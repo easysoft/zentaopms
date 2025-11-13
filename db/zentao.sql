@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `files` text DEFAULT NULL,
   `extra` text DEFAULT NULL,
   `read` tinyint unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `files` text DEFAULT NULL,
   `extra` text DEFAULT NULL,
   `read` tinyint unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
@@ -808,7 +808,6 @@ CREATE UNIQUE INDEX `design` ON `zt_designspec`(`design`,`version`);
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `project` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `execution` int unsigned NOT NULL DEFAULT 0,
@@ -855,6 +854,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readUsers` text DEFAULT NULL,
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `builtIn` tinyint unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -899,7 +899,6 @@ CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(30) NOT NULL DEFAULT '',
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `project` int unsigned NOT NULL DEFAULT 0,
@@ -917,6 +916,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `addedDate` datetime DEFAULT NULL,
   `archived` tinyint unsigned NOT NULL DEFAULT 0,
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -945,7 +945,6 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `execution` int unsigned NOT NULL DEFAULT 0,
   `account` varchar(30) NOT NULL DEFAULT '',
   `work` text DEFAULT NULL,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `date` date DEFAULT NULL,
   `left` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   `consumed` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
@@ -953,6 +952,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `end` char(4) NOT NULL DEFAULT '',
   `extra` text DEFAULT NULL,
   `order` tinyint unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1049,12 +1049,12 @@ CREATE INDEX `gid`        ON `zt_file`(`gid`);
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `project` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `name` varchar(30) NOT NULL DEFAULT '',
   `role` varchar(30) NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
   `acl` text DEFAULT NULL,
   `developer` tinyint unsigned NOT NULL DEFAULT 1,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1452,9 +1452,9 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `method` varchar(30) NOT NULL DEFAULT '',
   `parent` int unsigned NOT NULL DEFAULT 0,
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
-  `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `system` tinyint unsigned NOT NULL DEFAULT 0,
   `order` int unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(30) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
@@ -1466,8 +1466,8 @@ CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `code` varchar(100) NOT NULL DEFAULT '',
   `type` varchar(10) NOT NULL DEFAULT 'package',
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
-  `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `order` int unsigned NOT NULL DEFAULT 0,
+  `vision` varchar(30) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -1646,7 +1646,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `tplAcl` varchar(30) NOT NULL DEFAULT 'open',
   `tplWhiteList` text DEFAULT NULL,
   `order` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `stageBy` varchar(10) NOT NULL DEFAULT 'product',
   `displayCards` smallint unsigned NOT NULL DEFAULT 0,
   `fluidBoard` tinyint unsigned NOT NULL DEFAULT 0,
@@ -1659,6 +1658,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `minColWidth` smallint unsigned NOT NULL DEFAULT 200,
   `maxColWidth` smallint unsigned NOT NULL DEFAULT 384,
   `deliverable` text DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1918,13 +1918,13 @@ CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
   `title` text DEFAULT NULL,
   `content` text DEFAULT NULL,
   `addedDate` datetime DEFAULT NULL,
   `editedDate` datetime DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_content` (`title`, `content`)
 ) ENGINE=InnoDB;
@@ -1968,7 +1968,6 @@ CREATE INDEX `objectType` ON `zt_stakeholder` (`objectType`);
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent` int unsigned NOT NULL DEFAULT 0,
   `isParent` tinyint unsigned NOT NULL DEFAULT 0,
   `root` int unsigned NOT NULL DEFAULT 0,
@@ -2036,6 +2035,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
   `verifiedDate` datetime,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -13419,12 +13419,12 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `desc` text DEFAULT NULL,
   `version` varchar(10) NOT NULL DEFAULT '1.0',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `approval` varchar(10) NOT NULL DEFAULT 'disabled',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
@@ -13445,7 +13445,6 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `desc` text DEFAULT NULL,
   `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `main` tinyint unsigned NOT NULL DEFAULT 0,
   `exclusive` tinyint unsigned NOT NULL DEFAULT 0,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
@@ -13453,6 +13452,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
   `deliverable` text DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -13487,11 +13487,11 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `blocks` text DEFAULT NULL,
   `desc` text DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'enable',
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
@@ -13510,11 +13510,11 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `keyField` varchar(50) NOT NULL DEFAULT '',
   `valueField` varchar(50) NOT NULL DEFAULT '',
   `buildin` tinyint unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime DEFAULT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowdatasource` (`type`);
@@ -15908,7 +15908,6 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `childDemands` varchar(255) NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `parentVersion` smallint unsigned NOT NULL DEFAULT 1,
-  `vision` varchar(255) NOT NULL DEFAULT 'or',
   `color` char(7) NOT NULL DEFAULT '',
   `changedBy` varchar(30) NOT NULL DEFAULT '',
   `changedDate` datetime DEFAULT NULL,
@@ -15923,6 +15922,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `distributedDate` datetime DEFAULT NULL,
   `feedback` int unsigned NOT NULL DEFAULT 0,
   `keywords` varchar(255) NOT NULL DEFAULT '',
+  `vision` varchar(255) NOT NULL DEFAULT 'or',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
