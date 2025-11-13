@@ -22,7 +22,7 @@ class scale_of_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.estimate', 't1.closedReason', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.status', 't1.closedReason', 't1.parent', 't1.isParent');
 
     public $result = 0;
 
