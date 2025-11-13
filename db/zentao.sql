@@ -14014,7 +14014,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属执行',
   `assignedTo` varchar(30) NOT NULL DEFAULT '' COMMENT '指派给',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '检查状态',
-  `cycleType` varchar(10) NOT NULL DEFAULT '' COMMENT '周期类型',
+  `cycleType` varchar(10) NOT NULL DEFAULT 'noCycle' COMMENT '周期类型',
   `cycleConfig` varchar(100) NOT NULL DEFAULT '[]' COMMENT '周期设置',
   `cyclePlan` smallint unsigned  NOT NULL DEFAULT 0 COMMENT '生成计划(提前的天数)',
   `deadline` date NULL COMMENT '过期时间',
