@@ -4,7 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
-zenData('case')->gen(10);
+$caseTable = zenData('case');
+$caseTable->story->range(0);
+$caseTable->gen(10);
 
 /**
 
