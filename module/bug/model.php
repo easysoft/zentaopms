@@ -2248,7 +2248,7 @@ class bugModel extends model
             ->leftJoin(TABLE_BUG)->alias('t3')->on("t2.AType='bug' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
-            ->andWhere('t3.id')->ne('')
+            ->andWhere('t3.id')->notNULL()
             ->fetchGroup('revision', 'id');
     }
 
