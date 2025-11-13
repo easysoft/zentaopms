@@ -281,7 +281,7 @@ class storyModel extends model
 
         $sqlCondition = '';
         $showGrades   = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : null;
-        if($showGrades)
+        if($showGrades && $this->config->vision != 'lite')
         {
             $items = explode(',', $showGrades);
             $conditions = array();
