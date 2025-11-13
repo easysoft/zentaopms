@@ -95,8 +95,6 @@ class helper extends baseHelper
             return !str_contains(",$config->disabledFeatures,", ",{$code},");
         }
 
-        if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return !str_contains(",$config->disabledFeatures,", ",{$feature},");
-
         $hasFeature       = false;
         $canConfigFeature = false;
         foreach($config->featureGroup as $group => $modules)
@@ -106,14 +104,7 @@ class helper extends baseHelper
                 if($feature != $group && $feature != $module) continue;
 
                 $canConfigFeature = true;
-                if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
-                {
-                    $hasFeature |= (helper::hasFeature("{$group}") && helper::hasFeature("{$group}_{$module}"));
-                }
-                else
-                {
-                    $hasFeature |= helper::hasFeature("{$group}_{$module}");
-                }
+                $hasFeature |= helper::hasFeature("{$group}_{$module}");
             }
         }
         return !$canConfigFeature || ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));

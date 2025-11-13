@@ -92,7 +92,7 @@ $lang->admin->menuList->feature['tabMenu']['project']['percent'] = array('link' 
 $lang->admin->menuList->feature['tabMenu']['project']['hours']   = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
 
 $lang->admin->menuList->feature['tabMenu']['execution']['execution'] = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'links' => array("custom|execution|"), 'alias' => 'execution', 'exclude' => 'custom-required');
-$lang->admin->menuList->feature['tabMenu']['execution']['stage']     = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->feature['tabMenu']['execution']['stage']     = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
 $lang->admin->menuList->feature['tabMenu']['execution']['task']      = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList', 'custom|limittaskdate|'), 'alias' => 'limittaskdate','exclude' => 'custom-required');
 
 $lang->admin->menuList->feature['tabMenu']['qa']['bug']        = array('link' => "{$lang->bug->common}|custom|required|module=bug", 'links' => array("custom|set|module=bug&field=priList"), 'exclude' => 'custom-required,custom-set');

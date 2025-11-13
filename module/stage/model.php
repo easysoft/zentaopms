@@ -171,10 +171,11 @@ class stageModel extends model
      * @param  string $orderBy
      * @param  int    $projectID
      * @param  int    $groupID
+     * @param  int    $grade
      * @access public
      * @return array
      */
-    public function getStages(string $orderBy = 'order_desc', int $projectID = 0, int $groupID = 0): array
+    public function getStages(string $orderBy = 'order_desc', int $projectID = 0, int $groupID = 0, int $grade = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStages();
 
@@ -195,6 +196,7 @@ class stageModel extends model
         $stages = $this->dao->select('*')->from(TABLE_STAGE)
             ->where('deleted')->eq(0)
             ->andWhere('workflowGroup')->eq($groupID)
+            ->beginIF($this->config->edition != 'ipd')->andWhere('projectType')->ne('ipd')->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
 
@@ -276,6 +278,7 @@ class stageModel extends model
                 $builtinStage->createdDate   = helper::now();
                 $builtinStage->name          = in_array($workflowGroup->projectModel, array('waterfall', 'waterfallplus')) ? zget($this->lang->stage->typeList, $stageType, '') : zget($this->lang->stage->ipdTypeList, $stageType, '');
                 $builtinStage->type          = $stageType;
+                $builtinStage->projectType   = $workflowGroup->projectModel;
                 $this->dao->insert(TABLE_STAGE)->data($builtinStage)->exec();
 
                 $stageID = $this->dao->lastInsertID();

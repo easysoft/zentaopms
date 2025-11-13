@@ -121,7 +121,7 @@ class stage extends control
             if(isset($flow->projectModel) && $flow->projectModel == 'ipd')
             {
                 $this->config->stage->create->requiredFields = 'name,type';
-                $this->config->stage->form->batchcreate['percent']['required'] = false;
+                if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->config->stage->form->batchcreate['percent']['required'] = false;
             }
 
             $stages = form::batchData()->get();

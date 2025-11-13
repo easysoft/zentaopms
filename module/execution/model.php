@@ -4978,7 +4978,7 @@ class executionModel extends model
             if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
-        if(in_array($this->config->edition, array('max', 'ipd'))) $rows = $this->project->countDeliverable($rows, 'execution');
+        if(in_array($this->config->edition, array('max', 'ipd'))) $rows = $this->loadModel('project')->countDeliverable($rows, 'execution');
         return $rows;
     }
 
