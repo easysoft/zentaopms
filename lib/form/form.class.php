@@ -416,7 +416,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
-        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && empty($data))
+        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && (is_null($this->rawdata->$field) || $this->rawdata->$field === '') && empty($data))
         {
             $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
