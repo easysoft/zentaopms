@@ -334,7 +334,7 @@ function registerZentaoAIPlugin(lang)
                     const lib       = collection.substr(7);
                     const oldFilter = zentaoMemories[lib] ? zentaoMemories[lib].content_filter : null;
                     const newFilter = memory.content_filter;
-                    zentaoMemories[lib] = oldFilter ? $.extend({}, oldFilter, memory, {attrs: $.extend({}, oldFilter.attrs, newFilter.attrs)}) : newFilter;
+                    zentaoMemories[lib] = oldFilter ? $.extend({}, oldFilter, memory, {attrs: $.extend({}, oldFilter.attrs, newFilter.attrs)}) : (newFilter || {});
                     continue;
                 }
                 ohterCollections.push(collection);
