@@ -1062,7 +1062,11 @@ class productModel extends model
     public function getStatByID($productID, $storyType = 'story')
     {
         /* Check privilege. */
-        if(!$this->checkPriv($productID)) return false;
+        if(!$this->checkPriv($productID))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return false;
+        }
 
         /* Get product. */
         $product = $this->getByID($productID);
