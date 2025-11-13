@@ -79,7 +79,7 @@ class devopsspace extends control
         if($_POST)
         {
             $formData = form::data($this->config->devopsspace->form->edit)
-                ->setDefault('updatedBy', $this->app->user->account)
+                ->setDefault('editedBy', $this->app->user->account)
                 ->get();
             $changes = $this->devopsspace->update($space, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
