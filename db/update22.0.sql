@@ -186,3 +186,5 @@ ALTER TABLE `zt_nc` ADD `execution` int unsigned NOT NULL DEFAULT 0 COMMENT '所
 ALTER TABLE `zt_nc` ADD `deliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '交付物' AFTER `auditplan`;
 
 ALTER TABLE `zt_workflowgroup` ADD `disabledFeatures` varchar(255) NOT NULL DEFAULT '' COMMENT '项目流程关闭的功能' AFTER `disabledModules`;
+
+ALTER TABLE `zt_stage` MODIFY COLUMN `projectType` varchar(30) NOT NULL DEFAULT '' COMMENT '所属项目流程的类型';

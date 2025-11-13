@@ -45,10 +45,6 @@ cid=1
  - 第10条的title属性 @ADCP
  - 第10条的type属性 @DCP
  - 第10条的category属性 @ADCP
-- 获取LDCP评审点
- - 第11条的title属性 @LDCP
- - 第11条的type属性 @DCP
- - 第11条的category属性 @LDCP
 
 */
 
@@ -82,4 +78,3 @@ r($IPDpoint) && p('7:title,type,category')  && e('TR4A,TR,TR4A');  //获取TR4A�
 r($IPDpoint) && p('8:title,type,category')  && e('TR5,TR,TR5');    //获取TR5评审点
 r($IPDpoint) && p('9:title,type,category')  && e('TR6,TR,TR6');    //获取TR6评审点
 r($IPDpoint) && p('10:title,type,category') && e('ADCP,DCP,ADCP'); //获取ADCP评审点
-r($IPDpoint) && p('11:title,type,category') && e('LDCP,DCP,LDCP'); //获取LDCP评审点
