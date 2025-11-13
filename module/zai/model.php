@@ -827,12 +827,12 @@ class zaiModel extends model
      * 将通用对象转换为 Markdown。
      * Convert generic object to Markdown format.
      *
-     * @access protected
+     * @access public
      * @param  string $type
      * @param  object $target
      * @return array
      */
-    protected static function convertGenericToMarkdown(string $type, object $target): array
+    public static function convertGenericToMarkdown(string $type, object $target): array
     {
         global $app;
 
