@@ -298,7 +298,7 @@ toolbar
     backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
 
-if($project->model == 'ipd' && empty($stages) && empty($plans))
+if($project->model == 'ipd' && empty($stages) && empty($plans) && empty($planID))
 {
     div
     (

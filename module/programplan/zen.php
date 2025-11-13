@@ -145,6 +145,7 @@ class programplanZen extends programplan
 
             $lastLevels[$plan->level] = $plan;
             if($plan->level > 0) $this->checkLegallyDate($plan, $project, zget($lastLevels, $plan->level - 1, null), $rowID);
+            if($plan->percent < 0) dao::$errors["percent[$rowID]"] = sprintf($this->lang->error->float, $this->lang->programplan->percent);
         }
 
         foreach($totalPercent as $group => $percent)
