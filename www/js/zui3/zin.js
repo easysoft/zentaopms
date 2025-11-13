@@ -556,7 +556,8 @@
         let updateFullPage = false;
         list.forEach(item =>
         {
-            renderPartial(item, options);
+            try{renderPartial(item, options);}
+            catch(error) {console.error('[ZIN] ', 'Render partial failed', error, {item, options});}
             if(item.name === 'html' || item.name === 'body') updateFullPage = true;
         });
         if(updateFullPage)
