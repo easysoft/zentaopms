@@ -45,8 +45,6 @@ window.openPageForm = function(url, data, callback)
 
 window.executeZentaoPrompt = async function(info, testingMode)
 {
-    const htmlDiff = await zui.HTMLDiff.loadModule();
-
     testingMode = testingMode && testingMode !== '0';
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
