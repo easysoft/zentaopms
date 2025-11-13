@@ -61,7 +61,6 @@ common:
 	cd zentaopms/lib/vendor/phpoffice/phpspreadsheet; rm -fr bin docs samples CHANGELOG.md CHANGELOG.PHPExcel.md composer.json composer.lock CONTRIBUTING.md mkdocs.yml PATCHES.txt phpunit.xml.dist
 	cd zentaopms/lib/vendor/phpoffice/phpword; rm -fr CHANGELOG.md composer.json CONTRIBUTING.md COPYING COPYING.LESSER phpword.ini.dist README.md sonar-project.properties
 	cd zentaopms/lib/vendor/rmccue/requests; rm -fr CHANGELOG.md composer.json README.md
-	cd zentaopms/lib/vendor/symfony/finder; rm -fr Tests CHANGELOG.md composer.json phpunit.xml.dist README.md
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
 	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	# disable the autoExclude function.
