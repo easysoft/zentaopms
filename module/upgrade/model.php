@@ -1158,17 +1158,39 @@ class upgradeModel extends model
     public function parseToSqls(string $sqlFile): array
     {
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqlList = array();
-        $sqls    = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $line)
+        $sqls  = array();
+        $lines = explode("\n", file_get_contents($sqlFile));
+        foreach($lines as $line)
         {
             $line = trim($line);
             /* Skip sql that is note and empty sql. */
             if(!$line || preg_match('/^--|^#|^\/\*/', $line)) continue;
-            $sqlList[] = $line;
+            $sqls[] = $line;
         }
 
-        return array_filter(explode(';', join("\n", $sqlList)));
+        $sqls = array_filter(explode(';', implode("\n", $sqls)));
+        if($this->config->db->driver != 'mysql') return $sqls;
+
+        $version = $this->loadModel('install')->getDatabaseVersion();
+        foreach($sqls as $key => $sql)
+        {
+            if(strpos($sql, 'CREATE TABLE') !== 0) continue;
+
+            $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
+            {
+                if(version_compare($version, '5.6', '>='))
+                {
+                    $sql .= ' DEFAULT CHARSET utf8mb4 COLLATE ' . $this->dbh->getDatabaseCollation();
+                }
+                elseif(version_compare($version, '4.1', '>='))
+                {
+                    $sql .= ' DEFAULT CHARSET utf8 COLLATE utf8_general_ci';
+                }
+            }
+            $sqls[$key] = $sql;
+        }
+
+        return $sqls;
     }
 
 
