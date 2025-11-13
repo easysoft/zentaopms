@@ -1,5 +1,8 @@
 <?php
 declare(strict_types = 1);
+
+helper::import(dirname(__FILE__, 3) . '/model.php');
+
 class zaiTest
 {
     public function __construct()
@@ -172,6 +175,46 @@ class zaiTest
     public function convertGenericToMarkdownTest($type, $target)
     {
         return zaiModel::convertGenericToMarkdown($type, $target);
+    }
+
+    /**
+     * Test formatFieldValue protected static method.
+     *
+     * @param array  $langData
+     * @param string $field
+     * @param mixed  $value
+     * @access public
+     * @return string
+     */
+    public function formatFieldValueTest(array $langData, string $field, $value): string
+    {
+        return zaiModel::formatFieldValue($langData, $field, $value);
+    }
+
+    /**
+     * Test getFieldLabel protected static method.
+     *
+     * @param array  $langData
+     * @param string $field
+     * @access public
+     * @return string
+     */
+    public function getFieldLabelTest(array $langData, string $field): string
+    {
+        return zaiModel::getFieldLabel($langData, $field);
+    }
+
+    /**
+     * Test getSectionLabel protected static method.
+     *
+     * @param array  $langData
+     * @param string $section
+     * @access public
+     * @return string
+     */
+    public function getSectionLabelTest(array $langData, string $section): string
+    {
+        return zaiModel::getSectionLabel($langData, $section);
     }
 
     /**

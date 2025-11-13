@@ -858,7 +858,7 @@ class zaiModel extends model
      * @param  string $field
      * @return string
      */
-    protected static function getFieldLabel(array $langData, string $field): string
+    public static function getFieldLabel(array $langData, string $field): string
     {
         return isset($langData['fields'][$field]) ? $langData['fields'][$field] : '';
     }
@@ -870,7 +870,7 @@ class zaiModel extends model
      * @param  string $section
      * @return string
      */
-    protected static function getSectionLabel(array $langData, string $section): string
+    public static function getSectionLabel(array $langData, string $section): string
     {
         return isset($langData['sections'][$section]) ? $langData['sections'][$section] : '';
     }
@@ -883,7 +883,7 @@ class zaiModel extends model
      * @param  mixed       $value
      * @return string
      */
-    protected static function formatFieldValue(array $langData, string $field, $value): string
+    public static function formatFieldValue(array $langData, string $field, $value): string
     {
         if($value === null) return '';
 
