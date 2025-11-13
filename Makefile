@@ -45,7 +45,10 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr roadrunner zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
+	# 删除不需要的包
 	cd zentaopms/lib/; rm -fr composer.json composer.lock patches vendor/bin vendor/cweagans vendor/laminas vendor/markbaker vendor/paragonie vendor/phpseclib vendor/psr vendor/symfony
+	# 清理自动加载文件，移除已删除包的引用
+	php misc/cleanup_autoload.php zentaopms/lib/vendor
 	cd zentaopms/lib/vendor/box/spout; rm -fr appveyor.yml composer.json PATCHES.txt README.md UPGRADE-3.0.md
 	cd zentaopms/lib/vendor/dragonmantank/cron-expression; rm -fr tests CHANGELOG.md composer.json README.md
 	cd zentaopms/lib/vendor/erusev/parsedown; rm -fr composer.json PATCHES.txt README.md
