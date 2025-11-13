@@ -311,6 +311,9 @@ $config->project->linkMap->budget['summary'] = array('budget', 'summary', 'proje
 $config->project->linkMap->programplan = array();
 $config->project->linkMap->programplan[''] = array('project', 'execution', 'type=all&projectID=%s', '');
 
+$config->project->linkMap->auditplan = array();
+$config->project->linkMap->auditplan[''] = array('project', 'index', 'projectID=%s', '');
+
 $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
