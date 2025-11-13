@@ -229,11 +229,24 @@ class zaiModel extends model
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             }
         }
-        if($postData) curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($postData, JSON_UNESCAPED_UNICODE));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Authorization: Bearer ' . $token,
-            'Content-Type: application/json'
-        ));
+
+        $hasFile = false;
+        if($postData)
+        {
+            foreach($postData as $value)
+            {
+                if($value instanceof CURLFile)
+                {
+                    $hasFile = true;
+                    break;
+                }
+            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $hasFile ? $postData : json_encode($postData, JSON_UNESCAPED_UNICODE));
+        }
+
+        $headers = ['Authorization: Bearer ' . $token];
+        if(!$hasFile) $headers[] = 'Content-Type: application/json';
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
         $response = curl_exec($curl);
         $error    = '';
@@ -456,7 +469,7 @@ class zaiModel extends model
 
         if($result['result'] === 'success')
         {
-            if(!empty($result['data']['id'])) return $result['data']['id'];
+            if(!empty($result['data']['content_id'])) return $result['data']['content_id'];
 
             $contentsResult = $this->callAdminAPI("/v8/memories/$memoryID/contents", 'GET');
             if($contentsResult['result'] !== 'success') return null;
@@ -611,7 +624,6 @@ class zaiModel extends model
 
         if($attrs === null) $attrs = array();
         $canView = false;
-        if($objectType === 'story' || $objectType === 'demand')
         if($objectType === 'story' || $objectType === 'demand')
         {
             $table   = $objectType === 'story' ? TABLE_STORY : TABLE_DEMAND;
