@@ -9,5 +9,5 @@ $config->devopsspace->form->create['acl']         = array('type' => 'string', 'r
 $config->devopsspace->form->create['createdDate'] = array('type' => 'datetime', 'required' => false, 'default' => helper::now());
 
 $config->devopsspace->form->edit = $config->devopsspace->form->create;
-$config->devopsspace->form->edit['updatedDate'] = array('type' => 'datetime', 'required' => false, 'default' => helper::now());
+$config->devopsspace->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => helper::now());
 unset($config->devopsspace->form->edit['createdDate']);

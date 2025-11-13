@@ -16412,8 +16412,8 @@ CREATE TABLE IF NOT EXISTS `zt_ops_space` (
   `desc` TEXT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
-  `updatedBy` varchar(30) NOT NULL DEFAULT '',
-  `updatedDate`datetime NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate`datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
