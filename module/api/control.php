@@ -600,7 +600,9 @@ class api extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $libID    = $this->doc->createApiLib($formData);
+            $libID = $this->doc->createApiLib($formData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $objectID = $libType == 'project' ? $this->post->project : $this->post->product;
             if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true, 'docApp' => array("selectSpace", ($libType == 'product' || $libType == 'project') ? "$libType.$objectID" : 'nolink', $libID, true)));
 
