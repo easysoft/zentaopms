@@ -555,6 +555,52 @@ class zaiTest
     }
 
     /**
+     * Test appendFieldList static method.
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  array $fieldPairs
+     * @access public
+     * @return array
+     */
+    public function appendFieldListTest(array $content, array $langData, array $fieldPairs): array
+    {
+        zaiModel::appendFieldList($content, $langData, $fieldPairs);
+        return $content;
+    }
+
+    /**
+     * Test appendDetailSection static method.
+     *
+     * @param  array  $content
+     * @param  array  $langData
+     * @param  string $sectionKey
+     * @param  mixed  $rawValue
+     * @access public
+     * @return array
+     */
+    public function appendDetailSectionTest(array $content, array $langData, string $sectionKey, $rawValue): array
+    {
+        zaiModel::appendDetailSection($content, $langData, $sectionKey, $rawValue);
+        return $content;
+    }
+
+    /**
+     * Test appendMilestoneSection static method.
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  mixed $milestones
+     * @access public
+     * @return array
+     */
+    public function appendMilestoneSectionTest(array $content, array $langData, $milestones): array
+    {
+        zaiModel::appendMilestoneSection($content, $langData, $milestones);
+        return $content;
+    }
+
+    /**
      * Test createKnowledgeLib method.
      *
      * @param  string $name
