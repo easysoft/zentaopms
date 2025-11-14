@@ -601,6 +601,19 @@ class zaiTest
     }
 
     /**
+     * Test buildCaseStepsText static method.
+     *
+     * @param  mixed $steps
+     * @param  array $langData
+     * @access public
+     * @return string
+     */
+    public function buildCaseStepsTextTest($steps, array $langData): string
+    {
+        return zaiModel::buildCaseStepsText($steps, $langData);
+    }
+
+    /**
      * Test createKnowledgeLib method.
      *
      * @param  string $name
