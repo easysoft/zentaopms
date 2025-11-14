@@ -54,7 +54,7 @@ class resetpasswordTester extends tester
         $form->wait(1);
 
         // 通过页面源断言过期提示与登录跳转，避免元素等待超时。
-        $html      = $form->getPageSource();
+        $html       = $form->getPageSource();
         $hasExpired = (strpos($html, $this->lang->user->linkExpired) !== false);
         if(!$hasExpired) return $this->failed('过期提示信息不匹配');
 
@@ -85,7 +85,7 @@ class resetpasswordTester extends tester
 
         if(!$password1Exists || !$password2Exists || !$submitExists) return $this->failed('重置密码表单元素缺失');
 
-        $password = 'StrongPass123!';
+        $password    = 'StrongPass123!';
         $passwordMD5 = md5($password);
         $form->dom->password1->setValue($password);
         $form->dom->password2->setValue($password);
