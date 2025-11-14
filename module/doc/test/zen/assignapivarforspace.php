@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignApiVarForSpace();
 timeout=0
-cid=0
+cid=16177
 
 - 执行docTest模块的assignApiVarForSpaceTest方法，参数是'product', 'all', 'lib', 1, array
  - 属性pager @pager

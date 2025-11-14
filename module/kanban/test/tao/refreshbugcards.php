@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::refreshBugCards();
 timeout=0
-cid=0
+cid=16989
 
 - 步骤1:测试未确认Bug的卡片刷新
  - 属性unconfirmed @

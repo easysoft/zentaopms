@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::installationSettingsMap();
 timeout=0
-cid=0
+cid=16806
 
 - 步骤1:不设置自定义域名且数据库类型为unsharedDB,返回stdClass对象 @stdClass
 - 步骤2:设置自定义域名但数据库类型为unsharedDB第ingress条的enabled属性 @1

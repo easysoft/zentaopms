@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::refreshStoryCards();
 timeout=0
-cid=0
+cid=16991
 
 - 步骤1:测试处于开发中(developing)状态的需求卡片刷新
  - 属性developing @

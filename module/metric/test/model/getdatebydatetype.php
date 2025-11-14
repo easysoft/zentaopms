@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getDateByDateType();
 timeout=0
-cid=0
+cid=17090
 
 - 执行metricTest模块的getDateByDateTypeTest方法，参数是'day'  @2025-11-17
 - 执行metricTest模块的getDateByDateTypeTest方法，参数是'week'  @2025-10-24

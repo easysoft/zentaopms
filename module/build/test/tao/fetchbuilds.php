@@ -4,7 +4,7 @@
 
 title=测试 buildModel->fetchBuilds();
 timeout=0
-cid=1
+cid=15512
 
 - 获取系统内所有的版本信息第1条的name属性 @版本1
 - 获取产品1下的所有版本信息第2条的name属性 @版本2

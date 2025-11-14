@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 branchModel::manage();
 timeout=0
-cid=0
+cid=15334
 
 - 测试添加2个新分支 @2
 - 测试更新现有分支名称不添加新分支 @0

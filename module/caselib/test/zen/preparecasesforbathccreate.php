@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::prepareCasesForBathcCreate();
 timeout=0
-cid=0
+cid=15552
 
 - 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是1
  - 第0条的title属性 @Test Case Title 1

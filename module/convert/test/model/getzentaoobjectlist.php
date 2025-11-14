@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoObjectList();
 timeout=0
-cid=0
+cid=15789
 
 - 步骤1：默认配置下返回完整对象列表 @7
 - 步骤2：关闭enableER配置时不包含epic属性epic @~~

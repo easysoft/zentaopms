@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterRecord();
 timeout=0
-cid=0
+cid=18947
 
 - 执行taskTest模块的responseAfterRecordTest方法，参数是$task1, $changes1, '', false 属性result @success
 - 执行taskTest模块的responseAfterRecordTest方法，参数是$task2, $changes2, '', false 属性result @success

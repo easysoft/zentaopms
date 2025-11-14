@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignVarsForEdit();
 timeout=0
-cid=0
+cid=15431
 
 - 步骤1:bug有execution的情况属性execution @1
 - 步骤2:bug有project但无execution的情况属性execution @0

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::validateCert();
 timeout=0
-cid=0
+cid=15637
 
 - 测试步骤1:所有参数都为空的情况属性code @600
 - 测试步骤2:证书名称为空的情况属性code @600

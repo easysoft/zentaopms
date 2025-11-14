@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildCreateForm();
 timeout=0
-cid=0
+cid=15437
 
 - 步骤1:正常情况下验证产品成员数量属性productMembers @11
 - 步骤2:from='global'的情况属性gobackLink @buildcreateform.php?m=bug&f=browse&productID=1

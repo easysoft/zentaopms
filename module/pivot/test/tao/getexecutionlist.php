@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getExecutionList();
 timeout=0
-cid=0
+cid=17441
 
 - 执行pivotTest模块的getExecutionListTest方法，参数是'', '', array  @5
 - 执行pivotTest模块的getExecutionListTest方法，参数是'2024-06-01', '2024-06-29', array  @0

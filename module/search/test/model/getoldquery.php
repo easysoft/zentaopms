@@ -5,7 +5,7 @@
 
 title=测试 searchModel::getOldQuery();
 timeout=0
-cid=0
+cid=18302
 
 - 测试查询ID为1的旧版搜索条件
  - 属性module @task

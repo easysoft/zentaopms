@@ -5,7 +5,7 @@
 
 title=测试 searchModel::buildOldQuery();
 timeout=0
-cid=0
+cid=18294
 
 - 测试步骤1:基本相等查询 @0
 - 测试步骤2:包含操作符查询 @0

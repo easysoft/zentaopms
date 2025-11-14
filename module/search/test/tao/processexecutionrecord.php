@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processExecutionRecord();
 timeout=0
-cid=0
+cid=18335
 
 - 测试普通执行类型(sprint),应生成view链接 >> 验证URL包含execution-view且extraType为空
 - 测试看板执行类型(kanban),应生成kanban链接 >> 验证URL包含execution-kanban且extraType为kanban

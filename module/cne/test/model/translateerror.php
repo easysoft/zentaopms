@@ -5,7 +5,7 @@
 
 title=测试 cneModel::translateError();
 timeout=0
-cid=0
+cid=15631
 
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult1 属性code @400
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult2 属性code @404

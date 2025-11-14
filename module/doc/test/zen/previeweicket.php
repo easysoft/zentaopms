@@ -5,7 +5,7 @@
 
 title=测试 docZen::previeweicket();
 timeout=0
-cid=0
+cid=16197
 
 - 步骤1:customSearch条件预览工单列表,status=wait @3
 - 步骤2:customSearch条件预览工单列表,pri=1 @2

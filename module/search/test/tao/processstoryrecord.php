@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processStoryRecord();
 timeout=0
-cid=0
+cid=18341
 
 - 执行searchTao模块的processStoryRecordTest方法,story不存在于objectList中 >> url为空字符串
 - 执行searchTao模块的processStoryRecordTest方法,story类型,lib为0,vision为rnd >> url包含story-storyView-1
