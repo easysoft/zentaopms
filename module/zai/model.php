@@ -1753,10 +1753,21 @@ class zaiModel extends model
 
         $fieldPairs = static::collectFieldPairs('risk', $langData, $risk);
         static::appendFieldList($content, $langData, $fieldPairs);
+
         static::appendDetailSection($content, $langData, 'desc', $risk->desc ?? null);
         static::appendDetailSection($content, $langData, 'prevention', $risk->prevention ?? null);
         static::appendDetailSection($content, $langData, 'remedy', $risk->remedy ?? null);
+
         $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'status'      => $risk->status      ?? '',
+            'probability' => $risk->probability ?? ($risk->chance ?? ''),
+            'impact'      => $risk->impact      ?? '',
+            'strategy'    => $risk->strategy    ?? '',
+            'assignedTo'  => $risk->assignedTo  ?? '',
+            'project'     => $risk->project     ?? '',
+            'execution'   => $risk->execution   ?? '',
+        );
 
         return $markdown;
     }
