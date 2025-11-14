@@ -1864,4 +1864,47 @@ class zaiModel extends model
 
         return $markdown;
     }
+
+    /**
+     * 将 RELEASE 对象转换为 Markdown。
+     * Convert release object to Markdown format.
+     *
+     * @access public
+     * @param  object     $release
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertReleaseToMarkdown($release, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $release->id ?? 0;
+        $title = trim((string)($release->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('release', $langData, $release);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'desc', $release->desc ?? null);
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'system'  => $release->system  ?? '',
+            'project' => $release->project ?? '',
+            'build'   => $release->build   ?? '',
+            'status'  => $release->status  ?? '',
+        );
+
+        return $markdown;
+    }
 }
