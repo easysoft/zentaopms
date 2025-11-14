@@ -45,3 +45,191 @@
      {
          return $this->position < $this->subject->getSheetCount() && $this->position >= 0;
      }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
+@@ -113,7 +113,7 @@ class RowCellIterator extends CellIterator
+     /**
+      * Rewind the iterator to the starting column.
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->currentColumnIndex = $this->startColumnIndex;
+     }
+@@ -123,7 +123,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->worksheet->getCellByColumnAndRow($this->currentColumnIndex, $this->rowIndex);
+     }
+@@ -133,7 +133,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return string
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
+     }
+@@ -141,7 +141,7 @@ class RowCellIterator extends CellIterator
+     /**
+      * Set the iterator to its next value.
+      */
+-    public function next()
++    public function next(): void
+     {
+         do {
+             ++$this->currentColumnIndex;
+@@ -165,7 +165,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
+@@ -117,7 +117,7 @@ class RowIterator implements \Iterator
+     /**
+      * Rewind the iterator to the starting row.
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->position = $this->startRow;
+     }
+@@ -127,7 +127,7 @@ class RowIterator implements \Iterator
+      *
+      * @return Row
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return new Row($this->subject, $this->position);
+     }
+@@ -137,7 +137,7 @@ class RowIterator implements \Iterator
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->position;
+     }
+@@ -145,7 +145,7 @@ class RowIterator implements \Iterator
+     /**
+      * Set the iterator to its next value.
+      */
+-    public function next()
++    public function next(): void
+     {
+         ++$this->position;
+     }
+@@ -163,7 +163,7 @@ class RowIterator implements \Iterator
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return $this->position <= $this->endRow && $this->position >= $this->startRow;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
+@@ -111,7 +111,7 @@ class ColumnCellIterator extends CellIterator
+     /**
+      * Rewind the iterator to the starting row.
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->currentRow = $this->startRow;
+     }
+@@ -121,7 +121,7 @@ class ColumnCellIterator extends CellIterator
+      *
+      * @return null|\PhpOffice\PhpSpreadsheet\Cell\Cell
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->worksheet->getCellByColumnAndRow($this->columnIndex, $this->currentRow);
+     }
+@@ -131,7 +131,7 @@ class ColumnCellIterator extends CellIterator
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->currentRow;
+     }
+@@ -139,7 +139,7 @@ class ColumnCellIterator extends CellIterator
+     /**
+      * Set the iterator to its next value.
+      */
+-    public function next()
++    public function next(): void
+     {
+         do {
+             ++$this->currentRow;
+@@ -165,7 +165,7 @@ class ColumnCellIterator extends CellIterator
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return $this->currentRow <= $this->endRow && $this->currentRow >= $this->startRow;
+     }
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php
+@@ -122,7 +122,7 @@ class ColumnIterator implements \Iterator
+     /**
+      * Rewind the iterator to the starting column.
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->currentColumnIndex = $this->startColumnIndex;
+     }
+@@ -132,7 +132,7 @@ class ColumnIterator implements \Iterator
+      *
+      * @return Column
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return new Column($this->worksheet, Coordinate::stringFromColumnIndex($this->currentColumnIndex));
+     }
+@@ -142,7 +142,7 @@ class ColumnIterator implements \Iterator
+      *
+      * @return string
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
+     }
+@@ -150,7 +150,7 @@ class ColumnIterator implements \Iterator
+     /**
+      * Set the iterator to its next value.
+      */
+-    public function next()
++    public function next(): void
+     {
+         ++$this->currentColumnIndex;
+     }
+@@ -168,7 +168,7 @@ class ColumnIterator implements \Iterator
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
+     }

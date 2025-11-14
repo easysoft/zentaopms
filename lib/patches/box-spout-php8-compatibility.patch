@@ -118,3 +118,199 @@ index 81f481c3cdc..5b6315e9ac5 100644
      {
          return $this->currentSheetIndex + 1;
      }
+diff --git a/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php b/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
+index 78e66501320..afef215101b 100644
+--- a/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
+@@ -84,7 +84,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->rewindAndSkipBom();
+
+@@ -114,7 +114,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return ($this->filePointer && !$this->hasReachedEndOfFile);
+     }
+@@ -126,7 +126,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\EncodingConversionException If unable to convert data to UTF-8
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         $this->hasReachedEndOfFile = $this->globalFunctionsHelper->feof($this->filePointer);
+
+@@ -224,7 +224,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row|null
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->rowBuffer;
+     }
+@@ -235,7 +235,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->numReadRows;
+     }
+diff --git a/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
+index 69eb58a0ba9..31347ee6190 100644
+--- a/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
+@@ -30,7 +30,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->hasReadUniqueSheet = false;
+     }
+@@ -41,7 +41,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return (!$this->hasReadUniqueSheet);
+     }
+@@ -52,7 +52,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         $this->hasReadUniqueSheet = true;
+     }
+@@ -63,7 +63,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\CSV\Sheet
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->sheet;
+     }
+@@ -74,7 +74,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return 1;
+     }
+diff --git a/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php b/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
+index 81f0953d811..965275f0a19 100644
+--- a/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
+@@ -118,7 +118,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Reader\Exception\IteratorNotRewindableException If the iterator is rewound more than once
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         // Because sheet and row data is located in the file, we can't rewind both the
+         // sheet iterator and the row iterator, as XML file cannot be read backwards.
+@@ -142,7 +142,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return (!$this->hasReachedEndOfFile);
+     }
+@@ -155,7 +155,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         if ($this->doesNeedDataForNextRowToBeProcessed()) {
+             $this->readDataForNextRow();
+@@ -356,7 +356,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         return $this->rowBuffer;
+     }
+@@ -367,7 +367,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->lastRowIndexProcessed;
+     }
+diff --git a/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
+index c7b8cd9dcf8..5b3351fd1a9 100644
+--- a/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
+@@ -79,7 +79,7 @@ class SheetIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to open the XML file containing sheets' data
+      * @return void
+      */
+-    public function rewind()
++    public function rewind(): void
+     {
+         $this->xmlReader->close();
+
+@@ -131,7 +131,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
+-    public function valid()
++    public function valid(): bool
+     {
+         return $this->hasFoundSheet;
+     }
+@@ -142,7 +142,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
+-    public function next()
++    public function next(): void
+     {
+         $this->hasFoundSheet = $this->xmlReader->readUntilNodeFound(self::XML_NODE_TABLE);
+
+@@ -157,7 +157,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\ODS\Sheet
+      */
+-    public function current()
++    public function current(): mixed
+     {
+         $escapedSheetName = $this->xmlReader->getAttribute(self::XML_ATTRIBUTE_TABLE_NAME);
+         $sheetName = $this->escaper->unescape($escapedSheetName);
+@@ -214,7 +214,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
+-    public function key()
++    public function key(): mixed
+     {
+         return $this->currentSheetIndex + 1;
+     }
