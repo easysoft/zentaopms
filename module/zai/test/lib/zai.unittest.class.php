@@ -495,6 +495,34 @@ class zaiTest
     }
 
     /**
+     * Test collectFieldPairs static method.
+     *
+     * @param  string $objectType
+     * @param  array  $langData
+     * @param  object $target
+     * @access public
+     * @return array
+     */
+    public function collectFieldPairsTest(string $objectType, array $langData, object $target): array
+    {
+        return zaiModel::collectFieldPairs($objectType, $langData, $target);
+    }
+
+    /**
+     * Test extractFieldValue static method.
+     *
+     * @param  string $objectType
+     * @param  string $field
+     * @param  object $target
+     * @access public
+     * @return mixed
+     */
+    public function extractFieldValueTest(string $objectType, string $field, object $target)
+    {
+        return zaiModel::extractFieldValue($objectType, $field, $target);
+    }
+
+    /**
      * Test searchKnowledgesInCollections method.
      *
      * @param  string $query

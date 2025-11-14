@@ -916,6 +916,26 @@ class zaiModel extends model
     }
 
     /**
+     * 附加字段列表。
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  array $fieldPairs
+     * @return void
+     */
+    public static function appendFieldList(array &$content, array $langData, array $fieldPairs): void
+    {
+        foreach($fieldPairs as $field => $value)
+        {
+            $label = static::getFieldLabel($langData, $field);
+            if($label === '') continue;
+
+            $formatted = static::formatFieldValue($langData, $field, $value);
+            $content[] = "* {$label}: {$formatted}";
+        }
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
