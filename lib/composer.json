@@ -59,8 +59,10 @@
             "phpoffice/phpspreadsheet": {
                 "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
                 "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
+                "Optimize DefaultValueBinder type checking and safety": "patches/phpspreadsheet-optimize-defaultvaluebinder.patch",
                 "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
-                "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch"
+                "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch",
+                "Fix alignment check condition in Styles reader": "patches/phpspreadsheet-fix-alignment-check.patch"
             }
         }
     },

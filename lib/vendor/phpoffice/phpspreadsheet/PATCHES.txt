@@ -9,11 +9,19 @@ Add return types to Iterator methods for PHP 8 compatibility
 Source: patches/phpspreadsheet-iterator-return-types.patch
 
 
+Optimize DefaultValueBinder type checking and safety
+Source: patches/phpspreadsheet-optimize-defaultvaluebinder.patch
+
+
 Optimize OLE date conversion with improved type safety
 Source: patches/phpspreadsheet-ole-date-optimization.patch
 
 
 Fix libxml entity loader compatibility for PHP 8.0+
 Source: patches/phpspreadsheet-fix-libxml-php8-compatibility.patch
+
+
+Fix alignment check condition in Styles reader
+Source: patches/phpspreadsheet-fix-alignment-check.patch
 
 
