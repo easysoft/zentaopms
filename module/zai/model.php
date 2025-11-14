@@ -1907,4 +1907,52 @@ class zaiModel extends model
 
         return $markdown;
     }
+
+    /**
+     * 将 TICKET 对象转换为 Markdown。
+     * Convert ticket object to Markdown format.
+     *
+     * @access public
+     * @param  object     $ticket
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertTicketToMarkdown($ticket, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $ticket->id ?? 0;
+        $title = trim((string)($ticket->title ?? $ticket->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('ticket', $langData, $ticket);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'desc', $ticket->desc ?? null);
+        static::appendDetailSection($content, $langData, 'resolution', $ticket->resolution ?? null);
+        static::appendDetailSection($content, $langData, 'history', $ticket->history ?? null);
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'status'     => $ticket->status     ?? '',
+            'type'       => $ticket->type       ?? '',
+            'pri'        => $ticket->pri        ?? '',
+            'assignedTo' => $ticket->assignedTo ?? '',
+            'product'    => $ticket->product    ?? '',
+            'project'    => $ticket->project    ?? '',
+            'customer'   => $ticket->customer   ?? '',
+        );
+
+        return $markdown;
+    }
 }
