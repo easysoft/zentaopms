@@ -574,6 +574,32 @@ class zaiTest
     }
 
     /**
+     * Test convertPlanToMarkdown static method.
+     *
+     * @param  object     $plan
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertPlanToMarkdownTest($plan, ?array $langData = null): array
+    {
+        return zaiModel::convertPlanToMarkdown($plan, $langData);
+    }
+
+    /**
+     * Test convertOpportunityToMarkdown static method.
+     *
+     * @param  object     $opportunity
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertOpportunityToMarkdownTest($opportunity, ?array $langData = null): array
+    {
+        return zaiModel::convertOpportunityToMarkdown($opportunity, $langData);
+    }
+
+    /**
      * Test searchKnowledgesInCollections method.
      *
      * @param  string $query
