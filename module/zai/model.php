@@ -1072,6 +1072,42 @@ class zaiModel extends model
      * @param  object $target
      * @return mixed
      */
+    public static function extractFieldValue(string $objectType, string $field, object $target)
+    {
+        $data = (array)$target;
+        if(array_key_exists($field, $data)) return $data[$field];
+
+        $aliases = static::getFieldAliasMap($objectType);
+        if(isset($aliases[$field]))
+        {
+            foreach((array)$aliases[$field] as $alias)
+            {
+                if(array_key_exists($alias, $data)) return $data[$alias];
+            }
+        }
+
+        $snake = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $field));
+        if($snake !== $field && array_key_exists($snake, $data)) return $data[$snake];
+
+        if(array_key_exists($field . 'Text', $data)) return $data[$field . 'Text'];
+
+        return null;
+    }
+
+    /**
+     * 获取字段别名映射。
+     * Get alias map for field values.
+     *
+     * @param  string $objectType
+     * @return array
+     */
+    public static function getFieldAliasMap(string $objectType): array
+    {
+        static $aliasMap = array(
+        );
+
+        return $aliasMap[$objectType] ?? array();
+    }
 
     /**
      * 将 STORY 对象转换为 Markdown 格式。
