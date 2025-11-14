@@ -535,6 +535,45 @@ class zaiTest
     }
 
     /**
+     * Test convertCaseToMarkdown static method.
+     *
+     * @param  object     $case
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertCaseToMarkdownTest($case, ?array $langData = null): array
+    {
+        return zaiModel::convertCaseToMarkdown($case, $langData);
+    }
+
+    /**
+     * Test convertIssueToMarkdown static method.
+     *
+     * @param  object     $issue
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertIssueToMarkdownTest($issue, ?array $langData = null): array
+    {
+        return zaiModel::convertIssueToMarkdown($issue, $langData);
+    }
+
+    /**
+     * Test convertRiskToMarkdown static method.
+     *
+     * @param  object     $risk
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertRiskToMarkdownTest($risk, ?array $langData = null): array
+    {
+        return zaiModel::convertRiskToMarkdown($risk, $langData);
+    }
+
+    /**
      * Test searchKnowledgesInCollections method.
      *
      * @param  string $query
