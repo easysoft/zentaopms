@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildCreateRepoForm();
 timeout=0
-cid=0
+cid=18125
 
 - 执行repoZenTest模块的buildCreateRepoFormTest方法，参数是1 属性objectID @1
 - 执行repoZenTest模块的buildCreateRepoFormTest方法，参数是2 属性objectID @2

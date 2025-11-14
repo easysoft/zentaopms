@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDoc();
 timeout=0
-cid=0
+cid=19423
 
 - 步骤1：验证文档ID属性id @1
 - 步骤2：验证文档标题属性title @Test Doc

@@ -4,7 +4,7 @@
 /**
 
 title=测试jenkinsModel->getTasks();
-cid=1
+cid=16833
 
 - 测试获取流水线 1 列表 depth 0 @0
 - 测试获取流水线 1 列表 depth 1 @0

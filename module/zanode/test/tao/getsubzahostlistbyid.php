@@ -5,7 +5,7 @@
 
 title=测试 zanodeTao::getSubZahostListByID();
 timeout=0
-cid=0
+cid=19811
 
 - 步骤1：正常主机ID(4)获取子主机，应返回3个子主机属性count @3
 - 步骤2：不存在主机ID获取子主机，应返回空数组属性count @0

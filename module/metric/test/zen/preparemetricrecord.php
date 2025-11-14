@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareMetricRecord();
 timeout=0
-cid=0
+cid=17200
 
 - 执行$methodExists @1
 - 执行$result2 @1

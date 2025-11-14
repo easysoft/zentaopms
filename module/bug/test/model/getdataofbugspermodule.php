@@ -11,7 +11,7 @@ zenData('module')->loadYaml('grade')->gen(10);
 
 title=bugModel->getDataOfBugsPerModule();
 timeout=0
-cid=1
+cid=15368
 
 - 获取未设置模块的数据
  - 第0条的name属性 @/

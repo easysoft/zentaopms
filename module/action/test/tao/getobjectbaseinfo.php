@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getObjectBaseInfo().
 timeout=0
-cid=1
+cid=14951
 
 - 测试获取project=11的首个bug的id,title,project字段
  - 属性id @1

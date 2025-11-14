@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildImportBugSearchForm();
 timeout=0
-cid=0
+cid=16415
 
 - 步骤1:正常执行和查询ID,包含产品和项目
  - 属性success @1

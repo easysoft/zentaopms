@@ -5,7 +5,7 @@
 
 title=测试 gitModel::linkCommit();
 timeout=0
-cid=0
+cid=16549
 
 - 步骤1：正常关联单个设计和提交（因linkCommit方法存在bug） @has_error
 - 步骤2：关联多个设计和提交（因linkCommit方法存在bug） @has_error

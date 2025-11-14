@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->getInfoFromPackage();
 timeout=0
-cid=1
+cid=16462
 
 - 获取插件1的详细信息
  - 属性name @code1

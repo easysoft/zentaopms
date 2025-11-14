@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(5);
 
 title=测试 kanbanModel->activateCard();
 timeout=0
-cid=1
+cid=16867
 
 - 测试激活卡片1，进度0
  - 属性id @1

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiSyncMR();
 timeout=0
-cid=0
+cid=17234
 
 - 有CI的合并请求，更新本地MR的流水线状态和编辑者
  - 属性id @4

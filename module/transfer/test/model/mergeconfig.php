@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 transfer->mergeConfig();
 timeout=0
-cid=1
+cid=19327
 
 - 测试获取合并配置后的字段
  - 属性6 @deadline

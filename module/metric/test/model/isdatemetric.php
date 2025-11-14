@@ -5,7 +5,7 @@
 
 title=测试 metricModel::isDateMetric();
 timeout=0
-cid=0
+cid=17138
 
 - 执行metric模块的isDateMetric方法，参数是$systemHeader  @false
 - 执行metric模块的isDateMetric方法，参数是$fullHeader  @true

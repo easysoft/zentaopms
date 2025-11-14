@@ -5,7 +5,7 @@
 
 title=测试 treeModel::setModuleLang();
 timeout=0
-cid=0
+cid=19391
 
 - 步骤1：正常情况 - 验证name属性属性name @名称
 - 步骤2：验证short属性属性short @简称

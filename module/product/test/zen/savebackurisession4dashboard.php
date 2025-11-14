@@ -5,7 +5,7 @@
 
 title=测试 productZen::saveBackUriSession4Dashboard();
 timeout=0
-cid=0
+cid=17606
 
 - 测试返回hasProductPlanList值为0属性hasProductPlanList @0
 - 测试返回hasReleaseList值为0属性hasReleaseList @0

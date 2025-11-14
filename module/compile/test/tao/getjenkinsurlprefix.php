@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 compileModel->getJenkinsUrlPrefix().
 timeout=0
-cid=1
+cid=15758
 
 - 测试当url为http:www.baidu.com, pipeline包含/job/且在开头的情况，生成的url链接是否正确。 @http://www.baidu.com/job/Job1
 - 测试当url为http:www.google.com, pipeline不包含/job/的情况，生成的url链接是否正确。 @http://www.google.com/job/Job2/

@@ -24,7 +24,7 @@ su('admin');
 
 title=测试 kanbanModel->getLanes4Group();
 timeout=0
-cid=1
+cid=16933
 
 - 获取执行1 story pri的泳道 @,优先级: 无
 - 获取执行1 story category的泳道 @,功能

@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->linkToExecutionForCreate();
-cid=0
+cid=18652
 
 - 不传入执行，也不传入需求。 @0
 - 传入执行，不传入需求。 @0

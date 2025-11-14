@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::fetchHook();
 timeout=0
-cid=0
+cid=19688
 
 - 步骤1：测试钉钉用户webhook类型，无绑定用户 @Could not resolve host
 - 步骤2：测试微信用户webhook类型，无绑定用户 @false

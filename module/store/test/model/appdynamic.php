@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 storeModel->appDynamic().
 timeout=0
-cid=1
+cid=18448
 
 - 测试获取应用动态第一页信息 @Success
 - 测试每页展示5条动态 @5

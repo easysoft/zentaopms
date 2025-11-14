@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::processStepResults();
 timeout=0
-cid=0
+cid=19217
 
 - 步骤1：用例有步骤，结果为pass第1条的result属性 @pass
 - 步骤2：用例有步骤，结果为fail第1条的result属性 @fail

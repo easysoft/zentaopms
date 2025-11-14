@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getPivotID();
 timeout=0
-cid=0
+cid=17444
 
 - 步骤1：正常分组ID获取透视表(group=1的最大ID) @1006
 - 步骤2：边界值分组ID为0的情况 @0

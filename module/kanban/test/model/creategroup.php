@@ -11,7 +11,7 @@ zenData('kanbanregion')->gen(5);
 
 title=测试 kanbanModel->createGroup();
 timeout=0
-cid=1
+cid=16893
 
 - 测试创建看板1 区域1的看板组
  - 属性kanban @1

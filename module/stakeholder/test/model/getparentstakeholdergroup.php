@@ -5,7 +5,7 @@
 
 title=测试 stakeholderModel->getParentStakeholderGroup();
 timeout=0
-cid=1
+cid=18437
 
 - 获取对象ID为0的父对象干系人分组信息第2条的user1属性 @user1
 - 获取项目集ID为1-10的父项目集干系人分组信息第2条的admin属性 @admin

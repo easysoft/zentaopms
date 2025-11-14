@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildProductSwitcher();
 timeout=0
-cid=0
+cid=16417
 
 - 步骤1：多产品情况，应包含全部选项第0条的0属性 @所有产品
 - 步骤2：单个normal产品第0条的1属性 @Product A

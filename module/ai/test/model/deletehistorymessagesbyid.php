@@ -5,7 +5,7 @@
 
 title=测试 aiModel::deleteHistoryMessagesByID();
 timeout=0
-cid=0
+cid=15017
 
 - 执行aiTest模块的deleteHistoryMessagesByIDTest方法，参数是1, 1, array  @0
 - 执行aiTest模块的deleteHistoryMessagesByIDTest方法，参数是2, 2, array  @0

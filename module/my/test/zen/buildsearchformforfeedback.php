@@ -5,7 +5,7 @@
 
 title=测试 myZen::buildSearchFormForFeedback();
 timeout=0
-cid=0
+cid=17314
 
 - 执行myZenTest模块的buildSearchFormForFeedbackTest方法，参数queryID为0，orderBy为id_desc >> 期望hasActionURL为1
 - 执行myZenTest模块的buildSearchFormForFeedbackTest方法，参数queryID为1，orderBy为id_desc >> 期望queryID为1

@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getValidObjects();
 timeout=0
-cid=0
+cid=17195
 
 - 执行$result @3
 - 执行$result['product'] @5

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildStorySearchForm();
 timeout=0
-cid=0
+cid=18128
 
 - 执行repoZenTest模块的buildStorySearchFormTest方法，参数是1, 'abc123', 'all', 1, array 属性result @success
 - 执行repoZenTest模块的buildStorySearchFormTest方法，参数是2, 'def456', 'bySearch', 2, array 属性result @success

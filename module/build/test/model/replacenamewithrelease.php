@@ -5,7 +5,7 @@
 
 title=测试 buildModel->replaceNameWithRelease();
 timeout=0
-cid=1
+cid=15506
 
 - 替换版本的名称第2030-01-01条的0属性 @发布10
 - 替换包含主干版本的名称第2030-01-01条的0属性 @发布10

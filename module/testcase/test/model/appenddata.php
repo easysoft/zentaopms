@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 testcaseModel->appendData();
 timeout=0
-cid=1
+cid=18952
 
 - 获取case 1 2 可以加入的数据
  - 第1条的bugs属性 @6

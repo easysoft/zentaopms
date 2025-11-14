@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAssignMeBlockID();
 timeout=0
-cid=0
+cid=18680
 
 - 步骤1:isonlybody()为false时,返回0 @0
 - 步骤2:没有符合条件的block记录,返回0 @0

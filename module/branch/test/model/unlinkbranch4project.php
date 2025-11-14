@@ -5,7 +5,7 @@
 
 title=测试 branchModel::unlinkBranch4Project();
 timeout=0
-cid=0
+cid=15339
 
 - 步骤1：测试单个产品解除分支关联 @0
 - 步骤2：测试多个产品批量解除分支关联 @0

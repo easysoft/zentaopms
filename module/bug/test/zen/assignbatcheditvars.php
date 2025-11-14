@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignBatchEditVars();
 timeout=0
-cid=0
+cid=15425
 
 - 测试正常产品批量编辑情况 @1
 - 测试分支产品批量编辑情况 @1

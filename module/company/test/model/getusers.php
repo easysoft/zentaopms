@@ -13,7 +13,7 @@ zenData('dept')->gen(10);
 
 title=测试companyModel->getUsersTest();
 timeout=0
-cid=1
+cid=15734
 
 - 查询内部人员
  - 第0条的account属性 @admin

@@ -5,7 +5,7 @@
 
 title=测试 productZen::getBrowseProduct();
 timeout=0
-cid=0
+cid=17576
 
 - 执行productTest模块的getBrowseProductTest方法，参数是1 属性name @产品1
 - 执行productTest模块的getBrowseProductTest方法，参数是2 属性name @产品2

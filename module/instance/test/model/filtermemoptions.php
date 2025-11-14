@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::filterMemOptions();
 timeout=0
-cid=0
+cid=16793
 
 - 步骤1：1GB内存，期望返回6个选项 @6
 - 步骤2：512MB内存，期望返回7个选项 @7

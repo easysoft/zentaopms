@@ -5,7 +5,7 @@
 
 title=测试 editorModel::addLink4Dir();
 timeout=0
-cid=0
+cid=16227
 
 - 步骤1：测试control.php目录链接属性hasNewPageLink @1
 - 步骤2：测试model.php目录链接属性hasNewMethodLink @1

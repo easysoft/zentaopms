@@ -5,7 +5,7 @@
 
 title=测试 programZen::getProgramsByType();
 timeout=0
-cid=0
+cid=17732
 
 - 执行programTest模块的getProgramsByTypeTest方法，参数是'doing', 'id_desc', 0  @9
 - 执行programTest模块的getProgramsByTypeTest方法，参数是'unclosed', 'id_desc', 0  @17

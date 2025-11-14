@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testtaskModel->getResultsFiles();
 timeout=0
-cid=1
+cid=19188
 
 - 测试获取结果 1 2 3 的文件
  - 属性result @1: 1 3: 3

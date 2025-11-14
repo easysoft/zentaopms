@@ -5,7 +5,7 @@
 
 title=测试 searchModel::processSearchParams();
 timeout=0
-cid=0
+cid=18306
 
 - 测试正常情况：session中有完整的搜索函数配置 @array
 - 测试缺少funcModel的情况 @array

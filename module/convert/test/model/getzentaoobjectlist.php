@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoObjectList();
 timeout=0
-cid=0
+cid=15789
 
 - 步骤1:enableER=true且URAndSR=true时,返回所有对象(含epic和requirement)属性epic @业务需求
 - 步骤2:enableER=false时,不包含epic对象属性requirement @用户需求

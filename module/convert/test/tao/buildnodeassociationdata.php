@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildNodeAssociationData();
 timeout=0
-cid=0
+cid=15819
 
 - 执行convertTest模块的buildNodeAssociationDataTest方法，参数是array 属性source_node_id @1001
 - 执行convertTest模块的buildNodeAssociationDataTest方法，参数是array 属性source_node_entity @project

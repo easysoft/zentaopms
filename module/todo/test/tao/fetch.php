@@ -8,7 +8,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试完成待办 todoModel->finish();
 timeout=0
-cid=1
+cid=19270
 
 - 查询id=1的todo属性
  - 属性id @1

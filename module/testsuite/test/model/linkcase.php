@@ -9,7 +9,7 @@ zenData('case')->gen(3);
 /**
 
 title=测试 testsuiteModel->linkCase();
-cid=1
+cid=19149
 pid=1
 
 测试存在的suiteID值为1,cases值为空 >> 0

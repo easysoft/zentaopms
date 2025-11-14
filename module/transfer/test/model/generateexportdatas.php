@@ -15,7 +15,7 @@ su('admin');
 
 title=测试 transfer->generateExportDatas();
 timeout=0
-cid=1
+cid=19314
 
 - 测试导出任务预计工时第41条的estimate属性 @5
 - 测试导出任务消耗工时第41条的consumed属性 @12

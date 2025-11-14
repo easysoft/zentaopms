@@ -5,7 +5,7 @@
 
 title=测试 programModel::updateOrder();
 timeout=0
-cid=1
+cid=17714
 
 - 设置排序是1属性order @1
 - 设置排序是5属性order @5

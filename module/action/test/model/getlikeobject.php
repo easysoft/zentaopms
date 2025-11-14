@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getLikeObject();
 timeout=0
-cid=0
+cid=14902
 
 - 执行action模块的getLikeObjectTest方法，参数是TABLE_PROJECT, 'name', 'name', '%项目集%'  @5
 - 执行action模块的getLikeObjectTest方法，参数是TABLE_PROJECT, 'code', 'code', '%program%'  @5

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAfterEditLocation();
 timeout=0
-cid=0
+cid=18678
 
 - 执行storyTest模块的getAfterEditLocationTest方法，参数是1, 'story'  @getaftereditlocation.php?m=story&f=view&storyID=1&version=0&param=0&storyType=story
 - 执行storyTest模块的getAfterEditLocationTest方法，参数是2, 'requirement'  @getaftereditlocation.php?m=requirement&f=view&storyID=2&version=0&param=0&storyType=requirement

@@ -17,7 +17,7 @@ $scenes = $tester->dao->update(TABLE_SCENE)->set("path= replace(`path`,',0,', ',
 /**
 
 title=测试 testcaseModel->getSceneMenu();
-cid=1
+cid=18998
 
 - 测试获取产品 1 模块 0 起始场景 0 分支 all 当前场景 0 无空值 的场景数组 @/,/场景1,/场景1/场景2,/场景3,/场景4,/场景5,/场景6,/场景6/场景7,/场景6/场景7/场景8,/场景9,/场景10
 

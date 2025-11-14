@@ -5,7 +5,7 @@
 
 title=测试 repoTao::parseTaskComment();
 timeout=0
-cid=0
+cid=18121
 
 - 测试步骤1：正常解析完成任务注释属性8 @8
 - 测试步骤2：解析多个任务ID的注释

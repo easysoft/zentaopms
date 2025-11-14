@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getCommitsByObject();
 timeout=0
-cid=0
+cid=18053
 
 - 步骤1：获取任务关联提交信息第0条的id属性 @1
 - 步骤2：获取bug关联提交信息第0条的revision属性 @c808480afe22d3a55d94e91c59a8f3170212ade0

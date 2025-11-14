@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getRelatedPrivs();
 timeout=0
-cid=1
+cid=16716
 
 - 选中my-todo权限，会提示依赖my和todo模块
  - 第depend条的my属性 @my

@@ -5,7 +5,7 @@
 
 title=测试 projectZen::assignTesttaskVars();
 timeout=0
-cid=0
+cid=17923
 
 - 步骤1:空数组输入
  - 属性waitCount @0

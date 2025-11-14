@@ -5,7 +5,7 @@
 
 title=测试 treeModel->createCaseLink();
 timeout=0
-cid=1
+cid=19349
 
 - 测试创建module 4  的buglink属性url @testcase-browse-1-0-byModule-5.html
 - 测试创建module 20 的buglink属性url @testcase-browse-1-0-byModule-10.html

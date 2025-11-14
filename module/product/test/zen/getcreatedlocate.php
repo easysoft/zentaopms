@@ -5,7 +5,7 @@
 
 title=测试 productZen::getCreatedLocate();
 timeout=0
-cid=0
+cid=17577
 
 - 测试步骤1:在product标签页创建产品,programID为0
  - 属性result @success

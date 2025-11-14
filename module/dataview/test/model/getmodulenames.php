@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::getModuleNames();
 timeout=0
-cid=0
+cid=15954
 
 - 步骤1：正常表名转换测试
  - 属性zt_bug @bug

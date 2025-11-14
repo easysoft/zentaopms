@@ -5,7 +5,7 @@
 
 title=测试 designZen::setMenu();
 timeout=0
-cid=0
+cid=15999
 
 - 测试项目不存在的情况属性count @0
 - 测试 waterfall 项目且 type 为空的情况

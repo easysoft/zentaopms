@@ -5,7 +5,7 @@
 
 title=测试 projectZen::processBugSearchParams();
 timeout=0
-cid=0
+cid=17955
 
 - 执行$searchConfig1['fields']['product'] @1
 - 执行$searchConfig2['fields']['product'] @1

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeTao->checkFields4Create().
 timeout=0
-cid=1
+cid=19781
 
 - 测试添加物理机节点时必填项
  - 第name条的0属性 @『名称』不能为空。

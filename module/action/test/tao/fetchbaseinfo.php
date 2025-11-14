@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->fetchBaseInfo().
 timeout=0
-cid=1
+cid=14941
 
 - 测试获取id为1的action的基本信息
  - 属性id @1

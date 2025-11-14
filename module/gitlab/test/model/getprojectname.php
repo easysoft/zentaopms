@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getProjectName();
 timeout=0
-cid=0
+cid=16655
 
 - 测试步骤1：获取有效GitLab服务器1项目ID 1的项目名称 @Monitoring
 - 测试步骤2：获取有效GitLab服务器1项目ID 2的项目名称 @testHtml

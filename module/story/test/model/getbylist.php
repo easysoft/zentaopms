@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByList();
 timeout=0
-cid=0
+cid=18504
 
 - 测试步骤1：传入有效ID列表，获取未删除需求 @4
 - 测试步骤2：传入有效ID列表使用all模式，获取所有需求 @5

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::isFiltersAllEmpty();
 timeout=0
-cid=0
+cid=17411
 
 - 步骤1：空数组输入测试，应返回false @0
 - 步骤2：所有default值为empty的过滤器数组，应返回true @1

@@ -5,7 +5,7 @@
 
 title=测试 docModel->getHotTemplates();
 timeout=0
-cid=1
+cid=16095
 
 - 获取所有文档模板
  - 第0条的id属性 @1

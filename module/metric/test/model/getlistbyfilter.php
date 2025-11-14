@@ -5,7 +5,7 @@
 
 title=getListByFilter
 timeout=0
-cid=1
+cid=17105
 
 - 执行metric模块的getListByFilter方法，参数是$filters1
  - 第0条的code属性 @count_of_program

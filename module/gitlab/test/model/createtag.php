@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::createTag();
 timeout=0
-cid=1
+cid=16640
 
 - 使用空的gitlabID,projectID,标签对象创建GitLab标签 @return false
 - 使用空的gitlabID、projectID,正确的标签对象创建GitLab标签 @return false

@@ -4,7 +4,7 @@
 
 title=测试 installModel->createTable();
 timeout=0
-cid=1
+cid=16769
 
 - 测试是否能正常生成mysql7.0版本的数据库表。 @1
 - 测试生成的数据库product表是否含有数据。 @0

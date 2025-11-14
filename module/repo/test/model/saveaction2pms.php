@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->saveAction2PMS();
 timeout=0
-cid=1
+cid=18093
 
 - 开始任务
  - 第1条的status属性 @doing

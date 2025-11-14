@@ -5,7 +5,7 @@
 
 title=测试 svnModel::setRepo();
 timeout=0
-cid=0
+cid=18723
 
 - 步骤1：正常SVN仓库设置属性result @1
 - 步骤2：HTTPS协议SVN仓库设置属性result @1

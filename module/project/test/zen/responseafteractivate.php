@@ -5,7 +5,7 @@
 
 title=测试 projectZen::responseAfterActivate();
 timeout=0
-cid=0
+cid=17963
 
 - 执行projectzenTest模块的responseAfterActivateTest方法，参数是1, array  @success
 - 执行projectzenTest模块的responseAfterActivateTest方法，参数是2, array  @success

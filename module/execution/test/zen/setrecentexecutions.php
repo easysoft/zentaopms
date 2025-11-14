@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setRecentExecutions();
 timeout=0
-cid=0
+cid=16442
 
 - 测试首次添加执行ID @1
 - 测试添加新执行ID到已有列表 @2,1

@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::setBrowseSessionAndCookie();
 timeout=0
-cid=0
+cid=15561
 
 - 步骤1：正常情况执行成功 @1
 - 步骤2：bymodule类型执行成功 @1

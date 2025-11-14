@@ -5,7 +5,7 @@
 
 title=测试 settingModel::getURSR();
 timeout=0
-cid=0
+cid=18363
 
 - 执行settingTest模块的getURSRTest方法  @12345
 - 执行settingTest模块的getURSRTest方法，参数是true  @2

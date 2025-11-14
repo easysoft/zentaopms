@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getChildItems();
 timeout=0
-cid=0
+cid=18633
 
 - 执行storyTest模块的getChildItemsTest方法，参数是array
  - 第1条的total属性 @3

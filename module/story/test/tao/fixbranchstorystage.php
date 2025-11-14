@@ -5,7 +5,7 @@
 
 title=测试 storyModel->fixBranchStoryStage();
 timeout=0
-cid=0
+cid=18628
 
 - 不传入任何项目。 @0
 - 传入需求，检查结果。 @testing

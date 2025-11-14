@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProjectTeamBlock();
 timeout=0
-cid=0
+cid=15278
 
 - 步骤1：正常参数调用属性success @1
 - 步骤2：空参数调用使用默认值属性success @1

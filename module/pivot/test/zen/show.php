@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::show();
 timeout=0
-cid=0
+cid=17466
 
 - 执行$result @1
 - 执行$result['pivot'] @1

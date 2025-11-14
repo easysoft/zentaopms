@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->execGitlabPipeline();
 timeout=0
-cid=1
+cid=16839
 
 - 测试执行jenkins job的情况属性status @create_fail
 - 测试执行gitlab job的情况属性status @created

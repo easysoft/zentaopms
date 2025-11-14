@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::idenfyFromSSO();
 timeout=0
-cid=0
+cid=18416
 
 - 步骤1:测试status参数不为success时返回false @0
 - 步骤2:测试md5签名验证失败时返回false @0

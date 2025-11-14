@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignForBatchCreate();
 timeout=0
-cid=0
+cid=19066
 
 - 步骤1:正常产品ID,空分支,无模块,无需求属性executed @1
 - 步骤2:正常产品ID,指定分支,无模块,无需求属性executed @1

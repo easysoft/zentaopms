@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getProduct();
 timeout=0
-cid=1
+cid=19375
 
 - 获取module 2 的产品属性name @正常产品1
 - 获取module 7 的产品属性name @正常产品1

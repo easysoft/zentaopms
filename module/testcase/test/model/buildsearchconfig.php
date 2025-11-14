@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->buildSearchConfig();
-cid=1
+cid=18965
 pid=1
 
 - 获取全部产品配置的module @testcase

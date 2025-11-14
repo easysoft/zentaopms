@@ -5,7 +5,7 @@
 
 title=测试 metricModel::processObjectList();
 timeout=0
-cid=0
+cid=17148
 
 - 步骤1：URAndSR启用时保留requirement @1
 - 步骤2：URAndSR禁用时移除requirement @0

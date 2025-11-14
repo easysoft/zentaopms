@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiDeleteUser();
 timeout=0
-cid=1
+cid=16595
 
 - 使用空的userID删除gitlab群组 @0
 - 使用错误的gitlabID删除gitlab群组 @404 User Not Found

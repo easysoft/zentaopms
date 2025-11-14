@@ -5,7 +5,7 @@
 
 title=测试 chartModel::addFormatter4Echart();
 timeout=0
-cid=0
+cid=15562
 
 - 执行$result1 @1
 - 执行$result2 @1

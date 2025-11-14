@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildIssuelinkData();
 timeout=0
-cid=0
+cid=15815
 
 - 执行convertTest模块的buildIssuelinkDataTest方法，参数是array 属性linktype @blocks
 - 执行convertTest模块的buildIssuelinkDataTest方法，参数是array 属性linktype @~~

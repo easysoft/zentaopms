@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getStakeholders();
-cid=1
+cid=18443
 
 - 获取项目ID=0时，按照id倒序排列的所有干系人 @0
 - 获取项目ID=0时，按照name倒序排列的所有干系人 @0

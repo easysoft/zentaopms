@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->getByID();
 timeout=0
-cid=1
+cid=17988
 
 - 测试获取ID为0的release信息 @0
 - 测试获取ID不存在的release信息 @0

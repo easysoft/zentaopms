@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getProgramsForAdminGroup();
 timeout=0
-cid=0
+cid=16714
 
 - 执行groupTest模块的getProgramsForAdminGroupTest方法 属性1 @项目集1
 - 执行groupTest模块的getProgramsForAdminGroupTest方法 属性1 @项目集1

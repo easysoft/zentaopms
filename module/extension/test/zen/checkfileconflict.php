@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkFileConflict();
 timeout=0
-cid=0
+cid=16481
 
 - 执行func模块的invokeArgs方法，参数是$zenInstance, array 属性result @ok
 - 执行func模块的invokeArgs方法，参数是$zenInstance, array 属性result @ok

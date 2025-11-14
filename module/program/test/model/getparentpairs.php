@@ -25,7 +25,7 @@ $program->gen(10);
 /**
 
 title=测试 programModel::getParentPairs();
-cid=1
+cid=17690
 pid=1
 
 获取所有父项目集的数量 >> 5

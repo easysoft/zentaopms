@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildStoryForSubmitReview();
 timeout=0
-cid=0
+cid=18674
 
 - 步骤1：不需要评审的正常情况属性status @active
 - 步骤2：有评审者的正常情况属性status @active

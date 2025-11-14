@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::checkBindedUser();
 timeout=0
-cid=0
+cid=16673
 
 - 测试管理员用户调用，不检查绑定 @success
 - 测试普通用户已绑定的情况 @success

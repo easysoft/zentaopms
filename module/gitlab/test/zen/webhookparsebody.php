@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::webhookParseBody();
 timeout=0
-cid=0
+cid=16679
 
 - 测试解析有效的issue类型webhook事件,期望成功解析并返回对象 @1
 - 测试解析空的object_kind,期望返回false(类型错误) @type_error_false

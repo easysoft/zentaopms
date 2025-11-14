@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao::getReviewRelated();
 timeout=0
-cid=0
+cid=14954
 
 - 步骤1：正常review查询project 1，返回第一个和第二个product以及project ID
  - 第0条的1属性 @1

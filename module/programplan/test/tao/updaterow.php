@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->updateRow()
-cid=0
+cid=17784
 
 - 传入空参数 @0
 - 检查未编辑前的数据。

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getBackupStatus();
 timeout=0
-cid=0
+cid=15615
 
 - 测试步骤1:正常获取备份状态,实例ID=1,备份名称=backup-001属性code @200
 - 测试步骤2:正常获取备份状态,实例ID=2,备份名称=backup-002第data条的status属性 @completed

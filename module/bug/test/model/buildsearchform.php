@@ -29,7 +29,7 @@ function initData()
 
 title=测试 bugModel::buildSearchForm();
 timeout=0
-cid=0
+cid=15347
 
 - 执行bugTest模块的buildSearchFormTest方法，参数是1, array 
  - 属性actionURL @/bug-browse-1.html

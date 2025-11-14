@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getToAndCcList();
-cid=1
+cid=16134
 
 - 测试抄送人为空时，获取的收信人列表 @0
 - 测试抄送人为admin时，获取的收信人列表 @admin

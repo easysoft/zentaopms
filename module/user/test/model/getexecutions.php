@@ -5,7 +5,7 @@
 
 title=测试 userModel->getExecutions();
 timeout=0
-cid=0
+cid=19610
 
 - 用户名为空，返回空数组。 @0
 - 用户 user2 未参与任何执行，返回空数组。 @0

@@ -5,7 +5,7 @@
 
 title=测试 backupZen::backupCode();
 timeout=0
-cid=0
+cid=15143
 
 - 步骤1：配置包含nofile属性result @success
 - 步骤2：正常备份属性result @success

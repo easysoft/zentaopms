@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printCaseBlock();
 timeout=0
-cid=0
+cid=15253
 
 - 执行blockTest模块的printCaseBlockTest方法，参数是$block1 属性count @5
 - 执行blockTest模块的printCaseBlockTest方法，参数是$block2 属性count @4

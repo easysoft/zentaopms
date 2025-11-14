@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createWorkflowStatus();
 timeout=0
-cid=0
+cid=15853
 
 - 步骤1:测试open版本下返回序列化的空数组 @a:0:{}
 - 步骤2:测试企业版无zentaoStatus相关键返回原始relations @a:1:{s:8:"otherKey";s:9:"testValue";}

@@ -5,7 +5,7 @@
 
 title=测试 weeklyModel::save();
 timeout=0
-cid=0
+cid=19739
 
 - 执行weeklyTest模块的saveTest方法，参数是1, '2023-10-15' 
  - 属性project @1

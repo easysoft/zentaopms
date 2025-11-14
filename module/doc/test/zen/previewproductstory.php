@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewProductStory();
 timeout=0
-cid=0
+cid=16205
 
 - 步骤1:setting视图下customSearch条件预览产品1的story类型需求(status=active) @5
 - 步骤2:setting视图下customSearch条件预览产品1的story类型需求(status=closed) @3

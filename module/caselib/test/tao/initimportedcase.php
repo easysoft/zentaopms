@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 caselibTao->insertImportedCase();
 timeout=0
-cid=1
+cid=15539
 
 - 测试初始化一条导入的用例1
  - 第0条的title属性 @用例1

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getRepoPairs();
 timeout=0
-cid=1
+cid=18078
 
 - 获取type为repo的结果集
  - 属性1 @[gitlab] testHtml

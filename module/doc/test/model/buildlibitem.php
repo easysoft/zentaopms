@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->buildLibItem();
-cid=1
+cid=16046
 
 - 构造api文档库节点
  - 属性type @apiLib

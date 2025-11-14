@@ -5,7 +5,7 @@
 
 title=测试 storyModel::submitReview();
 timeout=0
-cid=0
+cid=18588
 
 - 执行$storyList[28]属性status @reviewing
 - 执行$storyList[30]属性status @reviewing

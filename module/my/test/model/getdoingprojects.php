@@ -5,7 +5,7 @@
 
 title=测试 myModel::getDoingProjects();
 timeout=0
-cid=0
+cid=17282
 
 - 执行doingCount) && isset($result模块的projects方法  @1
 - 执行$result->doingCount <= 5 @1

@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->replaceImgURL();
-cid=0
+cid=16524
 
 - 不传入任何数据。 @0
 - 不传入 editorList 参数。属性step @<img src="{1.png}" /> <a href="https://www.baidu.com">baidu</a> https://www.zentao.net

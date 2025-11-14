@@ -14,7 +14,7 @@ zenData('case')->gen(1);
 
 title=测试 commonModel::diff();
 timeout=0
-cid=1
+cid=15649
 
 - 查看需求是否可以被修改 @1
 - 查看bug是否可以被修改 @1

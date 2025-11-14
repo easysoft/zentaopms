@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildCustomFieldValueData();
 timeout=0
-cid=0
+cid=15808
 
 - 步骤1：正常情况属性id @1001
 - 步骤2：缺少stringvalue属性stringvalue @~~

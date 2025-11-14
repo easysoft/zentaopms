@@ -5,7 +5,7 @@
 
 title=测试 projectZen::extractUnModifyForm();
 timeout=0
-cid=0
+cid=17940
 
 - 执行$result1, 'linkedProducts' @1
 - 执行$result2, 'allProducts' @1

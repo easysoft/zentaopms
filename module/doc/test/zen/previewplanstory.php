@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewPlanStory();
 timeout=0
-cid=0
+cid=16201
 
 - 步骤1:在setting视图下预览计划关联的需求 @3
 - 步骤2:在list视图下根据ID列表预览需求 @3

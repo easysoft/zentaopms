@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::filterFieldsWithSettings();
 timeout=0
-cid=0
+cid=17363
 
 - 执行$result1 @4
 - 执行$result2 @0

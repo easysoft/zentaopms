@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getResultByCodes();
 timeout=0
-cid=0
+cid=17124
 
 - 步骤1：正常情况测试有效代码数组属性count_of_product @0
 - 步骤2：空数组测试 @0

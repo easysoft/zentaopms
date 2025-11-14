@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 title=测试 mrModel->unlink();
 timeout=0
-cid=1
+cid=17260
 
 - 取消关联需求
  - 属性id @1

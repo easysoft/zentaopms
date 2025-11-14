@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getFormFieldsForChange();
 timeout=0
-cid=0
+cid=18684
 
 - 步骤1：测试需求1的变更表单字段包含title第title条的name属性 @title
 - 步骤2：测试需求2的变更表单字段包含spec第spec条的name属性 @spec

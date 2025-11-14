@@ -4,7 +4,7 @@
 /**
 
 title=测试 productModel->batchUpdate();
-cid=0
+cid=17471
 
 - 执行$changes
  - 属性field @program

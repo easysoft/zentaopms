@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getFormFieldsForEdit();
 timeout=0
-cid=1
+cid=18686
 
 - 测试获取普通产品的软件需求编辑表单字段
  - 第product条的control属性 @select

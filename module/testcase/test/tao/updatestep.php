@@ -10,7 +10,7 @@ zenData('casestep')->gen(10);
 
 title=测试 testcaseTao->updateStep();
 timeout=0
-cid=1
+cid=19055
 
 - 测试更新步骤的版本号
  - 第0条的version属性 @2

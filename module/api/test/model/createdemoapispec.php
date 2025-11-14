@@ -5,7 +5,7 @@
 
 title=测试 apiModel::createDemoApiSpec();
 timeout=0
-cid=0
+cid=15092
 
 - 步骤1：正常情况，使用完整的映射关系 @1
 - 步骤2：使用完整apiMap和部分moduleMap @1

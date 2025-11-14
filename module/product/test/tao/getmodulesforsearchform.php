@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getModulesForSearchForm();
-cid=0
+cid=17546
 
 - 产品视图下，不传入数据。 @/
 - 产品视图下，传入正常产品编号。 @5

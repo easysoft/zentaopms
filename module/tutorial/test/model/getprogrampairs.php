@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getProgramPairs();
 timeout=0
-cid=0
+cid=19453
 
 - 执行tutorialTest模块的getProgramPairsTest方法 属性1 @Test program
 - 执行tutorialTest模块的getProgramPairsTest方法  @1

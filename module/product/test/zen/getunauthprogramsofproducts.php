@@ -5,7 +5,7 @@
 
 title=测试 productZen::getUnauthProgramsOfProducts();
 timeout=0
-cid=0
+cid=17598
 
 - 执行productTest模块的getUnauthProgramsOfProductsTest方法，参数是$products1, $authPrograms1  @1
 - 执行productTest模块的getUnauthProgramsOfProductsTest方法，参数是$products2, $authPrograms2  @0

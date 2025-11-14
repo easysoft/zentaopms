@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::computeAuth();
 timeout=0
-cid=0
+cid=18412
 
 - 步骤1:测试正常token生成认证字符串,MD5值长度为32 @32
 - 步骤2:测试空token生成认证字符串,MD5值长度为32 @32

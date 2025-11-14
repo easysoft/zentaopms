@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiDeleteGroup();
 timeout=0
-cid=0
+cid=16586
 
 - 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$validGitlabID, $emptyGroupID  @0
 - 执行gitlabTest模块的apiDeleteGroupTest方法，参数是$invalidGitlabID, $validGroupID  @null

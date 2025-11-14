@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::checkVersion();
 timeout=0
-cid=0
+cid=16450
 
 - 测试步骤1：版本字符串为'all'时的检查 @1
 - 测试步骤2：版本字符串不包含当前版本时的检查 @0

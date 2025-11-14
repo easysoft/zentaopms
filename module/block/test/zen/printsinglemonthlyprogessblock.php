@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSingleMonthlyProgressBlock();
 timeout=0
-cid=0
+cid=15297
 
 - 执行blockTest模块的printSingleMonthlyProgressBlockTest方法，参数是1 属性doneStoryEstimateCount @6
 - 执行blockTest模块的printSingleMonthlyProgressBlockTest方法，参数是1 属性createStoryCountCount @6

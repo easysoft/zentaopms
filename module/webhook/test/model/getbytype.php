@@ -10,7 +10,7 @@ zenData('webhook')->gen(10);
 
 title=测试 webhookModel->getByType();
 timeout=0
-cid=1
+cid=19693
 
 - 通过type为dinggroup查id属性id @1
 - 通过type为dinguser查id属性id @2

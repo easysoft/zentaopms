@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::__construct();
 timeout=0
-cid=0
+cid=16777
 
 - 执行instanceTest模块的__constructTest方法 
  - 属性cneLoaded @1

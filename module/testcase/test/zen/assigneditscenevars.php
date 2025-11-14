@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignEditSceneVars();
 timeout=0
-cid=0
+cid=19065
 
 - 步骤1：正常场景对象编辑变量分配属性executed @1
 - 步骤2：产品不存在的场景对象变量分配属性executed @0

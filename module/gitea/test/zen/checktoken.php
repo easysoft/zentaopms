@@ -5,7 +5,7 @@
 
 title=测试 giteaZen::checkToken();
 timeout=0
-cid=0
+cid=16570
 
 - 执行$giteaZen, $method, $invalidGitea属性result @fail
 - 执行$giteaZen, $method, $missingNameGitea属性result @fail

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getCases();
 timeout=0
-cid=0
+cid=19412
 
 - 步骤1：测试返回数组类型 @1
 - 步骤2：测试返回数组长度 @1

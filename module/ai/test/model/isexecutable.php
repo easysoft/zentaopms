@@ -5,7 +5,7 @@
 
 title=测试 aiModel::isExecutable();
 timeout=0
-cid=0
+cid=15056
 
 - 步骤1：完整有效的prompt对象 @1
 - 步骤2：缺少必填字段name的prompt对象 @0

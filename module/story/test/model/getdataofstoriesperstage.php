@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getDataOfStoriesPerStage();
 timeout=0
-cid=0
+cid=18523
 
 - 按照需求阶段分组，获取分组后的需求数量 @10
 - 按照需求阶段分组，获取各个需求阶段的需求数量，查看wait下的数据

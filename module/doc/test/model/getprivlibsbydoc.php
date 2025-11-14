@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getPrivLibsByDoc();
-cid=1
+cid=16123
 
 - 获取有权限访问的文档库
  - 属性11 @11

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiReopenMR();
 timeout=0
-cid=0
+cid=17233
 
 - 测试步骤1：正常的gitlab主机重新打开MR @0
 - 测试步骤2：不存在的主机ID重新打开MR @0

@@ -5,7 +5,7 @@
 
 title=测试 jenkinsModel::getDepthJobs();
 timeout=0
-cid=0
+cid=16831
 
 - 测试正常情况：深度为1时解析Jenkins作业结构 @{"\/job\/simpleJob\/":"Simple Job","\/job\/paramJob\/":"Param Job","folder1":{"\/job\/folder1\/job\/subJob1\/":"Sub Job 1","\/job\/folder1\/job\/subJob2\/":"Sub Job 2"}}
 

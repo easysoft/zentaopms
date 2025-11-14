@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createWorkflowGroup();
 timeout=0
-cid=0
+cid=15852
 
 - 步骤1：开源版本直接返回原始relations @a:1:{s:4:"test";s:4:"data";}
 - 步骤2：企业版无项目关系时返回原始relations @a:1:{s:4:"test";s:4:"data";}

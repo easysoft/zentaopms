@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createTmpRelation();
 timeout=0
-cid=0
+cid=15849
 
 - 执行convertTest模块的createTmpRelationTest方法，参数是'juser', 'admin', 'zuser', 'admin001', '' 
  - 属性AType @juser

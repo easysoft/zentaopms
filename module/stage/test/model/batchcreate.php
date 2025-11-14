@@ -3,7 +3,7 @@
 /**
 
 title=测试 stageModel->batchCreate();
-cid=1
+cid=18418
 
 - 测试批量创建瀑布项目的阶段 1 @2
 - 测试批量创建瀑布项目的阶段 2 @4

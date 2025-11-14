@@ -5,7 +5,7 @@
 
 title=测试 projectZen::processBuildSearchParams();
 timeout=0
-cid=0
+cid=17957
 
 - 步骤1:无产品项目,product字段应该被移除第fields条的name属性 @Name
 - 步骤2:有产品项目,product字段应该存在第fields条的product属性 @Product

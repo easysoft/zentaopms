@@ -5,7 +5,7 @@
 
 title=测试 biModel::getOptionsFromSql();
 timeout=0
-cid=0
+cid=15177
 
 - 执行biTest模块的getOptionsFromSqlTest方法，参数是'SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'account' 属性1 @admin
 - 执行biTest模块的getOptionsFromSqlTest方法，参数是'SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'account' 属性2 @user1

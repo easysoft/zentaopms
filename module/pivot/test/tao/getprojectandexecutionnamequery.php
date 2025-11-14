@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getProjectAndExecutionNameQuery();
 timeout=0
-cid=0
+cid=17448
 
 - 步骤1：验证返回数组类型 @1
 - 步骤2：验证返回记录数量 @7

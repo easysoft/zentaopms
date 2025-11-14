@@ -5,7 +5,7 @@
 
 title=测试 testsuiteModel::getCaseLinkedStories();
 timeout=0
-cid=0
+cid=19141
 
 - 步骤1：正常情况，产品1下关联的需求
  - 属性1 @需求1

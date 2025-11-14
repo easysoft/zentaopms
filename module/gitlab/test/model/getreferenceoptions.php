@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->getReferenceOptions();
 timeout=0
-cid=1
+cid=16657
 
 - 获取gitlab服务器1空项目id 1的项目分支和标签。 @0
 - 获取gitlab服务器1项目id 2的项目分支和标签。

@@ -5,7 +5,7 @@
 
 title=测试 metricModel::parseDateStr();
 timeout=0
-cid=0
+cid=17145
 
 - 步骤1：默认all类型测试，检查年份第year条的year属性 @2024
 - 步骤2：年份类型测试属性year @2024

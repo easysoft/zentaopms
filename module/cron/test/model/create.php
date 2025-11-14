@@ -5,7 +5,7 @@
 
 title=测试 cronModel->create();
 timeout=0
-cid=1
+cid=15880
 
 - 命令为空时候返回值属性command @『命令』不能为空。
 - 添加之后对比添加数据信息

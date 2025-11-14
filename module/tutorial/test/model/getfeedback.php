@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getFeedback();
 timeout=0
-cid=0
+cid=19436
 
 - 步骤1：验证反馈ID为1 @1
 - 步骤2：验证反馈标题为Test feedback @Test feedback

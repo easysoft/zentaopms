@@ -5,7 +5,7 @@
 
 title=fetchMetricsWithFilter
 timeout=0
-cid=1
+cid=17173
 
 - 执行metric模块的fetchMetricsWithFilter方法，参数是$filters1
  - 第0条的id属性 @1

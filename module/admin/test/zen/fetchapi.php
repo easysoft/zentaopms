@@ -5,7 +5,7 @@
 
 title=测试 adminZen::fetchAPI();
 timeout=0
-cid=0
+cid=14987
 
 - 测试步骤1:验证fetchAPI方法存在且可访问 >> 期望返回1
 - 测试步骤2:使用空URL调用,验证返回false或处理异常 >> 期望返回1

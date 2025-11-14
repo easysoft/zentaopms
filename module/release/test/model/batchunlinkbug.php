@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->batchUnlinkBug();
 timeout=0
-cid=1
+cid=17980
 
 - 测试发布ID为空时，解除跟bugID=1,2的关联 @0
 - 测试发布ID=1时，解除跟bugID=1,2的关联

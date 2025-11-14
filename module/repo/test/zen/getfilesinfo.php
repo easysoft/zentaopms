@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getFilesInfo();
 timeout=0
-cid=0
+cid=18139
 
 - 步骤1:正常Git仓库返回2个文件信息 @2
 - 步骤2:Gitlab仓库revision字段为空第0条的revision属性 @~~

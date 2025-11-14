@@ -5,7 +5,7 @@
 
 title=测试 executionZen::checkCFDDate();
 timeout=0
-cid=0
+cid=16420
 
 - 测试步骤1:正常有效的日期范围 @1
 - 测试步骤2:开始日期为空 @『开始日期』不能为空

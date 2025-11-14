@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignProductRelatedVars();
 timeout=0
-cid=0
+cid=15427
 
 - 步骤1:空数据
  - 属性branchProduct @0

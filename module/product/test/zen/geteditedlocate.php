@@ -5,7 +5,7 @@
 
 title=测试 productZen::getEditedLocate();
 timeout=0
-cid=0
+cid=17579
 
 - 测试步骤1:programID不为0,跳转到program模块
  - 属性result @success

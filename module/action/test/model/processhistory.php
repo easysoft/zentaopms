@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 actionModel->processHistory();
 timeout=0
-cid=1
+cid=14924
 
 - 测试处理ID为的产品历史记录
  - 属性field @PO

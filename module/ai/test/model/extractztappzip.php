@@ -5,7 +5,7 @@
 
 title=测试 aiModel::extractZtAppZip();
 timeout=0
-cid=0
+cid=15023
 
 - 步骤1：有效ZIP文件解压成功返回数组长度 @1
 - 步骤2：无效ZIP文件返回错误码 @0

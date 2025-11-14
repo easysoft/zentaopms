@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::getByUrl();
 timeout=0
-cid=0
+cid=16801
 
 - 执行instanceTest模块的getByUrlTest方法，参数是'rila.dops.corp.cc' 属性id @1
 - 执行instanceTest模块的getByUrlTest方法，参数是'https://7czx.dops.corp.cc' 属性id @2

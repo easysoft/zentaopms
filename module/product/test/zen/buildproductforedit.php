@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildProductForEdit();
 timeout=0
-cid=0
+cid=17566
 
 - 执行productTest模块的buildProductForEditTest方法，参数是1, 0
  - 属性name @Updated Product 1

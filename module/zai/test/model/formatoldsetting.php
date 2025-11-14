@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::formatOldSetting();
 timeout=0
-cid=0
+cid=19770
 
 - 测试空设置输入 @0
 - 测试包含旧apiBaseUrl的设置格式化 @testhost.com,8080,oldtoken123

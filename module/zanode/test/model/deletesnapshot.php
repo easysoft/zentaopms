@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::deleteSnapshot();
 timeout=0
-cid=0
+cid=19786
 
 - 测试步骤1：删除存在的快照ID=1 >> 期望返回API调用失败错误
 - 测试步骤2：删除不存在的快照ID=999 >> 期望返回空值（快照不存在）

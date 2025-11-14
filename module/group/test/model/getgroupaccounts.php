@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getGroupAccounts();
 timeout=0
-cid=0
+cid=16704
 
 - 执行groupTest模块的getGroupAccountsTest方法，参数是array 属性user1 @user1
 - 执行groupTest模块的getGroupAccountsTest方法，参数是array 属性user1 @user1

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 title=测试 programModel::batchProcessProgramName();
 timeout=0
-cid=1
+cid=17672
 
 - 测试处理所有项目第5条的name属性 @项目集2/项目3
 - 测试处理所有项目第3条的name属性 @项目集1/项目集1/项目1

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::productSummary();
 timeout=0
-cid=0
+cid=17463
 
 - 执行pivotTest模块的productSummaryTest方法，参数是'', 0, 'normal', 'normal' 属性title @产品汇总表
 - 执行pivotTest模块的productSummaryTest方法，参数是'', 1, 'normal', 'normal' 第filters条的productID属性 @1

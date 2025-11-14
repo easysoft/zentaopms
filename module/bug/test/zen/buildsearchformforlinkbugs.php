@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildSearchFormForLinkBugs();
 timeout=0
-cid=0
+cid=15439
 
 - 步骤1：普通产品项目
  - 属性hasProductField @1

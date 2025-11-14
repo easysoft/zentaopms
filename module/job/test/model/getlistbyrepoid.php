@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getListByRepoID();
 timeout=0
-cid=0
+cid=16845
 
 - 测试步骤1：repo=1有3个未删除作业 @3
 - 测试步骤2：repo=2有2个作业 @2

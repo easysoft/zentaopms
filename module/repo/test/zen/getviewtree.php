@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getViewTree();
 timeout=0
-cid=0
+cid=18147
 
 - 测试步骤1:空repo对象 @0
 - 测试步骤2:Gitlab类型repo @2

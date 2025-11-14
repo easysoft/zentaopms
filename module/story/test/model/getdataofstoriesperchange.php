@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerChange();
 timeout=0
-cid=0
+cid=18513
 
 - 测试正常情况下按需求变更次数分组统计 @4
 - 测试变更次数为0的需求(版本号为1)

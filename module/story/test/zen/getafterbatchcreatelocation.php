@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAfterBatchCreateLocation();
 timeout=0
-cid=0
+cid=18675
 
 - 步骤1：有storyID无session返回projectstory链接 @getafterbatchcreatelocation.php?m=projectstory&f=view&storyID=1&projectID=0
 - 步骤2：有storyID且不在project tab（有session） @projectstory-story-5.html

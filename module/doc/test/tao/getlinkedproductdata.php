@@ -5,7 +5,7 @@
 
 title=测试 docModel->getLinkedProductData();
 timeout=0
-cid=1
+cid=16172
 
 - 测试空数据 @SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'
 - 获取productID=1的需求查询SQL @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'

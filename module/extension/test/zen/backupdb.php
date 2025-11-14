@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::backupDB();
 timeout=0
-cid=0
+cid=16473
 
 - 执行extensionTest模块的backupDBTest方法，参数是$testExt1  @testplugin1.20251109.sql
 - 执行extensionTest模块的backupDBTest方法，参数是$testExt2  @0

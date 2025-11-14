@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDocViewListBlock();
 timeout=0
-cid=0
+cid=15259
 
 - 测试当有10条文档时按浏览量降序返回最多6条属性count @6
 - 测试返回文档按浏览量降序排列第1条的views属性 @100

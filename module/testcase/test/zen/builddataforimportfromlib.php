@@ -4,7 +4,7 @@
 
 title=测试 testcaseZen::buildDataForImportFromLib();
 timeout=0
-cid=1
+cid=19080
 
 - 测试用例属性是否存在 @1
 - 测试用例步骤是否存在 @1

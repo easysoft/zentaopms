@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getRecordCalcInfo();
 timeout=0
-cid=0
+cid=17121
 
 - 执行metricTest模块的getRecordCalcInfoTest方法，参数是1 
  - 属性calcType @cron

@@ -5,7 +5,7 @@
 
 title=测试 jobTao::getSvnDir();
 timeout=0
-cid=0
+cid=16858
 
 - 执行jobTest模块的getSvnDirTest方法，参数是$job1, $repo1, array 属性svnDir @tags/v1.0
 - 执行jobTest模块的getSvnDirTest方法，参数是$job2, $repo2, array 属性svnDir @~~

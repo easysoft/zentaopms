@@ -5,7 +5,7 @@
 
 title=测试 productZen::getBranchID();
 timeout=0
-cid=0
+cid=17574
 
 - 测试产品为空时返回 'all' @all
 - 测试产品类型为 normal 时返回 'all' @all

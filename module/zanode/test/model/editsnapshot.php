@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel::editSnapshot();
 timeout=0
-cid=0
+cid=19788
 
 - 测试步骤1
  - 属性localName @updatedSnap

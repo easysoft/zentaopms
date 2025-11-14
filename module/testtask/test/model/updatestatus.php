@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 testtaskModel->updateStatus();
-cid=1
+cid=19221
 
 - 测试更新测试单 ID 为 1 的状态到doing属性status @doing
 - 测试更新测试单 ID 为 2 的状态到doing属性status @doing

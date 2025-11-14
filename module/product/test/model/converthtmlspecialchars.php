@@ -5,7 +5,7 @@
 
 title=测试productModel->convertHtmlSpecialChars();
 timeout=0
-cid=0
+cid=17480
 
 - 不传入任何数据。 @0
 - 检查转换后的产品名称。 @a's product

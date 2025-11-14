@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignUsersForBatchEdit();
 timeout=0
-cid=0
+cid=15429
 
 - 执行bugTest模块的assignUsersForBatchEditTest方法，参数是$bugs1, $productIdList1, $branchTagOption1, 'execution'
  - 属性users @20

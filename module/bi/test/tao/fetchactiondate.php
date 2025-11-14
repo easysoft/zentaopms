@@ -5,7 +5,7 @@
 
 title=测试 biTao::fetchActionDate();
 timeout=0
-cid=0
+cid=15220
 
 - 正常情况:有多条记录时返回最小和最大日期 >> 2009-01-01 00:00:00,2024-12-31 18:00:00
 - 正常情况:验证返回的是对象且包含minDate和maxDate字段 >> 1

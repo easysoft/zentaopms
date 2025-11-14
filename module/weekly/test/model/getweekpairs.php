@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 weeklyModel->getWeekPairs();
 timeout=0
-cid=1
+cid=19736
 
 - 执行weekly模块的getWeekPairsTest方法，参数是1, 1  @0
 - 执行weekly模块的getWeekPairsTest方法，参数是1, 2  @0

@@ -5,7 +5,7 @@
 
 title=测试 docModel::getDocIdByTitle();
 timeout=0
-cid=0
+cid=16076
 
 - 步骤1：空标题测试 @0
 - 步骤2：无效originPageID（负数） @0

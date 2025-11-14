@@ -5,7 +5,7 @@
 
 title=测试 productZen::getStoriesByStoryType();
 timeout=0
-cid=0
+cid=17596
 
 - 执行productTest模块的getStoriesByStoryTypeTest方法，参数是1, '', 'all', 'id_desc' 属性count @10
 - 执行productTest模块的getStoriesByStoryTypeTest方法，参数是1, '', 'story', 'id_desc'

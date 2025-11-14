@@ -5,7 +5,7 @@
 
 title=upgradeModel->processLinkStories();
 timeout=0
-cid=1
+cid=19545
 
 - 获取bug的关联关系
  - 第0条的AType属性 @story

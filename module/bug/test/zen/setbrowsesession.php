@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 bugZen::setBrowseSession();
 timeout=0
-cid=0
+cid=15477
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['all']  @1
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['bymodule']  @1

@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->mergeChartOption();
-cid=0
+cid=18574
 
 - 执行$tester->story->lang->story->report->storiesPerProduct
  - 属性type @pie

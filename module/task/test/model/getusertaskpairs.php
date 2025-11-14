@@ -11,7 +11,7 @@ zenData('task')->loadYaml('task')->gen(12);
 
 title=taskModel->getUserTaskPairs();
 timeout=0
-cid=1
+cid=18827
 
 - 获取指派给admin的任务属性1 @迭代 / 任务1
 - 获取指派给admin的任务数量 @4

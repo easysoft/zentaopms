@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getTriggerConfig();
 timeout=0
-cid=0
+cid=16849
 
 - 测试步骤1：tag触发类型且有svnDir @目录改动(/module/caselib)
 - 测试步骤2：tag触发类型但无svnDir @打标签

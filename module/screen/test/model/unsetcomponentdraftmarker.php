@@ -5,7 +5,7 @@
 
 title=测试 screenModel::unsetComponentDraftMarker();
 timeout=0
-cid=0
+cid=18284
 
 - 步骤1：完整组件isDeleted属性被移除 @0
 - 步骤2：完整组件notFoundText属性被移除 @0

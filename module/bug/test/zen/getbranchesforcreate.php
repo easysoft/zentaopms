@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getBranchesForCreate();
 timeout=0
-cid=0
+cid=15448
 
 - 查看更新后的分支属性branch @1
 - 查看更新后的分支属性branch @1

@@ -5,7 +5,7 @@
 
 title=测试 taskTao::recordTaskVersion();
 timeout=0
-cid=0
+cid=18888
 
 - 执行taskTest模块的recordTaskVersionTest方法  @1
 - 执行taskTest模块的recordTaskVersionTest方法  @1

@@ -5,7 +5,7 @@
 
 title=测试programTao::getRootProgramList();
 timeout=0
-cid=1
+cid=17719
 
 - 执行$programList @10
 - 执行$programList

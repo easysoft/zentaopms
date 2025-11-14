@@ -5,7 +5,7 @@
 
 title=测试 commonModel::getDotStyle();
 timeout=0
-cid=0
+cid=15673
 
 - 执行commonTest模块的getDotStyleTest方法，参数是true, 15
  - 属性top @-3px

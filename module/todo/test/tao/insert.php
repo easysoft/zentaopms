@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 todoTao::insert();
 timeout=0
-cid=1
+cid=19280
 
 - 正常插入待办数据 @2
 - 正常插入task类型待办数据 @3

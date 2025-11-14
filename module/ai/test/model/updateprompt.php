@@ -5,7 +5,7 @@
 
 title=测试 aiModel::updatePrompt();
 timeout=0
-cid=0
+cid=15078
 
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt, $originalPrompt  @1
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt2, $originalPrompt2  @1

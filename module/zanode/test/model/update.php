@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel->update().
 timeout=0
-cid=1
+cid=19808
 
 - 更新一个测试节点，检查更新的name，extranet，desc字段是否正确。
  - 第0条的field属性 @name

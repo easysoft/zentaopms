@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getChunkedFile();
-cid=1
+cid=16506
 
 - 测试获取上传分片的文件信息
  - 属性extension @png

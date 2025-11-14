@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getResponseInModal();
 timeout=0
-cid=0
+cid=18695
 
 - 步骤1：不在弹窗中，返回false @0
 - 步骤2：弹窗中+execution tab+kanban类型

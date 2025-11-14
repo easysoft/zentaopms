@@ -5,7 +5,7 @@
 
 title=测试 cneModel->cneMetrics();
 timeout=0
-cid=1
+cid=15607
 
 - 获取CNE平台的集群度量状态属性status @unknown
 - 获取CNE平台的集群cpu数据属性usage @0

@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::bind();
 timeout=0
-cid=0
+cid=19685
 
 - 执行webhookTest模块的bindTest方法，参数是1, $validUserList  @1
 - 执行webhookTest模块的bindTest方法，参数是1, $emptyUserList  @0

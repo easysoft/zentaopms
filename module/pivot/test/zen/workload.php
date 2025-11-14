@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::workload();
 timeout=0
-cid=0
+cid=17467
 
 - 执行pivotTest模块的workloadTest方法，参数是'', '', 0, 0, 0, 'assign'
  - 属性assign @assign

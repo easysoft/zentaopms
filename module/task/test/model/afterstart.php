@@ -16,7 +16,7 @@ zenData('kanbancell')->loadYaml('kanbancell')->gen(7);
 
 title=taskModel->afterStart();
 timeout=0
-cid=1
+cid=18763
 
 - 测试开始任务状态为未开始的任务后的数据处理 @1
 - 测试开始任务状态为进行中的任务后的数据处理属性load @1

@@ -4,7 +4,7 @@
 
 title=测试 chartModel::getByID();
 timeout=0
-cid=1
+cid=15570
 
 - 测试获取ID为0的图表 @0
 - 测试获取一个不存在的ID 的图表 @0

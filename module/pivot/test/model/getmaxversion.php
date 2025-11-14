@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getMaxVersion();
 timeout=0
-cid=0
+cid=17391
 
 - 执行pivotTest模块的getMaxVersionTest方法，参数是1  @2.1
 - 执行pivotTest模块的getMaxVersionTest方法，参数是2  @2.9

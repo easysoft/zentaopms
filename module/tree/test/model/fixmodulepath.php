@@ -5,7 +5,7 @@
 
 title=测试 treeModel->fixModulePath();
 timeout=0
-cid=1
+cid=19360
 
 - 修复root为 1 的module path
  - 属性1 @1

@@ -9,7 +9,7 @@ zenData('testsuite')->loadYaml('testsuite')->gen(1);
 /**
 
 title=测试 testsuiteModel->getById();
-cid=1
+cid=19140
 pid=1
 
 测试suiteID值为0,setImgSize值为false    >> 0

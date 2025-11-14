@@ -5,7 +5,7 @@
 
 title=测试 customModel::buildMenuItems();
 timeout=0
-cid=0
+cid=15892
 
 - 测试主菜单构建 @array
 - 测试产品模块菜单构建 @array

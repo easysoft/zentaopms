@@ -5,7 +5,7 @@
 
 title=测试 bugZen::updateTodoAfterCreate();
 timeout=0
-cid=0
+cid=15483
 
 - 测试正常更新待办状态 @1
 - 测试另一个待办更新 @1

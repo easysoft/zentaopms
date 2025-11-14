@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getAPILink();
 timeout=0
-cid=0
+cid=16232
 
 - 执行editor模块的getAPILinkTest方法，参数是'/module/user/model.php/getById', 'extendModel'
  - 属性hasDebug @1

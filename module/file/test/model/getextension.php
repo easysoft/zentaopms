@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getExtension();
-cid=0
+cid=16509
 
 - 获取 1.xlsm 的扩展名 @xlsm
 - 获取 2.jpg 的扩展名 @jpg

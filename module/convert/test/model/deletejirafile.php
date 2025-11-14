@@ -5,7 +5,7 @@
 
 title=测试 convertModel::deleteJiraFile();
 timeout=0
-cid=0
+cid=15770
 
 - 步骤1：正常删除所有预定义文件属性deletedCount @34
 - 步骤2：验证预定义文件总数属性totalFiles @34

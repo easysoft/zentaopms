@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::togglePackageDisable();
 timeout=0
-cid=0
+cid=16490
 
 - 步骤1:插件目录不存在时返回true @1
 - 步骤2:禁用插件返回true @1

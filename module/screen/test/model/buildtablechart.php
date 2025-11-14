@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildTableChart();
 timeout=0
-cid=0
+cid=18219
 
 - 执行screenTest模块的buildTableChartTest方法，参数是$component1, $chart1 属性key @TableScrollBoard
 - 执行$result2->chartConfig @1

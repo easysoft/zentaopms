@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::__construct();
 timeout=0
-cid=0
+cid=19780
 
 - 步骤1：验证父类构造函数调用属性parentCalled @1
 - 步骤2：验证语言项设置属性langSet @1

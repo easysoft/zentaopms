@@ -5,7 +5,7 @@
 
 title=测试 customZen::assignVarsForSet();
 timeout=0
-cid=0
+cid=15932
 
 - 执行customTest模块的assignVarsForSetTest方法，参数是'story', 'priList', 'zh-cn', 'zh-cn' 属性lang2Set @zh-cn
 - 执行customTest模块的assignVarsForSetTest方法，参数是'project', 'unitList', 'zh-cn', 'zh-cn'

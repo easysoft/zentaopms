@@ -5,7 +5,7 @@
 
 title=测试 productZen::saveSession4Browse();
 timeout=0
-cid=0
+cid=17608
 
 - 测试在product模块下保存session,产品类型为normal属性currentProductType @normal
 - 测试在product模块下保存session,产品类型为branch属性currentProductType @branch

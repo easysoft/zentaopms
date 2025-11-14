@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::deleteBackupCron();
 timeout=0
-cid=0
+cid=16789
 
 - 步骤1：正常情况 @1
 - 步骤2：不存在的ID @1

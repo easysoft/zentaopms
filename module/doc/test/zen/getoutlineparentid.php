@@ -5,7 +5,7 @@
 
 title=测试 docZen::getOutlineParentID();
 timeout=0
-cid=0
+cid=16191
 
 - 测试1:空大纲列表 @0
 - 测试2:单层级结构 @1

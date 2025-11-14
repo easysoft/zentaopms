@@ -19,7 +19,7 @@ $program->gen(2);
 
 title=测试 programModel::isClickable();
 timeout=0
-cid=1
+cid=17705
 
 */
 

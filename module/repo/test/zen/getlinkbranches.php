@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getLinkBranches();
 timeout=0
-cid=0
+cid=18140
 
 - 测试步骤1:空产品数组 @0
 - 测试步骤2:仅包含normal类型产品 @0

@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::getOldSetting();
 timeout=0
-cid=0
+cid=15944
 
 - 步骤1：正常模块旧设置获取
  - 第0条的id属性 @id

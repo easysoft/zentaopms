@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 actionModel->setObjectLink();
 timeout=0
-cid=1
+cid=14932
 
 - 检查超级管理员
  - 属性objectLabel @任务

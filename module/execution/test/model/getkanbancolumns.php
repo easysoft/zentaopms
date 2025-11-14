@@ -11,7 +11,7 @@ $execution = new executionTest();
 
 title=测试 executionModel::getKanbanColumns();
 timeout=0
-cid=0
+cid=16319
 
 - 测试步骤1：默认看板列配置 @wait
 - 测试步骤2：完整看板列配置属性4 @cancel

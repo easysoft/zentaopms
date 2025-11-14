@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::projectDeviation();
 timeout=0
-cid=0
+cid=17464
 
 - 执行pivotTest模块的projectDeviationTest方法，参数是'', ''
  - 属性begin @2025-11-01

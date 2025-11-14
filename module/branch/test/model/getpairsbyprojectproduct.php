@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->getPairsByProjectProduct();
 timeout=0
-cid=1
+cid=15329
 
 */
 $projectID = array(101, 102, 103, 104, 105);

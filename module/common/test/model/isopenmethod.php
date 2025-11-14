@@ -5,7 +5,7 @@
 
 title=测试 commonModel::isOpenMethod();
 timeout=0
-cid=0
+cid=15683
 
 - 步骤1：公开方法权限验证 @1
 - 步骤2：登录后方法权限验证 @1

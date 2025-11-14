@@ -9,7 +9,7 @@ zenData('acl')->gen(50);
 /**
 
 title=测试 personnelModel->getWhitelistAccount();
-cid=1
+cid=17336
 
 - 测试获取 项目集 1 的白名单人员 @admin,user20,user40
 

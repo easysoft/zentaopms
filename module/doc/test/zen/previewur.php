@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewUR();
 timeout=0
-cid=0
+cid=16209
 
 - 步骤1:setting视图下customSearch条件预览用户需求列表,status=active @5
 - 步骤2:setting视图下customSearch条件预览用户需求列表,pri=1 @2

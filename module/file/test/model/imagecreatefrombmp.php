@@ -5,7 +5,7 @@
 
 title=测试 fileModel::imagecreatefrombmp();
 timeout=0
-cid=0
+cid=16516
 
 - 步骤1：正常BMP文件（在测试环境中可能出现异常） @exception
 - 步骤2：非24位BMP文件应返回false @0

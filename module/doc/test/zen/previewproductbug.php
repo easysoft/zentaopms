@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewProductBug();
 timeout=0
-cid=0
+cid=16202
 
 - 步骤1:在setting视图下预览产品1的Bug @5
 - 步骤2:在list视图下根据ID列表预览Bug @3

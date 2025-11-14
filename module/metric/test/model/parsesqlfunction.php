@@ -5,7 +5,7 @@
 
 title=测试 metricModel::parseSqlFunction();
 timeout=0
-cid=0
+cid=17146
 
 - 步骤1：标准CREATE FUNCTION语句 @calculate_score
 - 步骤2：小写CREATE FUNCTION语句 @user_count

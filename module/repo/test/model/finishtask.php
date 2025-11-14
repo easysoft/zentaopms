@@ -5,7 +5,7 @@
 
 title=测试 repoModel::finishTask();
 timeout=0
-cid=0
+cid=18044
 
 - 执行repoTest模块的finishTaskTest方法，参数是$task1, $params1, $action, $changes  @1
 - 执行repoTest模块的finishTaskTest方法，参数是$task2, $params2, $action, $changes  @1

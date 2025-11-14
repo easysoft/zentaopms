@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::includeTable();
 timeout=0
-cid=0
+cid=15957
 
 - 步骤1：加载存在的bug表配置文件
  - 属性primaryTable @bug

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getFilterOptionUrl();
 timeout=0
-cid=0
+cid=17459
 
 - 执行pivotTest模块的getFilterOptionUrlTest方法，参数是$filter1
  - 属性method @post

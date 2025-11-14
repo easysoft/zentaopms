@@ -5,7 +5,7 @@
 
 title=测试 aiModel::checkAssistantDuplicate();
 timeout=0
-cid=0
+cid=15000
 
 - 执行aiTest模块的checkAssistantDuplicateTest方法，参数是'Assistant1', 1 
  - 属性name @Assistant1

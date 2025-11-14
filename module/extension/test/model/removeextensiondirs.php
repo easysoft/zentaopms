@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::removeExtensionDirs();
 timeout=0
-cid=0
+cid=16468
 
 - 步骤1：空字符串输入 @0
 - 步骤2：不存在的目录JSON列表 @0

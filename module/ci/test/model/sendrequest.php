@@ -5,7 +5,7 @@
 
 title=测试 ciModel::sendRequest();
 timeout=0
-cid=0
+cid=15591
 
 - 步骤1：正常情况 @1
 - 步骤2：空数据 @1

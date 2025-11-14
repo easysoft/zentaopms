@@ -4,7 +4,7 @@
 /**
 
 title=测试 programModel::getListBySearch();
-cid=0
+cid=17687
 
 - 按照id倒序查看，所有名称包含项目集并且未开始的第一个项目集第17条的name属性 @项目集17
 - 按照id正序查看，所有名称包含项目集并且进行中的第一个项目集第2条的name属性 @项目集2

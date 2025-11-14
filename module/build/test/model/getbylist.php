@@ -4,7 +4,7 @@
 
 title=测试 buildModel->getByList();
 timeout=0
-cid=1
+cid=15492
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -5,7 +5,7 @@
 
 title=测试 adminZen::syncDynamics();
 timeout=0
-cid=0
+cid=14991
 
 - 执行$adminTest, 'syncDynamicsTest') ? 1 : 0 @1
 - 执行adminTest模块的syncDynamicsTest方法，参数是2)) ? 1 : 0  @1

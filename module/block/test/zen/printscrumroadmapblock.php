@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printScrumRoadMapBlock();
 timeout=0
-cid=0
+cid=15292
 
 - 执行blockTest模块的printScrumRoadMapBlockTest方法，参数是0, 0
  - 属性productsCount @10

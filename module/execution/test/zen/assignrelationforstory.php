@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignRelationForStory();
 timeout=0
-cid=0
+cid=16406
 
 - 执行executionZenTest模块的assignRelationForStoryTest方法，参数是$execution1, $products1, 1, 'all', 'story', 0, 'id_desc', $pager 
  - 属性title @执行1-需求列表

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::apiPost();
 timeout=0
-cid=1
+cid=16627
 
 - 用host url 发送一个请求 @success
 - 用host ID 发送一个请求 @success

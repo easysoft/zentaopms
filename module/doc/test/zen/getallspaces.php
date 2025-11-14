@@ -5,7 +5,7 @@
 
 title=测试 docZen::getAllSpaces();
 timeout=0
-cid=0
+cid=16189
 
 - 步骤1:默认参数属性mine @我的空间
 - 步骤2:nomine参数属性mine @0

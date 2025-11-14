@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildConfigurationcontextData();
 timeout=0
-cid=0
+cid=15805
 
 - 执行convertTest模块的buildConfigurationcontextDataTest方法，参数是$fullData
  - 属性id @12345

@@ -8,7 +8,7 @@ su('admin');
 
 title=bugModel->create();
 timeout=0
-cid=1
+cid=15350
 
 - 测试bug的名称属性title @bug_codeerror
 

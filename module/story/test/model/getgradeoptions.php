@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getGradeOptions();
 timeout=0
-cid=0
+cid=18536
 
 - 步骤1：空故事对象，返回story类型启用的分级选项
  - 属性1 @SR1

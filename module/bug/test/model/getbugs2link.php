@@ -7,7 +7,7 @@ su('admin');
 
 title=bugModel->getBugs2Link();
 timeout=0
-cid=1
+cid=15358
 
 - 获取和 bug1 相同产品下的 bug 列表，第一个 bug 的标题是 BUG9第0条的title属性 @BUG9
 - 获取和 bug1 相同产品下的 bug 列表，第二个 bug 的标题是 BUG7第1条的title属性 @BUG7

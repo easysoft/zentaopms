@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::getGroupMemberData();
 timeout=0
-cid=0
+cid=16675
 
 - 执行gitlabTest模块的getGroupMemberDataTest方法，参数是array 第0条的0:user_id属性 @2
 - 执行gitlabTest模块的getGroupMemberDataTest方法，参数是array 第0条的0:access_level属性 @40

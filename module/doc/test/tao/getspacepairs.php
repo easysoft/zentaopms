@@ -5,7 +5,7 @@
 
 title=测试 docTao::getSpacePairs();
 timeout=0
-cid=0
+cid=16176
 
 - 步骤1：测试product类型空间数量 @10
 - 步骤2：测试空字符串类型返回空数组 @0

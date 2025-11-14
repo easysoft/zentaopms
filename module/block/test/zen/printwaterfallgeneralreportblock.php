@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWaterfallGeneralReportBlock();
 timeout=0
-cid=0
+cid=15310
 
 - 测试项目1：有任务、有工时数据、部分任务已完成
  - 属性pv @2000

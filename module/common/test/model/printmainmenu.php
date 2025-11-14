@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printMainMenu();
 timeout=0
-cid=0
+cid=15697
 
 - 验证方法存在 @1
 - 验证为静态方法 @1

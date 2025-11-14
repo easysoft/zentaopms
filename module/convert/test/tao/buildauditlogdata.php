@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildAuditLogData();
 timeout=0
-cid=0
+cid=15801
 
 - 步骤1：完整数据输入id字段属性id @1
 - 步骤2：部分字段缺失时object_type字段属性object_type @~~

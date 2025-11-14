@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 executionModel::getKanbanSetting();
-cid=0
+cid=16321
 
 - 测试步骤1：验证colorList中wait颜色配置 >> 期望包含'#7EC5FF'
 - 测试步骤2：验证colorList总数量 >> 期望为6个状态颜色

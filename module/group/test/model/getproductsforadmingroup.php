@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getProductsForAdminGroup();
 timeout=0
-cid=0
+cid=16713
 
 - 步骤1：无参数时返回有效产品数量 @8
 - 步骤2：空数组参数时返回有效产品数量 @8

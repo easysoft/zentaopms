@@ -5,7 +5,7 @@
 
 title=测试 programModel::getTeamMemberPairs();
 timeout=0
-cid=1
+cid=17700
 
 - 获取项目集1下所有团队成员数量 @4
 - 获取项目集2下所有团队成员数量 @1

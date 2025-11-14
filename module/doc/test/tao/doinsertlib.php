@@ -5,7 +5,7 @@
 
 title=测试 docTao::doInsertLib();
 timeout=0
-cid=0
+cid=16166
 
 - 执行docTest模块的doInsertLibTest方法，参数是$validLib  @6
 - 执行docTest模块的doInsertLibTest方法，参数是$validLib2  @7

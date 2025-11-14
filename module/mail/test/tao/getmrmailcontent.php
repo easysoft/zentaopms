@@ -4,7 +4,7 @@
 /**
 
 title=测试 mailModel->getMRMailContent();
-cid=0
+cid=17034
 
 - 只传入mr @0
 - 传入动作：compilefail @您提交的合并请求：<a href='/mr-view-1.html'>Test MR</a> 流水线任务执行失败，查看执行结果。

@@ -5,7 +5,7 @@
 
 title=测试 editorModel::extendModel();
 timeout=0
-cid=0
+cid=16231
 
 - 步骤1：正常情况-todo模块create方法扩展
  - 属性hasPhpTag @1

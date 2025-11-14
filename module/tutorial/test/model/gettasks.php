@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTasks();
 timeout=0
-cid=0
+cid=19485
 
 - 步骤1：获取任务列表，验证数组长度 @2
 - 步骤2：验证第一个任务状态第1条的status属性 @wait

@@ -5,7 +5,7 @@
 
 title=测试 programZen::prepareStartExtras();
 timeout=0
-cid=0
+cid=17733
 
 - 执行programTest模块的prepareStartExtrasTest方法，参数是array
  - 属性status @doing

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getGitlabProjects();
 timeout=0
-cid=1
+cid=17247
 
 - 正确的服务器ID和项目ID列表
  - 第3条的id属性 @3

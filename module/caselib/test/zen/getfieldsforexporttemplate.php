@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getFieldsForExportTemplate();
 timeout=0
-cid=0
+cid=15547
 
 - 步骤1：正常调用获取导出模板字段 @12
 - 步骤2：验证返回的字段包含module字段属性module @所属模块

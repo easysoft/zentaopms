@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->computeCFD();
 timeout=0
-cid=1
+cid=16287
 
 - 获取所有看板执行的累计卡片个数 @6
 - 获取看板1的累计流图信息

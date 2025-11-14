@@ -5,7 +5,7 @@
 
 title=测试 searchZen::setOptionFields();
 timeout=0
-cid=0
+cid=18350
 
 - 测试步骤1:正常输入两个字段 @1
 - 测试步骤2:测试空字段输入 @0

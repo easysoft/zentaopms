@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printGuideBlock();
 timeout=0
-cid=0
+cid=15264
 
 - 步骤1:测试基本区块对象,验证blockID正确设置属性blockID @1
 - 步骤2:测试programLink链接正确设置属性programLink @program-browse

@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkExtensionPaths();
 timeout=0
-cid=0
+cid=16478
 
 - 执行extensionTest模块的checkExtensionPathsTest方法，参数是'nonexistent_plugin' 属性result @ok
 - 执行extensionTest模块的checkExtensionPathsTest方法，参数是'' 属性result @ok

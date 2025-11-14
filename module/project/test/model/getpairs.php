@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 projectModel->getPairs();
 timeout=0
-cid=1
+cid=17837
 
 - 查找管理员可查看的所有项目数量 @40
 - 查找管理员可查看的所有vision所有项目数量 @40

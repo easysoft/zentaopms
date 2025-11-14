@@ -16,7 +16,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->buildExecutionCards();
 timeout=0
-cid=1
+cid=16875
 
 - 构造迭代的任务卡片
  - 属性id @1

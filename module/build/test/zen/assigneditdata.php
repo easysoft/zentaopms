@@ -5,7 +5,7 @@
 
 title=测试 buildZen::assignEditData();
 timeout=0
-cid=0
+cid=15516
 
 - 执行buildTest模块的assignEditDataTest方法，参数是$build1 第products条的1属性 @Product1
 - 执行buildTest模块的assignEditDataTest方法，参数是$build2 属性executionType @0

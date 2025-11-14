@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::flattenRow();
 timeout=0
-cid=0
+cid=17367
 
 - 执行pivotTest模块的flattenRowTest方法，参数是$scalarRow 
  - 第name条的value属性 @admin

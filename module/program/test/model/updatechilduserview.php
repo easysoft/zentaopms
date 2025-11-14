@@ -12,7 +12,7 @@ zenData('userview')->gen(5);
 
 title=测试 programModel::updateChildUserView();
 timeout=0
-cid=1
+cid=17713
 
 - 更新项目集ID为0下的用户视图。 @,2
 - 更新项目集ID为1下的用户视图。 @,2

@@ -5,7 +5,7 @@
 
 title=测试 chartZen::getChartToFilter();
 timeout=0
-cid=0
+cid=15585
 
 - 执行chartTest模块的getChartToFilterTest方法，参数是5, 1, array
  - 属性id @1

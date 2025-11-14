@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getTasksForCreate();
 timeout=0
-cid=0
+cid=15460
 
 - 步骤1:测试有executionID时tasks是数组 @1
 - 步骤2:测试无executionID时tasks为null @1

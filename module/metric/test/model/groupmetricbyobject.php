@@ -5,7 +5,7 @@
 
 title=groupMetricByObject
 timeout=0
-cid=1
+cid=17134
 
 - 获取系统度量项文档分组的第3个度量的code属性code @count_of_annual_created_doc
 - 获取系统度量项文档分组的第3个度量的code属性code @0

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignVarsForBatchCreate();
 timeout=0
-cid=0
+cid=15430
 
 - 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product1, $project1, $bugImagesFile1
  - 属性customFields @12

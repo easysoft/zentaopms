@@ -5,7 +5,7 @@
 
 title=测试 productZen::getFormFields4Close();
 timeout=0
-cid=0
+cid=17584
 
 - 测试返回的字段数组是否包含 status 字段第status条的type属性 @string
 - 测试返回的字段数组是否包含 closedDate 字段第closedDate条的type属性 @string

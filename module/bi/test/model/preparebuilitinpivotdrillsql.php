@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::prepareBuilitinPivotDrillSQL();
 timeout=0
-cid=0
+cid=15196
 
 - 步骤1：空下钻数组情况 @0
 - 步骤2：单个下钻配置情况（删除+插入SQL） @2

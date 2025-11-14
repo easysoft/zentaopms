@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildFileData();
 timeout=0
-cid=0
+cid=15812
 
 - 步骤1：正常完整数据
  - 属性issueid @1001

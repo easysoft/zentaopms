@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::getSummary();
 timeout=0
-cid=0
+cid=17666
 
 - 执行productplanTest模块的getSummaryTest方法，参数是$planList1  @本页共 <strong>0</strong> 个计划，父计划 <strong>0</strong>，子计划 <strong>0</strong>，独立计划 <strong>0</strong>。
 - 执行productplanTest模块的getSummaryTest方法，参数是$planList2  @本页共 <strong>3</strong> 个计划，父计划 <strong>0</strong>，子计划 <strong>0</strong>，独立计划 <strong>3</strong>。

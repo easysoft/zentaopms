@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->batchUpdate();
 timeout=0
-cid=1
+cid=15319
 
 - 测试批量更新名称
  - 第0条的field属性 @name

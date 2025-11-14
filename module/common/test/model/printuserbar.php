@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 commonModel::printUserBar();
 timeout=0
-cid=0
+cid=15702
 
 - 步骤1：验证方法存在 @1
 - 步骤2：验证方法为静态方法 @1

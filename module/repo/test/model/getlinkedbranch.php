@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getLinkedBranch();
 timeout=0
-cid=0
+cid=18068
 
 - 执行repoTest模块的getLinkedBranchTest方法，参数是1, 'story', 1 
  - 第0条的BType属性 @master

@@ -10,7 +10,7 @@ zenData('kanbanlane')->gen(10);
 
 title=测试 kanbanModel->getLanePairsByGroup();
 timeout=0
-cid=1
+cid=16931
 
 - 获取泳道组1的泳道 @默认泳道
 - 获取泳道组2的泳道 @默认泳道

@@ -5,7 +5,7 @@
 
 title=测试 fileModel::saveAFile();
 timeout=0
-cid=0
+cid=16525
 
 - 测试步骤1：正常保存有效文件属性title @有效测试文件.txt
 - 测试步骤2：保存图片文件测试压缩属性title @测试图片.jpg

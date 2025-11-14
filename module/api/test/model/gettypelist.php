@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getTypeList();
 timeout=0
-cid=0
+cid=15119
 
 - 步骤1：正常libID获取类型列表，检查返回数组长度 @14
 - 步骤2：无效libID获取类型列表，检查只返回基本类型 @11

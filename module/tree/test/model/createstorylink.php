@@ -5,7 +5,7 @@
 
 title=测试 treeModel->createStoryLink();
 timeout=0
-cid=1
+cid=19357
 
 - 测试获取module 1 project 1 的 story link属性url @projectstory-story-1-0--byModule-1-story.html
 - 测试获取module 1 project 1 product 1 的 story link属性url @projectstory-story-1-1--byModule-1-story.html

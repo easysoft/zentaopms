@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getHistoryMessages();
 timeout=0
-cid=0
+cid=15032
 
 - 步骤1：空数据表获取历史消息 @0
 - 步骤2：不存在appID @0

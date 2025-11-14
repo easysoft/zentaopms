@@ -5,7 +5,7 @@
 
 title=测试 cneModel::deleteBackup();
 timeout=0
-cid=0
+cid=15610
 
 - 测试步骤1:正常删除备份,实例ID=1,正常备份名称属性code @200
 - 测试步骤2:删除备份,实例ID=2,正常备份名称属性code @200

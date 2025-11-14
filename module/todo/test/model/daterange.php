@@ -5,7 +5,7 @@
 
 title=测试 todoModel::dateRange();
 timeout=0
-cid=0
+cid=19253
 
 - 执行todo模块的dateRangeTest方法，参数是'future'
  - 属性begin @2030-01-01

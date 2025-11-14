@@ -5,7 +5,7 @@
 
 title=测试 apiModel::createDemoModule();
 timeout=0
-cid=0
+cid=15095
 
 - 执行apiTest模块的createDemoModuleTest方法，参数是1, '16.0' 属性2964 @1
 - 执行apiTest模块的createDemoModuleTest方法，参数是2, '16.0' 属性2963 @18

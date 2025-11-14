@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setFormOptionsForBatchEdit();
 timeout=0
-cid=0
+cid=18704
 
 - 单产品批量编辑时branchProduct为0 @0
 - 单产品批量编辑时检查users属性admin @`A:管理员`

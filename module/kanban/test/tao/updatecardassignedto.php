@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::updateCardAssignedTo();
 timeout=0
-cid=0
+cid=16993
 
 - 执行kanbanTest模块的updateCardAssignedToTest方法，参数是1, 'admin, user1, user2', array  @admin,user1,user2
 

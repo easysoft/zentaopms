@@ -5,7 +5,7 @@
 
 title=测试 taskZen::formatExportTask();
 timeout=0
-cid=0
+cid=18928
 
 - 测试CSV格式导出时工时consumed字段单位添加 >> 期望工时带有单位
 - 测试HTML格式导出时工时left字段单位添加 >> 期望工时带有单位

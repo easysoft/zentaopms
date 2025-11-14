@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildWorklogData();
 timeout=0
-cid=0
+cid=15830
 
 - 步骤1：正常情况
  - 属性id @1

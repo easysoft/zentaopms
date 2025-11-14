@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getOrderedObjects();
-cid=1
+cid=16118
 
 - 测试空数据 @0
 - 获取已排序的产品数据属性1 @产品1

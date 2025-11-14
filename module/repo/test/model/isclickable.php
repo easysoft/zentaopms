@@ -5,7 +5,7 @@
 
 title=测试 repoModel::isClickable();
 timeout=0
-cid=0
+cid=18085
 
 - 执行repoTest模块的isClickableTest方法，参数是$repo1, 'execJob'  @0
 - 执行repoTest模块的isClickableTest方法，参数是$repo2, 'execJob'  @1

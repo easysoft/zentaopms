@@ -5,7 +5,7 @@
 
 title=测试 docZen::processFiles();
 timeout=0
-cid=0
+cid=16210
 
 - 执行docTest模块的processFilesTest方法，参数是array 第1条的fileName属性 @test1
 - 执行docTest模块的processFilesTest方法，参数是array  @0

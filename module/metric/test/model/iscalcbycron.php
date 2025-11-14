@@ -5,7 +5,7 @@
 
 title=测试 metricModel::isCalcByCron();
 timeout=0
-cid=0
+cid=17137
 
 - 步骤1：查询年度度量项（无匹配） @0
 - 步骤2：正常查询月度度量项 @1

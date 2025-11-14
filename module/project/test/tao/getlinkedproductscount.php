@@ -10,7 +10,7 @@ zenData('project')->loadYaml('project')->gen(5);
 
 title=测试 projectModel->getLinkedProductsCount();
 timeout=0
-cid=1
+cid=17910
 
 - 测试敏捷项目没有选择产品时获取的数量 @0
 - 测试瀑布项目没有选择产品时获取的数量 @0

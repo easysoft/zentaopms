@@ -12,7 +12,7 @@ zenData('task')->loadYaml('task')->gen(3);
 
 title=taskModel->batchChangeModule();
 timeout=0
-cid=1
+cid=18767
 
 - 将模块ID更新成一个大数字，查看能否更新成功
  - 第1条的module属性 @10000000

@@ -5,7 +5,7 @@
 
 title=测试 chartModel::addRotate4Echart();
 timeout=0
-cid=0
+cid=15563
 
 - 执行$result1 @1
 - 执行$result2['xAxis']['axisLabel']['rotate']) ? $result2['xAxis']['axisLabel']['rotate'] : 0 @30

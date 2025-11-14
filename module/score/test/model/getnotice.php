@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->getNotice();
-cid=1
+cid=18201
 
 - 获取admin用户昨日积分总数 @昨天增加了积分：<strong>100</strong><br/>总积分：<strong>100</strong>
 - 获取user1用户昨日积分总数 @昨天增加了积分：<strong>100</strong><br/>总积分：<strong>100</strong>

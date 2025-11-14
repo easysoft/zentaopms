@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 transfer->getQueryDatas();
 timeout=0
-cid=1
+cid=19317
 
 - 测试导出需求第14条的title属性 @软件需求14
 - 测试导出task数据

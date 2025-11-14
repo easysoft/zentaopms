@@ -4,7 +4,7 @@
 
 title=测试 customModel->getAllLang();
 timeout=0
-cid=1
+cid=15895
 
 - 获取自定义迭代概念
  - 属性key @executionCommon

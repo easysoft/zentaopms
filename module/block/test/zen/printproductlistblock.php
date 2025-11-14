@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProductListBlock();
 timeout=0
-cid=0
+cid=15270
 
 - 步骤1：默认参数测试属性productStatsCount @0
 - 步骤2：type为all类型测试属性productStatsCount @10

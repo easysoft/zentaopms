@@ -5,7 +5,7 @@
 
 title=- 属性color @
 timeout=0
-cid=333
+cid=16887
 
 - 创建没有在制品限制的看板列
  - 属性name @测试创建不限制看板列

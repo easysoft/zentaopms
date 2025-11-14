@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserYearActions();
-cid=1
+cid=18173
 pid=1
 
 测试获取本年度 admin 的操作数 >> 34

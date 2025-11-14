@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 reportModel::getUserYearContributionCount();
 timeout=0
-cid=0
+cid=18174
 
 - 测试获取admin用户当前年份的贡献数 @25
 - 测试获取dev17用户当前年份的贡献数 @25

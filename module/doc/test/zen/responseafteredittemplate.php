@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterEditTemplate();
 timeout=0
-cid=0
+cid=16218
 
 - 测试编辑模板文档无修改属性result @success
 - 测试编辑模板文档有变更属性result @success

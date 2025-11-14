@@ -12,7 +12,7 @@ zenData('testtask')->loadYaml('testtask')->gen(24);
 
 title=测试 testtaskModel->getByUser();
 timeout=0
-cid=1
+cid=19167
 
 - 执行testtask模块的getByUser方法，参数是''  @0
 - 执行testtask模块的getByUser方法，参数是'admin'  @0

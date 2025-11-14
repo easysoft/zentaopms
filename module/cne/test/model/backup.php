@@ -5,7 +5,7 @@
 
 title=测试 cneModel::backup();
 timeout=0
-cid=0
+cid=15603
 
 - 测试步骤1:正常备份请求，实例ID=1，默认账号属性code @200
 - 测试步骤2:备份请求，实例ID=2，指定账号testuser第data条的account属性 @testuser

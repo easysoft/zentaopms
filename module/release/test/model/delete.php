@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::delete();
 timeout=0
-cid=0
+cid=17985
 
 - 步骤1：测试删除无效ID（0）的发布 @0
 - 步骤2：测试删除不存在ID的发布 @0

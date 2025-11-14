@@ -5,7 +5,7 @@
 
 title=测试 kanbanZen::assignCreateVars();
 timeout=0
-cid=0
+cid=16999
 
 - 步骤1:正常私有空间创建看板属性spaceID @1
 - 步骤2:全局空间创建看板属性ownerPairs @10

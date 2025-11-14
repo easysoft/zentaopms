@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignCasesForBrowse();
 timeout=0
-cid=0
+cid=19061
 
 - 执行testcaseTest模块的assignCasesForBrowseTest方法，参数是1, '0', 'all', 0, 0, '', 'id_desc', 0, 20, 1, 'testcase' 属性casesCount @20
 - 执行testcaseTest模块的assignCasesForBrowseTest方法，参数是1, '0', 'all', 0, 0, '', 'id_desc', 0, 10, 2, 'testcase' 属性casesCount @10

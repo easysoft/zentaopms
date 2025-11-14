@@ -5,7 +5,7 @@
 
 title=测试 mrZen::saveMrData();
 timeout=0
-cid=0
+cid=17270
 
 - 执行mrTest模块的saveMrDataTest方法，参数是$repo, array  @1
 - 执行mrTest模块的saveMrDataTest方法，参数是$repo, $rawMRList  @1

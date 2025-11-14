@@ -5,7 +5,7 @@
 
 title=测试 taskTao::formatDatetime();
 timeout=0
-cid=0
+cid=18877
 
 - 测试空任务对象属性id @0
 - 测试正常日期openedDate属性openedDate属性openedDate @2024-01-15 10:30:00

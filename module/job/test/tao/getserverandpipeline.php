@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->getServerAndPipeline();
 timeout=0
-cid=1
+cid=16857
 
 - 有构建和代码库的情况
  - 属性server @0

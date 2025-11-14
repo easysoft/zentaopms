@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
 title=productplanModel->linkBug()
 timeout=0
-cid=1
+cid=17642
 
 - id为1的计划关联id为3的bug @1
 - id为1的计划关联id为1和2的bug @1

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::converse();
 timeout=0
-cid=0
+cid=15005
 
 - 步骤1：正常对话请求 @0
 - 步骤2：ERNIE模型系统消息处理 @0

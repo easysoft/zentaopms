@@ -5,7 +5,7 @@
 
 title=测试 docModel->insertTemplateScopes();
 timeout=0
-cid=1
+cid=16141
 
 - 测试插入产品范围第1条的name属性 @产品范围
 - 测试插入项目范围第2条的name属性 @项目范围

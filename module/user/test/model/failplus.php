@@ -5,7 +5,7 @@
 
 title=测试 userModel::failPlus();
 timeout=0
-cid=0
+cid=19601
 
 - 执行userTest模块的failPlusTest方法，参数是'@#$invalid'  @0
 - 执行userTest模块的failPlusTest方法，参数是'notexist'  @0

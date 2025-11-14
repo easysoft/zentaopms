@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->identifyByCookie();
-cid=0
+cid=19641
 
 - 空用户验证失败，返回 false。 @0
 - guest 用户验证失败，返回 false。 @0

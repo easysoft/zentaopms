@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::mergePivotSpecData();
 timeout=0
-cid=0
+cid=17450
 
 - 步骤1：正常情况，单个对象处理，验证名称被合并属性name @合并后透视表1
 - 步骤2：数组输入，检查第一个元素合并后名称第0条的name属性 @合并后透视表1

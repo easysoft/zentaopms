@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDemandpool();
 timeout=0
-cid=0
+cid=19419
 
 - 步骤1：正常调用并验证基本信息
  - 属性id @1

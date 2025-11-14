@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getGradePairs();
 timeout=0
-cid=0
+cid=19438
 
 - 步骤1：测试story类型属性1 @SR
 - 步骤2：测试requirement类型属性1 @UR

@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getOrderedProducts();
-cid=0
+cid=17497
 
 - 测试获取状态为all的产品数量 @30
 - 测试获取状态为normal的产品数量 @20

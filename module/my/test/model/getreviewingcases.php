@@ -12,7 +12,7 @@ zenData('user')->gen('2');
 
 title=测试 myModel->getReviewingCases();
 timeout=0
-cid=1
+cid=17291
 
 - 测试获取用户 admin 排序 id_desc 的需求id。 @17,13,9,5,1
 

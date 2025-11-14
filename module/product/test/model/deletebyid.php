@@ -5,7 +5,7 @@
 
 title=productTao->deleteByID();
 timeout=0
-cid=0
+cid=17482
 
 - 删除前查询ID为3的产品是否被删除 @0
 - 删除前查询产品ID为3的产品库是否被删除 @1

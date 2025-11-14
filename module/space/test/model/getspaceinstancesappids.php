@@ -5,7 +5,7 @@
 
 title=测试 spaceModel::getSpaceInstancesAppIDs();
 timeout=0
-cid=0
+cid=18397
 
 - 步骤1：正常情况 - 空间1有3个应用 @3
 - 步骤2：不存在的空间ID @0

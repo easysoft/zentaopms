@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::processFileForExport();
 timeout=0
-cid=0
+cid=15555
 
 - 执行caselibTest模块的processFileForExportTest方法，参数是$case1, $emptyFiles, 'is_empty'  @1
 - 执行caselibTest模块的processFileForExportTest方法，参数是$case2, $relatedFiles2, 'has_html_link'  @1

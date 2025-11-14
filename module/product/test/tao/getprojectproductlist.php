@@ -5,7 +5,7 @@
 
 title=productTao->getProjectProductList();
 timeout=0
-cid=0
+cid=17553
 
 - 测试传入空的产品ID列表 @0
 - 测试传入产品ID列表

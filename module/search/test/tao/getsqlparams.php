@@ -5,7 +5,7 @@
 
 title=测试 searchModel->getSummary();
 timeout=0
-cid=1
+cid=18328
 
 - 测试获取搜索 test 关键词的 unicode @test_
 - 测试获取搜索 test 关键词的查询语句的 against 条件属性1 @(+"test_")

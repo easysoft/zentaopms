@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::initCardItem();
 timeout=0
-cid=0
+cid=16988
 
 - 执行kanbanTest模块的initCardItemTest方法，参数是1, 1, 1, array 
  - 属性title @测试卡片1

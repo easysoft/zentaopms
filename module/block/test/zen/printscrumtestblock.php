@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printScrumTestBlock();
 timeout=0
-cid=0
+cid=15293
 
 - 步骤1:测试正常情况下传入type=all和count=5的参数
  - 属性type @all

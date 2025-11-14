@@ -5,7 +5,7 @@
 
 title=测试 groupModel::checkNavSubset();
 timeout=0
-cid=0
+cid=16695
 
 - 步骤1：空nav参数测试，期望返回true @1
 - 步骤2：general nav且subset无配置，期望返回true @1

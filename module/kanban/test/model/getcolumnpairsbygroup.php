@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(10);
 
 title=测试 kanbanModel->getColumnPairsByGroup();
 timeout=0
-cid=1
+cid=16914
 
 - 查看分组1的看板列数量 @4
 - 查看分组2的看板列数量 @4

@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getProductStructure();
 timeout=0
-cid=1
+cid=19376
 
 - 测试获取 root 1  type story 的树结构 @2:2;12:0;22:0;
 - 测试获取 root 2  type bug   的树结构 @0

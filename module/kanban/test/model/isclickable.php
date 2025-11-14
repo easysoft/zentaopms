@@ -11,7 +11,7 @@ zenData('kanbanlane')->gen(50);
 
 title=测试 kanbanModel->isClickable();
 timeout=0
-cid=1
+cid=16949
 
 - 测试lane1 是否可以排序 @2
 - 测试lane1 是否可以删除 @2

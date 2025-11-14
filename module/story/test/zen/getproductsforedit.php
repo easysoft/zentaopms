@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getProductsForEdit();
 timeout=0
-cid=0
+cid=18694
 
 - 执行storyTest模块的getProductsForEditTest方法 属性1 @产品1
 - 执行storyTest模块的getProductsForEditTest方法 属性2 @产品2

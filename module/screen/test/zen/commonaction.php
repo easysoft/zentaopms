@@ -5,7 +5,7 @@
 
 title=测试 screenZen::commonAction();
 timeout=0
-cid=0
+cid=18289
 
 - 步骤1:传入正常dimensionID和setMenu参数 @1
 - 步骤2:传入正常dimensionID且setMenu为false @1

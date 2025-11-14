@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkCreateTask();
 timeout=0
-cid=0
+cid=18921
 
 - 执行taskTest模块的checkCreateTaskTest方法  @1
 - 执行taskTest模块的checkCreateTaskTest方法 属性estimate @预计不能为负数

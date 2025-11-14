@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getPrintKanbanData();
 timeout=0
-cid=0
+cid=16433
 
 - 步骤1：正常执行ID和故事数据返回数组 @Array
 - 步骤2：空故事数组情况返回数组 @(

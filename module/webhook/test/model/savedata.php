@@ -11,7 +11,7 @@ zenData('notify')->gen(0);
 
 title=测试 webhookModel->saveData();
 timeout=0
-cid=1
+cid=19703
 
 - $objectType[0], $objectID[0], $actionType[0], $webhookID[0], $actionID[0], $actor[0] @1
 - $objectType[1], $objectID[1], $actionType[1], $webhookID[1], $actionID[1], $actor[1] @1

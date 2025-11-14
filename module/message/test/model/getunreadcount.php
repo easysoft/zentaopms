@@ -5,7 +5,7 @@
 
 title=测试 messageModel::getUnreadCount();
 timeout=0
-cid=0
+cid=17056
 
 - 执行messageTest模块的getUnreadCountTest方法，参数是'admin'  @3
 - 执行messageTest模块的getUnreadCountTest方法，参数是'user1'  @3

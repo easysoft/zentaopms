@@ -5,7 +5,7 @@
 
 title=测试 todoZen::buildBatchCreateView();
 timeout=0
-cid=0
+cid=19294
 
 - 步骤1：正常日期格式属性result @success
 - 步骤2：空字符串日期属性result @success

@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->getExternalAppByApp();
-cid=1
+cid=18395
 
 - 获取域名为空的外部应用信息
  - 属性type @gitlab

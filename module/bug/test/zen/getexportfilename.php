@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getExportFileName();
 timeout=0
-cid=0
+cid=15454
 
 - 步骤1:有执行ID时,使用执行名称+Bug @执行一-Bug
 - 步骤2:无执行ID,有产品名称和browseType @产品一-全部Bug

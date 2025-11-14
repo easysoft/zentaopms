@@ -5,7 +5,7 @@
 
 title=测试 svnModel::getRepos();
 timeout=0
-cid=0
+cid=18717
 
 - 执行$result['repos'] @5
 - 执行$result['repos'] @https://svn.example.com/repo1

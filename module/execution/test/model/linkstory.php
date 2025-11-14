@@ -56,7 +56,7 @@ su('admin');
 
 title=测试executionModel->linkStoryTest();
 timeout=0
-cid=1
+cid=16354
 
 - 敏捷执行关联需求
  - 第0条的project属性 @3

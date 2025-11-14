@@ -11,7 +11,7 @@ zenData('user')->gen(200);
 
 title=测试 deptModel->getUsers();
 timeout=0
-cid=1
+cid=15978
 
 - 全部用户查询
  - 第101条的account属性 @test2

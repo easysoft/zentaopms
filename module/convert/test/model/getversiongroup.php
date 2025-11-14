@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getVersionGroup();
 timeout=0
-cid=0
+cid=15787
 
 - 执行convertTest模块的getVersionGroupTest方法  @0
 - 执行convertTest模块的getVersionGroupTest方法  @2

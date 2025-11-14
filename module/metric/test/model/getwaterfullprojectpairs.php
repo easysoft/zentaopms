@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getWaterfullProjectPairs();
 timeout=0
-cid=0
+cid=17133
 
 - 步骤1：查询rnd视域瀑布项目数量 @4
 - 步骤2：查询ops视域瀑布项目数量 @0

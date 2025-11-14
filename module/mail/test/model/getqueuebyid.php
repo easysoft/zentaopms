@@ -5,7 +5,7 @@
 
 title=测试 mailModel::getQueueById();
 timeout=0
-cid=0
+cid=17010
 
 - 步骤1：正常获取ID为1的队列
  - 属性id @1

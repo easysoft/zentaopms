@@ -5,7 +5,7 @@
 
 title=测试 biModel::checkDuckDBFile();
 timeout=0
-cid=0
+cid=15152
 
 - 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @object
 - 执行biTest模块的checkDuckDBFileTest方法，参数是$testPath, array  @0

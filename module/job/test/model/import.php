@@ -5,7 +5,7 @@
 
 title=测试 jobModel::import();
 timeout=0
-cid=0
+cid=16851
 
 - 步骤1：导入有效的Gitlab仓库ID @1
 - 步骤2：导入另一个有效的Gitlab仓库ID @1

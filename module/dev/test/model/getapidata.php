@@ -5,7 +5,7 @@
 
 title=测试 devModel::getAPIData();
 timeout=0
-cid=0
+cid=16000
 
 - 步骤1：默认参数apiID=0测试，返回3个元素的数组 @3
 - 步骤2：指定存在的API ID测试第0条的id属性 @1

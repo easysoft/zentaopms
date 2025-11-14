@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->processRules();
 timeout=0
-cid=1
+cid=18090
 
 - 测试规则属性storyReg @((Story) *((\#)[0-9]+((\,)[0-9]+)*))
 - 测试规则属性taskReg @((Task) *((\#)[0-9]+((\,)[0-9]+)*))

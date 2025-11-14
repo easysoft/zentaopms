@@ -5,7 +5,7 @@
 
 title=测试 docModel->buildTemplateModule();
 timeout=0
-cid=1
+cid=16050
 
 - 创建模板类型对象
  - 属性root @1

@@ -5,7 +5,7 @@
 
 title=测试 docZen::initLibForMySpace();
 timeout=0
-cid=0
+cid=16192
 
 - 步骤1:验证创建了库 @1
 - 步骤2:验证类型属性type @mine

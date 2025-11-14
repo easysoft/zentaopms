@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=16215
 
 - 步骤1:测试创建普通文档
  - 属性result @success

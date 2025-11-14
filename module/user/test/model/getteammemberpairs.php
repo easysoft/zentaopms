@@ -5,7 +5,7 @@
 
 title=测试 userModel->getTeamMemberPairs();
 timeout=0
-cid=0
+cid=19634
 
 - 获取ID为11的项目的团队成员数量 @1
 - 获取ID为11的项目的团队成员数量，追加用户user1 @2

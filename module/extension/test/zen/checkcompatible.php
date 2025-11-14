@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkCompatible();
 timeout=0
-cid=0
+cid=16474
 
 - 执行extensionTest模块的checkCompatibleTest方法，参数是'test_ext1', $condition1, 'no', 'test_link', 'install'  @1
 - 执行extensionTest模块的checkCompatibleTest方法，参数是'test_ext2', $condition2, 'no', 'test_link', 'install'  @0

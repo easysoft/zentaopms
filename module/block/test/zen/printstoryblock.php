@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printStoryBlock();
 timeout=0
-cid=0
+cid=15304
 
 - 测试步骤1:测试正常显示指派给我的需求类型assignedTo,限制5条属性storiesCount @5
 - 测试步骤2:测试显示由我创建的需求类型openedBy,限制3条属性storiesCount @3

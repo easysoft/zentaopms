@@ -5,7 +5,7 @@
 
 title=测试 devModel::loadDefaultLang();
 timeout=0
-cid=0
+cid=16016
 
 - 测试步骤1：默认参数调用检查URCommon属性属性URCommon @$URCOMMON
 - 测试步骤2：指定zh-cn语言和common模块检查productCommon属性属性productCommon @$PRODUCTCOMMON

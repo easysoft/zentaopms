@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testcaseModel->batchDelete();
 timeout=0
-cid=1
+cid=18963
 
 - 用例和场景都为空返回 false。 @0
 - 用例不为空，场景为空，返回 true。 @1

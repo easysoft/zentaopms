@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getEditionByVersion();
-cid=1
+cid=19522
 
 - 测试获取版本 18_1 的产品版本类型 @open
 - 测试获取版本 pro8_1 的产品版本类型 @pro

@@ -25,7 +25,7 @@ $execution->gen(8);
 
 title=测试executionModel->resetExecutionSorts();
 timeout=0
-cid=1
+cid=16361
 
 - 检查没有执行时的排序 @0
 - 检查项目 2 的执行排序 @3,5,7,8,6,4

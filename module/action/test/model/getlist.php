@@ -27,7 +27,7 @@ su('admin');
 
 title=测试 actionModel->getList();
 timeout=0
-cid=1
+cid=14903
 
 - 测试获取对象类型 story 对象ID 1 的动态信息 @nochanged
 - 测试获取对象类型 story 对象ID 2 的动态信息 @link

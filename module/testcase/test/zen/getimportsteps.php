@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getImportSteps();
 timeout=0
-cid=0
+cid=19092
 
 - 执行testcaseTest模块的getImportStepsTest方法，参数是'stepDesc', $steps1, $stepData1, 1
  - 第1条的content属性 @打开登录页面

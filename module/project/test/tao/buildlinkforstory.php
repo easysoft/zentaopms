@@ -5,7 +5,7 @@
 
 title=测试 projectTao::buildLinkForStory();
 timeout=0
-cid=0
+cid=17889
 
 - 步骤1:测试change方法 @/zentaopms/projectstory-story-projectID=%s.html
 - 步骤2:测试create方法 @/zentaopms/projectstory-story-projectID=%s.html

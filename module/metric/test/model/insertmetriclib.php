@@ -5,7 +5,7 @@
 
 title=测试 metricModel::insertMetricLib();
 timeout=0
-cid=0
+cid=17136
 
 - 执行metricTest模块的insertMetricLibTest方法，参数是$recordData1, 'cron'  @0
 - 执行metricTest模块的insertMetricLibTest方法，参数是$recordData2, 'cron'  @0

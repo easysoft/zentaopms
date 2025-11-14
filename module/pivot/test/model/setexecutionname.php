@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 pivotModel->setExecutionName();
-cid=1
+cid=17431
 
 - 测试当execution的multiple为0时，生成的executionName为空 @空
 - 测试当execution的multiple为1时，生成的executionName为executionName值本身、 @<span title='name1'>name1</span>

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiCreateMRTodo();
 timeout=0
-cid=0
+cid=17225
 
 - 执行$check1 @0
 - 执行$check2 @object

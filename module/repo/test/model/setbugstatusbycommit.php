@@ -5,7 +5,7 @@
 
 title=测试 repoModel::setBugStatusByCommit();
 timeout=0
-cid=0
+cid=18102
 
 - 步骤1：正常resolve操作
  - 属性1 @1

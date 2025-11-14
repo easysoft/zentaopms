@@ -4,7 +4,7 @@
 
 title=测试 taskZen::checkStart();
 timeout=0
-cid=1
+cid=18926
 
 - 测试总消耗小于之前的消耗属性consumed @"总计消耗"必须大于之前消耗
 - 测试开始一个进行中的任务 @此任务已被启动，不能重复启动！

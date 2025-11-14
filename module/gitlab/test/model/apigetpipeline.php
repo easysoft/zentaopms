@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::apiGetPipeline();
 timeout=0
-cid=0
+cid=16611
 
 - 步骤1：正常参数查询pipeline @0
 - 步骤2：使用无效gitlabID查询 @0

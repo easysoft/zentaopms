@@ -5,7 +5,7 @@
 
 title=测试 blockModel::getModelType4Projects();
 timeout=0
-cid=0
+cid=15231
 
 - 执行blockTest模块的getModelType4ProjectsTest方法，参数是array  @0
 - 执行blockTest模块的getModelType4ProjectsTest方法，参数是array  @scrum

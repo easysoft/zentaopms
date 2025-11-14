@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getFieldsForExportTemplate();
 timeout=0
-cid=0
+cid=19091
 
 - 步骤1：normal类型包含title字段属性title @用例名称
 - 步骤2：branch类型包含branch字段属性branch @分支

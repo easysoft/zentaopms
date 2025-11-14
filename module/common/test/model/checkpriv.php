@@ -8,7 +8,7 @@ zenData('user')->gen(10);
 
 title=测试 commonModel::checkPriv();
 timeout=0
-cid=1
+cid=15660
 
 - 用户没有权限时，返回跳转的URL @{"load":"user-deny-user-create.html"}没有权限
 - 用户没有权限时，返回跳转的URL @{"load":"user-deny-productplan-view.html"}没有权限

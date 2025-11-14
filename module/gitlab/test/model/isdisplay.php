@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
 title=测试 gitlabModel::isDisplay();
 timeout=0
-cid=1
+cid=16661
 
 - 用户1检查browseBranch权限 @1
 - 用户1检查browseTag权限 @1

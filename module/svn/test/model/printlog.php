@@ -5,7 +5,7 @@
 
 title=测试 svnModel::printLog();
 timeout=0
-cid=0
+cid=18719
 
 - 步骤1：正常日志输出 @1
 - 步骤2：空字符串输入 @1

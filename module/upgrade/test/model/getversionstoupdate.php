@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getVersionsToUpdate();
-cid=1
+cid=19532
 
 - 测试获取开源版版本 18_8 来源版本 open 的升级版本 @pro:0;biz:0;max:0;ipd:0
 - 测试获取开源版版本 18_8 来源版本 pro 的升级版本 @pro:pro8_7;biz:0;max:0;ipd:0

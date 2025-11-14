@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::buildAjaxCustomView();
 timeout=0
-cid=0
+cid=17785
 
 - 步骤1：正常情况属性customFields @2
 - 步骤2：空用户参数属性stageCustom @~~

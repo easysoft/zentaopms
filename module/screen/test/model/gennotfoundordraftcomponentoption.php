@@ -5,7 +5,7 @@
 
 title=测试 screenModel::genNotFoundOrDraftComponentOption();
 timeout=0
-cid=0
+cid=18231
 
 - 步骤1：测试chart类型,空component和空chart对象
  - 属性hasOption @1

@@ -5,7 +5,7 @@
 
 title=测试 buildZen::setMenuForView();
 timeout=0
-cid=0
+cid=15523
 
 - 测试execution tab下版本1设置菜单 >> 期望session project设置为11
 - 测试execution tab下版本2设置菜单 >> 期望session project设置为12

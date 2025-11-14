@@ -5,7 +5,7 @@
 
 title=测试 executionTao::updateTeam();
 timeout=0
-cid=0
+cid=16399
 
 - 步骤1：正常添加新成员 @4
 - 步骤2：移除现有成员 @0

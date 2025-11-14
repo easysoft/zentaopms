@@ -5,7 +5,7 @@
 
 title=测试 storyModel->unlinkStory();
 timeout=0
-cid=0
+cid=18592
 
 - 删除用户需求1的关联关系之前，获取关联关系数量 @1
 - 删除用户需求1的关联关系之后，获取关联关系数量 @0

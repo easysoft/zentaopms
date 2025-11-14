@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::processResult();
 timeout=0
-cid=0
+cid=19215
 
 - 步骤1：正常情况无failure或skipped属性caseResult @pass
 - 步骤2：处理failure字符串属性caseResult @fail

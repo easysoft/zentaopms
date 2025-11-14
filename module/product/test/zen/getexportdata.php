@@ -5,7 +5,7 @@
 
 title=测试 productZen::getExportData();
 timeout=0
-cid=0
+cid=17581
 
 - 步骤1:测试获取全部产品导出数据 @10
 - 步骤2:测试获取项目集1的产品导出数据 @1

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::processScene();
 timeout=0
-cid=0
+cid=19103
 
 - 步骤1：正常情况
  - 属性id @scene001

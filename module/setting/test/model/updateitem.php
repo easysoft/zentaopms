@@ -11,7 +11,7 @@ $config->gen(10);
 /**
 
 title=测试 settingModel->updateItem.php();
-cid=1
+cid=18371
 
 - 测试更新错误数据 @0
 - 测试更新已存在数据属性value @value10

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDemand();
 timeout=0
-cid=0
+cid=19418
 
 - 步骤1：正常获取需求，验证ID属性id @1
 - 步骤2：验证标题属性属性title @Test Demand

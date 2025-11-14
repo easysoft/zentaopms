@@ -12,7 +12,7 @@ zenData('api_lib_release')->gen(10);
 
 title=测试 apiModel->getListByModuleID();
 timeout=0
-cid=1
+cid=15109
 
 - 测试不传参数时获取的文档列表。 @0
 - 测试获取文档库ID为1的文档列表。

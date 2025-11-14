@@ -5,7 +5,7 @@
 
 title=测试 zanodeTao::getHostsByIDList();
 timeout=0
-cid=0
+cid=19810
 
 - 步骤1：正常多个主机ID查询属性count @3
 - 步骤2：单个存在主机ID查询

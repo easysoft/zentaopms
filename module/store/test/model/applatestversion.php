@@ -5,7 +5,7 @@
 
 title=测试 storeModel::appLatestVersion();
 timeout=0
-cid=0
+cid=18449
 
 - 步骤1：获取有新版本的应用最新版本 @0
 - 步骤2：获取已是最新版本应用的最新版本 @0

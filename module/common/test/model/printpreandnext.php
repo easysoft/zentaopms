@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printPreAndNext();
 timeout=0
-cid=0
+cid=15701
 
 - 测试步骤1:在onlybody模式下调用printPreAndNext返回false @0
 - 测试步骤2:传入空的preAndNext对象只输出nav标签 @<nav class='container'></nav>

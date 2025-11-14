@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::apiCreatePipeline();
 timeout=0
-cid=1
+cid=16579
 
 - 执行gitlabTest模块的apiCreatePipelineTest方法，参数是$invalidGitlabID, $invalidProjectID, $emptyPipeline  @0
 - 执行gitlabTest模块的apiCreatePipelineTest方法，参数是$invalidGitlabID, $invalidProjectID, $basicPipeline  @0

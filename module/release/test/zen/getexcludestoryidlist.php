@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::getExcludeStoryIdList();
 timeout=0
-cid=0
+cid=18026
 
 - 执行releaseTest模块的getExcludeStoryIdListTest方法，参数是$release1
  - 属性1 @1

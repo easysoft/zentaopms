@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->fixKey();
-cid=1
+cid=18199
 
 - 将created改为create @create
 - 将opened改为create @create

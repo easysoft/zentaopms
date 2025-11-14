@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printTesttaskBlock();
 timeout=0
-cid=0
+cid=15307
 
 - 步骤1:测试正常情况下传入type参数为wait和count参数为10
  - 属性type @wait

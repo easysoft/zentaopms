@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterMove();
 timeout=0
-cid=0
+cid=16219
 
 - 步骤1:移动文档到mine空间
  - 属性result @success

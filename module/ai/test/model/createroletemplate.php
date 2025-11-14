@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createRoleTemplate();
 timeout=0
-cid=0
+cid=15014
 
 - 步骤1：正常创建 @1
 - 步骤2：空角色描述 @2

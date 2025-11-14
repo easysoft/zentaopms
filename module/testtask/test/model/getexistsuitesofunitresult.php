@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::getExistSuitesOfUnitResult();
 timeout=0
-cid=0
+cid=19174
 
 - 步骤1：正常情况
  - 属性UnitSuite1 @1

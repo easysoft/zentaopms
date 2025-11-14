@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::buildLocationByPATHINFO();
 timeout=0
-cid=0
+cid=18409
 
 - 步骤1:测试包含&的GET格式URL转换为PATH_INFO格式 @1
 - 步骤2:测试已经是PATH_INFO格式的URL添加SSO参数 @1

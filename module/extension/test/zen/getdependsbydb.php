@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 extensionZen::getDependsByDB();
 timeout=0
-cid=1
+cid=16487
 
 - 执行func模块的invokeArgs方法，参数是$zenInstance, ['base_plugin']  @0
 - 执行func模块的invokeArgs方法，参数是$zenInstance, ['nonexistent_plugin']  @0

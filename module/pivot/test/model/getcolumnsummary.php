@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getColumnSummary();
 timeout=0
-cid=0
+cid=17376
 
 - 执行pivotTest模块的getColumnSummaryTest方法，参数是$data[0], 'total' 第col1条的value属性 @25
 - 执行pivotTest模块的getColumnSummaryTest方法，参数是$data[1], 'summary' 第col1条的value属性 @text

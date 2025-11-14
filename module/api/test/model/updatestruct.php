@@ -5,7 +5,7 @@
 
 title=测试 apiModel::updateStruct();
 timeout=0
-cid=0
+cid=15123
 
 - 执行apiTest模块的updateStructTest方法  @1
 - 执行apiTest模块的updateStructTest方法 第name条的0属性 @『结构名』不能为空。

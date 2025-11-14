@@ -4,7 +4,7 @@
 /**
 
 title=测试 testsuiteModel->getCanImportCases();
-cid=0
+cid=18982
 
 - 测试获取产品 1 用例库 0 分支 all 排序 id_desc 可以导入的用例 @29,27,25,23,21
 

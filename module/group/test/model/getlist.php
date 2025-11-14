@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getList();
 timeout=0
-cid=1
+cid=16705
 
 - 获取权限分组列表
  - 第0条的name属性 @这是一个新的用户分组1

@@ -5,7 +5,7 @@
 
 title=测试 mailZen::getConfigForEdit();
 timeout=0
-cid=0
+cid=17039
 
 - 步骤1：无配置返回false @0
 - 步骤2：会话配置为空时返回false @0

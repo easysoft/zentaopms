@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printTeamAchievementBlock();
 timeout=0
-cid=0
+cid=15306
 
 - 测试步骤1：无任何度量数据
  - 属性finishedTasks @0

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::createMoreLink();
 timeout=0
-cid=0
+cid=15238
 
 - 步骤1:测试recentproject类型block的moreLink生成属性moreLink @project-browse
 - 步骤2:测试带type参数的bug类型block的moreLink生成属性moreLink @my-bug-type=assignedTo

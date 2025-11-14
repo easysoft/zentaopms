@@ -5,7 +5,7 @@
 
 title=测试 projectTao::buildLinkForProject();
 timeout=0
-cid=0
+cid=17888
 
 - 步骤1:测试execution方法 @m=project&f=execution&status=all&projectID=%s
 - 步骤2:测试managePriv方法 @m=project&f=group&projectID=%s

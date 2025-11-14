@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getBindAccount();
 timeout=0
-cid=0
+cid=19690
 
 - 步骤1：正常查询存在的绑定账号 @admin
 - 步骤2：查询不存在的webhookID @0

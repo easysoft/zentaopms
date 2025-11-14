@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSinglePlanBlock();
 timeout=0
-cid=0
+cid=15299
 
 - 测试步骤1：测试正常显示产品计划数据，包含5个计划属性plansCount @5
 - 测试步骤2：测试显示产品计划数据时显示计划数量限制为3属性plansCount @3

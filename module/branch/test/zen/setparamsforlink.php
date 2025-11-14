@@ -5,7 +5,7 @@
 
 title=测试 branchZen::setParamsForLink();
 timeout=0
-cid=0
+cid=15343
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['plan', '/test-%d-%d-%s', 1, 2]  @/test-1-2-{id}
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['program', '/test-%d-%d-%s', 1, 2]  @/test-1-2-{id}

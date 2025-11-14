@@ -5,7 +5,7 @@
 
 title=测试 metricTao::getObjectsWithPager();
 timeout=0
-cid=0
+cid=17175
 
 - 测试scope为system时返回false @0
 - 测试scope为product时返回产品ID列表 @0

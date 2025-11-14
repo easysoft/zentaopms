@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::addDrillFields();
 timeout=0
-cid=0
+cid=17353
 
 - 步骤1:cell包含value且无drillFields第drillFields条的field1属性 @value1
 - 步骤2:cell包含value且已有drillFields第drillFields条的field1属性 @value1

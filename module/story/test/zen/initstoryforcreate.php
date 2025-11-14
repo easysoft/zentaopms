@@ -5,7 +5,7 @@
 
 title=测试 storyZen::initStoryForCreate();
 timeout=0
-cid=0
+cid=18699
 
 - 步骤1：正常情况，无任何关联对象，只指定计划ID属性pri @3
 - 步骤2：基于已有需求复制初始化属性source @customer

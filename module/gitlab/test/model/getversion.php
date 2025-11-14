@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getVersion();
 timeout=0
-cid=0
+cid=16659
 
 - 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com', 'glpat-test1234567890abcdef' 属性version @*
 - 执行gitlabTest模块的getVersionTest方法，参数是'https://gitlab.example.com', 'invalid-token'  @~~

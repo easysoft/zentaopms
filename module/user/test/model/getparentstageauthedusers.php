@@ -5,7 +5,7 @@
 
 title=测试 userModel->getParentStageAuthedUsers();
 timeout=0
-cid=0
+cid=19622
 
 - 传入阶段ID为0获取有权限的用户 @0
 - 传入一个阶段ID为1获取有权限的用户 @0

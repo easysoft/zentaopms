@@ -5,7 +5,7 @@
 
 title=测试 metricZen::startTime();
 timeout=0
-cid=0
+cid=17208
 
 - 步骤1:验证返回值为浮点数类型 @double
 - 步骤2:验证返回值大于零 @1

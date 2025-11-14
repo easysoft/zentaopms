@@ -5,7 +5,7 @@
 
 title=测试 storyTao::buildReorderResult();
 timeout=0
-cid=0
+cid=18602
 
 - 步骤1：正常嵌套数组
  - 属性1 @1

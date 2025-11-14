@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->saveExportTemplate();
-cid=0
+cid=16529
 
 - 测试新建 公共 bug 模板
  - 属性title @新建的公共bug模板

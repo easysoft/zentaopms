@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 projectModel->getlistbyaclandtype();
 timeout=0
-cid=1
+cid=17831
 
 - 获取权限为公开类型为项目ID为100的项目属性。
  - 第100条的id属性 @100

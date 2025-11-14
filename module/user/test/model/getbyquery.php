@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::getByQuery();
-cid=0
+cid=19605
 
 - 使用默认参数，有 8 个用户。 @8
 - 不分页查找内部用户，有 8 个用户。 @8

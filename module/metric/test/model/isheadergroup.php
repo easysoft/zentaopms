@@ -5,7 +5,7 @@
 
 title=测试 metricModel::isHeaderGroup();
 timeout=0
-cid=0
+cid=17140
 
 - 步骤1：测试包含headerGroup属性的header数组 @1
 - 步骤2：测试不包含headerGroup属性的header数组 @0

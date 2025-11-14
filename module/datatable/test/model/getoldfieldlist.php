@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::getOldFieldList();
 timeout=0
-cid=0
+cid=15943
 
 - 步骤1：正常模块字段列表获取
  - 第id条的title属性 @ID

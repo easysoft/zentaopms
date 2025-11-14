@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processRiskRecord();
 timeout=0
-cid=0
+cid=18340
 
 - 执行searchTao模块的processRiskRecordTest方法,module为risk,lib为0 >> url属性包含risk-view-1
 - 执行searchTao模块的processRiskRecordTest方法,module为risk,lib不为0 >> url属性包含assetlib-riskView-2

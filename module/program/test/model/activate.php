@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 title=测试 programModel::activate();
 timeout=0
-cid=1
+cid=17670
 
 - 测试实际完成时间小于实际开始时间的情况属性end @『计划完成』应当不小于『计划开始』。
 - 测试激活一个项目集

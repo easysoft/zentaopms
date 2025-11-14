@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setLinkedBranches();
 timeout=0
-cid=0
+cid=16441
 
 - 步骤1：有copyExecutionID时的正常分支设置 @copyExecution
 - 步骤2：有project且stageBy='project'时的分支设置 @projectStage

@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::locateNotifyLink();
 timeout=0
-cid=0
+cid=18417
 
 - 执行locateNotifyLinkTest('http://example.com/index.php?m=user&f=view', 'home'), 'token=test_token_abc123') && substr_count($ssoTest模块的locateNotifyLinkTest方法，参数是'http://example.com/index.php?m=user&f=view', 'home'), 'referer=home'  @1
 - 执行locateNotifyLinkTest('http://example.com/user-view-1.html', 'dashboard'), 'token=test_token_abc123') && substr_count($ssoTest模块的locateNotifyLinkTest方法，参数是'http://example.com/user-view-1.html', 'dashboard'), 'referer=dashboard'  @1

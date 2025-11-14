@@ -20,7 +20,7 @@ su('admin');
 
 title=测试executionModel->getByIdListTest();
 timeout=0
-cid=1
+cid=16304
 
 - 敏捷项目查询第3条的name属性 @迭代1
 - 瀑布项目查询第4条的type属性 @stage

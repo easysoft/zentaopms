@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setModuleField();
 timeout=0
-cid=0
+cid=18709
 
 - 测试步骤1：正常字段配置和模块ID第module条的default属性 @2
 - 测试步骤2：空模块ID，使用cookie中lastStoryModule第module条的default属性 @1

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 programModel::getTopByID();
 timeout=0
-cid=1
+cid=17701
 
 - 获取项目集1最上级的项目集id @1
 - 获取项目集2最上级的项目集id @1

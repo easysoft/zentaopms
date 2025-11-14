@@ -5,7 +5,7 @@
 
 title=测试 metricZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=17206
 
 - 执行metricZenTest模块的responseAfterCreateZenTest方法，参数是1, 'back', 'metric', 'http://example.com' 
  - 属性result @success

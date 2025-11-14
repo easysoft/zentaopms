@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareBuiltinChartSQL();
 timeout=0
-cid=0
+cid=15197
 
 - 步骤1:insert操作返回非空数组 @1
 - 步骤2:update操作返回非空数组 @1

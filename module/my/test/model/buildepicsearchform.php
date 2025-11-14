@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 myModel->buildEpicSearchForm();
 timeout=0
-cid=1
+cid=17272
 
 - 测试获取queryID 0 actionURL actionURL1 的搜索表单
  - 属性module @epicEpic

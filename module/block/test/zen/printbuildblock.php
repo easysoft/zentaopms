@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printBuildBlock();
 timeout=0
-cid=0
+cid=15252
 
 - 执行blockTest模块的printBuildBlockTest方法，参数是$block1 属性count @0
 - 执行blockTest模块的printBuildBlockTest方法，参数是$block2 属性count @0

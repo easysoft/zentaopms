@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->getListByAccount();
-cid=1
+cid=18200
 
 - 获取5条admin积分记录第一页的数据 @5
 - 获取10条admin积分记录第一页的数据 @10

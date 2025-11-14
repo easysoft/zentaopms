@@ -3,7 +3,7 @@
 /**
 
 title=测试 fileModel->compressImage();
-cid=0
+cid=16495
 
 - 测试上传 png 文件
  - 属性extension @png

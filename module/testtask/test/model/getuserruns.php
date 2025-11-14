@@ -10,7 +10,7 @@ zenData('story')->gen(2);
 
 title=测试 testtaskModel->getUserRuns();
 timeout=0
-cid=1
+cid=19196
 
 - 查看测试单 0 中指派给用户 1 的用例数。 @0
 - 查看测试单 2 中指派给用户 1 的用例数。 @0

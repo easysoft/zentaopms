@@ -5,7 +5,7 @@
 
 title=测试 ssoModel::bind();
 timeout=0
-cid=0
+cid=18401
 
 - 执行ssoTest模块的bindTest方法
  - 属性account @admin

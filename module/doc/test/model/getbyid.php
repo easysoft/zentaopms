@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getByID();
-cid=1
+cid=16071
 
 - 测试空数据 @0
 - 测试docID=1的数据

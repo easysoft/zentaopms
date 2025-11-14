@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::buildLinkBugSearchForm();
 timeout=0
-cid=0
+cid=18021
 
 - 执行releaseTest模块的buildLinkBugSearchFormTest方法，参数是$normalRelease, 0, 'bug' 第actionURL条的contains属性 @true
 - 执行releaseTest模块的buildLinkBugSearchFormTest方法，参数是$branchRelease, 1, 'bug' 属性branchConfigured @true

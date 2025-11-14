@@ -5,7 +5,7 @@
 
 title=测试 repoTao::getMatchedReposByUrl();
 timeout=0
-cid=0
+cid=18119
 
 - 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'http://github.com/example/test.git'  @0
 - 执行repoTest模块的getMatchedReposByUrlTest方法，参数是'https://bitbucket.org/example/test.git'  @0

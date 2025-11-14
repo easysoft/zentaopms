@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProjectAuthedUsers();
 timeout=0
-cid=0
+cid=19629
 
 - 步骤1：基本项目角色获取属性user1 @user1
 - 步骤2：包含利益相关者属性stakeholder1 @stakeholder1

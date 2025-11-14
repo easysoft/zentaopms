@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=19108
 
 - 步骤1：正常QA tab调用属性result @success
 - 步骤2：JSON视图调用属性type @json

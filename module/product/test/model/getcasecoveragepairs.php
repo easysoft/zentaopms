@@ -5,7 +5,7 @@
 
 title=productModel->getCaseCoveragePairs();
 timeout=0
-cid=0
+cid=17488
 
 - 获取产品ID为0的用例覆盖率 @0
 - 获取产品ID为1的用例覆盖率属性1 @20

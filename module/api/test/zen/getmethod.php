@@ -5,7 +5,7 @@
 
 title=测试 apiZen::getMethod();
 timeout=0
-cid=0
+cid=15125
 
 - 执行apiTest模块的getMethodTest方法，参数是$filePath1, 'Zen' 属性className @api
 - 执行apiTest模块的getMethodTest方法，参数是$filePath1, 'Zen' 属性methodName @getMethod

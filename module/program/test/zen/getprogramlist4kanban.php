@@ -5,7 +5,7 @@
 
 title=测试 programZen::getProgramList4Kanban();
 timeout=0
-cid=0
+cid=17731
 
 - 测试步骤1:使用默认参数my获取看板数据 @1
 - 测试步骤2:使用参数my获取看板数据 @1

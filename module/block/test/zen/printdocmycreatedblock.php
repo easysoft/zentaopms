@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDocMyCreatedBlock();
 timeout=0
-cid=0
+cid=15256
 
 - 测试1:当用户创建6个文档时返回数量属性count @6
 - 测试2:验证返回文档的editedDate格式正确第1条的editedDate属性 @2024-11-07

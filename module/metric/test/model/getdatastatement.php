@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getDataStatement();
 timeout=0
-cid=0
+cid=17089
 
 - 步骤1：正常情况，返回statement对象 @1
 - 步骤2：返回SQL字符串 @1

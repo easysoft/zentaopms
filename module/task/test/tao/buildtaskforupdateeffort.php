@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->buildTaskForUpdateEffort();
 timeout=0
-cid=1
+cid=18863
 
 - 正常编辑的工时信息，查看返回的任务信息
  - 属性consumed @4.1

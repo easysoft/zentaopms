@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->getGroupsFromSettings().
 timeout=0
-cid=1
+cid=17388
 
 - 测试一个分组。 @product
 - 测试两个个分组。 @product,project

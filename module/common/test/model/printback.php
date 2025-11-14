@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printBack();
 timeout=0
-cid=0
+cid=15689
 
 - 测试步骤1:检查printBack方法是否存在 @1
 - 测试步骤2:检查printBack方法是否为静态方法 @1

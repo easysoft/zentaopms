@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchMetricRecordsWithOption();
 timeout=0
-cid=0
+cid=17167
 
 - 步骤1：正常获取度量数据 @0
 - 步骤2：使用options过滤execution @0

@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetUsers();
 timeout=0
-cid=1
+cid=16626
 
 - 通过gitlabID,onlyLinked,获取GitLab用户列表 @1
 - 通过gitlabID,onlyLinked,获取GitLab用户数量 @1

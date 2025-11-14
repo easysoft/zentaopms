@@ -5,7 +5,7 @@
 
 title=测试 projectZen::setProjectMenu();
 timeout=0
-cid=0
+cid=17967
 
 - 步骤1：program tab设置菜单属性program_tab @program menu set
 - 步骤2：project tab设置菜单属性project_tab @project menu set

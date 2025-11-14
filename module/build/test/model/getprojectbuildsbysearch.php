@@ -4,7 +4,7 @@
 
 title=测试 buildModel->getProjectBuildsBySearch();
 timeout=0
-cid=1
+cid=15497
 
 */
 

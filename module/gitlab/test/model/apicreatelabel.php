@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiCreateLabel();
 timeout=0
-cid=0
+cid=16578
 
 - 步骤1：缺少name属性 @0
 - 步骤2：缺少color属性 @0

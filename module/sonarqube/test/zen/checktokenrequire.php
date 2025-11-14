@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeZen::checkTokenRequire();
 timeout=0
-cid=0
+cid=18389
 
 - 执行sonarqubeTest模块的checkTokenRequireTest方法，参数是$validData  @success
 - 执行sonarqubeTest模块的checkTokenRequireTest方法，参数是$noName 第name条的0属性 @『应用名称』不能为空。

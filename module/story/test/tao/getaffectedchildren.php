@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getAffectedChildren();
 timeout=0
-cid=0
+cid=18631
 
 - 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 
  - 属性id @1

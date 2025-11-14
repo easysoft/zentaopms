@@ -5,7 +5,7 @@
 
 title=测试 userModel::getManageListGroupByType();
 timeout=0
-cid=0
+cid=19619
 
 - 测试用户admin的programs权限为all，isAdmin为1第programs条的isAdmin属性 @1
 - 测试用户admin的projects权限为all，isAdmin为1第projects条的isAdmin属性 @1

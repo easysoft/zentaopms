@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildGroupColumn();
 timeout=0
-cid=0
+cid=16971
 
 - 执行$result1属性id @1
 - 执行$result2属性cards @3

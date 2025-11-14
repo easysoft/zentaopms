@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getAssignedToPairs();
 timeout=0
-cid=0
+cid=15446
 
 - 执行bugTest模块的getAssignedToPairsTest方法，参数是$bug1  @3
 - 执行bugTest模块的getAssignedToPairsTest方法，参数是$bug2  @2

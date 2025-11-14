@@ -9,7 +9,7 @@ zenData('project')->gen(20);
 
 title=测试 commonModel->syncProgramStatus();
 timeout=0
-cid=1
+cid=15721
 
 - 执行$program1属性status @wait
 - 执行$program2属性status @wait

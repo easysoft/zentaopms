@@ -5,7 +5,7 @@
 
 title=测试 hostModel::getTreeModules();
 timeout=0
-cid=0
+cid=16759
 
 - 步骤1：获取根模块树结构，期望第4个元素名称为模块4第3条的name属性 @模块4
 - 步骤2：获取模块ID为1的子模块，期望第1个元素名称为子模块1第0条的name属性 @子模块1

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getMembersByIdListTest();
 timeout=0
-cid=1
+cid=16329
 
 - 批量查询敏捷执行team
  - 第admin条的root属性 @3

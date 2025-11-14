@@ -38,7 +38,7 @@ $rows[3]->estimate = 2;
 
 title=测试 transfer->parseExcelDropdownValues();
 timeout=0
-cid=1
+cid=19328
 
 sed: can't read /home/z/repo/master/zentaopms/test/config/my.php: No such file or directory
 - 测试正常条件下导入需求标题是否为需求1第2条的title属性 @需求1

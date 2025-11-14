@@ -15,7 +15,7 @@ su('admin');
 
 title=测试 testreportModel->getCaseIdList();
 timeout=0
-cid=1
+cid=19116
 
 - 正常查询
  - 属性1 @1

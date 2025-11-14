@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 /**
 
 title=测试 testcaseModel->appendSteps();
-cid=1
+cid=18953
 
 - 测试添加原有步骤数量 0 @3
 

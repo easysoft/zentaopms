@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processDocRecord();
 timeout=0
-cid=0
+cid=18334
 
 - 测试普通文档记录(无assetLib)属性url @doc-view-1.html
 - 测试资产库文档记录(assetLibType为practice)属性url @assetlib-practiceView-3.html

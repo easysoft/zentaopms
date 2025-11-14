@@ -10,7 +10,7 @@ zenData('kanbangroup')->gen(20);
 
 title=测试 kanbanModel->getGroupGroupByRegions();
 timeout=0
-cid=1
+cid=16918
 
 - 获取区域1 2 3的泳道组数量 @3
 - 获取区域4,5,6的泳道组数量 @3

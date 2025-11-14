@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignCreateVars();
 timeout=0
-cid=0
+cid=19064
 
 - 步骤1:正常产品ID,空分支,无模块,无来源属性executed @1
 - 步骤2:正常产品ID,from为project,param为项目ID属性executed @1
