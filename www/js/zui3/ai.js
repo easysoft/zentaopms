@@ -200,38 +200,6 @@ function registerZentaoAIPlugin(lang)
         }
     });
 
-    if(lang.knowledgeLib)
-    {
-        plugin.defineContextProvider({
-            code : 'knowledgeLibs',
-            title: lang.knowledgeLib,
-            icon : 'book',
-            contexts : function()
-            {
-                return new Promise((resolve) => {
-                    zui.Modal.open({url: $.createLink('ai', 'selectknowledgelib', `selectedID=&callback=getKnowledgeLibsByForm`), size: 'sm'});
-                    window.getKnowledgeLibsByForm = function(libs)
-                    {
-                        if(!libs.length) return resolve();
-
-                        const res = [];
-                        libs.forEach(item => {
-                            res.push({
-                                title: item.name,
-                                hint: item.name,
-                                code: `zentao-knowledgeLib-${item.id}`,
-                                data: {
-                                    memory: {collections: [`zentao:${item.id}`]}
-                                }
-                            })
-                        });
-                        resolve(res);
-                    }
-                });
-            },
-        });
-    }
-
     const objectIcons = {
         story   : 'file-text',
         demand  : 'file-text',
@@ -316,6 +284,38 @@ function registerZentaoAIPlugin(lang)
         when : context => !!context.store.globalMemory,
         data : {memory: {collections: ['zentao:global']}},
     });
+
+    if(lang.knowledgeLib)
+    {
+        plugin.defineContextProvider({
+            code : 'knowledgeLibs',
+            title: lang.knowledgeLib,
+            icon : 'book',
+            contexts : function()
+            {
+                return new Promise((resolve) => {
+                    zui.Modal.open({url: $.createLink('ai', 'selectknowledgelib', `selectedID=&callback=getKnowledgeLibsByForm`), size: 'sm'});
+                    window.getKnowledgeLibsByForm = function(libs)
+                    {
+                        if(!libs.length) return resolve();
+
+                        const res = [];
+                        libs.forEach(item => {
+                            res.push({
+                                title: item.name,
+                                hint: item.name,
+                                code: `zentao-knowledgeLib-${item.id}`,
+                                data: {
+                                    memory: {collections: [`zentao:${item.id}`]}
+                                }
+                            })
+                        });
+                        resolve(res);
+                    }
+                });
+            },
+        });
+    }
 
     plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(info)
     {
