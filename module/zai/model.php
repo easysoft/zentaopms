@@ -797,7 +797,7 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertTargetToMarkdown($type, $target, ?array $langData = null)
+    public static function convertTargetToMarkdown($type, $target, array $langData = [])
     {
         global $app;
 
@@ -1185,7 +1185,7 @@ class zaiModel extends model
      * @param object $story
      * @return array
      */
-    public static function convertStoryToMarkdown($story, ?array $langData = null)
+    public static function convertStoryToMarkdown($story, array $langData = [])
     {
         global $app;
 
@@ -1239,10 +1239,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertCaseToMarkdown($case, ?array $langData = null): array
+    public static function convertCaseToMarkdown($case, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $case->id ?? 0;
         $title = trim((string)($case->title ?? $case->name ?? ''));
 
@@ -1289,7 +1287,7 @@ class zaiModel extends model
      * @param object $demand
      * @return array
      */
-    public static function convertDemandToMarkdown($demand, ?array $langData = null)
+    public static function convertDemandToMarkdown($demand, array $langData = [])
     {
         global $app;
 
@@ -1344,7 +1342,7 @@ class zaiModel extends model
      * @param object $bug
      * @return array
      */
-    public static function convertBugToMarkdown($bug, ?array $langData = null)
+    public static function convertBugToMarkdown($bug, array $langData = [])
     {
         global $app;
 
@@ -1399,7 +1397,7 @@ class zaiModel extends model
      * @access public
      * @return array
      */
-    public static function convertTaskToMarkdown($task, ?array $langData = null)
+    public static function convertTaskToMarkdown($task, array $langData = [])
     {
         global $app;
 
@@ -1458,7 +1456,7 @@ class zaiModel extends model
      * @param object $doc
      * @return array
      */
-    public static function convertDocToMarkdown($doc, ?array $langData = null)
+    public static function convertDocToMarkdown($doc, array $langData = [])
     {
         global $app;
 
@@ -1592,7 +1590,7 @@ class zaiModel extends model
      * @param object $design
      * @return array
      */
-    public static function convertDesignToMarkdown($design, ?array $langData = null)
+    public static function convertDesignToMarkdown($design, array $langData = [])
     {
         global $app;
 
@@ -1632,7 +1630,7 @@ class zaiModel extends model
      * @param object $feedback
      * @return array
      */
-    public static function convertFeedbackToMarkdown($feedback, ?array $langData = null)
+    public static function convertFeedbackToMarkdown($feedback, array $langData = [])
     {
         global $app;
 
@@ -1685,10 +1683,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertIssueToMarkdown($issue, ?array $langData = null): array
+    public static function convertIssueToMarkdown($issue, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $issue->id ?? 0;
         $title = trim((string)($issue->title ?? $issue->name ?? ''));
 
@@ -1733,10 +1729,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertRiskToMarkdown($risk, ?array $langData = null): array
+    public static function convertRiskToMarkdown($risk, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $risk->id ?? 0;
         $title = trim((string)($risk->name ?? ''));
 
@@ -1781,10 +1775,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertOpportunityToMarkdown($opportunity, ?array $langData = null): array
+    public static function convertOpportunityToMarkdown($opportunity, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $opportunity->id ?? 0;
         $title = trim((string)($opportunity->name ?? ''));
 
@@ -1828,10 +1820,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertPlanToMarkdown($plan, ?array $langData = null): array
+    public static function convertPlanToMarkdown($plan, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $plan->id ?? 0;
         $title = trim((string)($plan->title ?? $plan->name ?? ''));
 
@@ -1874,10 +1864,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertReleaseToMarkdown($release, ?array $langData = null): array
+    public static function convertReleaseToMarkdown($release, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $release->id ?? 0;
         $title = trim((string)($release->name ?? ''));
 
@@ -1917,10 +1905,8 @@ class zaiModel extends model
      * @param  array|null $langData
      * @return array
      */
-    public static function convertTicketToMarkdown($ticket, ?array $langData = null): array
+    public static function convertTicketToMarkdown($ticket, array $langData = []): array
     {
-        $langData = is_array($langData) ? $langData : array();
-
         $id    = $ticket->id ?? 0;
         $title = trim((string)($ticket->title ?? $ticket->name ?? ''));
 
