@@ -983,6 +983,11 @@ class zaiModel extends model
         foreach((array)$milestones as $milestone)
         {
             if(is_object($milestone)) $milestone = (array)$milestone;
+            $name = isset($milestone['name']) ? trim((string)$milestone['name']) : '';
+            $date = isset($milestone['date']) ? trim((string)$milestone['date']) : '';
+            $line = $name;
+            if($date !== '') $line = $line === '' ? $date : "{$line} ({$date})";
+            if($line !== '') $content[] = "- {$line}";
         }
     }
 
