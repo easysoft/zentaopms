@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->isClickable().
 timeout=0
-cid=1
+cid=19840
 
 - 测试对象node状态 suspend hostType physics 的 resume 按钮是否可点击 @0
 - 测试对象node状态 suspend hostType 空 的 resume 按钮是否可点击 @1
