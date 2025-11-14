@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::destroy();
 timeout=0
-cid=0
+cid=19825
 
 - 执行zanodeTest模块的destroyTest方法，参数是1  @没有发现Agent服务
 - 执行zanodeTest模块的destroyTest方法，参数是6  @success

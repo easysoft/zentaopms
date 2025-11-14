@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::linkAgentService();
 timeout=0
-cid=0
+cid=19841
 
 - 步骤1：正常情况下Agent服务不可用属性image @没有发现Agent服务
 - 步骤2：不存在的镜像ID @0
