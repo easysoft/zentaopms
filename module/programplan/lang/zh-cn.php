@@ -135,7 +135,7 @@ $lang->programplan->ganttCustom['delay']        = '是否延期';
 $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"工作量占比"必须为数字';
+$lang->programplan->error->percentNumber   = '"工作量占比"必须为非负数';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
 $lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';

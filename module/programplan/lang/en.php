@@ -135,7 +135,7 @@ $lang->programplan->ganttCustom['delay']        = 'Delay';
 $lang->programplan->ganttCustom['delayDays']    = 'Delay days';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
+$lang->programplan->error->percentNumber   = '"Workload %" must be non-negative';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task is decomposed. Sub stages cannot be added.';
