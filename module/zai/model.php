@@ -957,11 +957,8 @@ class zaiModel extends model
         $plain = $text === '' ? '' : trim(strip_tags($text));
 
         $label = static::getSectionLabel($langData, $sectionKey);
-        if($label === '')
-        {
-            $label = static::getFieldLabel($langData, $sectionKey);
-            return;
-        }
+        if($label === '') $label = static::getFieldLabel($langData, $sectionKey);
+        if($label === '') return;
 
         $content[] = "\n## {$label}\n\n" . $plain;
     }
