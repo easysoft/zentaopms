@@ -188,6 +188,7 @@ class programplan extends control
 
             if(empty($plan->realBegan)) $plan->realBegan = null;
             if(empty($plan->realEnd))   $plan->realEnd   = null;
+            if(empty($plan->percent))   $plan->percent   = 0;
 
             $plan = $this->programplanZen->prepareEditPlan($planID, $projectID, $plan, isset($parentStage) ? $parentStage : null);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
