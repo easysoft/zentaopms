@@ -1045,7 +1045,7 @@ class zaiModel extends model
      * @param  object $target
      * @return array
      */
-    public static function collectFieldPairs(string $objectType, array $langData, object $target): array
+    protected static function collectFieldPairs(string $objectType, array $langData, object $target): array
     {
         if(empty($langData['fields']) || !is_array($langData['fields'])) return array();
 
@@ -1072,7 +1072,7 @@ class zaiModel extends model
      * @param  object $target
      * @return mixed
      */
-    public static function extractFieldValue(string $objectType, string $field, object $target)
+    protected static function extractFieldValue(string $objectType, string $field, object $target)
     {
         $data = (array)$target;
         if(array_key_exists($field, $data)) return $data[$field];
@@ -1101,7 +1101,7 @@ class zaiModel extends model
      * @param  string $objectType
      * @return array
      */
-    public static function getFieldAliasMap(string $objectType): array
+    protected static function getFieldAliasMap(string $objectType): array
     {
         static $aliasMap = array(
             'issue' => array(
