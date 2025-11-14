@@ -11914,15 +11914,24 @@ class upgradeModel extends model
             else
             {
                 /* 复制一份检查单放到项目型项目流程中。*/
+                $idMap       = array();
                 $auditclList = $this->dao->select('*')->from(TABLE_AUDITCL)->where('model')->eq($workflow->projectModel)->fetchAll('id', false);
                 foreach($auditclList as $auditcl)
                 {
+                    $oldID = $auditcl->id;
                     unset($auditcl->id);
                     $auditcl->workflowGroup = $id;
                     $auditcl->model         = '';
                     if(helper::isZeroDate($auditcl->editedDate))   $auditcl->editedDate   = null;
                     if(helper::isZeroDate($auditcl->assignedDate)) $auditcl->assignedDate = null;
                     $this->dao->insert(TABLE_AUDITCL)->data($auditcl)->exec();
+                    $idMap[$oldID] = $this->dao->lastInsertID();
+                }
+
+                $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($id)->fetchPairs();
+                foreach($idMap as $oldID => $newID)
+                {
+                    $this->dao->update(TABLE_NC)->set('listID')->eq($newID)->where('listID')->eq($oldID)->andWhere('project')->in($projectIdList)->exec();
                 }
             }
         }

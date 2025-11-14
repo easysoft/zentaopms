@@ -248,8 +248,3 @@ $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = '基线评审';
 $lang->upgrade->baselineReview['change']   = '项目变更评审';
 $lang->upgrade->baselineReview['accept']   = '项目变更验收评审';
-
-$lang->upgrade->classifyList = array();
-$lang->upgrade->classifyList['project']     = '项目管理';
-$lang->upgrade->classifyList['engineering'] = '工程实现';
-$lang->upgrade->classifyList['support']     = '支持过程';
