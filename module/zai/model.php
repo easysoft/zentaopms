@@ -1037,6 +1037,43 @@ class zaiModel extends model
     }
 
     /**
+     * 收集需要展示的字段列表。
+     * Collect field-value pairs for markdown listing.
+     *
+     * @param  string $objectType
+     * @param  array  $langData
+     * @param  object $target
+     * @return array
+     */
+    public static function collectFieldPairs(string $objectType, array $langData, object $target): array
+    {
+        if(empty($langData['fields']) || !is_array($langData['fields'])) return array();
+
+        $pairs      = array();
+        $skipFields = array('desc', 'prevention', 'remedy', 'resolution', 'history', 'resolutionComment', 'steps', 'precondition', 'expect');
+
+        foreach($langData['fields'] as $fieldKey => $label)
+        {
+            if($fieldKey === 'actions') continue;
+            if(in_array($fieldKey, $skipFields, true)) continue;
+
+            $pairs[$fieldKey] = static::extractFieldValue($objectType, $fieldKey, $target);
+        }
+
+        return $pairs;
+    }
+
+    /**
+     * 获取指定字段的值。
+     * Get field value from target with alias support.
+     *
+     * @param  string $objectType
+     * @param  string $field
+     * @param  object $target
+     * @return mixed
+     */
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
