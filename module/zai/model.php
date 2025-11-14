@@ -1231,6 +1231,56 @@ class zaiModel extends model
     }
 
     /**
+     * 将 CASE 对象转换为 Markdown 格式。
+     * Convert case object to Markdown format.
+     *
+     * @access public
+     * @param  object     $case
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertCaseToMarkdown($case, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $case->id ?? 0;
+        $title = trim((string)($case->title ?? $case->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('case', $langData, $case);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'precondition', $case->precondition ?? null);
+
+        $stepsText = static::buildCaseStepsText($case->steps ?? null, $langData);
+        if($stepsText !== '') static::appendDetailSection($content, $langData, 'steps', $stepsText);
+
+        static::appendDetailSection($content, $langData, 'expect', $case->expect ?? ($case->expects ?? null));
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'product'   => $case->product   ?? '',
+            'module'    => $case->module    ?? '',
+            'execution' => $case->execution ?? '',
+            'pri'       => $case->pri       ?? '',
+            'type'      => $case->type      ?? '',
+            'status'    => $case->status    ?? '',
+            'stage'     => $case->stage     ?? '',
+        );
+        return $markdown;
+    }
+
+    /**
      * 将 DEMAND 对象转换为 Markdown 格式。
      * Convert demand object to Markdown format.
      *
