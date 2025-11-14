@@ -600,6 +600,32 @@ class zaiTest
     }
 
     /**
+     * Test convertReleaseToMarkdown static method.
+     *
+     * @param  object     $release
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertReleaseToMarkdownTest($release, ?array $langData = null): array
+    {
+        return zaiModel::convertReleaseToMarkdown($release, $langData);
+    }
+
+    /**
+     * Test convertTicketToMarkdown static method.
+     *
+     * @param  object     $ticket
+     * @param  array|null $langData
+     * @access public
+     * @return array
+     */
+    public function convertTicketToMarkdownTest($ticket, ?array $langData = null): array
+    {
+        return zaiModel::convertTicketToMarkdown($ticket, $langData);
+    }
+
+    /**
      * Test searchKnowledgesInCollections method.
      *
      * @param  string $query
