@@ -8,7 +8,7 @@ timeout=0
 cid=0
 
 - 执行func模块的invokeArgs方法，参数是$instance, [3, 1, $plan, $parentStage]) ? 'success' : 'fail  @success
-- 执行属性end @完成时间不能小于开始时间
+- 执行属性end @"计划完成时间"必须大于"计划开始时间"
 - 执行属性begin @子阶段计划开始不能小于父阶段的计划开始时间 2024-01-01
 - 执行属性end @子阶段计划完成不能超过父阶段的计划完成时间 2024-01-31
 - 执行func模块的invokeArgs方法，参数是$instance, [3, 2, $researchPlan, null]) ? 'success' : 'fail  @success
@@ -23,8 +23,8 @@ $table = zenData('project');
 $table->id->range('1-3');
 $table->name->range('测试项目,调研项目,阶段1');
 $table->type->range('project{2},stage');
-$table->begin->range('2024-01-01{3}');
-$table->end->range('2024-12-31{3}');
+$table->begin->range('`2024-01-01`{3}');
+$table->end->range('`2024-12-31`{3}');
 $table->model->range('scrum,research,scrum');
 $table->acl->range('open{3}');
 $table->attribute->range('mix{2},request');
@@ -65,7 +65,7 @@ $invalidPlan->end = '2024-01-10';
 $invalidPlan->percent = 10;
 
 $func->invokeArgs($instance, [3, 1, $invalidPlan, $parentStage]);
-r(dao::getError()) && p('end') && e('完成时间不能小于开始时间');
+r(dao::getError()) && p('end') && e('"计划完成时间"必须大于"计划开始时间"');
 
 dao::$errors = array();
 

@@ -81,6 +81,7 @@ class programplanZen extends programplan
         $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
+
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
             $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->programplan->calcDaysForStage($plan->begin, $plan->end) : 0;
             $plan->project    = $projectID;
@@ -112,8 +113,10 @@ class programplanZen extends programplan
                 if(!empty($this->config->setCode) && empty($plan->code) && strpos(",{$this->config->execution->create->requiredFields},", ',code,') !== false) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
 
+            if(!is_numeric($plan->percent) || $plan->percent < 0) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentNumber;
+
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && isset($plan->percent))
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && isset($plan->percent) && !dao::isError())
             {
                 if($plan->level == 0)
                 {
@@ -145,7 +148,6 @@ class programplanZen extends programplan
 
             $lastLevels[$plan->level] = $plan;
             if($plan->level > 0) $this->checkLegallyDate($plan, $project, zget($lastLevels, $plan->level - 1, null), $rowID);
-            if($plan->percent < 0) dao::$errors["percent[$rowID]"] = sprintf($this->lang->error->float, $this->lang->programplan->percent);
         }
 
         foreach($totalPercent as $group => $percent)
@@ -219,6 +221,8 @@ class programplanZen extends programplan
 
             if(dao::isError()) return false;
         }
+
+        if(!is_numeric($plan->percent) || $plan->percent < 0) dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
 
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
         if(dao::isError()) return false;

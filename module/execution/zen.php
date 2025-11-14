@@ -1644,7 +1644,7 @@ class executionZen extends execution
         }
         elseif($module == 'pssp')
         {
-            $link = helper::createLink($module, 'browse', "projectID=%s#app={$this->app->tab}");
+            $link = helper::createLink($module, 'browse', "projectID=%s") . "#app={$this->app->tab}";
         }
         elseif(in_array($module, array('issue', 'risk', 'opportunity', 'auditplan', 'nc', 'meeting')))
         {
@@ -1661,6 +1661,10 @@ class executionZen extends execution
         elseif($method == 'createrelation')
         {
             $link = helper::createLink('execution', 'relation', "executionID=%s");
+        }
+        elseif($module == 'project' && $method == 'deliverablechecklist')
+        {
+            $link = helper::createLink('project', 'deliverableChecklist', "projectID=%s") . "#app={$this->app->tab}";
         }
 
         if($type != '') $link .= "&type=$type";

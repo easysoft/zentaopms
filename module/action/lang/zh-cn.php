@@ -944,7 +944,6 @@ $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
-$lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 $lang->action->label->module       = '模块|tree|browse|productid=%s&view=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = '工单|ticket|view|id=%s';
 $lang->action->label->chartgroup   = '分组';

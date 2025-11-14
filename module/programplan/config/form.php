@@ -11,7 +11,7 @@ $config->programplan->form->create['order']      = array('label' => '',         
 $config->programplan->form->create['name']       = array('label' => $lang->nameAB,                 'type' => 'string', 'control' => 'text',     'required' => true,  'default' => '',     'base' => true, 'filter' => 'trim');
 $config->programplan->form->create['code']       = array('label' => $lang->code,                   'type' => 'string', 'control' => 'text',     'required' => false, 'default' => '',     'filter' => 'trim');
 $config->programplan->form->create['PM']         = array('label' => $lang->programplan->PMAB,      'type' => 'string', 'control' => 'picker',   'required' => false, 'default' => '',     'options' => '');
-if(!empty($config->setPercent)) $config->programplan->form->create['percent'] = array('label' => $lang->programplan->percent, 'type' => 'float', 'control' => 'text', 'required' => false, 'default' => 0);
+if(!empty($config->setPercent)) $config->programplan->form->create['percent'] = array('label' => $lang->programplan->percent, 'type' => 'string', 'control' => 'text', 'required' => false, 'default' => '');
 $config->programplan->form->create['attribute']    = array('label' => $lang->programplan->attribute, 'type' => 'string', 'control' => 'picker',   'required' => false, 'default' => 0,      'options' => $lang->stage->typeList);
 $config->programplan->form->create['type']         = array('label' => $lang->execution->method,      'type' => 'string', 'control' => 'picker',   'required' => true,  'default' => 'stage', 'options' => $lang->execution->typeList);
 $config->programplan->form->create['point']        = array('label' => $lang->programplan->point,     'type' => 'array',  'control' => 'picker',   'required' => false, 'default' => '',     'options' => array(''), 'multiple' => true);
@@ -33,7 +33,7 @@ $config->programplan->form->edit['parent']    = array('required' => false, 'type
 $config->programplan->form->edit['name']      = array('required' => true,  'type' => 'string', 'default' => '');
 $config->programplan->form->edit['code']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['PM']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->programplan->form->edit['percent']   = array('required' => false, 'type' => 'float',  'default' => 0);
+$config->programplan->form->edit['percent']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['attribute'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['acl']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->edit['begin']     = array('required' => true,  'type' => 'string', 'default' => null);
