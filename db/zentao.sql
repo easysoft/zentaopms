@@ -2384,7 +2384,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `email` char(90) NOT NULL DEFAULT '',
   `skype` char(90) NOT NULL DEFAULT '',
   `qq` char(20) NOT NULL DEFAULT '',
-  `mobile` char(11) NOT NULL DEFAULT '',
+  `mobile` varchar(20) NOT NULL DEFAULT '',
   `phone` char(20) NOT NULL DEFAULT '',
   `weixin` varchar(90) NOT NULL DEFAULT '',
   `dingding` varchar(90) NOT NULL DEFAULT '',
