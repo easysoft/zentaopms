@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getAutomationByID().
 timeout=0
-cid=19789
+cid=19827
 
 - 测试获取 id 1 的自动化设置
  - 属性id @1

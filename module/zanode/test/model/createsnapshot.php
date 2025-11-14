@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::createSnapshot();
 timeout=0
-cid=19785
+cid=19823
 
 - 执行zanode模块的createSnapshotTest方法，参数是10, '192.168.1.100', 8080, 'valid_token_123', $validSnapshot  @失败
 - 执行zanode模块的createSnapshotTest方法，参数是11, '192.168.1.101', 0, 'valid_token_456', $validSnapshot  @失败

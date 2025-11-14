@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getCustomImage().
 timeout=0
-cid=19791
+cid=19829
 
 - 测试获取 node id 1 状态 creating,wait id_desc 快照列表
  - 属性id @13
