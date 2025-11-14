@@ -1818,4 +1818,50 @@ class zaiModel extends model
 
         return $markdown;
     }
+
+    /**
+     * 将 PLAN 对象转换为 Markdown。
+     * Convert plan object to Markdown format.
+     *
+     * @access public
+     * @param  object     $plan
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertPlanToMarkdown($plan, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $plan->id ?? 0;
+        $title = trim((string)($plan->title ?? $plan->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('plan', $langData, $plan);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'desc', $plan->desc ?? null);
+        static::appendMilestoneSection($content, $langData, $plan->milestones ?? null);
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'status'  => $plan->status  ?? '',
+            'product' => $plan->product ?? '',
+            'project' => $plan->project ?? '',
+            'begin'   => $plan->begin   ?? ($plan->start ?? ''),
+            'end'     => $plan->end     ?? '',
+            'owner'   => $plan->owner   ?? ($plan->assignedTo ?? ''),
+        );
+
+        return $markdown;
+    }
 }
