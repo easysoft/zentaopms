@@ -1104,6 +1104,56 @@ class zaiModel extends model
     public static function getFieldAliasMap(string $objectType): array
     {
         static $aliasMap = array(
+            'issue' => array(
+                'assetCreatedBy'   => array('assetCreatedBy', 'createdBy', 'openedBy'),
+                'assetCreatedDate' => array('assetCreatedDate', 'createdDate', 'openedDate'),
+                'issueType'        => array('issueType', 'type'),
+                'execution'        => array('execution', 'executionName'),
+                'project'          => array('project', 'projectName'),
+                'resolution'       => array('resolution', 'resolutionType'),
+                'deadline'         => array('deadline', 'deadLine'),
+            ),
+            'risk' => array(
+                'assetCreatedBy'   => array('assetCreatedBy', 'createdBy', 'openedBy'),
+                'assetCreatedDate' => array('assetCreatedDate', 'createdDate', 'openedDate'),
+                'project'          => array('project', 'projectName'),
+                'execution'        => array('execution', 'executionName'),
+            ),
+            'opportunity' => array(
+                'assetCreatedBy'   => array('assetCreatedBy', 'createdBy', 'openedBy'),
+                'assetCreatedDate' => array('assetCreatedDate', 'createdDate', 'openedDate'),
+                'project'          => array('project', 'projectName'),
+                'opportunityType'  => array('opportunityType', 'type'),
+            ),
+            'plan' => array(
+                'begin'    => array('begin', 'start', 'beginDate'),
+                'end'      => array('end', 'finish', 'endDate'),
+                'owner'    => array('owner', 'assignedTo'),
+                'stories'  => array('stories', 'storyCount', 'story'),
+                'bugs'     => array('bugs', 'bugCount', 'bug'),
+                'project'  => array('project', 'projectName'),
+                'product'  => array('product', 'productName'),
+            ),
+            'release' => array(
+                'system'       => array('system', 'systemName'),
+                'project'      => array('project', 'projectName'),
+                'build'        => array('build', 'buildName'),
+                'releasedDate' => array('releasedDate', 'releaseDate'),
+            ),
+            'ticket' => array(
+                'openedBy'     => array('openedBy', 'createdBy'),
+                'openedDate'   => array('openedDate', 'createdDate'),
+                'subStatus'    => array('subStatus'),
+                'closedReason' => array('closedReason'),
+                'project'      => array('project', 'projectName'),
+                'product'      => array('product', 'productName'),
+            ),
+            'case' => array(
+                'execution'     => array('execution', 'executionName'),
+                'module'        => array('module', 'moduleName'),
+                'story'         => array('story', 'storyID'),
+                'lastEditedBy'  => array('lastEditedBy', 'editedBy'),
+            ),
         );
 
         return $aliasMap[$objectType] ?? array();
