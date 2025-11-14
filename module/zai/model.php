@@ -934,6 +934,7 @@ class zaiModel extends model
             $content[] = "* {$label}: {$formatted}";
         }
     }
+
     /**
      * 附加详情章节。
      *
@@ -983,6 +984,51 @@ class zaiModel extends model
         {
             if(is_object($milestone)) $milestone = (array)$milestone;
         }
+    }
+
+    /**
+     * 构建用例步骤文本。
+     * Build test case steps markdown text.
+     *
+     * @param  mixed $steps
+     * @param  array $langData
+     * @return string
+     */
+    public static function buildCaseStepsText($steps, array $langData): string
+    {
+        if(empty($steps)) return '';
+
+        if(is_string($steps)) return trim($steps);
+
+        if(is_object($steps)) $steps = json_decode(json_encode($steps, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true);
+
+        if(!is_array($steps)) return '';
+
+        $lines       = array();
+        $index       = 1;
+        $expectLabel = static::getFieldLabel($langData, 'expect');
+        if($expectLabel === '') $expectLabel = static::getFieldLabel($langData, 'expects');
+
+        foreach($steps as $step)
+        {
+            if(is_object($step)) $step = (array)$step;
+            if(!is_array($step)) continue;
+
+            $desc   = trim((string)($step['desc'] ?? $step['title'] ?? $step['step'] ?? ''));
+            $expect = trim((string)($step['expect'] ?? $step['expects'] ?? ''));
+
+            $line = $desc !== '' ? "{$index}. {$desc}" : "{$index}.";
+            if($expect !== '')
+            {
+                $label = $expectLabel !== '' ? $expectLabel : 'Expect';
+                $line .= " ({$label}: {$expect})";
+            }
+
+            $lines[] = $line;
+            $index++;
+        }
+
+        return $lines ? implode("\n", $lines) : '';
     }
 
     /**
