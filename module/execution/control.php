@@ -3041,7 +3041,7 @@ class execution extends control
      */
     public function export(string $status, int $productID, string $orderBy, string $from)
     {
-        $status = strtolower($status);
+        $lowerStatus = strtolower($status);
         if($_POST)
         {
             $executionLang          = $this->lang->execution;
@@ -3068,10 +3068,10 @@ class execution extends control
 
             $users    = $this->loadModel('user')->getPairs('noletter');
             $showTask = ($this->app->tab == 'project' && (bool)$this->cookie->showTask);
-            if($showTask && $status == 'bysearch')
+            if($showTask && $lowerStatus == 'bysearch')
             {
                 $executionIdList = $this->loadModel('programplan')->getStageList($projectID, $productID, 'all', 'order');
-                $tasks = $this->programplan->getGanttTasks($projectID, array_keys($executionIdList), $status, 0, null);
+                $tasks = $this->programplan->getGanttTasks($projectID, array_keys($executionIdList), $lowerStatus, 0, null);
                 $executionTasks  = array();
                 $executionIdList = array();
                 foreach($tasks as $task)
@@ -3086,7 +3086,7 @@ class execution extends control
             }
             else
             {
-                $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, (bool)$showTask, 'withchild', $orderBy);
+                $executionStats = $this->execution->getStatData($projectID, $lowerStatus == 'byproduct' ? 'all' : $status, $productID, 0, (bool)$showTask, 'withchild', $orderBy);
             }
             $executionStats = $this->flattenObjectArray($executionStats);
 
@@ -3150,7 +3150,7 @@ class execution extends control
             $fileName = $project->name . ' - ' . $executionConcept;
         }
 
-        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? zget($this->lang->execution, $status, '') : zget($this->lang->execution->statusList, $status, '')) . $executionConcept;
+        if($lowerStatus != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? zget($this->lang->execution, $status, '') : zget($this->lang->execution->statusList, $status, '')) . $executionConcept;
         $this->view->fileName = !empty($fileName) ? $fileName : $executionConcept;
         $this->display();
     }
