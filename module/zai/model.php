@@ -1708,6 +1708,56 @@ class zaiModel extends model
 
         static::appendDetailSection($content, $langData, 'desc', $issue->desc ?? null);
         static::appendDetailSection($content, $langData, 'solution', $issue->resolutionComment ?? null);
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'status'     => $issue->status     ?? '',
+            'pri'        => $issue->pri        ?? '',
+            'severity'   => $issue->severity   ?? '',
+            'project'    => $issue->project    ?? '',
+            'execution'  => $issue->execution  ?? '',
+            'assignedTo' => $issue->assignedTo ?? '',
+            'resolution' => $issue->resolution ?? '',
+            'issueType'  => $issue->issueType  ?? ($issue->type ?? ''),
+        );
+
+        return $markdown;
+    }
+
+    /**
+     * 将 RISK 对象转换为 Markdown。
+     * Convert risk object to Markdown format.
+     *
+     * @access public
+     * @param  object     $risk
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertRiskToMarkdown($risk, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $risk->id ?? 0;
+        $title = trim((string)($risk->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('risk', $langData, $risk);
+        static::appendFieldList($content, $langData, $fieldPairs);
+        static::appendDetailSection($content, $langData, 'desc', $risk->desc ?? null);
+        static::appendDetailSection($content, $langData, 'prevention', $risk->prevention ?? null);
+        static::appendDetailSection($content, $langData, 'remedy', $risk->remedy ?? null);
+        $markdown['content'] = implode("\n", $content);
+
         return $markdown;
     }
 }
