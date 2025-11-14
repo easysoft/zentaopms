@@ -5,7 +5,7 @@
 
 title=测试 biModel::initParquet();
 timeout=0
-cid=0
+cid=15190
 
 - 步骤1:正常调用initParquet方法,验证返回值类型 @1
 - 步骤2:测试DuckDB bin文件存在性检查 @1

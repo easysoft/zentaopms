@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getStatusForUpdate();
 timeout=0
-cid=0
+cid=19098
 
 - 执行$result1[0] @0
 - 执行$result1[1] @normal

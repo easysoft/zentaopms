@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getActionListByTypeAndID().
 timeout=0
-cid=1
+cid=14944
 
 - 测试获取当objectType为project，并且限定objectID在1,2,3之间的操作记录，返回的数据是否正确
  - 第1条的id属性 @1

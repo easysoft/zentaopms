@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::getObjectFields();
 timeout=0
-cid=0
+cid=15955
 
 - 步骤1：验证返回结果非空 @1
 - 步骤2：验证包含product对象 @1

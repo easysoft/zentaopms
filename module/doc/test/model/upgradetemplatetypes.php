@@ -5,7 +5,7 @@
 
 title=测试 docModel->upgradeCustomTemplateTypes();
 timeout=0
-cid=1
+cid=16165
 
 - 内置计划 @1
 - 内置需求 @1

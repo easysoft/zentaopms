@@ -5,7 +5,7 @@
 
 title=测试 blockZen::isExternalCall();
 timeout=0
-cid=0
+cid=15245
 
 - 步骤1：无hash参数时，期望返回false @0
 - 步骤2：有hash参数时，期望返回true @1

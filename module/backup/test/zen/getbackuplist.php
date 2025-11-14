@@ -5,7 +5,7 @@
 
 title=测试 backupZen::getBackupList();
 timeout=0
-cid=0
+cid=15146
 
 - 步骤1：测试获取备份列表返回类型为数组 @array
 - 步骤2：测试创建备份文件后列表数量大于0 @1

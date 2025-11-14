@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetJobLog();
 timeout=0
-cid=0
+cid=16606
 
 - 执行gitlabTest模块的apiGetJobLogTest方法，参数是1, 2, 8  @0
 - 执行gitlabTest模块的apiGetJobLogTest方法，参数是999, 2, 8  @0

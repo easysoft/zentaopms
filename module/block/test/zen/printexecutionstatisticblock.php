@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printExecutionStatisticBlock();
 timeout=0
-cid=0
+cid=15263
 
 - 执行blockTest模块的printExecutionStatisticBlockTest方法，参数是$block1
  - 属性executionsCount @0

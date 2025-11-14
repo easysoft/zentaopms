@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getCommits();
 timeout=0
-cid=0
+cid=18137
 
 - 测试步骤1:获取Git版本库的提交记录 @3
 - 测试步骤2:获取Subversion版本库的提交记录 @3

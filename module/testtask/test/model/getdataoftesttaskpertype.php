@@ -9,7 +9,7 @@ zenData('testrun')->loadYaml('testrun')->gen(36);
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerType();
-cid=1
+cid=19171
 pid=1
 
 */

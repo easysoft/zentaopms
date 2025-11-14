@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::explainSQL();
 timeout=0
-cid=0
+cid=15157
 
 - 使用有效SQL和mysql驱动属性result @success
 - 使用有效SQL和duckdb驱动属性result @success

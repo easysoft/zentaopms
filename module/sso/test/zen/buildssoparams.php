@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::buildSSOParams();
 timeout=0
-cid=0
+cid=18410
 
 - 步骤1:测试正常referer参数生成SSO参数字符串 @1
 - 步骤2:测试空referer参数生成SSO参数字符串 @1

@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterAddTemplateType();
 timeout=0
-cid=0
+cid=16214
 
 - 测试正常scope=0的情况属性result @success
 - 测试正常scope=1的情况属性result @success

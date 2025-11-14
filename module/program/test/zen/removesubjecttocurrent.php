@@ -5,7 +5,7 @@
 
 title=测试 programZen::removeSubjectToCurrent();
 timeout=0
-cid=0
+cid=17734
 
 - 执行programTest模块的removeSubjectToCurrentTest方法，参数是array  @4
 - 执行programTest模块的removeSubjectToCurrentTest方法，参数是array  @6

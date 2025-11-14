@@ -4,7 +4,7 @@
 
 title=测试 storyModel->updateStoryByReview();
 timeout=0
-cid=0
+cid=18596
 
 - 执行storyModel模块的updateStoryByReview方法，参数是1, $oldStory, $story
  - 属性status @draft

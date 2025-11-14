@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::getNextSyncType();
 timeout=0
-cid=0
+cid=19771
 
 - 测试无参数时获取第一个同步类型 @story
 - 测试从story获取下一个同步类型 @demand

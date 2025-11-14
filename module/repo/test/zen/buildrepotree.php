@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildRepoTree();
 timeout=0
-cid=0
+cid=18127
 
 - 步骤1:空路径列表 @0
 - 步骤2:单个根路径第0条的text属性 @repo1

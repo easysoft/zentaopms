@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 /**
 
 title=测试 testcaseModel->ignoreAutoCaseIdList();
-cid=0
+cid=19009
 
 - 传入空数组 @0
 - 传入不存在的用例 @0

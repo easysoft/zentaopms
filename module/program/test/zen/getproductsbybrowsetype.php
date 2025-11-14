@@ -5,7 +5,7 @@
 
 title=测试 programZen::getProductsByBrowseType();
 timeout=0
-cid=0
+cid=17730
 
 - 执行programTest模块的getProductsByBrowseTypeTest方法，参数是'all', $products  @10
 - 执行programTest模块的getProductsByBrowseTypeTest方法，参数是'unclosed', $products  @10

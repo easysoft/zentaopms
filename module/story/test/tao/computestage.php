@@ -5,7 +5,7 @@
 
 title=测试 storyTao::computeStage();
 timeout=0
-cid=0
+cid=18614
 
 - 步骤1：全部子需求为wait状态 @wait
 - 步骤2：包含inroadmap状态 @inroadmap

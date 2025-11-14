@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::saveBackupSettings();
 timeout=0
-cid=0
+cid=16815
 
 - 步骤1：正常禁用自动备份 @1
 - 步骤2：正常启用自动备份 @1

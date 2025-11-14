@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiUpdateUser();
 timeout=0
-cid=1
+cid=16633
 
 - 使用空的userID创建gitlab群组 @0
 - 使用错误gitlabID创建群组 @0

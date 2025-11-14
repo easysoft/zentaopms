@@ -5,7 +5,7 @@
 
 title=测试 storyModel->mergeChildrenForTrack();
 timeout=0
-cid=0
+cid=18653
 
 - 全部传入空参数，检查newStories。 @0
 - allStories传入空参数，检查newStories。属性id @1

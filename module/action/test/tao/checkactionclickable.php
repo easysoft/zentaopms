@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->checkActionClickable().
 timeout=0
-cid=1
+cid=14939
 
 - 测试模块名和方法名为空时，返回false @0
 - 测试没有没有权限时，返回false @0

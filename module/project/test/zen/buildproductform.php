@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildProductForm();
 timeout=0
-cid=0
+cid=17930
 
 - 执行projectzenTest模块的buildProductFormTest方法，参数是1, array 属性currentProducts @1
 - 执行projectzenTest模块的buildProductFormTest方法，参数是2, array 属性currentProducts @0

@@ -4,7 +4,7 @@
 /**
 
 title=测试 testtaskZen::buildTaskForImportUnitResult();
-cid=0
+cid=19230
 
 - 测试步骤1：正常产品ID测试 >> 期望返回构建的任务对象
 - 测试步骤2：空产品ID测试 >> 期望返回构建的任务对象

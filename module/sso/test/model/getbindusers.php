@@ -5,7 +5,7 @@
 
 title=测试 ssoModel::getBindUsers();
 timeout=0
-cid=0
+cid=18405
 
 - 步骤1：正常情况查询有ranzhi绑定的用户，期望返回4条记录 @4
 - 步骤2：验证ranzhi1对应user1的映射关系属性ranzhi1 @user1

@@ -5,7 +5,7 @@
 
 title=测试 taskZen::assignCreateVars();
 timeout=0
-cid=0
+cid=18895
 
 - 步骤1:测试正常执行情况,验证execution对象被赋值属性name @执行1
 - 步骤2:测试带storyID情况,验证storyID视图变量被赋值 @1

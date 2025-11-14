@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=biModel->getExpression();
 timeout=0
-cid=1
+cid=15170
 
 - 测试 * @*
 - 测试 id @`id`

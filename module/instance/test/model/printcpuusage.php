@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::printCpuUsage();
 timeout=0
-cid=0
+cid=16810
 
 - 步骤1：用户来源返回空值属性color @
 - 步骤2：停止状态显示灰色属性color @gray

@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::createUser();
 timeout=0
-cid=0
+cid=16641
 
 - 步骤1：空account参数验证第account条的0属性 @禅道用户不能为空
 - 步骤2：空name参数验证第name条的0属性 @名称不能为空

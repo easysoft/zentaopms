@@ -11,7 +11,7 @@ zenData('user')->loadYaml('user')->gen(200);
 
 title=测试 deptModel->getDeptUserPairs();
 timeout=0
-cid=1
+cid=15972
 
 - 查询所有内部用户属性50 @用户49
 - 查询所有外部用户属性101 @测试1

@@ -5,7 +5,7 @@
 
 title=测试 todoZen::afterBatchEdit();
 timeout=0
-cid=0
+cid=19285
 
 - 执行todoTest模块的afterBatchEditTest方法，参数是array
  - 属性totalChanges @0

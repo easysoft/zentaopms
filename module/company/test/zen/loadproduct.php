@@ -5,7 +5,7 @@
 
 title=测试 companyZen::loadProduct();
 timeout=0
-cid=0
+cid=15739
 
 - 步骤1:正常情况下加载产品列表,返回第一个元素为产品标签 @产品
 - 步骤2:验证返回类型为数组 @1

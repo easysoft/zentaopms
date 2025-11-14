@@ -5,7 +5,7 @@
 
 title=测试 groupModel::insertPrivs();
 timeout=0
-cid=0
+cid=16718
 
 - 执行groupTest模块的insertPrivsTest方法，参数是$insertPrivs  @1
 - 执行groupTest模块的insertPrivsTest方法，参数是$newGroupPrivs  @1

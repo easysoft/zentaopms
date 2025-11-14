@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->saveRelation();
 timeout=0
-cid=8
+cid=18100
 
 - 保存任务和分支的关联关系
  - 属性AID @2

@@ -26,7 +26,7 @@ su('admin');
 
 title=测试executionModel->updateUserView();
 timeout=0
-cid=1
+cid=16379
 
 - 默认情况下的用户是否有执行的可视权限 @`,5,4,`
 

@@ -5,7 +5,7 @@
 
 title=测试 convertModel::callJiraAPI();
 timeout=0
-cid=0
+cid=15761
 
 - 步骤1：空Session情况 @0
 - 步骤2：无效的jiraApi Session数据 @0

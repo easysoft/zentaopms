@@ -5,7 +5,7 @@
 
 title=测试 convertModel::checkImportJira();
 timeout=0
-cid=0
+cid=15763
 
 - 执行convertTest模块的checkImportJiraTest方法，参数是'object', array  @1
 - 执行convertTest模块的checkImportJiraTest方法，参数是'object', array 属性message @『禅道对象』不能为空。

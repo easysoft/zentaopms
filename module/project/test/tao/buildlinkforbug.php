@@ -5,7 +5,7 @@
 
 title=测试 projectTao::buildLinkForBug();
 timeout=0
-cid=0
+cid=17887
 
 - 步骤1:测试create方法 @/zentaopms/bug-create-0-0-projectID=%s.html
 - 步骤2:测试edit方法 @/zentaopms/project-bug-projectID=%s.html

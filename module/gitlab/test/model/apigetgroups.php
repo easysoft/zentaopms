@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetGroups();
 timeout=0
-cid=1
+cid=16603
 
 - 使用空的数据查询群组 @return null
 - 使用正确的gitlabID查询群组 @return true

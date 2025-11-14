@@ -29,7 +29,7 @@ $product = zenData('product')->gen(5);
 
 title=测试 projectModel::update();
 timeout=0
-cid=1
+cid=17873
 
 - 正常更新项目的情况属性name @测试更新项目十
 - 更新项目名称为空时属性name @~~

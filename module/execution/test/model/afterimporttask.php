@@ -23,7 +23,7 @@ su('admin');
 
 title=测试executionModel->afterImportTask();
 timeout=0
-cid=1
+cid=16261
 
 - 敏捷执行导入任务后团队成员信息
  - 第0条的root属性 @101

@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiDeleteBranch();
 timeout=0
-cid=0
+cid=16682
 
 - 项目和分支都为空 @0
 - 错误的项目ID @0

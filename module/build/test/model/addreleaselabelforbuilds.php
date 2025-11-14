@@ -5,7 +5,7 @@
 
 title=测试 buildModel::addReleaseLabelForBuilds();
 timeout=0
-cid=0
+cid=15484
 
 - 测试空版本数组 @0
 - 测试单个版本无发布关联

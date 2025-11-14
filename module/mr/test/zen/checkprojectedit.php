@@ -5,7 +5,7 @@
 
 title=测试 mrZen::checkProjectEdit();
 timeout=0
-cid=0
+cid=17266
 
 - 执行mrTest模块的checkProjectEditTest方法，参数是'gitlab', $sourceProject, $MR  @0
 - 执行mrTest模块的checkProjectEditTest方法，参数是'gitlab', $sourceProject, $MR  @0

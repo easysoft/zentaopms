@@ -11,7 +11,7 @@ zenData('effort')->loadYaml('effort')->gen(30);
 
 title=测试 projectModel::getProjectsConsumed;
 timeout=0
-cid=1
+cid=17848
 
 - 批量获取不存在项目的总计消耗工时第1条的totalConsumed属性 @0
 - 批量获取有工时记录的项目的总计消耗工时第11条的totalConsumed属性 @55

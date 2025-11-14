@@ -5,7 +5,7 @@
 
 title=测试 biModel::processDrills();
 timeout=0
-cid=0
+cid=15209
 
 - 步骤1：正常钻取条件处理，验证返回的drillField @originalField
 - 步骤2：列不包含钻取字段时，验证返回空数组 @0

@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetMergeRequests();
 timeout=0
-cid=0
+cid=16685
 
 - 步骤1：正常的gogsID和项目名称 @0
 - 步骤2：无效的gogsID（0） @0

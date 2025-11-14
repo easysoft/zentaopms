@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getRoadmapOfReleases();
-cid=0
+cid=17511
 
 - 获取产品ID为1的产品发布数据 @3
 - 获取产品ID为1下主干的产品发布数据 @3

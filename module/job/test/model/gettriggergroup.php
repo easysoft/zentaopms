@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getTriggerGroup();
 timeout=0
-cid=0
+cid=16850
 
 - 执行jobTest模块的getTriggerGroupTest方法，参数是'tag', array  @2
 - 执行jobTest模块的getTriggerGroupTest方法，参数是'commit', array  @2

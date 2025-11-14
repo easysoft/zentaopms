@@ -5,7 +5,7 @@
 
 title=测试 commonModel::formConfig();
 timeout=0
-cid=0
+cid=15671
 
 - 步骤1:正常模块和方法 @0
 - 步骤2:带objectID参数 @0

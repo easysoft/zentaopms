@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getPrivApis();
 timeout=0
-cid=0
+cid=15111
 
 - 执行apiTest模块的getPrivApisTest方法  @15
 - 执行apiTest模块的getPrivApisTest方法，参数是'all'  @20

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getAllChildId();
 timeout=0
-cid=0
+cid=18498
 
 - 步骤1：获取父需求(ID=1)包含自己的所有子需求数量 @5
 - 步骤2：获取父需求(ID=1)不包含自己的所有子需求数量 @4

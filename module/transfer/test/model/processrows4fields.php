@@ -5,7 +5,7 @@
 
 title=测试 transferModel::processRows4Fields();
 timeout=0
-cid=0
+cid=19329
 
 - 执行transferTest模块的processRows4FieldsTest方法，参数是$normalRows, $normalFields 第2条的title属性 @测试需求1
 - 执行transferTest模块的processRows4FieldsTest方法，参数是$emptyRows, $emptyFields 属性message @没有数据

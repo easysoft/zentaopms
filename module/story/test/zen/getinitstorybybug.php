@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getInitStoryByBug();
 timeout=0
-cid=0
+cid=18689
 
 - 执行storyTest模块的getInitStoryByBugTest方法，参数是1, clone $initStory
  - 属性product @1

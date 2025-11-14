@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=测试 taskModel::updateParent();
 timeout=0
-cid=0
+cid=18857
 
 - 执行taskTest模块的updateParentTest方法，参数是$task, false
  - 属性path @

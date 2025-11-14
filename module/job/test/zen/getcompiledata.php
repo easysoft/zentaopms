@@ -5,7 +5,7 @@
 
 title=测试 jobZen::getCompileData();
 timeout=0
-cid=0
+cid=16861
 
 - 执行jobTest模块的getCompileDataTest方法，参数是$compile1 属性taskID @1
 - 执行jobTest模块的getCompileDataTest方法，参数是$compile2 属性taskID @2

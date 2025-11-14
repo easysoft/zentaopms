@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printPlanBlock();
 timeout=0
-cid=0
+cid=15268
 
 - 步骤1：默认参数测试属性plansCount @1
 - 步骤2：type为all类型测试属性plansCount @1

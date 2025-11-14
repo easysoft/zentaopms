@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkProgramPriv();
 timeout=0
-cid=0
+cid=18320
 
 - 执行searchTest模块的checkProgramPrivTest方法，参数是$results1, $objectIdList1 第1条的objectID属性 @1
 - 执行searchTest模块的checkProgramPrivTest方法，参数是$results2, $objectIdList2  @0

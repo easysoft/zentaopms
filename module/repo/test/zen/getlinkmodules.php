@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getLinkModules();
 timeout=0
-cid=0
+cid=18142
 
 - 测试步骤1:空产品数组 @0
 - 测试步骤2:单个产品story类型 @2

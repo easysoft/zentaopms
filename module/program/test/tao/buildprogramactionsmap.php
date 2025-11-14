@@ -17,7 +17,7 @@ su('admin');
 
 title=测试 programTao::buildProgramActionsMap();
 timeout=0
-cid=1
+cid=17715
 
 - 测试生成项目集id为1的操作按钮数据。第0条的name属性 @close
 - 测试生成项目集id为2的操作按钮数据。第0条的name属性 @close

@@ -11,7 +11,7 @@ zenData('kanbancard')->gen(1);
 
 title=测试 kanbanModel->batchCreateCard();
 timeout=0
-cid=1
+cid=16873
 
 - 批量创建正常的卡片
  - 属性kanban @1

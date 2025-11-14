@@ -5,7 +5,7 @@
 
 title=测试 productZen::getBranchOptions();
 timeout=0
-cid=0
+cid=17575
 
 - 测试空产品列表 @0
 - 测试只有normal类型产品 @0

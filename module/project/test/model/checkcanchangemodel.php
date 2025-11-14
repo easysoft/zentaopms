@@ -25,7 +25,7 @@ zenData('meeting')->gen(0);
 
 title=测试 projectModel->checkCanChangeModel();
 timeout=0
-cid=1
+cid=17806
 
 - 执行project模块的checkCanChangeModel方法，参数是1, scrum @0
 

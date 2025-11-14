@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRelease();
 timeout=0
-cid=0
+cid=19459
 
 - 步骤1：正常情况，验证ID属性id @1
 - 步骤2：验证名称属性name @Test release

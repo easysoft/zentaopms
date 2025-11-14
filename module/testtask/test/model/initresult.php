@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::initResult();
 timeout=0
-cid=0
+cid=19204
 
 - 执行testtaskTest模块的initResultTest方法，参数是$now 
  - 属性case @0

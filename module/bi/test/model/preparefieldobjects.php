@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareFieldObjects();
 timeout=0
-cid=0
+cid=15204
 
 - 测试步骤1: 验证返回结果是数组类型 @array
 - 测试步骤2: 验证返回的第一个元素text为产品第0条的text属性 @产品

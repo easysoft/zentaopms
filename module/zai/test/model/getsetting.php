@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
 
 title=测试 zaiModel->getSetting();
 timeout=0
-cid=0
+cid=19773
 
 - 测试获取不存在的ZAI设置 @0
 - 测试设置完整的ZAI配置后获取设置（不包含管理员token）

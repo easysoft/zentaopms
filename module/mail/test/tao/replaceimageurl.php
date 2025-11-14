@@ -5,7 +5,7 @@
 
 title=测试 mailTao::replaceImageURL();
 timeout=0
-cid=0
+cid=17037
 
 - 步骤1：空图片数组保持原内容 @<img src="/test.jpg" />
 - 步骤2：单个图片URL替换 @<img src="cid:file1.jpg" />

@@ -5,7 +5,7 @@
 
 title=测试 biModel::parseTableList();
 timeout=0
-cid=0
+cid=15194
 
 - 测试解析简单SELECT语句，包含单个表且无别名属性zt_user @zt_user
 - 测试解析带表别名的SELECT语句属性u @zt_user

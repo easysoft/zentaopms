@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkLocked();
-cid=0
+cid=19586
 
 - admin 用户被锁定，返回 true。 @1
 - user1 用户锁定时间未超过锁定时长限制，返回 true。 @1

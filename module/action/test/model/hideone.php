@@ -11,7 +11,7 @@ zenData('actionrecent')->gen(0);
 
 title=测试 actionModel->hideOne();
 timeout=0
-cid=1
+cid=14917
 
 - 隐藏action1属性extra @2
 - 隐藏action2

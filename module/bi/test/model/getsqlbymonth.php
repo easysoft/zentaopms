@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getSqlByMonth();
 timeout=0
-cid=0
+cid=15181
 
 - 步骤1：默认参数测试返回数组且长度为1 @1
 - 步骤2：返回数组类型验证 @1

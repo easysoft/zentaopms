@@ -4,7 +4,7 @@
 
 title=测试taskModel->afterUpdate();
 timeout=0
-cid=0
+cid=18764
 
 - 测试子任务的相关属性是否变更。
  - 属性name @开发任务12

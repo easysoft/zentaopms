@@ -5,7 +5,7 @@
 
 title=测试 customZen::assignFieldListForSet();
 timeout=0
-cid=0
+cid=15931
 
 - 执行customTest模块的assignFieldListForSetTest方法，参数是'story', 'priList', 'zh-cn', 'zh-cn' 属性fieldListType @array
 - 执行customTest模块的assignFieldListForSetTest方法，参数是'story', 'priList', 'all', 'zh-cn' 属性lang2Set @all

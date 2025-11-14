@@ -5,7 +5,7 @@
 
 title=测试 convertModel::convertStage();
 timeout=0
-cid=0
+cid=15766
 
 - 步骤1：带有有效relations参数的正常转换 @developing
 - 步骤2：使用session中jiraRelation的正常转换 @developing

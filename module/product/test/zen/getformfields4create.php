@@ -5,7 +5,7 @@
 
 title=测试 productZen::getFormFields4Create();
 timeout=0
-cid=0
+cid=17585
 
 - 测试不传任何参数时返回的字段数组是否包含 name 字段第name条的type属性 @string
 - 测试不传任何参数时 program 字段的默认值是否为空字符串第program条的default属性 @~~

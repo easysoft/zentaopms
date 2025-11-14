@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignBugVars();
 timeout=0
-cid=0
+cid=16401
 
 - 执行executionzenTest模块的assignBugVarsTest方法，参数是1, 1, 1, '', array 
  - 属性title @执行1-Bug列表

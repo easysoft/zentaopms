@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->replaceFile();
-cid=0
+cid=16523
 
 - 测试 id = 0 的记录。 @0
 - 测试替换文件。

@@ -5,7 +5,7 @@
 
 title=测试 jobZen::getJobSearchQuery();
 timeout=0
-cid=0
+cid=16863
 
 - 测试查询ID为0时，返回默认查询条件 @1 = 1
 - 测试查询ID为1时，返回对应的SQL查询语句并添加t1.前缀 @(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::apiGetSingleBranch();
 timeout=0
-cid=0
+cid=16615
 
 - 查询正确的branch信息属性name @branch1
 - 使用不存在的gitlabID查询branch信息 @0

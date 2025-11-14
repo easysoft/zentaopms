@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBuildPairs();
 timeout=0
-cid=0
+cid=19408
 
 - 步骤1：正常情况，验证ID为1的版本名称属性1 @Test build
 - 步骤2：验证指定键的值属性1 @Test build

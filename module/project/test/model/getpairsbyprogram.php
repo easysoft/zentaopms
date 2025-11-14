@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 projectModel->getPairsByProgram();
 timeout=0
-cid=1
+cid=17840
 
 - 查找管理员可查看的所有项目数量 @4
 

@@ -5,7 +5,7 @@
 
 title=测试 adminZen::sendCodeByAPI();
 timeout=0
-cid=0
+cid=14989
 
 - 执行$methodExists @1
 - 执行$testResult2 @1

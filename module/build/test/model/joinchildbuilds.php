@@ -5,7 +5,7 @@
 
 title=测试 buildModel::joinChildBuilds();
 timeout=0
-cid=0
+cid=15502
 
 - 执行$result1
  - 属性allBugs @1

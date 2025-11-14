@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(5);
 
 title=测试修改列1信息 >> name,测试修改列名1,未开始;color,
 timeout=0
-cid=2
+cid=16964
 
 - 测试修改列1信息
  - 第0条的field属性 @name

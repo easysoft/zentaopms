@@ -5,7 +5,7 @@
 
 title=测试 svnModel::updateCommit();
 timeout=0
-cid=0
+cid=18726
 
 - 测试步骤1：初始化仓库应返回true @true
 - 测试步骤2：已同步仓库的正常updateCommit操作

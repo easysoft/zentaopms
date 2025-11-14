@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processProjectRecord();
 timeout=0
-cid=0
+cid=18337
 
 - 执行searchTest模块的processProjectRecordTest方法,项目模型为scrum,参数是$record1, $objectList1 >> url属性包含project-view-1
 - 执行searchTest模块的processProjectRecordTest方法,项目模型为waterfall,参数是$record2, $objectList2 >> url属性包含project-view-2

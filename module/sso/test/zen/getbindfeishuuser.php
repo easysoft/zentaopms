@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::getBindFeishuUser();
 timeout=0
-cid=0
+cid=18413
 
 - 步骤1:测试有效token但API返回空响应属性result @fail
 - 步骤2:测试空用户token,返回失败信息属性result @fail

@@ -5,7 +5,7 @@
 
 title=测试 docZen::checkPrivForCreate();
 timeout=0
-cid=0
+cid=16187
 
 - 执行docTest模块的checkPrivForCreateTest方法，参数是$doclibOpen, 'custom'  @1
 - 执行docTest模块的checkPrivForCreateTest方法，参数是$doclibCustomWithUser, 'custom'  @1

@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 transfer->initFieldList();
 timeout=0
-cid=1
+cid=19321
 
 - 测试初始化导出需求时所属产品字段第product条的title属性 @所属产品
 - 测试初始化导出需求时所属模块字段第module[items]条的2属性 @/这是一个模块2

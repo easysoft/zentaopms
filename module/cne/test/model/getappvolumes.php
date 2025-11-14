@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getAppVolumes();
 timeout=0
-cid=0
+cid=15613
 
 - 步骤1：正常实例获取数据卷信息第0条的name属性 @data-volume
 - 步骤2：使用component参数为true获取MySQL数据卷第0条的name属性 @mysql-data

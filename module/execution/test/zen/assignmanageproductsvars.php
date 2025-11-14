@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignManageProductsVars();
 timeout=0
-cid=0
+cid=16404
 
 - 步骤1：正常执行对象分配管理产品变量第execution条的name属性 @测试执行1
 - 步骤2：无关联产品的执行分配管理产品变量第allProducts条的2属性 @产品2

@@ -4,7 +4,7 @@
 
 title=测试 adminModel->checkWeak();
 timeout=0
-cid=1
+cid=14977
 
 - 测试密码使用123456 @1
 - 测试密码与用户名相同 @1

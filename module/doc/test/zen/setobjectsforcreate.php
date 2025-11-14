@@ -5,7 +5,7 @@
 
 title=测试 docZen::setObjectsForCreate();
 timeout=0
-cid=0
+cid=16224
 
 - 测试项目类型linkType为project属性hasObjects @0
 - 测试项目类型linkType为project且lib类型为execution属性hasExecution @1

@@ -5,7 +5,7 @@
 
 title=测试 mailModel::convertCharset();
 timeout=0
-cid=0
+cid=17005
 
 - 执行mailTest模块的convertCharsetTest方法，参数是''  @0
 - 执行mailTest模块的convertCharsetTest方法，参数是'测试文本'  @测试文本

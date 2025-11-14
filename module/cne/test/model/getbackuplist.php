@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getBackupList();
 timeout=0
-cid=0
+cid=15614
 
 - 测试步骤1:正常获取备份列表,实例ID=1属性code @200
 - 测试步骤2:获取备份列表,实例ID=2属性code @200

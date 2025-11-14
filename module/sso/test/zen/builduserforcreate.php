@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::buildUserForCreate();
 timeout=0
-cid=0
+cid=18411
 
 - 步骤1:测试正常创建用户对象account字段正确属性account @testuser001
 - 步骤2:测试用户对象realname字段正确属性realname @Test User

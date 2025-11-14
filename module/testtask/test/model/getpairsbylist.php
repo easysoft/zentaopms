@@ -11,7 +11,7 @@ su('admin');
 
 title=测试testtaskModel->getByIdListTest();
 timeout=0
-cid=1
+cid=19182
 
 - 测试查找测试单 ID 1 2 3 的名称 @测试单1,测试单2,测试单3
 - 测试查找测试单 ID 4 5 6 的名称 @测试单4,测试单5,测试单6

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createAssistant();
 timeout=0
-cid=0
+cid=15009
 
 - 执行aiTest模块的createAssistantTest方法，参数是$assistant1, false  @1
 - 执行aiTest模块的createAssistantTest方法，参数是$assistant2, true  @1

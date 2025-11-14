@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseTao->fetchSceneName();
-cid=1
+cid=19034
 pid=1
 
 */

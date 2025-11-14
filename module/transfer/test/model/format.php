@@ -5,7 +5,7 @@
 
 title=测试 transferModel::format();
 timeout=0
-cid=0
+cid=19313
 
 - 步骤1：空模块情况 @Module is empty
 - 步骤2：正常模块输入属性error @~~

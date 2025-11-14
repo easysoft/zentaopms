@@ -32,7 +32,7 @@ su('admin');
 
 title=测试 searchModel->getList();
 timeout=0
-cid=1
+cid=18300
 
 - 测试在全部类型中搜索带有bug字体的条数 @12
 - 测试在任务类型中搜索带有任务字体的条数 @10

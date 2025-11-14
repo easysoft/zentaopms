@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::getStageAttribute();
 timeout=0
-cid=0
+cid=17750
 
 - 测试步骤1：获取id为1的阶段属性（空属性） @0
 - 测试步骤2：获取id为2的阶段属性（项目集） @0

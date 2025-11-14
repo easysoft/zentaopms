@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildBugForResolve();
 timeout=0
-cid=0
+cid=15434
 
 - 步骤1:正常解决bug
  - 属性id @1

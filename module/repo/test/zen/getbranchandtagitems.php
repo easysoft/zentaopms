@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getBranchAndTagItems();
 timeout=0
-cid=0
+cid=18135
 
 - 步骤1:选中master分支属性selected @master
 - 步骤2:选中v1.0标签属性selected @v1.0

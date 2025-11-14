@@ -5,7 +5,7 @@
 
 title=测试 projectreleaseZen::commonAction();
 timeout=0
-cid=0
+cid=17976
 
 - 执行projectreleaseTest模块的commonActionTest方法，参数是1, 0, ''  @0
 - 执行projectreleaseTest模块的commonActionTest方法，参数是1, 1, ''  @0

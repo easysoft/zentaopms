@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->expect();
-cid=1
+cid=18429
 
 - 测试不填写期望第expect条的0属性 @『expect』不能为空。
 - 测试不填写进展第progress条的0属性 @『progress』不能为空。

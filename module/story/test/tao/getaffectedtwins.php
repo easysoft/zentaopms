@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getAffectedTwins();
 timeout=0
-cid=0
+cid=18632
 
 - 检查需求2孪生需求 @1
 - 检查需求28孪生需求

@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 commonModel::saveQueryCondition();
 timeout=0
-cid=1
+cid=15707
 
 - 仅保留WHERE条件 @id = 1
 - 保留完整SQL语句 @SELECT * FROM zt_execution WHERE id = 1

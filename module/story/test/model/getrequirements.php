@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getRequirements();
 timeout=0
-cid=0
+cid=18552
 
 - 步骤1：获取产品1的活跃需求列表
  - 属性1 @需求1

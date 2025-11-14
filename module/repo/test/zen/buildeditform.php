@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildEditForm();
 timeout=0
-cid=0
+cid=18126
 
 - 步骤1：正常版本库ID编辑表单标题属性title @代码库-编辑
 - 步骤2：正常版本库ID检查repoID属性属性repoID @1

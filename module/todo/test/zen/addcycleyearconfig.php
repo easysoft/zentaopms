@@ -5,7 +5,7 @@
 
 title=测试 todoZen::addCycleYearConfig();
 timeout=0
-cid=0
+cid=19284
 
 - 执行$result1 @1
 - 执行data模块的config['type']方法  @month

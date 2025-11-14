@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::updateVolSize();
 timeout=0
-cid=0
+cid=16825
 
 - 执行instanceTest模块的updateVolSizeTest方法，参数是$instance, 10737418240, 'data-storage'  @调整磁盘空间失败
 - 执行instanceTest模块的updateVolSizeTest方法，参数是$instance, '5', 'data-storage'  @调整磁盘空间失败

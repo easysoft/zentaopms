@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildBugsForBatchCreate();
 timeout=0
-cid=0
+cid=15435
 
 - 测试步骤1:正常批量创建2个bug属性count @2
 - 测试步骤2:验证bug数据自动设置了创建人第0条的openedBy属性 @admin

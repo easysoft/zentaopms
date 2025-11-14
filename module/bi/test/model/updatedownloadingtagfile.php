@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::updateDownloadingTagFile();
 timeout=0
-cid=0
+cid=15218
 
 - 执行$biTest->objectModel, 'updateDownloadingTagFile' @1
 - 执行biTest模块的updateDownloadingTagFileTest方法  @1

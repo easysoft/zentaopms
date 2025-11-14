@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTaskForClose();
 timeout=0
-cid=0
+cid=18908
 
 - 步骤1：已完成任务关闭情况
  - 属性status @closed

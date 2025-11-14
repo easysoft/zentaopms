@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=taskTao->getParentStatusById();
 timeout=0
-cid=1
+cid=18881
 
 - 执行task模块的getParentStatusById方法，参数是1  @doing
 - 执行task模块的getParentStatusById方法，参数是2  @doing

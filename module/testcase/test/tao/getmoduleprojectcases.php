@@ -26,7 +26,7 @@ initData();
 
 title=测试 testcaseModel->getModuleProjectCases();
 timeout=0
-cid=1
+cid=19039
 
 - 测试获取产品1的case
  - 第1条的title属性 @这个是测试用例1

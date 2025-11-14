@@ -5,7 +5,7 @@
 
 title=测试 storeModel::getVersionPairs();
 timeout=0
-cid=0
+cid=18456
 
 - 步骤1：正常应用ID @0
 - 步骤2：不存在的应用ID @0

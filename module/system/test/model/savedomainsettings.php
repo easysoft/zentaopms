@@ -17,7 +17,7 @@ $configData->gen(2);
 
 title=instanceModel->saveDomainSettings();
 timeout=0
-cid=1
+cid=18745
 
 - 查看实例的domain属性属性domain @rila.dops.corp.cc
 - cne没有修改成功，则实例的domain属性不变属性domain @rila.dops.corp.cc

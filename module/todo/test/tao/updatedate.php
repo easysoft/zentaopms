@@ -5,7 +5,7 @@
 
 title=测试 todoTao::updateDate();
 timeout=0
-cid=0
+cid=19282
 
 - 执行todoTest模块的updateDateTest方法，参数是$singleTodoList, $validDate1  @1
 - 执行todoTest模块的updateDateTest方法，参数是$multipleTodoList, $validDate2  @1

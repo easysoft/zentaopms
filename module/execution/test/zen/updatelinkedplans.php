@@ -5,7 +5,7 @@
 
 title=测试 executionZen::updateLinkedPlans();
 timeout=0
-cid=0
+cid=16448
 
 - newPlans为空,confirm为no,不做任何操作 @0
 - newPlans不为空,confirm为yes,关联计划到执行和项目属性result @success

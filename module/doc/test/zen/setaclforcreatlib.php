@@ -5,7 +5,7 @@
 
 title=测试 docZen::setAclForCreateLib();
 timeout=0
-cid=0
+cid=16222
 
 - 执行docTest模块的setAclForCreateLibTest方法，参数是'custom'
  - 属性hasDefault @0

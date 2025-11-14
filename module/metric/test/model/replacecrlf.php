@@ -5,7 +5,7 @@
 
 title=测试 metricModel::replaceCRLF();
 timeout=0
-cid=0
+cid=17155
 
 - 测试步骤1：使用R替换包含多种换行符的字符串 @hello R Zentao ZentaoPHP R R Rhello world.
 - 测试步骤2：使用~替换包含多种换行符的字符串 @hello ~ Zentao ZentaoPHP ~ ~ ~hello world.

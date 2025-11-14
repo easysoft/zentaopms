@@ -5,7 +5,7 @@
 
 title=测试 programZen::getLink();
 timeout=0
-cid=0
+cid=17728
 
 - 执行programTest模块的getLinkTest方法，参数是'product', 'browse', '1', '', 'other'  @getlink.php?m=product&f=all&programID=1
 - 执行programTest模块的getLinkTest方法，参数是'project', 'browse', '1', '', 'program'  @getlink.php?m=program&f=project&programID=1

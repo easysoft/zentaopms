@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 actionModel->getActionCondition();
 timeout=0
-cid=1
+cid=14888
 
 - 超级管理员的动态 @0
 - 没有设置动态权限 @0

@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getstatsproducts();
-cid=0
+cid=17516
 
 - 测试传入空的产品ID列表 @0
 - 测试传入存在的产品ID列表第1条的name属性 @产品1

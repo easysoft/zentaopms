@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试 todoModel->activate();
 timeout=0
-cid=1
+cid=19245
 
 - 激活一个状态为wait的todo属性status @wait
 - 激活一个状态为doing的todo属性status @wait

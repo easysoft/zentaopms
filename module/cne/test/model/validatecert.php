@@ -5,7 +5,7 @@
 
 title=测试 cneModel::validateCert();
 timeout=0
-cid=0
+cid=15637
 
 - 步骤1:使用空证书名称验证证书属性code @600
 - 步骤2:使用空证书PEM内容验证证书属性code @600

@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getProductProjects();
 timeout=0
-cid=0
+cid=17447
 
 - 测试步骤1:验证产品101关联项目11(type=project,hasProduct=0)属性101 @11
 - 测试步骤2:验证产品102关联项目12(type=project,hasProduct=0)属性102 @12

@@ -5,7 +5,7 @@
 
 title=fetchMetricByCode
 timeout=0
-cid=1
+cid=17163
 
 - 获取codeList[1]的id,scale,product
  - 属性id @13

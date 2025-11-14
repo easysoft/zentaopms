@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->getLast();
 timeout=0
-cid=1
+cid=17990
 
 - 测试传入产品ID跟分支ID都为空的情况 @0
 - 测试传入产品ID为1，分支ID为空的情况属性name @发布3

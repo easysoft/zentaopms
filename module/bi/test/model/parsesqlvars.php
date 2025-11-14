@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=biModel->parseSqlVars();
 timeout=0
-cid=1
+cid=15193
 
 - 测试正常过滤器替换变量 @SELECT * FROM zt_user WHERE account = 'admin' AND status = 'active'
 - 测试空过滤器数组处理 @SELECT * FROM zt_task WHERE '' AND ''

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::toggleModel();
 timeout=0
-cid=0
+cid=15070
 
 - 步骤1：启用已禁用的模型 @1
 - 步骤2：禁用已启用的模型 @1

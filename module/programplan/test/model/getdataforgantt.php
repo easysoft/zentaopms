@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->getDataForGantt();
-cid=0
+cid=17741
 
 - 测试获取阶段数据第0条的type属性 @plan
 - 测试获取任务数据

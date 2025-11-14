@@ -5,7 +5,7 @@
 
 title=测试 productZen::setTrackMenu();
 timeout=0
-cid=0
+cid=17618
 
 - 步骤1:测试productID=1,branch=main,projectID=0属性executionSuccess @1
 - 步骤2:测试productID=2,branch=dev,projectID=0属性executionSuccess @1

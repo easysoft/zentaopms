@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAfterChangeLocation();
 timeout=0
-cid=0
+cid=18676
 
 - 步骤1：execution tab场景 @execution-storyView-1.html
 - 步骤2：非project tab场景 @story-view-1-0-0-story.html

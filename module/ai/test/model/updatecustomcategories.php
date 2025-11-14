@@ -5,7 +5,7 @@
 
 title=测试 aiModel::updateCustomCategories();
 timeout=0
-cid=0
+cid=15076
 
 - 步骤1：空数据处理 @0
 - 步骤2：字符串值处理 @0

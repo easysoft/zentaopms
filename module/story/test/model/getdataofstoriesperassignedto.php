@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerAssignedTo();
 timeout=0
-cid=0
+cid=18512
 
 - 执行storyTest模块的getDataOfStoriesPerAssignedToTest方法，参数是'story'  @array
 - 执行storyTest模块的getDataOfStoriesPerAssignedToTest方法，参数是'story' 第admin条的value属性 @5

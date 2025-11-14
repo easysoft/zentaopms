@@ -5,7 +5,7 @@
 
 title=测试 buildZen::assignBugVarsForView();
 timeout=0
-cid=0
+cid=15514
 
 - 执行buildTest模块的assignBugVarsForViewTest方法，参数是$buildObj, 'bug', 'id_desc', '', $bugPager, $generatedBugPager 属性type @bug
 - 执行buildTest模块的assignBugVarsForViewTest方法，参数是$buildObj, 'generatedBug', 'id_desc', '1', $bugPager, $generatedBugPager 属性type @generatedBug

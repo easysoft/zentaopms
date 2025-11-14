@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getStatusForCreate();
 timeout=0
-cid=0
+cid=19096
 
 - 步骤1：强制不评审且需要评审 @normal
 - 步骤2：强制不评审且不需要评审 @normal

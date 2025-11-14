@@ -4,7 +4,7 @@
 
 title=productplanModel->relationBranch();
 timeout=0
-cid=1
+cid=17645
 
 - 不传入任何数据 @0
 - 关联主干分支属性branchName @主干

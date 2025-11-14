@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::buildLocationByGET();
 timeout=0
-cid=0
+cid=18408
 
 - 步骤1:测试已包含&的GET格式URL包含token @1
 - 步骤2:测试PATH_INFO格式URL转换为GET格式 @1

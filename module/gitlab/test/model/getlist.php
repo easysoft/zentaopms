@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getList();
 timeout=0
-cid=0
+cid=16652
 
 - 步骤1：正常获取gitlab列表，按id降序排序第5条的id属性 @5
 - 步骤2：正常获取gitlab列表，按id升序排序第1条的id属性 @1

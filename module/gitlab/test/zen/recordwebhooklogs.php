@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::recordWebhookLogs();
 timeout=0
-cid=0
+cid=16678
 
 - 测试记录包含issue信息的webhook日志,验证文件包含JSON字符串 @1
 - 测试记录包含bug对象类型的webhook日志,验证文件包含对象类型 @1

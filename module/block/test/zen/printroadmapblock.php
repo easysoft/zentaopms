@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printRoadmapBlock();
 timeout=0
-cid=0
+cid=15285
 
 - 步骤1：正常情况第product条的name属性 @正常产品1
 - 步骤2：不存在产品第product条的name属性 @0

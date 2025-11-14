@@ -5,7 +5,7 @@
 
 title=测试 transferTao::getFileGroups();
 timeout=0
-cid=0
+cid=19333
 
 - 步骤1：获取bug模块指定ID列表的附件分组 @1
 - 步骤2：获取所有bug模块的附件分组（空ID列表） @1

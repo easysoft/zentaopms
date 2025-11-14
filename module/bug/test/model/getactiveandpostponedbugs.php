@@ -13,7 +13,7 @@ zenData('bug')->loadYaml('bug_status')->gen(10);
 
 title=bugModel->getActiveAndPostponedBugs();
 timeout=0
-cid=1
+cid=15354
 
 - 查询普通产品1 2 执行1 下的 bug 数量 @3
 

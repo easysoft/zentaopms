@@ -5,7 +5,7 @@
 
 title=测试 cneModel::appDBDetail();
 timeout=0
-cid=0
+cid=15601
 
 - 步骤1：正常实例但无外部API连接 @0
 - 步骤2：空实例对象 @0

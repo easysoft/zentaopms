@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::saveMiniProgramMessage();
 timeout=0
-cid=0
+cid=15088
 
 - 步骤1：正常情况保存req类型消息 @1
 - 步骤2：正常情况保存res类型消息 @1

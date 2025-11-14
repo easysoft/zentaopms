@@ -5,7 +5,7 @@
 
 title=测试 repoZen::encodingDiff();
 timeout=0
-cid=0
+cid=18134
 
 - 步骤1:空数组 @0
 - 步骤2:文件名UTF-8第0条的fileName属性 @test.php

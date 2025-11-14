@@ -5,7 +5,7 @@
 
 title=测试 metricModel::saveLogs();
 timeout=0
-cid=0
+cid=17156
 
 - 步骤1：正常情况
  - 属性fileExists @1

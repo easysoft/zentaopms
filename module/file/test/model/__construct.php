@@ -5,7 +5,7 @@
 
 title=测试 fileModel::__construct();
 timeout=0
-cid=0
+cid=16491
 
 - 步骤1：验证now属性为整数属性nowIsInt @1
 - 步骤2：验证savePath包含upload路径属性savePathContainsUpload @1

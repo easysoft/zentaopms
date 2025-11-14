@@ -8,7 +8,7 @@ su('admin');
 
 title=测试executionModel->isClickableTest();
 timeout=0
-cid=1
+cid=16351
 
 - wait状态执行start按钮检查 @检查通过
 - wait状态执行close按钮检查 @检查通过

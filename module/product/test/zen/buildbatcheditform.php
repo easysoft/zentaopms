@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildBatchEditForm();
 timeout=0
-cid=0
+cid=17562
 
 - 步骤1:空产品ID列表属性productsCount @0
 - 步骤2:单个产品ID

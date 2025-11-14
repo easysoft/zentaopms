@@ -5,7 +5,7 @@
 
 title=productTao->syncProgramToProduct();
 timeout=0
-cid=0
+cid=17560
 
 - 测试项目集ID和产品线所属项目集是同一个的情况属性program @1
 - 测试项目集ID和产品线所属项目集不是同一个的情况属性program @2

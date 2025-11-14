@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->deleteAction();
-cid=1
+cid=16063
 
 - 删除不存在的action @0
 - 删除ID=1的操作 @1

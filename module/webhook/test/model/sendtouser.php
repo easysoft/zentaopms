@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::sendToUser();
 timeout=0
-cid=0
+cid=19706
 
 - 步骤1：测试钉钉用户类型（无actionID） @0
 - 步骤2：测试企业微信用户类型（无actionID） @0

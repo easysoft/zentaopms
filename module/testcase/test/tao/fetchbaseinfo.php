@@ -9,7 +9,7 @@ zenData('case')->gen(2);
 /**
 
 title=测试 testcaseTao->fetchBaseInfo();
-cid=1
+cid=19033
 pid=1
 
 */

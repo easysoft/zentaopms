@@ -5,7 +5,7 @@
 
 title=测试 cronModel::changeStatus();
 timeout=0
-cid=0
+cid=15877
 
 - 步骤1：正常状态更新为stop @1
 - 步骤2：正常状态更新为running @1

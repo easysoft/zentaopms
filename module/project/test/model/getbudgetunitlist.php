@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 projectModel::getBudgetUnitList();
-cid=1
+cid=17817
 
 - 获取预算单位
  - 属性CNY @¥ 人民币

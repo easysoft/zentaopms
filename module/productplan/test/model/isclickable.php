@@ -4,7 +4,7 @@
 
 title=productplanModel->isClickable();
 timeout=0
-cid=1
+cid=17641
 
 - 检查开始按钮 @0
 - 检查完成按钮 @0

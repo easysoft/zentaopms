@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->addCreateAction4Story();
-cid=1
+cid=19496
 
 - 判断是否生成了创建的历史记录，并且判断生成的数据是否正确。@1
 

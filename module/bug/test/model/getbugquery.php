@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=bugModel->getBugQuery();
-cid=1
+cid=15357
 pid=1
 
 */

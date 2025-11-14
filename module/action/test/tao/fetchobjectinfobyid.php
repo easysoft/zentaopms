@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getActionListByTypeAndID().
 timeout=0
-cid=1
+cid=14942
 
 - 测试获取历史例句表中的id为1的记录的objectType和objectID字段的值是否正确,未能获取product字段，所以product为空。
  - 属性id @1

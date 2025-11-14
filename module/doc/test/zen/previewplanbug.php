@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewPlanBug();
 timeout=0
-cid=0
+cid=16200
 
 - 步骤1:在setting视图下预览计划关联的Bug @3
 - 步骤2:在list视图下根据ID列表预览Bug @3

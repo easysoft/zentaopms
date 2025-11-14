@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getMetricCardOption();
 timeout=0
-cid=0
+cid=18245
 
 - 执行screenTest模块的getMetricCardOptionTest方法，参数是1, array 属性displayType @normal
 - 执行screenTest模块的getMetricCardOptionTest方法，参数是1, array 属性cardType @A

@@ -10,7 +10,7 @@ zenData('release')->gen(10);
 
 title=测试 systemModel::getList();
 timeout=0
-cid=1
+cid=18740
 
 - 查询应用id为1的应用关联的发布名称第1条的name属性 @产品正常的正常的发布1
 - 查询应用id为1的应用关联的发布数量 @1

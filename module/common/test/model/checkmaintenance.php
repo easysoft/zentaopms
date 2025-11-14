@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 commonModel::checkMaintenance();
 timeout=0
-cid=1
+cid=15657
 
 - 检查是否处于维护状态 @0
 - 检查是否处于维护状态 @0

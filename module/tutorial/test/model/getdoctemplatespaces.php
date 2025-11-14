@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDocTemplateSpaces();
 timeout=0
-cid=0
+cid=19427
 
 - 步骤1：测试正常调用获取文档模板空间属性1 @Doc Template Space
 - 步骤2：测试返回数组长度 @1

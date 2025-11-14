@@ -5,7 +5,7 @@
 
 title=测试 ssoModel::createUser();
 timeout=0
-cid=0
+cid=18403
 
 - 步骤1：用户已存在属性data @该用户名已经存在，请更换用户名，或直接绑定到该用户。
 - 步骤2：正常创建属性status @success

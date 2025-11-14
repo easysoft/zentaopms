@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::getSyncTypes();
 timeout=0
-cid=0
+cid=19774
 
 - 测试获取可同步类型列表 @1
 - 测试获取的类型数量 @1

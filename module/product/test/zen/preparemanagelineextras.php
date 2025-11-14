@@ -5,7 +5,7 @@
 
 title=测试 productZen::prepareManageLineExtras();
 timeout=0
-cid=0
+cid=17599
 
 - 步骤1:正常情况,不同项目集下的产品线
  - 第1条的1属性 @手机产品线

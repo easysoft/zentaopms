@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeTao->updateProjectByProduct()。
-cid=1
+cid=19577
 
 - 测试根据产品迁移数据至id为1的项目下是否成功。@1
 - 测试根据产品迁移数据至id为2的项目下是否成功。@1

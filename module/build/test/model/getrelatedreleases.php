@@ -5,7 +5,7 @@
 
 title=测试 buildModel::getRelatedReleases();
 timeout=0
-cid=0
+cid=15498
 
 - 步骤1：基本产品ID数组查询 @0
 - 步骤2：基本产品ID单个查询 @0

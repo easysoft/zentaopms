@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getObjectBaseInfo().
 timeout=0
-cid=1
+cid=14955
 
 - 获取操作类型为linked2build,extra为1的用户故事相关产品，项目和执行信息。
  - 第0条的0属性 @0

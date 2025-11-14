@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::processStepsAndExpectsForBatchEdit();
 timeout=0
-cid=0
+cid=19106
 
 - 执行testcaseTest模块的processStepsAndExpectsForBatchEditTest方法，参数是$multipleCases  @2
 - 执行testcaseTest模块的processStepsAndExpectsForBatchEditTest方法，参数是$emptyCases  @0

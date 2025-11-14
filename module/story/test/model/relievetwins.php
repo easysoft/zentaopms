@@ -5,7 +5,7 @@
 
 title=测试 storyModel::relieveTwins();
 timeout=0
-cid=0
+cid=18579
 
 - 执行storyTest模块的relieveTwinsTest方法，参数是1, 2  @1
 - 执行storyTest模块的relieveTwinsTest方法，参数是999, 2  @1

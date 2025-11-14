@@ -5,7 +5,7 @@
 
 title=测试 todoZen::beforeBatchCreate();
 timeout=0
-cid=0
+cid=19290
 
 - 执行$result1 @2
 - 执行$result2 @0

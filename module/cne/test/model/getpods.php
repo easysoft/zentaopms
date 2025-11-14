@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getPods();
 timeout=0
-cid=0
+cid=15621
 
 - 步骤1：正常情况测试获取实例pods（实例ID=1） @0
 - 步骤2：使用指定组件mysql获取pods @0

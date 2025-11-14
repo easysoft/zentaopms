@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkVerifyPassword();
-cid=0
+cid=19592
 
 - 验证密码传空字符串返回 false。属性result @0
 - 验证密码传空字符串提示信息。第errors条的verifyPassword属性 @验证失败，请检查您的系统登录密码是否正确

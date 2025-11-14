@@ -5,7 +5,7 @@
 
 title=测试 systemModel::setMaintenance();
 timeout=0
-cid=0
+cid=18746
 
 - 步骤1：有效的backup操作 @1
 - 步骤2：有效的restore操作 @1

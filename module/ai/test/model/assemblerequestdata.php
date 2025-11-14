@@ -5,7 +5,7 @@
 
 title=测试 aiModel::assembleRequestData();
 timeout=0
-cid=0
+cid=14996
 
 - 步骤1：chat类型正常情况，检查模型名属性model @gpt-3.5-turbo
 - 步骤2：function类型正常情况，检查function_call参数属性function_call @auto

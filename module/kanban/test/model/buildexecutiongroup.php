@@ -16,7 +16,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->buildExecutionGroup();
 timeout=0
-cid=1
+cid=16876
 
 - 构造迭代的任务泳道组
  - 第0条的id属性 @1

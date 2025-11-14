@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::deleteHistoryMessagesByID();
 timeout=0
-cid=0
+cid=15083
 
 - 步骤1：正常情况删除历史消息（保留指定消息ID） @1
 - 步骤2：使用空消息ID数组删除所有消息 @1

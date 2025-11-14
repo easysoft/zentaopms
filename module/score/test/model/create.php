@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->create();
-cid=1
+cid=18198
 
 - 创建登录用户的积分
  - 属性account @admin

@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->buildPlanDataForGantt()
-cid=0
+cid=17763
 
 - 检查普通阶段，构建Gantt数据。
  - 属性id @1

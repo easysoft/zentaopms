@@ -5,7 +5,7 @@
 
 title=测试 customModel->getDataForUpdateProjectAcl();
 timeout=0
-cid=1
+cid=15930
 
 - 获取项目权限为继承项目集的项目数据的信息。
  - 属性id @11

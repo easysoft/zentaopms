@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::assignKanbanData();
 timeout=0
-cid=0
+cid=17657
 
 - 执行productplanTest模块的assignKanbanDataTest方法，参数是1, 'normal', '0', 'begin_asc'
  - 属性productType @normal

@@ -4,7 +4,7 @@
 
 title=测试 customModel->computeFeatures();
 timeout=0
-cid=1
+cid=0
 - 计算开源版不启用的功能
  -  @program
  - 属性1 @productLine

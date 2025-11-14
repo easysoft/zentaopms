@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::prepareTestreportForCreate();
 timeout=0
-cid=0
+cid=19135
 
 - 步骤1：正常情况
  - 属性title @测试报告标题

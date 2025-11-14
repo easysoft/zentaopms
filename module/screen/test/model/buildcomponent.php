@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildComponent();
 timeout=0
-cid=0
+cid=18207
 
 - 测试步骤1：传入空对象时设置默认属性 @1
 - 测试步骤2：传入非组模式组件设置默认属性 @1

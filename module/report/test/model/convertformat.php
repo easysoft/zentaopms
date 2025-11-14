@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 reportModel->convertFormat();
-cid=1
+cid=18160
 pid=1
 
 */

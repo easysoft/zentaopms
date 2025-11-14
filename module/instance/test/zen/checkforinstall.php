@@ -5,7 +5,7 @@
 
 title=测试 instanceZen::checkForInstall();
 timeout=0
-cid=0
+cid=16828
 
 - 步骤1:正常情况 @0
 - 步骤2:域名为空属性message @域名长度必须介于2-20字符之间

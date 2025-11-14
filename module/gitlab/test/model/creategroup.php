@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::createGroup();
 timeout=0
-cid=0
+cid=16638
 
 - 步骤1：空名称测试第name条的0属性 @群组名称不能为空
 - 步骤2：空路径测试第path条的0属性 @群组URL不能为空

@@ -5,7 +5,7 @@
 
 title=测试 chartModel::genPie();
 timeout=0
-cid=0
+cid=15567
 
 - 执行chartTest模块的genPieTest方法，参数是$fields, $settings, $normalSql, $filters, 'mysql')['series'][0]['data']  @3
 - 执行chartTest模块的genPieTest方法，参数是$fields, $settings, $emptySql, $filters, 'mysql')['series'][0]['data']  @0

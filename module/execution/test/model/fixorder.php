@@ -25,7 +25,7 @@ $execution->gen(5);
 
 title=测试 executionModel::fixOrder();
 timeout=0
-cid=0
+cid=16296
 
 - 测试正常order排序第1条第1条的order属性 @5
 - 测试正常order排序第3条第3条的order属性 @15

@@ -5,7 +5,7 @@
 
 title=测试 executionZen::checkLinkPlan();
 timeout=0
-cid=0
+cid=16421
 
 - 测试步骤1:没有新计划关联 @0
 - 测试步骤2:有新计划关联 @保存成功

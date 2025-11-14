@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printExecutionListBlock();
 timeout=0
-cid=0
+cid=15261
 
 - 测试count为5时返回5条执行记录属性hasExecutions @true
 - 测试count为3时返回成功属性success @1

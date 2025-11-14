@@ -5,7 +5,7 @@
 
 title=测试 zahostModel->isClickable();
 timeout=0
-cid=1
+cid=19753
 
 - 测试是否可以删除 @1
 - 测试wait状态下是否可以浏览镜像 @0

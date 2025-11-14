@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->getSystemSpace();
-cid=1
+cid=18399
 
 - 获取用户名为空的系统空间
  - 属性name @空间1

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->createNewProgram();
 timeout=0
-cid=1
+cid=19511
 
 - 测试项目集名称不能为空第programName条的0属性 @『项目集名称』不能为空。
 - 测试结束日期不能为空第end条的0属性 @『结束日期』不能为空。

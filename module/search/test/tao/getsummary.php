@@ -5,7 +5,7 @@
 
 title=测试 searchTao::getSummary();
 timeout=0
-cid=0
+cid=18329
 
 - 步骤1：短内容有关键词 @短内容<span class='text-danger'>测试</span>
 - 步骤2：短内容无关键词 @这是一个测试文档内容，用于验证摘要功能

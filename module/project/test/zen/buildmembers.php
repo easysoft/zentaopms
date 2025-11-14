@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildMembers();
 timeout=0
-cid=0
+cid=17929
 
 - 步骤1:正常情况3个成员+5个空行
  - 属性count @9

@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignVarsForMySpace();
 timeout=0
-cid=0
+cid=16180
 
 - 执行docTest模块的assignVarsForMySpaceTest方法，参数是'mine', 0, 1, 0, 'all', 0, 'id_desc', $docs, $pager, $libs, ''
  - 属性type @mine

@@ -5,7 +5,7 @@
 
 title=测试 caselibModel::getPairs();
 timeout=0
-cid=0
+cid=15534
 
 - 测试type=all,orderBy=id_desc,获取所有用例库的键值对
  - 属性402 @这是测试套件名称402

@@ -5,7 +5,7 @@
 
 title=测试 storyModel->computeEstimate();
 timeout=0
-cid=0
+cid=18485
 
 - 不传入需求。 @0
 - 传入普通需求，检查计算前后预计工时变化。

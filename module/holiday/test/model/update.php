@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->update();
-cid=1
+cid=16749
 
 - 测试修改类型 @true
 - 测试修改名称 @true

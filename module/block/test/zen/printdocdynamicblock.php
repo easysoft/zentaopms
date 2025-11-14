@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDocDynamicBlock();
 timeout=0
-cid=0
+cid=15254
 
 - 测试1:返回对象包含actionsCount属性actionsCount @0
 - 测试2:返回对象包含usersCount属性usersCount @11

@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::assignProjectReportDataForCreate();
 timeout=0
-cid=0
+cid=19127
 
 - 执行testreportTest模块的assignProjectReportDataForCreateTest方法，参数是0, 'project', '', '', '', 1 属性begin @2024-01-01
 - 执行testreportTest模块的assignProjectReportDataForCreateTest方法，参数是1, 'project', 'task123', '', '', 1 属性extra @task123

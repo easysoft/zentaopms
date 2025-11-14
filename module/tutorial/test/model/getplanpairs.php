@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getPlanPairs();
 timeout=0
-cid=0
+cid=19447
 
 - 测试1：验证键1对应的值属性1 @Test plan
 - 测试2：再次验证键1的值属性1 @Test plan

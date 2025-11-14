@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getInitStoryByTodo();
 timeout=0
-cid=0
+cid=18691
 
 - 步骤1：正常有效待办ID，验证所有字段映射
  - 属性source @todo

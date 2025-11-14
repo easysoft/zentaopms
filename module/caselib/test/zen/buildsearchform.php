@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::buildSearchForm();
 timeout=0
-cid=0
+cid=15543
 
 - 步骤1：正常情况属性module @caselib
 - 步骤2：lib字段配置属性libAllValue @所有用例库

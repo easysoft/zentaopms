@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::doCneInstall();
 timeout=0
-cid=0
+cid=16790
 
 - 执行instanceTest模块的doCneInstallTest方法，参数是null, $validSpace, $validSettingsMap, array  @0
 - 执行instanceTest模块的doCneInstallTest方法，参数是$validInstance, $validSpace, $validSettingsMap, array  @Array

@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getSV();
-cid=1
+cid=19731
 pid=1
 
 测试ev值为0，pv值为0 >> 0

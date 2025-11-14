@@ -5,7 +5,7 @@
 
 title=测试 buildModel->create();
 timeout=0
-cid=1
+cid=15487
 
 - 敏捷执行新增版本属性name @新增版本一
 - 瀑布执行新增版本属性product @2

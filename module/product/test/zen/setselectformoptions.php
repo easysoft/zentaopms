@@ -5,7 +5,7 @@
 
 title=测试 productZen::setSelectFormOptions();
 timeout=0
-cid=0
+cid=17614
 
 - 步骤1:用户选项已展开 @1
 - 步骤2:用户组选项已设置 @1

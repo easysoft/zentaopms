@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::copyColumns();
 timeout=0
-cid=0
+cid=16881
 
 - 步骤1：正常复制多个看板列 @8
 - 步骤2：复制包含父子关系的看板列，验证子列parent属性第10条的parent属性 @9

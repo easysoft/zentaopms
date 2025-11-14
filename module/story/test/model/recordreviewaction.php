@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->recordReviewAction();
-cid=0
+cid=18578
 
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewed
 - 执行story模块的recordReviewActionTest方法，参数是$storyData 属性action @reviewpassed

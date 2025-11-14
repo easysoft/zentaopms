@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewProjectStory();
 timeout=0
-cid=0
+cid=16206
 
 - 步骤1:setting视图下customSearch条件预览项目1的需求(status=active) @5
 - 步骤2:setting视图下customSearch条件预览项目1的需求(status=closed) @3

@@ -5,7 +5,7 @@
 
 title=测试 myZen::assignRelatedData();
 timeout=0
-cid=0
+cid=17312
 
 - 测试空反馈列表设置view属性属性hasBugs @1
 - 测试单个tobug类型反馈设置bugs属性属性hasBugs @1

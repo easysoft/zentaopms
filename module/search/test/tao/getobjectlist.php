@@ -5,7 +5,7 @@
 
 title=测试 searchTao::getObjectList();
 timeout=0
-cid=0
+cid=18326
 
 - 执行searchTest模块的getObjectListTest方法，参数是array  @array
 - 执行searchTest模块的getObjectListTest方法，参数是array  @array

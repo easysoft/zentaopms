@@ -3,7 +3,7 @@
 /**
 
 title=测试 stageModel->getStages();
-cid=1
+cid=18421
 
 - 获取敏捷模型下按照id倒序排列的所有阶段 @0
 - 获取瀑布模型下按照id正序排列的所有阶段 @0

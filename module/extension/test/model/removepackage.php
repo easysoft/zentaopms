@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel::removePackage();
 timeout=0
-cid=0
+cid=16470
 
 - 步骤1：删除正常extension类型的插件，返回数组类型 @~~
 - 步骤2：删除patch类型的插件，应返回空数组 @~~

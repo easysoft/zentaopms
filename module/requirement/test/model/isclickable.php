@@ -5,7 +5,7 @@
 
 title=测试 requirementModel::isClickable();
 timeout=0
-cid=0
+cid=18193
 
 - 步骤1：正常需求状态，close动作 @1
 - 步骤2：已关闭需求状态，close动作 @0

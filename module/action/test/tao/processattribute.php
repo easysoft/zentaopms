@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processAttribute();
 timeout=0
-cid=0
+cid=14960
 
 - 执行actionTest模块的processAttributeTest方法，参数是'user'  @user
 - 执行actionTest模块的processAttributeTest方法，参数是'testtask'  @task

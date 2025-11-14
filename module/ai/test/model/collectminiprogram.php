@@ -5,7 +5,7 @@
 
 title=测试 aiModel::collectMiniProgram();
 timeout=0
-cid=0
+cid=15003
 
 - 步骤1：正常添加收藏 @1
 - 步骤2：添加不同应用收藏 @1

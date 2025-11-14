@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoRelationList();
 timeout=0
-cid=0
+cid=15790
 
 - 步骤1:验证返回结果是数组类型 @array
 - 步骤2:验证包含父-子任务关联类型属性subTaskLink @父-子任务

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getTeamMembersPairs();
 timeout=0
-cid=1
+cid=19487
 
 - 测试是否能拿到数据 admin属性admin @admin
 - 测试是否能拿到数据 空属性~~ @~~

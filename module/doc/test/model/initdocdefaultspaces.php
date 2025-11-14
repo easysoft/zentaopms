@@ -5,7 +5,7 @@
 
 title=测试 docModel::initDocDefaultSpaces();
 timeout=0
-cid=0
+cid=16138
 
 - 步骤1：正常情况创建父级空间
  - 属性type @doctemplate

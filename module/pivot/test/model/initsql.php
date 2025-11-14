@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::initSql();
 timeout=0
-cid=0
+cid=17409
 
 - 执行pivot模块的initSqlTest方法，参数是'select id, name from zt_user;;;;', array  @select id,name from zt_user
 

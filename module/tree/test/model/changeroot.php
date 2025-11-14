@@ -5,7 +5,7 @@
 
 title=测试 treeModel->changeRoot();
 timeout=0
-cid=1
+cid=0
 
 - 测试修改module 12 的root从 1 修改为 2属性id @6
 属性root @6

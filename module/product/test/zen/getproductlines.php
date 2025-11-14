@@ -5,7 +5,7 @@
 
 title=测试 productZen::getProductLines();
 timeout=0
-cid=0
+cid=17590
 
 - 步骤1:多个项目集ID,返回数组包含2个元素 @2
 - 步骤2:单个项目集ID,返回数组长度为2 @2

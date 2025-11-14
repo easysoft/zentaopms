@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkBeforeBatchCreate();
-cid=0
+cid=19582
 
 - 检查未通过，返回 false。属性result @0
 - 用户名不符合规则错误提示。第errors条的account[0]属性 @『用户名』只能是字母、数字或下划线的组合三位以上。

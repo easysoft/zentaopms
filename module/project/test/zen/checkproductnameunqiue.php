@@ -5,7 +5,7 @@
 
 title=测试 projectZen::checkProductNameUnqiue();
 timeout=0
-cid=0
+cid=17936
 
 - 执行projectzenTest模块的checkProductNameUnqiueTest方法，参数是$project, $rawdata  @1
 - 执行projectzenTest模块的checkProductNameUnqiueTest方法，参数是$project, $rawdata 属性productName @『产品名称』不能为空。

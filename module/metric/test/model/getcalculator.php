@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getCalculator();
 timeout=0
-cid=0
+cid=17082
 
 - 步骤1：正常情况 @rate_of_annual_finished_story
 - 步骤2：不存在的计算器 @0

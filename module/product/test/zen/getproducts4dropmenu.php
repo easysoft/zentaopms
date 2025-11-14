@@ -5,7 +5,7 @@
 
 title=测试 productZen::getProducts4DropMenu();
 timeout=0
-cid=0
+cid=17593
 
 - 步骤1:在 product tab 下获取所有非影子产品 @10
 - 步骤2:在 project tab 下获取项目关联的产品(无关联数据) @0

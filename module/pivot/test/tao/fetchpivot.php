@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::fetchPivot();
 timeout=0
-cid=0
+cid=17437
 
 - 执行pivotTest模块的fetchPivotTest方法，参数是1, null
  - 属性id @1

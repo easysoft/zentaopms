@@ -8,7 +8,7 @@ zenData('extension')->gen(10);
 
 title=测试 extensionModel->getLocalExtensions();
 timeout=0
-cid=1
+cid=16463
 
 - 获取已安装的插件列表。
  - 第code1条的name属性 @这是插件名称1

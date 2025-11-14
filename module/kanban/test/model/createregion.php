@@ -10,7 +10,7 @@ zenData('kanbanregion')->gen(1);
 
 title=测试 kanbanModel->createRegion();
 timeout=0
-cid=1
+cid=16900
 
 - 创建默认区域
  - 属性name @默认区域

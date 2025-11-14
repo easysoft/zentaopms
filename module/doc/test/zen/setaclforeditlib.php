@@ -5,7 +5,7 @@
 
 title=测试 docZen::setAclForEditLib();
 timeout=0
-cid=0
+cid=16223
 
 - 步骤1:测试custom类型文档库权限设置属性hasDefault @0
 - 步骤2:测试api类型文档库(product)权限设置属性hasApiLang @1

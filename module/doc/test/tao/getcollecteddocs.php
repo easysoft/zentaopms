@@ -5,7 +5,7 @@
 
 title=测试 docModel->getCollectedDocs();
 timeout=0
-cid=1
+cid=16169
 
 - 获取没有可查看的文档时，按照id倒序排序的已收藏文档 @0
 - 获取没有可查看的文档时，按照id正序排序的已收藏文档 @0

@@ -5,7 +5,7 @@
 
 title=测试 projectZen::getKanbanData();
 timeout=0
-cid=0
+cid=17944
 
 - 步骤1:正常情况下获取看板数据 @2
 - 步骤2:验证第一个区域的key为my第0条的key属性 @my

@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::buildBugDataForExport();
 timeout=0
-cid=0
+cid=18020
 
 - 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release1, 'bug'), '<h3>Bug</h3><table>') !== false  @1
 - 执行releaseTest模块的buildBugDataForExportTest方法，参数是$release2, 'bug'  @<h3>Bug</h3>

@@ -28,7 +28,7 @@ $product = zenData('product')->gen(5);
 
 title=测试 projectTao::doUpdate();
 timeout=0
-cid=1
+cid=17902
 
 */
 

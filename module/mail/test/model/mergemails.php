@@ -5,7 +5,7 @@
 
 title=测试 mailModel->mergeMails();
 timeout=0
-cid=0
+cid=17015
 
 - 测试步骤1：不传入任何数据 @0
 - 测试步骤2：只传入1条数据

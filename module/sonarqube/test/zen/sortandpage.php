@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeZen::sortAndPage();
 timeout=0
-cid=0
+cid=18391
 
 - 执行sonarqubeTest模块的sortAndPageTest方法，参数是$dataList, 'id_desc', 5, 1 第0条的id属性 @10
 - 执行sonarqubeTest模块的sortAndPageTest方法，参数是$dataList, 'id_asc', 5, 1 第0条的id属性 @1

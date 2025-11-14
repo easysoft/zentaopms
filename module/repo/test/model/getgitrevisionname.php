@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getGitRevisionName();
 timeout=0
-cid=0
+cid=18062
 
 - 执行repoTest模块的getGitRevisionNameTest方法，参数是'd30919bdb9b4cf8e2698f4a6a30e41910427c01c', 0  @d30919bdb9
 - 执行repoTest模块的getGitRevisionNameTest方法，参数是'd30919bdb9b4cf8e2698f4a6a30e41910427c01c', 2  @d30919bdb9<span title="第2次提交"> (2) </span>

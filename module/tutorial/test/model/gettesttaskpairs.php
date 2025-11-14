@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTesttaskPairs();
 timeout=0
-cid=0
+cid=19491
 
 - 步骤1：正常调用获取测试单键值对属性1 @Test testtask
 - 步骤2：验证返回数组长度 @1

@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 projectreleaseModel->getReleasedBuilds();
-cid=1
+cid=17971
 
 - 测试获取项目 131 的已经发布的版本 @1,0,2,3,4,5,6,7
 

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getSidebarMenus();
 timeout=0
-cid=0
+cid=17461
 
 - 执行pivotTest模块的getSidebarMenusTest方法，参数是1, 1  @0
 - 执行pivotTest模块的getSidebarMenusTest方法，参数是1, 999  @0

@@ -5,7 +5,7 @@
 
 title=测试 productZen::getFormFields4Activate();
 timeout=0
-cid=0
+cid=17583
 
 - 测试步骤1:检查status字段的类型第status条的type属性 @string
 - 测试步骤2:检查status字段的控件类型第status条的control属性 @hidden

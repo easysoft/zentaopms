@@ -4,7 +4,7 @@
 
 title=测试 taskZen::buildTaskForActivate();
 timeout=0
-cid=1
+cid=18906
 
 - 测试剩余为负数属性left @预计剩余不能为负数
 - 测试剩余为正数

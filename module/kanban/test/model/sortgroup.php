@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel->sortGroup();
 timeout=0
-cid=1
+cid=16959
 
 - 查看更新之前的排序
  - 属性1 @5

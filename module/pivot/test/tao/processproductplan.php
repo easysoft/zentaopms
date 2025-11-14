@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::processProductPlan();
 timeout=0
-cid=0
+cid=17452
 
 - 执行plans) ? count($products1[1]模块的plans) : 0方法  @5
 - 执行$products2[1]->plans[3]) && strpos($products2[1]->plans[3]->title, '>>') === 0 ? 1 : 0 @1

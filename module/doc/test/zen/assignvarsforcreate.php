@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignVarsForCreate();
 timeout=0
-cid=0
+cid=16179
 
 - 测试产品空间下创建文档
  - 属性objectType @product

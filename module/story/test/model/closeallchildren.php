@@ -4,7 +4,7 @@
 
 title=测试 storyModel->closeAllChildren();
 timeout=0
-cid=0
+cid=18484
 
 - 关闭父需求ID为1所有子需求关闭原因为已完成属性closedReason @done
 - 关闭父需求ID为4所有子需求关闭原因为已拆分属性closedReason @subdivided

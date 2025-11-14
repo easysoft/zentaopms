@@ -5,7 +5,7 @@
 
 title=测试 buildZen::buildBuildForCreate();
 timeout=0
-cid=0
+cid=15518
 
 - 执行buildTest模块的buildBuildForCreateTest方法
  - 属性name @Build 1.0

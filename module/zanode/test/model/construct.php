@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::__construct();
 timeout=0
-cid=0
+cid=19782
 
 - 步骤1：正常构造对象验证父类构造方法调用属性parentCalled @1
 - 步骤2：验证语言设置被正确配置属性langSet @1

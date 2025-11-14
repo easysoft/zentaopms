@@ -5,7 +5,7 @@
 
 title=测试 repoZen::checkRepoInternet();
 timeout=0
-cid=0
+cid=18132
 
 - 步骤1：空repo对象 @0
 - 步骤2：GitHub地址可访问 @0

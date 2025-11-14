@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewER();
 timeout=0
-cid=0
+cid=16195
 
 - 步骤1:setting视图下customSearch条件预览业务需求列表,status=active @3
 - 步骤2:setting视图下customSearch条件预览业务需求列表,pri=1 @2

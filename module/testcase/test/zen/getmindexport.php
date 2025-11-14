@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getMindExport();
 timeout=0
-cid=0
+cid=19093
 
 - 步骤1：正常情况xmind格式全模块，验证返回数组有6个键 @6
 - 步骤2：freemind格式全模块，验证返回数组有6个键 @6

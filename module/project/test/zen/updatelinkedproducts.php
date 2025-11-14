@@ -5,7 +5,7 @@
 
 title=测试 projectZen::updateLinkedProducts();
 timeout=0
-cid=0
+cid=17968
 
 - 测试正常更新 @1
 - 测试无迭代项目 @1

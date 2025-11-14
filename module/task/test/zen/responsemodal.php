@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseModal();
 timeout=0
-cid=0
+cid=18948
 
 - 步骤1: recordworkhour场景因createLink未定义而返回错误属性error @Call to undefined function createLink()
 - 步骤2: execution kanban场景返回refreshKanban回调属性callback @refreshKanban()

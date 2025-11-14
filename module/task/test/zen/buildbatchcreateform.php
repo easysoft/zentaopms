@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildBatchCreateForm();
 timeout=0
-cid=0
+cid=18899
 
 - 步骤1:正常sprint执行类型,无父任务属性title @批量创建任务
 - 步骤2:看板类型执行属性execution @13

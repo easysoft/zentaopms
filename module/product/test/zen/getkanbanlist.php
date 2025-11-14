@@ -5,7 +5,7 @@
 
 title=测试 productZen::getKanbanList();
 timeout=0
-cid=0
+cid=17587
 
 - 步骤1:测试browseType为my时返回数组类型 @1
 - 步骤2:测试browseType为other时返回数组类型 @1

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printBlock4Json();
 timeout=0
-cid=0
+cid=15249
 
 - 步骤1：验证testData属性保留第view条的testData属性 @test_value
 - 步骤2：验证app属性被移除第view条的app属性 @~~

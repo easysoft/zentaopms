@@ -5,7 +5,7 @@
 
 title=测试 taskZen::commonAction();
 timeout=0
-cid=0
+cid=18927
 
 - 步骤1：正常任务ID测试
  - 属性success @1

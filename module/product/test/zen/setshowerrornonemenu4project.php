@@ -5,7 +5,7 @@
 
 title=测试 productZen::setShowErrorNoneMenu4Project();
 timeout=0
-cid=0
+cid=17616
 
 - 执行productTest模块的setShowErrorNoneMenu4ProjectTest方法，参数是'bug', 1
  - 属性projectSuccess @1

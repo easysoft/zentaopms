@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetTagPrivs();
 timeout=0
-cid=1
+cid=16623
 
 - 通过gitlabID,projectID,获取GitLab标签保护列表 @1
 - 通过gitlabID,projectID,获取GitLab标签保护数量 @1

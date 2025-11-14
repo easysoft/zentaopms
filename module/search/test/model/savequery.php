@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 searchModel->saveIndex();
 timeout=0
-cid=1
+cid=18309
 
 - 标题非空测试第title条的0属性 @『标题』不能为空。
 - 测试保存的查询的模块属性module @bug

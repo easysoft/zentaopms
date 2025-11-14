@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getFormFieldsForReview();
 timeout=0
-cid=0
+cid=18687
 
 - 测试获取软件需求评审表单字段的基本结构
  - 第result条的control属性 @picker

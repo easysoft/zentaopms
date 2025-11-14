@@ -5,7 +5,7 @@
 
 title=测试 customModel->updateURAndSR();
 timeout=0
-cid=1
+cid=15928
 
 - 测试修改key为1，SRName值更改为软件需求1属性SRName @软件需求1
 - 测试修改key为1，SRName值更改为软件需求属性SRName @软件需求

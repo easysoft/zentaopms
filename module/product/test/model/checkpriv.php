@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->checkPriv();
-cid=0
+cid=17477
 
 - 测试admin能否看到产品1 @1
 - 测试admin能否看到产品2 @1

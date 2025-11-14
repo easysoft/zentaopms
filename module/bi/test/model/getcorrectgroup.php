@@ -5,7 +5,7 @@
 
 title=测试 biModel::getCorrectGroup();
 timeout=0
-cid=0
+cid=15164
 
 - 测试步骤1: 测试单个有效的chart模块ID @1
 - 测试步骤2: 测试单个有效的pivot模块ID @13

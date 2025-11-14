@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getNodeByID().
 timeout=0
-cid=1
+cid=19797
 
 - 测试获取 id 1 的节点
  - 属性id @1

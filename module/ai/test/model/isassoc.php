@@ -5,7 +5,7 @@
 
 title=测试 aiModel::isAssoc();
 timeout=0
-cid=0
+cid=15054
 
 - 步骤1：索引数组 @0
 - 步骤2：关联数组 @1

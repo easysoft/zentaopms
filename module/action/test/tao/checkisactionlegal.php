@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->checkIsActionLegal().
 timeout=0
-cid=1
+cid=14940
 
 - 测试文档在有权限的文档列表中，返回true @1
 - 测试产品属于影子产品，返回false @0

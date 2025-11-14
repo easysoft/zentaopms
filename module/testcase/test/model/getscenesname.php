@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getScenesName();
-cid=1
+cid=19001
 
 - 获取场景 1 2 3 的名称
  - 属性1 @/这个是测试场景1

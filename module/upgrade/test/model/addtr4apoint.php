@@ -15,7 +15,7 @@ $result->gen(75);
 /**
 
 title=upgradeModel->addTR4APoint();
-cid=1
+cid=19499
 pid=1
 
 - 获取ID为61的项目评审点。

@@ -5,7 +5,7 @@
 
 title=测试 projectZen::responseAfterClose();
 timeout=0
-cid=0
+cid=17964
 
 - 步骤1：正常情况 @success
 - 步骤2：只有备注 @success

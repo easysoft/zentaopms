@@ -5,7 +5,7 @@
 
 title=测试 bugZen::processImageForBatchCreate();
 timeout=0
-cid=0
+cid=15468
 
 - 步骤1:测试uploadImage为null的情况 @0
 - 步骤2:测试uploadImage为空字符串的情况 @0

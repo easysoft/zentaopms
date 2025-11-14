@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getExecutionStories();
-cid=0
+cid=18530
 
 - 不传入数据。 @0
 - 传入有关联需求的项目数据，不传入产品数据。 @25

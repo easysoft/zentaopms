@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAfterCreateLocation();
 timeout=0
-cid=0
+cid=18677
 
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 0, 1, 'story', ''  @getaftercreatelocation.php?m=product&f=browse&productID=1&branch=0&browseType=&param=0&storyType=story&orderBy=id_desc
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 0, 1, 'story', ''  @story-browse-1.html

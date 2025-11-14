@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(100);
 
 title=测试 kanbanModel->getColumnsByField();
 timeout=0
-cid=1
+cid=16915
 
 - 测试获取parent 457的看板列数量 @0
 - 测试获取parent 468的看板列数量 @0

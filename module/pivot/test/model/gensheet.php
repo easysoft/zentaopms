@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->genSheet();
 timeout=0
-cid=1
+cid=0
 
 - 查看id为1002的透视表生成的分组信息是否正确。
  -  @一级项目集

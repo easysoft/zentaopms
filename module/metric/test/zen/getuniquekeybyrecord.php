@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getUniqueKeyByRecord();
 timeout=0
-cid=0
+cid=17194
 
 - 执行metricTest模块的getUniqueKeyByRecordZenTest方法，参数是$record1, ''  @product1_year2025_month1
 - 执行metricTest模块的getUniqueKeyByRecordZenTest方法，参数是$record2, ''  @product2_year2025

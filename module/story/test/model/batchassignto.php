@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->batchAssignTo();
-cid=0
+cid=18464
 
 - 批量指派6个需求，查看修改成功的需求数量 @5
 - 批量指派6个需求，查看修改成功的需求指派人第1条的assignedTo属性 @test20

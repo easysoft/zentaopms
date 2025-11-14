@@ -4,7 +4,7 @@
 
 title=productpanModel->getGroupByProduct();
 timeout=0
-cid=1
+cid=17634
 
 - 传入正常product 1，2； @2
 - 传入部分不存在product； @1

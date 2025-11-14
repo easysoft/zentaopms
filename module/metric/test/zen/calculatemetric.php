@@ -5,7 +5,7 @@
 
 title=测试 metricZen::calculateMetric();
 timeout=0
-cid=0
+cid=17184
 
 - 执行$methodExists @1
 - 执行$result2 @1

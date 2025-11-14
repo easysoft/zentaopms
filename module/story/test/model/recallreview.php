@@ -5,7 +5,7 @@
 
 title=测试 storyModel->recallReview();
 timeout=0
-cid=0
+cid=18577
 
 - 需求28状态属性status @draft
 - 需求29状态属性status @draft

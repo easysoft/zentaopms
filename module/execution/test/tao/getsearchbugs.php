@@ -55,7 +55,7 @@ su('admin');
 
 title=测试executionModel->getSearchBugs();
 timeout=0
-cid=1
+cid=16392
 
 - 查询产品1bug名称第10条的title属性 @Bug10
 - 查询执行3bug名称第1条的title属性 @Bug1

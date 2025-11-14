@@ -5,7 +5,7 @@
 
 title=测试 storeModel::pickHighestVersion();
 timeout=0
-cid=0
+cid=18457
 
 - 步骤1：多个版本选择最高属性version @2.1.0
 - 步骤2：空列表返回null @0

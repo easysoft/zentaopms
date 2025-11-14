@@ -5,7 +5,7 @@
 
 title=测试 mailZen::getHasMailUserPairs();
 timeout=0
-cid=0
+cid=17041
 
 - 测试步骤1：获取所有有邮箱的用户键值对 @15
 - 测试步骤2：验证admin键存在于结果中 @1

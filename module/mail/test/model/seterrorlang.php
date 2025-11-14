@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setErrorLang();
 timeout=0
-cid=0
+cid=17020
 
 - 步骤1：测试方法正常执行属性processed @1
 - 步骤2：测试MTA对象存在性属性mtaExists @1

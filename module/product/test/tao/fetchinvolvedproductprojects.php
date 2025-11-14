@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->fetchInvolvedProductProjects();
-cid=0
+cid=17537
 
 - 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 0, 'all', '', 'order_desc'  @0
 - 执行product模块的fetchInvolvedProductProjects方法，参数是$productID = 1, 'all', '', 'order_desc'  @8

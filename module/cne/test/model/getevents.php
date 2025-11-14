@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getEvents();
 timeout=0
-cid=0
+cid=15620
 
 - 执行cneTest模块的getEventsTest方法，参数是1, ''  @200
 - 执行cneTest模块的getEventsTest方法，参数是2, 'mysql'  @200

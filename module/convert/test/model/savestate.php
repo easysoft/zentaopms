@@ -5,7 +5,7 @@
 
 title=测试 convertModel::saveState();
 timeout=0
-cid=0
+cid=15795
 
 - 执行$convertTest->objectModel, 'saveState' @1
 - 执行$convertTest->objectModel, 'saveState' @1

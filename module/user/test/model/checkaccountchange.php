@@ -5,7 +5,7 @@
 
 title=测试 userModel->checkAccountChange();
 timeout=0
-cid=0
+cid=19581
 
 - 新用户忙和旧用户名相同，返回 false。属性result @0
 - 查看用户权限组，返回 2 条记录。 @2

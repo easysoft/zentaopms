@@ -5,7 +5,7 @@
 
 title=测试 testsuiteZen::checkTestsuiteAccess();
 timeout=0
-cid=0
+cid=19151
 
 - 步骤1：正常情况，public类型属性name @接口测试套件2
 - 步骤2：边界值，suiteID为0属性result @fail

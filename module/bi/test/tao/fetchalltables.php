@@ -5,7 +5,7 @@
 
 title=测试 biTao::fetchAllTables();
 timeout=0
-cid=0
+cid=15221
 
 - 执行biTest模块的fetchAllTablesTest方法  @1
 - 执行biTest模块的fetchAllTablesTest方法  @1

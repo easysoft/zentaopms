@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getProxyType();
 timeout=0
-cid=0
+cid=15046
 
 - 执行aiTest模块的getProxyTypeTest方法，参数是'http'  @0
 - 执行aiTest模块的getProxyTypeTest方法，参数是'socks4'  @4

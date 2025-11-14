@@ -5,7 +5,7 @@
 
 title=测试 executionModel::updateCFDData();
 timeout=0
-cid=0
+cid=16376
 
 - 测试步骤1：已有日期的情况 @5
 - 测试步骤2：未来日期的情况 @0

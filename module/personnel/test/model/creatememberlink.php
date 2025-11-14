@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 /**
 
 title=测试 personnelModel->createMemberLink();
-cid=1
+cid=17320
 
 - 测试获取项目集 1 部门 1 的访问链接 @1
 - 测试获取项目集 1 部门 2 的访问链接 @1

@@ -4,7 +4,7 @@
 /**
 
 title=测试获取产品的路线图数量 productModel->getRoadmap();
-cid=0
+cid=17509
 
 - 测试获取产品1的roadmap数量属性total @6
 - 测试获取产品2的roadmap数量属性total @4

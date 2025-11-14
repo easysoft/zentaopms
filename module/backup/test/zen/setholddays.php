@@ -5,7 +5,7 @@
 
 title=测试 backupZen::setHoldDays();
 timeout=0
-cid=0
+cid=15149
 
 - 步骤1:正常输入保留天数7 @1
 - 步骤2:正常输入保留天数30 @1

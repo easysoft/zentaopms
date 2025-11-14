@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getExecutionStats();
 timeout=0
-cid=0
+cid=19433
 
 - 测试 admin 登录时是否能拿到 browseType 空 数据
  - 第0条的id属性 @3

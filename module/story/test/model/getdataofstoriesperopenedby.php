@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerOpenedBy();
 timeout=0
-cid=0
+cid=18518
 
 - 步骤1：正常story类型参数，返回4个分组 @4
 - 步骤2：epic类型参数，没有epic数据 @0

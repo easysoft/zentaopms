@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiCreateTagPriv();
 timeout=0
-cid=1
+cid=16583
 
 - 使用空的gitlabID,projectID,保护标签对象创建GitLab保护标签 @return false
 - 使用正确的gitlabID,空的projectID、保护标签对象创建GitLab保护标签 @return false

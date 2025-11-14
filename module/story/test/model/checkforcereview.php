@@ -5,7 +5,7 @@
 
 title=测试 storyModel->checkforcereview();
 timeout=0
-cid=0
+cid=18480
 
 - 执行story模块的checkForceReview方法  @0
 - 执行story模块的checkForceReview方法  @1

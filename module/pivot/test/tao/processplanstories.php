@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::processPlanStories();
 timeout=0
-cid=0
+cid=17451
 
 - 步骤1：正常情况下处理有计划的需求统计第1条的name属性 @电商平台
 - 步骤2：处理包含多个计划的需求（逗号分隔）第2条的name属性 @管理系统

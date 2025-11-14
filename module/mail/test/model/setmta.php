@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setMTA();
 timeout=0
-cid=0
+cid=17023
 
 - 步骤1：验证setMTA方法基本功能和CharSet设置属性CharSet @utf-8
 - 步骤2：验证单例模式实现机制 @1

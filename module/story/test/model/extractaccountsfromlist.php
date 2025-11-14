@@ -5,7 +5,7 @@
 
 title=测试 storyModel::extractAccountsFromList();
 timeout=0
-cid=0
+cid=18490
 
 - 测试步骤1：完整账户信息故事列表，应返回6个不同账户 @6
 - 测试步骤2：包含空字段的故事列表，应返回4个有效账户 @4

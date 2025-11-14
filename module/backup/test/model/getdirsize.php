@@ -5,7 +5,7 @@
 
 title=测试 backupModel::getDirSize();
 timeout=0
-cid=0
+cid=15136
 
 - 执行backupTest模块的getDirSizeTest方法，参数是'/nonexistent/dir/path'  @0
 - 执行backupTest模块的getDirSizeTest方法，参数是''  @0

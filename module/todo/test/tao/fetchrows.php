@@ -5,7 +5,7 @@
 
 title=测试 todoTao::fetchRows();
 timeout=0
-cid=0
+cid=19271
 
 - 执行todoTest模块的fetchRowsTest方法，参数是array 第1条的name属性 @待办任务1
 - 执行todoTest模块的fetchRowsTest方法，参数是array 第1条的id属性 @1

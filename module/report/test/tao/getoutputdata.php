@@ -5,7 +5,7 @@
 
 title=测试 reportTao::getOutputData();
 timeout=0
-cid=0
+cid=18187
 
 - 步骤1：正常用户账号和年份查询第case条的createBug属性 @0
 - 步骤2：空账号数组查询第case条的run属性 @0

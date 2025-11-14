@@ -5,7 +5,7 @@
 
 title=测试 systemZen::getCpuUsage();
 timeout=0
-cid=0
+cid=18753
 
 - 执行systemTest模块的getCpuUsageTest方法，参数是$metrics1 属性color @gray
 - 执行systemTest模块的getCpuUsageTest方法，参数是$metrics2 属性color @var(--color-secondary-500)

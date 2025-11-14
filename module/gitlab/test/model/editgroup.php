@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::editGroup();
 timeout=0
-cid=0
+cid=16644
 
 - 执行gitlabTest模块的editGroupTest方法，参数是$gitlabID, $emptyNameGroup 第name条的0属性 @群组名称不能为空
 - 执行gitlabTest模块的editGroupTest方法，参数是$gitlabID, $validGroup  @1

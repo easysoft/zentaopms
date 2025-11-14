@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::getExpiringPlugins();
 timeout=0
-cid=0
+cid=16459
 
 - 测试步骤1：无已安装插件时获取即将到期的插件列表 @0
 - 测试步骤2：测试非分组模式的返回格式 @1

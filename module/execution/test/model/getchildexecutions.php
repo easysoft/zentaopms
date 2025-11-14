@@ -20,7 +20,7 @@ $execution->gen(7);
 
 title=测试executionModel->getChildExecutionsTest();
 timeout=0
-cid=1
+cid=16308
 
 - 查询子阶段1第4条的name属性 @子阶段1
 - 查询子阶段2第5条的name属性 @子阶段2

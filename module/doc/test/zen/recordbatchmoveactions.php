@@ -5,7 +5,7 @@
 
 title=测试 docZen::recordBatchMoveActions();
 timeout=0
-cid=0
+cid=16213
 
 - 执行docTest模块的recordBatchMoveActionsTest方法，参数是createOldDocList  @1
 - 执行docTest模块的recordBatchMoveActionsTest方法，参数是createOldDocList  @4

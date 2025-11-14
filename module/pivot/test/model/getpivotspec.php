@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getPivotSpec();
 timeout=0
-cid=0
+cid=17394
 
 - 执行pivotTest模块的getPivotSpecTest方法，参数是1000, '1' 属性id @1000
 - 执行pivotTest模块的getPivotSpecTest方法，参数是999999, '1'  @0

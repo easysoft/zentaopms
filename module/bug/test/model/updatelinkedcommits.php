@@ -5,7 +5,7 @@
 
 title=测试 bugModel::updateLinkedCommits();
 timeout=0
-cid=0
+cid=15408
 
 - 步骤1:正常情况 @1
 - 步骤2:bugID为0 @1

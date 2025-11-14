@@ -5,7 +5,7 @@
 
 title=测试 chartModel::isChartHaveData();
 timeout=0
-cid=0
+cid=15578
 
 - 步骤1：waterpolo类型始终返回true @1
 - 步骤2：pie类型有数据 @1

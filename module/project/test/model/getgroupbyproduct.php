@@ -11,7 +11,7 @@ zenData('project')->loadYaml('execution')->gen(30);
 
 title=测试 projectModel->getGroupByProduct();
 timeout=0
-cid=1
+cid=17827
 
 - 获取关联系统所有产品的项目信息
  - 第0条的product属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkEntry();
 timeout=0
-cid=0
+cid=15652
 
 - 测试步骤1:缺少模块参数 @EMPTY_ENTRY
 - 测试步骤2:缺少方法参数 @EMPTY_ENTRY

@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->getListByCondition();
 timeout=0
-cid=1
+cid=17992
 
 - 测试根据ID列表获取发布列表信息第1条的name属性 @发布1
 - 测试根据ID列表获取发布数量 @1

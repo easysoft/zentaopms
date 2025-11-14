@@ -23,7 +23,7 @@ initData();
 
 title=测试 testcaseModel->getBySuite();
 timeout=0
-cid=1
+cid=19037
 
 - 测试获取产品 1 套件 1 的case
  - 第1条的title属性 @这个是测试用例1

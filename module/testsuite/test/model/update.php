@@ -10,7 +10,7 @@ zenData('file')->gen(1);
 /**
 
 title=测试 testsuiteModel->update();
-cid=1
+cid=19150
 pid=1
 
 测试productID为1,name正常存在,type为privatedesc为空,     >> type,public,private

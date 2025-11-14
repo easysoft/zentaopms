@@ -15,7 +15,7 @@ zenData('kanbancell')->loadYaml('kanbancell_updatekanbancell')->gen(7);
 
 title=taskModel->updateKanbanCell();
 timeout=0
-cid=1
+cid=18852
 
 - 测试获取wait状态任务更新看板单元格不传output后的看板单元格数据 @1:,1,|2:|3:,2,6,7,|4:,3,|5:|6:,4,|7:,5,
 

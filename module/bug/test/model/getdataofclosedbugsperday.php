@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDataOfClosedBugsPerDay();
 timeout=0
-cid=0
+cid=15374
 
 - 步骤1：验证第一项统计数量第0条的value属性 @10
 - 步骤2：验证第一项日期第0条的name属性 @2023-05-25

@@ -5,7 +5,7 @@
 
 title=测试 commonModel::apiGet();
 timeout=0
-cid=0
+cid=15641
 
 - 执行commonTest模块的apiGetTest方法，参数是''  @Empty URL
 - 执行commonTest模块的apiGetTest方法，参数是'invalid-url' 属性code @600

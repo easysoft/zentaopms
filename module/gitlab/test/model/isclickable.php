@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 gitlabModel::isClickable();
 timeout=0
-cid=1
+cid=16660
 
 - 计算isDeveloper为true是否能进行浏览分支操作 @1
 - 计算isDeveloper为false是否能进行浏览分支操作 @0

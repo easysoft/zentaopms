@@ -5,7 +5,7 @@
 
 title=测试 aiModel::checkDuplicatedAppName();
 timeout=0
-cid=0
+cid=15001
 
 - 执行aiTest模块的checkDuplicatedAppNameTest方法，参数是'测试应用1', 5  @1
 - 执行aiTest模块的checkDuplicatedAppNameTest方法，参数是'不存在的应用', 10  @0

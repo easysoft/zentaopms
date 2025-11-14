@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getCustomFields();
 timeout=0
-cid=0
+cid=18681
 
 - 步骤1:normal产品且不隐藏plan属性plan @所属计划
 - 步骤2:branch产品且不隐藏plan

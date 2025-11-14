@@ -5,7 +5,7 @@
 
 title=测试 bugZen::afterCreate();
 timeout=0
-cid=0
+cid=15422
 
 - 执行bugTest模块的afterCreateTest方法，参数是$bug1, $params1  @1
 - 执行$result2 && $afterCount >= $beforeCount @1

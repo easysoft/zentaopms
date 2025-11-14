@@ -3,7 +3,7 @@
 /**
 
 title=测试 reportModel->createSingleJSON();
-cid=1
+cid=18161
 
 - 测试获取执行 101 的json数据 @1
 - 测试获取执行 102 的json数据 @1

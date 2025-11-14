@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildObjectCard();
 timeout=0
-cid=0
+cid=16973
 
 - 执行kanbanTest模块的buildObjectCardTest方法，参数是$objectCard1, $object1, 'productplan', $creators1 属性createdBy @admin
 - 执行kanbanTest模块的buildObjectCardTest方法，参数是$objectCard2, $object2, 'release', $creators2 属性createdBy @user1

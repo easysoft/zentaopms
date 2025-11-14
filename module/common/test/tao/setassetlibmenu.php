@@ -9,7 +9,7 @@ zenData('user')->gen(10);
 
 title=测试 commonTao->setAssetLibMenu();
 timeout=0
-cid=1
+cid=0
 
 - 查看admin是否可以打印资产库的菜单
  -  @1

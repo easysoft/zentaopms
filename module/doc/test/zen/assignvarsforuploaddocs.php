@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignVarsForUploadDocs();
 timeout=0
-cid=0
+cid=16181
 
 - 测试产品空间下上传文档
  - 属性objectType @product

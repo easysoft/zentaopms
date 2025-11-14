@@ -5,7 +5,7 @@
 
 title=测试 systemModel::updateMinioDomain();
 timeout=0
-cid=0
+cid=18752
 
 - 步骤1：正常调用updateMinioDomain方法 @0
 - 步骤2：测试重复调用 @0

@@ -5,7 +5,7 @@
 
 title=测试 jobZen::getJobList();
 timeout=0
-cid=0
+cid=16862
 
 - 执行jobTest模块的getJobListTest方法，参数是0, '', 'id_asc', $pager 第1条的id属性 @1
 - 执行jobTest模块的getJobListTest方法，参数是1, '', 'id_desc', $pager 第1条的repo属性 @1

@@ -10,7 +10,7 @@ zenData('dept')->gen(11);
 
 title=测试 deptModel->deleteDept();
 timeout=0
-cid=1
+cid=15965
 
 - 删除后统计数量 @10
 - 删除后统计数量 @9

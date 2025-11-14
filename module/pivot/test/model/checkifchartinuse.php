@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::checkIFChartInUse();
 timeout=0
-cid=0
+cid=17359
 
 - 执行pivotTest模块的checkIFChartInUseTest方法，参数是1002, 'pivot', $screenList  @1
 - 执行pivotTest模块的checkIFChartInUseTest方法，参数是2001, 'chart', $screenList  @1

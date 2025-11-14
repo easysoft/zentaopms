@@ -5,7 +5,7 @@
 
 title=测试 systemModel::setSystemRelease();
 timeout=0
-cid=0
+cid=18747
 
 - 执行system模块的setSystemRelease方法，参数是1, 2, '2024-01-15 10:00:00') ? '1' : '0  @1
 - 执行system模块的setSystemRelease方法，参数是999, 1, '2024-01-15 10:00:00') ? '1' : '0  @0

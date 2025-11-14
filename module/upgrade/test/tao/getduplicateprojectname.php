@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->getDuplicateProjectNameTest();
 timeout=0
-cid=1
+cid=19569
 
 - 测试重复项目名称的 id 列表 @2,1,
 

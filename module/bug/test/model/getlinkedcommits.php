@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getLinkedCommits();
 timeout=0
-cid=0
+cid=15383
 
 - 测试步骤1:正常情况,仓库1的3个有效版本号 @3
 - 测试步骤2:正常情况,仓库2的2个版本号 @2

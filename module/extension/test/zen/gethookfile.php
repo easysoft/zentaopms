@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::getHookFile();
 timeout=0
-cid=0
+cid=16488
 
 - 执行$result1 !== false && strpos($result1, 'preinstall.php') !== false @1
 - 执行$result2 !== false && strpos($result2, 'postinstall.php') !== false @1

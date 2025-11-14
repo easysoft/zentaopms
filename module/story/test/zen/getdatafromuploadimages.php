@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getDataFromUploadImages();
 timeout=0
-cid=0
+cid=18682
 
 - 步骤1:无session数据时返回默认空需求数组数量 @10
 - 步骤2:产品ID相同时保留session数据第0条的title属性 @图片需求1

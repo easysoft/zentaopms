@@ -5,7 +5,7 @@
 
 title=测试 productZen::getActiveStoryTypeForTrackTest();
 timeout=0
-cid=0
+cid=17571
 
 - 测试步骤1:product模块包含story键 @1
 - 测试步骤2:product模块包含requirement键 @1

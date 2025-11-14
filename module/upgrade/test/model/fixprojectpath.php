@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->fixProjectPath();
-cid=1
+cid=19518
 
 - 测试项目的路径是否被成功修复 @1
 

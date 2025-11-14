@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildRecordForm();
 timeout=0
-cid=0
+cid=18905
 
 - 执行taskZenTest模块的buildRecordFormTest方法，参数是1, 'taskList', 'id_desc' 属性taskEffortFold @1
 - 执行taskZenTest模块的buildRecordFormTest方法，参数是6, 'taskList', ''

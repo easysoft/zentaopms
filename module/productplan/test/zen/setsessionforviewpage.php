@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::setSessionForViewPage();
 timeout=0
-cid=0
+cid=17668
 
 - 步骤1: 所有参数都符合不设置 session 的条件，storyList 应该不被设置属性storyList @0
 - 步骤2: 所有参数都符合不设置 session 的条件，bugList 应该不被设置属性bugList @0

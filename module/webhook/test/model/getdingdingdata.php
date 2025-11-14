@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 webhookModel->getDingdingData();
 timeout=0
-cid=1
+cid=19696
 
 - 打印出msgtype第markdown条的title属性 @ceshi
 - 测试不传text的情况第markdown条的title属性 @ceshi

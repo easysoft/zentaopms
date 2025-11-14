@@ -5,7 +5,7 @@
 
 title=getDefaultDate
 timeout=0
-cid=1
+cid=17094
 
 - 测试传入年度筛选器标签 @3
 - 测试传入月度筛选器标签 @6

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::setBrowseSession();
 timeout=0
-cid=0
+cid=18153
 
 - 测试步骤1: 正常情况下设置session >> 验证revisionList被正确设置为/repo-browse-1-master.html
 - 测试步骤2: 带参数URI的情况 >> 验证包含参数的URI被正确存储,uriContainsParams为1

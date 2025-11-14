@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setHiddenFieldsForView();
 timeout=0
-cid=0
+cid=18705
 
 - 执行storyTest模块的setHiddenFieldsForViewTest方法，参数是$product1  @0
 - 执行storyTest模块的setHiddenFieldsForViewTest方法，参数是$product2  @0

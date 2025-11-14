@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getToAndCcList();
 timeout=0
-cid=0
+cid=18564
 
 - 获取创建需求1时的通知人数量 @2
 - 获取评审需求1时的通知人数量 @2

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSingleReleaseBlock();
 timeout=0
-cid=0
+cid=15300
 
 - 步骤1：正常情况，限制5条属性releasesCount @5
 - 步骤2：产品2有5条记录属性releasesCount @5

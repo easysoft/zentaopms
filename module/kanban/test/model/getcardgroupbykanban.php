@@ -11,7 +11,7 @@ zenData('kanbancell')->gen(100);
 
 title=测试 kanbanModel->getCardGroupByKanban();
 timeout=0
-cid=1
+cid=16906
 
 - 测试查询看板1的卡片数量 @1
 - 测试查询看板2的卡片数量 @1

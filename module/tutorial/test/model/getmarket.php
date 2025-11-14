@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getMarket();
 timeout=0
-cid=0
+cid=19444
 
 - 步骤1：验证ID属性id @1
 - 步骤2：验证名称属性name @Test Market

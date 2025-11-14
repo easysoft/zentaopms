@@ -5,7 +5,7 @@
 
 title=测试 repoTao::copySvnDir();
 timeout=0
-cid=0
+cid=18115
 
 - 测试正常SVN目录复制 @1
 - 测试源路径不存在时的复制 @0

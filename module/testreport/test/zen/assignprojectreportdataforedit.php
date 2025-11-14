@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::assignProjectReportDataForEdit();
 timeout=0
-cid=0
+cid=19128
 
 - 执行testreportTest模块的assignProjectReportDataForEditTest方法，参数是$completeReport
  - 属性begin @2024-01-01

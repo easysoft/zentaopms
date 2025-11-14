@@ -5,7 +5,7 @@
 
 title=测试 systemModel::getBackupStatus();
 timeout=0
-cid=0
+cid=18731
 
 - 执行systemTest模块的getBackupStatusTest方法，参数是$validInstance, 'backup-20241201-120000' 属性result @fail
 - 执行systemTest模块的getBackupStatusTest方法，参数是$emptyInstance, 'backup-test' 属性result @fail

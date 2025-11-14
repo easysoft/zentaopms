@@ -18,7 +18,7 @@ su('admin');
 /**
 
 title=bugModel->close();
-cid=1
+cid=15348
 
 - 测试关闭状态为active的bug1
  - 属性title @第1个bug

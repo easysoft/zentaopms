@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getDrill();
 timeout=0
-cid=0
+cid=17457
 
 - 执行pivotTest模块的getDrillTest方法，参数是1, '1', 'status', 'published' 属性field @status
 - 执行pivotTest模块的getDrillTest方法，参数是2, '1', 'priority', 'published' 属性field @priority

@@ -5,7 +5,7 @@
 
 title=测试 customZen::checkKeysForSet();
 timeout=0
-cid=0
+cid=15935
 
 - 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array  @1
 - 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array 属性message @1键重复

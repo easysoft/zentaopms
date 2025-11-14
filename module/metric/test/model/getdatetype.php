@@ -5,7 +5,7 @@
 
 title=getDateType
 timeout=0
-cid=1
+cid=17092
 
 - 测试传入day @day
 - 测试传入month @month

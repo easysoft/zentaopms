@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getLogList();
 timeout=0
-cid=0
+cid=19699
 
 - 执行webhook模块的getLogListTest方法，参数是1  @9
 - 执行webhook模块的getLogListTest方法，参数是999  @1

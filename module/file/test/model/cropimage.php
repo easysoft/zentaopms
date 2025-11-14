@@ -5,7 +5,7 @@
 
 title=测试 fileModel::cropImage();
 timeout=0
-cid=0
+cid=16496
 
 - 执行fileTest模块的cropImageTest方法，参数是'/valid/image.jpg', '/target/output.jpg', 10, 10, 100, 100  @exception
 - 执行fileTest模块的cropImageTest方法，参数是'/valid/image.jpg', '/target/output.jpg', 0, 0, 50, 50, 200, 150  @exception

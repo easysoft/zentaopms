@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getNodeByMac().
 timeout=0
-cid=1
+cid=19798
 
 - 测试获取 mac 地址 mac1 的节点
  - 属性id @1

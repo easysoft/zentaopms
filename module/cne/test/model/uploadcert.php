@@ -5,7 +5,7 @@
 
 title=测试 cneModel::uploadCert();
 timeout=0
-cid=0
+cid=15636
 
 - 步骤1:使用默认channel上传证书属性code @600
 - 步骤2:使用自定义channel上传证书属性code @600

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 customModel->parseItemParam();
 timeout=0
-cid=1
+cid=15919
 
 - 测试参数为lang,key,section,module,vision
  - 属性lang @zh-cn

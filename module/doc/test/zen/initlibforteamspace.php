@@ -5,7 +5,7 @@
 
 title=测试 docZen::initLibForTeamSpace();
 timeout=0
-cid=0
+cid=16193
 
 - 步骤1:验证创建了团队空间库 @1
 - 步骤2:验证类型属性type @custom

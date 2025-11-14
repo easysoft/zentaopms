@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRequirement();
 timeout=0
-cid=0
+cid=19463
 
 - 步骤1：验证用户需求是否为父级属性isParent @1
 - 步骤2：验证用户需求ID属性id @2

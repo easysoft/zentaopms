@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->deleteTmpModel();
-cid=1
+cid=19516
 
 - 测试删除临时 model 文件，然后获取 tmp 目录下文件数量。 @0
 

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildDataForBatchToTask();
 timeout=0
-cid=0
+cid=18665
 
 - 步骤1:正常的批量转任务数据构建第0条的name属性 @任务1
 - 步骤2:包含必填字段验证的数据构建第0条的name属性 @任务2

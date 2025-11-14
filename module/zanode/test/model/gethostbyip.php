@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel->getHostByIP().
 timeout=0
-cid=1
+cid=19793
 
 - 判断ip为10.0.0.1的主机是否存在,并返回id,type,extranet
  - 属性id @1

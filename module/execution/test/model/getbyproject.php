@@ -26,7 +26,7 @@ $execution->gen(7);
 
 title=测试executionModel->getByProjectTest();
 timeout=0
-cid=1
+cid=16305
 
 - 敏捷项目执行列表查询
  - 第5条的project属性 @2

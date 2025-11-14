@@ -5,7 +5,7 @@
 
 title=测试 cneModel::queryStatus();
 timeout=0
-cid=0
+cid=15626
 
 - 执行cneTest模块的queryStatusTest方法，参数是1 属性code @0
 - 执行cneTest模块的queryStatusTest方法，参数是999  @0

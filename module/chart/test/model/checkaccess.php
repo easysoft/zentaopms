@@ -5,7 +5,7 @@
 
 title=测试 chartModel::checkAccess();
 timeout=0
-cid=0
+cid=15564
 
 - 步骤1:管理员admin访问有权限的图表ID=1 @success
 - 步骤2:管理员admin访问有权限的图表ID=5,method='view' @success

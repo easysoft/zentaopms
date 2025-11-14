@@ -5,7 +5,7 @@
 
 title=测试 bugZen::updateBug();
 timeout=0
-cid=0
+cid=15481
 
 - 执行bugTest模块的updateBugTest方法，参数是$bug1, array 属性status @resolved
 - 执行bugTest模块的updateBugTest方法，参数是$bug2, array

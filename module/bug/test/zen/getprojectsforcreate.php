@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getProjectsForCreate();
 timeout=0
-cid=0
+cid=15458
 
 - 步骤1:测试获取项目列表，传入存在的productID和projectID属性projectID @1
 - 步骤2:测试返回对象包含projects属性 @1

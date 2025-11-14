@@ -10,7 +10,7 @@ zenData('release')->loadYaml('release')->gen(100);
 
 title=taskModel->statisticRecentReleases();
 timeout=0
-cid=0
+cid=18014
 
 - 测试空数据的情况 @0
 - 获取产品1的最新发布信息

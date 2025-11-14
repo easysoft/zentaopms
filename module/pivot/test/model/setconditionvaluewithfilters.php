@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::setConditionValueWithFilters();
 timeout=0
-cid=0
+cid=17430
 
 - 执行pivotTest模块的setConditionValueWithFiltersTest方法，参数是$condition1, $filters1  @ = 'active'
 - 执行pivotTest模块的setConditionValueWithFiltersTest方法，参数是$condition2, $filters2  @0

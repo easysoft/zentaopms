@@ -5,7 +5,7 @@
 
 title=测试 productZen::getFormFields4Edit();
 timeout=0
-cid=0
+cid=17586
 
 - 步骤1:正常产品编辑-program字段为select控件第program条的control属性 @select
 - 步骤2:name字段应该是必填的第name条的required属性 @1

@@ -4,7 +4,7 @@
 
 title=测试 projectModel::getByID();
 timeout=0
-cid=1
+cid=17819
 
 - 获取ID为1的项目数据
  - 属性id @1

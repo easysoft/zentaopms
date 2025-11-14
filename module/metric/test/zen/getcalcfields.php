@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getCalcFields();
 timeout=0
-cid=0
+cid=17189
 
 - 执行metricTest模块的getCalcFieldsZenTest方法，参数是$calc1, $row1 
  - 属性id @1

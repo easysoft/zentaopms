@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::processChildScene();
 timeout=0
-cid=0
+cid=19101
 
 - 执行testcaseTest模块的processChildSceneTest方法，参数是$simpleResult, 'root', 'scene'  @2
 - 执行testcaseTest模块的processChildSceneTest方法，参数是$attachedResult, 'root', 'scene'  @1

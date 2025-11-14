@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 repoModel::isClickable();
 timeout=0
-cid=1
+cid=15753
 
 - 计算状态为空时是否能查看日志 @1
 - 计算状态为success时是否能查看结果 @0

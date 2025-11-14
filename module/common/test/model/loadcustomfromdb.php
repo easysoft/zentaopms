@@ -8,7 +8,7 @@ zenData('lang')->gen(10);
 
 title=测试 commonModel::loadCustomFromDB();
 timeout=0
-cid=1
+cid=15687
 
 - 查看设置后的语言项的数量 @3
 - 查看设置后的语言项的值第section1条的key1属性 @value1

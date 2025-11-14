@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getStatsStoriesAndRequirements();
-cid=0
+cid=17517
 
 - 测试不传产品ID列表获取产品下的需求和用户需求第1条的changing属性 @0
 - 测试产品ID列表获取产品下的需求和用户需求第1条的changing属性 @1

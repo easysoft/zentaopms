@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getMineList();
-cid=1
+cid=16109
 
 - 获取最近浏览的所有文档
  - 第3条的title属性 @我的文档3

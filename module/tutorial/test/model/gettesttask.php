@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTesttask();
 timeout=0
-cid=0
+cid=19490
 
 - 步骤1：正常获取测试单对象
  - 属性id @1

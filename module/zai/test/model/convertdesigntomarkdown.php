@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::convertDesignToMarkdown();
 timeout=0
-cid=0
+cid=19764
 
 - 测试转换完整的设计对象 @1
 - 测试转换第二个设计对象 @2

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getModulesForCreate();
 timeout=0
-cid=0
+cid=15455
 
 - 步骤1:正常产品,有效的模块ID属性moduleID @1
 - 步骤2:正常产品,无效的模块ID属性moduleID @~~

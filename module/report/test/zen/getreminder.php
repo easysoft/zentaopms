@@ -5,7 +5,7 @@
 
 title=测试 reportZen::getReminder();
 timeout=0
-cid=0
+cid=18191
 
 - 测试所有配置都开启时,验证返回的用户数量 @9
 - 测试bug配置开启时,验证admin用户的bug数据条数 @29

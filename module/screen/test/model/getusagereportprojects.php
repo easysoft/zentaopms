@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getUsageReportProjects();
 timeout=0
-cid=0
+cid=18260
 
 - 执行screenTest模块的getUsageReportProjectsTest方法，参数是'2023', '01'  @2
 - 执行screenTest模块的getUsageReportProjectsTest方法，参数是'2024', '12'  @7

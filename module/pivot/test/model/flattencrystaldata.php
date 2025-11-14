@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::flattenCrystalData();
 timeout=0
-cid=0
+cid=17366
 
 - 执行pivotTest模块的flattenCrystalDataTest方法，参数是$simpleData  @3
 - 执行pivotTest模块的flattenCrystalDataTest方法，参数是$groupData, false  @3

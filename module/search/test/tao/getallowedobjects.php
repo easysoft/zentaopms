@@ -5,10 +5,10 @@
 
 title=测试 searchModel->getSummary();
 timeout=0
-cid=1
+cid=0
 
 - 测试获取所有有权限的对象类型
- -  @bug
+ - 属性0 @bug
  - 属性1 @build
  - 属性2 @case
  - 属性3 @doc
@@ -28,7 +28,7 @@ cid=1
  - 属性17 @testreport
  - 属性18 @program
 - 测试获取所有有权限的对象类型
- -  @bug
+ - 属性0 @bug
  - 属性1 @build
  - 属性2 @case
  - 属性3 @doc

@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getKanbanCallback();
 timeout=0
-cid=0
+cid=16922
 
 - 执行kanbanTest模块的getKanbanCallbackTest方法，参数是1, 1 属性name @updateKanbanRegion
 - 执行kanbanTest模块的getKanbanCallbackTest方法，参数是1, 1 第params条的0属性 @region1

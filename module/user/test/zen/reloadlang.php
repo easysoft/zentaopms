@@ -5,7 +5,7 @@
 
 title=测试 userZen::reloadLang();
 timeout=0
-cid=0
+cid=19680
 
 - 执行userZenTest模块的reloadLangTest方法，参数是'zh-cn' 属性currentLang @zh-cn
 - 执行userZenTest模块的reloadLangTest方法，参数是'en' 属性currentLang @en

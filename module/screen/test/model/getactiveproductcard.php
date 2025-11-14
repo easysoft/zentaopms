@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getActiveProductCard();
 timeout=0
-cid=0
+cid=18232
 
 - 测试2025年1月的活跃产品数第0条的count属性 @5
 - 测试2025年2月的活跃产品数第0条的count属性 @3

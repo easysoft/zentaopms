@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->convertWiki2Html();
 timeout=0
-cid=1
+cid=19509
 
 - 转换文档模板6 @<p>文档模板6</p>
 - 转换文档模板7 @<p>文档模板7</p>

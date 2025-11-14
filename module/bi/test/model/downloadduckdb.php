@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::downloadDuckdb();
 timeout=0
-cid=0
+cid=15155
 
 - 步骤1：验证方法存在性 @1
 - 步骤2：检查返回值类型 @1

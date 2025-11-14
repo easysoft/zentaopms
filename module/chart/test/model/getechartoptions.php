@@ -5,7 +5,7 @@
 
 title=测试 biModel::getEchartOptions();
 timeout=0
-cid=1
+cid=15572
 
 - 查询获取到的所有属性第0条的name属性 @5
 - 查询结果中的gird

@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 testcaseModel->getPairsByProduct();
 timeout=0
-cid=1
+cid=18993
 
 - 获取产品1的case @4:这个是测试用例4,3:这个是测试用例3,2:这个是测试用例2,1:这个是测试用例1
 

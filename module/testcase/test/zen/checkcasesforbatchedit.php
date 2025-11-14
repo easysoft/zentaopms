@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::checkCasesForBatchEdit();
 timeout=0
-cid=0
+cid=19084
 
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$validCases 第0条的title属性 @测试用例1
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithEmptyTitle 属性title[0] @『用例名称』不能为空。

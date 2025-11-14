@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getLinkedObjects();
 timeout=0
-cid=0
+cid=18692
 
 - 执行storyTest模块的getLinkedObjectsTest方法，参数是$story1 第fromBug条的title属性 @Bug1
 - 执行storyTest模块的getLinkedObjectsTest方法，参数是$story2 属性fromBug @~~

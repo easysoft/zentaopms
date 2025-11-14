@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getStories2Link();
 timeout=0
-cid=0
+cid=18556
 
 - 获取需求1可关联的需求数量 @9
 - 获取需求2可关联的需求数量 @9

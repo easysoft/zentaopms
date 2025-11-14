@@ -5,7 +5,7 @@
 
 title=测试 personnelZen::setSelectObjectTips();
 timeout=0
-cid=0
+cid=17341
 
 - 测试objectType为program时的objectName属性属性objectName @项目集
 - 测试objectType为product时的objectName属性属性objectName @产品

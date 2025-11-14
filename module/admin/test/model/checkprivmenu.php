@@ -5,7 +5,7 @@
 
 title=测试 adminModel::checkPrivMenu();
 timeout=0
-cid=0
+cid=14976
 
 - 测试步骤1:基本菜单权限检查功能
  - 属性success @1

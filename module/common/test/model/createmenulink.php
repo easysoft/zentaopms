@@ -5,7 +5,7 @@
 
 title=测试 commonModel::createMenuLink();
 timeout=0
-cid=0
+cid=15667
 
 - 测试普通数组链接创建 @task-create-1.html
 - 测试tutorial模式链接创建 @tutorial-wizard-project-browse-c3RhdHVzPWFjdGl2ZQ==.html

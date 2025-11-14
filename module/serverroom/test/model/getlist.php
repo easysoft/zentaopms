@@ -10,7 +10,7 @@ su('admin');
 
 title=serverroomModel->getList();
 timeout=0
-cid=1
+cid=18355
 
 */
 

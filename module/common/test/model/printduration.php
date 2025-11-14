@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printDuration();
 timeout=0
-cid=0
+cid=15693
 
 - 测试标准秒数转换 @1天1小时1分1秒
 - 测试0秒 @0

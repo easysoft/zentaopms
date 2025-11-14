@@ -5,7 +5,7 @@
 
 title=测试 productZen::saveAndModifyCookie4Browse();
 timeout=0
-cid=0
+cid=17605
 
 - 执行productTest模块的saveAndModifyCookie4BrowseTest方法，参数是2, 'all', 0, '', 'id_desc', '1', 'all', '100' 属性storyModule @0
 - 执行productTest模块的saveAndModifyCookie4BrowseTest方法，参数是1, 'branch2', 0, '', 'id_desc', '1', 'branch1', '100' 属性storyModule @0

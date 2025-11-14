@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getFullNameList();
 timeout=0
-cid=0
+cid=16315
 
 - 执行executionTest模块的getFullNameListTest方法，参数是$emptyArray @0
 - 执行executionTest模块的getFullNameListTest方法，参数是array 属性11 @敏捷项目

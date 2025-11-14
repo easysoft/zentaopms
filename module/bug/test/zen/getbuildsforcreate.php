@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getBuildsForCreate();
 timeout=0
-cid=0
+cid=15451
 
 - 步骤1:测试allBuilds为true时builds是数组 @1
 - 步骤2:测试有executionID时builds是数组 @1

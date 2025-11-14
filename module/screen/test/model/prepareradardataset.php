@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->prepareRadarDataset();
 timeout=0
-cid=1
+cid=18273
 
 - 执行screen模块的prepareRadarDatasetTest方法，参数是'normal' 第radarIndicator条的0属性 @indicator1
 - 执行screen模块的prepareRadarDatasetTest方法，参数是'normal' 第seriesData条的0属性 @series1

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 /**
 
 title=测试 caselibModel->getCasesToExport();
-cid=1
+cid=15530
 
 - 测试导出用例库按照id倒序排列的所有用例 @429;427;425;423;421;419;417;415;413;411;409;407;405;403;401
 - 测试导出用例库按照id倒序排列的选择的用例 @429;427;417

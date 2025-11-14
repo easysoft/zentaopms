@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getGradeMenu();
 timeout=0
-cid=0
+cid=18535
 
 - 执行storyTest模块的getGradeMenuTest方法，参数是'story' 
  - 第0条的text属性 @查看

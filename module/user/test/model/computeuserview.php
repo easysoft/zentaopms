@@ -5,7 +5,7 @@
 
 title=测试 userModel->computeUserView();
 timeout=0
-cid=0
+cid=19595
 
 - 不强制更新，获取test1账户的可查看项目集列表。属性programs @,3
 - 不强制更新，获取test1账户的可查看产品列表。属性products @,3

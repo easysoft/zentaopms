@@ -5,7 +5,7 @@
 
 title=测试 storyZen::processFilterTitle();
 timeout=0
-cid=0
+cid=18701
 
 - 步骤1：普通状态过滤（未关闭） @状态: 未关闭
 - 步骤2：按产品过滤 @状态: 测试产品A

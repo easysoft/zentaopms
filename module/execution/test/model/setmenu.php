@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试 executionModel::setMenu();
 timeout=0
-cid=1
+cid=16364
 
 - 测试构建导航
  - 第build条的link属性 @构建|execution|build|executionID=3

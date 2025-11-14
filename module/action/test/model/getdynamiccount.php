@@ -12,7 +12,7 @@ zenData('actionproduct')->gen(0);
 
 title=测试 actionModel->getDynamicCount();
 timeout=0
-cid=1
+cid=14899
 
 - 测试传入空SESSION @0
 - 测试传入条件 1=1。 @6

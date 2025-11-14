@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getExecutionPairs();
 timeout=0
-cid=1
+cid=19431
 
 - 检查获取的数据信息属性3 @Test execution
 - 检查获取的数据信息属性4 @~~

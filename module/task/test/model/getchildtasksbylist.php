@@ -4,7 +4,7 @@
 /**
 
 title=taskModel->getChildTasksByList();
-cid=0
+cid=18792
 
 - 查询任务 1 的子任务和未关联需求的子任务属性1 @childTasks: 6,7; nonStoryChildTasks: 7;
 - 查询任务 2 的子任务和未关联需求的子任务属性2 @childTasks: 8,9;

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildBrowseView();
 timeout=0
-cid=0
+cid=15433
 
 - 步骤1:正常产品有bugs的情况属性bugsCount @3
 - 步骤2:分支产品的情况属性product @2

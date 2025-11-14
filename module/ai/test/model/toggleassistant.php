@@ -5,7 +5,7 @@
 
 title=测试 aiModel::toggleAssistant();
 timeout=0
-cid=0
+cid=15069
 
 - 步骤1：启用已禁用的助手 @1
 - 步骤2：禁用已启用的助手 @1

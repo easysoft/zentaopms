@@ -5,7 +5,7 @@
 
 title=测试 metricTao::setDeleted();
 timeout=0
-cid=0
+cid=17179
 
 - 步骤1：设置已删除状态 @5
 - 步骤2：设置未删除状态 @5

@@ -24,7 +24,7 @@ $effort->gen(3);
 
 title=获取删除工时后的剩余工时
 timeout=0
-cid=1
+cid=18879
 
 - 删除ID为1的工时
  - 属性taskEstimate @2

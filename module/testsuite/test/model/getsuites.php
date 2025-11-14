@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testsuiteModel->getSuites();
 timeout=0
-cid=1
+cid=19145
 
 - 测试productID值为1,orderBy为id_desc
  - 第3条的name属性 @这是测试套件名称3

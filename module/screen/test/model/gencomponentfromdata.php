@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 screenModel->genComponentFromData();
 timeout=0
-cid=1
+cid=18227
 
 - 测试类型是text,标题是Text1生成的组件
  - 属性title @Text1

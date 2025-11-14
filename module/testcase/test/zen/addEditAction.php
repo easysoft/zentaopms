@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::addEditAction();
 timeout=0
-cid=0
+cid=19056
 
 - 步骤1：正常编辑操作 @1
 - 步骤2：正常评论操作 @1

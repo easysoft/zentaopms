@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::computeFieldsCreateView();
 timeout=0
-cid=0
+cid=17793
 
 - 步骤1：测试ipd项目模型stage执行类型无planID,检查requiredFields包含enabled,point,type,name,begin,end
  - 属性1 @

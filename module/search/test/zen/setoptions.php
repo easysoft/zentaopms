@@ -5,7 +5,7 @@
 
 title=测试 searchZen::setOptions();
 timeout=0
-cid=0
+cid=18352
 
 - 测试步骤1:正常输入完整参数属性savedQueryTitle @已保存的查询条件
 - 测试步骤2:测试空字段和fieldParams属性searchBtnText @搜索

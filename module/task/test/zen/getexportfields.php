@@ -5,7 +5,7 @@
 
 title=测试 taskZen::getExportFields();
 timeout=0
-cid=0
+cid=18932
 
 - 步骤1:使用默认字段列表
  - 属性id @编号

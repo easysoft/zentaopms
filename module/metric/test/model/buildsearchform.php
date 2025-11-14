@@ -5,7 +5,7 @@
 
 title=测试 metricModel::buildSearchForm();
 timeout=0
-cid=0
+cid=17063
 
 - 执行metricTest模块的buildSearchFormTest方法，参数是1, '/metric/browse'  @1
 - 执行metricTest模块的buildSearchFormTest方法，参数是0, '/test/url'  @1

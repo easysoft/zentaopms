@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraIssueLink();
 timeout=0
-cid=0
+cid=15860
 
 - 步骤1：空数据列表情况 @true
 - 步骤2：正常链接数据情况 @true

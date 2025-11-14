@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildDataForBrowse();
 timeout=0
-cid=0
+cid=17661
 
 - 执行productplanTest模块的buildDataForBrowseTest方法，参数是$emptyPlans, $branchOption  @0
 - 执行branchName) ? '0' : $result[0]模块的branchName方法  @0

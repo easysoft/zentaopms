@@ -5,7 +5,7 @@
 
 title=测试 weeklyModel::getPageNav();
 timeout=0
-cid=0
+cid=19725
 
 - 执行weekly模块的getPageNavTest方法，参数是'19', '2022-05-07'  @报告-项目19
 - 执行weekly模块的getPageNavTest方法，参数是'13', '2022-05-07'  @报告-项目13

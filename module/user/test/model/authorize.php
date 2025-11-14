@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->authorize();
-cid=0
+cid=19578
 
 - 获取user2用户的访问权限。
  - 第rights[index]条的index属性 @1

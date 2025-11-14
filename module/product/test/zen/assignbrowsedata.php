@@ -5,7 +5,7 @@
 
 title=测试 productZen::assignBrowseData();
 timeout=0
-cid=0
+cid=17561
 
 - 测试步骤1: 空需求列表
  - 属性productID @1

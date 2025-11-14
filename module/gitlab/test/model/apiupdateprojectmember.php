@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiUpdateProjectMember();
 timeout=0
-cid=0
+cid=16632
 
 - 执行gitlabTest模块的apiUpdateProjectMemberTest方法，参数是$gitlabID, $projectID, $projectMember  @return false
 - 执行gitlabTest模块的apiUpdateProjectMemberTest方法，参数是$gitlabID, $projectID, $projectMember  @return false

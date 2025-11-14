@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getExecutionPairsByProduct();
-cid=0
+cid=17489
 
 - 不传入任何数据。 @0
 - 只传入产品，不传入项目，检查敏捷项目。 @敏捷项目1/迭代5

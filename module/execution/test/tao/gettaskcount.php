@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 /**
 
 title=executionModel->getTaskCount();
-cid=0
+cid=16393
 
 - 传入空数组，检查返回值 @0
 - 传入无子任务数组。 @2

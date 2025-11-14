@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 transfer->getImportFields
 timeout=0
-cid=1
+cid=19334
 
 - 获取task模块的导入字段
  - 属性id @编号

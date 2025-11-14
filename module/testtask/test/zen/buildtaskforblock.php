@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::buildTaskForBlock();
 timeout=0
-cid=0
+cid=19227
 
 - 步骤1：正常阻塞测试单属性id @1
 - 步骤2：空注释的阻塞测试单属性id @2

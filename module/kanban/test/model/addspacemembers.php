@@ -4,7 +4,7 @@
 /**
 
 title=测试 kanbanModel::addSpaceMembers();
-cid=0
+cid=16870
 
 - 测试步骤1：正常添加成员到whitelist >> 期望成功添加新成员
 - 测试步骤2：正常添加成员到team >> 期望成功添加新成员

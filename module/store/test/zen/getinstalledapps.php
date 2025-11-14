@@ -5,7 +5,7 @@
 
 title=测试 storeZen::getInstalledApps();
 timeout=0
-cid=0
+cid=18459
 
 - 步骤1：正常情况 - admin用户默认空间有3个已安装应用 @3
 - 步骤2：验证admin用户空间第一个应用的appID @101

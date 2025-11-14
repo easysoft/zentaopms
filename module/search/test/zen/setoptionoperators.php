@@ -5,7 +5,7 @@
 
 title=测试 searchZen::setOptionOperators();
 timeout=0
-cid=0
+cid=18351
 
 - 执行$result1 @1
 - 执行$result2 @10

@@ -5,7 +5,7 @@
 
 title=测试 compileModel::syncGitlabBuildList();
 timeout=0
-cid=0
+cid=15755
 
 - 执行compileTest模块的syncGitlabBuildListTest方法，参数是$emptyGitlab, $validJob  @false
 - 执行compileTest模块的syncGitlabBuildListTest方法，参数是$validGitlab, $emptyPipelineJob  @false

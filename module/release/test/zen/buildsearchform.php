@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::buildSearchForm();
 timeout=0
-cid=0
+cid=18024
 
 - 执行releaseTest模块的buildSearchFormTest方法，参数是0, '', $normalProduct, '' 属性queryID @0
 - 执行releaseTest模块的buildSearchFormTest方法，参数是5, '/release/browse-1-all-0.html', $normalProduct, ''

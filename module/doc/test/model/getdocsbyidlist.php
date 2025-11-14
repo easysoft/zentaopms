@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getDocsByIdList();
-cid=1
+cid=16081
 
 - idList为空时获取空 @0
 - 获取我的文档1第1条的title属性 @我的文档1

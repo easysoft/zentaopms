@@ -5,7 +5,7 @@
 
 title=测试 adminZen::syncExtensions();
 timeout=0
-cid=0
+cid=14992
 
 - 执行$adminTest, 'syncExtensionsTest') ? 1 : 0 @1
 - 执行adminTest模块的syncExtensionsTest方法，参数是'plugin', 5)) ? 1 : 0  @1

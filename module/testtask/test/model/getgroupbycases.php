@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::getGroupByCases();
 timeout=0
-cid=0
+cid=19175
 
 - 步骤1：正常单个用例ID，返回1个分组 @1
 - 步骤2：多个用例ID数组返回3个分组 @3

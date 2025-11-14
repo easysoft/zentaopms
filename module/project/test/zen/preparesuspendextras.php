@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareSuspendExtras();
 timeout=0
-cid=0
+cid=17954
 
 - 步骤1:正常项目挂起数据处理
  - 属性id @1

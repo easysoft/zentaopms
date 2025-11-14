@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->processImgURL();
-cid=0
+cid=16521
 
 - 不传入任何数据。 @0
 - 不传入 editorList 参数。属性step @<img src="/file-read-1.png" />

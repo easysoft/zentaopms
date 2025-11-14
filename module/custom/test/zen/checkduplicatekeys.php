@@ -5,7 +5,7 @@
 
 title=测试 customZen::checkDuplicateKeys();
 timeout=0
-cid=0
+cid=15933
 
 - 执行customTest模块的checkDuplicateKeysTest方法，参数是'story', 'priList', array  @1
 - 执行customTest模块的checkDuplicateKeysTest方法，参数是'story', 'priList', array 属性message @key1键重复

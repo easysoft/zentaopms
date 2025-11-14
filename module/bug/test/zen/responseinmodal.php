@@ -5,7 +5,7 @@
 
 title=测试 bugZen::responseInModal();
 timeout=0
-cid=0
+cid=15475
 
 - 执行bugTest模块的responseInModalTest方法，参数是'', false, 'execution'
  - 属性result @success

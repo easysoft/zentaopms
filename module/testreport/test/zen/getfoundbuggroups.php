@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::getFoundBugGroups();
 timeout=0
-cid=0
+cid=19134
 
 - 步骤1：空数组输入 @8
 - 步骤2：单个bug分组返回数组长度 @8

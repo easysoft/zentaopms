@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getStatusForReview();
 timeout=0
-cid=0
+cid=19097
 
 - 执行testcaseTest模块的getStatusForReviewTest方法，参数是$case1, 'pass'  @normal
 - 执行testcaseTest模块的getStatusForReviewTest方法，参数是$case2, 'pass'  @normal

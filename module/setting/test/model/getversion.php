@@ -5,7 +5,7 @@
 
 title=测试 settingModel::getVersion();
 timeout=0
-cid=0
+cid=18364
 
 - 步骤1：无版本配置时返回默认版本 @0.3.beta
 - 步骤2：正常版本号配置 @10.0

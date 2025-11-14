@@ -12,7 +12,7 @@ $caseTable->gen(10);
 
 title=测试 testcaseModel->doUpdate();
 timeout=0
-cid=1
+cid=19032
 
 - 测试更新用例名称
  - 属性title @修改后的用例

@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getHistory();
 timeout=0
-cid=0
+cid=14901
 
 - 测试步骤1：使用整数actionID查询存在的历史记录
  - 第0条的field属性 @resolution

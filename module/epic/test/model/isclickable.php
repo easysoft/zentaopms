@@ -5,7 +5,7 @@
 
 title=测试 epicModel::isClickable();
 timeout=0
-cid=0
+cid=16256
 
 - 步骤1：正常story状态下close动作 @1
 - 步骤2：closed状态下close动作 @0

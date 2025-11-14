@@ -5,7 +5,7 @@
 
 title=测试 repoModel::saveExistCommits4Branch();
 timeout=0
-cid=0
+cid=18096
 
 - 测试步骤1：正常情况-保存gitea版本库master分支的历史提交 @1
 - 测试步骤2：边界值测试-不存在的仓库ID @0

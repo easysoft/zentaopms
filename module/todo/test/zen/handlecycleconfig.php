@@ -5,7 +5,7 @@
 
 title=测试 todoZen::handleCycleConfig();
 timeout=0
-cid=0
+cid=19303
 
 - 执行todoTest模块的handleCycleConfigTest方法，参数是'day' 属性type @day
 - 执行todoTest模块的handleCycleConfigTest方法，参数是'week' 属性type @week

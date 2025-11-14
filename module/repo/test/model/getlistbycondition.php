@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 repoModel::getListByCondition();
 timeout=0
-cid=0
+cid=18070
 
 - 执行repoTest模块的getListByConditionTest方法，参数是'', ''  @1
 - 执行repoTest模块的getListByConditionTest方法，参数是'', ''  @5

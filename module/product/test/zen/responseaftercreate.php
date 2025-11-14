@@ -5,7 +5,7 @@
 
 title=测试 productZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=17602
 
 - 步骤1:正常情况,无项目集
  - 属性result @success

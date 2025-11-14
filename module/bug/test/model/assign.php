@@ -13,7 +13,7 @@ su('admin');
 
 title=bugModel->assign();
 timeout=0
-cid=1
+cid=15345
 
 - 指派bug状态为激活的bug 更改指派人
  - 属性assignedTo @user2

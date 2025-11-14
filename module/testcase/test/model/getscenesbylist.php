@@ -10,7 +10,7 @@ zenData('scene')->gen('4')->fixPath();
 
 title=测试 testcaseModel->getScenesByList();
 timeout=0
-cid=1
+cid=18999
 
 - 测试获取编号为空数组的场景条数。 @0
 - 测试获取编号为 1、2 的场景条数。 @2

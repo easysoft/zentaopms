@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::batchFresh();
 timeout=0
-cid=0
+cid=16781
 
 - 步骤1：空实例数组 @0
 - 步骤2：单个实例ID第0条的id属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::getPackageFile();
 timeout=0
-cid=0
+cid=16464
 
 - 步骤1：正常插件代号 @/apps/zentao/tmp/extension/code1.zip
 - 步骤2：空字符串 @/apps/zentao/tmp/extension/.zip

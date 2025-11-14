@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 myModel->getActions();
-cid=1
+cid=17305
 
 - 获取 admin 角色 空 的地盘菜单 @5:index,10:calendar,15:work,20:audit,25:project,30:execution,35:contribute,40:dynamic,50:contacts,11:effort,41:meeting
 

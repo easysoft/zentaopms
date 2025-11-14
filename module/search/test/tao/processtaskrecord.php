@@ -26,7 +26,7 @@ su('admin');
 
 title=测试 searchTao::processTaskRecord();
 timeout=0
-cid=0
+cid=18342
 
 - 执行searchTest模块的processTaskRecordTest方法，参数是$record1 属性url @task-view-1
 - 执行searchTest模块的processTaskRecordTest方法，参数是$record2

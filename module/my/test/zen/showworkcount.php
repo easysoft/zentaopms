@@ -5,7 +5,7 @@
 
 title=测试 myZen::showWorkCount();
 timeout=0
-cid=0
+cid=17316
 
 - 测试默认参数调用属性hasTodoCount @1
 - 测试默认参数时taskCount初始化为0属性taskCount @0

@@ -5,7 +5,7 @@
 
 title=测试 storyModel->reorderStories();
 timeout=0
-cid=0
+cid=18656
 
 - 无效重排，查看重排后的数量 @16
 - 无效重排，查看重排后索引为3的需求ID属性3 @3

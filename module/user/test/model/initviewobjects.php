@@ -5,7 +5,7 @@
 
 title=测试 userModel::initViewObjects();
 timeout=0
-cid=0
+cid=19644
 
 - 步骤1：正常初始化，返回7个元素的数组 @7
 - 步骤2：强制刷新，返回7个元素的数组 @7

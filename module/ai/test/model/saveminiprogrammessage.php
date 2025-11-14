@@ -5,7 +5,7 @@
 
 title=测试 aiModel::saveMiniProgramMessage();
 timeout=0
-cid=0
+cid=15062
 
 - 执行aiTest模块的saveMiniProgramMessageTest方法，参数是1, 'req', '这是一个测试请求消息'  @1
 - 执行aiTest模块的saveMiniProgramMessageTest方法，参数是2, 'res', '这是一个测试响应消息'  @1

@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->deleteContactList();
-cid=0
+cid=19600
 
 - 联系人列表数量为 3。 @3
 - 联系人列表第 1 条 id 为 3。第0条的id属性 @3

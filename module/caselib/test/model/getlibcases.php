@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 caselibModel->getLibCases();
-cid=1
+cid=15531
 
 - bymodule 状态下 查询用例库 201 模块 0 排序 id_desc 的用例 id @429,427,425,423,421,419,417,415,413,411,409,407,405,403,401
 

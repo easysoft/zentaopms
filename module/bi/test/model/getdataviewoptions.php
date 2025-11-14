@@ -5,7 +5,7 @@
 
 title=测试 biModel::getDataviewOptions();
 timeout=0
-cid=0
+cid=15165
 
 - 步骤1：正常获取bug对象status字段的选项 @1
 - 步骤2：正常获取bug对象type字段的选项 @1

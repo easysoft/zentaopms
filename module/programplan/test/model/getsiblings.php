@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::getSiblings();
 timeout=0
-cid=0
+cid=17749
 
 - 执行programplan模块的getSiblingsTest方法，参数是3 属性3 @4
 - 执行programplan模块的getSiblingsTest方法，参数是[3, 4]

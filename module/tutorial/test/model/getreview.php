@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getReview();
 timeout=0
-cid=0
+cid=19467
 
 - 执行tutorialTest模块的getReviewTest方法 属性id @1
 - 执行tutorialTest模块的getReviewTest方法 属性project @2

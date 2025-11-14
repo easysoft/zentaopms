@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getLibById();
-cid=1
+cid=16097
 
 - 测试空数据 @0
 - 获取ID=1的文档库信息

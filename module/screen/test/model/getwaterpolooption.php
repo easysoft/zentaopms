@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getWaterPoloOption();
 timeout=0
-cid=0
+cid=18261
 
 - 步骤1：settings为空字符串的处理属性hasOption @1
 - 步骤2：settings为null的处理属性hasOption @1

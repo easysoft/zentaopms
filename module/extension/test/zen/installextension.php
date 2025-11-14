@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::installExtension();
 timeout=0
-cid=0
+cid=16489
 
 - 执行$result1 @1
 - 执行$result2 @1

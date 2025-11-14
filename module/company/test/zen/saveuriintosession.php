@@ -5,7 +5,7 @@
 
 title=测试 companyZen::saveUriIntoSession();
 timeout=0
-cid=0
+cid=15742
 
 - 步骤1:不设置URI时调用方法成功 @1
 - 步骤2:设置URI为/product时调用方法成功 @1

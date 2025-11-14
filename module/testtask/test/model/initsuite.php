@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::initSuite();
 timeout=0
-cid=0
+cid=19206
 
 - 步骤1：正常情况属性product @1
 - 步骤2：名称检查属性name @Unit Test Suite

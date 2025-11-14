@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkPassword();
-cid=0
+cid=19588
 
 - 密码为空，返回 false。属性result @0
 - 密码为空，有错误提示。第errors条的password1属性 @『密码』不能为空。

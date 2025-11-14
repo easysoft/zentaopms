@@ -24,7 +24,7 @@ $execution->gen(8);
 
 title=测试 executionModel::changeStatus2Doing();
 timeout=0
-cid=0
+cid=16278
 
 - 测试等待状态执行更改为进行中状态 @1
 - 测试已关闭状态执行更改为进行中状态 @1

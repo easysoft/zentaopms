@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterEdit();
 timeout=0
-cid=0
+cid=16217
 
 - 步骤1:测试编辑文档无修改属性result @success
 - 步骤2:测试编辑文档有变更属性result @success

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getAfterReviewLocation();
 timeout=0
-cid=0
+cid=18679
 
 - 执行storyTest模块的getAfterReviewLocationTest方法，参数是1, 'story', 'project'  @getafterreviewlocation.php?m=execution&f=storyView&storyID=1
 - 执行storyTest模块的getAfterReviewLocationTest方法，参数是2, 'story', 'project'  @getafterreviewlocation.php?m=projectstory&f=view&storyID=2&projectID=6

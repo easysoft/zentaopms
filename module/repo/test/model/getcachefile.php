@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getCacheFile();
 timeout=0
-cid=0
+cid=18050
 
 - 步骤1：正常情况 @1
 - 步骤2：空路径 @1

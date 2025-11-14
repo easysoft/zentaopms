@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildEffortForFinish();
 timeout=0
-cid=0
+cid=18903
 
 - 执行taskTest模块的buildEffortForFinishTest方法，参数是$oldTask, $task1, '3.5', ''
  - 属性consumed @3.5

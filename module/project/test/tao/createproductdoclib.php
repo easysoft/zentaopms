@@ -10,7 +10,7 @@ zenData('doclib')->gen(1);
 
 title=测试 projectModel->createProductDocLib();
 timeout=0
-cid=1
+cid=17895
 
 - 测试创建产品文档库
  - 属性id @2

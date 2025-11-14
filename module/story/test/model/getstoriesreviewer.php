@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getStoriesReviewer();
 timeout=0
-cid=0
+cid=18559
 
 - 执行storyTest模块的getStoriesReviewerTest方法，参数是1  @A:管理员
 - 执行storyTest模块的getStoriesReviewerTest方法，参数是2  @U:用户1
