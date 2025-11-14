@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getSnapshotList().
 timeout=0
-cid=19800
+cid=19838
 
 - 测试获取 node id 1 id_desc 快照列表 @11:defaultSnap1,failed;1:defaultSnap,creating
 

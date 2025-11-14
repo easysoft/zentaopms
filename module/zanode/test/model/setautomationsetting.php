@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->setAutomationSetting().
 timeout=0
-cid=19806
+cid=19844
 
 - 测试自动化设置 node1 新增
  - 属性id @2

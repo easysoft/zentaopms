@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel->getHostByID().
 timeout=0
-cid=19792
+cid=19830
 
 - 获取ID为1的主机的id,type,extranet
  - 属性id @1

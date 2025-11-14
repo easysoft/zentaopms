@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel::runZTFScript();
 timeout=0
-cid=19805
+cid=19843
 
 - 测试HTTP请求失败的情况 >> 期望返回超时错误
 - 测试automation配置不存在 >> 期望返回属性读取错误

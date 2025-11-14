@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::updateImageStatus();
 timeout=0
-cid=19809
+cid=19847
 
 - 执行zanode模块的updateImageStatusTest方法，参数是1, $postData1
  - 属性status @failed
