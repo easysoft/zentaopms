@@ -1153,6 +1153,24 @@ class zaiModel extends model
                 'module'        => array('module', 'moduleName'),
                 'story'         => array('story', 'storyID'),
                 'lastEditedBy'  => array('lastEditedBy', 'editedBy'),
+                'lastEditedDate'=> array('lastEditedDate', 'editedDate'),
+            ),
+            'story' => array(
+                'plan'         => array('plan', 'planTitle'),
+                'planTitle'    => array('planTitle', 'plan'),
+                'openedBy'     => array('openedBy', 'createdBy'),
+                'openedDate'   => array('openedDate', 'createdDate'),
+                'assignedTo'   => array('assignedTo', 'owner'),
+                'branch'       => array('branch', 'branchName'),
+                'module'       => array('module', 'moduleName'),
+                'stage'        => array('stage', 'statusStage'),
+            ),
+            'bug' => array(
+                'openedBy'     => array('openedBy', 'createdBy'),
+                'openedDate'   => array('openedDate', 'createdDate'),
+                'resolvedBy'   => array('resolvedBy'),
+                'resolvedDate' => array('resolvedDate'),
+                'assignedTo'   => array('assignedTo'),
             ),
         );
 
