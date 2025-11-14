@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeZen::getIssueList();
 timeout=0
-cid=0
+cid=18390
 
 - 执行sonarqubeTest模块的getIssueListTest方法，参数是100, 'test-project'  @0
 - 执行sonarqubeTest模块的getIssueListTest方法，参数是101, ''  @0

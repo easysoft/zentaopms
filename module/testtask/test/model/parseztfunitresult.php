@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::parseZTFUnitResult();
 timeout=0
-cid=0
+cid=19213
 
 - 执行$result1) && isset($result1['suites']) && isset($result1['cases']) && isset($result1['results'] @1
 - 执行$result2) && count($result2['cases']) > 0 && isset($result2['suites'][1] @1

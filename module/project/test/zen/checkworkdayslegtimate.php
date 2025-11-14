@@ -5,7 +5,7 @@
 
 title=测试 projectZen::checkWorkdaysLegtimate();
 timeout=0
-cid=0
+cid=17937
 
 - 步骤1:工作日小于计划工作日期间 @1
 - 步骤2:工作日等于计划工作日期间 @1

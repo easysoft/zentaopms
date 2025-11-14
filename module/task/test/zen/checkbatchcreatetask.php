@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkBatchCreateTask();
 timeout=0
-cid=0
+cid=18918
 
 - 步骤1：正常情况 @1
 - 步骤2：名称超长属性name[0] @名称长度不能超过255个字符。

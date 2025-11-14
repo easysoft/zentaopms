@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetDiffs();
 timeout=0
-cid=0
+cid=17227
 
 - 不存在的主机 @0
 - GitLab 服务器 @0

@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getFromDB();
-cid=1
+cid=19722
 
 查询项目为已挂起、日期不为空的数据 >> 1,41
 查询项目为已挂起、日期为空的数据 >> 0

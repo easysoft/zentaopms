@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->replaceRevertQuery();
-cid=0
+cid=18658
 
 - 不传入数据。 @0
 - 传入产品参数，不传入查询语句。 @0

@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->buildRules();
-cid=1
+cid=18194
 
 - 获取积分规则列表数量 @38
 - 获取第一条积分规则

@@ -1296,7 +1296,6 @@ class bugZen extends bug
     protected function buildBugForResolve(object $oldBug): object
     {
         $bug = form::data($this->config->bug->form->resolve, $oldBug->id)
-            ->setDefault('assignedTo', $oldBug->openedBy)
             ->setDefault('resolvedDate', helper::now())
             ->add('id',        $oldBug->id)
             ->add('execution', $oldBug->execution)

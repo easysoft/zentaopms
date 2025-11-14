@@ -5,7 +5,7 @@
 
 title=测试 aiModel::executePrompt();
 timeout=0
-cid=0
+cid=15022
 
 - 步骤1：空prompt参数测试 @-1
 - 步骤2：无效prompt ID测试 @-1

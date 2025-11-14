@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->computePasswordStrength();
-cid=0
+cid=19594
 
 - 密码为空，强度为弱。 @0
 - 密码包含纯数字，长度小于 6，强度为弱。 @0

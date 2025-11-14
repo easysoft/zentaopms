@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::saveTestcase();
 timeout=0
-cid=0
+cid=19021
 
 - 步骤1：测试参数解析设置scene正确 @10
 - 步骤2：测试tmpPId在sceneIdList中存在 @5

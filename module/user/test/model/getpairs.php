@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getPairs();
-cid=0
+cid=19621
 
 - 查找带有Closed用户的外部用户键值对属性closed @Closed
 - 查找带有首字母的外部用户键值对属性account4 @A:用户名4

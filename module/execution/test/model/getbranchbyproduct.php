@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=executionModel->getBranchByProduct();
 timeout=0
-cid=1
+cid=16298
 
 - 正常产品分支统计 @0
 - 正常产品分支统计 @0

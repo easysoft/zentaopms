@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 userTao->fetchExecutions();
-cid=1
+cid=19667
 
 - 用户名为空，返回空数组。 @0
 - 用户 user2 未参与任何执行，返回空数组。 @0

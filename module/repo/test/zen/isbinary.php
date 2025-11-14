@@ -5,7 +5,7 @@
 
 title=测试 repoZen::isBinary();
 timeout=0
-cid=0
+cid=18148
 
 - 执行repoZenTest模块的isBinaryTest方法，参数是'This is a normal text content with some words.', ''  @0
 - 执行repoZenTest模块的isBinaryTest方法，参数是'Some content', 'pdf'  @1

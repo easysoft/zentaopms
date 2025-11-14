@@ -10,7 +10,7 @@ zenData('kanban')->gen(5);
 
 title=测试 kanbanModel->getKanbanIDByRegion();
 timeout=0
-cid=1
+cid=16925
 
 - 测试通过区域1获取看板id @1
 - 测试通过区域2获取看板id @2

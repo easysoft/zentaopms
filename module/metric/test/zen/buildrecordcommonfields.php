@@ -5,7 +5,7 @@
 
 title=测试 metricZen::buildRecordCommonFields();
 timeout=0
-cid=0
+cid=17182
 
 - 执行metricZenTest模块的buildRecordCommonFieldsZenTest方法，参数是1, 'test_metric', '2023-10-15', array 
  - 属性value @0

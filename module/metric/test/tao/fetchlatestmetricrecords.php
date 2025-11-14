@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchLatestMetricRecords();
 timeout=0
-cid=0
+cid=17162
 
 - 步骤1：空参数测试，返回0 @0
 - 步骤2：空字符串参数测试，返回0 @0

@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildRegionData();
 timeout=0
-cid=0
+cid=16975
 
 - 测试步骤1：正常构造区域数据属性laneCount @2
 - 测试步骤2：空分组数据输入属性laneCount @0

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTestReports();
 timeout=0
-cid=0
+cid=19489
 
 - 步骤1：验证返回数组包含1个元素 @1
 - 步骤2：验证包含ID为1的测试报告第1条的id属性 @1

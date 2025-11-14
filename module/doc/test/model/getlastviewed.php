@@ -5,7 +5,7 @@
 
 title=测试 docModel::getLastViewed();
 timeout=0
-cid=0
+cid=16096
 
 - 执行docTest模块的getLastViewedTest方法，参数是'lastViewedSpace'  @0
 - 执行docTest模块的getLastViewedTest方法，参数是'lastViewedSpaceHome'  @0

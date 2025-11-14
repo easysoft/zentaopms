@@ -5,7 +5,7 @@
 
 title=productModel->getProductLink();
 timeout=0
-cid=0
+cid=17501
 
 - 当前页面是product-roadmap，切换1.5级导航时跳转链接。 @/product-roadmap-%s.html
 - 当前页面是product-roadmap，包含分支，切换1.5级导航时跳转链接。 @/product-roadmap-%s-%s.html

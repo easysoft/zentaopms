@@ -3,7 +3,7 @@
 /**
 
 title=测试 stageModel->getByID();
-cid=1
+cid=18420
 
 - 测试获取ID=0的阶段 @0
 - 测试获取ID=1的阶段

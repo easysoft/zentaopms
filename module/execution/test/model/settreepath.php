@@ -5,7 +5,7 @@
 
 title=测试 executionModel::setTreePath();
 timeout=0
-cid=0
+cid=16366
 
 - 步骤1：父项目为project类型的stage设置TreePath
  - 第2条的path属性 @

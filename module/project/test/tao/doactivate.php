@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 projectModel->doActivate();
 timeout=0
-cid=1
+cid=17897
 
 - 更新不存在的项目 @1
 - 更新项目2 @1

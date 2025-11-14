@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->doUpdateSpec();
-cid=0
+cid=18623
 
 - 执行storyTest模块的doUpdateSpecTest方法，参数是1, $data, $oldData
  - 属性title @teststory

@@ -9,7 +9,7 @@ zenData('instance')->gen(200);
 
 title=instanceModel->getByID();
 timeout=0
-cid=1
+cid=16802
 
 - 获取所有instance数量 @200
 - 获取运行中的instance数量 @198

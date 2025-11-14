@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getMaxVersionByIDList();
 timeout=0
-cid=0
+cid=17392
 
 - 执行pivotTest模块的getMaxVersionByIDListTest方法，参数是array 
  - 属性1 @2.1

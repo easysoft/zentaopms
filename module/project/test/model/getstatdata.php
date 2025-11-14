@@ -40,7 +40,7 @@ $bug->gen(100);
 
 title=测试 projectModel->getStatData();
 timeout=0
-cid=1
+cid=17849
 
 - 统计id=1的项目下数据数量
  - 属性bugCount @0

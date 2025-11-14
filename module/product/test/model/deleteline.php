@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->deleteLine();
-cid=0
+cid=17483
 
 - 测试删除产品线1
  - 属性name @产品线1

@@ -5,7 +5,7 @@
 
 title=测试 treeModel->createRequirementLink();
 timeout=0
-cid=1
+cid=19355
 
 - 测试获取module 1 的 requirement link属性url @product-browse-1-all-byModule-1-requirement.html
 - 测试获取module 2 的 requriement link属性url @product-browse-1-all-byModule-2-requirement.html

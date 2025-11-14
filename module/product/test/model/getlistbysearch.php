@@ -3,7 +3,7 @@
 /**
 
 title=测试productModel->getListBySearch();
-cid=0
+cid=17495
 
 - 测试通过空的搜索条件筛选产品数据第1条的name属性 @产品1
 - 测试通过空的搜索条件筛选产品数据第2条的name属性 @产品2

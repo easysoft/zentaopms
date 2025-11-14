@@ -5,7 +5,7 @@
 
 title=测试 docModel::getObjectIDByLib();
 timeout=0
-cid=0
+cid=16115
 
 - 步骤1：product类型返回product字段 @15
 - 步骤2：custom类型返回parent字段 @10

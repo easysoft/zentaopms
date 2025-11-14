@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->getFilterFieldSQL().
 timeout=0
-cid=1
+cid=17386
 
 - 测试mysql下的input。 @tt.`name`
 - 测试duckdb下的input。 @cast(tt.`name` as varchar)

@@ -4,7 +4,7 @@
 
 title=测试 installModel->execDMSQL();
 timeout=0
-cid=1
+cid=16770
 
 - 测试是否能正常执行dm.sql里的SQL语句。 @1
 - 测试是否能正常执行dm.sql里的SQL语句。 @1

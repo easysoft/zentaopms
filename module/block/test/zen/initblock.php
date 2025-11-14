@@ -5,7 +5,7 @@
 
 title=测试 blockZen::initBlock();
 timeout=0
-cid=0
+cid=15244
 
 - 执行blockTest模块的zenInitBlockTest方法，参数是'my'  @1
 - 执行blockTest模块的zenInitBlockTest方法，参数是'qa'  @1

@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getLineChartOption();
 timeout=0
-cid=0
+cid=18243
 
 - 步骤1：正常情况 @1
 - 步骤2：边界值 @1

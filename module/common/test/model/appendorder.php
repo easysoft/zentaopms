@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel->appendOrder();
 timeout=0
-cid=1
+cid=15644
 
 - 正序追加name排序 @status_asc,name_asc
 

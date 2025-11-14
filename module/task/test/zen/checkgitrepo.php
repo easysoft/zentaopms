@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkGitRepo();
 timeout=0
-cid=0
+cid=18923
 
 - 步骤1：项目1关联产品1，仓库1关联产品1,2，应返回true @1
 - 步骤2：项目2关联产品2，仓库1关联产品1,2，应返回true @1

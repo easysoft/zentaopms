@@ -4,7 +4,7 @@
 /**
 
 title=获取产品列表中每个产品的统计信息 productModel->getStats();
-cid=0
+cid=17514
 
 - 获取第1个产品的名称第1条的name属性 @正常产品1
 - 获取第1个产品的计划数第1条的plans属性 @0

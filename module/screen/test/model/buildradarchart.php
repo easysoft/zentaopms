@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildRadarChart();
 timeout=0
-cid=0
+cid=18217
 
 - 步骤1：无settings默认配置返回key @Radar
 - 步骤2：有settings但无sql处理返回key @Radar

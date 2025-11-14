@@ -5,7 +5,7 @@
 
 title=测试 projectModel::setNoMultipleMenu();
 timeout=0
-cid=0
+cid=17868
 
 - 步骤1：测试multiple项目 @0
 - 步骤2：测试project类型项目 @0

@@ -4,7 +4,7 @@
 
 title=测试 chartModel::getSysOptions();
 timeout=0
-cid=1
+cid=15576
 
 - 测试参数全部为空 @0
 - 测试查询用户属性admin @admin

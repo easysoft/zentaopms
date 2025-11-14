@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 projectModel->hasStageData();
 timeout=0
-cid=1
+cid=17860
 
 - 测试传入执行ID为0的情况 @0
 - 测试有子阶段的情况 @0

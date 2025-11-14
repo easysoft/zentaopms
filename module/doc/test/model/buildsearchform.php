@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->buildSearchForm();
-cid=1
+cid=16049
 
 - 构造我的空间搜索表单
  - 第fields条的title属性 @文档标题

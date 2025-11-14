@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->deleteTemplate();
-cid=1
+cid=16065
 
 - 测试删除ID为0的模板 @0
 - 测试删除ID为1的模板 @1

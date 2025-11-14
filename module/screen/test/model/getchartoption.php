@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getChartOption();
 timeout=0
-cid=0
+cid=18239
 
 - 执行$result1) || is_object($result1) || $result1 ===  @1
 - 执行$result2) || is_object($result2) || $result2 ===  @1

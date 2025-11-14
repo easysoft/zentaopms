@@ -5,7 +5,7 @@
 
 title=测试 convertModel::connectDB();
 timeout=0
-cid=0
+cid=15765
 
 - 执行$convertTest->objectModel, 'connectDB' @1
 - 执行$convertTest->objectModel, 'sourceDBH' @1

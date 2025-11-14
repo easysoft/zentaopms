@@ -7,7 +7,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 commonModel::deny();
 timeout=0
-cid=1
+cid=15668
 
 - 超级管理员返回TRUE @1
 - deny中鉴权，有权限权限时返回TRUE @1

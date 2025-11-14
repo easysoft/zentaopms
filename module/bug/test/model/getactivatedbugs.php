@@ -16,7 +16,7 @@ su('admin');
 
 title=bugModel->getActivatedBugs();
 timeout=0
-cid=1
+cid=15353
 
 - 测试获取产品 1 2 3 类型 空 开始日期 上月 结束日期 下月 的bug @1,2,5,6,9
 

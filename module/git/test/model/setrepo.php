@@ -5,7 +5,7 @@
 
 title=测试 gitModel::setRepo();
 timeout=0
-cid=0
+cid=16554
 
 - 测试步骤1：正常有效的Git仓库对象属性result @1
 - 测试步骤2：包含空client属性的仓库对象属性result @0

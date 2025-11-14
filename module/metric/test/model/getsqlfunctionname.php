@@ -5,7 +5,7 @@
 
 title=getSqlFunctionName
 timeout=0
-cid=1
+cid=17127
 
 - 测试获取函数名pgmURInitScale @qc_pgmurinitscale
 - 测试获取函数名pgmSRInitScale @qc_pgmsrinitscale

@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::getUsedCategoryArray();
 timeout=0
-cid=0
+cid=15087
 
 - 执行aiappTest模块的getUsedCategoryArrayTest方法  @Array
 - 执行aiappTest模块的getUsedCategoryArrayTest方法  @(

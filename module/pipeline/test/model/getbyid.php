@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel->getByID();
 timeout=0
-cid=1
+cid=17344
 
 - 获取id为0的流水线信息 @0
 - 获取id为1流水线信息

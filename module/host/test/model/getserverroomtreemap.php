@@ -4,7 +4,7 @@
 
 title=测试 hostModel->getServerroomTreemap();
 timeout=0
-cid=1
+cid=16758
 
 - 测试获取的物理拓扑图数据是否正确。
  - 第0条的text属性 @北京

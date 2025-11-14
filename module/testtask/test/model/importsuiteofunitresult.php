@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::importSuiteOfUnitResult();
 timeout=0
-cid=0
+cid=19201
 
 - 步骤1：正常情况 @4
 - 步骤2：完整信息 @5

@@ -5,7 +5,7 @@
 
 title=测试 metricModel::createSqlFunction();
 timeout=0
-cid=0
+cid=17072
 
 - 执行metricTest模块的createSqlFunctionTest方法，参数是$validSql, $validMeasurement 属性result @success
 - 执行metricTest模块的createSqlFunctionTest方法，参数是$validSql, $nullMeasurement 属性result @fail

@@ -10,7 +10,7 @@ zenData('kanbanlane')->gen(200);
 
 title=测试 kanbanModel->getLaneGroupByRegions();
 timeout=0
-cid=1
+cid=16930
 
 - 测试获取区域101,102,103的泳道 @6
 - 测试获取区域101,102,103的bug泳道 @0

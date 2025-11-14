@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试 todoModel->getPriByTodoType();
 timeout=0
-cid=1
+cid=19261
 
 - 获取类型为bug,ID为1对象的优先级，结果为1 @1
 - 获取类型为bug,ID为1对象的优先级，结果为3 @3

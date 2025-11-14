@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildStoryForCreate();
 timeout=0
-cid=0
+cid=18671
 
 - 步骤1：正常情况属性title @测试需求标题
 - 步骤2：从执行创建属性stage @projected

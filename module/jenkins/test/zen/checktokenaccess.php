@@ -5,7 +5,7 @@
 
 title=测试 jenkinsZen::checkTokenAccess();
 timeout=0
-cid=0
+cid=16835
 
 - 步骤1: 测试空URL情况属性account @Jenkins权限验证失败，请检查账号信息是否正确
 - 步骤2: 测试空账号情况属性account @Jenkins权限验证失败，请检查账号信息是否正确

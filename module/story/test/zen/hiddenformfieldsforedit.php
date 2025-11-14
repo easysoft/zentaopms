@@ -5,7 +5,7 @@
 
 title=测试 storyZen::hiddenFormFieldsForEdit();
 timeout=0
-cid=0
+cid=18698
 
 - 测试步骤1第product条的className属性 @hidden
 - 测试步骤2第product条的className属性 @hidden

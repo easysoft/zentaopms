@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildViewActions();
 timeout=0
-cid=0
+cid=17664
 
 - 执行$result1, 'start') || hasAction($result1, '开始' @1
 - 执行$result1, '编辑' @1

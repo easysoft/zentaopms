@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 caselibModel->getList();
-cid=1
+cid=15533
 pid=1
 
 测试获取列表的个数，目前只有一个 >> 1

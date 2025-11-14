@@ -5,7 +5,7 @@
 
 title=测试 ciModel::transformAnsiToHtml();
 timeout=0
-cid=0
+cid=15595
 
 - 执行ciTest模块的transformAnsiToHtmlTest方法，参数是'normal text'  @normal text
 - 执行ciTest模块的transformAnsiToHtmlTest方法，参数是"\x1B[31;40mred text\x1B[0;m"  @<font style="color: red">red text</font><br>

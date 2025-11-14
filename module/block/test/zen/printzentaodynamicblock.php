@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printZentaoDynamicBlock();
 timeout=0
-cid=0
+cid=15316
 
 - 执行$result1->dynamics @1
 - 执行$result2 @1

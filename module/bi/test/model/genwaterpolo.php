@@ -5,7 +5,7 @@
 
 title=测试 biModel::genWaterpolo();
 timeout=0
-cid=0
+cid=15159
 
 - 步骤1：正常情况第series[0]条的type属性 @liquidFill
 - 步骤2：无过滤器第tooltip条的show属性 @1

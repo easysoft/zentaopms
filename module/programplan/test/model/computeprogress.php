@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->computeProgress();
-cid=0
+cid=17737
 
 - 测试参数=项目id直接continue @fail
 - 测试阶段status=suspended子阶段status=wait @success

@@ -5,7 +5,7 @@
 
 title=测试 biModel::validateSql();
 timeout=0
-cid=0
+cid=15219
 
 - 正常简单SELECT语句 @1
 - 空SQL语句 @请输入一条正确的SQL语句

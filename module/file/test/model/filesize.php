@@ -5,7 +5,7 @@
 
 title=测试 fileModel->fileSize();
 timeout=0
-cid=0
+cid=16501
 
 - 传入空对象 @0
 - 检查文件的大小 @4

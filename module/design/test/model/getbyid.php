@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getByID();
-cid=1
+cid=15987
 
 - 获取ID=0的设计信息 @0
 - 获取ID=3的设计信息

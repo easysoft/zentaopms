@@ -5,7 +5,7 @@
 
 title=测试 metricModel::updateMetricDate();
 timeout=0
-cid=0
+cid=17159
 
 - 步骤1：正常情况 - 更新 createdDate 为 null 的记录属性updated @5
 - 步骤2：验证更新后无 null 记录属性after @0

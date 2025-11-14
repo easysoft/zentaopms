@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getLinkedObjects();
 timeout=0
-cid=0
+cid=16431
 
 - 执行executionTest模块的getLinkedObjectsTest方法，参数是1 属性currentPlan @0
 - 执行executionTest模块的getLinkedObjectsTest方法，参数是2 属性currentPlan @0

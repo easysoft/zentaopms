@@ -5,7 +5,7 @@
 
 title=测试 apiModel::createDemoLib();
 timeout=0
-cid=0
+cid=15094
 
 - 执行apiTest模块的createDemoLibTest方法，参数是'API Demo Library', 'https://api.demo.com', 'admin' 属性name @API Demo Library
 - 执行apiTest模块的createDemoLibTest方法，参数是'API Demo Library', 'https://api.demo.com', 'admin' 属性type @api

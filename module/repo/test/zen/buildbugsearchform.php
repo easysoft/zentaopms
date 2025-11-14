@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildBugSearchForm();
 timeout=0
-cid=0
+cid=18123
 
 - 步骤1：正常情况属性result @success
 - 步骤2：带分支产品属性branchRemoved @0

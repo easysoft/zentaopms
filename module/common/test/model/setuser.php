@@ -5,7 +5,7 @@
 
 title=测试 commonModel::setUser();
 timeout=0
-cid=0
+cid=15714
 
 - 测试步骤1：无session用户且允许访客访问时创建guest用户
  - 属性account @guest

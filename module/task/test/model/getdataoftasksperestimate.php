@@ -10,7 +10,7 @@ zenData('task')->loadYaml('task')->gen(30);
 
 title=taskModel->getDataOfTasksPerEstimate();
 timeout=0
-cid=1
+cid=18798
 
 - 按预计工时统计的数量 @11
 - 统计预计工时为1的任务数量

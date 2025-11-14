@@ -5,7 +5,7 @@
 
 title=测试 screenModel::processMetricFilter();
 timeout=0
-cid=0
+cid=18278
 
 - 执行screenTest模块的processMetricFilterTest方法，参数是array 属性dateBegin @2021-01-01
 - 执行screenTest模块的processMetricFilterTest方法，参数是array 属性scope @1

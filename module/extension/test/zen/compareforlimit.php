@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::compareForLimit();
 timeout=0
-cid=0
+cid=16483
 
 - 执行extensionTest模块的compareForLimitTest方法，参数是'1.5.0', '', 'between'  @1
 - 执行extensionTest模块的compareForLimitTest方法，参数是'2.0.0', 'all', 'between'  @1

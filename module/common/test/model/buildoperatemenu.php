@@ -5,7 +5,7 @@
 
 title=测试 commonModel::buildOperateMenu();
 timeout=0
-cid=0
+cid=15648
 
 - 步骤1：验证方法存在 @1
 - 步骤2：验证方法为公共方法 @1

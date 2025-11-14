@@ -5,7 +5,7 @@
 
 title=测试 markModel::getMarks();
 timeout=0
-cid=0
+cid=17043
 
 - 执行markTest模块的getMarksTest方法，参数是$objectsWithMarks, 'story', 'view'  @2
 - 执行markTest模块的getMarksTest方法，参数是$emptyObjects, 'story', 'view'  @0

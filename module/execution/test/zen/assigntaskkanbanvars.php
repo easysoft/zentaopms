@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignTaskKanbanVars();
 timeout=0
-cid=0
+cid=16407
 
 - 步骤1：正常情况第admin条的realname属性 @admin
 - 步骤2：空execution对象 @看板

@@ -38,7 +38,7 @@ $tester->dao->insert(TABLE_PROJECT)->data(array(
 
 title=测试 programModel::setMenu();
 timeout=0
-cid=0
+cid=17709
 
 - 执行programTest模块的setMenuTest方法，参数是1  @1
 - 执行programTest模块的setMenuTest方法  @1

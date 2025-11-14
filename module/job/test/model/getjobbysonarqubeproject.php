@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getJobBySonarqubeProject();
 timeout=0
-cid=0
+cid=16842
 
 - 执行job模块的getJobBySonarqubeProjectTest方法，参数是2, array 属性zentaopms @10
 - 执行job模块的getJobBySonarqubeProjectTest方法，参数是999, array  @0

@@ -5,7 +5,7 @@
 
 title=测试 transferModel::initWorkflowFieldList();
 timeout=0
-cid=0
+cid=19326
 
 - 执行transferTest模块的initWorkflowFieldListTest方法，参数是'', array  @0
 - 执行transferTest模块的initWorkflowFieldListTest方法，参数是'story', array  @0

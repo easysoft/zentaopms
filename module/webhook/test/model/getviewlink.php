@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getViewLink();
 timeout=0
-cid=0
+cid=19701
 
 - 执行webhookTest模块的getViewLinkTest方法，参数是'product', 1  @product-view-1.html
 - 执行webhookTest模块的getViewLinkTest方法，参数是'case', 1  @testcase-view-1.html

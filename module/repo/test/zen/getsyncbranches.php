@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getSyncBranches();
 timeout=0
-cid=0
+cid=18146
 
 - 执行repoTest模块的getSyncBranchesTest方法，参数是$svnRepo, $branchID1, array  @0
 - 执行repoTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID2, array  @0

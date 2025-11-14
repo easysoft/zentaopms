@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->doupdate();
-cid=0
+cid=17535
 
 - 执行product模块的doUpdateTest方法，参数是$data, $productID, $programID
  - 属性program @1

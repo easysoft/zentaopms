@@ -5,7 +5,7 @@
 
 title=测试 gitModel::setRepos();
 timeout=0
-cid=0
+cid=16556
 
 - 执行gitTest模块的setReposTest方法 属性result @1
 - 执行gitTest模块的setReposTest方法 属性count @6

@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->create();
 timeout=0
-cid=1
+cid=16837
 
 - 测试创建job name为空的情况第name条的0属性 @『流水线名称』不能为空。
 - 测试创建job engine为空的情况第engine条的0属性 @『引擎』不能为空。

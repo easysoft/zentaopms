@@ -4,7 +4,7 @@
 /**
 
 title=测试 projectModel::checkPriv;
-cid=0
+cid=17808
 
 - 查看普通用户是否有开放项目的权限 @1
 - 查看项目创建用户是否有私有项目的权限 @1

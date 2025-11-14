@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 /**
 
 title=bugModel->batchAppendDelayedDays();
-cid=1
+cid=15413
 
 - 检查产品1  中的bug延期天数属性delay @7,1,9
 - 检查产品7  中的bug延期天数属性delay @11,5,13

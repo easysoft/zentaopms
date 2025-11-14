@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(5);
 
 title=测试 kanbanModel->restoreCard();
 timeout=0
-cid=1
+cid=16954
 
 - 还原卡片1
  - 属性id @1

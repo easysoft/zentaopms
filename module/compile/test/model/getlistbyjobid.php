@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getListByJobID();
 timeout=0
-cid=0
+cid=15749
 
 - 步骤1：正常jobID查询第2条的name属性 @构建2
 - 步骤2：不存在的jobID @0

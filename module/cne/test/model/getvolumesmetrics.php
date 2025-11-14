@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getVolumesMetrics();
 timeout=0
-cid=0
+cid=15624
 
 - 步骤1：传入null实例获取卷指标
  - 属性limit @0

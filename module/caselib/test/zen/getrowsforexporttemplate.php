@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getRowsForExportTemplate();
 timeout=0
-cid=0
+cid=15550
 
 - 步骤1:传入2个模块和num=1,验证返回的行数应为2 @2
 - 步骤2:传入3个模块和num=2,验证返回的行数应为6 @6

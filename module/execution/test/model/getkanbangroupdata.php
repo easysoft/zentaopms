@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getKanbanGroupData();
 timeout=0
-cid=0
+cid=16320
 
 - 执行executionTest模块的getKanbanGroupDataTest方法，参数是array  @2
 - 执行executionTest模块的getKanbanGroupDataTest方法，参数是$stories, $tasks, $bugs, 'story'  @12

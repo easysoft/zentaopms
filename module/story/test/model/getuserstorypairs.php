@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getUserStoryPairs();
 timeout=0
-cid=0
+cid=18567
 
 - 获取指派给 user2 的需求数量，每页10条 @10
 - 获取指派给 user2 的用户需求，每页20条 @20

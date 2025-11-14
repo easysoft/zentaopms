@@ -13,7 +13,7 @@ zenData('kanbanlane')->gen(0);
 
 title=测试 kanbanModel->createRDKanban();
 timeout=0
-cid=1
+cid=16897
 
 - 测试创建执行101的执行看板 @1,4,38
 

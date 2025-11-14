@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getLinkedBranchesAndProjects();
-cid=0
+cid=18638
 
 - 不传入需求，检查关联的分支。 @0
 - 不传入需求，检查关联的项目。 @0

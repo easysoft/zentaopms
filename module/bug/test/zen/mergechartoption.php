@@ -5,7 +5,7 @@
 
 title=测试 bugZen::mergeChartOption();
 timeout=0
-cid=0
+cid=15463
 
 - 执行bugTest模块的mergeChartOptionTest方法，参数是'bugsPerModule', 'default' 第graph条的caption属性 @模块Bug数量
 - 执行bugTest模块的mergeChartOptionTest方法，参数是'bugsPerModule', 'default' 属性type @pie

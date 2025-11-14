@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareProject();
 timeout=0
-cid=0
+cid=17952
 
 - 步骤1属性team @Test Project 1
 - 步骤2属性team @Test Project 2

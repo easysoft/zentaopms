@@ -5,7 +5,7 @@
 
 title=测试 customModel::hasWaterfallplusData();
 timeout=0
-cid=0
+cid=15917
 
 - 步骤1：系统中无任何项目数据 @0
 - 步骤2：系统中有非融合瀑布项目数据 @0

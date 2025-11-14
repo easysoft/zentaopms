@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printMessageBar();
 timeout=0
-cid=0
+cid=15698
 
 - 步骤1：验证printMessageBar方法存在性 @1
 - 步骤2：验证printMessageBar是静态方法 @1

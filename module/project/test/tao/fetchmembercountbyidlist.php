@@ -30,7 +30,7 @@ zenData('user')->gen(10);
 
 title=测试 projectModel::fetchMemberCountByIdList();
 timeout=0
-cid=1
+cid=17903
 
 - 查询没有项目ID的情况 @0
 - 查询错误ID的情况 @0

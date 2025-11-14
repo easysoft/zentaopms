@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getFormOptionsForSingleProduct();
 timeout=0
-cid=0
+cid=18688
 
 - 执行storyTest模块的getFormOptionsForSingleProductTest方法，参数是1, 0, $normalProduct 属性branchProduct @1
 - 执行storyTest模块的getFormOptionsForSingleProductTest方法，参数是4, 0, $branchProduct 属性branchProduct @1

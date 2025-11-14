@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 searchTao::decode();
 timeout=0
-cid=1
+cid=18325
 
 - 步骤1：测试空字符串 @~~
 - 步骤2：测试不在字典中的字符串 @hello

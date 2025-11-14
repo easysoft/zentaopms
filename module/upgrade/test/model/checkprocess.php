@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->checkProcess();
-cid=1
+cid=19502
 
 - 测试版本 18.1 管理模式 new 的流程 @0
 - 测试版本 18.1 管理模式 classic 的流程 @0

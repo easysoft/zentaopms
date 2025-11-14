@@ -5,7 +5,7 @@
 
 title=getDateTypeByCode
 timeout=0
-cid=1
+cid=17093
 
 - 测试度量项count_of_bug的日期类型 @nodate
 - 测试度量项count_of_annual_created_product的日期类型 @year

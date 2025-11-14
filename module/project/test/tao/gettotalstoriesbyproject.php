@@ -28,7 +28,7 @@ zenData('projectstory')->gen(10);
 /**
 
 title=测试 projectModel::getTotalStoriesByProject;
-cid=1
+cid=17913
 
 - 不传入项目ID列表，获取需求数量 @0
 - 传入错误的ID列表，获取需求数量 @0

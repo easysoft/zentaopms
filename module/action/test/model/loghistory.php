@@ -5,7 +5,7 @@
 
 title=测试 actionModel::logHistory();
 timeout=0
-cid=0
+cid=14918
 
 - 执行actionTest模块的logHistoryTest方法，参数是$actionIDList[0], $changes1
  - 第0条的field属性 @name

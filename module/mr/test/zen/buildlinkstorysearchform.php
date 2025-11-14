@@ -5,7 +5,7 @@
 
 title=测试 mrZen::buildLinkStorySearchForm();
 timeout=0
-cid=0
+cid=17263
 
 - 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性actionURL @buildlinkstorysearchform.php?m=mr&f=linkStory&MRID=1&repoID=1&browseType=bySearch&param=myQueryID&orderBy=id_desc
 - 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 5 属性queryID @5

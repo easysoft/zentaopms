@@ -5,7 +5,7 @@
 
 title=测试 devModel::sortMenus();
 timeout=0
-cid=0
+cid=16020
 
 - 执行devTester模块的sortMenusTest方法，参数是array  @0
 - 执行devTester模块的sortMenusTest方法，参数是$menuWithoutOrder  @home,product,project,

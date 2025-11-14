@@ -18,7 +18,7 @@ $result->gen(10);
 /**
 
 title=bugModel->getBugInfoFromResult();
-cid=1
+cid=15356
 
 - 测试获取runID为0 caseID为2的bug @0
 - 测试获取runID为0 caseID为6的bug @0

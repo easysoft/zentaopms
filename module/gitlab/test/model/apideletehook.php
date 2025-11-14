@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 gitlabModel::apiDeleteHook();
 timeout=0
-cid=1
+cid=16588
 
 - 使用空的projectID删除gitlab群组属性message @404 Project Not Found
 - 使用空的hookID删除gitlab群组属性message @404 Not found

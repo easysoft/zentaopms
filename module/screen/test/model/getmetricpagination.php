@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getMetricPagination();
 timeout=0
-cid=0
+cid=18248
 
 - 执行screenTest模块的getMetricPaginationTest方法，参数是null 
  - 属性index @1

@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 searchModel::deleteQuery();
 timeout=0
-cid=0
+cid=18298
 
 - 步骤1：管理员删除存在的查询ID @true
 - 步骤2：管理员删除不存在的查询ID @true

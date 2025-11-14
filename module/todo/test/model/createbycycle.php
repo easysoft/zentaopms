@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试 todoModel->createByCycle();
 timeout=0
-cid=1
+cid=19252
 
 - 周期性待办ID为1的待办属性
  - 第0条的id属性 @1

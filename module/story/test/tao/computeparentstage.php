@@ -46,7 +46,7 @@ $release->gen(5);
 
 title=测试 storyModel->setStage();
 timeout=0
-cid=1
+cid=18613
 
 - 查看父需求初始阶段属性stage @wait
 - 查看父需求初始阶段属性stage @planned

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignForEditLibCase();
 timeout=0
-cid=0
+cid=19069
 
 - 步骤1：正常情况属性executed @1
 - 步骤2：检查isLibCase属性isLibCase @1

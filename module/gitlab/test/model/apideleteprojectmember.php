@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiDeleteProjectMember();
 timeout=0
-cid=1
+cid=16592
 
 - 使用空的projectID删除gitlab群组属性message @404 Project Not Found
 - 使用空的memberID删除gitlab群组属性message @404 Not found

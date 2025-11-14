@@ -5,7 +5,7 @@
 
 title=测试 screenModel::filterMetricData();
 timeout=0
-cid=0
+cid=18223
 
 - 步骤1：空过滤器，返回原始数据数量 @3
 - 步骤2：时间范围过滤，检查第一个元素的scope字段第0条的scope属性 @project1

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getRelationByCommit();
 timeout=0
-cid=0
+cid=18074
 
 - 步骤1：根据代码库ID和提交版本获取任务关联信息第0条的type属性 @task
 - 步骤2：根据代码库ID和提交版本获取缺陷关联信息第0条的id属性 @4

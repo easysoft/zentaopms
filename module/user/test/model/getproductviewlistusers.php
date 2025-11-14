@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getProductViewListUsers();
-cid=0
+cid=19625
 
 - 获取ID为11的产品关联的用户。
  - 属性po1 @po1

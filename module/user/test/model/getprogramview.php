@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProgramView();
 timeout=0
-cid=0
+cid=19628
 
 - 执行userTest模块的getProgramViewTest方法，参数是'admin', $allPrograms, $manageObjectsAdmin, array  @1,2,3,4,5,6,7,8
 

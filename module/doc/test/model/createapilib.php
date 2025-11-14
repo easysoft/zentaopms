@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->createApiLib();
-cid=1
+cid=16059
 
 - 新建公有接口库
  - 属性type @api

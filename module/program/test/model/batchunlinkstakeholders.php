@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 programModel::batchUnlinkStakeholders();
 timeout=0
-cid=1
+cid=17673
 
 - 测试批量解除项目集1与干系人的关联 @1
 - 测试批量解除项目集1与干系人的关联 @1

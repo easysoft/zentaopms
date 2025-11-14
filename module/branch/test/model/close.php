@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->close();
 timeout=0
-cid=1
+cid=15322
 
 */
 $branchID = array(1, 2, 3, 4, 5, 6);

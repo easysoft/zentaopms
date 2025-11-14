@@ -5,7 +5,7 @@
 
 title=getMetricRecordDateField
 timeout=0
-cid=1
+cid=0
 
 - 测试度量项count_of_bug的日期类型 @0
 - 测试度量项count_of_annual_created_product的日期类型 @year

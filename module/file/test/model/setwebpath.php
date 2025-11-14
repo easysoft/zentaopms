@@ -5,7 +5,7 @@
 
 title=测试 fileModel::setWebPath();
 timeout=0
-cid=0
+cid=16536
 
 - 测试默认公司ID（1）的webPath设置 @/data/upload/1/
 - 测试自定义公司ID（5）的webPath设置 @/data/upload/5/

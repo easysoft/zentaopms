@@ -5,7 +5,7 @@
 
 title=测试 docZen::buildSearchFormForShowFiles();
 timeout=0
-cid=0
+cid=16186
 
 - 步骤1:测试product类型的搜索表单配置
  - 属性module @productDocFile

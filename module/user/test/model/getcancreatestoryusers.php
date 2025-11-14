@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getCanCreateStoryUsers();
-cid=0
+cid=19606
 
 - 有创建需求权限的用户数为 4。 @4
 - admin 用户是超级管理员，有创建需求权限。属性admin @A:admin

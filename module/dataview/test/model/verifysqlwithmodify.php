@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::verifySqlWithModify();
 timeout=0
-cid=0
+cid=15961
 
 - 步骤1：有效SELECT语句 @1
 - 步骤2：空字符串属性result @fail

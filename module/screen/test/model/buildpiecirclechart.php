@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildPieCircleChart();
 timeout=0
-cid=0
+cid=18216
 
 - 测试步骤1：无settings时的默认配置属性key @PieCircle
 - 测试步骤2：组件状态验证属性status @normal

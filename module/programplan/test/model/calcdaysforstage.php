@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 programplanModel->calcDaysForStage();
 timeout=0
-cid=0
+cid=17735
 
 - 测试计算2025-01-01到2025-01-01期间的工作日。 @1
 - 测试计算2025-01-01到2025-01-05期间的工作日。 @4

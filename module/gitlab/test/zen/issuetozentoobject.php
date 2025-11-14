@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::issueToZentaoObject();
 timeout=0
-cid=0
+cid=16677
 
 - 测试场景1
  - 属性name @Implement User Login

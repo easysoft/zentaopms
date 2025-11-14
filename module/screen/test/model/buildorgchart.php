@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildOrgChart();
 timeout=0
-cid=0
+cid=18214
 
 - 步骤1：有效对象但chart->settings为空 @0
 - 步骤2：有效对象且chart->settings不为空 @0

@@ -5,7 +5,7 @@
 
 title=测试 biModel::query();
 timeout=0
-cid=0
+cid=15211
 
 - 步骤1：正常SQL查询 @0
 - 步骤2：空SQL查询 @1

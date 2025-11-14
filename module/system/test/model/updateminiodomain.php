@@ -5,7 +5,7 @@
 
 title=测试 systemModel::updateMinioDomain();
 timeout=0
-cid=0
+cid=18750
 
 - 步骤1：有自定义域名时更新Minio域名配置 @0
 - 步骤2：使用环境变量APP_DOMAIN更新配置 @0

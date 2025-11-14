@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testcaseModel->getSceneGroups();
 timeout=0
-cid=1
+cid=18997
 
 - 产品 0、分支空、模块 0、正序，场景分组为空。 @0
 - 产品 3、分支空、模块 0、正序，场景分组为空。 @0

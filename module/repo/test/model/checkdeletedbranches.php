@@ -5,7 +5,7 @@
 
 title=测试 repoModel::checkDeletedBranches();
 timeout=0
-cid=0
+cid=18031
 
 - 步骤1：正常删除已删除的分支数据
  - 属性repoHistoryCount @4

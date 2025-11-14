@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 caselibModel->delete();
 timeout=0
-cid=1
+cid=15528
 
 - 测试删除之后用例库 1 deleted值是否为1属性deleted @1
 - 测试删除之后用例库 2 deleted值是否为1属性deleted @1

@@ -4,7 +4,7 @@
 
 title=测试 productplanTao->getPlanList()
 timeout=0
-cid=1
+cid=17654
 
 */
 

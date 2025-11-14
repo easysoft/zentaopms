@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 myModel->getReviewingApprovals();
 timeout=0
-cid=1
+cid=17290
 
 - 测试获取排序 id_desc 的审批id。 @empty
 - 测试获取排序 id_desc 的审批是否存在。 @empty

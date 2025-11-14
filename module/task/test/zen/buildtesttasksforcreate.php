@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTestTasksForCreate();
 timeout=0
-cid=0
+cid=18916
 
 - 步骤1：selectTestStory为off时返回空数组 @0
 - 步骤2：正常创建单个测试任务 @1

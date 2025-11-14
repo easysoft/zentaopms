@@ -5,7 +5,7 @@
 
 title=测试 projectZen::checkProductAndBranch();
 timeout=0
-cid=0
+cid=17935
 
 - 执行projectzenTest模块的checkProductAndBranchTest方法，参数是$project, $rawdata  @1
 - 执行projectzenTest模块的checkProductAndBranchTest方法，参数是$project, $rawdata 属性products[0] @最少关联一个产品

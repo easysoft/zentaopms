@@ -5,7 +5,7 @@
 
 title=测试 repoModel::saveCommit();
 timeout=0
-cid=0
+cid=18094
 
 - 步骤1：正常Git提交保存 @3
 - 步骤2：SVN提交数量验证 @2

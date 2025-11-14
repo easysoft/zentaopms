@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 storeModel::getCategories();
 timeout=0
-cid=0
+cid=18454
 
 - 执行store模块的getCategoriesTest方法，参数是'normal'  @数据库 项目管理 企业IM 持续集成 企业管理 DevOps 代码检查 文档系统 网盘服务 安全 搜索引擎 网站分析 内容管理 人工智能
 - 执行store模块的getCategoriesTest方法，参数是'structure'

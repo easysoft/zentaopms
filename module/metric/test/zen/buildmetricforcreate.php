@@ -5,7 +5,7 @@
 
 title=测试 metricZen::buildMetricForCreate();
 timeout=0
-cid=0
+cid=17180
 
 - 执行metricZenTest模块的buildMetricForCreateZenTest方法  @1
 - 执行metricZenTest模块的buildMetricForCreateZenTest方法 属性createdBy @admin

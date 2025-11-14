@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetUsers();
 timeout=0
-cid=0
+cid=16689
 
 - 错误的服务器ID @0
 - 正确的服务器ID

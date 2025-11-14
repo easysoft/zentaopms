@@ -5,7 +5,7 @@
 
 title=测试 docTao::filterDeletedDocs();
 timeout=0
-cid=0
+cid=16168
 
 - 执行docTest模块的filterDeletedDocsTest方法，参数是$normalDocs 第1条的title属性 @Document1
 - 执行docTest模块的filterDeletedDocsTest方法，参数是$mixedDocs 第1条的title属性 @Document1

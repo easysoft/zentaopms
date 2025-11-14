@@ -5,7 +5,7 @@
 
 title=测试 productZen::getModuleId();
 timeout=0
-cid=0
+cid=17588
 
 - 测试步骤1:browseType为bymodule时,返回param值 @123
 

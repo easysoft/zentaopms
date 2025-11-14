@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByReviewedBy();
 timeout=0
-cid=0
+cid=18508
 
 - 步骤1：正常情况 - 查询admin审核过的故事数量 @3
 - 步骤2：边界值 - 查询不存在用户审核的故事 @0

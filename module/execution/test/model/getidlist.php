@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getIdListTest();
 timeout=0
-cid=1
+cid=16316
 
 - 敏捷项目下执行id查询属性5 @5
 - 瀑布项目下执行id查询属性7 @7

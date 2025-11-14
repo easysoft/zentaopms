@@ -5,7 +5,7 @@
 
 title=测试 devModel::getSecondMenus();
 timeout=0
-cid=0
+cid=16010
 
 - 测试步骤1：空菜单参数情况 @0
 - 测试步骤2：非project菜单情况 @0

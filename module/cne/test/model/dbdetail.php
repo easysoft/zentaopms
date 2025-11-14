@@ -5,7 +5,7 @@
 
 title=测试 cneModel::dbDetail();
 timeout=0
-cid=0
+cid=15609
 
 - 步骤1：测试空参数边界值 @0
 - 步骤2：测试部分参数为空的情况 @0

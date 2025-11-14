@@ -5,7 +5,7 @@
 
 title=测试productModel->buildSearchForm();
 timeout=0
-cid=0
+cid=17475
 
 - 正确的执行，正确的queryID @1
 - 构建后的搜索数据属性module @product

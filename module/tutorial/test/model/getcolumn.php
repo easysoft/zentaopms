@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getColumn();
 timeout=0
-cid=0
+cid=19415
 
 - 步骤1:验证返回值类型 @object
 - 步骤2:验证id属性属性id @1

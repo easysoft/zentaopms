@@ -5,7 +5,7 @@
 
 title=测试 actionModel::buildTrashSearchForm();
 timeout=0
-cid=0
+cid=14879
 
 - 步骤1：正常情况属性actionURL @action-trash-browseTrash-all-byQuery-123.html
 - 步骤2：queryID为0边界值属性queryID @0

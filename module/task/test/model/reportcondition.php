@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->reportCondition();
 timeout=0
-cid=1
+cid=18842
 
 - 测试没有session条件 @1=1
 - 测试负责的where查询条件 @id in (execution  = '4' AND  status IN ('','wait','doing','done','pause','cancel') AND  deleted  = '0')

@@ -77,7 +77,7 @@ su('admin');
 
 title=测试executionModel->buildStorySearchForm();
 timeout=0
-cid=1
+cid=16274
 
 - 正确的执行，正确的queryID @1
 - 错误的执行，正确的queryID @0

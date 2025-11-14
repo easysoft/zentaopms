@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::getHistoryMessages();
 timeout=0
-cid=0
+cid=15084
 
 - 步骤1：查询不存在消息的应用ID @0
 - 先插入测试数据 @1

@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::setProject();
 timeout=0
-cid=0
+cid=16667
 
 - 步骤1：设置正常项目对象属性name @test_project
 - 步骤2：设置包含完整属性的项目对象

@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getMyDocListBySearch();
-cid=1
+cid=16112
 
 - 搜索queryID=0、没有可查看的任何文档/文档库时，按照id降序排列的文档信息 @0
 - 搜索queryID=0、没有可查看的任何文档/文档库时，按照id升序排列的文档信息 @0

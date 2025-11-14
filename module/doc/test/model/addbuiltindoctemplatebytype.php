@@ -5,7 +5,7 @@
 
 title=测试 docModel->addBuiltInDocTemplateByType();
 timeout=0
-cid=1
+cid=16038
 
 - 添加内置项目计划模板 @1
 - 添加内置软件需求说明书模板 @1

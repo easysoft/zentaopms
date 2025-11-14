@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::initCase();
 timeout=0
-cid=0
+cid=19203
 
 - 执行testtaskTest模块的initCaseTest方法，参数是1, 'Test Case Title', '2024-01-01 10:00:00', 'no', 'phpunit' 属性product @1
 - 执行testtaskTest模块的initCaseTest方法，参数是2, 'Another Test Case', '2024-01-02 11:00:00', 'yes', 'jest' 属性type @unit

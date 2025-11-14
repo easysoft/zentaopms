@@ -5,7 +5,7 @@
 
 title=测试 gitModel::printLog();
 timeout=0
-cid=0
+cid=16550
 
 - 测试步骤1：正常字符串日志输出 @1
 - 测试步骤2：空字符串日志输出 @1

@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testcaseModel->buildSceneBaseOnCase();
 timeout=0
-cid=1
+cid=19029
 
 - 测试构建场景 1 rule1 rule2 用例 空 的用例信息 @1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene
 

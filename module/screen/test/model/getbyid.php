@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getByID();
 timeout=0
-cid=0
+cid=18238
 
 - 步骤1：查询不存在的screen ID @0
 - 步骤2：查询存在的screen ID且不加载chartData

@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareFieldSettingFormData();
 timeout=0
-cid=0
+cid=15205
 
 - 执行biTest模块的prepareFieldSettingFormDataTest方法 
  - 第0条的key属性 @field1

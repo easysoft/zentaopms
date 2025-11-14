@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getObjectsByDoc();
-cid=1
+cid=16116
 
 - 测试传入空的文档ID数组时，获取的项目数据 @0
 - 测试传入空的文档ID数组时，获取的执行数据 @0

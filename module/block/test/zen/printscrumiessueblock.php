@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printScrumIssueBlock();
 timeout=0
-cid=0
+cid=15286
 
 - 步骤1:测试正常情况下传入合法type参数和count参数
  - 属性type @active

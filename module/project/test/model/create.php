@@ -16,7 +16,7 @@ $program->gen(1);
 
 title=测试 projectModel->create();
 timeout=0
-cid=1
+cid=17810
 
 - 执行projectClass模块的create方法，参数是$normalProject, $postData 属性name @测试新增项目一
 - 执行projectClass模块的create方法，参数是$emptyNameProject, $postData 第message[name]条的0属性 @『项目名称』不能为空。

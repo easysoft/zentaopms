@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildSearchFormForTrack();
 timeout=0
-cid=0
+cid=17568
 
 - 执行productTest模块的buildSearchFormForTrackTest方法，参数是1, '', 0, 'all', 0, 'story'
  - 属性productID @1

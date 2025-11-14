@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildEffortForStart();
 timeout=0
-cid=0
+cid=18902
 
 - 步骤1：普通任务
  - 属性task @1

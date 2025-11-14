@@ -5,7 +5,7 @@
 
 title=测试 adminModel::setSwitcher();
 timeout=0
-cid=0
+cid=14984
 
 - 步骤1：正常情况，system菜单 @success
 - 步骤2：正常情况，company菜单 @success

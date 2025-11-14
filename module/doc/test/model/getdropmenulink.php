@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getDropMenuLink();
-cid=1
+cid=16088
 
 - 获取type=all, objectID=0, module=doc, method=index的链接 @0
 - 获取type=project, objectID=0, module=doc, method=index的链接 @getdropmenulink.php?m=doc&f=ajaxGetDropMenu&objectType=project&objectID=0&module=doc&method=index

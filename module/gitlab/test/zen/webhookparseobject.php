@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::webhookParseObject();
 timeout=0
-cid=0
+cid=16681
 
 - 测试解析带bug标签的labels
  - 属性type @bug

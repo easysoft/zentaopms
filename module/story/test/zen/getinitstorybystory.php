@@ -5,7 +5,7 @@
 
 title=- 属性color @
 timeout=0
-cid=3
+cid=18690
 
 - 步骤1：传入有效需求ID验证数据复制
  - 属性title @软件需求1

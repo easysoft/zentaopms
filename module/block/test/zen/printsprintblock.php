@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSprintBlock();
 timeout=0
-cid=0
+cid=15303
 
 - 步骤1:测试默认block对象生成groups数据 @2
 - 步骤2:测试返回结果包含cards组属性type @cards

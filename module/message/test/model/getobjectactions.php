@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 messageModel->getObjectActions();
-cid=1
+cid=17053
 
 - 查询objectType为product的action是opened的lab标签第product条的opened属性 @创建
 - 查询objectType为story的action是frombug的lab标签第story条的frombug属性 @转研发需求

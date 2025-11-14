@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::getNotifyList();
 timeout=0
-cid=0
+cid=17994
 
 - 执行releaseTest模块的getNotifyListTest方法，参数是1  @admin
 - 执行releaseTest模块的getNotifyListTest方法，参数是2  @admin

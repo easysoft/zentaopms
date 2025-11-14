@@ -5,7 +5,7 @@
 
 title=测试 fileModel->checkPriv();
 timeout=0
-cid=0
+cid=16494
 
 - 查看超级管理员是否有下载附件1的权限 @1
 - 查看超级管理员是否有下载附件2的权限 @1

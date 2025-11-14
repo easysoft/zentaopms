@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getPairs();
 timeout=0
-cid=0
+cid=16654
 
 - 步骤1：正常获取GitLab pairs，验证返回类型 @array
 - 步骤2：验证ID为1的GitLab服务器名称属性1 @GitLab服务器

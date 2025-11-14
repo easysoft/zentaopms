@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::processStepForExport();
 timeout=0
-cid=0
+cid=19105
 
 - 执行testcaseTest模块的processStepForExportTest方法 属性real @1. 实际结果1
 - 执行testcaseTest模块的processStepForExportTest方法 属性real @1.

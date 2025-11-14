@@ -5,7 +5,7 @@
 
 title=测试 transferModel::createTmpFile();
 timeout=0
-cid=0
+cid=19311
 
 - 执行transferTest模块的createTmpFileTest方法，参数是array  @Success
 - 执行transferTest模块的createTmpFileTest方法，参数是array  @Success

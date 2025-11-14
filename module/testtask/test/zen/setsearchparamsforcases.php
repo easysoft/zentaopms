@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::setSearchParamsForCases();
 timeout=0
-cid=0
+cid=19243
 
 - 步骤1：qa应用下正常产品和测试单设置搜索参数 @1
 - 步骤2：project应用下设置搜索参数 @1

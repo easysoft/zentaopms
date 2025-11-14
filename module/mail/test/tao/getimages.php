@@ -5,7 +5,7 @@
 
 title=测试 mailTao::getImages();
 timeout=0
-cid=0
+cid=17030
 
 - 执行mailModel模块的getImages方法，参数是$body1  @1
 - 执行mailModel模块的getImages方法，参数是$body2  @1

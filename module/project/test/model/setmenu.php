@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 projectModel::setMenu();
 timeout=0
-cid=1
+cid=17867
 
 - 项目不存在的情况 @迭代
 - 敏捷项目 @迭代

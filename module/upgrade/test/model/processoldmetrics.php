@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->processOldMetrics();
-cid=1
+cid=19546
 
 - 检查scope数据是否覆盖成功 @1
 - 检查purpose数据是否覆盖成功 @1

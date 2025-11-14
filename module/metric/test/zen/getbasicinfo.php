@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getBasicInfo();
 timeout=0
-cid=0
+cid=17188
 
 - 步骤1：获取完整基本信息字段数量 @9
 - 步骤2：获取旧版度量项指定字段信息数量（含自动添加字段） @5

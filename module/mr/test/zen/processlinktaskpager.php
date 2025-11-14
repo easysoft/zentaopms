@@ -5,7 +5,7 @@
 
 title=测试 mrZen::processLinkTaskPager();
 timeout=0
-cid=0
+cid=17269
 
 - 执行mrTest模块的processLinkTaskPagerTest方法，参数是25, 10, 1, $tasks25 属性taskCount @10
 - 执行mrTest模块的processLinkTaskPagerTest方法，参数是25, 10, 2, $tasks25 属性taskCount @10

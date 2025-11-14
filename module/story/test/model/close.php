@@ -17,7 +17,7 @@ zenData('product')->gen(5);
 
 title=测试 storyModel->close();
 timeout=0
-cid=0
+cid=18483
 
 - 关闭一个用户需求，查看状态
  - 属性status @closed

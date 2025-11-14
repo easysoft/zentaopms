@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::getBugList();
 timeout=0
-cid=0
+cid=17987
 
 - 步骤1：测试传入空bugIdList @0
 - 步骤2：测试传入有效bugIdList获取bug列表第4条的title属性 @Bug5

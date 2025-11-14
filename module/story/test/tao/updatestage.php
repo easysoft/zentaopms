@@ -5,7 +5,7 @@
 
 title=测试 storyModel->setStageToClosed();
 timeout=0
-cid=0
+cid=18663
 
 - 不传入任何数据。 @0
 - 传入不是多分支产品的需求，检查需求的阶段。属性stage @developed

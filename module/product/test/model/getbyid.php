@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getById();
-cid=0
+cid=17486
 
 - 测试获取产品1的信息
  - 属性name @正常产品1

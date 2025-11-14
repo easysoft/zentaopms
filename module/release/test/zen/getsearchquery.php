@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::getSearchQuery();
 timeout=0
-cid=0
+cid=18027
 
 - 执行releaseTest模块的getSearchQueryTest方法  @ 1 = 1
 - 执行releaseTest模块的getSearchQueryTest方法，参数是1  @(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'

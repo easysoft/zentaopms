@@ -15,7 +15,7 @@ zenData('usergroup')->gen(0);
 /**
 
 title=测试 personnelModel->updateWhitelist();
-cid=1
+cid=17340
 pid=1
 
 */

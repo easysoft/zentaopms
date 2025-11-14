@@ -9,7 +9,7 @@ zenData('project')->loadYaml('execution')->gen(200);
 
 title=测试 commonModel->syncProjectStatus();
 timeout=0
-cid=1
+cid=15722
 
 - 执行$execution1属性status @wait
 - 执行$execution2属性status @doing

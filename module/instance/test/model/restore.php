@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::restore();
 timeout=0
-cid=0
+cid=16813
 
 - 步骤1：正常运行实例还原（CNE接口返回失败） @0
 - 步骤2：已停止实例还原（CNE接口返回失败） @0

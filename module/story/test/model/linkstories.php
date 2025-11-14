@@ -19,7 +19,7 @@ $relation->gen(0);
 
 title=测试 storyModel->linkStories();
 timeout=0
-cid=1
+cid=18572
 
 - 查看关联前的关联关系数量 @0
 - 查看关联后的关联关系数量 @4

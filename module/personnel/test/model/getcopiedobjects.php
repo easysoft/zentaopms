@@ -14,7 +14,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getCopiedObjects();
-cid=1
+cid=17327
 pid=1
 
 */

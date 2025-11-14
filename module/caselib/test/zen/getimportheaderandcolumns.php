@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getImportHeaderAndColumns();
 timeout=0
-cid=0
+cid=15549
 
 - 执行caselibTest模块的getImportHeaderAndColumnsTest方法，参数是$normalCsvFile, $testFields, 'header_count'  @4
 - 执行caselibTest模块的getImportHeaderAndColumnsTest方法，参数是$emptyCsvFile, $testFields, 'is_empty'  @1

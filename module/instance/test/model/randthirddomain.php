@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::randThirdDomain();
 timeout=0
-cid=0
+cid=16812
 
 - 步骤1：测试默认长度4的域名生成 @4
 - 步骤2：测试长度为2的短域名生成 @2

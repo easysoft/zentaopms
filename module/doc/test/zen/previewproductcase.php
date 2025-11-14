@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewProductCase();
 timeout=0
-cid=0
+cid=16203
 
 - 步骤1:setting视图下customSearch条件预览产品用例列表,pri=1 @3
 - 步骤2:setting视图下customSearch条件预览产品用例列表,pri=2 @2

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createMiniProgram();
 timeout=0
-cid=0
+cid=15010
 
 - 步骤1：正常创建小程序 @1
 - 步骤2：创建带自定义字段的小程序 @2

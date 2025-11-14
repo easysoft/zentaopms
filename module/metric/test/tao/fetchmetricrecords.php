@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchMetricRecords();
 timeout=0
-cid=0
+cid=17166
 
 - 执行metricTest模块的fetchMetricRecordsTest方法，参数是'storyScale', array  @0
 - 执行metricTest模块的fetchMetricRecordsTest方法，参数是'taskProgress', array  @0

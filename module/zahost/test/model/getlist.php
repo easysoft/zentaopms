@@ -5,7 +5,7 @@
 
 title=测试 zahostModel->getList();
 timeout=0
-cid=1
+cid=19749
 
 - 查询所有的宿主机中第一个宿主机
  - 第0条的hostID属性 @2

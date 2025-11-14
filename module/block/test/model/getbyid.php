@@ -21,7 +21,7 @@ function initData()
 
 title=测试 blockModel->getByID();
 timeout=0
-cid=1
+cid=15229
 
 - 测试获取ID为2的block的内容
  - 属性account @admin

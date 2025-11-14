@@ -5,7 +5,7 @@
 
 title=测试 fileModel::deleteByObject();
 timeout=0
-cid=0
+cid=16497
 
 - 步骤1：删除story类型且objectID为1的文件 @1
 - 步骤2：删除不存在的objectType和objectID组合 @1

@@ -5,7 +5,7 @@
 
 title=fetchModules
 timeout=0
-cid=1
+cid=17174
 
 - 获取范围为系统的分组
  - 第0条的object属性 @application

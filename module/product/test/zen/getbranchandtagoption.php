@@ -5,7 +5,7 @@
 
 title=测试 productZen::getBranchAndTagOption();
 timeout=0
-cid=0
+cid=17573
 
 - 测试产品为空且isProjectStory为true @0
 - 测试产品类型为normal @0

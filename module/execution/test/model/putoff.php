@@ -19,7 +19,7 @@ su('admin');
 /**
 
 title=测试executionModel->putoffTest();
-cid=0
+cid=16359
 
 - wait执行延期
  - 第0条的field属性 @days

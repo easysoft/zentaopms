@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->unlinkCommit();
-cid=1
+cid=15996
 
 - 测试空数据 @0
 - 测试没有关联提交的设计解除关联 @0

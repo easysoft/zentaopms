@@ -5,7 +5,7 @@
 
 title=测试 miscModel::checkOneClickPackage();
 timeout=0
-cid=0
+cid=17209
 
 - 执行miscTest模块的checkOneClickPackageTest方法  @0
 - 执行miscTest模块的checkOneClickPackageTest方法  @0

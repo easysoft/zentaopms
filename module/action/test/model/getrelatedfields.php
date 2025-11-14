@@ -27,7 +27,7 @@ zenData('productplan')->gen(1);
 
 title=测试 actionModel->getRelatedFields();
 timeout=0
-cid=1
+cid=14909
 
 - 测试获取objectType program      ojbectID 1 actionType common                 extra 1  的动态信息
  - 属性product @,0,

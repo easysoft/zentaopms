@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 productModel->getLibsOfSpace();
 timeout=0
-cid=1
+cid=16102
 
 - 获取项目ID为11的项目空间信息。
  - 第101条的type属性 @project

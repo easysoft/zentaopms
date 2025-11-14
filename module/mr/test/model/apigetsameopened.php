@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetSameOpened();
 timeout=0
-cid=0
+cid=17230
 
 - 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch
  - 属性id @36

@@ -9,7 +9,7 @@ zenData('task')->gen(2);
 
 title=测试 commonModel::diff();
 timeout=0
-cid=1
+cid=15669
 
 - 查看任务一和任务二的描述差异长度 @77
 - 查看返回的差异中001-序号的位置 @0

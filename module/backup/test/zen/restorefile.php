@@ -5,7 +5,7 @@
 
 title=测试 backupZen::restoreFile();
 timeout=0
-cid=0
+cid=15148
 
 - 测试不存在的备份文件属性result @success
 - 测试普通备份文件还原属性result @success

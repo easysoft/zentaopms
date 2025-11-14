@@ -5,7 +5,7 @@
 
 title=测试 transferZen::process4Testcase();
 timeout=0
-cid=0
+cid=19339
 
 - 执行transferTest模块的process4TestcaseTest方法，参数是'stepDesc', $testData1, 0  @312
 - 执行transferTest模块的process4TestcaseTest方法，参数是'precondition', $testData1, 0  @127

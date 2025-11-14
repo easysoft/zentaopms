@@ -5,7 +5,7 @@
 
 title=测试 holidayModel::getHolidayByAPI();
 timeout=0
-cid=0
+cid=16742
 
 - 执行holiday模块的getHolidayByAPITest方法，参数是'this year'  @11
 - 执行holiday模块的getHolidayByAPITest方法，参数是'last year'  @12

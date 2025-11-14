@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildBugView();
 timeout=0
-cid=0
+cid=17925
 
 - 步骤1:正常项目bug视图构建
  - 属性productID @1

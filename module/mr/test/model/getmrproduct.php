@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getMRProduct();
 timeout=0
-cid=0
+cid=17252
 
 - 不存在的产品 @0
 - 代码库不存在 @0

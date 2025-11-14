@@ -5,7 +5,7 @@
 
 title=测试 projectModel::leftJoinInvolvedTable();
 timeout=0
-cid=0
+cid=17862
 
 - 执行$result1 @1
 - 执行$result2 @1

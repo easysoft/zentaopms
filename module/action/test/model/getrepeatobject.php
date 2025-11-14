@@ -11,7 +11,7 @@ zenData('project')->loadYaml('execution')->gen(9);
 
 title=测试 actionModel->getRepeatObjectTest();
 timeout=0
-cid=1
+cid=14910
 
 - 测试actionID为1，table为zt_product的情况属性id @2
 - 测试actionID为1，table为zt_product的情况属性id @1

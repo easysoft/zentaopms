@@ -5,7 +5,7 @@
 
 title=测试 messageModel::getMessages();
 timeout=0
-cid=0
+cid=17051
 
 - 测试获取全部消息 @8
 - 测试获取wait状态消息 @4

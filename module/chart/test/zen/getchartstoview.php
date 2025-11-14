@@ -5,7 +5,7 @@
 
 title=测试 chartZen::getChartsToView();
 timeout=0
-cid=0
+cid=15584
 
 - 执行chartTest模块的getChartsToViewTest方法，参数是array  @0
 - 执行chartTest模块的getChartsToViewTest方法，参数是array

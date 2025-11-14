@@ -5,7 +5,7 @@
 
 title=测试 cronModel::checkChange();
 timeout=0
-cid=0
+cid=15878
 
 - 步骤1：存在lastTime为NULL且status不为stop的定时任务 @1
 - 步骤2：所有定时任务都有lastTime值 @0

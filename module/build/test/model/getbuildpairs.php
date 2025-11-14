@@ -4,7 +4,7 @@
 
 title=测试 buildModel->getBuildPairs();
 timeout=0
-cid=1
+cid=15490
 
 - 测试产品为空时，获取版本数据属性trunk @主干
 - 测试产品1-5下的版本数据属性trunk @主干

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getLanguageModel();
 timeout=0
-cid=0
+cid=15033
 
 - 执行aiTest模块的getLanguageModelTest方法，参数是1, false
  - 属性id @1

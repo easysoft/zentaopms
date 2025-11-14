@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 myModel->getRisksBySearch();
-cid=1
+cid=17300
 
 - 测试通过搜索获取 query id 0 类型 work id_desc 风险id @19,16,13,10,7,4,1
 - 测试通过搜索获取 query id 0 类型 work id_desc 风险数量 @7

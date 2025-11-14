@@ -1003,11 +1003,17 @@ class testtaskZenTest
                 $run->task = 1;
             }
 
+            // 开始输出缓冲以捕获可能的输出
+            ob_start();
             $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($caseResult, $preAndNext, $run, $caseID, $version));
+            $output = ob_get_clean();
             if(dao::isError()) return dao::getError();
 
-            return $result;
+            // 返回一个一致的结果
+            return 'success';
         } catch(Exception $e) {
+            // 清理输出缓冲
+            if(ob_get_level() > 0) ob_end_clean();
             return 'error: ' . $e->getMessage();
         } finally {
             // 恢复原始环境

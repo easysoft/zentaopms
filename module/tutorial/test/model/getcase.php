@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getCase();
 timeout=0
-cid=0
+cid=19411
 
 - 步骤1：验证用例ID属性id @1
 - 步骤2：验证用例标题属性title @Test case

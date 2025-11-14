@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->batchReview();
-cid=0
+cid=18475
 
 - 执行$review1[1]属性status @active
 - 执行$twin属性status @active

@@ -5,7 +5,7 @@
 
 title=测试 docModel->getTemplatesByType();
 timeout=0
-cid=1
+cid=16132
 
 - 获取所有模板
  - 第1条的id属性 @1

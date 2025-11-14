@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 /**
 
 title=测试 testcaseModel->saveMindConfig();
-cid=1
+cid=19020
 
 - 测试存储 xmind 导出的配置 module scene @module:M,scene:S
 

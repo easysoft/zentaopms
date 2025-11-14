@@ -16,7 +16,7 @@ su('user1');
 
 title=测试 testtaskModel->getTaskCases();
 timeout=0
-cid=1
+cid=19195
 
 - $browseType 参数为空，查看测试单 1 包含的用例数。 @0
 - $browseType 参数为 other，查看测试单 1 包含的用例数。 @0

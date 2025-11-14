@@ -5,7 +5,7 @@
 
 title=测试 actionTao::getObjectLinkParams();
 timeout=0
-cid=0
+cid=14952
 
 - 执行actionTest模块的getObjectLinkParamsTest方法，参数是$action1, 'libID=%s&apiID=%s&moduleID=%s'  @libID=1&apiID=1&moduleID=0
 - 执行actionTest模块的getObjectLinkParamsTest方法，参数是$action2, 'productID=%s'  @productID=1,2

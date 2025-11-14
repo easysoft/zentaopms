@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getProjectStoryTable();
 timeout=0
-cid=0
+cid=18253
 
 - 执行$result1 @0
 - 执行screenTest模块的getProjectStoryTableTest方法，参数是'2023', '06', array  @0

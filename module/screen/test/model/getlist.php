@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->getList();
 timeout=0
-cid=1
+cid=18244
 
 - 测试获取dimension=0的数据 @0
 - 测试获取dimension=1的数据 @5

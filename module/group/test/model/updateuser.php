@@ -5,7 +5,7 @@
 
 title=测试 groupModel->updateUser();
 timeout=0
-cid=1
+cid=16727
 
 - 更新分组成员，检查已有用户属性user1 @用户1
 - 更新分组成员，检查已删除用户属性user6 @~~

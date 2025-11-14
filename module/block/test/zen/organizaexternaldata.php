@@ -5,7 +5,7 @@
 
 title=测试 blockZen::organizaExternalData();
 timeout=0
-cid=0
+cid=15246
 
 - 步骤1：正常用户参数第user条的account属性 @admin
 - 步骤2：空参数第user条的account属性 @guest

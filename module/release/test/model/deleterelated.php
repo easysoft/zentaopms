@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::deleteRelated();
 timeout=0
-cid=0
+cid=17986
 
 - 执行releaseTest模块的deleteRelatedTest方法，参数是1, 'story', 1  @1
 - 执行releaseTest模块的deleteRelatedTest方法，参数是2, 'bug', '1, 2, 3'  @0

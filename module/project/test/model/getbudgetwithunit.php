@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 projectModel->getBudgetWithUnit();
 timeout=0
-cid=1
+cid=17818
 
 */
 

@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->getParentChildrenTypes();
-cid=0
+cid=17746
 
 - 查找父ID为 0 未删除的阶段类型 @1
 - 查找父ID为 1 未删除的阶段类型 stage属性stage @stage

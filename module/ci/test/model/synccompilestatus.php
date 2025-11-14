@@ -5,7 +5,7 @@
 
 title=测试 ciModel->syncCompileStatus();
 timeout=0
-cid=1
+cid=15593
 
 - 同步jenkins构建结果属性status @created
 - 同步gitlab构建结果属性status @failed

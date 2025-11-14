@@ -5,7 +5,7 @@
 
 title=测试 apiZen::generateLibsDropMenu();
 timeout=0
-cid=0
+cid=15124
 
 - 执行apiTest模块的generateLibsDropMenuTest方法，参数是$lib2, 0 属性text @正常产品2
 - 执行apiTest模块的generateLibsDropMenuTest方法，参数是$lib6, 0 属性text @正常产品1

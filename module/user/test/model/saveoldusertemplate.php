@@ -5,7 +5,7 @@
 
 title=测试 userModel::saveOldUserTemplate();
 timeout=0
-cid=0
+cid=19653
 
 - 步骤1：正常保存Bug模板属性result @1
 - 步骤2：正常保存Story模板属性result @1

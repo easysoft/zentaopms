@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(100);
 
 title=测试 kanbanModel->getColumnGroupByRegions();
 timeout=0
-cid=1
+cid=16912
 
 - 测试获取region 1 2 3 的看板列数量 @12
 - 测试获取region 4,5,6的看板列数量 @12

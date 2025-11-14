@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getExecutionProducts();
-cid=1;
+cid=19432;
 
 - 测试拿到的 admin 数据是否正确 id,name,type,PO,reviewer
  - 第1条的id属性 @1

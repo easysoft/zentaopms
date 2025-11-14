@@ -5,7 +5,7 @@
 
 title=测试 systemModel::restore();
 timeout=0
-cid=0
+cid=18744
 
 - 步骤1：正常实例恢复备份属性result @fail
 - 步骤2：恢复操作消息字段属性message @CNE服务器出错

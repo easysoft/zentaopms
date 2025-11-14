@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getBarChartOption();
 timeout=0
-cid=0
+cid=18236
 
 - 测试空SQL情况下返回空数据集 @empty_dataset
 - 测试有效SQL和settings下的数据处理 @valid_data

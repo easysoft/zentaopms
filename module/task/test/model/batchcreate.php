@@ -15,7 +15,7 @@ zenData('kanbancell')->loadYaml('kanbancell')->gen(18);
 
 title=测试taskModel->batchCreate();
 timeout=0
-cid=1
+cid=18768
 
 - 测试批量创建任务时，任务名称必填第name条的0属性 @『任务名称』不能为空。
 - 测试批量创建任务时，任务类型必填第type条的0属性 @『任务类型』不能为空。

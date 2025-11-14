@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->createProgram();
 timeout=0
-cid=1
+cid=0
 
 - 测试选择项目集1，没有选择项目，没有选择产品线时
  -  @1

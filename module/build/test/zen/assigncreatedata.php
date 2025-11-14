@@ -5,7 +5,7 @@
 
 title=测试 buildZen::assignCreateData();
 timeout=0
-cid=0
+cid=15515
 
 - 执行buildTest模块的assignCreateDataTest方法，参数是1, 0, 1, '' 属性productID @1
 - 执行buildTest模块的assignCreateDataTest方法，参数是1, 11, 1, '' 属性executionID @11

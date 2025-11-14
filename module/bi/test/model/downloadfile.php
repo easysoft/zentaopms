@@ -5,7 +5,7 @@
 
 title=测试 biModel::downloadFile();
 timeout=0
-cid=0
+cid=15156
 
 - 执行biTest模块的downloadFileTest方法，参数是'', '/tmp/', 'test.txt'  @0
 - 执行biTest模块的downloadFileTest方法，参数是'invalid-url', '/tmp/', 'test.txt'  @0

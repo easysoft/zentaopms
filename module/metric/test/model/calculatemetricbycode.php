@@ -5,7 +5,7 @@
 
 title=测试 metricModel::calculateMetricByCode();
 timeout=0
-cid=0
+cid=17065
 
 - 执行metricTest模块的calculateMetricByCodeTest方法，参数是'user_count'  @0
 - 执行metricTest模块的calculateMetricByCodeTest方法，参数是'empty_test'  @0

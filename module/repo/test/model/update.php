@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->update();
 timeout=0
-cid=1
+cid=18109
 
 - 更新版本库1名字
  - 第0条的field属性 @name

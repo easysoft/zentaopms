@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel::getByUrl();
 timeout=0
-cid=0
+cid=17346
 
 - 测试步骤1：正常查询system用户创建的存在URL记录属性id @201
 - 测试步骤2：查询空URL字符串 @0

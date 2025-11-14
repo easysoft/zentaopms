@@ -4,7 +4,7 @@
 /**
 
 title=ssoModel->bindZTUser();
-cid=0
+cid=18407
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

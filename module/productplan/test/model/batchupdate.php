@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
 title=productpanModel->batchUpdate();
 timeout=0
-cid=1
+cid=17620
 
 - 测试修改父计划的名称
  - 第0条的field属性 @title

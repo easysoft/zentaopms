@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 compileModel::syncJenkinsBuildList();
 timeout=0
-cid=1
+cid=15756
 
 - 执行compileTest模块的syncJenkinsBuildListTest方法，参数是null, $job  @alse
 - 执行compileTest模块的syncJenkinsBuildListTest方法，参数是$emptyJenkins, $job  @alse

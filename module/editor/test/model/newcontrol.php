@@ -5,7 +5,7 @@
 
 title=测试 editorModel::newControl();
 timeout=0
-cid=0
+cid=16241
 
 - 测试步骤1：使用默认参数生成todo模块create方法的控制器代码
  - 属性hasPhpTag @1

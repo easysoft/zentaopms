@@ -5,7 +5,7 @@
 
 title=测试 cneModel::translateError();
 timeout=0
-cid=0
+cid=15631
 
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult1, false 属性message @请求集群接口失败
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult2, false 属性message @服务不存在

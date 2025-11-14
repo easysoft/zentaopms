@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->updatePivotStage();
 timeout=0
-cid=1
+cid=19557
 
 - 测试1008数据修改是否正确 @1
 - 测试1012数据修改是否正确 @1

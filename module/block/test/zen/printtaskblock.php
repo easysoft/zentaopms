@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printTaskBlock();
 timeout=0
-cid=0
+cid=15305
 
 - 步骤1:测试正常情况下传入合法type参数和count参数
  - 属性type @assignedTo

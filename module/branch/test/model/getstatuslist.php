@@ -5,7 +5,7 @@
 
 title=测试 branchModel::getStatusList();
 timeout=0
-cid=0
+cid=15331
 
 - 执行branchTest模块的getStatusListTest方法，参数是101 属性1 @active
 - 执行branchTest模块的getStatusListTest方法，参数是999  @0

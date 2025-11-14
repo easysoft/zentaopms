@@ -5,7 +5,7 @@
 
 title=测试 userModel::mergeAclsToUserView();
 timeout=0
-cid=0
+cid=19649
 
 - 执行userTest模块的mergeAclsToUserViewTest方法，参数是'admin', $userView1, $acls1, '' 属性programs @1,2,3
 - 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user1', $userView2, $acls2, '' 属性programs @100,200

@@ -5,7 +5,7 @@
 
 title=测试 productModel::getAccessibleProductID;
 timeout=0
-cid=0
+cid=17485
 
 - 不传入ID @1
 - 传入存在ID的值 @1

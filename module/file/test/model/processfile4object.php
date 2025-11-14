@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->processFile4Object();
-cid=0
+cid=16519
 
 - 传入空对象。属性count @5
 - 没有删除文件字段。

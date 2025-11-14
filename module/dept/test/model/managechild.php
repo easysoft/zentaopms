@@ -10,7 +10,7 @@ zenData('dept')->loadYaml('dept')->gen(30);
 
 title=测试 deptModel->manageChild();
 timeout=0
-cid=1
+cid=15979
 
 - 三级部门下添加四级部门属性1 @32
 - 三级部门下添加四级部门统计 @3

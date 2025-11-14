@@ -9,7 +9,7 @@ zenData('product')->gen(10);
 
 title=测试 systemModel::getList();
 timeout=0
-cid=1
+cid=18736
 
 - 查询默认排序应用第1条的name属性 @应用1
 - 获取所有应用数量 @1

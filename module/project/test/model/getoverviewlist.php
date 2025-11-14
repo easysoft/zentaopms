@@ -40,7 +40,7 @@ su('admin');
 
 title=测试 projectModel::getOverviewList($status, $projectID, $orderBy);
 timeout=0
-cid=1
+cid=17836
 
 - 获取未开始的项目数量 @3
 - 获取状态不为done和closed的项目数量 @7

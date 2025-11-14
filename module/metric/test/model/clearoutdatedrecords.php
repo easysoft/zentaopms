@@ -5,7 +5,7 @@
 
 title=测试 metricModel::clearOutDatedRecords();
 timeout=0
-cid=0
+cid=17071
 
 - 执行metricTest模块的clearOutDatedRecordsTest方法，参数是'test_metric_001', 'year'  @2
 - 执行metricTest模块的clearOutDatedRecordsTest方法，参数是'test_metric_001', 'month'  @0

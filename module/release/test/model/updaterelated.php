@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::updateRelated();
 timeout=0
-cid=0
+cid=18018
 
 - 步骤1：整数ID输入 @1
 - 步骤2：字符串ID列表输入 @1

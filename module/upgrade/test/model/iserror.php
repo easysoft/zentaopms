@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->isError();
-cid=1
+cid=19536
 
 - 测试 static::$errors 为 errors 时，是否有报错 @1
 - 测试 static::$errors 为 emptyErrors 时，是否有报错 @0

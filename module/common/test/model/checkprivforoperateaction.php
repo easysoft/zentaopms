@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 commonModel::checkPrivForOperateAction();
 timeout=0
-cid=1
+cid=15662
 
 - 测试研发需求创建日志按钮权限 @1
 - 测试任务开始按钮权限 @1

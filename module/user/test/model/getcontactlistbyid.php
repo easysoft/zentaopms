@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getContactListByID();
-cid=0
+cid=19608
 
 - 获取 id 为 0 的联系人列表，返回空。 @0
 - 获取 id 为 4 的联系人列表，返回空。 @0

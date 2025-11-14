@@ -5,7 +5,7 @@
 
 title=测试 storeModel::__construct();
 timeout=0
-cid=1
+cid=18447
 
 - 测试默认构造函数初始化API头信息 @1
 - 测试构造函数设置API认证头包含token @1

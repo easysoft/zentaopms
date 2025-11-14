@@ -5,7 +5,7 @@
 
 title=测试 transferZen::initTemplateFields();
 timeout=0
-cid=0
+cid=19338
 
 - 执行transferTest模块的initTemplateFieldsTest方法，参数是'user', 'account, realname, email' 属性module @user
 - 执行transferTest模块的initTemplateFieldsTest方法，参数是'task', 'name, pri, estimate' 属性module @task

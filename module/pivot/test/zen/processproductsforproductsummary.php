@@ -5,7 +5,7 @@
 
 title=测试 pivotZ// 测试步骤5：未来计划时间边界测试 - 期望正确处理特殊时间标记为“待定”
 timeout=0
-cid=0
+cid=17462
 
 - 执行pivotTest模块的processProductsForProductSummaryTest方法，参数是$testData1  @0
 - 执行pivotTest模块的processProductsForProductSummaryTest方法，参数是$testData2 

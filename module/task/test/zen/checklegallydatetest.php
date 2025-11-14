@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkLegallyDate();
 timeout=0
-cid=0
+cid=18925
 
 - 步骤1：正常情况 @success
 - 步骤2：日期冲突属性deadline @"截止日期"必须大于"预计开始"

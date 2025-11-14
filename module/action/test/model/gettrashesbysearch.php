@@ -17,7 +17,7 @@ zenData('pipeline')->gen(5);
 
 title=测试 actionModel->getTrashesBySearch();
 timeout=0
-cid=1
+cid=14912
 
 - 搜索objectType all,      type all,    queryID myQueryID, orderBy id_desc的回收站信息 @0
 - 搜索objectType story,    type all,    queryID myQueryID, orderBy id_desc的回收站信息

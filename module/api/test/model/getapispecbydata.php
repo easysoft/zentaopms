@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getApiSpecByData();
 timeout=0
-cid=0
+cid=15103
 
 - 执行apiTest模块的getApiSpecByDataTest方法，参数是$fullData 
  - 属性doc @1

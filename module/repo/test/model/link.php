@@ -5,7 +5,7 @@
 
 title=测试 repoModel::link();
 timeout=0
-cid=0
+cid=18086
 
 - 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $validLinks 第0条的relation属性 @commit
 - 执行repoTest模块的linkTest方法，参数是1, $validRevision, 'story', 'repo', $validLinks 第0条的BType属性 @story

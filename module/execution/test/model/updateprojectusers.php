@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->updateProjectUsers();
 timeout=0
-cid=1
+cid=16378
 
 - 测试阶段更新到敏捷项目下属性user9 @user9
 - 测试看板更新到敏捷项目下属性dev7 @dev7

@@ -5,7 +5,7 @@
 
 title=测试pivotModel->getTableHeader();
 timeout=0
-cid=0
+cid=17404
 
 - 获取合并列头
  - 第0条的name属性 @id

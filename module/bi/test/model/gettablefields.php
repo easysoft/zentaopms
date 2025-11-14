@@ -5,7 +5,7 @@
 
 title=测试 biModel::getTableFields();
 timeout=0
-cid=0
+cid=15185
 
 - 测试正常调用返回结果是数组类型 @array
 - 测试返回结果不为空 @not_empty

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getFilterOptionUrl();
 timeout=0
-cid=0
+cid=17458
 
 - 执行pivotTest模块的getFilterOptionUrlTest方法，参数是$filter1 属性url @getfilteroption.php?m=pivot&f=ajaxGetSysOptions&search={search}
 - 执行pivotTest模块的getFilterOptionUrlTest方法，参数是$filter2 属性method @post

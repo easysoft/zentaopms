@@ -4,7 +4,7 @@
 
 title=测试 customModel->hasScrumIssueData();
 timeout=0
-cid=1
+cid=15911
 
 */
 

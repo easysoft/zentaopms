@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createModel();
 timeout=0
-cid=0
+cid=15011
 
 - 执行aiTest模块的createModelTest方法，参数是$validOpenAIModel  @6
 - 执行aiTest模块的createModelTest方法，参数是$validAzureModel  @7

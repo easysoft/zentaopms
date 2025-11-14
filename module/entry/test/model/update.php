@@ -3,7 +3,7 @@
 /**
 
 title=测试 entryModel::update();
-cid=1
+cid=16253
 pid=1
 
 */

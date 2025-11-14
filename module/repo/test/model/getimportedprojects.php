@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getImportedProjects();
 timeout=0
-cid=0
+cid=18066
 
 - 期望返回3个项目 @3
 - 期望返回空数组 @0

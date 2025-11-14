@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::fetchByXML();
 timeout=0
-cid=0
+cid=19089
 
 - 步骤1：正常XML文件，没有产品ID
  - 属性result @success

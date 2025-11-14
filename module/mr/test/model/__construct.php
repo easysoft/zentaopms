@@ -5,7 +5,7 @@
 
 title=测试 mrModel::__construct();
 timeout=0
-cid=0
+cid=17220
 
 - 步骤1：默认参数，rawModule为mr @mr
 - 步骤2：指定appName，rawModule为mr @mr

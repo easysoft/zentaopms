@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getAffectedCases();
 timeout=0
-cid=0
+cid=18630
 
 - 获取需求2关联用例数 @3
 - 获取需求2关联的第1条用例

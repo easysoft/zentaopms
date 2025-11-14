@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::isClickable();
-cid=0
+cid=19645
 
 - 判断是否可以对用户 user1 执行解除绑定操作，返回 false。 @0
 - 判断是否可以对用户 user2 执行解除绑定操作，返回 true。 @1

@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getOpenIdList();
 timeout=0
-cid=0
+cid=19700
 
 - 步骤1：传入toList参数 @openid_001,openid_002
 

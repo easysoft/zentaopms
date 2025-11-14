@@ -9,7 +9,7 @@ $metric = new metricTest();
 
 title=getMetricCycle
 timeout=0
-cid=1
+cid=17107
 
 - 测试record[1]的收集周期 @year
 - 测试record[2]的收集周期 @0

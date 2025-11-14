@@ -5,7 +5,7 @@
 
 title=测试 blockModel::getBlockInitStatus();
 timeout=0
-cid=0
+cid=15228
 
 - 执行blockTest模块的getBlockInitStatusTest方法，参数是'my'  @1
 - 执行blockTest模块的getBlockInitStatusTest方法，参数是'product'  @0

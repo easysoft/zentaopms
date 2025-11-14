@@ -12,7 +12,7 @@ zenData('usergroup')->loadYaml('usergroup')->gen(3);
 /**
 
 title=测试 personnelModel->canViewProgram();
-cid=1
+cid=17319
 
 - 看admin是否具有访问项目集1权限 @1
 - 看admin是否具有访问项目集2权限 @1

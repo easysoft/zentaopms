@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getPairsByProjectModel();
-cid=0
+cid=17499
 
 - 用超级管理员账号，测试获取model为空产品数量属性name @0
 - 用超级管理员账号，测试获取model为all产品数量属性name @50

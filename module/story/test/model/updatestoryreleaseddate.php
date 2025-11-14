@@ -5,7 +5,7 @@
 
 title=测试 storyModel->updateStoryReleasedDate();
 timeout=0
-cid=0
+cid=18599
 
 - 判断更新后的需求1发布日期后是否正确。属性releasedDate @2022-02-02 00:00:00
 - 判断更新后的需求2发布日期后是否正确。属性releasedDate @2022-02-02 00:00:00

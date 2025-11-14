@@ -19,7 +19,7 @@ function initData()
 /**
 title=测试 projectModel::suspend();
 timeout=0
-cid=1
+cid=17870
 
 - 暂停 projectID=2 后，检查$changes[0]
  - 属性field @status

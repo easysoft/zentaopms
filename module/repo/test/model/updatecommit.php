@@ -5,7 +5,7 @@
 
 title=测试 repoModel::updateCommit();
 timeout=0
-cid=0
+cid=18110
 
 - 步骤1：测试Gitlab类型代码库更新 @1
 - 步骤2：测试Git类型代码库更新，期望返回2条历史记录 @2

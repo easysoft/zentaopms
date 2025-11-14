@@ -5,7 +5,7 @@
 
 title=测试 searchModel::buildIndexQuery();
 timeout=0
-cid=0
+cid=18293
 
 - 执行searchTest模块的buildIndexQueryTest方法，参数是'program'  @SELECT t1.* FROM `zt_project` AS t1  WHERE (t1.`isTpl` = '0' OR t1.`isTpl` IS NULL) AND 1=1  AND  `type`  = 'program' AND  t1.deleted  = '0'
 - 执行searchTest模块的buildIndexQueryTest方法，参数是'story'  @SELECT DISTINCT t1.*, t2.spec, t2.verify FROM `zt_story` AS t1  LEFT JOIN `zt_storyspec` AS t2  ON t1.id=t2.story  WHERE t1.deleted  = '0' AND  `type`  = 'story' AND  t1.version=t2.version

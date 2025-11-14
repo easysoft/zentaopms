@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignBranchForEdit();
 timeout=0
-cid=0
+cid=19059
 
 - 执行testcaseTest模块的assignBranchForEditTest方法，参数是$case1, 1, 'execution' 属性1 @分支1
 - 执行testcaseTest模块的assignBranchForEditTest方法，参数是$case2, 0, 'project' 属性2 @分支2 (已关闭)

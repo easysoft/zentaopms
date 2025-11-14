@@ -5,7 +5,7 @@
 
 title=测试 executionModel::linkStories();
 timeout=0
-cid=0
+cid=16353
 
 - 测试步骤1：正常的敏捷执行关联需求 @1
 - 测试步骤2：瀑布执行关联需求（无计划） @0

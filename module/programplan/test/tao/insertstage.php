@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanTao->insertStage();
-cid=0
+cid=17778
 
 - 测试值传入plan数据
  - 属性id @3

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::complete();
 timeout=0
-cid=0
+cid=15004
 
 - 执行aiTest模块的completeTest方法，参数是999, 'Hello, world!', 512  @0
 - 执行aiTest模块的completeTest方法，参数是1, 'Hello, world!', 512  @0

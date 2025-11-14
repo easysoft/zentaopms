@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraStatusList();
 timeout=0
-cid=0
+cid=15782
 
 - 步骤1：正常情况 @2
 - 步骤2：空relations参数 @0

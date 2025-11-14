@@ -12,7 +12,7 @@ zenData('kanbangroup')->loadYaml('rdkanbangroup')->gen(20);
 
 title=测试 kanbanModel->getRDColumnGroupByRegions();
 timeout=0
-cid=1
+cid=16937
 
 - 测试获取region 1 执行看板泳道列组 @4
 - 测试获取region 1 group 1执行看板泳道列组 @4

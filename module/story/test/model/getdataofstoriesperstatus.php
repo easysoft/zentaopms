@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getDataOfStoriesPerStatus();
 timeout=0
-cid=0
+cid=18524
 
 - 按照需求状态分组，获取分组后的需求数量 @4
 - 按照需求状态分组，获取各个需求状态的需求数量，查看draft下的数据

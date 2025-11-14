@@ -10,7 +10,7 @@ zenData('project')->loadYaml('project')->gen(8);
 
 title=测试 projectTao::classifyProjects
 timeout=0
-cid=1
+cid=17891
 
 - 测试分类后myProjects包含的项目数是3 @1
 - 测试分类后otherProjects包含的项目数是2 @1

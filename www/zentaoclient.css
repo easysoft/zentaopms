@@ -9,3 +9,4 @@ body.xxc-embed .titleBox #promptRegenerate {right: 120px;}
 body.xxc-embed #basicInfoLink {margin-right: 120px;}
 body.xxc-embed #appsBar {display: none;}
 body.xxc-embed #tutorial-start-btn {display: none;}
+body.xxc-embed #header {position: sticky; top: 0; z-index: 1000;}

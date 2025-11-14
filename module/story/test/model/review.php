@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->review();
-cid=0
+cid=18582
 
 - 评审一个草稿的需求，传入评审意见为通过，状态变为激活属性status @active
 - 评审一个草稿的需求，传入评审意见为通过，状态变为激活属性status @closed

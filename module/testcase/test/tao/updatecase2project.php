@@ -32,7 +32,7 @@ initData();
 
 title=测试 testcaseModel->updateCase2Project();
 timeout=0
-cid=1
+cid=19054
 
 - 测试修改用例 1 产品 1 => 2
  - 第0条的project属性 @1

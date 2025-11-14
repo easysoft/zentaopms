@@ -5,7 +5,7 @@
 
 title=测试 markModel::isMark();
 timeout=0
-cid=0
+cid=17046
 
 - 步骤1：查询存在的标记记录第0条的objectID属性 @1
 - 步骤2：查询不存在的对象ID @0

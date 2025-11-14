@@ -5,7 +5,7 @@
 
 title=测试 ssoModel::getBindUser();
 timeout=0
-cid=0
+cid=18404
 
 - 步骤1：正常查询存在的ranzhi绑定用户属性account @admin
 - 步骤2：空字符串参数查询 @0

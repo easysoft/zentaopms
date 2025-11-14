@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 userTao->fetchProjects();
-cid=1
+cid=19670
 
 - 用户名为空，返回空数组。 @0
 - 用户 user2 未参与任何项目，返回空数组。 @0

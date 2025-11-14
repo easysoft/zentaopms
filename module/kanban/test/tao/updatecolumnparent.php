@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::updateColumnParent();
 timeout=0
-cid=0
+cid=16994
 
 - 步骤1：删除父列1的唯一子列3后，父列1的parent重置为0属性result @1
 - 步骤2：删除父列2的一个子列4，但父列2还有子列5，不重置属性result @0

@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewProductplan();
 timeout=0
-cid=0
+cid=16204
 
 - 步骤1:setting视图下预览产品1的所有计划 @3
 - 步骤2:setting视图下预览产品2的所有计划 @2

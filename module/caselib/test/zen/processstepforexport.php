@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::processStepForExport();
 timeout=0
-cid=0
+cid=15558
 
 - 执行caselibTest模块的processStepForExportTest方法，参数是$case1, $emptySteps, array  @0
 - 执行caselibTest模块的processStepForExportTest方法，参数是$case2, $singleSteps, array  @1

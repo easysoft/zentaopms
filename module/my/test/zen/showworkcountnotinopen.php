@@ -5,7 +5,7 @@
 
 title=测试 myZen::showWorkCountNotInOpen();
 timeout=0
-cid=0
+cid=17317
 
 - 测试开源版(open)下空count数组属性isBiz @0
 - 测试开源版(open)下空count数组的isMax属性isMax @0

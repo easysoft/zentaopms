@@ -13,7 +13,7 @@ zenData('projectproduct')->gen(0);
 
 title=测试 projectModel::linkOtherProducts();
 timeout=0
-cid=1
+cid=17863
 
 - 测试敏捷项目关联空产品 @1
 - 测试瀑布项目关联空产品 @1

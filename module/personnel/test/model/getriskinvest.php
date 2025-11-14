@@ -14,7 +14,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getRiskInvest();
-cid=1
+cid=17333
 
 - 项目集 1 下的参与人的项目风险 @admin:4,0,0;user12:0,0,0;user22:0,0,0;user32:0,0,0;
 

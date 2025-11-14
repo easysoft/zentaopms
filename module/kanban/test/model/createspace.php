@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 kanbanModel->createSpace();
 timeout=0
-cid=1
+cid=16901
 
 - 创建私人空间
  - 属性name @测试创建私人空间

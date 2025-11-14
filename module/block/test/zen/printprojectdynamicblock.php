@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProjectDynamicBlock();
 timeout=0
-cid=0
+cid=15275
 
 - 步骤1：正常情况属性actions @1
 - 步骤2：指定数量属性actions @1

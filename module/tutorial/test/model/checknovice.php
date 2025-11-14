@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->checkNovice();
-cid=1
+cid=19401
 
 - 检查当account是 guest 的时候的返回值 modifyPassword 0。 @0
 - 检查当account是 guest 的时候的返回值 modifyPassword 1。 @0

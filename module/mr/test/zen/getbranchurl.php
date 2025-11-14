@@ -5,7 +5,7 @@
 
 title=测试 mrZen::getBranchUrl();
 timeout=0
-cid=0
+cid=17268
 
 - 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 100, 'main'  @0
 - 执行mrTest模块的getBranchUrlTest方法，参数是$giteaHost, 'test/project', 'develop'  @0

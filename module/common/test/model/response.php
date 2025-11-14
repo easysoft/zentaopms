@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 commonModel::response();
 timeout=0
-cid=1
+cid=15706
 
 - 应用不存在，返回错误代码404
  - 属性errcode @404

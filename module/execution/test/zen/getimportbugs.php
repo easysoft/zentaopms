@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getImportBugs();
 timeout=0
-cid=0
+cid=16429
 
 - 步骤1:正常浏览模式获取产品1和2的bugs @6
 - 步骤2:正常浏览模式获取产品1的bugs @3

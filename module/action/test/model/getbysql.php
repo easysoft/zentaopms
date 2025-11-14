@@ -10,7 +10,7 @@ zenData('action')->gen(50);
 
 title=测试 actionModel->getBySQL();
 timeout=0
-cid=1
+cid=14891
 
 - 查询id like %1的动作个数 @11
 - 查询objectType = product的动作个数 @3

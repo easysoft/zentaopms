@@ -5,7 +5,7 @@
 
 title=测试 groupModel->create();
 timeout=0
-cid=1
+cid=16719
 
 - 受限用户不能管理视野 @0
 - 测试action的大小写 @0

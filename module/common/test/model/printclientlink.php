@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printClientLink();
 timeout=0
-cid=0
+cid=15690
 
 - 步骤1：两个配置都启用 @1
 - 步骤2：仅xxserver安装 @0

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=taskModel->assign();
 timeout=0
-cid=1
+cid=18766
 
 - wait状态任务指派
  - 第0条的field属性 @assignedTo

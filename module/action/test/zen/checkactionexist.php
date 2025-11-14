@@ -5,7 +5,7 @@
 
 title=测试 actionZen::checkActionExist();
 timeout=0
-cid=0
+cid=14969
 
 - 步骤1：检查存在的操作记录
  - 属性id @1

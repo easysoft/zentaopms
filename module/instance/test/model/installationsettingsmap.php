@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::installationSettingsMap();
 timeout=0
-cid=0
+cid=16806
 
 - 步骤1:自定义域名配置测试第ingress条的enabled属性 @1
 - 步骤2:devops应用(gitea)配置测试第ci条的enabled属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 repoTao::getLastRevision();
 timeout=0
-cid=0
+cid=18117
 
 - 执行repoTest模块的getLastRevisionTest方法，参数是1  @2023-12-13 19:00:25
 - 执行repoTest模块的getLastRevisionTest方法，参数是3  @2023-12-18 19:00:25

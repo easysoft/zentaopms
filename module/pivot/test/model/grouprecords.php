@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::groupRecords();
 timeout=0
-cid=0
+cid=17408
 
 - 步骤1：单字段分组，期望返回2个分组 @2
 - 步骤2：多字段分组，期望返回4个分组 @4

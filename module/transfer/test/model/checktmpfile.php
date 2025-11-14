@@ -5,7 +5,7 @@
 
 title=测试 transferModel::checkTmpFile();
 timeout=0
-cid=0
+cid=19309
 
 - 步骤1：正常情况，文件存在且maxImport设置 @1
 - 步骤2：边界值，没有session文件名 @0

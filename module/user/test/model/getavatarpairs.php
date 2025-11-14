@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getAvatarPairs();
-cid=0
+cid=19603
 
 - 未删除的用户头像的数量 @4
 - 所有用户头像的数量 @5

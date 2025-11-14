@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkDocPriv();
 timeout=0
-cid=0
+cid=18314
 
 - 执行searchTest模块的checkDocPrivTest方法，参数是$results1, $objectIdList1, $table1
  - 第1条的objectID属性 @1

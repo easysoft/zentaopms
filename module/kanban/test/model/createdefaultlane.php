@@ -12,7 +12,7 @@ zenData('kanbanlane')->gen(0);
 
 title=测试 kanbanModel->createDefaultLane();
 timeout=0
-cid=1
+cid=16889
 
 - 创建region 1 group 1的默认泳道
  - 属性name @默认泳道

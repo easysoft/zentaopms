@@ -13,7 +13,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
 
 title=测试 projectModel->updateProducts();
 timeout=0
-cid=1
+cid=17878
 
 - 测试敏捷项目不关联产品的数量 @0
 - 测试敏捷项目关联所属项目集的产品的数量 @3

@@ -5,7 +5,7 @@
 
 title=测试 epicModel::getToAndCcList();
 timeout=0
-cid=0
+cid=16255
 
 - 步骤1:有assignedTo和mailto,基本情况 @user1
 - 步骤2:只有assignedTo,无mailto @user2

@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->getAllPairs();
 timeout=0
-cid=1
+cid=0
 
 - 测试获取全部分支名个数 @11
 - 测试获取没有主干的分支名个数 @10

@@ -5,7 +5,7 @@
 
 title=测试 editorModel::analysis();
 timeout=0
-cid=0
+cid=16229
 
 - 步骤1：分析control.php文件属性hasCreateMethod @1
 - 步骤2：分析model.php文件属性hasCreateMethod @1

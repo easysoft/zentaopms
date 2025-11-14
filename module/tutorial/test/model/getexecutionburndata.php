@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getExecutionBurnData();
 timeout=0
-cid=0
+cid=19430
 
 - 步骤1：正常情况-5个日期
  - 第2024-01-01条的value属性 @6

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::checkSyncResult();
 timeout=0
-cid=0
+cid=18133
 
 - 测试步骤1:Git类型仓库,有提交数量,batch类型 @10
 - 测试步骤2:Git类型仓库,有提交数量,sync类型 @finish

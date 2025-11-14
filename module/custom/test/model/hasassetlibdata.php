@@ -4,7 +4,7 @@
 
 title=测试 customModel->hasAssetlibData();
 timeout=0
-cid=1
+cid=15907
 
 */
 

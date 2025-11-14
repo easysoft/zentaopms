@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getProducts();
 timeout=0
-cid=0
+cid=17396
 
 - 执行$pivotTest, 'getProductsTest' @1
 - 执行pivotTest模块的getProductsTest方法，参数是''  @0

@@ -4,7 +4,7 @@
 
 title=测试 programTao::updateProgress();
 timeout=0
-cid=1
+cid=17722
 
 - 获取系统中所有项目集的进度 1第1条的progress属性 @0.00
 - 获取系统中所有项目集的进度 2第2条的progress属性 @0.00

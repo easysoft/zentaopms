@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 reportModel::getContributionCountTips();
 timeout=0
-cid=0
+cid=18163
 
 - 测试company模式下的贡献数提示信息 @1
 - 测试dept模式下的贡献数提示信息 @1

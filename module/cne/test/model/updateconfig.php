@@ -5,7 +5,7 @@
 
 title=测试 cneModel::updateConfig();
 timeout=0
-cid=0
+cid=15634
 
 - 执行cneTest模块的updateConfigTest方法  @0
 - 执行cneTest模块的updateConfigTest方法，参数是'2024.04.2401'  @0

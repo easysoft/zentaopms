@@ -5,7 +5,7 @@
 
 title=测试 svnModel::getRepoLogs();
 timeout=0
-cid=0
+cid=18716
 
 - 步骤1：正常提交ID为0的情况 @0
 - 步骤2：正常提交ID为1的情况 @0

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getGroupTreeWithKey();
 timeout=0
-cid=0
+cid=17390
 
 - 执行pivotTest模块的getGroupTreeWithKeyTest方法，参数是$data1  @key1
 - 执行pivotTest模块的getGroupTreeWithKeyTest方法，参数是$data2 属性group1 @item1

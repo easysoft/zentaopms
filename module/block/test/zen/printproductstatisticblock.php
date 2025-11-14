@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProductStatisticBlock();
 timeout=0
-cid=0
+cid=15272
 
 - 步骤1:type为all类型测试属性productsCount @10
 - 步骤2:count限制为5测试属性productsCount @5

@@ -31,7 +31,7 @@ su('admin');
 
 title=测试 actionModel->getRelatedDataByActions();
 timeout=0
-cid=1
+cid=14908
 
 - 获取动态1 2 3 4 5 objectNames的关联信息
  - 第product条的1属性 @正常产品1

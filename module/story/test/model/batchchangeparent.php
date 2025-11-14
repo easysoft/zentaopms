@@ -5,7 +5,7 @@
 
 title=测试 storyModel::batchChangeParent();
 timeout=0
-cid=0
+cid=18468
 
 - 执行storyTest模块的batchChangeParentTest方法，参数是'6, 7', 1, 'story'  @
 - 执行storyTest模块的batchChangeParentTest方法，参数是'', 1, 'story'  @~~

@@ -5,7 +5,7 @@
 
 title=测试 biModel::getDuckdbBinConfig();
 timeout=0
-cid=0
+cid=15167
 
 - 测试正常情况下返回完整配置数组
  - 属性file @duckdb

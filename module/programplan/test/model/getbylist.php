@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::getByList();
 timeout=0
-cid=0
+cid=17740
 
 - 步骤1：传入有效ID数组 @3
 - 步骤2：传入空数组 @0

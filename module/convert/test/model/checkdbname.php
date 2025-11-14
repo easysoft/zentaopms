@@ -5,7 +5,7 @@
 
 title=测试 convertModel::checkDBName();
 timeout=0
-cid=0
+cid=15762
 
 - 执行convertTest模块的checkDBNameTest方法，参数是'zentao_db'  @1
 - 执行convertTest模块的checkDBNameTest方法，参数是'test_db123'  @1

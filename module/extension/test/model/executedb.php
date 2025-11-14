@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::executeDB();
 timeout=0
-cid=0
+cid=16453
 
 - 步骤1：执行有效扩展的安装SQL属性result @ok
 - 步骤2：执行有效扩展的卸载SQL属性result @ok

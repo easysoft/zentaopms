@@ -5,7 +5,7 @@
 
 title=测试 screenZen::setSelectFilter();
 timeout=0
-cid=0
+cid=18291
 
 - 步骤1：正常输入单个过滤器第source1条的type1属性 @field1
 - 步骤2：多个过滤器

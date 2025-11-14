@@ -5,7 +5,7 @@
 
 title=测试gitModel->getRepoLogs();
 timeout=0
-cid=1
+cid=16546
 
 - 分支名为空，返回默认分支的日志
  - 属性revision @b362ea7aa65515dc35ff3a93423478b2143e771d

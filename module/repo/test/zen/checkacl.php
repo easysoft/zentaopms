@@ -5,7 +5,7 @@
 
 title=测试 repoZen::checkACL();
 timeout=0
-cid=0
+cid=18129
 
 - acl数组正常返回 @1
 - acl数组正常返回 @1

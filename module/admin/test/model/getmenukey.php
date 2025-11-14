@@ -4,7 +4,7 @@
 
 title=测试 adminModel->getMenuKey();
 timeout=0
-cid=1
+cid=14980
 
 - 访问后台页面 @null
 - 访问备份页面 @system

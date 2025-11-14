@@ -5,7 +5,7 @@
 
 title=测试 instanceZen::storeView();
 timeout=0
-cid=0
+cid=16829
 
 - 步骤1:查看不存在的instance实例(ID=999)属性result @fail
 - 步骤2:查看ID为0的instance实例属性result @fail

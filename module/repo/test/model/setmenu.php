@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->setMenu();
 timeout=0
-cid=1
+cid=18104
 
 - 正常设置版本库id @2
 - 正常设置版本库id @3

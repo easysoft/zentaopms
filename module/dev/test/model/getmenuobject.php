@@ -5,7 +5,7 @@
 
 title=测试 devModel::getMenuObject();
 timeout=0
-cid=0
+cid=16005
 
 - 执行devTest模块的getMenuObjectTest方法，参数是'用户管理', 'user', 'browse' 属性module @user
 - 执行devTest模块的getMenuObjectTest方法，参数是'任务列表', 'task', 'browse', true 属性active @1

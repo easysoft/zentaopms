@@ -4,7 +4,7 @@
 
 title=productpanModel->getChildren();
 timeout=0
-cid=1
+cid=17632
 
 - 测试传入空的PlanID获取子计划
  - 第3条的title属性 @计划3

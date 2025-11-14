@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processDTableData();
 timeout=0
-cid=0
+cid=17418
 
 - 步骤1：正常情况第0条的0属性 @1
 - 步骤2：空数据数组 @0

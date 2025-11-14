@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::getExpireDate();
 timeout=0
-cid=0
+cid=16458
 
 - 步骤1：无授权文件情况 @0
 - 步骤2：终生版授权 @life

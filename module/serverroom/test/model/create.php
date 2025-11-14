@@ -5,7 +5,7 @@
 
 title=测试 serverroomModel::create();
 timeout=0
-cid=0
+cid=18354
 
 - 执行serverroomTest模块的createTest方法，参数是$validRoom  @1
 - 执行serverroomTest模块的createTest方法，参数是$emptyName 第name条的0属性 @『名称』不能为空。

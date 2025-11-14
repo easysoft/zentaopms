@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getGradeList();
 timeout=0
-cid=0
+cid=18534
 
 - 步骤1：获取默认类型需求等级列表第0条的type属性 @story
 - 步骤2：获取story类型需求等级列表第0条的type属性 @story

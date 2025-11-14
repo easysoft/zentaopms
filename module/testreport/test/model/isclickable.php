@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
 /**
 
 title=测试 testreportModel->isClickable();
-cid=1
+cid=19125
 
 - 测试 edit 方法是否可以点击 @1
 - 测试 delete 方法是否可以点击 @1

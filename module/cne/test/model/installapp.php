@@ -5,7 +5,7 @@
 
 title=测试 cneModel::installApp();
 timeout=0
-cid=0
+cid=15625
 
 - 执行cneTest模块的installAppWithFullParamsTest方法 属性code @200
 - 执行cneTest模块的installAppWithEmptyChannelTest方法 第data条的channel属性 @stable

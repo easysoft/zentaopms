@@ -11,7 +11,7 @@ su('admin');
 
 title=bugModel->isClickable();
 timeout=0
-cid=1
+cid=15401
 
 - 状态为active confirmed为0的bug能否执行confirm动作 @1
 - 状态为active confirmed为0的bug能否执行resolve动作 @1

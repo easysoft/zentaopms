@@ -11,7 +11,7 @@ zenData('actionrecent')->gen(0);
 
 title=测试 actionModel->read();
 timeout=0
-cid=1
+cid=14926
 
 - 测试对action 1 进行阅读操作
  - 第0条的objectType属性 @product

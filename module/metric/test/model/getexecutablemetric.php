@@ -5,7 +5,7 @@
 
 title=getExecutableMetric
 timeout=0
-cid=1
+cid=17099
 
 - 测试可执行的第1个度量项的代号属性1 @count_of_program
 - 测试可执行的第2个度量项的代号属性2 @count_of_doing_program

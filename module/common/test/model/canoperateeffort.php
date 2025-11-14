@@ -5,7 +5,7 @@
 
 title=测试 commonModel::canOperateEffort();
 timeout=0
-cid=0
+cid=15651
 
 - 步骤1：管理员用户可以操作任何日志 @1
 - 步骤2：空effort对象的处理 @1

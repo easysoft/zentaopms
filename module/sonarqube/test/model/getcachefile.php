@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::getCacheFile();
 timeout=0
-cid=0
+cid=18384
 
 - 测试步骤1：正常情况下获取缓存文件路径 @path format correct
 - 测试步骤2：使用不同sonarqubeID获取缓存文件 @path format correct

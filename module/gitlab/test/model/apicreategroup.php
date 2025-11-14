@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiCreateGroup();
 timeout=0
-cid=1
+cid=16575
 
 - 使用空的名字创建gitlab群组 @return false
 - 使用空的群组URL创建gitlab群组 @return false

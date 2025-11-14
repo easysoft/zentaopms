@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getFormFieldsForCreate();
 timeout=0
-cid=0
+cid=18685
 
 - 步骤1:测试普通产品创建需求的表单字段包含product字段第product条的name属性 @product
 - 步骤2:测试分支产品创建需求的表单字段包含branch字段第branch条的name属性 @branch

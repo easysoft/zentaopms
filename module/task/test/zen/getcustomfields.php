@@ -5,7 +5,7 @@
 
 title=测试 taskZen::getCustomFields();
 timeout=0
-cid=0
+cid=18931
 
 - 执行taskTest模块的getCustomFieldsTest方法，参数是$normalExecution, 'create' 第0条的module属性 @所属模块
 - 执行taskTest模块的getCustomFieldsTest方法，参数是$stageExecution, 'batchCreate'

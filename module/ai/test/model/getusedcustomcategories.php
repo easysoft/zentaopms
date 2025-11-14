@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getUsedCustomCategories();
 timeout=0
-cid=0
+cid=15052
 
 - 步骤1：有数据情况，期望返回3个分类 @3
 - 步骤2：验证第一个分类 @work

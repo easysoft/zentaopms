@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkRelatedObjectPriv();
 timeout=0
-cid=0
+cid=18322
 
 - 执行searchTest模块的checkRelatedObjectPrivTest方法，参数是'bug', TABLE_BUG, $results1, $objectIdList1, $products1, $executions1 第1条的objectID属性 @1
 - 执行searchTest模块的checkRelatedObjectPrivTest方法，参数是'bug', TABLE_BUG, $results2, $objectIdList2, $products2, $executions2  @0

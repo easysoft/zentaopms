@@ -5,7 +5,7 @@
 
 title=测试 productModel::accessDenied();
 timeout=0
-cid=0
+cid=17468
 
 - 权限不足跳转 @fail
 - 权限不足跳转 @fail

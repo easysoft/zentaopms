@@ -5,7 +5,7 @@
 
 title=测试 productZen::getModuleTree();
 timeout=0
-cid=0
+cid=17589
 
 - 测试正常产品获取模块树结果是否为数组 @1
 - 测试带分支参数的模块树结果是否为数组 @1

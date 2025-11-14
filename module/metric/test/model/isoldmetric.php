@@ -5,7 +5,7 @@
 
 title=isOldMetric
 timeout=0
-cid=1
+cid=17142
 
 - 测试度量项0是否是旧版度量项 @1
 - 测试度量项1是否是旧版度量项 @0

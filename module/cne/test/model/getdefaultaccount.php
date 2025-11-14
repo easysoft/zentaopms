@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getDefaultAccount();
 timeout=0
-cid=0
+cid=15617
 
 - 步骤1：正常情况测试获取默认账号（空组件参数） @0
 - 步骤2：使用mysql组件获取默认账号 @0

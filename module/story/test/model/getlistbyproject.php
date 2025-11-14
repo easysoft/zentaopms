@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getListByProject();
-cid=0
+cid=18542
 
 - 查询不存在的项目 @0
 - 查询存在的项目 @2

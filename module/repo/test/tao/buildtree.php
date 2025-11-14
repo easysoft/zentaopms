@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->buildTree();
 timeout=0
-cid=8
+cid=18114
 
 - 获取代码文件得提交信息第一个文件
  - 第0条的parent属性 @0

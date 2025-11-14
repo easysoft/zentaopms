@@ -5,7 +5,7 @@
 
 title=测试 buildModel->selectedBuildPairs();
 timeout=0
-cid=1
+cid=15513
 
 - 测试不传buildIdList获取给定ID列表的版本数据 @0
 - 测试传入buildIdList获取给定ID列表的版本数据属性1 @版本1

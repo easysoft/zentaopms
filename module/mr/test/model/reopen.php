@@ -5,7 +5,7 @@
 
 title=测试 mrModel::reopen();
 timeout=0
-cid=0
+cid=17259
 
 - 测试步骤1：已开启状态的MR重新打开属性message @请勿重复操作
 - 测试步骤2：已关闭状态的MR重新打开，API调用失败属性message @失败

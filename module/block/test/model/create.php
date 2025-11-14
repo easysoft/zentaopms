@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 block 模块 model下的 create 方法
 timeout=0
-cid=39
+cid=15226
 
 - 测试获取正常的block的内容
  - 属性account @admin

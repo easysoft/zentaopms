@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::fetchAPI();
 timeout=0
-cid=0
+cid=16454
 
 - 执行extensionTest模块的fetchAPITest方法，参数是'http://api.example.com/test.json'  @0
 - 执行extensionTest模块的fetchAPITest方法，参数是''  @0

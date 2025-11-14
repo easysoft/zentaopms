@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getShowColPosition();
 timeout=0
-cid=0
+cid=17401
 
 - 步骤1：columnTotal为noShow @noShow
 - 步骤2：columnTotal为show且columnPosition为bottom @bottom

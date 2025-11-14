@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiDeleteMR();
 timeout=0
-cid=0
+cid=17226
 
 - 测试步骤1：正常删除GitLab类型的MR @0
 - 测试步骤2：删除不存在host的MR @0

@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::freshStatus();
 timeout=0
-cid=0
+cid=16794
 
 - 步骤1：正常状态刷新，设置runDuration为0属性runDuration @0
 - 步骤2：CNE查询失败，runDuration保持为0属性runDuration @0

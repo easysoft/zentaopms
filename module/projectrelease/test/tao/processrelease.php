@@ -15,7 +15,7 @@ su('admin');
 
 title=测试 projectreleaseModel->processRelease();
 timeout=0
-cid=1
+cid=17974
 
 - 测试计算发布信息 1 @project:131 branch:0 build:1 branchName: buildInfos:项目11版本1
 - 测试计算发布信息 3 @project:131 branch:0 build:3 branchName: buildInfos:项目13版本3

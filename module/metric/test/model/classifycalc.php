@@ -5,7 +5,7 @@
 
 title=测试 metricModel::classifyCalc();
 timeout=0
-cid=0
+cid=17070
 
 - 执行metricTest模块的classifyCalcTest方法，参数是$calcList1 第0条的dataset属性 @user_dataset
 - 执行metricTest模块的classifyCalcTest方法，参数是array  @0

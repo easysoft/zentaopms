@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStages();
 timeout=0
-cid=0
+cid=19473
 
 - 步骤1：验证返回数组包含ID为3的阶段第3条的id属性 @3
 - 步骤2：验证阶段名称第3条的name属性 @Development stage

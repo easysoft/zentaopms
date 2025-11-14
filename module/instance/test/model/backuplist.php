@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::backupList();
 timeout=0
-cid=0
+cid=16780
 
 - 步骤1：正常情况（CNE不可用返回空数组） @0
 - 步骤2：空实例（参数不完整返回空数组） @0

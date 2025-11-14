@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildLinkBugsSearchForm();
 timeout=0
-cid=0
+cid=19082
 
 - 步骤1：正常情况下构建关联bug搜索表单属性executed @1
 - 步骤2：project tab下的objectID设置属性objectID @1

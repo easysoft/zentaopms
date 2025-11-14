@@ -4,7 +4,7 @@
 
 title=测试 installModel->connectDB();
 timeout=0
-cid=1
+cid=16768
 
 - 检查正确配置mysql连接信息时候能否连接到数据库。 @1
 - 检查密码错误时候能否连接到数据库。 @0

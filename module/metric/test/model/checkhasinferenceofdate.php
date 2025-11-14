@@ -5,7 +5,7 @@
 
 title=测试 metricModel::checkHasInferenceOfDate();
 timeout=0
-cid=0
+cid=17069
 
 - 执行metricTest模块的checkHasInferenceOfDateTest方法，参数是'test_metric_year', 'year', '2024-01-15'  @1
 - 执行metricTest模块的checkHasInferenceOfDateTest方法，参数是'test_metric_year', 'month', '2024-01-15'  @1

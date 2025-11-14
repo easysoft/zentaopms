@@ -5,7 +5,7 @@
 
 title=测试 storyModel->mergeReviewer();
 timeout=0
-cid=0
+cid=18575
 
 - 获取需求2的评审人 @admin|user1|user2
 - 获取需求2的待评审人 @admin|user1

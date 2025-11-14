@@ -11,7 +11,7 @@ zenData('task')->gen(10);
 
 title=测试 bugTao::getNameFromTable;
 timeout=0
-cid=1
+cid=15418
 
 
 */

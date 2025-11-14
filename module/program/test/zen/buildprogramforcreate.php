@@ -5,7 +5,7 @@
 
 title=测试 programZen::buildProgramForCreate();
 timeout=0
-cid=0
+cid=17724
 
 - 执行programTest模块的buildProgramForCreateTest方法
  - 属性type @program

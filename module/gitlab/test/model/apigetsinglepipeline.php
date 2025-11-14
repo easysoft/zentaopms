@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetSinglePipeline();
 timeout=0
-cid=0
+cid=16619
 
 - 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是1, 2, 8 属性status @failed
 - 执行gitlabTest模块的apiGetSinglePipelineTest方法，参数是0, 2, 8  @0

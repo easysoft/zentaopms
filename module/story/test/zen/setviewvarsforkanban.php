@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setViewVarsForKanban();
 timeout=0
-cid=0
+cid=18710
 
 - 执行storyTest模块的setViewVarsForKanbanTest方法，参数是3, array 属性executionType @kanban
 - 执行storyTest模块的setViewVarsForKanbanTest方法，参数是3, array 属性executionType @kanban

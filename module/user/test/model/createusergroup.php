@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->createUserGroup();
-cid=0
+cid=19599
 
 - 权限组为空，返回 false。属性result @0
 - 用户名为空，返回 false。属性result @0

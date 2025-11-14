@@ -10,7 +10,7 @@ zenData('config')->gen(7);
 
 title=测试 settingModel->parseItemPath();
 timeout=0
-cid=1
+cid=18366
 
 - 解析参数包含vision、owner、module、section、key的数据
  - 属性vision @rnd

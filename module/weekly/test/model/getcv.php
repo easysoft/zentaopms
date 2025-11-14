@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getCV();
-cid=1
+cid=19720
 pid=1
 
 测试ev值为0，ac值为0 >> 0

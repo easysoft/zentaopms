@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 /**
 
 title=测试executionModel->fixFirstTest();
-cid=1
+cid=16295
 
 - 不传入withLeft第0条的estimate属性 @56.3
 - 敏捷执行更新首日剩余工时第0条的left属性 @68.5

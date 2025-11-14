@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBranchPairs();
 timeout=0
-cid=0
+cid=19404
 
 - 步骤1：验证主分支名称（ID=0） @主干
 - 步骤2：验证测试分支名称（ID=1）属性1 @Test branch

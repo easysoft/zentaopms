@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::setChartDatas();
 timeout=0
-cid=0
+cid=19137
 
 - 步骤1：正常测试单ID @1
 - 步骤2：有效测试单ID @1

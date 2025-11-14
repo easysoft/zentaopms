@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testtaskModel->update();
-cid=1
+cid=19220
 pid=1
 
 - 测试修改测试单 name

@@ -5,7 +5,7 @@
 
 title=测试 hostZen::checkFormData();
 timeout=0
-cid=0
+cid=16764
 
 - 步骤1：正常情况 @1
 - 步骤2：名称长度边界值属性name @主机名称长度不能超过100个字符！

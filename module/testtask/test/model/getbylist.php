@@ -9,7 +9,7 @@ zenData('testtask')->gen(5);
 
 title=测试 testtaskModel->getByList();
 timeout=0
-cid=1
+cid=19166
 
 - idList 参数为空，返回 false。 @0
 - idList 参数包含 10 个 ID，数据库里只有 5 条数据，只返回 5 条数据。 @5

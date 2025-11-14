@@ -5,7 +5,7 @@
 
 title=测试 blockZen::getAvailableParams();
 timeout=0
-cid=0
+cid=15241
 
 - 执行blockTest模块的getAvailableParamsTest方法，参数是'', 'task' 第type条的name属性 @类型
 - 执行blockTest模块的getAvailableParamsTest方法，参数是'', 'bug' 第type条的name属性 @类型

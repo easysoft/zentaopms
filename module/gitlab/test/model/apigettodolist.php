@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetTodoList();
 timeout=0
-cid=1
+cid=16625
 
 - 通过gitlabID,projectID,超级管理员获取GitLab待办列表 @1
 - 通过gitlabID,projectID,超级管理员获取GitLab待办数量 @1

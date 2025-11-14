@@ -5,7 +5,7 @@
 
 title=测试 storyModel->buildTrackItems();
 timeout=0
-cid=0
+cid=18607
 
 - 执行$epicItems['lane_11']['epic_1'][0]属性id @11
 - 执行$epicItems['lane_10']['epic_1'][0]属性id @1

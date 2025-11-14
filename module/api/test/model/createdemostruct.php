@@ -5,7 +5,7 @@
 
 title=测试 apiModel::createDemoStruct();
 timeout=0
-cid=0
+cid=15097
 
 - 步骤1：正常的libID创建演示数据结构 @1
 - 步骤2：无效libID创建演示数据结构 @1

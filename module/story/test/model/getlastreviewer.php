@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getLastReviewer();
 timeout=0
-cid=0
+cid=18540
 
 - 执行storyTest模块的getLastReviewerTest方法  @0
 - 执行storyTest模块的getLastReviewerTest方法，参数是1  @latest_reviewer

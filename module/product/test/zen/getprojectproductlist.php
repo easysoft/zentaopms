@@ -5,7 +5,7 @@
 
 title=测试 productZen::getProjectProductList();
 timeout=0
-cid=0
+cid=17594
 
 - 步骤1:isProjectStory为false时,返回空数组 @0
 - 步骤2:isProjectStory为true且项目ID为11,获取关联产品数量 @3

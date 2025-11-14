@@ -5,7 +5,7 @@
 
 title=测试 metricModel::uniteFieldList();
 timeout=0
-cid=0
+cid=17158
 
 - 步骤1：空数组情况 @0
 - 步骤2：简单字段 @`id`,`name`,`status`

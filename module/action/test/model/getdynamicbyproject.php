@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getDynamicByProject();
 timeout=0
-cid=0
+cid=14897
 
 - 执行actionTest模块的getDynamicByProjectTest方法，参数是101  @20
 - 执行actionTest模块的getDynamicByProjectTest方法，参数是101, 'admin'  @10

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildOptionconfigurationData();
 timeout=0
-cid=0
+cid=15820
 
 - 步骤1：完整数据测试
  - 属性id @1

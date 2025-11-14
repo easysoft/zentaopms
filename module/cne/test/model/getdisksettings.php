@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getDiskSettings();
 timeout=0
-cid=0
+cid=15618
 
 - 步骤1：测试正常实例但没有块设备卷的情况属性resizable @0
 - 步骤2：测试不存在的实例ID

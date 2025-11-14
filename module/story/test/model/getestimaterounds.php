@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getEstimateRounds();
 timeout=0
-cid=0
+cid=18529
 
 - 执行storyTest模块的getEstimateRoundsTest方法，参数是999  @0
 - 执行storyTest模块的getEstimateRoundsTest方法，参数是2 属性1 @第 1 轮估算

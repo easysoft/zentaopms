@@ -5,7 +5,7 @@
 
 title=测试 customModel::getMainMenu();
 timeout=0
-cid=0
+cid=15899
 
 - 执行$result1 @array
 - 执行$result2 @array

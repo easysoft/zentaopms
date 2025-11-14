@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createBug();
 timeout=0
-cid=0
+cid=15831
 
 - 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data1, $relations1  @0
 - 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data2, $relations1  @0

@@ -5,7 +5,7 @@
 
 title=测试 ciModel::saveCompile();
 timeout=0
-cid=0
+cid=15589
 
 - 测试404响应处理属性result @1
 - 测试XML响应解析属性status @created

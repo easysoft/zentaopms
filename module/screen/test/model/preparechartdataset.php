@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->prepareChartDataset();
 timeout=0
-cid=1
+cid=18270
 
 - 测试dimensions和sourceData属性为空的情况下，生成的默认值是否正确;属性type @pie
 - 测试传入dimensions属性的情况下，生成的值是否正确;属性type @pie

@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getReviewResult();
 timeout=0
-cid=0
+cid=18554
 
 - 传入空参数 @pass
 - 设置 allpass，都是传入pass结果 @pass

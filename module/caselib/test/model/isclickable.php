@@ -5,7 +5,7 @@
 
 title=测试 caselibModel::isClickable();
 timeout=0
-cid=0
+cid=15535
 
 - 执行caselibTest模块的isClickableTest方法，参数是$libObject, 'createcase'  @1
 - 执行caselibTest模块的isClickableTest方法，参数是$libWithProduct, 'createcase'  @0

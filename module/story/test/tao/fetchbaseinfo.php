@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyTao->fetchBaseInfo();
-cid=0
+cid=18624
 
 - storyID 参数为 0 返回 false。 @0
 - storyID 参数在数据库中不存在返回 false。 @0

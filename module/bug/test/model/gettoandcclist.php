@@ -9,7 +9,7 @@ zenData('bug')->gen(82);
 
 title=bugModel->getToAndCcList();
 timeout=0
-cid=1
+cid=15398
 
 - 测试获取bug1的联系人 @admin,admin
 - 测试获取bug2的联系人 @admin,admin

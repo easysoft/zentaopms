@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->summary();
-cid=1
+cid=16155
 
 - 测试没有附件的情况 @本页共 <strong>0</strong> 个附件，共计 <strong>0B</strong>，其中<strong></strong>。
 - 测试有附件的情况 @本页共 <strong>10</strong> 个附件，共计 <strong>159.2K</strong>，其中<strong>txt 1个、doc 1个、docx 1个、dot 1个、wps 1个、wri 1个、pdf 1个、ppt 1个、pptx 1个、xls 1个</strong>。

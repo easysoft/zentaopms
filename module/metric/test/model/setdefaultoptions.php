@@ -5,7 +5,7 @@
 
 title=setDefaultOptions
 timeout=0
-cid=1
+cid=17157
 
 - 测试传入options的情况1
  - 属性product @1

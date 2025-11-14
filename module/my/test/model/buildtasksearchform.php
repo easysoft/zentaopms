@@ -23,7 +23,7 @@ su('admin');
 
 title=测试 myModel->buildTaskSearchForm();
 timeout=0
-cid=1
+cid=0
 
 - module 为 workTask，缓存查询参数，查询参数中 queryID 为空。 @0
 - module 为 workTask，缓存查询参数，查询参数中 actionURL 为空。 @0

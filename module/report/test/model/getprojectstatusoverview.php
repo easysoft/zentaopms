@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getProjectStatusOverview();
-cid=1
+cid=18166
 
 - 获取项目状态 @doing:20;suspended:5;closed:5;wait:10;
 - 获取 admin 的项目状态 @doing:1;

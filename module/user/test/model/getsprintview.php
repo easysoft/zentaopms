@@ -5,7 +5,7 @@
 
 title=测试 userModel->getProductMembers();
 timeout=0
-cid=0
+cid=19633
 
 - 查看user1可访问的执行 @1
 - 查看user2可访问的执行 @1

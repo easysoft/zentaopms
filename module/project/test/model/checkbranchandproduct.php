@@ -5,7 +5,7 @@
 
 title=测试 projectModel::checkBranchAndProduct();
 timeout=0
-cid=0
+cid=17805
 
 - 步骤1：正常情况-有产品有分支 @1
 - 步骤2：边界值-空产品数组 @1

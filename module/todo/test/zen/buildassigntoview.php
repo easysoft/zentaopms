@@ -5,7 +5,7 @@
 
 title=测试 todoZen::buildAssignToView();
 timeout=0
-cid=0
+cid=19293
 
 - 步骤1：正常情况属性result @success
 - 步骤2：边界值属性result @success

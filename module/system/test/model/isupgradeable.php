@@ -5,7 +5,7 @@
 
 title=测试 systemModel::isUpgradeable();
 timeout=0
-cid=0
+cid=18743
 
 - 步骤1：正常情况，预期无升级 @0
 - 步骤2：边界值，版本相同 @0

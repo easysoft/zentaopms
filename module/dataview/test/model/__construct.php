@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::__construct();
 timeout=0
-cid=0
+cid=15950
 
 - 步骤1：验证构造函数正常执行属性result @normal
 - 步骤2：验证父类model正确初始化属性result @1

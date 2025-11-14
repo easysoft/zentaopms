@@ -11,7 +11,7 @@ su('admin');
 
 title=测试executionModel->getByIdListTest();
 timeout=0
-cid=1
+cid=16333
 
 - 测试查找执行 ID 1 2 3 的名称 @项目集1,项目集2,项目集3
 - 测试查找执行 ID 4 5 6 的名称 @项目集4,项目集5,项目集6

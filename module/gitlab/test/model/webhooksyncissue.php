@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::webhookSyncIssue();
 timeout=0
-cid=1
+cid=16672
 
 - 对象类型为空 @0
 - 对象类型错误 @0

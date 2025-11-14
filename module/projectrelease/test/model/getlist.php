@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 projectreleaseModel->getList();
-cid=1
+cid=17970
 
 - 查询projectID正常存在, type为 all 排序 id_asc 的发布 @9,19
 

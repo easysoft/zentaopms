@@ -4,7 +4,7 @@
 
 title=测试 weeklyModel->addBuiltinScope();
 timeout=0
-cid=1
+cid=19715
 
 - 测试添加内置范围
  - 属性name @项目

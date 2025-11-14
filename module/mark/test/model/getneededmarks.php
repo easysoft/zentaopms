@@ -5,7 +5,7 @@
 
 title=测试 markModel::getNeededMarks();
 timeout=0
-cid=0
+cid=17044
 
 - 测试正常查询存在的标记数据 @3
 - 测试查询不存在的对象ID @0

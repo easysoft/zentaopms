@@ -5,7 +5,7 @@
 
 title=测试 taskZen::generalCreateResponse();
 timeout=0
-cid=0
+cid=18929
 
 - 步骤1：continueAdding 场景，带有需求和模块属性result @success
 - 步骤2：continueAdding 场景，无需求无模块属性result @success

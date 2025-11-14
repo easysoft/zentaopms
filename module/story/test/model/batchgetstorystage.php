@@ -5,7 +5,7 @@
 
 title=测试 storyModel::batchGetStoryStage();
 timeout=0
-cid=0
+cid=18474
 
 - 执行storyTest模块的batchGetStoryStageTest方法，参数是array 第100条的0:stage属性 @wait
 - 执行storyTest模块的batchGetStoryStageTest方法，参数是array 第101条的0:stage属性 @planned

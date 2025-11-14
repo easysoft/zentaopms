@@ -5,7 +5,7 @@
 
 title=测试 mailZen::sendQueue();
 timeout=0
-cid=0
+cid=17042
 
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue1, false 属性result @success
 - 执行mailZenTest模块的sendQueueZenTest方法，参数是$queue2, false  @0

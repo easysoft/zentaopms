@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::manageTagPrivs();
 timeout=0
-cid=0
+cid=16664
 
 - 步骤1：正常标签权限管理（无已有保护标签） @fail
 - 步骤2：管理包含已有保护标签的情况 @fail

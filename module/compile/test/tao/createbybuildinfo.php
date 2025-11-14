@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 compileModel->createByBuildInfo().
 timeout=0
-cid=1
+cid=15757
 
 - 测试当buildTType为空的时候，判断创建的compile信息是否正确。 @0
 - 测试当buildTType为jenkins的时候，判断创建的compile信息是否正确，是否与build内的信息一致。

@@ -16,7 +16,7 @@ $project->gen(10);
 
 title=测试 treeModel->isMergeModule();
 timeout=0
-cid=1
+cid=19388
 
 - 测试检查root 1 type bug 合并模块版本 @2
 - 测试检查root 2 type bug 合并模块版本 @1

@@ -5,7 +5,7 @@
 
 title=测试 caselibModel::setLibMenu();
 timeout=0
-cid=0
+cid=15536
 
 - 执行caselibTest模块的setLibMenuTest方法，参数是array  @1
 - 执行caselibTest模块的setLibMenuTest方法，参数是array  @1

@@ -9,7 +9,7 @@ zenData('apistruct')->gen(10);
 
 title=测试 apiModel->getStructByID();
 timeout=0
-cid=1
+cid=15115
 
 - 获取数据结构ID为1的数据结构。
  - 属性id @1

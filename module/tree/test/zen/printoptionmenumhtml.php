@@ -5,7 +5,7 @@
 
 title=测试 treeZen::printOptionMenuMHtml();
 timeout=0
-cid=0
+cid=19397
 
 - 执行treeTest模块的printOptionMenuMHtmlTest方法，参数是array  @1
 - 执行treeTest模块的printOptionMenuMHtmlTest方法，参数是array  @1

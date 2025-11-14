@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkExecutionPriv();
 timeout=0
-cid=0
+cid=18315
 
 - 执行searchTest模块的checkExecutionPrivTest方法，参数是$results1, $objectIdList1, $executions1
  - 第1条的objectID属性 @1

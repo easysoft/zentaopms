@@ -5,7 +5,7 @@
 
 title=测试 entryModel::isClickable();
 timeout=0
-cid=0
+cid=16251
 
 - 步骤1：正常entry对象和log操作 @1
 - 步骤2：正常entry对象和edit操作 @1

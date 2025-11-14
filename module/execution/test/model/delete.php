@@ -8,7 +8,7 @@ su('admin');
 /**
 
 title=测试executionModel->activateTest();
-cid=0
+cid=16290
 
 - 测试删除迭代5 @1
 - 测试删除迭代6 @1

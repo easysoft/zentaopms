@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProjects();
 timeout=0
-cid=0
+cid=19630
 
 - 执行userTest模块的getProjectsTest方法，参数是''  @0
 - 执行userTest模块的getProjectsTest方法，参数是'nonexistuser'  @0

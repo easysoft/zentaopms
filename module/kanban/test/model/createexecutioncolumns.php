@@ -10,7 +10,7 @@ zenData('kanbancell')->gen(0);
 
 title=测试 kanbanModel->createExecutionColumns();
 timeout=0
-cid=1
+cid=16891
 
 - 创建泳道 100001 执行101 需求的看板列 @15
 - 创建泳道 100001 执行101 任务的看板列 @7

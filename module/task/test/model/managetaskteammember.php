@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskModel->manageTaskTeamMember();
-cid=1
+cid=18832
 pid=1
 
 */

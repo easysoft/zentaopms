@@ -3,7 +3,7 @@
 /**
 
 title=测试 projectModel->updateWhitelist();
-cid=1
+cid=17883
 
 - 测试敏捷项目添加白名单成员 @admin|user1|user2
 - 测试瀑布项目添加白名单成员 @admin|user1|user2

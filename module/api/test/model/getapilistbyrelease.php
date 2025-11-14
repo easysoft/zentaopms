@@ -10,7 +10,7 @@ zenData('apispec')->gen(100);
 
 title=测试 apiModel->getApiListByRelease();
 timeout=0
-cid=1
+cid=15101
 
 - 测试获取空发布的文档列表。
  - 第0条的id属性 @1

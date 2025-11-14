@@ -5,7 +5,7 @@
 
 title=测试 bugZen::prepareBrowseParams();
 timeout=0
-cid=0
+cid=15465
 
 - 测试 browseType 为 all 时的参数准备属性moduleID @0
 - 测试 browseType 为 all 时的参数准备属性queryID @0

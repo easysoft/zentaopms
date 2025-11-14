@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::parseToStatement();
 timeout=0
-cid=0
+cid=15195
 
 - 测试简单SELECT语句解析 @object
 - 测试带WHERE条件的SELECT语句解析 @object

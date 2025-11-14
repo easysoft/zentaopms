@@ -11,7 +11,7 @@ zenData('kanbanregion')->gen(1);
 
 title=测试 kanbanModel->create();
 timeout=0
-cid=1
+cid=16976
 
 - 创建协同空间
  - 属性name @测试创建协作看板

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::buildCreateForm();
 timeout=0
-cid=0
+cid=18124
 
 - 步骤1：正常项目ID属性title @代码库-创建
 - 步骤2：项目ID属性objectID @2

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildStatusData();
 timeout=0
-cid=0
+cid=15826
 
 - 步骤1：正常情况-检查id属性id @1
 - 步骤2：包含额外字段-检查sequence属性sequence @200

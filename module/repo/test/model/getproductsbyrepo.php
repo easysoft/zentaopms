@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getProductsByRepo();
 timeout=0
-cid=0
+cid=18073
 
 - 步骤1：无效代码库ID(0) @0
 - 步骤2：不存在的代码库ID(99) @0

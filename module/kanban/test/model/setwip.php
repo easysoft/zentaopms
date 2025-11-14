@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(500);
 
 title=测试 kanbanModel->setWIP();
 timeout=0
-cid=1
+cid=16958
 
 - 测试设置看板列401的在制品限制属性limit @子列在制品数量之和不能大于父列的在制品数量
 - 测试设置看板列402的在制品限制

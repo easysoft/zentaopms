@@ -5,7 +5,7 @@
 
 title=测试 buildZen::buildBuildForEdit();
 timeout=0
-cid=0
+cid=15519
 
 - 执行buildTest模块的buildBuildForEditTest方法，参数是1 属性name @Build1
 - 执行buildTest模块的buildBuildForEditTest方法，参数是2 属性name @Build2

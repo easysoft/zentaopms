@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::getContactLists();
-cid=0
+cid=19609
 
 - 获取user1的联系人列表，取出数组第一个值第0条的listName属性 @联系人列表41
 - 获取dev2的联系人列表，取出数组第三个值第2条的listName属性 @联系人列表2

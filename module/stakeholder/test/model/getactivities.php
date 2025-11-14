@@ -5,7 +5,7 @@
 
 title=测试 stakeholderModel::getActivities();
 timeout=0
-cid=0
+cid=18430
 
 - 步骤1：获取正常活动数据的键值对属性1 @活动名称1
 - 步骤2：验证返回数据的数量 @20

@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getLinkedProducts();
 timeout=0
-cid=0
+cid=16432
 
 - 步骤1：通过复制执行ID获取产品（无执行数据时返回空） @0
 - 步骤2：通过产品计划ID获取产品第1条的name属性 @正常产品1

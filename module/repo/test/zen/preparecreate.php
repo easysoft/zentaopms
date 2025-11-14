@@ -5,7 +5,7 @@
 
 title=测试 repoZen::prepareCreate();
 timeout=0
-cid=0
+cid=18150
 
 - 执行result1 = $repoZenTest模块的prepareCreateTest方法，参数是$normalFormData, false, 'normal' 属性acl @{"acl":"open"}
 - 执行result2 = $repoZenTest模块的prepareCreateTest方法，参数是$containerFormData, false, 'container_git' 属性acl @{"acl":"open"}

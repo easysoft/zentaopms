@@ -4,7 +4,7 @@
 
 title=productpanModel->getPlansByStories();
 timeout=0
-cid=1
+cid=17638
 
 - 查询存在的id @3
 - 查询部分存在的id @1

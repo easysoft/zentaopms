@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=biModel->buildSQL();
 timeout=0
-cid=1
+cid=15151
 
 - 测试 简单sql @SELECT `id`, `name` FROM `zt_task`
 

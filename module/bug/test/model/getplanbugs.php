@@ -13,7 +13,7 @@ su('admin');
 
 title=bugModel->getPlanBugs();
 timeout=0
-cid=1
+cid=15387
 
 - 查询计划1 状态为all的bug属性title @BUG3,BUG2,BUG1
 - 查询计划1 状态为active的bug属性title @BUG3,BUG2,BUG1

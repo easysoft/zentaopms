@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getApiLibs();
-cid=1
+cid=16070
 
 - 获取全部的接口库
  - 第1条的type属性 @api

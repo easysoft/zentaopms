@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 transfer->initRequired();
 timeout=0
-cid=1
+cid=19323
 
 - 测试Task模块execution字段是否必填 @1
 - 测试获取bug模块title字段是否必填 @1

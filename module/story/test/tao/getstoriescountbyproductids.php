@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getStoriesCountByProductIDs();
 timeout=0
-cid=0
+cid=18647
 
 - 执行storyTest模块的getStoriesCountByProductIDsTest方法，参数是array  @2
 - 执行storyTest模块的getStoriesCountByProductIDsTest方法，参数是array  @1

@@ -5,7 +5,7 @@
 
 title=测试 todoZen::buildBatchEditView();
 timeout=0
-cid=0
+cid=19295
 
 - 步骤1：正常调用属性result @success
 - 步骤2：验证customFields属性customFields @1

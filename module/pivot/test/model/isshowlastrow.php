@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::isShowLastRow();
 timeout=0
-cid=0
+cid=17412
 
 - 步骤1：测试'bottom'参数 @1
 - 步骤2：测试'all'参数 @1

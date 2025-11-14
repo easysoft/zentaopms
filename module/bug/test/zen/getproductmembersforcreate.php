@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getProductMembersForCreate();
 timeout=0
-cid=0
+cid=15456
 
 - 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug1 属性admin @A:管理员
 - 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug2 属性admin @A:管理员

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProductDocBlock();
 timeout=0
-cid=0
+cid=15269
 
 - 测试默认type参数(involved)
  - 属性type @involved

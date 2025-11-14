@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getIssueTypeList();
 timeout=0
-cid=0
+cid=15771
 
 - 步骤1：正常情况 @0
 - 步骤2：空参数 @0

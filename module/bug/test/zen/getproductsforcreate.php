@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getProductsForCreate();
 timeout=0
-cid=0
+cid=15457
 
 - 步骤1:测试在默认tab下获取产品列表,传入productID=1 @1
 - 步骤2:测试在默认tab下获取产品列表,传入不存在的productID=999 @10

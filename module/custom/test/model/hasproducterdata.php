@@ -5,7 +5,7 @@
 
 title=测试 customModel::hasProductERData();
 timeout=0
-cid=0
+cid=15908
 
 - 步骤1：测试空数据库情况 @0
 - 步骤2：测试有epic类型story且未删除 @3

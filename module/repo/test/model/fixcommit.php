@@ -5,7 +5,7 @@
 
 title=测试 repoModel::fixCommit();
 timeout=0
-cid=0
+cid=18045
 
 - 测试步骤1：正常情况下修复repo3的第一条记录第3条的commit属性 @1
 - 测试步骤2：空repo历史记录情况 @0

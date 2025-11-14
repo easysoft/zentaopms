@@ -5,7 +5,7 @@
 
 title=测试 executionZen::processPrintKanbanData();
 timeout=0
-cid=0
+cid=16438
 
 - 步骤1：有历史数据时过滤重复项目
  - 属性wait @3

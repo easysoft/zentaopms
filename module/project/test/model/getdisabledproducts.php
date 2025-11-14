@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
 
 title=测试 projectModel->getDisabledProducts();
 timeout=0
-cid=1
+cid=17823
 
 - 测试获取敏捷项目不可修改产品 @0
 - 测试获取以产品创建的瀑布项目不可修改产品属性2 @项目已经关联了该产品中的，不能取消关联，您可以取消关联后再操作。

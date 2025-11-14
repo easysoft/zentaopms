@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 kanbanTao->getCanImportProducts();
 timeout=0
-cid=1
+cid=16980
 
 - 获取可导入计划的产品数量 @101
 - 获取可导入发布的产品数量 @101

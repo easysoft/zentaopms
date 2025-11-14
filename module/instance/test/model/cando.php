@@ -9,7 +9,7 @@ zenData('instance')->gen(2);
 
 title=instanceModel->getByID();
 timeout=0
-cid=1
+cid=16782
 
 - 查看第一条instance是否可操作start @0
 - 查看第一条instance是否可操作stop @1

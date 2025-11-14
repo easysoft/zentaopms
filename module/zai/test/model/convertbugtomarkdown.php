@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::convertBugToMarkdown();
 timeout=0
-cid=0
+cid=19762
 
 - 测试转换完整的Bug对象 @1
 - 测试转换最小化的Bug对象 @2

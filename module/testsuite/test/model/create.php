@@ -7,7 +7,7 @@ zenData('testsuite')->gen(1);
 /**
 
 title=测试 testsuiteModel->create();
-cid=1
+cid=19138
 pid=1
 
 */

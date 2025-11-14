@@ -5,7 +5,7 @@
 
 title=测试 backupModel::restoreFile();
 timeout=0
-cid=0
+cid=15141
 
 - 步骤1：正常传入有效的备份目录路径
  - 属性result @1

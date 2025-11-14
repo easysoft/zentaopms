@@ -39,7 +39,7 @@ $task->gen(10);
 
 title=测试executionModel->getBurnDataFlotTest();
 timeout=0
-cid=1
+cid=16301
 
 - 按剩余工时查看敏捷执行查询统计属性value @95.3
 - 按剩余工时查看瀑布执行查询统计属性value @3

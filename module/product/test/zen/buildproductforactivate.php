@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildProductForActivate();
 timeout=0
-cid=0
+cid=17563
 
 - 步骤1:正常激活产品属性status @normal
 - 步骤2:OR视觉模式下激活产品属性status @normal

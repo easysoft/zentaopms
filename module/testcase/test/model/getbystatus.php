@@ -12,7 +12,7 @@ zenData('story')->gen(10);
 
 title=测试 testcaseModel->getByStatus();
 timeout=0
-cid=1
+cid=18981
 
 - 测试查询所有产品 所有状态的case @10
 - 测试查询产品1 所有状态的case @4

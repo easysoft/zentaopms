@@ -4,7 +4,7 @@
 
 title=测试 buildModel->getProjectBuilds();
 timeout=0
-cid=1
+cid=15496
 
 - 全部项目版本查询
  - 第1条的project属性 @11

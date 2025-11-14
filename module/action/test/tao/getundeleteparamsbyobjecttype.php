@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getUndeleteParamsByObjectType().
 timeout=0
-cid=1
+cid=14957
 
 - 查看通过项目获取的字段 @`zt_project`
 - 查看通过项目获取的字段属性3 @id

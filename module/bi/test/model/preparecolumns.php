@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareColumns();
 timeout=0
-cid=0
+cid=15201
 
 - 测试简单SELECT语句,验证返回结果包含两个元素 @2
 - 测试简单SELECT语句,验证第一个元素columns包含id字段第id条的name属性 @id

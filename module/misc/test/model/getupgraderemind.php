@@ -5,7 +5,7 @@
 
 title=测试 miscModel::getUpgradeRemind();
 timeout=0
-cid=0
+cid=17216
 
 - 步骤1：首次调用，配置未设置，应该返回true @1
 - 步骤2：设置隐藏升级指南，应该返回false @0

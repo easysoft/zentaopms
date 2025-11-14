@@ -5,7 +5,7 @@
 
 title=测试 holidayModel::isHoliday();
 timeout=0
-cid=0
+cid=16747
 
 - 步骤1：正常节假日（元旦） @It is a holiday
 - 步骤2：正常工作日（不在节假日范围） @It is not a holiday

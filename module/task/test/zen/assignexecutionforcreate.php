@@ -5,7 +5,7 @@
 
 title=测试 taskZen::assignExecutionForCreate();
 timeout=0
-cid=0
+cid=18896
 
 - 步骤1：正常执行对象属性projectID @1
 - 步骤2：全局创建模式属性executions @0

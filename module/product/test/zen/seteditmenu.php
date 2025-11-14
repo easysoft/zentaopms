@@ -5,7 +5,7 @@
 
 title=测试 productZen::setEditMenu();
 timeout=0
-cid=0
+cid=17611
 
 - 步骤1:测试仅传入productID,programID为0
  - 属性productID @1

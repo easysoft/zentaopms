@@ -5,7 +5,7 @@
 
 title=测试 convertTao::processJiraIssueContent();
 timeout=0
-cid=0
+cid=15870
 
 - 执行convertTest模块的processJiraIssueContentTest方法，参数是array  @1
 - 执行convertTest模块的processJiraIssueContentTest方法，参数是$largeIssueList  @1

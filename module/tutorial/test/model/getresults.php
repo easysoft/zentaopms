@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getResults();
 timeout=0
-cid=0
+cid=19466
 
 - 执行tutorialTest模块的getResultsTest方法  @1
 - 执行tutorialTest模块的getResultsTest方法 第1条的id属性 @1

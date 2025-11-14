@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getCellByCard();
 timeout=0
-cid=0
+cid=16909
 
 - 执行kanbanTest模块的getCellByCardTest方法，参数是1, 1 
  - 属性lane @1

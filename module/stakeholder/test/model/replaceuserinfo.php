@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->replaceUserInfo();
-cid=1
+cid=18446
 
 - 测试创建团队干系人时，不填写用户名属性user @『用户』不能为空。
 - 测试创建公司干系人时，不填写用户名属性user @『用户』不能为空。

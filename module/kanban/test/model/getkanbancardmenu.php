@@ -16,7 +16,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->getKanbanCardMenu();
 timeout=0
-cid=1
+cid=16923
 
 - 测试获取执行1 story的操作数量 @0
 - 测试获取执行1 task的操作数量 @32

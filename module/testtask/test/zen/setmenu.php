@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::setMenu();
 timeout=0
-cid=0
+cid=19242
 
 - 步骤1：qa tab默认情况，返回productID @1
 - 步骤2：project tab情况，返回projectID @1

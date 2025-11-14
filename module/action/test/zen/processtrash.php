@@ -5,7 +5,7 @@
 
 title=测试 actionZen::processTrash();
 timeout=0
-cid=0
+cid=14972
 
 - 步骤1：pivot类型JSON名称处理属性objectName @中文名称
 - 步骤2：普通对象名称处理（包含HTML链接）属性objectName @<a href='bug-view-1.html' title='测试Bug'  >测试Bug</a>

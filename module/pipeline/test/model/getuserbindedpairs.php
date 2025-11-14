@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel->getUserBindedPairs();
 timeout=0
-cid=1
+cid=17351
 
 - 获取Id为0、type为空的用户绑定信息 @0
 - 获取Id为0、type为gitlab的用户绑定信息 @0

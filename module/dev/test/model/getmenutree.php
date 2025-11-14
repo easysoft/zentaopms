@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
 /**
 
 title=测试 devModel::getMenuTree();
-cid=1
+cid=0
 pid=1
 
 检查传入空值时的情况 >> 0

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByAssignedTo();
 timeout=0
-cid=0
+cid=18500
 
 - 步骤1：查询admin用户被分配的story（产品1中有6个admin的story） @6
 - 步骤2：查询不存在用户的story @0

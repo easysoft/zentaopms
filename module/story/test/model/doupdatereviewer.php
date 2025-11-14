@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->doUpdateReviewer();
-cid=0
+cid=18489
 
 - 只传入评审人列表。 @0
 - 只传入软件需求 ID。第0条的reviewer属性 @user2

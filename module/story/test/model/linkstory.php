@@ -5,7 +5,7 @@
 
 title=测试 storyModel->linkStory();
 timeout=0
-cid=0
+cid=18573
 
 - 获取关联需求后的执行下的需求数量 @1
 - 获取关联需求后的执行下的需求数量 @2

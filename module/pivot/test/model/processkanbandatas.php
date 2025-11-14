@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processKanbanDatas();
 timeout=0
-cid=0
+cid=17421
 
 - 步骤1：story对象，包含看板项目第0条的isModal属性 @1
 - 步骤2：story对象，不包含看板项目第0条的isModal属性 @~~

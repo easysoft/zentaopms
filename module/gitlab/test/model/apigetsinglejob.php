@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetSingleJob();
 timeout=0
-cid=0
+cid=16618
 
 - 执行gitlabTest模块的apiGetSingleJobTest方法，参数是1, 2, 8 属性stage @deploy
 - 执行gitlabTest模块的apiGetSingleJobTest方法，参数是0, 2, 8  @0

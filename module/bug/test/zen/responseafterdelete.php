@@ -5,7 +5,7 @@
 
 title=测试 bugZen::responseAfterDelete();
 timeout=0
-cid=0
+cid=15473
 
 - 执行bugTest模块的responseAfterDeleteTest方法，参数是$bug1, '', '' 属性result @1
 - 执行bugTest模块的responseAfterDeleteTest方法，参数是$bug2, '', 'Custom success message' 属性result @1

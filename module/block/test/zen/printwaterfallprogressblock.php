@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWaterfallProgressBlock();
 timeout=0
-cid=0
+cid=15312
 
 - 执行blockTest模块的printWaterfallProgressBlockTest方法，参数是1
  - 属性hasCharts @1

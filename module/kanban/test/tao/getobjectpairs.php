@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::getObjectPairs();
 timeout=0
-cid=0
+cid=16983
 
 - 步骤1：正常获取模块键值对
  - 属性1 @模块一

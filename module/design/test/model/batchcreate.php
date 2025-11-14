@@ -5,7 +5,7 @@
 
 title=测试 designModel->batchCreate();
 timeout=0
-cid=1
+cid=15983
 
 - 批量创建概要设计
  - 第0条的name属性 @概要设计1

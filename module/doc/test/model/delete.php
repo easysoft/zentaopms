@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->delete();
-cid=1
+cid=16062
 
 - 测试删除ID为0的文档 @0
 - 测试删除ID为1的文档 @1

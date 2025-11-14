@@ -5,7 +5,7 @@
 
 title=测试 biModel::getDrillFields();
 timeout=0
-cid=0
+cid=15166
 
 - 测试步骤1：正常情况属性name @ZenTao
 - 测试步骤2：空钻取数据返回空数组 @0

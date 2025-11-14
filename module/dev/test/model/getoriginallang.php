@@ -8,7 +8,7 @@ zenData('config')->gen(0);
 /**
 
 title=测试 devModel::getOriginalLang();
-cid=1
+cid=16009
 pid=1
 
 错误的类型返回数据                         >> 地盘

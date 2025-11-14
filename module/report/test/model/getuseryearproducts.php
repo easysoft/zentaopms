@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserYearProducts();
-cid=1
+cid=18179
 pid=1
 
 */

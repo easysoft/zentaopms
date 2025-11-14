@@ -5,7 +5,7 @@
 
 title=测试 dimensionModel::getList();
 timeout=0
-cid=0
+cid=16036
 
 - 执行dimensionTester模块的getListTest方法 第1条的name属性 @宏观管理维度
 - 执行dimensionTester模块的getListTest方法 第1条的code属性 @macro

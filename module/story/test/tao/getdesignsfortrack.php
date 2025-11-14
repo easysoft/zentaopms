@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getDesignsForTrack();
 timeout=0
-cid=0
+cid=18634
 
 - 传入空参数。 @2
 - 执行$designs['design'] @6;7;8;9;10

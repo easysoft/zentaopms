@@ -5,7 +5,7 @@
 
 title=测试 programModel::getSwitcher();
 timeout=0
-cid=0
+cid=17699
 
 - 步骤1：有效项目集ID包含项目集名称 @1
 - 步骤2：ID为0的情况包含所有项目集文本 @1

@@ -5,7 +5,7 @@
 
 title=测试 productZen::getActions4Dashboard();
 timeout=0
-cid=0
+cid=17569
 
 - 步骤1:测试产品ID=1 @1
 - 步骤2:测试产品ID=2 @1

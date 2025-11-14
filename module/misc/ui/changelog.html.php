@@ -62,7 +62,7 @@ foreach($features as $feature)
         )
     );
 
-    $idx ++;
+    if($idx) $idx ++;
 }
 
 div

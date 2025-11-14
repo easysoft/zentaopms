@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDocs();
 timeout=0
-cid=0
+cid=19426
 
 - 步骤1：验证文档ID第1条的id属性 @1
 - 步骤2：验证文档标题第1条的title属性 @Test Doc

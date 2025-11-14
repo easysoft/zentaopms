@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testreportModel->getList();
 timeout=0
-cid=1
+cid=19118
 
 - 查询objectID 1 objectType product extra 0 orderBy id_desc @21,11,1
 

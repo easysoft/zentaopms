@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::updateRegion();
 timeout=0
-cid=0
+cid=16966
 
 - 步骤1：正常更新看板区域名称属性name @更新后的区域名称
 - 步骤2：更新区域名称为空值第name条的0属性 @『区域名称』不能为空。

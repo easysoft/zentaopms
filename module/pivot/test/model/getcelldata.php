@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getCellData();
 timeout=0
-cid=0
+cid=17374
 
 - 步骤1：sum统计属性value @35
 - 步骤2：count统计属性value @3

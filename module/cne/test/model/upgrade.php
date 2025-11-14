@@ -5,7 +5,7 @@
 
 title=测试 cneModel->upgrade();
 timeout=0
-cid=1
+cid=15635
 
 - 升级禅道DevOps平台版 status @0
 - 升级禅道DevOps平台版 status @0

@@ -5,7 +5,7 @@
 
 title=测试 projectTao::createProduct();
 timeout=0
-cid=0
+cid=17894
 
 - 执行projectTest模块的createProductTest方法，参数是$projectID, $project, $postData, $program  @1
 - 执行$product属性name @测试新增产品一

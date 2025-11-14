@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getFinished();
-cid=1
+cid=19721
 pid=1
 
 测试project值为0，date值为2022-05-01 >> 0

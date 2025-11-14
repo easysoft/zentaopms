@@ -4,7 +4,7 @@
 
 title=测试 convertTao::createProduct();
 timeout=0
-cid=0
+cid=15841
 
 - 步骤1：正常项目数据创建产品 @6
 - 步骤2：空项目对象处理 @0

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getGitlabProjects();
 timeout=0
-cid=0
+cid=18061
 
 - 执行repoTest模块的getGitlabProjectsTest方法，参数是1, ''  @14
 - 执行repoTest模块的getGitlabProjectsTest方法，参数是1, 'IS_DEVELOPER'  @14

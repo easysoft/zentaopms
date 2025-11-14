@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->statisticProductData();
-cid=0
+cid=17559
 
 - 测试传入空数组 @0
 - 测试传入存在的产品

@@ -12,7 +12,7 @@ $taskTable->gen(30);
 
 title=taskModel->getDataOfTasksPerClosedReason();
 timeout=0
-cid=1
+cid=18795
 
 - 完成原因的数量 @2
 - 统计完成原因为已完成的任务数量

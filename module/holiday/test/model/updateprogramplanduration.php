@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->updateProgramPlanDuration();
-cid=1
+cid=16750
 
 - 测试插入id为 10 的节假日时迭代 11 项目的planDuration @250
 - 测试插入id为 10 的节假日时迭代 60 项目的planDuration @252

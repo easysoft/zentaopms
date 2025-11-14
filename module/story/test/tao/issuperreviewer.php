@@ -5,7 +5,7 @@
 
 title=测试 storyModel->isSuperReviewer();
 timeout=0
-cid=0
+cid=18651
 
 - superReviewers变量中无该账号。 @0
 - superReviewers变量中有该账号。 @1

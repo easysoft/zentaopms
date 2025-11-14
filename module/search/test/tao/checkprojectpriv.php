@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkProjectPriv();
 timeout=0
-cid=0
+cid=18321
 
 - 执行searchTest模块的checkProjectPrivTest方法，参数是$results, $objectIdList  @3
 - 执行searchTest模块的checkProjectPrivTest方法，参数是$results, $objectIdList  @2

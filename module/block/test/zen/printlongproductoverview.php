@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printLongProductOverview();
 timeout=0
-cid=0
+cid=15266
 
 - 步骤1：无参数调用属性currentYear @2025
 - 步骤2：指定有效年份属性currentYear @2023

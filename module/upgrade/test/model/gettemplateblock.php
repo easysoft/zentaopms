@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->getTemplateBlock();
 timeout=0
-cid=1
+cid=19529
 
 - 获取概要设计区块名称属性blockTitle @全部的概要设计
 - 获取详细设计区块名称属性blockTitle @全部的详细设计

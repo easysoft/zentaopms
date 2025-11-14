@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->batchCreate();
-cid=1
+cid=18425
 
 - 测试项目ID为0、人员为空时，批量创建项目干系人 @0
 - 测试项目ID为0、人员为admin、user1时，批量创建项目干系人 @1

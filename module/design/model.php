@@ -470,7 +470,7 @@ class designModel extends model
             ->leftJoin(TABLE_DESIGN)->alias('t3')->on("t2.AType='design' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
-            ->andWhere('t3.id')->ne('')
+            ->andWhere('t3.id')->notNULL()
             ->orderBy('id')
             ->fetchGroup('revision', 'id');
     }

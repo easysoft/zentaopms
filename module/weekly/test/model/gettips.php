@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getTips();
-cid=1
+cid=19735
 pid=1
 
 测试type值为progress，data值为0 >> 0

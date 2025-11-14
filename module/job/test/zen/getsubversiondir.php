@@ -5,7 +5,7 @@
 
 title=测试 jobZen::getSubversionDir();
 timeout=0
-cid=0
+cid=16864
 
 - 执行jobTest模块的getSubversionDirTest方法，参数是$svnRepo1 第triggerTypeList条的tag属性 @目录改动
 - 执行jobTest模块的getSubversionDirTest方法，参数是$svnRepo2 第triggerTypeList条的tag属性 @目录改动

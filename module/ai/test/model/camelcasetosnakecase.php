@@ -5,7 +5,7 @@
 
 title=测试 aiModel::camelCaseToSnakeCase();
 timeout=0
-cid=0
+cid=14998
 
 - 步骤1：正常驼峰命名转换 @camel_case_string
 - 步骤2：单个单词输入 @singleword

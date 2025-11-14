@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getLibFiles();
-cid=1
+cid=16098
 
 - 测试空数据 @0
 - 获取关联产品ID=0数据的附件 @0

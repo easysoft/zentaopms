@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 projectModel->getWaterfallPVEVAC();
 timeout=0
-cid=1
+cid=17858
 
 - 测试projectID值为0
  - 属性PV @0.00

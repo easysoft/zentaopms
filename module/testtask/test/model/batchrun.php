@@ -13,7 +13,7 @@ zenData('action')->gen(0);
 /**
 
 title=测试 testtaskModel->batchRun();
-cid=1
+cid=19156
 
 - 测试用例参数为空数组返回 false。 @0
 - 测试用例参数内元素为空字符串返回 false。 @0

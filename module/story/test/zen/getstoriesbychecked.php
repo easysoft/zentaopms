@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getStoriesByChecked();
 timeout=0
-cid=0
+cid=18697
 
 - 步骤1:空的storyIdList @0
 - 步骤2:正常的storyIdList第1条的id属性 @1

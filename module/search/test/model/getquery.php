@@ -11,7 +11,7 @@ zenData('userquery')->gen(10);
 
 title=测试 searchModel->getQuery();
 timeout=0
-cid=1
+cid=18303
 
 - 查询ID为1的搜索条件名称及查询数量
  - 属性title @这是搜索条件名称1

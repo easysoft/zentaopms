@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createWorkflow();
 timeout=0
-cid=0
+cid=15850
 
 - 步骤1：测试open版本下空relations参数 @0
 - 步骤2：测试open版本下包含zentaoObject的relations第zentaoObject条的10001属性 @add_custom

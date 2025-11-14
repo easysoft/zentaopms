@@ -5,7 +5,7 @@
 
 title=测试 userZen::prepareCustomFields();
 timeout=0
-cid=0
+cid=19678
 
 - 步骤1：正常batchCreate方法测试，验证部门字段第listFields条的dept属性 @部门
 - 步骤2：正常batchEdit方法测试，验证部门字段第listFields条的dept属性 @部门

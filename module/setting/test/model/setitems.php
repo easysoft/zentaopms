@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 settingModel->setItems();
 timeout=0
-cid=1
+cid=18368
 
 - 创建空数据 @1
 - 创建没有vision，只有视图且值为空的数据 @1

@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getPairs();
 timeout=0
-cid=0
+cid=16847
 
 - 执行jobTest模块的getPairsTest方法，参数是1, 'jenkins' 属性1 @Jenkins任务1
 - 执行jobTest模块的getPairsTest方法，参数是2, 'gitlab' 属性2 @GitLab流水线1

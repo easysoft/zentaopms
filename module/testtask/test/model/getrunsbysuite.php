@@ -19,7 +19,7 @@ $suitecase->gen(7);
 
 title=测试 testtaskModel->getRunsBySuite();
 timeout=0
-cid=1
+cid=19192
 
 - 查看测试单 0 套件 0 包含的用例数。 @0
 - 查看测试单 2 套件 0 包含的用例数。 @0

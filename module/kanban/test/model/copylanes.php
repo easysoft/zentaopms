@@ -12,7 +12,7 @@ zenData('kanbanregion')->gen(1);
 
 title=测试 kanbanModel->copyLanes();
 timeout=0
-cid=1
+cid=16882
 
 - 正常复制泳道，查看生成的泳道ID
  - 属性1 @2

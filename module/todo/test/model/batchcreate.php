@@ -10,7 +10,7 @@ zenData('todo')->loadYaml('batchcreate')->gen(5);
 
 title=测试 todoModel->batchCreate();
 timeout=0
-cid=1
+cid=19247
 
 - 判断批量创建8条待办，返回创建成功的数量 @8
 - 判断批量创建8条待办，返回创建成功的ID @6

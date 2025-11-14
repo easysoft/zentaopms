@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getExportFields();
 timeout=0
-cid=0
+cid=19090
 
 - 步骤1：normal产品类型，不包含branch字段 @4
 - 步骤2：branch产品类型，包含branch字段 @5

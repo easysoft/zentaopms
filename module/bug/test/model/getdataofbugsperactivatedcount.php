@@ -10,7 +10,7 @@ zenData('bug')->loadYaml('activatedcount')->gen(10);
 
 title=bugModel->getDataOfBugsPerActivatedCount();
 timeout=0
-cid=1
+cid=15364
 
 - 获取 bug 激活次数为 0 的数据
  - 第0条的name属性 @激活次数:0

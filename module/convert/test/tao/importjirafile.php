@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraFile();
 timeout=0
-cid=0
+cid=15858
 
 - 执行convertTest模块的importJiraFileTest方法，参数是array  @true
 - 执行convertTest模块的importJiraFileTest方法，参数是array  @true

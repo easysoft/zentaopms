@@ -5,7 +5,7 @@
 
 title=测试 todoZen::beforeAssignTo();
 timeout=0
-cid=0
+cid=19289
 
 - 步骤1：正常指派数据处理属性assignedBy @admin
 - 步骤2：未来日期设置属性date @2030-01-01

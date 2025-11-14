@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareBranchForBug();
 timeout=0
-cid=0
+cid=17948
 
 - 步骤1：正常情况-传入多分支产品
  - 属性branchOptionCount @1

@@ -13,7 +13,7 @@ zenData('product')->gen(5);
 
 title=taskModel->close();
 timeout=0
-cid=1
+cid=18774
 
 - wait状态任务关闭 @status-wait-closed
 - doing状态任务关闭 @status-doing-closed

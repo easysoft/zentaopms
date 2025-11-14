@@ -5,7 +5,7 @@
 
 title=测试 storyModel->updateStoryOrderOfPlan();
 timeout=0
-cid=0
+cid=18597
 
 - 把需求1迁移到计划1下，获取更新后的planstory
  - 第0条的plan属性 @1

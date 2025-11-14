@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getProjectPairs();
 timeout=0
-cid=1
+cid=19456
 
 - 测试是否能拿到数据属性2 @Test Project
 - 测试是否能拿到数据属性3 @~~

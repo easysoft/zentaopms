@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetSingleTag();
 timeout=0
-cid=0
+cid=16621
 
 - 执行gitlabTest模块的apiGetSingleTagTest方法，参数是1, 2, 'tag3' 属性name @tag3
 - 执行gitlabTest模块的apiGetSingleTagTest方法，参数是0, 2, 'tag3'  @0

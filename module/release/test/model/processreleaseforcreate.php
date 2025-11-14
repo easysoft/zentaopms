@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->processReleaseForCreate();
 timeout=0
-cid=1
+cid=18009
 
 - 测试同步版本数据并处理空的数据 @0
 - 测试同步版本数据并处理发布1的数据属性name @发布1

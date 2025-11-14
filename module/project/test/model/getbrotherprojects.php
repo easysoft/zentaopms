@@ -8,7 +8,7 @@ $project = zenData('project')->gen(100);
 
 title=测试 projectModel->getBrotherProjects();
 timeout=0
-cid=1
+cid=17816
 
 - 获取项目id为79同一个项目集下的所有项目个数 @9
 

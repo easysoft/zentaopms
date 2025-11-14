@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraDataFromFile();
 timeout=0
-cid=0
+cid=15777
 
 - 步骤1：不存在的模块，文件不存在返回空数组 @0
 - 步骤2：空模块名参数返回空数组 @0

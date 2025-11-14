@@ -4,7 +4,7 @@
 
 title=测试 storyZen::buildStoryForReview();
 timeout=0
-cid=0
+cid=18673
 
 - 步骤1：正常评审通过情况属性lastEditedBy @admin
 - 步骤2：评审拒绝情况属性closedReason @bydesign

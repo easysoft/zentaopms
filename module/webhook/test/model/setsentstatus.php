@@ -10,7 +10,7 @@ zenData('notify')->gen(3);
 
 title=测试 webhookModel->setSentStatus();
 timeout=0
-cid=1
+cid=19707
 
 - 获取第一条记录的status,sendTime
  - 第1条的status属性 @done

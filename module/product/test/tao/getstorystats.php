@@ -5,7 +5,7 @@
 
 title=productTao->getStoryStats();
 timeout=0
-cid=0
+cid=17558
 
 - 测试系统中所有产品下的需求统计信息
  - 第story条的draft属性 @0

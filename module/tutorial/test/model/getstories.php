@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getStories();
-cid=1
+cid=19474
 
 - 测试获取需求1的信息
  - 第1条的id属性 @1

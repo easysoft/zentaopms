@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getByID();
 timeout=0
-cid=0
+cid=18048
 
 - 测试步骤1：正常获取存在的repo对象
  - 属性id @1

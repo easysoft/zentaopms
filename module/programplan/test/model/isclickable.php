@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::isClickable();
 timeout=0
-cid=0
+cid=17751
 
 - 步骤1：测试空阶段对象的非create操作权限 @1
 - 步骤2：测试空阶段对象的create操作权限 @1

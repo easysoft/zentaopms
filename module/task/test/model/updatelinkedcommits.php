@@ -5,7 +5,7 @@
 
 title=测试 taskModel::updateLinkedCommits();
 timeout=0
-cid=0
+cid=18855
 
 - 步骤1：正常情况 @1
 - 步骤2：任务ID为0 @1

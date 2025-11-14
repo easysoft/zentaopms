@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 actionModel->hasPreOrNext();
 timeout=0
-cid=1
+cid=14915
 
 - 测试传入空参数 @0
 - 测试传入空时间 @0

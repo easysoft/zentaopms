@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setImages();
 timeout=0
-cid=0
+cid=17022
 
 - 步骤1：正常图片数组属性processed @1
 - 步骤2：空数组属性imageCount @0

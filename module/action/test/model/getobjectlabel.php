@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 actionModel->getObjectLabel();
 timeout=0
-cid=1
+cid=14905
 
 - 测试获取objectType product objectId 1的动态信息 @产品|product|view|productID=%s
 - 测试获取objectType story objectId 2的动态信息 @研发需求|story|storyView|storyID=%s

@@ -5,7 +5,7 @@
 
 title=测试 commonTao::checkPrivByRights();
 timeout=0
-cid=0
+cid=15723
 
 - 步骤1：正常权限检查情况 @1
 - 步骤2：无数据库权限情况 @0

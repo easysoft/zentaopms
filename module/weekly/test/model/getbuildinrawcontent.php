@@ -4,7 +4,7 @@
 
 title=测试 weeklyModel->getBuildinRawContent();
 timeout=0
-cid=1
+cid=19719
 
 - 检查模板标题属性title @项目周报模板
 - 获取holder数据

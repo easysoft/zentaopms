@@ -5,7 +5,7 @@
 
 title=测试 fileModel::saveUpload();
 timeout=0
-cid=0
+cid=16530
 
 - 执行fileTest模块的saveUploadTest方法，参数是'', 0, '', $noFiles, $labels1  @empty
 - 执行fileTest模块的saveUploadTest方法，参数是'task', 1, '', $errorFile, $labels2  @empty

@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareModuleForBug();
 timeout=0
-cid=0
+cid=17951
 
 - 步骤1:正常情况-单产品多模块场景
  - 属性moduleID @0

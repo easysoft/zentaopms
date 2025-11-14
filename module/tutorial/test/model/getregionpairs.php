@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRegionPairs();
 timeout=0
-cid=0
+cid=19458
 
 - 步骤1：正常情况，验证返回默认区域属性1 @默认区域
 - 步骤2：验证返回数组数量 @1

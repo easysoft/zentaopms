@@ -4,7 +4,7 @@
 /**
 
 title=productModel->createmainlib();
-cid=0
+cid=17534
 
 - 执行product模块的createMainLibTest方法，参数是'-1'  @0
 - 执行product模块的createMainLibTest方法，参数是'0'  @0

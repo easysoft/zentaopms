@@ -16,7 +16,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getInvest();
-cid=1
+cid=17328
 
 - 项目集1下投入人员admin创建的bug数量
  - 第qa[admin]条的role属性 @测试

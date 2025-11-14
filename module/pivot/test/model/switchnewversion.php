@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::switchNewVersion();
 timeout=0
-cid=0
+cid=17435
 
 - 步骤1:正常更新版本号,有效的ID和版本号 @1
 - 步骤2:更新为不同版本号格式 @1

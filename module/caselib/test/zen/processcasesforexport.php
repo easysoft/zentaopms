@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::processCasesForExport();
 timeout=0
-cid=0
+cid=15554
 
 - 步骤1:测试空用例数组处理 @0
 - 步骤2:测试单个用例的基本字段处理 @1

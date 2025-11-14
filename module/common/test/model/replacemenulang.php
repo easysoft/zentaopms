@@ -5,7 +5,7 @@
 
 title=测试 commonModel::replaceMenuLang();
 timeout=0
-cid=0
+cid=15704
 
 - 执行commonTest模块的replaceMenuLangTest方法  @0
 - 执行commonTest模块的replaceMenuLangTest方法  @0

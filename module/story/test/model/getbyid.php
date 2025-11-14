@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getById();
 timeout=0
-cid=0
+cid=18503
 
 - 获取ID为1、版本号为1的需求的名称。属性title @用户需求版本一1
 - 获取ID为1、版本号为2的需求的名称。

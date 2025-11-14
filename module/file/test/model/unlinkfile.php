@@ -5,7 +5,7 @@
 
 title=测试 fileModel::unlinkFile();
 timeout=0
-cid=0
+cid=16537
 
 - 执行fileTest模块的unlinkFileTest方法，参数是$file1  @1
 - 执行fileTest模块的unlinkFileTest方法，参数是$file2  @0

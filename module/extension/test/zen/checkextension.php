@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkExtension();
 timeout=0
-cid=0
+cid=16477
 
 - 执行extensionTest模块的checkExtensionTest方法，参数是'nonexistent_plugin', 'no', '', 'no', '', 'install'  @0
 - 执行extensionTest模块的checkExtensionTest方法，参数是'nonexistent_plugin', 'yes', 'test_link', 'no', '', 'install'  @0

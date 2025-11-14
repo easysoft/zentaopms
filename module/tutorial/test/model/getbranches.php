@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBranches();
 timeout=0
-cid=0
+cid=19402
 
 - 步骤1：验证返回分支数组长度 @2
 - 步骤2：验证第一个分支ID为0 @0

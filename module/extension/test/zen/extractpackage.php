@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::extractPackage();
 timeout=0
-cid=0
+cid=16486
 
 - 执行$result1->result @ok
 - 执行$extractedDir1 @1

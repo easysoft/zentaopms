@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getSteps();
-cid=1
+cid=19046
 
 - 测试获取case 1 version 1 的步骤 @1 1.1 1.1.1
 - 测试获取case 1 version 2 的步骤 @1 1.1 1.1.1 1.1.2 1.2 1.2.1 2 2.1 3

@@ -5,7 +5,7 @@
 
 title=fetchMetricByID
 timeout=0
-cid=1
+cid=17164
 
 - 获取codeList[1]的范围 @system
 - 获取codeList[2]的范围 @product

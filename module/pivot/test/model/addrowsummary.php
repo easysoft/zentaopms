@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::addRowSummary();
 timeout=0
-cid=0
+cid=17355
 
 - 执行$result1['rows']['key1']['count'] @10
 - 执行$result2['summary']['count']['value'] @$total$

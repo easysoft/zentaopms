@@ -5,7 +5,7 @@
 
 title=测试 searchTao::setResultsInPage();
 timeout=0
-cid=0
+cid=18345
 
 - 测试结果集按照每页5条记录时第1页的记录数 @5
 - 测试结果集按照每页5条记录时第2页的记录数 @5

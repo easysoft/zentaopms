@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getProductStats();
-cid=1
+cid=19451
 
 - 测试是否能拿到 admin 的数据 id program PO createdBy reviewer
  - 第1条的id属性 @1

@@ -4,7 +4,7 @@
 
 title=测试 buildModel->getLast();
 timeout=0
-cid=1
+cid=15495
 
 - 测试项目ID为空、执行ID=101时，获取最近一次创建的版本息属性name @版本10
 - 测试项目ID正确、执行ID=101时，获取最近一次创建的版本息属性name @版本1

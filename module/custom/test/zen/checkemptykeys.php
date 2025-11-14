@@ -5,7 +5,7 @@
 
 title=测试 customZen::checkEmptyKeys();
 timeout=0
-cid=0
+cid=15934
 
 - 执行customTest模块的checkEmptyKeysTest方法，参数是'story', 'priList', 'zh-cn', array  @1
 - 执行customTest模块的checkEmptyKeysTest方法，参数是'bug', 'severityList', 'zh-cn', array  @1

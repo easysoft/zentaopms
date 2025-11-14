@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDocRecentUpdateBlock();
 timeout=0
-cid=0
+cid=15257
 
 - 测试当有10条文档时返回最多6条属性count @6
 - 测试返回文档的editedDate格式正确第1条的editedDate属性 @2024-11-10

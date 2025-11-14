@@ -39,7 +39,7 @@ $bug->gen(5);
 
 title=测试 bugModel::getRelatedObjects();
 timeout=0
-cid=0
+cid=15393
 
 - 测试product对象返回关联对象列表
  - 属性count @4

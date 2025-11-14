@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::checkTaskForEdit();
 timeout=0
-cid=0
+cid=19233
 
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$validTask  @1
 - 执行testtaskTest模块的checkTaskForEditTest方法，参数是$taskMissingName 第name条的0属性 @『测试单名称』不能为空。

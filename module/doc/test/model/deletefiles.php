@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->deleteFiles();
-cid=1
+cid=16064
 
 - 测试空数据 @0
 - 测试正常数据属性1 @1

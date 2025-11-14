@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试executionModel->suspendTest();
-cid=1
+cid=16370
 pid=1
 
 - wait敏捷执行挂起

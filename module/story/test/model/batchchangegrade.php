@@ -5,7 +5,7 @@
 
 title=测试 storyModel::batchChangeGrade();
 timeout=0
-cid=0
+cid=18466
 
 - 步骤1：正常修改单个需求等级 @success
 - 步骤2：修改多个需求等级为相同值 @success

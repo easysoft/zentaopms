@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=biModel->getCondition();
 timeout=0
-cid=1
+cid=15163
 
 - 测试 `deleted` = '0' @`deleted` = '0'
 - 测试 `t1`.`deleted` = '0' @`t1`.`deleted` = '0'

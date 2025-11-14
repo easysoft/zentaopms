@@ -15,7 +15,7 @@ zenData('api_lib_release')->gen(0);
 
 title=测试 apiModel->createDemoData();
 timeout=0
-cid=1
+cid=15093
 
 - 测试v1初始化数据。 @1
 - 测试v2初始化数据。 @2

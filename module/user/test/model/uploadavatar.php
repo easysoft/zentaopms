@@ -5,7 +5,7 @@
 
 title=测试 userModel::uploadAvatar();
 timeout=0
-cid=0
+cid=19666
 
 - 步骤1：正常情况下无文件上传属性result @fail
 - 步骤2：模拟上传成功但无文件属性result @fail

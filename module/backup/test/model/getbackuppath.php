@@ -5,7 +5,7 @@
 
 title=测试 backupModel::getBackupPath();
 timeout=0
-cid=0
+cid=15134
 
 - 执行backupTest模块的getBackupPathTest方法，参数是, '/tmp/backup/') !== false  @1
 - 执行backupTest模块的getBackupPathTest方法，参数是, 'module/backup/test/model/backup/') !== false  @1

@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getByID();
 timeout=0
-cid=1
+cid=16703
 
 - 获取存在的权限分组
  - 属性name @这是一个新的用户分组1

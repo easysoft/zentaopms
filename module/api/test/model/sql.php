@@ -9,7 +9,7 @@ zenData('api')->gen(10);
 
 title=测试 apiModel->sql();
 timeout=0
-cid=1
+cid=15121
 
 - 在没启用配置的时候调用sql接口。
  - 属性status @fail

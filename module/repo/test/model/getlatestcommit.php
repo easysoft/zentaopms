@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getLatestCommit();
 timeout=0
-cid=0
+cid=18067
 
 - 执行repo模块的getLatestCommitTest方法，参数是1
  - 属性id @1

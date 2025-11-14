@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::processRowspanForGroupCase();
 timeout=0
-cid=0
+cid=19239
 
 - 步骤1：空用例数组测试 @0
 - 步骤2：多个需求正常处理，第一个需求的第一个用例rowspan为2第0条的rowspan属性 @2

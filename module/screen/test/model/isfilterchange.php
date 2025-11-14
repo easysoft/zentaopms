@@ -5,7 +5,7 @@
 
 title=测试 screenModel::isFilterChange();
 timeout=0
-cid=0
+cid=18266
 
 - 步骤1：最新过滤器为空 @1
 - 步骤2：过滤器数量不同 @1

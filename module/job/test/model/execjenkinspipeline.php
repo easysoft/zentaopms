@@ -5,7 +5,7 @@
 
 title=测试 jobModel::execJenkinsPipeline();
 timeout=0
-cid=0
+cid=16840
 
 - 步骤1：基础pipeline对象属性ZENTAO_DATA @compile=1
 - 步骤2：包含tag参数属性PARAM_TAG @v1.0.0

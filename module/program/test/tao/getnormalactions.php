@@ -5,7 +5,7 @@
  *
 title=测试programTao::getNormalActions();
 timeout=0
-cid=1
+cid=17718
 
 - 项目集第0条的name属性 @edit
 - 项目集第1条的name属性 @create

@@ -5,7 +5,7 @@
 
 title=测试 commonModel::setMainMenu();
 timeout=0
-cid=0
+cid=15711
 
 - 步骤1：验证方法存在性 @method_exists
 - 步骤2：验证方法为静态方法 @is_static

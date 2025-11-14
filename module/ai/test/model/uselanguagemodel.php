@@ -5,7 +5,7 @@
 
 title=测试 aiModel::useLanguageModel();
 timeout=0
-cid=0
+cid=15080
 
 - 步骤1：测试有效启用模型 @1
 - 步骤2：测试禁用模型回退到默认模型 @1

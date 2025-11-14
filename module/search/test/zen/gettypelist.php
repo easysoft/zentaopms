@@ -5,7 +5,7 @@
 
 title=测试 searchZen::getTypeList();
 timeout=0
-cid=0
+cid=18348
 
 - 执行$result1['all'] @1
 - 执行$result2 @1

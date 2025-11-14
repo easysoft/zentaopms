@@ -5,7 +5,7 @@
 
 title=测试 productZen::getCustomFieldsForTrack();
 timeout=0
-cid=0
+cid=17578
 
 - 测试步骤1:epic类型返回list数组 @1
 - 测试步骤2:epic类型返回show数组 @1
@@ -20,6 +20,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
+zenData('product')->gen(10);
 su('admin');
 
 $productTest = new productZenTest();

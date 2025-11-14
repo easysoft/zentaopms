@@ -10,7 +10,7 @@ zenData('notify')->gen(50);
 
 title=测试 webhookModel->getDataList();
 timeout=0
-cid=1
+cid=19695
 
 - 不需传任何参数,取出其中一个ID=40的日志内容，这里时间上取当前时间三小时以前的
  - 第40条的id属性 @40

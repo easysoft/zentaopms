@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::processRelated();
 timeout=0
-cid=0
+cid=18007
 
 - 步骤1：处理所有类型关联属性afterCount @15
 - 步骤2：仅项目和构建版本属性afterCount @2

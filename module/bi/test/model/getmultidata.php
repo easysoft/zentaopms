@@ -5,7 +5,7 @@
 
 title=测试 biModel::getMultiData();
 timeout=0
-cid=0
+cid=15175
 
 - 步骤1：正常情况测试单个y轴指标 @status
 - 步骤2：多个y轴指标测试

@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 title=测试 screenModel->getAxisRotateOption();
 timeout=0
-cid=1
+cid=18235
 
 - 判断折线图x轴旋转角度 @30
 - 判断折线图y轴旋转角度 @30

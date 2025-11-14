@@ -4,7 +4,7 @@
 
 title=测试 programModel::appendStatToProjects();
 timeout=0
-cid=1
+cid=17671
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

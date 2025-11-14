@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::backup();
 timeout=0
-cid=0
+cid=16779
 
 - 执行instanceTest模块的backupTest方法，参数是$validInstance, $validUser  @0
 - 执行instanceTest模块的backupTest方法，参数是$emptyInstance, $validUser  @0

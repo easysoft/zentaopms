@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildPieChart();
 timeout=0
-cid=0
+cid=18215
 
 - 步骤1：无settings默认配置返回key @PieCommon
 - 步骤2：空settings处理返回option.type @nomal

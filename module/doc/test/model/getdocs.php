@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getDocs();
-cid=1
+cid=16079
 
 - 获取libID=0、moduleID=0、browseType=all的文档列表
  - 第6条的lib属性 @11

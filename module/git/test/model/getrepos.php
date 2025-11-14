@@ -5,7 +5,7 @@
 
 title=测试 gitModel::getRepos();
 timeout=0
-cid=0
+cid=16547
 
 - 步骤1：正常情况下获取Git仓库路径列表 @8
 - 步骤2：验证返回的第一个仓库路径格式属性1 @https://gitlabdev.qc.oop.cc/root/unittest11

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 compileTao::updateJobLastSyncDate();
 timeout=0
-cid=0
+cid=15759
 
 - 执行compile模块的updateJobLastSyncDateTest方法，参数是1, $now  @2025-01-15 10:30:00
 - 执行compile模块的updateJobLastSyncDateTest方法，参数是2, $futureDate  @2025-12-31 23:59:59

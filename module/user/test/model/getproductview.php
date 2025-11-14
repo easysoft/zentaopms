@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProductView();
 timeout=0
-cid=0
+cid=19624
 
 - 执行userTest模块的getProductViewTest方法，参数是'admin', $allProducts, $manageObjects1, $whiteList1  @1,2,3,4,5
 

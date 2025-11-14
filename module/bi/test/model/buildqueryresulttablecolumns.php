@@ -5,7 +5,7 @@
 
 title=测试 biModel::buildQueryResultTableColumns();
 timeout=0
-cid=0
+cid=15150
 
 - 执行biTest模块的buildQueryResultTableColumnsTest方法，参数是array  @0
 - 执行biTest模块的buildQueryResultTableColumnsTest方法，参数是$testData1 第0条的name属性 @id

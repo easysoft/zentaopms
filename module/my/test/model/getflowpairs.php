@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 myModel::getFlowPairs();
 timeout=0
-cid=0
+cid=17284
 
 - 测试步骤1：正常获取自定义工作流程键值对 @flow1:流程1,flow2:流程2,flow3:流程3
 

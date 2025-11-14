@@ -5,7 +5,7 @@
 
 title=测试 metricModel::rebuildPrimaryKey();
 timeout=0
-cid=0
+cid=17154
 
 - 步骤1：空表重建主键 @0
 - 步骤2：有数据的表重建主键属性result @success

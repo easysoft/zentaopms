@@ -5,7 +5,7 @@
 
 title=测试 storyModel::get2BeClosed();
 timeout=0
-cid=0
+cid=18495
 
 - 正常情况测试 @1
 - 多产品ID测试 @1

@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getCreateEditInfo();
 timeout=0
-cid=0
+cid=17190
 
 - 步骤1：获取完整创建编辑信息字段数量 @4
 - 步骤2：获取指定字段信息数量 @2

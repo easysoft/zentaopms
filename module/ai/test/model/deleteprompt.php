@@ -5,7 +5,7 @@
 
 title=测试 aiModel::deletePrompt();
 timeout=0
-cid=0
+cid=15019
 
 - 执行aiTest模块的deletePromptTest方法，参数是1  @1
 - 执行aiTest模块的deletePromptTest方法，参数是999  @0

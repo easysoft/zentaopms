@@ -5,7 +5,7 @@
 
 title=测试 repoZen::syncLocalCommit();
 timeout=0
-cid=0
+cid=18156
 
 - 步骤1：日志文件不存在时应返回空字符串 @0
 - 步骤2：日志包含fatal错误时应返回错误行内容 @fatal: repository not found

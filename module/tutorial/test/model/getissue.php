@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getIssue();
 timeout=0
-cid=0
+cid=19440
 
 - 步骤1：验证问题ID属性id @1
 - 步骤2：验证问题标题属性title @Test issue-unconfirmed

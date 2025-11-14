@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->create();
 timeout=0
-cid=1
+cid=16838
 
 - 测试执行jenkins job的情况属性status @create_fail
 - 测试执行gitlab job的情况属性status @created

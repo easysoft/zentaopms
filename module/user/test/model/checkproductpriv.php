@@ -5,7 +5,7 @@
 
 title=测试 userModel::checkProductPriv();
 timeout=0
-cid=0
+cid=19589
 
 - 步骤1：系统管理员权限检查 @1
 - 步骤2：产品审批人权限检查 @1

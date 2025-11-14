@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getStatCountByID();
-cid=0
+cid=17555
 
 - 获取产品1的计划数 @5
 - 获取产品1的用例数 @4

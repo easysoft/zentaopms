@@ -10,7 +10,7 @@ zenData('case')->gen(2);
 
 title=测试 testcaseModel->batchChangeCaseBranch();
 timeout=0
-cid=1
+cid=18955
 
 - 用例参数为空返回 false。 @0
 - 用例参数不为空、所属分支参数小于 mediumint unsigned 类型最小值返回 false。 @0

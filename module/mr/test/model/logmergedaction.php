@@ -5,7 +5,7 @@
 
 title=测试 mrModel::logMergedAction();
 timeout=0
-cid=0
+cid=17258
 
 - 没有关联的对象
  - 属性id @1

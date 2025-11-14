@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->setTaskByCommit();
 timeout=0
-cid=1
+cid=18105
 
 - 开始任务
  - 属性status @doing

@@ -5,7 +5,7 @@
 
 title=测试 gitModel::updateCommit();
 timeout=0
-cid=0
+cid=16557
 
 - 测试步骤1：未同步的代码库更新提交属性result @1
 - 测试步骤2：已同步的空代码库更新提交属性result @1

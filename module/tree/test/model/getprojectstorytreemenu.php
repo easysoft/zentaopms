@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getProjectStoryTreeMenu();
 timeout=0
-cid=1
+cid=19377
 
 - 测试获取项目1的Story模块 @7|2
 - 测试获取项目2的Story模块 @7|2|12

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->setDefaultPriv();
-cid=1
+cid=19552
 
 - 测试设置项目集默认权限后，获取权限分组 1 的方法 @index,pgmindex,prjbrowse
 

@@ -5,7 +5,7 @@
 
 title=测试 repoTao::parseBugComment();
 timeout=0
-cid=0
+cid=18120
 
 - 步骤1：正常单个bug修复属性3 @3
 - 步骤2：正常多个bug修复

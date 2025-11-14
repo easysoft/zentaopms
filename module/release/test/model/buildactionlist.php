@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->buildActionList();
 timeout=0
-cid=1
+cid=0
 
 - 测试获取正常状态的发布单的操作列表
  -  @linkStory

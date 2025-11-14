@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getExecutionCounts();
 timeout=0
-cid=0
+cid=16312
 
 - 步骤1：项目ID为1的执行数量统计 @5
 - 步骤2：项目ID为2的执行数量统计 @3

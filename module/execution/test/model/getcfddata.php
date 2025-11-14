@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getCFDData();
 timeout=0
-cid=1
+cid=16307
 
 - 不存在执行的累计流图信息 @0
 - 存在的执行的需求卡片累计流图信息第2022-01-22条的name属性 @看板列3

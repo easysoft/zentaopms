@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::checkAddress();
 timeout=0
-cid=0
+cid=19741
 
 - 步骤1：测试有效域名 @1
 - 步骤2：测试有效IP地址 @1

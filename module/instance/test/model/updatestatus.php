@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::updateStatus();
 timeout=0
-cid=0
+cid=16824
 
 - 执行instanceTest模块的updateStatusTest方法，参数是1, 'running'  @0
 - 执行instanceTest模块的updateStatusTest方法，参数是2, 'stopped'  @0

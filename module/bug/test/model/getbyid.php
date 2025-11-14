@@ -22,7 +22,7 @@ function initData()
 
 title=测试 bugModel::getByID;
 timeout=0
-cid=1
+cid=15359
 
 - 执行bug模块的getByID方法，参数是2
  - 属性pri @1

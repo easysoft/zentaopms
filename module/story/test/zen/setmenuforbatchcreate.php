@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setMenuForBatchCreate();
 timeout=0
-cid=0
+cid=18707
 
 - 步骤1：产品标签下无执行ID情况 @product_tab
 - 步骤2：带分支的产品导航设置 @product_tab

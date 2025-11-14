@@ -5,7 +5,7 @@
 
 title=测试 apiZen::parseDocSpaceParam();
 timeout=0
-cid=0
+cid=15126
 
 - 步骤1：无cookie情况
  - 属性type @custom

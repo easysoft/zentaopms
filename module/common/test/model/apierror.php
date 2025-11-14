@@ -5,7 +5,7 @@
 
 title=测试 commonModel::apiError();
 timeout=0
-cid=0
+cid=15640
 
 - 执行commonTest模块的apiErrorTest方法，参数是null 属性code @600
 - 执行commonTest模块的apiErrorTest方法，参数是$validError

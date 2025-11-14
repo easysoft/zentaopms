@@ -10,7 +10,7 @@ zenData('bug')->gen(10);
 
 title=bugModel->getDataOfBugsPerPri();
 timeout=0
-cid=1
+cid=15369
 
 - 获取优先级为1的数据
  - 第1条的name属性 @优先级:1

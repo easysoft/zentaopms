@@ -10,7 +10,7 @@ su('admin');
 
 title=测试productplanModel->getByID();
 timeout=0
-cid=1
+cid=17629
 
 - 测试传入空值，且不设置图片大小 @0
 - 测试获取计划2，且不设置图片大小属性title @计划2

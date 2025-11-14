@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=executionModel->getBeginEnd4CFD();
 timeout=0
-cid=1
+cid=0
 
 - ID 1 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
  -  @1

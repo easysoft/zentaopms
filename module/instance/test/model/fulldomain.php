@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::fullDomain();
 timeout=0
-cid=0
+cid=16795
 
 - 步骤1：正常域名拼接 @test.dops.corp.cc
 - 步骤2：包含数字的域名 @app123.dops.corp.cc

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::generateTableCols();
 timeout=0
-cid=0
+cid=17369
 
 - 执行$result1) && count($result1) > 0 @1
 - 执行$result2) && count($result2) == 0 @1

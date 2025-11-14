@@ -5,7 +5,7 @@
 
 title=测试 settingModel::getSysAndPersonalConfig();
 timeout=0
-cid=0
+cid=18362
 
 - 执行setting模块的getSysAndPersonalConfigTest方法，参数是'admin')) ? 0 : 1  @1
 - 执行setting模块的getSysAndPersonalConfigTest方法，参数是'')) ? 0 : 1  @1

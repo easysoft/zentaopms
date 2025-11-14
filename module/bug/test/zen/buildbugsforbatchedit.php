@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildBugsForBatchEdit();
 timeout=0
-cid=0
+cid=15436
 
 - 测试步骤1:空参数输入返回空数组 @0
 - 测试步骤2:验证os字段被正确处理第0条的os属性 @windows

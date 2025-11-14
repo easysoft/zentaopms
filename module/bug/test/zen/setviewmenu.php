@@ -5,7 +5,7 @@
 
 title=测试 bugZen::setViewMenu();
 timeout=0
-cid=0
+cid=15480
 
 - 执行bugTest模块的setViewMenuTest方法，参数是$bug, 'project'  @1
 - 执行bugTest模块的setViewMenuTest方法，参数是$bug, 'execution'  @1

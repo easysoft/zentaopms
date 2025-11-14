@@ -5,7 +5,7 @@
 
 title=测试 dimensionModel::getDimension();
 timeout=0
-cid=0
+cid=16034
 
 - 步骤1：传入有效维度ID @1
 - 步骤2：传入0，获取默认维度ID @1

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignForImportFromLib();
 timeout=0
-cid=0
+cid=19070
 
 - 步骤1：检查方法是否执行成功 @0
 - 步骤2：不同参数执行 @0

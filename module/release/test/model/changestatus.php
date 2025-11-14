@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::changeStatus();
 timeout=0
-cid=0
+cid=17983
 
 - 执行$result1 @1
 - 执行$result2 @1

@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 todoModel->getList();
 timeout=0
-cid=1
+cid=19260
 
 - 获取当前用户今天的待办数量 @1
 - 获取当前用户昨天的待办数量 @1

@@ -5,7 +5,7 @@
 
 title=测试 chartModel::isClickable();
 timeout=0
-cid=1
+cid=15579
 
 - 测试不存在的图表按钮是否不可点击 @0
 - 测试内置图表的设计按钮是否不可点击 @0

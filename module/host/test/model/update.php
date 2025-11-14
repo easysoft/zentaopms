@@ -4,7 +4,7 @@
 
 title=测试 hostModel->update();
 timeout=0
-cid=1
+cid=16762
 
 - 测试对象没有ID时候能否成功更新主机 @0
 - 测试对象有ID时能否成功更新主机 @1

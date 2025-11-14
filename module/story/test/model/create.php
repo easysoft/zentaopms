@@ -4,7 +4,7 @@
 
 title=测试 storyModel->create();
 timeout=0
-cid=0
+cid=18486
 
 - 检查创建后的数据。
  - 属性id @5

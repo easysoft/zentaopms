@@ -5,7 +5,7 @@
 
 title=测试 docZen::prepareCols();
 timeout=0
-cid=0
+cid=16194
 
 - 执行$result1['actions'] @1
 - 执行$result2['id']['name'] @id

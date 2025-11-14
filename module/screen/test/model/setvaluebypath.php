@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->setValueByPath();
 timeout=0
-cid=1
+cid=18283
 
 - 测试title.show=true @1
 - 测试series.0.color.0.colorStops.0.offset=1 @1

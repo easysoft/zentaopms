@@ -42,7 +42,7 @@ su('admin');
 
 title=测试 programModel::getProjectStats();
 timeout=0
-cid=1
+cid=17697
 
 */
 

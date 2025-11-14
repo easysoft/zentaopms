@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerProduct();
 timeout=0
-cid=0
+cid=18521
 
 - 测试默认storyType参数获取产品需求统计数量 @7
 - 测试指定storyType为story的统计结果数量 @7

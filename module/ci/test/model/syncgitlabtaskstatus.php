@@ -5,7 +5,7 @@
 
 title=测试 ciModel->syncGitlabTaskStatus();
 timeout=0
-cid=1
+cid=15594
 
 - 同步jenkins流水线状态属性lastStatus @create_fail
 - 同步gitlab流水线失败状态属性lastStatus @failed

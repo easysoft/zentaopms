@@ -5,7 +5,7 @@
 
 title=测试 repoZen::strposAry();
 timeout=0
-cid=0
+cid=18155
 
 - 步骤1：正常匹配测试 @1
 - 步骤2：不匹配测试 @0

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::bugAssign();
 timeout=0
-cid=0
+cid=17453
 
 - 执行$result @1
 - 执行$result) || isset($result[0]->product @1

@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildChartData();
 timeout=0
-cid=0
+cid=18900
 
 - 期望返回3个图表的数组 @3
 - 执行$charts2['tasksPerStatus']->type @pie

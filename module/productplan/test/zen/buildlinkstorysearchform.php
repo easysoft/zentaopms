@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildLinkStorySearchForm();
 timeout=0
-cid=0
+cid=17662
 
 - 执行productplanTest模块的buildLinkStorySearchFormTest方法，参数是$normalPlan, 1, 'id_desc'
  - 属性queryID @1

@@ -4,7 +4,7 @@
 
 title=productpanModel->getPairs();
 timeout=0
-cid=1
+cid=17637
 
 - 获取产品1下的所有计划属性3 @计划3 [2022-01-01 ~ 2022-01-30]
 - 获取产品2下的所有计划属性5 @计划5 待定

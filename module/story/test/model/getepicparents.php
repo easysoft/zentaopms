@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getEpicParents();
 timeout=0
-cid=0
+cid=18527
 
 - 步骤1：正常产品获取史诗父级，期望返回数组类型 @1
 - 步骤2：产品ID为0，期望返回空数组 @0

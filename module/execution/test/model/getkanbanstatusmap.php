@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getKanbanStatusMap();
 timeout=0
-cid=0
+cid=16323
 
 - 执行executionTest模块的getKanbanStatusMapTest方法，参数是'0')['task']['wait']['doing']  @start
 - 执行executionTest模块的getKanbanStatusMapTest方法，参数是'0')['bug']['wait']['done']  @resolve

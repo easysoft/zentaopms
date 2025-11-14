@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::initVarFilter();
 timeout=0
-cid=0
+cid=17410
 
 - 步骤1：空过滤器和空SQL @0
 - 步骤2：基本变量替换 @SELECT * FROM zt_bug WHERE status = 'active'

@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 pivotModel->getBugAssign();
-cid=1
+cid=17371
 pid=1
 
 判断已分配的bug数据获取是否正确。                                                                                           >> 1

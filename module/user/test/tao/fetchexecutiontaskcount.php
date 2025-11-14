@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 userTao->fetchExecutionTaskCount();
-cid=1
+cid=19668
 
 - 传入空数组，返回空数组。 @0
 - 用户 admin 没有参与执行，返回空数组。 @0

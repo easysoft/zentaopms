@@ -5,7 +5,7 @@
 
 title=测试 aiModel::unserializeModel();
 timeout=0
-cid=0
+cid=15074
 
 - 执行aiTest模块的unserializeModelTest方法，参数是$model1
  - 属性id @1

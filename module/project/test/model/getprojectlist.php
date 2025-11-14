@@ -44,7 +44,7 @@ su('admin');
 
 title=测试 projectModel::getProjectList($status, $projectID, $orderBy);
 timeout=0
-cid=1
+cid=17847
 
 - 获取全部未开始的项目数量 @3
 

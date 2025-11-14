@@ -5,7 +5,7 @@
 
 title=测试 aiModel::autoPrependNewline();
 timeout=0
-cid=0
+cid=14997
 
 - 步骤1：空字符串测试 @0
 - 步骤2：无换行符文本 @1

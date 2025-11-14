@@ -5,7 +5,7 @@
 
 title=测试 bugZen::checkRquiredForEdit();
 timeout=0
-cid=0
+cid=15443
 
 - 步骤1:正常情况 @1
 - 步骤2:title为空属性title @『Bug标题』不能为空。

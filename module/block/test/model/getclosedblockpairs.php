@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 blockModel->getClosedBlockPairs();
 timeout=0
-cid=1
+cid=15230
 
 - 测试配置项存在且module不等于code的结果属性product|list @产品|产品列表
 

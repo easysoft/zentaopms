@@ -11,7 +11,7 @@ zenData('project')->loadYaml('type')->gen(90);
 
 title=bugModel->getDataOfBugsPerExecution();
 timeout=0
-cid=1
+cid=15367
 
 - 获取迭代11数据
  - 第11条的name属性 @/PROJECT21

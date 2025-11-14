@@ -5,7 +5,7 @@
 
 title=测试 blockZen::getProjectsStatisticData();
 timeout=0
-cid=0
+cid=15243
 
 - 步骤1：单个项目ID测试 @1
 - 步骤2：多个项目ID测试 @1

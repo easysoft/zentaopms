@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStoryPairs();
 timeout=0
-cid=0
+cid=19478
 
 - 步骤1：正常情况获取需求键值对数量 @4
 - 步骤2：验证Epic需求ID和标题映射属性1 @Test epic

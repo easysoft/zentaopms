@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getRDKanbanByGroup();
 timeout=0
-cid=0
+cid=16939
 
 - 测试步骤1：正常execution对象分组看板查询第0条的key属性 @region1
 - 测试步骤2：不同browseType参数测试第0条的id属性 @1

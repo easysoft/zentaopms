@@ -5,7 +5,7 @@
 
 title=测试 storyModel->superReview();
 timeout=0
-cid=0
+cid=18589
 
 - 查看评审人详情
  - 第0条的story属性 @1

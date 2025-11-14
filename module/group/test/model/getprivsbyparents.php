@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getPrivsByParents();
 timeout=0
-cid=0
+cid=16712
 
 - 步骤1：获取 my 子集的权限属性my-index @地盘仪表盘
 - 步骤2：获取 todo 子集的权限属性todo-create @添加待办

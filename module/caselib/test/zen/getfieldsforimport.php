@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getFieldsForImport();
 timeout=0
-cid=0
+cid=15548
 
 - 执行caselibTest模块的getFieldsForImportTest方法，参数是'count'  @9
 - 执行caselibTest模块的getFieldsForImportTest方法 属性用例名称 @title

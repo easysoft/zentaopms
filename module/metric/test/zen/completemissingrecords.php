@@ -5,7 +5,7 @@
 
 title=测试 metricZen::completeMissingRecords();
 timeout=0
-cid=0
+cid=17185
 
 - 执行metricZenTest模块的completeMissingRecordsZenTest方法，参数是$records, $metric 第0条的value属性 @0
 - 执行metricZenTest模块的completeMissingRecordsZenTest方法，参数是$records, $metric 第0条的value属性 @0

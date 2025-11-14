@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::completePivot();
 timeout=0
-cid=0
+cid=17361
 
 - 执行$result1->settings @1
 - 执行$result2->settings ===  @1

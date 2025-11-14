@@ -5,7 +5,7 @@
 
 title=测试 repoZen::checkClient();
 timeout=0
-cid=0
+cid=18130
 
 - SCM在notSyncSCM列表中,返回true @1
 - checkClient配置为false,返回true @1

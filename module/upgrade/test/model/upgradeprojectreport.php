@@ -4,7 +4,7 @@
 
 title=测试 projectModel->upgradeProjectReport();
 timeout=0
-cid=1
+cid=19564
 
 - 测试升级开始日期跟项目开始日期相同的周报
  - 属性title @第 1 周( 2025-01-01 ~ 2025-01-07)

@@ -8,7 +8,7 @@ zenData('testtask')->loadYaml('testtask')->gen(10);
 /**
 
 title=测试 testtaskModel->getRelatedTestTasks();
-cid=1
+cid=19186
 pid=1
 
 */

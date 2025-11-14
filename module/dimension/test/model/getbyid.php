@@ -5,7 +5,7 @@
 
 title=测试 dimensionModel::getByID();
 timeout=0
-cid=0
+cid=16033
 
 - 步骤1：正常查询存在的维度
  - 属性id @1

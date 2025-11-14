@@ -5,7 +5,7 @@
 
 title=测试 userModel::su();
 timeout=0
-cid=0
+cid=19656
 
 - 执行userTest模块的suTest方法 属性result @1
 - 执行userTest模块的suTest方法 第currentUser条的account属性 @admin

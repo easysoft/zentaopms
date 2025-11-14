@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getVersions();
 timeout=0
-cid=0
+cid=18569
 
 - 查看需求1-5的版本
  - 属性1 @3

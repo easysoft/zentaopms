@@ -5,7 +5,7 @@
 
 title=测试 backupModel::getDiskSpace();
 timeout=0
-cid=0
+cid=15137
 
 - 执行$result1, ',') !== false @1
 - 执行$result2, ',') !== false @1

@@ -5,7 +5,7 @@
 
 title=测试 editorModel::save();
 timeout=0
-cid=0
+cid=16243
 
 - 执行$result) && str_contains($result, '为了安全起见' @1
 - 执行$result === true ? 1 : 0 @1

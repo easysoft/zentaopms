@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->linkStory();
 timeout=0
-cid=1
+cid=18006
 
 - 测试releaseID为0时，关联需求 @0
 - 测试releaseID为1时，关联需求

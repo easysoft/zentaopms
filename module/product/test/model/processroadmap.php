@@ -4,7 +4,7 @@
 /**
 
 title=productModel->processRoadmap();
-cid=0
+cid=17523
 
 - 测试获取产品1下的发布roadmap
  - 第0条的id属性 @1

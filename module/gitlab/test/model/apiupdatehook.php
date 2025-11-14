@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::apiUpdateHook();
 timeout=0
-cid=1
+cid=16630
 
 - 使用空的projectID更新gitlab群组属性message @404 Project Not Found
 - 使用空的hookID更新gitlab群组属性message @404 Not found

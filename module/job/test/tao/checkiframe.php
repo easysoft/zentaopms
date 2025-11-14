@@ -5,7 +5,7 @@
 
 title=测试 jobTao::checkIframe();
 timeout=0
-cid=0
+cid=16855
 
 - 执行jobTest模块的checkIframeTest方法，参数是$job1 第frame条的0属性 @SonarQube工具/框架仅在构建引擎为JenKins的情况下使用
 - 执行jobTest模块的checkIframeTest方法，参数是$job2 第repo条的0属性 @此代码库已关联流水线『1-这是一个Job1』

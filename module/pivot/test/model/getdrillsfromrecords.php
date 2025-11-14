@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getDrillsFromRecords();
 timeout=0
-cid=0
+cid=17381
 
 - 执行$result1['bug']['drillFields']['status']['id'] @1
 - 执行$result2 @0

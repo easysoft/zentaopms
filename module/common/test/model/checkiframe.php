@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 commonModel::checkIframe();
 timeout=0
-cid=1
+cid=15655
 
 - 查看该页面是否要在iframe中打开 @0
 - 查看该页面是否要在iframe中打开 @0

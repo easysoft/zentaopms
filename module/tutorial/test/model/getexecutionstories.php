@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getExecutionStories();
-cid=1
+cid=19434
 
 - 检查获取需求ID第3条的id属性 @3
 - 检查获取需求名称第3条的title属性 @Test active story

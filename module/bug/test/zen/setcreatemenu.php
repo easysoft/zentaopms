@@ -5,7 +5,7 @@
 
 title=测试 bugZen::setCreateMenu();
 timeout=0
-cid=0
+cid=15478
 
 - 执行bugTest模块的setCreateMenuTest方法，参数是1, 'all', array  @1
 - 执行bugTest模块的setCreateMenuTest方法，参数是1, '', array  @1

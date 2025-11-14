@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::webhookParseIssue();
 timeout=0
-cid=0
+cid=16680
 
 - 测试解析带bug标签的有效issue事件属性objectType @bug
 - 测试解析带story标签的有效issue事件属性objectType @story

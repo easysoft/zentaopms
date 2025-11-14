@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->buildProductsCondition();
-cid=0
+cid=18601
 
 - 不传入数据 @1
 - 不传入数据 @1

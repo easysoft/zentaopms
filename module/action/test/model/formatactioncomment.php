@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 actionModel->formatActionComment();
 timeout=0
-cid=0
+cid=14886
 
 - 测试纯文本处理 @Simple text
 - 测试HTML标签保留 @<p>This is a <strong>formatted</strong> text.</p>

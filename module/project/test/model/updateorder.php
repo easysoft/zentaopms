@@ -14,7 +14,7 @@ function initData()
 
 title=测试 projectModel::suspend;
 timeout=0
-cid=1
+cid=17875
 
 - 检查更新 id_asc 排序的返回结果 @1
 - 检查 id_asc 排序后, projectID 为 1 的 order @5

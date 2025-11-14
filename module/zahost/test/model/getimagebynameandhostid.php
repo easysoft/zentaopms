@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zahostemodel->getImageByNameAndHost().
 timeout=0
-cid=1
+cid=19746
 
 - 测试获取 host id 1 name defaultSnap1 的镜像
  - 属性id @1

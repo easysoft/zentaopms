@@ -5,7 +5,7 @@
 
 title=测试 convertTao::updateRelatesObject();
 timeout=0
-cid=0
+cid=15874
 
 - 步骤1：任务关联需求正常情况 @1
 - 步骤2：需求关联任务正常情况 @1

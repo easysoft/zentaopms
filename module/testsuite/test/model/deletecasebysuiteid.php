@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 testsuiteModel->deleteCaseBySuiteIDTest();
 timeout=0
-cid=1
+cid=19139
 
 - 检查当前关联的用例数量 @2
 - 测试suiteID值为1 @2

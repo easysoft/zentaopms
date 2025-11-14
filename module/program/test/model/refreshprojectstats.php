@@ -4,7 +4,7 @@
 
 title=测试 programTao::refreshProjectStats();
 timeout=0
-cid=1
+cid=17707
 
 - 更新项目 11 的统计信息，获取项目 11 的统计信息
  - 属性progress @22.80

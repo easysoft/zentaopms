@@ -5,7 +5,7 @@
 
 title=测试 searchModel->getListCount();
 timeout=0
-cid=1
+cid=18301
 
 - 测试索引中所有类型的条数
  - 属性project @4

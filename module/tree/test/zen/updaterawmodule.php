@@ -5,7 +5,7 @@
 
 title=测试 treeZen::updateRawModule();
 timeout=0
-cid=0
+cid=19399
 
 - 步骤1：测试bug视图类型 @bug
 - 步骤2：测试case视图类型 @testcase

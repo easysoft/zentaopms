@@ -4,7 +4,7 @@
 
 title=productpanModel->checkDataForUpdate();
 timeout=0
-cid=1
+cid=17624
 
 - 测试正常数据 @1
 - 测试不填写分支 @1

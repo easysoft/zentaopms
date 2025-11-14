@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::convertTargetToMarkdown();
 timeout=0
-cid=0
+cid=19768
 
 - 测试转换story类型的目标对象 @1
 - 测试story返回attrs属性 @1

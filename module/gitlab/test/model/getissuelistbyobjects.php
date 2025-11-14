@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getIssueListByObjects();
 timeout=0
-cid=0
+cid=16651
 
 - 步骤1：获取多个任务的issue关联
  - 第18条的issueID属性 @4

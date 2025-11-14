@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildGroup();
 timeout=0
-cid=0
+cid=18211
 
 - 步骤1：空component，验证添加了默认styles.hueRotate第styles条的hueRotate属性 @0
 - 步骤2：已有styles，验证保持不变属性styles @customStyles

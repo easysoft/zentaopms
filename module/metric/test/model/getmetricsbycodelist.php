@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getMetricsByCodeList();
 timeout=0
-cid=0
+cid=17109
 
 - 步骤1：传入多个有效code @2
 - 步骤2：传入单个有效code第0条的code属性 @count_of_story

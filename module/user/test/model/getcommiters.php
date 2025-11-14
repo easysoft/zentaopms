@@ -5,7 +5,7 @@
 
 title=测试 userModel->getCommiters();
 timeout=0
-cid=0
+cid=19607
 
 - 获取源代码账号为user1的用户真实姓名属性user1 @用户1
 - 获取源代码账号为user2的用户真实姓名属性user2 @用户2

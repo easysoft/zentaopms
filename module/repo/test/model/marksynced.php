@@ -5,7 +5,7 @@
 
 title=测试 repoModel::markSynced();
 timeout=0
-cid=0
+cid=18087
 
 - 步骤1：正常代码库ID属性synced @1
 - 步骤2：不存在的代码库ID属性synced @0

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 treeModel->getSyncConfig();
 timeout=0
-cid=1
+cid=19380
 
 - 不传入任何数据，测试配置。 @0
 - 测试 feedback 配置。属性sync @1

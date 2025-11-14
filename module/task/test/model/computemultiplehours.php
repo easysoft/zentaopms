@@ -67,7 +67,7 @@ $members = array(array($members1, $members2), array($members3));
 
 title=taskModel->computeMultipleHours();
 timeout=0
-cid=1
+cid=18777
 
 - taskID 1 只有老task计算多人工时
  - 属性id @1

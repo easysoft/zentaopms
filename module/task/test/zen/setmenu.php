@@ -21,7 +21,7 @@ su('admin');
 
 title=测试 taskZen::setMenu();
 timeout=0
-cid=1
+cid=18949
 
 - 启用迭代的项目，跳转到可访问的第一个执行下 @3
 - 不启用迭代的项目，直接返回当前项目的导航 @2

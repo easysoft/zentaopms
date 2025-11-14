@@ -5,7 +5,7 @@
 
 title=测试 metricModel::isObjectMetric();
 timeout=0
-cid=0
+cid=17141
 
 - 步骤1：测试系统度量项（不含scope字段） @false
 - 步骤2：测试包含scope字段的度量项 @true

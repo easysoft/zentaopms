@@ -5,7 +5,7 @@
 
 title=测试 treeZen::getBranches();
 timeout=0
-cid=0
+cid=19394
 
 - 执行treeTest模块的getBranchesTest方法，参数是$normalProduct, 'story', 0  @0
 - 执行treeTest模块的getBranchesTest方法，参数是$branchProduct, 'story', 0  @0

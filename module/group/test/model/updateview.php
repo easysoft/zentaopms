@@ -5,7 +5,7 @@
 
 title=测试 groupModel->updateView();
 timeout=0
-cid=1
+cid=16728
 
 - 验证views第views条的program属性 @program
 - 验证programs第programs条的0属性 @1

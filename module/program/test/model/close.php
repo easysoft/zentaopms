@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 title=测试 programModel::close();
 timeout=0
-cid=1
+cid=17677
 
 - 测试实际完成时间大于今日的情况第realEnd条的0属性 @~f:『实际完成日期』应当不大于~
 - 测试实际完成时间小于实际开始时间的情况第realEnd条的0属性 @『实际完成日期』应当不小于『2023-09-11』。

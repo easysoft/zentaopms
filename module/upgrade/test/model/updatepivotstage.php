@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->updatePivotStage();
 timeout=0
-cid=1
+cid=19558
 
 - 测试阶段为草稿的情况属性stage @draft
 - 测试sql为空时阶段是否为草稿属性stage @draft

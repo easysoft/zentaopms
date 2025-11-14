@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 reportModel->getUserTasks();
 timeout=0
-cid=1
+cid=18170
 
 - 获取admin的任务ID第0条的id属性 @25
 - 获取user1的任务ID第0条的id属性 @26

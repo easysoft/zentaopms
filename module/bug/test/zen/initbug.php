@@ -5,7 +5,7 @@
 
 title=测试 bugZen::initBug();
 timeout=0
-cid=0
+cid=15462
 
 - 步骤1:测试传入空字段数组初始化bug对象,验证默认值 @0
 - 步骤2:测试传入空字段数组初始化bug对象,验证默认类型 @codeerror

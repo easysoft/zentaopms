@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getLinkedMRPairs();
 timeout=0
-cid=0
+cid=17249
 
 - 查询ID为1的需求关联的MR列表
  - 第1条的title属性 @test-merge

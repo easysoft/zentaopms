@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getBatchResolveVars();
 timeout=0
-cid=0
+cid=15447
 
 - 执行bugTest模块的getBatchResolveVarsTest方法，参数是array 属性1 @tester1
 - 执行bugTest模块的getBatchResolveVarsTest方法，参数是array 属性1 @tester1

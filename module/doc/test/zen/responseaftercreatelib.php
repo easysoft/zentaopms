@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterCreateLib();
 timeout=0
-cid=0
+cid=16216
 
 - 步骤1:测试产品文档库创建返回
  - 属性result @success

@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildExecutionForCreate();
 timeout=0
-cid=0
+cid=16411
 
 - 执行executionzenTest模块的buildExecutionForCreateTest方法 属性project @所属项目不能为空。
 - 执行executionzenTest模块的buildExecutionForCreateTest方法 属性openedBy @admin

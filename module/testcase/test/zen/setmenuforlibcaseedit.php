@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::setMenuForLibCaseEdit();
 timeout=0
-cid=0
+cid=19112
 
 - 步骤1：项目模式设置菜单
  - 属性executed @1

@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::assignViewData();
 timeout=0
-cid=0
+cid=17658
 
 - 执行productplanTest模块的assignViewDataTest方法，参数是$normalPlan 
  - 属性plan @1

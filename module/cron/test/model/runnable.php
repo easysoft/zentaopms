@@ -5,7 +5,7 @@
 
 title=测试 cronModel::runnable();
 timeout=0
-cid=0
+cid=15887
 
 - 测试步骤1：cron全局配置为空 @0
 - 测试步骤2：lastTime为零日期情况 @1

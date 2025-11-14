@@ -5,7 +5,7 @@
 
 title=测试 docModel::setLastViewed();
 timeout=0
-cid=0
+cid=16152
 
 - 执行docTest模块的setLastViewedTest方法，参数是array  @1
 - 执行docTest模块的setLastViewedTest方法，参数是array  @1

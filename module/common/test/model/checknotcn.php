@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkNotCN();
 timeout=0
-cid=0
+cid=15659
 
 - 步骤1：中文简体 @0
 - 步骤2：中文繁体 @0

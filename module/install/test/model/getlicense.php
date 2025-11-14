@@ -4,7 +4,7 @@
 
 title=测试 installModel->getLicense();
 timeout=0
-cid=1
+cid=16773
 
 - 获取中文授权内容。 @Z PUBLIC LICENSE
 - 获取英文授权内容。 @The source code of zentao is covered by the fol

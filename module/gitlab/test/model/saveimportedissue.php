@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::saveImportedIssue();
 timeout=0
-cid=0
+cid=16665
 
 - 测试步骤1：正常保存task类型的issue第labels条的0属性 @zentao_task/18
 - 测试步骤2：正常保存bug类型的issue第labels条的0属性 @zentao_bug/9

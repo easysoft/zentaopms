@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->keepkeepLogin();
-cid=0
+cid=19647
 
 - 未勾选保持登录状态，cookie 中保持登录状态的值是 off。 @off
 - 未勾选保持登录状态，cookie 中 za 的值为空。 @0

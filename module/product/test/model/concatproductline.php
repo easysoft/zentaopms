@@ -4,7 +4,7 @@
 /**
 
 title=productModel->concatProductLine();
-cid=0
+cid=17479
 
 - 测试第一组产品列表的0条数据第0条的name属性 @产品线1/产品1
 - 测试第一组产品列表的1条数据第1条的name属性 @产品线1/产品2

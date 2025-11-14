@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getTimeTable();
 timeout=0
-cid=0
+cid=17129
 
 - 执行metricTest模块的getTimeTableTest方法，参数是$normalData  @0
 - 执行metricTest模块的getTimeTableTest方法，参数是array  @0

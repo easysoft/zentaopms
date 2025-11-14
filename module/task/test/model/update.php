@@ -8,7 +8,7 @@ su('admin');
 
 title=测试taskModel->update();
 timeout=0
-cid=1
+cid=18846
 
 - 测试修改任务名称
  - 第1条的field属性 @name

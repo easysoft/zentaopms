@@ -5,7 +5,7 @@
 
 title=测试 projectModel::getAclListByObjectType();
 timeout=0
-cid=0
+cid=17813
 
 - 步骤1：查询project类型记录数量 @5
 - 步骤2：查询product类型记录数量 @5

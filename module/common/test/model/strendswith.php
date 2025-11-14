@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 commonModel::strEndsWith();
 timeout=0
-cid=0
+cid=15717
 
 - 步骤1：正常情况-字符串以指定后缀结尾 @1
 - 步骤2：不匹配情况-字符串不以指定后缀结尾 @0

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->initComponent();
 timeout=0
-cid=1
+cid=18263
 
 - 当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表类型为组件的设置类型。 @xline
 - 当图表为内置图表并且图表id不在系统设置的内置图表id列表中时，图表id为组件的设置id。 @1000

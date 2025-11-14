@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->activate();
-cid=0
+cid=18460
 
 - 查看激活之前的需求状态属性status @draft
 - 查看激活之前的需求状态属性status @active

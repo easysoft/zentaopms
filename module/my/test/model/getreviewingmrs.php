@@ -11,7 +11,7 @@ zenData('user')->gen('5');
 
 title=测试 myModel->getReviewingStories();
 timeout=0
-cid=1
+cid=17296
 
 - 测试获取用户 account 排序 id_desc 的合并请求。
  - 第0条的title属性 @Test MR9

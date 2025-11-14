@@ -5,7 +5,7 @@
 
 title=测试 searchModel::saveIndex();
 timeout=0
-cid=0
+cid=18308
 
 - 测试步骤1：正常创建bug索引
  - 属性objectType @bug

@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::assignCaseParamsForCreateCase();
 timeout=0
-cid=0
+cid=15542
 
 - 执行caselibTest模块的assignCaseParamsForCreateCaseTest方法 
  - 属性type @feature

@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkFile();
 timeout=0
-cid=0
+cid=16480
 
 - 步骤1：允许覆盖文件 @1
 - 步骤2：不存在的扩展，不冲突 @1

@@ -5,7 +5,7 @@
 
 title=测试 myTao::getProductRelatedAssignedByMe();
 timeout=0
-cid=0
+cid=17311
 
 - 步骤1：测试story模块正常情况 @2
 - 步骤2：测试bug模块正常情况 @3

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::createRepo();
 timeout=0
-cid=0
+cid=18039
 
 - 执行repoTest模块的createRepoTest方法，参数是$repo1 属性name @名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。
 - 执行repoTest模块的createRepoTest方法，参数是$repo2 属性name @名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。

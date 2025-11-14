@@ -5,7 +5,7 @@
 
 title=测试 customModel::getRequiredFields();
 timeout=0
-cid=0
+cid=15901
 
 - 测试步骤1：空配置对象 @0
 - 测试步骤2：单个方法配置属性create @name

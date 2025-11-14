@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getConsistencyLogFile();
-cid=1
+cid=19520
 
 - 测试获取一致性检查的日志文件地址是否正确 @1
 

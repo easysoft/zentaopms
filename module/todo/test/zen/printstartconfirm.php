@@ -5,7 +5,7 @@
 
 title=测试 todoZen::printStartConfirm();
 timeout=0
-cid=0
+cid=19305
 
 - 执行todoTest模块的printStartConfirmTest方法，参数是$bugTodo
  - 属性result @success

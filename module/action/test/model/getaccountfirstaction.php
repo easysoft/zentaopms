@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getAccountFirstAction();
 timeout=0
-cid=0
+cid=14887
 
 - 执行actionTest模块的getAccountFirstActionTest方法，参数是'admin' 属性actor @admin
 - 执行actionTest模块的getAccountFirstActionTest方法，参数是'user' 属性actor @user

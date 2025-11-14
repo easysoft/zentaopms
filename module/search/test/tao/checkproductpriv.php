@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkProductPriv();
 timeout=0
-cid=0
+cid=18319
 
 - 执行searchTest模块的checkProductPrivTest方法，参数是$results1, $objectIdList1, $products1 第1条的objectID属性 @1
 - 执行searchTest模块的checkProductPrivTest方法，参数是$results2, $objectIdList2, $products2  @0

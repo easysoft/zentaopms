@@ -10,7 +10,7 @@ zenData('product')->loadYaml('product')->gen(30);
 
 title=测试 programModel::getProductByProgram();
 timeout=0
-cid=1
+cid=17692
 
 */
 

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::updateAssistant();
 timeout=0
-cid=0
+cid=15075
 
 - 执行aiTest模块的updateAssistantTest方法  @1
 - 执行aiTest模块的updateAssistantTest方法  @1

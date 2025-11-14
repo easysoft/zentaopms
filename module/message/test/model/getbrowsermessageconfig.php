@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 messageModel->getBrowserMessageConfig();
-cid=1
+cid=17050
 pid=1
 
 */

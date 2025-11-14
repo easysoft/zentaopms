@@ -5,7 +5,7 @@
 
 title=测试 fileModel::fileMTime();
 timeout=0
-cid=0
+cid=16500
 
 - 步骤1：传入空对象 @0
 - 步骤2：传入存在的文件对象 @1

@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildSearchFormForBrowse();
 timeout=0
-cid=0
+cid=17567
 
 - 测试步骤1:正常产品浏览属性productID @1
 - 测试步骤2:验证搜索模块类型属性searchModule @story

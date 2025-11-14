@@ -5,7 +5,7 @@
 
 title=测试 customZen::setTestcaseReview();
 timeout=0
-cid=0
+cid=15939
 
 - 执行customTest模块的setTestcaseReviewTest方法，参数是array  @1
 - 执行customTest模块的setTestcaseReviewTest方法，参数是array  @1

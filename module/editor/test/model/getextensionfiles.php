@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 editorModel::getExtensionFiles();
 timeout=0
-cid=0
+cid=16235
 
 - 步骤1：测试todo模块扩展文件 @1
 - 步骤2：测试user模块扩展文件 @1

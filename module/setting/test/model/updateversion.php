@@ -12,7 +12,7 @@ $config->gen(10);
 
 title=测试 settingModel->updateVersion();
 timeout=0
-cid=1
+cid=18372
 
 - 测试version值为16.5，添加数据第1条的value属性 @16.5
 - 测试version值为max3.0，更新数据第1条的value属性 @max3.0

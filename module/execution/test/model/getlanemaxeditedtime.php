@@ -9,7 +9,7 @@ zenData('kanbanlane')->loadYaml('kanbanlane')->gen(10);
 
 title=测试 executionModel->getLaneMaxEditedTime();
 timeout=0
-cid=1
+cid=16325
 
 - 获取迭代看板的最后更新时间 @2022-01-07 00:00:00
 - 获取迭代看板的最后更新时间 @2022-01-08 00:00:00

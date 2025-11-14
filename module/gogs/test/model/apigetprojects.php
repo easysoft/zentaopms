@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetProjects();
 timeout=0
-cid=0
+cid=16686
 
 - 执行gogsTest模块的apiGetProjectsTest方法，参数是1  @0
 - 执行gogsTest模块的apiGetProjectsTest方法，参数是999  @0

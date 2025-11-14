@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignModuleForStory();
 timeout=0
-cid=0
+cid=16405
 
 - 执行executionTest模块的assignModuleForStoryTest方法，参数是'bymodule', 1, 'story', 1, 1 
  - 属性moduleID @1

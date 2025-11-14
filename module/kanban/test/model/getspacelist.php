@@ -9,7 +9,7 @@ zenData('kanbanspace')->gen(100);
 
 title=测试 kanbanModel->getSpaceList();
 timeout=0
-cid=1
+cid=16945
 
 - 查询用户可以看到的admin private的空间数量 @0
 - 查询用户可以看到的admin cooperation的空间数量 @34

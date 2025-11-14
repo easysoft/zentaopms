@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->batchCreate();
-cid=0
+cid=19579
 
 - 传入空数组，返回 false。属性result @0
 - 用户名为空，返回 false。属性result @0

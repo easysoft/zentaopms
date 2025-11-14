@@ -5,7 +5,7 @@
 
 title=测试 customZen::setStoryReview();
 timeout=0
-cid=0
+cid=15938
 
 - 执行customTest模块的setStoryReviewTest方法，参数是'story', array  @1
 - 执行customTest模块的setStoryReviewTest方法，参数是'requirement', array  @1

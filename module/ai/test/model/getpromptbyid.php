@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getPromptById();
 timeout=0
-cid=0
+cid=15043
 
 - 步骤1：正常情况属性name @需求润色
 - 步骤2：不存在的ID @0

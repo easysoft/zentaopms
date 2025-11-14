@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignTestcaseVars();
 timeout=0
-cid=0
+cid=16408
 
 - 步骤1：正常情况
  - 属性executionID @1

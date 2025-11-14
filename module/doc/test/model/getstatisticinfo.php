@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getStatisticInfo();
-cid=1
+cid=16128
 
 - 获取登录用户为admin时，文档总数、今日编辑文档数、用户编辑过的文档数、用户创建的文档数
  - 属性totalDocs @50

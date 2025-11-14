@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getDocsBySearch();
-cid=1
+cid=16083
 
 - 根据搜索条件获取我的空间下文档
  - 第1条的lib属性 @11

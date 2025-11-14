@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel::getDefaultShowGrades();
-cid=0
+cid=18526
 
 - 测试步骤1：正常单级菜单结构输入 >> 期望正常拼接结果
 - 测试步骤2：多级菜单结构输入 >> 期望所有级别拼接结果

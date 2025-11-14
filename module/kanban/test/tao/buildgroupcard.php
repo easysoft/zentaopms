@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildGroupCard();
 timeout=0
-cid=0
+cid=16970
 
 - 步骤1：正常情况下构建分组卡片 @2
 - 步骤2：空卡片ID列表情况 @0

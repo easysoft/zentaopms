@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::getImagePairs();
 timeout=0
-cid=0
+cid=19748
 
 - 执行zahostTest模块的getImagePairsTest方法，参数是1 属性1 @ubuntu18.04
 - 执行zahostTest模块的getImagePairsTest方法，参数是2 属性4 @mysql8.0

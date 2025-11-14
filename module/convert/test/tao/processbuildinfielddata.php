@@ -5,7 +5,7 @@
 
 title=测试 convertTao::processBuildinFieldData();
 timeout=0
-cid=0
+cid=15866
 
 - 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data1, $object1, $relations1, false 
  - 属性title @Test Bug Title

@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkSafeFile();
 timeout=0
-cid=0
+cid=15663
 
 - 步骤1：容器环境返回false @0
 - 步骤2：有效安全文件返回false @0

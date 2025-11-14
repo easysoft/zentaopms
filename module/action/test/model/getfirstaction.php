@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 actionModel->getFirstAction();
 timeout=0
-cid=1
+cid=14900
 
 - 测试获取对象类型 story 对象ID 1 的动态信息
  - 属性id @1

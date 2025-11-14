@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 transfer->getCascadeList();
 timeout=0
-cid=1
+cid=19332
 
 - 测试导出bug类型字段的下拉值第typeList条的codeerror属性 @代码错误(#codeerror)
 - 测试导出bug项目字段的下拉数量 @5

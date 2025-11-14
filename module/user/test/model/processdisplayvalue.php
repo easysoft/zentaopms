@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->processDisplayValue();
-cid=0
+cid=19650
 
 - 参数为空，用户 1 显示首字母 + 姓名，用户 2 显示首字母 + 用户名，用户 3 显示首字母 + 用户名。
  - 属性user1 @U:用户1

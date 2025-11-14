@@ -5,7 +5,7 @@
 
 title=测试 mailZen::getConfigForSave();
 timeout=0
-cid=0
+cid=17040
 
 - 执行mailTest模块的getConfigForSaveZenTest方法 属性turnon @1
 - 执行mailTest模块的getConfigForSaveZenTest方法 属性mta @smtp

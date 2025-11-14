@@ -5,7 +5,7 @@
 
 title=测试 docModel->getUserByConfluenceUserID();
 timeout=0
-cid=1
+cid=16135
 
 - 获取admin的用户名
  - 属性account @admin

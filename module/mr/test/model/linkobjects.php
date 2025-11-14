@@ -5,7 +5,7 @@
 
 title=测试 mrModel::linkObjects();
 timeout=0
-cid=0
+cid=17257
 
 - 错误的合并请求 @0
 - 正确的合并请求 @3

@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getAllSubSpaces();
-cid=1
+cid=16069
 
 - 测试获取项目接口库1属性mine.1 @我的空间/项目接口库1
 - 测试获取自定义文档库6属性mine.6 @我的空间/自定义文档库6

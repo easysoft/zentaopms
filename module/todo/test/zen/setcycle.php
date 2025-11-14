@@ -5,7 +5,7 @@
 
 title=测试 todoZen::setCycle();
 timeout=0
-cid=0
+cid=19306
 
 - 步骤1：正常天循环属性type @cycle
 - 步骤2：正常周循环属性type @cycle

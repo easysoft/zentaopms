@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildActivateForm();
 timeout=0
-cid=0
+cid=17924
 
 - 步骤1：正常项目激活
  - 属性title @激活项目

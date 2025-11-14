@@ -5,7 +5,7 @@
 
 title=测试 adminZen::setCompanyByAPI();
 timeout=0
-cid=0
+cid=14990
 
 - 执行$methodExists @1
 - 执行$testResult @1

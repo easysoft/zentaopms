@@ -5,7 +5,7 @@
 
 title=测试 webhookZen::getBoundUseridPairs();
 timeout=0
-cid=0
+cid=19713
 
 - 执行webhookTest模块的getBoundUseridPairsTest方法，参数是$dingWebhook, $users, $boundUsers, $oauthUsers 属性bound_admin_id @bound_admin_id
 - 执行webhookTest模块的getBoundUseridPairsTest方法，参数是$feishuWebhook, $users, $boundUsers, $oauthUsers 属性oauth_user1_id @用户一

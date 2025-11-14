@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->formatStories();
-cid=0
+cid=18493
 
 - 获取处理title之前的需求列表数量 @2
 - 获取处理title之前的需求列表数量 @2

@@ -10,7 +10,7 @@ zenData('kanbanregion')->gen(5);
 
 title=测试 kanbanModel->getRegionByID();
 timeout=0
-cid=1
+cid=16942
 
 - 测试查询看板1信息
  - 属性name @默认区域

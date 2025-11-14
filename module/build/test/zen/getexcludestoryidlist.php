@@ -5,7 +5,7 @@
 
 title=测试 buildZen::getExcludeStoryIdList();
 timeout=0
-cid=0
+cid=15522
 
 - 测试产品1有父需求和已关联需求的情况,期望返回包含父需求和已关联需求的ID列表 @4
 - 测试产品1只有父需求无已关联需求的情况,期望返回只包含父需求的ID列表 @1

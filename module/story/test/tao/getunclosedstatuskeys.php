@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getUnclosedStatusKeys();
-cid=0
+cid=18649
 
 - 获取草稿状态属性1 @draft
 - 获取评审中状态属性2 @reviewing

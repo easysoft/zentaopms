@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printQaOverviewBlock();
 timeout=0
-cid=0
+cid=15279
 
 - 步骤1：正常情况统计总数属性total @20
 - 步骤2：项目过滤情况属性total @0

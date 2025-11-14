@@ -5,7 +5,7 @@
 
 title=测试 productModel::buildSearchConfig();
 timeout=0
-cid=0
+cid=17474
 
 - 测试 productID=1, storyType='story' 的正常情况第fields条的title属性 @需求名称
 - 测试 productID=1, storyType='requirement' 的情况，验证 title 字段名称被替换第fields条的title属性 @用户需求名称

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getBrowseInfo();
 timeout=0
-cid=0
+cid=18136
 
 - 执行repoZenTest模块的getBrowseInfoTest方法，参数是$gitlabRepo 第0条的master属性 @master
 - 执行repoZenTest模块的getBrowseInfoTest方法，参数是$gitRepo  @0

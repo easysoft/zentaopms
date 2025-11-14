@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::filterSpecialChars();
 timeout=0
-cid=0
+cid=17365
 
 - 执行pivotTest模块的filterSpecialCharsTest方法，参数是$objectRecords 第0条的name属性 @test<name>
 - 执行pivotTest模块的filterSpecialCharsTest方法，参数是$arrayRecords 第0条的name属性 @test<array>

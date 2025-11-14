@@ -5,7 +5,7 @@
 
 title=测试 docModel->getLinkedObjectData();
 timeout=0
-cid=1
+cid=16107
 
 - 测试传入错误的type @0
 - 获取开源版关联产品ID=1的数据属性4 @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'

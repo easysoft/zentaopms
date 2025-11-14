@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->summary();
-cid=1
+cid=19024
 pid=1
 
 */

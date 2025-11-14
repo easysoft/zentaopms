@@ -11,7 +11,7 @@ zenData('task')->loadYaml('task', true)->gen(5);
 
 title=taskModel->addTaskEffort();
 timeout=0
-cid=1
+cid=18756
 
 - 插入task为1 left为0 consumed为3的任务
  - 属性objectID @1

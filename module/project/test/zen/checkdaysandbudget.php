@@ -5,7 +5,7 @@
 
 title=测试 projectZen::checkDaysAndBudget();
 timeout=0
-cid=0
+cid=17934
 
 - 执行projectzenTest模块的checkDaysAndBudgetTest方法，参数是$project, $rawdata  @1
 - 执行projectzenTest模块的checkDaysAndBudgetTest方法，参数是$project, $rawdata 属性days @可用工作日不能超过『31』天

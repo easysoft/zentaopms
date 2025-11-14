@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 projectreleaseModel->getLast();
-cid=1
+cid=17972
 
 - 测试获取 没有 需求 和 bug 的发布是否可以点击 notify 按钮 @2
 - 测试获取 有 需求 没有 bug 的发布是否可以点击 notify 按钮 @1

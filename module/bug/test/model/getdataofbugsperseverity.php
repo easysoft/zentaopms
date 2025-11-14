@@ -10,7 +10,7 @@ zenData('bug')->gen(10);
 
 title=bugModel->getDataOfBugsPerSeverity();
 timeout=0
-cid=1
+cid=15371
 
 - 获取严重程度1数据
  - 第1条的name属性 @严重程度:1

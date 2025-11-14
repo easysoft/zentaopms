@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::checkCreateFormData();
 timeout=0
-cid=0
+cid=19085
 
 - 执行testcaseTest模块的checkCreateFormDataTest方法，参数是$validCase  @1
 - 执行testcaseTest模块的checkCreateFormDataTest方法，参数是$noproductCase 属性product @『所属产品』不能为空。

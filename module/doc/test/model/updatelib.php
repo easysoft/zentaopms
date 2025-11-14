@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->updateLib();
-cid=1
+cid=16161
 
 - 正常修改产品文档库
  - 第0条的field属性 @product

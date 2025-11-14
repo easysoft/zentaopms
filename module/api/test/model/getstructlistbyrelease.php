@@ -10,7 +10,7 @@ zenData('apistruct_spec')->gen(10);
 
 title=测试 apiModel->getStructListByRelease();
 timeout=0
-cid=1
+cid=15118
 
 - 获取空发布下的数据结构列表。
  - 第0条的id属性 @1

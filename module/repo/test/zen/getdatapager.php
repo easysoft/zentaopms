@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getDataPager();
 timeout=0
-cid=0
+cid=18138
 
 - 执行repoZenTest模块的getDataPagerTest方法，参数是$testData, $pager  @3
 - 执行repoZenTest模块的getDataPagerTest方法，参数是$emptyData, $pager  @0

@@ -5,7 +5,7 @@
 
 title=测试 backupModel::processFileSize();
 timeout=0
-cid=0
+cid=15139
 
 - 执行backupTest模块的processFileSizeTest方法  @0KB
 - 执行backupTest模块的processFileSizeTest方法，参数是512  @0.5KB

@@ -12,7 +12,7 @@ zenData('suitecase')->gen(10);
 
 title=测试 testsuiteModel->getLinkedCasePairs();
 timeout=0
-cid=1
+cid=19142
 
 - 测试suiteID值正常存在,orderBy值为id_desc,append值为true属性1 @0
 - 测试suiteID值正常存在,orderBy值为id_desc,append值为false

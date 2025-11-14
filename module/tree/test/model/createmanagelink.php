@@ -5,7 +5,7 @@
 
 title=测试 treeModel::createManageLink();
 timeout=0
-cid=0
+cid=19352
 
 - 执行treeTest模块的createManageLinkTest方法，参数是'story', $module1 
  - 属性id @1

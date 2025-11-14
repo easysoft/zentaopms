@@ -11,7 +11,7 @@ $project->gen(1);
 
 title=测试 projectTao::doCreate();
 timeout=0
-cid=1
+cid=17899
 
 */
 

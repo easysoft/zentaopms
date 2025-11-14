@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->joinStep();
-cid=1
+cid=19013
 pid=1
 
 测试获取步骤 1 2 的字符串 >> 用例步骤描述1 EXPECT:这是用例预期结果1 用例步骤描述2 EXPECT:这是用例预期结果2

@@ -514,12 +514,12 @@ class programModel extends model
         }
 
         $stmt = $this->dao->select("DISTINCT t1.*, CAST(NULLIF(t1.budget, '') AS DECIMAL) AS budget")->from(TABLE_PROJECT)->alias('t1');
-        if($this->cookie->involved) $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
+        if($this->cookie->involved || $browseType == 'involved') $stmt = $this->loadModel('project')->leftJoinInvolvedTable($stmt);
         $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch' && $query)->andWhere($query)->fi()
             ->andWhere('t1.type')->eq('project')
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed', 'delayed'), true))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed', 'delayed', 'involved'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' || $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'delayed')->andWhere('t1.status')->notIn('done,closed,suspend')->andWhere('t1.end')->lt(helper::today())->fi()
             ->beginIF($browseType == 'review')

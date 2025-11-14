@@ -4,7 +4,7 @@
 
 title=测试 storyZen::buildStoriesForBatchEdit();
 timeout=0
-cid=0
+cid=18668
 
 - 步骤1：正常情况
  - 第1条的title属性 @更新需求1

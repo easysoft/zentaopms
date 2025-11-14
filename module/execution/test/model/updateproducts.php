@@ -30,7 +30,7 @@ su('admin');
 
 title=测试executionModel->updateProductsTest();
 timeout=0
-cid=1
+cid=16377
 
 - 测试修改敏捷执行关联产品第0条的product属性 @1
 - 测试修改瀑布执行关联产品第1条的product属性 @2

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskTao->mergeChildIntoParent();
-cid=0
+cid=18887
 
 - 传入空数组。 @0
 - 检查归并后的第一个任务 @2

@@ -5,7 +5,7 @@
 
 title=测试 biModel::unzipFile();
 timeout=0
-cid=0
+cid=15217
 
 - 步骤1：使用不存在的ZIP文件路径 @1
 - 步骤2：使用空的文件参数 @1  

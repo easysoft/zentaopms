@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 testtaskModel->batchUnlinkCases();
 timeout=0
-cid=1
+cid=19157
 
 - 测试单参数为 0 返回 false。 @0
 - 测试用例参数为空返回 false。 @0

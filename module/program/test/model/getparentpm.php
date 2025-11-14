@@ -5,7 +5,7 @@
 
 title=测试 programModel::getParentPM();
 timeout=0
-cid=1
+cid=17691
 
 - 获取父项目集的负责人数量 @4
 - 获取父项目集的负责人account第6条的admin属性 @admin

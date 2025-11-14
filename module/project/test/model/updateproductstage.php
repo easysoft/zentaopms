@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 projectModel->updateProductStage();
 timeout=0
-cid=1
+cid=17879
 
 - 检查阶段一关联产品一第product条的1属性 @1
 - 检查阶段一关联分支第branch条的0属性 @0

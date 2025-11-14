@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->getTeamByAccount();
 timeout=0
-cid=1
+cid=18821
 
 - 获取未开始的指定账号的团队信息 @admin_wait
 - 获取进行中的指定账号的团队信息 @admin_doing

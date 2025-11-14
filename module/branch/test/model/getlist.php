@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 branchModel->getList();
 timeout=0
-cid=1
+cid=15326
 
 - 执行branch模块的getListTest方法，参数是$productID[0]  @,0,1,2
 - 执行branch模块的getListTest方法，参数是$productID[0], $executionID[0]  @0

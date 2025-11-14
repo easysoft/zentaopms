@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::rebuildFieldSettings();
 timeout=0
-cid=0
+cid=15214
 
 - 步骤1：正常情况下重建字段设置 @1
 - 步骤2：输入空字段对数组 @1

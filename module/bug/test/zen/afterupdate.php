@@ -5,7 +5,7 @@
 
 title=测试 bugZen::afterUpdate();
 timeout=0
-cid=0
+cid=15423
 
 - 执行bugTest模块的afterUpdateTest方法，参数是$bug1, $oldBug1  @1
 - 执行$result2 && $afterActionCount > $beforeActionCount @1

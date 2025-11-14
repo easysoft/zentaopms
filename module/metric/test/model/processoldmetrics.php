@@ -5,7 +5,7 @@
 
 title=测试 metricModel::processOldMetrics();
 timeout=0
-cid=0
+cid=17149
 
 - 步骤1：open版本处理度量项第0条的isOldMetric属性 @1
 - 步骤2：max版本处理旧度量项第0条的isOldMetric属性 @0

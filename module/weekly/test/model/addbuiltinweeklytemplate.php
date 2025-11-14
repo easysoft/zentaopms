@@ -5,7 +5,7 @@
 
 title=测试 weeklyModel::addBuiltinWeeklyTemplate();
 timeout=0
-cid=0
+cid=19717
 
 - 步骤1：测试addBuiltinWeeklyTemplate方法正常执行 @1
 - 步骤2：测试addBuiltinWeeklyTemplate方法返回值类型 @boolean

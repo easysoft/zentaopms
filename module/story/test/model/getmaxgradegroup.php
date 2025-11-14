@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getMaxGradeGroup();
 timeout=0
-cid=0
+cid=18543
 
 - 步骤1：默认状态获取最大等级分组
  - 属性story @5

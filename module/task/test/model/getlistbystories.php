@@ -30,7 +30,7 @@ foreach($tasks as $task) {
 
 title=taskModel->getListByStories();
 timeout=0
-cid=1
+cid=18812
 
 - 测试步骤1：根据需求ID 1,2,3获取任务（排除deleted=1的任务7） @6
 - 测试步骤2：根据需求ID 1,2和执行ID 1获取任务 @3

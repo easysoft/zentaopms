@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBugs();
 timeout=0
-cid=0
+cid=19406
 
 - 步骤1：获取Bug列表，验证数组长度 @2
 - 步骤2：验证第一个Bug状态为active第1条的status属性 @active

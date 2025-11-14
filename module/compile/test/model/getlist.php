@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 compileModel->getList();
 timeout=0
-cid=1
+cid=15748
 
 - 检查是否能获取到数据
  - 第1条的name属性 @构建1

@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetUsers();
 timeout=0
-cid=0
+cid=16565
 
 - 错误的服务器ID @0
 - 正确的服务器ID

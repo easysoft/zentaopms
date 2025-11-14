@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getRowTotal();
 timeout=0
-cid=0
+cid=17400
 
 - 执行pivotTest模块的getRowTotalTest方法，参数是$normalRow 属性col1 @25
 - 执行pivotTest模块的getRowTotalTest方法，参数是$multiSameKeyRow 

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getRoleTemplates();
 timeout=0
-cid=0
+cid=15048
 
 - 步骤1：获取所有未删除角色模板，期望8个 @8
 - 步骤2：验证第一个角色模板名称第1条的name属性 @系统分析师

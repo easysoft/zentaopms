@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getLogFile();
 timeout=0
-cid=0
+cid=15174
 
 - 步骤1：正常调用getLogFile方法返回字符串 @1
 - 步骤2：验证返回值包含日志目录 @1

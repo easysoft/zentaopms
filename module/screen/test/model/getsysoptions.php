@@ -17,7 +17,7 @@ zenData('bug')->gen(5);
 
 title=测试 screenModel->getSysOptions();
 timeout=0
-cid=1
+cid=18256
 
 - 测试type为user，对象类型为空，字段为空，sql为空的情况下，用户列表获取是否正确。
  - 属性admin @A:admin

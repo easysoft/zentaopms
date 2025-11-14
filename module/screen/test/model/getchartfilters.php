@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->getByID();
 timeout=0
-cid=1
+cid=0
 
 - 当from为query时，type为date时，default应该为当前周一的日期，检查是否生成了正确的时间。 @1
 - 当from不存在，type为date并且default不存在的时候，生成default应该为null，检查是否生成了正确的default值。第0条的default属性 @~~

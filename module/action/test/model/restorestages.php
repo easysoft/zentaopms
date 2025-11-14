@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 actionModel->restoreStages();
 timeout=0
-cid=1
+cid=14930
 
 - 测试还原id为2的阶段
  - 属性id @1

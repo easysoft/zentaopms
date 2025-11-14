@@ -5,7 +5,7 @@
 
 title=测试 mailTao::getAddressees();
 timeout=0
-cid=0
+cid=17029
 
 - 测试空objectType参数情况 @0
 - 测试空object参数情况 @0

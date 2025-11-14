@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::setVectorizedInfo();
 timeout=0
-cid=0
+cid=19778
 
 - 测试设置对象类型的向量化信息 @1
 - 测试设置字符串类型的向量化信息 @vectorkey001,active,50

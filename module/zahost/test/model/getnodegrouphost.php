@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::getNodeGroupHost();
 timeout=0
-cid=0
+cid=19750
 
 - 步骤1：验证返回2个主机分组 @2
 - 步骤2：验证宿主机1下有1个执行节点 @1

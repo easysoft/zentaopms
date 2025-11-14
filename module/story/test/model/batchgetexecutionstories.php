@@ -5,7 +5,7 @@
 
 title=测试 storyModel->batchGetExecutionStories();
 timeout=0
-cid=0
+cid=18473
 
 - 不传入数据。 @0
 - 传入有关联需求的项目数据，不传入产品数据。 @25

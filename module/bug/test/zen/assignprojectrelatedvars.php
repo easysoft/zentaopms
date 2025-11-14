@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignProjectRelatedVars();
 timeout=0
-cid=0
+cid=15428
 
 - 步骤1:空输入
  - 属性noProductProjects @0

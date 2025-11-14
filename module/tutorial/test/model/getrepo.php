@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRepo();
 timeout=0
-cid=0
+cid=19461
 
 - 执行tutorialTest模块的getRepoTest方法 
  - 属性id @1

@@ -5,7 +5,7 @@
 
 title=测试 zaiModel->callAPI() and callAdminAPI();
 timeout=0
-cid=0
+cid=19761
 
 - 测试没有ZAI设置时调用API @failed
 - 测试没有用户登录时调用API @fail

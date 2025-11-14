@@ -5,7 +5,7 @@
 
 title=测试 gogsZen::checkToken();
 timeout=0
-cid=0
+cid=16693
 
 - 步骤1：正常情况（会因网络连接失败）属性result @fail
 - 步骤2：缺少name字段属性result @fail

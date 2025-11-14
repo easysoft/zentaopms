@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getPairs();
 timeout=0
-cid=0
+cid=18545
 
 - 获取产品1计划1下的所有需求数量 @4
 - 获取产品1计划1下的所有需求数量，包括父需求 @4

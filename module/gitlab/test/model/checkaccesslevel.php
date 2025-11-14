@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::checkAccessLevel();
 timeout=0
-cid=1
+cid=16634
 
 - 使用空的权限信息查询 @40
 - 使用只有维护者权限信息查询 @40

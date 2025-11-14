@@ -5,7 +5,7 @@
 
 title=测试 aiModel::testModelConnection();
 timeout=0
-cid=0
+cid=15068
 
 - 步骤1：有效模型ID，测试连接失败 @0
 - 步骤2：不存在模型ID，返回false @0

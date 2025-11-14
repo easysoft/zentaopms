@@ -5,7 +5,7 @@
 
 title=测试 deptModel::getDeptPairs();
 timeout=0
-cid=0
+cid=15971
 
 - 步骤1：正常情况获取所有部门数量 @10
 - 步骤2：验证返回类型为数组 @1

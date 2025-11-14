@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoFields();
 timeout=0
-cid=0
+cid=15788
 
 - 测试story模块的字段数量 @6
 - 测试bug模块的字段数量 @13

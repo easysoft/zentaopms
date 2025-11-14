@@ -5,7 +5,7 @@
 
 title=测试 docModel::filterPrivDocs();
 timeout=0
-cid=0
+cid=16067
 
 - 执行$result1 @0
 - 执行$result2 @1

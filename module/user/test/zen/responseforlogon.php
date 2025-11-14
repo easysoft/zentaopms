@@ -5,7 +5,7 @@
 
 title=测试 userZen::responseForLogon();
 timeout=0
-cid=0
+cid=19683
 
 - 执行userTest模块的responseForLogonTest方法，参数是'', 'json', '', '', '', '' 属性status @success
 - 执行userTest模块的responseForLogonTest方法，参数是'', '', '', '', '', 'http://example.com/'

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getProjectExecutions();
 timeout=0
-cid=0
+cid=17397
 
 - 测试步骤1：正常情况下获取项目执行列表 @array
 - 测试步骤2：multiple为1的执行项目格式化 @项目1/迭代1

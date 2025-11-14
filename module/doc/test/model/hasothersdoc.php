@@ -5,7 +5,7 @@
 
 title=测试 docModel->hasOthersDoc();
 timeout=0
-cid=1
+cid=16137
 
 - 测试文档库1下是否有其他人创建的文档 @0
 - 测试文档库2下是否有其他人创建的文档 @0

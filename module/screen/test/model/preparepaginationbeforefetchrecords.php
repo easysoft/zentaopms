@@ -5,7 +5,7 @@
 
 title=测试 screenModel::preparePaginationBeforeFetchRecords();
 timeout=0
-cid=0
+cid=18272
 
 - 步骤1：测试传入数组形式的完整分页参数
  - 第0条的pageID属性 @2

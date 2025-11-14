@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->computeProductAcl();
-cid=1
+cid=19506
 
 - 测试更新产品 1 2 3 的项目集ID改为 0 lineID改为 0 @1:0,private,0; 2:0,open,0; 3:1,private,2;
 

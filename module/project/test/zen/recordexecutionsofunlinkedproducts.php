@@ -5,7 +5,7 @@
 
 title=测试 projectZen::recordExecutionsOfUnlinkedProducts();
 timeout=0
-cid=0
+cid=17960
 
 - 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array  @0
 - 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array 第101条的action属性 @unlinkproduct

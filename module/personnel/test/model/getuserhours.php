@@ -42,7 +42,7 @@ zenData('user')->gen(20);
 /**
 
 title=测试 personnelModel->getUserHours();
-cid=1
+cid=17334
 pid=1
 
 */

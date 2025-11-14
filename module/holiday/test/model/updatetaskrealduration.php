@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->updateTaskRealDuration();
-cid=1
+cid=16753
 
 - 测试插入id为 10 的节假日时任务 1 任务的计划工期 @1
 - 测试插入id为 10 的节假日时任务 2 任务的计划工期 @1

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::parseChatResponse();
 timeout=0
-cid=0
+cid=15058
 
 - 执行aiTest模块的parseChatResponseTest方法，参数是$ernieResponse  @这是文心一言的回复消息
 - 执行aiTest模块的parseChatResponseTest方法，参数是$openaiResponse  @Hello! How can I help you today?

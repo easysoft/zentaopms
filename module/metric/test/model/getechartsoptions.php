@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getEchartsOptions();
 timeout=0
-cid=0
+cid=17096
 
 - 执行metricTest模块的getEchartsOptionsTest方法，参数是$emptyHeader, $emptyData, 'line'  @0
 - 执行metricTest模块的getEchartsOptionsTest方法，参数是$timeHeader, $timeData, 'line'  @1

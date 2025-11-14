@@ -10,7 +10,7 @@ zenData('case')->gen(2);
 
 title=测试 testcaseModel->batchChangeType();
 timeout=0
-cid=1
+cid=18961
 
 - 用例参数为空返回 false。 @0
 - 用例参数不为空、类型参数为空返回 false。 @0

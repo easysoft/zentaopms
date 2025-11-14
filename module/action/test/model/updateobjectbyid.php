@@ -5,7 +5,7 @@
 
 title=测试 actionModel::updateObjectByID();
 timeout=0
-cid=0
+cid=14936
 
 - 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 1, array 属性name @更新后的项目名称
 - 执行action模块的updateObjectByIDTest方法，参数是TABLE_PROJECT, 2, array

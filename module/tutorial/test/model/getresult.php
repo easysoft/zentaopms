@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getResult();
 timeout=0
-cid=0
+cid=19465
 
 - 步骤1：正常获取结果对象的核心字段
  - 属性id @1

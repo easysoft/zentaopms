@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::downloadImage();
 timeout=0
-cid=0
+cid=19743
 
 - 步骤1：下载第1个镜像，返回错误信息 @创建下载镜像任务失败
 - 步骤2：下载不存在的镜像 @0

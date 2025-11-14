@@ -5,7 +5,7 @@
 
 title=测试 mrModel::checkSameOpened();
 timeout=0
-cid=0
+cid=17238
 
 - 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch属性message @存在重复并且未关闭的合并请求: ID1
 - 使用空的gitlabID属性result @success

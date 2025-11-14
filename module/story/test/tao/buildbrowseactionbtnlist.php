@@ -5,7 +5,7 @@
 
 title=测试 storyModel->buildBrowseActionBtnList();
 timeout=0
-cid=0
+cid=18600
 
 - 查看用户需求列表操作菜单第一个链接
  - 第0条的name属性 @change

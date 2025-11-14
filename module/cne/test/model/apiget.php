@@ -5,7 +5,7 @@
 
 title=测试 cneModel::apiGet();
 timeout=0
-cid=0
+cid=15599
 
 - 测试步骤1:正常的API GET请求属性code @200
 - 测试步骤2:带查询参数的API GET请求第data条的name属性 @my-app

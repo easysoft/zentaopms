@@ -23,7 +23,7 @@ $effort->gen(3);
 
 title=获取删除工时后的任务
 timeout=0
-cid=1
+cid=18884
 
 - 删除ID为1的工时
  - 属性consumed @0

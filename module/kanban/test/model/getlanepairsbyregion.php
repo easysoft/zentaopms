@@ -11,7 +11,7 @@ zenData('kanbanlane')->loadYaml('rdkanbanlane')->gen(10);
 
 title=测试 kanbanModel->getLanePairsByRegion();
 timeout=0
-cid=1
+cid=16932
 
 - 测试获取区域101的泳道 @泳道1
 - 测试获取区域101的bug泳道 @0

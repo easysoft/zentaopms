@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getMetricRecordType();
 timeout=0
-cid=0
+cid=17108
 
 - 步骤1：空code返回false @0
 - 步骤2：system范围无日期类型 @system

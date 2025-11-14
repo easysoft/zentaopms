@@ -20,7 +20,7 @@ su('admin');
 
 title=测试 bugZen::prepareCreateExtras();
 timeout=0
-cid=0
+cid=15466
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData1] 属性project @123
 - 执行$result2属性assignedDate @datetime

@@ -17,7 +17,7 @@ su('admin');
 
 title=测试 testcaseModel->syncCase2Project();
 timeout=0
-cid=1
+cid=19025
 
 - 测试同步用例 1  到关联项目中 @11,101
 

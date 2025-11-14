@@ -5,7 +5,7 @@
 
 title=测试 personnelModel::getInvolvedExecutions();
 timeout=0
-cid=0
+cid=17329
 
 - 步骤1：正常项目包含执行的情况-验证admin用户执行数量属性admin @5
 - 步骤2：检查用户1的执行统计数量属性user1 @5

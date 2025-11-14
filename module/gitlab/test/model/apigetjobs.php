@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetJobs();
 timeout=0
-cid=0
+cid=16607
 
 - 步骤1：正常查询pipeline jobs第0条的stage属性 @deploy
 - 步骤2：不存在的GitLab ID @0

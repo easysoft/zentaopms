@@ -5,7 +5,7 @@
 
 title=测试 screenModel::setFilterSQL();
 timeout=0
-cid=0
+cid=18282
 
 - 执行screenTest模块的setFilterSQLTest方法，参数是$chart, '', false  @SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'
 

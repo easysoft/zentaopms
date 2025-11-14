@@ -4,7 +4,7 @@
 
 title=productplanModel->linkStory();
 timeout=0
-cid=1
+cid=17644
 
 - 关联计划id为2的需求4
  - 第4条的plan属性 @2

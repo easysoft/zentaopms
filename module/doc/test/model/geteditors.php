@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getEditors();
-cid=1
+cid=16090
 
 - 获取编辑过docID=0的用户列表 @0
 - 获取编辑过docID=1的用户列表第0条的account属性 @user2

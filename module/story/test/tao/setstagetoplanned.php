@@ -5,7 +5,7 @@
 
 title=测试 storyModel->setStageToPlanned();
 timeout=0
-cid=0
+cid=18660
 
 - 不传入任何数据。 @0
 - 传入未关联计划的需求。属性stage @wait

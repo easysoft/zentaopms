@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getFeedbacks();
 timeout=0
-cid=0
+cid=19437
 
 - 测试获取反馈1的信息
  - 第1条的id属性 @1

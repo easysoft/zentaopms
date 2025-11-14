@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::createZentaoObjectLabel();
 timeout=0
-cid=0
+cid=16642
 
 - 步骤1：无效的gitlabID和projectID @0
 - 步骤2：无效projectID属性message @404 Project Not Found

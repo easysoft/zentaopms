@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getViewTableWidth();
 timeout=0
-cid=0
+cid=17196
 
 - 步骤1：空数组边界测试 @1
 - 步骤2：正常headers包含width属性（100+200+50+1=351） @351

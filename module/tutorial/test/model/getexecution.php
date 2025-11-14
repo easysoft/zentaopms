@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getExecution();
 timeout=0
-cid=1
+cid=19429
 
 - 检查获取 admin 数据的id,project,name,PM,PO,QD,RD
  - 属性id @3

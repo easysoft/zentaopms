@@ -8,7 +8,7 @@ su('admin');
 
 title=mrModel->getToAndCcList();
 timeout=0
-cid=1
+cid=0
 
 - 计算有指派者和创建者的情况
  -  @admin

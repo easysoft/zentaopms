@@ -4,7 +4,7 @@
 /**
 
 title=测试 personnelModel::getInvolvedProjects();
-cid=0
+cid=17330
 
 - 测试步骤1：传入多个有效项目ID >> 期望返回正确的账户项目统计
 - 测试步骤2：传入空项目数组 >> 期望返回空数组

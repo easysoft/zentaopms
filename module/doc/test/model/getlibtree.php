@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getLibTree();
-cid=1
+cid=16105
 
 - 获取接口库的树形结构
  - 第0条的type属性 @apiLib

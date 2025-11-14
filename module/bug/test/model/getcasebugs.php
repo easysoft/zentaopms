@@ -9,7 +9,7 @@ zenData('bug')->loadYaml('casebug')->gen(20);
 
 title=bugModel->getCaseBugs();
 timeout=0
-cid=1
+cid=15363
 
 - 测试获取runID为0 caseID为2的bug @测试单转Bug1,测试单转Bug11
 

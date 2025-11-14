@@ -4,7 +4,7 @@
 
 title=测试 loadModel->syncParentData()
 timeout=0
-cid=0
+cid=17783
 
 - 测试同步父阶段ID为0的数据给ID为0的子阶段 @0
 - 测试同步父阶段ID为2的数据给ID为0的子阶段 @0

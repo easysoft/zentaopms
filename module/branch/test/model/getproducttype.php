@@ -5,7 +5,7 @@
 
 title=测试 branchModel::getProductType();
 timeout=0
-cid=0
+cid=15330
 
 - 测试步骤1：测试获取branch类型产品的分支ID @branch
 - 测试步骤2：测试获取platform类型产品的分支ID @platform

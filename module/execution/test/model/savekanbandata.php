@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->saveKanbanData();
 timeout=0
-cid=1
+cid=16362
 
 - 保存看板1的空数据第story条的0属性 @3
 - 保存看板1的空数据 @empty

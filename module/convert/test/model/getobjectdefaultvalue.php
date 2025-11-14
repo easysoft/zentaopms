@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getObjectDefaultValue();
 timeout=0
-cid=0
+cid=15786
 
 - 步骤1：测试object步骤返回配置数组第zentaoObject条的Epic属性 @requirement
 - 步骤2：测试有效步骤ID返回默认值数组第zentaoStatus1001条的Open属性 @draft

@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setSubject();
 timeout=0
-cid=0
+cid=17025
 
 - 执行mail模块的setSubjectTest方法，参数是'Normal subject text' 属性Subject @Normal subject text
 - 执行mail模块的setSubjectTest方法，参数是'Test with \\slash' 属性Subject @Test with slash

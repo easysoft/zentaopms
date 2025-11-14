@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->doCreateSpec();
-cid=1
+cid=19031
 
 - 测试创建用例1 文件 ''
  - 属性title @标题1

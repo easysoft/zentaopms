@@ -12,7 +12,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
 
 title=测试projectModel->updateShadowProduct();
 timeout=0
-cid=1
+cid=17880
 
 - 测试更新项目型敏捷项目的产品信息
  - 第0条的id属性 @1

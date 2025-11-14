@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiUpdateGroup();
 timeout=0
-cid=1
+cid=16628
 
 - 执行gitlab模块的apiUpdateGroup方法，参数是$gitlabID, $emptyGroup  @0
 - 执行gitlab模块的apiUpdateGroup方法，参数是0, $invalidGroup  @0

@@ -11,7 +11,7 @@ zenData('team')->loadYaml('team', true)->gen(60);
 
 title=测试 executionModel->getMemberCountGroup();
 timeout=0
-cid=1
+cid=16389
 
 - 测试空数据 @0
 - 测试获取执行的团队成员分组个数 @5

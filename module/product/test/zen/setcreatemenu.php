@@ -5,7 +5,7 @@
 
 title=测试 productZen::setCreateMenu();
 timeout=0
-cid=0
+cid=17610
 
 - 步骤1:product标签页属性tab @product
 - 步骤2:program标签页,传入programID

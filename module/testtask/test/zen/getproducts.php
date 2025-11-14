@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::getProducts();
 timeout=0
-cid=0
+cid=19235
 
 - 步骤1：教程模式下获取产品属性1 @产品A
 - 步骤2：项目标签页非弹窗模式属性2 @产品B

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=15472
 
 - 执行$result1['result']) && $result1['result'] @1
 - 执行$result2['result']) && $result2['result'] @1

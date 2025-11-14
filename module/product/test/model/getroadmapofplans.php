@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getRoadmapOfPlans();
-cid=0
+cid=17510
 
 - 获取产品ID为1的产品计划数据 @3
 - 获取产品ID为1下主干的产品计划数据 @3

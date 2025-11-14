@@ -5,7 +5,7 @@
 
 title=测试 storyModel->batchChangePlan();
 timeout=0
-cid=0
+cid=18469
 
 - 批量修改6个需求的计划，查看被修改计划的需求数量 @5
 - 批量修改6个需求的计划，查看被修改计划的需求数量 @6

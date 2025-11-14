@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetDiffVersions();
 timeout=0
-cid=0
+cid=17228
 
 - 测试步骤1：无效的主机ID @0
 - 测试步骤2：负数主机ID @0

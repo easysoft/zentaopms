@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createCase();
 timeout=0
-cid=0
+cid=15834
 
 - 执行convertTest模块的createCaseTest方法，参数是1, 1, 1,   @0
 - 执行convertTest模块的createCaseTest方法，参数是999, 1, 1,   @0

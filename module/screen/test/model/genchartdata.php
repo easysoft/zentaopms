@@ -5,7 +5,7 @@
 
 title=测试 screenModel::genChartData();
 timeout=0
-cid=0
+cid=18225
 
 - 执行$result1->editCanvasConfig @1
 - 执行$result2

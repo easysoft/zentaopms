@@ -5,7 +5,7 @@
 
 title=测试 repoModel::filterProject();
 timeout=0
-cid=0
+cid=18043
 
 - 步骤1：正常输入，产品1,2关联项目+直接链接项目11,12 @5
 - 步骤2：仅产品ID列表，产品3,4关联的项目 @2

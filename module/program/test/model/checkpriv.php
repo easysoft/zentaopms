@@ -5,7 +5,7 @@
 
 title=测试 programModel::checkPriv();
 timeout=0
-cid=0
+cid=17676
 
 - 测试步骤1:programID为0时应返回false @0
 - 测试步骤2:admin用户访问存在的programID应返回true @1

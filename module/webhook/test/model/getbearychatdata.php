@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 webhookModel->getBearychatData();
 timeout=0
-cid=1
+cid=19689
 
 - 测试传入正确数据属性markdown @true
 - 测试不传text属性markdown @true

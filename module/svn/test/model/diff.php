@@ -5,7 +5,7 @@
 
 title=测试 svnModel::diff();
 timeout=0
-cid=0
+cid=18714
 
 - 执行svnTest模块的diffTest方法，参数是'https://svn.qc.oop.cc/svn/unittest', 1  @sh: 1: svn: not found
 - 执行svnTest模块的diffTest方法，参数是'https://svn.qc.oop.cc/svn/unittest', 0  @~~

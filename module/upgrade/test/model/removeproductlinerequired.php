@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->removeProductLineRequired().
 timeout=0
-cid=1
+cid=19549
 
 - 检测产品线必填字段是否已经被移除 @1
 

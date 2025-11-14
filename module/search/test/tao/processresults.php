@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processResults();
 timeout=0
-cid=0
+cid=18339
 
 - 执行search模块的processResultsTest方法，参数是$results1, $objectList1, $words1 第0条的title属性 @<span class='text-danger'>test </span> <span class='text-danger'>bug </span> title
 - 执行search模块的processResultsTest方法，参数是$results2, $objectList2, $words2 第0条的title属性 @~~

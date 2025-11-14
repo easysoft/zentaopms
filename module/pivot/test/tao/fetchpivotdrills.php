@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::fetchPivotDrills();
 timeout=0
-cid=0
+cid=17438
 
 - 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', 'status' 第status条的field属性 @status
 - 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', array  @2

@@ -5,7 +5,7 @@
 
 title=测试 screenModel::updateComponentFilters();
 timeout=0
-cid=0
+cid=18285
 
 - 执行$result1->chartConfig->filters) && count($result1->chartConfig->filters) == 1 && $result1->chartConfig->filters[0]->field == 'name @1
 - 执行$result2->chartConfig->filters[0]->default == 'closed @1

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildUserData();
 timeout=0
-cid=0
+cid=15827
 
 - 执行convertTest模块的buildUserDataTest方法，参数是$testData 属性id @1
 - 执行convertTest模块的buildUserDataTest方法，参数是$testData 属性account @admin

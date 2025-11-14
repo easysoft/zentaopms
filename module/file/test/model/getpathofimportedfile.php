@@ -5,7 +5,7 @@
 
 title=测试 fileModel::getPathOfImportedFile();
 timeout=0
-cid=0
+cid=16511
 
 - 步骤1：正常获取导入路径 @tmp/import
 - 步骤2：验证路径以import结尾 @1

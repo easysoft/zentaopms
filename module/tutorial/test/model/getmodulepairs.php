@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel::getModulePairs();
 timeout=0
-cid=0
+cid=19445
 
 - 测试admin用户获取模块键值对属性1 @Test module
 - 测试user1用户获取模块键值对属性1 @Test module

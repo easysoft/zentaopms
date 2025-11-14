@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::getBrowseBranch();
 timeout=0
-cid=0
+cid=19234
 
 - 执行testtaskTest模块的getBrowseBranchTest方法，参数是'master', 'normal'  @all
 - 执行testtaskTest模块的getBrowseBranchTest方法，参数是'', 'multi'  @0

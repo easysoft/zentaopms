@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(5);
 
 title=测试 kanbanModel->getCardByID();
 timeout=0
-cid=1
+cid=16904
 
 - 测试查询卡片1的信息
  - 属性name @卡片1

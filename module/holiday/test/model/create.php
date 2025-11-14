@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->create();
-cid=1
+cid=16738
 
 - 测试创建holiday
  - 属性id @1

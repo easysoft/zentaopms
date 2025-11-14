@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::assignForCreate();
 timeout=0
-cid=0
+cid=19223
 
 - 执行testtaskTest模块的assignForCreateTest方法，参数是1, 1, 11, 1  @success
 - 执行testtaskTest模块的assignForCreateTest方法，参数是1, 0, 0, 0  @success

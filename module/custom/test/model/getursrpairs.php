@@ -5,7 +5,7 @@
 
 title=测试 customModel::getURSRPairs();
 timeout=0
-cid=0
+cid=15906
 
 - 步骤1：正常情况获取需求概念集合
  - 属性1 @软件需求

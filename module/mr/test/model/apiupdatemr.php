@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiUpdateMR();
 timeout=0
-cid=0
+cid=17235
 
 - 正确的数据更新Gitlab合并请求
  - 属性oldTitle @test-merge（不要关闭或删除）

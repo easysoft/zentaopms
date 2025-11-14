@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->getPlans();
-cid=0
+cid=17748
 
 - 测试获取执行2 产品2的阶段
  - 属性type @stage

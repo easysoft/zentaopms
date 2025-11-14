@@ -4,7 +4,7 @@
 /**
 
 title=测试 convertTao::createStory();
-cid=0
+cid=15845
 
 - 测试步骤1：正常创建story类型需求 >> 期望返回true
 - 测试步骤2：正常创建requirement类型需求 >> 期望返回true

@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 messageModel->saveNotice();
-cid=1
+cid=17057
 
 - 发送 需求 2 动态 2 用户 admin 的消息
  - 属性id @1

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::createGitlabRepo();
 timeout=0
-cid=0
+cid=18037
 
 - 执行$result @1
 - 执行$result->message第namespace条的0属性 @不能为空字符

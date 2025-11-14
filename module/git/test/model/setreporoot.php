@@ -5,7 +5,7 @@
 
 title=测试 gitModel::setRepoRoot();
 timeout=0
-cid=0
+cid=16555
 
 - 执行gitTest模块的setRepoRootTest方法，参数是$normalRepo  @/home/git/normal
 - 执行gitTest模块的setRepoRootTest方法，参数是$specialRepo  @/path/with-special_chars

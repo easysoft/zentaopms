@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildCreateForm();
 timeout=0
-cid=0
+cid=17927
 
 - 测试scrum模型、无项目集ID、无复制项目的创建表单 >> 创建项目
 - 测试waterfall模型、有项目集ID的创建表单 >> waterfall,1

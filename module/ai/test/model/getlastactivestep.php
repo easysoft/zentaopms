@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getLastActiveStep();
 timeout=0
-cid=0
+cid=15036
 
 - 步骤1：null参数 @assignrole
 - 步骤2：active状态 @finalize

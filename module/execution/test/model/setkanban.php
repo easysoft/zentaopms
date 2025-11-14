@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->setKanban();
 timeout=0
-cid=1
+cid=16363
 
 - 测试修改固定列宽
  - 属性fluidBoard @0

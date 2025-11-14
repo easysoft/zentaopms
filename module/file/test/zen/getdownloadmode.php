@@ -5,7 +5,7 @@
 
 title=测试 fileZen::getDownloadMode();
 timeout=0
-cid=0
+cid=16542
 
 - 步骤1：图片文件左键点击 @open
 - 步骤2：文本文件左键点击 @open

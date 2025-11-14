@@ -5,7 +5,7 @@
 
 title=测试 todoZen::buildEditView();
 timeout=0
-cid=0
+cid=19296
 
 - 步骤1：正常情况属性result @success
 - 步骤2：时间戳日期属性dateFormatted @1

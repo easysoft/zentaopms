@@ -12,7 +12,7 @@ zenData('kanbanlane')->gen(0);
 
 title=测试 kanbanModel->createRDColumn();
 timeout=0
-cid=1
+cid=16896
 
 - 测试创建执行161 区域101 泳道组101 泳道101 story执行看板的泳道列 @15
 - 测试创建执行161 区域101 泳道组102 泳道102 bug执行看板的泳道列 @9

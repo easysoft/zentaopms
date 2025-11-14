@@ -4,7 +4,7 @@
 /**
 
 title=测试 installModel->importDemoData();
-cid=0
+cid=16775
 
 - 检查user表的演示数据导出是否正确。
  - 属性id @9

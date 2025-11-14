@@ -5,7 +5,7 @@
 
 title=测试 repoModel::unlinkObjectBranch();
 timeout=0
-cid=0
+cid=18108
 
 - 步骤1：删除存在的关系记录 @1
 - 步骤2：删除不存在的记录 @1

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getTaskProductsAndExecutions();
 timeout=0
-cid=1
+cid=18080
 
 - 获取任务执行第1条的execution属性 @30
 - 获取任务产品第4条的product属性 @,24,26,

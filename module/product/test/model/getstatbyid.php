@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getStatByID();
-cid=0
+cid=17513
 
 - 测试获取产品1的stat信息
  - 属性name @正常产品1

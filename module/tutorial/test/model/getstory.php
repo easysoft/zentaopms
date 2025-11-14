@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStory();
 timeout=0
-cid=0
+cid=19475
 
 - 步骤1：正常获取研发需求，验证ID属性id @3
 - 步骤2：验证标题属性属性title @Test active story

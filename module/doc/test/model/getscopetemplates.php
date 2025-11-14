@@ -5,7 +5,7 @@
 
 title=测试 docModel::getScopeTemplates();
 timeout=0
-cid=0
+cid=16125
 
 - 测试步骤1：获取空范围列表的模板 @0
 - 测试步骤2：获取单个范围的模板数组长度 @1

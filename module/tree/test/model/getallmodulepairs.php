@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getAllModulePairs();
 timeout=0
-cid=1
+cid=19362
 
 - 测试获取默认类型task的模块数量 @46
 - 测试获取Bug类型的模块数量 @51

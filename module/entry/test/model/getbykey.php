@@ -5,7 +5,7 @@
 
 title=测试 entryModel::getByKey();
 timeout=0
-cid=0
+cid=16248
 
 - 执行entryTest模块的getByKeyTest方法，参数是'792b9b972157d2d8531b43e04c0af021' 属性name @应用1
 - 执行entryTest模块的getByKeyTest方法，参数是''  @0

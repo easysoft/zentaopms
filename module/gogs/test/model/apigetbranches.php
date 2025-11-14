@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetBranches();
 timeout=0
-cid=0
+cid=16683
 
 - 步骤1：无效gogsID @0
 - 步骤2：空项目参数 @0

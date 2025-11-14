@@ -5,7 +5,7 @@
 
 title=测试 cneModel::appDBList();
 timeout=0
-cid=0
+cid=15602
 
 - 执行cneTest模块的appDBListByInstanceTest方法，参数是$instance1  @0
 - 执行cneTest模块的appDBListByInstanceTest方法，参数是$instance2  @0

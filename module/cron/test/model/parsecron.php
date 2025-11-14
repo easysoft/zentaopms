@@ -4,7 +4,7 @@
 /**
 
 title=测试 cronModel::parseCron();
-cid=0
+cid=15885
 
 - 测试正常cron表达式解析功能获取id为2的command属性 >> 期望返回执行命令
 - 测试正常cron表达式解析功能获取id为3的command属性 >> 期望返回执行命令

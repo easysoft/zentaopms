@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::getBranches();
 timeout=0
-cid=1
+cid=16648
 
 - 测试步骤1：正常获取有效GitLab项目的分支列表 @branch1
 - 测试步骤2：获取空项目的分支列表，验证默认分支 @main

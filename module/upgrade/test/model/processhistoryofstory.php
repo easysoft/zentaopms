@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->processHistoryOfStory().
-cid=1
+cid=19542
 
 - 判断需求的releasedDate是否更新成功,差值在10秒内 @1
 

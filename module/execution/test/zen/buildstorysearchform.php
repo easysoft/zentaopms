@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildStorySearchForm();
 timeout=0
-cid=0
+cid=16418
 
 - 步骤1：正常执行和查询ID属性success @1
 - 步骤2：第二个执行和产品ID属性success @1

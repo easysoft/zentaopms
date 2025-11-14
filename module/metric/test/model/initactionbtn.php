@@ -5,7 +5,7 @@
 
 title=initActionBtn
 timeout=0
-cid=1
+cid=17135
 
 - 测试拥有全部权限的操作按钮显示
  - 第0条的name属性 @edit

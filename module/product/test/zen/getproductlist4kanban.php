@@ -5,7 +5,7 @@
 
 title=测试 productZen::getProductList4Kanban();
 timeout=0
-cid=0
+cid=17591
 
 - 执行productTest模块的getProductList4KanbanTest方法，参数是array  @0
 - 执行productTest模块的getProductList4KanbanTest方法，参数是$productList, $planList, $projectList, $releaseList, $projectProduct)) > 0  @1

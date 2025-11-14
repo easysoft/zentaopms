@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSingleBugStatisticBlock();
 timeout=0
-cid=0
+cid=15295
 
 - 执行blockTest模块的printSingleBugStatisticBlockTest方法，参数是$emptyBlock 属性productID @1
 - 执行blockTest模块的printSingleBugStatisticBlockTest方法，参数是$normalBlock 属性totalBugs @0

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::updateModel();
 timeout=0
-cid=0
+cid=15077
 
 - 步骤1：正常更新情况 @1
 - 步骤2：不存在的模型ID @0

@@ -5,7 +5,7 @@
 
 title=测试 groupModel->update();
 timeout=0
-cid=1
+cid=16723
 
 - 测试更新分组为2的分组属性name @更新分组
 - 测试更新分组为2的分组属性desc @更新描述

@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 branchModel->getPairsByIdList();
 timeout=0
-cid=1
+cid=15328
 
 - 测试传入空的分支ID列表 @0
 - 测试传入正常的分支ID列表属性1 @分支1

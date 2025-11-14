@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGet();
 timeout=0
-cid=0
+cid=16597
 
 - 步骤1：使用有效的host URL发送API请求 @success
 - 步骤2：使用有效的host ID发送API请求 @success

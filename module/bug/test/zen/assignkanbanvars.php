@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignKanbanVars();
 timeout=0
-cid=0
+cid=15426
 
 - 测试看板类型执行无output参数情况属性executionType @kanban
 - 测试sprint类型执行无output参数情况属性executionType @sprint

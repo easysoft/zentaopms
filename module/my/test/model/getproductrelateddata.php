@@ -5,7 +5,7 @@
 
 title=测试 myModel::getProductRelatedData();
 timeout=0
-cid=0
+cid=17286
 
 - 步骤1：正常产品ID数组输入 @4
 - 步骤2：空数组输入情况 @4

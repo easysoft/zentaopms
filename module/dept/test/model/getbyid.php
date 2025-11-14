@@ -4,7 +4,7 @@
 /**
 
 title=测试 deptModel::getByID();
-cid=0
+cid=15968
 
 - 测试步骤1：正常ID查询 >> 期望返回正确的部门信息
 - 测试步骤2：不存在的ID查询 >> 期望返回false

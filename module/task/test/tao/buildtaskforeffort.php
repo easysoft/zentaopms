@@ -8,7 +8,7 @@ su('admin');
 
 title= 测试buildTaskforEffort方法
 timeout=0
-cid=1
+cid=18862
 
 - 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
  - 第0条的consumed属性 @8

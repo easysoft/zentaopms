@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::editProject();
 timeout=0
-cid=0
+cid=16645
 
 - 执行gitlabTest模块的editProjectTest方法，参数是$gitlabID, $emptyNameProject 第name条的0属性 @项目名称不能为空
 - 执行gitlabTest模块的editProjectTest方法，参数是$gitlabID, $validProject  @1

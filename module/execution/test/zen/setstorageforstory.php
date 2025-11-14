@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setStorageForStory();
 timeout=0
-cid=0
+cid=16443
 
 - 步骤1：按模块浏览设置存储 @1
 - 步骤2：按产品浏览设置存储 @3

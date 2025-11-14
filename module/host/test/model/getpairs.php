@@ -5,7 +5,7 @@
 
 title=测试 hostModel::getPairs();
 timeout=0
-cid=0
+cid=16757
 
 - 步骤1：不带参数获取所有主机 @10
 - 步骤2：根据模块ID为1获取主机 @3

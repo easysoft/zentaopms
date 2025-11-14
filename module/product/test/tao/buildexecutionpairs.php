@@ -5,7 +5,7 @@
 
 title=productTao->buildExecutionPairs();
 timeout=0
-cid=0
+cid=17531
 
 - 开启含有项目名称选项，检查敏捷项目。 @敏捷项目1/迭代5
 - 开启含有项目名称选项，检查不启用迭代的项目。 @敏捷项目1(不启用迭代的项目)

@@ -5,7 +5,7 @@
 
 title=测试 adminModel::genDateUsed();
 timeout=0
-cid=0
+cid=14978
 
 ✓ Expected: numeric, Actual: 2 (string)
 ✓ Expected: numeric, Actual: 9 (string)

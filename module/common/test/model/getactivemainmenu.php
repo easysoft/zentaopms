@@ -5,7 +5,7 @@
 
 title=测试 commonModel::getActiveMainMenu();
 timeout=0
-cid=0
+cid=15672
 
 - 步骤1：验证方法基本功能-产品模块场景 @method_validated
 - 步骤2：验证方法基本功能-空模块场景 @method_validated

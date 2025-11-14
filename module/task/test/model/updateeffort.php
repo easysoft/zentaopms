@@ -7,7 +7,7 @@ su('admin');
 
 title=taskModel->updateEffort();
 timeout=0
-cid=1
+cid=18848
 
 - 正常编辑日志，查看返回的信息
  - 第0条的field属性 @consumed

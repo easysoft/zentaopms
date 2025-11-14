@@ -5,7 +5,7 @@
 
 title=测试 docZen::processReleaseListData();
 timeout=0
-cid=0
+cid=16212
 
 - 执行$result1 @0
 - 执行docTest模块的processReleaseListDataTest方法，参数是$releaseList, array 第0条的rowID属性 @1

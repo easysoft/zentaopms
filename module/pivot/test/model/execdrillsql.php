@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::execDrillSQL();
 timeout=0
-cid=0
+cid=17362
 
 - 步骤1：正常情况属性status @success
 - 步骤2：限制数量属性status @success

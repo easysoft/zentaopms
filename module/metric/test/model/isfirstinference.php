@@ -5,7 +5,7 @@
 
 title=测试 metricModel::isFirstInference();
 timeout=0
-cid=0
+cid=17139
 
 - 步骤1：无参数时检查所有推断记录 @0
 - 步骤2：检查不存在的单个代码 @1

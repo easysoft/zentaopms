@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::getById();
-cid=0
+cid=19604
 
 - $userID 参数为 0 ，通过默认字段获取，用户不存在。属性account @0
 - $userID 参数为 1 ，通过默认字段获取，用户不存在。属性account @0

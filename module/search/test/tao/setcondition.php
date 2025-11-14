@@ -13,7 +13,7 @@ zenData('scene')->gen(1);
 
 title=测试 searchModel->setCondition();
 timeout=0
-cid=1
+cid=18344
 
 - 测试 module 包含 id 为 1 的条件 @= '1'
 - 测试 title 包含 test 的条件 @ LIKE '%test%'

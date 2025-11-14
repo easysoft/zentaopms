@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterCreate();
 timeout=0
-cid=0
+cid=18945
 
 - 步骤1：正常情况continueAdding
  - 属性result @success

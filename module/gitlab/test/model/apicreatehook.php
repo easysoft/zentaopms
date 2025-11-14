@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiCreateHook();
 timeout=0
-cid=0
+cid=16577
 
 - 执行gitlabTest模块的apiCreateHookTest方法，参数是1, 1, $hookWithoutUrl  @0
 - 执行gitlabTest模块的apiCreateHookTest方法，参数是1, 1, $emptyHook  @0

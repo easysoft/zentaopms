@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareBuiltinPivotSQLTest();
 timeout=0
-cid=1
+cid=15199
 
 - 测试透视表插入数量 @140
 - 测试第1张透视表信息 @141

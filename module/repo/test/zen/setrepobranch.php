@@ -5,7 +5,7 @@
 
 title=测试 repoZen::setRepoBranch();
 timeout=0
-cid=0
+cid=18154
 
 - 步骤1：设置普通分支名称属性cookieSet @1
 - 步骤2：设置空字符串分支名称属性cookieSet @1

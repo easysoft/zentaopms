@@ -5,7 +5,7 @@
 
 title=测试 docModel->getTemplatesModules();
 timeout=0
-cid=1
+cid=16131
 
 - 获取所有模板类型模块
  - 第0条的id属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 commonTao::updateDBWebRoot();
 timeout=0
-cid=0
+cid=15729
 
 - 执行commonTest模块的updateDBWebRootTest方法，参数是$mockDbConfig1  @success
 - 执行commonTest模块的updateDBWebRootTest方法，参数是$mockDbConfig2  @success

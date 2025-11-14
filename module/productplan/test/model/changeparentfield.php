@@ -4,7 +4,7 @@
 
 title=productplanModel->changeParentField();
 timeout=0
-cid=1
+cid=17623
 
 - 测试更新父计划的parent字段属性parent @-1
 - 测试更新子计划的parent字段属性parent @0

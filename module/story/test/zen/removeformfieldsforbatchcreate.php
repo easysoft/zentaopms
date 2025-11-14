@@ -5,7 +5,7 @@
 
 title=测试 storyZen::removeFormFieldsForBatchCreate();
 timeout=0
-cid=0
+cid=18702
 
 - 步骤1:hiddenPlan为true时,移除plan字段 @1
 - 步骤2:executionType为scrum时,移除region和lane字段 @1

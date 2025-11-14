@@ -9,7 +9,7 @@ zenData('instance')->gen(5);
 
 title=instanceModel->getByName();
 timeout=0
-cid=1
+cid=16800
 
 - 查看获取到的第一条instance
 - 查询 禅道开源版 是否存在 @禅道开源版

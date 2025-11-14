@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::assignTaskParisForCreate();
 timeout=0
-cid=0
+cid=19129
 
 - 执行testreportTest模块的assignTaskParisForCreateTest方法，参数是1  @1
 - 执行testreportTest模块的assignTaskParisForCreateTest方法，参数是0, '2' 属性2 @2

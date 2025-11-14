@@ -5,7 +5,7 @@
 
 title=processRecordQuery
 timeout=0
-cid=1
+cid=17151
 
 - 获取query1的scope字段 @1,2
 

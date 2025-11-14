@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildBuildData();
 timeout=0
-cid=0
+cid=15802
 
 - 步骤1：完整数据测试
  - 属性id @1

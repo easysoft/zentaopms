@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildPlansForBatchEdit();
 timeout=0
-cid=0
+cid=17663
 
 - 执行productplanTest模块的buildPlansForBatchEditTest方法，参数是$postData1
  - 第1条的begin属性 @2024-01-01

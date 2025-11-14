@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getRepoListByUrl();
 timeout=0
-cid=0
+cid=18077
 
 - 执行repoTest模块的getRepoListByUrlTest方法，参数是'' 属性message @Url is empty.
 - 执行repoTest模块的getRepoListByUrlTest方法，参数是'http://invalid-server.example.com/repo.git' 属性message @No matched gitlab.

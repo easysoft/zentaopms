@@ -4,7 +4,7 @@
 
 title=taskModel->computeDelay();
 timeout=0
-cid=0
+cid=18776
 
 - 测试获取有截止日期已完成的任务延期天数属性delay @4
 - 测试获取没有截止日期未开始的任务延期天数属性delay @~~

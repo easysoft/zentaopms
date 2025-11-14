@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildDataForImportToLib();
 timeout=0
-cid=0
+cid=19081
 
 - 步骤1：检查返回的cases数组是否存在 @1
 - 步骤2：检查返回的steps数组是否存在 @1

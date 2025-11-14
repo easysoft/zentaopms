@@ -30,7 +30,7 @@ su('admin');
 
 title=测试executionModel->unlinkMember();
 timeout=0
-cid=1
+cid=16373
 
 - 敏捷执行解除团队成员
  - 第0条的account属性 @user4

@@ -5,7 +5,7 @@
 
 title=测试 metricZen::buildMetricForEdit();
 timeout=0
-cid=0
+cid=17181
 
 - 执行metricZenTest模块的buildMetricForEditZenTest方法  @1
 - 执行metricZenTest模块的buildMetricForEditZenTest方法 属性editedBy @admin

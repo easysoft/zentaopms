@@ -10,7 +10,7 @@ zenData('kanbanregion')->gen(1);
 
 title=测试 kanbanModel->createDefaultRegion();
 timeout=0
-cid=1
+cid=16890
 
 - 创建看板10001的默认区域
  - 属性space @10001

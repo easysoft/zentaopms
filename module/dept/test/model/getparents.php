@@ -10,7 +10,7 @@ zenData('dept')->gen(30);
 
 title=测试 deptModel->getParents();
 timeout=0
-cid=1
+cid=15975
 
 - 父级部门查询父级
  - 第0条的id属性 @2

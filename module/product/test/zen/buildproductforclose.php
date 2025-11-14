@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildProductForClose();
 timeout=0
-cid=0
+cid=17564
 
 - 执行productTest模块的buildProductForCloseTest方法，参数是1
  - 属性status @close

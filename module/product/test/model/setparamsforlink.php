@@ -5,7 +5,7 @@
 
 title=测试productModel->setParamsForLink();
 timeout=0
-cid=0
+cid=17526
 
 - 不传入任何数据。 @0
 - 只传入module参数。 @0

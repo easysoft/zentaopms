@@ -5,7 +5,7 @@
 
 title=测试 storyModel->assign();
 timeout=0
-cid=0
+cid=18463
 
 - 指派需求，查看返回的指派人信息
  - 属性id @2

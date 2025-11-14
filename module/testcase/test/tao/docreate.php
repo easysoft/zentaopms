@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->doCreate();
-cid=1
+cid=19030
 
 - 测试创建用例1
  - 属性title @测试创建测试用例1

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getTargetFormLocation();
 timeout=0
-cid=0
+cid=15049
 
 - 执行aiTest模块的getTargetFormLocationTest方法，参数是1,   @story-change-storyID=1.html#app=product
 - 执行aiTest模块的getTargetFormLocationTest方法，参数是999,  属性1 @1

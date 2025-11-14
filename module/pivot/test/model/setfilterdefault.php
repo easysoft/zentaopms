@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::setFilterDefault();
 timeout=0
-cid=0
+cid=17432
 
 - 执行$result1[0]['default'] ===  @1
 - 执行$result2[0]['default'] == $monday @1

@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiGetProjects();
 timeout=0
-cid=0
+cid=18377
 
 - 步骤1：正常情况第0条的name属性 @Special Key Test
 - 步骤2：关键字搜索第0条的key属性 @special.key:test-123

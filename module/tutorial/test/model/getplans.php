@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getPlans();
 timeout=0
-cid=0
+cid=19448
 
 - 步骤1：正常调用返回数组长度为1 @1
 - 步骤2：验证数组键名为1 @1

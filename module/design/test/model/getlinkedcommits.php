@@ -5,7 +5,7 @@
 
 title=测试 designModel::getLinkedCommits();
 timeout=0
-cid=0
+cid=15991
 
 - 步骤1：正常情况查询设计提交关联数据 @2
 - 步骤2：查询不存在的仓库ID @0

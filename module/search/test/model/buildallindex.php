@@ -5,7 +5,7 @@
 
 title=测试 searchModel::buildAllIndex();
 timeout=0
-cid=0
+cid=18292
 
 - 测试构建所有索引从空开始属性finished @1
 - 测试指定类型为build构建索引属性type @build

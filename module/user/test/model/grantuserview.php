@@ -5,7 +5,7 @@
 
 title=测试 userModel->grantUserView();
 timeout=0
-cid=0
+cid=19639
 
 - 用户视图最后更新时间大于相关表最后更新时间，获取admin账户最终可见的项目集列表属性programs @1,1,4,7,10
 - 用户视图最后更新时间大于相关表最后更新时间，获取admin账户最终可见的产品列表属性products @1,1,2,3,4,5,6,7,8,9,10

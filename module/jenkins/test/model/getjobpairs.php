@@ -4,7 +4,7 @@
 /**
 
 title=测试jenkinsModel->getJobPairs();
-cid=1
+cid=16832
 pid=1
 
 - 测试获取 jenkins 1 的构建任务 @1:这是一个Job1,6:这是一个Job6

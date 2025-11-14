@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->saveObjectToPms();
 timeout=0
-cid=1
+cid=18097
 
 - 开始任务
  - 第1条的objectID属性 @1

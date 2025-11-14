@@ -31,7 +31,7 @@ initData();
 
 title=bugModel->getProjectBugs();
 timeout=0
-cid=1
+cid=15392
 
 - 测试获取项目ID为2的bug
  - 第10条的title属性 @BUG10

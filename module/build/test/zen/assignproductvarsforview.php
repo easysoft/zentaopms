@@ -5,7 +5,7 @@
 
 title=测试 buildZen::assignProductVarsForView();
 timeout=0
-cid=0
+cid=15517
 
 - 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build1, '', '', $pager 属性branchName @主干
 - 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build2, 'story', '', $pager 属性branchName @V1

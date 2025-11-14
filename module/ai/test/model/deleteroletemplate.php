@@ -5,7 +5,7 @@
 
 title=测试 aiModel::deleteRoleTemplate();
 timeout=0
-cid=0
+cid=15020
 
 - 步骤1：删除存在的角色模板ID=1 @1
 - 步骤2：删除存在的角色模板ID=2 @1

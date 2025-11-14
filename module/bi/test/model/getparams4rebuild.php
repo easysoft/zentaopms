@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getParams4Rebuild();
 timeout=0
-cid=0
+cid=15178
 
 - 测试简单SELECT语句，检查返回数组包含4个元素 @4
 - 测试带别名的SELECT语句，验证字段映射处理第2条的user_id属性 @user_id

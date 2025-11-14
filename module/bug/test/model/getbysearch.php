@@ -7,7 +7,7 @@ su('admin');
 
 title=bugModel->getBySearch();
 timeout=0
-cid=1
+cid=15361
 
 - 获取产品1 下的全部 bug 列表，查看数量是否正确 @5
 - 获取产品2 下的全部 bug 列表，查看数量是否正确 @5

@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getDataByType();
 timeout=0
-cid=0
+cid=19694
 
 - 步骤1：钉钉群组类型属性msgtype @markdown
 - 步骤2：钉钉用户类型属性msgtype @markdown

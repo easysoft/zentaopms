@@ -5,7 +5,7 @@
 
 title=测试 productZen::saveSession4Roadmap();
 timeout=0
-cid=0
+cid=17609
 
 - 测试步骤1:调用saveSession4Roadmap方法,验证releaseList session值属性hasReleaseList @0
 - 测试步骤2:验证productPlanList session值属性hasProductPlanList @0

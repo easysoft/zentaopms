@@ -9,7 +9,7 @@ su('admin');
 
 title=测试关闭待办 todoModel::close();
 timeout=0
-cid=1
+cid=19250
 
 - 判断生成的待办的状态是等待状态属性status @wait
 - 关闭这个待办 @1

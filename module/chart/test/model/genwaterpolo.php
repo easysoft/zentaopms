@@ -5,7 +5,7 @@
 
 title=测试 chartModel::genWaterpolo();
 timeout=0
-cid=0
+cid=15569
 
 - 执行$result1
  - 第series[0]条的type属性 @liquidFill

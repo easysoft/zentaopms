@@ -5,7 +5,7 @@
 
 title=测试 groupZen::getNavGroup();
 timeout=0
-cid=0
+cid=16733
 
 - 步骤1:检查my分组包含effort第my条的effort属性 @effort
 - 步骤2:检查my分组包含score第my条的score属性 @score

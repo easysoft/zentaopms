@@ -4,7 +4,7 @@
 /**
 
 title=测试 mailModel->getActionForMail();
-cid=0
+cid=17028
 
 - 传入空参数 @0
 - 检查 id=1 的数据的id,extra,appendLink字段

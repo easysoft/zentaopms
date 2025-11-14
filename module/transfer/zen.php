@@ -130,13 +130,13 @@ class transferZen extends transfer
      *
      * @param  array  $list
      * @param  int    $lastID
-     * @param  string $fields
+     * @param  array  $fields
      * @param  int    $pagerID
      * @param  string $module
      * @access protected
      * @return string
      */
-    protected function buildNextList(array $list = array(), int $lastID = 0, string $fields = '', int $pagerID = 1, string $module = ''): string
+    protected function buildNextList(array $list = array(), int $lastID = 0, array $fields = array(), int $pagerID = 1, string $module = ''): string
     {
         $html  = '';
         $key   = key($list);
@@ -173,10 +173,11 @@ class transferZen extends transfer
      * @param  string  $trClass
      * @param  int     $addID
      * @access private
-     * @return void
+     * @return string
      */
-    private function printRow(string $module, int $row, array $fields, object $object, string $trClass, int $addID)
+    private function printRow(string $module, int $row, array $fields, object $object, string $trClass, int $addID): string
     {
+        $html = '';
         $html .= "<tr class='text-top $trClass' data-id=$row> <td>";
 
         /* 是否显示ID。*/

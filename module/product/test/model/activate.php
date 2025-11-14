@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->activate();
-cid=0
+cid=17469
 
 - 测试未关闭产品1 @0
 - 测试未关闭产品2 @0

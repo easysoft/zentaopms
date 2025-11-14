@@ -11,7 +11,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 
 title=测试 projectModel->getBranchesByProject();
 timeout=0
-cid=1
+cid=17814
 
 - 获取id为1的项目的关联产品的分支数组数量，按产品分组 @3
 - 获取id为1的项目的关联产品的分支数组，获取第一个数组的键 @1

@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::hiddenHost();
 timeout=0
-cid=0
+cid=19752
 
 - 步骤1：空数据库情况，期望返回true @1
 - 步骤2：有zahost类型未删除数据，期望返回false @0

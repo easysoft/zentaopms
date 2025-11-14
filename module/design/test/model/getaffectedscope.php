@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getAffectedScope();
-cid=1
+cid=15986
 
 - 测试设计ID为0时，受影响的任务信息 @0
 - 测试设计ID为1时，受影响的任务信息

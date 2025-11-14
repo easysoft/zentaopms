@@ -5,7 +5,7 @@
 
 title=测试 actionZen::getTrashesHeaderNavigation();
 timeout=0
-cid=0
+cid=14971
 
 - 空数组应该返回0个元素 @0
 - 应该返回3个首选类型 @3

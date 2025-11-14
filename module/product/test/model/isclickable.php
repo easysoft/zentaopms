@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->isClickable();
-cid=0
+cid=17521
 
 - 产品1状态为为normal,action为start @1
 - 产品2状态为为normal,action为start @1

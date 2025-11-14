@@ -5,7 +5,7 @@
 
 title=测试 companyZen::buildDyanmicSearchForm();
 timeout=0
-cid=0
+cid=15736
 
 - 步骤1:传入有效用户ID 1 @admin
 - 步骤2:传入用户ID 0 @all

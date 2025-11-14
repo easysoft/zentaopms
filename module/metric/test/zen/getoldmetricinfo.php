@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getOldMetricInfo();
 timeout=0
-cid=0
+cid=17191
 
 - 步骤1：测试第1个旧版度量项基本信息字段数量 @9
 - 步骤2：测试第1个旧版度量项的scope字段name值第scope条的name属性 @度量范围

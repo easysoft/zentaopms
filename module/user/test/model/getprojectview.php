@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProjectView();
 timeout=0
-cid=0
+cid=19631
 
 - 步骤1：管理员用户可访问所有项目 @1,2,3
 

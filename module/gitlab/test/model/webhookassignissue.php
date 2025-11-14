@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::webhookAssignIssue();
 timeout=0
-cid=1
+cid=16669
 
 - 对象类型为空 @0
 - 对象类型错误 @0

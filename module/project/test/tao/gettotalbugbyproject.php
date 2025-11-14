@@ -28,7 +28,7 @@ zenData('bug')->gen(50);
 
 title=测试 projectModel->getTotalBugByProject();
 timeout=0
-cid=1
+cid=17912
 
 - 获取id为11的项目下bug数量第11条的allBugs属性 @3
 - 获取id为11的项目下bug数量第12条的allBugs属性 @3

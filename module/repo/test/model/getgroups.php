@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::getGitlabGroups();
 timeout=0
-cid=1
+cid=18063
 
 - 使用正确的gitlabID查询群组第0条的text属性 @GitLab Instance
 - 使用正确的gitlabID，groupID查询群组 @testGroup

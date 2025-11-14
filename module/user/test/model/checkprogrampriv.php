@@ -5,7 +5,7 @@
 
 title=测试 userModel::checkProgramPriv();
 timeout=0
-cid=0
+cid=19590
 
 - 步骤1：管理员访问任何项目集 @1
 - 步骤2：项目集PM访问自己管理的项目集（当前测试数据中user1不是系统管理员） @0

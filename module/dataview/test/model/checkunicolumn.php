@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::checkUniColumn();
 timeout=0
-cid=0
+cid=15951
 
 - 执行dataviewTest模块的checkUniColumnTest方法，参数是'', 'mysql', false, $uniqueColumns  @1
 - 执行dataviewTest模块的checkUniColumnTest方法，参数是'', 'mysql', false, $duplicateColumns  @0

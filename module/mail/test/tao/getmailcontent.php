@@ -5,7 +5,7 @@
 
 title=测试 mailTao::getMailContent();
 timeout=0
-cid=0
+cid=17033
 
 - 测试步骤1：传入空objectType参数情况 @0
 - 测试步骤2：传入空object参数情况 @0

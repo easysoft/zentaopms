@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getLogFile();
-cid=1
+cid=19524
 
 - 测试获取的升级日志文件地址是否正确 @1
 

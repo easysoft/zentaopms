@@ -12,7 +12,7 @@ zenData('testresult')->gen(0);
 
 title=测试 testtaskModel->createResult();
 timeout=0
-cid=1
+cid=19161
 
 - 在测试单外执行测试用例 1，测试结果为忽略。
  - 属性caseResult @pass

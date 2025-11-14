@@ -5,7 +5,7 @@
 
 title=测试 blockZen::processBlockForRender();
 timeout=0
-cid=0
+cid=15317
 
 - 执行blockTest模块的processBlockForRenderTest方法，参数是array 第0条的id属性 @1
 - 执行$result[0]->params->count) ? $result[0]->params->count : 0 @10

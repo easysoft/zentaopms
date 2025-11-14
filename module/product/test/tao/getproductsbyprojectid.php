@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getProductsByProjectID();
-cid=0
+cid=17550
 
 - 获取敏捷项目关联的产品数据
  - 第0条的name属性 @产品1

@@ -5,7 +5,7 @@
 
 title=测试 searchModel::convertQueryForm();
 timeout=0
-cid=0
+cid=18296
 
 - 执行searchTest模块的convertQueryFormTest方法，参数是array
  - 属性field1 @id

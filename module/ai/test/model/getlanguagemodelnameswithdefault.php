@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getLanguageModelNamesWithDefault();
 timeout=0
-cid=0
+cid=15034
 
 - 步骤1：检查default键存在且值正确属性default @默认
 - 步骤2：检查模型1名称属性1 @GPT-4

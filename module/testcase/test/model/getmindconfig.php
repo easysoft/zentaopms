@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getMindConfig();
-cid=1
+cid=18991
 
 - 测试获取设置了 module scene case pri group 的配置
  - 属性module @MM

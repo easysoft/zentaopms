@@ -6,7 +6,7 @@ su('admin');
 /**
 
 title=测试 commonTao->searchPreAndNextFromList();
-cid=1
+cid=15728
 pid=1
 
 */

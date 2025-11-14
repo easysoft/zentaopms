@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printReleaseStatisticBlock();
 timeout=0
-cid=0
+cid=15283
 
 - 执行blockTest模块的printReleaseStatisticBlockTest方法，参数是$normalBlock 属性releaseDataCount @6
 - 执行blockTest模块的printReleaseStatisticBlockTest方法，参数是$emptyBlock 属性releasesCount @5

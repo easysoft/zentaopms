@@ -5,7 +5,7 @@
 
 title=测试 cneModel::apiPost();
 timeout=0
-cid=0
+cid=15600
 
 - 测试步骤1:正常的API POST请求属性code @200
 - 测试步骤2:使用对象数据的POST请求第data条的name属性 @new-app

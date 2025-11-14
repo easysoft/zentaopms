@@ -14,7 +14,7 @@ zenData('user')->gen(20);
 /**
 
 title=测试 personnelModel->deleteProgramWhitelist();
-cid=1
+cid=17323
 pid=1
 
 */

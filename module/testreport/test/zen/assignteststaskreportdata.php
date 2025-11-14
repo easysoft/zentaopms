@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::assignTesttaskReportData();
 timeout=0
-cid=0
+cid=19130
 
 - 步骤1：测试正常的测试任务报告数据生成
  - 属性begin @2024-01-01

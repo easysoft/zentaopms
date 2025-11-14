@@ -5,7 +5,7 @@
 
 title=测试 commonModel::setMenuVars();
 timeout=0
-cid=0
+cid=15712
 
 - 步骤1：正常情况 @browse-123
 - 步骤2：带html后缀链接 @view-456.html

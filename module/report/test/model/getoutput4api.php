@@ -17,7 +17,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getOutput4API();
-cid=1
+cid=18164
 
 - 测试获取 admin 的输出 @story:10;task:8;bug:3;case:5;
 - 测试获取 dev17 的输出 @task:4;bug:3;case:3;

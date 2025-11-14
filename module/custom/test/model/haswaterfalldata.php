@@ -5,7 +5,7 @@
 
 title=测试 customModel::hasWaterfallData();
 timeout=0
-cid=0
+cid=15916
 
 - 步骤1：测试系统中无任何项目数据 @0
 - 步骤2：测试系统中有瀑布项目但已删除 @0

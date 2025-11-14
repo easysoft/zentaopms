@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 actionModel->processExecutionAndProjectActionExtra();
 timeout=0
-cid=1
+cid=14923
 
 - 检查只有1个产品 @1
 - 检查extra中是否有id=1的产品 @1

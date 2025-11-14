@@ -5,7 +5,7 @@
 
 title=测试 cneModel::restore();
 timeout=0
-cid=0
+cid=15627
 
 - 测试步骤1:正常恢复请求，实例ID=1，默认账号属性code @200
 - 测试步骤2:恢复请求，实例ID=2，指定账号testuser第data条的account属性 @testuser

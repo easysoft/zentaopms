@@ -5,7 +5,7 @@
 
 title=测试 storyModel::addGradeLabel();
 timeout=0
-cid=0
+cid=18461
 
 - 测试步骤1：单个需求处理第0条的text属性 @单个需求测试
 - 测试步骤2：空数组输入 @0

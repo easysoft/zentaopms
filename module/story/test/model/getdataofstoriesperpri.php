@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getDataOfStoriesPerPri();
 timeout=0
-cid=0
+cid=18520
 
 - 按照优先级分组，获取分组后的需求数量 @4
 - 按照优先级分组，获取各个优先级的需求数量，查看优先级1下的数据

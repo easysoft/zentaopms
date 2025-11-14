@@ -11,7 +11,7 @@ zenData('product')->gen(100);
 
 title=bugModel->getUserBugs();
 timeout=0
-cid=1
+cid=15400
 
 - 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @30
 - 测试获取用户admin 关闭的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @30

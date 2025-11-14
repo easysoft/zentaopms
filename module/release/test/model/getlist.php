@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->getList();
 timeout=0
-cid=1
+cid=17991
 
 - 测试获取系统内所有产品下的发布列表信息第5条的name属性 @发布5
 - 测试获取产品ID=1下的发布列表信息第3条的name属性 @发布3

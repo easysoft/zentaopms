@@ -5,7 +5,7 @@
 
 title=测试 actionModel::processDynamicForAPI();
 timeout=0
-cid=0
+cid=14922
 
 - 步骤1：测试处理空动态数组 @0
 - 步骤2：测试过滤用户动态 @0

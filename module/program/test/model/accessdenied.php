@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 programModel::accessDenied();
 timeout=0
-cid=1
+cid=17669
 
 - 权限不足跳转 @fail
 - 权限不足跳转 @fail

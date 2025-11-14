@@ -4,7 +4,7 @@
 
 title=测试 storyZen::buildStoriesForBatchCreate();
 timeout=0
-cid=0
+cid=18667
 
 - 执行storyTest模块的buildStoriesForBatchCreateTest方法，参数是1, 'story'  @0
 - 执行$result1

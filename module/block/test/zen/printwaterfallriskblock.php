@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWaterfallRiskBlock();
 timeout=0
-cid=0
+cid=15314
 
 - 执行blockTest模块的printWaterfallRiskBlockTest方法，参数是$block1
  - 第count,hasUsers,1条的status属性 @5

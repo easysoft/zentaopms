@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetBranchPrivs();
 timeout=0
-cid=1
+cid=16599
 
 - 获取指定项目下受保护分支列表第master条的name属性 @master
 - 获取指定项目下受保护分支数量 @1

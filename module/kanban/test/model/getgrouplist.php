@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getGroupList();
 timeout=0
-cid=0
+cid=16919
 
 - 执行kanban模块的getGroupListTest方法，参数是1  @,1,2,3,1,2
 

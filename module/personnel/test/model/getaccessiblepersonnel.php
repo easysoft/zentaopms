@@ -14,7 +14,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getAccessiblePersonnel();
-cid=1
+cid=17325
 
 - 测试programID为1，部门ID为0，浏览类型为all，查询ID为0的结果集的数量 @50
 - 测试programID为1，部门ID为0，浏览类型为all，查询ID为0的结果集内id为50的account第50条的account属性 @user49

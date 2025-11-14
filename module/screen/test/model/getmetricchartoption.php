@@ -5,7 +5,7 @@
 
 title=- 测试正常情况的处理结果 @
 timeout=0
-cid=0
+cid=18246
 
 - 测试正常情况的处理结果 @object
 - 测试组件参数的边界值处理 @object

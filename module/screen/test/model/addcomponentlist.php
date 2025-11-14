@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->addComponentList();
 timeout=0
-cid=1
+cid=18203
 
 - 测试componentList属性为空的情况下，生成的默认值是否正确;第editCanvasConfig条的blendMode属性 @normal
 - 测试传入componentList属性的情况下，生成的值是否正确;第0条的type属性 @text

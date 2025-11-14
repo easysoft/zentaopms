@@ -5,7 +5,7 @@
 
 title=测试 searchTao::unify();
 timeout=0
-cid=0
+cid=18347
 
 - 测试将多种特殊符号统一替换为逗号 @hello,world,test,data
 

@@ -5,7 +5,7 @@
 
 title=测试 groupZen::managePrivByModule();
 timeout=0
-cid=0
+cid=16735
 
 - 步骤1:正常情况下调用方法,验证返回的视图数据结构完整性
  - 属性title @string

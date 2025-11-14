@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchMetricRecordByDate();
 timeout=0
-cid=0
+cid=17165
 
 - 步骤1：查询所有记录，数据库为空 @0
 - 步骤2：查询指定度量编码记录 @0

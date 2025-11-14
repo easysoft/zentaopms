@@ -5,7 +5,7 @@
 
 title=测试 deptModel::fixDeptPath();
 timeout=0
-cid=0
+cid=15966
 
 - 步骤1：验证fixDeptPath执行成功 @1
 - 步骤2：再次验证fixDeptPath执行成功 @1

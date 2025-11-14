@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskTao->updateRelation();
-cid=0
+cid=18891
 
 - 都传入空参数 @null
 - childID传入空参数 @null

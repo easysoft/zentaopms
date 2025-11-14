@@ -5,7 +5,7 @@
 
 title=测试 productZen::saveBackUriSessionForDynamic();
 timeout=0
-cid=0
+cid=17607
 
 - 执行productTest模块的saveBackUriSessionForDynamicTest方法 属性hasProductList @0
 - 执行productTest模块的saveBackUriSessionForDynamicTest方法 属性hasProductPlanList @0

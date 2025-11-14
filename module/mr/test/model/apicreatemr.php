@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiCreateMR();
 timeout=0
-cid=0
+cid=17224
 
 - 正确的数据创建Gitlab合并请求
  - 属性title @test

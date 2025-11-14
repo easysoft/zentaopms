@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->getById();
-cid=1
+cid=16740
 
 - 查询id为1的holiday
  - 属性name @这是一个节假日1

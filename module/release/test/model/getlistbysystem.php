@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->getListBySystem();
 timeout=0
-cid=1
+cid=17993
 
 - 测试ID存在的情况第1条的name属性 @发布1
 - 测试ID为空的情况 @0

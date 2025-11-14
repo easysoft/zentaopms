@@ -5,7 +5,7 @@
 
 title=测试 userModel::checkBeforeCreateOrEdit();
 timeout=0
-cid=0
+cid=19584
 
 - 执行$guestUser属性result @0
 - 执行$guestUser属性error @用户名已被系统预留

@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getOptionsFromSql();
 timeout=0
-cid=0
+cid=18250
 
 - 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 3", 'id', 'account' 
  - 属性1 @admin

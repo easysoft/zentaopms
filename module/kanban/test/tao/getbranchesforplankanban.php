@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::getBranchesForPlanKanban();
 timeout=0
-cid=0
+cid=16978
 
 - 步骤1:正常产品返回all键 @1
 - 步骤2:多分支产品获取所有分支(5个+主分支) @6

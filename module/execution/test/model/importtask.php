@@ -20,7 +20,7 @@ su('admin');
 
 title=测试executionModel->importTaskTest();
 timeout=0
-cid=1
+cid=16350
 
 - 敏捷执行导入任务
  - 第0条的id属性 @1

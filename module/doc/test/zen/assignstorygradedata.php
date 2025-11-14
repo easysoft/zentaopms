@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignStoryGradeData();
 timeout=0
-cid=0
+cid=16178
 
 - 执行docTest模块的assignStoryGradeDataTest方法，参数是'planStory'
  - 属性hasGradeGroup @1

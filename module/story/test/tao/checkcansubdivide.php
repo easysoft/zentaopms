@@ -5,7 +5,7 @@
 
 title=测试 storyTao::checkCanSubdivide();
 timeout=0
-cid=0
+cid=18610
 
 - 执行storyTest模块的checkCanSubdivideTest方法，参数是$storyNormal, false  @1
 - 执行storyTest模块的checkCanSubdivideTest方法，参数是$storyRequirement, false  @1

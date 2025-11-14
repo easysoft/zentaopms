@@ -10,7 +10,7 @@ zenData('kanbanregion')->gen(5);
 
 title=测试 kanbanModel->getRegionPairs();
 timeout=0
-cid=1
+cid=16943
 
 - 测试查询kanban1的区域信息属性1 @默认区域
 - 测试查询kanban1 reigon1的区域信息属性1 @默认区域

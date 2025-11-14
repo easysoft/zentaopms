@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getMergeTrackCells();
 timeout=0
-cid=0
+cid=18544
 
 - 步骤1：正常情况第lane2条的demand_col1属性 @1
 - 步骤2：空数据 @0

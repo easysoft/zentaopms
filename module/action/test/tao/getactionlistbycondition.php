@@ -17,7 +17,7 @@ zenData('userview')->loadYaml('userview')->gen(2);
 
 title=测试 actionModel->getActionListByCondition();
 timeout=0
-cid=1
+cid=14943
 
 - 查找全部动态 @35
 - 查找用户admin动态 @12

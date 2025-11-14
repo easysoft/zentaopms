@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildCasesForShowImport();
 timeout=0
-cid=0
+cid=19079
 
 - 步骤1：新增用例情况，返回结果数量 @1
 - 步骤2：更新用例情况，存在变更 @1

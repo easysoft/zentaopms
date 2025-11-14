@@ -5,7 +5,7 @@
 
 title=测试 docZen::buildLibForCreateLib();
 timeout=0
-cid=0
+cid=16183
 
 - 测试创建产品类型文档库属性addedBy @admin
 - 测试创建产品类型文档库并关联产品属性product @1

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildCasesForBathcEdit();
 timeout=0
-cid=0
+cid=19078
 
 - 步骤1：空用例数据测试 @0
 - 步骤2：测试返回数组长度 @3

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::unlink();
 timeout=0
-cid=0
+cid=18107
 
 - 执行repoTest模块的unlinkTest方法，参数是1, 'rev001', 'story', 1  @success
 - 执行repoTest模块的unlinkTest方法，参数是1, 'rev002', 'bug', 2  @success

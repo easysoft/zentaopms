@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::webhookCheckToken();
 timeout=0
-cid=0
+cid=16670
 
 - 执行gitlabTest模块的webhookCheckTokenTest方法  @Token error.
 - 执行gitlabTest模块的webhookCheckTokenTest方法  @Token error.

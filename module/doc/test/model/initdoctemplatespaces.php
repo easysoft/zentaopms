@@ -5,7 +5,7 @@
 
 title=测试 docModel::initDocTemplateSpaces();
 timeout=0
-cid=0
+cid=16139
 
 - 步骤1：检查方法调用是否成功完成 @true
 - 步骤2：测试默认空间数量是否正确创建 @12

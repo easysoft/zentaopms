@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 
 title=jobModel->update();
 timeout=0
-cid=1
+cid=16853
 
 - 测试job名称为空第name条的0属性 @『流水线名称』不能为空。
 - 测试更新job名称属性name @这是一个job11

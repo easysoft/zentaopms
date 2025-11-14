@@ -13,7 +13,7 @@ $projectproduct->gen(10);
 
 title=测试 projectModel::getExecutionProductGroup();
 timeout=0
-cid=0
+cid=17826
 
 - 传入多个执行ID,获取执行1的产品数量 @3
 - 传入多个执行ID,获取执行2的产品数量 @2

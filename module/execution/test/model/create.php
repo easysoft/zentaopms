@@ -23,7 +23,7 @@ $project->gen(4);
 
 title=测试executionModel->create();
 timeout=0
-cid=0
+cid=16288
 
 - 测试创建敏捷私有执行
  - 属性name @新增私有敏捷执行

@@ -4,7 +4,7 @@
 
 title=测试 buildModel->linkBug();
 timeout=0
-cid=1
+cid=15503
 
 - 测试版本1关联Bug2,3
  - 第0条的field属性 @bugs

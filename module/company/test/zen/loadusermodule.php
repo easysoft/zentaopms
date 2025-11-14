@@ -5,7 +5,7 @@
 
 title=测试 companyZen::loadUserModule();
 timeout=0
-cid=0
+cid=15741
 
 - 步骤1:传入有效用户ID 1,验证返回数组的第一个元素为用户账号 @admin
 - 步骤2:传入有效用户ID 2,验证返回数组的第一个元素为用户账号 @user1

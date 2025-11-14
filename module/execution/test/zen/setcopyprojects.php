@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setCopyProjects();
 timeout=0
-cid=0
+cid=16439
 
 - 步骤1：正常项目对象设置拷贝项目 @0
 - 步骤2：敏捷增强项目模式处理 @0

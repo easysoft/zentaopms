@@ -5,7 +5,7 @@
 
 title=测试 kanbanZen::setUserAvatar();
 timeout=0
-cid=0
+cid=17001
 
 - 执行kanbanTest模块的setUserAvatarTest方法 属性count @11
 - 执行kanbanTest模块的setUserAvatarTest方法 属性hasClosed @1

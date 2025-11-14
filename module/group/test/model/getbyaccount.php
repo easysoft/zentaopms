@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getByAccount();
 timeout=0
-cid=1
+cid=16702
 
 - 测试获取user2所在的所有分组
  - 第2条的id属性 @2

@@ -8,7 +8,7 @@ zenData('config')->gen(5);
 
 title=测试 commonModel::loadConfigFromDB();
 timeout=0
-cid=1
+cid=15686
 
 - 查看设置后的配置项数量 @5
 - 查看设置后的配置项详情

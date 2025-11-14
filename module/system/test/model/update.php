@@ -8,7 +8,7 @@ zendata('system')->gen(10);
 
 title=测试 systemModel::update();
 timeout=0
-cid=1
+cid=18749
 
 - 默认修改应用 @1
 - 修改重名提示第name条的0属性 @『应用名称』已经有『应用2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。

@@ -36,7 +36,7 @@ $story->gen(1);
 
 title=测试 actionModel->transformActions();
 timeout=0
-cid=101
+cid=14933
 
 - 测试转换动态1 2 3 4 5
  - 第1条的objectName属性 @正常产品1

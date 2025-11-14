@@ -5,7 +5,7 @@
 
 title=测试 executionZen::checkPostForCreate();
 timeout=0
-cid=0
+cid=16422
 
 - 执行executionzenTest模块的checkPostForCreateTest方法  @1
 - 执行executionzenTest模块的checkPostForCreateTest方法 属性project @所属项目不能为空。

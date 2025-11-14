@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonTao->getPreAndNextSQL();
 timeout=0
-cid=1
+cid=15725
 
 - 执行common模块的getPreAndNextSQL方法，参数是'story'  @SELECT * FROM `zt_story` WHERE id < 40
 - 执行common模块的getPreAndNextSQL方法，参数是'story'  @SELECT *, IF(`pri` = 0, 256, `pri`) as priOrder, IF(`severity` = 0, 256, `severity`) as severityOrder FROM `zt_story` WHERE id < 40  ORDER BY `id` desc,`priOrder`,`severityOrder`

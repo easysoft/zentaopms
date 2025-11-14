@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getRowSpanConfig();
 timeout=0
-cid=0
+cid=17399
 
 - 执行pivotTest模块的getRowSpanConfigTest方法，参数是$testData1  @0
 - 执行pivotTest模块的getRowSpanConfigTest方法，参数是$testData2  @1

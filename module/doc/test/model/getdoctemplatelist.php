@@ -5,7 +5,7 @@
 
 title=测试 docModel->getDocTemplateList();
 timeout=0
-cid=1
+cid=16085
 
 - 获取产品范围下的所有模板
  - 第0条的lib属性 @1

@@ -14,7 +14,7 @@ $group->gen(15);
 
 title=测试 projectModel->create();
 timeout=0
-cid=1
+cid=17885
 
 - 测试将项目ID为1添加admin至分组属性projects @1
 - 测试将项目ID为2添加admin至分组属性projects @1,2

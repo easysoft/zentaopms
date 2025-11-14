@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getPageToolBar();
 timeout=0
-cid=0
+cid=16934
 
 - 执行$userToolbar @161
 - 执行$adminToolbar) > strlen($userToolbar @1

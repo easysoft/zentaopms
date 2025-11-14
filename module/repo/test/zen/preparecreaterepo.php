@@ -5,7 +5,7 @@
 
 title=测试 repoZen::prepareCreateRepo();
 timeout=0
-cid=0
+cid=18151
 
 - 执行result1 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$normalRepo, 'normal' 属性acl @{"acl":"open"}
 - 执行result2 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$aclErrorRepo, 'acl_error'  @0

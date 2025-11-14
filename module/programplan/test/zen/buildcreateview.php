@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::buildCreateView();
 timeout=0
-cid=0
+cid=17787
 
 - 执行programplanTest模块的buildCreateViewTest方法，参数是1, 'normal' 属性success @1
 - 执行programplanTest模块的buildCreateViewTest方法，参数是2, 'ipd' 属性success @1

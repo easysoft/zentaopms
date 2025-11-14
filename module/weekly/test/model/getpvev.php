@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getPVEV();
-cid=1
+cid=19728
 pid=1
 
 - 测试projectID值为0，date值为2022-05-01 @20.00,60.68

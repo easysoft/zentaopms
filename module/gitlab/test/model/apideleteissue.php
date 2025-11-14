@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 gitlabModel::apiDeleteIssue();
 timeout=0
-cid=1
+cid=16589
 
 - 使用空的projectID删除gitlab群组属性message @404 Project Not Found
 - 使用空的issueID删除gitlab群组属性message @404 Issue Not Found

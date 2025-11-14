@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->saveOneCommit();
 timeout=0
-cid=1
+cid=18098
 
 - 保存版本库1 一条commit
  - 属性revision @2e0dd521b4a29930d5670a2c142a4400d7cffc1a

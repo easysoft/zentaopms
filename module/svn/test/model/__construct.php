@@ -5,7 +5,7 @@
 
 title=测试 svnModel::__construct();
 timeout=0
-cid=0
+cid=18711
 
 - 执行svnTest模块的__constructTest方法，参数是'', ''  @svnModel
 - 执行svnTest模块的__constructTest方法，参数是'testModule', ''  @svnModel

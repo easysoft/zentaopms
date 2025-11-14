@@ -5,7 +5,7 @@
 
 title=测试 productZen::getActionsForDynamic();
 timeout=0
-cid=0
+cid=17570
 
 - 测试步骤1:获取产品1所有用户的全部动态记录 @0
 - 测试步骤2:获取产品1的admin用户动态记录 @0

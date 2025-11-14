@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->doCreateReviewer();
-cid=0
+cid=18617
 
 - 不传入任何数据。 @0
 - 只传入评审人列表。 @0

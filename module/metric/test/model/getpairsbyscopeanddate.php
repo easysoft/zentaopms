@@ -5,7 +5,7 @@
 
 title=getPairsByScopeAndDate
 timeout=0
-cid=1
+cid=17119
 
 - 测试user对象数 @15
 - 测试product对象数 @5

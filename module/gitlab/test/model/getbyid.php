@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getByID();
 timeout=0
-cid=0
+cid=16649
 
 - 测试步骤1：正常获取存在的GitLab配置属性id @1
 - 测试步骤2：使用ID为0的边界值测试 @0

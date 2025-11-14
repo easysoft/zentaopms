@@ -61,7 +61,7 @@ catch(Error $e)
 
 title=测试 projectModel::getInvolvedListByCurrentUser();
 timeout=0
-cid=0
+cid=17828
 
 - 执行projectTest模块的getInvolvedListByCurrentUserTest方法，参数是't1.*'  @10
 - 执行projectTest模块的getInvolvedListByCurrentUserTest方法，参数是't1.id, t1.name'

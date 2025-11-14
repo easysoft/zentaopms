@@ -5,7 +5,7 @@
 
 title=测试 taskModel::addTaskLabel();
 timeout=0
-cid=0
+cid=18757
 
 - 步骤1：空数组情况 @0
 - 步骤2：普通任务第0条的value属性 @1

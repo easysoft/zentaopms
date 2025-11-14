@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 title=测试 programModel::getProgramIDByObject();
 timeout=0
-cid=1
+cid=17695
 
 - 获取项目集的id @1
 - 获取敏捷项目的项目集id @1

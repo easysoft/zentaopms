@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=- 执行actionTest模块的processLinkStoryAndBugActionExtraTest方法，参数是'1', 'story', 'view' 属性extra @
 timeout=0
-cid=1
+cid=14964
 
 - 执行actionTest模块的processLinkStoryAndBugActionExtraTest方法，参数是'1', 'story', 'view' 属性extra @#1
 - 执行actionTest模块的processLinkStoryAndBugActionExtraTest方法，参数是'1, 2, 3', 'story', 'view'

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->prepareWaterPoloDataset();
 timeout=0
-cid=1
+cid=18277
 
 - 测试data属性为0的情况下，生成的值是否正确;第option条的dataset属性 @0
 - 测试data属性为0.2的情况下，生成的值是否正确;第option条的dataset属性 @0.2

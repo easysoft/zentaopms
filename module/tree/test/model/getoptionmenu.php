@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getOptionMenu();
 timeout=0
-cid=1
+cid=19372
 
 - 测试获取产品1 type story 的模块列表 @/
 - 测试获取产品1 type story 的模块列表属性2 @/模块2

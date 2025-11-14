@@ -5,7 +5,7 @@
 
 title=测试 programModel::getBudgetLeft();
 timeout=0
-cid=1
+cid=17681
 
 - 查看项目集1的所有父项目集的预算剩余 @1000
 - 查看项目集2的所有父项目集的预算剩余 @2000

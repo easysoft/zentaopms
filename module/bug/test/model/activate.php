@@ -19,7 +19,7 @@ zenData('history')->gen(0);
 
 title=bugModel->activate();
 timeout=0
-cid=1
+cid=15344
 
 - 状态是 resolved 的 bug 激活后的状态是 active，激活次数加 1。
  - 属性status @active

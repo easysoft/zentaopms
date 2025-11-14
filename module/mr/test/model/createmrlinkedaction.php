@@ -5,7 +5,7 @@
 
 title=测试 mrModel::createMRLinkedAction();
 timeout=0
-cid=1
+cid=17242
 
 - 不存在的合并请求 @0
 - ID为1的合并请求关联的需求记录动态数量 @10

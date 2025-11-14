@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getAffectedScope();
-cid=0
+cid=18497
 
 - 获取需求2团队成员的数量 @22|30|37
 - 获取需求2影响任务的数量 @26|21

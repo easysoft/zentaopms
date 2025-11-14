@@ -5,7 +5,7 @@
 
 title=测试 executionTao::getTaskGroups();
 timeout=0
-cid=0
+cid=16394
 
 - 测试步骤1：查询包含任务的执行ID，返回任务分组结构 @1
 - 测试步骤2：查询不存在任务的执行ID，应返回空数组 @0

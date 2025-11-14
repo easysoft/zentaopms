@@ -44,7 +44,7 @@ su('admin');
 
 title=测试executionModel->getListTest();
 timeout=0
-cid=1
+cid=16327
 
 - 敏捷项目执行列表查询
  - 第5条的project属性 @2

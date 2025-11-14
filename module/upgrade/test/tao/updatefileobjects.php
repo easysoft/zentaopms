@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->updateFileObjects();
-cid=1
+cid=19575
 
 - 测试更新类型 doc 上一个id 3 限制 1 的文件对象 @count:1,lastID:4,fileID:1
 

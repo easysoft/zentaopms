@@ -5,7 +5,7 @@
 
 title=测试 programZen::getKanbanList();
 timeout=0
-cid=0
+cid=17727
 
 - 测试步骤1:默认参数my获取看板列表 @1
 - 测试步骤2:参数为my获取看板列表 @1

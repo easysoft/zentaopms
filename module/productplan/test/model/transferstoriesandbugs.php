@@ -4,7 +4,7 @@
 
 title=测试productplanModel->transferStoriesAndBugs();
 timeout=0
-cid=1
+cid=17647
 
 - 测试转移父计划下父计划的需求和bug @1
 - 测试转移父计划下子计划的需求和bug @2

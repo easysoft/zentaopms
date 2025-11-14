@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getRevertStoryIdList();
-cid=0
+cid=18645
 
 - 不传入数据。 @0
 - 传入存在数据的产品 ID。属性1 @1

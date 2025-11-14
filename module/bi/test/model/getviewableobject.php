@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getViewableObject();
 timeout=0
-cid=0
+cid=15189
 
 - 测试无效对象类型 @0
 - 测试空字符串对象类型 @0

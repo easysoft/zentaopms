@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setUserMoreLink();
 timeout=0
-cid=0
+cid=16447
 
 - 步骤1：传入execution对象数组第0条的pm1属性 @P:项目经理1
 - 步骤2：传入单个execution对象第0条的pm1属性 @P:项目经理1

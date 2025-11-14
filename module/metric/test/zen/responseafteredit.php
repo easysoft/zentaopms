@@ -5,7 +5,7 @@
 
 title=测试 metricZen::responseAfterEdit();
 timeout=0
-cid=0
+cid=17207
 
 - 执行metricZenTest模块的responseAfterEditZenTest方法，参数是1, 'back', 'http://example.com' 
  - 属性result @success

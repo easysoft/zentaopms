@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->isClickable();
 timeout=0
-cid=1
+cid=18004
 
 */
 

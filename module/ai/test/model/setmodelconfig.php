@@ -5,7 +5,7 @@
 
 title=测试 aiModel::setModelConfig();
 timeout=0
-cid=0
+cid=15066
 
 - 步骤1：正常配置对象 @1
 - 步骤2：数据库模型对象 @1

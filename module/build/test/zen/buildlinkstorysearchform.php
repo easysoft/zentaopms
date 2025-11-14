@@ -5,7 +5,7 @@
 
 title=测试 buildZen::buildLinkStorySearchForm();
 timeout=0
-cid=0
+cid=15521
 
 - 执行buildTest模块的buildLinkStorySearchFormTest方法，参数是$build1, 1, 'normal'
  - 属性queryID @1

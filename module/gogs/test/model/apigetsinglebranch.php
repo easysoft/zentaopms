@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetSingleBranch();
 timeout=0
-cid=0
+cid=16687
 
 - 错误的服务器ID @0
 - 错误的项目ID @0

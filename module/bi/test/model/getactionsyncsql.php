@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getActionSyncSql();
 timeout=0
-cid=0
+cid=15160
 
 - 步骤1：测试当前月份范围返回数组且长度为1 @1
 - 步骤2：测试当前月份范围返回数组类型验证 @1

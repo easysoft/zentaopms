@@ -5,7 +5,7 @@
 
 title=测试 mailZen::deleteSentQueue();
 timeout=0
-cid=0
+cid=17038
 
 - 步骤1：正常情况下删除2天前已发送记录 @success
 - 步骤2：无任何记录时的清理操作 @success

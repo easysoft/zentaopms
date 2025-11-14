@@ -5,7 +5,7 @@
 
 title=测试 AIResponseException::__construct();
 timeout=0
-cid=0
+cid=14994
 
 - 执行aiTest模块的__constructTest方法，参数是'invalid_format', 'test response'  @1
 - 执行aiTest模块的__constructTest方法，参数是'parse_error', array  @1

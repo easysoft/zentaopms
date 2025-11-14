@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->getMatchedUsers();
 timeout=0
-cid=1
+cid=16653
 
 - 获取gitlab服务器1匹配的用户列表。
  - 第1条的account属性 @root

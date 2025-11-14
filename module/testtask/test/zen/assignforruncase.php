@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::assignForRunCase();
 timeout=0
-cid=0
+cid=19225
 
 - 步骤1：正常情况 @success
 - 步骤2：runID为0 @success

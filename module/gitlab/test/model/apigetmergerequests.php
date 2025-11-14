@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetMergeRequests();
 timeout=0
-cid=0
+cid=16609
 
 - 步骤1：使用有效的GitLab ID和项目ID获取合并请求 @~~
 - 步骤2：验证返回结果是数组类型 @1

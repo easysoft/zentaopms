@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=biModel->parseSql();
 timeout=0
-cid=1
+cid=15192
 
 - 测试第1条sql
  - 属性id @zt_product=>id

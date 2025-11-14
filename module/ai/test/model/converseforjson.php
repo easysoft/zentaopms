@@ -5,7 +5,7 @@
 
 title=测试 aiModel::converseForJSON();
 timeout=0
-cid=0
+cid=15006
 
 - 步骤1：有效模型ID、有效消息、有效schema @0
 - 步骤2：无效模型ID、有效消息、有效schema @0

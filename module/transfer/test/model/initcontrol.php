@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 transfer->initControl();
 timeout=0
-cid=1
+cid=19320
 
 - 测试获取task模块id字段语言项 @input
 - 测试获取bug模块product字段应该是下拉列表 @select

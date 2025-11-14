@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getTeamMembers();
-cid=0
+cid=18562
 
 - 查找需求20的相关团队成员数量 @1
 - 查找需求21的变更时影响的团队成员数量 @1

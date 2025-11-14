@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processParamString();
 timeout=0
-cid=0
+cid=14966
 
 - 执行actionTest模块的processParamStringTest方法，参数是$buildAction, 'build'  @buildID=123&type=story
 - 执行actionTest模块的processParamStringTest方法，参数是$bugAction, 'bug'  @bugID=456&type=bug

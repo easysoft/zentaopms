@@ -5,7 +5,7 @@
 
 title=测试 zahostZen::getServiceStatus();
 timeout=0
-cid=0
+cid=19759
 
 - 执行zahostTest模块的getServiceStatusTest方法 属性kvm @not_install
 - 执行zahostTest模块的getServiceStatusTest方法 属性nginx @not_install

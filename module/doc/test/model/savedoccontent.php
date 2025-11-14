@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->saveDocContent();
-cid=1
+cid=16149
 
 - 保存文档1的内容
  - 属性content @这是文档1的content

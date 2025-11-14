@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetGroupMembers();
 timeout=0
-cid=1
+cid=16602
 
 - 使用空的数据查询群组用户 @return null
 - 使用空的groupID查询群组用户 @return null

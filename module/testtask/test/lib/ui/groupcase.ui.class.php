@@ -16,6 +16,7 @@ class groupCaseTester extends tester
     {
         $form = $this->initForm('testtask', 'groupCase', array('taskID' => '1', 'browseType' => $tab), 'appIframe-qa');
         $caseXpath = "//div[@data-col='storyTitle']/div[text()='{$story}']";
+        $form->wait(1);
         if(count($form->dom->getElementList($caseXpath)->element) == $num) return $this->success('用例数量正确');
         return $this->failed('用例数量不正确');
     }

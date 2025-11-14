@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetBranchPrivs();
 timeout=0
-cid=0
+cid=16684
 
 - 错误的服务器ID @0
 - 错误的项目ID @0

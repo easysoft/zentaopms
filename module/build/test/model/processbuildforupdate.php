@@ -4,7 +4,7 @@
 
 title=测试 buildModel->processBuildForUpdate();
 timeout=0
-cid=1
+cid=15505
 
 */
 

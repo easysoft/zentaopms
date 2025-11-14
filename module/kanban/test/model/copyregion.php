@@ -15,7 +15,7 @@ zenData('kanbangroup')->gen(200);
 
 title=测试 kanbanModel->copyRegion();
 timeout=0
-cid=1
+cid=16883
 
 - 复制默认区域1，查看相关字段
  - 属性name @默认区域

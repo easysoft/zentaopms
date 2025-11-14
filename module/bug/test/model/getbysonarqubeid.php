@@ -9,7 +9,7 @@ zenData('bug')->loadYaml('bug_getbysonarqubeid')->gen(10);
 
 title=bugModel->getBySonarqubeID();
 timeout=0
-cid=1
+cid=15362
 
 - 获取sonarqubeID为0的bug issueKey数量 @0
 - 获取sonarqubeID为1的bug issueKey数量 @3

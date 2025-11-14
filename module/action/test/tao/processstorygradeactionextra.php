@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processStoryGradeActionExtra();
 timeout=0
-cid=0
+cid=14967
 
 - 执行actionTest模块的processStoryGradeActionExtraTest方法，参数是1 属性extra @UR
 - 执行actionTest模块的processStoryGradeActionExtraTest方法，参数是2 属性extra @SR

@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::enoughMemory();
 timeout=0
-cid=0
+cid=16792
 
 - 步骤1：正常情况-低内存需求（测试环境集群资源为0） @0
 - 步骤2：高内存需求 @0

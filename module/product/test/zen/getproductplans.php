@@ -5,7 +5,7 @@
 
 title=测试 productZen::getProductPlans();
 timeout=0
-cid=0
+cid=17592
 
 - 步骤1:正常情况,isProjectStory为true且storyType为story
  - 第1条的3属性 @计划3 [2025-01-25 ~ 2025-12-31]

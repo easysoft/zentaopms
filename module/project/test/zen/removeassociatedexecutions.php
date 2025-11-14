@@ -5,7 +5,7 @@
 
 title=测试 projectZen::removeAssociatedExecutions();
 timeout=0
-cid=0
+cid=17961
 
 - 步骤1：正常删除单个执行 @success
 - 步骤2：正常删除多个执行 @success

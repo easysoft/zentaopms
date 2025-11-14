@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->createNewLine();
 timeout=0
-cid=1
+cid=19510
 
 - 测试新建产品线
  - 属性type @line

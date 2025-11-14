@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getLines();
-cid=0
+cid=17492
 
 - 测试不传参数的情况 @20
 - 测试传入空数组的情况 @20

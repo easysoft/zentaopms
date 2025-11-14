@@ -5,7 +5,7 @@
 
 title=测试 screenModel::checkAccess();
 timeout=0
-cid=0
+cid=18221
 
 - 步骤1：测试管理员访问存在的screen @access_granted
 - 步骤2：测试普通用户访问自己创建的screen @access_granted

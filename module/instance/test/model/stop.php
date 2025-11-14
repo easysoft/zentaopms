@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::stop();
 timeout=0
-cid=0
+cid=16817
 
 - 步骤1:正常停止运行中的实例属性code @200
 - 步骤2:停止异常状态的实例属性code @400

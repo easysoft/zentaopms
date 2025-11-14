@@ -5,7 +5,7 @@
 
 title=测试 docModel->deleteTemplateScopes();
 timeout=0
-cid=1
+cid=16066
 
 - 测试删除产品范围 @1
 - 测试删除项目范围 @1

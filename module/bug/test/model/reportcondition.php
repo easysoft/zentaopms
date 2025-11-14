@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 title=bugModel->reportCondition();
 timeout=0
-cid=1
+cid=15404
 
 - 获取 bugQueryCondition id,name 有 bugOnlyCondition 的 reportCondition 值 @SELECT id,name FROM xxxxx
 

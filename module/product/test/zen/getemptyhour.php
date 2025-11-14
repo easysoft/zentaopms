@@ -5,7 +5,7 @@
 
 title=测试 productZen::getEmptyHour();
 timeout=0
-cid=0
+cid=17580
 
 - 步骤1:验证返回对象类型 @stdClass
 - 步骤2:验证totalEstimate属性属性totalEstimate @0

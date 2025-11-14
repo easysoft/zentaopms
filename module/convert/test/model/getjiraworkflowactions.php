@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraWorkflowActions();
 timeout=0
-cid=0
+cid=15785
 
 - 执行convertTest模块的getJiraWorkflowActionsTest方法  @0
 - 执行$result, 'error') !== false @1

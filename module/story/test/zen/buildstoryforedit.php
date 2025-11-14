@@ -4,7 +4,7 @@
 
 title=测试 storyZen::buildStoryForEdit();
 timeout=0
-cid=0
+cid=18672
 
 - 步骤1：不存在需求ID应返回异常属性name @0
 - 步骤2：无效需求ID应返回异常属性name @0

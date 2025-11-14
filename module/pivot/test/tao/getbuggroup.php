@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getBugGroup();
 timeout=0
-cid=0
+cid=17440
 
 - 执行pivotTest模块的getBugGroupTest方法，参数是'2025-01-01', '2025-12-31', 0, 0  @1
 - 执行pivotTest模块的getBugGroupTest方法，参数是'2025-01-01', '2025-12-31', 0, 0)['admin']  @90

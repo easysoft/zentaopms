@@ -5,7 +5,7 @@
 
 title=测试 biModel::getFields();
 timeout=0
-cid=0
+cid=15171
 
 - 执行biTest模块的getFieldsTest方法，参数是$statement1
  - 属性id @id

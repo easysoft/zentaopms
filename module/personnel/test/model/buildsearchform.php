@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 /**
 
 title=测试 personnelModel->buildSearchForm();
-cid=1
+cid=17318
 pid=1
 
 */

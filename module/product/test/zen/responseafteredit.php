@@ -5,7 +5,7 @@
 
 title=测试 productZen::responseAfterEdit();
 timeout=0
-cid=0
+cid=17603
 
 - 步骤1:编辑产品,有programID属性result @success
 - 步骤2:编辑产品,无programID属性result @success

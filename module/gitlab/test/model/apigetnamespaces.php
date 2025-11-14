@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetNamespaces();
 timeout=0
-cid=0
+cid=16610
 
 - 步骤1：有效GitLab ID获取namespace列表 @~~
 - 步骤2：有效GitLab ID检查返回数据类型 @1

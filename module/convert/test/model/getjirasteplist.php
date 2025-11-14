@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraStepList();
 timeout=0
-cid=0
+cid=15783
 
 - 步骤1：空参数测试属性object @对象映射
 - 步骤2：正常数据测试属性1 @Story对象数据映射

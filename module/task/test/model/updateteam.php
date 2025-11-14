@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=taskModel->updateTeam();
 timeout=0
-cid=1
+cid=18859
 
 - 分配2个成员团队后任务
  - 第0条的field属性 @estimate

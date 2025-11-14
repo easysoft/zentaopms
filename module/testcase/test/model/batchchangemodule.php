@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->batchChangeModule();
-cid=1
+cid=18957
 pid=1
 
 */

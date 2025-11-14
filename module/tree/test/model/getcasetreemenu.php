@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getCaseTreeMenu();
 timeout=0
-cid=1
+cid=19365
 
 - 测试获取产品1的Case模块 @正常产品1
 - 测试产品10的Case模块 @正常产品10

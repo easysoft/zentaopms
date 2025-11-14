@@ -5,7 +5,7 @@
 
 title=测试 projectModel::updateTeamMembers();
 timeout=0
-cid=0
+cid=17881
 
 - 执行projectTest模块的updateTeamMembersTest方法，参数是$newProject1, $oldProject1, array  @1
 - 执行projectTest模块的updateTeamMembersTest方法，参数是$newProject2, $oldProject2, array  @1

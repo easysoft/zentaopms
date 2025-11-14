@@ -5,7 +5,7 @@
 
 title=测试 mrZen::getAllProjects();
 timeout=0
-cid=0
+cid=17267
 
 - 执行mrTest模块的getAllProjectsTest方法，参数是$repo1  @array
 - 执行mrTest模块的getAllProjectsTest方法，参数是$repo2  @array

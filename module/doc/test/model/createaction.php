@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->createAction();
-cid=1
+cid=16058
 
 - 测试空数据 @0
 - 给docID=1的文档添加一个收藏操作 @21

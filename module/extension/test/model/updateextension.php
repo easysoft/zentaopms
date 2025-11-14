@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::updateExtension();
 timeout=0
-cid=0
+cid=16472
 
 - 测试步骤1：测试数据为空时更新插件 @0
 - 测试步骤2：测试代号为空时更新插件 @0

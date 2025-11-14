@@ -5,7 +5,7 @@
 
 title=测试 convertTao::processJiraContent();
 timeout=0
-cid=0
+cid=15869
 
 - 执行convertTest模块的processJiraContentTest方法，参数是'', array  @0
 - 执行convertTest模块的processJiraContentTest方法，参数是'This is plain text without image markers.', array  @0

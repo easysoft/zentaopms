@@ -5,7 +5,7 @@
 
 title=测试 aiModel::converseTwiceForJSON();
 timeout=0
-cid=0
+cid=15007
 
 - 执行aiTest模块的converseTwiceForJSONTest方法，参数是1, $validMessages, $validSchema, $validOptions  @0
 - 执行aiTest模块的converseTwiceForJSONTest方法，参数是0, $validMessages, $validSchema, $validOptions  @0

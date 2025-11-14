@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->statLibCounts();
-cid=1
+cid=16154
 
 - 文档库ID列表为空时，获取文档、模块的数量 @0
 - 文档库ID列表为1-30时，获取文档ID=11、模块的数量属性11 @4

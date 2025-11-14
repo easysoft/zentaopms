@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getByField();
-cid=0
+cid=18502
 
 - 根据指派给获取软件需求
  - 第1条的title属性 @用户需求1

@@ -5,7 +5,7 @@
 
 title=fetchMetricsByScope
 timeout=0
-cid=1
+cid=17172
 
 - 获取系统范围下的第一个度量项
  - 第system条的id属性 @143

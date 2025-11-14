@@ -5,7 +5,7 @@
 
 title=测试 programZen::buildProgramForEdit();
 timeout=0
-cid=0
+cid=17725
 
 - 执行programTest模块的buildProgramForEditTest方法，参数是1 属性status @doing
 - 执行programTest模块的buildProgramForEditTest方法，参数是2 属性end @2059-12-31

@@ -5,7 +5,7 @@
 
 title=测试 biModel::getTableAndFields();
 timeout=0
-cid=1
+cid=15188
 
 - 执行bi模块的getTableAndFields方法，参数是'SELECT * FROM zt_story' 第tables条的0属性 @zt_story
 - 执行bi模块的getTableAndFields方法，参数是'SELECT * FROM zt_story' 第fields条的*属性 @*

@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::getStageCount();
 timeout=0
-cid=0
+cid=17772
 
 - 步骤1：正常情况-planID=1有4个子阶段 @4
 - 步骤2：边界值-planID为0 @5

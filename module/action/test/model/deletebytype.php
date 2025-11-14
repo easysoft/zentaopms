@@ -5,7 +5,7 @@
 
 title=测试 actionModel::deleteByType();
 timeout=0
-cid=0
+cid=14885
 
 - 步骤1：测试删除空objectType @1
 - 步骤2：测试删除story类型 @1

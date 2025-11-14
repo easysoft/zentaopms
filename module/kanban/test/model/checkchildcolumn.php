@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::checkChildColumn();
 timeout=0
-cid=0
+cid=16877
 
 - 步骤1：正常子列验证通过 @1
 - 步骤2：子列名称为空验证失败 @0

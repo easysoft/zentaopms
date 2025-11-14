@@ -5,7 +5,7 @@
 
 title=测试 aiModel::isClickable();
 timeout=0
-cid=0
+cid=15055
 
 - 步骤1：正常情况，模型启用动作，对象disabled状态 @1
 - 步骤2：边界值，模型启用动作，对象已enabled状态 @0

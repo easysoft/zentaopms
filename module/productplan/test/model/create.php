@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 
 title=productpanModel->create();
 timeout=0
-cid=1
+cid=17627
 
 - 测试正常创建属性title @测试创建1
 - 测试正常创建属性title @测试创建1

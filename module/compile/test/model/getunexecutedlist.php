@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getUnexecutedList();
 timeout=0
-cid=0
+cid=15752
 
 - 步骤1：检查返回结果中未执行构建记录的数量 @3
 - 步骤2：验证第一条未执行记录的name属性第0条的name属性 @构建1

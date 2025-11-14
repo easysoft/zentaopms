@@ -5,7 +5,7 @@
 
 title=测试 storyZen::processDataForEdit();
 timeout=0
-cid=0
+cid=18700
 
 - 执行storyTest模块的processDataForEditTest方法，参数是4, $storyData, $oldStory 属性status @changing
 - 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性plan @5

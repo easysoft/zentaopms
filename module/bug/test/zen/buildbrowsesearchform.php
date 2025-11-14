@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildBrowseSearchForm();
 timeout=0
-cid=0
+cid=15432
 
 - 执行属性productID @1
 - 执行属性productID @2

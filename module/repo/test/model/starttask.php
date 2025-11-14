@@ -5,7 +5,7 @@
 
 title=测试 repoModel::startTask();
 timeout=0
-cid=0
+cid=18106
 
 - 步骤1：正常启动等待任务属性status @1
 - 步骤2：启动剩余时间为0的任务

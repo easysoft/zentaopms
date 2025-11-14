@@ -5,7 +5,7 @@
 
 title=测试 jobModel::updateLastTag();
 timeout=0
-cid=0
+cid=16854
 
 - 执行jobTest模块的updateLastTagTest方法，参数是1, 'testTag' 属性lastTag @testTag
 - 执行jobTest模块的updateLastTagTest方法，参数是2, '' 属性lastTag @~~

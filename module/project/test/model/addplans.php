@@ -20,7 +20,7 @@ su('admin');
 
 title=测试 projectModel::addPlans();
 timeout=0
-cid=1
+cid=17797
 
 - 将计划1，4，7下的需求关联到项目13，查看关联后的需求数 @16
 - 将计划1，4，7下的需求关联到项目13，查看关联后的需求ID/产品ID

@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::getXmlTagsArray();
 timeout=0
-cid=0
+cid=19008
 
 - 步骤1：普通XML标签解析 @1
 - 步骤2：包含命名空间的XML标签解析 @1

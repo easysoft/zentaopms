@@ -9,7 +9,7 @@ zenData('dept')->gen(30);
 /**
 
 title=测试 deptModel->getOptionMenu();
-cid=1
+cid=15974
 pid=1
 
 父级部门查询     >> /产品部1

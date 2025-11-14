@@ -5,7 +5,7 @@
 
 title=测试 actionTao::getDocLibLinkParameters();
 timeout=0
-cid=0
+cid=14947
 
 - 步骤1：正常情况 @custom
 - 步骤2：边界值 @product

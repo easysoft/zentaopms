@@ -5,7 +5,7 @@
 
 title=测试 userZen::checkTmp();
 timeout=0
-cid=0
+cid=19673
 
 - 步骤1：正常情况下检查权限 @1
 - 步骤2：再次检查确保一致性 @1

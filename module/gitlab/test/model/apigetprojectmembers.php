@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetProjectMembers();
 timeout=0
-cid=0
+cid=16612
 
 - 步骤1：使用空的gitlabID和projectID @return null
 - 步骤2：无效projectID @0

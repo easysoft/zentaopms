@@ -5,7 +5,7 @@
 
 title=测试 adminModel::setTabMenu();
 timeout=0
-cid=0
+cid=14985
 
 - 执行adminTest模块的setTabMenuTest方法，参数是'company', $menu1  @2
 - 执行adminTest模块的setTabMenuTest方法，参数是'system', $menu2  @2

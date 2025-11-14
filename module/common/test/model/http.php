@@ -5,7 +5,7 @@
 
 title=测试 commonModel::http();
 timeout=0
-cid=0
+cid=15681
 
 - 执行commonTest模块的httpTest方法，参数是'https://example.com/api', null, array  @GET response data
 - 执行commonTest模块的httpTest方法，参数是'https://example.com/api', array  @POST response with data

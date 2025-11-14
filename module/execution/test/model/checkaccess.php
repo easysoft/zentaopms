@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 executionModel::checkAccess;
 timeout=0
-cid=1
+cid=16281
 
 - 不传入ID @101
 - 传入存在ID的值 @106

@@ -10,7 +10,7 @@ $metric = new metricTest();
 
 title=getViewTableHeader
 timeout=0
-cid=1
+cid=17132
 
 - 测试度量项count_of_bug
  - 第0条的name属性 @value

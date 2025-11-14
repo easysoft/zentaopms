@@ -5,7 +5,7 @@
 
 title=测试 projectTao::updateMemberView();
 timeout=0
-cid=0
+cid=17921
 
 - 执行projectTest模块的updateMemberViewTest方法，参数是1, array  @TABLE_NOT_EXISTS
 - 执行projectTest模块的updateMemberViewTest方法，参数是1, array  @TABLE_NOT_EXISTS

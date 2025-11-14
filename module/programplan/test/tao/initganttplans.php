@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->initGanttPlans()
-cid=0
+cid=17776
 
 - 传入空数据，检查datas数据。 @0
 - 传入空数据，检查stageIndex数据。 @0

@@ -12,7 +12,7 @@ zenData('taskspec')->gen(0);
 
 title=测试taskModel->afterBatchCreate();
 timeout=0
-cid=1
+cid=18758
 
 - 测试批量创建迭代下的任务后的数据处理 @1
 - 测试批量创建阶段下的任务后的数据处理 @1

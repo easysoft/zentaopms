@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::getParentStages();
 timeout=0
-cid=0
+cid=17769
 
 - 测试步骤1：正常情况查询属性2 @执行1-1
 - 测试步骤2：不存在的项目ID @0

@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->fetchExtraUsers();
-cid=0
+cid=19602
 
 - usersToAppended 参数为空字符串，返回空数组。 @0
 - usersToAppended 参数为空数组，返回空数组。 @0

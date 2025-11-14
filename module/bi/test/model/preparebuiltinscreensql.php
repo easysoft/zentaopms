@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareBuiltinScreenSQL();
 timeout=0
-cid=0
+cid=15200
 
 - 步骤1：测试insert操作返回数组 @array
 - 步骤2：测试update操作返回数组 @array

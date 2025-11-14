@@ -17,7 +17,7 @@ su('admin');
 
 title=测试 actionModel->recoverRelatedData();
 timeout=0
-cid=1
+cid=14927
 
 - build表的deleted应为0 @0
 - product表的deleted应为0 @0

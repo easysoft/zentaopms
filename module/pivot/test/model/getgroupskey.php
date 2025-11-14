@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getGroupsKey();
 timeout=0
-cid=0
+cid=17389
 
 - 执行pivotTest模块的getGroupsKeyTest方法，参数是$groups1, $record1  @bug_active_high
 - 执行pivotTest模块的getGroupsKeyTest方法，参数是$groups2, $record2  @story_product_development

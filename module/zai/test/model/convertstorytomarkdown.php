@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::convertStoryToMarkdown();
 timeout=0
-cid=0
+cid=19767
 
 - 测试转换完整的需求对象 @1
 - 测试转换没有spec的需求对象 @2

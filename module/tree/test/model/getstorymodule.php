@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getStoryModule();
 timeout=0
-cid=1
+cid=19379
 
 - 测试获取module 2 的story模块 @2
 - 测试获取module 7 的story模块 @7

@@ -4,7 +4,7 @@
 
 title=productplanModel->reorder4Children();
 timeout=0
-cid=1
+cid=17646
 
 - 传入四个子计划id100,102,101,排序第一个第100条的id属性 @100
 - 第二个第101条的id属性 @101

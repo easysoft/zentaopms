@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(5);
 
 title=测试 kanbanModel->archiveCard();
 timeout=0
-cid=1
+cid=16871
 
 - 测试归档卡片1
  - 属性id @1

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::convertApiError();
 timeout=0
-cid=0
+cid=17240
 
 - 执行mrModel模块的convertApiError方法，参数是array  @存在另外一个同样的合并请求在源项目分支中: ID123
 - 执行mrModel模块的convertApiError方法，参数是"You can't use same project/branch for source and target"  @源项目分支与目标项目分支不能相同

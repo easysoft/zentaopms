@@ -5,7 +5,7 @@
 
 title=测试 productZen::getBackLink4Create();
 timeout=0
-cid=0
+cid=17572
 
 - 测试步骤1:extra参数为空字符串 @0
 - 测试步骤2:extra参数from=qa @1

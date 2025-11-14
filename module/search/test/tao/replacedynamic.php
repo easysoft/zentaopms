@@ -5,7 +5,7 @@
 
 title=测试 searchTao::replaceDynamic();
 timeout=0
-cid=1
+cid=18343
 
 - 测试替换 $lastWeek @1
 - 测试替换 $thisWeek @1

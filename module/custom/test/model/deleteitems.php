@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 customModel->deleteItems();
 timeout=0
-cid=1
+cid=15893
 
 - 测试参数为空 @1
 - 测试参数为lang @1

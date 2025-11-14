@@ -5,7 +5,7 @@
 
 title=测试 metricZen::endTime();
 timeout=0
-cid=0
+cid=17186
 
 - 步骤1：正常计算时间差，验证返回值格式 @string
 - 步骤2：测试时间差为非负值 @1

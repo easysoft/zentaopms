@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getCharter();
 timeout=0
-cid=0
+cid=19413
 
 - 步骤1：正常获取Charter对象并验证id属性id @1
 - 步骤2：验证Charter名称属性name @Test charter

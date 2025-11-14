@@ -4,7 +4,7 @@
 /**
 
 title=测试 spaceZen->getSpaceInstances();
-cid=1
+cid=18400
 
 - 测试 browseType='' 时的返回结果 @1
 - 测试 browseType='all' 时的返回结果 @1

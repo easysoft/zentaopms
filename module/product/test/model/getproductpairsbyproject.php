@@ -4,7 +4,7 @@
 /**
 
 title=测试通过项目查询产品信息 productModel->getProductPairsByProject();
-cid=0
+cid=17502
 
 - 测试获取项目11 状态为all的产品信息属性1 @正常产品1
 - 测试获取项目12 状态为all的产品信息属性2 @正常产品2

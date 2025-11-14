@@ -5,7 +5,7 @@
 
 title=productModel->getProductsGroupByProgram();
 timeout=0
-cid=0
+cid=17504
 
 - 检查获取项目集条目数。 @10
 - 检查项目集 0 的产品名称。 @/正常产品1

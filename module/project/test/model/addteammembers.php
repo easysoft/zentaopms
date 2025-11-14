@@ -5,7 +5,7 @@
 
 title=测试 projectModel::addTeamMembers();
 timeout=0
-cid=0
+cid=17798
 
 - 执行projectTest模块的addTeamMembersTest方法，参数是1, $project1, array  @1
 - 执行projectTest模块的addTeamMembersTest方法，参数是0, $project1, array  @1

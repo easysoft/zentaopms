@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->activate();
-cid=0
+cid=18585
 
 - 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'pass'
  - 属性status @active

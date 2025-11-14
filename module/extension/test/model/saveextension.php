@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::saveExtension();
 timeout=0
-cid=0
+cid=16471
 
 - 步骤1：正常情况 - 保存插件类型 @1
 - 步骤2：patch类型 - 保存补丁类型 @1

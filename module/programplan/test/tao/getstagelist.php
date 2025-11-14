@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::getStageList();
 timeout=0
-cid=0
+cid=17773
 
 - 步骤1：正常情况 - 获取指定执行下的阶段第2条的name属性 @阶段1-1
 - 步骤2：边界值 - 不存在的执行ID和产品ID @0

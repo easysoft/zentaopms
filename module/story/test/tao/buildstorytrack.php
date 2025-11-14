@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->buildStoryTrack();
-cid=0
+cid=18603
 
 - 执行$track @0
 - 执行$track->cases @5

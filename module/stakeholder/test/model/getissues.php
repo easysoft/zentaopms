@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getIssues();
-cid=1
+cid=18435
 
 - 获取项目ID=0下干系人提出的问题列表。
  - 第1条的project属性 @60

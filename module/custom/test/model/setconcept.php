@@ -5,7 +5,7 @@
 
 title=测试 customModel::setConcept();
 timeout=0
-cid=0
+cid=15924
 
 - 测试sprintConcept值为1，设置为项目产品冲刺模式 @1
 - 测试sprintConcept值为0，设置为项目产品迭代模式 @1

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->setProjectProductsRelation().
 timeout=0
-cid=1
+cid=19573
 
 - 检查isProjectType为true的时候，项目id为1，产品id为5,6,7,8的关联关系以及生成的分支计划id是否正确。 @1
 

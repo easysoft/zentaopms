@@ -5,7 +5,7 @@
 
 title=测试 productZen::responseAfterBatchEdit();
 timeout=0
-cid=0
+cid=17601
 
 - 测试在program tab下,programID为1时的跳转链接属性load @`m=program&f=product&programID=1`
 - 测试在program tab下,programID为0时的跳转链接属性load @`m=program&f=productView`

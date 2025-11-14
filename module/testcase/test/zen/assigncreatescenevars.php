@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignCreateSceneVars();
 timeout=0
-cid=0
+cid=19063
 
 - 步骤1:正常产品ID,空分支,无模块属性executed @1
 - 步骤2:有分支的产品,指定分支属性executed @1

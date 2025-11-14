@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkConflicts();
 timeout=0
-cid=0
+cid=16475
 
 - 执行extensionTest模块的checkConflictsTest方法，参数是$condition1, $installedExts1  @1
 - 执行extensionTest模块的checkConflictsTest方法，参数是$condition2, $installedExts2  @1

@@ -5,7 +5,7 @@
 
 title=测试 userZen::responseForLocked();
 timeout=0
-cid=0
+cid=19681
 
 - 执行userTest模块的responseForLockedTest方法，参数是'' 属性result @fail
 - 执行userTest模块的responseForLockedTest方法，参数是'json' 属性status @failed

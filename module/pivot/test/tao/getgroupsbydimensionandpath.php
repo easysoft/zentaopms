@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 pivotTao->getGroupsByDimensionAndPath();
-cid=1
+cid=17443
 pid=1
 
 测试获取dimensionID为1，path为,3的模块信息  >> 3,这是一个模块3

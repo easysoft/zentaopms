@@ -5,7 +5,7 @@
 
 title=测试 screenZen::prepareCardList();
 timeout=0
-cid=0
+cid=18290
 
 - 测试空数组输入 >> 返回空数组
 - 测试已发布大屏无封面 >> 使用默认发布封面图

@@ -5,7 +5,7 @@
 
 title=测试 fileModel::getCount();
 timeout=0
-cid=0
+cid=16507
 
 - 测试多文件上传时获取文件数量 @2
 - 测试单文件上传时获取文件数量 @1

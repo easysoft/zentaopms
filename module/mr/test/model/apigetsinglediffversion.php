@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetSingleDiffVersion();
 timeout=0
-cid=0
+cid=17231
 
 - 测试步骤1：无效主机ID @0
 - 测试步骤2：有效参数正常情况

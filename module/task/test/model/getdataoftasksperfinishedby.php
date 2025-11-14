@@ -12,7 +12,7 @@ $taskTable->gen(30);
 
 title=taskModel->getDataOfTasksPerFinishedBy();
 timeout=0
-cid=1
+cid=18800
 
 - 按由谁完成统计的数量 @4
 - 完成者为admin的任务数量

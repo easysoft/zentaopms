@@ -5,7 +5,7 @@
 
 title=测试 searchModel::deleteIndex();
 timeout=0
-cid=0
+cid=18297
 
 - 执行search模块的deleteIndexTest方法，参数是'project', 1  @0
 - 执行search模块的deleteIndexTest方法，参数是'story', 2  @0

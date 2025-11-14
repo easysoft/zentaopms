@@ -5,7 +5,7 @@
 
 title=测试 executionZen::displayAfterCreated();
 timeout=0
-cid=0
+cid=16425
 
 - 步骤1：正常情况有计划ID未确认属性result @success
 - 步骤2：有计划ID且确认导入 @linkStories

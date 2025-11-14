@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->prepareSunburstDataset();
 timeout=0
-cid=1
+cid=18274
 
 - 测试data属性为空的情况下，生成的默认值是否正确;第styles条的hueRotate属性 @0
 - 测试传入data属性的情况下，生成的值是否正确;第styles条的hueRotate属性 @0

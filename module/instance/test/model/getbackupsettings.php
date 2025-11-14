@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::getBackupSettings();
 timeout=0
-cid=0
+cid=16797
 
 - 步骤1：正常情况获取备份时间属性backupTime @01:00
 - 步骤2：有定时任务的实例获取备份时间属性backupTime @01:00

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processDateVar();
 timeout=0
-cid=0
+cid=17416
 
 - 测试空字符串 @1
 - 测试普通字符串 @normal_string

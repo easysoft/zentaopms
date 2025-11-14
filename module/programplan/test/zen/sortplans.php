@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::sortPlans();
 timeout=0
-cid=0
+cid=17795
 
 - 执行programplanTest模块的sortPlansTest方法，参数是array  @0
 - 执行programplanTest模块的sortPlansTest方法，参数是$singlePlan 第1条的id属性 @1

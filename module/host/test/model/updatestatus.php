@@ -4,7 +4,7 @@
 
 title=测试 hostModel->updatestatus();
 timeout=0
-cid=1
+cid=16763
 
 - 测试对象没有ID时候能否成功上架主机 @0
 - 测试对象有ID时能否成功上架主机 @1

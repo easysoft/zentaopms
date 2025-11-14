@@ -5,7 +5,7 @@
 
 title=测试 backupModel::backCode();
 timeout=0
-cid=0
+cid=15129
 
 - 步骤1：正常备份到新目录属性result @1
 - 步骤2：备份到另一个新目录属性result @1

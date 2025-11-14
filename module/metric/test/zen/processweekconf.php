@@ -5,7 +5,7 @@
 
 title=测试 metricZen::processWeekConf();
 timeout=0
-cid=0
+cid=17205
 
 - 步骤1：单个工作日 @星期一
 - 步骤2：多个工作日 @星期一、星期二、星期三

@@ -5,7 +5,7 @@
 
 title=测试 adminModel::setMenu();
 timeout=0
-cid=0
+cid=14983
 
 - 步骤1：admin模块在system组中的方法测试属性hasSwitcherMenu @1
 - 步骤2：user模块在company组中的方法测试属性hasSwitcherMenu @1

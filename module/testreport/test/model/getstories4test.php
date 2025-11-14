@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 testreportModel->getStories4Test();
 timeout=0
-cid=1
+cid=19123
 
 - 测试查询版本 1 3 5 的需求 @2,4,10,12,18,20
 

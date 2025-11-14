@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getSystemList();
 timeout=0
-cid=0
+cid=19482
 
 - 步骤1：正常情况-验证返回数组包含ID为1的元素第1条的id属性 @1
 - 步骤2：边界值-验证系统名称第1条的name属性 @Test App

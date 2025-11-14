@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 adminModel::getApiConfig();
 timeout=0
-cid=0
+cid=14979
 
 - 执行admin模块的getApiConfigTest方法  @null
 - 执行admin模块的getApiConfigWithCacheTest方法  @cached_config

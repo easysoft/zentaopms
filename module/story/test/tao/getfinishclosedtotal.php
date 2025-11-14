@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getFinishClosedTotal();
 timeout=0
-cid=0
+cid=18636
 
 - 步骤1：获取story类型的已完成关闭需求数量(4+3+3=10) @10
 - 步骤2：获取requirement类型的已完成关闭需求数量(1+1=2) @2

@@ -5,7 +5,7 @@
 
 title=测试 biModel::getColumns();
 timeout=0
-cid=0
+cid=15161
 
 - 测试步骤1：MySQL驱动获取基本字段类型 @2
 - 测试步骤2：无效驱动参数测试 @0

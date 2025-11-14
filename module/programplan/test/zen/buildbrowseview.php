@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::buildBrowseView();
 timeout=0
-cid=0
+cid=17786
 
 - 步骤1：正常参数gantt类型属性success @1
 - 步骤2：gantt类型带排序和浏览类型属性type @gantt

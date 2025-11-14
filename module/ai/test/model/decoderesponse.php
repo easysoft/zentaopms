@@ -5,7 +5,7 @@
 
 title=测试 aiModel::decodeResponse();
 timeout=0
-cid=0
+cid=15015
 
 - 执行aiTest模块的decodeResponseTest方法，参数是$validResponse 属性message @Hello World
 - 执行aiTest模块的decodeResponseTest方法，参数是$failResponse  @0

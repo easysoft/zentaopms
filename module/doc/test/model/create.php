@@ -5,7 +5,7 @@
 
 title=测试 docModel->create();
 timeout=0
-cid=1
+cid=16057
 
 - 创建产品文档第1条的title属性 @新建产品文档
 - 创建项目文档第2条的title属性 @新建项目文档

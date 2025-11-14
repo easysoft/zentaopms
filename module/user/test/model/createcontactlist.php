@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->createContactList();
-cid=0
+cid=19598
 
 - 列表名称和用户列表为空，返回 false。属性result @0
 - 创建人无错误提示。第errors条的account属性 @~~

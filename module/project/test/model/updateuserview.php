@@ -5,7 +5,7 @@
 
 title=测试 projectModel::updateUserView();
 timeout=0
-cid=0
+cid=17882
 
 - 步骤1：ACL为open时直接返回true @1
 - 步骤2：ACL为private时更新用户视图 @1

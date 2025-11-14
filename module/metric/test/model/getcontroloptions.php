@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getControlOptions();
 timeout=0
-cid=0
+cid=17085
 
 - 测试product选项：获取产品对象列表 @5
 - 测试sprint选项：获取执行对象列表 @0

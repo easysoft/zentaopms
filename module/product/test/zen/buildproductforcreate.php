@@ -5,7 +5,7 @@
 
 title=测试 productZen::buildProductForCreate();
 timeout=0
-cid=0
+cid=17565
 
 - 执行productTest模块的buildProductForCreateTest方法
  - 属性name @Test Product 1

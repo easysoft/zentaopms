@@ -4,7 +4,7 @@
 
 title=测试 userZen::buildLinkTaskSearchForm();
 timeout=0
-cid=0
+cid=17264
 
 - 搜素的模块属性module @mrTask
 - 搜索的URL属性actionURL @~f:MRID\=1\&repoID\=2~

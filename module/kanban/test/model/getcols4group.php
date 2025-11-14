@@ -15,7 +15,7 @@ zenData('kanbancell')->loadYaml('rdkanbancell')->gen(20);
 
 title=测试 kanbanModel->getCols4Group();
 timeout=0
-cid=1
+cid=16910
 
 - 获取执行1 story pri的泳道 @0
 - 获取执行1 story category的泳道

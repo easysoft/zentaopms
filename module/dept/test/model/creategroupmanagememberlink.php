@@ -5,7 +5,7 @@
 
 title=测试 deptModel::createGroupManageMemberLink();
 timeout=0
-cid=0
+cid=15962
 
 - 步骤1：正常参数链接生成 @index.php?m=group&f=managemember&groupID=1&deptID=1
 - 步骤2：边界值测试大权限组ID @index.php?m=group&f=managemember&groupID=999&deptID=1

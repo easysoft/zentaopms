@@ -5,7 +5,7 @@
 
 title=测试 treeModel->createBugLink();
 timeout=0
-cid=1
+cid=19347
 
 - 测试创建module 4  的buglink属性url @bug-browse-1--byModule-4.html
 - 测试创建module 20 的buglink属性url @bug-browse-41--byModule-20.html

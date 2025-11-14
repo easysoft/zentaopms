@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 myModel->getTestcasesBySearch();
 timeout=0
-cid=1
+cid=17304
 
 - 测试通过搜索获取用例 1 的当前用例名称和状态
  - 属性title @这个是测试用例19

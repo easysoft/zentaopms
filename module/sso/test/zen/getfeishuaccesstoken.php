@@ -5,7 +5,7 @@
 
 title=测试 ssoZen::getFeishuAccessToken();
 timeout=0
-cid=0
+cid=18414
 
 - 步骤1:测试有效的appConfig配置,返回失败(因为无效的凭证)属性result @fail
 - 步骤2:测试空appId的配置,返回失败信息属性result @fail

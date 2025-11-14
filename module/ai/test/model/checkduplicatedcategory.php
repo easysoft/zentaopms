@@ -5,7 +5,7 @@
 
 title=测试 aiModel::checkDuplicatedCategory();
 timeout=0
-cid=0
+cid=15002
 
 - 步骤1：空数据测试 @0
 - 步骤2：不重复的新分类 @0

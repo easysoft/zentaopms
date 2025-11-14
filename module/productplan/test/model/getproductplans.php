@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=productplanModel->getProductPlans();
 timeout=0
-cid=1
+cid=17639
 
 - 获取系统内所有产品下的计划
  - 第0条的product属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 backupModel::restoreSQL();
 timeout=0
-cid=0
+cid=15142
 
 - 执行backupTest模块的restoreSQLTest方法，参数是'/tmp/backup_测试-2024.sql' 属性result @1
 - 执行backupTest模块的restoreSQLTest方法，参数是'/tmp/test_backup.sql' 属性result @~~

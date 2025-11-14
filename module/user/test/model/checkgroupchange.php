@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkGroupChange();
-cid=0
+cid=19585
 
 - 新权限组和旧权限组相同，返回 false。属性result @0
 - 查看用户权限组，返回 2 条记录。 @2

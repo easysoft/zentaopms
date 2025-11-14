@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 settingModel->snNeededUpdate();
 timeout=0
-cid=1
+cid=18370
 
 - 测试sn值为空，返回true @1
 - 测试sn值为281602d8ff5ee7533eeafd26eda4e776，返回true @1

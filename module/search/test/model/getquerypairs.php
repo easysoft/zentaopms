@@ -10,7 +10,7 @@ zenData('userquery')->loadYaml('userquery')->gen(50);
 
 title=测试 searchModel->getQueryPairs();
 timeout=0
-cid=1
+cid=18305
 
 - 查询module为task的键值对属性1 @这是搜索条件名称1
 - 查询module为executionStory的键值对属性2 @这是搜索条件名称2

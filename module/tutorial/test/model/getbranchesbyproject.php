@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBranchesByProject();
 timeout=0
-cid=0
+cid=19403
 
 - 步骤1：验证返回数组长度 @1
 - 步骤2：验证产品ID为1的分支数量 @1

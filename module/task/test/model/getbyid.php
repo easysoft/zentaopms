@@ -12,7 +12,7 @@ zenData('taskteam')->loadYaml('taskteam', true)->gen(6);
 
 title=taskModel->getByID();
 timeout=0
-cid=1
+cid=18790
 
 - 测试获取taskID=1的任务信息
  - 属性id @1

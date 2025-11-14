@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getList();
 timeout=0
-cid=1
+cid=17251
 
 - 获取合并请求列表数量 @8
 - 获取合并请求列表ID为1的合并请求的主机ID和标题

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::buildEditForm();
 timeout=0
-cid=0
+cid=15438
 
 - 步骤1:正常情况下编辑bug,验证基本视图属性
  - 属性bug @1

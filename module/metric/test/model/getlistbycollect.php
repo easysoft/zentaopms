@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getListByCollect();
 timeout=0
-cid=0
+cid=17104
 
 - 执行metric模块的getListByCollect方法，参数是'all' 第0条的id属性 @8
 - 执行metric模块的getListByCollect方法，参数是'released' 第0条的id属性 @8

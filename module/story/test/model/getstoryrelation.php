@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getStoryRelation();
-cid=0
+cid=18560
 
 - 获取用户需求1关联的软件需求数量 @1
 - 获取软件需求11关联的用户需求数量 @1

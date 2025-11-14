@@ -5,7 +5,7 @@
 
 title=测试 testcaseTao::saveScene();
 timeout=0
-cid=0
+cid=19052
 
 - 步骤1：新建场景正常情况属性result @success
 - 步骤2：更新现有场景属性result @success

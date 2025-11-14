@@ -4,7 +4,7 @@
 
 title=测试 projectModel->getUpgradeProjectReports();
 timeout=0
-cid=1
+cid=19531
 
 - 检查周报数量 @13
 - 检查周报信息

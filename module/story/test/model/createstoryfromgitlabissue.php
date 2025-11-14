@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->createStoryFromGitlabIssue();
-cid=0
+cid=18487
 
 - 创建正常的需求，获取创建后的id、title、stage、product
  - 属性id @1

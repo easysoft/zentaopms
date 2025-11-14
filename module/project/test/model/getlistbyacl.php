@@ -5,7 +5,7 @@
 
 title=测试 projectModel::getListByAcl();
 timeout=0
-cid=0
+cid=17830
 
 - 步骤1：查询open权限的项目 @5
 - 步骤2：查询private权限的项目 @5

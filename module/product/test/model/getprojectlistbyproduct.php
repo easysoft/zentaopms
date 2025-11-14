@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getProjectListByProduct();
-cid=0
+cid=17505
 
 - 执行product模块的getProjectListByProduct方法，参数是$productID = 0, 'all', '', false, 'order_desc'  @0
 - 执行product模块的getProjectListByProduct方法，参数是$productID = 1, 'all', '', false, 'order_desc'  @17

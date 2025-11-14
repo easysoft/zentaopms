@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 webhookModel->getFeishuData();
 timeout=0
-cid=1
+cid=19697
 
 - 测试正常传入的情况第title条的content属性 @test1
 - 测试不传title的情况第title条的content属性 @~~

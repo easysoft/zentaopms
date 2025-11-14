@@ -5,7 +5,7 @@
 
 title=测试 actionModel::processActionForAPI();
 timeout=0
-cid=0
+cid=14921
 
 - 执行actionTest模块的processActionForAPITest方法，参数是array  @1
 - 执行actionTest模块的processActionForAPITest方法，参数是array 第0条的extra属性 @user2

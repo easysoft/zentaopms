@@ -5,7 +5,7 @@
 
 title=测试 mrTao::getLinkedObjectPairs();
 timeout=0
-cid=0
+cid=17262
 
 - 测试步骤1：查询MR ID为1关联的story对象 @1|4|7
 - 测试步骤2：查询MR ID为1关联的task对象 @2|5|8

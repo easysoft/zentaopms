@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getPlanedTaskByWeek();
-cid=1
+cid=19726
 
 - 测试project值为0，date值为2022-05-01第50条的name属性 @开发任务60
 - 测试project值为0，date值为空第47条的name属性 @开发任务57

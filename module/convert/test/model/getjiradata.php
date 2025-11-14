@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraData();
 timeout=0
-cid=0
+cid=15775
 
 - 步骤1：使用file方法获取user模块数据，文件不存在返回空数组显示为0 @0
 - 步骤2：使用file方法获取issue模块数据，文件不存在返回空数组显示为0 @0

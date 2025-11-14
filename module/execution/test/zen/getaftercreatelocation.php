@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getAfterCreateLocation();
 timeout=0
-cid=0
+cid=16427
 
 - 执行executionTest模块的getAfterCreateLocationTest方法，参数是1, 1, '', 'doc', false, ''  @/doc-projectSpace-objectID=1.html
 - 执行executionTest模块的getAfterCreateLocationTest方法，参数是1, 1, '', '', true, ''  @/execution-create-projectID=1&executionID=1&copyExecutionID=&planID=1&confirm=no.html

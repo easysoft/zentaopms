@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildStoryForActivate();
 timeout=0
-cid=0
+cid=18669
 
 - 步骤1：正常需求ID的lastEditedBy应为admin属性lastEditedBy @admin
 - 步骤2：已激活需求ID的lastEditedBy应为admin属性lastEditedBy @admin

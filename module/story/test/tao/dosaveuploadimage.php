@@ -5,7 +5,7 @@
 
 title=测试 storyTao::doSaveUploadImage();
 timeout=0
-cid=0
+cid=18620
 
 - 执行doSaveUploadImageTest(1, 'test_image.jpg', 'image')模块的spec) > 10方法  @1
 - 执行doSaveUploadImageTest(2, 'test_doc.pdf', 'file')模块的files) > 0方法  @1

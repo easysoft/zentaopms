@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 myModel->getActions();
 timeout=0
-cid=1
+cid=17279
 
 - 查询最近两年的动态中序号为0的actionID @93
 - 查询最近两年的动态中序号为1的actionID属性1 @62

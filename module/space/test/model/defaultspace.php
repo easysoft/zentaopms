@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->defaultSpace();
-cid=1
+cid=18393
 
 - 获取用户名为空的默认空间
  - 属性name @默认空间

@@ -5,7 +5,7 @@
 
 title=- 测试关联需求任务处理 >> 期望story字段包含需求标题 @用户需求1(
 timeout=0
-cid=1
+cid=18937
 
 - 执行taskTest模块的processExportDataTest方法，参数是array 第0条的name属性 @Task 1
 - 执行taskTest模块的processExportDataTest方法，参数是array 第0条的story属性 @用户需求1(#1)

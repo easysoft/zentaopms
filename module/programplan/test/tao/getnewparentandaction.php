@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::getNewParentAndAction();
 timeout=0
-cid=0
+cid=17768
 
 - 应该有wait相关动作或为空
  - 属性parentAction @waitbychild

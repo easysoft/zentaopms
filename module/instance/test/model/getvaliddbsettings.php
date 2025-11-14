@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::getValidDBSettings();
 timeout=0
-cid=0
+cid=16804
 
 - 步骤1：正常情况，验证service字段属性service @mysql
 - 步骤2：正常情况，验证name字段属性name @testdb

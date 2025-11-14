@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::updateDomain();
 timeout=0
-cid=0
+cid=16821
 
 - 执行instanceTest模块的updateDomainTest方法，参数是$instance1  @1
 - 执行instanceTest模块的updateDomainTest方法，参数是$instance2  @1

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printRiskBlock();
 timeout=0
-cid=0
+cid=15284
 
 - 步骤1:测试默认参数情况 @1
 - 步骤2:测试type为all,count为15 @1

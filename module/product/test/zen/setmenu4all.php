@@ -5,7 +5,7 @@
 
 title=测试 productZen::setMenu4All();
 timeout=0
-cid=0
+cid=17612
 
 - 步骤1:普通视图类型,方法执行成功
  - 属性executionSuccess @1

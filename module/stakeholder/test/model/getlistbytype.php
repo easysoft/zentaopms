@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getListByType();
-cid=1
+cid=18436
 
 - 获取项目ID=0按照类型分组的干系人列表 @0
 - 获取项目ID=11按照类型分组的干系人列表

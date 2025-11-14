@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->update();
-cid=1
+cid=16156
 
 - 修改产品文档
  - 第0条的field属性 @title

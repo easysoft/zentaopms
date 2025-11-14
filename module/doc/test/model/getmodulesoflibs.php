@@ -5,7 +5,7 @@
 
 title=测试 docModel::getModulesOfLibs();
 timeout=0
-cid=0
+cid=16110
 
 - 执行docTest模块的getModulesOfLibsTest方法，参数是array  @10
 - 执行docTest模块的getModulesOfLibsTest方法，参数是array 第1条的type属性 @doc

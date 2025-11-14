@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getStoriesByProductIdList();
 timeout=0
-cid=0
+cid=18646
 
 - 获取产品1下的需求
  - 第0条的id属性 @1

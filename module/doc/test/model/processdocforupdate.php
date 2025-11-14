@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->processDocForUpdate();
-cid=1
+cid=16146
 
 - 修改产品文档
  - 属性lib @26

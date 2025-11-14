@@ -5,7 +5,7 @@
 
 title=测试 projectZen::getOtherProducts();
 timeout=0
-cid=0
+cid=17945
 
 - 步骤1:测试正常产品列表(无分支)
  - 属性2 @Product2

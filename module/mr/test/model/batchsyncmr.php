@@ -5,7 +5,7 @@
 
 title=测试 mrModel::batchSyncMR();
 timeout=0
-cid=0
+cid=17237
 
 - 正常的合并请求，更新本地MR的标题和编辑者
  - 第1条的id属性 @1

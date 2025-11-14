@@ -5,7 +5,7 @@
 
 title=测试 metricModel::execSqlMeasurement();
 timeout=0
-cid=0
+cid=17074
 
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement1, $vars1  @14
 - 执行metricTest模块的execSqlMeasurementTest方法，参数是$measurement2, $vars2  @0

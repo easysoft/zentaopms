@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getStoriesForCreate();
 timeout=0
-cid=0
+cid=15459
 
 - 步骤1:测试有executionID时stories是数组 @1
 - 步骤2:测试有projectID但无executionID时stories是数组 @1

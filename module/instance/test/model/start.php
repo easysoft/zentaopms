@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::start();
 timeout=0
-cid=0
+cid=16816
 
 - 步骤1：正常启动实例属性code @600
 - 步骤2：启动运行中的实例属性code @600

@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getProjectPairsByProduct();
-cid=0
+cid=17506
 
 - 不传入产品 ID。 @0
 - 传入不存在产品 ID。 @0

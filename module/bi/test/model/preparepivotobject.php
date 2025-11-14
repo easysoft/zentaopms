@@ -5,7 +5,7 @@
 
 title=测试 biModel::preparePivotObject();
 timeout=0
-cid=0
+cid=15206
 
 - 步骤1：基础pivot对象处理，验证返回数组长度 @3
 - 步骤2：完整pivot对象处理，验证pivotSpec的name字段 @{"zh-cn":"\u5b8c\u6574\u7528\u6237","en":"Full User"}

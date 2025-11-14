@@ -5,7 +5,7 @@
 
 title=测试 compileZen::buildSearchForm();
 timeout=0
-cid=0
+cid=15760
 
 - 步骤1：测试无参数情况，验证repo字段存在属性hasRepoField @1
 - 步骤2：测试repoID参数为1，验证repo字段不存在属性hasRepoField @0

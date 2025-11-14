@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->saveScore();
-cid=1
+cid=18202
 
 - 测试空数据 @1
 - 保存admin用户登录的积分

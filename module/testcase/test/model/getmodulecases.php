@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testcaseModel->getModuleCases();
 timeout=0
-cid=1
+cid=18992
 
 - 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases @4,2,1
 

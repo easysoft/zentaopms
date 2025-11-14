@@ -4,7 +4,7 @@
 
 title=测试 projectModel->getWaterfallProgress();
 timeout=0
-cid=1
+cid=17857
 
 - 测试获取不存在项目的进度 @0
 - 测试获取敏捷项目的进度 @0

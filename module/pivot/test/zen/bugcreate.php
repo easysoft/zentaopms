@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::bugCreate();
 timeout=0
-cid=0
+cid=17454
 
 - 测试不传参数的默认情况 >> 查询上月至今日的Bug数据
 - 测试指定时间范围查询Bug数据 >> 返回指定时间范围的Bug数据

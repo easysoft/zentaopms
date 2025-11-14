@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::setBrowseSession();
 timeout=0
-cid=0
+cid=19109
 
 - 步骤1：正常设置会话参数属性productID @1
 - 步骤2：设置browseType为bymodule属性browseType @bymodule

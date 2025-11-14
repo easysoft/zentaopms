@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::getPairs();
 timeout=0
-cid=0
+cid=19751
 
 - 测试步骤1：查询正常的zahost类型宿主机键值对
  - 属性1 @宿主机A

@@ -7,7 +7,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 todoModel->editDateTest();
 timeout=0
-cid=1
+cid=19254
 
 - 获取待办id为1的修改后的日期属性date @2023-06-07
 - 获取待办id为2的修改后的日期属性date @2023-04-27

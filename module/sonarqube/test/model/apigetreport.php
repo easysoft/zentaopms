@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiGetReport();
 timeout=0
-cid=0
+cid=18379
 
 - 步骤1：无效sonarqubeID和空projectKey @return empty
 - 步骤2：不存在的sonarqubeID @return empty

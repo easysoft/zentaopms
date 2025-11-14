@@ -216,6 +216,7 @@ dtable
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     !$isFromDoc ? null : set::height(400),
+    !$isFromDoc ? null : set::noNestedCheck(),
     $isFromDoc ? null : set::customCols(true),
     $isFromDoc ? null : set::sortLink($sortLink),
     $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),

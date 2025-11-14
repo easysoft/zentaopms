@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getBurnData();
 timeout=0
-cid=0
+cid=18237
 
 - 测试有进行中执行数据时返回数量 @4
 - 测试执行名称拼接格式第10条的name属性 @项目1--迭代1

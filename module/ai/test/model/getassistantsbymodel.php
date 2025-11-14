@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getAssistantsByModel();
 timeout=0
-cid=0
+cid=15028
 
 - 步骤1：获取模型ID为1且启用的助手 @3
 - 步骤2：获取模型ID为2且启用的助手 @3

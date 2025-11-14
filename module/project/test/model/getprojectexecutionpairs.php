@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 projectModel->getProjectExecutionPairs();
-cid=1
+cid=17845
 
 - 查看全部项目与执行键值对数组数量为6 @2
 - 查看瀑布项目编号为3的阶段5 @2

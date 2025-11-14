@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->fetchProjectStories();
-cid=0
+cid=18626
 
 - 不传入项目，也不传入产品。 @0
 - 传入项目，不传入产品。 @50

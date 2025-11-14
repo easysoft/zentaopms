@@ -4,7 +4,7 @@
 /**
 
 title=测试productTao->filterOrderedAndParentPlans();
-cid=0
+cid=17540
 
 - 获取产品ID为1的产品路线图数据 @2
 - 获取产品ID为1下主干的产品路线图数据 @2

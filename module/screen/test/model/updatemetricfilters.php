@@ -5,7 +5,7 @@
 
 title=测试 screenModel::updateMetricFilters();
 timeout=0
-cid=0
+cid=18286
 
 - 步骤1：正常情况
  - 属性chartConfig @present

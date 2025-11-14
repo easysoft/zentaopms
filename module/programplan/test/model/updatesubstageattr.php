@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::updateSubStageAttr();
 timeout=0
-cid=0
+cid=17759
 
 - 测试attribute为mix的情况，应该直接返回true，不更新任何数据 @empty string
 - 测试无子阶段的情况，应该返回true，不执行更新操作 @design

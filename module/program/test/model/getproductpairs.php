@@ -29,7 +29,7 @@ $product->gen(10);
 
 title=测试 programModel::getProductPairs();
 timeout=0
-cid=1
+cid=17693
 
 - 获取项目集1下的所有产品数量 @10
 - 根据项目集ID获取关联产品名字属性2 @产品2

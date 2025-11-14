@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getSceneByID();
-cid=1
+cid=18994
 pid=1
 
 */

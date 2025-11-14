@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getSettingsMapping();
 timeout=0
-cid=0
+cid=15623
 
 - 执行cneTest模块的getSettingsMappingTest方法 属性admin_username @admin
 - 执行cneTest模块的getSettingsMappingTest方法，参数是array 属性z_username @zentao_user

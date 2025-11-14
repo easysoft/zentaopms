@@ -5,7 +5,7 @@
 
 title=测试 treeModel->createCaseLibLink();
 timeout=0
-cid=1
+cid=19348
 
 - 测试创建module 1 的 caselib link属性url @caselib-browse-1-byModule-1.html
 - 测试创建module 2 的 caselib link属性url @caselib-browse-1-byModule-2.html

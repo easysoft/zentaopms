@@ -5,7 +5,7 @@
 
 title=测试 commonModel::isTutorialMode();
 timeout=0
-cid=0
+cid=15684
 
 - 执行commonTest模块的isTutorialModeTest方法  @0
 - 执行commonTest模块的isTutorialModeTest方法  @0

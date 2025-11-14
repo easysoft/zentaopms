@@ -10,7 +10,7 @@ zenData('bug')->loadYaml('status')->gen(10);
 
 title=bugModel->getDataOfBugsPerStatus();
 timeout=0
-cid=1
+cid=15372
 
 - 获取状态为激活的数据
  - 第active条的name属性 @激活

@@ -5,7 +5,7 @@
 
 title=测试 mailModel::isClickable();
 timeout=0
-cid=0
+cid=17012
 
 - 步骤1：空方法名参数测试 @0
 - 步骤2：delete方法权限测试（管理员） @1

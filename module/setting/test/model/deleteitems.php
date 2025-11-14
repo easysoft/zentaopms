@@ -12,7 +12,7 @@ $config->gen(10);
 
 title=测试 settingModel->deleteItems();
 timeout=0
-cid=1
+cid=18359
 pid=1
 
 */

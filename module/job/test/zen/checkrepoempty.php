@@ -5,7 +5,7 @@
 
 title=测试 jobZen::checkRepoEmpty();
 timeout=0
-cid=0
+cid=16860
 
 - 执行jobTest模块的checkRepoEmptyTest方法  @0
 - 执行jobTest模块的checkRepoEmptyTest方法  @0

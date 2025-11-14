@@ -15,7 +15,7 @@ su('admin');
 
 title=测试 myModel->getproducts();
 timeout=0
-cid=1
+cid=17287
 
 - 获取所有产品的数量属性allCount @10
 - 获取所有未关闭的产品数量属性unclosedCount @10

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::mapRecordValueWithFieldOptions();
 timeout=0
-cid=0
+cid=17414
 
 - 执行pivotTest模块的mapRecordValueWithFieldOptionsTest方法，参数是$records1, $fields1, 'mysql' 第0条的name属性 @Test Record 1
 - 执行pivotTest模块的mapRecordValueWithFieldOptionsTest方法，参数是$records2, $fields2, 'mysql' 第0条的content属性 @Test Content

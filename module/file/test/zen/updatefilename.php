@@ -5,7 +5,7 @@
 
 title=测试 fileZen::updateFileName();
 timeout=0
-cid=0
+cid=16544
 
 - 步骤1：正常更新txt文件名属性result @success
 - 步骤2：更新文件名为空字符串属性result @fail

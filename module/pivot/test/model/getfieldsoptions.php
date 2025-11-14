@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getFieldsOptions();
 timeout=0
-cid=0
+cid=17385
 
 - 步骤1：空字段设置 @0
 - 步骤2：单个option类型字段 @1

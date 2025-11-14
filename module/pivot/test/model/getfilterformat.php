@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->getFilterFormat();
 timeout=0
-cid=1
+cid=17387
 
 - 测试sql和过滤条件为空的情况 @1
 - 测试过滤类型为query的情况，判断过滤条件的值是否替换正确 @1

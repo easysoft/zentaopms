@@ -4,7 +4,7 @@
 
 title=测试 installModel->getIniInfo();
 timeout=0
-cid=1
+cid=16772
 
 - 验证是否能成功获取到php.ini信息。 @1
 

@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->parseExtra();
-cid=0
+cid=18655
 
 - 不传入任何数据 @0
 - 传入项目 ID。属性projectID @1

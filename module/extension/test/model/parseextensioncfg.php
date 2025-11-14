@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->parseExtensionCFG();
 timeout=0
-cid=1
+cid=16466
 
 - 执行 @1
 - 获取代号为code1的插件包配置信息

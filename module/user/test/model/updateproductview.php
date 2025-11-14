@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->updateProductView();
-cid=0
+cid=19661
 
 - 测试更新ID为12的产品的用户视图。 @1
 - 查看ID为12的产品的用户视图是否更新成功属性products @,12

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByClosedBy();
 timeout=0
-cid=0
+cid=18501
 
 - 步骤1：查询admin关闭的story（产品1中有5个admin关闭的story） @5
 - 步骤2：查询不存在用户关闭的story @0

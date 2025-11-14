@@ -5,7 +5,7 @@
 
 title=测试 todoZen::setSessionUri();
 timeout=0
-cid=0
+cid=19307
 
 - 步骤1：设置有效的URI @1
 - 步骤2：设置空字符串URI @1

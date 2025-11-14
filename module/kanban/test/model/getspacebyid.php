@@ -10,7 +10,7 @@ zenData('kanbanspace')->gen(5);
 
 title=测试 kanbanModel->getSpaceById();
 timeout=0
-cid=1
+cid=16944
 
 - 测试查询空间1信息
  - 属性name @协作空间1

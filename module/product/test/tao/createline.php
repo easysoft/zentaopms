@@ -4,7 +4,7 @@
 /**
 
 title=productModel->createLine();
-cid=0
+cid=17533
 
 - 执行product模块的createLineTest方法，参数是'1', 'test line1'
  - 属性root @1

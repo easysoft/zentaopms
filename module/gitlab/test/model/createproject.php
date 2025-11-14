@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::createProject();
 timeout=0
-cid=0
+cid=16639
 
 - 执行gitlab模块的createProjectTest方法，参数是$gitlabID, $project 第name条的0属性 @项目名称不能为空
 - 执行gitlab模块的createProjectTest方法，参数是$gitlabID, $project 第path条的0属性 @项目标识串不能为空

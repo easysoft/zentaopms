@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseTao->fetchStepsByList();
-cid=1
+cid=19035
 
 - 测试获取case 1 的步骤 @1: 1,2,3;
 

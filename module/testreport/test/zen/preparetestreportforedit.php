@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::prepareTestreportForEdit();
 timeout=0
-cid=0
+cid=19136
 
 - 执行testreportTest模块的prepareTestreportForEditTest方法，参数是1, array
  - 属性title @Test Report

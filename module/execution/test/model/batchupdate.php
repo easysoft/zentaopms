@@ -20,7 +20,7 @@ $execution->gen(5);
 
 title=测试executionModel->batchUpdate();
 timeout=0
-cid=1
+cid=16267
 
 - 测试批量修改任务
  - 第0条的field属性 @name

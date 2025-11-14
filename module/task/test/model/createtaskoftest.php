@@ -13,7 +13,7 @@ zenData('story')->loadYaml('story')->gen(5);
 
 title=taskModel->createTaskOfTest();
 timeout=0
-cid=1
+cid=18784
 
 - 测试空数据第name条的0属性 @『任务名称』不能为空。
 - 测试创建迭代下的测试任务

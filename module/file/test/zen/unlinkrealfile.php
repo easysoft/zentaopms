@@ -5,7 +5,7 @@
 
 title=测试 fileZen::unlinkRealFile();
 timeout=0
-cid=0
+cid=16543
 
 - 执行fileTest模块的unlinkRealFileZenTest方法，参数是$multiPathFile 属性called @1
 - 执行fileTest模块的unlinkRealFileZenTest方法，参数是$uniquePathFile 属性called @1

@@ -5,7 +5,7 @@
 
 title=测试 branchModel::changeBranchLanguage();
 timeout=0
-cid=0
+cid=15320
 
 - 步骤1：正常产品类型，期望返回false @0
 - 步骤2：多分支产品，验证语言修改 @新建分支

@@ -12,7 +12,7 @@ $team->gen(10);
 
 title=测试 projectTao::deleteMembers();
 timeout=0
-cid=1
+cid=17896
 
 - 检查原来的成员数 @10
 - 检查删除后的成员数 @7

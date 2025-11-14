@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::getUserTemplates();
-cid=0
+cid=19637
 
 - admin 用户可以查看导出任务的模板有 2 个。 @2
 - 第一个模板的 id 是 1，创建者是 admin。

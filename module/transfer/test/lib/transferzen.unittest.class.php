@@ -115,7 +115,7 @@ class transferZenTest
      *
      * @param  array  $list
      * @param  int    $lastID
-     * @param  string $fields
+     * @param  array  $fields
      * @param  int    $pagerID
      * @param  string $module
      * @access public
@@ -164,7 +164,7 @@ class transferZenTest
 
         // 设置必要的配置和语言
         if(!isset($tester->config->transfer)) $tester->config->transfer = new stdClass();
-        if(!isset($tester->config->transfer->actionModule)) $tester->config->transfer->actionModule = array();
+        $tester->config->transfer->actionModule = array('task', 'story', 'bug');
 
         if(!isset($tester->lang->transfer)) $tester->lang->transfer = new stdClass();
         $tester->lang->transfer->new = '新建';
@@ -173,16 +173,22 @@ class transferZenTest
 
         try {
             // 获取transfer对象并设置transferConfig
-            $transferZen = $tester->loadTarget('transfer', '', 'zen');
+            $transferZen = $tester->app->loadTarget('transfer', '', 'zen');
             if(!property_exists($transferZen, 'transferConfig')) {
                 $transferZen->transferConfig = new stdClass();
             }
             $transferZen->transferConfig->textareaFields = 'desc,content,steps';
 
-            $result = callZenMethod('transfer', 'printRow', array($module, $row, $fields, $object, $trClass, $addID));
+            // 使用反射直接调用private方法,避免responseException
+            $reflection = new ReflectionClass($transferZen);
+            $method = $reflection->getMethod('printRow');
+            $method->setAccessible(true);
+            $result = $method->invokeArgs($transferZen, array($module, $row, $fields, $object, $trClass, $addID));
 
             if(dao::isError()) return dao::getError();
             return $result;
+        } catch(EndResponseException $e) {
+            return $e->getContent();
         } catch(Exception $e) {
             return 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
         } catch(TypeError $e) {
@@ -223,28 +229,18 @@ class transferZenTest
         }
 
         try {
-            // 获取transfer对象并设置transferConfig
-            $transferZen = $tester->loadTarget('transfer', '', 'zen');
-            if(!property_exists($transferZen, 'transferConfig')) {
-                $transferZen->transferConfig = new stdClass();
+            // 获取zen对象并设置transferConfig
+            $zenTest = $tester->app->loadTarget('transfer', '', 'zen');
+            if(!property_exists($zenTest, 'transferConfig')) {
+                $zenTest->transferConfig = new stdClass();
             }
-            $transferZen->transferConfig->textareaFields = 'desc,content,steps';
-
-            // 为避免特殊字段的复杂逻辑，我们直接调用zen方法但提供必要的上下文
-            $zenObject = initReference('transfer');
-
-            // 设置必要的属性
-            if(!property_exists($zenObject, 'transferConfig')) {
-                $zenObject->transferConfig = new stdClass();
-            }
-            $zenObject->transferConfig->textareaFields = 'desc,content,steps';
+            $zenTest->transferConfig->textareaFields = 'desc,content,steps';
 
             // 使用反射调用private方法
-            $reflection = new ReflectionClass($zenObject);
+            $reflection = new ReflectionClass($zenTest);
             $method = $reflection->getMethod('printCell');
             $method->setAccessible(true);
-
-            $result = $method->invoke($zenObject, $module, $field, $control, $name, $selected, $values, $row);
+            $result = $method->invokeArgs($zenTest, array($module, $field, $control, $name, $selected, $values, $row));
 
             if(dao::isError()) return dao::getError();
             return $result;

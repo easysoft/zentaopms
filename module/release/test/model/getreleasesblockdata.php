@@ -5,7 +5,7 @@
 
 title=taskModel->getReleasesBlockData();
 timeout=0
-cid=0
+cid=18000
 
 - 测试传入的projectID为0时，获取发布信息
  - 第1条的id属性 @79

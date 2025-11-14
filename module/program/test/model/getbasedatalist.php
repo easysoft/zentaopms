@@ -3,7 +3,7 @@
 /**
 title=测试programTao::getBaseDataList();
 timeout=0
-cid=1
+cid=17680
 
 - 获取id为3的path第1条的path属性 @,1,
 - 获取id为2的path第2条的path属性 @,1,2,

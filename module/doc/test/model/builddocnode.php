@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->buildDocNode();
-cid=1
+cid=16045
 
 - 测试模块为空，libID=0时，获取的文档节点数据
  - 属性type @module

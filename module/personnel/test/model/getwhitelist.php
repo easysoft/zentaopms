@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getWhitelist();
-cid=1
+cid=17335
 
 - 获取 项目集 1 白名单人员account @admin,user20,user40
 

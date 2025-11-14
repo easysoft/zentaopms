@@ -5,7 +5,7 @@
 
 title=productModel->updateOrder();
 timeout=0
-cid=0
+cid=17530
 
 - 不传入任何数据。 @1|2|3|4|5
 - 传入全部排序后的 ID 列表。 @1|3|4|5|2

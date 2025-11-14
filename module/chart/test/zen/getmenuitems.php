@@ -5,7 +5,7 @@
 
 title=测试 chartZen::getMenuItems();
 timeout=0
-cid=0
+cid=15586
 
 - 测试空数组 @0
 - 测试仅包含parent为0的菜单 @0

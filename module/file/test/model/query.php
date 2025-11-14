@@ -5,7 +5,7 @@
 
 title=测试 fileModel::query();
 timeout=0
-cid=0
+cid=16522
 
 - 步骤1：查询task类型文件
  - 属性id @1

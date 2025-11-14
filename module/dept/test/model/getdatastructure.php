@@ -10,7 +10,7 @@ zenData('dept')->gen(30);
 
 title=测试 deptModel->getDataStructure();
 timeout=0
-cid=1
+cid=15970
 
 - 全部查询
  - 第29条的id属性 @30

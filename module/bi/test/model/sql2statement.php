@@ -5,7 +5,7 @@
 
 title=测试 biModel::sql2Statement();
 timeout=0
-cid=0
+cid=15216
 
 - 测试正常的SELECT语句转换为statement对象 @object
 - 测试空SQL字符串输入(text模式) @请输入一条正确的SQL语句

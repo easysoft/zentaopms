@@ -5,7 +5,7 @@
 
 title=测试 userModel::getUserAcls();
 timeout=0
-cid=0
+cid=19635
 
 - 步骤1：测试guest用户权限获取 @1
 - 步骤2：测试admin用户权限获取 @1

@@ -5,7 +5,7 @@
 
 title=测试 taskZen::prepareManageTeam();
 timeout=0
-cid=0
+cid=18936
 
 - 步骤1：正常表单数据和有效任务ID
  - 属性id @1

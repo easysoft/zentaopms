@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->saveEstimateInfo();
-cid=0
+cid=18583
 
 - 测试 story的id，圆整值，平均值
  - 属性story @2

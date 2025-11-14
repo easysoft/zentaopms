@@ -5,7 +5,7 @@
 
 title=测试 screenModel::processXLabel();
 timeout=0
-cid=0
+cid=18279
 
 - 步骤1：日期类型标签处理
  - 属性2023-11-03 @2023-11-03

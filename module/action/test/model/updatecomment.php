@@ -13,7 +13,7 @@ zenData('file')->gen(1);
 
 title=测试 actionModel->updateComment();
 timeout=0
-cid=1
+cid=14935
 
 - 测试更新action 1的备注, 备注被成功更新为备注1属性comment @备注1
 - 测试更新action 2的备注, 备注被成功更新为备注2属性comment @备注2

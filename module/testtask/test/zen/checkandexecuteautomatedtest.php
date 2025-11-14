@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::checkAndExecuteAutomatedTest();
 timeout=0
-cid=0
+cid=19232
 
 - 步骤1：自动化用例未确认时 @fail
 - 步骤2：非自动化用例 @0

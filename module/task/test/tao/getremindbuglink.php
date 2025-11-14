@@ -8,7 +8,7 @@ zenData('task')->loadYaml('task')->gen(9);
 
 title=taskModel->getRemindBugLink();
 timeout=0
-cid=1
+cid=18882
 
 - 获取是否请求成功属性result @success
 - 获取是否刷新页面属性load @1

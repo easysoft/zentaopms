@@ -5,7 +5,7 @@
 
 title=测试 taskZen::assignBatchEditVars();
 timeout=0
-cid=0
+cid=18894
 
 - 步骤1:测试带执行ID的正常情况,验证execution对象被赋值属性id @11
 - 步骤2:测试带执行ID的情况,验证execution对象的名称属性name @执行1

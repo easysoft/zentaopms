@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::saveXmindImport();
 timeout=0
-cid=0
+cid=19022
 
 - 测试1属性result @success
 - 测试2属性result @success

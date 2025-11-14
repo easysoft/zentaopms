@@ -5,7 +5,7 @@
 
 title=测试 zahostModel->getList();
 timeout=0
-cid=1
+cid=19756
 
 - 测试名称不能为空第name条的0属性 @『名称』不能为空。
 - 测试单CPU核心数不能为空第cpuCores条的0属性 @『单CPU核心数』不能为空。

@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getBySearch();
-cid=0
+cid=18509
 
 - 获取产品ID 1 的需求数量 @2
 - 根据产品ID 1 关联执行获取需求数量 @1

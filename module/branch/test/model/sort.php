@@ -5,7 +5,7 @@
 
 title=测试 branchModel::sort();
 timeout=0
-cid=0
+cid=15338
 
 - 执行branchTest模块的sortTest方法，参数是array  @2,1
 

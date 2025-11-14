@@ -5,7 +5,7 @@
 
 title=测试 transferModel::getRowsFromExcel();
 timeout=0
-cid=0
+cid=19319
 
 - 步骤1：正常文件读取 @array
 - 步骤2：文件读取错误 @false

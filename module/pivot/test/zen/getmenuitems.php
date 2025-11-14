@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getMenuItems();
 timeout=0
-cid=0
+cid=17460
 
 - 执行pivotTest模块的getMenuItemsTest方法，参数是$menusWithUrl  @3
 - 执行pivotTest模块的getMenuItemsTest方法，参数是$emptyMenus  @0

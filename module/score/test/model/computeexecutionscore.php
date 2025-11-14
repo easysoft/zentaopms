@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->computeExecutionScore();
-cid=1
+cid=18196
 
 - 计算迭代ID=0时，关闭执行的分数第0条的score属性 @0
 - 计算迭代ID=101时，关闭执行的分数第0条的score属性 @20

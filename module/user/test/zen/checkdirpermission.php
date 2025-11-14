@@ -5,7 +5,7 @@
 
 title=测试 userZen::checkDirPermission();
 timeout=0
-cid=0
+cid=19672
 
 - 根据实际返回调整期望 @permission_denied
 - checkTmp方法实际返回1 @1

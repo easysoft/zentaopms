@@ -5,7 +5,7 @@
 
 title=测试 blockModel::getMyDashboard();
 timeout=0
-cid=0
+cid=15232
 
 - 步骤1：正常情况，查询admin用户my仪表盘的区块数量 @5
 - 步骤2：验证排序，检查第一个区块的宽度第0条的width属性 @3

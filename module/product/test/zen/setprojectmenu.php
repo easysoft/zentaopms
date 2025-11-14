@@ -5,7 +5,7 @@
 
 title=测试 productZen::setProjectMenu();
 timeout=0
-cid=0
+cid=17613
 
 - 步骤1:正常场景,传入有效的productID和branch
  - 属性executionSuccess @1

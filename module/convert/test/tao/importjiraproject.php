@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraProject();
 timeout=0
-cid=0
+cid=15862
 
 - 执行convertTest模块的importJiraProjectTest方法，参数是array  @true
 - 执行convertTest模块的importJiraProjectTest方法，参数是$testData2  @true

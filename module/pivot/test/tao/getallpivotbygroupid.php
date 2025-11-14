@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getAllPivotByGroupID();
 timeout=0
-cid=0
+cid=17439
 
 - 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是60  @2
 - 执行pivotTest模块的getAllPivotByGroupIDTest方法，参数是999  @0

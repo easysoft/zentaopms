@@ -5,7 +5,7 @@
 
 title=测试 aiModel::parseFunctionCallResponse();
 timeout=0
-cid=0
+cid=15059
 
 - 执行aiTest模块的parseFunctionCallResponseTest方法，参数是$openaiResponse  @{"key": "value"}
 - 执行aiTest模块的parseFunctionCallResponseTest方法，参数是$ernieResponse  @{"ernie_key": "ernie_value"}

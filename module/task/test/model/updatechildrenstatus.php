@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=taskModel->updateChildrenStatus();
 timeout=0
-cid=1
+cid=18847
 
 - 任务参数为空 @0
 - 不是父任务 @0

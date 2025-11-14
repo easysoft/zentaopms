@@ -5,7 +5,7 @@
 
 title=测试 executionZen::getAllProductsForCreate();
 timeout=0
-cid=0
+cid=16428
 
 - 步骤1：有产品关联的项目获取产品属性1 @正常产品1
 - 步骤2：有hasProduct=1的项目应包含空选项 @~~

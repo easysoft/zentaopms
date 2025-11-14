@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->buildTrackCol();
-cid=0
+cid=18605
 
 - 执行story模块的buildTrackCol方法，参数是'epic', '业务需求'
  - 属性name @epic

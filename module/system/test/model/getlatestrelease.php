@@ -5,7 +5,7 @@
 
 title=测试 systemModel::getLatestRelease();
 timeout=0
-cid=0
+cid=18735
 
 - 步骤1：正常调用获取最新版本（测试环境下返回false） @0
 - 步骤2：验证返回结果在测试环境下为false @1

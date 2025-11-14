@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setMenuForBatchClose();
 timeout=0
-cid=0
+cid=18706
 
 - 步骤1：产品标签下的批量关闭菜单设置 @product_menu_set
 - 步骤2：执行标签下的批量关闭菜单设置 @execution_menu_set

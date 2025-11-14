@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiValidate();
 timeout=0
-cid=0
+cid=18380
 
 - 步骤1：使用默认有效配置验证 @success
 - 步骤2：有效host但无效token @return false

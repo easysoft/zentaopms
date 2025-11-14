@@ -5,6 +5,26 @@
 title=检查测试单下的分组视图
 timeout=0
 cid=1
+
+- 执行tester模块的checkNum方法，参数是'', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+- 执行tester模块的checkNum方法，参数是'1', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+- 执行tester模块的checkNum方法，参数是'2', '3'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+- 执行tester模块的checkNum方法，参数是'', '0', 'assignedtome'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+- 执行tester模块的checkNum方法，参数是'1', '2', 'assignedtome'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+- 执行tester模块的checkNum方法，参数是'2', '1', 'assignedtome'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @用例数量正确
+
  */
 
 chdir(__DIR__);

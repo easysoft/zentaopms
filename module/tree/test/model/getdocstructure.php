@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 treeModel->getDocStructure();
 timeout=0
-cid=1
+cid=19367
 
 - 测试获取doc树的数量 @1
 - 测试获取doc树的第1条数据

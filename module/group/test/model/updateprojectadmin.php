@@ -5,7 +5,7 @@
 
 title=测试 groupModel->updateProjectAdmin();
 timeout=0
-cid=1
+cid=16726
 
 - 测试项目管理员更新项目集第user1条的programs属性 @2
 - 测试项目管理员更新产品第user1条的products属性 @2

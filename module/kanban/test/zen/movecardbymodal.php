@@ -5,7 +5,7 @@
 
 title=测试 kanbanZen::moveCardByModal();
 timeout=0
-cid=0
+cid=17000
 
 - 步骤1:获取存在的卡片1的移动视图数据属性regions @1
 - 步骤2:获取存在的卡片2的移动视图数据第card条的id属性 @2

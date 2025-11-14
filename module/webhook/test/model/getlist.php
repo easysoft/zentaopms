@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getList();
 timeout=0
-cid=0
+cid=19698
 
 - 测试步骤1：正常获取webhook列表，验证记录数量 @12
 - 测试步骤2：测试默认排序（id_desc），验证第一条记录ID第12条的id属性 @12

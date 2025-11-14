@@ -7,7 +7,7 @@ su('admin');
 
 /**
 title=测试executionModel->buildExecutionByStatus();
-cid=1
+cid=16272
 
 - 测试传入未开始状态
  - 属性status @wait

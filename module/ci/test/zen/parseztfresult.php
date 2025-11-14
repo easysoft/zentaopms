@@ -5,7 +5,7 @@
 
 title=测试 ciZen::parseZtfResult();
 timeout=0
-cid=0
+cid=15597
 
 - 步骤1：单元测试类型正常情况 @1
 - 步骤2：功能测试类型正常情况 @1

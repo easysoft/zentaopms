@@ -10,7 +10,7 @@ zenData('webhook')->gen(2);
 
 title=测试 webhookModel->getByID();
 timeout=0
-cid=1
+cid=19692
 
 - 通过ID查创建人属性createdBy @admin
 - 通过ID查名字属性name @钉钉群机器人

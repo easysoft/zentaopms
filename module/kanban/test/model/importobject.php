@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::importObject();
 timeout=0
-cid=0
+cid=16948
 
 - 执行kanban模块的importObjectTest方法，参数是1, 1, 1, 1, 'productplan', $param1 属性cards @,2,3,4,
 - 执行kanban模块的importObjectTest方法，参数是2, 2, 2, 5, 'release', $param2 属性cards @,5,6,7,

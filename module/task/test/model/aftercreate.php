@@ -42,7 +42,7 @@ $story->gen(5);
 
 title=测试taskModel->afterCreate();
 timeout=0
-cid=1
+cid=18761
 
 - 测试空数据 @0
 - 测试taskID为空的情况 @0

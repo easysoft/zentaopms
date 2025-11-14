@@ -12,7 +12,7 @@ zenData('kanbanlane')->gen(0);
 
 title=测试 kanbanModel->createRDRegion();
 timeout=0
-cid=1
+cid=16899
 
 - 测试创建执行10001的执行看板区域
  - 属性name @默认区域

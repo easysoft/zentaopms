@@ -9,7 +9,7 @@ zenData('instance')->gen(1);
 
 title=instanceModel->updateByID();
 timeout=0
-cid=1
+cid=16819
 
 - 正常编辑name的情况属性name @测试编辑名称
 - 编辑memory_kb属性memory_kb @~~

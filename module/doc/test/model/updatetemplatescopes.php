@@ -5,7 +5,7 @@
 
 title=测试 docModel->updateTemplateScopes();
 timeout=0
-cid=1
+cid=16163
 
 - 测试修改产品范围名称属性1 @修改后的产品范围
 - 测试修改项目范围名称属性2 @修改后的项目范围

@@ -5,7 +5,7 @@
 
 title=测试 fileModel::getByGid();
 timeout=0
-cid=0
+cid=16502
 
 - 执行fileTest模块的getByGidTest方法，参数是'test_gid_001' 
  - 属性gid @test_gid_001

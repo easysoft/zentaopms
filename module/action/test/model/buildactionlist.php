@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 actionModel->buildActionList();
 timeout=0
-cid=1
+cid=14877
 
 - 传入空数组，检查结果。 @0
 - 传入 actions，检查第一条记录的content字段。 @1

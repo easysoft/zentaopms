@@ -10,7 +10,7 @@ zenData('project')->loadYaml('execution')->gen(102);
 
 title=测试 commonModel::canModify();
 timeout=0
-cid=1
+cid=15650
 
 - 查看产品1是否可以修改 @1
 - 查看产品2是否可以修改 @1

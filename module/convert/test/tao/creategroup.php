@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createGroup();
 timeout=0
-cid=0
+cid=15840
 
 - 执行convertTest模块的createGroupTest方法，参数是'project', '测试项目组', array  @true
 - 执行convertTest模块的createGroupTest方法，参数是'product', '测试产品组', array  @true

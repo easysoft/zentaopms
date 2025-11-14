@@ -5,7 +5,7 @@
 
 title=productModel->getStats4Kanban();
 timeout=0
-cid=0
+cid=17515
 
 - 执行product模块的getStats4KanbanTest方法  @0
 - 执行product模块的getStats4KanbanTest方法，参数是2 

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createTicket();
 timeout=0
-cid=0
+cid=15848
 
 - 执行convertTest模块的createTicketTest方法，参数是1, $fullData, $relations  @1
 - 执行convertTest模块的createTicketTest方法，参数是1, $partialData, $relations  @1

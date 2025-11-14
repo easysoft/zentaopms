@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->createDefaultSpace();
-cid=1
+cid=18392
 
 - 测试传入空用户名创建默认空间
  - 属性name @默认空间

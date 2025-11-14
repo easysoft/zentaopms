@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->batchClose();
-cid=0
+cid=18471
 
 - 批量关闭需求，查看需求1被关闭后的字段
  - 第2条的status属性 @closed

@@ -5,7 +5,7 @@
 
 title=测试 markModel::setMark();
 timeout=0
-cid=0
+cid=17047
 
 - 步骤1：正常设置单个对象标记 @0
 - 步骤2：批量设置多个对象标记 @0

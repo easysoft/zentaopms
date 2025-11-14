@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getLibsByObject();
-cid=1
+cid=16101
 
 - 获取我的文档库
  - 第11条的type属性 @mine

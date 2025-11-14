@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getRequirementParents();
 timeout=0
-cid=0
+cid=18551
 
 - 步骤1：正常产品获取父需求，当前数据预期返回0 @0
 - 步骤2：产品ID为0，期望返回0个结果 @0

@@ -5,7 +5,7 @@
 
 title=测试 mrModel::approve();
 timeout=0
-cid=0
+cid=17236
 
 - 步骤1：正常拒绝审批属性message @保存成功
 - 步骤2：正常通过审批属性message @保存成功

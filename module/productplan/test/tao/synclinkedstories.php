@@ -3,7 +3,7 @@
 /**
 
 title=测试 productplanTao->syncLinkedStories()
-cid=1
+cid=17656
 
 - 测试同步需求 1 3 到计划 1，没有新增需求，不删除原有的计划需求 @1,2,3,4
 

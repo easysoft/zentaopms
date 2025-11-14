@@ -8,7 +8,7 @@ include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
 
 title=测试 messageModel::batchSaveTodoNotice();
 timeout=0
-cid=0
+cid=17048
 
 - 测试步骤1：有待办需要提醒时批量保存通知消息 @3
 - 测试步骤2：无待办需要提醒时返回空数组 @0

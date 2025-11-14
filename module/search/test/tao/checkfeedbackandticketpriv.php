@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkFeedbackAndTicketPriv();
 timeout=0
-cid=0
+cid=18316
 
 - 测试feedback类型,用户为反馈创建者,应保留结果 >> 验证返回结果数量为1
 - 测试feedback类型,用户有产品授权,应保留结果 >> 验证返回结果数量为1

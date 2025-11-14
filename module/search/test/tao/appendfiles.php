@@ -5,7 +5,7 @@
 
 title=测试 searchTao::appendFiles();
 timeout=0
-cid=0
+cid=18313
 
 - 执行searchTest模块的appendFilesTest方法 属性id @1
 - 执行searchTest模块的appendFilesTest方法 属性id @2

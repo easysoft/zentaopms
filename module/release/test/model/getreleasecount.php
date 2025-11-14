@@ -5,7 +5,7 @@
 
 title=taskModel->getReleaseCount();
 timeout=0
-cid=0
+cid=17998
 
 - 获取不传入参数的发布数量 @40
 - 获取传入参数为空的发布数量 @40

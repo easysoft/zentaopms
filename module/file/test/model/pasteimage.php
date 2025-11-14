@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->pasteImage();
-cid=0
+cid=16517
 
 - 不传入任何数据。 @0
 - 传入有图片信息的数据。 @<img src="/file-read-1.png" />

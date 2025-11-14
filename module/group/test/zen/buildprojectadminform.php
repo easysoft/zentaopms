@@ -5,7 +5,7 @@
 
 title=测试 groupZen::buildProjectAdminForm();
 timeout=0
-cid=0
+cid=16731
 
 - 步骤1：正常完整表单数据处理 @1
 - 步骤2：空表单数据处理 @1

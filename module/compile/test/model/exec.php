@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 compileModel->exec();
 timeout=0
-cid=1
+cid=15744
 
 - 检测job不存在时是否能执行编译 @0
 - 检测job存在但是$compile->id不等于$compile->job是否能执行编译 @1

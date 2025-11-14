@@ -5,7 +5,7 @@
 
 title=测试 devModel::getModules();
 timeout=0
-cid=0
+cid=16007
 
 - 执行devTest模块的getModulesStructureTest方法
  - 属性hasGroups @1

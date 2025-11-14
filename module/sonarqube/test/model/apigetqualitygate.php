@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiGetQualitygate();
 timeout=0
-cid=0
+cid=18378
 
 - 执行sonarqubeTest模块的apiGetQualitygateTest方法，参数是0, ''  @return empty
 - 执行sonarqubeTest模块的apiGetQualitygateTest方法，参数是21, ''  @return empty

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTestReport();
 timeout=0
-cid=0
+cid=19488
 
 - 步骤1：正常获取测试报告对象的核心字段
  - 属性id @1

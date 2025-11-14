@@ -10,7 +10,7 @@ zenData('task')->gen(10);
 
 title=测试 commonModel->syncExecutionStatus();
 timeout=0
-cid=1
+cid=15719
 
 - 执行$execution1属性status @wait
 - 执行$execution2属性status @doing

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getObjectForPromptById();
 timeout=0
-cid=0
+cid=15042
 
 - 步骤1：story模块正常情况，返回数组包含两个元素 @2
 - 步骤2：task模块正常情况，返回数组包含两个元素 @2

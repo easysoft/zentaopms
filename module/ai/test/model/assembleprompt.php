@@ -5,7 +5,7 @@
 
 title=测试 aiModel::assemblePrompt();
 timeout=0
-cid=0
+cid=14995
 
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt1, 'Test1'), 'Test1') === 0  @1
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt2, 'Test2'), 'Test2') === 0  @1

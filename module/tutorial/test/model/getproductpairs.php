@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel::getProductPairs();
 timeout=0
-cid=0
+cid=19450
 
 - 步骤1：测试获取产品ID为1的产品名称属性1 @Test product
 - 步骤2：测试返回数组不为空 @0

@@ -5,7 +5,7 @@
 
 title=测试 docZen::responseAfterUploadDocs();
 timeout=0
-cid=0
+cid=16220
 
 - 步骤1:空参数返回失败属性result @fail
 - 步骤2:combinedDocs格式上传

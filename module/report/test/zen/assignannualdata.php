@@ -5,7 +5,7 @@
 
 title=测试 reportZen::assignAnnualData();
 timeout=0
-cid=0
+cid=18189
 
 - 测试有account参数的情况,返回hasLogins标识属性hasLogins @yes
 - 测试有dept参数的情况,返回hasUsers标识属性hasUsers @yes

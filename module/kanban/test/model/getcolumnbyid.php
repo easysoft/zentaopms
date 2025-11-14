@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(5);
 
 title=测试 kanbanModel->getColumnByID();
 timeout=0
-cid=1
+cid=16911
 
 - 测试查询看板列1的信息
  - 属性type @column1

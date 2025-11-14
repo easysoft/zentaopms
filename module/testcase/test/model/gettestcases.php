@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 testcaseModel->getTestCases();
 timeout=0
-cid=1
+cid=19006
 
 - 测试查询产品 1 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
 

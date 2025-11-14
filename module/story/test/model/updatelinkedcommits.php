@@ -5,7 +5,7 @@
 
 title=测试 storyModel::updateLinkedCommits();
 timeout=0
-cid=0
+cid=18594
 
 - 执行storyTest模块的updateLinkedCommitsTest方法，参数是1, 1, array  @1
 - 执行storyTest模块的updateLinkedCommitsTest方法，参数是0, 1, array  @1

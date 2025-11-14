@@ -4,7 +4,7 @@
 /**
 
 title=测试 convertTao::processBuildinFieldData();
-cid=0
+cid=15865
 
 - 测试步骤1：正常输入story模块，包含zentao字段映射 >> 期望正确设置object属性
 - 测试步骤2：测试空relations处理 >> 期望返回原始object

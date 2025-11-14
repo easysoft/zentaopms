@@ -12,7 +12,7 @@ zenData('case')->loadYaml('confirmstorychange')->gen(4);
 
 title=测试 testcaseModel->batchConfirmStoryChange();
 timeout=0
-cid=1
+cid=18962
 
 - 用例参数为空返回 false。 @0
 - 用例参数对应的用例没有关联需求，返回 false。 @0

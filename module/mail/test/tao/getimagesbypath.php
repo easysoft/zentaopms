@@ -5,7 +5,7 @@
 
 title=测试 mailTao::getImagesByPath();
 timeout=0
-cid=0
+cid=17032
 
 - 执行mailTest模块的getImagesByPathTest方法，参数是$matches1  @1
 - 执行mailTest模块的getImagesByPathTest方法，参数是$matches2  @0

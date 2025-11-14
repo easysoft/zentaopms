@@ -5,7 +5,7 @@
 
 title=测试 blockModel::getSpecifiedBlockID();
 timeout=0
-cid=0
+cid=15233
 
 - 步骤1：正常情况查找存在的区块 @1
 - 步骤2：查找不存在的区块 @0

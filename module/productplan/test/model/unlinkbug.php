@@ -5,7 +5,7 @@
 
 title=productpanModel->unlinkBug();
 timeout=0
-cid=1
+cid=17648
 
 - 正确的bug属性title @BUG1
 - 正确的bug属性title @BUG2

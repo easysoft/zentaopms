@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::assignVarsForView();
 timeout=0
-cid=0
+cid=18019
 
 - 步骤~~：正常情况测试需求类型
  - 属性type @story

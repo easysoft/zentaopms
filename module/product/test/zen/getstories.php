@@ -5,7 +5,7 @@
 
 title=测试 productZen::getStories();
 timeout=0
-cid=0
+cid=17595
 
 - 步骤1:获取产品1的所有需求属性count @10
 - 步骤2:获取产品1的story类型需求属性firstType @story

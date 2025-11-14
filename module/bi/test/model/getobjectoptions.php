@@ -5,7 +5,7 @@
 
 title=测试 biModel::getObjectOptions();
 timeout=0
-cid=0
+cid=15176
 
 - 步骤1：正常获取用户ID选项属性1 @1
 - 步骤2：获取产品名称选项属性1 @正常产品

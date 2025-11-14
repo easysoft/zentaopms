@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildViewSummary();
 timeout=0
-cid=0
+cid=17665
 
 - 执行productplanTest模块的buildViewSummaryTest方法，参数是$stories1  @本页共 <strong>0</strong> 个，<strong>0</strong> 个， <strong>0</strong> 个，预计 <strong>0</strong> 个工时， 用例覆盖率 <strong>0%</strong> 。
 - 执行productplanTest模块的buildViewSummaryTest方法，参数是$stories2  @本页共 <strong>0</strong> 个，<strong>0</strong> 个， <strong>2</strong> 个，预计 <strong>8</strong> 个工时， 用例覆盖率 <strong>0%</strong> 。

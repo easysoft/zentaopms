@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDemands();
 timeout=0
-cid=0
+cid=19420
 
 - 步骤1：验证返回2个需求 @2
 - 步骤2：验证活跃需求状态第1条的status属性 @active

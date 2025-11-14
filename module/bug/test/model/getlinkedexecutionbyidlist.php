@@ -9,7 +9,7 @@ zenData('build')->loadYaml('build')->gen(100);
 
 title=bugModel->getLinkedExecutionByIdList();
 timeout=0
-cid=1
+cid=15384
 
 - 测试获取版本ID 1 3 5 的执行 @1,3
 

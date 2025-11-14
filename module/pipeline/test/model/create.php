@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel::create();
 timeout=0
-cid=0
+cid=17342
 
 - 执行pipelineTester模块的createTest方法，参数是'jenkins', $jenkinsData 属性type @jenkins
 - 执行pipelineTester模块的createTest方法，参数是'gitlab', $gitlabData 属性account @gitlab_admin

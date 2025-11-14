@@ -10,7 +10,7 @@ zenData('kanbanlane')->gen(20);
 
 title=测试 kanbanModel->getLaneCount();
 timeout=0
-cid=1
+cid=16928
 
 - 查看看板1的泳道数量 @1
 - 查看看板2的泳道数量 @0

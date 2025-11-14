@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::checkDisplayCards();
 timeout=0
-cid=0
+cid=16878
 
 - 执行kanbanTest模块的checkDisplayCardsTest方法，参数是10  @1
 - 执行kanbanTest模块的checkDisplayCardsTest方法，参数是3  @1

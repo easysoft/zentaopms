@@ -5,7 +5,7 @@
 
 title=测试 docModel::getTeamSpaces();
 timeout=0
-cid=0
+cid=16130
 
 - 步骤1：正常获取团队空间数量 @8
 - 步骤2：验证返回数组类型 @array

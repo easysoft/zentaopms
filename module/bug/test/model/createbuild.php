@@ -15,7 +15,7 @@ su('admin');
 
 title=bugTao->createBuild();
 timeout=0
-cid=1
+cid=15352
 
 - 测试解决版本执行11 解决方案为设计如此的时候创建一个版本属性name @bug新建的版本1
 - 测试解决版本执行12 解决方案为设计如此的时候创建一个版本属性name @bug新建的版本2

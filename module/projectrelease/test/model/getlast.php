@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 projectreleaseModel->getLast();
-cid=1
+cid=17969
 
 - 测试获取项目 11 的最后一次发布属性id @9
 - 测试获取项目 12 的最后一次发布属性id @10

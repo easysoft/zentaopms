@@ -5,7 +5,7 @@
 
 title=测试 storyTao::buildStoryTree();
 timeout=0
-cid=0
+cid=18604
 
 - 步骤1：空数组输入 @0
 - 步骤2：简单父子关系 @3

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDocStatisticBlock();
 timeout=0
-cid=0
+cid=15258
 
 - 步骤1：正常文档统计区块测试，实际返回0属性totalDocs @0
 - 步骤2：今日编辑文档数测试，实际返回0属性todayEditedDocs @0

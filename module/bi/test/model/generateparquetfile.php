@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::generateParquetFile();
 timeout=0
-cid=0
+cid=15158
 
 - 步骤1：正常调用generateParquetFile方法，检查返回值类型 @1
 - 步骤2：验证方法执行不会抛出异常 @1

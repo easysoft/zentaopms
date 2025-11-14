@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetBranchPrivs();
 timeout=0
-cid=0
+cid=16559
 
 - 错误的服务器ID @0
 - 错误的项目ID @0

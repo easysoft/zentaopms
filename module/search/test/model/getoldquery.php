@@ -5,7 +5,7 @@
 
 title=测试 searchModel::getOldQuery();
 timeout=0
-cid=0
+cid=18302
 
 - 步骤1:正常查询存在的记录
  - 属性id @1

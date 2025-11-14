@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildUsers();
 timeout=0
-cid=0
+cid=17933
 
 - 执行projectTest模块的buildUsersTest方法 属性pairsCount @20
 - 执行projectTest模块的buildUsersTest方法 属性hasAdmin @1

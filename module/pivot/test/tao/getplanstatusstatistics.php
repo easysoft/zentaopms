@@ -5,7 +5,7 @@
 
 title=测试 pivotTao::getPlanStatusStatistics();
 timeout=0
-cid=0
+cid=17445
 
 - 执行$result1[1]->plans[1]->status['active']) ? $result1[1]->plans[1]->status['active'] : 0 @3
 - 执行$result2[1]->plans[1]->status['draft']) ? $result2[1]->plans[1]->status['draft'] : 0 @1

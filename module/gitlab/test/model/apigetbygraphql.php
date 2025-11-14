@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
 title=测试 gitlabModel::apiGetByGraphql();
 timeout=0
-cid=0
+cid=16600
 
 - 测试步骤1：空查询字符串 @Unexpected end of document
 - 测试步骤2：无效的GraphQL语法 @Parse error on "error" (IDENTIFIER) at [1, 1]

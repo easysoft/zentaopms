@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildStoryForChange();
 timeout=0
-cid=0
+cid=18670
 
 - 步骤1：正常变更需求内容属性version @2
 - 步骤2：变更需求标题属性version @2

@@ -5,7 +5,7 @@
 
 title=测试 userZen::setReferer();
 timeout=0
-cid=0
+cid=19684
 
 - 执行userZenTest模块的setRefererTest方法，参数是''  @0
 - 执行userZenTest模块的setRefererTest方法，参数是''  @0

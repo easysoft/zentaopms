@@ -5,7 +5,7 @@
 
 title=测试 reportModel::getAllTimeStatusStat();
 timeout=0
-cid=0
+cid=18162
 
 - 测试步骤1：正常情况下获取story状态统计属性story @changing:15;active:15;
 - 测试步骤2：正常情况下获取task状态统计属性task @wait:10;doing:10;done:10;pause:10;cancel:10;closed:10;

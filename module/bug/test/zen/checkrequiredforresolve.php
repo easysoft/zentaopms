@@ -15,7 +15,7 @@ su('admin');
 
 title=测试 bugZen::checkRequiredForResolve();
 timeout=0
-cid=0
+cid=15444
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$bug1, 0]  @1
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$bug2, 11]  @0

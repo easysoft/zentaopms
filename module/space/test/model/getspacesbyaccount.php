@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->getSpacesByAccount();
-cid=1
+cid=18398
 
 - 获取用户名为空的空间列表 @0
 - 获取用户名为admin的空间列表

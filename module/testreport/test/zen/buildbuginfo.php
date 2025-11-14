@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::buildBugInfo();
 timeout=0
-cid=0
+cid=19132
 
 - 步骤1：正常情况返回数组 @Array
 - 步骤2：指定参数测试 @Array

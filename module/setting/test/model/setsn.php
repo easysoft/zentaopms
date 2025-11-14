@@ -5,7 +5,7 @@
 
 title=测试 settingModel::setSN();
 timeout=0
-cid=0
+cid=18369
 
 - 测试已安装系统且无cookie时的SN设置属性length @32
 - 测试已安装系统且cookie存在有效SN时的处理属性length @32

@@ -12,7 +12,7 @@ function initData()
 
 title=测试 todoModel->batchUpdate();
 timeout=0
-cid=1
+cid=19249
 
 - 批量修改todo类型
  - 第0条的field属性 @type

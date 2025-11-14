@@ -4,7 +4,7 @@
 
 title=productpanModel->updateParentStatus();
 timout=0
-cid=1
+cid=17652
 
 - 测试将计划1的状态更新为wait
  - 第0条的field属性 @status

@@ -20,7 +20,7 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->activateTest();
-cid=0
+cid=16258
 
 - 敏捷执行激活
  - 第0条的field属性 @status

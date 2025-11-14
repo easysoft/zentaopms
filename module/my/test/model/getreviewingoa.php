@@ -8,7 +8,7 @@ include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
 title=测试 myModel->getReviewingOA();
 timeout=0
-cid=1
+cid=17297
 
 - 测试获取排序 id_desc 的审批id。 @empty
 - 测试获取排序 id_desc 的审批是否存在。 @empty

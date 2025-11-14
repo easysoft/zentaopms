@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::getPairs();
 timeout=0
-cid=0
+cid=17745
 
 - 步骤1：测试获取执行11产品11的all类型计划键值对 @/项目11
 - 步骤2：测试获取执行12产品12的leaf类型计划键值对 @/项目12

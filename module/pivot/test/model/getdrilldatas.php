@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getDrillDatas();
 timeout=0
-cid=0
+cid=17379
 
 - 步骤1：正常情况测试带有value的conditions @3
 - 步骤2：空conditions数组边界情况 @3

@@ -5,7 +5,7 @@
 
 title=测试 metricModel::deduplication();
 timeout=0
-cid=0
+cid=17073
 
 - 执行metricTest模块的deduplicationTest方法，参数是'count_of_bug'  @ERROR 1054 (42S22) at line 1: Unknown column 'deleted' in 'field list'
 - 执行metricTest模块的deduplicationTest方法，参数是'count_of_annual_created_project'  @error cmd: 'mysql -uroot -pzentao -h127.0.0.1 -P3306 --default-character-set=utf8 -Dzttest < /home/z/rzto/module/metric/test/model/data/sql/metriclib_deduplication_zd.sql'

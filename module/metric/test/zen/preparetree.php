@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareTree();
 timeout=0
-cid=0
+cid=17203
 
 - 步骤1：正常情况，验证产品对象节点第product条的id属性 @product
 - 步骤2：空模块数组，返回空数组 @0

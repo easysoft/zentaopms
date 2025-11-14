@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->addORPriv();
-cid=1
+cid=19498
 
 - 测试添加 or 界面权限，获取数量 @groups:4,groupPrivs:607
 

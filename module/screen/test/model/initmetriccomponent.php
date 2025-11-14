@@ -5,7 +5,7 @@
 
 title=测试 screenModel::initMetricComponent();
 timeout=0
-cid=0
+cid=18264
 
 - 步骤1：正常情况 - 验证id第0条的id属性 @1
 - 步骤2：已有component - 保持原标题第0条的title属性 @自定义标题

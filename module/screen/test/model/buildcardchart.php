@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildCardChart();
 timeout=0
-cid=0
+cid=18205
 
 - 步骤1：测试空chart参数情况属性option @object
 - 步骤2：测试chart无settings的情况属性option @object

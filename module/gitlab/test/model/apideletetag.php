@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiDeleteTag();
 timeout=0
-cid=1
+cid=16593
 
 - 使用空的gitlabID,projectID,分支名称删除保护分支 @return false
 - 使用正确的gitlabID、错误的projectID删除标签属性message @404 Project Not Found

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getComponents();
 timeout=0
-cid=0
+cid=15616
 
 - 执行cneTest模块的getComponentsTest方法 属性code @600
 - 执行cneTest模块的getComponentsTest方法，参数是999  @0

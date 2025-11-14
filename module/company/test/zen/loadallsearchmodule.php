@@ -5,7 +5,7 @@
 
 title=测试 companyZen::loadAllSearchModule();
 timeout=0
-cid=0
+cid=15737
 
 - 步骤1:传入有效用户ID 1和queryID 0 @admin
 - 步骤2:传入用户ID 0和queryID 0 @all

@@ -4,7 +4,7 @@
 
 title=测试 buildModel->batchUnlinkBug();
 timeout=0
-cid=1
+cid=15485
 
 - 测试buildID=0，bug ID 列表为空 @0
 - 测试buildID=1，bug ID 列表为1,2

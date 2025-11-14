@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getDynamicByExecution();
 timeout=0
-cid=0
+cid=14895
 
 - 执行actionTest模块的getDynamicByExecutionTest方法，参数是1  @0
 - 执行actionTest模块的getDynamicByExecutionTest方法，参数是999  @0

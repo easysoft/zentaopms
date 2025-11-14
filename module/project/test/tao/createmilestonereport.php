@@ -4,7 +4,7 @@
 
 title=测试 projectModel->createMilestoneReport();
 timeout=0
-cid=1
+cid=17893
 
 - 测试创建里程碑报告
  - 属性title @里程碑报告

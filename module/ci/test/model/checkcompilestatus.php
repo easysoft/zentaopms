@@ -5,7 +5,7 @@
 
 title=测试 ciModel::checkCompileStatus();
 timeout=0
-cid=0
+cid=15587
 
 - 测试步骤1：不指定compileID检查所有未完成的编译任务
  - 第1条的name属性 @构建1

@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::updateExecutionCell();
 timeout=0
-cid=0
+cid=16996
 
 - 步骤1：正常更新单元格卡片属性updated @1
 - 步骤2：更新不存在单元格属性result @success

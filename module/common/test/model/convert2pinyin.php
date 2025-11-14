@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel->isOpenMethod();
 timeout=0
-cid=1
+cid=15665
 
 - 查看转换拼音后的数组长度 @3
 - 查看转换拼音后的数组第一个元素属性测试1 @ceshi1 cs1

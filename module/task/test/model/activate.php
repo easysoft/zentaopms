@@ -5,7 +5,7 @@
 
 title=taskModel->activate();
 timeout=0
-cid=0
+cid=18755
 
 - wait状态任务激活属性status @doing
 - doing状态任务激活属性status @doing

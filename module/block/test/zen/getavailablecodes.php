@@ -5,7 +5,7 @@
 
 title=测试 blockZen::getAvailableCodes();
 timeout=0
-cid=0
+cid=15239
 
 - 步骤1：正常product模块属性overview @产品总览
 - 步骤2：正常project模块属性overview @项目总览

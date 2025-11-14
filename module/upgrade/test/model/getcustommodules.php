@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getCustomModules();
-cid=1
+cid=19521
 
 - 测试获取 modules1 中的自定义模块 @0
 - 测试获取 modules2 中的自定义模块 @custom1

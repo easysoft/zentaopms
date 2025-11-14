@@ -10,7 +10,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->gettaskcardmenu();
 timeout=0
-cid=1
+cid=16987
 
 - 测试获取执行1 task1的操作数量 @8
 - 测试获取执行1 task2的操作数量 @8

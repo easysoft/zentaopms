@@ -5,7 +5,7 @@
 
 title=测试 settingModel::computeSN();
 timeout=0
-cid=0
+cid=18357
 
 - 检查 sn 长度 @32
 - 检查 sn 是否只包含a-f和0-9的字符并且长度为 32 @1

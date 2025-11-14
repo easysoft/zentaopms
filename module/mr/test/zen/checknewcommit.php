@@ -5,7 +5,7 @@
 
 title=测试 mrZen::checkNewCommit();
 timeout=0
-cid=0
+cid=17265
 
 - 执行mrTest模块的checkNewCommitTest方法，参数是'gitlab', $mockCommits, '2025-11-10 10:00:00'  @1
 - 执行mrTest模块的checkNewCommitTest方法，参数是'gitlab', $mockCommits, '2025-11-10 10:00:00'  @0

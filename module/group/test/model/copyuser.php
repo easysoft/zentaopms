@@ -5,7 +5,7 @@
 
 title=测试 groupModel->copyUser();
 timeout=0
-cid=1
+cid=16698
 
 - 复制分组1用户到分组2 @1
 - 复制分组2用户到分组3 @1

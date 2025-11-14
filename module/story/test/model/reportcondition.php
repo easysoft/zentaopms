@@ -5,7 +5,7 @@
 
 title=测试 storyModel->reportCondition();
 timeout=0
-cid=0
+cid=18581
 
 - 执行story模块的reportCondition方法，参数是'story'  @1=1
 - 执行story模块的reportCondition方法，参数是'story'  @`title` like '%aa%'

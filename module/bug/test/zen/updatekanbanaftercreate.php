@@ -5,7 +5,7 @@
 
 title=测试 bugZen::updateKanbanAfterCreate();
 timeout=0
-cid=0
+cid=15482
 
 - 执行bugTest模块的updateKanbanAfterCreateTest方法，参数是$bug1, 0, 0, ''  @1
 - 执行bugTest模块的updateKanbanAfterCreateTest方法，参数是$bug2, 1, 1, ''  @1

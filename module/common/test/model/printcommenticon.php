@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printCommentIcon();
 timeout=0
-cid=0
+cid=15691
 
 - 测试步骤1：验证方法存在性 @1
 - 测试步骤2：验证方法是静态方法 @1

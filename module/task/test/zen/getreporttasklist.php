@@ -5,7 +5,7 @@
 
 title=测试 taskZen::getReportTaskList();
 timeout=0
-cid=0
+cid=18934
 
 - 步骤1：正常情况第7条的name属性 @普通任务1
 - 步骤2：按搜索条件第1条的name属性 @搜索任务1

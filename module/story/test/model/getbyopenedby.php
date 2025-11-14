@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByOpenedBy();
 timeout=0
-cid=0
+cid=18505
 
 - 步骤1：正常情况 - 查询admin创建的故事数量 @4
 - 步骤2：边界值 - 查询不存在用户 @0

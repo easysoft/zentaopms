@@ -5,7 +5,7 @@
 
 title=fetchMetricsByIDList
 timeout=0
-cid=1
+cid=17171
 
 - 查询id为1，2的度量
  - 第0条的id属性 @1

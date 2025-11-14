@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->fixConsistency().
-cid=1
+cid=19517
 
 - 判断修复一致性的sql中是否有失败执行，若有，则会记录HasError。 @1
 - 判断是否成功的记录了修复一致性的sql。 @1

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getLinkedCommits();
 timeout=0
-cid=0
+cid=18541
 
 - 执行storyTest模块的getLinkedCommitsTest方法，参数是1, array  @0
 - 执行storyTest模块的getLinkedCommitsTest方法，参数是999, array  @0

@@ -5,7 +5,7 @@
 
 title=测试 upgradeModel->completeClassifyLang();
 timeout=0
-cid=1
+cid=19503
 
 - 检查数据库中已经给融合敏捷模型添加了project分类项 @项目管理
 - 检查数据库中已经给融合敏捷模型添加了support分类项 @支持过程

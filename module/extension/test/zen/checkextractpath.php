@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::checkExtractPath();
 timeout=0
-cid=0
+cid=16479
 
 - 执行extensionTest模块的checkExtractPathTest方法，参数是'', $checkResult1 属性result @ok
 - 执行extensionTest模块的checkExtractPathTest方法，参数是'nonexistent_plugin', $checkResult2 属性result @ok

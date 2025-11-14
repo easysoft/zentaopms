@@ -5,7 +5,7 @@
 
 title=测试 metricModel::mergeRecord();
 timeout=0
-cid=0
+cid=17144
 
 - 执行$result1第product1条的value属性 @10
 - 执行$result2第product1条的value属性 @15

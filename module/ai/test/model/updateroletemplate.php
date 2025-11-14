@@ -5,7 +5,7 @@
 
 title=测试 aiModel::updateRoleTemplate();
 timeout=0
-cid=0
+cid=15079
 
 - 执行aiTest模块的updateRoleTemplateTest方法，参数是1, '请你扮演一名高级产品经理。', '负责产品战略规划、需求分析、项目管理等工作'  @1
 - 执行aiTest模块的updateRoleTemplateTest方法，参数是999, '测试角色', '测试角色描述'  @1

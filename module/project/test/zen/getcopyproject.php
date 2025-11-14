@@ -5,7 +5,7 @@
 
 title=测试 projectZen::getCopyProject();
 timeout=0
-cid=0
+cid=17942
 
 - 步骤1：正常项目ID获取复制项目信息
  - 属性id @1

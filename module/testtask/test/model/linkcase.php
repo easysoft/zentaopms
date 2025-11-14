@@ -17,7 +17,7 @@ $testtaskData->loadYaml('testtask')->gen(16);
 
 title=测试 testtaskModel->linkCase();
 timeout=0
-cid=1
+cid=19208
 
 - 要关联到当前测试单的用例为空数组时 返回 false。 @0
 - 在测试应用中全部用例标签下关联用例 1,2 到测试单 2，查看关联后的测试单 2 中的用例 2。

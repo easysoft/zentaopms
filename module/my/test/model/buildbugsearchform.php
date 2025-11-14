@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 myModel->buildBugSearchForm();
 timeout=0
-cid=1
+cid=17271
 
 - 测试获取queryID 1 actionURL actionURL1 的搜索表单
  - 属性module @bugBug

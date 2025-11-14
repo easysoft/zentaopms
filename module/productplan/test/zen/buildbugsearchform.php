@@ -5,7 +5,7 @@
 
 title=测试 productplanZen::buildBugSearchForm();
 timeout=0
-cid=0
+cid=17660
 
 - 执行productplanTest模块的buildBugSearchFormTest方法，参数是$normalPlan, 1, 'id_desc'
  - 属性queryID @1

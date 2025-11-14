@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getModuleListForXmindExport();
 timeout=0
-cid=0
+cid=19094
 
 - 步骤1：指定有效moduleID属性1 @模块1
 - 步骤2：moduleID为0获取所有模块，期望返回数组长度5 @5

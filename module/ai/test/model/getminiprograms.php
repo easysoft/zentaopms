@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getMiniPrograms();
 timeout=0
-cid=0
+cid=15040
 
 - 步骤1：无筛选条件获取所有小程序 @5
 - 步骤2：按类别筛选personal @2

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getUnsyncedCommits();
 timeout=0
-cid=1
+cid=18082
 
 - 获取gitlab版本库未同步commit属性revision @2e0dd521b4a29930d5670a2c142a4400d7cffc1a
 - 获取gitlab版本库未同步commit file数量 @1

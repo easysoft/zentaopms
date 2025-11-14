@@ -5,7 +5,7 @@
 
 title=测试 editorZen::buildContentByAction();
 timeout=0
-cid=0
+cid=16244
 
 - 执行editorTest模块的buildContentByActionTest方法，参数是'', 'edit', ''  @0
 - 执行editorTest模块的buildContentByActionTest方法，参数是'/tmp/test_php_file.php', 'edit', ''  @<?php echo 'test';

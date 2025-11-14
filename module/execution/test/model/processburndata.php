@@ -9,7 +9,7 @@ zenData('burn')->loadYaml('burn')->gen(15);
 
 title=测试executionModel->processBurnDataTest();
 timeout=0
-cid=1
+cid=16356
 
 - 敏捷执行查询统计 @30
 - 瀑布执行查询统计 @60

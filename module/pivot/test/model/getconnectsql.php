@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getConnectSQL();
 timeout=0
-cid=0
+cid=17377
 
 - 步骤1：空数组输入测试 @0
 - 步骤2：包含from键的过滤条件测试 @0

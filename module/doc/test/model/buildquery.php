@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->buildQuery();
-cid=1
+cid=16048
 
 - 测试type=mine 并且 queryID=0时，构造的搜索条件 @ 1 = 1
 - 测试type=mine 并且 queryID=1时，构造的搜索条件 @(( 1 AND `title` LIKE '文档' ) AND ( 1 ))

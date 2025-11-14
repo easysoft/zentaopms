@@ -5,7 +5,7 @@
 
 title=测试 branchModel::linkBranch4Project();
 timeout=0
-cid=0
+cid=15333
 
 - 步骤1：测试单个有效产品ID的分支关联 @2
 - 步骤2：测试数组产品ID的分支关联 @4

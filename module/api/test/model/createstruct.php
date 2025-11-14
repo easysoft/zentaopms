@@ -12,7 +12,7 @@ zenData('action')->gen(0);
 
 title=测试 apiModel::createStruct();
 timeout=0
-cid=0
+cid=15099
 
 - 测试正常创建数据结构 @1
 - 测试结构名称为空时创建数据结构 @0

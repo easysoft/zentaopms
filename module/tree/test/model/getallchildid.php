@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getAllChildId();
 timeout=0
-cid=1
+cid=19361
 
 - 测试获取module 1 的全部子项 @,1,6,26
 

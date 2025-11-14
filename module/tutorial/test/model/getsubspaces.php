@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getSubSpaces();
 timeout=0
-cid=0
+cid=19480
 
 - 步骤1：测试'custom'参数属性1 @Test Team Space
 - 步骤2：测试'mine'参数属性1 @Test My Space

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::appendChildren();
 timeout=0
-cid=0
+cid=18462
 
 - 步骤1：为epic需求追加子需求，验证包含原需求第0条的id属性 @1
 - 步骤2：空需求数组情况，返回空数组 @0

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->importBug();
 timeout=0
-cid=1
+cid=16349
 
 - 测试在迭代中导入Bug第273条的taskID属性 @11
 - 测试在阶段中导入Bug第273条的taskID属性 @15

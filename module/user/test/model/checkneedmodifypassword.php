@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkNeedModifyPassword();
-cid=0
+cid=19587
 
 - 首次登录修改密码功能关闭，首次登录无需修改密码。
  - 属性account @user1

@@ -31,7 +31,7 @@ su('admin');
 
 title=测试projectModel->buildSearchForm();
 timeout=0
-cid=1
+cid=17803
 
 - 正确的queryID @1
 - 错误的queryID @0

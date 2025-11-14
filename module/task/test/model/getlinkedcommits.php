@@ -5,7 +5,7 @@
 
 title=测试 taskModel::getLinkedCommits();
 timeout=0
-cid=0
+cid=18810
 
 - 步骤1：正常情况获取关联提交记录 @0
 - 步骤2：空版本号数组 @0

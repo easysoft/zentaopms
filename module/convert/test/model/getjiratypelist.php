@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraTypeList();
 timeout=0
-cid=0
+cid=15784
 
 - 执行convertTest模块的getJiraTypeListTest方法  @0
 - 执行convertTest模块的getJiraTypeListTest方法  @0

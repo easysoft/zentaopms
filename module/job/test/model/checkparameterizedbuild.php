@@ -5,7 +5,7 @@
 
 title=测试 jobModel::checkParameterizedBuild();
 timeout=0
-cid=0
+cid=16836
 
 - 步骤1：正常Jenkins Job（无参数化构建） @0
 - 步骤2：参数化Job检查（模拟返回） @0

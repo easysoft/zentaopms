@@ -5,7 +5,7 @@
 
 title=buildDateCell
 timeout=0
-cid=1
+cid=17060
 
 - buildDateCell 传入 nodate
  - 属性date @2023-11-12

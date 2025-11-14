@@ -5,7 +5,7 @@
 
 title=测试 docZen::setObjectsForEdit();
 timeout=0
-cid=0
+cid=16225
 
 - 执行docTest模块的setObjectsForEditTest方法，参数是'project', 1 属性hasObjects @1
 - 执行docTest模块的setObjectsForEditTest方法，参数是'execution', 6 属性hasObjects @1

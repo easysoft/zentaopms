@@ -5,7 +5,7 @@
 
 title=测试 webhookTao::getWeixinSecret();
 timeout=0
-cid=0
+cid=19712
 
 - 执行webhookTest模块的getWeixinSecretTest方法，参数是$normalWebhook 属性url @https://qyapi.weixin.qq.com/cgi-bin/
 - 执行webhookTest模块的getWeixinSecretTest方法，参数是$missingCorpId 属性wechatCorpId @『企业ID』不能为空。

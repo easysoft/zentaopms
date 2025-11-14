@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getStoryCasesCount();
-cid=0
+cid=17557
 
 - 测试获取需求列表1所关联的用例总数 @30
 - 测试获取需求列表2所关联的用例总数 @30

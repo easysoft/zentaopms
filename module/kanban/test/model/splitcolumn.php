@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel->splitColumn();
 timeout=0
-cid=333
+cid=16960
 
 - 正常创建子看板列，查看创建的数量 @3
 - 名字为空的看板列不会创建,返回一个错误 @1

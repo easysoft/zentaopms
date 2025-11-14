@@ -5,7 +5,7 @@
 
 title=测试 biTao::fetchTableQueue();
 timeout=0
-cid=0
+cid=15222
 
 - 执行biTest模块的fetchTableQueueTest方法  @1
 - 执行biTest模块的fetchTableQueueTest方法  @4

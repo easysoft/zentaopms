@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getSonarqubeByRepo();
 timeout=0
-cid=0
+cid=16848
 
 - 步骤1：查询单个版本库返回该repo的最新任务第1条的name属性 @SonarQube任务Repo1_3
 - 步骤2：查询另一个版本库返回该repo的最新任务第2条的name属性 @SonarQube任务Repo2_2

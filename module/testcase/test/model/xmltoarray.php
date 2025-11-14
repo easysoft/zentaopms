@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::xmlToArray();
 timeout=0
-cid=0
+cid=19028
 
 - 步骤1：简单XML转换 @{"root":{"item":"test"}}
 - 步骤2：命名空间XML转换 @{"root":{"item":"test"}}

@@ -5,7 +5,7 @@
 
 title=测试 chartModel::getMultiData();
 timeout=0
-cid=0
+cid=15575
 
 - 步骤1：正常情况 @status
 - 步骤2：多指标第1条的0属性 @id

@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::checkAppNameUnique();
 timeout=0
-cid=0
+cid=16783
 
 - 步骤1：不存在的应用名称 @1
 - 步骤2：存在于instance表中的名称 @0

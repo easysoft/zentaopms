@@ -9,7 +9,7 @@ zenData('kanban')->gen(5);
 
 title=测试 kanbanModel->setting();
 timeout=0
-cid=1
+cid=16957
 
 - 查看设置后的看板信息
  - 属性showWIP @1

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getInvolvedExecutionListTest();
 timeout=0
-cid=1
+cid=16317
 
 - 根据敏捷项目查询执行列表
  - 第5条的project属性 @2

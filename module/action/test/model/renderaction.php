@@ -5,7 +5,7 @@
 
 title=测试 actionModel::renderAction();
 timeout=0
-cid=0
+cid=14928
 
 - 执行$result1) && is_string($result1) && strpos($result1, '创建') !== false @1
 - 执行$result2) && is_string($result2) && strpos($result2, '编辑') !== false @1

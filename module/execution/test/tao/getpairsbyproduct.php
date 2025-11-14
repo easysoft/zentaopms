@@ -13,7 +13,7 @@ $projectproduct->gen(30);
 
 title=测试executionModel->getPairsByProduct();
 timeout=0
-cid=1
+cid=16390
 
 - 测试空数据 @0
 - 获取关联产品1-5的执行属性101 @迭代5

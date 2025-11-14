@@ -5,7 +5,7 @@
 
 title=测试 treeModel::getGroupPairs();
 timeout=0
-cid=0
+cid=19368
 
 - 步骤1：正常查询chart类型的二级分组 @0
 - 步骤2：查询一级分组数据 @0

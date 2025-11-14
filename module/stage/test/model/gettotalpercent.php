@@ -5,7 +5,7 @@
 
 title=测试 stageModel::getTotalPercent();
 timeout=0
-cid=1
+cid=18422
 
 - 测试空数据库中waterfall类型的总百分比 @0
 - 测试获取有stage数据的waterfall类型总百分比 @60

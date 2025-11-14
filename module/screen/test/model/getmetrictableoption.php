@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getMetricTableOption();
 timeout=0
-cid=0
+cid=18249
 
 - 执行$result->headers @1
 - 执行$result->data @1

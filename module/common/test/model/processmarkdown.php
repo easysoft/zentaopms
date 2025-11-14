@@ -5,7 +5,7 @@
 
 title=测试 commonModel::processMarkdown();
 timeout=0
-cid=0
+cid=15703
 
 - 执行commonTest模块的processMarkdownTest方法，参数是''  @0
 - 执行commonTest模块的processMarkdownTest方法，参数是'Hello World'  @<p>Hello World</p>

@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testsuiteModel->getSuitePairs();
-cid=1
+cid=19144
 pid=1
 
 测试productID值为1,orderBy为id_desc           >> 这是测试套件名称1

@@ -5,7 +5,7 @@
 
 title=测试 storyModel->formatStoryForList();
 timeout=0
-cid=0
+cid=18494
 
 - 查看激活之前的需求状态
  - 属性taskCount @1

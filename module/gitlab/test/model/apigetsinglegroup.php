@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetSingleGroup();
 timeout=0
-cid=0
+cid=16616
 
 - 步骤1：正常情况属性name @testGroup
 - 步骤2：无效gitlabID @0

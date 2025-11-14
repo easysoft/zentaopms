@@ -5,7 +5,7 @@
 
 title=测试 screenModel::genMetricComponent();
 timeout=0
-cid=0
+cid=18230
 
 - 执行screenTest模块的genMetricComponentTest方法，参数是1 属性hasComponent @1
 - 执行screenTest模块的genMetricComponentTest方法，参数是2 属性isDeleted @1

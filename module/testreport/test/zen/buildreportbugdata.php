@@ -5,7 +5,7 @@
 
 title=测试 testreportZen::buildReportBugData();
 timeout=0
-cid=0
+cid=19133
 
 - 步骤1：正常情况第1条的foundBugs属性 @7
 - 步骤2：空任务列表第1条的foundBugs属性 @0

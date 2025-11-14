@@ -5,7 +5,7 @@
 
 title=测试 fileModel::fileExists();
 timeout=0
-cid=0
+cid=16499
 
 - 执行fileModel模块的fileExists方法，参数是$emptyFile  @0
 - 执行fileModel模块的fileExists方法，参数是$fileWithoutRealPath  @0

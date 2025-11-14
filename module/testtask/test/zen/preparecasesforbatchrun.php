@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::prepareCasesForBatchRun();
 timeout=0
-cid=0
+cid=19236
 
 - 步骤1：正常情况获取测试单用例（用例3因版本过期被过滤） @2
 - 步骤2：从测试用例模块获取用例 @2

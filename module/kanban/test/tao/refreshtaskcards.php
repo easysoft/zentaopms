@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::refreshTaskCards();
 timeout=0
-cid=0
+cid=16992
 
 - 步骤1：正常情况，空的卡片对和执行ID属性wait @0
 - 步骤2：测试不存在的执行ID属性wait @~~

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProductOverviewBlock();
 timeout=0
-cid=0
+cid=15271
 
 - 步骤1：短区块宽度为1
  - 属性success @1

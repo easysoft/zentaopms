@@ -327,6 +327,8 @@ class caselib extends control
      */
     public function batchEditCase(int $libID, string|int $branch = '', string $type = '')
     {
+        $this->config->testcase->edit->requiredFields = str_replace(array('story', 'scene'), '', $this->config->testcase->edit->requiredFields);
+        $this->config->testcase->list->customBatchEditFields = 'module,stage,precondition,status,pri,keywords';
         echo $this->fetch('testcase', 'batchEdit', "libID=$libID&branch=$branch&type=$type");
     }
 

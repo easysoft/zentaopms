@@ -361,7 +361,7 @@ class testcaseTao extends testcaseModel
      */
     protected function doCreate(object $case): bool
     {
-        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
+        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace(array('story', 'scene'), '', $this->config->testcase->create->requiredFields);
         if(!empty($case->lib)) $this->config->testcase->create->requiredFields = str_replace('product', '', $this->config->testcase->create->requiredFields);
 
         $this->dao->insert(TABLE_CASE)->data($case, 'steps,expects,files,labels,stepType,needReview,scriptFile,scriptName')
@@ -408,7 +408,7 @@ class testcaseTao extends testcaseModel
     {
         /* Remove the require field named story when the case is a lib case.*/
         $requiredFields = $this->config->testcase->edit->requiredFields;
-        if(!empty($case->lib)) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
+        if(!empty($case->lib)) $requiredFields = str_replace(array('story', 'scene'), '', $requiredFields);
 
         $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,addedFiles,files')
             ->autoCheck()

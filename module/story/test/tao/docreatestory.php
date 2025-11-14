@@ -5,7 +5,7 @@
 
 title=测试 storyModel->doCreateStory();
 timeout=0
-cid=0
+cid=18619
 
 - 检查保存后的数据。
  - 属性product @1

@@ -10,7 +10,7 @@ zenData('bug')->loadYaml('assignedto')->gen(10);
 
 title=bugModel->getDataOfBugsPerAssignedTo();
 timeout=0
-cid=1
+cid=15365
 
 - 获取指派给用户 admin 的数据
  - 第admin条的name属性 @admin

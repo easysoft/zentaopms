@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterbatchCreate();
 timeout=0
-cid=0
+cid=18942
 
 - 步骤1：正常批量创建任务成功情况
  - 属性result @success

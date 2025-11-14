@@ -5,7 +5,7 @@
 
 title=测试 mrModel::execJob();
 timeout=0
-cid=0
+cid=17244
 
 - MR不存在 @0
 - 没有更新数据

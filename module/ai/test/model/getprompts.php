@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getPrompts();
 timeout=0
-cid=0
+cid=15044
 
 - 步骤1：获取所有提示词，应返回10条记录 @10
 - 步骤2：按story模块过滤，应返回3条记录 @3

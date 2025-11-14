@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildDataset();
 timeout=0
-cid=0
+cid=18209
 
 - 执行screenTest模块的buildDatasetTest方法，参数是20002, 'mysql', '' 第0条的count属性 @0
 - 执行screenTest模块的buildDatasetTest方法，参数是20004, 'mysql', '' 第0条的count属性 @0

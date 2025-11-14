@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::addEditAction();
 timeout=0
-cid=0
+cid=19057
 
 - 测试步骤1:有变更时创建编辑动作属性actionCount @1
 - 测试步骤2:有变更和评论时创建编辑动作属性actionCount @1

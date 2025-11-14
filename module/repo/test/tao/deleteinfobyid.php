@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel::deleteInfoByID();
 timeout=0
-cid=1
+cid=18116
 
 - 删除gitlab版本库
  - 属性repoHistoryCount @0

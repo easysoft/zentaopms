@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->fetchStoriesByProjectIdList();
-cid=0
+cid=18492
 
 - 不传入数据。 @1
 - 传入不存在的项目ID。 @1

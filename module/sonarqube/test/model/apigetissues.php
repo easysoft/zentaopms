@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiGetIssues();
 timeout=0
-cid=0
+cid=18376
 
 - 步骤1：正常sonarqubeID和项目key获取问题列表 @1
 - 步骤2：验证问题列表第一项的key属性存在 @1

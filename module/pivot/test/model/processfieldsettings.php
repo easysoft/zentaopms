@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processFieldSettings();
 timeout=0
-cid=0
+cid=17419
 
 - 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot1  @0
 - 执行pivotTest模块的processFieldSettingsTest方法，参数是$pivot2  @0

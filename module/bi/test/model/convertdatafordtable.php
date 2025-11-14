@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::convertDataForDtable();
 timeout=0
-cid=0
+cid=15154
 
 - 执行biTest模块的convertDataForDtableTest方法，参数是$normalData, array  @1
 - 执行biTest模块的convertDataForDtableTest方法，参数是$sliceData, array  @1

@@ -5,7 +5,7 @@
 
 title=测试 adminModel::getSecretKey();
 timeout=0
-cid=0
+cid=14981
 
 - 测试步骤1:在session缓存为空时调用 @type_error
 - 测试步骤2:网络不可用时调用 @type_error

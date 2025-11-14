@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTasksForBatchCreate();
 timeout=0
-cid=0
+cid=18914
 
 - 执行taskTest模块的buildTasksForBatchCreateTest方法，参数是$execution1, 0, $output1  @3
 - 执行taskTest模块的buildTasksForBatchCreateTest方法，参数是$execution1, 0, $output1  @父级名称不能为空！

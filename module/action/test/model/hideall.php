@@ -11,7 +11,7 @@ zenData('actionrecent')->gen(0);
 
 title=测试 actionModel->hideAll();
 timeout=0
-cid=1
+cid=14916
 
 - 隐藏回收站全部信息，并获取隐藏的产品信息
  - 第0条的id属性 @1

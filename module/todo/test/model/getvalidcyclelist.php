@@ -14,7 +14,7 @@ function initData()
 
 title=测试 todoModel->getValidCycleList();
 timeout=0
-cid=1
+cid=19264
 
 - 获取有效的周期待办列表的第一条数据的ID和名称
  - 第1条的id属性 @1

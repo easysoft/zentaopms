@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getClassNameByPath();
 timeout=0
-cid=0
+cid=16233
 
 - 测试步骤1：module路径 @1
 - 测试步骤2：ext扩展路径 @1

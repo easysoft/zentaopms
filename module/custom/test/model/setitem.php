@@ -4,7 +4,7 @@
 
 title=测试 customModel->setItem();
 timeout=0
-cid=1
+cid=15925
 
 - 测试path中.出现的个数为0，value正常存在，不能保存 @0
 - 测试path中.出现的个数为1，value正常存在，不能保存 @0

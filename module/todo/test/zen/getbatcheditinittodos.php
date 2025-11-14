@@ -5,7 +5,7 @@
 
 title=测试 todoZen::getBatchEditInitTodos();
 timeout=0
-cid=0
+cid=19300
 
 - 步骤1：空待办ID列表情况，返回数组长度为2 @2
 - 步骤2：有效待办ID列表，返回3个待办 @3

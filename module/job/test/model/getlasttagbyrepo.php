@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->getLastTagByRepo();
 timeout=0
-cid=1
+cid=16843
 
 - 查询id为1的job的版本库的last tag @tag3
 - 查询id为2的job的版本库的last tag @tag3

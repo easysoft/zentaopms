@@ -5,7 +5,7 @@
 
 title=测试 projectZen::processGroupPrivs();
 timeout=0
-cid=0
+cid=17958
 
 - 步骤1:有产品的项目,productplan资源应被移除 @0
 - 步骤2:有产品的项目,tree资源应被移除 @0

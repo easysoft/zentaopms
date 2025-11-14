@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::createInstance();
 timeout=0
-cid=0
+cid=16786
 
 - 步骤1：验证createInstance方法存在 @1
 - 步骤2：验证应用对象有效 @1

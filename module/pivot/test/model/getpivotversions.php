@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getPivotVersions();
 timeout=0
-cid=0
+cid=17395
 
 - 执行pivotTest模块的getPivotVersionsTest方法，参数是1) ?: array  @2
 - 执行pivotTest模块的getPivotVersionsTest方法，参数是2) ?: array  @2

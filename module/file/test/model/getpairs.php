@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getPairs();
-cid=0
+cid=16510
 
 - 测试获取文件 1 2 3 4 5 的 标题
  - 属性1 @文件标题1

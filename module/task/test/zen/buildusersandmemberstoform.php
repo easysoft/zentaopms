@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildUsersAndMembersToForm();
 timeout=0
-cid=0
+cid=18917
 
 - 步骤1：正常任务用户成员构建
  - 属性success @1

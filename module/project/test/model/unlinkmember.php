@@ -28,7 +28,7 @@ su('admin');
 
 title=测试 projectModel::unlinkmember;
 timeout=0
-cid=1
+cid=17871
 
 - 查看项目成员是否删除 @admin
 - 查看执行成员是否删除 @admin

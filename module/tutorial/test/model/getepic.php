@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getEpic();
 timeout=0
-cid=0
+cid=19428
 
 - 步骤1：验证返回对象的ID属性属性id @1
 - 步骤2：验证ID和类型

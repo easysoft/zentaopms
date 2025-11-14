@@ -5,7 +5,7 @@
 
 title=测试 projectZen::removeAssociatedProducts();
 timeout=0
-cid=0
+cid=17962
 
 - 步骤1:项目有产品关联时不删除产品 @success
 - 步骤2:项目无产品关联且产品是影子产品时删除产品 @success

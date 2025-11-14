@@ -11,7 +11,7 @@ zenData('user')->gen(5);
 
 title=测试 sonarqubeModel::getProjectPairs();
 timeout=0
-cid=0
+cid=18386
 
 - 执行sonarqubeTest模块的getProjectPairsTest方法  @0
 - 执行sonarqubeTest模块的getProjectPairsTest方法，参数是2  @6

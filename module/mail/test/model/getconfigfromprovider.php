@@ -5,7 +5,7 @@
 
 title=测试 mailModel::getConfigFromProvider();
 timeout=0
-cid=0
+cid=17008
 
 - 步骤1：测试qq.com邮件服务商配置获取属性host @smtp.qq.com
 - 步骤2：测试qq.com端口和安全配置

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
 /**
 
 title=测试 personnelModel->unbindWhitelist();
-cid=1
+cid=17338
 
 - 测试id为0的用户解绑白名单 @0
 

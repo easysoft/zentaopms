@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->getList();
-cid=1
+cid=16744
 
 - 返回2024年的holiday list @0
 - 返回2023年的holiday list @1,2,3,4,5,6,7,8,9,10

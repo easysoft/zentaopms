@@ -5,7 +5,7 @@
 
 title=测试 myZen::buildCaseData();
 timeout=0
-cid=0
+cid=17313
 
 - 测试空用例列表返回结果 @0
 - 测试assigntome类型处理正常用例数据第0条的title属性 @正常用例1

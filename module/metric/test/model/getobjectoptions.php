@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getObjectOptions();
 timeout=0
-cid=0
+cid=17113
 
 - 步骤1：正常情况xAxis类型第xAxis条的type属性 @category
 - 步骤2：bar图表类型yAxis类型第yAxis条的type属性 @value

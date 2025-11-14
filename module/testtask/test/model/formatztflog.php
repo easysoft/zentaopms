@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::formatZtfLog();
 timeout=0
-cid=0
+cid=19162
 
 - 执行testtaskTest模块的formatZtfLogTest方法，参数是'', array  @0
 - 执行testtaskTest模块的formatZtfLogTest方法，参数是'{"test": "value"}', array  @0

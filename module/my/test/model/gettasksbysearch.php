@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 myModel->getTasksBySearch();
-cid=0
+cid=17303
 
 - 测试通过搜索获取用户 admin 的任务id @37,33,29,25,21,17,13,9,5,1
 

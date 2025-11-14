@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchMetricsByCodeList();
 timeout=0
-cid=0
+cid=17169
 
 - 执行metric模块的fetchMetricsByCodeList方法，参数是array 
  - 第0条的id属性 @1

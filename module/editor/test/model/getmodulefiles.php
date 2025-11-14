@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getModuleFiles();
 timeout=0
-cid=0
+cid=16237
 
 - 测试获取todo模块的文件列表属性isArray @1
 - 测试检查模块路径存在性属性hasModulePath @1

@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::getVectorizedInfo();
 timeout=0
-cid=0
+cid=19776
 
 - 测试获取不存在的向量化信息 @disabled
 - 测试默认向量化信息的key字段 @~~

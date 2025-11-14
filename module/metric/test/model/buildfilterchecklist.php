@@ -5,7 +5,7 @@
 
 title=buildFilterCheckList
 timeout=0
-cid=1
+cid=17061
 
 - 测试filter1筛选器返回的选中数
  - 属性scope @1

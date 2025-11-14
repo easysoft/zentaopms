@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareSqlPager();
 timeout=0
-cid=0
+cid=15207
 
 - 步骤1：正常分页MySQL驱动 @SELECT SQL_CALC_FOUND_ROWS * FROM test_table LIMIT 0, 10
 

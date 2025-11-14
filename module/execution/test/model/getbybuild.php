@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getByBuild();
 timeout=0
-cid=0
+cid=16302
 
 - 步骤1：正常构建ID属性id @1
 - 步骤2：不存在的构建ID @0

@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 weeklyModel->getLastDay();
 timeout=0
-cid=1
+cid=19723
 
 - 查询日期为星期六 @2022-05-06
 - 查询日期为星期日 @2022-05-06

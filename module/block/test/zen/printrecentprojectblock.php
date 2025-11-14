@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printRecentProjectBlock();
 timeout=0
-cid=0
+cid=15281
 
 - 步骤1：正常调用测试属性success @1
 - 步骤2：检查是否有项目数据属性hasProjects @1

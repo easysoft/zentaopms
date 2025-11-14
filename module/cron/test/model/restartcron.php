@@ -5,7 +5,7 @@
 
 title=测试 cronModel::restartCron();
 timeout=0
-cid=0
+cid=15886
 
 - 步骤1：正常执行ID属性configAfter @2001
 - 步骤2：字符串执行ID属性configAfter @3002

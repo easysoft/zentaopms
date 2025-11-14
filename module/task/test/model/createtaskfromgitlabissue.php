@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=taskModel->createTaskFromGitlabIssue();
-cid=1
+cid=18782
 pid=1
 
 测试正常的创建开发任务 >> gitlab中新建的问题01

@@ -11,7 +11,7 @@ zenData('kanbancell')->loadYaml('rdkanbancell')->gen(10);
 
 title=测试 kanbanModel->getColumnIDByLaneID();
 timeout=0
-cid=1
+cid=16913
 
 - 测试获取泳道1 column1的看板列 @1
 - 测试获取泳道1 column2的看板列 @0

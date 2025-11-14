@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getGitlabGroups();
 timeout=0
-cid=0
+cid=18060
 
 - 步骤1：正常gitlabID查询群组第0条的text属性 @GitLab Instance
 - 步骤2：验证群组数据结构第0条的value属性 @2

@@ -4,7 +4,7 @@
 
 title=productpanModel->update();
 timeout=0
-cid=1
+cid=17651
 
 - 修改planId=1的数据,打印出旧的名称
  - 第0条的old属性 @计划1

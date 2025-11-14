@@ -5,7 +5,7 @@
 
 title=测试 fileModel::autoDelete();
 timeout=0
-cid=0
+cid=16492
 
 - 步骤1：空字符串UID输入 @10
 - 步骤2：正常UID但SESSION中无album数据 @10

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getFieldsFromPivot();
 timeout=0
-cid=0
+cid=17384
 
 - 步骤1：获取存在的字符串字段 @SELECT * FROM test_table
 - 步骤2：获取JSON字段并解码为对象属性field1 @value1

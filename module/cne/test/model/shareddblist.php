@@ -5,7 +5,7 @@
 
 title=测试 cneModel::sharedDBList();
 timeout=0
-cid=0
+cid=15628
 
 - 执行cneTest模块的sharedDBListTest方法，参数是''  @0
 - 执行cneTest模块的sharedDBListTest方法，参数是'mysql'

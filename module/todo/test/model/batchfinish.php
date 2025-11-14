@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试批量完成待办 todoModel->batchFinish();
 timeout=0
-cid=1
+cid=19248
 
 - 获取ID为1的待办状态属性status @wait
 - 获取ID为2的待办状态属性status @doing

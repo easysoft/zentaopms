@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProjectStatisticBlock();
 timeout=0
-cid=0
+cid=15277
 
 - 步骤1:标准区块对象正常获取项目统计数据属性projectCount @10
 - 步骤2:验证用户数量正确加载属性userCount @11

@@ -5,7 +5,7 @@
 
 title=测试 projectZen::displayAfterCreated();
 timeout=0
-cid=0
+cid=17938
 
 - 执行projectTest模块的displayAfterCreatedTest方法，参数是1  @valid project id
 - 执行projectTest模块的displayAfterCreatedTest方法，参数是999  @non-existent project id

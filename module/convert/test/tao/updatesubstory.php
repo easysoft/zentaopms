@@ -5,7 +5,7 @@
 
 title=测试 convertTao::updateSubStory();
 timeout=0
-cid=0
+cid=15875
 
 - 执行convertTest模块的updateSubStoryTest方法，参数是$storyLink1, $issueList1  @1
 - 执行convertTest模块的updateSubStoryTest方法，参数是$storyLink2, $issueList2  @1

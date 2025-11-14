@@ -22,7 +22,7 @@ su('admin');
 
 title=测试 branchModel->checkBranchData();
 timeout=0
-cid=1
+cid=15321
 
 - 测试验证branchID 1 的数据 @2
 - 测试验证branchID 2 的数据 @2

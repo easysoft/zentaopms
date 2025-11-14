@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::isDisplay();
 timeout=0
-cid=0
+cid=18388
 
 - 超级管理员，检查 edit 方法权限。 @1
 - 超级管理员，检查 reportView 方法权限。 @1

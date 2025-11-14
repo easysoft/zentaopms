@@ -9,7 +9,7 @@ zenData('project')->gen(10);
 
 title=测试 projectZen::prepareCreateExtras();
 timeout=0
-cid=1
+cid=17950
 
 - 执行project模块的prepareCreateExtrasTest方法，参数是$testData, 0 属性end @『计划完成』不能为空。
 - 执行project模块的prepareCreateExtrasTest方法，参数是$testData, 0 属性days @可用工作日不能超过『-5』天

@@ -5,7 +5,7 @@
 
 title=测试 repoZen::prepareEdit();
 timeout=0
-cid=0
+cid=18152
 
 - 执行result1 = $repoZenTest模块的prepareEditTest方法，参数是$normalFormData, $oldGitRepo, 'normal' 属性acl @{"acl":"open"}
 - 执行result2 = $repoZenTest模块的prepareEditTest方法，参数是$gitlabFormData, $oldGitRepo, 'normal' 属性extra @456

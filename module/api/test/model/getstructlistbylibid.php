@@ -9,7 +9,7 @@ zenData('apistruct')->gen(10);
 
 title=测试 apiModel->getStructListByLibID();
 timeout=0
-cid=1
+cid=15117
 
 - 获取文档目录ID为1的数据结构列表。
  - 第0条的id属性 @1

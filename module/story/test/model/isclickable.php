@@ -5,7 +5,7 @@
 
 title=测试 storyModel->isclickable();
 timeout=0
-cid=0
+cid=18571
 
 - 判断需求2是否有变更按钮操作权限 @1
 - 判断需求2是否有评审按钮操作权限 @0

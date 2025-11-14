@@ -5,7 +5,7 @@
 
 title=测试 backupZen::removeExpiredFiles();
 timeout=0
-cid=0
+cid=15147
 
 - 步骤1:空目录不应有错误 @0
 - 步骤2:未过期文件保留 @0

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::extractObjectFromExtras();
 timeout=0
-cid=0
+cid=15445
 
 - 执行bugTest模块的extractObjectFromExtrasTest方法，参数是clone $baseBug, array
  - 属性title @Original Bug Title

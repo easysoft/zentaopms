@@ -5,7 +5,7 @@
 
 title=测试 repoModel::addLink();
 timeout=0
-cid=0
+cid=18028
 
 - 执行repo模块的addLinkTest方法，参数是$singleTaskComment, 'task'  @task #<a href='task-view-1.html'  >1</a>
 - 执行repo模块的addLinkTest方法，参数是$multiTaskComment, 'task'  @task #<a href='task-view-1.html'  >1</a>

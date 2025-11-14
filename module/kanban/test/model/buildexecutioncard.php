@@ -12,7 +12,7 @@ zenData('task')->gen(10);
 
 title=测试 kanbanModel->buildExecutionCard();
 timeout=0
-cid=1
+cid=16874
 
 - 构造看板卡片，查看id和title
  - 属性id @1

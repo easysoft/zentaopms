@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkCreateTestTasks();
 timeout=0
-cid=0
+cid=18922
 
 - 步骤1:传入空数组时返回错误 @1
 - 步骤2:正常的测试任务数据验证通过 @1

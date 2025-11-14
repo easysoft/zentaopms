@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::processStepsForMindMap();
 timeout=0
-cid=0
+cid=19107
 
 - 步骤1：正常用例处理脑图步骤第mindMapSteps条的id属性 @case_1
 - 步骤2：空步骤数组处理第mindMapSteps条的id属性 @case_2

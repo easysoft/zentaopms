@@ -5,7 +5,7 @@
 
 title=测试 projectstoryModel->getExecutionStories();
 timeout=0
-cid=1
+cid=17978
 
 - 这里取出了id13的项目下需求id10名称第10条的title属性 @软件需求10
 - 这里取出了id13的项目下需求id12名称第12条的title属性 @软件需求12

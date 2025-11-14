@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getPairs();
 timeout=0
-cid=1
+cid=16707
 
 - 获取权限分组属性1 @这是一个新的用户分组1
 - 获取权限分组属性3 @这是一个新的用户分组3

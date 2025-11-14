@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 commonModel::setUserConfig();
 timeout=0
-cid=1
+cid=15715
 
 - 没有登录的用户，账号和姓名都是guest
  - 属性account @guest

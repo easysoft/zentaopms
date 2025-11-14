@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::pureCrystalData();
 timeout=0
-cid=0
+cid=17428
 
 - 执行pivotTest模块的pureCrystalDataTest方法，参数是$testData1 第0条的group1属性 @value1
 - 执行pivotTest模块的pureCrystalDataTest方法，参数是$testData2  @0

@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiCreateProject();
 timeout=0
-cid=0
+cid=18373
 
 - 测试步骤1：使用无效的sonarqubeID创建项目 @return false
 - 测试步骤2：使用空项目对象创建项目 @object result

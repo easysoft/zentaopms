@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getReviews();
 timeout=0
-cid=0
+cid=19468
 
 - 步骤1：正常调用返回数组长度 @1
 - 步骤2：验证评审ID第1条的id属性 @1

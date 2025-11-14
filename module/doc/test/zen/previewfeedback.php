@@ -5,7 +5,7 @@
 
 title=测试 docZen::previewFeedback();
 timeout=0
-cid=0
+cid=16199
 
 - 步骤1:customSearch条件预览反馈列表,status=wait @3
 - 步骤2:customSearch条件预览反馈列表,pri=1 @2

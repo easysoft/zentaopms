@@ -5,7 +5,7 @@
 
 title=测试 requirementModel::getToAndCcList();
 timeout=0
-cid=0
+cid=18192
 
 - 测试步骤1：正常story对象和changed动作类型 @admin
 - 测试步骤2：story对象无assignedTo但有mailto @user1

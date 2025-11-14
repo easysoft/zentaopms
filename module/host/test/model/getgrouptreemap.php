@@ -4,7 +4,7 @@
 
 title=测试 hostModel->getGroupTreemap();
 timeout=0
-cid=1
+cid=16755
 
 - 测试获取的分组拓扑图数据是否正确。
  - 第0条的text属性 @这是一个模块1

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processPercentage();
 timeout=0
-cid=0
+cid=17423
 
 - 执行$result1['rows'][0]['name'] @test1
 - 执行$result2['rows'] @0

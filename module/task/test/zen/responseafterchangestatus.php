@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterChangeStatus();
 timeout=0
-cid=0
+cid=18944
 
 - 步骤1：JSON视图类型返回属性result @success
 - 步骤2：API模式下的返回属性result @success

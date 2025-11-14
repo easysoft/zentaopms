@@ -4,7 +4,7 @@
 
 title=测试 chartModel::getFilterFormat();
 timeout=0
-cid=1
+cid=15573
 
 - 测试没有default的情况 @0
 - 测试default为空的情况 @0

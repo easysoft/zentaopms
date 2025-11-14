@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getSearchFormQuery();
 timeout=0
-cid=0
+cid=18145
 
 - 测试步骤1:验证查询对象返回begin属性属性begin @2023-01-01
 - 测试步骤2:验证查询对象返回end属性属性end @2023-12-31

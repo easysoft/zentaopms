@@ -556,18 +556,18 @@ class bugZenTest extends baseTest
     /**
      * Test getBrowseBugs method.
      *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $browseType
-     * @param  array  $executions
-     * @param  int    $moduleID
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int          $productID
+     * @param  string       $branch
+     * @param  string       $browseType
+     * @param  array        $executions
+     * @param  int          $moduleID
+     * @param  int          $queryID
+     * @param  string       $orderBy
+     * @param  object|null  $pager
      * @access public
      * @return array|false
      */
-    public function getBrowseBugsTest(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object $pager)
+    public function getBrowseBugsTest(int $productID, string $branch, string $browseType, array $executions, int $moduleID, int $queryID, string $orderBy, object|null $pager = null)
     {
         $result = $this->invokeArgs('getBrowseBugs', [$productID, $branch, $browseType, $executions, $moduleID, $queryID, $orderBy, $pager]);
         if(dao::isError()) return false;

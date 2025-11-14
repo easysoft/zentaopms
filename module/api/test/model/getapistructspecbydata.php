@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getApiStructSpecByData();
 timeout=0
-cid=0
+cid=15105
 
 - 执行apiTest模块的getApiStructSpecByDataTest方法，参数是$fullData 
  - 属性name @TestStruct

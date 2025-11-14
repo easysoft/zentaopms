@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::convertApiError();
 timeout=0
-cid=0
+cid=18381
 
 - 步骤1：空字符串输入 @0
 - 步骤2：数组输入处理 @array error

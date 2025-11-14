@@ -10,7 +10,7 @@ zenData('dept')->gen(30);
 
 title=测试 deptModel->update();
 timeout=0
-cid=1
+cid=15980
 
 - 修改父级
  - 第16条的name属性 @修改后部门

@@ -23,7 +23,7 @@ $execution->gen(6);
 /**
 title=测试executionModel->closeTest();
 timeout=0
-cid=1
+cid=16285
 
 - 敏捷执行关闭 @1
 - 瀑布执行关闭 @2

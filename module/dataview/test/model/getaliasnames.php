@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::getAliasNames();
 timeout=0
-cid=0
+cid=15953
 
 - 测试步骤1：正常获取from和join表的别名
  - 属性t1 @zt_bug

@@ -10,7 +10,7 @@ zenData('task')->loadYaml('task')->gen(30);
 
 title=taskModel->getDataOfFinishedTasksPerDay();
 timeout=0
-cid=1
+cid=18793
 
 - 每日完成的数量 @30
 - 统计2021-01-30完成的任务数量

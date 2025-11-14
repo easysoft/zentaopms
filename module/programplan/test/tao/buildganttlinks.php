@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->buildGanttLinks()
-cid=0
+cid=17761
 
 - 禅道版本为开源版，检查任务关系。 @0
 - 检查第一条任务关系

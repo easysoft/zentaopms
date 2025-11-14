@@ -5,7 +5,7 @@
 
 title=测试 actionZen::saveUrlIntoSession();
 timeout=0
-cid=0
+cid=14975
 
 - 执行actionTest模块的saveUrlIntoSessionTest方法，参数是'/project-browse-1.html' 属性productList @/project-browse-1.html
 - 执行actionTest模块的saveUrlIntoSessionTest方法，参数是'/bug-browse.html' 属性bugList @/bug-browse.html

@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::getApiBase();
 timeout=0
-cid=0
+cid=18383
 
 - 测试步骤1：有效sonarqubeID获取API基础信息 @https://sonar.example.com/api/%s
 - 测试步骤2：不存在的sonarqubeID获取API基础信息 @return empty

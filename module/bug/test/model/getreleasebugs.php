@@ -12,7 +12,7 @@ zenData('project')->loadYaml('execution2')->gen(20);
 
 title=bugModel->getReleaseBugs();
 timeout=0
-cid=1
+cid=15394
 
 - 测试获取buildID为11 productID为2的bug @BUG4,BUG5,BUG6
 

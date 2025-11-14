@@ -5,7 +5,7 @@
 
 title=测试 svnModel::setRepos();
 timeout=0
-cid=0
+cid=18725
 
 - 执行svnTest模块的setReposTest方法，参数是'count'  @4
 - 执行svnTest模块的setReposTest方法，参数是'first'

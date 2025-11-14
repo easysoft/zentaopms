@@ -5,7 +5,7 @@
 
 title=测试 metricModel::processImplementTips();
 timeout=0
-cid=0
+cid=17147
 
 - 执行metricTest模块的processImplementTipsTest方法，参数是'count_of_bug'
  - 属性hasCodePlaceholder @0

@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::sortOldCols();
 timeout=0
-cid=0
+cid=15949
 
 - 执行datatableTest模块的sortOldColsTest方法，参数是$objA, $objB  @-1
 - 执行datatableTest模块的sortOldColsTest方法，参数是$objA, $objB  @0

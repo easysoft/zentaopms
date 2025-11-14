@@ -10,7 +10,7 @@ su('admin');
 
 title=testtaskModel->isClickable();
 timeout=0
-cid=1
+cid=19207
 
 - 测试ID为1的testtask的启动按钮是否允许被点击。 @1
 - 测试ID为1的testtask的区块按钮是否允许被点击。 @1

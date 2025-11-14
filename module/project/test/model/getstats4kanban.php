@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 projectTao::getstats4kanban
 timeout=0
-cid=1
+cid=17850
 
 - 获取到的看板分组数量 @2
 

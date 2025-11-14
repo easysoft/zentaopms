@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::getRunByCase();
 timeout=0
-cid=0
+cid=19189
 
 - 执行testtaskTest模块的getRunByCaseTest方法，参数是1, 1 
  - 属性task @1

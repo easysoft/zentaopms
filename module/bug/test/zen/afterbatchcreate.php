@@ -5,7 +5,7 @@
 
 title=测试 bugZen::afterBatchCreate();
 timeout=0
-cid=0
+cid=15421
 
 - 执行bugTest模块的afterBatchCreateTest方法，参数是$bug1, $output1  @1
 - 执行bugTest模块的afterBatchCreateTest方法，参数是$bug2, $output2  @1

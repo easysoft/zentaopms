@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getSliceRecords();
 timeout=0
-cid=0
+cid=17402
 
 - 步骤1：正常分组 - 验证active组第一个记录的名称 @Task 1
 - 步骤2：单个分组 - 验证done组包含2个记录 @2

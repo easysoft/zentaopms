@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::prepareSummaryForBrowse();
 timeout=0
-cid=0
+cid=19237
 
 - 步骤1：空数组测试属性total @0
 - 步骤2：混合状态测试

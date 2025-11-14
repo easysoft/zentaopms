@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildChangeItemData();
 timeout=0
-cid=0
+cid=15804
 
 - 执行convertTest模块的buildChangeItemDataTest方法，参数是$testData1 属性id @1001
 - 执行convertTest模块的buildChangeItemDataTest方法，参数是$testData1 属性groupid @2001

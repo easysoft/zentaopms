@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printCreateList();
 timeout=0
-cid=0
+cid=15692
 
 - 执行commonTest模块的printCreateListTest方法，参数是1  @1
 - 执行commonTest模块的printCreateListTest方法，参数是2  @1

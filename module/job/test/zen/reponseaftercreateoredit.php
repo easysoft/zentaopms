@@ -5,7 +5,7 @@
 
 title=测试 jobZen::reponseAfterCreateEdit();
 timeout=0
-cid=0
+cid=16865
 
 - 测试无错误且repoID为0时,返回成功结果
  - 属性result @success

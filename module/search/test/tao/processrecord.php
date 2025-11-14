@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processRecord();
 timeout=0
-cid=0
+cid=18338
 
 - 测试issue类型的记录处理,lib为空 >> url属性包含issue-view-1
 - 测试project类型的记录处理,项目模型为scrum >> url属性包含project-view-2

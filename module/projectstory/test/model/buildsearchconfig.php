@@ -5,7 +5,7 @@
 
 title=测试 projectstoryModel::buildSearchConfig();
 timeout=0
-cid=0
+cid=17977
 
 - 步骤1：正常项目ID返回配置数组属性module @story
 - 步骤2：另一个正常项目ID属性module @story

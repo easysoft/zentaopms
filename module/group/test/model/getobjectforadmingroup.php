@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getObjectForAdminGroup();
 timeout=0
-cid=0
+cid=16706
 
 - 步骤1：验证项目集属性programs @项目集1|项目1
 - 步骤2：验证项目属性projects @迭代1|阶段1|看板1

@@ -5,7 +5,7 @@
 
 title=测试 productZen::getExportFields();
 timeout=0
-cid=0
+cid=17582
 
 - 步骤1:测试返回的字段数组包含name字段且值为产品名称属性name @产品名称
 - 步骤2:测试返回的字段数组包含productLine字段且值为所属产品线属性productLine @所属产品线

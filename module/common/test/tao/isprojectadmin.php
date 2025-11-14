@@ -5,7 +5,7 @@
 
 title=测试 commonTao::isProjectAdmin();
 timeout=0
-cid=0
+cid=15726
 
 - 步骤1：项目管理员检查项目权限 @1
 - 步骤2：产品管理员检查产品权限 @1

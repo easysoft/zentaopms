@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getGogsProjects();
 timeout=0
-cid=0
+cid=17248
 
 - 测试步骤1：有效服务器ID查询项目数量 @1
 - 测试步骤2：项目详细信息验证-id属性id @1

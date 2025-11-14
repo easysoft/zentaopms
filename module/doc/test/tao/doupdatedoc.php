@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->doUpdateDoc();
-cid=1
+cid=16167
 
 - 修改文档库ID属性lib @2
 - 修改所属目录属性module @3

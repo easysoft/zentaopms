@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildFieldConfigSchemeIssueTypeData();
 timeout=0
-cid=0
+cid=15810
 
 - 执行convertTest模块的buildFieldConfigSchemeIssueTypeDataTest方法，参数是array 属性id @1
 - 执行convertTest模块的buildFieldConfigSchemeIssueTypeDataTest方法，参数是array 属性issuetype @~~

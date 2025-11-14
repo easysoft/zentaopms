@@ -5,7 +5,7 @@
 
 title=测试 mrModel::deleteByID();
 timeout=0
-cid=0
+cid=17243
 
 - 没有关联对象的合并请求
  - 第1条的id属性 @1

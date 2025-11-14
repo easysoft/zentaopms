@@ -5,7 +5,7 @@
 
 title=测试 storeModel::batchSetLatestVersions();
 timeout=0
-cid=0
+cid=18451
 
 - 步骤1：空数组测试 @0
 - 步骤2：空数组长度验证 @0

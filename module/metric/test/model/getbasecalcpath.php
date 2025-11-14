@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getBaseCalcPath();
 timeout=0
-cid=0
+cid=17077
 
 - 执行metricTest模块的getBaseCalcPathTest方法  @module/metric/calc.class.php
 - 执行metricTest模块的getFullBaseCalcPathTest方法，参数是, 'metric') !== false  @1

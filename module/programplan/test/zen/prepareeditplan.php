@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::prepareEditPlan();
 timeout=0
-cid=0
+cid=17794
 
 - 步骤1: 正常编辑阶段,所有日期都合法
  - 属性begin @2024-02-01

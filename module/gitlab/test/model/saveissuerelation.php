@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->saveIssueRelation();
 timeout=0
-cid=1
+cid=16666
 
 - issue为空时获取结果。 @0
 - issue正确时获取结果。

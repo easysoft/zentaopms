@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildChangeGroupData();
 timeout=0
-cid=0
+cid=15803
 
 - 步骤1：正常情况
  - 属性id @1

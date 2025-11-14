@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiDeleteProject();
 timeout=0
-cid=0
+cid=18374
 
 - 执行sonarqubeTest模块的apiDeleteProjectTest方法，参数是$invalidSonarqubeID, $emptyProjectKey  @return false
 - 执行sonarqubeTest模块的apiDeleteProjectTest方法，参数是$validSonarqubeID, $emptyProjectKey  @return true

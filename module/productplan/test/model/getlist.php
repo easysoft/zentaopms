@@ -5,7 +5,7 @@
 
 title=测试 productplan->getList()
 timeout=0
-cid=1
+cid=17636
 
 - 获取空数据 @0
 - 获取product=1的所有的计划

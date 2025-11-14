@@ -5,7 +5,7 @@
 
 title=测试 docModel::getSpaceType();
 timeout=0
-cid=0
+cid=16127
 
 - 步骤1：传入有效ID查询产品类型 @product
 - 步骤2：传入包含点号的字符串 @project

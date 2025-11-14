@@ -5,7 +5,7 @@
 
 title=getDateLabels
 timeout=0
-cid=1
+cid=17091
 
 - 测试传入year的情况
  - 属性3 @近3年

@@ -5,7 +5,7 @@
 
 title=测试 cronModel->getById();
 timeout=0
-cid=1
+cid=15881
 
 - 获取ID为2的定时的命令，备注，分，时
  - 属性command @moduleName=execution&methodName=computeburn

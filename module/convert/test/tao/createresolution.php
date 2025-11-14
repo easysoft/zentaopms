@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createResolution();
 timeout=0
-cid=0
+cid=15844
 
 - 执行convertTest模块的createResolutionTest方法  @0
 - 执行convertTest模块的createResolutionTest方法，参数是'bug_resolution'  @array

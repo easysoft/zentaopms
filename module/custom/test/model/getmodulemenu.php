@@ -5,7 +5,7 @@
 
 title=测试 customModel::getModuleMenu();
 timeout=0
-cid=1
+cid=15900
 
 - 步骤1：正常获取主菜单 @0
 - 步骤2：空参数默认处理 @0

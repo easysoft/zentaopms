@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getChartType();
 timeout=0
-cid=0
+cid=18240
 
 - 执行screenTest模块的getChartTypeTest方法，参数是'Tables'  @pivot
 - 执行screenTest模块的getChartTypeTest方法，参数是'pivot'  @pivot

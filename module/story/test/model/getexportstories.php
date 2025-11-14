@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getExportStories();
 timeout=0
-cid=0
+cid=18532
 
 - 查看只保存导出条件，导出选中需求数 @2
 - 查看只保存导出条件，导出全部需求数 @9

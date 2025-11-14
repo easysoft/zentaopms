@@ -5,7 +5,7 @@
 
 title=getGroupTable
 timeout=0
-cid=1
+cid=17100
 
 - 传入resultHeader1和resultData1，获取header
  - 第0条的name属性 @date

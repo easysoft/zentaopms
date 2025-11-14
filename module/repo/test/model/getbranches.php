@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getBranches();
 timeout=0
-cid=0
+cid=18047
 
 - 步骤1：从SCM获取repo1分支 @0
 - 步骤2：从SCM获取repo1分支带标签 @0

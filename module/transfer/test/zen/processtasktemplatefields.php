@@ -5,7 +5,7 @@
 
 title=测试 transferZen::processTaskTemplateFields();
 timeout=0
-cid=0
+cid=19341
 
 - 执行transferTest模块的processTaskTemplateFieldsTest方法，参数是1, 'id, name, story, type, status, assignedTo'  @id,name,story,type,status,assignedTo
 

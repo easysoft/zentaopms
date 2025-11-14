@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getMembers2ImportTest();
 timeout=0
-cid=1
+cid=16328
 
 - 正常数据查询
  - 第user1条的account属性 @user1

@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getBySearch();
-cid=1
+cid=15988
 
 - 测试projectID=0, productID=0, queryID=0时，按照id倒序排列的设计列表数据 @0
 - 测试projectID=0, productID=0, queryID=0时，按照id正序排列的设计列表数据 @0

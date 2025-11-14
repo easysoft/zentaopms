@@ -5,7 +5,7 @@
 
 title=测试 cneModel::allDBList();
 timeout=0
-cid=0
+cid=15598
 
 - 执行cneTest模块的allDBListTest方法，参数是'success'
  - 第zentaopaas-mysql条的db_type属性 @mysql

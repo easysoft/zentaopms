@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->buildSearchForm();
-cid=1
+cid=18966
 
 - 测试构建产品 0 project 0 module 0 branch all 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene
 

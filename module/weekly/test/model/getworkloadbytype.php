@@ -20,7 +20,7 @@ zenData('task')->gen(50);
 
 title=测试 weeklyModel->getWorkloadByType();
 timeout=0
-cid=1
+cid=19738
 
 - 测试project值为0
  - 属性design @8.00

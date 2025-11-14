@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareDrillConditions();
 timeout=0
-cid=0
+cid=15203
 
 - 步骤1：正常情况测试钻取字段匹配，验证返回的originField @origin_field
 - 步骤2：空条件数组测试，验证返回的originField @origin_field

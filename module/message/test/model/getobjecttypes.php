@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 messageModel->getObjectTypes();
-cid=1
+cid=17054
 pid=1
 
 - 查询objectType为product的objectTypes属性product @产品

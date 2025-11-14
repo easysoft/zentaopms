@@ -5,7 +5,7 @@
 
 title=测试 buildModel::getStoryBuilds();
 timeout=0
-cid=0
+cid=15499
 
 - 执行buildTest模块的getStoryBuildsTest方法，参数是1  @2
 - 执行buildTest模块的getStoryBuildsTest方法  @0

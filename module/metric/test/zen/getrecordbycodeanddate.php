@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getRecordByCodeAndDate();
 timeout=0
-cid=0
+cid=17193
 
 - 步骤1：正常度量项查询第0条的metricCode属性 @test_metric_001
 - 步骤2：无效度量编码 @0

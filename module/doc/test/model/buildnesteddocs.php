@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->buildNestedDocs();
-cid=1
+cid=16047
 
 - 测试获取我的文档1第1条的text属性 @我的文档1
 - 测试获取我的草稿文档6第6条的text属性 @我的草稿文档6

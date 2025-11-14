@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->updateBISQL();
-cid=1
+cid=19555
 
 - 判断修改的sql是否正确 @0
 - 判断修改的desc是否正确 @1

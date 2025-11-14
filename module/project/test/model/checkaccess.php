@@ -9,7 +9,7 @@ zenData('project')->gen(5);
 
 title=测试 programModel::checkAccess;
 timeout=0
-cid=1
+cid=17804
 
 - 不传入ID @10
 - 传入存在ID的值 @11

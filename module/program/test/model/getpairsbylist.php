@@ -19,7 +19,7 @@ $program->gen(10);
 /**
 
 title=测试 programModel::getPairsByList();
-cid=1
+cid=17689
 pid=1
 
 通过字符串'1'获取项目集名称 >> 项目集1

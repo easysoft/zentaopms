@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareClosedExtras();
 timeout=0
-cid=0
+cid=17949
 
 - 步骤1:正常项目关闭数据处理
  - 属性id @1

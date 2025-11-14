@@ -4,7 +4,7 @@
 
 title=测试 chartModel::getTreeMenu();
 timeout=0
-cid=1
+cid=15577
 
 - 测试ID为0时是否返回空 @0
 - 测试传入子分组时是否返回空 @0

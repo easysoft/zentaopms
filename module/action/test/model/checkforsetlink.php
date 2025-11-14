@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 actionModel->checkForSetLink();
 timeout=0
-cid=1
+cid=14881
 
 - 检查超级管理员 @1
 - 传入父项目ID @0

@@ -5,7 +5,7 @@
 
 title=测试 projectreleaseZen::buildReleaseForCreate();
 timeout=0
-cid=0
+cid=17975
 
 - 执行projectreleaseTest模块的buildReleaseForCreateTest方法，参数是1
  - 属性name @Release 1.0

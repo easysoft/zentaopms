@@ -5,7 +5,7 @@
 
 title=测试 entryModel::updateCalledTime();
 timeout=0
-cid=0
+cid=16254
 
 - 测试步骤1：正常entry代号更新calledTime属性calledTime @1234567890
 - 测试步骤2：边界值时间戳0更新calledTime属性calledTime @0

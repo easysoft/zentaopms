@@ -4,7 +4,7 @@
 
 title=测试 programModel::getKanbanStatisticData();
 timeout=0
-cid=1
+cid=17685
 
 - 获取项目集的产品数量 @9
 - 获取项目集的计划数量 @0

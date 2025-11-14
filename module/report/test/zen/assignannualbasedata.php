@@ -5,7 +5,7 @@
 
 title=测试 reportZen::assignAnnualBaseData();
 timeout=0
-cid=0
+cid=18188
 
 - 测试带有account参数的正常情况,返回year属性4 @2024
 - 测试带有dept参数的正常情况,返回dept属性3 @1

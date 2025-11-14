@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::getRiskCardMenu();
 timeout=0
-cid=0
+cid=16984
 
 - 执行kanbanTest模块的getRiskCardMenuTest方法，参数是$emptyRisks  @0
 - 执行$activeMenus[$activeRisk->id] @5

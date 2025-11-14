@@ -5,7 +5,7 @@
 
 title=测试 searchTao::checkObjectPriv();
 timeout=0
-cid=0
+cid=18317
 
 - 测试product类型权限检查,有权限的产品应保留 >> 期望返回1个结果
 - 测试product类型权限检查,无权限的产品应移除 >> 期望返回0个结果

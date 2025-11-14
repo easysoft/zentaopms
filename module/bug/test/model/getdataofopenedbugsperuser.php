@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDataOfOpenedBugsPerUser();
 timeout=0
-cid=0
+cid=15377
 
 - 测试步骤1：多用户不同数量bug统计
  - 第admin条的name属性 @admin

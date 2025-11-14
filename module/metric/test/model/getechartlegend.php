@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getEchartLegend();
 timeout=0
-cid=0
+cid=17095
 
 - 执行metricTest模块的getEchartLegendTest方法，参数是array 属性type @scroll
 - 执行metricTest模块的getEchartLegendTest方法，参数是array 

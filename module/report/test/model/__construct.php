@@ -5,7 +5,7 @@
 
 title=测试 reportModel::__construct();
 timeout=0
-cid=0
+cid=18158
 
 - 步骤1：验证对象类型属性isReportModel @1
 - 步骤2：验证dao对象存在属性hasDao @1

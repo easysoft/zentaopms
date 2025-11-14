@@ -11,7 +11,7 @@ zenData('task')->loadYaml('task')->gen(6);
 
 title=taskModel->afterChangeStatus();
 timeout=0
-cid=1
+cid=18760
 
 - 测试任务状态为未开始的任务
  - 第0条的field属性 @status

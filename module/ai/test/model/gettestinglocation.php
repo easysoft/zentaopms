@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getTestingLocation();
 timeout=0
-cid=0
+cid=15050
 
 - 执行aiTest模块的getTestingLocationTest方法，参数是$myPrompt  @my-effort-type=all.html
 - 执行aiTest模块的getTestingLocationTest方法，参数是$productPrompt  @ai-promptexecute-promptId=2&objectId=5.html

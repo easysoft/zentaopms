@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->hasConsistencyError();
-cid=1
+cid=19533
 
 - 当前日志文件不存在，返回false @0
 - 当前日志文件存在，但倒数两行没有错误信息，返回false @0

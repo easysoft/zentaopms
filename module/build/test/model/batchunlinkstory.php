@@ -5,7 +5,7 @@
 
 title=测试 buildModel::batchUnlinkStory();
 timeout=0
-cid=0
+cid=15486
 
 - 步骤1：正常批量移除多个需求
  - 第1条的stories属性 @1

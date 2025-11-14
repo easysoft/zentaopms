@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(5);
 
 title=测试 kanbanModel->restoreColumn();
 timeout=0
-cid=1
+cid=16955
 
 - 还原看板列1
  - 属性name @未开始

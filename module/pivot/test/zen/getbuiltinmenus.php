@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getBuiltinMenus();
 timeout=0
-cid=0
+cid=17455
 
 - 执行pivotTest模块的getBuiltinMenusTest方法，参数是1, $productGroup  @0
 - 执行pivotTest模块的getBuiltinMenusTest方法，参数是1, $projectGroup  @0

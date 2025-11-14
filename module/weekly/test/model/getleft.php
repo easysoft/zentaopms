@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 weeklyModel::getLeft();
 timeout=0
-cid=0
+cid=19724
 
 - 测试项目ID为0,日期为2022-05-01 @102.00
 - 测试项目ID为0,日期为空 @102.00

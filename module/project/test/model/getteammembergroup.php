@@ -11,7 +11,7 @@ zenData('user')->gen(500);
 
 title=测试 projectModel->getTeamMemberGroup();
 timeout=0
-cid=1
+cid=17854
 
 - 通过ID列表：11,12,13,14,15获取项目团队成员分组 @1
 

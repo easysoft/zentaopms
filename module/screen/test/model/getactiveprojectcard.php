@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getActiveProjectCard();
 timeout=0
-cid=0
+cid=18233
 
 - 执行screenTest模块的getActiveProjectCardTest方法，参数是'2024', '01' 第0条的count属性 @3
 - 执行screenTest模块的getActiveProjectCardTest方法，参数是'2023', '12' 第0条的count属性 @2

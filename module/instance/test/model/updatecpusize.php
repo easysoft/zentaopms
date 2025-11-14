@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::updateCpuSize();
 timeout=0
-cid=0
+cid=16820
 
 - 步骤1：正常CPU更新（CNE API失败） @调整CPU失败
 - 步骤2：CPU设为0边界值（CNE API失败） @调整CPU失败

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->unlinkCasesTest();
 timeout=0
-cid=1
+cid=16372
 
 - 敏捷执行解除关联用例 @0
 - 瀑布执行解除关联用例 @0

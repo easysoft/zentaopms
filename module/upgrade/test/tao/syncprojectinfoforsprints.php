@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->syncProjectInfoForSprints()。
-cid=1
+cid=19574
 
 - 检查所有的执行是否都被转移到了对应的项目中。@1
 - 检查项目和项目集的开始结束时间是否被成功更新。@1

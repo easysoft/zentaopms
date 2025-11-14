@@ -9,7 +9,7 @@ zenData('case')->loadYaml('case_getcasesfrombug')->gen(50);
 
 title=测试 bugTao::getCasesFromBug;
 timeout=0
-cid=1
+cid=15416
 
 
 */

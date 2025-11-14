@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildSuspendForm();
 timeout=0
-cid=0
+cid=17932
 
 - 执行projectTest模块的buildSuspendFormTest方法，参数是1 属性title @挂起项目
 - 执行projectTest模块的buildSuspendFormTest方法 属性title @挂起项目

@@ -10,7 +10,7 @@ zenData('space')->gen(5);
 
 title=instanceModel->getByID();
 timeout=0
-cid=1
+cid=16798
 
 - 查看获取到的第一条instance
  - 属性id @1

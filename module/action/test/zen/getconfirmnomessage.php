@@ -5,7 +5,7 @@
 
 title=测试 actionZen::getConfirmNoMessage();
 timeout=0
-cid=0
+cid=14970
 
 - 步骤1：名称和代码都重复 @系统内已有同名、同代号的产品，恢复后名称为"product_1"、代号为"PD0001_1"。
 - 步骤2：仅名称重复 @系统内已有同名的研发需求，恢复后名称为"story_1"。

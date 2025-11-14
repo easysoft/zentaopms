@@ -5,7 +5,7 @@
 
 title=测试 taskZen::assignStoryForCreate();
 timeout=0
-cid=0
+cid=18898
 
 - 执行taskZenTest模块的assignStoryForCreateTest方法，参数是1, 1 
  - 属性executionID @1

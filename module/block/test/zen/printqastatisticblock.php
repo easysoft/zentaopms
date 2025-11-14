@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printQaStatisticBlock();
 timeout=0
-cid=0
+cid=15280
 
 - 步骤1：正常情况属性success @1
 - 步骤2：包含无效字符的type属性success @1

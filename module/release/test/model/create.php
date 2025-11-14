@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->create();
 timeout=0
-cid=1
+cid=17984
 
 - 执行版本新增发布
  - 属性id @1

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getObjectBaseInfo().
 timeout=0
-cid=1
+cid=14946
 
 - 判断actionType为linked2testtask,extra为1的用例相关信息。
  - 第0条的0属性 @1

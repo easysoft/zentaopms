@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::genOriginSheet();
 timeout=0
-cid=0
+cid=17370
 
 - 步骤1：正常情况 @1
 - 步骤2：测试钻取设置 @1

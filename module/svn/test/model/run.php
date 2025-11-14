@@ -5,7 +5,7 @@
 
 title=测试 svnModel::run();
 timeout=0
-cid=0
+cid=18720
 
 - 测试步骤1：正常流程有SVN仓库时执行同步 @false
 - 测试步骤2：边界情况无SVN仓库时返回false @0

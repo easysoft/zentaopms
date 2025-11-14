@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getStaff();
-cid=0
+cid=19730
 
 - 测试project值为0，date值为2022-05-01 @0
 - 测试project值为0，date值为空 @0

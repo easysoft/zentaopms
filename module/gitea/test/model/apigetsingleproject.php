@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetSingleProject();
 timeout=0
-cid=0
+cid=16564
 
 - 错误的服务器ID @0
 - 错误的项目ID @0

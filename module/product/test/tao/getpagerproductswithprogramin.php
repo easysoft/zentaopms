@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getPagerProductsWithProgramIn();
-cid=0
+cid=17548
 
 - 执行$result[1000]
  - 属性id @1000

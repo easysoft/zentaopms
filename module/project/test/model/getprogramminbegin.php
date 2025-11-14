@@ -4,7 +4,7 @@
 
 title=测试 projectModel->getProgramMinBegin();
 timeout=0
-cid=1
+cid=17843
 
 - 获取二级项目集下唯一项目最小开始时间属性maxBegin @2023-05-07
 - 获取一级项目集下唯一项目最小开始时间属性maxBegin @2023-05-20

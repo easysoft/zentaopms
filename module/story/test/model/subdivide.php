@@ -5,7 +5,7 @@
 
 title=测试 storyModel->subdivide();
 timeout=0
-cid=0
+cid=18587
 
 - 将用户需求1拆分两个软件需求，查看relation表记录的关系。
  - 属性isParent @1

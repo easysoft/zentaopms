@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->createNewProject();
 timeout=0
-cid=1
+cid=19512
 
 - 测试结束日期不能为空第end条的0属性 @『结束日期』不能为空。
 - 测试新增的项目的 id 和 name

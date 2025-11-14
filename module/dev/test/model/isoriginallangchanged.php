@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
 /**
 
 title=测试 devModel::isOriginalLangChanged();
-cid=1
+cid=16015
 pid=1
 
 

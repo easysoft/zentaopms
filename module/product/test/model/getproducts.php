@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getProducts();
-cid=0
+cid=17503
 
 - 测试获取项目11 状态为all的产品信息第1条的name属性 @正常产品1
 - 测试获取项目12 状态为all的产品信息第2条的name属性 @正常产品2

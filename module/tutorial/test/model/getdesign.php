@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDesign();
 timeout=0
-cid=0
+cid=19421
 
 - 步骤1：验证设计ID属性id @1
 - 步骤2：验证设计名称属性name @Test Design

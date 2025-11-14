@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testcaseModel->getByList();
 timeout=0
-cid=1
+cid=18977
 
 - 测试获取case 1 2 3 的信息 @1,2,3
 

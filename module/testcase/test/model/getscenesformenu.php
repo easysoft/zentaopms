@@ -17,7 +17,7 @@ $scenes = $tester->dao->update(TABLE_SCENE)->set("path= replace(`path`,',0,', ',
 
 title=测试 testcaseModel->getScenesForMenu();
 timeout=0
-cid=1
+cid=19000
 
 - 测试获取产品 0 模块 0 起始场景 0 的场景 @1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
 

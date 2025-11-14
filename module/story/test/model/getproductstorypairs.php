@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getProductStoryPairs();
 timeout=0
-cid=0
+cid=18550
 
 - 获取产品1下的所有软件需求数量 @4
 - 获取产品1下的所有用户需求数量 @1

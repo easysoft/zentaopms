@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 customModel->prepareSQL();
 timeout=0
-cid=1
+cid=15920
 
 */
 

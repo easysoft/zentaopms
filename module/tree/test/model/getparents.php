@@ -3,7 +3,7 @@
 /**
 
 title=测试 treeModel->getParents();
-cid=1
+cid=19374
 
 - 获取 module 1 的未删除父module @,1
 

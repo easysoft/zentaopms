@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::buildOperateViewMenu();
 timeout=0
-cid=0
+cid=17982
 
 - 测试正常状态发布的操作菜单第0条的text属性 @停止维护
 - 测试停止维护状态发布的操作菜单第0条的text属性 @激活

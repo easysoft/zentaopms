@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetProjects();
 timeout=0
-cid=1
+cid=16613
 
 - 通过gitlabID获取GitLab项目列表 @1
 - 通过gitlabID获取GitLab项目数量 @1

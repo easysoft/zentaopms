@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetSingleMR();
 timeout=0
-cid=0
+cid=17232
 
 - 测试步骤1：查询有效的仓库和合并请求ID
  - 属性title @test-merge（不要关闭或删除）

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getProductsAndBranchesForCreate();
 timeout=0
-cid=0
+cid=18693
 
 - 执行storyTest模块的getProductsAndBranchesForCreateTest方法，参数是1, 1 第0条的1属性 @产品1
 - 执行storyTest模块的getProductsAndBranchesForCreateTest方法，参数是0, 1 第0条的1属性 @产品1

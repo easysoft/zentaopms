@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildCustomFieldOptionData();
 timeout=0
-cid=0
+cid=15807
 
 - 步骤1：正常自定义字段选项数据转换 - ID属性id @1001
 - 步骤1：正常自定义字段选项数据转换 - customfield属性customfield @1

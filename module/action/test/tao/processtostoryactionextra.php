@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=- 测试非影子产品的故事action extra处理属性extra @*
 timeout=0
-cid=1
+cid=14968
 
 - 测试非影子产品的故事action extra处理属性extra @*#1 用户故事1*
 - 测试影子产品的故事action extra处理(有项目关联)属性extra @*#4 需求1*

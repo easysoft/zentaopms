@@ -5,7 +5,7 @@
 
 title=测试 treeModel::createPracticeLink();
 timeout=0
-cid=0
+cid=19354
 
 - 执行treeTest模块的createPracticeLinkTest方法，参数是'practice', $module1  @<a href='traincourse-practicebrowse-1.html' id='module1' title='培训模块1' >培训模块1</a>
 - 执行treeTest模块的createPracticeLinkTest方法，参数是'practice', $module2  @~~

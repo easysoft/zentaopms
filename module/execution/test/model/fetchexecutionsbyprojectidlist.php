@@ -5,7 +5,7 @@
 
 title=测试 executionModel::fetchExecutionsByProjectIdList();
 timeout=0
-cid=0
+cid=16292
 
 - 测试步骤1：传入空数组参数 @0
 - 测试步骤2：传入不存在的项目ID @0

@@ -5,7 +5,7 @@
 
 title=测试 productZen::responseNotFound4View();
 timeout=0
-cid=0
+cid=17604
 
 - 测试步骤1:Web模式下返回的响应结构包含result字段属性result @success
 - 测试步骤2:Web模式下返回的load字段包含alert第load条的alert属性 @抱歉，您访问的对象不存在！

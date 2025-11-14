@@ -10,7 +10,7 @@ zenData('oauth')->gen(10);
 
 title=测试 webhookModel->getBoundUsers();
 timeout=0
-cid=1
+cid=19691
 
 - 统计匹配数量 @1
 - 取出其中一个用户属性user4 @2

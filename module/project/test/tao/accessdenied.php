@@ -10,7 +10,7 @@ zenData('project')->loadYaml('project')->gen(2);
 
 title=测试 projectModel->accessDenied();
 timeout=0
-cid=1
+cid=17884
 
 - 执行 checkAccess 方法，检查 session 中 project 的值。 @2
 - 执行 accessDenied 方法，检查 session 中 project 的值。 @0

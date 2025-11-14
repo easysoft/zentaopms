@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(1);
 
 title=测试 kanbanModel->updateCard();
 timeout=0
-cid=1
+cid=16962
 
 - 正常编辑卡片
  - 属性name @修改名字

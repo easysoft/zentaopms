@@ -5,7 +5,7 @@
 
 title=测试 gitModel::run();
 timeout=0
-cid=0
+cid=16551
 
 - 步骤1：无仓库时返回false @0
 - 步骤2：有仓库时正常执行 @1

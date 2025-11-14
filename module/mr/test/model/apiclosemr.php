@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiCloseMR();
 timeout=0
-cid=0
+cid=17222
 
 - 测试步骤1：不存在的主机ID @0
 - 测试步骤2：有效的Gitlab主机关闭MR

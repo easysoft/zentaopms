@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::getERURCardMenu();
 timeout=0
-cid=0
+cid=16981
 
 - 步骤1：正常执行ID和空对象数组 @0
 - 步骤2：正常执行ID和包含需求对象的数组 @2

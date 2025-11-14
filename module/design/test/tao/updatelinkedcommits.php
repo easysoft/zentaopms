@@ -5,7 +5,7 @@
 
 title=测试 designModel->updateLinkedCommits();
 timeout=0
-cid=1
+cid=15998
 
 - 测试空数据 @0
 - 测试designID为0的数据 @0

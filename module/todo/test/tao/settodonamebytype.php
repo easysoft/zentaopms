@@ -5,7 +5,7 @@
 
 title=测试 todoTao::setTodoNameByType();
 timeout=0
-cid=0
+cid=19281
 
 - 执行todoTest模块的setTodoNameByTypeTest方法，参数是1 属性name @Test Story Title
 - 执行todoTest模块的setTodoNameByTypeTest方法，参数是2 属性name @Test Task Name

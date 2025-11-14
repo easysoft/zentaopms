@@ -5,7 +5,7 @@
 
 title=测试 mailModel->getSubject();
 timeout=0
-cid=0
+cid=17011
 
 - 获取关闭测试单时邮件主题 @1
 - 获取创建文档时的邮件主题 @1

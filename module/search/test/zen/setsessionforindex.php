@@ -5,7 +5,7 @@
 
 title=测试 searchZen::setSessionForIndex();
 timeout=0
-cid=0
+cid=18353
 
 - 测试步骤1:正常输入完整参数验证bugList session属性bugList @测试URI地址
 - 测试步骤2:正常输入完整参数验证taskList session属性taskList @测试URI地址

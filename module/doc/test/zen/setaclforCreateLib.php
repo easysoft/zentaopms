@@ -5,7 +5,7 @@
 
 title=测试 docZen::setAclForCreateLib();
 timeout=0
-cid=0
+cid=16221
 
 - 测试 product 类型
  - 属性hasDefault @1

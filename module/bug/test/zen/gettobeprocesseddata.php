@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getToBeProcessedData();
 timeout=0
-cid=0
+cid=15461
 
 - 执行bugTest模块的getToBeProcessedDataTest方法，参数是$bug, $oldBug 
  -  @0

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::countLatestMiniPrograms();
 timeout=0
-cid=0
+cid=15008
 
 - 执行aiTest模块的countLatestMiniProgramsTest方法  @0
 - 执行aiTest模块的countLatestMiniProgramsTest方法  @0

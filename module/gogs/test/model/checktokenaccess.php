@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::checkTokenAccess();
 timeout=0
-cid=1
+cid=16691
 
 - 使用空的数据验证token权限 @0
 - 使用错误的host验证token权限 @0

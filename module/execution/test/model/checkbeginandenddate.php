@@ -4,7 +4,7 @@
 /**
 
 title=测试executionModel->checkBeginAndEndDate();
-cid=0
+cid=16282
 
 - 测试敏捷项目不正确的开始日期属性begin @迭代开始日期应大于等于项目的开始日期：2022-01-12。
 - 测试敏捷项目正确的开始跟结束日期 @1

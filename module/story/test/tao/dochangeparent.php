@@ -5,7 +5,7 @@
 
 title=测试 storyModel->doUpdateSpec();
 timeout=0
-cid=0
+cid=18616
 
 - 测试父需求不变的情况
  - 第2条的root属性 @1

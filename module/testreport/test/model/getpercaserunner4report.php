@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 testreportModel->getPerCaseRunner4Report();
 timeout=0
-cid=1
+cid=19121
 
 - 测试获取测试单 1 2 3 测试报告 1 的结果。 @admin:4,用户2:2,用户3:2
 

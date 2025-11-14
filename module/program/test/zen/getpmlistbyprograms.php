@@ -5,7 +5,7 @@
 
 title=测试 programZen::getPMListByPrograms();
 timeout=0
-cid=0
+cid=17729
 
 - 执行programTest模块的getPMListByProgramsTest方法，参数是$testData1  @0
 - 执行programTest模块的getPMListByProgramsTest方法，参数是$testData2  @2

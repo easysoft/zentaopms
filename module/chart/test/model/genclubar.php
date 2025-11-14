@@ -5,7 +5,7 @@
 
 title=测试 chartModel::genCluBar();
 timeout=0
-cid=0
+cid=15565
 
 - 执行$result1) && isset($result1['series'][0]['name'] @1
 - 执行$result2) && isset($result2['series'][0]['stack'] @1

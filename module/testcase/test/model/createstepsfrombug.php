@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 title=测试 testcaseModel->createStepsFromBug();
 timeout=0
-cid=1
+cid=18971
 
 - 测试从 bug 中创建步骤 steps1 @step:一个步骤 expect:一个期望 type:item.
 - 测试从 bug 中创建步骤 steps2 @step:1. 步骤1 expect: type:item.   step:2. 步骤2 expect:期望 type:item.

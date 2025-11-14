@@ -5,7 +5,7 @@
 
 title=测试 docModel->getTemplateScopes();
 timeout=0
-cid=1
+cid=16133
 
 - 获取产品范围
  - 第1条的id属性 @1

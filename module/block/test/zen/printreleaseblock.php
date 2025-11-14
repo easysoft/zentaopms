@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printReleaseBlock();
 timeout=0
-cid=0
+cid=15282
 
 - 步骤1：默认参数测试属性releaseCount @0
 - 步骤2：noclosed过滤测试属性releaseCount @0

@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::getDefaultMethodAndParams();
 timeout=0
-cid=0
+cid=17456
 
 - 执行pivotTest模块的getDefaultMethodAndParamsTest方法，参数是1, 0  @~~
 - 执行pivotTest模块的getDefaultMethodAndParamsTest方法，参数是1, 999  @~~

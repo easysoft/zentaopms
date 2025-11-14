@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getDrillResult();
 timeout=0
-cid=0
+cid=17380
 
 - 步骤1：正常情况属性status @success
 - 步骤2：包含过滤器属性status @success

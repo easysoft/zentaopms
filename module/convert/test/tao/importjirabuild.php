@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraBuild();
 timeout=0
-cid=0
+cid=15856
 
 - 步骤1：空数据列表处理属性message @Empty data list handled correctly
 - 步骤2：单个有效版本数据导入属性validCount @1

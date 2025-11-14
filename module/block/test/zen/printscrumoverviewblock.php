@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printScrumOverviewBlock();
 timeout=0
-cid=0
+cid=15289
 
 - 步骤1:正常项目ID测试返回项目ID属性projectID @11
 - 步骤2:验证项目对象存在属性hasProject @1

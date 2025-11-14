@@ -5,7 +5,7 @@
 
 title=测试 aiModel::edit();
 timeout=0
-cid=0
+cid=15021
 
 - 步骤1：模型ID为空时返回false @0
 - 步骤2：模型ID为负数时返回false @0

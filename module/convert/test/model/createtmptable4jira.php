@@ -5,7 +5,7 @@
 
 title=测试 convertModel::createTmpTable4Jira();
 timeout=0
-cid=0
+cid=15768
 
 - 执行convertTest模块的createTmpTable4JiraTest方法 属性id @int(8)
 - 执行convertTest模块的createTmpTable4JiraTest方法 属性AType @char(30)

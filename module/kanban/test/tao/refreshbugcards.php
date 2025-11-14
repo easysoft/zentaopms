@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::refreshBugCards();
 timeout=0
-cid=0
+cid=16989
 
 - 执行kanbanTest模块的refreshBugCardsTest方法，参数是$cardPairs0, 999, ''  @7
 - 执行kanbanTest模块的refreshBugCardsTest方法，参数是$cardPairs1, 101, ''

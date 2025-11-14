@@ -5,7 +5,7 @@
 
 title=测试 treeModel->update();
 timeout=0
-cid=1
+cid=19392
 
 - 测试更新module 1821 的 root
  - 属性root @2

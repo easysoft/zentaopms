@@ -5,7 +5,7 @@
 
 title=测试 customZen::setFieldListForSet();
 timeout=0
-cid=0
+cid=15936
 
 - 执行customTest模块的setFieldListForSetTest方法，参数是'story', 'priList', array  @1
 - 执行customTest模块的setFieldListForSetTest方法，参数是'project', 'unitList', array 属性message @至少选择一种货币

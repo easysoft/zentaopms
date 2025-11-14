@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 branchModel->mergeBranch();
 timeout=0
-cid=1
+cid=15335
 
 - 测试合并分支 1 到 分支 2
  - 第0条的product属性 @6

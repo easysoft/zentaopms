@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getRepoGroup();
 timeout=0
-cid=1
+cid=18076
 
 - 按项目分组第4条的text属性 @正常产品4
 - 按项目分组对应的repo第0条的text属性 @testHtml

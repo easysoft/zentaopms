@@ -5,7 +5,7 @@
 
 title=测试 jobZen::buildSearchForm();
 timeout=0
-cid=0
+cid=16859
 
 - 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
 - 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0

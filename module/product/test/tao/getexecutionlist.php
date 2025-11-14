@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getExecutionList();
-cid=0
+cid=17545
 
 - 测试项目跟产品的ID列表都为空的情况 @0
 - 测试项目ID列表不为空，产品ID列表为空的情况 @0

@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getOrderedProducts();
-cid=1
+cid=16119
 
 - 获取系统中已排序的产品第0条的1属性 @产品1
 - 获取系统中包括ID=1已排序的产品第0条的1属性 @产品1

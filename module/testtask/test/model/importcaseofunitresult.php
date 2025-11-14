@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::importCaseOfUnitResult();
 timeout=0
-cid=0
+cid=19198
 
 - 步骤1：更新已有用例 @1
 - 步骤2：创建新用例 @6

@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::setSearchParamsForLinkCase();
 timeout=0
-cid=0
+cid=19244
 
 - 执行testtaskTest模块的setSearchParamsForLinkCaseTest方法，参数是$normalProduct, $task, '', 0  @0
 - 执行testtaskTest模块的setSearchParamsForLinkCaseTest方法，参数是$branchProduct, $task, 'bystory', 1  @0

@@ -5,7 +5,7 @@
 
 title=测试 docModel::getLibTargetSpace();
 timeout=0
-cid=0
+cid=16104
 
 - 步骤1：product类型 @product.1
 - 步骤2：project类型 @project.2

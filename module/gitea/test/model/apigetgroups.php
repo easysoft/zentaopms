@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetGroups();
 timeout=0
-cid=0
+cid=16560
 
 - 错误的服务器ID @0
 - 管理员账号模拟用户权限查询

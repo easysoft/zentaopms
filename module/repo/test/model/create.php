@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 title=测试 repoModel->create();
 timeout=0
-cid=1
+cid=18035
 
 - 正常创建gitlab版本库属性id @1
 - 当已有版本库时提示已有记录第name条的0属性 @『名称』已经有『zzxx』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。

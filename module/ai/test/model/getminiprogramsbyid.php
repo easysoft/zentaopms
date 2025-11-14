@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getMiniProgramsByID();
 timeout=0
-cid=0
+cid=15041
 
 - 步骤1：多个有效ID不排序，期望返回3个记录 @3
 - 步骤2：多个有效ID需要排序，期望返回3个记录 @3

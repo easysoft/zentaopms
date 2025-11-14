@@ -5,7 +5,7 @@
 
 title=测试 userModel::unbind();
 timeout=0
-cid=0
+cid=19657
 
 - 步骤1：解绑已有然之账号的正常用户 @success
 - 步骤2：解绑不存在的用户账号 @success

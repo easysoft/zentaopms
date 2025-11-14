@@ -5,7 +5,7 @@
 
 title=getList
 timeout=0
-cid=1
+cid=17103
 
 - 获取系统范围内的所有度量项第0条的code属性 @count_of_pending_deployment
 - 获取系统范围内未发布的度量项 @0

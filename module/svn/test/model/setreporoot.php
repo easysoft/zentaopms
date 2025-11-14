@@ -5,7 +5,7 @@
 
 title=测试 svnModel::setRepoRoot();
 timeout=0
-cid=0
+cid=18724
 
 - 步骤1：正常SVN仓库设置根路径 @https://svn.qc.oop.cc/svn/unittest
 - 步骤2：测试不同类型的仓库路径格式 @0

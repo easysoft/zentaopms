@@ -5,7 +5,7 @@
 
 title=测试 commonModel::buildActionItem();
 timeout=0
-cid=0
+cid=15645
 
 - 步骤1：测试有权限模块正常构建链接属性url @product-index-
 - 步骤2：测试带属性参数的链接构建属性class @btn

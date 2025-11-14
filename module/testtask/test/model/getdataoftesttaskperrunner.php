@@ -10,7 +10,7 @@ zenData('user')->gen(5);
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerRunner();
-cid=1
+cid=19169
 pid=1
 
 */

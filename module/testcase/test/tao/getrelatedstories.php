@@ -15,7 +15,7 @@ function initData()
 
 title=测试 testcaseModel->getRelatedStories();
 timeout=0
-cid=1
+cid=19044
 
 - 测试获取关联的需求
  - 属性1 @用户需求1

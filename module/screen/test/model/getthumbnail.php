@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getThumbnail();
 timeout=0
-cid=0
+cid=18258
 
 - 步骤1：测试单个screen有一张图片的情况第0条的cover属性 @file-read-2.png
 - 步骤2：测试单个screen有多张图片的情况第0条的cover属性 @file-read-10.png

@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::checkUserRepeat();
 timeout=0
-cid=0
+cid=16674
 
 - 测试无重复用户的情况属性result @success
 - 测试有一个重复用户的情况,返回失败属性result @fail

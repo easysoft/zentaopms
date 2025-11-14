@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->getByID();
-cid=0
+cid=17739
 
 - 传入0参数。 @0
 - 传入不存在的ID。 @0

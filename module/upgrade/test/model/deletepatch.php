@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->deletePatch();
-cid=1
+cid=19515
 
 - 测试删除补丁记录，然后获取补丁记录数量。 @0
 

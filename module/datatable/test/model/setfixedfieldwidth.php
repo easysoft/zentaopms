@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::setFixedFieldWidth();
 timeout=0
-cid=0
+cid=15947
 
 - 执行datatableTest模块的setFixedFieldWidthTest方法，参数是$emptySetting 
  - 属性leftWidth @30

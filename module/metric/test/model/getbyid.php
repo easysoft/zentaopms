@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getByID();
 timeout=0
-cid=0
+cid=17079
 
 - 步骤1：正常获取存在的度量项属性name @按系统统计的所有层级的项目集总数
 - 步骤2：验证最小有效ID返回正确的对象属性id @1

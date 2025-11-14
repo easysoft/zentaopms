@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::buildTaskForEdit();
 timeout=0
-cid=0
+cid=19229
 
 - 步骤1：正常任务ID和产品ID
  - 属性id @1

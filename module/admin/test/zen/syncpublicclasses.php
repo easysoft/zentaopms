@@ -5,7 +5,7 @@
 
 title=测试 adminZen::syncPublicClasses();
 timeout=0
-cid=0
+cid=14993
 
 - 执行$adminTest, 'syncPublicClassesTest') ? 1 : 0 @1
 - 执行adminTest模块的syncPublicClassesTest方法，参数是3)) ? 1 : 0  @1

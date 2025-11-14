@@ -5,7 +5,7 @@
 
 title=测试 aiModel::generateDemoDataPrompt();
 timeout=0
-cid=0
+cid=15025
 
 - 执行aiTest模块的generateDemoDataPromptTest方法，参数是'story', 'story.title'  @{"需求":{"需求标题":"开发一个在线学习平台"}}
 - 执行aiTest模块的generateDemoDataPromptTest方法，参数是'story', 'story.spec'  @{"需求":{"需求描述":"我们需要开发一个在线学习平台，能够提供课程管理、学生管理、教师管理等功能。"}}

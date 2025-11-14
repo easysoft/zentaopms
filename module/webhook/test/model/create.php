@@ -10,7 +10,7 @@ zenData('webhook')->gen(7);
 
 title=测试 webhookModel->create();
 timeout=0
-cid=1
+cid=19687
 
 - 测试全部传入的正常创建 @8
 - 测试不传type的情况 @9

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printSingleDynamicBlock();
 timeout=0
-cid=0
+cid=15296
 
 - 执行blockTest模块的printSingleDynamicBlockTest方法 属性productID @1
 - 执行blockTest模块的printSingleDynamicBlockTest方法

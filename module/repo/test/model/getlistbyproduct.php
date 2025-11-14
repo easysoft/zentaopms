@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getListByProduct();
 timeout=0
-cid=0
+cid=18071
 
 - 执行repoTest模块的getListByProductTest方法，参数是1 
  - 第1条的name属性 @repo1

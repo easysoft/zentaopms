@@ -5,7 +5,7 @@
 
 title=测试 fileModel->processFileDiffsForObject();
 timeout=0
-cid=0
+cid=16520
 
 - 传入空对象。属性count @added:;delete:;rename:;
 - 没有删除文件字段。 @added:;delete:;rename:;

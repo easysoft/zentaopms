@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getPrivs();
 timeout=0
-cid=0
+cid=16708
 
 - 步骤1：测试正常分组ID获取存在的权限属性module1 @method1
 - 步骤2：测试正常分组ID获取另一个存在的权限属性module6 @method6

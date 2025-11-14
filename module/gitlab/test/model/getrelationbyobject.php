@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::getRelationByObject();
 timeout=0
-cid=0
+cid=16658
 
 - 测试步骤1：获取存在的任务关联记录
  - 属性issueID @100

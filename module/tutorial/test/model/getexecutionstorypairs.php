@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getExecutionStoryPairs();
-cid=1
+cid=19435
 
 - 测试是否能拿到数据属性3 @Test active story
 

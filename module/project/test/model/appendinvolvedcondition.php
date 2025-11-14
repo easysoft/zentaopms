@@ -5,7 +5,7 @@
 
 title=测试 projectModel::appendInvolvedCondition();
 timeout=0
-cid=0
+cid=17799
 
 - 测试步骤1：正常查询语句添加参与条件 @1
 - 测试步骤2：空查询语句添加参与条件 @1

@@ -5,7 +5,7 @@
 
 title=测试 systemModel::getBackupList();
 timeout=0
-cid=0
+cid=18730
 
 - 步骤1：正常实例获取备份列表属性result @fail
 - 步骤2：获取备份列表消息字段属性message @CNE服务器出错

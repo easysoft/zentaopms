@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->appendCaseFails();
-cid=1
+cid=18951
 pid=1
 
 */

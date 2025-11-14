@@ -5,7 +5,7 @@
 
 title=测试 cneModel->uninstallApp();
 timeout=0
-cid=1
+cid=15633
 
 - 卸载CNE平台的卸载应用 code @0
 - 卸载CNE平台的卸载应用 code @0

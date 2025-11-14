@@ -5,7 +5,7 @@
 
 title=测试 docModel::getZentaoList();
 timeout=0
-cid=0
+cid=16136
 
 - 步骤1：正常查询存在记录
  - 属性id @1

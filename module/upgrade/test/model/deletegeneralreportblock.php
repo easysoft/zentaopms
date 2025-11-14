@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->deleteGeneralReportBlock();
-cid=1
+cid=19514
 
 - 瀑布通用报表块已经被删除。 @1
 - 瀑布通用报表块配置已经被删除。 @0

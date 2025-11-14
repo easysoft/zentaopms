@@ -5,7 +5,7 @@
 
 title=测试 reportModel::getUserTestTasks();
 timeout=0
-cid=0
+cid=18171
 
 - 测试步骤1：正常情况下获取用户测试任务 @user3:2;user4:2;user7:2;user8:2;user11:1;user12:1;
 - 测试步骤2：验证用户3的测试任务数量属性user3 @2

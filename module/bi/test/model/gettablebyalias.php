@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getTableByAlias();
 timeout=0
-cid=0
+cid=15184
 
 - 执行bi模块的getTableByAliasTest方法，参数是$statement1, 'u'  @zt_user
 - 执行bi模块的getTableByAliasTest方法，参数是$statement2, 't'  @zt_task

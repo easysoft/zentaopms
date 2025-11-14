@@ -4,7 +4,7 @@
 
 title=测试 hostModel->create();
 timeout=0
-cid=1
+cid=16754
 
 - 测试正确的创建主机时的返回结果。 @1
 - 测试正确的创建主机时有无报错信息。 @0

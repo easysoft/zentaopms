@@ -5,7 +5,7 @@
 
 title=测试 actionModel->renderChanges();
 timeout=0
-cid=1
+cid=14929
 
 - 测试type为空 @0
 - 测试bug解决方案历史记录 @修改了 <strong><i>解决方案</i></strong>，旧值为 "oldValue"，新值为 "newValue"。<br />

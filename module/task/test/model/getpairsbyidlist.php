@@ -28,7 +28,7 @@ foreach($tasks as $task) {
 
 title=taskModel->getPairsByIdList();
 timeout=0
-cid=1
+cid=18816
 
 - 执行taskModel模块的getPairsByIdList方法，参数是array 属性1 @任务1
 - 执行taskModel模块的getPairsByIdList方法，参数是array 属性2 @任务2

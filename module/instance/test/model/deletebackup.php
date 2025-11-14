@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::deleteBackup();
 timeout=0
-cid=0
+cid=16788
 
 - 步骤1：有效参数删除备份属性code @600
 - 步骤2：空备份名称属性code @600

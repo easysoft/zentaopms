@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->batchCreate();
 timeout=0
-cid=1
+cid=18029
 
 - 批量创建一个版本库
  - 第1条的name属性 @imortRepo1

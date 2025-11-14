@@ -5,7 +5,7 @@
 
 title=测试 gitlabZen::issueToZentaoObject();
 timeout=0
-cid=0
+cid=16676
 
 - 测试转换任务类型issue,包含所有字段
  - 属性name @Test Task

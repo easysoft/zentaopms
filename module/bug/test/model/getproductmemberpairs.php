@@ -19,7 +19,7 @@ su('admin');
 
 title=bugModel->getProductMemberPairs();
 timeout=0
-cid=1
+cid=15391
 
 - 测试获取productID为1的bug的团队成员 @A:admin,U:用户12,U:用户22,U:用户32
 

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignLibForBatchEdit();
 timeout=0
-cid=0
+cid=19071
 
 - 步骤1：测试有效库ID(1)属性libID @1
 - 步骤2：测试有效库ID(2)属性libID @2

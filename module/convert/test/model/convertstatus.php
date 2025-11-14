@@ -5,7 +5,7 @@
 
 title=测试 convertModel::convertStatus();
 timeout=0
-cid=0
+cid=15767
 
 - 步骤1：测试关系映射中存在的状态转换 @active
 - 步骤2：测试关系映射中不存在的状态转换(testcase类型) @normal

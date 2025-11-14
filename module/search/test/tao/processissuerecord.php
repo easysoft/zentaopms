@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processIssueRecord();
 timeout=0
-cid=0
+cid=18336
 
 - 执行$result1->url, 'm=issue') !== false @1
 - 执行url, 'm=assetlib') !== false && strpos($result2模块的url, 'f=issueView') !== false方法  @1

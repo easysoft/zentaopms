@@ -5,7 +5,7 @@
 
 title=测试 docModel::isClickable();
 timeout=0
-cid=0
+cid=16142
 
 - 步骤1：当前用户文档，movedoc操作 @1
 - 步骤2：其他用户文档，movedoc操作 @0

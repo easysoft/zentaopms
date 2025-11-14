@@ -14,7 +14,7 @@ zenData('task')->loadYaml('task')->gen(5);
 
 title=测试 kanbanModel->updateLane();
 timeout=0
-cid=1
+cid=16965
 
 - 测试更新执行101的story泳道 @0
 - 测试更新执行101的bug泳道 @0

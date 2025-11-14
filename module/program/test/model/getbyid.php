@@ -5,7 +5,7 @@
 
 title=测试 programModel::getById();
 timeout=0
-cid=1
+cid=17682
 
 - 通过id字段获取id=1的项目集。
  - 属性id @1

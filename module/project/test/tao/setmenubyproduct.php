@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 projectModel::setMenuByProduct();
-cid=1
+cid=17917
 pid=1
 
 */

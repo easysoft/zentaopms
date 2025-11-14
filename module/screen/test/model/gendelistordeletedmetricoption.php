@@ -5,7 +5,7 @@
 
 title=测试 screenModel::genDelistOrDeletedMetricOption();
 timeout=0
-cid=0
+cid=18228
 
 - 步骤1：空component参数
  - 属性hasOption @1

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printAssignToMeBlock();
 timeout=0
-cid=0
+cid=15248
 
 - 步骤1:测试方法执行成功返回success为true属性success @1
 - 步骤2:测试返回对象包含权限验证信息属性hasViewPriv @1

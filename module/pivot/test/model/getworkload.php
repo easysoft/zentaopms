@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->getWorkload();
 timeout=0
-cid=1
+cid=17405
 
 - 测试部门id为0，执行状态未分配，工时为7的透视表数据是否正常生成,此返回值包含四条数据。
  - 第0条的user属性 @user1

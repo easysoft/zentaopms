@@ -5,7 +5,7 @@
 
 title=测试 transferModel::__construct();
 timeout=0
-cid=0
+cid=19308
 
 - 步骤1：正常初始化模型属性transferConfig @1
 - 步骤2：设置cookie为100属性maxImport @100

@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getExportTemplate();
-cid=0
+cid=16508
 
 - 测试获取 用户admin task 模块的用户模板 @1
 - 测试获取 用户admin bug 模块的用户模板 @0

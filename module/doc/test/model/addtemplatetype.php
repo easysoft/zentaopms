@@ -5,7 +5,7 @@
 
 title=测试 docModel->addTemplateType();
 timeout=0
-cid=1
+cid=16041
 
 - 添加产品模板类型
  - 属性short @custom1

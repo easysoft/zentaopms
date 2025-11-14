@@ -5,7 +5,7 @@
 
 title=测试 aiModel::togglePromptStatus();
 timeout=0
-cid=0
+cid=15071
 
 - 步骤1：使用ID切换draft状态prompt为active @1
 - 步骤2：使用ID切换active状态prompt为draft @1

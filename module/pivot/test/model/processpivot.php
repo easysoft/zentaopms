@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processPivot();
 timeout=0
-cid=0
+cid=17424
 
 - 步骤1：正常对象输入，验证name解析属性name @产品汇总表
 - 步骤2：数组输入处理，验证数量属性count @2

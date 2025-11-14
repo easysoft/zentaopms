@@ -11,7 +11,7 @@ zenData('docaction')->gen(0);
 /**
 
 title=测试 upgradeModel->convertCharset();
-cid=1
+cid=19507
 
 - 检查zt_task字符集信息 @utf8mb4_general_ci
 - 检查zt_bug字符集信息 @utf8mb4_general_ci

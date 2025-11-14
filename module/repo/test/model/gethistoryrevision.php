@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 repoModel::getHistoryRevision();
 timeout=0
-cid=1
+cid=18065
 
 - 查询提交记录版本号 @d30919bdb9b4cf8e2698f4a6a30e41910427c01c
 - 查询提交记录版本号withCommmit参数为true

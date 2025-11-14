@@ -5,7 +5,7 @@
 
 title=测试 backupZen::backupSQL();
 timeout=0
-cid=0
+cid=15145
 
 - 步骤1:正常备份SQL文件属性result @success
 - 步骤2:reload=yes参数测试属性result @success

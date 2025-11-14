@@ -13,7 +13,7 @@ zenData('taskspec')->loadYaml('taskspec')->gen(20);
 
 title=测试taskModel->batchUpdate();
 timeout=0
-cid=1
+cid=18769
 
 - 检查修改任务名称
  - 第1[0]条的old属性 @开发任务11

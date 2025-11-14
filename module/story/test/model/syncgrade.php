@@ -5,7 +5,7 @@
 
 title=测试 storyModel::syncGrade();
 timeout=0
-cid=0
+cid=18590
 
 - 步骤1：父需求层级变更同步（子需求grade从2变为3）第3条的grade属性 @3
 - 步骤2：非父需求不执行同步 @not_parent

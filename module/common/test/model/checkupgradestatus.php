@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkUpgradeStatus();
 timeout=0
-cid=0
+cid=15664
 
 - 步骤1：测试checkUpgradeStatus正常调用情况 @1
 - 步骤2：测试容器环境下的行为 @1

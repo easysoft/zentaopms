@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 executionTao::setKanbanMenu();
 timeout=0
-cid=0
+cid=16398
 
 - 执行$menu第kanban条的link属性 @看板|execution|kanban|executionID=%s
 - 执行$menu第CFD条的link属性 @累积流图|execution|cfd|executionID=%s

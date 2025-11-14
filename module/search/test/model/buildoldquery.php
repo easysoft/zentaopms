@@ -5,7 +5,7 @@
 
 title=测试 searchModel::buildOldQuery();
 timeout=0
-cid=0
+cid=18294
 
 - 执行search模块的buildOldQueryTest方法，参数是$searchConfig, $postData1 属性query @(( 1   AND `title`  LIKE '%test%' ) AND ( 1  ))
 - 执行search模块的buildOldQueryTest方法，参数是$searchConfig, $postData2 属性query @(( 1   AND `title`  LIKE '%0%' ) AND ( 1  ))

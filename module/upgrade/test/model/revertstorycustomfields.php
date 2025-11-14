@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->revertStoryCustomFields();
-cid=1
+cid=19550
 
 - 测试删除需求自定义表单项 @0
 

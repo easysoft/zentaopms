@@ -5,7 +5,7 @@
 
 title=测试 executionZen::hasMultipleBranch();
 timeout=0
-cid=0
+cid=16434
 
 - 步骤1：指定产品ID，产品类型为normal @0
 - 步骤2：指定产品ID，产品类型为branch @1

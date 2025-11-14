@@ -15,7 +15,7 @@ zenData('product')->gen(1);
 
 title=测试 actionModel->getTrashes();
 timeout=0
-cid=1
+cid=14911
 
 - 查询objectType all type all id desc排序的回收站信息
  - 第0条的objectType属性 @testreport

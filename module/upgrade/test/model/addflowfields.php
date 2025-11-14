@@ -9,7 +9,7 @@ $result = zenData('workflowfield')->gen(0);
 /**
 
 title=upgradeModel->addFlowFields();
-cid=1
+cid=19497
 pid=1
 
 - 获取ID为1的工作流字段名称、所属模块、类型、控件。

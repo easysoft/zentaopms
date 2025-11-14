@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getLatestChart();
 timeout=0
-cid=0
+cid=18242
 
 - 执行$result1属性key @Select
 - 执行$result2属性key @test

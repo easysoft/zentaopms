@@ -4,7 +4,7 @@
 /**
 
 title=测试批量获取需求阶段 productModel->batchGetStoryStage();
-cid=0
+cid=17470
 
 - 获取需求ID1,2,3的需求阶段
  - 属性1 @wait

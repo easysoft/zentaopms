@@ -5,7 +5,7 @@
 
 title=taskModel->getTeamStoryVersion();
 timeout=0
-cid=0
+cid=18823
 
 - 测试获取任务ID为0的需求版本信息 @0
 - 测试获取任务ID为4的需求版本信息属性4 @2

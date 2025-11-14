@@ -10,7 +10,7 @@ zenData('config')->gen(7);
 
 title=测试 settingModel->createDAO();
 timeout=0
-cid=1
+cid=18358
 
 - 测试查询参数包含vision、owner、module、section、key的config数据
  - 属性vision @rnd

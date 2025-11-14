@@ -5,7 +5,7 @@
 
 title=测试 executionZen::processBuildListData();
 timeout=0
-cid=0
+cid=16435
 
 - 执行executionZenTest模块的processBuildListDataTest方法，参数是$normalBuildList, 1 
  - 第0条的name属性 @Build 1.0

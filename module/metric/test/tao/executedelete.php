@@ -5,7 +5,7 @@
 
 title=测试 metricTao::executeDelete();
 timeout=0
-cid=0
+cid=17161
 
 - 步骤1：删除test_code_1的记录（5个deleted=1） @5
 - 步骤2：删除test_code_2的记录（2个value=0） @2

@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getProcessGroup();
-cid=1
+cid=18439
 
 - 获取项目ID为0的按照进度分组的活动列表 @0
 - 获取项目ID为60的按照进度分组的活动列表

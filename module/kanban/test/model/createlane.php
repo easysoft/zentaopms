@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel->createLane();
 timeout=0
-cid=1
+cid=16894
 
 - 测试创建与其他泳道使用相同看板列的泳道
  - 属性name @测试创建与其他泳道使用相同看板列的泳道

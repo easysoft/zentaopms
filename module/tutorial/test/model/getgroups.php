@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getGroups();
 timeout=0
-cid=0
+cid=19439
 
 - 步骤1：验证返回结果类型为数组 @1
 - 步骤2：验证区域1包含3个组 @3

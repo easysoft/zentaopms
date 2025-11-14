@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDatatableModules();
 timeout=0
-cid=0
+cid=15380
 
 - 测试普通产品(无分支)获取模块列表，查看模块数量 @7
 - 测试普通产品(无分支)获取模块列表，检查根节点 @/

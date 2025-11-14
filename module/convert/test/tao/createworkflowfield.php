@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createWorkflowField();
 timeout=0
-cid=0
+cid=15851
 
 - 执行convertTest模块的createWorkflowFieldTest方法，参数是$relations1, array 第zentaoObject条的Story属性 @story
 - 执行convertTest模块的createWorkflowFieldTest方法，参数是$relations2, array 第zentaoObject条的Story属性 @story

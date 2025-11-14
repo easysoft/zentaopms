@@ -5,7 +5,7 @@
 
 title=测试 biModel::getTableList();
 timeout=0
-cid=0
+cid=15187
 
 - 测试默认参数(包含数据视图表，带前缀)
  - 属性zt_user @用户

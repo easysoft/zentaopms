@@ -5,7 +5,7 @@
 
 title=测试 pivotZen::setNewMark();
 timeout=0
-cid=0
+cid=17465
 
 - 执行$result1属性name @Test Pivot 1
 - 执行$result2属性name @Test Pivot 2

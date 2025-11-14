@@ -10,7 +10,7 @@ zenData('space')->gen(5);
 
 title=instanceModel->getByIdList();
 timeout=0
-cid=1
+cid=16799
 
 - 查看获取到的instance数量 @3
 - 查看获取到的第一条instance的id和name

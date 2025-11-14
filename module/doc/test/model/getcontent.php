@@ -5,7 +5,7 @@
 
 title=测试 docModel->getContent();
 timeout=0
-cid=1
+cid=16073
 
 - 获取docID=1、版本为1的文档内容
  - 属性doc @1

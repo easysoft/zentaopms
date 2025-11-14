@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getByID();
 timeout=0
-cid=0
+cid=16841
 
 - 测试步骤1：查询有效jenkins类型job的基本信息
  - 属性id @1

@@ -8,7 +8,7 @@ zenData('task')->loadYaml('task')->gen(50);
 
 title=测试 metricModel->getResultByCodeFromData();
 timeout=0
-cid=1
+cid=17123
 
 - 测试执行14下的任务数量是否正确;第0条的value属性 @6
 - 测试执行15下的任务数量是否正确;第0条的value属性 @2

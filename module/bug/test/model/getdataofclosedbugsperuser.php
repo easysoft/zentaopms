@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDataOfClosedBugsPerUser();
 timeout=0
-cid=0
+cid=15375
 
 - 测试步骤1：测试admin用户关闭bug的数量第admin条的value属性 @8
 - 测试步骤2：测试user1用户关闭bug的数量第user1条的value属性 @5

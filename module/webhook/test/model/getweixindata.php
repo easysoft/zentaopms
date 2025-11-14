@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::getWeixinData();
 timeout=0
-cid=0
+cid=19702
 
 - 测试有mobile参数时的消息类型属性msgtype @text
 - 测试有mobile参数时的文本内容第text条的content属性 @测试消息

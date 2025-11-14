@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getProductReviewers();
 timeout=0
-cid=0
+cid=18641
 
 - 测试步骤1:获取有reviewer字段的open产品的评审人员列表 >> 返回包含admin和user1用户
 - 测试步骤2:获取有reviewer字段的private产品的评审人员列表 >> 返回包含admin和user2用户

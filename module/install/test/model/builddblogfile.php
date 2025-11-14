@@ -4,7 +4,7 @@
 
 title=测试 installModel->buildDBLogFile();
 timeout=0
-cid=1
+cid=16767
 
 - 获取数据库config日志存储路径。 @1
 - 获取数据库error日志存储路径。 @1

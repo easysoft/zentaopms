@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->updateTestcaseVersion();
-cid=0
+cid=16539
 
 - 检查用例ID = 0 用例 fromCaseVersion 字段是否改动 @0
 - 检查用例ID = 1 用例 fromCaseVersion 字段是否改动 @1

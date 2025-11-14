@@ -19,7 +19,7 @@ su('admin');
 
 title=bugModel->resolve();
 timeout=0
-cid=1
+cid=15405
 
 - 测试解决原因为设计如此的bug
  - 属性resolution @bydesign

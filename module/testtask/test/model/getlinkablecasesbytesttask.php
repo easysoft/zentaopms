@@ -10,7 +10,7 @@ zenData('testrun')->loadYaml('testrun')->gen(10);
 
 title=测试 testtaskModel->getLinkableCasesByTestTask();
 timeout=0
-cid=1
+cid=19180
 
 - 测试单 0 可关联的用例数为 0。 @0
 - 测试单 2 可关联的用例数为 0。 @0

@@ -5,7 +5,7 @@
 
 title=测试 fileTao::saveFile();
 timeout=0
-cid=0
+cid=16540
 
 - 执行fileTest模块的saveFileTest方法，参数是$normalFile  @6
 - 执行fileTest模块的saveFileTest方法，参数是$skipFieldsFile, 'realpath, extra'  @7

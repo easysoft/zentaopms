@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildBarChart();
 timeout=0
-cid=0
+cid=18204
 
 - 执行$result属性key @BarCrossrange
 - 执行$result属性chartConfig->chartKey @VBarCrossrange

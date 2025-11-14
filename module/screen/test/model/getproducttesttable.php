@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getProductTestTable();
 timeout=0
-cid=0
+cid=18252
 
 - 步骤1：正常情况测试
  - 第0条的name属性 @产品A

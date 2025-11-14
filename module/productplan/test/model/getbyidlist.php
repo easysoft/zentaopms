@@ -4,7 +4,7 @@
 
 title=productpanModel->getByIDList();
 timeout=0
-cid=1
+cid=17630
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

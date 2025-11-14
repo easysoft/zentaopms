@@ -5,7 +5,7 @@
 
 title=测试 fileModel::saveChunkedFile();
 timeout=0
-cid=0
+cid=16527
 
 - 执行fileTest模块的saveChunkedFileTest方法，参数是$normalFile, $normalUid 
  - 属性extension @txt

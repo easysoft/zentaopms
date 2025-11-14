@@ -11,7 +11,7 @@ zenData('product')->gen(100);
 
 title=测试 apiModel->getOrderedObjects();
 timeout=0
-cid=1
+cid=15110
 
 - 测试获取正常的产品和项目列表。
  - 第product条的1属性 @正常产品1

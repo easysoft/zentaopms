@@ -5,7 +5,7 @@
 
 title=测试 extensionZen::copyHookFiles();
 timeout=0
-cid=0
+cid=16484
 
 - 步骤1：插件hook目录存在且系统hook目录存在 @0
 - 步骤2：插件hook目录不存在 @0

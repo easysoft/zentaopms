@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 
 title=测试 todoTao::getListBy();
 timeout=0
-cid=1
+cid=19276
 
 - 正常获取指定类型和用户的待办列表 @1
 - 获取空结果的待办列表 @0

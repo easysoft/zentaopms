@@ -4,7 +4,7 @@
 
 title=测试 projectModel->getPrivsByModel();
 timeout=0
-cid=1
+cid=17841
 
 - 传递空类型的情况 @0
 - 传递错误的类型的情况 @0

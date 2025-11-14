@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printScrumProductBlock();
 timeout=0
-cid=0
+cid=15290
 
 - 执行blockTest模块的printScrumProductBlockTest方法，参数是$block1 属性productsCount @15
 - 执行blockTest模块的printScrumProductBlockTest方法，参数是$block2 属性productsCount @5

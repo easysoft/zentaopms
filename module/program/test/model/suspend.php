@@ -57,7 +57,7 @@ $tester->dao->insert(TABLE_PROJECT)->data(array(
 
 title=测试 programModel::suspend();
 timeout=0
-cid=0
+cid=17711
 
 - 步骤1：正常挂起等待状态的项目集 @1
 - 步骤2：正常挂起进行中状态的项目集 @1

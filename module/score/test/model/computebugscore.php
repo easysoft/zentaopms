@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->computeBugScore();
-cid=1
+cid=18195
 
 - 计算caseID=0时，用例建bug的积分第0条的score属性 @1
 - 计算caseID=1时，用例建bug的积分第0条的score属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::domainExists();
 timeout=0
-cid=0
+cid=16791
 
 - 执行instanceTest模块的domainExistsTest方法，参数是'existing'  @1
 - 执行instanceTest模块的domainExistsTest方法，参数是'nonexistent'  @0

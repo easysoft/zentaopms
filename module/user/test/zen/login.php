@@ -5,7 +5,7 @@
 
 title=测试 userZen::login();
 timeout=0
-cid=0
+cid=19676
 
 - 执行userZenTest模块的loginTest方法，参数是'', '', '', '', '', ''  @0
 - 执行userZenTest模块的loginTest方法，参数是'', '', '', '', '', '', 'admin', '123456' 属性result @success

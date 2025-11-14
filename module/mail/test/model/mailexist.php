@@ -5,7 +5,7 @@
 
 title=测试 mailModel::mailExist();
 timeout=0
-cid=0
+cid=17014
 
 - 执行mailTest模块的mailExistTest方法 属性email @admin@test.com
 - 执行mailTest模块的mailExistTest方法 属性email @user2@test.com

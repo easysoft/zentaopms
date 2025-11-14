@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printBugStatisticBlock();
 timeout=0
-cid=0
+cid=15251
 
 - 执行blockTest模块的printBugStatisticBlockTest方法，参数是$normalBlock 属性totalBugs @10
 - 执行blockTest模块的printBugStatisticBlockTest方法，参数是$shadowBlock, $shadowParams 属性totalBugs @15

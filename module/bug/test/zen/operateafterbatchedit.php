@@ -5,7 +5,7 @@
 
 title=测试 bugZen::operateAfterBatchEdit();
 timeout=0
-cid=0
+cid=15464
 
 - 步骤1:status从active变为resolved @1
 - 步骤2:status保持active不变 @1

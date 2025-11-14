@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->setMenu();
-cid=0
+cid=17525
 
 - 执行product模块的setMenuTest方法
  - 属性idReplaced @1

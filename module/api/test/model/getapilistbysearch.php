@@ -11,7 +11,7 @@ zenData('apispec')->gen(100);
 
 title=测试 apiModel->getApiListBySearch();
 timeout=0
-cid=1
+cid=15102
 
 - 测试获取文档库ID为1的文档列表。
  - 第0条的id属性 @1

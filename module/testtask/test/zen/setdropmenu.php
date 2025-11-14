@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::setDropMenu();
 timeout=0
-cid=0
+cid=19241
 
 - 步骤1：qa tab下的正常产品和任务属性switcherParams @productID=1&branch=&taskID=1&module=testtask&method=browse&objectType=&objectID=
 - 步骤2：project tab下的项目相关参数设置属性switcherParams @productID=1&branch=&taskID=1&module=testtask&method=browse&objectType=&objectID=

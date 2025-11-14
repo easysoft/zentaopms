@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getDataOfStoriesPerClosedReason();
 timeout=0
-cid=0
+cid=18514
 
 - 按照需求关闭原因分组，获取分组后的需求数量 @7
 - 按照需求关闭原因分组，获取各个关闭原因下的需求数量，查看willnotdo的数据

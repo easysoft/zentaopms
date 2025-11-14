@@ -10,7 +10,7 @@ zenData('kanbanspace')->gen(5);
 
 title=测试 kanbanModel->updateSpace();
 timeout=0
-cid=1
+cid=16967
 
 - 测试修改空间1
  - 属性name @测试修改名称1

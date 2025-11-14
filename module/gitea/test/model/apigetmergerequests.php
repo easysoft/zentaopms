@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetMergeRequests();
 timeout=0
-cid=0
+cid=16561
 
 - 执行giteaTest模块的apiGetMergeRequestsTest方法，参数是1, 'test/project'  @0
 - 执行giteaTest模块的apiGetMergeRequestsTest方法，参数是999, 'test/project'  @0

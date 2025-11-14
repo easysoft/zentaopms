@@ -5,7 +5,7 @@
 
 title=测试 taskZen::getAssignedToOptions();
 timeout=0
-cid=0
+cid=18930
 
 - 步骤1:空manageLink-multiple模式multiple为true第multiple条的multiple属性 @1
 - 步骤2:空manageLink-multiple模式checkbox为true第multiple条的checkbox属性 @1

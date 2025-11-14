@@ -5,7 +5,7 @@
 
 title=测试 metricZen::formatException();
 timeout=0
-cid=0
+cid=17187
 
 - 执行metricTest模块的formatExceptionZenTest方法，参数是$exception1), 'Error: Test exception message in') !== false  @1
 - 执行metricTest模块的formatExceptionZenTest方法，参数是$exception2), 'Message with special chars: <>&"\'') !== false  @1

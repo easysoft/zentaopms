@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processNameDesc();
 timeout=0
-cid=0
+cid=17422
 
 - 执行pivot模块的processNameDescTest方法，参数是$pivotWithType 属性name @original_name
 - 执行$result2->names @1

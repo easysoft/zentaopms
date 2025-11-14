@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->cancel();
 timeout=0
-cid=1
+cid=18770
 
 - wait状态任务取消
  - 属性id @1

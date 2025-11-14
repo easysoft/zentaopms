@@ -5,7 +5,7 @@
 
 title=测试 userModel->update();
 timeout=0
-cid=0
+cid=19658
 
 - 使用系统预留用户名，返回 false。属性result @0
 - 使用系统预留用户名，提示错误信息。第errors条的account属性 @用户名已被系统预留

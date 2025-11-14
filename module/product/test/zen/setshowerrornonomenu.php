@@ -5,7 +5,7 @@
 
 title=测试 productZen::setShowErrorNoneMenu();
 timeout=0
-cid=0
+cid=17617
 
 - 执行productTest模块的setShowErrorNoneMenuTest方法，参数是'qa', 'testcase', 0, 'mhtml'  @1
 - 执行productTest模块的setShowErrorNoneMenuTest方法，参数是'qa', 'testcase', 0, ''  @1

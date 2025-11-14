@@ -27,7 +27,7 @@ su('admin');
 
 title=测试 projectModel->updateProductProgram();
 timeout=0
-cid=1
+cid=17877
 
 - 查看被更新了项目集的产品数量 @4
 - 查看被更新了项目集的产品详情

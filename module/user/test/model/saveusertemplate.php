@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel::saveUserTemplate();
-cid=0
+cid=19654
 
 - 模板名称和模板内容为空，返回 false。属性result @0
 - 创建人无错误提示。第errors条的account属性 @~~

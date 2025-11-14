@@ -5,7 +5,7 @@
 
 title=测试 aiModel::saveMiniProgramFields();
 timeout=0
-cid=0
+cid=15061
 
 - 执行aiTest模块的saveMiniProgramFieldsTest方法，参数是1, $testData1  @2
 - 执行aiTest模块的saveMiniProgramFieldsTest方法，参数是2, $testData2  @1

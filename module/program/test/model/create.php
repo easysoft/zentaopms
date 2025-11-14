@@ -16,7 +16,7 @@ $program->gen(1);
 /**
 
 title=测试 programModel::create();
-cid=1
+cid=17678
 pid=1
 
 创建新项目集                         >> 测试新增项目集一

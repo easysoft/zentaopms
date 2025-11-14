@@ -14,7 +14,7 @@ zenData('acl')->gen(0);
 /**
 
 title=测试 projectModel::updateInvolvedUserView();
-cid=1
+cid=17874
 
 - 测试用户user1有权限访问的产品项目和迭代。
  - 属性account @user1

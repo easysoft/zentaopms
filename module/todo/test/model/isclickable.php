@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 todoModel->isClickable();
 timeout=0
-cid=1
+cid=19265
 
 - 测试cyclei的值不为空并且action为finish的情况下 @2
 

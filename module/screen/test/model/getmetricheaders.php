@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getMetricHeaders();
 timeout=0
-cid=0
+cid=18247
 
 - 步骤1：年份类型返回单行表头数量 @1
 - 步骤2：月份类型返回双行表头数量 @2

@@ -5,7 +5,7 @@
 
 title=测试 programModel::hasUnfinished();
 timeout=0
-cid=1
+cid=17704
 
 - 获取项目集1下未完成的项目和项目集数量 @1
 - 获取项目集2下未完成的项目和项目集数量 @1

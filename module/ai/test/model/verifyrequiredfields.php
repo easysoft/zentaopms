@@ -5,7 +5,7 @@
 
 title=测试 aiModel::verifyRequiredFields();
 timeout=0
-cid=0
+cid=15081
 
 - 返回false，无错误 @0
 - 执行aiTest模块的verifyRequiredFieldsTest方法，参数是$requiredFields2, $postData2 属性name @『名称』不能为空。

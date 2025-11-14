@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getSCM();
 timeout=0
-cid=0
+cid=18144
 
 - 步骤1：正常的GitLab服务器类型 @Gitlab
 - 步骤2：正常的Gitea服务器类型 @Gitea

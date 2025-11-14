@@ -5,7 +5,7 @@
 
 title=测试 commonModel::judgeSuhosinSetting();
 timeout=0
-cid=0
+cid=15685
 
 false
 false

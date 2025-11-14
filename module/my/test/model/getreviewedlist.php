@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 myModel->getReviewedList();
 timeout=0
-cid=1
+cid=17289
 
 - 测试获取排序 browse all id_desc 的审批列表。 @10,9
 

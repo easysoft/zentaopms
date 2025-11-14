@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 todoModel->getByList();
 timeout=0
-cid=1
+cid=19258
 
 - 执行todo模块的getByListTest方法，参数是$todoIDList1  @1
 - 执行todo模块的getByListTest方法，参数是$todoIDList2  @1234

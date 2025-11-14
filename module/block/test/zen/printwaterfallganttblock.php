@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWaterfallGanttBlock();
 timeout=0
-cid=0
+cid=15309
 
 - 执行blockTest模块的printWaterfallGanttBlockTest方法，参数是$block1  @1
 - 执行blockTest模块的printWaterfallGanttBlockTest方法，参数是$block2, array  @1

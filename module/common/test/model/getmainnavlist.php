@@ -5,7 +5,7 @@
 
 title=测试 commonModel::getMainNavList();
 timeout=0
-cid=0
+cid=15674
 
 - 步骤1：测试product模块导航列表获取第0条的group属性 @my
 - 步骤2：测试使用默认菜单参数第0条的group属性 @my

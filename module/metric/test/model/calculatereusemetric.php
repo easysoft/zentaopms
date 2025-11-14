@@ -5,7 +5,7 @@
 
 title=测试 metricModel::calculateReuseMetric();
 timeout=0
-cid=0
+cid=17066
 
 - 步骤1：不支持重用 @0
 - 步骤2：空重用指标列表 @1

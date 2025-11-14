@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel->checkField();
 timeout=0
-cid=1
+cid=15654
 
 - 查看需求表中的id字段是否存在 @1
 - 查看需求表中的tester字段是否存在 @0

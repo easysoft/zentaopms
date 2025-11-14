@@ -5,7 +5,7 @@
 
 title=测试 docZen::getDocChildrenByRecursion();
 timeout=0
-cid=0
+cid=16190
 
 - 步骤1:level为0时返回空数组 @0
 - 步骤2:level为负数时返回空数组 @0

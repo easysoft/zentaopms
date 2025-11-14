@@ -5,7 +5,7 @@
 
 title=测试 storyModel->replaceURLang();
 timeout=0
-cid=0
+cid=18580
 
 - 查看更换语言之前的create属性create @提研发需求
 - 查看更换语言之前的create属性create @提用户需求

@@ -5,7 +5,7 @@
 
 title=productModel->getShadowProductByProject();
 timeout=0
-cid=0
+cid=17512
 
 - 不传入项目编写。 @0
 - 传入正常的项目编号。

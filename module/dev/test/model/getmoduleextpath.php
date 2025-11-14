@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 devModel::getModuleExtPath();
-cid=1
+cid=16006
 pid=1
 
 - 获取开源版扩展的模块路径 @xuan

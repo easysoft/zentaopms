@@ -4,7 +4,7 @@
 
 title=测试 fileModel->printFile();
 timeout=0
-cid=0
+cid=16518
 
 - 测试非详情/编辑页面的情况 @1
 - 测试编辑页面不展示删除按钮的情况 @1

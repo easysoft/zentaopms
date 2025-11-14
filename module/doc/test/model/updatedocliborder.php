@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->updateDocLibOrder();
-cid=1
+cid=16159
 
 - 测试更新ID为0的文档库顺序为2 @0
 - 测试更新ID为1的文档库顺序为5 @5

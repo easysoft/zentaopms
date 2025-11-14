@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getCloneUrl();
 timeout=0
-cid=1
+cid=18051
 
 - 获取gitlab项目2 clone url属性http @https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml.git
 - 获取gitlab项目1 clone url属性http @https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/Monitoring.git

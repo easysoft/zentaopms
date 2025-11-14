@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildGroupMultiTask();
 timeout=0
-cid=0
+cid=16413
 
 - 步骤1：assignedTo分组，期望2个分组（用户1和用户2） @2
 - 步骤2：finishedBy分组，期望1个分组（用户3） @1

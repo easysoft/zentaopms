@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraFieldGroupByProject();
 timeout=0
-cid=0
+cid=15778
 
 - 执行convertTest模块的getJiraFieldGroupByProjectTest方法，参数是array  @0
 - 执行convertTest模块的getJiraFieldGroupByProjectTest方法，参数是$relations  @0

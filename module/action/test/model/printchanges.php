@@ -5,7 +5,7 @@
 
 title=测试 actionModel::printChanges();
 timeout=0
-cid=0
+cid=14920
 
 - 执行actionTest模块的printChangesTest方法，参数是'task', 1, array  @
 - 执行actionTest模块的printChangesTest方法，参数是'task', 1, $histories1  @修改了 <strong><i>任务状态</i></strong>，旧值为 "待处理"，新值为 "进行中"。<br />' . "\n"

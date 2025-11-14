@@ -5,7 +5,7 @@
 
 title=测试 chartModel::genRadar();
 timeout=0
-cid=0
+cid=15568
 
 - 执行chartTest模块的genRadarTest方法，参数是'normal')['series']['data']  @1
 - 执行chartTest模块的genRadarTest方法，参数是'multi')['series']['data']  @2

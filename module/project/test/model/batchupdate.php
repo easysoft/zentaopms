@@ -27,7 +27,7 @@ $project->gen(4);
 
 title=测试taskModel->batchUpdateTest();
 timeout=0
-cid=1
+cid=17800
 
 - 查看被编辑了的项目数量 @3
 - 查看被编辑了的项目11详情

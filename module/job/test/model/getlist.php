@@ -8,7 +8,7 @@ su('admin');
 
 title=jobModel->getList();
 timeout=0
-cid=1
+cid=16844
 
 - 测试获取列表的个数 @5
 - 测试获取列表某个job的名称信息第1条的name属性 @这是一个Job1

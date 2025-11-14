@@ -36,6 +36,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testcase->module),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',module,') !== false),
             inputGroup
             (
                 set('id', 'moduleBox'),
@@ -69,6 +70,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testcase->stage),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',stage,') !== false),
             inputGroup
             (
                 set('id', 'stageBox'),
@@ -114,6 +116,7 @@ formPanel
         (
             setClass('grow-0'),
             set::label($lang->testcase->pri),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',pri,') !== false),
             set::control(array('control' => 'priPicker', 'items' => array_filter($lang->testcase->priList), 'required' => true)),
             set::name('pri'),
             set::value('3')
@@ -124,6 +127,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->precondition),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',precondition,') !== false),
             set::control(array('control' => 'textarea', 'rows' => 2)),
             set::name('precondition'),
             set::value($precondition)
@@ -142,6 +146,7 @@ formPanel
         formGroup
         (
             set::label($lang->testcase->keywords),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',keywords,') !== false),
             set::name('keywords'),
             set::value($keywords)
         )

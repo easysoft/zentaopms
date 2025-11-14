@@ -5,7 +5,7 @@
 
 title=测试 bugZen::processRepoIssueActions();
 timeout=0
-cid=0
+cid=15469
 
 - 步骤1：正常仓库ID属性repoID @1
 - 步骤2：边界值0属性repoID @0

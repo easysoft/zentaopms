@@ -5,7 +5,7 @@
 
 title=测试 miscZen::hello();
 timeout=0
-cid=0
+cid=17219
 
 - 执行 @hello world from hello()<br />
 - 执行 @hello world from hello()<br />

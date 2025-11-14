@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 commonModel::getUserPriv();
 timeout=0
-cid=0
+cid=15678
 
 - 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'nouser'  @0
 - 执行commonTest模块的getUserPrivTest方法，参数是'user', 'browse', null, '', 'admin'  @1

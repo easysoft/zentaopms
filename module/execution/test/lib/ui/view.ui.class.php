@@ -65,9 +65,9 @@ class viewTester extends tester
         if($url['module'] != 'execution') return $this->failed('点击更多按钮，页面跳转后module不正确');
         if($url['method'] != 'team')      return $this->failed('点击更多按钮，页面跳转后method不正确');
         $form->dom->btn($this->lang->overview)->click();
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->manageMembers->click();
-        $form->wait(1);
+        $form->wait(2);
         $url = $this->response();
         if($url['module'] != 'execution')     return $this->failed('点击管理按钮，页面跳转后module不正确');
         if($url['method'] != 'manageMembers') return $this->failed('点击管理按钮，页面跳转后method不正确');

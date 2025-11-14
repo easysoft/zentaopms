@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProjectOverviewBlock();
 timeout=0
-cid=0
+cid=15276
 
 - 步骤1:标准区块对象正常获取项目总览数据属性groupsCount @2
 - 步骤2:验证cards组包含2张卡片第group0条的cardsCount属性 @2

@@ -16,7 +16,7 @@ zenData('productplan')->loadYaml('productplan')->gen(5);
 
 title=测试 bugTao::fetchBugInfo;
 timeout=0
-cid=1
+cid=15414
 
 - 获取ID等于2的bug
  - 属性title @第1个bug

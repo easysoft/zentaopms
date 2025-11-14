@@ -5,7 +5,7 @@
 
 title=测试 myModel::getAssignedByMe();
 timeout=0
-cid=0
+cid=17280
 
 - 步骤1：正常获取admin用户指派的task @0
 - 步骤2：正常获取admin用户指派的bug @4

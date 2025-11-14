@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getTreeByGraphql();
 timeout=0
-cid=1
+cid=18081
 
 - 获取gitlab类型版本库1的master分支文件夹列表第0条的name属性 @public
 - 获取gitlab类型版本库1的master分支文件列表第2条的name属性 @sonar-project.properties

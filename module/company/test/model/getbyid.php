@@ -10,7 +10,7 @@ zenData('company')->gen(5);
 
 title=测试 companyModel::getByID();
 timeout=0
-cid=0
+cid=15731
 
 - 步骤1：正常有效ID查询公司名称 @易软天创网络科技有限公司
 - 步骤2：边界值ID=0的查询处理 @0

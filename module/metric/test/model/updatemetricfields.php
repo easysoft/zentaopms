@@ -5,7 +5,7 @@
 
 title=测试 metricModel::updateMetricFields();
 timeout=0
-cid=0
+cid=17160
 
 - 执行metricTest模块的updateMetricFieldsTest方法，参数是'1', $metric1  @0
 - 执行metricTest模块的updateMetricFieldsTest方法，参数是'2', $metric2  @0

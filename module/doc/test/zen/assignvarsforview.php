@@ -5,7 +5,7 @@
 
 title=测试 docZen::assignVarsForView();
 timeout=0
-cid=0
+cid=16182
 
 - 执行docTest模块的assignVarsForViewTest方法，参数是1, 0, 'product', 1, 1, $doc1, $object1, 'product', $libs, $objectDropdown
  - 属性docID @1

@@ -5,7 +5,7 @@
 
 title=测试 miscModel::getRemind();
 timeout=0
-cid=0
+cid=17213
 
 - 步骤1：默认配置返回0 @0
 - 步骤2：showAnnual为空返回0 @0

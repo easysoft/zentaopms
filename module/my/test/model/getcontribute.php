@@ -19,7 +19,7 @@ su('admin');
 
 title=测试 myModel->getContribute();
 timeout=0
-cid=0
+cid=17281
 
 - myTaskTotal数据获取 @5
 - myStoryTotal数据获取 @4

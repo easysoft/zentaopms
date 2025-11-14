@@ -9,7 +9,7 @@ zenData('dept')->loadYaml('dept')->gen(15);
 
 title=测试 deptModel->getAllChildId();
 timeout=0
-cid=1
+cid=15967
 
 - 有子部门查询 @2
 - 无子部门查询 @5

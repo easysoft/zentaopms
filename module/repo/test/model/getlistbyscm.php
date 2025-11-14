@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getListBySCM();
 timeout=0
-cid=0
+cid=18072
 
 - 执行$gitResults第0条的SCM属性 @Git
 - 执行$gitlabResults第0条的SCM属性 @Gitlab

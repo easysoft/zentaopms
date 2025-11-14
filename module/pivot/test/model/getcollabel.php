@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getColLabel();
 timeout=0
-cid=0
+cid=17375
 
 - 步骤1：字段存在客户端语言标签 @标题字段
 - 步骤2：在langs中存在标签 @状态标签

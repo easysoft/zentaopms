@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printAnnualWorkloadBlock();
 timeout=0
-cid=0
+cid=15247
 
 - 步骤1:测试方法执行成功返回success为true属性success @1
 - 步骤2:测试返回maxStoryEstimate最大需求规模属性maxStoryEstimate @80

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::getXmindExportData();
 timeout=0
-cid=0
+cid=19099
 
 - 步骤1：正常产品和用例数据导出XMind @1
 - 步骤2：空产品ID测试 @1

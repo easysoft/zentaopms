@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildGroupKanban();
 timeout=0
-cid=0
+cid=16972
 
 - 执行$result) && count($result) == 3 @1
 - 执行$result2) && count($result2[0]) == 0 @1

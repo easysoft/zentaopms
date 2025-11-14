@@ -10,7 +10,7 @@ zenData('kanbanspace')->gen(3);
 
 title=测试 kanbanModel->activateSpace();
 timeout=0
-cid=1
+cid=16868
 
 - 查看激活前的字段
  - 属性status @active

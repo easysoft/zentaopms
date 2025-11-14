@@ -20,7 +20,7 @@ su('admin');
 
 title=测试 transfer->updateChildDatas();
 timeout=0
-cid=1
+cid=19336
 
 - 测试导出多人并行任务第0条的name属性 @[多人] 开发任务11
 - 测试导出多人串行任务第1条的name属性 @[多人] 开发任务12

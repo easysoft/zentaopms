@@ -11,7 +11,7 @@ zenData('api_lib_release')->gen(10);
 
 title=测试 apiModel->getByID();
 timeout=0
-cid=1
+cid=15106
 
 - 获取接口文档ID为1的接口。
  - 属性id @1

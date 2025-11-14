@@ -5,7 +5,7 @@
 
 title=测试 userZen::responseForLoginFail();
 timeout=0
-cid=0
+cid=19682
 
 - 执行userZenTest模块的responseForLoginFailTest方法，参数是'json', '' 属性status @failed
 - 执行userZenTest模块的responseForLoginFailTest方法，参数是'', '' 属性result @fail

@@ -5,7 +5,7 @@
 
 title=测试 buildModel::updateLinkedBug();
 timeout=0
-cid=0
+cid=15511
 
 - 步骤1：正常更新Bug状态第1条的status属性 @resolved
 - 步骤2：验证解决人设置第1条的resolvedBy属性 @admin

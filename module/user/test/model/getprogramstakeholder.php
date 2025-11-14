@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProgramStakeholder();
 timeout=0
-cid=0
+cid=19627
 
 - 步骤1：正常情况，检查产品1有admin第1条的admin属性 @admin
 - 步骤2：空数组 @0

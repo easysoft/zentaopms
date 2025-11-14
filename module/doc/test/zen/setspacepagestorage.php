@@ -5,7 +5,7 @@
 
 title=测试 docZen::setSpacePageStorage();
 timeout=0
-cid=0
+cid=16226
 
 - 测试自定义空间类型
  - 属性spaceType @custom

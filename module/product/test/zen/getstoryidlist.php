@@ -5,7 +5,7 @@
 
 title=测试 productZen::getStoryIdList();
 timeout=0
-cid=0
+cid=17597
 
 - 步骤1:测试空数组 @0
 - 步骤2:测试单个需求无子需求属性1 @1

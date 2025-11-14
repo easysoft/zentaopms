@@ -5,7 +5,7 @@
 
 title=测试 aiModel::hasModelsAvailable();
 timeout=0
-cid=0
+cid=15053
 
 - 步骤1：有启用且未删除的模型时 @1
 - 步骤2：只有禁用但未删除的模型时 @0

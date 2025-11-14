@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkEntryToken();
 timeout=0
-cid=0
+cid=15653
 
 - 测试正确的token验证（无时间戳模式） @1
 - 测试错误的token验证（无时间戳模式） @0

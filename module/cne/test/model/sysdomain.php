@@ -5,7 +5,7 @@
 
 title=测试 cneModel::sysDomain();
 timeout=0
-cid=0
+cid=15630
 
 - 执行cneTest模块的sysDomainTest方法，参数是'empty_all'  @0
 - 执行cneTest模块的sysDomainTest方法，参数是'config_only'  @config.test.com

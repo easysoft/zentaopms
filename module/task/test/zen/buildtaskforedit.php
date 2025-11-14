@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTaskForEdit();
 timeout=0
-cid=0
+cid=18910
 
 - 步骤1:正常编辑任务
  - 属性id @1

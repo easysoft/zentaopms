@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getProjectPairsByProgram();
-cid=1
+cid=19528
 
 - 测试获取项目集 0 的项目键值对 @0
 - 测试获取项目集 1 的项目键值对 @11:项目11

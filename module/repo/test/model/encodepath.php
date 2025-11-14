@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->encodePath();
 timeout=0
-cid=1
+cid=18042
 
 - 测试正常路径 @ZXh0ZW50aW9u
 - 测试数字路径 @NQ==

@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::setMenu();
 timeout=0
-cid=0
+cid=19023
 
 - 执行testcaseTest模块的setMenuTest方法，参数是1  @1
 - 执行testcaseTest模块的setMenuTest方法  @1

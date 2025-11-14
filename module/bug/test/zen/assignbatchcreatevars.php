@@ -5,7 +5,7 @@
 
 title=测试 bugZen::assignBatchCreateVars();
 timeout=0
-cid=0
+cid=15424
 
 - 测试正常产品无执行情况 @1
 - 测试正常产品有执行情况 @1

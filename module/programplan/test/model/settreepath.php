@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::setTreePath();
 timeout=0
-cid=0
+cid=17757
 
 - 执行programplanTest模块的setTreePathTest方法，参数是2
  - 属性path @,1,2,

@@ -5,7 +5,7 @@
 
 title=测试 executionModel::changeStatus2Wait();
 timeout=0
-cid=0
+cid=16280
 
 - 执行execution模块的changeStatus2WaitTest方法，参数是8  @
 - 执行execution模块的changeStatus2WaitTest方法，参数是2  @'父阶段A',

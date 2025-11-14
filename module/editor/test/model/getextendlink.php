@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getExtendLink();
 timeout=0
-cid=0
+cid=16234
 
 - 执行editor模块的getExtendLinkNormalTest方法  @1
 - 执行editor模块的getExtendLinkWithExtendsTest方法  @1

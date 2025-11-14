@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getTask();
 timeout=0
-cid=0
+cid=19484
 
 - 步骤1：测试获取默认任务对象的基本属性
  - 属性id @1

@@ -5,7 +5,7 @@
 
 title=测试 biModel::getScopeOptions();
 timeout=0
-cid=0
+cid=15179
 
 - 步骤1：测试user类型返回用户选项数组属性admin @管理员
 - 步骤2：测试product类型返回产品选项数组属性1 @产品1

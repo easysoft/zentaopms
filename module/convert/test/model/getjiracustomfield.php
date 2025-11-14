@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraCustomField();
 timeout=0
-cid=0
+cid=15774
 
 - 步骤1：开源版返回空数组 @0
 - 步骤2：zentaoObject为空返回空数组 @0

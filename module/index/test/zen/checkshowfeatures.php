@@ -5,7 +5,7 @@
 
 title=测试 indexZen::checkShowFeatures();
 timeout=0
-cid=0
+cid=16765
 
 - 执行indexTest模块的checkShowFeaturesTest方法  @0
 - 执行indexTest模块的checkShowFeaturesTest方法  @0

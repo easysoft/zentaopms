@@ -5,7 +5,7 @@
 
 title=测试 transferZen::processEstimate();
 timeout=0
-cid=0
+cid=19340
 
 - 执行transferTest模块的processEstimateTest方法，参数是1,   @1
 - 执行transferTest模块的processEstimateTest方法，参数是2,   @1

@@ -5,7 +5,7 @@
 
 title=测试 docModel::getDocTemplateSpaces();
 timeout=0
-cid=0
+cid=16086
 
 - 步骤1：正常获取文档模板空间数量 @3
 - 步骤2：验证返回值为数组类型 @array

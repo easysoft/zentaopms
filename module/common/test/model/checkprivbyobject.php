@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkPrivByObject();
 timeout=0
-cid=0
+cid=15661
 
 - 步骤1：教程模式下返回true @1
 - 步骤2：有效的product对象类型检查权限 @1

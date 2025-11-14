@@ -4,7 +4,7 @@
 /**
 
 title=测试productTao->getProjectPairsByProductIdList();
-cid=0
+cid=17507
 
 - 不传入产品 ID。 @0
 - 用超级管理员账号，传入单个产品数组，确认获取条目数。 @10

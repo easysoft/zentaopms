@@ -10,7 +10,7 @@ su('admin');
 /**
 
 title=测试 testtaskModel->getPairs();
-cid=1
+cid=19181
 pid=1
 
 */

@@ -5,7 +5,7 @@
 
 title=测试 companyZen::loadProject();
 timeout=0
-cid=0
+cid=15740
 
 - 步骤1:正常情况下加载项目列表,验证返回类型为数组 @1
 - 步骤2:验证返回数组不为空 @1

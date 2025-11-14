@@ -5,7 +5,7 @@
 
 title=测试 programplanModel::isCreateTask();
 timeout=0
-cid=0
+cid=17752
 
 - 执行programplan模块的isCreateTaskTest方法，参数是-1  @1
 - 执行programplan模块的isCreateTaskTest方法  @1

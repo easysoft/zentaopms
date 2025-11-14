@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->batchCreate();
-cid=1
+cid=16737
 
 - 测试创建holiday
  - 属性id @1

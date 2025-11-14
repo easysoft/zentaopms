@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getError();
-cid=1
+cid=19523
 
 - 测试 static::$errors 为 errors1 时的错误内容 @error1,error2,error3
 

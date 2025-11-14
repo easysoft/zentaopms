@@ -5,7 +5,7 @@
 
 title=测试 svnModel::convertLog();
 timeout=0
-cid=0
+cid=18713
 
 - 执行svnTest模块的convertLogTest方法，参数是$normalLog 属性revision @e7699d04f1586d337f34496da932dde55db92616
 - 执行svnTest模块的convertLogTest方法，参数是$emptyLog  @0

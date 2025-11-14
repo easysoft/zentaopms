@@ -34,7 +34,7 @@ zenData('task')->gen(10);
 
 title=测试 projectModel->getTotalTaskByProject();
 timeout=0
-cid=1
+cid=17914
 
 - 获取id为11的项目下未开始的task数量第11条的waitTasks属性 @1
 - 获取id为15的项目下所有的task数量第15条的allTasks属性 @1

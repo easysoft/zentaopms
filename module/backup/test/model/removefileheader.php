@@ -5,7 +5,7 @@
 
 title=测试 backupModel::removeFileHeader();
 timeout=0
-cid=0
+cid=15140
 
 - 执行backupTest模块的removeFileHeaderTest方法，参数是$testFile1  @1
 - 执行$testFile1), 'data1') !== false @1

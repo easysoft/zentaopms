@@ -5,7 +5,7 @@
 
 title=测试 actionTao::getActionTable();
 timeout=0
-cid=0
+cid=14945
 
 - 执行actionTest模块的getActionTableTest方法，参数是'today'  @`zt_actionrecent`
 - 执行actionTest模块的getActionTableTest方法，参数是'yesterday'  @`zt_actionrecent`
