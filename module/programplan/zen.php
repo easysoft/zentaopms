@@ -81,7 +81,6 @@ class programplanZen extends programplan
         $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
-
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
             $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->programplan->calcDaysForStage($plan->begin, $plan->end) : 0;
             $plan->project    = $projectID;
@@ -90,7 +89,7 @@ class programplanZen extends programplan
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->isTpl      = $project->isTpl;
             if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
-            if(!empty($plan->percent) && $plan->type != 'stage') $plan->percent = 0; // 非阶段类型，工作量占比为0
+            if($plan->type != 'stage' || empty($plan->percent)) $plan->percent = 0; // 非阶段类型，工作量占比为0
 
             if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
             if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
