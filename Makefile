@@ -45,10 +45,8 @@ common:
 	cp -fr sdk zentaopms/
 	cp -fr roadrunner zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
-	# 删除不需要的包
+	# 删除不需要的包和文件
 	cd zentaopms/lib/; rm -fr composer.json composer.lock patches vendor/bin vendor/cweagans vendor/laminas vendor/markbaker vendor/paragonie vendor/phpseclib vendor/psr vendor/symfony
-	# 清理自动加载文件，移除已删除包的引用
-	php misc/cleanup_autoload.php zentaopms/lib/vendor
 	cd zentaopms/lib/vendor/box/spout; rm -fr appveyor.yml composer.json PATCHES.txt README.md UPGRADE-3.0.md
 	cd zentaopms/lib/vendor/dragonmantank/cron-expression; rm -fr tests CHANGELOG.md composer.json README.md
 	cd zentaopms/lib/vendor/erusev/parsedown; rm -fr composer.json PATCHES.txt README.md
@@ -64,6 +62,10 @@ common:
 	cd zentaopms/lib/vendor/phpoffice/phpspreadsheet; rm -fr bin docs samples CHANGELOG.md CHANGELOG.PHPExcel.md composer.json composer.lock CONTRIBUTING.md mkdocs.yml PATCHES.txt phpunit.xml.dist
 	cd zentaopms/lib/vendor/phpoffice/phpword; rm -fr CHANGELOG.md composer.json CONTRIBUTING.md COPYING COPYING.LESSER phpword.ini.dist README.md sonar-project.properties
 	cd zentaopms/lib/vendor/rmccue/requests; rm -fr CHANGELOG.md composer.json README.md
+	# 清理自动加载文件，移除已删除包的引用
+	php misc/cleanup_autoload.php zentaopms/lib/vendor
+	# 把隐式可空类型声明 Type $param = null 改为显式可空类型声明 ?Type $param = null
+	php misc/fix_nullable_types.php zentaopms/lib/vendor
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
 	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	# disable the autoExclude function.
