@@ -1771,4 +1771,51 @@ class zaiModel extends model
 
         return $markdown;
     }
+
+    /**
+     * 将 OPPORTUNITY 对象转换为 Markdown。
+     * Convert opportunity object to Markdown format.
+     *
+     * @access public
+     * @param  object     $opportunity
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertOpportunityToMarkdown($opportunity, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $opportunity->id ?? 0;
+        $title = trim((string)($opportunity->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('opportunity', $langData, $opportunity);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'desc', $opportunity->desc ?? null);
+        static::appendDetailSection($content, $langData, 'prevention', $opportunity->prevention ?? null);
+
+        $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'status'     => $opportunity->status     ?? '',
+            'benefit'    => $opportunity->benefit    ?? ($opportunity->impact ?? ''),
+            'chance'     => $opportunity->chance     ?? '',
+            'type'       => $opportunity->type       ?? '',
+            'strategy'   => $opportunity->strategy   ?? '',
+            'assignedTo' => $opportunity->assignedTo ?? '',
+            'project'    => $opportunity->project    ?? '',
+        );
+
+        return $markdown;
+    }
 }
