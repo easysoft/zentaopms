@@ -934,6 +934,56 @@ class zaiModel extends model
             $content[] = "* {$label}: {$formatted}";
         }
     }
+    /**
+     * 附加详情章节。
+     *
+     * @param  array  $content
+     * @param  array  $langData
+     * @param  string $sectionKey
+     * @param  mixed  $rawValue
+     * @return void
+     */
+    public static function appendDetailSection(array &$content, array $langData, string $sectionKey, $rawValue): void
+    {
+        if($rawValue === null) return;
+
+        if(is_array($rawValue) || is_object($rawValue))
+        {
+            $rawValue = json_encode($rawValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        $text  = trim((string)$rawValue);
+        $plain = $text === '' ? '' : trim(strip_tags($text));
+
+        $label = static::getSectionLabel($langData, $sectionKey);
+        if($label === '') $label = static::getFieldLabel($langData, $sectionKey);
+        if($label === '') return;
+
+        $content[] = "\n## {$label}\n\n" . $plain;
+    }
+
+    /**
+     * 附加里程碑章节。
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  mixed $milestones
+     * @return void
+     */
+    public static function appendMilestoneSection(array &$content, array $langData, $milestones): void
+    {
+        if(empty($milestones)) return;
+
+        $label = static::getSectionLabel($langData, 'milestone');
+        if($label === '') $label = static::getFieldLabel($langData, 'milestone');
+        if($label === '') return;
+
+        $content[] = "\n## {$label}";
+        foreach((array)$milestones as $milestone)
+        {
+            if(is_object($milestone)) $milestone = (array)$milestone;
+        }
+    }
 
     /**
      * 将 STORY 对象转换为 Markdown 格式。
