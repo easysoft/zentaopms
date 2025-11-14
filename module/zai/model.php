@@ -1185,7 +1185,7 @@ class zaiModel extends model
      * @param object $story
      * @return array
      */
-    public static function convertStoryToMarkdown($story)
+    public static function convertStoryToMarkdown($story, ?array $langData = null)
     {
         global $app;
 
@@ -1277,6 +1277,7 @@ class zaiModel extends model
             'status'    => $case->status    ?? '',
             'stage'     => $case->stage     ?? '',
         );
+
         return $markdown;
     }
 
@@ -1288,7 +1289,7 @@ class zaiModel extends model
      * @param object $demand
      * @return array
      */
-    public static function convertDemandToMarkdown($demand)
+    public static function convertDemandToMarkdown($demand, ?array $langData = null)
     {
         global $app;
 
@@ -1343,7 +1344,7 @@ class zaiModel extends model
      * @param object $bug
      * @return array
      */
-    public static function convertBugToMarkdown($bug)
+    public static function convertBugToMarkdown($bug, ?array $langData = null)
     {
         global $app;
 
@@ -1398,7 +1399,7 @@ class zaiModel extends model
      * @access public
      * @return array
      */
-    public static function convertTaskToMarkdown($task)
+    public static function convertTaskToMarkdown($task, ?array $langData = null)
     {
         global $app;
 
@@ -1457,7 +1458,7 @@ class zaiModel extends model
      * @param object $doc
      * @return array
      */
-    public static function convertDocToMarkdown($doc)
+    public static function convertDocToMarkdown($doc, ?array $langData = null)
     {
         global $app;
 
@@ -1591,7 +1592,7 @@ class zaiModel extends model
      * @param object $design
      * @return array
      */
-    public static function convertDesignToMarkdown($design)
+    public static function convertDesignToMarkdown($design, ?array $langData = null)
     {
         global $app;
 
@@ -1631,7 +1632,7 @@ class zaiModel extends model
      * @param object $feedback
      * @return array
      */
-    public static function convertFeedbackToMarkdown($feedback)
+    public static function convertFeedbackToMarkdown($feedback, ?array $langData = null)
     {
         global $app;
 
@@ -1672,6 +1673,41 @@ class zaiModel extends model
         $markdown['content'] = implode("\n", $content);
 
         $markdown['attrs'] = array('product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
+        return $markdown;
+    }
+
+    /**
+     * 将 ISSUE 对象转换为 Markdown。
+     * Convert issue object to Markdown format.
+     *
+     * @access public
+     * @param  object     $issue
+     * @param  array|null $langData
+     * @return array
+     */
+    public static function convertIssueToMarkdown($issue, ?array $langData = null): array
+    {
+        $langData = is_array($langData) ? $langData : array();
+
+        $id    = $issue->id ?? 0;
+        $title = trim((string)($issue->title ?? $issue->name ?? ''));
+
+        $typeName = isset($langData['common']) ? $langData['common'] : '';
+        $header   = trim(($typeName !== '' ? "{$typeName} " : '') . "#$id $title");
+        if($header === '') $header = "#$id $title";
+
+        $markdown = array('id' => $id, 'title' => $header);
+        $content  = array();
+        $content[] = "# {$header}\n";
+
+        $sectionBasic = static::getSectionLabel($langData, 'basic');
+        if($sectionBasic !== '') $content[] = "## {$sectionBasic}\n";
+
+        $fieldPairs = static::collectFieldPairs('issue', $langData, $issue);
+        static::appendFieldList($content, $langData, $fieldPairs);
+
+        static::appendDetailSection($content, $langData, 'desc', $issue->desc ?? null);
+        static::appendDetailSection($content, $langData, 'solution', $issue->resolutionComment ?? null);
         return $markdown;
     }
 }
