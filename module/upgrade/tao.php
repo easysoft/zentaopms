@@ -1008,6 +1008,7 @@ class upgradeTao extends upgradeModel
      */
     protected function handleNeedCopyWorkflowGroup(object $group, int $groupID, array $classifyModule)
     {
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
         $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
         $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
         $outputGroup   = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
@@ -1019,7 +1020,7 @@ class upgradeTao extends upgradeModel
 
         foreach($processList as $process)
         {
-            $this->copyProcessWithActivities($process, $groupID, $activityGroup, $outputGroup);
+            $this->copyProcessWithActivities($process, $groupID, $activityGroup, $outputGroup, $projectIdList);
         }
 
         $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
@@ -1035,8 +1036,9 @@ class upgradeTao extends upgradeModel
      * @param int    $groupID 流程ID
      * @param array  $activityGroup 活动分组
      * @param array  $outputGroup 文档分组
+     * @param array  $projectIdList 项目ID列表
      */
-    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup, array $outputGroup)
+    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup, array $outputGroup, array $projectIdList)
     {
         $activityList = zget($activityGroup, $process->id, array());
         unset($process->id);
@@ -1050,7 +1052,7 @@ class upgradeTao extends upgradeModel
 
         foreach($activityList as $activity)
         {
-            $this->copyActivity($activity, $processID, $groupID, $outputGroup);
+            $this->copyActivity($activity, $processID, $groupID, $outputGroup, $projectIdList);
         }
     }
 
@@ -1062,11 +1064,11 @@ class upgradeTao extends upgradeModel
      * @param int    $processID   过程ID
      * @param int    $groupID     流程ID
      * @param array  $outputGroup 文档分组
+     * @param array  $projectIdList 项目ID列表
      */
-    protected function copyActivity(object $activity, int $processID, int $groupID, array $outputGroup)
+    protected function copyActivity(object $activity, int $processID, int $groupID, array $outputGroup, array $projectIdList)
     {
-        $outputList    = zget($outputGroup, $activity->id, array());
-        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($groupID)->fetchPairs();
+        $outputList = zget($outputGroup, $activity->id, array());
 
         $oldActivityID = $activity->id;
         unset($activity->id);
@@ -1082,6 +1084,7 @@ class upgradeTao extends upgradeModel
         $newActivityID = $this->dao->lastInsertID();
 
         $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('objectType')->eq('activity')->andWhere('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('activity')->exec();
         $this->dao->update(TABLE_PROGRAMACTIVITY)->set('activity')->eq($newActivityID)->where('activity')->eq($oldActivityID)->andWhere('project')->in($projectIdList)->exec();
 
         $idMap = array();
@@ -1100,7 +1103,7 @@ class upgradeTao extends upgradeModel
 
         foreach($idMap as $oldID => $newOutputID)
         {
-            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->exec();
+            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('zoutput')->exec();
             $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('objectType')->eq('zoutput')->andWhere('project')->in($projectIdList)->exec();
         }
     }
