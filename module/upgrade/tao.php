@@ -961,7 +961,6 @@ class upgradeTao extends upgradeModel
         $customOrder    = 40;
         foreach($classifyList as $key => $value)
         {
-            $value    = isset($this->lang->upgrade->classifyList[$key]) ? $this->lang->upgrade->classifyList[$key] : $value;
             $order    = isset($orderList[$key]) ? $orderList[$key] : $customOrder;
             $moduleID = $this->createProcessModule($groupID, $key, $value, $order);
             $classifyModule[$key] = $moduleID;
