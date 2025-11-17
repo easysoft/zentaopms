@@ -795,12 +795,12 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $oldStory->type);
 
         $specChanged = $oldStory->version != $story->version;
         if($specChanged)
         {
-            $this->loadModel('file')->processFileDiffsForObject('story', $oldStory, $story, (string)$story->version);
+            $this->loadModel('file')->processFileDiffsForObject($oldStory->type, $oldStory, $story, (string)$story->version);
 
             $this->storyTao->doCreateSpec($storyID, $story, $story->files);
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer, $story->version);
@@ -871,8 +871,8 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         $this->loadModel('action');
-        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
-        $this->file->processFileDiffsForObject('story', $oldStory, $story, (string)$oldStory->version);
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $oldStory->type);
+        $this->file->processFileDiffsForObject($oldStory->type, $oldStory, $story, (string)$oldStory->version);
         $this->storyTao->doUpdateSpec($storyID, $story, $oldStory);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
