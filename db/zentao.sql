@@ -1445,55 +1445,6 @@ CREATE TABLE IF NOT EXISTS `zt_planstory` (
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `plan_story` ON `zt_planstory`(`plan`,`story`);
 
--- DROP TABLE IF EXISTS `zt_priv`;
-CREATE TABLE IF NOT EXISTS `zt_priv` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(30) NOT NULL DEFAULT '',
-  `method` varchar(30) NOT NULL DEFAULT '',
-  `parent` int unsigned NOT NULL DEFAULT 0,
-  `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
-  `system` tinyint unsigned NOT NULL DEFAULT 0,
-  `order` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
-
--- DROP TABLE IF EXISTS `zt_privmanager`;
-CREATE TABLE IF NOT EXISTS `zt_privmanager` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `parent` int unsigned NOT NULL DEFAULT 0,
-  `code` varchar(100) NOT NULL DEFAULT '',
-  `type` varchar(10) NOT NULL DEFAULT 'package',
-  `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
-  `order` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
--- DROP TABLE IF EXISTS `zt_privlang`;
-CREATE TABLE IF NOT EXISTS `zt_privlang` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `objectID` int unsigned NOT NULL DEFAULT 0,
-  `objectType` varchar(10) NOT NULL DEFAULT 'priv',
-  `lang` varchar(30) NOT NULL DEFAULT '',
-  `key` varchar(100) NOT NULL DEFAULT '',
-  `value` varchar(255) NOT NULL DEFAULT '',
-  `desc` text DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `objectlang` ON `zt_privlang` (`objectID`,`objectType`,`lang`);
-
--- DROP TABLE IF EXISTS `zt_privrelation`;
-CREATE TABLE IF NOT EXISTS `zt_privrelation` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `priv` varchar(100) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '',
-  `relationPriv` varchar(100) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
-
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

@@ -377,7 +377,6 @@ define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
 define('TABLE_CONFIG',        '`' . $config->db->prefix . 'config`');
 define('TABLE_USER',          '`' . $config->db->prefix . 'user`');
-define('TABLE_SESSION',       '`' . $config->db->prefix . 'session`');
 define('TABLE_TODO',          '`' . $config->db->prefix . 'todo`');
 define('TABLE_GROUP',         '`' . $config->db->prefix . 'group`');
 define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'grouppriv`');
@@ -515,11 +514,6 @@ define('TABLE_DATAVIEW',   '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION',  '`' . $config->db->prefix . 'dimension`');
 define('TABLE_SCENE',      '`' . $config->db->prefix . 'scene`');
 define('VIEW_SCENECASE',   '`ztv_scenecase`');
-
-define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
-define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
-define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
-define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
 
 define('TABLE_ACTIVITY',               '`' . $config->db->prefix . 'activity`');
 define('TABLE_APPROVAL',               '`' . $config->db->prefix . 'approval`');
