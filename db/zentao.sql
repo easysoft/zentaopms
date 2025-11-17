@@ -810,7 +810,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT 'normal',
-  `parent` smallint unsigned NOT NULL DEFAULT 0,
+  `parent` int unsigned NOT NULL DEFAULT 0,
   `path` varchar(255) NOT NULL DEFAULT '',
   `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `order` int unsigned NOT NULL DEFAULT 0,
