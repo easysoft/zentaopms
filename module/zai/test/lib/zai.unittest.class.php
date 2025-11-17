@@ -538,7 +538,7 @@ class zaiTest
      * Test convertCaseToMarkdown static method.
      *
      * @param  object     $case
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -551,7 +551,7 @@ class zaiTest
      * Test convertIssueToMarkdown static method.
      *
      * @param  object     $issue
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -564,7 +564,7 @@ class zaiTest
      * Test convertRiskToMarkdown static method.
      *
      * @param  object     $risk
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -577,7 +577,7 @@ class zaiTest
      * Test convertPlanToMarkdown static method.
      *
      * @param  object     $plan
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -590,7 +590,7 @@ class zaiTest
      * Test convertOpportunityToMarkdown static method.
      *
      * @param  object     $opportunity
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -603,7 +603,7 @@ class zaiTest
      * Test convertReleaseToMarkdown static method.
      *
      * @param  object     $release
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
@@ -616,7 +616,7 @@ class zaiTest
      * Test convertTicketToMarkdown static method.
      *
      * @param  object     $ticket
-     * @param  array $langData
+     * @param  array      $langData
      * @access public
      * @return array
      */
