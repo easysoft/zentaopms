@@ -15686,7 +15686,7 @@ CREATE INDEX `group`     ON `zt_pivot` (`group`);
 CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `pivot` int unsigned NOT NULL DEFAULT 0,
-  `version` varchar(10) NOT NULL DEFAULT '',
+  `version` varchar(10) NOT NULL DEFAULT '1',
   `driver` varchar(10) NOT NULL DEFAULT 'mysql',
   `mode` varchar(10) NOT NULL DEFAULT 'builder',
   `name` text DEFAULT NULL,
@@ -16537,7 +16537,7 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `version` varchar(50) NOT NULL DEFAULT '',
+  `version` varchar(50) NOT NULL DEFAULT '1',
   `account` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   `mark` varchar(50) NOT NULL DEFAULT '',
