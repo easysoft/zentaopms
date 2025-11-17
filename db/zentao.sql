@@ -13512,7 +13512,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `ui` int unsigned NOT NULL DEFAULT 0,
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` int unsigned NOT NULL DEFAULT 0,
-  `width` varchar(50) NOT NULL DEFAULT '0',
+  `width` smallint unsigned NOT NULL DEFAULT 0,
   `position` text DEFAULT NULL,
   `readonly` tinyint unsigned NOT NULL DEFAULT 0,
   `mobileShow` tinyint unsigned NOT NULL DEFAULT 1,
