@@ -12,3 +12,16 @@ ALTER TABLE `zt_doc` ADD `reportModule` varchar(20) NOT NULL DEFAULT '0' AFTER `
 UPDATE `zt_doc` SET `reportModule` = `module` WHERE `templateType` = 'projectReport';
 UPDATE `zt_doc` SET `module` = 0 WHERE `templateType` = 'projectReport' OR `module` = '';
 ALTER TABLE `zt_doc` MODIFY `module` int unsigned NOT NULL DEFAULT 0;
+
+CREATE TABLE `zt_testtaskproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `product` int unsigned NOT NULL default 0 COMMENT '所属产品',
+  `build` int unsigned NOT NULL default 0 COMMENT '所属构建',
+  `task` int unsigned NOT NULL default 0 COMMENT '所属测试单',
+  `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
+  `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `product_build` (`product`,`build`,`task`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
