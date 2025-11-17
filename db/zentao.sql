@@ -2663,19 +2663,24 @@ REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`projectType`,`createdBy`,`crea
 ('发布','10','release','waterfallplus','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','waterfallplus','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'hourPoint',   '0');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRProduct',   '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', '', 'CRExecution', '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'URSR', '2');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'custom', '', 'enableER', '1');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'mode', 'ALM');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'unitList', 'CNY,USD');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'project', '', 'defaultCurrency', 'CNY');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reviewRules', 'allpass');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'common', 'global', 'syncProduct', '{"feedback":{},"ticket":{}}');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'gradeRule', 'stepwise');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'requirement', '', 'gradeRule', 'stepwise');
-INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'epic', '', 'gradeRule', 'stepwise');
+REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
+('',   'system', 'common',      '',       'CRProduct',       '1');
+('',   'system', 'common',      '',       'CRExecution',     '1');
+('',   'system', 'common',      '',       'closedFeatures',  'otherOA');
+('',   'system', 'common',      'global', 'mode',            'ALM');
+('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}');
+('',   'system', 'common',      'global', 'installedDate',   CURDATE());
+('',   'system', 'custom',      '',       'enableER',        '1');
+('',   'system', 'custom',      '',       'hourPoint',       '0');
+('',   'system', 'custom',      '',       'URSR',            '2');
+('',   'system', 'project',     '',       'defaultCurrency', 'CNY');
+('',   'system', 'project',     '',       'unitList',        'CNY,USD');
+('',   'system', 'epic',        '',       'gradeRule',       'stepwise');
+('',   'system', 'requirement', '',       'gradeRule',       'stepwise');
+('',   'system', 'story',       '',       'gradeRule',       'stepwise');
+('',   'system', 'story',       '',       'reviewRules',     'allpass');
+('or', 'system', 'demand',      '',       'reviewRules',     'allpass');
+('or', 'system', 'demand',      '',       'needReview',      '1');
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
@@ -16018,9 +16023,6 @@ CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);
 
-REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'reviewRules', 'allpass');
-REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'needReview', 1);
-
 -- DROP TABLE IF EXISTS `zt_roadmap`;
 CREATE TABLE IF NOT EXISTS `zt_roadmap` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -16486,8 +16488,6 @@ UPDATE `zt_chart` SET `editedBy`  = 'system' WHERE `editedBy`  = 'admin';
 UPDATE `zt_pivot` SET `editedBy`  = 'system' WHERE `editedBy`  = 'admin';
 UPDATE `zt_pivot` SET `editedBy`  = 'system' WHERE `editedBy`  = 'admin';
 
-INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
-INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
 CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
