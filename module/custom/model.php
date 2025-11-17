@@ -757,8 +757,8 @@ class customModel extends model
      */
     public function saveRequiredFields(string $moduleName, array $data): void
     {
-        if(isset($this->config->system->$moduleName))   unset($this->config->system->$moduleName);
-        if(isset($this->config->personal->$moduleName)) unset($this->config->personal->$moduleName);
+        if(isset($this->config->systemDB->$moduleName))   unset($this->config->systemDB->$moduleName);
+        if(isset($this->config->personalDB->$moduleName)) unset($this->config->personalDB->$moduleName);
 
         $this->loadModel($moduleName);
         $systemFields = $this->getRequiredFields($this->config->$moduleName);

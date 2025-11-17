@@ -23,5 +23,5 @@ cid=15686
 su('admin');
 $tester->loadModel('common')->loadConfigFromDB();
 
-r(count($config->system->common)) && p() && e(5); // 查看设置后的配置项数量
-r($config->system->common) && p('0:owner,module,section,key,value') && e('system,common,global,hourPoint,0'); // 查看设置后的配置项详情
+r(count($config->systemDB->common)) && p() && e(5); // 查看设置后的配置项数量
+r($config->systemDB->common) && p('0:owner,module,section,key,value') && e('system,common,global,hourPoint,0'); // 查看设置后的配置项详情
