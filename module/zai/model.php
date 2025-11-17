@@ -794,7 +794,7 @@ class zaiModel extends model
      * @access public
      * @param  string     $type
      * @param  object     $target
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertTargetToMarkdown($type, $target, array $langData = [])
@@ -1236,7 +1236,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $case
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertCaseToMarkdown($case, array $langData = []): array
@@ -1680,7 +1680,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $issue
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertIssueToMarkdown($issue, array $langData = []): array
@@ -1726,7 +1726,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $risk
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertRiskToMarkdown($risk, array $langData = []): array
@@ -1772,7 +1772,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $opportunity
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertOpportunityToMarkdown($opportunity, array $langData = []): array
@@ -1817,7 +1817,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $plan
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertPlanToMarkdown($plan, array $langData = []): array
@@ -1861,7 +1861,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $release
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertReleaseToMarkdown($release, array $langData = []): array
@@ -1902,7 +1902,7 @@ class zaiModel extends model
      *
      * @access public
      * @param  object     $ticket
-     * @param  array|null $langData
+     * @param  array $langData
      * @return array
      */
     public static function convertTicketToMarkdown($ticket, array $langData = []): array
