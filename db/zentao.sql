@@ -1908,7 +1908,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `isParent` tinyint unsigned NOT NULL DEFAULT 0,
   `root` int unsigned NOT NULL DEFAULT 0,
   `path` text DEFAULT NULL,
-  `grade` smallint unsigned NOT NULL DEFAULT 0,
+  `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `branch` int unsigned NOT NULL DEFAULT 0,
   `module` int unsigned NOT NULL DEFAULT 0,
@@ -1986,7 +1986,7 @@ CREATE INDEX `feedback` ON `zt_story` (`feedback`);
 CREATE TABLE IF NOT EXISTS `zt_storygrade` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(10) NOT NULL DEFAULT '',
-  `grade` smallint unsigned NOT NULL DEFAULT 0,
+  `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `name` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
