@@ -16472,7 +16472,7 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT 0,
-  `version` varchar(50) NOT NULL DEFAULT '1',
+  `version` varchar(10) NOT NULL DEFAULT '1',
   `account` varchar(30) NOT NULL DEFAULT '',
   `date` datetime DEFAULT NULL,
   `mark` varchar(50) NOT NULL DEFAULT '',
