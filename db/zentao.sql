@@ -2593,28 +2593,27 @@ REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `typ
 ('40',  '23', '*', '*', '*', 'moduleName=execution&methodName=computeburn',           '更新燃尽图',                         'zentao', 1, 'normal', NULL),
 ('50',  '23', '*', '*', '*', 'moduleName=execution&methodName=computecfd',            '更新累积流图',                       'zentao', 1, 'normal', NULL);
 
-INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('rnd', 'ADMIN', 'admin', 'for administrator'),
-('rnd', 'DEV', 'dev', 'for developers.'),
-('rnd', 'QA', 'qa', 'for testers.'),
-('rnd', 'PM', 'pm', 'for project managers.'),
-('rnd', 'PO', 'po', 'for product owners.'),
-('rnd', 'TD', 'td', 'for technical director.'),
-('rnd', 'PD', 'pd', 'for product director.'),
-('rnd', 'QD', 'qd', 'for quality director.'),
-('rnd', 'TOP', 'top', 'for top manager.'),
-('rnd', 'OTHERS', 'others', 'for others.'),
-('rnd', 'guest', 'guest', 'For guest'),
-('rnd', 'LIMITED', 'limited', 'For limited user'),
-('rnd', 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges'),
-('lite', 'LITEADMIN', 'liteAdmin', 'for lite administrator'),
-('lite', 'LITEPROJECT', 'liteProject', 'for lite project managers.'),
-('lite', 'LITETEAM', 'liteTeam', 'for lite team.');
-
-REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDPRODUCTPLAN', 'IPDPRODUCTPLAN', '');
-REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDDEMAND',      'IPDDEMAND', '');
-REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDPMT',         'IPDPMT', '');
-REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDADMIN',       'IPDADMIN', '');
+REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('rnd',  'ADMIN',          'admin',          'for administrator'),
+('rnd',  'DEV',            'dev',            'for developers.'),
+('rnd',  'QA',             'qa',             'for testers.'),
+('rnd',  'PM',             'pm',             'for project managers.'),
+('rnd',  'PO',             'po',             'for product owners.'),
+('rnd',  'TD',             'td',             'for technical director.'),
+('rnd',  'PD',             'pd',             'for product director.'),
+('rnd',  'QD',             'qd',             'for quality director.'),
+('rnd',  'TOP',            'top',            'for top manager.'),
+('rnd',  'OTHERS',         'others',         'for others.'),
+('rnd',  'guest',          'guest',          'For guest'),
+('rnd',  'LIMITED',        'limited',        'For limited user'),
+('rnd',  'PROJECTADMIN',   'projectAdmin',   'Project Admins manage project privileges'),
+('lite', 'LITEADMIN',      'liteAdmin',      'for lite administrator'),
+('lite', 'LITEPROJECT',    'liteProject',    'for lite project managers.'),
+('lite', 'LITETEAM',       'liteTeam',       'for lite team.'),
+('or',   'IPDPRODUCTPLAN', 'IPDPRODUCTPLAN', ''),
+('or',   'IPDDEMAND',      'IPDDEMAND',      ''),
+('or',   'IPDPMT',         'IPDPMT',         ''),
+('or',   'IPDADMIN',       'IPDADMIN',       '');
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'URSRList', '1', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
