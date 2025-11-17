@@ -1454,7 +1454,7 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
   `system` tinyint unsigned NOT NULL DEFAULT 0,
   `order` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(30) NOT NULL DEFAULT 'rnd',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
@@ -1467,7 +1467,7 @@ CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `type` varchar(10) NOT NULL DEFAULT 'package',
   `edition` varchar(30) NOT NULL DEFAULT ',open,biz,max,',
   `order` int unsigned NOT NULL DEFAULT 0,
-  `vision` varchar(30) NOT NULL DEFAULT 'rnd',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -15931,7 +15931,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `distributedDate` datetime DEFAULT NULL,
   `feedback` int unsigned NOT NULL DEFAULT 0,
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `vision` varchar(255) NOT NULL DEFAULT 'or',
+  `vision` varchar(10) NOT NULL DEFAULT 'or',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
