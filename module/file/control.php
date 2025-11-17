@@ -315,6 +315,16 @@ class file extends control
         else
         {
             $file = $this->file->getById($fileID);
+            if(empty($file) || !$this->file->fileExists($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound));
+
+            $canDelete = $this->file->checkPriv($file);
+            if($file->objectType == 'comment')
+            {
+                $action    = $this->loadModel('action')->fetchBaseInfo($file->objectID);
+                $canDelete = ($this->app->user->admin || empty($action) || $action->actor == $this->app->user->account);
+            }
+            if(!$canDelete) return $this->send(array('result' => 'fail',  'message' => $this->lang->file->accessDenied));
+
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
             $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
 
