@@ -4918,6 +4918,9 @@ class executionModel extends model
             }
         }
 
+        $canCreateChildStage = commonModel::hasPriv('programplan', 'create');
+        $canCreateTask       = commonModel::hasPriv('task', 'create');
+        $canEditStage        = commonModel::hasPriv('programplan', 'edit');
         foreach($executionList as $execution)
         {
             $execution->rawID       = $execution->id;
@@ -4934,14 +4937,16 @@ class executionModel extends model
             $canModify = common::canModify('execution', $execution);
             if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
+                $isStage = in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd'));
                 foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
                     $action  = array();
                     $actions = explode('|', $actionKey);
                     foreach($actions as $actionName)
                     {
-                        if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
-                        if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
+                        if($actionName == 'createChildStage' && !$canCreateChildStage) continue;
+                        if($actionName == 'createTask' && !$canCreateTask)  continue;
+                        if($actionName == 'edit' && $isStage && !$canEditStage) continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
 
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
