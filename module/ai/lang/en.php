@@ -515,6 +515,7 @@ $lang->ai->dataSource['task']['task']['left']        = 'Left';
 $lang->ai->dataSource['task']['task']['progress']    = 'Progress';
 $lang->ai->dataSource['task']['task']['estStarted']  = 'Start Date';
 $lang->ai->dataSource['task']['task']['realStarted'] = 'Actual Start';
+$lang->ai->dataSource['task']['task']['story']       = 'Related story';
 
 $lang->ai->dataSource['case']['case']['common']        = 'Test Case';
 $lang->ai->dataSource['case']['case']['title']         = 'Title';

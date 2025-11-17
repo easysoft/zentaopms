@@ -1756,6 +1756,24 @@ class aiModel extends model
         /* Handle empty sources array. */
         if(empty($sources)) return '';
 
+        $storyData = [];
+        if(in_array(['task', 'story'], $sources, true))
+        {
+            $story     = $this->loadModel('story')->getById($data['task']['story']);
+            $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
+            $storyData = [];
+            foreach($fields as $field)
+            {
+                $langLabel = $this->lang->story->$field;
+                $value     = $story->$field;
+                if($field == 'title') $langLabel = $this->lang->story->name;
+                if($field == 'type')  $value = zget($this->lang->story->typeList, $story->type);
+                if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
+
+                $storyData[$langLabel] = $value;
+            }
+        }
+
         $dataObject = array();
 
         $supplement = '';
@@ -1787,7 +1805,7 @@ class aiModel extends model
                     $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
                 }
             }
-
+            if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);
             if(in_array($objectKey, $supplementTypes) || !isset($this->lang->ai->dataType->$objectKey)) continue;
 
             $supplementTypes[] = $objectKey;
@@ -2658,9 +2676,10 @@ class aiModel extends model
      */
     public function getTestPromptData(object $prompt): array
     {
-        $module = $prompt->module;
-        $source = explode(',', $prompt->source);
-        $source = array_filter($source, function($value) {return !empty($value);});
+        $module       = $prompt->module;
+        $promptSource = str_replace('task.story,', '', $prompt->source);
+        $source       = explode(',', $promptSource);
+        $source       = array_filter($source, function($value) {return !empty($value);});
 
         $titleData = $this->lang->ai->dataSource[$module];
         $testData  = $this->lang->ai->prompts->testData[$module];

@@ -515,6 +515,7 @@ $lang->ai->dataSource['task']['task']['left']        = '剩余';
 $lang->ai->dataSource['task']['task']['progress']    = '进度';
 $lang->ai->dataSource['task']['task']['estStarted']  = '预计开始';
 $lang->ai->dataSource['task']['task']['realStarted'] = '实际开始';
+$lang->ai->dataSource['task']['task']['story']       = '相关需求';
 
 $lang->ai->dataSource['case']['case']['common']        = '用例';
 $lang->ai->dataSource['case']['case']['title']         = '标题';
