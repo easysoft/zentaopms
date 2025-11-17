@@ -81,7 +81,7 @@ formPanel
         set::width('2/3'),
         inputControl
         (
-            input(set::name('percent'), set::value($plan->percent)),
+            input(set::name('percent'), set::value((string)$plan->percent)),
             to::suffix('%'),
             set::suffixWidth('lg')
         )
