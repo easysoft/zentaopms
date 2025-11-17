@@ -700,21 +700,6 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
 ) ENGINE=InnoDB;
 CREATE INDEX `lastTime` ON `zt_cron`(`lastTime`);
 
--- DROP TABLE IF EXISTS `zt_dashboard`;
-CREATE TABLE IF NOT EXISTS `zt_dashboard` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `dimension` int unsigned NOT NULL DEFAULT 0,
-  `module` int unsigned NOT NULL DEFAULT 0,
-  `desc` mediumtext DEFAULT NULL,
-  `layout` mediumtext DEFAULT NULL,
-  `filters` mediumtext DEFAULT NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 -- DROP TABLE IF EXISTS `zt_dataset`;
 CREATE TABLE IF NOT EXISTS `zt_dataset` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
