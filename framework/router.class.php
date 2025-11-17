@@ -454,8 +454,8 @@ class router extends baseRouter
         /* 加载数据库中与本模块相关的配置项。Merge from the db configs. */
         if($moduleName != 'common')
         {
-            if(isset($config->system->$moduleName))   $this->mergeConfig($config->system->$moduleName, $moduleName);
-            if(isset($config->personal->$moduleName)) $this->mergeConfig($config->personal->$moduleName, $moduleName);
+            if(isset($config->systemDB->$moduleName))   $this->mergeConfig($config->systemDB->$moduleName, $moduleName);
+            if(isset($config->personalDB->$moduleName)) $this->mergeConfig($config->personalDB->$moduleName, $moduleName);
         }
     }
 
