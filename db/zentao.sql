@@ -2567,23 +2567,31 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal'),
-('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computeburn', '更新燃尽图',    'zentao', 1, 'normal'),
-('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computecfd', '更新累积流图',   'zentao', 1, 'normal'),
-('0',    '8',    '*',    '*',    '*',    'moduleName=report&methodName=remind',       '每日任务提醒',    'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=svn&methodName=run',             '同步SVN',         'zentao', 1, 'stop'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=git&methodName=run',             '同步GIT',         'zentao', 1, 'stop'),
-('30',   '0',    '*',    '*',    '*',    'moduleName=backup&methodName=backup',       '备份数据和附件',  'zentao', 1, 'normal'),
-('*/1',  '*',    '*',    '*',    '*',    'moduleName=mail&methodName=asyncSend',      '异步发信',        'zentao', 1, 'normal'),
-('*/1',  '*',    '*',    '*',    '*',    'moduleName=webhook&methodName=asyncSend',   '异步发送Webhook', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=admin&methodName=deleteLog',     '删除过期日志',    'zentao', 1, 'normal'),
-('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal'),
-('1',    '0',    '*',    '*',    '*',    'moduleName=ci&methodName=initQueue', '创建周期性任务', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCompileStatus', '同步DevOps构建任务状态', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=ajaxSyncCompile', '定时同步构建记录', 'zentao', 1, 'normal');
+REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
+('*',   '*',  '*', '*', '*', '',                                                      '监控定时任务',                       'zentao', 1, 'normal', NULL),
+('0',   '*',  '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据',                     'zentao', 1, 'normal', NULL),
+('*/1', '*',  '*', '*', '*', 'moduleName=mail&methodName=asyncSend',                  '异步发信',                           'zentao', 1, 'normal', NULL),
+('*/1', '*',  '*', '*', '*', 'moduleName=webhook&methodName=asyncSend',               '异步发送Webhook',                    'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=svn&methodName=run',                         '同步SVN',                            'zentao', 1, 'stop',   NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=git&methodName=run',                         '同步GIT',                            'zentao', 1, 'stop',   NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=admin&methodName=deleteLog',                 '删除过期日志',                       'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=ci&methodName=checkCompileStatus',           '同步DevOps构建任务状态',             'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=ci&methodName=exec',                         '执行DevOps构建任务',                 'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=mr&methodName=syncMR',                       '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=compile&methodName=ajaxSyncCompile',         '定时同步构建记录',                   'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=program&methodName=refreshStats',            '刷新项目集统计数据',                 'zentao', 1, 'normal', NULL),
+('*/5', '*',  '*', '*', '*', 'moduleName=product&methodName=refreshStats',            '刷新产品统计数据',                   'zentao', 1, 'normal', NULL),
+('0',   '0',  '*', '*', '*', 'moduleName=weekly&methodName=createCycleReport',        '定时生成报告',                       'zentao', 1, 'normal', NULL),
+('15',  '0',  '*', '*', '*', 'moduleName=ci&methodName=initQueue',                    '创建周期性任务',                     'zentao', 1, 'normal', NULL),
+('30',  '0',  '*', '*', '*', 'moduleName=backup&methodName=backup',                   '备份数据和附件',                     'zentao', 1, 'normal', NULL),
+('0',   '1',  '*', '*', '*', 'moduleName=todo&methodName=createCycle',                '生成周期性待办',                     'zentao', 1, 'normal', NULL),
+('15',  '1',  '*', '*', '*', 'moduleName=instance&methodName=cronCleanBackup',        'Devops服务备份清理',                 'zentao', 1, 'normal', NULL),
+('30',  '1',  '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib',          '计算度量数据',                       'zentao', 1, 'normal', NULL),
+('30',  '7',  '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord',          '提醒录入日志',                       'zentao', 1, 'stop',   NULL),
+('0',   '8',  '*', '*', '*', 'moduleName=report&methodName=remind',                   '每日任务提醒',                       'zentao', 1, 'normal', NULL),
+('30',  '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort',     '计算任务剩余工时',                   'zentao', 1, 'normal', NULL),
+('40',  '23', '*', '*', '*', 'moduleName=execution&methodName=computeburn',           '更新燃尽图',                         'zentao', 1, 'normal', NULL),
+('50',  '23', '*', '*', '*', 'moduleName=execution&methodName=computecfd',            '更新累积流图',                       'zentao', 1, 'normal', NULL);
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('rnd', 'ADMIN', 'admin', 'for administrator'),
@@ -15637,9 +15645,6 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tai
 (493, 328, '项目度量数据库', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', NULL, 615, '0'),
 (494, 329, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', NULL, 630, '0');
 
-REPLACE INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
-('1','0','*','*','*','moduleName=weekly&methodName=createCycleReport','定时生成报告','zentao',1,'normal');
-
 -- DROP TABLE IF EXISTS `zt_pivot`;
 CREATE TABLE IF NOT EXISTS `zt_pivot` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -16474,11 +16479,6 @@ CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort', '计算任务剩余工时', 'zentao', '1', 'normal');
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '7', '*', '*', '*', 'moduleName=effort&methodName=remindNotRecord', '提醒录入日志', 'zentao', '1', 'stop');
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('1', '1', '*', '*', '*', 'moduleName=metric&methodName=updateMetricLib', '计算度量数据', 'zentao', 1, 'normal', NULL);
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('0', '*/1', '*', '*', '*', 'moduleName=metric&methodName=updateDashboardMetricLib', '计算仪表盘数据', 'zentao', 1, 'normal', NULL);
-
 UPDATE `zt_chart` SET `createdBy` = 'system' WHERE `createdBy` = 'admin';
 UPDATE `zt_pivot` SET `createdBy` = 'system' WHERE `createdBy` = 'admin';
 UPDATE `zt_pivot` SET `createdBy` = 'system' WHERE `createdBy` = 'admin';
@@ -16489,11 +16489,6 @@ UPDATE `zt_pivot` SET `editedBy`  = 'system' WHERE `editedBy`  = 'admin';
 INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', '', 'closedFeatures', 'otherOA');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'installedDate', CURDATE());
 CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
-
-INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
-('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL),
-('30', '1', '*', '*', '*', 'moduleName=instance&methodName=cronCleanBackup', 'Devops服务备份清理',   'zentao', 1, 'normal', NULL);
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u5173\",\"relativeRelation\":\"\\u76f8\\u5173\"}', '0', 'all'),
