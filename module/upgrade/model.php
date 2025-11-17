@@ -11831,7 +11831,7 @@ class upgradeModel extends model
         }
 
         /* 之前交付物没存文档名称、版本，升级的时候补上。 */
-        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version,t2.addedBy,t2.addedDate')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id')
             ->where('t1.name')->eq('')
             ->andWhere('t2.deleted')->eq('0')
@@ -11839,7 +11839,14 @@ class upgradeModel extends model
 
         foreach($emptyNameDocs as $deliverableID => $doc)
         {
-            $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('name')->eq($doc->title)->set('docVersion')->eq($doc->version)->where('id')->eq($deliverableID)->exec();
+            $deliverableCreatedDate = date('Y-m-d', strtotime($doc->addedDate));
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('name')->eq($doc->title)
+                ->set('docVersion')->eq($doc->version)
+                ->set('createdBy')->eq($doc->addedBy)
+                ->set('createdDate')->eq($deliverableCreatedDate)
+                ->where('id')->eq($deliverableID)
+                ->exec();
         }
 
         $this->dao->query("ALTER TABLE " . TABLE_PROJECT . " DROP COLUMN `deliverable`;");
