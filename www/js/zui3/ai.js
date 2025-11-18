@@ -155,7 +155,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                     trailingIcon: 'icon-arrow-right'
                 }, info.promptAudit ? {
                     text: langData.goTesting,
-                    url:  $.createLink('ai', 'promptAudit', `promptId=${info.promptConfig.id}&objectId=${info.objectID}`),
+                    url:  $.createLink('ai', 'promptAudit', `promptId=${info.promptID}&objectId=${info.objectID || 0}`),
                     type: 'primary-pale',
                     'data-toggle': 'modal',
                 } : null]
@@ -167,7 +167,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
         content: info.name,
         chat:    {type: 'agent', model: info.model, tools: tools, prompt: [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n')},
     };
-    zaiPanel.closePopup('zentao-prompt-popoup');
     zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: info.content ? 800 : 600, postMessage: postMessage});
 };
 
