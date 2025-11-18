@@ -2268,7 +2268,7 @@ class aiModel extends model
             }
             if($prompt->module == 'doc') $objectType = 'mine';
 
-            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params#"), false);
+            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params#open-in-modal?width=300"), false);
         }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
