@@ -75,14 +75,14 @@ dtable
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'testtask', "executionID={$execution->id}&productID={$productID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'testtask', "executionID={$execution->id}&productID={$productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->testtask->noTesttask),
