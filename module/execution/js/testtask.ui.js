@@ -39,8 +39,9 @@ window.setStatistics = function(element, checkedIDList)
     rows.forEach((row) => {
         if(checkedIDList.length == 0 || checkedIDList.includes(row.id))
         {
-            const task = row.data;
+            if(row.id.includes('_')) return;
 
+            const task = row.data;
             if(task.rawStatus == 'wait')
             {
                 waitCount ++;
