@@ -199,7 +199,7 @@ class coverage
         }
         $traces['executeLines'] = $executeLines;
 
-        $methodCoverage = round(count($executeLines)/$methodLines, 2);
+        $methodCoverage = empty($methodLines) ? 0 : round(count($executeLines)/$methodLines, 2);
         $traces['coverage'] = $methodCoverage === true ? 1 : $methodCoverage;
         if($traces['coverage'] > 1) $traces['coverage'] = 1;
         return $traces;
