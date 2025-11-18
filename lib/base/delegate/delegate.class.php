@@ -140,20 +140,21 @@ class baseDelegate
             return call_user_func_array([$className, $name], $arguments);
         }
 
-        if(property_exists($className, $name) && count($arguments) === 1)
+        $argumentCount = count($arguments);
+        if(property_exists($className, $name) && $argumentCount === 1)
         {
             // 支持静态属性的直接赋值
             $className::$$name = $arguments[0];
             return;
         }
 
-        if(property_exists($className, $name) && count($arguments) === 0)
+        if(property_exists($className, $name) && $argumentCount === 0)
         {
             // 支持静态属性的直接读取
             return $className::$$name;
         }
 
-        if(strpos($name, 'set') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 1)
+        if(strpos($name, 'set') === 0 && property_exists($className, lcfirst(substr($name, 3))) && $argumentCount === 1)
         {
             // 支持静态属性的 set 方法
             $property = lcfirst(substr($name, 3));
@@ -161,7 +162,7 @@ class baseDelegate
             return;
         }
 
-        if(strpos($name, 'get') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 0)
+        if(strpos($name, 'get') === 0 && property_exists($className, lcfirst(substr($name, 3))) && $argumentCount === 0)
         {
             // 支持静态属性的 get 方法
             $property = lcfirst(substr($name, 3));
