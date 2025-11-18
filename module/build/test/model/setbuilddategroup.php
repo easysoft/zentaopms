@@ -5,7 +5,7 @@
 
 title=测试 buildModel->setBuildDateGroup();
 timeout=0
-cid=15507
+cid=1
 
 - 获取版本1-10的数据第2021-01-01条的1属性 @版本1
 - 获取版本1-10且不关联分支的数据第2021-01-01条的1属性 @版本1
