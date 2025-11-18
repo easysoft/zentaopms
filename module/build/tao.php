@@ -28,6 +28,7 @@ class buildTao extends buildModel
         $fieldList = 't1.id, t1.name, t1.product, t1.branch, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t3.id as releaseID, t4.type as productType';
         if($objectType == 'execution' || $objectType == 'project') $fieldList .= ', t2.status as objectStatus';
 
+        $userView = trim($this->app->user->view->projects, ',') . ',' . trim($this->app->user->view->sprints, ',');
         return $this->dao->select($fieldList)->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
@@ -42,6 +43,7 @@ class buildTao extends buildModel
             ->beginIF(!empty($productIdList))->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' && $objectID)->andWhere('t1.project')->eq($objectID)->fi()
+            ->beginIF($objectType === 'project' && !$this->app->user->admin)->andWhere('t1.project')->in($userView)->fi()
             ->beginIF($system)->andWhere('t1.system')->eq($system)->fi()
             ->orderBy('t1.date desc, t1.id desc')
             ->fetchAll('id');
