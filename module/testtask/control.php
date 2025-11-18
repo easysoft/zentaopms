@@ -582,6 +582,7 @@ class testtask extends control
             }
 
             $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->testtaskList, 'closeModal' => true));
         }
 
