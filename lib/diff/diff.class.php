@@ -19,6 +19,6 @@ class diff extends baseDelegate
 
     public function __construct($from_text = '', $to_text = '', $granularityStack = null)
     {
-        $this->instance = new self::$className($from_text, $to_text, $granularityStack);
+        $this->instance = new static::$className($from_text, $to_text, $granularityStack);
     }
 }

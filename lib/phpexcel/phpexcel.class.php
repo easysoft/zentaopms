@@ -23,7 +23,7 @@ class phpExcel extends baseDelegate
 
     public function __construct()
     {
-        $this->instance = new self::$className();
+        $this->instance = new static::$className();
     }
 
     public static function load($file)

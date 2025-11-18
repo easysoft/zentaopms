@@ -20,7 +20,7 @@ require_once dirname(__FILE__, 3) . '/vendor/autoload.php';
  *     protected static $className = 'ThirdPartyClass';
  *     public function __construct()
  *     {
- *         $this->instance = new self::$className();
+ *         $this->instance = new static::$className();
  *     }
  * }
  *

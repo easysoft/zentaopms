@@ -19,6 +19,6 @@ class pclzip extends baseDelegate
 
     public function __construct($p_zipname)
     {
-        $this->instance = new self::$className($p_zipname);
+        $this->instance = new static::$className($p_zipname);
     }
 }

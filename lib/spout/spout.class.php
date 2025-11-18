@@ -19,6 +19,6 @@ class spout extends baseDelegate
 
     public function __construct($readerType = 'xlsx')
     {
-        $this->instance = self::$className::createFromType($readerType);
+        $this->instance = static::$className::createFromType($readerType);
     }
 }

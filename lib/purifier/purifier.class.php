@@ -26,6 +26,6 @@ class purifier extends baseDelegate
         foreach ($config as $key => $value) {
             $purifierConfig->set($key, $value);
         }
-        $this->instance = new self::$className($purifierConfig);
+        $this->instance = new static::$className($purifierConfig);
     }
 }
