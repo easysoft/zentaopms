@@ -17,3 +17,14 @@ $config->task->actions->view['suffixActions'] = array('edit', 'delete', 'view');
 
 $config->task->exportFields   = str_replace('parent,', '', $config->task->exportFields);
 $config->task->templateFields = "module,story,assignedTo,mode,name,desc,type,pri,estimate,estStarted,deadline";
+
+$config->task->exportFields = '
+    id, project, execution, module, story,
+    name, desc, parent,
+    type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
+    keywords,mailto, progress, mode,
+    openedBy, openedDate, assignedTo, assignedDate,
+    finishedBy, finishedDate, canceledBy, canceledDate,
+    closedBy, closedDate, closedReason,
+    lastEditedBy, lastEditedDate, activatedDate, files
+    ';
