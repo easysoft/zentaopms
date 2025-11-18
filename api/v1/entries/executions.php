@@ -20,8 +20,8 @@ class executionsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        $appendFields = $this->param('fields', '');
-        $withProject  = $this->param('withProject', '');
+        $appendFields  = $this->param('fields', '');
+        $withProject   = $this->param('withProject', '');
         $mergeChildren = $this->param('mergeChildren', 0);
         if(strpos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
