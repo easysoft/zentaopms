@@ -1171,6 +1171,7 @@ class tutorialModel extends model
         $testtask->name             = 'Test testtask';
         $testtask->execution        = 3;
         $testtask->build            = 1;
+        $testtask->joint            = 0;
         $testtask->type             = '';
         $testtask->owner            = '';
         $testtask->pri              = 3;
