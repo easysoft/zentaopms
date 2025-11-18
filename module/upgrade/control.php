@@ -151,13 +151,18 @@ class upgrade extends control
 
         /* 手动删除无法自动删除的文件。*/
         /* Remove files that can not be deleted automatically. */
-        $result = $this->upgrade->deleteFiles();
+        $script = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $result = $this->upgrade->deleteFiles($script);
         if($result)
         {
             $this->view->result = 'fail';
             $this->view->errors = $result;
 
             return $this->display();
+        }
+        elseif(is_file($script))
+        {
+            unlink($script);
         }
 
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;

@@ -657,10 +657,11 @@ class upgradeModel extends model
      * 删除无用的文件。
      * Delete Useless Files.
      *
+     * @param  string $script
      * @access public
      * @return array
      */
-    public function deleteFiles(): array
+    public function deleteFiles(string $script): array
     {
         $result = array();
         $zfile  = $this->app->loadClass('zfile');
@@ -681,7 +682,7 @@ class upgradeModel extends model
                     if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
                        (!$isDir && !$zfile->removeFile($fullPath)))
                     {
-                        $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
+                        $result[] = 'rm -fr ' . $fullPath;
                     }
                 }
             }
@@ -696,11 +697,19 @@ class upgradeModel extends model
             if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
                 (!$isDir && !$zfile->removeDir($patchPath)))
             {
-                $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
+                $result[] = 'rm -fr ' . $patchPath;
             }
         }
 
-        return $result;
+        if(empty($result)) return $result;
+
+        asort($result);
+
+        $content = "#!/bin/bash\n";
+        foreach($result as $cmd) $content .= "$cmd\n";
+        file_put_contents($script, $content);
+
+        return ["/bin/bash $script"];
     }
 
     /**

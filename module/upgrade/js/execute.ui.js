@@ -7,6 +7,18 @@ window.submitConfirm = function(event)
     updateProgress();
 }
 
+window.copyCommand = function()
+{
+    const command = $('#command').text();
+    navigator.clipboard.writeText(command).then(function()
+    {
+        zui.Messager.show({type: 'success', message: copySuccess, timeout: 1000});
+    }, function()
+    {
+        zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
+    });
+}
+
 $(document).ready(function()
 {
     if(typeof result != 'undefined' && result == 'duckdbFail')
