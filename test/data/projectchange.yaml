@@ -1,0 +1,28 @@
+---
+title: table zt_projectchange
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: project
+    note: "所属项目"
+    range: 1-100
+  - field: name
+    note: "项目变更名称"
+    fields:
+    - field: name1
+      range: "项目变更"
+    - field: name2
+      range: 1-1000
+  - field: urgency
+    range: "[normal,major,critical]"
+  - field: type
+    range: "[story,design,stage,case]"
+  - field: status
+    range: "[wait,reviewing,pass,reject,reverting]"
+  - field: owner
+    range: "[admin,dev1,test1]{30},[]{20}"
+  - field: owner
+    range: "[admin,dev1,test1]{30},[]{20}"
+...
