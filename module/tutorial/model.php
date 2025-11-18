@@ -393,6 +393,8 @@ class tutorialModel extends model
         $story->spec           = '';
         $story->verify         = '';
         $story->files          = array();
+        $story->docs           = '';
+        $story->docVersions    = '';
         return $story;
     }
 
