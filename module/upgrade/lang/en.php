@@ -59,6 +59,9 @@ $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions<
                                       <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 
 $lang->upgrade->selectVersion = 'Version';
+$lang->upgrade->copyCommand   = 'Copy';
+$lang->upgrade->copySuccess   = 'Copied to clipboard';
+$lang->upgrade->copyFail      = 'Copy failed, please copy it manually.';
 $lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
 $lang->upgrade->fromVersion   = 'From';
@@ -70,8 +73,8 @@ $lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version.
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
 $lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'Please execute commands to delete the files. Please refresh after you delete them.';
-$lang->upgrade->afterExec     = 'Please modify the database manually according to the above error information, and refresh after the modification!';
+$lang->upgrade->afterDeleted  = 'Please execute the above command on the server to delete the file, and then refresh the page.';
+$lang->upgrade->afterExec     = 'Please manually modify the database based on the above error message, and then refresh the page.';
 $lang->upgrade->afterDuckdb   = 'Please wait for Duckdb engine to install.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
