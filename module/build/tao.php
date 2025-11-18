@@ -25,7 +25,7 @@ class buildTao extends buildModel
      */
     protected function fetchBuilds(array|int $productIdList, string $params = '', int $objectID = 0, string $objectType = '', array $shadows = array(), int $system = 0): array
     {
-        $fieldList = 't1.id, t1.name, t1.product, t1.branch, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t3.id as releaseID, t4.type as productType';
+        $fieldList = 't1.id, t1.name, t1.product, t1.branch, t1.project, t1.execution, t1.date, t1.deleted, t3.status as releaseStatus, t3.id as releaseID, t4.type as productType';
         if($objectType == 'execution' || $objectType == 'project') $fieldList .= ', t2.status as objectStatus';
 
         return $this->dao->select($fieldList)->from(TABLE_BUILD)->alias('t1')
