@@ -81,7 +81,7 @@ common:
 	mv zentaopms/www/upgrade.php.tmp zentaopms/www/upgrade.php
 	cp VERSION zentaopms/
 	# create index.html of each folder.
-	for path in `find zentaopms/ -type d`; do touch "$$path/index.html"; done
+	find zentaopms/ -type d -not -path "zentaopms/lib*" -exec touch {}/index.html \;
 	rm zentaopms/www/index.html
 	# combine js and css files.
 	cp -fr misc zentaopms/misc && cd zentaopms/misc/ && php ./minifyfront.php
