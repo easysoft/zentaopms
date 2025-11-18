@@ -103,7 +103,7 @@ class tasksEntry extends entry
     {
         $control = $this->loadController('task', 'create');
 
-        $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
+        $fields = 'name,type,mode,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
         $this->setPost('execution',  $executionID);
