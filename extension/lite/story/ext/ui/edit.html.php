@@ -97,6 +97,7 @@ detailBody
                     span
                     (
                         setClass('reviewerBox'),
+                        setStyle('width', '100%'),
                         picker
                         (
                             set::id('reviewer'),
