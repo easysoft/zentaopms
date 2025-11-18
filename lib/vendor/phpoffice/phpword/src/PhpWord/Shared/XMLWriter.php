@@ -25,12 +25,12 @@ namespace PhpOffice\PhpWord\Shared;
  * @method bool openMemory()
  * @method string outputMemory(bool $flush = null)
  * @method bool setIndent(bool $indent)
- * @method bool startDocument(string $version = 1.0, ?string $encoding = null, ?string $standalone = null)
+ * @method bool startDocument(string $version = 1.0, string $encoding = null, string $standalone = null)
  * @method bool startElement(string $name)
  * @method bool text(string $content)
  * @method bool writeCData(string $content)
  * @method bool writeComment(string $content)
- * @method bool writeElement(string $name, ?string $content = null)
+ * @method bool writeElement(string $name, string $content = null)
  * @method bool writeRaw(string $content)
  */
 class XMLWriter extends \XMLWriter

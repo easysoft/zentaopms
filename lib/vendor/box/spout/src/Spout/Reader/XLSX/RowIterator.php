@@ -374,7 +374,7 @@ class RowIterator implements IteratorInterface
      *
      * @return Row|null
      */
-    public function current(): mixed
+    public function current(): Row|null
     {
         $rowToBeProcessed = $this->rowBuffer;
 
@@ -399,7 +399,7 @@ class RowIterator implements IteratorInterface
      *
      * @return int
      */
-    public function key(): mixed
+    public function key(): int
     {
         // TODO: This should return $this->nextRowIndexToBeProcessed
         //       but to avoid a breaking change, the return value for

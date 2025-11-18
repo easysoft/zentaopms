@@ -182,7 +182,7 @@ abstract class AbstractPart
      * @param array $paragraphStyle
      * @return number|null
      */
-    private function getHeadingDepth(?array $paragraphStyle = null)
+    private function getHeadingDepth(array $paragraphStyle = null)
     {
         if (is_array($paragraphStyle) && isset($paragraphStyle['styleName'])) {
             if ('Title' === $paragraphStyle['styleName']) {
@@ -590,7 +590,7 @@ abstract class AbstractPart
      * @param string|array|null $elements
      * @return string|null
      */
-    private function findPossibleElement(XMLReader $xmlReader, ?\DOMElement $parentNode = null, $elements = null)
+    private function findPossibleElement(XMLReader $xmlReader, \DOMElement $parentNode = null, $elements = null)
     {
         if (is_array($elements)) {
             //if element is an array, we take the first element that exists in the XML
@@ -639,7 +639,7 @@ abstract class AbstractPart
      * @ignoreScrutinizerPatch
      * @return array
      */
-    protected function readStyleDefs(XMLReader $xmlReader, ?\DOMElement $parentNode = null, $styleDefs = array())
+    protected function readStyleDefs(XMLReader $xmlReader, \DOMElement $parentNode = null, $styleDefs = array())
     {
         $styles = array();
 

@@ -2200,7 +2200,7 @@ class Calculation
         ],
     ];
 
-    public function __construct(?Spreadsheet $spreadsheet = null)
+    public function __construct(Spreadsheet $spreadsheet = null)
     {
         $this->delta = 1 * pow(10, 0 - ini_get('precision'));
 
@@ -2228,7 +2228,7 @@ class Calculation
      *
      * @return Calculation
      */
-    public static function getInstance(?Spreadsheet $spreadsheet = null)
+    public static function getInstance(Spreadsheet $spreadsheet = null)
     {
         if ($spreadsheet !== null) {
             $instance = $spreadsheet->getCalculationEngine();
@@ -2693,7 +2693,7 @@ class Calculation
      *
      * @return mixed
      */
-    public function calculate(?Cell $pCell = null)
+    public function calculate(Cell $pCell = null)
     {
         try {
             return $this->calculateCellValue($pCell);
@@ -2712,7 +2712,7 @@ class Calculation
      *
      * @return mixed
      */
-    public function calculateCellValue(?Cell $pCell = null, $resetLog = true)
+    public function calculateCellValue(Cell $pCell = null, $resetLog = true)
     {
         if ($pCell === null) {
             return null;
@@ -2816,7 +2816,7 @@ class Calculation
      *
      * @return mixed
      */
-    public function calculateFormula($formula, $cellID = null, ?Cell $pCell = null)
+    public function calculateFormula($formula, $cellID = null, Cell $pCell = null)
     {
         //    Initialise the logging settings
         $this->formulaError = null;
@@ -2892,7 +2892,7 @@ class Calculation
      *
      * @return mixed
      */
-    public function _calculateFormulaValue($formula, $cellID = null, ?Cell $pCell = null)
+    public function _calculateFormulaValue($formula, $cellID = null, Cell $pCell = null)
     {
         $cellValue = null;
 
@@ -3294,7 +3294,7 @@ class Calculation
      *
      * @return bool
      */
-    private function _parseFormula($formula, ?Cell $pCell = null)
+    private function _parseFormula($formula, Cell $pCell = null)
     {
         if (($formula = $this->convertMatrixReferences(trim($formula))) === false) {
             return false;
@@ -3628,7 +3628,7 @@ class Calculation
      *
      * @return bool
      */
-    private function processTokenStack($tokens, $cellID = null, ?Cell $pCell = null)
+    private function processTokenStack($tokens, $cellID = null, Cell $pCell = null)
     {
         if ($tokens == false) {
             return false;
@@ -4304,7 +4304,7 @@ class Calculation
      *
      * @return mixed Array of values in range if range contains more than one element. Otherwise, a single value is returned.
      */
-    public function extractCellRange(&$pRange = 'A1', ?Worksheet $pSheet = null, $resetLog = true)
+    public function extractCellRange(&$pRange = 'A1', Worksheet $pSheet = null, $resetLog = true)
     {
         // Return value
         $returnValue = [];
@@ -4357,7 +4357,7 @@ class Calculation
      *
      * @return mixed Array of values in range if range contains more than one element. Otherwise, a single value is returned.
      */
-    public function extractNamedRange(&$pRange = 'A1', ?Worksheet $pSheet = null, $resetLog = true)
+    public function extractNamedRange(&$pRange = 'A1', Worksheet $pSheet = null, $resetLog = true)
     {
         // Return value
         $returnValue = [];
@@ -4464,7 +4464,7 @@ class Calculation
      *
      * @return array
      */
-    private function addCellReference(array $args, $passCellReference, $functionCall, ?Cell $pCell = null)
+    private function addCellReference(array $args, $passCellReference, $functionCall, Cell $pCell = null)
     {
         if ($passCellReference) {
             if (is_array($functionCall)) {

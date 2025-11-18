@@ -220,7 +220,7 @@ class Settings extends AbstractPart
      *
      * @param ProofState $proofState
      */
-    private function setProofState(?ProofState $proofState = null)
+    private function setProofState(ProofState $proofState = null)
     {
         if ($proofState != null && $proofState->getGrammar() !== null && $proofState->getSpelling() !== null) {
             $this->settings['w:proofState'] = array(
@@ -237,7 +237,7 @@ class Settings extends AbstractPart
      *
      * @param TrackChangesView $trackChangesView
      */
-    private function setRevisionView(?TrackChangesView $trackChangesView = null)
+    private function setRevisionView(TrackChangesView $trackChangesView = null)
     {
         if ($trackChangesView != null) {
             $revisionView = array();
@@ -256,7 +256,7 @@ class Settings extends AbstractPart
      *
      * @param Language $language
      */
-    private function setThemeFontLang(?Language $language = null)
+    private function setThemeFontLang(Language $language = null)
     {
         $latinLanguage = ($language == null || $language->getLatin() === null) ? 'en-US' : $language->getLatin();
         $lang = array();

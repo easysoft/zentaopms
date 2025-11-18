@@ -170,7 +170,7 @@ class Section extends AbstractContainer
      *
      * @param FootnoteProperties $footnoteProperties
      */
-    public function setFootnoteProperties(?FootnoteProperties $footnoteProperties = null)
+    public function setFootnoteProperties(FootnoteProperties $footnoteProperties = null)
     {
         $this->footnoteProperties = $footnoteProperties;
     }

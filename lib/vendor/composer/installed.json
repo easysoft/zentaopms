@@ -1120,7 +1120,8 @@
             "type": "library",
             "extra": {
                 "patches_applied": {
-                    "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+                    "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch",
+                    "Fix memory limit calculation in privOptionDefaultThreshold method": "patches/pclzip-memory-limit-fix.patch"
                 }
             },
             "installation-source": "dist",

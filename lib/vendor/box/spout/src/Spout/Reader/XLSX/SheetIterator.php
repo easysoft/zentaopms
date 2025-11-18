@@ -77,7 +77,7 @@ class SheetIterator implements IteratorInterface
      *
      * @return \Box\Spout\Reader\XLSX\Sheet
      */
-    public function current(): mixed
+    public function current(): \Box\Spout\Reader\XLSX\Sheet
     {
         return $this->sheets[$this->currentSheetIndex];
     }

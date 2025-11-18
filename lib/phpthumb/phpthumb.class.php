@@ -19,6 +19,6 @@ class phpthumb extends baseDelegate
 
     public function __construct($fileName, $options = array(), array $plugins = array())
     {
-        $this->instance = new self::$className($fileName, $options, $plugins);
+        $this->instance = new static::$className($fileName, $options, $plugins);
     }
 }

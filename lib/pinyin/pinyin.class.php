@@ -19,6 +19,6 @@ class pinyin extends baseDelegate
 
     public function __construct($loaderName = null)
     {
-        $this->instance = new self::$className($loaderName);
+        $this->instance = new static::$className($loaderName);
     }
 }

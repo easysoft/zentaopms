@@ -14,7 +14,7 @@
       * @return Worksheet
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Worksheet
      {
          return $this->subject->getSheet($this->position);
      }
@@ -23,7 +23,7 @@
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->position;
      }
@@ -61,7 +61,7 @@
       * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
      {
          return $this->worksheet->getCellByColumnAndRow($this->currentColumnIndex, $this->rowIndex);
      }
@@ -70,7 +70,7 @@
       * @return string
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): string
      {
          return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
      }
@@ -108,7 +108,7 @@
       * @return Row
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Row
      {
          return new Row($this->subject, $this->position);
      }
@@ -117,7 +117,7 @@
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->position;
      }
@@ -155,7 +155,7 @@
       * @return null|\PhpOffice\PhpSpreadsheet\Cell\Cell
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
      {
          return $this->worksheet->getCellByColumnAndRow($this->columnIndex, $this->currentRow);
      }
@@ -164,7 +164,7 @@
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->currentRow;
      }
@@ -202,7 +202,7 @@
       * @return Column
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Column
      {
          return new Column($this->worksheet, Coordinate::stringFromColumnIndex($this->currentColumnIndex));
      }
@@ -211,7 +211,7 @@
       * @return string
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): string
      {
          return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
      }

@@ -43,7 +43,7 @@ class RowCellIterator extends CellIterator
      * @param string $startColumn The column address at which to start iterating
      * @param string $endColumn Optionally, the column address at which to stop iterating
      */
-    public function __construct(?Worksheet $worksheet = null, $rowIndex = 1, $startColumn = 'A', $endColumn = null)
+    public function __construct(Worksheet $worksheet = null, $rowIndex = 1, $startColumn = 'A', $endColumn = null)
     {
         // Set subject and row index
         $this->worksheet = $worksheet;
@@ -113,7 +113,7 @@ class RowCellIterator extends CellIterator
     /**
      * Rewind the iterator to the starting column.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->currentColumnIndex = $this->startColumnIndex;
     }
@@ -123,7 +123,7 @@ class RowCellIterator extends CellIterator
      *
      * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
      */
-    public function current()
+    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
     {
         return $this->worksheet->getCellByColumnAndRow($this->currentColumnIndex, $this->rowIndex);
     }
@@ -133,7 +133,7 @@ class RowCellIterator extends CellIterator
      *
      * @return string
      */
-    public function key()
+    public function key(): string
     {
         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
     }
@@ -141,7 +141,7 @@ class RowCellIterator extends CellIterator
     /**
      * Set the iterator to its next value.
      */
-    public function next()
+    public function next(): void
     {
         do {
             ++$this->currentColumnIndex;
@@ -165,7 +165,7 @@ class RowCellIterator extends CellIterator
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
     }

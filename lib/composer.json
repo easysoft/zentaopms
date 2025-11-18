@@ -54,7 +54,8 @@
                 "Add namespace to Spyc class": "patches/spyc-add-namespace.patch"
             },
             "pclzip/pclzip": {
-                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch",
+                "Fix memory limit calculation in privOptionDefaultThreshold method": "patches/pclzip-memory-limit-fix.patch"
             },
             "phpoffice/phpspreadsheet": {
                 "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
