@@ -2339,9 +2339,9 @@ CREATE TABLE `zt_testtaskproduct` (
   `task` int unsigned NOT NULL default 0 COMMENT '所属测试单',
   `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
   `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_build` (`product`,`build`,`task`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (

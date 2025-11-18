@@ -20,8 +20,8 @@ CREATE TABLE `zt_testtaskproduct` (
   `task` int unsigned NOT NULL default 0 COMMENT '所属测试单',
   `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
   `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_build` (`product`,`build`,`task`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
