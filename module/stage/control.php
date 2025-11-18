@@ -44,12 +44,12 @@ class stage extends control
 
                 if(common::hasPriv('stage', 'edit'))
                 {
-                    $this->config->stage->actionList['setTRpoint']['icon']        = 'seal';
+                    $this->config->stage->actionList['setTRpoint']['icon']        = 'tr-box';
                     $this->config->stage->actionList['setTRpoint']['hint']        = $this->lang->stage->setTRpoint;
                     $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=TR&stageID={id}');
                     $this->config->stage->actionList['setTRpoint']['data-toggle'] = 'modal';
 
-                    $this->config->stage->actionList['setDCPpoint']['icon']        = 'seal';
+                    $this->config->stage->actionList['setDCPpoint']['icon']        = 'dcp-box';
                     $this->config->stage->actionList['setDCPpoint']['hint']        = $this->lang->stage->setDCPpoint;
                     $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=DCP&stageID={id}');
                     $this->config->stage->actionList['setDCPpoint']['data-toggle'] = 'modal';
