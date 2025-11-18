@@ -2658,6 +2658,7 @@ $config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = 
 $config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-rule']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deliverable']    = array('edition' => 'max,ipd',     'vision' => 'rnd',         'order' => 70, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-setModule']      = array('edition' => 'max,ipd',     'vision' => 'rnd',         'order' => 75, 'depend' => array('workflowgroup-project'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
 $config->group->package->workflow->order  = 5;
