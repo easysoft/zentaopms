@@ -1037,14 +1037,6 @@ class dbh
      */
     public function convertAlterTableSql($sql)
     {
-        /* If table has datas and sql no default values defined, add default ''/0. */
-        if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false)
-        {
-            $default = '';
-            if(strpos($sql, "integer") !== false) $default = 0;
-            $sql = str_replace("NOT NULL", "NOT NULL DEFAULT '" . $default ."'", $sql);
-        }
-
         $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
         preg_match($pattern, $sql, $matches);
         if(count($matches) != 5) return $sql;
