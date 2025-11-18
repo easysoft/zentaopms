@@ -1243,8 +1243,15 @@ class testtask extends control
      */
     public function ajaxGetDropMenu(int $productID, string $branch, int $taskID, string $module, string $method, string $objectType = '', int $objectID = 0)
     {
-        $scope     = empty($objectType) ? 'local' : 'all';
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
+        if($objectType && ($objectType == 'project' || $objectType == 'execution') && $objectID)
+        {
+            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'id_desc', null);
+        }
+        else
+        {
+            $scope     = empty($objectType) ? 'local' : 'all';
+            $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
+        }
 
         $namePairs = array();
         foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;
