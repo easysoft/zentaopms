@@ -64,9 +64,9 @@ common:
 	cd zentaopms/lib/vendor/psr/simple-cache; rm -fr composer.json README.md
 	cd zentaopms/lib/vendor/rmccue/requests; rm -fr CHANGELOG.md composer.json README.md
 	# 清理自动加载文件，移除已删除包的引用
-	php misc/cleanup_autoload.php zentaopms/lib/vendor
+	php misc/cleanup_autoload.php zentaopms/lib/vendor > /dev/null
 	# 把隐式可空类型声明 Type $param = null 改为显式可空类型声明 ?Type $param = null
-	php misc/fix_nullable_types.php zentaopms/lib/vendor
+	php misc/fix_nullable_types.php zentaopms/lib/vendor > /dev/null && rm misc/nullable_types_fix_*.log
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
 	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	# disable the autoExclude function.
