@@ -36,7 +36,9 @@ class phpExcel extends baseDelegate
         try
         {
             return IOFactory::createReader($type);
-        } catch (ReaderException $e) {
+        }
+        catch (ReaderException $e)
+        {
             throw $e;
         }
     }
@@ -46,7 +48,9 @@ class phpExcel extends baseDelegate
         try
         {
             return IOFactory::createWriter($this->instance, ucfirst($type));
-        } catch (WriterException $e) {
+        }
+        catch (WriterException $e)
+        {
             throw $e;
         }
     }
@@ -58,7 +62,9 @@ class phpExcel extends baseDelegate
             $fileType = IOFactory::identify($file);
             $reader   = IOFactory::createReader($fileType);
             return $fileType == 'Xls' || $fileType == 'Xlsx';
-        } catch (ReaderException $e) {
+        }
+        catch (ReaderException $e)
+        {
             return false;
         }
     }
