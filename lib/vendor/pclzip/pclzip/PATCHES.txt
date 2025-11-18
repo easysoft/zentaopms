@@ -5,3 +5,7 @@ Add namespace to PclZip class
 Source: patches/pclzip-add-namespace.patch
 
 
+Fix memory limit calculation in privOptionDefaultThreshold method
+Source: patches/pclzip-memory-limit-fix.patch
+
+

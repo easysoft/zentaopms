@@ -52,7 +52,7 @@ class Iterator implements \Iterator
      *
      * @return Worksheet
      */
-    public function current(): mixed
+    public function current(): Worksheet
     {
         return $this->subject->getSheet($this->position);
     }
@@ -62,7 +62,7 @@ class Iterator implements \Iterator
      *
      * @return int
      */
-    public function key(): mixed
+    public function key(): int
     {
         return $this->position;
     }

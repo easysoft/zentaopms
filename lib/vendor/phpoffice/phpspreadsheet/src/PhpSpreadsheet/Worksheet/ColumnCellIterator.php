@@ -43,7 +43,7 @@ class ColumnCellIterator extends CellIterator
      * @param int $startRow The row number at which to start iterating
      * @param int $endRow Optionally, the row number at which to stop iterating
      */
-    public function __construct(?Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
+    public function __construct(Worksheet $subject = null, $columnIndex = 'A', $startRow = 1, $endRow = null)
     {
         // Set subject
         $this->worksheet = $subject;
@@ -111,7 +111,7 @@ class ColumnCellIterator extends CellIterator
     /**
      * Rewind the iterator to the starting row.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->currentRow = $this->startRow;
     }
@@ -121,7 +121,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return null|\PhpOffice\PhpSpreadsheet\Cell\Cell
      */
-    public function current()
+    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
     {
         return $this->worksheet->getCellByColumnAndRow($this->columnIndex, $this->currentRow);
     }
@@ -131,7 +131,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->currentRow;
     }
@@ -139,7 +139,7 @@ class ColumnCellIterator extends CellIterator
     /**
      * Set the iterator to its next value.
      */
-    public function next()
+    public function next(): void
     {
         do {
             ++$this->currentRow;
@@ -165,7 +165,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->currentRow <= $this->endRow && $this->currentRow >= $this->startRow;
     }

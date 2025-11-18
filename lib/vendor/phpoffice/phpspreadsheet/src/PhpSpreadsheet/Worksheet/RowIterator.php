@@ -117,7 +117,7 @@ class RowIterator implements \Iterator
     /**
      * Rewind the iterator to the starting row.
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = $this->startRow;
     }
@@ -127,7 +127,7 @@ class RowIterator implements \Iterator
      *
      * @return Row
      */
-    public function current()
+    public function current(): Row
     {
         return new Row($this->subject, $this->position);
     }
@@ -137,7 +137,7 @@ class RowIterator implements \Iterator
      *
      * @return int
      */
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
@@ -145,7 +145,7 @@ class RowIterator implements \Iterator
     /**
      * Set the iterator to its next value.
      */
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -163,7 +163,7 @@ class RowIterator implements \Iterator
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->position <= $this->endRow && $this->position >= $this->startRow;
     }
