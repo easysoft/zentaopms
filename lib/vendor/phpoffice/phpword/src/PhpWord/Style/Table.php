@@ -779,7 +779,7 @@ class Table extends Border
      *
      * @param int[] $value
      */
-    public function setColumnWidths(?array $value = null)
+    public function setColumnWidths(array $value = null)
     {
         $this->columnWidths = $value;
     }

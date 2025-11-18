@@ -40,7 +40,7 @@ class HashTable
      *
      * @throws Exception
      */
-    public function addFromSource(?array $pSource = null)
+    public function addFromSource(array $pSource = null)
     {
         // Check if an array was passed
         if ($pSource == null) {

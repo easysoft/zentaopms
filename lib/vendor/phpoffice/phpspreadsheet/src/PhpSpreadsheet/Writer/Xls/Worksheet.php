@@ -2566,7 +2566,7 @@ class Worksheet extends BIFFwriter
      *
      * @param \PhpOffice\PhpSpreadsheet\Shared\Escher $pValue
      */
-    public function setEscher(?\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
+    public function setEscher(\PhpOffice\PhpSpreadsheet\Shared\Escher $pValue = null)
     {
         $this->escher = $pValue;
     }

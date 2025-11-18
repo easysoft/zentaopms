@@ -38,7 +38,7 @@ class RTF extends AbstractWriter implements WriterInterface
      *
      * @param \PhpOffice\PhpWord\PhpWord $phpWord
      */
-    public function __construct(?PhpWord $phpWord = null)
+    public function __construct(PhpWord $phpWord = null)
     {
         $this->setPhpWord($phpWord);
 
