@@ -16,7 +16,7 @@ if(!is_dir($composerDir))
 }
 
 // 要删除的包前缀
-$excludePackages = ['cweagans', 'laminas', 'markbaker', 'paragonie', 'phpseclib', 'psr', 'symfony'];
+$excludePackages = ['cweagans', 'laminas', 'markbaker', 'paragonie', 'phpseclib', 'symfony'];
 
 echo "Cleaning up autoload files...\n";
 
