@@ -1599,6 +1599,21 @@ class aiModel extends model
     }
 
     /**
+     * Get prompt fields by prompt id.
+     *
+     * @param  int   $promptID
+     * @access public
+     * @return array
+     */
+    public function getPromptFields($promptID)
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_AI_PROMPTFIELD)
+            ->where('appID')->eq($promptID)
+            ->fetchAll('id', false);
+    }
+
+    /**
      * Create a prompt.
      *
      * @param  object    $prompt
@@ -1625,6 +1640,36 @@ class aiModel extends model
         $this->loadModel('action')->create('prompt', $promptId, 'created');
 
         return $promptId;
+    }
+
+    /**
+     * Save prompt fields.
+     *
+     * @param  int         $promptID
+     * @param  null|object $data
+     * @access public
+     * @return void
+     */
+    public function savePromptFields(int $promptID, $data = null): void
+    {
+        if(empty($data)) $data = fixer::input('post')->get();
+        if(empty($data->fields)) return;
+
+        $this->dao->delete()
+            ->from(TABLE_AI_PROMPTFIELD)
+            ->where('appID')->eq($promptID)
+            ->exec();
+
+        foreach($data->fields as $field)
+        {
+            $field = (array)$field;
+            if(!isset($field['appID'])) $field['appID'] = $promptID;
+            if(isset($field['options']) && is_array($field['options'])) $field['options'] = implode(',', $field['options']);
+
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)
+                ->data($field)
+                ->exec();
+        }
     }
 
     /**
