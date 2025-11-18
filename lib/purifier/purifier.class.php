@@ -21,6 +21,7 @@ class purifier extends baseDelegate
 
     public function __construct($config = [])
     {
+        if(empty($config)) $config = $this->config;
         $purifierConfig = HTMLPurifier_Config::createDefault();
         foreach ($config as $key => $value) {
             $purifierConfig->set($key, $value);
