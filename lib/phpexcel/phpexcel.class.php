@@ -12,6 +12,8 @@
  */
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
 use PhpOffice\PhpSpreadsheet\Writer\Exception as WriterException;
 
@@ -39,7 +41,7 @@ class phpExcel extends baseDelegate
         }
         catch (ReaderException $e)
         {
-            throw $e;
+            throw new Exception('Create reader error, the error message is ' . $e->getMessage());
         }
     }
 
@@ -51,7 +53,7 @@ class phpExcel extends baseDelegate
         }
         catch (WriterException $e)
         {
-            throw $e;
+            throw new Exception('Create writer error, the error message is ' . $e->getMessage());
         }
     }
 
@@ -61,7 +63,7 @@ class phpExcel extends baseDelegate
         {
             $fileType = IOFactory::identify($file);
             $reader   = IOFactory::createReader($fileType);
-            return $fileType == 'Xls' || $fileType == 'Xlsx';
+            return $reader instanceof Xls || $reader instanceof Xlsx;
         }
         catch (ReaderException $e)
         {
