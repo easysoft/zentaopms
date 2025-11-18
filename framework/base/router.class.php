@@ -3764,6 +3764,9 @@ class EndResponseException extends \Exception
     public static function create($content = '')
     {
         $exception = new self($content);
+
+        $exception->content = $content;
+        
         return $exception;
     }
 
