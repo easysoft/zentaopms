@@ -136,7 +136,7 @@ $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 
 $config->ai->targetForm['bug']['edit']                   = (object)array('m' => 'bug', 'f' => 'edit', 'for' => 'bug');
 $config->ai->targetForm['bug']['story/create']           = (object)array('m' => 'story', 'f' => 'create', 'for' => 'bug');
 $config->ai->targetForm['bug']['testcase/create']        = (object)array('m' => 'testcase', 'f' => 'create', 'for' => 'bug');
-// $config->ai->targetForm['doc']['create']                 = (object)array('m' => 'doc', 'f' => 'create');
+$config->ai->targetForm['doc']['create']                 = (object)array('m' => 'doc', 'f' => 'selectLibType', 'for' => 'product,project,productplan,release,story,execution,task,case,bug,doc');
 $config->ai->targetForm['doc']['edit']                   = (object)array('m' => 'doc', 'f' => 'edit', 'for' => 'doc');
 
 /* Used to check if form injection is available, generated from `$config->ai->targetForm`. */
@@ -175,6 +175,7 @@ $config->ai->targetFormVars['testreport']['create']    = (object)array('format' 
 $config->ai->targetFormVars['execution']['testreport'] = (object)array('format' => '', 'args' => array(), 'app' => 'execution');
 // $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'), 'app' => 'product');
 $config->ai->targetFormVars['programplan']['create']   = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
+$config->ai->targetFormVars['doc']['create']           = (object)array('format' => 'objectType=%d', 'args' => array('objectType' => 'mine'), 'app' => 'doc');
 $config->ai->targetFormVars['doc']['edit']             = (object)array('format' => 'docID=%d', 'args' => array('doc' => 1), 'app' => 'doc');
 
 /* Menu printing configurations. */

@@ -2244,6 +2244,33 @@ class aiModel extends model
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
 
+        if($targetForm == 'doc.create')
+        {
+            $objectType = '';
+            $params     = '';
+            $objectData = $object->{$prompt->module};
+            if(in_array($prompt->module, array('product', 'story', 'productplan', 'release', 'case', 'bug')))
+            {
+                $objectType = 'product';
+                $productID  = $prompt->module == 'product' ? $objectData->id : $objectData->product;
+                $params     = helper::safe64Encode("objectID=$productID");
+            }
+            if($prompt->module == 'project')
+            {
+                $objectType = 'project';
+                $params     = helper::safe64Encode("objectID={$objectData->id}");
+            }
+            if($prompt->module == 'execution' || $prompt->module == 'task')
+            {
+                $objectType  = 'project';
+                $executionID = $prompt->module == 'execution' ? $objectData->id : $objectData->execution;
+                $params      = helper::safe64Encode("&objectID=$objectData->project&executionID=$executionID");
+            }
+            if($prompt->module == 'doc') $objectType = 'mine';
+
+            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params#"), false);
+        }
+
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
         $vars = array();

@@ -1086,6 +1086,8 @@ $lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string
 $lang->ai->formSchema['doc']['edit']->properties->content->description = 'Content of the document';
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
+$lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
+
 $lang->ai->formSchema['tree']['browse'] = new stdclass();
 $lang->ai->formSchema['tree']['browse']->title = 'Modules';
 $lang->ai->formSchema['tree']['browse']->type  = 'object';
