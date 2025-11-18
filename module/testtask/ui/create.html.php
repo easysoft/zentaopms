@@ -30,7 +30,7 @@ formPanel
         set::label($lang->testtask->product),
         set::className(!isset($executionID) || !empty($product->shadow) ? 'hidden' : ''),
         set::name('product'),
-        set::value($product->id),
+        set::value($productID),
         set::control('picker'),
         set::items($products)
     ),
@@ -65,7 +65,7 @@ formPanel
                 a
                 (
                     setID('buildCreateLink'),
-                    set('href', createLink('build', 'create', "executionID=$buildExecutionID&productID={$product->id}&projectID={$projectID}")),
+                    set('href', createLink('build', 'create', "executionID=$buildExecutionID&productID={$productID}&projectID={$projectID}")),
                     set('data-toggle', 'modal'),
                     $lang->build->create
                 )

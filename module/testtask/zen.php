@@ -403,9 +403,10 @@ class testtaskZen extends testtask
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
         $product = $this->loadModel('product')->fetchByID($productID);
-        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+        if(!isset($this->products[$productID]) && !empty($product)) $this->products[$productID] = $product->name;
 
         $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->create;
+        $this->view->productID   = $productID;
         $this->view->product     = $product;
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
         $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $objectID, $objectType, '', false) : array();
