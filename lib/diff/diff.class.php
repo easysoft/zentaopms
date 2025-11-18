@@ -17,8 +17,8 @@ class diff extends baseDelegate
 {
     protected static $className = 'GorHill\FineDiff\FineDiff';
 
-    public function __construct($from_text = '', $to_text = '', $granularityStack = null)
+    public function __construct($from = '', $to = '', $granularityStack = null)
     {
-        $this->instance = new static::$className($from_text, $to_text, $granularityStack);
+        $this->instance = new static::$className($from, $to, $granularityStack);
     }
 }

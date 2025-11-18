@@ -17,8 +17,8 @@ class pclzip extends baseDelegate
 {
     protected static $className = 'Vendor\PclZip\PclZip';
 
-    public function __construct($p_zipname)
+    public function __construct($zipname)
     {
-        $this->instance = new static::$className($p_zipname);
+        $this->instance = new static::$className($zipname);
     }
 }
