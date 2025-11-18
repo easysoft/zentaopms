@@ -18,13 +18,14 @@ class kanbanTester extends tester
         $currentVision = $this->page->getCookie('vision');
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
-        $form->wait(2);
+        $form->wait(3);
 
         /* 选择泳道分组 */
         if(!empty($groupId))
         {
             $form->dom->xpath['kanbanGroup'] = "(//menu/menu/li)[{$groupId}]";
             $form->dom->groupPickerInLite->click();
+            $form->wait(1);
             $form->dom->kanbanGroup->click();
             $form->wait(1);
         }
