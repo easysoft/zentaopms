@@ -34,6 +34,7 @@ formPanel
     ),
     formGroup
     (
+        setID('buildBox'),
         set::width('1/2'),
         set::label($lang->testtask->build),
         set::required(true),
@@ -45,6 +46,7 @@ formPanel
     ),
     formGroup
     (
+        setID('typeBox'),
         set::width('1/2'),
         set::label($lang->testtask->type),
         set::name('type[]'),

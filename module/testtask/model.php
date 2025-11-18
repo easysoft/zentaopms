@@ -147,12 +147,13 @@ class testtaskModel extends model
      * Get testtasks of a project.
      *
      * @param  int    $projectID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getProjectTasks(int $projectID, int $productID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -163,6 +164,7 @@ class testtaskModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq('0')
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -175,13 +177,14 @@ class testtaskModel extends model
      * Get testtasks of a execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $objectType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
 
@@ -192,6 +195,7 @@ class testtaskModel extends model
             ->where('t1.deleted')->eq('0')
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
@@ -322,7 +326,7 @@ class testtaskModel extends model
             ->andWhere('(t1.owner')->eq($account)
             ->orWhere("FIND_IN_SET('$account', t1.members)")
             ->markRight(1)
-            ->andWhere('t2.id')->in($this->app->user->view->sprints)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
@@ -849,6 +853,7 @@ class testtaskModel extends model
             $run->assignedTo = zget($users, $run->case, '');
             $this->dao->replace(TABLE_TESTRUN)->data($run)->exec();
 
+            if(!empty($testtask->joint)) continue;
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
             /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
             if(!empty($testtask->execution))
@@ -1100,16 +1105,16 @@ class testtaskModel extends model
      * 获取用例以及场景数据。
      * Get cases with scenes data.
      *
-     * @param  int   $productID
-     * @param  array $runs
+     * @param  int|array $productID
+     * @param  array     $runs
      * @access public
      * @return array
      */
-    public function getSceneCases($productID, $runs)
+    public function getSceneCases(int|array $productID, array $runs)
     {
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
-            ->andWhere('product')->eq($productID)
+            ->andWhere('product')->in($productID)
             ->orderBy('grade_desc, sort_asc')
             ->fetchAll('id', false);
 
@@ -1148,17 +1153,17 @@ class testtaskModel extends model
      * 获取一个测试单关联的用例。
      * Get cases associated with a testtask.
      *
-     * @param  int    $productID
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
-     * @param  object $task
+     * @param  int|array $productID
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $sort
+     * @param  object    $pager
+     * @param  object    $task
      * @access public
      * @return array
      */
-    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null, ?object $task = null): array
+    public function getTaskCases(int|array $productID, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null, ?object $task = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -1189,8 +1194,8 @@ class testtaskModel extends model
             /* Preprocess the query SQL generated by the search form. */
             $allProduct     = "`product` = 'all'";
             $caseQuery      = $this->session->testtaskQuery;
-            $isQueryAllProduct = strpos($caseQuery, $allProduct);
-            if($isQueryAllProduct !== false) $caseQuery = str_replace($allProduct, '1', $caseQuery) . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            $isQueryProduct = strpos($caseQuery, "`product` = '");
+            if(strpos($caseQuery, $allProduct) !== false) $caseQuery = str_replace($allProduct, '1', $caseQuery) . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
@@ -1202,7 +1207,7 @@ class testtaskModel extends model
                 ->where($caseQuery)
                 ->andWhere('t1.task')->eq($task->id)
                 ->andWhere('t2.deleted')->eq('0')
-                ->beginIF($isQueryAllProduct === false)->andWhere('t2.product')->eq($productID)->fi()
+                ->beginIF($isQueryProduct === false)->andWhere('t2.product')->in($productID)->fi()
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)

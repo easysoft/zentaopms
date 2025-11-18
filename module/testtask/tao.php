@@ -19,7 +19,7 @@ class testtaskTao extends testtaskModel
      * @access protected
      * @return array
      */
-    protected function fetchTesttaskList(int $productID, string $branch = '', int $projectID = 0, string $unit = 'no', string $scope = '', string $status = '', string $begin = '', string $end = '', string $orderBy = '', ?object $pager = null): array
+    public function fetchTesttaskList(int $productID, string $branch = '', int $projectID = 0, string $unit = 'no', string $scope = '', string $status = '', string $begin = '', string $end = '', string $orderBy = '', ?object $pager = null): array
     {
         return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')

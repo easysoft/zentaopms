@@ -49,6 +49,7 @@ detailBody
     (
         section
         (
+            setID('descBox'),
             set::title($lang->testtask->desc),
             set::content($task->desc ? $task->desc : $lang->noData),
             set::useHtml(true)
@@ -94,6 +95,7 @@ detailBody
                         set::name($lang->testtask->build),
                         span
                         (
+                            setID('buildText'),
                             $isInModal ? $buildName : a
                             (
                                 set::href(createLink('build', 'view', "buildID=$task->build")),

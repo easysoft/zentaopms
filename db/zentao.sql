@@ -2301,34 +2301,47 @@ CREATE INDEX `product` ON `zt_testsuite` (`product`);
 
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `name` char(90) NOT NULL DEFAULT '',
-  `execution` mediumint(8) unsigned NOT NULL default '0',
-  `build` char(30) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `owner` varchar(30) NOT NULL DEFAULT '',
-  `pri` tinyint(3) unsigned NOT NULL default '0',
-  `begin` date NULL,
-  `end` date NULL,
-  `realBegan` date NULL,
-  `realFinishedDate` datetime NULL,
-  `mailto` text NULL,
-  `desc` mediumtext NULL,
+  `id` mediumint(8) unsigned NOT NULL auto_increment COMMENT '测试单编号',
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属产品',
+  `name` char(90) NOT NULL DEFAULT '' COMMENT '测试单名称',
+  `execution` mediumint(8) unsigned NOT NULL default '0' COMMENT '所属执行',
+  `build` char(30) NOT NULL DEFAULT '' COMMENT '所属构建',
+  `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
+  `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
+  `pri` tinyint(3) unsigned NOT NULL default '0' COMMENT '优先级',
+  `begin` date NULL COMMENT '计划开始日期',
+  `end` date NULL COMMENT '计划结束日期',
+  `realBegan` date NULL COMMENT '实际开始日期',
+  `realFinishedDate` datetime NULL COMMENT '实际完成时间',
+  `mailto` text NULL COMMENT '抄送人',
+  `desc` mediumtext NULL COMMENT '描述',
   `report` text NULL,
-  `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
-  `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `auto` varchar(10) NOT NULL DEFAULT 'no',
-  `subStatus` varchar(30) NOT NULL default '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
-  `members` text DEFAULT NULL,
+  `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait' COMMENT '状态',
+  `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '相关联的测试报告',
+  `auto` varchar(10) NOT NULL DEFAULT 'no' COMMENT '是否为自动化测试',
+  `subStatus` varchar(30) NOT NULL default '' COMMENT '子状态',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
+  `createdDate` datetime NULL COMMENT '创建时间',
+  `members` text DEFAULT NULL COMMENT '团队成员',
+  `deleted` enum('0','1') NOT NULL default '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `product` ON `zt_testtask` (`product`);
 CREATE INDEX `build`   ON `zt_testtask` (`build`);
+
+-- DROP TABLE IF EXISTS `zt_testtaskproduct`;
+CREATE TABLE `zt_testtaskproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `product` int unsigned NOT NULL default 0 COMMENT '所属产品',
+  `build` int unsigned NOT NULL default 0 COMMENT '所属构建',
+  `task` int unsigned NOT NULL default 0 COMMENT '所属测试单',
+  `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
+  `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (

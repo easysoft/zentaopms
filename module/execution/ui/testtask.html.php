@@ -14,6 +14,18 @@ jsVar('allTasks', $lang->testtask->allTasks);
 jsVar('pageSummary', sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount));
 jsVar('checkedAllSummary', $lang->testtask->checkedAllSummary);
 
+$productItems[] = array('text' => $lang->testtask->all, 'url' => createLink('execution', 'testtask', array('executionID' => $executionID)));
+foreach($products as $currentProductID => $productName)
+{
+    $productItems[] = array('text' => $productName, 'url' => createLink('execution', 'testtask', array('executionID' => $executionID, 'productID' => $currentProductID)));
+}
+
+$productDropdown = dropdown
+(
+    to('trigger', btn($productID ? zget($products, $productID) : $lang->testtask->all, setClass('ghost'))),
+    set::items($productItems)
+);
+
 featureBar
 (
     li
@@ -24,7 +36,8 @@ featureBar
             set('class', 'active'),
             $lang->testtask->browse
         )
-    )
+    ),
+    to::before($productDropdown)
 );
 
 $canCreate = $canBeChanged && hasPriv('testtask', 'create');

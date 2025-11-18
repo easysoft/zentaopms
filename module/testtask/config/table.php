@@ -21,6 +21,12 @@ $config->testtask->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->testtask->dtable->fieldList['pri']['type']  = 'pri';
 $config->testtask->dtable->fieldList['pri']['show']  = true;
 
+$config->testtask->dtable->fieldList['productName']['name']  = 'productName';
+$config->testtask->dtable->fieldList['productName']['title'] = $lang->testtask->product;
+$config->testtask->dtable->fieldList['productName']['type']  = 'text';
+$config->testtask->dtable->fieldList['productName']['group'] = 'text';
+$config->testtask->dtable->fieldList['productName']['show']  = true;
+
 $config->testtask->dtable->fieldList['buildName']['name']     = 'buildName';
 $config->testtask->dtable->fieldList['buildName']['title']    = $lang->testtask->build;
 $config->testtask->dtable->fieldList['buildName']['type']     = 'text';
@@ -28,12 +34,6 @@ $config->testtask->dtable->fieldList['buildName']['link']     = array('module' =
 $config->testtask->dtable->fieldList['buildName']['data-app'] = 'execution';
 $config->testtask->dtable->fieldList['buildName']['group']    = 'text';
 $config->testtask->dtable->fieldList['buildName']['show']     = true;
-
-$config->testtask->dtable->fieldList['productName']['name']  = 'productName';
-$config->testtask->dtable->fieldList['productName']['title'] = $lang->testtask->product;
-$config->testtask->dtable->fieldList['productName']['type']  = 'text';
-$config->testtask->dtable->fieldList['productName']['group'] = 'text';
-$config->testtask->dtable->fieldList['productName']['show']  = true;
 
 $config->testtask->dtable->fieldList['executionName']['name']  = 'executionName';
 $config->testtask->dtable->fieldList['executionName']['title'] = $lang->testtask->execution;
