@@ -66,14 +66,14 @@ class testsuiteModel extends model
      * 获取一个产品下的测试套件对。
      * Get test suites pairs of a product.
      *
-     * @param  int    $productID
+     * @param  int|array $productID
      * @access public
      * @return array
      */
-    public function getSuitePairs(int $productID): array
+    public function getSuitePairs(int|array $productID): array
     {
         return $this->dao->select('id, name')->from(TABLE_TESTSUITE)
-            ->where('product')->eq($productID)
+            ->where('product')->in($productID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq('0')
             ->andWhere("(`type` = 'public' OR (`type` = 'private' AND `addedBy` = '{$this->app->user->account}'))")
