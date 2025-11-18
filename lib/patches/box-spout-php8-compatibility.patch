@@ -56,7 +56,7 @@ index a54b8b192b0..2a5616d10f8 100644
       * @return Row|null
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Row|null
      {
          $rowToBeProcessed = $this->rowBuffer;
 
@@ -65,7 +65,7 @@ index a54b8b192b0..2a5616d10f8 100644
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          // TODO: This should return $this->nextRowIndexToBeProcessed
          //       but to avoid a breaking change, the return value for
@@ -105,7 +105,7 @@ index 81f481c3cdc..5b6315e9ac5 100644
       * @return \Box\Spout\Reader\XLSX\Sheet
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): \Box\Spout\Reader\XLSX\Sheet
      {
          return $this->sheets[$this->currentSheetIndex];
      }
@@ -154,7 +154,7 @@ index 78e66501320..afef215101b 100644
       * @return Row|null
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Row|null
      {
          return $this->rowBuffer;
      }
@@ -163,7 +163,7 @@ index 78e66501320..afef215101b 100644
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->numReadRows;
      }
@@ -203,7 +203,7 @@ index 69eb58a0ba9..31347ee6190 100644
       * @return \Box\Spout\Reader\CSV\Sheet
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): \Box\Spout\Reader\CSV\Sheet
      {
          return $this->sheet;
      }
@@ -212,7 +212,7 @@ index 69eb58a0ba9..31347ee6190 100644
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return 1;
      }
@@ -252,7 +252,7 @@ index 81f0953d811..965275f0a19 100644
       * @return Row
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): Row
      {
          return $this->rowBuffer;
      }
@@ -261,7 +261,7 @@ index 81f0953d811..965275f0a19 100644
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->lastRowIndexProcessed;
      }
@@ -301,7 +301,7 @@ index c7b8cd9dcf8..5b3351fd1a9 100644
       * @return \Box\Spout\Reader\ODS\Sheet
       */
 -    public function current()
-+    public function current(): mixed
++    public function current(): \Box\Spout\Reader\ODS\Sheet
      {
          $escapedSheetName = $this->xmlReader->getAttribute(self::XML_ATTRIBUTE_TABLE_NAME);
          $sheetName = $this->escaper->unescape($escapedSheetName);
@@ -310,7 +310,7 @@ index c7b8cd9dcf8..5b3351fd1a9 100644
       * @return int
       */
 -    public function key()
-+    public function key(): mixed
++    public function key(): int
      {
          return $this->currentSheetIndex + 1;
      }
