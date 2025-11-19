@@ -236,7 +236,6 @@ $config->logonMethods[] = 'action.commentzin';
 $config->logonMethods[] = 'action.editcommentzin';
 $config->logonMethods[] = 'action.restorestages';
 $config->logonMethods[] = 'admin.ignore';
-$config->logonMethods[] = 'ai.adminindex';
 $config->logonMethods[] = 'caselib.index';
 $config->logonMethods[] = 'company.index';
 $config->logonMethods[] = 'cron.consume';
