@@ -405,7 +405,7 @@ class testtaskZen extends testtask
         $product = $this->loadModel('product')->getByID($productID);
         if(!isset($this->products[$productID]) && !empty($product)) $this->products[$productID] = $product->name;
 
-        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->create;
+        $this->view->title       = $this->lang->testtask->create;
         $this->view->productID   = $productID;
         $this->view->product     = $product;
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
