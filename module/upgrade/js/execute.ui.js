@@ -10,13 +10,39 @@ window.submitConfirm = function(event)
 window.copyCommand = function()
 {
     const command = $('#command').text();
-    navigator.clipboard.writeText(command).then(function()
-    {
-        zui.Messager.show({type: 'success', message: copySuccess, timeout: 1000});
-    }, function()
-    {
-        zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
+    const $textArea = $('<textarea>', {
+        css: {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '2em',
+            height: '2em',
+            padding: '0',
+            border: 'none',
+            outline: 'none',
+            boxShadow: 'none',
+            background: 'transparent'
+        },
+        val: command
     });
+
+    $('body').append($textArea);
+
+    $textArea[0].focus();
+    $textArea[0].select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if(successful)
+        {
+            zui.Messager.show({type: 'success', message: copySuccess, timeout: 1000});
+        } else {
+            zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
+        }
+    } catch (err) {
+        zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
+    }
+    $textArea.remove();
 }
 
 $(document).ready(function()
