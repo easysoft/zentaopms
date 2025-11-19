@@ -1657,11 +1657,11 @@ class aiModel extends model
             ->where('appID')->eq($promptID)
             ->exec();
 
-        foreach($data->fields as $field)
+        foreach($fields as $field)
         {
-            $field = (array)$field;
-            if(!isset($field['appID'])) $field['appID'] = $promptID;
-            if(isset($field['options']) && is_array($field['options'])) $field['options'] = implode(',', $field['options']);
+            if(!is_object($field)) $field = (object)$field;
+
+            if(!isset($field->appID)) $field->appID = $promptID;
 
             $this->dao->insert(TABLE_AI_PROMPTFIELD)
                 ->data($field)

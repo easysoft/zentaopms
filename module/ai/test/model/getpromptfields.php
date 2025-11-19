@@ -7,11 +7,11 @@ title=测试 aiModel::getPromptFields();
 timeout=0
 cid=0
 
-- 执行aiTest模块的getPromptFieldsTest方法，参数是'1'  @5
-- 执行aiTest模块的getPromptFieldsTest方法，参数是'2'  @5
-- 执行aiTest模块的getPromptFieldsTest方法，参数是'999'  @2
-- 执行aiTest模块的getPromptFieldsTest方法，参数是'3'  @5
-- 执行aiTest模块的getPromptFieldsTest方法，参数是'0'  @3
+- 执行aiTest模块的getPromptFieldsTest方法，参数是1  @5
+- 执行aiTest模块的getPromptFieldsTest方法，参数是2  @5
+- 执行aiTest模块的getPromptFieldsTest方法，参数是999  @2
+- 执行aiTest模块的getPromptFieldsTest方法，参数是3  @5
+- 执行aiTest模块的getPromptFieldsTest方法，参数是0  @3
 
 */
 
@@ -31,8 +31,8 @@ su('admin');
 
 $aiTest = new aiTest();
 
-r(count($aiTest->getPromptFieldsTest('1'))) && p() && e('5');
-r(count($aiTest->getPromptFieldsTest('2'))) && p() && e('5');
-r(count($aiTest->getPromptFieldsTest('999'))) && p() && e('2');
-r(count($aiTest->getPromptFieldsTest('3'))) && p() && e('5');
-r(count($aiTest->getPromptFieldsTest('0'))) && p() && e('3');
+r(count($aiTest->getPromptFieldsTest(1))) && p() && e('5');
+r(count($aiTest->getPromptFieldsTest(2))) && p() && e('5');
+r(count($aiTest->getPromptFieldsTest(999))) && p() && e('2');
+r(count($aiTest->getPromptFieldsTest(3))) && p() && e('5');
+r(count($aiTest->getPromptFieldsTest(0))) && p() && e('3');

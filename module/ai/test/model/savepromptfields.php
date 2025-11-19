@@ -27,26 +27,26 @@ $testData1->fields = array(
     (object)array('appID' => 1, 'name' => '字段A', 'type' => 'text', 'options' => null, 'required' => '1'),
     (object)array('appID' => 1, 'name' => '字段B', 'type' => 'text', 'options' => null, 'required' => '1')
 );
-r($aiTest->savePromptFieldsTest(1, $testData1)) && p() && e('2');
+r($aiTest->savePromptFieldsTest(1, $testData1->fields)) && p() && e('2');
 
 $testData2 = new stdClass();
 $testData2->fields = array(
     (object)array('appID' => 2, 'name' => '字段C', 'type' => 'textarea', 'options' => null, 'required' => '0')
 );
-r($aiTest->savePromptFieldsTest(2, $testData2)) && p() && e('1');
+r($aiTest->savePromptFieldsTest(2, $testData2->fields)) && p() && e('1');
 
 $testData3 = new stdClass();
 $testData3->fields = array(
-    (object)array('appID' => 3, 'name' => '字段D', 'type' => 'radio', 'options' => array('选项1', '选项2'), 'required' => '1')
+    (object)array('appID' => 3, 'name' => '字段D', 'type' => 'radio', 'options' => '选项1,选项2', 'required' => '1')
 );
-r($aiTest->savePromptFieldsTest(3, $testData3)) && p() && e('1');
+r($aiTest->savePromptFieldsTest(3, $testData3->fields)) && p() && e('1');
 
 $testData4 = new stdClass();
 $testData4->fields = array();
-r($aiTest->savePromptFieldsTest(4, $testData4)) && p() && e('0');
+r($aiTest->savePromptFieldsTest(4, $testData4->fields)) && p() && e('0');
 
 $testData5 = new stdClass();
 $testData5->fields = array(
-    (object)array('appID' => 999, 'name' => '字段E', 'type' => 'checkbox', 'options' => array('可选1', '可选2'), 'required' => '0')
+    (object)array('appID' => 999, 'name' => '字段E', 'type' => 'checkbox', 'options' => '可选1,可选2', 'required' => '0')
 );
-r($aiTest->savePromptFieldsTest(999, $testData5)) && p() && e('1');
+r($aiTest->savePromptFieldsTest(999, $testData5->fields)) && p() && e('1');
