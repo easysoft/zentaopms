@@ -84,6 +84,9 @@ UPDATE `zt_review` AS t1
 JOIN `zt_object` AS t2 ON t1.object = t2.id
 SET t1.version = t2.version;
 
+UPDATE `zt_object` SET `category` = 'intergrate' WHERE `category` = 'ITTC';
+UPDATE `zt_object` SET `category` = 'system' WHERE `category` = 'STTC';
+
 ALTER TABLE `zt_object` ADD `status` varchar(20) NOT NULL DEFAULT '' AFTER `type`;
 ALTER TABLE `zt_object` ADD `approval`  mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_object` ADD `reviewResult` varchar(20) NOT NULL DEFAULT '' AFTER `approval`;
@@ -188,3 +191,23 @@ ALTER TABLE `zt_nc` ADD `deliverable` int unsigned NOT NULL DEFAULT 0 COMMENT '�
 ALTER TABLE `zt_workflowgroup` ADD `disabledFeatures` varchar(255) NOT NULL DEFAULT '' COMMENT '项目流程关闭的功能' AFTER `disabledModules`;
 
 ALTER TABLE `zt_stage` MODIFY COLUMN `projectType` varchar(30) NOT NULL DEFAULT '' COMMENT '所属项目流程的类型';
+
+DELETE FROM `zt_doc` WHERE `templateType` IN ('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') AND `builtin` = '1';
+
+ALTER TABLE `zt_object`
+DROP `range`,
+ADD `object` text NULL COMMENT '评审条目列表' AFTER `data`,
+DROP `storyEst`,
+DROP `taskEst`,
+DROP `requestEst`,
+DROP `testEst`,
+DROP `devEst`,
+DROP `designEst`;
+
+ALTER TABLE `zt_review`
+DROP `auditedBy`,
+DROP `lastAuditedBy`,
+DROP `lastAuditedDate`,
+DROP `toAuditBy`,
+DROP `toAuditDate`,
+DROP `auditResult`;
