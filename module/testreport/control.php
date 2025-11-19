@@ -180,6 +180,8 @@ class testreport extends control
             if($executionID != $objectID) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
             $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
+
+            if(count($reportData['productIdList']) > 1 && !in_array($this->config->edition, array('max', 'ipd'))) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink($objectType, 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink($objectType, 'testtask', "objectID={$objectID}"))));
         }
 
         $this->testreportZen->assignReportData($reportData, 'create');
