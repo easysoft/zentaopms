@@ -195,7 +195,7 @@ class testreportZen extends testreport
         $owners        = array();
         $buildIdList   = array();
         $productIdList = array();
-        $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
+        $tasks         = $this->testtask->getExecutionTasks($executionID, 0, $objectType);
         $taskBegin     = '';
         $taskEnd       = '';
         foreach($tasks as $i => $task)

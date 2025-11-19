@@ -83,11 +83,15 @@ detailBody
                     !empty($execution->multiple) ? item
                     (
                         set::name($lang->testtask->execution),
-                        $isInModal ? $task->executionName : a
+                        span
                         (
-                            set('href', createLink('execution', 'story', "executionID=$task->execution")),
-                            set('title', $task->executionName),
-                            $task->executionName
+                            setID('executionText'),
+                            $isInModal ? $task->executionName : a
+                            (
+                                set('href', createLink('execution', 'story', "executionID=$task->execution")),
+                                set('title', $task->executionName),
+                                $task->executionName
+                            )
                         )
                     ) : null,
                     item
