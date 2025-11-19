@@ -1605,7 +1605,7 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function getPromptFields($promptID)
+    public function getPromptFields(int $promptID): array
     {
         return $this->dao->select('*')
             ->from(TABLE_AI_PROMPTFIELD)
@@ -1646,15 +1646,12 @@ class aiModel extends model
      * Save prompt fields.
      *
      * @param  int         $promptID
-     * @param  null|object $data
+     * @param  array       $fields
      * @access public
      * @return void
      */
-    public function savePromptFields(int $promptID, $data = null): void
+    public function savePromptFields(int $promptID, array $fields): void
     {
-        if(empty($data)) $data = fixer::input('post')->get();
-        if(empty($data->fields)) return;
-
         $this->dao->delete()
             ->from(TABLE_AI_PROMPTFIELD)
             ->where('appID')->eq($promptID)

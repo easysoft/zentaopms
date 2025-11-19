@@ -16048,14 +16048,14 @@ INSERT INTO `zt_ai_prompt` (`name`, `desc`, `model`, `module`, `source`, `target
 
 -- DROP TABLE IF EXISTS `zt_ai_promptfield`;
 CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `appID` mediumint(8) unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_prompt.id',
-  `name` varchar(30) NOT NULL COMMENT '字段名称',
-  `type` enum('radio','checkbox','text','textarea') DEFAULT 'text' COMMENT '字段类型',
-  `options` text DEFAULT NULL COMMENT '选项列表，逗号分隔',
-  `required` enum('0','1') DEFAULT '1' COMMENT '是否必填',
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_prompt.id',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '字段名称',
+  `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '字段类型',
+  `options` text NULL COMMENT '选项列表，逗号分隔',
+  `required` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否必填',
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_ai_promptrole`;
 CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
