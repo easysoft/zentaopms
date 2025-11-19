@@ -650,6 +650,10 @@ class dbh
                     $sql = preg_replace($pattern, '', $sql);
                 }
 
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
+
                 $sql = $this->formatAttr($sql);
 
             case 'ALTER':
