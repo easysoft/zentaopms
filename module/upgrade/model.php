@@ -12793,4 +12793,102 @@ class upgradeModel extends model
         $disabledFeatures = implode(',', array_unique($disabledFeatures));
         $this->dao->update(TABLE_CONFIG)->set('value')->eq($disabledFeatures)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->exec();
     }
+
+    /**
+     * 之前object表中data字段直接存入URL，如果改变请求方式则无法使用，现在升级为模块名、方法名、参数的形式。
+     * Before the object table directly stores the URL in the data field, if the request method changes, it cannot be used, now upgrade to the form of module name, method name, and parameters.
+     *
+     * @access public
+     * @return bool
+     */
+    public function parseDocFetcherURL()
+    {
+        $objects = $this->dao->select('id,data')->from(TABLE_OBJECT)->where('data')->like('%tml-zentaolist%')->fetchPairs();
+
+        $cleanValue = function($value)
+        {
+            if(preg_match('/__(\w+)__([0-9]+)/', $value, $m)) return $m[2];
+            return $value;
+        };
+
+        $parsePathInfoUrl = function($url) use ($cleanValue)
+        {
+            $url = ltrim($url, '/');
+            $url = preg_replace('/\.html$/', '', $url);
+
+            $parts = explode('-', $url);
+            array_shift($parts); // 删掉模块名
+            array_shift($parts); // 删掉方法名
+
+            $params = [];
+            foreach($parts as $index => $value)
+            {
+                $key   = 'param' . $index + 1;
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+            }
+
+            return $params;
+        };
+
+        $parseGetUrl = function($url) use ($cleanValue)
+        {
+            $parts = parse_url($url);
+            parse_str($parts['query'] ?? '', $query);
+
+            unset($query['m'], $query['f']);
+
+            $params = [];
+            $index  = 1;
+            foreach($query as $key => $value)
+            {
+                $key   = 'param' . $index;
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+                $index++;
+            }
+
+            return $params;
+        };
+
+        foreach($objects as $id => $data)
+        {
+            $data = json_decode($data, true);
+            $html = $data['$data'];
+
+            preg_match('/data-export-url=\'([^\']+)\'/', $html, $exportMatch);
+            preg_match('/data-fetcher=\'([^\']+)\'/', $html, $fetcherMatch);
+
+            $exportUrl  = $exportMatch[1] ?? null;
+            $fetcherUrl = $fetcherMatch[1] ?? null;
+
+            if(!$exportUrl && !$fetcherUrl) continue;
+
+            if(strpos($exportUrl, '?') !== false)
+            {
+                $data['exportParams'] = $parseGetUrl($exportUrl);
+            }
+            else
+            {
+                $data['exportParams'] = $parsePathInfoUrl($exportUrl);
+            }
+
+            if(strpos($fetcherUrl, '?') !== false)
+            {
+                $data['fetcherParams'] = $parseGetUrl($fetcherUrl);
+            }
+            else
+            {
+                $data['fetcherParams'] = $parsePathInfoUrl($fetcherUrl);
+            }
+
+            $data['$data'] = str_replace($exportMatch[1],  '', $data['$data']);
+            $data['$data'] = str_replace($fetcherMatch[1], '', $data['$data']);
+
+            $data = json_encode($data);
+            $this->dao->update(TABLE_OBJECT)->set('data')->eq($data)->where('id')->eq($id)->exec();
+        }
+    }
 }
