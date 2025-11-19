@@ -12292,7 +12292,7 @@ class upgradeModel extends model
         $reviewFlow->extra       = 'review';
 
         $upgradeReviewcls  = array();
-        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
+        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story');
 
         foreach($workflowGroups as $groupID => $workflowGroup)
         {
@@ -12309,7 +12309,7 @@ class upgradeModel extends model
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
-                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS'))) continue; // 设计类型的上面处理过了，跳过。
+                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC', 'intergrate', 'system'))) continue; // 设计类型和测试类型的上面处理过了，跳过。
                 if($key == 'PP' && in_array($projectModel, array('scrum', 'agileplus'))) continue; // 敏捷、融合敏捷没有项目计划
                 if($key == 'SRS') $value = $this->lang->upgrade->reviewObjectList['SRS']; // 将软件需求规格说明书改成项目需求规格说明书
                 $deliverable->category = $key; // 标记交付物的类型。
@@ -12497,7 +12497,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_OBJECT)->set('category')->eq($deliverable->deliverable)->where('id')->eq($review->object)->exec(); // 将评审对象改成交付物ID
 
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
-            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
+            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'intergrate', 'system')) && !$review->template)
             {
                 $deliverable->name       = zget($this->lang->upgrade->reviewObjectList, $review->category);
                 $deliverable->doc        = 0;
