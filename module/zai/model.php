@@ -530,7 +530,7 @@ class zaiModel extends model
      * @param bool   $filterByPriv
      * @return array
      */
-    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
+    public function searchKnowledges(string $query, string $collection, array $filter, int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -560,7 +560,7 @@ class zaiModel extends model
      * @param bool   $filterByPriv
      * @return array
      */
-    public function searchKnowledgeChunks(string $query, string $collection, array $filter = array(), int $limit = 20, float $minSimilarity = 0.8, bool $filterByPriv = true): array
+    public function searchKnowledgeChunks(string $query, string $collection, array $filter = array(), int $limit = 20, float $minSimilarity = 0.5, bool $filterByPriv = true): array
     {
         $postData = array();
         $postData['query']          = $query;
@@ -588,7 +588,7 @@ class zaiModel extends model
      * @param float  $minSimilarity
      * @return array
      */
-    public function searchKnowledgesInCollections(string $query, array $filters, string $type = 'content', int $limit = 20, float $minSimilarity = 0.8): array
+    public function searchKnowledgesInCollections(string $query, array $filters, string $type = 'content', int $limit = 20, float $minSimilarity = 0.5): array
     {
         $knowledges = array();
         foreach($filters as $collection => $setting)

@@ -456,7 +456,7 @@ class zaiTest
      * @access public
      * @return array
      */
-    public function searchKnowledgesTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.8)
+    public function searchKnowledgesTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.5)
     {
         $result = $this->objectModel->searchKnowledges($query, $collection, $filter, $limit, $minSimilarity);
         return $result;
@@ -473,7 +473,7 @@ class zaiTest
      * @access public
      * @return array
      */
-    public function searchKnowledgeChunksTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.8)
+    public function searchKnowledgeChunksTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.5)
     {
         $result = $this->objectModel->searchKnowledgeChunks($query, $collection, $filter, $limit, $minSimilarity);
         return $result;
@@ -636,7 +636,7 @@ class zaiTest
      * @access public
      * @return array
      */
-    public function searchKnowledgesInCollectionsTest($query, $filters, $type = 'content', $limit = 20, $minSimilarity = 0.8)
+    public function searchKnowledgesInCollectionsTest($query, $filters, $type = 'content', $limit = 20, $minSimilarity = 0.5)
     {
         $result = $this->objectModel->searchKnowledgesInCollections($query, $filters, $type, $limit, $minSimilarity);
         return $result;
