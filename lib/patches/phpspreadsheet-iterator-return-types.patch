@@ -1,235 +1,220 @@
---- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php
-+++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php
-@@ -42,7 +42,7 @@
-     /**
-      * Rewind iterator.
-      */
--    public function rewind()
-+    public function rewind(): void
-     {
-         $this->position = 0;
-     }
-@@ -52,7 +52,7 @@
-      *
-      * @return Worksheet
-      */
--    public function current()
-+    public function current(): Worksheet
-     {
-         return $this->subject->getSheet($this->position);
-     }
-@@ -62,7 +62,7 @@
-      *
-      * @return int
-      */
--    public function key()
-+    public function key(): int
-     {
-         return $this->position;
-     }
-@@ -70,7 +70,7 @@
-     /**
-      * Next value.
-      */
--    public function next()
-+    public function next(): void
-     {
-         ++$this->position;
-     }
-@@ -80,7 +80,7 @@
-      *
-      * @return bool
-      */
--    public function valid()
-+    public function valid(): bool
-     {
-         return $this->position < $this->subject->getSheetCount() && $this->position >= 0;
-     }
---- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
-+++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
-@@ -113,7 +113,7 @@ class RowCellIterator extends CellIterator
-     /**
-      * Rewind the iterator to the starting column.
-      */
--    public function rewind()
-+    public function rewind(): void
-     {
-         $this->currentColumnIndex = $this->startColumnIndex;
-     }
-@@ -123,7 +123,7 @@ class RowCellIterator extends CellIterator
-      *
-      * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
-      */
--    public function current()
-+    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
-     {
-         return $this->worksheet->getCellByColumnAndRow($this->currentColumnIndex, $this->rowIndex);
-     }
-@@ -133,7 +133,7 @@ class RowCellIterator extends CellIterator
-      *
-      * @return string
-      */
--    public function key()
-+    public function key(): string
-     {
-         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
-     }
-@@ -141,7 +141,7 @@ class RowCellIterator extends CellIterator
-     /**
-      * Set the iterator to its next value.
-      */
--    public function next()
-+    public function next(): void
-     {
-         do {
-             ++$this->currentColumnIndex;
-@@ -165,7 +165,7 @@ class RowCellIterator extends CellIterator
-      *
-      * @return bool
-      */
--    public function valid()
-+    public function valid(): bool
-     {
-         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
-     }
---- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
-+++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
-@@ -117,7 +117,7 @@ class RowIterator implements \Iterator
-     /**
-      * Rewind the iterator to the starting row.
-      */
--    public function rewind()
-+    public function rewind(): void
-     {
-         $this->position = $this->startRow;
-     }
-@@ -127,7 +127,7 @@ class RowIterator implements \Iterator
-      *
-      * @return Row
-      */
--    public function current()
-+    public function current(): Row
-     {
-         return new Row($this->subject, $this->position);
-     }
-@@ -137,7 +137,7 @@ class RowIterator implements \Iterator
-      *
-      * @return int
-      */
--    public function key()
-+    public function key(): int
-     {
-         return $this->position;
-     }
-@@ -145,7 +145,7 @@ class RowIterator implements \Iterator
-     /**
-      * Set the iterator to its next value.
-      */
--    public function next()
-+    public function next(): void
-     {
-         ++$this->position;
-     }
-@@ -163,7 +163,7 @@ class RowIterator implements \Iterator
-      *
-      * @return bool
-      */
--    public function valid()
-+    public function valid(): bool
-     {
-         return $this->position <= $this->endRow && $this->position >= $this->startRow;
-     }
+diff --git a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
+index 00dc6ac8d03..a319684ccf1 100644
 --- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
 +++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnCellIterator.php
-@@ -111,7 +111,7 @@ class ColumnCellIterator extends CellIterator
+@@ -111,6 +111,7 @@ class ColumnCellIterator extends CellIterator
      /**
       * Rewind the iterator to the starting row.
       */
--    public function rewind()
-+    public function rewind(): void
++    #[\ReturnTypeWillChange]
+     public function rewind()
      {
          $this->currentRow = $this->startRow;
-     }
-@@ -121,7 +121,7 @@ class ColumnCellIterator extends CellIterator
+@@ -121,6 +122,7 @@ class ColumnCellIterator extends CellIterator
       *
       * @return null|\PhpOffice\PhpSpreadsheet\Cell\Cell
       */
--    public function current()
-+    public function current(): null|\PhpOffice\PhpSpreadsheet\Cell\Cell
++    #[\ReturnTypeWillChange]
+     public function current()
      {
          return $this->worksheet->getCellByColumnAndRow($this->columnIndex, $this->currentRow);
-     }
-@@ -131,7 +131,7 @@ class ColumnCellIterator extends CellIterator
+@@ -131,6 +133,7 @@ class ColumnCellIterator extends CellIterator
       *
       * @return int
       */
--    public function key()
-+    public function key(): int
++    #[\ReturnTypeWillChange]
+     public function key()
      {
          return $this->currentRow;
-     }
-@@ -139,7 +139,7 @@ class ColumnCellIterator extends CellIterator
+@@ -139,6 +142,7 @@ class ColumnCellIterator extends CellIterator
      /**
       * Set the iterator to its next value.
       */
--    public function next()
-+    public function next(): void
++    #[\ReturnTypeWillChange]
+     public function next()
      {
          do {
-             ++$this->currentRow;
-@@ -165,7 +165,7 @@ class ColumnCellIterator extends CellIterator
+@@ -165,6 +169,7 @@ class ColumnCellIterator extends CellIterator
       *
       * @return bool
       */
--    public function valid()
-+    public function valid(): bool
++    #[\ReturnTypeWillChange]
+     public function valid()
      {
          return $this->currentRow <= $this->endRow && $this->currentRow >= $this->startRow;
-     }
+diff --git a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php
+index 80b548d6197..c449bad2506 100644
 --- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php
 +++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnIterator.php
-@@ -122,7 +122,7 @@ class ColumnIterator implements \Iterator
+@@ -122,6 +122,7 @@ class ColumnIterator implements \Iterator
      /**
       * Rewind the iterator to the starting column.
       */
--    public function rewind()
-+    public function rewind(): void
++    #[\ReturnTypeWillChange]
+     public function rewind()
      {
          $this->currentColumnIndex = $this->startColumnIndex;
-     }
-@@ -132,7 +132,7 @@ class ColumnIterator implements \Iterator
+@@ -132,6 +133,7 @@ class ColumnIterator implements \Iterator
       *
       * @return Column
       */
--    public function current()
-+    public function current(): Column
++    #[\ReturnTypeWillChange]
+     public function current()
      {
          return new Column($this->worksheet, Coordinate::stringFromColumnIndex($this->currentColumnIndex));
-     }
-@@ -142,7 +142,7 @@ class ColumnIterator implements \Iterator
+@@ -142,6 +144,7 @@ class ColumnIterator implements \Iterator
       *
       * @return string
       */
--    public function key()
-+    public function key(): string
++    #[\ReturnTypeWillChange]
+     public function key()
      {
          return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
-     }
-@@ -150,7 +150,7 @@ class ColumnIterator implements \Iterator
+@@ -150,6 +153,7 @@ class ColumnIterator implements \Iterator
      /**
       * Set the iterator to its next value.
       */
--    public function next()
-+    public function next(): void
++    #[\ReturnTypeWillChange]
+     public function next()
      {
          ++$this->currentColumnIndex;
-     }
-@@ -168,7 +168,7 @@ class ColumnIterator implements \Iterator
+@@ -168,6 +172,7 @@ class ColumnIterator implements \Iterator
       *
       * @return bool
       */
--    public function valid()
-+    public function valid(): bool
++    #[\ReturnTypeWillChange]
+     public function valid()
      {
          return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
-     }
+diff --git a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php
+index 348ca96f400..075a701cc69 100644
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php
+@@ -42,6 +42,7 @@ class Iterator implements \Iterator
+     /**
+      * Rewind iterator.
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->position = 0;
+@@ -52,6 +53,7 @@ class Iterator implements \Iterator
+      *
+      * @return Worksheet
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->subject->getSheet($this->position);
+@@ -62,6 +64,7 @@ class Iterator implements \Iterator
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->position;
+@@ -70,6 +73,7 @@ class Iterator implements \Iterator
+     /**
+      * Next value.
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         ++$this->position;
+@@ -80,6 +84,7 @@ class Iterator implements \Iterator
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return $this->position < $this->subject->getSheetCount() && $this->position >= 0;
+diff --git a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
+index 3dce799c284..8094d754a62 100644
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowCellIterator.php
+@@ -113,6 +113,7 @@ class RowCellIterator extends CellIterator
+     /**
+      * Rewind the iterator to the starting column.
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->currentColumnIndex = $this->startColumnIndex;
+@@ -123,6 +124,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->worksheet->getCellByColumnAndRow($this->currentColumnIndex, $this->rowIndex);
+@@ -133,6 +135,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return string
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
+@@ -141,6 +144,7 @@ class RowCellIterator extends CellIterator
+     /**
+      * Set the iterator to its next value.
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         do {
+@@ -165,6 +169,7 @@ class RowCellIterator extends CellIterator
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;
+diff --git a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
+index 009ff5de430..8b83ea4ec42 100644
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowIterator.php
+@@ -117,6 +117,7 @@ class RowIterator implements \Iterator
+     /**
+      * Rewind the iterator to the starting row.
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->position = $this->startRow;
+@@ -127,6 +128,7 @@ class RowIterator implements \Iterator
+      *
+      * @return Row
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return new Row($this->subject, $this->position);
+@@ -137,6 +139,7 @@ class RowIterator implements \Iterator
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->position;
+@@ -145,6 +148,7 @@ class RowIterator implements \Iterator
+     /**
+      * Set the iterator to its next value.
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         ++$this->position;
+@@ -163,6 +167,7 @@ class RowIterator implements \Iterator
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return $this->position <= $this->endRow && $this->position >= $this->startRow;
