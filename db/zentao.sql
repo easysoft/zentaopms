@@ -16052,7 +16052,8 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
   `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_prompt.id',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '字段名称',
   `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '字段类型',
-  `options` text NULL COMMENT '选项列表，逗号分隔',
+  `placeholder` text DEFAULT NULL COMMENT '输入提示',
+  `options` text DEFAULT NULL COMMENT '选项列表，逗号分隔',
   `required` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否必填',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

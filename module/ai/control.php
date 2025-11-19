@@ -420,15 +420,37 @@ class ai extends control
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            $data = fixer::input('post')->get();
+            if(!empty($_POST))
+            {
+                $data = fixer::input('post')->get();
+            }
+            else
+            {
+                $input = file_get_contents('php://input');
+                $data  = json_decode($input);
+
+                if(json_last_error() !== JSON_ERROR_NONE)
+                {
+                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
+                }
+            }
+
+            if(!is_object($data)) $data = new stdClass();
 
             $originalPrompt = clone $prompt;
 
-            $prompt->purpose      = $data->purpose;
-            $prompt->elaboration  = $data->elaboration;
+            $prompt->purpose      = isset($data->purpose) ? $data->purpose : '';
+            $prompt->elaboration  = '';
             $prompt->knowledgeLib = $data->knowledgeLib ?? '';
+
+            if(isset($data->fields))
+            {
+                $fields = is_array($data->fields) ? $data->fields : array();
+                $this->ai->savePromptFields($promptID, $fields);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -443,10 +465,14 @@ class ai extends control
 
         $knowledgeLibs = (empty($knowledgeLibIds)) ? [] : $this->ai->getKnowledgeLibsByIDs($knowledgeLibIds);
 
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
         $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
