@@ -31,7 +31,7 @@ $config->testtask->dtable->fieldList['buildName']['name']     = 'buildName';
 $config->testtask->dtable->fieldList['buildName']['title']    = $lang->testtask->build;
 $config->testtask->dtable->fieldList['buildName']['type']     = 'text';
 $config->testtask->dtable->fieldList['buildName']['link']     = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
-$config->testtask->dtable->fieldList['buildName']['data-app'] = 'execution';
+$config->testtask->dtable->fieldList['buildName']['data-app'] = 'project';
 $config->testtask->dtable->fieldList['buildName']['group']    = 'text';
 $config->testtask->dtable->fieldList['buildName']['show']     = true;
 
