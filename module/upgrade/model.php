@@ -1180,24 +1180,13 @@ class upgradeModel extends model
         $sqls = array_filter(explode(';', implode("\n", $sqls)));
         if($this->config->db->driver != 'mysql') return $sqls;
 
-        $version = $this->loadModel('install')->getDatabaseVersion();
+        $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
         foreach($sqls as $key => $sql)
         {
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
-            $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
-            {
-                if(version_compare($version, '5.6', '>='))
-                {
-                    $sql .= ' DEFAULT CHARSET utf8mb4 COLLATE ' . $this->dbh->getDatabaseCollation();
-                }
-                elseif(version_compare($version, '4.1', '>='))
-                {
-                    $sql .= ' DEFAULT CHARSET utf8 COLLATE utf8_general_ci';
-                }
-            }
-            $sqls[$key] = $sql;
+            $sqls[$key] = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET')) . " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
         }
 
         return $sqls;
