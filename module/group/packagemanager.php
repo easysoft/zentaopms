@@ -3948,13 +3948,6 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
-/* Temporarily hide */
-// $config->group->package->aiChatting = new stdclass();
-// $config->group->package->aiChatting->order  = 2020;
-// $config->group->package->aiChatting->subset = 'aiapp';
-// $config->group->package->aiChatting->privs  = array();
-// $config->group->package->aiChatting->privs['ai-chat'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->aiConversation = new stdclass();
 $config->group->package->aiConversation->order  = 2030;
 $config->group->package->aiConversation->subset = 'aiapp';
