@@ -1592,4 +1592,27 @@ class productZen extends product
 
         return $storyTypeList;
     }
+
+    /**
+     * 格式化导出数据。
+     * Format export data.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function formatExportData(array $products): array
+    {
+        if(empty($products) || $this->config->vision == 'or') return $products;
+
+        foreach($products as $product)
+        {
+            $product->testCaseCoverage        = isset($product->testCaseCoverage) ? $product->testCaseCoverage . '%' : '0%';
+            $product->epicCompleteRate        = isset($product->epicCompleteRate) ? $product->epicCompleteRate . '%' : '0%';
+            $product->requirementCompleteRate = isset($product->requirementCompleteRate) ? $product->requirementCompleteRate . '%' : '0%';
+            $product->storyCompleteRate       = isset($product->storyCompleteRate) ? $product->storyCompleteRate . '%' : '0%';
+            $product->bugFixedRate            = isset($product->bugFixedRate) ? $product->bugFixedRate . '%' : '0%';
+        }
+        return $products;
+    }
 }
