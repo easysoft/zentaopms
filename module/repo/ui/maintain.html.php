@@ -13,6 +13,17 @@ namespace zin;
 jsVar('deleteConfirm', $lang->repo->notice->deleteConfirm);
 jsVar('defaultServer', empty($defaultServer) ? 0 : $defaultServer->id);
 
+if($inSpace)
+{
+    dropmenu
+    (
+        set::module('devopsspace'),
+        set::tab('devopsspace'),
+        set::objectID($space),
+        set::url(createLink('devopsspace', 'ajaxGetDropMenu', "spaceID=$space&module={$app->rawModule}&method={$app->rawMethod}"))
+    );
+}
+
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
 $createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
@@ -97,7 +108,7 @@ foreach($spaces as $spaceID => $spaceName)
 
 featureBar
 (
-    to::before
+    $inSpace ? null : to::before
     (
         dropdown
         (
