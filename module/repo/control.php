@@ -42,10 +42,11 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID     projectID|executionID
+     * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function commonAction(int $repoID = 0, int $objectID = 0)
+    public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -75,7 +76,7 @@ class repo extends control
         }
         elseif($tab != 'admin' && !$fromModal)
         {
-            $this->repo->setMenu($this->repos, $repoID);
+            $this->repo->setMenu($this->repos, $repoID, $spaceID);
         }
 
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
@@ -91,6 +92,7 @@ class repo extends control
      * 版本库列表。
      * List all repo.
      *
+     * @param  int    $inSpace
      * @param  int    $objectID
      * @param  int    $space
      * @param  string $orderBy
@@ -101,10 +103,10 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function maintain(int $objectID = 0, int $space = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
+    public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $repoID = $this->repo->saveState(0, $objectID);
-        if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
+        if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
 
         $repoList = $this->repo->getList(0, $space, '', $orderBy, null, false, true, $type, $param);
         /* Pager. */
@@ -139,6 +141,7 @@ class repo extends control
         $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
         $this->view->space         = $space;
         $this->view->spaces        = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->inSpace       = $inSpace;
 
         $this->display();
     }
