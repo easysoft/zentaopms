@@ -134,7 +134,7 @@ function createBug(event)
     formData.append('stepIdList', stepIdList);
 
     var link = $.createLink('bug', 'create', $form.data('params'));
-    postAndLoadPage(link, formData);
+    postAndLoadPage(link, formData, '', {app: tab == 'my' ? 'qa' : tab});
 
     $('#runCaseModal').closest('.modal').off('hide.zui.modal');
     $('#casesResults').closest('.modal').off('hide.zui.modal');
