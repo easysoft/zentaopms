@@ -173,8 +173,7 @@ window.executeZentaoPrompt = async function(info, auto)
 
 function registerZentaoAIPlugin(lang)
 {
-    const TWO_BREAKS = '\n\n';
-    const plugin     = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
+    const plugin = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
 
     plugin.defineAgent('storyReviewer',
     {
