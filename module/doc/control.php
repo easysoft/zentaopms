@@ -42,6 +42,8 @@ class doc extends control
     public function lastViewedSpaceHome()
     {
         $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($this->config->vision == 'lite' && $lastViewedSpaceHome == 'api') $lastViewedSpaceHome = 'mine';
+
         if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
 
         $spaceMap = array(
@@ -66,6 +68,8 @@ class doc extends control
     public function lastViewedSpace()
     {
         $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($this->config->vision == 'lite' && $lastViewedSpaceHome == 'api') $lastViewedSpaceHome = 'mine';
+
         if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
 
         $spaceMap = array(
