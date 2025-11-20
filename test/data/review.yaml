@@ -40,21 +40,13 @@ fields:
     format: ""
   - field: status
     note: "评审状态"
-    range: draft,wait,reviewing,pass,fail,auditing,done
+    range: draft,wait,reviewing,pass,fail,done
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: reviewedBy
     note: "由谁评审"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: auditedBy
-    note: "由谁审计"
     from: common.user.v1.yaml
     use: user
     prefix: ""
@@ -87,14 +79,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: lastAuditedBy
-    note: "最后审计者"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: lastEditedBy
     note: "最后编辑者"
     from: common.user.v1.yaml
@@ -105,13 +89,6 @@ fields:
     format: ""
   - field: result
     note: "评审结果"
-    range: pass,fail,needfix
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: auditResult
-    note: "审计结果"
     range: pass,fail,needfix
     prefix: ""
     postfix: ""
