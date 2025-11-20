@@ -496,6 +496,27 @@ class dbh
     }
 
     /**
+     * 获取数据库支持的字符集和排序规则。
+     * Get the database charset and collation.
+     *
+     * @param  string $database
+     * @access public
+     * @return array
+     */
+    public function getDatabaseCharsetAndCollation(string $database = ''): array
+    {
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
+
+        if(empty($database)) $database = $this->dbConfig->name;
+
+        $sql    = "SELECT DEFAULT_CHARACTER_SET_NAME AS charset, DEFAULT_COLLATION_NAME AS collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$database}';";
+        $result = $this->rawQuery($sql)->fetch();
+        if($result) return (array)$result;
+
+        return $this->getServerCharsetAndCollation();
+    }
+
+    /**
      * 获取服务器支持的字符集和排序规则。
      * Get the server charset and collation.
      *
