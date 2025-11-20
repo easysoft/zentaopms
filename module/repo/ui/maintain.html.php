@@ -67,7 +67,7 @@ if(empty($config->repo->maintain->showRepoPath))
 if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo.visit';
 
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
-$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&space={$space}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+$queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$space}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
@@ -157,7 +157,7 @@ dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&space={$space}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$space}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager()),
     set::actionItemCreator(jsRaw('window.renderActions'))
