@@ -496,6 +496,24 @@ class dbh
     }
 
     /**
+     * 获取服务器支持的字符集和排序规则。
+     * Get the server charset and collation.
+     *
+     * @access private
+     * @return array
+     */
+    private function getServerCharsetAndCollation(): array
+    {
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
+
+        $charsets  = [];
+        $statement = $this->rawQuery("SHOW CHARSET WHERE Charset LIKE 'utf8%';");
+        while($charset = $statement->fetch(PDO::FETCH_ASSOC)) $charsets[$charset['Charset']] = ['charset' => $charset['Charset'], 'collation' => $charset['Default collation']];
+
+        return $charsets['utf8mb4'] ?? $charsets['utf8mb3'] ?? ['charset' => 'utf8', 'collation' => 'utf8_general_ci'];
+    }
+
+    /**
      * Create database.
      *
      * @param  string    $version
