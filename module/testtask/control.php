@@ -291,7 +291,7 @@ class testtask extends control
         /* Execute extended actions configured in the workflow. */
         $this->executeHooks($testtaskID);
 
-        if(!empty($executionID)) $this->view->execution = $this->loadModel('project')->getByID($executionID);
+        if(!empty($testtask->execution)) $this->view->execution = $this->loadModel('project')->getByID($executionID);
 
         $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$testtask->product];
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -622,7 +622,7 @@ class testtask extends control
         /* Set menu. */
         $testtask  = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
-        $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
+        $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->start;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -661,7 +661,7 @@ class testtask extends control
         /* Set menu. */
         $testtask  = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
-        $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
+        $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->close;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -700,7 +700,7 @@ class testtask extends control
         /* Set menu. */
         $testtask  = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
-        $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
+        $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->block;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
@@ -739,7 +739,7 @@ class testtask extends control
         /* Set menu. */
         $testtask  = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
-        $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
+        $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->activate;
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
