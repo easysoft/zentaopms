@@ -11291,6 +11291,7 @@ class upgradeModel extends model
         $deliverable->status      = 'enabled';
         $deliverable->createdBy   = 'system';
         $deliverable->createdDate = helper::now();
+        $deliverable->systemList  = 1;
         $deliverable->trimmable   = '1';
         $deliverable->template    = '[]';
 
@@ -11702,6 +11703,7 @@ class upgradeModel extends model
         $deliverable->template    = '[]';
         $deliverable->trimmable   = '1';
         $deliverable->builtin     = '0';
+        $deliverable->systemList  = 1;
 
         $deliverableStage = new stdClass();
         $deliverableStage->required = '0';
@@ -12313,6 +12315,15 @@ class upgradeModel extends model
                 if($key == 'PP' && in_array($projectModel, array('scrum', 'agileplus'))) continue; // 敏捷、融合敏捷没有项目计划
                 if($key == 'SRS') $value = $this->lang->upgrade->reviewObjectList['SRS']; // 将软件需求规格说明书改成项目需求规格说明书
                 $deliverable->category = $key; // 标记交付物的类型。
+
+                if(in_array($key, array('PP', 'SRS')))
+                {
+                    $deliverable->systemList = 1;
+                }
+                else
+                {
+                    $deliverable->systemList = 0;
+                }
 
                 /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
                 $moduleKey           = isset($categoryModuleMap[$key]) ? $categoryModuleMap[$key] : 'other';

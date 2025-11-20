@@ -20,7 +20,8 @@ ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmab
 ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
 ALTER TABLE `zt_deliverable` ADD `status` varchar(30) NOT NULL DEFAULT 'enabled' AFTER `name`;
 ALTER TABLE `zt_deliverable` ADD `category` varchar(255) NOT NULL DEFAULT '' AFTER `lastEditedDate`;
-ALTER TABLE `zt_deliverable` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `module`;
+ALTER TABLE `zt_deliverable` ADD `builtin` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `module`;
+ALTER TABLE `zt_deliverable` ADD `systemList` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `builtin`;
 
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
