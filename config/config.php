@@ -273,4 +273,9 @@ else
     unset($config->ipdVersion);
 }
 
-if(strtolower($config->db->encoding) == 'utf8') $config->db->encoding = 'utf8mb4';
+if($config->db->driver == 'mysql')
+{
+    if($config->db->encoding != 'utf8mb4')              $config->db->encoding  = 'utf8mb4';
+    if(empty($config->db->collation))                   $config->db->collation = 'utf8mb4_general_ci';
+    if(strpos($config->db->collation, 'utf8mb4') !== 0) $config->db->collation = 'utf8mb4_general_ci';
+}

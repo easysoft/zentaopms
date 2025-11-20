@@ -136,9 +136,11 @@ class dbh
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $collation = $dbConfig->collation ?? 'utf8mb4_general_ci';
-            $queries[] = "SET NAMES {$dbConfig->encoding}";
-            $queries[] = "SET COLLATION_CONNECTION = '{$collation}'";
+            $encoding  = strtolower($dbConfig->encoding ?? 'utf8mb4');
+            $collation = strtolower($dbConfig->collation ?? 'utf8mb4_general_ci');
+            if($encoding !== 'utf8mb4') $encoding = 'utf8mb4';
+            if(strpos($collation, $encoding) !== 0) $collation = 'utf8mb4_general_ci';
+            $queries[] = "SET NAMES {$encoding} COLLATE '{$collation}'";
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else
@@ -451,37 +453,42 @@ class dbh
     }
 
     /**
-     * 获取 MySQL 或 MariaDB 数据库支持的字符集排序规则。
-     * Get the database collation of MySQL or MaraiDB.
+     * 获取数据库支持的字符集和排序规则。
+     * Get the database charset and collation.
      *
+     * @param  string $database
      * @access public
-     * @return string
+     * @return array
      */
-    public function getDatabaseCollation(): string
+    public function getDatabaseCharsetAndCollation(string $database = ''): array
     {
-        if($this->dbConfig->driver != 'mysql') return '';
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
 
-        $sql    = "SELECT DEFAULT_COLLATION_NAME as collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$this->dbConfig->name}';";
+        if(empty($database)) $database = $this->dbConfig->name;
+
+        $sql    = "SELECT DEFAULT_CHARACTER_SET_NAME AS charset, DEFAULT_COLLATION_NAME AS collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$database}';";
         $result = $this->rawQuery($sql)->fetch();
-        return $result->collation ?? $this->getServerCollation();
+        if($result) return (array)$result;
+
+        return $this->getServerCharsetAndCollation();
     }
 
     /**
-     * 获取 MySQL 或 MariaDB 服务器支持的字符集排序规则。
-     * Get the server collation of MySQL or MaraiDB.
+     * 获取服务器支持的字符集和排序规则。
+     * Get the server charset and collation.
      *
      * @access public
-     * @return string
+     * @return array
      */
-    public function getServerCollation(): string
+    public function getServerCharsetAndCollation(): array
     {
-        if($this->dbConfig->driver != 'mysql') return '';
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
 
-        $collations = [];
-        $statement  = $this->rawQuery("SHOW COLLATION WHERE Charset = 'utf8mb4';");
-        while($collation = $statement->fetch()) $collations[$collation->Collation] = $collation->Collation;
+        $charsets  = [];
+        $statement = $this->rawQuery("SHOW CHARSET WHERE Charset LIKE 'utf8%';");
+        while($charset = $statement->fetch(PDO::FETCH_ASSOC)) $charsets[$charset['Charset']] = ['charset' => $charset['Charset'], 'collation' => $charset['Default collation']];
 
-        return $collations['utf8mb4_uca1400_ai_ci'] ?? $collations['utf8mb4_0900_ai_ci'] ?? $collations['utf8mb4_unicode_ci'] ?? 'utf8mb4_general_ci';
+        return $charsets['utf8mb4'] ?? $charsets['utf8mb3'] ?? ['charset' => 'utf8', 'collation' => 'utf8_general_ci'];
     }
 
     /**
@@ -496,15 +503,8 @@ class dbh
         switch($this->dbConfig->driver)
         {
             case 'mysql':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                if(version_compare($version, '5.6', '>='))
-                {
-                    $sql .= ' CHARACTER SET utf8mb4 COLLATE ' . $this->getServerCollation();
-                }
-                elseif(version_compare($version, '4.1', '>='))
-                {
-                    $sql .= ' CHARACTER SET utf8 COLLATE utf8_general_ci';
-                }
+                $result = $this->getServerCharsetAndCollation();
+                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
                 return $this->rawQuery($sql);
             case 'dm':
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
