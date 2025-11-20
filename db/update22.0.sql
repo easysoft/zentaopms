@@ -196,7 +196,7 @@ DELETE FROM `zt_doc` WHERE `templateType` IN ('PP', 'SRS', 'HLDS', 'DDS', 'ADS',
 
 ALTER TABLE `zt_object`
 DROP `range`,
-ADD `items` text NULL COMMENT '评审条目列表' AFTER `data`,
+ADD `items` text NULL DEFAULT NULL COMMENT '评审条目列表' AFTER `data`,
 DROP `storyEst`,
 DROP `taskEst`,
 DROP `requestEst`,
