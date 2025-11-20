@@ -55,10 +55,11 @@ class repoModel extends model
      *
      * @param  array  $repos
      * @param  int    $repoID
+     * @param  int   $spaceID
      * @access public
      * @return void
      */
-    public function setMenu(array $repos, int $repoID = 0)
+    public function setMenu(array $repos, int $repoID = 0, int $spaceID = 0)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
@@ -77,6 +78,7 @@ class repoModel extends model
                 unset($this->lang->devops->menu->branch);
             }
         }
+        $this->loadModel('devopsspace')->setMenu($spaceID);
 
         if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
         if(!session_id()) session_start();
