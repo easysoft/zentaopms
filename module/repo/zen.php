@@ -395,7 +395,7 @@ class repoZen extends repo
         $this->view->products     = $products;
         $this->view->serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
     }
 
     /**
