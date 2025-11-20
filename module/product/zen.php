@@ -1605,7 +1605,7 @@ class productZen extends product
     {
         if(empty($products) || $this->config->vision == 'or') return $products;
 
-        foreach($products as $key => $product)
+        foreach($products as $product)
         {
             $product->testCaseCoverage        = isset($product->testCaseCoverage) ? $product->testCaseCoverage . '%' : '0%';
             $product->epicCompleteRate        = isset($product->epicCompleteRate) ? $product->epicCompleteRate . '%' : '0%';
