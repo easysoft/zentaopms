@@ -1550,6 +1550,8 @@ class tutorialModel extends model
         $design->type         = 'HLDS';
         $design->files        = array();
         $design->productName  = 'Test product';
+        $design->docs         = '';
+        $design->docVersions  = '';
         return $design;
     }
 
