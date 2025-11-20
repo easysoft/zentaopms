@@ -40,7 +40,7 @@ formPanel
         set::required(true),
         set::name('build'),
         set::value($testtask->build),
-        set::control('picker'),
+        set::control(array('control' => 'picker', 'required' => false)),
         set::items($builds),
         on::change('setExecutionByBuild')
     ),
