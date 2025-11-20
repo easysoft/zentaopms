@@ -117,14 +117,8 @@ class installModel extends model
                     $table = substr($table, 0, stripos($table, ' DEFAULT CHARSET'));
                     if($this->config->db->driver == 'mysql')
                     {
-                        if(version_compare($version, '5.6', '>='))
-                        {
-                            $table .= ' DEFAULT CHARSET utf8mb4 COLLATE ' . $this->dbh->getDatabaseCollation();
-                        }
-                        elseif(version_compare($version, '4.1', '>='))
-                        {
-                            $table .= ' DEFAULT CHARSET utf8 COLLATE utf8_general_ci';
-                        }
+                        $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
+                        $table .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
                     }
                 }
                 elseif(strpos($table, 'DROP TABLE') !== false && $isClearDB)
