@@ -12292,7 +12292,7 @@ class upgradeModel extends model
         $reviewFlow->extra       = 'review';
 
         $upgradeReviewcls  = array();
-        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story', 'ITTC' => 'test', 'STTC' => 'test');
+        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story');
 
         foreach($workflowGroups as $groupID => $workflowGroup)
         {
@@ -12309,7 +12309,7 @@ class upgradeModel extends model
             foreach(array_filter($objectList) as $key => $value)
             {
                 if(empty($value)) continue;
-                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS'))) continue; // 设计类型的上面处理过了，跳过。
+                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC', 'intergrate', 'system'))) continue; // 设计类型和测试类型的上面处理过了，跳过。
                 if($key == 'PP' && in_array($projectModel, array('scrum', 'agileplus'))) continue; // 敏捷、融合敏捷没有项目计划
                 if($key == 'SRS') $value = $this->lang->upgrade->reviewObjectList['SRS']; // 将软件需求规格说明书改成项目需求规格说明书
                 $deliverable->category = $key; // 标记交付物的类型。
@@ -12497,7 +12497,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_OBJECT)->set('category')->eq($deliverable->deliverable)->where('id')->eq($review->object)->exec(); // 将评审对象改成交付物ID
 
             /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
-            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC')) && !$review->template)
+            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'intergrate', 'system')) && !$review->template)
             {
                 $deliverable->name       = zget($this->lang->upgrade->reviewObjectList, $review->category);
                 $deliverable->doc        = 0;
@@ -12792,5 +12792,103 @@ class upgradeModel extends model
 
         $disabledFeatures = implode(',', array_unique($disabledFeatures));
         $this->dao->update(TABLE_CONFIG)->set('value')->eq($disabledFeatures)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->exec();
+    }
+
+    /**
+     * 之前object表中data字段直接存入URL，如果改变请求方式则无法使用，现在升级为模块名、方法名、参数的形式。
+     * Before the object table directly stores the URL in the data field, if the request method changes, it cannot be used, now upgrade to the form of module name, method name, and parameters.
+     *
+     * @access public
+     * @return bool
+     */
+    public function parseDocFetcherURL()
+    {
+        $objects = $this->dao->select('id,data')->from(TABLE_OBJECT)->where('data')->like('%tml-zentaolist%')->fetchPairs();
+
+        $cleanValue = function($value)
+        {
+            if(preg_match('/__(\w+)__([0-9]+)/', $value, $m)) return $m[2];
+            return $value;
+        };
+
+        $parsePathInfoUrl = function($url) use ($cleanValue)
+        {
+            $url = ltrim($url, '/');
+            $url = preg_replace('/\.html$/', '', $url);
+
+            $parts = explode('-', $url);
+            array_shift($parts); // 删掉模块名
+            array_shift($parts); // 删掉方法名
+
+            $params = [];
+            foreach($parts as $index => $value)
+            {
+                $key   = 'param' . $index + 1;
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+            }
+
+            return $params;
+        };
+
+        $parseGetUrl = function($url) use ($cleanValue)
+        {
+            $parts = parse_url($url);
+            parse_str($parts['query'] ?? '', $query);
+
+            unset($query['m'], $query['f']);
+
+            $params = [];
+            $index  = 1;
+            foreach($query as $key => $value)
+            {
+                $key   = 'param' . $index;
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+                $index++;
+            }
+
+            return $params;
+        };
+
+        foreach($objects as $id => $data)
+        {
+            $data = json_decode($data, true);
+            $html = $data['$data'];
+
+            preg_match('/data-export-url=\'([^\']+)\'/', $html, $exportMatch);
+            preg_match('/data-fetcher=\'([^\']+)\'/', $html, $fetcherMatch);
+
+            $exportUrl  = $exportMatch[1] ?? null;
+            $fetcherUrl = $fetcherMatch[1] ?? null;
+
+            if(!$exportUrl && !$fetcherUrl) continue;
+
+            if(strpos($exportUrl, '?') !== false)
+            {
+                $data['exportParams'] = $parseGetUrl($exportUrl);
+            }
+            else
+            {
+                $data['exportParams'] = $parsePathInfoUrl($exportUrl);
+            }
+
+            if(strpos($fetcherUrl, '?') !== false)
+            {
+                $data['fetcherParams'] = $parseGetUrl($fetcherUrl);
+            }
+            else
+            {
+                $data['fetcherParams'] = $parsePathInfoUrl($fetcherUrl);
+            }
+
+            $data['$data'] = str_replace($exportMatch[1],  '', $data['$data']);
+            $data['$data'] = str_replace($fetcherMatch[1], '', $data['$data']);
+
+            $data = json_encode($data);
+            $this->dao->update(TABLE_OBJECT)->set('data')->eq($data)->where('id')->eq($id)->exec();
+        }
     }
 }
