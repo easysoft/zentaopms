@@ -453,40 +453,6 @@ class dbh
     }
 
     /**
-     * 获取 MySQL 或 MariaDB 数据库支持的字符集排序规则。
-     * Get the database collation of MySQL or MaraiDB.
-     *
-     * @access public
-     * @return string
-     */
-    public function getDatabaseCollation(): string
-    {
-        if($this->dbConfig->driver != 'mysql') return '';
-
-        $sql    = "SELECT DEFAULT_COLLATION_NAME as collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$this->dbConfig->name}';";
-        $result = $this->rawQuery($sql)->fetch();
-        return $result->collation ?? $this->getServerCollation();
-    }
-
-    /**
-     * 获取 MySQL 或 MariaDB 服务器支持的字符集排序规则。
-     * Get the server collation of MySQL or MaraiDB.
-     *
-     * @access public
-     * @return string
-     */
-    public function getServerCollation(): string
-    {
-        if($this->dbConfig->driver != 'mysql') return '';
-
-        $collations = [];
-        $statement  = $this->rawQuery("SHOW COLLATION WHERE Charset = 'utf8mb4';");
-        while($collation = $statement->fetch()) $collations[$collation->Collation] = $collation->Collation;
-
-        return $collations['utf8mb4_uca1400_ai_ci'] ?? $collations['utf8mb4_0900_ai_ci'] ?? $collations['utf8mb4_unicode_ci'] ?? 'utf8mb4_general_ci';
-    }
-
-    /**
      * 获取数据库支持的字符集和排序规则。
      * Get the database charset and collation.
      *
