@@ -273,4 +273,4 @@ else
     unset($config->ipdVersion);
 }
 
-if(strtolower($config->db->encoding) == 'utf8') $config->db->encoding = 'utf8mb4';
+if($config->db->driver == 'mysql' && $config->db->encoding != 'utf8mb4') $config->db->encoding = 'utf8mb4';
