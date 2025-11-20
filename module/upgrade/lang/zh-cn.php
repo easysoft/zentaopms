@@ -247,4 +247,3 @@ $lang->upgrade->reviewObjectList['UM']         = '用户手册';
 $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = '基线评审';
 $lang->upgrade->baselineReview['change']   = '项目变更评审';
-$lang->upgrade->baselineReview['accept']   = '项目变更验收评审';
