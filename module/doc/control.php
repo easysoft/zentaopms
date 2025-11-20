@@ -2566,7 +2566,6 @@ class doc extends control
         }
         $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
 
-
         if($objectType == 'template')
         {
             $scopeList = $this->doc->getTemplateScopes();
