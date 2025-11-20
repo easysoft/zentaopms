@@ -83,7 +83,6 @@ class storiesEntry extends entry
         if(empty($reviewer)) $this->setPost('needNotReview', 1);
         $this->setPost('product', $productID);
         $this->setPost('type', $this->param('type', 'story'));
-        $this->setPost('status', $this->param('status', 'draft'));
 
         $this->requireFields('title,spec,pri,category');
 
