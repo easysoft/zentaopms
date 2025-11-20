@@ -448,6 +448,10 @@ $lang->devops->os           = 'OS Version';
 $lang->devops->service      = 'Service';
 $lang->devops->platform     = 'Platform';
 $lang->devops->components   = 'Components';
+$lang->devops->spaceSetting = 'Setting';
+$lang->devops->member       = 'Member';
+$lang->devops->group        = 'Group';
+$lang->devops->overview     = 'Overview';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

@@ -448,6 +448,10 @@ $lang->devops->os           = '系统版本';
 $lang->devops->service      = '服务';
 $lang->devops->platform     = '平台';
 $lang->devops->components   = '组件';
+$lang->devops->spaceSetting = '设置';
+$lang->devops->member       = '成员';
+$lang->devops->group        = '权限';
+$lang->devops->overview     = '概览';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
