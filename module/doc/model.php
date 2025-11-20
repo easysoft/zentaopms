@@ -1470,7 +1470,8 @@ class docModel extends model
             $spaces[]  = array('id' => $execution->id, 'name' => $execution->name, 'canModify' => $canModify);
         }
 
-        if(!$spaceID && !empty($spaces)) $spaceID = $spaces[0]['id'];
+        $spaceIDs = array_column($spaces, 'id');
+        if(!in_array($spaceID, $spaceIDs) && !empty($spaces)) $spaceID = $spaces[0]['id'];
 
         return array($spaces, $spaceID);
     }
