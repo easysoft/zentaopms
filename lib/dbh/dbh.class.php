@@ -537,15 +537,8 @@ class dbh
         switch($this->dbConfig->driver)
         {
             case 'mysql':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                if(version_compare($version, '5.6', '>='))
-                {
-                    $sql .= ' CHARACTER SET utf8mb4 COLLATE ' . $this->getServerCollation();
-                }
-                elseif(version_compare($version, '4.1', '>='))
-                {
-                    $sql .= ' CHARACTER SET utf8 COLLATE utf8_general_ci';
-                }
+                $result = $this->getServerCharsetAndCollation();
+                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
                 return $this->rawQuery($sql);
             case 'dm':
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
