@@ -10880,6 +10880,8 @@ class upgradeModel extends model
             $this->dao->query("ALTER TABLE `{$table}` CONVERT TO CHARACTER SET {$result['charset']}LATE {$result['collation']}");
         }
 
+        $this->loadModel('setting')->setItems('system.common.global', ['dbCharset' => $result['charset'], 'dbCollation' => $result['collation']]);
+
         return true;
     }
 
