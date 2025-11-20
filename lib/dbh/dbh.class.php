@@ -520,10 +520,10 @@ class dbh
      * 获取服务器支持的字符集和排序规则。
      * Get the server charset and collation.
      *
-     * @access private
+     * @access public
      * @return array
      */
-    private function getServerCharsetAndCollation(): array
+    public function getServerCharsetAndCollation(): array
     {
         if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
 
