@@ -14391,7 +14391,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `reviewers` text NULL,
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `data` text NULL,
-  `object` text NULL COMMENT '评审条目列表',
+  `items` text NULL COMMENT '评审条目列表',
   `end` date NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
