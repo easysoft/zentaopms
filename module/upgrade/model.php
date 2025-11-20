@@ -10857,11 +10857,15 @@ class upgradeModel extends model
         if(version_compare($dbVersion, '5.6', '<')) return true;
 
         /* 转换数据库的字符集。Convert database charset. */
-        $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        $encoding = $this->config->db->encoding;
+        $result   = $this->dbh->getServerCharsetAndCollation($this->config->db->name);
+        if($encoding != $result['charset']) return true;
+
+        $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET {$result['charset']} COLLATE {$result['collation']}");
 
         /* 转换自定义工作流表的字符集。Convert custom workflow tables charset. */
         $flowTables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
-        foreach($flowTables as $flowTable) $this->dao->query("ALTER TABLE `$flowTable` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        foreach($flowTables as $flowTable) $this->dao->query("ALTER TABLE `{$flowTable}` CONVERT TO CHARACTER SET {$result['charset']}LATE {$result['collation']}");
 
         /* 获取数据库文件中的表名。Get table names from database file. */
         $dbFile  = $this->app->getBasePath() . 'db' . DS . 'zentao.sql';
@@ -10873,7 +10877,7 @@ class upgradeModel extends model
         foreach($matches[1] as $table)
         {
             $table = str_replace('zt_', $this->config->db->prefix, $table);
-            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            $this->dao->query("ALTER TABLE `{$table}` CONVERT TO CHARACTER SET {$result['charset']}LATE {$result['collation']}");
         }
 
         return true;
