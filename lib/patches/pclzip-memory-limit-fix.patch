@@ -1,0 +1,12 @@
+diff --git a/vendor/pclzip/pclzip/pclzip.lib.php b/vendor/pclzip/pclzip/pclzip.lib.php
+index 11b7e552199..37f19d23b9d 100644
+--- a/vendor/pclzip/pclzip/pclzip.lib.php
++++ b/vendor/pclzip/pclzip/pclzip.lib.php
+@@ -1789,6 +1789,7 @@ class PclZip
+         $v_memory_limit = ini_get('memory_limit');
+         $v_memory_limit = trim($v_memory_limit);
+         $last           = strtolower(substr($v_memory_limit, -1));
++        $v_memory_limit = (float)$v_memory_limit;
+
+         if ($last == 'g') {
+             //$v_memory_limit = $v_memory_limit*1024*1024*1024;

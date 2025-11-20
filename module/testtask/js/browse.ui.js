@@ -8,7 +8,7 @@ function changeBrowseDate()
 
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'buildName' && row.data.execution != 0 && multipleSprints[row.data.execution] == undefined)
+    if(result && col.name == 'buildName' && multipleSprints[row.data.execution] == undefined)
     {
         if(result[0].props) result[0].props['data-app'] = 'project';
     }

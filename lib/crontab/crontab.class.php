@@ -19,6 +19,6 @@ class crontab extends baseDelegate
 
     public function __construct($expression, ?FieldFactory $fieldFactory = null)
     {
-        $this->instance = new self::$className($expression, $fieldFactory);
+        $this->instance = new static::$className($expression, $fieldFactory);
     }
 }

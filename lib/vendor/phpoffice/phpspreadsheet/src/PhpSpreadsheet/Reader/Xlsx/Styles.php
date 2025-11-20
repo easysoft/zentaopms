@@ -31,7 +31,7 @@ class Styles extends BaseParserClass
         $this->styleXml = $styleXml;
     }
 
-    public function setStyleBaseData(?Theme $theme = null, $styles = [], $cellStyles = [])
+    public function setStyleBaseData(Theme $theme = null, $styles = [], $cellStyles = [])
     {
         self::$theme = $theme;
         $this->styles = $styles;
@@ -163,7 +163,7 @@ class Styles extends BaseParserClass
             self::readBorderStyle($docStyle->getBorders(), $style->border);
         }
 
-        if (isset($style->alignment)) {
+        if (isset($style->alignment->alignment)) {
             self::readAlignmentStyle($docStyle->getAlignment(), $style->alignment);
         }
 

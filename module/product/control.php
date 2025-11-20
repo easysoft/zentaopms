@@ -796,6 +796,7 @@ class product extends control
             /* 获取导出字段和数据。 */
             $fields       = $this->productZen->getExportFields();
             $productStats = $this->productZen->getExportData($programID, $status, $orderBy, $param);
+            $productStats = $this->productZen->formatExportData($productStats);
 
             /* 如果只导出选中产品，删除非选中产品。 */
             if($this->post->exportType == 'selected')

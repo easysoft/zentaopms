@@ -26,7 +26,7 @@ final class CreateTemporaryFileException extends Exception
      * @param int $code The user defined exception code
      * @param \Exception $previous The previous exception used for the exception chaining
      */
-    final public function __construct($code = 0, ?\Exception $previous = null)
+    final public function __construct($code = 0, \Exception $previous = null)
     {
         parent::__construct(
             'Could not create a temporary file with unique name in the specified directory.',

@@ -1454,4 +1454,30 @@ class productZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return array('productID' => $productID, 'branch' => $branch, 'projectID' => $projectID, 'executionSuccess' => $executionSuccess);
     }
+
+    /**
+     * 格式化导出数据。
+     * Format export data.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function formatExportDataTest(array $dataList = array()): array
+    {
+        $this->instance->app->rawModule = 'product';
+
+        $products = array();
+        foreach($dataList as $data)
+        {
+            $product = new stdclass();
+            foreach($data as $key => $value) $product->$key = $value;
+            $products[] = $product;
+        }
+
+        $result = $this->invokeArgs('formatExportData', [$products]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

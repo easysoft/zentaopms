@@ -46,7 +46,7 @@ class Word2007 extends AbstractWriter implements WriterInterface
      *
      * @param \PhpOffice\PhpWord\PhpWord
      */
-    public function __construct(?PhpWord $phpWord = null)
+    public function __construct(PhpWord $phpWord = null)
     {
         // Assign PhpWord
         $this->setPhpWord($phpWord);

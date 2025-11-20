@@ -1016,6 +1016,7 @@ class project extends control
      * Project test task list.
      *
      * @param  int    $projectID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1023,7 +1024,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testtask(int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $projectID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('testtaskList', $this->app->getURI(true), 'project');
 
@@ -1034,17 +1035,19 @@ class project extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $project = $this->project->getByID($projectID);
-        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $orderBy, $pager);
+        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $productID, $orderBy, $pager);
 
         $this->projectZen->assignTesttaskVars($tasks);
 
-        $this->view->title    = $project->name . $this->lang->hyphen . $this->lang->project->common;
-        $this->view->project  = $project;
-        $this->view->pager    = $pager;
-        $this->view->orderBy  = $orderBy;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products = $this->loadModel('product')->getPairs('', 0);
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $projectID);
+        $this->view->title     = $project->name . $this->lang->hyphen . $this->lang->project->common;
+        $this->view->project   = $project;
+        $this->view->productID = $productID;
+        $this->view->projectID = $projectID;
+        $this->view->pager     = $pager;
+        $this->view->orderBy   = $orderBy;
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->products  = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
+        $this->view->actions   = $this->loadModel('action')->getList('testtask', $projectID);
         $this->display();
     }
 

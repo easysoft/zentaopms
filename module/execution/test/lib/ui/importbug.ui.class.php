@@ -33,6 +33,7 @@ class importBugTester extends tester
         $importForm->dom->saveBtn->click();
         $importForm->wait(3);
         $importForm->dom->btn($this->lang->goback)->click();
+        $importForm->wait(1);
 
         $form->dom->search(array("{$this->lang->task->fromBugID},=,{$id}"));
         if($form->dom->firstName === false) return $this->failed('导入Bug失败');

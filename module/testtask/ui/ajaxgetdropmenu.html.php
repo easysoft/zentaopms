@@ -13,8 +13,8 @@ namespace zin;
 $data = array();
 foreach($testtasks as $testtask)
 {
-    if($objectType == 'project' && $testtask->project != $objectID) continue;
-    if($objectType == 'execution' && $testtask->execution != $objectID) continue;
+    if($objectType == 'project'   && $testtask->project   != $objectID && empty($testtask->joint)) continue;
+    if($objectType == 'execution' && $testtask->execution != $objectID && empty($testtask->joint)) continue;
 
     $item = array();
     $item['id']        = $testtask->id;

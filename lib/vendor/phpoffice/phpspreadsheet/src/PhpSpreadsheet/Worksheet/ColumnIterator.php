@@ -122,6 +122,7 @@ class ColumnIterator implements \Iterator
     /**
      * Rewind the iterator to the starting column.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentColumnIndex = $this->startColumnIndex;
@@ -132,6 +133,7 @@ class ColumnIterator implements \Iterator
      *
      * @return Column
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return new Column($this->worksheet, Coordinate::stringFromColumnIndex($this->currentColumnIndex));
@@ -142,6 +144,7 @@ class ColumnIterator implements \Iterator
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return Coordinate::stringFromColumnIndex($this->currentColumnIndex);
@@ -150,6 +153,7 @@ class ColumnIterator implements \Iterator
     /**
      * Set the iterator to its next value.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->currentColumnIndex;
@@ -168,6 +172,7 @@ class ColumnIterator implements \Iterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->currentColumnIndex <= $this->endColumnIndex && $this->currentColumnIndex >= $this->startColumnIndex;

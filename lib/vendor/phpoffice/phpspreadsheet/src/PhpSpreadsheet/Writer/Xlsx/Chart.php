@@ -112,7 +112,7 @@ class Chart extends WriterPart
      *
      * @throws WriterException
      */
-    private function writeTitle(XMLWriter $objWriter, ?Title $title = null)
+    private function writeTitle(XMLWriter $objWriter, Title $title = null)
     {
         if ($title === null) {
             return;
@@ -157,7 +157,7 @@ class Chart extends WriterPart
      *
      * @throws WriterException
      */
-    private function writeLegend(XMLWriter $objWriter, ?Legend $legend = null)
+    private function writeLegend(XMLWriter $objWriter, Legend $legend = null)
     {
         if ($legend === null) {
             return;
@@ -215,7 +215,7 @@ class Chart extends WriterPart
      *
      * @throws WriterException
      */
-    private function writePlotArea(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pSheet, PlotArea $plotArea, ?Title $xAxisLabel = null, ?Title $yAxisLabel = null, ?Axis $xAxis = null, ?Axis $yAxis = null, ?GridLines $majorGridlines = null, ?GridLines $minorGridlines = null)
+    private function writePlotArea(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $pSheet, PlotArea $plotArea, Title $xAxisLabel = null, Title $yAxisLabel = null, Axis $xAxis = null, Axis $yAxis = null, GridLines $majorGridlines = null, GridLines $minorGridlines = null)
     {
         if ($plotArea === null) {
             return;
@@ -344,7 +344,7 @@ class Chart extends WriterPart
      * @param XMLWriter $objWriter XML Writer
      * @param \PhpOffice\PhpSpreadsheet\Chart\Layout $chartLayout Chart layout
      */
-    private function writeDataLabels(XMLWriter $objWriter, ?Layout $chartLayout = null)
+    private function writeDataLabels(XMLWriter $objWriter, Layout $chartLayout = null)
     {
         $objWriter->startElement('c:dLbls');
 
@@ -1421,7 +1421,7 @@ class Chart extends WriterPart
      * @param XMLWriter $objWriter XML Writer
      * @param Layout $layout
      */
-    private function writeLayout(XMLWriter $objWriter, ?Layout $layout = null)
+    private function writeLayout(XMLWriter $objWriter, Layout $layout = null)
     {
         $objWriter->startElement('c:layout');
 

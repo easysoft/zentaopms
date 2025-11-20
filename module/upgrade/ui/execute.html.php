@@ -13,6 +13,9 @@ namespace zin;
 set::zui(true);
 
 jsVar('result', $result);
+jsVar('copySuccess', $lang->upgrade->copySuccess);
+jsVar('copyFail', $lang->upgrade->copyFail);
+
 div
 (
     setID('main'),
@@ -40,6 +43,7 @@ div
                 h::textarea
                 (
                     setClass('form-control w-full'),
+                    set::id('command'),
                     set::name('errors'),
                     set::rows(10),
                     set::readonly('readonly'),
@@ -50,19 +54,35 @@ div
             (
                 on::click('button[type=submit]', "submitConfirm"),
                 on::click('button[type=button]', "loadCurrentPage"),
+                on::click('#copyBtn', "copyCommand"),
                 set::target('_self'),
                 set::actions(false),
                 formHidden('fromVersion', $fromVersion),
                 div
                 (
                     setClass('mt-4'),
-                    $result == 'sqlFail' ? $lang->upgrade->afterExec : null,
-                    $result == 'fail' ? $lang->upgrade->afterDeleted : null,
-                    btn
+                    div
                     (
-                        setID('refreshBtn'),
-                        set::btnType($this->app->rawMethod == 'execute' ? 'submit' : 'button'),
-                        $lang->refresh
+                        setClass('text-important'),
+                        $result == 'sqlFail' ? $lang->upgrade->afterExec : null,
+                        $result == 'fail' ? $lang->upgrade->afterDeleted : null,
+                    ),
+                    div
+                    (
+                        setClass('text-center'),
+                        $result == 'fail' ? a
+                        (
+                            setID('copyBtn'),
+                            setClass('btn wide important mr-2'),
+                            $lang->upgrade->copyCommand
+                        ) : null,
+                        btn
+                        (
+                            setID('refreshBtn'),
+                            setClass('btn-wide primary'),
+                            set::btnType($this->app->rawMethod == 'execute' ? 'submit' : 'button'),
+                            $lang->refresh
+                        )
                     )
                 )
             )

@@ -604,11 +604,11 @@ class blockZen extends block
      * 打印测试单区块。
      * Print testtask block.
      *
-     * @params object     $block
-     * @access protected
+     * @params object $block
+     * @access public
      * @return void
      */
-    protected function printTesttaskBlock($block): void
+    public function printTesttaskBlock(object $block): void
     {
         $this->app->loadLang('testtask');
 
@@ -1556,11 +1556,11 @@ class blockZen extends block
      * 打印敏捷项目的测试统计区块。
      * Print srcum test block.
      *
-     * @param  object    $block
-     * @access protected
+     * @param  object $block
+     * @access public
      * @return void
      */
-    protected function printScrumTestBlock(object $block): void
+    public function printScrumTestBlock(object $block): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('testtaskList', $uri, 'qa');

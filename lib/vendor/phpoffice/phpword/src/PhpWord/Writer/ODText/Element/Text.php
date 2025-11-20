@@ -124,7 +124,7 @@ class Text extends AbstractElement
         }
     }
 
-    private function writeChangeInsertion($start = true, ?TrackChange $trackChange = null)
+    private function writeChangeInsertion($start = true, TrackChange $trackChange = null)
     {
         if ($trackChange == null || $trackChange->getChangeType() != TrackChange::INSERTED) {
             return;

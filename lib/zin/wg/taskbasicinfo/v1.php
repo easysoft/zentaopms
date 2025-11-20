@@ -79,15 +79,18 @@ class taskBasicInfo extends wg
             $items[$lang->task->design] = array('control' => 'text', 'text' => $task->designName, 'title' => $task->designName, 'control' => 'link', 'url' => createLink('design', 'view', "designID=$task->design"));
         }
 
-        $items[$lang->task->fromBug] = array
-        (
-            'control'   => 'entityTitle',
-            'object'    => $fromBug,
-            'type'      => 'bug',
-            'url'       => true,
-            'inline'    => true,
-            'linkProps' => array('data-toggle' => 'modal', 'data-size' => 'lg')
-        );
+        if($config->vision != 'lite')
+        {
+            $items[$lang->task->fromBug] = array
+            (
+                'control'   => 'entityTitle',
+                'object'    => $fromBug,
+                'type'      => 'bug',
+                'url'       => true,
+                'inline'    => true,
+                'linkProps' => array('data-toggle' => 'modal', 'data-size' => 'lg')
+            );
+        }
 
         $items[$lang->task->assignedTo] = zget($users, $task->assignedTo, '');
         $items[$lang->task->type] = zget($lang->task->typeList, $task->type, $task->type);

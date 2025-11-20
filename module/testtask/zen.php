@@ -10,10 +10,11 @@ class testtaskZen extends testtask
      * @param  int|string $branch
      * @param  int        $projectID
      * @param  int        $executionID
-     * @access protected
+     * @param  object     $testtask
+     * @access public
      * @return void
      */
-    protected function setMenu(int $productID, int|string $branch, int $projectID, int $executionID)
+    public function setMenu(int $productID, int|string $branch, int $projectID, int $executionID, object $testtask = null)
     {
         if($this->app->tab == 'project')
         {
@@ -22,8 +23,8 @@ class testtaskZen extends testtask
         }
         if($this->app->tab == 'execution')
         {
-            $this->view->executionID = $this->loadModel('execution')->setMenu($executionID);
-            return $this->view->executionID;
+            $this->loadModel('execution')->setMenu($executionID);
+            return $executionID;
         }
         return $this->loadModel('qa')->setMenu($productID, $branch);
     }
@@ -97,6 +98,7 @@ class testtaskZen extends testtask
         unset($searchConfig['fields']['branch']);
         unset($searchConfig['params']['branch']);
 
+        $this->config->testcase->search = $searchConfig;
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
 
@@ -120,8 +122,8 @@ class testtaskZen extends testtask
         $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type={$type}&param={$param}");
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
-        $searchConfig['params']['product']['values'] = array($product->id => $product->name);
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        if(empty($searchConfig['params']['product'])) $searchConfig['params']['product']['values'] = array($product->id => $product->name);
 
         $build = $this->loadModel('build')->getByID((int)$task->build);
         if($build)
@@ -301,19 +303,19 @@ class testtaskZen extends testtask
      * 分配变量给一个测试单的用例列表页。
      * Assign variables for cases page of a testtask.
      *
-     * @param  object    $produc
-     * @param  object    $testtask
-     * @param  array     $runs
-     * @param  array     $scenes
-     * @param  int       $moduleID
-     * @param  string    $browseType
-     * @param  int       $param
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @access protected
+     * @param  object $produc
+     * @param  object $testtask
+     * @param  array  $runs
+     * @param  array  $scenes
+     * @param  int    $moduleID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
      * @return void
      */
-    protected function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
+    public function assignForCases(object $product, object $testtask, array $runs, array $scenes, int $moduleID, string $browseType, int $param, string $orderBy, object $pager): void
     {
         $suites = $this->loadModel('testsuite')->getSuitePairs($product->id);
 
@@ -401,14 +403,12 @@ class testtaskZen extends testtask
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
-        if(!isset($this->products[$productID]))
-        {
-            $product = $this->loadModel('product')->getByID($productID);
-            $this->products[$productID] = $product->name;
-        }
+        $product = $this->loadModel('product')->getByID($productID);
+        if(!isset($this->products[$productID]) && !empty($product)) $this->products[$productID] = $product->name;
 
-        $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testtask->create;
-        $this->view->product     = $this->loadModel('product')->getByID($productID);
+        $this->view->title       = $this->lang->testtask->create;
+        $this->view->productID   = $productID;
+        $this->view->product     = $product;
         $this->view->executions  = $productID ? $this->product->getExecutionPairsByProduct($productID, '', $projectID, 'stagefilter') : array();
         $this->view->builds      = $productID ? $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'notrunk,withexecution', $objectID, $objectType, '', false) : array();
         $this->view->testreports = $this->loadModel('testreport')->getPairs($productID);
@@ -433,7 +433,7 @@ class testtaskZen extends testtask
         $productID   = $productID;
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executionID = $task->execution;
-        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, '0', $projectID, 'stagefilter');
+        $executions  = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '0', $projectID, 'stagefilter');
         if($executionID && !isset($executions[$executionID]))
         {
             $execution = $this->loadModel('execution')->getById($executionID);
@@ -779,7 +779,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return void
      */
-    protected function setDropMenu(int $productID, object $task)
+    public function setDropMenu(int $productID, object $task)
     {
         /* Set drop menu. */
         $objectType = $objectID = '';

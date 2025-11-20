@@ -19,6 +19,8 @@ $lang->block->story = 'Target';
 
 $lang->block->storyCount = 'Target Count';
 
+$lang->block->projectstatistic->story = 'Target';
+
 $lang->block->default['full']['my'][] = array('title' => 'Kanban List', 'module' => 'execution', 'code' => 'scrumlist', 'width' => '2', 'height' => '6', 'left' => '0', 'top' => '45', 'params' => array('type' => 'doing', 'orderBy' => 'id_desc', 'count' => '15'));
 
 $lang->block->modules['kanban'] = new stdclass();

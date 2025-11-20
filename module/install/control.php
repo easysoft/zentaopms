@@ -162,10 +162,6 @@ class install extends control
         if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
         if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
 
-        /* IPD版本不支持达梦数据库。*/
-        /* The IPD version does not support the Da Meng database. */
-        if($this->config->edition == 'ipd') unset($this->lang->install->dbDriverList['dm']);
-
         $this->view->title      = $this->lang->install->setConfig;
         $this->view->dbHost     = $dbHost ? $dbHost : '127.0.0.1';
         $this->view->dbPort     = $dbPort ? $dbPort : '3306';

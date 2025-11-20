@@ -19,6 +19,6 @@ class captcha extends baseDelegate
 
     public function __construct($phrase = null, ?PhraseBuilderInterface $builder = null)
     {
-        $this->instance = new self::$className($phrase, $builder);
+        $this->instance = new static::$className($phrase, $builder);
     }
 }

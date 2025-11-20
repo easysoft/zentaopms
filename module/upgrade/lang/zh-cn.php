@@ -59,6 +59,9 @@ $lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操�
                                       <p><strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="#" onclick="location.reload()">继续更新</a></strong></p>';
 
 $lang->upgrade->selectVersion = '选择版本';
+$lang->upgrade->copyCommand   = '复制命令';
+$lang->upgrade->copySuccess   = '复制成功';
+$lang->upgrade->copyFail      = '浏览器不支持复制功能，请手动复制';
 $lang->upgrade->continue      = '继续';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
 $lang->upgrade->fromVersion   = '原来的版本';
@@ -70,8 +73,8 @@ $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自�
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->showSQLLog    = '检查到你的数据库跟标准不一致，正在尝试修复。以下是修复SQL语句。';
 $lang->upgrade->noticeErrSQL  = '检查到你的数据库跟标准不一致，尝试修复失败。请手动执行以下SQL语句，再刷新页面检查。';
-$lang->upgrade->afterDeleted  = '请执行上面命令删除文件， 删除后刷新！';
-$lang->upgrade->afterExec     = '请根据以上报错信息手动修改数据库，修改后刷新！';
+$lang->upgrade->afterDeleted  = '请在服务器上执行上面命令删除文件，删除后刷新页面。';
+$lang->upgrade->afterExec     = '请根据以上报错信息手动修改数据库，修改后刷新页面。';
 $lang->upgrade->afterDuckdb   = '请等待安装Duckdb引擎。';
 $lang->upgrade->mergeProgram  = '数据迁移';
 $lang->upgrade->mergeTips     = '数据迁移提示';

@@ -336,6 +336,22 @@ $$ LANGUAGE plpgsql;
 
 --
 
+CREATE OR REPLACE FUNCTION IF(
+    condition BOOLEAN,
+    true_val  timestamp without time zone,
+    false_val timestamp without time zone
+) RETURNS DATE AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
 CREATE OR REPLACE FUNCTION DATE_FORMAT(
     date_val DATE,
     format_str TEXT

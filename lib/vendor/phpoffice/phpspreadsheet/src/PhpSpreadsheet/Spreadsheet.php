@@ -930,7 +930,7 @@ class Spreadsheet
      *
      * @return null|NamedRange
      */
-    public function getNamedRange($namedRange, ?Worksheet $pSheet = null)
+    public function getNamedRange($namedRange, Worksheet $pSheet = null)
     {
         $returnValue = null;
 
@@ -957,7 +957,7 @@ class Spreadsheet
      *
      * @return Spreadsheet
      */
-    public function removeNamedRange($namedRange, ?Worksheet $pSheet = null)
+    public function removeNamedRange($namedRange, Worksheet $pSheet = null)
     {
         if ($pSheet === null) {
             if (isset($this->namedRanges[$namedRange])) {

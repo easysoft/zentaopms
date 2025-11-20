@@ -19,6 +19,6 @@ class phpmailer extends baseDelegate
 
     public function __construct($exceptions = null)
     {
-        $this->instance = new self::$className($exceptions);
+        $this->instance = new static::$className($exceptions);
     }
 }

@@ -34,17 +34,19 @@ formPanel
     ),
     formGroup
     (
+        setID('buildBox'),
         set::width('1/2'),
         set::label($lang->testtask->build),
         set::required(true),
         set::name('build'),
         set::value($testtask->build),
-        set::control('picker'),
+        set::control(array('control' => 'picker', 'required' => false)),
         set::items($builds),
         on::change('setExecutionByBuild')
     ),
     formGroup
     (
+        setID('typeBox'),
         set::width('1/2'),
         set::label($lang->testtask->type),
         set::name('type[]'),

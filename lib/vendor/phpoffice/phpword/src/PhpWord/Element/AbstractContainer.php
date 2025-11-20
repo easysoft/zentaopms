@@ -20,32 +20,32 @@ namespace PhpOffice\PhpWord\Element;
 /**
  * Container abstract class
  *
- * @method Text addText(string $text, ?mixed $fStyle = null, ?mixed $pStyle = null)
+ * @method Text addText(string $text, mixed $fStyle = null, mixed $pStyle = null)
  * @method TextRun addTextRun(mixed $pStyle = null)
  * @method Bookmark addBookmark(string $name)
- * @method Link addLink(string $target, ?string $text = null, ?mixed $fStyle = null, ?mixed $pStyle = null, boolean $internal = false)
- * @method PreserveText addPreserveText(string $text, ?mixed $fStyle = null, ?mixed $pStyle = null)
- * @method void addTextBreak(int $count = 1, ?mixed $fStyle = null, ?mixed $pStyle = null)
- * @method ListItem addListItem(string $txt, int $depth = 0, ?mixed $font = null, ?mixed $list = null, ?mixed $para = null)
- * @method ListItemRun addListItemRun(int $depth = 0, ?mixed $listStyle = null, ?mixed $pStyle = null)
+ * @method Link addLink(string $target, string $text = null, mixed $fStyle = null, mixed $pStyle = null, boolean $internal = false)
+ * @method PreserveText addPreserveText(string $text, mixed $fStyle = null, mixed $pStyle = null)
+ * @method void addTextBreak(int $count = 1, mixed $fStyle = null, mixed $pStyle = null)
+ * @method ListItem addListItem(string $txt, int $depth = 0, mixed $font = null, mixed $list = null, mixed $para = null)
+ * @method ListItemRun addListItemRun(int $depth = 0, mixed $listStyle = null, mixed $pStyle = null)
  * @method Footnote addFootnote(mixed $pStyle = null)
  * @method Endnote addEndnote(mixed $pStyle = null)
- * @method CheckBox addCheckBox(string $name, $text, ?mixed $fStyle = null, ?mixed $pStyle = null)
+ * @method CheckBox addCheckBox(string $name, $text, mixed $fStyle = null, mixed $pStyle = null)
  * @method Title addTitle(mixed $text, int $depth = 1)
- * @method TOC addTOC(mixed $fontStyle = null, ?mixed $tocStyle = null, int $minDepth = 1, int $maxDepth = 9)
+ * @method TOC addTOC(mixed $fontStyle = null, mixed $tocStyle = null, int $minDepth = 1, int $maxDepth = 9)
  * @method PageBreak addPageBreak()
  * @method Table addTable(mixed $style = null)
- * @method Image addImage(string $source, ?mixed $style = null, bool $isWatermark = false, $name = null)
- * @method OLEObject addOLEObject(string $source, ?mixed $style = null)
+ * @method Image addImage(string $source, mixed $style = null, bool $isWatermark = false, $name = null)
+ * @method OLEObject addOLEObject(string $source, mixed $style = null)
  * @method TextBox addTextBox(mixed $style = null)
- * @method Field addField(string $type = null, array $properties = array(), array $options = array(), ?mixed $text = null)
+ * @method Field addField(string $type = null, array $properties = array(), array $options = array(), mixed $text = null)
  * @method Line addLine(mixed $lineStyle = null)
- * @method Shape addShape(string $type, ?mixed $style = null)
- * @method Chart addChart(string $type, array $categories, array $values, ?array $style = null, $seriesName = null)
- * @method FormField addFormField(string $type, ?mixed $fStyle = null, ?mixed $pStyle = null)
+ * @method Shape addShape(string $type, mixed $style = null)
+ * @method Chart addChart(string $type, array $categories, array $values, array $style = null, $seriesName = null)
+ * @method FormField addFormField(string $type, mixed $fStyle = null, mixed $pStyle = null)
  * @method SDT addSDT(string $type)
  *
- * @method \PhpOffice\PhpWord\Element\OLEObject addObject(string $source, ?mixed $style = null) deprecated, use addOLEObject instead
+ * @method \PhpOffice\PhpWord\Element\OLEObject addObject(string $source, mixed $style = null) deprecated, use addOLEObject instead
  *
  * @since 0.10.0
  */

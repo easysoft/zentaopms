@@ -1989,7 +1989,7 @@ class projectModel extends model
         if(!empty($_POST['otherProducts'])) return $this->linkOtherProducts($projectID, $members);
 
         /* Link products of current program of the project. */
-        $products           = isset($_POST['products']) ? toIntArray($_POST['products']) : $products;
+        $products           = isset($_POST['products']) ? (array)$_POST['products'] : $products;
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchGroup('product', 'branch');
         $this->linkProducts($projectID, $products, $oldProjectProducts, $members);
 
@@ -1997,7 +1997,7 @@ class projectModel extends model
         if($projectID > 0)
         {
             $executions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->fetchPairs('id');
-            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin($products)->exec();
+            $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in($executions)->andWhere('product')->notin(toIntArray($products))->exec();
 
             if(isset($_POST['stageBy']) and $_POST['stageBy'] == 'product')
             {

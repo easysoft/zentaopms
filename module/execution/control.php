@@ -764,6 +764,7 @@ class execution extends control
      * Browse test tasks of execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -771,7 +772,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -787,7 +788,7 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', 'product_asc,' . $sort, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', 'product_asc,' . $sort, $pager);
 
         $this->executionZen->assignTesttaskVars($tasks);
 
@@ -795,11 +796,12 @@ class execution extends control
         $this->view->execution     = $execution;
         $this->view->project       = $this->loadModel('project')->getByID($execution->project);
         $this->view->executionID   = $executionID;
+        $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products      = $this->loadModel('product')->getPairs('', 0);
+        $this->view->products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();

@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('designID', $designID);
 jsVar('errorDate', $lang->design->errorDate);
+jsVar('isTutorial', common::isTutorialMode());
 
 foreach($revisions as $revision)
 {

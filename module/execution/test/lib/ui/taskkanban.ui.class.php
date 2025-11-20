@@ -17,6 +17,7 @@ class taskkanbanTester extends tester
     public function checkKanban($lane, $col, $num, $nameId = '', $groupId = '')
     {
         $form = $this->initForm('execution', 'taskkanban', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
 
         /* 选择看板 */
         if(!empty($nameId))

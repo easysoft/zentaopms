@@ -43,5 +43,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
 window.calcHeight = function()
 {
+    if(isTutorial) return 200;
     return $('#viewCommitModal').height() - $('#viewCommitModal .modal-header').height() - $('#viewCommitModal .modal-body > .flex').height() - 200;
 }

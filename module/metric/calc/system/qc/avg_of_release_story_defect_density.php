@@ -3,7 +3,7 @@ class avg_of_release_story_defect_density extends baseCalc
 {
     public $dataset = 'getAllDevStoriesWithLinkBug';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 't1.estimate', 't1.stage', 'count(CASE WHEN t4.deleted = "0" THEN t3.id END) as linkbugcount');
+    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 't1.estimate', 't1.stage', "count(CASE WHEN t4.deleted = '0' THEN t3.id END) as linkbugcount");
 
     public $result = array();
 

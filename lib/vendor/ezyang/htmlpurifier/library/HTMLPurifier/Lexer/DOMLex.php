@@ -266,7 +266,6 @@ class HTMLPurifier_Lexer_DOMLex extends HTMLPurifier_Lexer
         }
         $array = array();
         foreach ($node_map as $attr) {
-            if(!isset($attr->name)) continue;
             $array[$attr->name] = $attr->value;
         }
         return $array;

@@ -158,14 +158,14 @@ class taskModel extends model
             $oldTask = zget($oldTasks, $taskID);
 
             /* Record effort. */
-            if(!empty($task->consumed) && $task->consumed != $oldTask->consumed)
+            if(!empty($task->consumed) && $task->consumed > $oldTask->consumed)
             {
                 $record = new stdclass();
                 $record->account  = $currentAccount;
                 $record->task     = $taskID;
                 $record->date     = $today;
                 $record->left     = $task->left;
-                $record->consumed = $task->consumed;
+                $record->consumed = $task->consumed - $oldTask->consumed;
                 $this->addTaskEffort($record);
             }
 

@@ -113,7 +113,7 @@ abstract class AbstractWriter implements WriterInterface
      * @param \PhpOffice\PhpWord\PhpWord
      * @return self
      */
-    public function setPhpWord(?PhpWord $phpWord = null)
+    public function setPhpWord(PhpWord $phpWord = null)
     {
         $this->phpWord = $phpWord;
 
