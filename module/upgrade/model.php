@@ -1183,6 +1183,7 @@ class upgradeModel extends model
         $version = $this->loadModel('install')->getDatabaseVersion();
         foreach($sqls as $key => $sql)
         {
+            $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
             $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
