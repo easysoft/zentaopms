@@ -180,6 +180,7 @@ class upgradeModel extends model
             $this->addSubStatus();
         }
 
+        $this->convertCharset();
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
