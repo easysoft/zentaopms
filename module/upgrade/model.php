@@ -12798,7 +12798,7 @@ class upgradeModel extends model
         $disabledFeatures = array_values($disabledFeatures);
         foreach($countFeature as $feature => $count)
         {
-            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan'))))
+            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan', 'track'))))
             {
                 $disabledFeatures[] = 'project' . ucfirst($feature);
             }
