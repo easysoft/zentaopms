@@ -137,10 +137,11 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0)
+    public function getList(int $projectID = 0, int $devopsSpaceID = 0)
     {
         return $this->dao->select('*')->from(TABLE_GROUP)
             ->where('project')->eq($projectID)
+            ->andWhere('devopsSpace')->eq($devopsSpaceID)
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->orderBy('id')
             ->fetchAll();

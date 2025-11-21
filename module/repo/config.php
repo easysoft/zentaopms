@@ -2,7 +2,7 @@
 global $lang, $app;
 $app->loadLang('repo');
 
-$config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import');
+$config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import', 'group');
 
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
