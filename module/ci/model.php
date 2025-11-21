@@ -22,7 +22,7 @@ class ciModel extends model
     {
         if($repoID) $this->session->set('repoID', $repoID);
 
-        $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
+        $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube', 'devopsspace');
         if(!in_array("{$this->app->moduleName}", $homeMenuModule)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', (int)$this->session->repoID);
 
         if($this->session->repoID)

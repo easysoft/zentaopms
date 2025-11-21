@@ -532,11 +532,11 @@ $configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
 $lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,space,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
-$lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|devopsspace|view|spaceID=%s");
+$lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|devopsspace|view|spaceID=%s", 'subModule' =>'devopsspace', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
 $lang->devops->homeMenu->spaceSetting['subMenu']->overview = array('link' => "{$lang->devops->overview}|devopsspace|view|spaceID=%s");
 $lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|devopsspace|managemembers|spaceID=%s");
-$lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|devopsspace|managegroup|spaceID=%s");
+$lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|devopsspace|group|spaceID=%s");
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
@@ -572,6 +572,9 @@ $lang->devops->menuOrder[55] = 'deploy';
 $lang->devops->menuOrder[70] = 'apps';
 $lang->devops->menuOrder[75] = 'configure';
 $lang->devops->menuOrder[80] = 'spaceSetting';
+$lang->devops->menuOrder[85] = 'overview';
+$lang->devops->menuOrder[90] = 'member';
+$lang->devops->menuOrder[95] = 'group';
 
 $lang->devops->dividerMenu = ',configure,spaceSetting';
 

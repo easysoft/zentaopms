@@ -1043,6 +1043,7 @@ CREATE INDEX `gid`        ON `zt_file`(`gid`);
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `devopsSpace` int unsigned NOT NULL DEFAULT 0 COMMENT '所属DevOps空间',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `name` char(30) NOT NULL DEFAULT '',
   `role` char(30) NOT NULL DEFAULT '',
@@ -16416,27 +16417,11 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 
--- DROP TABLE IF EXISTS `zt_ops_space`;
-CREATE TABLE IF NOT EXISTS `zt_ops_space` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
-  `owner` varchar(30) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `desc` TEXT NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate`datetime NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 -- DROP TABLE IF EXISTS `zt_ops_spaceuser`;
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` smallint(5) unsigned NOT NULL default '0',
-  `account` char(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `account` (`account`)
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `space` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `uk_spaceuser` ON `zt_ops_spaceuser` (`space`,`account`);

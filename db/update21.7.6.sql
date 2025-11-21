@@ -25,3 +25,13 @@ CREATE TABLE `zt_testtaskproduct` (
 CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
+
+CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `space` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `uk_spaceuser` ON `zt_ops_spaceuser` (`space`,`account`);
+
+ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;

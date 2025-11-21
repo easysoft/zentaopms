@@ -30,7 +30,7 @@ formPanel
             set::rows('5')
         )
     ),
-    $app->tab != 'project' ? formGroup
+    !in_array($app->tab, ['project', 'devops']) ? formGroup
     (
         set::label($lang->group->limited),
         setClass('items-center'),
