@@ -16413,3 +16413,5 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
+
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'metriclibShowed', 1);
