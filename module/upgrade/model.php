@@ -11357,7 +11357,6 @@ class upgradeModel extends model
     public function initAIPrompts(): void
     {
         $this->app->loadConfig('ai');
-        $promptTableName = $this->config->db->prefix . 'ai_prompt';
         foreach($this->config->ai->initAIPrompts as $aiPrompt)
         {
             if(!$this->checkAIPromptUnique($aiPrompt)) return;
@@ -11366,7 +11365,7 @@ class upgradeModel extends model
             unset($aiPrompt->id);
             $aiPrompt->createdBy   = 'system';
             $aiPrompt->createdDate = helper::now();
-            $this->dao->insert("`$promptTableName`")->data($aiPrompt)->autoCheck()->exec();
+            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
 
             $promptID = $this->dao->lastInsertID();
             $this->initAIPromptFields($index, $promptID);
@@ -11383,8 +11382,7 @@ class upgradeModel extends model
      */
     public function checkAIPromptUnique(object $aiPrompt): bool
     {
-        $tableName = $this->config->db->prefix . 'ai_prompt';
-        $count     = $this->dao->select('COUNT(1) AS count')->from("`$tableName`")
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
             ->where('name')->eq($aiPrompt->name)
             ->fetch('count');
         return $count == 0;
@@ -11402,7 +11400,6 @@ class upgradeModel extends model
     public function initAIPromptFields(int $index, int $promptID): void
     {
         $this->app->loadConfig('ai');
-        $fieldTableName = $this->config->db->prefix . 'ai_promptfield';
         foreach($this->config->ai->initAIPromptFields as $key => $aiPromptFields)
         {
             if($key == $index)
@@ -11410,7 +11407,7 @@ class upgradeModel extends model
                 foreach($aiPromptFields as $field)
                 {
                     $field->appID = $promptID;
-                    $this->dao->insert("`$fieldTableName`")->data($field, 'id')->exec();
+                    $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
                 }
             }
         }
