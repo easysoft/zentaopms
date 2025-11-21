@@ -16419,9 +16419,9 @@ CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 
 -- DROP TABLE IF EXISTS `zt_ops_spaceuser`;
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` smallint(5) unsigned NOT NULL default '0',
-  `account` char(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `account` (`account`)
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `space` int unsigned NOT NULL default '0' COMMENT '所属空间',
+  `account` char(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `uk_spaceuser` ON `zt_ops_spaceuser` (`space`,`account`);
