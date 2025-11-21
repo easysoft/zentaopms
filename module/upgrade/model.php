@@ -11346,4 +11346,30 @@ class upgradeModel extends model
         $this->dao->exec($sql);
         return true;
     }
+
+    /**
+     * 内置AI禅道智能体和相关字段。
+     * Initialize the AI prompts and fields.
+     *
+     * @param  int    $index
+     * @param  int    $promptID
+     * @access public
+     * @return bool
+     */
+    public function initAIPromptFields(int $index, int $promptID): void
+    {
+        $this->app->loadConfig('ai');
+        $fieldTableName = $this->config->db->prefix . 'ai_promptfield';
+        foreach($this->config->ai->initAIPromptFields as $key => $aiPromptFields)
+        {
+            if($key == $index)
+            {
+                foreach($aiPromptFields as $field)
+                {
+                    $field->appID = $promptID;
+                    $this->dao->insert("`$fieldTableName`")->data($field, 'id')->exec();
+                }
+            }
+        }
+    }
 }
