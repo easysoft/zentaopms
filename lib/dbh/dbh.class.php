@@ -130,17 +130,15 @@ class dbh
         $driverAlias = array('oceanbase' => 'mysql', 'highgo' => 'pgsql', 'postgres' => 'pgsql');
         $driver      = isset($driverAlias[$dbConfig->driver]) ? $driverAlias[$dbConfig->driver] : $dbConfig->driver;
 
-        $pdo = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->dbConfig = $dbConfig;
+        $this->flag     = $flag;
 
         $queries = [];
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $encoding  = strtolower($dbConfig->encoding ?? 'utf8mb4');
-            $collation = strtolower($dbConfig->collation ?? 'utf8mb4_general_ci');
-            if($encoding !== 'utf8mb4') $encoding = 'utf8mb4';
-            if(strpos($collation, $encoding) !== 0) $collation = 'utf8mb4_general_ci';
-            $queries[] = "SET NAMES {$encoding} COLLATE '{$collation}'";
+            $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else
@@ -154,32 +152,8 @@ class dbh
         }
         if(!empty($queries))
         {
-            foreach($queries as $query)
-            {
-                try
-                {
-                    $begin = microtime(true);
-                    $pdo->exec($query);
-                    $duration = microtime(true) - $begin;
-                }
-                catch (PDOException $e)
-                {
-                    $duration = microtime(true) - $begin;
-                    $this->sqlError($e);
-                }
-                finally
-                {
-                    dbh::$flags[]     = $flag;
-                    dbh::$queries[]   = $query;
-                    dbh::$durations[] = round($duration, 6);
-                    if(!empty($config->debug)) dbh::$traces[] = 'vim +' . (__LINE__ - 12) . ' ' . __FILE__;
-                }
-            }
+            foreach($queries as $query) $this->rawQuery($query);
         }
-
-        $this->pdo      = $pdo;
-        $this->dbConfig = $dbConfig;
-        $this->flag     = $flag;
     }
 
     /**
