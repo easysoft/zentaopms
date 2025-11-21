@@ -11348,6 +11348,23 @@ class upgradeModel extends model
     }
 
     /**
+     * 检查AI禅道智能体唯一性。
+     * Check AI zentao agent unique.
+     *
+     * @param  object $aiPrompt
+     * @access public
+     * @return bool
+     */
+    public function checkAIPromptUnique(object $aiPrompt): bool
+    {
+        $tableName = $this->config->db->prefix . 'ai_prompt';
+        $count     = $this->dao->select('COUNT(1) AS count')->from("`$tableName`")
+            ->where('name')->eq($aiPrompt->name)
+            ->fetch('count');
+        return $count == 0;
+    }
+
+    /**
      * 内置AI禅道智能体和相关字段。
      * Initialize the AI prompts and fields.
      *
