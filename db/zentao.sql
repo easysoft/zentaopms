@@ -1043,7 +1043,7 @@ CREATE INDEX `gid`        ON `zt_file`(`gid`);
 CREATE TABLE IF NOT EXISTS `zt_group` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `devopsSpace` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `devopsSpace` int unsigned NOT NULL DEFAULT '0' COMMENT '所属DevOps空间',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `name` char(30) NOT NULL DEFAULT '',
   `role` char(30) NOT NULL DEFAULT '',
