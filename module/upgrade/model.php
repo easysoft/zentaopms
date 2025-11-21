@@ -11348,6 +11348,32 @@ class upgradeModel extends model
     }
 
     /**
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initAIPrompts(): void
+    {
+        $this->app->loadConfig('ai');
+        $promptTableName = $this->config->db->prefix . 'ai_prompt';
+        foreach($this->config->ai->initAIPrompts as $aiPrompt)
+        {
+            if(!$this->checkAIPromptUnique($aiPrompt)) return;
+
+            $index = $aiPrompt->id;
+            unset($aiPrompt->id);
+            $aiPrompt->createdBy   = 'system';
+            $aiPrompt->createdDate = helper::now();
+            $this->dao->insert("`$promptTableName`")->data($aiPrompt)->autoCheck()->exec();
+
+            $promptID = $this->dao->lastInsertID();
+            $this->initAIPromptFields($index, $promptID);
+        }
+    }
+
+    /**
      * 检查AI禅道智能体唯一性。
      * Check AI zentao agent unique.
      *
