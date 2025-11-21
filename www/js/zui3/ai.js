@@ -43,6 +43,23 @@ window.openPageForm = function(url, data, callback)
     });
 }
 
+function getPromptFormConfig(fields, extraConfig)
+{
+    if(!Array.isArray(fields) || !fields.length) return;
+    const typeMap    = {text: 'string'};
+    const required   = [];
+    const properties = fields.reduce((properties, field, index) => {
+        properties[field.name] = {type: typeMap[field.type] || 'string', title: field.name, description: field.placeholder};
+        if(field.required) required.push(field.name);
+        return properties;
+    }, {});
+    return $.extend(
+    {
+        schema: {type: 'object', properties: properties, required: required},
+        prompt: (data) => fields.map(x => `* ${x.name}: ${data[x.name] || ''}`).join('\n')
+    }, extraConfig);
+}
+
 window.executeZentaoPrompt = async function(info, testingMode)
 {
     testingMode = testingMode && testingMode !== '0';

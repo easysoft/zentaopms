@@ -2088,7 +2088,7 @@ class aiModel extends model
      */
     public static function assemblePrompt($prompt, $dataPrompt)
     {
-        $wholePrompt = "$dataPrompt\n";
+        $wholePrompt = empty($dataPrompt) ? '' : "$dataPrompt\n";
 
         $wholePrompt .= static::tryPunctuate($prompt->role);
         $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
@@ -2120,7 +2120,7 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
+        $wholePrompt = static::assemblePrompt($prompt, '');
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;
 

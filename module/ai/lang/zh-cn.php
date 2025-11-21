@@ -203,6 +203,10 @@ $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型�
 $lang->ai->prompts->goingTesting        = '即将跳转至调试页面';
 $lang->ai->prompts->goingTestingFail    = '暂无可调试的对象';
 
+/* Prompt form settings. */
+$lang->ai->prompts->formDefaultTitle  = '请补充下列表单内容：';
+$lang->ai->prompts->formSubmitBtnText = '生成';
+
 $lang->ai->prompts->testData['product']['product']['name'] = '企业网站建设平台';
 $lang->ai->prompts->testData['product']['product']['desc'] = '企业网站建设平台是一个专为现代企业设计的官网管理平台，旨在帮助公司以专业、创新的方式展示自我。该平台整合了最新的企业动态、项目成果、联系方式以及工商信息，让访客能够一目了然地了解公司的核心价值和服务。通过清晰简洁的界面和直观的导航，企业在线视窗提升了用户体验，帮助企业与客户和合作伙伴之间建立更紧密的联系。无论是信息更新还是内容管理，企业在线视窗都为企业提供了高效、灵活的解决方案，助力品牌建设与业务发展。';
 

@@ -609,6 +609,15 @@ class ai extends control
             $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
         }
 
+        $fields = array_values($this->ai->getPromptFields($promptId));
+        if($fields)
+        {
+            $response['fields']     = $fields;
+            $response['formConfig'] = [];
+            $response['formConfig']['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $response['formConfig']['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
+        }
+
         $response['objectID']     = $objectId;
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;

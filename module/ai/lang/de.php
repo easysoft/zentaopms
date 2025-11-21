@@ -203,6 +203,10 @@ $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be dir
 $lang->ai->prompts->goingTesting        = 'Redirecting to testing page';
 $lang->ai->prompts->goingTestingFail    = 'No testable object available.';
 
+/* Prompt form settings. */
+$lang->ai->prompts->formDefaultTitle  = 'Please fill in the following form content:';
+$lang->ai->prompts->formSubmitBtnText = 'Generate';
+
 $lang->ai->prompts->testData['product']['product']['name'] = 'Corporate Website Construction Platform';
 $lang->ai->prompts->testData['product']['product']['desc'] = 'The Corporate Website Construction Platform is a management platform designed specifically for modern enterprises, aimed at helping companies showcase themselves in a professional and innovative manner. The platform integrates the latest corporate news, project achievements, contact information, and business details, allowing visitors to easily understand the core values and services of the company. With a clear and concise interface and intuitive navigation, the platform enhances user experience and helps build closer connections between businesses and their customers and partners. Whether for information updates or content management, the platform provides efficient and flexible solutions for enterprises, supporting brand building and business development.';
 
