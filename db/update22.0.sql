@@ -94,6 +94,7 @@ ALTER TABLE `zt_object` ADD `reviewResult` varchar(20) NOT NULL DEFAULT '' AFTER
 ALTER TABLE `zt_object` ADD `reviewOpinion` text NULL AFTER `reviewResult`;
 ALTER TABLE `zt_object` ADD `reviewers` text NULL AFTER `reviewResult`;
 ALTER TABLE `zt_object` ADD `categoryVersion` text DEFAULT NULL AFTER `category`;
+ALTER TABLE `zt_object` MODIFY `category` varchar(255) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_designspec` ADD `docs` text NULL AFTER `files`;
 ALTER TABLE `zt_designspec` ADD `docVersions` text NULL AFTER `docs`;
@@ -173,6 +174,10 @@ CREATE TABLE IF NOT EXISTS `zt_projectchange` (
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '变更类型',
   `deliverable` varchar(255) NOT NULL DEFAULT '' COMMENT '变更对象',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '变更状态',
+  `approval`  int unsigned NOT NULL DEFAULT 0 COMMENT '审批流程',
+  `reviewResult` varchar(20) NOT NULL DEFAULT '' COMMENT '审批结果',
+  `reviewOpinion` text NULL COMMENT '审批意见',
+  `reviewers` text COMMENT '评审人员',
   `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
   `reason` varchar(1000) NOT NULL DEFAULT '' COMMENT '变更原因',
   `desc` text NULL COMMENT '变更描述',
