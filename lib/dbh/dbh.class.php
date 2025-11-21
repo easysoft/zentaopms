@@ -732,6 +732,10 @@ class dbh
                     $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
+
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
