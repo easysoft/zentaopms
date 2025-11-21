@@ -21,29 +21,6 @@ UPDATE `zt_ai_miniprogram` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_prompt` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
 
-CREATE TABLE IF NOT EXISTS `zt_ops_space` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) NOT NULL,
-  `owner` varchar(30) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `desc` TEXT NULL,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate`datetime NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `space` smallint(5) unsigned NOT NULL default '0',
-  `account` char(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 ALTER TABLE `zt_repo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
 ALTER TABLE `zt_artifactrepo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
 
