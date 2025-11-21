@@ -228,7 +228,7 @@ window.checkRelated = function(name, type)
 
             if(changeEnabled || cmEnabled)
             {
-                let message = closeDependFeature.replace('{source}', changeLang);
+                let message = closeDependFeature.replace('{source}', deliverableLang);
                 const activeLangs = [];
 
                 if(changeEnabled) activeLangs.push(changeLang);
