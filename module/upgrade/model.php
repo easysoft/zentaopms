@@ -11359,7 +11359,7 @@ class upgradeModel extends model
         $this->app->loadConfig('ai');
         foreach($this->config->ai->initAIPrompts as $aiPrompt)
         {
-            if(!$this->checkAIPromptUnique($aiPrompt)) return;
+            if(!$this->checkExistAIPrompt($aiPrompt)) return;
 
             $index = $aiPrompt->id;
             unset($aiPrompt->id);
@@ -11380,7 +11380,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function checkAIPromptUnique(object $aiPrompt): bool
+    public function checkExistAIPrompt(object $aiPrompt): bool
     {
         $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
             ->where('name')->eq($aiPrompt->name)
