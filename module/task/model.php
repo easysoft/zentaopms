@@ -526,16 +526,33 @@ class taskModel extends model
     {
         $this->loadModel('story');
 
+        $requireEstimate = strpos($this->config->task->create->requiredFields, 'estimate') !== false;
+
         $executionID = !empty($tasks) ? current($tasks)->execution : 0;
         $taskIdList  = array();
         $parents     = array();
-        foreach($tasks as $task)
+        foreach($tasks as $rowIndex => $task)
         {
             /* Get the lane and column of the current task. */
             $laneID   = $task->lane;
             $columnID = $task->column;
             $level    = $task->level;
             unset($task->lane, $task->column, $task->level);
+
+            if($requireEstimate)
+            {
+                $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+                if($this->post->isParent[$rowIndex] == '1')
+                {
+                    $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+                }
+                elseif(strpos($requiredFields, ',estimate,') === false)
+                {
+                    $requiredFields .= 'estimate';
+                }
+
+                $this->config->task->create->requiredFields = trim(',', $requiredFields);
+            }
 
             /* Create a task. */
             $taskID = $this->create($task);
