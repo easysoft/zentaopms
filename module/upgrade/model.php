@@ -11945,6 +11945,17 @@ class upgradeModel extends model
             }
         }
 
+        /* 将auditplan中的execution迁移到nc中。 */
+        $ncs = $this->dao->select('t1.id, t2.execution')->from(TABLE_NC)->alias('t1')
+            ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.auditplan=t2.id')
+            ->where('t2.execution')->ne('0')
+            ->fetchPairs();
+
+        foreach($ncs as $ncID => $executionID)
+        {
+            $this->dao->update(TABLE_NC)->set('execution')->eq($executionID)->where('id')->eq($ncID)->exec();
+        }
+
         $this->dao->exec("ALTER TABLE " . TABLE_AUDITCL . " DROP `model`;");
     }
 
@@ -12787,7 +12798,7 @@ class upgradeModel extends model
         $disabledFeatures = array_values($disabledFeatures);
         foreach($countFeature as $feature => $count)
         {
-            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan'))))
+            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan', 'track'))))
             {
                 $disabledFeatures[] = 'project' . ucfirst($feature);
             }

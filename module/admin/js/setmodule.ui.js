@@ -1,16 +1,16 @@
-function changeModule($target)
+function changeModule($target, type = 'single')
 {
     const name = $target.attr('name');
     if($target.prop('checked'))
     {
         $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
-        checkRelated(name, 'open');
+        if(type == 'single') checkRelated(name, 'open');
     }
     else
     {
         $("input[type=hidden][name='" + name + "']").val('1').attr('disabled');
         $("input[type=hidden][name='" + name + "']").val('0').removeAttr('disabled');
-        checkRelated(name, 'close');
+        if(type == 'single') checkRelated(name, 'close');
     }
 };
 
@@ -25,7 +25,7 @@ function checkGroup()
     $(this).closest('tr').find("input[type=checkbox][name^='module']").each(function()
     {
         $(this).prop('checked', checked);
-        changeModule($(this));
+        changeModule($(this), 'all');
     });
 };
 
@@ -36,7 +36,7 @@ function checkAll()
     $(this).closest('table').find("input[type=checkbox][name^='module']").each(function()
     {
         $(this).prop('checked', checked);
-        changeModule($(this));
+        changeModule($(this), 'all');
     });
 };
 
@@ -228,7 +228,7 @@ window.checkRelated = function(name, type)
 
             if(changeEnabled || cmEnabled)
             {
-                let message = closeDependFeature.replace('{source}', changeLang);
+                let message = closeDependFeature.replace('{source}', deliverableLang);
                 const activeLangs = [];
 
                 if(changeEnabled) activeLangs.push(changeLang);
