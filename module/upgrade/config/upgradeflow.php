@@ -113,6 +113,7 @@ $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgra
 $config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
 $config->upgrade->execFlow['21_7_1']      = array('functions' => 'convertCharset,processActionProduct');
 $config->upgrade->execFlow['21_7_5']      = array('functions' => 'weekly-addBuiltinWeeklyTemplate,adjustPriv21_7_5,upgradeStage4PMS');
+$config->upgrade->execFlow['21_9']        = array('functions' => 'importBuildinWorkflow');
 
 if(!empty($config->isINT))
 {
