@@ -9,3 +9,6 @@ $lang->project->aclList['private'] = "Private (Accessible to {$lang->projectComm
 $lang->project->storyPoints    = 'Target Size';
 $lang->project->storyCount     = 'Target Count';
 $lang->project->executionCount = 'Kanban Count';
+
+$lang->project->copyProject->basicInfo     = $lang->projectCommon . ' data (project name, project code)';
+$lang->project->copyProject->kanbanAllList = array($lang->projectCommon . ' data', 'Kanban and Target data', 'Project/Kanban doc lib and catalog', 'Task data', 'Team member');
