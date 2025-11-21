@@ -665,7 +665,7 @@ class ai extends control
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
             $prompt->purpose          = $data->purpose;
-            $prompt->elaboration      = $data->elaboration;
+            $prompt->elaboration      = '';
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -688,9 +688,13 @@ class ai extends control
 
         list($objectData, $object) = $objectForPrompt;
 
-        $this->view->prompt     = $prompt;
-        $this->view->object     = $object;
-        $this->view->dataPrompt = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
+        $this->view->prompt        = $prompt;
+        $this->view->currentPrompt = $currentPrompt;
+        $this->view->object        = $object;
+        $this->view->dataPrompt    = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $this->display();
     }
