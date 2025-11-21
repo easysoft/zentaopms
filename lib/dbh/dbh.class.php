@@ -130,7 +130,9 @@ class dbh
         $driverAlias = array('oceanbase' => 'mysql', 'highgo' => 'pgsql', 'postgres' => 'pgsql');
         $driver      = isset($driverAlias[$dbConfig->driver]) ? $driverAlias[$dbConfig->driver] : $dbConfig->driver;
 
-        $pdo = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->dbConfig = $dbConfig;
+        $this->flag     = $flag;
 
         $queries = [];
         /* Mysql driver include mysql and oceanbase. */
@@ -155,7 +157,7 @@ class dbh
                 try
                 {
                     $begin = microtime(true);
-                    $pdo->exec($query);
+                    $this->pdo->exec($query);
                     $duration = microtime(true) - $begin;
                 }
                 catch (PDOException $e)
@@ -172,10 +174,6 @@ class dbh
                 }
             }
         }
-
-        $this->pdo      = $pdo;
-        $this->dbConfig = $dbConfig;
-        $this->flag     = $flag;
     }
 
     /**
