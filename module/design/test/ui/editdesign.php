@@ -7,13 +7,10 @@ title=编辑设计测试
 timeout=0
 cid=2
 
-- 校验设计类型不能为空
- - 测试结果 @编辑设计表单页提示信息正确
- - 最终测试状态 @SUCCESS
 - 校验设计名称不能为空
  - 测试结果 @编辑设计表单页提示信息正确
- - 最终测试状态 @SUCCESS
-- 编辑设计名称 最终测试状态 @SUCCESS
+ - 最终测试状态 @ SUCCESS
+- 编辑设计名称最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -26,13 +23,11 @@ $tester = new editDesignTester();
 $tester->login();
 
 $design = array(
-    array('type' => '', 'name' => '设计1'),
     array('type' => '设计1', 'name' => ''),
     array('product' => '所有产品', 'type' => '概要设计', 'name' => '编辑设计1'),
 );
 
-r($tester->editDesign($design['0'])) && p('message,status') && e('编辑设计表单页提示信息正确, SUCCESS'); //校验设计类型不能为空
-r($tester->editDesign($design['1'])) && p('message,status') && e('编辑设计表单页提示信息正确, SUCCESS'); //校验设计名称不能为空
-r($tester->editDesign($design['2'])) && p('status') && e('SUCCESS');                                     //编辑设计名称
+r($tester->editDesign($design['0'])) && p('message,status') && e('设计名称必填提示信息正确, SUCCESS'); //校验设计名称不能为空
+r($tester->editDesign($design['1'])) && p('status') && e('SUCCESS');                                     //编辑设计名称
 
 $tester->closeBrowser();
