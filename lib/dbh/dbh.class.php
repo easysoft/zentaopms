@@ -152,27 +152,7 @@ class dbh
         }
         if(!empty($queries))
         {
-            foreach($queries as $query)
-            {
-                try
-                {
-                    $begin = microtime(true);
-                    $this->pdo->exec($query);
-                    $duration = microtime(true) - $begin;
-                }
-                catch (PDOException $e)
-                {
-                    $duration = microtime(true) - $begin;
-                    $this->sqlError($e);
-                }
-                finally
-                {
-                    dbh::$flags[]     = $flag;
-                    dbh::$queries[]   = $query;
-                    dbh::$durations[] = round($duration, 6);
-                    if(!empty($config->debug)) dbh::$traces[] = 'vim +' . (__LINE__ - 12) . ' ' . __FILE__;
-                }
-            }
+            foreach($queries as $query) $this->rawQuery($query);
         }
     }
 
