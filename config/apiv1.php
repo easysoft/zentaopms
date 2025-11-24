@@ -31,6 +31,8 @@ $routes['/options/:type'] = 'options';
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
 
+$routes['/requiredFields'] = 'requiredfields';
+
 $routes['/programs/:id/products'] = 'products';
 $routes['/products']              = 'products';
 $routes['/products/:id']          = 'product';
