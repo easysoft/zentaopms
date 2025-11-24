@@ -57,13 +57,13 @@ formPanel
         set::label($lang->execution->name),
         set::value($execution->name)
     ),
-    formGroup
+    !empty($config->setCode) ? formGroup
     (
         set::width('1/2'),
         set::name('code'),
         set::label($lang->execution->code),
         set::value($execution->code)
-    ),
+    ) : null,
     formRow
     (
         formGroup
