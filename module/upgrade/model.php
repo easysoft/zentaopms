@@ -11349,4 +11349,16 @@ class upgradeModel extends model
         $this->dao->exec($sql);
         return true;
     }
+
+    /**
+     * 添加 DevOps 默认组
+     * Add DevOps default group.
+     *  
+     * @access public
+     * @return void
+     */
+    public function addDevOpsDefaultGroup()
+    {
+        return true;
+    }
 }
