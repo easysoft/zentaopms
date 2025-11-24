@@ -31,4 +31,23 @@ class actionTaoTest
         if(dao::isError()) return dao::getError();
         return $action;
     }
+
+    /**
+     * Test processToStoryActionExtra method.
+     *
+     * @param  int    $storyID
+     * @param  string $product
+     * @access public
+     * @return object
+     */
+    public function processToStoryActionExtraTest(int $storyID, string $product = '1'): object
+    {
+        $action = new stdClass();
+        $action->extra = (string)$storyID;
+        $action->product = $product;
+
+        $this->objectTao->processToStoryActionExtra($action);
+        if(dao::isError()) return dao::getError();
+        return $action;
+    }
 }
