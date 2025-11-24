@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace zin;
 
-$cells = array();
+$cells    = array();
+$hasRisk  = helper::hasFeature('risk');
+$hasIssue = helper::hasFeature('issue');
 foreach($config->block->projectstatistic->items as $module => $items)
 {
     $cellItems = array();
@@ -129,11 +131,11 @@ panel
                     $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
                 )
             ),
-            $config->edition != 'open' && $config->edition != 'biz' ? cell
+            in_array($config->edition, array('max', 'ipd')) && ($hasIssue || $hasRisk) ? cell
             (
                 setClass('flex-1 text-left' . (!$longBlock ? ' w-full' : '')),
                 icon('bullhorn text-warning'),
-                span
+                $hasRisk ? span
                 (
                     setClass('text-gray mr-5'),
                     $lang->block->projectstatistic->existRisks,
@@ -142,8 +144,8 @@ panel
                         setClass('font-bold text-warning'),
                         round(zget($project, 'risks', 0), 2)
                     )
-                ),
-                span
+                ) : null,
+                $hasIssue ? span
                 (
                     setClass('text-gray'),
                     $lang->block->projectstatistic->existIssues,
@@ -152,7 +154,7 @@ panel
                         setClass('font-bold text-warning'),
                         zget($project, 'issues', 0)
                     )
-                )
+                ) : null
             ) : '',
             (!empty($project->executions) && $project->multiple) ? cell
             (

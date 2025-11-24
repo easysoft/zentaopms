@@ -1797,6 +1797,11 @@ class actionModel extends model
             }
         }
 
+        if($action->objectType == 'deliverable')
+        {
+            $this->dao->update(TABLE_DELIVERABLE)->set('status')->eq('disabled')->where('id')->eq($action->objectID)->exec();
+        }
+
         $this->recoverRelatedData($action, $object);
 
         /* 还原已删除的需求时重算OR需求和业用研需的阶段。 */

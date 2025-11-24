@@ -107,6 +107,9 @@ class helper extends baseHelper
                 $hasFeature |= helper::hasFeature("{$group}_{$module}");
             }
         }
+
+        if(in_array($feature, array('waterfall', 'waterfallplus'))) $canConfigFeature = true; // 轻量级模式关闭瀑布、融合瀑布
+
         return !$canConfigFeature || ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));
     }
 
