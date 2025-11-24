@@ -24,4 +24,21 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test apiPost method.
+     *
+     * @param  string       $url
+     * @param  array|object $data
+     * @param  array        $header
+     * @param  string       $host
+     * @access public
+     * @return mixed
+     */
+    public function apiPostTest(string $url, array|object $data, array $header = array(), string $host = '')
+    {
+        $result = $this->invokeArgs('apiPost', [$url, $data, $header, $host]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
