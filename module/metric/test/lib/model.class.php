@@ -21,4 +21,25 @@ class metricModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getLatestResultByCode method.
+     *
+     * @param  string $code
+     * @param  array  $options
+     * @param  object|null $pager
+     * @param  string $vision
+     * @access public
+     * @return array|bool
+     */
+    public function getLatestResultByCodeTest(string $code = '', array $options = array(), $pager = null, string $vision = 'rnd')
+    {
+        /* Check if metric code exists first to avoid fatal error. */
+        $metric = $this->instance->getByCode($code);
+        if(empty($metric)) return array();
+
+        $result = $this->invokeArgs('getLatestResultByCode', [$code, $options, $pager, $vision]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
