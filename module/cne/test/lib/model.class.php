@@ -188,4 +188,22 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test translateError method.
+     *
+     * @param  object $apiResult
+     * @access public
+     * @return object
+     */
+    public function translateErrorTest(object &$apiResult)
+    {
+        $cne = $this->getInstance('cne', 'model');
+        $reflection = new ReflectionClass($cne);
+        $method = $reflection->getMethod('translateError');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($cne, array(&$apiResult));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
