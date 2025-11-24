@@ -13,7 +13,7 @@ CREATE TABLE `zt_cron` (
   `status` varchar(20) NOT NULL,
   `lastTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 TRUNCATE `zt_cron`;
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
@@ -39,4 +39,4 @@ CREATE TABLE `zt_mailqueue` (
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `failReason` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

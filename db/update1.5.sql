@@ -1,4 +1,4 @@
-ALTER TABLE `zt_storySpec` ADD `verify` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_storySpec` ADD `verify` TEXT NOT NULL;
 
 CREATE TABLE IF NOT EXISTS `zt_extension` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -20,4 +20,4 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   KEY `name` (`name`),
   KEY `addedTime` (`installedTime`),
   KEY `company` (`company`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

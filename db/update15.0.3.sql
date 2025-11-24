@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `openedBy` varchar(30) NOT NULL,
   `openedDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`round`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `story` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `result` varchar(30) NOT NULL,
   `reviewDate` datetime NOT NULL,
   UNIQUE KEY `story` (`story`,`version`,`reviewer`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_story` MODIFY COLUMN `reviewedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 REPLACE INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('system', 'story', '', 'reviewRules', 'allpass');

@@ -6,7 +6,7 @@ CREATE TABLE `zt_cfd` (
   `count` smallint NOT NULL,
   `date` date NOT NULL,
   UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computecfd', '更新累积流图', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
 

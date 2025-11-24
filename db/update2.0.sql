@@ -3,8 +3,8 @@ UPDATE `zt_groupPriv` SET `method` = 'testTask' WHERE `method`='testtask';
 UPDATE `zt_groupPriv` SET `method` = 'testCase' WHERE `method`='testcase';
 
 -- 2011-06-30, add product and project field to action. 
-ALTER TABLE `zt_action` ADD `product` MEDIUMINT NOT NULL AFTER `objectID` ,
-ADD `project` MEDIUMINT NOT NULL AFTER `product` ;
+ALTER TABLE `zt_action` ADD `product` MEDIUMINT NOT NULL AFTER `objectID`,
+ADD `project` MEDIUMINT NOT NULL AFTER `product`;
 
 UPDATE zt_action, zt_story SET 
     zt_action.product = zt_story.product  WHERE
@@ -66,4 +66,4 @@ UPDATE zt_action, zt_testTask SET
     zt_action.objectType = 'testtask';
 
 -- 2011-07-04 add type field to extension.
-ALTER TABLE `zt_extension` ADD `type` VARCHAR( 20 ) NOT NULL DEFAULT 'extension' AFTER `license` ;
+ALTER TABLE `zt_extension` ADD `type` VARCHAR( 20 ) NOT NULL DEFAULT 'extension' AFTER `license`;

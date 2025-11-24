@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   key `product` (`product`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   key `ticketId` (`ticketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_ticketrelation` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
@@ -58,7 +58,7 @@ CREATE TABLE `zt_ticketrelation` (
   `objectType` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ticketId` (`ticketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_product` ADD `ticket` varchar(30) NOT NULL AFTER `feedback`;
 ALTER TABLE `zt_kanban` ADD `colWidth` smallint(4) NOT NULL DEFAULT '264' AFTER `fluidBoard`;

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   PRIMARY KEY (`id`),
   KEY `dimension` (`dimension`),
   KEY `group` (`group`)
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE zt_pivot ADD dataset varchar(30) NOT NULL DEFAULT '';
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `grade` tinyint(3) DEFAULT NULL,
   `path` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE OR REPLACE VIEW `ztv_scenecase` AS SELECT
   `zt_case`.`id` AS `id`,
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `order` mediumint(8) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `priv` (`module`,`method`)
-) ENGINE=InnoDB AUTO_INCREMENT=1768 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 -- DROP TABLE IF EXISTS `zt_privmanager`;
 CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `order` mediumint(8) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 -- DROP TABLE IF EXISTS `zt_privlang`;
 CREATE TABLE IF NOT EXISTS `zt_privlang` (
   `objectID` mediumint(8) unsigned NOT NULL,
@@ -205,14 +205,14 @@ CREATE TABLE IF NOT EXISTS `zt_privlang` (
   `value` varchar(255) NOT NULL,
   `desc` text NOT NULL,
   UNIQUE KEY `objectlang` (`objectID`,`objectType`,`lang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 -- DROP TABLE IF EXISTS `zt_privrelation`;
 CREATE TABLE IF NOT EXISTS `zt_privrelation` (
   `priv` mediumint(8) unsigned NOT NULL,
   `type` varchar(30) NOT NULL,
   `relationPriv` mediumint(8) unsigned NOT NULL,
   UNIQUE KEY `privrelation`(`priv`, `type`, `relationPriv`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_chart` MODIFY `fields` mediumtext NULL;
 ALTER TABLE `zt_chart` MODIFY `group` varchar(255) NOT NULL;
@@ -270,7 +270,7 @@ UPDATE `zt_doclib` SET `acl` = 'default' WHERE `main` = '1';
 
 ALTER TABLE `zt_doclib` ADD `addedBy` varchar(30) NOT NULL AFTER `order`;
 ALTER TABLE `zt_doclib` ADD `addedDate` datetime NOT NULL AFTER `addedBy`;
-ALTER TABLE `zt_doc` CHANGE `status` `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal';
+ALTER TABLE `zt_doc` CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'normal';
 
 /* Update doc lib. */
 UPDATE zt_doclib AS t1
@@ -1231,7 +1231,7 @@ CREATE TABLE IF NOT EXISTS `zt_docaction` (
     PRIMARY KEY (`id`),
     KEY `doc` (`doc`),
     KEY `actor` (`actor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 /* Refactor sql. */
 ALTER TABLE `zt_acl`
@@ -1627,7 +1627,7 @@ CHANGE `module` `module` varchar(30) NOT NULL DEFAULT '',
 CHANGE `title` `title` varchar(255) NOT NULL DEFAULT '',
 CHANGE `keywords` `keywords` varchar(255) NOT NULL DEFAULT '',
 CHANGE `type` `type` varchar(30) NOT NULL DEFAULT '',
-CHANGE `status` `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal',
+CHANGE `status` `status` varchar(30) NOT NULL DEFAULT 'normal',
 CHANGE `parent` `parent` smallint(5) unsigned NOT NULL DEFAULT '0',
 CHANGE `path` `path` char(255) NOT NULL DEFAULT '',
 CHANGE `grade` `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1938,9 +1938,9 @@ CHANGE `compileID` `compileID` mediumint(8) unsigned NOT NULL DEFAULT '0',
 CHANGE `compileStatus` `compileStatus` char(30) NOT NULL DEFAULT '',
 CHANGE `removeSourceBranch` `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
 CHANGE `squash` `squash` enum('0','1') NOT NULL DEFAULT '0',
-CHANGE `synced` `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1',
+CHANGE `synced` `synced` enum('0','1') NOT NULL DEFAULT '1',
 CHANGE `syncError` `syncError` varchar(255) NOT NULL DEFAULT '',
-CHANGE `hasNoConflict` `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0';
+CHANGE `hasNoConflict` `hasNoConflict` enum('0','1') NOT NULL DEFAULT '0';
 
 ALTER TABLE `zt_mrapproval`
 CHANGE `mrID` `mrID` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2150,7 +2150,7 @@ CHANGE `encrypt` `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
 CHANGE `synced` `synced` tinyint(1) NOT NULL DEFAULT '0',
 CHANGE `lastSync` `lastSync` datetime NULL,
 CHANGE `extra` `extra` char(30) NOT NULL DEFAULT '',
-CHANGE `preMerge` `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
+CHANGE `preMerge` `preMerge` enum('0','1') NOT NULL DEFAULT '0',
 CHANGE `job` `job` mediumint unsigned NOT NULL DEFAULT '0',
 CHANGE `deleted` `deleted` tinyint(1) NOT NULL DEFAULT '0';
 

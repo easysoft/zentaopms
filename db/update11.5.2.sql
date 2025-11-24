@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS `zt_translation` (
   `mode` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang_module_key_mode` (`lang`,`module`,`key`,`mode`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
