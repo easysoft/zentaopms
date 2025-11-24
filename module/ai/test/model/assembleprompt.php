@@ -9,7 +9,7 @@ cid=14995
 
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt1, 'Test1'), 'Test1') === 0  @1
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt2, 'Test2'), 'Test2') === 0  @1
-- 执行aiTest模块的assemblePromptTest方法，参数是$prompt3, ''), 'Role3') > 0  @1
+- 执行aiTest模块的assemblePromptTest方法，参数是$prompt3, ''), 'Role3') === 0  @1
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt4, 'OnlyData') === "OnlyData\n"  @1
 - 执行aiTest模块的assemblePromptTest方法，参数是$prompt5, 'Special'), 'Special') === 0  @1
 
@@ -54,6 +54,6 @@ $prompt5->elaboration = 'Elab5!';
 
 r(strpos($aiTest->assemblePromptTest($prompt1, 'Test1'), 'Test1') === 0) && p() && e('1');
 r(strpos($aiTest->assemblePromptTest($prompt2, 'Test2'), 'Test2') === 0) && p() && e('1');
-r(strpos($aiTest->assemblePromptTest($prompt3, ''), 'Role3') > 0) && p() && e('1');
+r(strpos($aiTest->assemblePromptTest($prompt3, ''), 'Role3') === 0) && p() && e('1');
 r($aiTest->assemblePromptTest($prompt4, 'OnlyData') === "OnlyData\n") && p() && e('1');
 r(strpos($aiTest->assemblePromptTest($prompt5, 'Special'), 'Special') === 0) && p() && e('1');
