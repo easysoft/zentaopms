@@ -291,7 +291,7 @@ class testtask extends control
         /* Execute extended actions configured in the workflow. */
         $this->executeHooks($testtaskID);
 
-        if(!empty($testtask->execution)) $this->view->execution = $this->loadModel('project')->getByID($testtask->executionID);
+        if(!empty($testtask->execution)) $this->view->execution = $this->loadModel('project')->getByID($testtask->execution);
 
         $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$testtask->product];
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
