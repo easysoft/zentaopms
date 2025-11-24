@@ -11353,14 +11353,14 @@ class upgradeModel extends model
     /**
      * 添加 DevOps 默认组
      * Add DevOps default group.
-     *  
+     *
      * @access public
      * @return void
      */
     public function addDevOpsDefaultGroup()
     {
         $defaultGroupList = array('DEVOPSADMIN', 'DEVOPSINSPECTOR', 'DEVOPSUSER');
-        
+
         $includePackage = array('git', 'subversion');
         $includeMethod  = array('repo-diff', 'repo-blame', 'host-treemap', 'deploy-steps', 'deploy-viewStep');
         $excludePackage = array('manageRepo', 'manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
@@ -11378,7 +11378,7 @@ class upgradeModel extends model
             $insertGroup->vision = 'rnd';
             $insertGroup->name   = zget($groupLang, 'name', $group);
             $insertGroup->role   = $group;
-            
+
             $this->dao->insert(TABLE_GROUP)->data($insertGroup)->exec();
             if(dao::isError()) return false;
 
@@ -11393,7 +11393,7 @@ class upgradeModel extends model
                     if(in_array($method, array('store-browse'))) continue;
                 }
                 if($group == 'DEVOPSUSER' && ($priv->module == 'devopsspace' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
-                
+
                 $insertPriv = new stdclass();
                 $insertPriv->group  = $groupID;
                 $insertPriv->module = $priv->module;
