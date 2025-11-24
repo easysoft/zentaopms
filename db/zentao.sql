@@ -13870,12 +13870,18 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('option',      '颜色',           'color',                    '1', 'rnd',  'admin', null, '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
 ('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', null, '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
 ('lang',        '立项级别',       'charterLevel',             '1', 'rnd',  'admin', null, 'charterLevel', '', '', ''),
-('lang',        '立项类型	',      'charterCategory',          '1', 'rnd',  'admin', null, 'charterCategory', '', '', ''),
-('lang',        '立项适用市场	',  'charterMarket',            '1', 'rnd',  'admin', null, 'charterMarket', '', '', ''),
+('lang',        '立项类型',       'charterCategory',          '1', 'rnd',  'admin', null, 'charterCategory', '', '', ''),
+('lang',        '立项适用市场',   'charterMarket',            '1', 'rnd',  'admin', null, 'charterMarket', '', '', ''),
 ('lang',        '立项状态',       'charterStatus',            '1', 'rnd',  'admin', null, 'charterStatus', '', '', ''),
-('lang',        '立项关闭原因	',  'charterCloseReason',       '1', 'rnd',  'admin', null, 'charterCloseReason', '', '', ''),
+('lang',        '立项关闭原因',   'charterCloseReason',       '1', 'rnd',  'admin', null, 'charterCloseReason', '', '', ''),
 ('lang',        '立项审批结果',   'charterReviewResult',      '1', 'rnd',  'admin', null, 'charterReviewResult', '', '', ''),
-('lang',        '立项审批状态',   'charterReviewStatus',      '1', 'rnd',  'admin', null, 'charterReviewStatus', '', '', '');
+('lang',        '立项审批状态',   'charterReviewStatus',      '1', 'rnd',  'admin', null, 'charterReviewStatus', '', '', ''),
+('lang',        '基线状态',       'baselineStatus',           '1', 'rnd',  'admin', null, 'baselineStatus', '', '', ''),
+('lang',        '基线审批结果',   'baselineReviewResult',     '1', 'rnd',  'admin', null, 'baselineReviewResult', '', '', ''),
+('lang',        '项目变更紧急等级', 'projectchangeUrgencyList',  '1', 'rnd',  'admin', null, 'projectchangeUrgencyList', '', '', ''),
+('lang',        '项目变更类型',     'projectchangeTypeList',     '1', 'rnd',  'admin', null, 'projectchangeTypeList', '', '', ''),
+('lang',        '项目变更状态',     'projectchangeStatus',       '1', 'rnd',  'admin', null, 'projectchangeStatus', '', '', ''),
+('lang',        '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd',  'admin', null, 'projectchangeReviewResult', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
