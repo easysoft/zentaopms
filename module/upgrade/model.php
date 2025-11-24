@@ -11368,7 +11368,7 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
 
             $promptID = $this->dao->lastInsertID();
-            $this->initAIPromptFields($index, $promptID);
+            if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
         }
     }
 
@@ -11392,24 +11392,17 @@ class upgradeModel extends model
      * 内置AI禅道智能体和相关字段。
      * Initialize the AI prompts and fields.
      *
-     * @param  int    $index
+     * @param  array  $aiPromptFields
      * @param  int    $promptID
      * @access public
      * @return bool
      */
-    public function initAIPromptFields(int $index, int $promptID): void
+    public function initAIPromptFields(array $aiPromptFields, int $promptID): void
     {
-        $this->app->loadConfig('ai');
-        foreach($this->config->ai->initAIPromptFields as $key => $aiPromptFields)
+        foreach($aiPromptFields as $field)
         {
-            if($key == $index)
-            {
-                foreach($aiPromptFields as $field)
-                {
-                    $field->appID = $promptID;
-                    $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
-                }
-            }
+            $field->appID = $promptID;
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
         }
     }
 }
