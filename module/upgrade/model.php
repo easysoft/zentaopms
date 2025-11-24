@@ -16,6 +16,15 @@ class upgradeModel extends model
 {
     static $errors = array();
 
+    /**
+     * 数据库版本。
+     * Database version.
+     *
+     * @var string
+     * access public
+     */
+    public $databaseVersion = '';
+
     public $fromVersion = '';
 
     public $fromEdition = '';
@@ -31,6 +40,7 @@ class upgradeModel extends model
     {
         parent::__construct();
         $this->loadModel('setting');
+        $this->databaseVersion = $this->loadModel('install')->getDatabaseVersion();
     }
 
     /**
@@ -1116,8 +1126,6 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        static $mysqlVersion;
-        if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
 
         $ignoreCode = '|1050|1054|1060|1091|1061|';
         $sqls       = $this->parseToSqls($sqlFile); // Get sqls in the file.
@@ -1125,9 +1133,6 @@ class upgradeModel extends model
         {
             if(empty($sql)) continue;
 
-            /* Replace sql that don't meet the version requirements. */
-            if($mysqlVersion <= 4.1) $sql = str_replace(array('DEFAULT CHARSET=utf8', 'CHARACTER SET utf8 COLLATE utf8_general_ci'), '', $sql);
-            if(stripos($sql, 'fulltext') !== false && stripos($sql, 'innodb') !== false && $mysqlVersion < 5.6) $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
             /* Replace constants in SQL. */
             $sql = str_replace(array('zt_', '__DELIMITER__', '__TABLE__'), array($this->config->db->prefix, ';', $this->config->db->name), $sql);
 
@@ -1187,7 +1192,10 @@ class upgradeModel extends model
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
-            $sqls[$key] = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET')) . " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+            if(version_compare($this->databaseVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+            if(version_compare($this->databaseVersion, '5.6', '<') && stripos($sql, 'FULLTEXT') !== false && stripos($sql, 'InnoDB') !== false) $sql = str_ireplace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
+
+            $sqls[$key] = $sql;
         }
 
         return $sqls;
@@ -10854,8 +10862,7 @@ class upgradeModel extends model
     {
         if($this->config->db->driver != 'mysql') return true;
 
-        $dbVersion = $this->loadModel('install')->getDatabaseVersion();
-        if(version_compare($dbVersion, '5.6', '<')) return true;
+        if(version_compare($this->databaseVersion, '5.6', '<')) return true;
 
         /* 获取服务器的字符集和排序规则。Get server charset and collation. */
         $result          = $this->dbh->getServerCharsetAndCollation($this->config->db->name);
