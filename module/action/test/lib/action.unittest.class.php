@@ -1132,13 +1132,18 @@ class actionTest
     /**
      * Test processCreateRequirementsActionExtra method.
      *
-     * @param  object $action
+     * @param  string $storyIds
      * @access public
      * @return object
      */
-    public function processCreateRequirementsActionExtraTest(object $action): object
+    public function processCreateRequirementsActionExtraTest(string $storyIds): object
     {
+        // 创建模拟的action对象
+        $action = new stdClass();
+        $action->extra = $storyIds;
+
         $this->objectTao->processCreateRequirementsActionExtra($action);
+        if(dao::isError()) return dao::getError();
         return $action;
     }
 
