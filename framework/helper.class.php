@@ -511,7 +511,7 @@ function initPageEntity(object $object): array
  */
 function initTableData(array $items, array &$fieldList, ?object $model = null): array
 {
-    if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '-') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
+    if(!empty($_GET['orderBy']) && strpos($_GET['orderBy'], '_') !== false) list($orderField, $orderValue) = explode('_', $_GET['orderBy']);
     if(!empty($orderField) && !empty($orderValue) && !empty($fieldList[$orderField]))
     {
         $sortType = false;
