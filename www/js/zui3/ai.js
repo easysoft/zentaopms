@@ -46,10 +46,10 @@ window.openPageForm = function(url, data, callback)
 function getPromptFormConfig(fields, extraConfig)
 {
     if(!Array.isArray(fields) || !fields.length) return;
-    const typeMap    = {text: 'string'};
+    const typeMap    = {text: 'string', radio: 'picker', checkbox: 'multiPicker'};
     const required   = [];
     const properties = fields.reduce((properties, field, index) => {
-        properties[field.name] = {type: typeMap[field.type] || 'string', title: field.name, description: field.placeholder};
+        properties[field.name] = {type: typeMap[field.type] || field.type || 'string', title: field.name, description: field.placeholder, order: index};
         if(field.required) required.push(field.name);
         return properties;
     }, {});
