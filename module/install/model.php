@@ -118,7 +118,7 @@ class installModel extends model
                     if($this->config->db->driver == 'mysql')
                     {
                         $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-                        $table .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+                        $table .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
                     }
                 }
                 elseif(strpos($table, 'DROP TABLE') !== false && $isClearDB)

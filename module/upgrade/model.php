@@ -1192,7 +1192,7 @@ class upgradeModel extends model
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
-            if(version_compare($this->databaseVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+            if(version_compare($this->databaseVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
             if(version_compare($this->databaseVersion, '5.6', '<') && stripos($sql, 'FULLTEXT') !== false && stripos($sql, 'InnoDB') !== false) $sql = str_ireplace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
 
             $sqls[$key] = $sql;
@@ -10880,7 +10880,7 @@ class upgradeModel extends model
         if($dbCharset != $serverCharset || $dbCollation != $serverCollation)
         {
             /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
-            $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
         }
 
         /* 获取当前数据库中所有表的排序规则。Get all tables collation in current database. */

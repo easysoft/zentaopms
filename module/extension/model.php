@@ -560,7 +560,7 @@ class extensionModel extends model
                 if($this->config->db->driver == 'mysql')
                 {
                     $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-                    $sql .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+                    $sql .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
                 }
             }
 
