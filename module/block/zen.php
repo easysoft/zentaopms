@@ -200,10 +200,17 @@ class blockZen extends block
         foreach($blocks as $key => $block)
         {
             /* 将没有开启功能区块过虑。 */
-            if($block->code == 'waterfallrisk'  && !helper::hasFeature('waterfall_risk'))  continue;
-            if($block->code == 'waterfallissue' && !helper::hasFeature('waterfall_issue')) continue;
-            if($block->code == 'scrumrisk'      && !helper::hasFeature('scrum_risk'))      continue;
-            if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
+            if(!helper::hasFeature('project_risk') && ($block->code == 'waterfallrisk'  || $block->code == 'scrumrisk'))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
+            if(!helper::hasFeature('project_issue') && ($block->code == 'waterfallissue' || $block->code == 'scrumissue'))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
 
             /* 过滤目前已经不存在的区块。 */
             if(!isset($this->lang->block->moduleList[$block->code]) && !isset($this->lang->block->modules[$block->module]->availableBlocks[$block->code]))
