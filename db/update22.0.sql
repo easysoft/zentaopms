@@ -217,3 +217,11 @@ DROP `lastAuditedDate`,
 DROP `toAuditBy`,
 DROP `toAuditDate`,
 DROP `auditResult`;
+
+INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
+('lang', '基线状态',         'baselineStatus',            '1', 'rnd', 'admin', null, 'baselineStatus',            '', '', ''),
+('lang', '基线审批结果',     'baselineReviewResult',      '1', 'rnd', 'admin', null, 'baselineReviewResult',      '', '', ''),
+('lang', '项目变更紧急等级', 'projectchangeUrgencyList',  '1', 'rnd', 'admin', null, 'projectchangeUrgencyList',  '', '', ''),
+('lang', '项目变更类型',     'projectchangeTypeList',     '1', 'rnd', 'admin', null, 'projectchangeTypeList',     '', '', ''),
+('lang', '项目变更状态',     'projectchangeStatus',       '1', 'rnd', 'admin', null, 'projectchangeStatus',       '', '', ''),
+('lang', '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd', 'admin', null, 'projectchangeReviewResult', '', '', '');

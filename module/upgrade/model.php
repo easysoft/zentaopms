@@ -12905,4 +12905,22 @@ class upgradeModel extends model
             $this->dao->update(TABLE_OBJECT)->set('data')->eq($data)->where('id')->eq($id)->exec();
         }
     }
+
+    /**
+     * 处理升级新增的工作流数据源。
+     * Process workflow datasource.
+     *
+     * @param  array  $codeList
+     * @access public
+     * @return void
+     */
+    public function processWorkflowDatasource($codeList)
+    {
+        $datasources = $this->dao->select('id,code')->from(TABLE_WORKFLOWDATASOURCE)->where('code')->in(array_keys($codeList))->fetchAll();
+        foreach($datasources as $datasource)
+        {
+            list($module, $field) = explode('_', $codeList[$datasource->code]);
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($datasource->id)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
+        }
+    }
 }
