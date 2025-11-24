@@ -2306,7 +2306,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属产品',
   `name` char(90) NOT NULL DEFAULT '' COMMENT '测试单名称',
   `execution` mediumint(8) unsigned NOT NULL default '0' COMMENT '所属执行',
-  `build` char(30) NOT NULL DEFAULT '' COMMENT '所属构建',
+  `build` int unsigned NOT NULL DEFAULT 0 COMMENT '所属构建',
   `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单',
   `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
   `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
