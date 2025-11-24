@@ -70,4 +70,19 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test deleteBackup method.
+     *
+     * @param  object $instance
+     * @param  string $backupName
+     * @access public
+     * @return mixed
+     */
+    public function deleteBackupTest(object $instance, string $backupName)
+    {
+        $result = $this->invokeArgs('deleteBackup', [$instance, $backupName]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
