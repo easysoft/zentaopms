@@ -104,8 +104,8 @@ class userZen extends user
         if(common::hasPriv($moduleName, 'testcase')) $featureBarMenus['testcase'] = array('active' => false, 'url' => $this->createLink($moduleName, 'testcase', $params), 'text' => $this->lang->user->testCase);
 
         if(common::hasPriv($moduleName, 'execution') && in_array($this->config->systemMode, array('ALM', 'PLM'))) $featureBarMenus['execution'] = array('active' => false, 'url' => $this->createLink($moduleName, 'execution', $params), 'text' => $this->lang->user->execution);
-        if(common::hasPriv($moduleName, 'issue')     && in_array($this->config->edition, array('max', 'ipd')))    $featureBarMenus['issue'] = array('active' => false, 'url' => $this->createLink($moduleName, 'issue', $params), 'text' => $this->lang->user->issue);
-        if(common::hasPriv($moduleName, 'risk')      && in_array($this->config->edition, array('max', 'ipd')))    $featureBarMenus['risk']  = array('active' => false, 'url' => $this->createLink($moduleName, 'risk', $params), 'text' => $this->lang->user->risk);
+        if(common::hasPriv($moduleName, 'issue')     && in_array($this->config->edition, array('max', 'ipd')) && helper::hasFeature('issue')) $featureBarMenus['issue'] = array('active' => false, 'url' => $this->createLink($moduleName, 'issue', $params), 'text' => $this->lang->user->issue);
+        if(common::hasPriv($moduleName, 'risk')      && in_array($this->config->edition, array('max', 'ipd')) && helper::hasFeature('risk'))  $featureBarMenus['risk']  = array('active' => false, 'url' => $this->createLink($moduleName, 'risk', $params), 'text' => $this->lang->user->risk);
 
         if(common::hasPriv($moduleName, 'dynamic')) $featureBarMenus['dynamic'] = array('active' => false, 'url' => $this->createLink($moduleName, 'dynamic', "$params&type=today"), 'text' => $this->lang->user->dynamic);
         if(common::hasPriv($moduleName, 'profile')) $featureBarMenus['profile'] = array('active' => false, 'url' => $this->createLink($moduleName, 'profile', $params), 'text' => $this->lang->user->profile);
