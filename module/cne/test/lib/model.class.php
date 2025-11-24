@@ -85,4 +85,19 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getAppVolumes method.
+     *
+     * @param  object      $instance
+     * @param  bool|string $component
+     * @access public
+     * @return mixed
+     */
+    public function getAppVolumesTest(object $instance, bool|string $component = false)
+    {
+        $result = $this->invokeArgs('getAppVolumes', [$instance, $component]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
