@@ -2573,6 +2573,10 @@ REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDDEM
 REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDPMT',         'IPDPMT', '');
 REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('or', 'IPDADMIN',       'IPDADMIN', '');
 
+REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('rnd', 'DEVOPSADMIN',     'DEVOPSADMIN', '');
+REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('rnd', 'DEVOPSINSPECTOR', 'DEVOPSINSPECTOR', '');
+REPLACE INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES ('rnd', 'DEVOPSUSER',      'DEVOPSUSER', '');
+
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'URSRList', '1', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
 ('zh-cn', 'custom', 'URSRList', '2', '{\"ERName\":\"\\u4e1a\\u52a1\\u9700\\u6c42\",\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '0', 'rnd'),
