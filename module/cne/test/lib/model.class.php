@@ -57,4 +57,17 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test cneServerError method.
+     *
+     * @access public
+     * @return object
+     */
+    public function cneServerErrorTest()
+    {
+        $result = $this->invokeArgs('cneServerError', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
