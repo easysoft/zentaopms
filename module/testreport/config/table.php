@@ -28,6 +28,7 @@ $config->testreport->dtable->fieldList['id']['type']     = 'ID';
 $config->testreport->dtable->fieldList['id']['align']    = 'left';
 $config->testreport->dtable->fieldList['id']['fixed']    = 'left';
 $config->testreport->dtable->fieldList['id']['sortType'] = true;
+$config->testreport->dtable->fieldList['id']['group']    = 1;
 
 $config->testreport->dtable->fieldList['title']['name']     = 'title';
 $config->testreport->dtable->fieldList['title']['title']    = $lang->testreport->title;
@@ -37,15 +38,20 @@ $config->testreport->dtable->fieldList['title']['fixed']    = 'left';
 $config->testreport->dtable->fieldList['title']['link']     = array('module' => 'testreport', 'method' => 'view', 'params' => 'testreportID={id}');
 $config->testreport->dtable->fieldList['title']['sortType'] = true;
 $config->testreport->dtable->fieldList['title']['data-app'] = $app->tab;
+$config->testreport->dtable->fieldList['title']['group']    = 2;
 
 $config->testreport->dtable->fieldList['execution']['name']     = 'execution';
-$config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->execution;
+$config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->object;
 $config->testreport->dtable->fieldList['execution']['sortType'] = true;
-$config->testreport->dtable->fieldList['execution']['width']    = '150px';
+$config->testreport->dtable->fieldList['execution']['hint']     = true;
+$config->testreport->dtable->fieldList['execution']['type']     = 'category';
+$config->testreport->dtable->fieldList['execution']['width']    = '180px';
+$config->testreport->dtable->fieldList['execution']['group']    = 3;
 
 $config->testreport->dtable->fieldList['tasks']['name']  = 'taskName';
 $config->testreport->dtable->fieldList['tasks']['title'] = $lang->testreport->testtask;
 $config->testreport->dtable->fieldList['tasks']['type']  = 'text';
+$config->testreport->dtable->fieldList['tasks']['group'] = 4;
 
 $config->testreport->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->testreport->dtable->fieldList['createdBy']['title']    = $lang->testreport->createdBy;

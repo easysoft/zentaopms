@@ -1016,6 +1016,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.product')->in($this->app->user->view->products)->fi()
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
