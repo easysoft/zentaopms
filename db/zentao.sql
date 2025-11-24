@@ -13344,7 +13344,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (20, 'webhook', 'create'),
 (20, 'webhook', 'delete'),
 (20, 'webhook', 'edit'),
-(20, 'webhook', 'log');
+(20, 'webhook', 'log'),
 (21,	'artifactrepo',	'ajaxGetArtifactRepos'),
 (21,	'artifactrepo',	'ajaxUpdateArtifactRepos'),
 (21,	'artifactrepo',	'browse'),
