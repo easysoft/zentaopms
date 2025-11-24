@@ -50,12 +50,12 @@ function getPromptFormConfig(fields, extraConfig)
     const required   = [];
     const properties = fields.reduce((properties, field, index) => {
         properties[field.name] = {
-            type: 'string',
-            widget: typeMap[field.type] || field.type,
-            title: field.name,
-            order: index,
+            type    : 'string',
+            widget  : typeMap[field.type] || field.type,
+            title   : field.name,
+            order   : index,
             required: field.required && field.required !== '0',
-            props: zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))} : undefined
+            props   : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
         };
         if(field.required) required.push(field.name);
         return properties;
