@@ -100,4 +100,18 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getBackupList method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function getBackupListTest(object $instance)
+    {
+        $result = $this->invokeArgs('getBackupList', [$instance]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
