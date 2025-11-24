@@ -158,4 +158,18 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test installApp method.
+     *
+     * @param  object $apiParams
+     * @access public
+     * @return mixed
+     */
+    public function installAppTest(object $apiParams)
+    {
+        $result = $this->invokeArgs('installApp', [$apiParams]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
