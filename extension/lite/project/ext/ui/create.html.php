@@ -25,6 +25,12 @@ $checkDeltaChecked = jsCallback()->do(<<<'JS'
     if($('#delta' + days).length > 0 && days != 999) $('#delta' + days).prop('checked', true);
 JS);
 
+$projectEnd = $copyProjectID ? $copyProject->end : '';
+$isLongTime = $projectEnd == LONG_TIME;
+
+$delta = 0;
+if($copyProjectID) $delta = $isLongTime ? 999 : (strtotime($copyProject->end) - strtotime($copyProject->begin)) / 3600 / 24 + 1;
+
 formPanel
 (
     to::heading(div
@@ -89,8 +95,9 @@ formPanel
                     set::name('end'),
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
-                    set::value($copyProjectID ? $copyProject->end : ''),
-                    set::required(true)
+                    set::value($projectEnd),
+                    set::required(true),
+                    set::disabled($isLongTime)
                 )
             )
         ),
@@ -102,7 +109,8 @@ formPanel
             (
                 set::name('delta'),
                 set::inline(true),
-                set::items($lang->project->endList)
+                set::items($lang->project->endList),
+                set::value($delta)
             )
         )
     ),
@@ -134,7 +142,8 @@ formPanel
         (
             set::name('whitelist[]'),
             set::items($users),
-            set::multiple(true)
+            set::multiple(true),
+            set::value($copyProjectID ? $copyProject->whitelist : '')
         )
     ),
     formHidden('LONG_TIME', LONG_TIME),
