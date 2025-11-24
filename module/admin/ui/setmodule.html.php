@@ -30,6 +30,7 @@ $rows = array();
 foreach($config->featureGroup as $group => $features)
 {
     if(strpos(",$disabledFeatures,", ",$group,") !== false) continue;
+    if($config->systemMode == 'light' && $group == 'project') continue;
 
     $hasData = false;
     foreach($features as $feature)
