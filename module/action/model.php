@@ -1584,8 +1584,8 @@ class actionModel extends model
 
         if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
-        /* Set app for no multiple project. */
-        if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
+        if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';  // Set app for no multiple project.
+        if(!empty($action->objectLink) && $action->objectType == 'meeting')    $action->objectLink .= '#app=' . $this->app->tab; // Set app for meeting by open tab.
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
 
         return $action;
