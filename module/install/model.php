@@ -115,10 +115,10 @@ class installModel extends model
 
                 if(strpos($table, 'CREATE TABLE') !== false)
                 {
-                    $table = substr($table, 0, stripos($table, ' DEFAULT CHARSET'));
+                    $table = substr($table, 0, strrpos($table, ')') + 1);
                     if($this->config->db->driver == 'mysql')
                     {
-                        $table .= " DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
+                        $table .= " ENGINE=InnoDB DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
                     }
                 }
                 elseif(strpos($table, 'DROP TABLE') !== false && $isClearDB)

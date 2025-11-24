@@ -1192,6 +1192,7 @@ class upgradeModel extends model
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
+            $sql = substr($sql, 0, strrpos($sql, ')') + 1) . ' ENGINE=InnoDB';
             if(version_compare($this->databaseVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
             if(version_compare($this->databaseVersion, '5.6', '<') && stripos($sql, 'FULLTEXT') !== false && stripos($sql, 'InnoDB') !== false) $sql = str_ireplace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
 

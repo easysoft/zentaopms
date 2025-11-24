@@ -557,10 +557,10 @@ class extensionModel extends model
 
             if(strpos($sql, 'CREATE TABLE') === 0)
             {
-                $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
+                $sql = substr($sql, 0, strrpos($sql, ')') + 1);
                 if($this->config->db->driver == 'mysql')
                 {
-                    $sql .= " DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
+                    $sql .= " ENGINE=InnoDB DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
                 }
             }
 
