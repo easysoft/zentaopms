@@ -144,4 +144,18 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getVolumesMetrics method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function getVolumesMetricsTest(object $instance)
+    {
+        $result = $this->invokeArgs('getVolumesMetrics', [$instance]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
