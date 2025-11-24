@@ -25,3 +25,7 @@ CREATE TABLE `zt_testtaskproduct` (
 CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
+
+UPDATE `zt_testtask` SET `build` = 0 WHERE `build` = 'trunk' OR `build` = '' OR `build` IS NULL;
+
+ALTER TABLE `zt_testtask` MODIFY `build` int unsigned NOT NULL DEFAULT 0;
