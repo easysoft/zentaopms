@@ -14,6 +14,24 @@
 class installModel extends model
 {
     /**
+     * 数据库版本。
+     * Database version.
+     *
+     * @var string
+     * access private
+     */
+    private $dbVersion = '';
+
+    /**
+     * 数据库字符集。
+     * Database charset.
+     *
+     * @var array
+     * access private
+     */
+    private $dbCharset = [];
+
+    /**
      * 获取对应语言项的禅道授权信息。
      * Get license according the client lang.
      *
@@ -91,60 +109,37 @@ class installModel extends model
      * 创建数据库表。
      * Create tables.
      *
-     * @param  string $version
      * @param  bool   $saveLog
      * @param  int    $isClearDB
      * @access public
      * @return bool
      */
-    public function createTable(string $version, bool $saveLog = false, int $isClearDB = 0): bool
+    public function createTable(bool $saveLog = false, int $isClearDB = 0): bool
     {
+        $this->dbh = $this->connectDB();
+
         /* Add exception handling to ensure that all SQL is executed successfully. */
         try
         {
             $this->dbh->useDB($this->config->db->name);
 
-            $dbCharset = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-            $dbFile    = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
-            $tables    = explode(';', file_get_contents($dbFile));
+            $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+            $tables = explode(';', file_get_contents($dbFile));
 
             foreach($tables as $table)
             {
                 $table = trim($table);
                 if(empty($table)) continue;
 
-                if(strpos($table, 'CREATE TABLE') !== false)
-                {
-                    $table = substr($table, 0, strrpos($table, ')') + 1);
-                    if($this->config->db->driver == 'mysql')
-                    {
-                        $table .= " ENGINE=InnoDB DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
-                    }
-                }
-                elseif(strpos($table, 'DROP TABLE') !== false && $isClearDB)
-                {
-                    $table = str_replace('--', '', $table);
-                }
+                if(strpos($table, 'DROP TABLE') !== false && $isClearDB) $table = trim(str_replace('--', '', $table));
 
-                $tableToLower = strtolower($table);
-                if(strpos($tableToLower, 'fulltext') !== false and strpos($tableToLower, 'innodb') !== false and $version < 5.6)
-                {
-                    $table = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $table);
-                }
-
-                $table = str_replace('__DELIMITER__', ';', $table);
-                $table = str_replace('__TABLE__', $this->config->db->name, $table);
+                $table = $this->replaceContantsInSQL($table);
+                $table = $this->appendMySQLTableOptions($table);
 
                 /* Skip sql that is note. */
                 if(strpos($table, '--') === 0) continue;
-
-                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-                $table = str_replace('`zt_', $prefix . '.`zt_', $table);
-                $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
-                $table = str_replace('zt_', $this->config->db->prefix, $table);
-
                 if($saveLog) file_put_contents($this->buildDBLogFile('progress'), $table . "\n", FILE_APPEND);
+
                 $this->dbh->exec($table);
             }
         }
@@ -156,6 +151,48 @@ class installModel extends model
             helper::end();
         }
         return true;
+    }
+
+    /**
+     * 替换SQL语句中的常量。
+     * Replace contants in SQL.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function replaceContantsInSQL(string $sql): string
+    {
+        $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+        $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+        $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
+        $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+        $sql    = str_replace('__DATABASE__', $this->config->db->name, $sql);
+        return $sql;
+    }
+
+    /**
+     * 为MySQL的建表语句追加选项。
+     * Append MySQL table options.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function appendMySQLTableOptions(string $sql): string
+    {
+        if(strpos($sql, 'CREATE TABLE') !== 0) return $sql;
+
+        $sql = substr($sql, 0, strrpos($sql, ')') + 1);
+        if($this->config->db->driver != 'mysql') return $sql;
+
+        if(empty($this->dbVersion)) $this->dbVersion = $this->getDatabaseVersion();
+        if(empty($this->dbCharset)) $this->dbCharset = $this->dbh->getDatabaseCharsetAndCollation();
+
+        $sql .= ' ENGINE=InnoDB';
+        if(version_compare($this->dbVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET={$this->dbCharset['charset']} COLLATE={$this->dbCharset['collation']}";
+        if(version_compare($this->dbVersion, '5.6', '<') && stripos($sql, 'FULLTEXT') !== false && stripos($sql, 'InnoDB') !== false) $sql = str_ireplace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
+        return $sql;
     }
 
     /**

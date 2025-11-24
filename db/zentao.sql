@@ -1,4 +1,4 @@
-USE `__TABLE__`;
+USE `__DATABASE__`;
 
 -- DROP TABLE IF EXISTS `zt_acl`;
 CREATE TABLE IF NOT EXISTS `zt_acl` (
