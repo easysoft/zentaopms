@@ -21,4 +21,17 @@ class convertModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getZentaoObjectList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getZentaoObjectListTest(): array
+    {
+        $result = $this->invokeArgs('getZentaoObjectList', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
