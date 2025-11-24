@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
   KEY `account` (`account`),
   KEY `providerType` (`providerType`),
   KEY `providerID` (`providerID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 ALTER TABLE `zt_product` ADD INDEX acl (`acl`); 
 ALTER TABLE `zt_project` ADD INDEX acl (`acl`); 

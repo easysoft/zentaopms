@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_webhook`;
 CREATE TABLE IF NOT EXISTS `zt_webhook` (
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_webhookdatas`;
 CREATE TABLE IF NOT EXISTS `zt_webhookdatas` (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhookdatas` (
   `createdDate` datetime NOT NULL,
   PRIMARY KEY `id` (`id`),
   UNIQUE KEY `uniq` (`webhook`, `action`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   PRIMARY KEY `id` (`id`),
   KEY `objectType` (`objectType`),
   KEY `obejctID` (`objectID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE `zt_score` (
@@ -80,7 +80,7 @@ CREATE TABLE `zt_score` (
   KEY `account` (`account`),
   KEY `model` (`module`),
   KEY `method` (`method`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_product` ADD `line` mediumint(8) NOT NULL AFTER `code`;
 

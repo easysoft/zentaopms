@@ -10,14 +10,14 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `lastEditedDate` datetime NOT NULL, 
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`) 
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
   `version` smallint(5) unsigned NOT NULL,
   UNIQUE KEY `suitecase` (`suite`,`case`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 ALTER TABLE `zt_case` ADD `lib` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `branch`;
 ALTER TABLE `zt_case` ADD `fromCaseID` mediumint(8) unsigned NOT NULL AFTER `fromBug`;
 ALTER TABLE `zt_case` ADD `reviewedBy` varchar(255) NOT NULL AFTER `openedDate`;
@@ -45,5 +45,5 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 ALTER TABLE `zt_bug` ADD `deadline` date NOT NULL AFTER `assignedDate`;

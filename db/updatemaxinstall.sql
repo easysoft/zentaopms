@@ -1,6 +1,6 @@
-ALTER TABLE `zt_doc` ADD `template` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `lib`;
-ALTER TABLE `zt_doc` ADD `templateType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `template`;
-ALTER TABLE `zt_doc` ADD `chapterType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `templateType`;
+ALTER TABLE `zt_doc` ADD `template` varchar(30) NOT NULL AFTER `lib`;
+ALTER TABLE `zt_doc` ADD `templateType` varchar(30) NOT NULL AFTER `template`;
+ALTER TABLE `zt_doc` ADD `chapterType` varchar(30) NOT NULL AFTER `templateType`;
 ALTER TABLE `zt_doc` ADD `assetLib` mediumint(8) unsigned NOT NULL default 0 after `views`;
 ALTER TABLE `zt_doc` ADD `assetLibType` varchar(30) NOT NULL default '' after `assetLib`;
 ALTER TABLE `zt_doc` ADD `from` mediumint(8) unsigned NOT NULL default 0 after `assetLibType`;
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE IF NOT EXISTS `zt_workestimation` (
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `dayHour` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_intervention`;
 CREATE TABLE IF NOT EXISTS `zt_intervention` (
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `deleted` enum('0','1') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `project` (`project`,`activity`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_activity`;
 CREATE TABLE IF NOT EXISTS `zt_activity` (
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_auditcl`;
 CREATE TABLE IF NOT EXISTS `zt_auditcl` (
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_auditplan`;
 CREATE TABLE IF NOT EXISTS `zt_auditplan` (
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `checkBy` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_auditresult`;
 CREATE TABLE IF NOT EXISTS `zt_auditresult` (
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `result` char(30) NOT NULL,
   `checkedBy` varchar(30) NOT NULL,
   `checkedDate` date NOT NULL,
-  `comment` text NOT NULL ,
+  `comment` text NOT NULL,
   `assignedTo` varchar(30) NOT NULL,
   `status` varchar(30) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_nc`;
 CREATE TABLE IF NOT EXISTS `zt_nc` (
@@ -191,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `zt_nc` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_zoutput`;
 CREATE TABLE IF NOT EXISTS `zt_zoutput` (
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_process`;
 CREATE TABLE IF NOT EXISTS `zt_process` (
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_programactivity`;
 CREATE TABLE IF NOT EXISTS `zt_programactivity` (
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `zt_programactivity` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_programoutput`;
 CREATE TABLE IF NOT EXISTS `zt_programoutput` (
@@ -267,7 +267,7 @@ CREATE TABLE IF NOT EXISTS `zt_programoutput` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_programprocess`;
 CREATE TABLE IF NOT EXISTS `zt_programprocess` (
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `zt_programprocess` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_basicmeas`;
 CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_budget`;
 CREATE TABLE IF NOT EXISTS `zt_budget` (
@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `zt_budget` (
   `lastEditedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_researchplan`;
 CREATE TABLE IF NOT EXISTS `zt_researchplan` (
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchplan` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_researchreport`;
 CREATE TABLE IF NOT EXISTS `zt_researchreport` (
@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchreport` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_meeting`;
 CREATE TABLE IF NOT EXISTS `zt_meeting` (
@@ -401,7 +401,7 @@ CREATE TABLE IF NOT EXISTS `zt_meeting` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_meetingroom`;
 CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
@@ -417,7 +417,7 @@ CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_assetlib`;
 CREATE TABLE IF NOT EXISTS `zt_assetlib` (
@@ -431,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_meastemplate`;
 CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_programreport`;
 CREATE TABLE IF NOT EXISTS `zt_programreport` (
@@ -457,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `zt_programreport` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_measrecords`;
 CREATE TABLE IF NOT EXISTS `zt_measrecords` (
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `zt_measrecords` (
   KEY `product` (`product`),
   KEY `project` (`project`),
   KEY `time` (`year`, `month`, `day`, `week`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_object`;
 CREATE TABLE IF NOT EXISTS `zt_object` (
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_review`;
 CREATE TABLE IF NOT EXISTS `zt_review` (
@@ -528,7 +528,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `auditResult` char(30) NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_reviewcl`;
 CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
@@ -547,7 +547,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_reviewresult`;
 CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
@@ -561,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
   `createdDate` date NOT NULL,
   `consumed` float NOT NULL,
   UNIQUE KEY `reviewer` (`review`,`reviewer`,`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_reviewissue`;
 CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
@@ -583,7 +583,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_reviewlist`;
 CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
@@ -600,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
   `assignedBy` varchar(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_cmcl`;
 CREATE TABLE IF NOT EXISTS `zt_cmcl` (
@@ -617,7 +617,7 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_solutions`;
 CREATE TABLE IF NOT EXISTS `zt_solutions` (
@@ -634,7 +634,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
  `editedDate` date NOT NULL,
  `deleted` enum('0','1') NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_measqueue`;
 CREATE TABLE IF NOT EXISTS `zt_measqueue` (
@@ -650,7 +650,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `updateDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
@@ -688,7 +688,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `approvedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_risk`;
 CREATE TABLE IF NOT EXISTS `zt_risk` (
@@ -734,7 +734,7 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `approvedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_opportunity`;
 CREATE TABLE IF NOT EXISTS `zt_opportunity` (
@@ -780,7 +780,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `lastCheckedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_trainplan`;
 CREATE TABLE IF NOT EXISTS `zt_trainplan` (
@@ -801,7 +801,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_gapanalysis`;
 CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
@@ -818,7 +818,7 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `project_account` (`project`,`account`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_bug`
 ADD `injection` mediumint(8) unsigned NOT NULL AFTER `product`,
@@ -4361,4 +4361,4 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

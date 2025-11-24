@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `zt_docblock` (
   `content` text NULL,
   `extra` varchar(255) NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_doc` ON `zt_docblock` (`doc`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=system&methodName=initSystem', '初始化产品下应用数据', 'zentao', 1, 'normal');
