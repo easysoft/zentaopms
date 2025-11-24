@@ -20,4 +20,18 @@ class searchModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getOldQuery method.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return object|false
+     */
+    public function getOldQueryTest(int $queryID)
+    {
+        $result = $this->invokeArgs('getOldQuery', [$queryID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
