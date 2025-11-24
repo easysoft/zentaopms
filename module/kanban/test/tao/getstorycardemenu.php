@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::getStoryCardMenu();
 timeout=0
-cid=16985
+cid=0
 
 - 步骤1:空对象数组输入 @0
 - 步骤2:单个active状态需求 @1
