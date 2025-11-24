@@ -1187,7 +1187,7 @@ class upgradeModel extends model
             $sql = trim($sql);
             if(strpos($sql, 'CREATE TABLE') !== 0) continue;
 
-            $sqls[$key] = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET')) . " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+            $sqls[$key] = $sql . " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
         }
 
         return $sqls;
