@@ -1,7 +1,14 @@
 <?php
 $config->ai->initAIPrompts = array();
 $config->ai->initAIPrompts[] = (object)['id' => 1, 'name' => '编写开发设计文档智能体', 'model' => 0, 'desc' => '根据任务的名称、描述、设计类型、后端框架、前端框架和数据库类型等信息生成一篇开发设计文档。', 'module' => 'task', 'source' => ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,task.story,', 'targetForm' => 'doc.create', 'purpose' => '请根据任务数据、 <设计类型> 、 <后端框架> 、 <前端框架>  和 <数据库类型>  生成一篇开发设计文档。', 'elaboration' => '', 'role' => '你是一名经验丰富的开发工程师。', 'characterization' => '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'status' => 'active', 'createdBy' => 'system'];
-$config->ai->initAIPrompts[] = (object)['id' => 2, 'name' => '绘制需求原型图智能体',   'model' => 0, 'desc' => '根据输入的需求信息, 生成一个HTML格式的原型图示例。', 'module' => 'story', 'source' => ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'targetForm' => 'empty.empty', 'purpose' => '根据输入的需求信息，生成一个HTML格式的原型图示例。原型图应包含以下部分： 1.标题 2.整体结构框架（如导航栏、侧边栏、主要内容区） 3.各功能模块的简要设计（如按钮、表单、图表等） 4.交互设计提示（如如何进行用户操作）5.生成一个html代码的代码块。', 'elaboration' => '', 'role' => '请你扮演一名资深的产品经理。', 'characterization' => '负责绘制需求原型图的过程。您将需求转化为可视化的原型图，同时确保其符合需求描述和需求验收标准。', 'status' => 'active', 'createdBy' => 'system'];
+$config->ai->initAIPrompts[] = (object)['id' => 2, 'name' => '绘制需求原型图智能体',   'model' => 0, 'desc' => '根据输入的需求信息, 生成一个HTML格式的原型图示例。', 'module' => 'story', 'source' => ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'targetForm' => 'empty.empty', 'purpose' => '根据输入的需求信息，生成一个HTML格式的原型图示例。原型图应包含以下部分：
+1. 标题
+2. 整体结构框架（如导航栏、侧边栏、主要内容区）
+3. 各功能模块的简要设计（如按钮、表单、图表等）
+4. 交互设计提示（如如何进行用户操作）
+5. 请生成完整的 HTML5 页面代码，包括开始的 `<!DOCTYPE html>` 和 结束的 `</html>`，使用 markdown html 代码块表示，如果有多个页面请使用多个代码块表示。
+6. 如果页面有 CSS，应该直接在 HTML 页面内使用内联样式`<style>`表示，而不是链接单独的 CSS 文件。',
+'elaboration' => '', 'role' => '请你扮演一名资深的产品经理。', 'characterization' => '负责绘制需求原型图的过程。您将需求转化为可视化的原型图，同时确保其符合需求描述和需求验收标准。', 'status' => 'active', 'createdBy' => 'system'];
 
 $config->ai->initAIPromptFields = array();
 $config->ai->initAIPromptFields[1][] = (object)['name' => '设计类型',   'type' => 'radio', 'placeholder' => '', 'options' => '系统设计,架构设计,接口设计,数据库设计', 'required' => 0];
