@@ -20,17 +20,6 @@ cid=1
 
 */
 
-ob_start();
-$user = zenData('user');
-$user->id->range('1');
-$user->account->range('admin');
-$user->realname->range('管理员');
-$user->password->range($config->uitest->defaultPassword)->format('md5');
-$user->role->range('admin');
-$user->gen(1, false);
-$__out = ob_get_clean();
-if($__out && strpos($__out, 'Duplicate entry') === false) echo $__out;
-
 $tester = new loginTester();
 
 r($tester->verifyLoginCorrectCredentials())             && p('status,message') && e('SUCCESS,使用正确账号密码登录测试通过'); // 使用正确账号密码登录测试
