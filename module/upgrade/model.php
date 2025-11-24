@@ -11349,4 +11349,61 @@ class upgradeModel extends model
         $this->dao->exec($sql);
         return true;
     }
+
+    /**
+     * 添加 DevOps 默认组
+     * Add DevOps default group.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDevOpsDefaultGroup()
+    {
+        $defaultGroupList = array('DEVOPSADMIN', 'DEVOPSINSPECTOR', 'DEVOPSUSER');
+
+        $includePackage = array('git', 'subversion');
+        $includeMethod  = array('repo-diff', 'repo-blame', 'host-treemap', 'deploy-steps', 'deploy-viewStep');
+        $excludePackage = array('manageRepo', 'manageArtifactrepo', 'deleteRepo', 'deleteArtifactrepo');
+
+        $devopsPriv = $this->loadModel('group')->getPrivsByNav('devops');
+        $this->app->loadLang('install');
+        foreach($defaultGroupList as $group)
+        {
+            $defaultGroup = $this->dao->select('*')->from(TABLE_GROUP)->where('role')->eq($group)->fetch();
+            if(!empty($defaultGroup)) continue;
+
+            $groupLang = zget($this->lang->install->groupList, $group);
+
+            $insertGroup = new stdclass();
+            $insertGroup->vision = 'rnd';
+            $insertGroup->name   = zget($groupLang, 'name', $group);
+            $insertGroup->role   = $group;
+
+            $this->dao->insert(TABLE_GROUP)->data($insertGroup)->exec();
+            if(dao::isError()) return false;
+
+            $groupID = $this->dao->lastInsertID();
+
+            foreach($devopsPriv as $method => $priv)
+            {
+                $package = $priv->package;
+                if($group == 'DEVOPSINSPECTOR')
+                {
+                    if(strpos($package, 'browse') !== 0 && !in_array($package, $includePackage) && !in_array($method, $includeMethod) && !in_array($priv->method, array('browse', 'view'))) continue;
+                    if(in_array($method, array('store-browse'))) continue;
+                }
+                if($group == 'DEVOPSUSER' && ($priv->module == 'devopsspace' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
+
+                $insertPriv = new stdclass();
+                $insertPriv->group  = $groupID;
+                $insertPriv->module = $priv->module;
+                $insertPriv->method = $priv->method;
+
+                $this->dao->insert(TABLE_GROUPPRIV)->data($insertPriv)->exec();
+                if(dao::isError()) return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -290,6 +290,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = '需求分析人员';
 $lang->install->groupList['IPDPMT']['name']         = 'PMT团队人员';
 $lang->install->groupList['IPDADMIN']['name']       = '管理人员';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DevOps管理员';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DevOps巡视员';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DevOps用户';
+
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任务提醒';
