@@ -46,10 +46,17 @@ window.openPageForm = function(url, data, callback)
 function getPromptFormConfig(fields, extraConfig)
 {
     if(!Array.isArray(fields) || !fields.length) return;
-    const typeMap    = {text: 'string', radio: 'picker', checkbox: 'multiPicker'};
+    const typeMap    = {radio: 'picker', checkbox: 'multiPicker'};
     const required   = [];
     const properties = fields.reduce((properties, field, index) => {
-        properties[field.name] = {type: typeMap[field.type] || field.type || 'string', title: field.name, description: field.placeholder, order: index, required: field.required && field.required !== '0'};
+        properties[field.name] = {
+            type: 'string',
+            widget: typeMap[field.type] || field.type,
+            title: field.name,
+            order: index,
+            required: field.required && field.required !== '0',
+            props: zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))} : undefined
+        };
         if(field.required) required.push(field.name);
         return properties;
     }, {});
