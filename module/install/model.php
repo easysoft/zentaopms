@@ -123,9 +123,8 @@ class installModel extends model
         {
             $this->dbh->useDB($this->config->db->name);
 
-            $dbCharset = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-            $dbFile    = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
-            $tables    = explode(';', file_get_contents($dbFile));
+            $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+            $tables = explode(';', file_get_contents($dbFile));
 
             foreach($tables as $table)
             {

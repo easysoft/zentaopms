@@ -16,15 +16,6 @@ class upgradeModel extends model
 {
     static $errors = array();
 
-    /**
-     * 数据库版本。
-     * Database version.
-     *
-     * @var string
-     * access public
-     */
-    public $databaseVersion = '';
-
     public $fromVersion = '';
 
     public $fromEdition = '';
@@ -40,7 +31,6 @@ class upgradeModel extends model
     {
         parent::__construct();
         $this->loadModel('setting');
-        $this->databaseVersion = $this->loadModel('install')->getDatabaseVersion();
     }
 
     /**
@@ -10854,7 +10844,8 @@ class upgradeModel extends model
     {
         if($this->config->db->driver != 'mysql') return true;
 
-        if(version_compare($this->databaseVersion, '5.6', '<')) return true;
+        $dbVersion = $this->loadModel('install')->getDatabaseVersion();
+        if(version_compare($dbVersion, '5.6', '<')) return true;
 
         /* 获取服务器的字符集和排序规则。Get server charset and collation. */
         $result          = $this->dbh->getServerCharsetAndCollation($this->config->db->name);
