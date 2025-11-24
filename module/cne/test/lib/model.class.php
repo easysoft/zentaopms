@@ -129,4 +129,19 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getDiskSettings method.
+     *
+     * @param  object      $instance
+     * @param  bool|string $component
+     * @access public
+     * @return mixed
+     */
+    public function getDiskSettingsTest(object $instance, bool|string $component = false)
+    {
+        $result = $this->invokeArgs('getDiskSettings', [$instance, $component]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
