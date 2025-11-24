@@ -290,6 +290,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
 $lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
 $lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS USER';
+
 $lang->install->cronList[''] = 'Monitor Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Daily Task Reminder';
