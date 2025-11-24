@@ -542,6 +542,7 @@ class extensionModel extends model
         $sqls = file_get_contents($this->getDBFile($extension, $method));
         $sqls = explode(';', $sqls);
 
+        $dbCharset  = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
         $ignoreCode = '|1050|1060|1062|1091|1169|';
         foreach($sqls as $sql)
         {
@@ -559,8 +560,7 @@ class extensionModel extends model
                 $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
                 if($this->config->db->driver == 'mysql')
                 {
-                    $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-                    $sql .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
+                    $sql .= " DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
                 }
             }
 

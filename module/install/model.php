@@ -104,8 +104,9 @@ class installModel extends model
         {
             $this->dbh->useDB($this->config->db->name);
 
-            $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
-            $tables = explode(';', file_get_contents($dbFile));
+            $dbCharset = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
+            $dbFile    = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+            $tables    = explode(';', file_get_contents($dbFile));
 
             foreach($tables as $table)
             {
@@ -117,8 +118,7 @@ class installModel extends model
                     $table = substr($table, 0, stripos($table, ' DEFAULT CHARSET'));
                     if($this->config->db->driver == 'mysql')
                     {
-                        $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-                        $table .= " DEFAULT CHARSET={$result['charset']} COLLATE={$result['collation']}";
+                        $table .= " DEFAULT CHARSET={$dbCharset['charset']} COLLATE={$dbCharset['collation']}";
                     }
                 }
                 elseif(strpos($table, 'DROP TABLE') !== false && $isClearDB)
