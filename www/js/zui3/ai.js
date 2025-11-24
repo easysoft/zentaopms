@@ -49,7 +49,7 @@ function getPromptFormConfig(fields, extraConfig)
     const typeMap    = {text: 'string', radio: 'picker', checkbox: 'multiPicker'};
     const required   = [];
     const properties = fields.reduce((properties, field, index) => {
-        properties[field.name] = {type: typeMap[field.type] || field.type || 'string', title: field.name, description: field.placeholder, order: index};
+        properties[field.name] = {type: typeMap[field.type] || field.type || 'string', title: field.name, description: field.placeholder, order: index, required: field.required && field.required !== '0'};
         if(field.required) required.push(field.name);
         return properties;
     }, {});
