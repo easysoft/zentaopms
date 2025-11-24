@@ -13576,6 +13576,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (22,	'codescan',	'taskLog'),
 (22,	'codescan',	'taskView'),
 (22,	'codescan',	'view'),
+(22,	'compile',	'browse'),
 (22,	'deploy',	'browse'),
 (22,	'deploy',	'steps'),
 (22,	'deploy',	'view'),
