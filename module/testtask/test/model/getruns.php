@@ -136,6 +136,7 @@ cid=19191
  - 第1条的storyTitle属性 @用户需求1
 
 */
+su('admin');
 
 global $tester, $app;
 
