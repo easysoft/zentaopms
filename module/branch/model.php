@@ -379,7 +379,7 @@ class branchModel extends model
             foreach($data->branch as $branchID => $branch)
             {
                 if(!$branch) return print(js::alert($this->lang->branch->nameNotEmpty));
-                if($oldBranches[$branchID] != $branch) $this->dao->update(TABLE_BRANCH)->set('name')->eq($branch)->where('id')->eq($branchID)->exec();
+                if(isset($oldBranches[$branchID]) && $oldBranches[$branchID] != $branch) $this->dao->update(TABLE_BRANCH)->set('name')->eq($branch)->where('id')->eq($branchID)->exec();
             }
         }
 
@@ -387,7 +387,7 @@ class branchModel extends model
         foreach($data->newbranch as $i => $branch)
         {
             if(empty($branch)) continue;
-            $this->dao->insert(TABLE_BRANCH)->set('name')->eq($branch)->set('product')->eq($productID)->set('`order`')->eq(count($data->branch) + $i + 1)->exec();
+            $this->dao->insert(TABLE_BRANCH)->set('name')->eq($branch)->set('product')->eq($productID)->set('order')->eq(count($data->branch) + $i + 1)->exec();
             $branches[] = $this->dao->lastInsertId();
         }
 

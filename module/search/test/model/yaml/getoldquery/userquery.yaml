@@ -1,0 +1,63 @@
+---
+title: 用户查询测试数据
+desc: 为 searchModel::getOldQuery() 方法准备的测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  note: 查询ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 用户账号
+  range: admin{5},user1{3},user2{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: task{3},bug{3},story{2},testcase{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 查询条件名称
+  range: 1-10
+  prefix: "这是搜索条件名称"
+  postfix: ""
+  loop: 0
+  format: ""
+- field: form
+  note: 查询表单数据(序列化)
+  range: 'a:3:{s:6:"module";s:4:"task";s:6:"field1";s:6:"status";s:6:"value1";s:4:"wait";}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: sql
+  note: SQL查询语句
+  range: '(( 1 = 1  AND `status` = ''wait'' ))'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: shortcut
+  note: 是否快捷方式
+  range: '[0]{8},[1]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: common
+  note: 是否公共查询
+  range: '[0]{8},[1]{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

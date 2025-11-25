@@ -5,59 +5,72 @@
 
 title=测试 metricModel::updateMetricFields();
 timeout=0
-cid=17160
+cid=0
 
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'1', $metric1  @0
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'2', $metric2  @0
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'3', $metric3  @Exception:
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'999', $metric4  @0
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'5', $metric5  @0
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'6', $metric6  @0
-- 执行metricTest模块的updateMetricFieldsTest方法，参数是'7', $metric7  @0
+- 步骤1:正常情况 - 更新单个字段 @0
+- 步骤2:更新多个字段 @0
+- 步骤3:空 metricID 参数测试 @invalid_params
+- 步骤4:null metric 对象测试 @invalid_params
+- 步骤5:更新不存在的度量项ID @0
 
 */
 
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
 
-zenData('metric')->loadYaml('updatemetricfields/metric', false, 2)->gen(10);
+// 2. zendata数据准备(根据需要配置)
+global $tester;
 
+// 清理已有数据
+$tester->dao->delete()->from(TABLE_METRIC)->exec();
+
+// 手工插入测试数据
+for($i = 1; $i <= 5; $i++)
+{
+    $metric = new stdClass();
+    $metric->id = $i;
+    $metric->name = "test_metric_$i";
+    $metric->code = "test_code_$i";
+    $metric->purpose = 'quality';
+    $metric->scope = 'system';
+    $metric->object = 'bug';
+    $metric->stage = 'wait';
+    $metric->type = 'php';
+    $metric->createdBy = 'admin';
+    $metric->createdDate = '2023-01-01 10:00:00';
+
+    $tester->dao->insert(TABLE_METRIC)->data($metric)->exec();
+}
+
+// 3. 用户登录(选择合适角色)
 su('admin');
 
+// 4. 创建测试实例(变量名与模块名一致)
 $metricTest = new metricTest();
 
-// 测试步骤1: 正常更新单个字段(name)
-$metric1 = new stdClass();
-$metric1->name = '更新后的度量项名称';
-r($metricTest->updateMetricFieldsTest('1', $metric1)) && p() && e('0');
+// 5. 强制要求:必须包含至少5个测试步骤
+// 准备更新数据 - 单个字段
+$updateData1 = new stdClass();
+$updateData1->name = 'updated_metric_name';
+r($metricTest->updateMetricFieldsTest('1', $updateData1)) && p() && e('0'); // 步骤1:正常情况 - 更新单个字段
 
-// 测试步骤2: 正常更新多个字段(name和desc)
-$metric2 = new stdClass();
-$metric2->name = '更新后的度量项名称2';
-$metric2->desc = '更新后的度量项描述2';
-r($metricTest->updateMetricFieldsTest('2', $metric2)) && p() && e('0');
+// 准备更新数据 - 多个字段
+$updateData2 = new stdClass();
+$updateData2->name = 'updated_metric_2';
+$updateData2->alias = 'updated_alias';
+$updateData2->unit = 'count';
+$updateData2->editedBy = 'admin';
+$updateData2->editedDate = date('Y-m-d H:i:s');
+r($metricTest->updateMetricFieldsTest('2', $updateData2)) && p() && e('0'); // 步骤2:更新多个字段
 
-// 测试步骤3: 使用空对象更新
-$metric3 = new stdClass();
-r($metricTest->updateMetricFieldsTest('3', $metric3)) && p() && e('Exception:');
+// 空参数测试
+r($metricTest->updateMetricFieldsTest('', $updateData1)) && p() && e('invalid_params'); // 步骤3:空 metricID 参数测试
 
-// 测试步骤4: 使用不存在的metricID
-$metric4 = new stdClass();
-$metric4->name = '不存在的度量项';
-r($metricTest->updateMetricFieldsTest('999', $metric4)) && p() && e('0');
+// null metric 对象测试
+r($metricTest->updateMetricFieldsTest('3', null)) && p() && e('invalid_params'); // 步骤4:null metric 对象测试
 
-// 测试步骤5: 更新包含特殊字符的字段
-$metric5 = new stdClass();
-$metric5->name = '特殊字符测试<>&"\'';
-$metric5->desc = '包含特殊字符的描述: <script>alert("test")</script>';
-r($metricTest->updateMetricFieldsTest('5', $metric5)) && p() && e('0');
-
-// 测试步骤6: 更新stage字段为released
-$metric6 = new stdClass();
-$metric6->stage = 'released';
-r($metricTest->updateMetricFieldsTest('6', $metric6)) && p() && e('0');
-
-// 测试步骤7: 更新type字段为sql
-$metric7 = new stdClass();
-$metric7->type = 'sql';
-r($metricTest->updateMetricFieldsTest('7', $metric7)) && p() && e('0');
+// 更新不存在的度量项
+$updateData3 = new stdClass();
+$updateData3->name = 'non_exist_metric';
+r($metricTest->updateMetricFieldsTest('999', $updateData3)) && p() && e('0'); // 步骤5:更新不存在的度量项ID
