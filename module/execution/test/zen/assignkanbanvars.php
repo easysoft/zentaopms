@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignKanbanVars();
 timeout=0
-cid=0
+cid=16403
 
 - 执行executionZenTest模块的assignKanbanVarsTest方法，参数是1 
  - 第users条的admin属性 @管理员

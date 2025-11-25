@@ -5,7 +5,7 @@
 
 title=测试 userZen::getUserForJSON();
 timeout=0
-cid=0
+cid=19675
 
 - 执行$result1->password @0
 - 执行$result2->deleted @0

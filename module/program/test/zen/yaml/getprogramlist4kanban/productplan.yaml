@@ -1,0 +1,59 @@
+---
+title: 产品计划测试数据
+desc: 用于getProgramList4Kanban方法的产品计划测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-40
+- field: product
+  note: 所属产品
+  range: 1-30:R
+- field: branch
+  note: 分支
+  range: '0'
+- field: parent
+  note: 父计划
+  range: 0
+- field: title
+  note: 计划标题
+  range: '计划1.0,计划1.1,计划1.2,计划2.0,计划2.1,计划3.0,计划3.1,迭代1,迭代2,迭代3,迭代4,迭代5,版本A,版本B,版本C,版本D,版本E,版本F,版本G,版本H,版本I,版本J,版本K,版本L,版本M,版本N,版本O,版本P,版本Q,版本R,版本S,版本T,版本U,版本V,版本W,版本X,版本Y,版本Z,版本AA,版本AB'
+- field: status
+  note: 状态
+  range: '[wait]{10},[doing]{15},[done]{10},[closed]{5}'
+- field: desc
+  note: 描述
+  range: '这是一个测试计划'
+- field: begin
+  note: 开始日期
+  range: '`(-60D)-(-10D):5D`'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  note: 结束日期
+  range: '`(+10D)-(+120D):10D`'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: finishedDate
+  note: 完成日期
+  range: '0000-00-00 00:00:00{25},`(-5D)-(+5D):2D`{15}'
+- field: closedDate
+  note: 关闭日期
+  range: '0000-00-00 00:00:00{35},`(-3D)-(+3D):1D`{5}'
+- field: order
+  note: 排序
+  range: ''
+- field: closedReason
+  note: 关闭原因
+  range: '[]{35},done{5}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{20},user1{10},user2{10}'
+- field: createdDate
+  note: 创建日期
+  range: '`(-90D)-(-20D):10D`'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 已删除
+  range: '0'

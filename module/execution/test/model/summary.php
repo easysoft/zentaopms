@@ -5,7 +5,7 @@
 
 title=测试 executionModel::summary();
 timeout=0
-cid=0
+cid=16369
 
 - 执行executionTest模块的summaryTest方法，参数是$emptyTasks  @本页共 <strong>0</strong> 个任务，未开始 <strong>0</strong>，进行中 <strong>0</strong>，总预计 <strong>0</strong> 工时，已消耗 <strong>0</strong> 工时，剩余 <strong>0</strong> 工时。
 - 执行executionTest模块的summaryTest方法，参数是$singleTasks  @本页共 <strong>1</strong> 个任务，未开始 <strong>1</strong>，进行中 <strong>0</strong>，总预计 <strong>8</strong> 工时，已消耗 <strong>2</strong> 工时，剩余 <strong>6</strong> 工时。

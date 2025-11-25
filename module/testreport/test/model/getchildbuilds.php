@@ -5,7 +5,7 @@
 
 title=测试 testreportModel::getChildBuilds();
 timeout=0
-cid=0
+cid=19117
 
 - 步骤1：获取有子版本的版本构建列表 @8:子版本1,9:子版本2
 

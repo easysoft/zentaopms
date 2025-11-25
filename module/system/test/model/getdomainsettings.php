@@ -5,7 +5,7 @@
 
 title=测试 systemModel::getDomainSettings();
 timeout=0
-cid=0
+cid=18734
 
 - 执行systemTest模块的getDomainSettingsTest方法 属性https @true
 - 执行systemTest模块的getDomainSettingsTest方法 属性customDomain @example.domain.com

@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildEditForm();
 timeout=0
-cid=0
+cid=18901
 
 - 步骤1：正常任务表单构建
  - 属性success @1

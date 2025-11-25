@@ -5,7 +5,7 @@
 
 title=测试 aiModel::serializeDataToPrompt();
 timeout=0
-cid=0
+cid=15063
 
 - 执行aiTest模块的serializeDataToPromptTest方法，参数是'task', '', array  @0
 - 执行aiTest模块的serializeDataToPromptTest方法，参数是'bug', array  @0

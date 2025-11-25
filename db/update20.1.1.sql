@@ -26,7 +26,7 @@ CREATE TABLE `zt_storygrade` (
   `grade` smallint NOT NULL,
   `name` char(30) NOT NULL,
   `status` char(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_storygrade` (`type`, `grade`, `name`, `status`) VALUES
 ('requirement', 1,    'UR', 'enable'),
@@ -117,6 +117,6 @@ CREATE TABLE `zt_pivotdrill` (
   `object`    varchar(40)  NOT NULL,
   `whereSql`  mediumtext   NOT NULL,
   `condition` mediumtext   NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_extension` MODIFY `zentaoCompatible` text NULL;

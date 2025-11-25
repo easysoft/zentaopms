@@ -5,28 +5,32 @@
 
 title=测试 bugZen::updateTodoAfterCreate();
 timeout=0
-cid=0
+cid=15483
 
-- 测试步骤1：正常情况下更新todo状态 @1
-- 测试步骤2：更新不存在的todo @1
-- 测试步骤3：使用无效bugID参数 @1
-- 测试步骤4：使用0作为todoID参数 @1
-- 测试步骤5：测试feedback类型todo的处理 @1
+- 测试正常更新待办状态 @1
+- 测试另一个待办更新 @1
+- 测试待办类型为feedback的情况 @1
+- 测试不存在的待办ID @1
+- 测试第5个待办更新 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zendata('todo')->gen(10);
-zendata('action')->gen(20);
+zenData('todo')->loadYaml('updatetodoaftercreate/todo', false, 2)->gen(10);
+zenData('action')->gen(0);
+zenData('bug')->gen(10);
+zenData('user')->gen(10);
+zenData('feedback')->gen(0);
 
 su('admin');
 
-$bugTest = new bugTest();
+global $tester;
+$bugTest = new bugZenTest();
 
-r($bugTest->updateTodoAfterCreateTest(1, 1)) && p() && e('1');             // 测试步骤1：正常情况下更新todo状态
-r($bugTest->updateTodoAfterCreateTest(1, 999)) && p() && e('1');           // 测试步骤2：更新不存在的todo
-r($bugTest->updateTodoAfterCreateTest(0, 2)) && p() && e('1');             // 测试步骤3：使用无效bugID参数
-r($bugTest->updateTodoAfterCreateTest(2, 0)) && p() && e('1');             // 测试步骤4：使用0作为todoID参数
-r($bugTest->updateTodoAfterCreateTest(3, 9)) && p() && e('1');             // 测试步骤5：测试feedback类型todo的处理
+r($bugTest->updateTodoAfterCreateTest(1, 1)) && p() && e('1'); // 测试正常更新待办状态
+r($bugTest->updateTodoAfterCreateTest(2, 2)) && p() && e('1'); // 测试另一个待办更新
+r($bugTest->updateTodoAfterCreateTest(3, 10)) && p() && e('1'); // 测试待办类型为feedback的情况
+r($bugTest->updateTodoAfterCreateTest(4, 999)) && p() && e('1'); // 测试不存在的待办ID
+r($bugTest->updateTodoAfterCreateTest(5, 5)) && p() && e('1'); // 测试第5个待办更新

@@ -5,7 +5,7 @@
 
 title=测试 convertModel::importJiraData();
 timeout=0
-cid=0
+cid=15792
 
 - 步骤1：默认参数调用，无会话数据返回finished结果属性finished @1
 - 步骤2：创建表参数为true，返回finished结果属性finished @1

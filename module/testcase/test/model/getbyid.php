@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getById();
-cid=1
+cid=18976
 pid=1
 
 - 测试获取case 1 的信息

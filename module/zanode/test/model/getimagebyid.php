@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodemodel->getImageByID().
 timeout=0
-cid=1
+cid=19832
 
 - 测试获取 node id 1 的快照
  - 属性id @1

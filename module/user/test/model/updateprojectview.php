@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->updateProjectView();
-cid=0
+cid=19663
 
 - 测试更新ID为12的项目的用户视图。 @1
 - 查看ID为12的项目的用户视图是否更新成功属性projects @,12

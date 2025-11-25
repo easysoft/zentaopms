@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiDeleteLabel();
 timeout=0
-cid=0
+cid=16590
 
 - 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, 0, $validLabelName  @0
 - 执行gitlabTest模块的apiDeleteLabelTest方法，参数是$gitlabID, $projectID, ''  @0

@@ -5,7 +5,7 @@
 
 title=测试 storeModel::getUpgradableVersions();
 timeout=0
-cid=0
+cid=18455
 
 - 执行storeTest模块的getUpgradableVersionsTest方法，参数是'1.0.0', 1  @0
 - 执行storeTest模块的getUpgradableVersionsTest方法，参数是'1.0.0', 0, 'testapp'  @0

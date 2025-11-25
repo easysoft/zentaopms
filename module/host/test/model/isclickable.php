@@ -4,7 +4,7 @@
 
 title=测试 hostModel->isClickable();
 timeout=0
-cid=1
+cid=16760
 
 - 测试ID为1的主机操作按钮权限。 @0
 - 测试ID为1的主机操作按钮权限。 @1

@@ -5,7 +5,7 @@
 
 title=测试 storyModel->batchCreate();
 timeout=0
-cid=0
+cid=18472
 
 - 插入两条软件需求，判断返回的需求总量 @3
 - 插入两条用户需求，判断返回的需求总量 @3

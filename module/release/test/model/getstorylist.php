@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->getStoryList();
 timeout=0
-cid=1
+cid=18001
 
 - 测试需求ID为空，分支ID为0时，获取需求列表数据 @0
 - 测试需求ID为1-5，分支ID为0时，获取需求列表数据第1条的title属性 @需求1

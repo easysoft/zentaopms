@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getProjectRequirements();
 timeout=0
-cid=0
+cid=18642
 
 - 执行storyModel模块的getProjectRequirements方法，参数是0, 0  @0
 - 执行storyModel模块的getProjectRequirements方法，参数是0, 1  @0

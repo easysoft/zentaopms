@@ -4,7 +4,7 @@
 /**
 
 title=测试 commonModel::apiPost();
-cid=0
+cid=15642
 
 - 测试步骤1：正常POST请求 >> 期望返回code为200
 - 测试步骤2：成功响应检查 >> 期望返回code为200且message为Success

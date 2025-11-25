@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignModuleAndSceneForBatchEdit();
 timeout=0
-cid=0
+cid=19072
 
 - 步骤1：正常情况属性executed @1
 - 步骤2：空用例数组属性executed @1

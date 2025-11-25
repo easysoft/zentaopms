@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiErrorHandling();
 timeout=0
-cid=0
+cid=16596
 
 - 步骤1：error字段错误处理 @403 Forbidden
 - 步骤2：字符串message错误处理 @保存失败，群组URL路径已经被使用。

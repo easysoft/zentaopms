@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerModule();
 timeout=0
-cid=0
+cid=18517
 
 - 测试默认story类型的模块统计数据 @3
 - 测试带查询条件的模块统计第1条的value属性 @6

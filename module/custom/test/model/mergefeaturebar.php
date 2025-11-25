@@ -5,7 +5,7 @@
 
 title=测试 customModel->mergeFeatureBar();
 timeout=0
-cid=1
+cid=15918
 
 - 获取地盘-待处理-任务列表筛选标签 @0
 - 获取未关闭标签属性unclosed @未关闭

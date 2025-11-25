@@ -172,6 +172,7 @@ formPanel
             set::control(array("control" => "picker","multiple" => true)),
             set::name('group[]'),
             set::items($groupList),
+            set::required(strpos($this->config->user->create->requiredFields, 'group') !== false),
             set::placeholder($lang->user->placeholder->group)
         )
     ) : null,

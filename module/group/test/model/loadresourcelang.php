@@ -5,7 +5,7 @@
 
 title=测试 groupModel::loadResourceLang();
 timeout=0
-cid=0
+cid=16720
 
 - 测试步骤1：验证项目模块语言加载成功属性start @启动项目
 - 测试步骤2：验证文档模块的common被替换为manage属性common @文档管理

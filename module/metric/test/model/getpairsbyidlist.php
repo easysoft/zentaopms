@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getPairsByIdList();
 timeout=0
-cid=0
+cid=17117
 
 - 步骤1：正常获取用户信息属性1 @管理员
 - 步骤2：正常获取产品信息属性1 @产品1

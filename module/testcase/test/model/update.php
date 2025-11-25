@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel->update();
 timeout=0
-cid=0
+cid=19026
 
 - 测试更新用例名称
  - 第0条的field属性 @title

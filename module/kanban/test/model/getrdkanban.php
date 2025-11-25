@@ -16,7 +16,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->getRDKanban();
 timeout=0
-cid=1
+cid=16938
 
 - 获取执行1的看板信息
  - 第0条的id属性 @1

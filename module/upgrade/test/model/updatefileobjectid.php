@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->updateFileObjectID();
 timeout=0
-cid=1
+cid=19556
 
 - 测试更新类型 空 上一个id 3 的编辑器文件对象
  - 属性type @comment

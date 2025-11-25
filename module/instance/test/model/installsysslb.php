@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::installSysSLB();
 timeout=0
-cid=0
+cid=16807
 
 - 步骤1：验证installSysSLB方法存在 @1
 - 步骤2：验证app对象有效 @1

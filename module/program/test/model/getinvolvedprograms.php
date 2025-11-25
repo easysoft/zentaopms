@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 title=测试 programModel::getInvolvedPrograms();
 timeout=0
-cid=1
+cid=17684
 
 - 获取admin参与的项目集数量 @2
 - 获取test1参与的项目集数量 @1

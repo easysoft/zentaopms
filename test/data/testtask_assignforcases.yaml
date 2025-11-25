@@ -1,0 +1,40 @@
+---
+title: 测试assignForCases方法的产品数据
+desc: 为测试assignForCases方法准备的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 产品A,产品B,产品C,产品D,产品E
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 产品代码
+  range: PROD-A,PROD-B,PROD-C,PROD-D,PROD-E
+  prefix: ""
+  postfix: ""
+- field: type
+  note: 产品类型
+  range: normal{2},branch{2},platform{1}
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 产品状态
+  range: normal{5}
+  prefix: ""
+  postfix: ""
+- field: shadow
+  note: 是否影子产品
+  range: 0{5}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 是否删除
+  range: 0{5}
+  prefix: ""
+  postfix: ""

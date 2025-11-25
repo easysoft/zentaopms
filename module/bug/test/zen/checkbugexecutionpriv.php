@@ -17,7 +17,7 @@ su('admin');
 
 title=测试 bugZen::checkBugExecutionPriv();
 timeout=0
-cid=0
+cid=15440
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [  @1
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [  @1

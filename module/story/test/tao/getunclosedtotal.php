@@ -5,7 +5,7 @@
 
 title=测试 storyTao::getUnClosedTotal();
 timeout=0
-cid=0
+cid=18650
 
 - 步骤1：正常获取story类型统计属性1 @2
 - 步骤2：正常获取requirement类型统计属性1 @1

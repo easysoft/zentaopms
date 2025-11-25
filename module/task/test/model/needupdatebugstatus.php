@@ -10,7 +10,7 @@ su('admin');
 
 title=taskModel->needUpdateBugStatus();
 timeout=0
-cid=1
+cid=18834
 
 - 计算不来源于bug的任务是否需要更新bug状态 @0
 - 计算来源于bug的任务是否需要更新bug状态 bug状态为active @1

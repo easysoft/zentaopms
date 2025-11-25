@@ -2,14 +2,14 @@ USE `__TABLE__`;
 
 -- DROP TABLE IF EXISTS `zt_acl`;
 CREATE TABLE IF NOT EXISTS `zt_acl` (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
   `type` char(40) NOT NULL DEFAULT 'whitelist',
   `source` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
 CREATE INDEX `actor`       ON `zt_action`(`actor`);
 CREATE INDEX `project`     ON `zt_action`(`project`);
@@ -41,7 +41,7 @@ CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
 CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
   `action` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 CREATE INDEX `product` ON `zt_actionproduct`(`product`);
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
 CREATE INDEX `actor`       ON `zt_actionrecent`(`actor`);
 CREATE INDEX `project`     ON `zt_actionrecent`(`project`);
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_api`;
 CREATE TABLE IF NOT EXISTS `zt_api` (
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `zt_api` (
   `editedDate` datetime NULL,
   `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_apispec`;
 CREATE TABLE IF NOT EXISTS `zt_apispec` (
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `zt_apispec` (
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_apistruct`;
 CREATE TABLE IF NOT EXISTS `zt_apistruct` (
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct` (
   `editedDate` datetime NULL,
   `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
   primary key (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_apistruct_spec`;
 CREATE TABLE IF NOT EXISTS `zt_apistruct_spec` (
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `zt_apistruct_spec` (
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NULL,
   primary key (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approval`;
 CREATE TABLE IF NOT EXISTS `zt_approval` (
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `createdDate` datetime NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalflow`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
   `workflow` varchar(30) NOT NULL DEFAULT '',
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalflowobject`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
   `relatedDate`  datetime NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalflowspec`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowspec` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalnode`;
 CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalnode` (
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_reviewed_date` ON `zt_approvalnode`(`reviewedDate`);
 
 -- DROP TABLE IF EXISTS `zt_approvalobject`;
@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
   `desc` text NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_approvalrole`;
 CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
   `users` longtext NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_autocache`;
 CREATE TABLE IF NOT EXISTS `zt_autocache` (
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `zt_autocache` (
   `code` varchar(30) NOT NULL DEFAULT '',
   `fields` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `cache` ON `zt_autocache`(`code`, `fields`);
 
 -- DROP TABLE IF EXISTS `zt_block`;
@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_block`(`account`);
 
 -- DROP TABLE IF EXISTS `zt_branch`;
@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `zt_branch` (
   `order` smallint(6) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_branch`(`product`);
 
 -- DROP TABLE IF EXISTS `zt_bug`;
@@ -389,7 +389,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product`                ON `zt_bug`(`product`);
 CREATE INDEX `execution`              ON `zt_bug`(`execution`);
 CREATE INDEX `status`                 ON `zt_bug`(`status`);
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product`   ON `zt_build`(`product`);
 CREATE INDEX `execution` ON `zt_build`(`execution`);
 CREATE INDEX `idx_system` ON `zt_build`(`system`);
@@ -442,7 +442,7 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
   `storyPoint` float NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `execution_task` ON `zt_burn` (`execution`,`date`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_case`;
@@ -494,7 +494,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `scene` int(11) NOT NULL default '0',
   `sort` int(11) NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_case`(`product`);
 CREATE INDEX `story`   ON `zt_case`(`story`);
 CREATE INDEX `fromBug` ON `zt_case`(`fromBug`);
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `desc` text NULL,
   `expect` text NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `case`    ON `zt_casestep`(`case`);
 CREATE INDEX `version` ON `zt_casestep`(`version`);
 
@@ -524,7 +524,7 @@ CREATE TABLE IF NOT EXISTS `zt_casespec` (
   `precondition` text NULL,
   `files` text NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_cfd`;
@@ -536,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `count` smallint(6) NOT NULL DEFAULT '0',
   `date` date NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `execution_type_name_date` ON `zt_cfd`(`execution`,`type`,`name`,`date`);
 
 -- DROP TABLE IF EXISTS `zt_chart`;
@@ -569,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `zt_chart` (
   `editedDate` datetime NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_screen`;
 CREATE TABLE IF NOT EXISTS `zt_screen` (
@@ -589,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_deliverable`;
 CREATE TABLE `zt_deliverable` (
@@ -640,7 +640,7 @@ CREATE TABLE IF NOT EXISTS `zt_decision` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
@@ -656,7 +656,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `code` ON `zt_dimension`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_company`;
@@ -673,7 +673,7 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
   `admins` char(255) default NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_compile`;
 CREATE TABLE IF NOT EXISTS `zt_compile` (
@@ -693,7 +693,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `updateDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_config`;
@@ -706,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `zt_config` (
   `key` char(30) NOT NULL default '',
   `value` longtext NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_config`(`vision`,`owner`,`module`,`section`,`key`);
 CREATE INDEX `vision` ON `zt_config`(`vision`);
 CREATE INDEX `owner`  ON `zt_config`(`owner`);
@@ -728,7 +728,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
   `status` varchar(20) NOT NULL DEFAULT '',
   `lastTime` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `lastTime` ON `zt_cron`(`lastTime`);
 
 -- DROP TABLE IF EXISTS `zt_dashboard`;
@@ -744,7 +744,7 @@ CREATE TABLE IF NOT EXISTS `zt_dashboard` (
   `createdDate` datetime NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_dataset`;
 CREATE TABLE IF NOT EXISTS `zt_dataset` (
@@ -757,7 +757,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataset` (
   `createdDate` datetime NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_dataview`;
 CREATE TABLE IF NOT EXISTS `zt_dataview` (
@@ -778,7 +778,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `editedDate` datetime NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_dept`;
 CREATE TABLE IF NOT EXISTS `zt_dept` (
@@ -792,15 +792,15 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `function` char(255) NOT NULL default '',
   `manager` char(30) NOT NULL default '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_dept`(`parent`);
 CREATE INDEX `path`   ON `zt_dept`(`path`);
 
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project` varchar(255) NOT NULL DEFAULT '',
-  `product` varchar(255) NOT NULL DEFAULT '',
+  `project` int unsigned NOT NULL DEFAULT 0,
+  `product` int unsigned NOT NULL DEFAULT 0,
   `commit` text NULL,
   `commitedBy` varchar(30) NOT NULL DEFAULT '',
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -820,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
@@ -849,7 +849,8 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `cycle` char(10) NOT NULL DEFAULT '',
   `cycleConfig` text NULL,
-  `module` varchar(30) NOT NULL DEFAULT '',
+  `module` int unsigned NOT NULL DEFAULT 0,
+  `reportModule` varchar(20) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
@@ -886,7 +887,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product`      ON `zt_doc`(`product`);
 CREATE INDEX `execution`    ON `zt_doc`(`execution`);
 CREATE INDEX `lib`          ON `zt_doc`(`lib`);
@@ -900,7 +901,7 @@ CREATE TABLE IF NOT EXISTS `zt_docaction` (
   `actor` char(30) NOT NULL DEFAULT '',
   `date` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `doc`   ON `zt_docaction`(`doc`);
 CREATE INDEX `actor` ON `zt_docaction`(`actor`);
 
@@ -921,7 +922,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `version` smallint(6) unsigned NOT NULL DEFAULT '0',
   `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_doclib`;
@@ -948,7 +949,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `archived` enum('0','1') NOT NULL DEFAULT '0',
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_doclib`(`product`);
 CREATE INDEX `execution` ON `zt_doclib`(`execution`);
 
@@ -961,7 +962,7 @@ CREATE TABLE IF NOT EXISTS `zt_docblock` (
   `content` mediumtext NULL,
   `extra` varchar(255) NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_doc` ON `zt_docblock` (`doc`);
 
 -- DROP TABLE IF EXISTS `zt_effort`;
@@ -984,7 +985,7 @@ CREATE TABLE IF NOT EXISTS `zt_effort` (
   `order` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_effort`(`execution`);
 CREATE INDEX `objectID`  ON `zt_effort`(`objectID`);
 CREATE INDEX `date`      ON `zt_effort`(`date`);
@@ -1007,7 +1008,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE IF NOT EXISTS `zt_expect` (
@@ -1020,7 +1021,7 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_extension`;
 CREATE TABLE IF NOT EXISTS `zt_extension` (
@@ -1040,7 +1041,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `files` mediumtext NULL,
   `status` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_extension`(`code`);
 CREATE INDEX `name` ON `zt_extension`(`name`);
 CREATE INDEX `installedTime` ON `zt_extension`(`installedTime`);
@@ -1051,7 +1052,7 @@ CREATE TABLE IF NOT EXISTS `zt_extuser` (
   `code` varchar(255) NOT NULL,
   `account` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_file`;
 CREATE TABLE IF NOT EXISTS `zt_file` (
@@ -1069,7 +1070,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `extra` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `objectType` ON `zt_file`(`objectType`);
 CREATE INDEX `objectID`   ON `zt_file`(`objectID`);
 CREATE INDEX `gid`        ON `zt_file`(`gid`);
@@ -1085,14 +1086,14 @@ CREATE TABLE IF NOT EXISTS `zt_group` (
   `acl` text NULL,
   `developer` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_grouppriv`;
 CREATE TABLE IF NOT EXISTS `zt_grouppriv` (
   `group` mediumint(8) unsigned NOT NULL default '0',
   `module` char(30) NOT NULL default '',
   `method` char(30) NOT NULL default ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `group` ON `zt_grouppriv`(`group`,`module`,`method`);
 
 -- DROP TABLE IF EXISTS `zt_history`;
@@ -1106,7 +1107,7 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `newValue` text NULL,
   `diff` mediumtext NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `action` ON `zt_history`(`action`);
 
 -- DROP TABLE IF EXISTS `zt_job`;
@@ -1139,7 +1140,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `lastSyncDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbanspace`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanspace` (
@@ -1163,7 +1164,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanspace` (
   `activatedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanban`;
 CREATE TABLE IF NOT EXISTS `zt_kanban` (
@@ -1197,7 +1198,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanban` (
   `activatedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbanregion`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
@@ -1212,7 +1213,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanregion` (
   `lastEditedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbancard`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
@@ -1246,7 +1247,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancard` (
   `assignedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbancell`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
@@ -1257,7 +1258,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancell` (
   `type` char(30) NOT NULL DEFAULT '',
   `cards` mediumtext NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `card_group` ON `zt_kanbancell`(`kanban`,`type`,`lane`,`column`);
 CREATE INDEX `lane` ON `zt_kanbancell`(`lane`);
 
@@ -1268,7 +1269,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbangroup` (
   `region` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_kanbanlane`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
@@ -1285,7 +1286,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `lastEditedTime` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_kanbanlane`(`execution`);
 CREATE INDEX `group` ON `zt_kanbanlane`(`group`);
 
@@ -1303,7 +1304,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_kanbancolumn`(`parent`);
 CREATE INDEX `group` ON `zt_kanbancolumn`(`group`);
 
@@ -1318,7 +1319,7 @@ CREATE TABLE IF NOT EXISTS `zt_lang` (
   `system` enum('0','1') NOT NULL default '1',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `lang` ON `zt_lang`(`lang`,`module`,`section`,`key`,`vision`);
 
 -- DROP TABLE IF EXISTS `zt_log`;
@@ -1333,7 +1334,7 @@ CREATE TABLE IF NOT EXISTS `zt_log` (
   `data` text NULL,
   `result` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `objectType` ON `zt_log`(`objectType`);
 CREATE INDEX `obejctID`   ON `zt_log`(`objectID`);
 
@@ -1355,7 +1356,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `extra` varchar(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `root` ON `zt_module`(`root`);
 CREATE INDEX `type` ON `zt_module`(`type`);
 CREATE INDEX `path` ON `zt_module`(`path`);
@@ -1397,7 +1398,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `hasNoConflict` enum('0','1') NOT NULL DEFAULT '0',
   `diffs` longtext NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_mrapproval`;
 CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
@@ -1408,7 +1409,7 @@ CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
   `action` char(30) NOT NULL DEFAULT '',
   `comment` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
@@ -1426,7 +1427,7 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `failReason` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `objectType` ON `zt_notify`(`objectType`);
 CREATE INDEX `status`     ON `zt_notify`(`status`);
 
@@ -1436,7 +1437,7 @@ CREATE TABLE IF NOT EXISTS `zt_oauth` (
   `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
   `providerID` mediumint(8) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account`      ON `zt_oauth` (`account`);
 CREATE INDEX `providerType` ON `zt_oauth` (`providerType`);
 CREATE INDEX `providerID`   ON `zt_oauth` (`providerID`);
@@ -1459,14 +1460,14 @@ CREATE TABLE IF NOT EXISTS `zt_pipeline` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_planstory`;
 CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `plan` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` mediumint(9) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `plan_story` ON `zt_planstory`(`plan`,`story`);
 
 -- DROP TABLE IF EXISTS `zt_priv`;
@@ -1480,7 +1481,7 @@ CREATE TABLE IF NOT EXISTS `zt_priv` (
   `system` enum('0','1') NOT NULL DEFAULT '0',
   `order` mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `priv` ON `zt_priv` (`module`,`method`);
 
 -- DROP TABLE IF EXISTS `zt_privmanager`;
@@ -1493,7 +1494,7 @@ CREATE TABLE IF NOT EXISTS `zt_privmanager` (
   `vision` varchar(30) NOT NULL DEFAULT ',rnd,',
   `order` mediumint(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_privlang`;
 CREATE TABLE IF NOT EXISTS `zt_privlang` (
@@ -1503,7 +1504,7 @@ CREATE TABLE IF NOT EXISTS `zt_privlang` (
   `key` varchar(100) NOT NULL DEFAULT '',
   `value` varchar(255) NOT NULL DEFAULT '',
   `desc` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `objectlang` ON `zt_privlang` (`objectID`,`objectType`,`lang`);
 
 -- DROP TABLE IF EXISTS `zt_privrelation`;
@@ -1511,7 +1512,7 @@ CREATE TABLE IF NOT EXISTS `zt_privrelation` (
   `priv` varchar(100) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `relationPriv` varchar(100) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
 
 -- DROP TABLE IF EXISTS `zt_product`;
@@ -1573,7 +1574,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `acl`   ON `zt_product` (`acl`);
 CREATE INDEX `order` ON `zt_product` (`order`);
 
@@ -1596,7 +1597,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_productplan` (`product`);
 CREATE INDEX `end`     ON `zt_productplan` (`end`);
 
@@ -1633,7 +1634,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `days` smallint(6) unsigned NOT NULL DEFAULT 0,
   `status` varchar(10) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
-  `pri` enum('1','2','3','4') NOT NULL DEFAULT '1',
+  `pri` tinyint unsigned NOT NULL DEFAULT 1,
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT 0,
   `parentVersion` smallint(6) NOT NULL DEFAULT 0,
@@ -1680,7 +1681,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `parent`     ON `zt_project` (`parent`);
 CREATE INDEX `begin`      ON `zt_project` (`begin`);
 CREATE INDEX `end`        ON `zt_project` (`end`);
@@ -1698,7 +1699,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectadmin` (
   `projects` text NULL,
   `products` text NULL,
   `executions` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `group_account` ON `zt_projectadmin`(`group`, `account`);
 
 -- DROP TABLE IF EXISTS `zt_projectchange`;
@@ -1753,7 +1754,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `count` mediumint(8) unsigned NOT NULL DEFAULT '1',
   `version` smallint(6) NOT NULL DEFAULT '1',
   `order` smallint(6) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectcase`(`project`,`case`);
 
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
@@ -1763,7 +1764,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `plan` varchar(255) NOT NULL DEFAULT '',
   `roadmap` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `product`, `branch`);
 
 -- DROP TABLE IF EXISTS `zt_projectspec`;
@@ -1774,7 +1775,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `milestone` enum('0','1') NOT NULL DEFAULT '0',
   `begin` date NULL,
   `end` date NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectspec`(`project`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_projectstory`;
@@ -1785,7 +1786,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `story` mediumint(8) unsigned NOT NULL default '0',
   `version` smallint(6) NOT NULL default '1',
   `order` smallint(6) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 CREATE INDEX `story` ON `zt_projectstory` (`story`);
 
@@ -1800,7 +1801,7 @@ CREATE TABLE IF NOT EXISTS `zt_queue` (
   `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `status_createdDate` ON `zt_queue`(`status`, `createdDate`);
 CREATE INDEX `cron_createdDate` ON `zt_queue`(`cron`, `createdDate`);
 
@@ -1819,7 +1820,7 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   `BVersion` char(30) NOT NULL DEFAULT '',
   `extra` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `relation` ON `zt_relation`(`product`,`relation`,`AType`,`BType`, `AID`, `BID`);
 CREATE INDEX `AID` ON `zt_relation` (`AType`, `AID`);
 CREATE INDEX `BID` ON `zt_relation` (`BType`, `BID`);
@@ -1850,7 +1851,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_release` (`product`);
 CREATE INDEX `build`   ON `zt_release` (`build`);
 CREATE INDEX `idx_system` ON `zt_release` (`system`);
@@ -1862,7 +1863,7 @@ CREATE TABLE IF NOT EXISTS `zt_releaserelated` (
   `objectID` int(11) unsigned NOT NULL,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `objectID` ON `zt_releaserelated` (`objectID`);
 CREATE INDEX `objectType` ON `zt_releaserelated` (`objectType`);
 CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `objectType`);
@@ -1897,14 +1898,14 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `fileServerPassword` varchar(100) NOT NULL default '',
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_repobranch`;
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` varchar(100) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
 CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,`branch`);
@@ -1920,7 +1921,7 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   `type` varchar(20) NOT NULL DEFAULT '',
   `action` char(1) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `path`     ON `zt_repofiles` (`path`);
 CREATE INDEX `parent`   ON `zt_repofiles` (`parent`);
 CREATE INDEX `repo`     ON `zt_repofiles` (`repo`);
@@ -1936,7 +1937,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
   `committer` varchar(100) NOT NULL DEFAULT '',
   `time` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `repo`     ON `zt_repohistory` (`repo`);
 CREATE INDEX `revision` ON `zt_repohistory` (`revision`);
 
@@ -1952,7 +1953,7 @@ CREATE TABLE IF NOT EXISTS `zt_score` (
   `after` int(11) NOT NULL DEFAULT '0',
   `time` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_score` (`account`);
 CREATE INDEX `module`  ON `zt_score` (`module`);
 CREATE INDEX `method`  ON `zt_score` (`method`);
@@ -1961,7 +1962,7 @@ CREATE INDEX `method`  ON `zt_score` (`method`);
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   `key` smallint(6) unsigned NOT NULL DEFAULT '0',
   `value` char(3) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
@@ -1976,7 +1977,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `title_content` (`title`, `content`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_searchindex`(`objectType`,`objectID`);
 CREATE INDEX `addedDate` ON `zt_searchindex` (`addedDate`);
 
@@ -1986,7 +1987,7 @@ CREATE TABLE IF NOT EXISTS `zt_session` (
     `data` mediumtext,
     `timestamp` int(10) unsigned DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `timestamp` ON `zt_session` (`timestamp`);
 
 -- DROP TABLE IF EXISTS `zt_stage`;
@@ -2004,7 +2005,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_stakeholder`;
 CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
@@ -2021,7 +2022,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `editedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `objectID` ON `zt_stakeholder` (`objectID`);
 CREATE INDEX `objectType` ON `zt_stakeholder` (`objectType`);
 
@@ -2098,7 +2099,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `verifiedDate` datetime,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_story` (`parent`);
 CREATE INDEX `product` ON `zt_story` (`product`);
 CREATE INDEX `root` ON `zt_story` (`root`);
@@ -2112,7 +2113,7 @@ CREATE TABLE IF NOT EXISTS `zt_storygrade` (
   `grade` smallint NOT NULL,
   `name` char(30) NOT NULL,
   `status` char(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_storyreview`;
 CREATE TABLE IF NOT EXISTS `zt_storyreview` (
@@ -2121,7 +2122,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyreview` (
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyreview`(`story`,`version`,`reviewer`);
 
 -- DROP TABLE IF EXISTS `zt_storyestimate`;
@@ -2132,7 +2133,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyestimate` (
   `average` float NOT NULL DEFAULT '0',
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyestimate`(`story`,`round`);
 
 -- DROP TABLE IF EXISTS `zt_storyspec`;
@@ -2145,7 +2146,7 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `files` text NULL,
   `docs` text NULL,
   `docVersions` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_storystage`;
@@ -2154,7 +2155,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `stage` varchar(50) NOT NULL DEFAULT '',
   `stagedBy` char(30) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `story_branch` ON `zt_storystage`(`story`,`branch`);
 CREATE INDEX `story` ON `zt_storystage` (`story`);
 
@@ -2164,7 +2165,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `case` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `version` smallint(5) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `suitecase` ON `zt_suitecase`(`suite`,`case`);
 
 -- DROP TABLE IF EXISTS `zt_task`;
@@ -2230,7 +2231,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `execution` ON `zt_task` (`execution`);
 CREATE INDEX `story` ON `zt_task` (`story`);
 CREATE INDEX `parent` ON `zt_task` (`parent`);
@@ -2250,7 +2251,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
   `work` text NULL,
   `order` tinyint(3) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `task` ON `zt_taskestimate` (`task`);
 
 -- DROP TABLE IF EXISTS `zt_taskspec`;
@@ -2260,7 +2261,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `estStarted` date NULL,
   `deadline` date NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `task` ON `zt_taskspec`(`task`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_taskteam`;
@@ -2276,7 +2277,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskteam` (
   `storyVersion` smallint(6) NOT NULL DEFAULT '1',
   `order` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `task` ON `zt_taskteam` (`task`);
 
 -- DROP TABLE IF EXISTS `zt_team`;
@@ -2296,7 +2297,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `left` decimal(12,2) unsigned NOT NULL DEFAULT '0.00',
   `order` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `team` ON `zt_team`(`root`,`type`,`account`);
 
 -- DROP TABLE IF EXISTS `zt_testreport`;
@@ -2322,7 +2323,7 @@ CREATE TABLE IF NOT EXISTS `zt_testreport` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_testresult`;
 CREATE TABLE IF NOT EXISTS `zt_testresult` (
@@ -2342,7 +2343,7 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `xml` text NULL,
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `case`    ON `zt_testresult` (`case`);
 CREATE INDEX `version` ON `zt_testresult` (`version`);
 CREATE INDEX `run`     ON `zt_testresult` (`run`);
@@ -2359,7 +2360,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `lastRunResult` char(30) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `task` ON `zt_testrun`(`task`,`case`);
 
 -- DROP TABLE IF EXISTS `zt_testsuite`;
@@ -2377,39 +2378,52 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_testsuite` (`product`);
 
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `name` char(90) NOT NULL DEFAULT '',
-  `execution` mediumint(8) unsigned NOT NULL default '0',
-  `build` char(30) NOT NULL DEFAULT '',
-  `type` varchar(255) NOT NULL DEFAULT '',
-  `owner` varchar(30) NOT NULL DEFAULT '',
-  `pri` tinyint(3) unsigned NOT NULL default '0',
-  `begin` date NULL,
-  `end` date NULL,
-  `realBegan` date NULL,
-  `realFinishedDate` datetime NULL,
-  `mailto` text NULL,
-  `desc` mediumtext NULL,
+  `id` mediumint(8) unsigned NOT NULL auto_increment COMMENT '测试单编号',
+  `project` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属项目',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '所属产品',
+  `name` char(90) NOT NULL DEFAULT '' COMMENT '测试单名称',
+  `execution` mediumint(8) unsigned NOT NULL default '0' COMMENT '所属执行',
+  `build` char(30) NOT NULL DEFAULT '' COMMENT '所属构建',
+  `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型',
+  `owner` varchar(30) NOT NULL DEFAULT '' COMMENT '负责人',
+  `pri` tinyint(3) unsigned NOT NULL default '0' COMMENT '优先级',
+  `begin` date NULL COMMENT '计划开始日期',
+  `end` date NULL COMMENT '计划结束日期',
+  `realBegan` date NULL COMMENT '实际开始日期',
+  `realFinishedDate` datetime NULL COMMENT '实际完成时间',
+  `mailto` text NULL COMMENT '抄送人',
+  `desc` mediumtext NULL COMMENT '描述',
   `report` text NULL,
-  `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
-  `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `auto` varchar(10) NOT NULL DEFAULT 'no',
-  `subStatus` varchar(30) NOT NULL default '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL default '0',
-  `members` text DEFAULT NULL,
+  `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait' COMMENT '状态',
+  `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '相关联的测试报告',
+  `auto` varchar(10) NOT NULL DEFAULT 'no' COMMENT '是否为自动化测试',
+  `subStatus` varchar(30) NOT NULL default '' COMMENT '子状态',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
+  `createdDate` datetime NULL COMMENT '创建时间',
+  `members` text DEFAULT NULL COMMENT '团队成员',
+  `deleted` enum('0','1') NOT NULL default '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_testtask` (`product`);
 CREATE INDEX `build`   ON `zt_testtask` (`build`);
+
+-- DROP TABLE IF EXISTS `zt_testtaskproduct`;
+CREATE TABLE `zt_testtaskproduct` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `product` int unsigned NOT NULL default 0 COMMENT '所属产品',
+  `build` int unsigned NOT NULL default 0 COMMENT '所属构建',
+  `task` int unsigned NOT NULL default 0 COMMENT '所属测试单',
+  `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
+  `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_todo`;
 CREATE TABLE IF NOT EXISTS `zt_todo` (
@@ -2438,7 +2452,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account`    ON `zt_todo` (`account`);
 CREATE INDEX `assignedTo` ON `zt_todo` (`assignedTo`);
 CREATE INDEX `finishedBy` ON `zt_todo` (`finishedBy`);
@@ -2465,7 +2479,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `email` char(90) NOT NULL DEFAULT '',
   `skype` char(90) NOT NULL DEFAULT '',
   `qq` char(20) NOT NULL DEFAULT '',
-  `mobile` char(11) NOT NULL DEFAULT '',
+  `mobile` varchar(20) NOT NULL DEFAULT '',
   `phone` char(20) NOT NULL DEFAULT '',
   `weixin` varchar(90) NOT NULL DEFAULT '',
   `dingding` varchar(90) NOT NULL DEFAULT '',
@@ -2493,7 +2507,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `clientStatus` enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_user`(`account`);
 CREATE INDEX `dept` ON `zt_user` (`dept`);
 CREATE INDEX `email` ON `zt_user` (`email`);
@@ -2508,7 +2522,7 @@ CREATE TABLE IF NOT EXISTS `zt_usercontact` (
   `userList` text NULL,
   `public` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_usercontact` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_usergroup`;
@@ -2516,7 +2530,7 @@ CREATE TABLE IF NOT EXISTS `zt_usergroup` (
   `account` char(30) NOT NULL default '',
   `group` mediumint(8) unsigned NOT NULL default '0',
   `project` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_usergroup`(`account`,`group`);
 
 -- DROP TABLE IF EXISTS `zt_userquery`;
@@ -2530,7 +2544,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `shortcut` enum('0','1') NOT NULL DEFAULT '0',
   `common` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_userquery` (`account`);
 CREATE INDEX `module`  ON `zt_userquery` (`module`);
 
@@ -2543,7 +2557,7 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
   `content` text NULL,
   `public` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `account` ON `zt_usertpl` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_userview`;
@@ -2555,7 +2569,7 @@ CREATE TABLE IF NOT EXISTS `zt_userview` (
   `projects` mediumtext NULL,
   `sprints` mediumtext NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account` ON `zt_userview`(`account`);
 
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
@@ -2572,7 +2586,7 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `progress` varchar(255) NOT NULL DEFAULT '',
   `workload` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `week` ON `zt_weeklyreport`(`project`,`weekStart`);
 
 -- DROP TABLE IF EXISTS `zt_webhook`;
@@ -2596,7 +2610,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal'),
@@ -2700,12 +2714,12 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `execution` char(30) NOT NULL DEFAULT '',
-  `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `condition` ENUM( 'begin', 'end' ) NOT NULL ,
-  `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL ,
-  `action` ENUM( 'begin', 'end' ) NOT NULL ,
+  `pretask` MEDIUMINT(8) UNSIGNED NOT NULL,
+  `condition` ENUM( 'begin', 'end' ) NOT NULL,
+  `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL,
+  `action` ENUM( 'begin', 'end' ) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
 
 -- DROP TABLE IF EXISTS `zt_report`;
@@ -2724,7 +2738,7 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `addedBy` char(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_report`(`code`);
 
 -- DROP VIEW IF EXISTS `ztv_executionsummary`;
@@ -2804,7 +2818,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_ticket`;
 CREATE TABLE IF NOT EXISTS `zt_ticket` (
@@ -2846,7 +2860,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticket` (
   `mailto` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_ticket` (`product`);
 CREATE INDEX `feedback` ON `zt_ticket` (`feedback`);
 
@@ -2859,7 +2873,7 @@ CREATE TABLE IF NOT EXISTS `zt_ticketsource` (
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `ticketId` ON `zt_ticketsource` (`ticketId`);
 
 -- DROP TABLE IF EXISTS `zt_ticketrelation`;
@@ -2869,14 +2883,14 @@ CREATE TABLE IF NOT EXISTS `zt_ticketrelation` (
   `objectId` mediumint(8) NOT NULL DEFAULT '0',
   `objectType` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `ticketId` ON `zt_ticketrelation` (`ticketId`);
 
 -- DROP TABLE IF EXISTS `zt_feedbackview`;
 CREATE TABLE IF NOT EXISTS `zt_feedbackview` (
   `account` char(30) NOT NULL DEFAULT '',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `account_product` ON `zt_feedbackview`(`account`,`product`);
 
 -- DROP TABLE IF EXISTS `zt_serverroom`;
@@ -2894,7 +2908,7 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_host`;
 CREATE TABLE IF NOT EXISTS `zt_host` (
@@ -2935,7 +2949,7 @@ CREATE TABLE IF NOT EXISTS `zt_host` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_image`;
 CREATE TABLE IF NOT EXISTS `zt_image` (
@@ -2957,7 +2971,7 @@ CREATE TABLE IF NOT EXISTS `zt_image` (
   `createdDate` datetime NULL,
   `restoreDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_automation`;
 CREATE TABLE IF NOT EXISTS `zt_automation` (
@@ -2969,7 +2983,7 @@ CREATE TABLE IF NOT EXISTS `zt_automation` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_attend`;
 CREATE TABLE IF NOT EXISTS `zt_attend` (
@@ -2990,7 +3004,7 @@ CREATE TABLE IF NOT EXISTS `zt_attend` (
   `reviewedBy` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `attend` ON `zt_attend`(`date`,`account`);
 CREATE INDEX `account` ON `zt_attend` (`account`);
 CREATE INDEX `date` ON `zt_attend` (`date`);
@@ -3020,7 +3034,7 @@ CREATE TABLE IF NOT EXISTS `zt_attendstat` (
   `actual` decimal(12,2) NOT NULL DEFAULT 0.00,
   `status` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `attend` ON `zt_attendstat`(`month`,`account`);
 CREATE INDEX `account` ON `zt_attendstat` (`account`);
 CREATE INDEX `month` ON `zt_attendstat` (`month`);
@@ -3048,7 +3062,7 @@ CREATE TABLE IF NOT EXISTS `zt_overtime` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `reviewers` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `year` ON `zt_overtime` (`year`);
 CREATE INDEX `type` ON `zt_overtime` (`type`);
 CREATE INDEX `status` ON `zt_overtime` (`status`);
@@ -3064,7 +3078,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   `begin` date NULL,
   `end` date NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `year` ON `zt_holiday` (`year`);
 CREATE INDEX `name` ON `zt_holiday` (`name`);
 
@@ -3090,7 +3104,7 @@ CREATE TABLE IF NOT EXISTS `zt_leave` (
   `reviewers` text NULL,
   `backReviewers` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `year` ON `zt_leave` (`year`);
 CREATE INDEX `type` ON `zt_leave` (`type`);
 CREATE INDEX `status` ON `zt_leave` (`status`);
@@ -3117,7 +3131,7 @@ CREATE TABLE IF NOT EXISTS `zt_lieu` (
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `reviewers` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `year` ON `zt_lieu` (`year`);
 CREATE INDEX `status` ON `zt_lieu` (`status`);
 CREATE INDEX `createdBy` ON `zt_lieu` (`createdBy`);
@@ -3139,7 +3153,7 @@ CREATE TABLE IF NOT EXISTS `zt_trip` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `year`      ON `zt_trip` (`year`);
 CREATE INDEX `createdBy` ON `zt_trip` (`createdBy`);
 
@@ -3162,14 +3176,14 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `result` varchar(20) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_deployproduct`;
 CREATE TABLE IF NOT EXISTS `zt_deployproduct` (
   `deploy` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `release` mediumint(8) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `deploy_product_release` ON `zt_deployproduct`(`deploy`,`product`,`release`);
 
 -- DROP TABLE IF EXISTS `zt_deploystep`;
@@ -3189,7 +3203,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploystep` (
   `createdDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_traincourse`;
 CREATE TABLE IF NOT EXISTS `zt_traincourse` (
@@ -3208,7 +3222,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincourse` (
   `editedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_traincontents`;
 CREATE TABLE IF NOT EXISTS `zt_traincontents` (
@@ -3227,7 +3241,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincontents` (
   `editedDate` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_traincategory`;
 CREATE TABLE IF NOT EXISTS `zt_traincategory` (
@@ -3239,7 +3253,7 @@ CREATE TABLE IF NOT EXISTS `zt_traincategory` (
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `parent` ON `zt_traincategory` (`parent`);
 CREATE INDEX `path` ON `zt_traincategory` (`path`);
 
@@ -3249,7 +3263,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
   `objectId` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(10) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_trainrecords` (`user`, `objectId`, `objectType`);
 
 -- DROP TABLE IF EXISTS `zt_practice`;
@@ -3263,7 +3277,7 @@ CREATE TABLE IF NOT EXISTS `zt_practice` (
   `content` text NULL,
   `contributor` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_faq`;
@@ -3275,7 +3289,7 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
 `answer` text NULL,
 `addedtime` datetime NULL,
 PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
@@ -13464,7 +13478,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflow`(`group`,`app`,`module`,`vision`);
 CREATE INDEX `type`   ON `zt_workflow` (`type`);
 CREATE INDEX `app`    ON `zt_workflow` (`app`);
@@ -13494,7 +13508,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `deliverable` text NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
 
 -- DROP TABLE IF EXISTS `zt_workflowaction`;
@@ -13532,7 +13546,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowaction`(`group`,`module`,`action`,`vision`);
 CREATE INDEX `module` ON `zt_workflowaction` (`module`);
 CREATE INDEX `action` ON `zt_workflowaction` (`action`);
@@ -13555,7 +13569,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowdatasource` (`type`);
 
 -- DROP TABLE IF EXISTS `zt_workflowfield`;
@@ -13588,7 +13602,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowfield`(`group`, `module`, `field`);
 CREATE INDEX `module` ON `zt_workflowfield` (`module`);
 CREATE INDEX `field`  ON `zt_workflowfield` (`field`);
@@ -13612,7 +13626,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `layoutRules` varchar(255) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlayout`(`group`,`module`,`action`,`ui`,`field`,`vision`);
 CREATE INDEX `module` ON `zt_workflowlayout` (`module`);
 CREATE INDEX `action` ON `zt_workflowlayout` (`action`);
@@ -13636,7 +13650,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `module` ON `zt_workflowlabel` (`module`);
 
 -- DROP TABLE IF EXISTS `zt_workflowlinkdata`;
@@ -13647,7 +13661,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
   `linkedID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowlinkdata`(`objectType`, `objectID`, `linkedType`, `linkedID`);
 
 -- DROP TABLE IF EXISTS `zt_workflowrelation`;
@@ -13662,7 +13676,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_workflowrelationlayout`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
@@ -13674,7 +13688,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrelationlayout` (
   `field` varchar(50) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `unique` ON `zt_workflowrelationlayout`(`prev`, `next`, `action`,`ui`,`field`);
 CREATE INDEX `prev` ON `zt_workflowrelationlayout` (`prev`);
 CREATE INDEX `next` ON `zt_workflowrelationlayout` (`next`);
@@ -13692,7 +13706,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowrule` (`type`);
 
 -- DROP TABLE IF EXISTS `zt_workflowsql`;
@@ -13708,7 +13722,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowsql` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `module` ON `zt_workflowsql` (`module`);
 CREATE INDEX `field`  ON `zt_workflowsql` (`field`);
 CREATE INDEX `action` ON `zt_workflowsql` (`action`);
@@ -13726,7 +13740,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowversion` (
   `table` text NULL,
   `datas` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `moduleversion` ON `zt_workflowversion`(`module`, `version`);
 CREATE INDEX `module`  ON `zt_workflowversion` (`module`);
 CREATE INDEX `version` ON `zt_workflowversion` (`version`);
@@ -13740,7 +13754,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowui` (
   `name` varchar(30) NOT NULL,
   `conditions` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `module` ON `zt_workflowui` (`module`);
 CREATE INDEX `action` ON `zt_workflowui` (`action`);
 
@@ -13758,7 +13772,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowreport` (
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate`) VALUES
 ('system','必填','notempty','admin','2020-10-14 14:06:14'),
@@ -13927,7 +13941,7 @@ CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_workestimation`;
 CREATE TABLE IF NOT EXISTS `zt_workestimation` (
@@ -13947,7 +13961,7 @@ CREATE TABLE IF NOT EXISTS `zt_workestimation` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `dayHour` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_intervention`;
 CREATE TABLE IF NOT EXISTS `zt_intervention` (
@@ -13963,7 +13977,7 @@ CREATE TABLE IF NOT EXISTS `zt_intervention` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project` ON `zt_intervention`(`project`,`activity`);
 
 -- DROP TABLE IF EXISTS `zt_activity`;
@@ -13986,7 +14000,7 @@ CREATE TABLE IF NOT EXISTS `zt_activity` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_auditcl`;
 CREATE TABLE IF NOT EXISTS `zt_auditcl` (
@@ -14008,7 +14022,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditcl` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_auditplan`;
 CREATE TABLE IF NOT EXISTS `zt_auditplan` (
@@ -14038,7 +14052,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditplan` (
   `assignedDate` datetime NULL COMMENT '指派时间',
   `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_auditresult`;
 CREATE TABLE IF NOT EXISTS `zt_auditresult` (
@@ -14060,7 +14074,7 @@ CREATE TABLE IF NOT EXISTS `zt_auditresult` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_nc`;
 CREATE TABLE IF NOT EXISTS `zt_nc` (
@@ -14091,7 +14105,7 @@ CREATE TABLE IF NOT EXISTS `zt_nc` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_zoutput`;
 CREATE TABLE IF NOT EXISTS `zt_zoutput` (
@@ -14109,7 +14123,7 @@ CREATE TABLE IF NOT EXISTS `zt_zoutput` (
   `order` mediumint(8) DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_process`;
 CREATE TABLE IF NOT EXISTS `zt_process` (
@@ -14130,7 +14144,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_programactivity`;
 CREATE TABLE IF NOT EXISTS `zt_programactivity` (
@@ -14148,7 +14162,7 @@ CREATE TABLE IF NOT EXISTS `zt_programactivity` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_programoutput`;
 CREATE TABLE IF NOT EXISTS `zt_programoutput` (
@@ -14167,7 +14181,7 @@ CREATE TABLE IF NOT EXISTS `zt_programoutput` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_programprocess`;
 CREATE TABLE IF NOT EXISTS `zt_programprocess` (
@@ -14184,7 +14198,7 @@ CREATE TABLE IF NOT EXISTS `zt_programprocess` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_basicmeas`;
 CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
@@ -14210,7 +14224,7 @@ CREATE TABLE IF NOT EXISTS `zt_basicmeas` (
   `order` mediumint(8) UNSIGNED NOT NULL DEFAULT 0,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_basicmeas`(`code`);
 
 -- DROP TABLE IF EXISTS `zt_budget`;
@@ -14228,7 +14242,7 @@ CREATE TABLE IF NOT EXISTS `zt_budget` (
   `lastEditedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_researchplan`;
 CREATE TABLE IF NOT EXISTS `zt_researchplan` (
@@ -14251,7 +14265,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchplan` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_researchreport`;
 CREATE TABLE IF NOT EXISTS `zt_researchreport` (
@@ -14273,7 +14287,7 @@ CREATE TABLE IF NOT EXISTS `zt_researchreport` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_meeting`;
 CREATE TABLE IF NOT EXISTS `zt_meeting` (
@@ -14301,7 +14315,7 @@ CREATE TABLE IF NOT EXISTS `zt_meeting` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_meetingroom`;
 CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
@@ -14317,7 +14331,7 @@ CREATE TABLE IF NOT EXISTS `zt_meetingroom` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_assetlib`;
 CREATE TABLE IF NOT EXISTS `zt_assetlib` (
@@ -14332,7 +14346,7 @@ CREATE TABLE IF NOT EXISTS `zt_assetlib` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_meastemplate`;
 CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
@@ -14344,7 +14358,7 @@ CREATE TABLE IF NOT EXISTS `zt_meastemplate` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_programreport`;
 CREATE TABLE IF NOT EXISTS `zt_programreport` (
@@ -14358,7 +14372,7 @@ CREATE TABLE IF NOT EXISTS `zt_programreport` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_measrecords`;
 CREATE TABLE IF NOT EXISTS `zt_measrecords` (
@@ -14377,7 +14391,7 @@ CREATE TABLE IF NOT EXISTS `zt_measrecords` (
   `value` varchar(255) NOT NULL DEFAULT '',
   `date` date NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `product` ON `zt_measrecords` (`product`);
 CREATE INDEX `project` ON `zt_measrecords` (`project`);
 CREATE UNIQUE INDEX `time` ON `zt_measrecords` (`year`, `month`, `day`, `week`);
@@ -14408,7 +14422,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `createdDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_review`;
 CREATE TABLE IF NOT EXISTS `zt_review` (
@@ -14435,7 +14449,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `result` char(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_reviewcl`;
 CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
@@ -14455,7 +14469,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewcl` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_reviewresult`;
 CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
@@ -14469,7 +14483,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewresult` (
   `createdDate` date NULL,
   `consumed` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `reviewer` ON `zt_reviewresult`(`review`,`reviewer`,`type`);
 
 -- DROP TABLE IF EXISTS `zt_reviewissue`;
@@ -14495,7 +14509,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_reviewlist`;
 CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
@@ -14513,7 +14527,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewlist` (
   `assignedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_cmcl`;
 CREATE TABLE IF NOT EXISTS `zt_cmcl` (
@@ -14531,7 +14545,7 @@ CREATE TABLE IF NOT EXISTS `zt_cmcl` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_solutions`;
 CREATE TABLE IF NOT EXISTS `zt_solutions` (
@@ -14548,7 +14562,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
  `editedDate` date NULL,
  `deleted` enum('0','1') NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
 CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
@@ -14566,7 +14580,7 @@ CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
   `editedDate` datetime NULL,
   `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_measqueue`;
 CREATE TABLE IF NOT EXISTS `zt_measqueue` (
@@ -14582,7 +14596,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `updateDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_issue`;
@@ -14593,7 +14607,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
-  `pri` char(30) NOT NULL DEFAULT '',
+  `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `severity` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT '',
   `activity` varchar(255) NOT NULL DEFAULT '',
@@ -14621,7 +14635,7 @@ CREATE TABLE IF NOT EXISTS `zt_issue` (
   `approvedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_risk`;
 CREATE TABLE IF NOT EXISTS `zt_risk` (
@@ -14636,7 +14650,7 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `impact` char(30) NOT NULL DEFAULT '',
   `probability` char(30) NOT NULL DEFAULT '',
   `rate` char(30) NOT NULL DEFAULT '',
-  `pri` char(30) NOT NULL DEFAULT '',
+  `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `identifiedDate` date NULL,
   `prevention` mediumtext NULL,
   `remedy` mediumtext NULL,
@@ -14667,13 +14681,13 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `approvedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_riskissue`;
 CREATE TABLE IF NOT EXISTS `zt_riskissue` (
   `risk` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `issue` mediumint(8) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `risk_issue` ON `zt_riskissue`(`risk`,`issue`);
 
 -- DROP TABLE IF EXISTS `zt_opportunity`;
@@ -14689,7 +14703,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `impact` mediumint(8) NOT NULL DEFAULT '0',
   `chance` mediumint(8) NOT NULL DEFAULT '0',
   `ratio` mediumint(8) NOT NULL DEFAULT '0',
-  `pri` char(30) NOT NULL DEFAULT '',
+  `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `identifiedDate` date NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` date NULL,
@@ -14721,7 +14735,7 @@ CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `lastCheckedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_trainplan`;
 CREATE TABLE IF NOT EXISTS `zt_trainplan` (
@@ -14742,7 +14756,7 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_gapanalysis`;
 CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
@@ -14758,7 +14772,7 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `project_account` ON `zt_gapanalysis`(`project`,`account`);
 
 -- DROP TABLE IF EXISTS `zt_scene`;
@@ -14778,7 +14792,7 @@ CREATE TABLE IF NOT EXISTS `zt_scene` (
   `grade` tinyint(3) NOT NULL DEFAULT '0',
   `path` varchar(1000) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
 (1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0),
@@ -14832,7 +14846,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivot`  (
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `dimension` ON `zt_pivot` (`dimension`);
 CREATE INDEX `group`     ON `zt_pivot` (`group`);
 
@@ -14852,7 +14866,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `settings` text NULL,
   `filters` text NULL,
   `createdDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 -- DROP TABLE IF EXISTS `zt_sqlbuilder`;
@@ -14863,7 +14877,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `sql`        text          NULL,
   `setting`    text          NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
 CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
@@ -14876,7 +14890,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
   `status`    enum('design', 'published') NOT NULL DEFAULT 'published',
   `account`   varchar(30) NOT NULL DEFAULT '',
   `type`      enum('auto','manual') NOT NULL DEFAULT 'manual'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_sqlview`;
 CREATE TABLE IF NOT EXISTS `zt_sqlview` (
@@ -14891,7 +14905,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `editedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_dimension`(`id`, `name`, `code`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
 (1, '宏观管理维度', 'macro', '', 'system', '2023-04-27 20:22:16', '', NULL, '0'),
@@ -15028,7 +15042,7 @@ CREATE TABLE IF NOT EXISTS `zt_space` (
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `name` ON `zt_space`(`name`);
 
 -- DROP TABLE IF EXISTS `zt_instance`;
@@ -15063,7 +15077,7 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   `createdAt` datetime NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `space` ON `zt_instance`(`space`);
 CREATE INDEX `k8name` ON `zt_instance`(`k8name`);
 
@@ -15081,7 +15095,7 @@ CREATE TABLE IF NOT EXISTS `zt_demandpool` (
   `acl` char(30) NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_demand`;
 CREATE TABLE IF NOT EXISTS `zt_demand` (
@@ -15090,7 +15104,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `module` int(8) NOT NULL DEFAULT '0',
   `product` varchar(255) NOT NULL DEFAULT '',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
-  `pri` char(30) NOT NULL DEFAULT '',
+  `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `category` char(30) NOT NULL DEFAULT '',
   `source` char(30) NOT NULL DEFAULT '',
   `sourceNote` varchar(255) NOT NULL DEFAULT '',
@@ -15112,7 +15126,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `mailto` text NULL,
   `duplicateDemand` mediumint(8) NULL,
   `childDemands` varchar(255) NOT NULL DEFAULT '',
-  `version` varchar(255) NOT NULL DEFAULT '',
+  `version` smallint NOT NULL DEFAULT '1',
   `parentVersion` smallint NOT NULL DEFAULT 0,
   `vision` varchar(255) NOT NULL DEFAULT 'or',
   `color` varchar(255) NOT NULL DEFAULT '',
@@ -15131,7 +15145,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_demandspec`;
 CREATE TABLE IF NOT EXISTS `zt_demandspec` (
@@ -15141,7 +15155,7 @@ CREATE TABLE IF NOT EXISTS `zt_demandspec` (
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
   `files` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_demandreview`;
@@ -15151,7 +15165,7 @@ CREATE TABLE IF NOT EXISTS `zt_demandreview` (
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
 -- DROP TABLE IF EXISTS `zt_charter`;
@@ -15201,7 +15215,7 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
   `meetingMinutes` mediumtext NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_charterproduct`;
 CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
@@ -15210,7 +15224,7 @@ CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `plan` varchar(255) NOT NULL DEFAULT '',
   `roadmap` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'reviewRules', 'allpass');
@@ -15233,14 +15247,14 @@ CREATE TABLE IF NOT EXISTS `zt_roadmap` (
   `closedReason` enum('done','canceled') DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_roadmapstory`;
 CREATE TABLE IF NOT EXISTS `zt_roadmapstory` (
   `roadmap` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` mediumint(8)  UNSIGNED  NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
 -- DROP TABLE IF EXISTS `zt_ai_model`;
@@ -15259,7 +15273,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_model` (
   `enabled` enum('0', '1') NOT NULL DEFAULT '1',
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_ai_prompt`;
 CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
@@ -15281,7 +15295,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_ai_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
 ('需求润色', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。直接给出你的润色结果，无需建议。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14', 'active'),
@@ -15303,7 +15317,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
   `characterization` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_ai_promptrole` (`role`, `characterization`) VALUES
 ('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。'),
@@ -15332,7 +15346,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `prompt` text NOT NULL,
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
 (1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <兴趣领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
@@ -15357,7 +15371,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_message` (
   `content` text NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -15368,7 +15382,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -15444,7 +15458,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `createdDate` datetime NOT NULL,
   UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
@@ -15462,7 +15476,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `publishedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (
@@ -15482,7 +15496,7 @@ CREATE TABLE IF NOT EXISTS `zt_market` (
   `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_marketreport`;
 CREATE TABLE IF NOT EXISTS `zt_marketreport` (
@@ -15504,7 +15518,7 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `publishedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_metric`;
 CREATE TABLE IF NOT EXISTS `zt_metric` (
@@ -15541,7 +15555,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `lastCalcTime` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
@@ -15568,7 +15582,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `date` datetime DEFAULT NULL,
   `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `metricCode_system_date` ON `zt_metriclib` (`metricCode`, `system`, `date`);
 CREATE INDEX `metricCode_program_date` ON `zt_metriclib` (`metricCode`, `program`, `date`);
 CREATE INDEX `metricCode_project_date` ON `zt_metriclib` (`metricCode`, `project`, `date`);
@@ -15581,7 +15595,7 @@ CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
   `object` varchar(255) NOT NULL DEFAULT '',
   `updatedTime` datetime NULL,
   `syncTime` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `object` ON `zt_duckdbqueue`(`object`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computeTaskEffort', '计算任务剩余工时', 'zentao', '1', 'normal');
@@ -15644,7 +15658,7 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
   `editedDate` DATETIME NULL,
   `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
 
@@ -15659,6 +15673,8 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `mark` varchar(50) NOT NULL DEFAULT '',
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
+
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'common', 'global', 'metriclibShowed', 1);

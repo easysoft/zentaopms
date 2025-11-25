@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 reportModel->getUserBugs();
 timeout=0
-cid=1
+cid=18169
 
 - 获取admin人员 bugID第0条的id属性 @1
 - 获取user1人员 bugID第0条的id属性 @2

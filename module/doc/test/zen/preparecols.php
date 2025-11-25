@@ -5,79 +5,54 @@
 
 title=测试 docZen::prepareCols();
 timeout=0
-cid=0
+cid=16194
 
-- 执行docTest模块的prepareColsTest方法，参数是$cols1 
- - 第id条的name属性 @id
- - 第id条的id:sortType属性 @~~
- - 第name条的name属性 @name
- - 第name条的name:sortType属性 @~~
- - 第status条的name属性 @status
- - 第status条的status:sortType属性 @~~
- - 属性actions @~~
-- 执行docTest模块的prepareColsTest方法，参数是$cols2 
- - 第title条的name属性 @title
- - 第title条的title:sortType属性 @~~
- - 第author条的name属性 @author
- - 第author条的author:sortType属性 @~~
-- 执行docTest模块的prepareColsTest方法，参数是$cols3 
- - 第content条的name属性 @content
- - 第content条的content:link属性 @~~
- - 第category条的name属性 @category
- - 第category条的category:nestedToggle属性 @~~
-- 执行docTest模块的prepareColsTest方法，参数是$cols4  @0
-- 执行docTest模块的prepareColsTest方法，参数是$cols5 
- - 第doc_id条的name属性 @doc_id
- - 第doc_id条的doc_id:sortType属性 @~~
- - 第doc_id条的doc_id:link属性 @~~
- - 第doc_title条的name属性 @doc_title
- - 第doc_title条的doc_title:sortType属性 @~~
- - 第doc_title条的doc_title:nestedToggle属性 @~~
- - 第created_by条的name属性 @created_by
- - 第created_by条的created_by:sortType属性 @~~
- - 属性actions @~~
+- 执行$result1['actions'] @1
+- 执行$result2['id']['name'] @id
+- 执行$result3['id']['sortType'] === false @1
+- 执行$result4['title']['link'] @1
+- 执行$result5['name']['nestedToggle'] @1
+- 执行$result6) === 0 @1
+- 执行$result7) === 0 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 步骤1：测试包含actions列的完整列配置
 $cols1 = array(
-    'id' => array('title' => 'ID', 'width' => 80, 'sortType' => true),
-    'name' => array('title' => '名称', 'width' => 200, 'link' => 'view'),
-    'status' => array('title' => '状态', 'width' => 100, 'nestedToggle' => true),
-    'actions' => array('title' => '操作', 'width' => 120)
+    'id'      => array('title' => 'ID', 'width' => 60),
+    'title'   => array('title' => 'Title', 'width' => 200, 'link' => array('url' => '/doc-view-{id}.html')),
+    'actions' => array('title' => 'Actions', 'width' => 100)
 );
-r($docTest->prepareColsTest($cols1)) && p('id:name,id:sortType;name:name,name:sortType;status:name,status:sortType;actions') && e('id,~~;name,~~;status,~~;~~');
 
-// 步骤2：测试不包含actions列的基本列配置
 $cols2 = array(
-    'title' => array('title' => '标题', 'width' => 300),
-    'author' => array('title' => '作者', 'width' => 100)
+    'name'    => array('title' => 'Name', 'width' => 100, 'nestedToggle' => true),
+    'status'  => array('title' => 'Status', 'width' => 80)
 );
-r($docTest->prepareColsTest($cols2)) && p('title:name,title:sortType;author:name,author:sortType') && e('title,~~;author,~~');
 
-// 步骤3：测试包含link和nestedToggle属性的列配置
-$cols3 = array(
-    'content' => array('title' => '内容', 'width' => 400, 'link' => 'detail'),
-    'category' => array('title' => '分类', 'width' => 150, 'nestedToggle' => true)
+$cols3 = array();
+
+$cols4 = array(
+    'actions' => array('title' => 'Actions', 'width' => 100)
 );
-r($docTest->prepareColsTest($cols3)) && p('content:name,content:link;category:name,category:nestedToggle') && e('content,~~;category,~~');
 
-// 步骤4：测试空的列配置
-$cols4 = array();
-r($docTest->prepareColsTest($cols4)) && p() && e('0');
+$result1 = $docTest->prepareColsTest($cols1);
+$result2 = $docTest->prepareColsTest($cols1);
+$result3 = $docTest->prepareColsTest($cols1);
+$result4 = $docTest->prepareColsTest($cols1);
+$result5 = $docTest->prepareColsTest($cols2);
+$result6 = $docTest->prepareColsTest($cols3);
+$result7 = $docTest->prepareColsTest($cols4);
 
-// 步骤5：测试复杂的列配置混合场景
-$cols5 = array(
-    'doc_id' => array('title' => '文档ID', 'width' => 80, 'sortType' => 'desc', 'link' => 'view'),
-    'doc_title' => array('title' => '文档标题', 'width' => 250, 'nestedToggle' => false),
-    'created_by' => array('title' => '创建者', 'width' => 120),
-    'actions' => array('title' => '操作', 'width' => 150, 'sortType' => false)
-);
-r($docTest->prepareColsTest($cols5)) && p('doc_id:name,doc_id:sortType,doc_id:link;doc_title:name,doc_title:sortType,doc_title:nestedToggle;created_by:name,created_by:sortType;actions') && e('doc_id,~~,~~;doc_title,~~,~~;created_by,~~;~~');
+r(!isset($result1['actions'])) && p() && e('1');
+r($result2['id']['name']) && p() && e('id');
+r($result3['id']['sortType'] === false) && p() && e('1');
+r(!isset($result4['title']['link'])) && p() && e('1');
+r(!isset($result5['name']['nestedToggle'])) && p() && e('1');
+r(count($result6) === 0) && p() && e('1');
+r(count($result7) === 0) && p() && e('1');

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::buildProjectStatistic();
 timeout=0
-cid=0
+cid=15237
 
 - 步骤1：敏捷项目costs统计属性costs @100
 - 步骤2：敏捷项目故事点统计属性storyPoints @50

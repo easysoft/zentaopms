@@ -5,7 +5,7 @@
 
 title=测试 blockModel::checkAPI();
 timeout=0
-cid=0
+cid=15224
 
 - 执行blockTest模块的checkAPITest方法，参数是''  @0
 - 执行blockTest模块的checkAPITest方法，参数是'858640a724c2c981983935eb2bbc4ad8'  @1

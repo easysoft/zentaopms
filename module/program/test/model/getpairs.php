@@ -21,7 +21,7 @@ $program->gen(20);
 
 title=测试 programModel::getPairs();
 timeout=0
-cid=1
+cid=17688
 
 - 获取项目集个数 @15
 - 获取所有项目集个数 @15

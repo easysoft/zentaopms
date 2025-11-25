@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getEstimateInfo();
 timeout=0
-cid=0
+cid=18528
 
 - 执行storyTest模块的getEstimateInfoTest方法，参数是1, 1  @0
 - 执行storyTest模块的getEstimateInfoTest方法，参数是2, 0

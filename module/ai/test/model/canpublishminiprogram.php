@@ -5,7 +5,7 @@
 
 title=测试 aiModel::canPublishMiniProgram();
 timeout=0
-cid=0
+cid=14999
 
 - 步骤1：完整有效对象 @1
 - 步骤2：缺少name字段 @0

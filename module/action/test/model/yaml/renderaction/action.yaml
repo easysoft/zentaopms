@@ -1,0 +1,76 @@
+---
+title: Action数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 动作ID
+  range: 1-100
+  loop: 0
+  format: ""
+- field: objectType
+  note: 对象类型
+  range: story,task,bug,case
+  loop: 0
+  format: ""
+- field: objectID
+  note: 对象ID
+  range: 1-50
+  loop: 0
+  format: ""
+- field: product
+  note: 产品
+  range: 1,2,3
+  loop: 0
+  format: ""
+- field: project
+  note: 项目
+  range: 1-10
+  loop: 0
+  format: ""
+- field: execution
+  note: 执行
+  range: 1-10
+  loop: 0
+  format: ""
+- field: actor
+  note: 操作者
+  range: admin,user1,user2
+  loop: 0
+  format: ""
+- field: action
+  note: 动作类型
+  range: created,edited,deleted,closed,activated
+  loop: 0
+  format: ""
+- field: date
+  note: 操作日期
+  range: "2025-01-01 00:00:00"-(+1d):1d
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: comment
+  note: 备注
+  range: 'comment{100}'
+  loop: 0
+  format: ""
+- field: extra
+  note: 附加值
+  range: '1-10,[]'
+  loop: 0
+  format: ""
+- field: read
+  note: 是否已读
+  range: '0,1'
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图
+  range: 'rnd'
+  loop: 0
+  format: ""
+- field: efforted
+  note: 是否工时
+  range: '0,1'
+  loop: 0
+  format: ""

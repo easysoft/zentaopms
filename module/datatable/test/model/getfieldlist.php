@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 datatableModel::getFieldList();
 timeout=0
-cid=1
+cid=15942
 
 - 获取产品模块browse方法自定义列
  - 第id条的title属性 @ID

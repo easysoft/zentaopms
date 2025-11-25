@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$uid            = uniqid();
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
 $forceReview    = $this->story->checkForceReview();
 $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;
@@ -97,6 +98,7 @@ detailBody
                     span
                     (
                         setClass('reviewerBox'),
+                        setStyle('width', '100%'),
                         picker
                         (
                             set::id('reviewer'),
@@ -122,7 +124,7 @@ detailBody
         section
         (
             set::title($lang->story->legendSpec),
-            $canEditContent ? formGroup(editor(set::name('spec'), htmlSpecialString($story->spec))) : set::content($story->spec),
+            $canEditContent ? formGroup(editor(set::name('spec'), set::uid($uid), html($story->spec))) : set::content($story->spec),
             $canEditContent ? null : set::useHtml(true)
         ),
         empty($twins) ? null : section

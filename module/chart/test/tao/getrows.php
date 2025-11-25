@@ -5,7 +5,7 @@
 
 title=测试 chartModel::getRows();
 timeout=0
-cid=1
+cid=15581
 
 - 测试筛选器为空，所属产品为组，以ID去重后计数为条件查询的需求数据
  - 第0条的product属性 @1

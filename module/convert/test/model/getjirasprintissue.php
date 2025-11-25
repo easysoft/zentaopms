@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraSprintIssue();
 timeout=0
-cid=0
+cid=15781
 
 - 步骤1：正常情况下使用file方法，无sprint关系返回空数组 @0
 - 步骤2：正常情况下使用db方法，无sprint关系返回空数组 @0

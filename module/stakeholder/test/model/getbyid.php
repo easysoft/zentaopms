@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getByID();
-cid=1
+cid=18431
 
 - 测试获取stakeholderID=0的干系人信息 @0
 - 测试获取stakeholderID=1的干系人信息

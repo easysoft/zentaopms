@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getSuccessJobs();
 timeout=0
-cid=0
+cid=15751
 
 - 测试步骤1：传入空数组 >> 期望返回空数组
 - 测试步骤2：传入包含成功job的ID列表 >> 期望返回对应的success job映射

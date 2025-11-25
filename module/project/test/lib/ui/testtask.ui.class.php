@@ -37,7 +37,7 @@ class testtaskTester extends tester
         $form = $this->initForm('project', 'testtask', array('project' => 1), 'appIframe-project');
         $form->dom->totalCheckbox->click();
         $form->dom->reportBtn->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if($form->dom->alertModal('text') == $this->lang->testreport->moreProduct) return $this->success('不同产品测试单生成测试报告提示信息正确');
         return $this->failed('不同产品测试单生成测试报告提示信息错误');

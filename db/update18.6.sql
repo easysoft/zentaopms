@@ -9,7 +9,7 @@ CREATE TABLE `zt_space` (
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_instance`;
 CREATE TABLE IF NOT EXISTS `zt_instance` (
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   PRIMARY KEY (`id`),
   KEY `space` (`space`),
   KEY `k8name` (`k8name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_solution`;
 CREATE TABLE IF NOT EXISTS `zt_solution` (
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   `createdAt` datetime NULL,
   `updatedDate` datetime NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
 CREATE TABLE `zt_artifactrepo` (
@@ -86,7 +86,7 @@ CREATE TABLE `zt_artifactrepo` (
   `editedDate` datetime NULL,
   `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_build` ADD `artifactRepoID` MEDIUMINT(8) UNSIGNED NOT NULL AFTER `bugs`;
 
@@ -509,7 +509,7 @@ CREATE TABLE IF NOT EXISTS `zt_prompt` (
   `editedDate` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_promptrole` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -520,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `zt_promptrole` (
   `characterization` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 REPLACE INTO
   `zt_priv` (`id`, `module`, `method`, `parent`, `edition`, `vision`, `system`, `order`)
@@ -749,7 +749,7 @@ CREATE TABLE IF NOT EXISTS `zt_practice` (
   `content` text NULL,
   `contributor` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `code` ON `zt_practice`(`code`);
 
 REPLACE INTO

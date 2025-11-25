@@ -5,47 +5,44 @@
 
 title=测试 productplanZen::buildActionsList();
 timeout=0
-cid=0
+cid=17659
 
-- 执行productplanTest模块的buildActionsListTest方法，参数是$plan1  @11
-- 执行productplanTest模块的buildActionsListTest方法，参数是$emptyPlan  @11
-- 执行productplanTest模块的buildActionsListTest方法，参数是$plan2  @11
-- 执行productplanTest模块的buildActionsListTest方法，参数是$plan3 属性5 @divider
-- 执行productplanTest模块的buildActionsListTest方法，参数是$plan1 属性10 @delete
+- 执行$result @11
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
+- 执行$result @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplanzen.unittest.class.php';
 
-zenData('productplan')->loadYaml('zt_productplan_buildactionslist', false, 2)->gen(10);
-
 su('admin');
 
 $productplanTest = new productplanZenTest();
 
-$plan1 = new stdClass();
-$plan1->id = 1;
-$plan1->product = 1;
-$plan1->title = '测试计划1';
-$plan1->status = 'wait';
+// 构造计划对象用于测试
+$plan = new stdClass();
+$plan->id = 1;
+$plan->status = 'wait';
+$plan->product = 1;
+$plan->branch = '0';
 
-$plan2 = new stdClass();
-$plan2->id = 2;
-$plan2->product = 1;
-$plan2->title = '测试计划2';
-$plan2->status = 'doing';
+$result = $productplanTest->buildActionsListTest($plan);
 
-$plan3 = new stdClass();
-$plan3->id = 3;
-$plan3->product = 1;
-$plan3->title = '测试计划3';
-$plan3->status = 'done';
-
-$emptyPlan = new stdClass();
-
-r(count($productplanTest->buildActionsListTest($plan1))) && p() && e('11');
-r(count($productplanTest->buildActionsListTest($emptyPlan))) && p() && e('11');
-r(count($productplanTest->buildActionsListTest($plan2))) && p() && e('11');
-r($productplanTest->buildActionsListTest($plan3)) && p('5') && e('divider');
-r($productplanTest->buildActionsListTest($plan1)) && p('10') && e('delete');
+r(count($result)) && p() && e('11');
+r(in_array('start', $result)) && p() && e('1');
+r(in_array('finish', $result)) && p() && e('1');
+r(in_array('close', $result)) && p() && e('1');
+r(in_array('activate', $result)) && p() && e('1');
+r(in_array('createExecution', $result)) && p() && e('1');
+r(in_array('linkStory', $result)) && p() && e('1');
+r(in_array('linkBug', $result)) && p() && e('1');
+r(in_array('edit', $result)) && p() && e('1');
+r(in_array('delete', $result)) && p() && e('1');

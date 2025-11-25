@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getLinePairs();
-cid=0
+cid=17491
 
 - 测试获取程序集-1的信息 @0
 - 获取所有未删除的产品线 @10

@@ -549,7 +549,20 @@ class extensionModel extends model
             if(empty($sql)) continue;
 
             /* 将zt_替换成prefix配置项。 */
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+            $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+            $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
+            $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+
+            if(strpos($sql, 'CREATE TABLE') === 0)
+            {
+                $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
+                if($this->config->db->driver == 'mysql')
+                {
+                    $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
+                    $sql .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
+                }
+            }
 
             try
             {

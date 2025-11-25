@@ -5,7 +5,7 @@
 
 title=测试productModel->formatDataForList();
 timeout=0
-cid=0
+cid=17484
 
 - id1的产品信息
  - 属性id @1

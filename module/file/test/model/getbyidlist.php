@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getByIdList();
-cid=0
+cid=16504
 
 - 测试查询 fileID 5 的信息
  - 属性title @文件标题5

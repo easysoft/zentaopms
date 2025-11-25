@@ -5,7 +5,7 @@
 
 title=测试 searchTao::initOldSession();
 timeout=0
-cid=0
+cid=18330
 
 - 步骤1：测试正常情况，验证session初始化
  - 属性field1 @title

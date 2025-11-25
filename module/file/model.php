@@ -295,7 +295,7 @@ class fileModel extends model
                 if(!validater::checkFileName($filename)) continue;
 
                 $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
-                $file['extension'] = $this->getExtension($filename);
+                $file['extension'] = $this->getExtension($filename, $tmp_name[$id]);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
                 $file['title']     = (!empty($title) and $title != $filename) ? htmlSpecialString($title) : $filename;
                 $file['title']     = $purifier->purify($file['title']);
@@ -311,7 +311,7 @@ class fileModel extends model
             extract($_FILES[$htmlTagName]);
             if(!validater::checkFileName($name)) return array();
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
-            $file['extension'] = $this->getExtension($name);
+            $file['extension'] = $this->getExtension($name, $tmp_name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
             $file['title']     = (!empty($title) && $title != $name) ? htmlSpecialString($title) : $name;
             $file['title']     = $purifier->purify($file['title']);
@@ -381,13 +381,23 @@ class fileModel extends model
      * Get extension of a file.
      *
      * @param  string    $filename
+     * @param  string    $filePath
      * @access public
      * @return string
      */
-    public function getExtension(string $filename): string
+    public function getExtension(string $filename, string $filePath = ''): string
     {
         $extension = trim(strtolower(pathinfo($filename, PATHINFO_EXTENSION)));
         if($extension and strpos($extension, '::') !== false) $extension = substr($extension, 0, strpos($extension, '::'));
+
+        if(in_array($extension, $this->config->file->imageExtensions) && !empty($filePath))
+        {
+            $imagesize = getimagesize($filePath);
+            if(!isset($imagesize[2])) return 'txt';
+
+            $realExtension = image_type_to_extension($imagesize[2], false);
+            $extension     = $extension == 'jpg' && $realExtension == 'jpeg' ? 'jpg' : $realExtension;
+        }
 
         if(empty($extension) or stripos(",{$this->config->file->dangers},", ",{$extension},") !== false) return 'txt';
         if(empty($extension) or stripos(",{$this->config->file->allowed},", ",{$extension},") === false) return 'txt';

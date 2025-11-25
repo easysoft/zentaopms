@@ -5,7 +5,7 @@
 
 title=测试 cacheModel::clear();
 timeout=0
-cid=0
+cid=15524
 
 - 执行cacheModel模块的clear方法，参数是true  @~~
 - 执行cacheModel模块的clear方法，参数是false  @~~

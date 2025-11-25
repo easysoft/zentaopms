@@ -8,7 +8,7 @@ zenData('extension')->loadYaml('extension')->gen(20);
 
 title=测试 extensionModel->getDependsExtension();
 timeout=0
-cid=1
+cid=16457
 
 - 获取依赖code1插件的插件列表。
  - 第0条的name属性 @这是插件名称6

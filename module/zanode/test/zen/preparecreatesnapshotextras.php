@@ -4,76 +4,90 @@
 /**
 
 title=测试 zanodeZen::prepareCreateSnapshotExtras();
+timeout=0
 cid=0
 
-- 测试正常快照名称输入情况 >> 期望返回正确的快照对象
-- 测试普通字符快照名称 >> 期望返回正确的快照对象
-- 测试空名称输入情况 >> 期望返回空名称快照对象
-- 测试特殊字符快照名称 >> 期望返回正确的快照对象
-- 测试长名称快照输入 >> 期望返回正确的快照对象
+- 执行zanodeTest模块的prepareCreateSnapshotExtrasTest方法，参数是$node1
+ - 属性host @1
+ - 属性name @test_snapshot
+ - 属性status @creating
+ - 属性from @snapshot
+- 执行zanodeTest模块的prepareCreateSnapshotExtrasTest方法，参数是$node2
+ - 属性name @snapshot_v1
+ - 属性desc @Version 1 snapshot
+ - 属性osName @CentOS 7
+- 执行zanodeTest模块的prepareCreateSnapshotExtrasTest方法，参数是$node1 属性name @Name validation error
+- 执行zanodeTest模块的prepareCreateSnapshotExtrasTest方法，参数是$node3
+ - 属性status @creating
+ - 属性memory @0
+ - 属性disk @0
+ - 属性fileSize @0
+- 执行zanodeTest模块的prepareCreateSnapshotExtrasTest方法，参数是$node1
+ - 属性desc @This is a detailed snapshot with full description
+ - 属性from @snapshot
+ - 属性osName @Ubuntu 20.04
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zanodezen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('host');
-$table->loadYaml('host_preparecreatesnapshotextras', false, 2)->gen(5);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+global $app;
+if(!isset($app->rawModule)) $app->rawModule = 'zanode';
+if(!isset($app->rawMethod)) $app->rawMethod = 'test';
 
-// 3. 用户登录（选择合适角色）
+zenData('host')->gen(0);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $zanodeTest = new zanodeTest();
 
-// 准备测试节点对象
+// 准备测试节点数据
 $node1 = new stdClass();
-$node1->id = 101;
-$node1->name = 'test-node-01';
+$node1->id = 1;
+$node1->name = 'test-node-1';
 $node1->osName = 'Ubuntu 20.04';
+$node1->status = 'running';
 
 $node2 = new stdClass();
-$node2->id = 102;
-$node2->name = 'test-node-02';
+$node2->id = 2;
+$node2->name = 'test-node-2';
 $node2->osName = 'CentOS 7';
+$node2->status = 'running';
 
-// 准备POST数据
-global $app;
+$node3 = new stdClass();
+$node3->id = 3;
+$node3->name = 'test-node-3';
+$node3->osName = 'Debian 11';
+$node3->status = 'running';
 
-// 设置正确的模块和方法名以便form::data()能找到配置
-$app->setModuleName('zanode');
-$app->setMethodName('createsnapshot');
+// 测试步骤1: 正常创建快照,使用英文字母名称
+$app->post = new stdClass();
+$app->post->name = 'test_snapshot';
+$app->post->desc = 'Test snapshot description';
+r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('host,name,status,from') && e('1,test_snapshot,creating,snapshot');
 
-// 创建clean post函数，用于重置post数据
-function setPostData($name, $desc = '')
-{
-    global $app;
-    $_POST = array();
-    $app->post = new stdClass();
-    if($name !== null) $app->post->name = (string)$name;
-    if($desc !== null) $app->post->desc = (string)$desc;
-    $_POST['name'] = $app->post->name ?? '';
-    $_POST['desc'] = $app->post->desc ?? '';
-}
+// 测试步骤2: 正常创建快照,名称包含字母和数字
+$app->post = new stdClass();
+$app->post->name = 'snapshot_v1';
+$app->post->desc = 'Version 1 snapshot';
+r($zanodeTest->prepareCreateSnapshotExtrasTest($node2)) && p('name,desc,osName') && e('snapshot_v1,Version 1 snapshot,CentOS 7');
 
-// 测试步骤1：正常快照名称
-setPostData('snapshot-test-01', 'Test snapshot description');
-r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('name,status,from') && e('snapshot-test-01,creating,snapshot');
+// 测试步骤3: 异常场景,快照名称为纯数字
+$app->post = new stdClass();
+$app->post->name = '12345';
+$app->post->desc = 'Numeric name test';
+r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('name') && e('Name validation error');
 
-// 测试步骤2：普通字符快照名称
-setPostData('test-snapshot-02', 'Another test snapshot');
-r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('name,status,from') && e('test-snapshot-02,creating,snapshot');
+// 测试步骤4: 正常创建快照,验证所有字段初始化
+$app->post = new stdClass();
+$app->post->name = 'full_snapshot';
+$app->post->desc = 'Full test';
+r($zanodeTest->prepareCreateSnapshotExtrasTest($node3)) && p('status,memory,disk,fileSize') && e('creating,0,0,0');
 
-// 测试步骤3：空名称快照
-setPostData('', 'Empty name test');
-r($zanodeTest->prepareCreateSnapshotExtrasTest($node2)) && p('name,host,osName') && e(',102,CentOS 7');
-
-// 测试步骤4：特殊字符快照名称
-setPostData('test-snapshot_2024@01', 'Special characters test');
-r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('name,host,memory,disk') && e('test-snapshot_2024@01,101,0,0');
-
-// 测试步骤5：长名称快照
-setPostData('very-long-snapshot-name-with-multiple-words-and-numbers-2024-test', 'Long description for testing purposes with multiple words and details');
-r($zanodeTest->prepareCreateSnapshotExtrasTest($node2)) && p('name,desc,status,fileSize') && e('very-long-snapshot-name-with-multiple-words-and-numbers-2024-test,Long description for testing purposes with multiple words and details,creating,0');
+// 测试步骤5: 正常创建快照,包含完整描述信息
+$app->post = new stdClass();
+$app->post->name = 'detailed_snapshot';
+$app->post->desc = 'This is a detailed snapshot with full description';
+r($zanodeTest->prepareCreateSnapshotExtrasTest($node1)) && p('desc,from,osName') && e('This is a detailed snapshot with full description,snapshot,Ubuntu 20.04');

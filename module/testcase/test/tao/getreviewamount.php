@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseTao->getReviewAmount();
-cid=1
+cid=19045
 pid=1
 
 */

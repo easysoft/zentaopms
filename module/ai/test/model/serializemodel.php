@@ -5,7 +5,7 @@
 
 title=测试 aiModel::serializeModel();
 timeout=0
-cid=0
+cid=15064
 
 - 执行aiTest模块的serializeModelTest方法，参数是$validOpenAIModel
  - 属性type @openai-gpt35

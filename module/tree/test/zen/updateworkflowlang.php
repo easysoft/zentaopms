@@ -5,7 +5,7 @@
 
 title=测试 treeZen::updateWorkflowLang();
 timeout=0
-cid=0
+cid=19400
 
 - 执行treeTest模块的updateWorkflowLangTest方法，参数是'datasource_1' 属性manageDatasource_1Child @模块维护
 - 执行treeTest模块的updateWorkflowLangTest方法，参数是'workflow_1' 属性manageWorkflow_1Child @模块维护

@@ -5,7 +5,7 @@
 
 title=测试 taskZen::setTaskByObjectID();
 timeout=0
-cid=0
+cid=18950
 
 - 步骤1：仅传入moduleID的默认情况属性module @2
 - 步骤2：传入不同moduleID的情况属性module @3

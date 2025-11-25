@@ -107,14 +107,37 @@ class releaseModel extends model
         if(!$showRelated) return $releases;
 
         $projectIdList = '';
-        foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
+        $productIdList = [];
+        foreach($releases as $release)
+        {
+            $projectIdList .= trim($release->project, ',') . ',';
+            $productIdList[$release->product] = $release->product;
+        }
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = CAST(t3.id AS CHAR)')
+            ->where("product")->in($productIdList)
             ->fetchAll('id');
+        if(!empty($builds))
+        {
+            $branches = [];
+            foreach($builds as $build)
+            {
+                foreach(explode(',', $build->branch) as $branchID) $branches[(int)$branchID] = (int)$branchID;
+            }
+            $branches = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($branches)->fetchPairs('id');
+            foreach($builds as $build)
+            {
+                $branchNames = [];
+                foreach(explode(',', $build->branch) as $branchID)
+                {
+                    $branchNames[] = isset($branches[$branchID]) ? $branches[$branchID] : $this->lang->trunk;
+                }
+                $build->branchName = implode(',', $branchNames);
+            }
+        }
 
         $this->loadModel('branch');
         foreach($releases as $release)
@@ -173,11 +196,29 @@ class releaseModel extends model
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
         $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
 
-        $builds = $this->dao->select("t1.id, t1.name, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName, IF(t3.name IS NOT NULL, t3.name, '{$this->lang->trunk}') AS branchName")
+        $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch = t3.id')
+            ->where("product")->eq($productID)
             ->fetchAll('id');
+        if(!empty($builds))
+        {
+            $branches = [];
+            foreach($builds as $build)
+            {
+                foreach(explode(',', $build->branch) as $branchID) $branches[(int)$branchID] = (int)$branchID;
+            }
+            $branches = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($branches)->fetchPairs('id');
+            foreach($builds as $build)
+            {
+                $branchNames = [];
+                foreach(explode(',', $build->branch) as $branchID)
+                {
+                    $branchNames[] = isset($branches[$branchID]) ? $branches[$branchID] : $this->lang->trunk;
+                }
+                $build->branchName = implode(',', $branchNames);
+            }
+        }
 
         $this->loadModel('branch');
         foreach($releases as $release)

@@ -5,7 +5,7 @@
 
 title=测试 devModel::getFields();
 timeout=0
-cid=0
+cid=16003
 
 - 步骤1：正常情况获取用户表字段信息第id条的name属性 @用户编号
 - 步骤2：varchar类型字段解析测试第name条的type属性 @varchar

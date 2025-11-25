@@ -5,7 +5,7 @@
 
 title=测试 deptModel::getChildDepts();
 timeout=0
-cid=0
+cid=15969
 
 - 测试步骤1：获取所有部门，验证总数量 @50
 - 测试步骤2：获取ID为1的部门，验证部门名称第1条的name属性 @产品部1

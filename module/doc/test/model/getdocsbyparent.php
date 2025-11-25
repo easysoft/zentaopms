@@ -5,7 +5,7 @@
 
 title=测试 docModel::getDocsByParent();
 timeout=0
-cid=0
+cid=16082
 
 - 步骤1：查询父文档ID为1的子文档，返回3个 @3
 - 步骤2：查询父文档ID为2的子文档，返回2个 @2

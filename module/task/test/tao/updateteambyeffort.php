@@ -8,7 +8,7 @@ su('user1');
 
 title=检查根据effortID更新任务团队工时
 timeout=0
-cid=1
+cid=18893
 
 - 通过ID为1的日志更新任务团队工时第0条的estimate属性 @5.00
 - 通过ID为2的日志更新任务团队工时第0条的consumed属性 @10.00

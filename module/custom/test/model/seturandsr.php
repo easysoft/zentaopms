@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 customModel->setURAndSR();
 timeout=0
-cid=1
+cid=15927
 
 - 测试SRName值为空 @1
 - 测试SRName值有一个 @1

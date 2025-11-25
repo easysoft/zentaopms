@@ -7,45 +7,55 @@ title=测试 transferZen::printRow();
 timeout=0
 cid=0
 
-- 执行transferTest模块的printRowTest方法，参数是'user', 1, $fields, $object, '', 1  @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 执行transferTest模块的printRowTest方法，参数是'user', 2, $fields, $object2, '', 1  @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 执行transferTest模块的printRowTest方法，参数是'task', 3, $fields, $object3, '', 1  @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 执行transferTest模块的printRowTest方法，参数是'user', 4, array  @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 执行transferTest模块的printRowTest方法，参数是'user', 5, $fields, $emptyObject, '', 1  @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
+- 步骤1：测试有ID的普通对象生成表格行 @1
+- 步骤2：测试无ID的新建对象生成表格行 @1
+- 步骤3：测试task模块子任务对象生成表格行 @1
+- 步骤4：测试带trClass的表格行 @1
+- 步骤5：测试actionModule模块生成带删除按钮的表格行 @1
 
 */
 
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/transferzen.unittest.class.php';
 
-// 显示所有错误
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+// 2. 用户登录（选择合适角色）
 su('admin');
 
+// 3. 创建测试实例（变量名与模块名一致）
 $transferTest = new transferZenTest();
 
-// 测试步骤1：正常对象有ID情况测试异常
-$fields = array('name' => array('control' => 'input', 'values' => array()));
-$object = new stdClass();
-$object->id = 1;
-$object->name = 'Test Object';
-r($transferTest->printRowTest('user', 1, $fields, $object, '', 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752');
+// 4. 准备测试数据
+$fields = array(
+    'name' => array('control' => 'input', 'values' => array()),
+    'status' => array('control' => 'select', 'values' => array('wait' => '未开始', 'doing' => '进行中'))
+);
 
-// 测试步骤2：新对象无ID情况测试异常
-$object2 = new stdClass();
-$object2->name = 'New Object';
-r($transferTest->printRowTest('user', 2, $fields, $object2, '', 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752');
+// 有ID的对象
+$objectWithId = new stdClass();
+$objectWithId->id = 101;
+$objectWithId->name = 'Task Name';
+$objectWithId->status = 'wait';
 
-// 测试步骤3：task模块子任务情况测试异常
-$object3 = new stdClass();
-$object3->name = '>Child Task';
-r($transferTest->printRowTest('task', 3, $fields, $object3, '', 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752');
+// 无ID的新建对象
+$objectNewTask = new stdClass();
+$objectNewTask->name = 'New Task';
+$objectNewTask->status = 'doing';
 
-// 测试步骤4：空字段数组测试异常
-r($transferTest->printRowTest('user', 4, array(), $object, '', 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752');
+// 子任务对象（task模块特殊标识）
+$objectChildTask = new stdClass();
+$objectChildTask->name = '>Child Task';
+$objectChildTask->status = 'wait';
 
-// 测试步骤5：空对象测试异常
-$emptyObject = new stdClass();
-r($transferTest->printRowTest('user', 5, $fields, $emptyObject, '', 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752');
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
+$result1 = $transferTest->printRowTest('task', 1, $fields, $objectWithId, '', 1);
+$result2 = $transferTest->printRowTest('task', 1, $fields, $objectNewTask, '', 1);
+$result3 = $transferTest->printRowTest('task', 1, $fields, $objectChildTask, '', 1);
+$result4 = $transferTest->printRowTest('task', 5, $fields, $objectWithId, 'showmore', 1);
+$result5 = $transferTest->printRowTest('story', 1, $fields, $objectWithId, '', 1);
+
+r(strpos($result1, '101') !== false && strpos($result1, "value='101'") !== false) && p() && e('1'); // 步骤1：测试有ID的普通对象生成表格行
+r(strpos($result2, '新建') !== false && strpos($result2, '2') !== false) && p() && e('1'); // 步骤2：测试无ID的新建对象生成表格行
+r(strpos($result3, '子任务') !== false) && p() && e('1'); // 步骤3：测试task模块子任务对象生成表格行
+r(strpos($result4, 'showmore') !== false) && p() && e('1'); // 步骤4：测试带trClass的表格行
+r(strpos($result5, 'icon-close') !== false) && p() && e('1'); // 步骤5：测试actionModule模块生成带删除按钮的表格行

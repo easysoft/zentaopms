@@ -5,126 +5,47 @@
 
 title=测试 kanbanTao::refreshERURCards();
 timeout=0
-cid=0
+cid=16990
 
-
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs0, 999, '', 'story'  @7
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs1, 101, '', 'story'
+ - 属性wait @,2,1,
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs2, 101, '', 'story'
+ - 属性planned @,3,
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs3, 101, '', 'story' 属性projected @~~
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs4, 101, '', 'story' 属性developing @~~
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs5, 101, '', 'story' 属性delivering @~~
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs6, 101, '', 'story' 属性delivered @~~
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs7, 101, '', 'parentStory'
+ - 属性wait @,10,9,
+- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs8, 101, '', 'epic'
+ - 属性wait @,8,7,6,
 
 */
 
-// 模拟测试框架
-function r($result) {
-    global $_lastResult;
-    $_lastResult = $result;
-    return true;
-}
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
-function p($property = '') {
-    global $_lastResult, $_targetProperty;
-    $_targetProperty = $property;
-    return true;
-}
+su('admin');
 
-function e($expected) {
-    global $_lastResult, $_targetProperty;
+$kanbanTest = new kanbanTest();
 
-    if(empty($_targetProperty)) {
-        $actual = $_lastResult;
-    } else {
-        if(is_array($_lastResult)) {
-            if(strpos($_targetProperty, ',') !== false) {
-                $props = explode(',', $_targetProperty);
-                $values = array();
-                foreach($props as $prop) {
-                    $values[] = isset($_lastResult[$prop]) ? $_lastResult[$prop] : '';
-                }
-                $actual = implode(',', $values);
-            } else {
-                $actual = isset($_lastResult[$_targetProperty]) ? $_lastResult[$_targetProperty] : '';
-            }
-        } else {
-            $actual = $_lastResult;
-        }
-    }
+$cardPairs0 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs1 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs2 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs3 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs4 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs5 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs6 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs7 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+$cardPairs8 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
 
-    // 为了模拟ZTF框架的行为，我们只返回比较结果
-    return $actual === $expected;
-}
-
-// 定义一个简化的测试类来模拟refreshERURCards方法的行为
-class SimpleKanbanTest
-{
-    public function refreshERURCardsTest($cardPairs, $executionID, $otherCardList, $laneType = 'story')
-    {
-        // 创建模拟的需求数据
-        $mockStories = array();
-
-        if($executionID == 101)
-        {
-            if($laneType == 'story')
-            {
-                $mockStories = array(
-                    1 => (object)array('id' => 1, 'stage' => 'wait', 'isParent' => '0'),
-                    2 => (object)array('id' => 2, 'stage' => 'wait', 'isParent' => '0'),
-                    3 => (object)array('id' => 3, 'stage' => 'planned', 'isParent' => '0'),
-                );
-            }
-            elseif($laneType == 'parentStory')
-            {
-                $mockStories = array(
-                    9 => (object)array('id' => 9, 'stage' => 'wait', 'isParent' => '1'),
-                    10 => (object)array('id' => 10, 'stage' => 'wait', 'isParent' => '1'),
-                );
-            }
-            elseif($laneType == 'epic')
-            {
-                $mockStories = array(
-                    6 => (object)array('id' => 6, 'stage' => 'wait', 'isParent' => '0'),
-                    7 => (object)array('id' => 7, 'stage' => 'wait', 'isParent' => '0'),
-                    8 => (object)array('id' => 8, 'stage' => 'wait', 'isParent' => '0'),
-                );
-            }
-        }
-
-        // 模拟ERURColumn配置
-        $ERURColumns = array(
-            'wait' => '未开始',
-            'planned' => '已计划',
-            'projected' => '已立项',
-            'developing' => '研发中',
-            'delivering' => '交付中',
-            'delivered' => '已交付',
-            'closed' => '已关闭'
-        );
-
-        // 模拟refreshERURCards的业务逻辑
-        foreach($mockStories as $storyID => $story)
-        {
-            if($laneType == 'parentStory' && $story->isParent != '1') continue;
-
-            foreach($ERURColumns as $stage => $langItem)
-            {
-                if($story->stage != $stage and isset($cardPairs[$stage]) and strpos((string)$cardPairs[$stage], ",$storyID,") !== false)
-                {
-                    $cardPairs[$stage] = str_replace(",$storyID,", ',', $cardPairs[$stage]);
-                }
-
-                if($story->stage == $stage and (!isset($cardPairs[$stage]) or strpos((string)$cardPairs[$stage], ",$storyID,") === false))
-                {
-                    $cardPairs[$stage] = empty($cardPairs[$stage]) ? ",$storyID," : ",$storyID" . $cardPairs[$stage];
-                }
-            }
-        }
-
-        return $cardPairs;
-    }
-}
-
-// 创建测试实例
-$kanbanTest = new SimpleKanbanTest();
-
-// 测试步骤
-r($kanbanTest->refreshERURCardsTest(array('wait' => ',1,2,', 'planned' => ',3,'), 101, '1,2,3', 'story')) && p('wait') && e(',1,2,'); // 步骤1：正常story类型卡片刷新
-r($kanbanTest->refreshERURCardsTest(array('wait' => ',9,10,'), 101, '9,10', 'parentStory')) && p('wait') && e(',9,10,'); // 步骤2：parentStory类型卡片处理
-r($kanbanTest->refreshERURCardsTest(array('wait' => ',6,7,8,'), 101, '6,7,8', 'epic')) && p('wait') && e(',6,7,8,'); // 步骤3：epic类型卡片处理
-r($kanbanTest->refreshERURCardsTest(array(), 101, '', 'story')) && p('wait') && e(',2,1,'); // 步骤4：空卡片对处理
-r($kanbanTest->refreshERURCardsTest(array('wait' => ',1,', 'planned' => ''), 101, '1', 'story')) && p('wait,planned') && e(',2,1,,,3,'); // 步骤5：需求阶段变更处理
+r(count($kanbanTest->refreshERURCardsTest($cardPairs0, 999, '', 'story'))) && p() && e('7');
+r($kanbanTest->refreshERURCardsTest($cardPairs1, 101, '', 'story')) && p('wait') && e(',2,1,');
+r($kanbanTest->refreshERURCardsTest($cardPairs2, 101, '', 'story')) && p('planned') && e(',3,');
+r($kanbanTest->refreshERURCardsTest($cardPairs3, 101, '', 'story')) && p('projected') && e('~~');
+r($kanbanTest->refreshERURCardsTest($cardPairs4, 101, '', 'story')) && p('developing') && e('~~');
+r($kanbanTest->refreshERURCardsTest($cardPairs5, 101, '', 'story')) && p('delivering') && e('~~');
+r($kanbanTest->refreshERURCardsTest($cardPairs6, 101, '', 'story')) && p('delivered') && e('~~');
+r($kanbanTest->refreshERURCardsTest($cardPairs7, 101, '', 'parentStory')) && p('wait') && e(',10,9,');
+r($kanbanTest->refreshERURCardsTest($cardPairs8, 101, '', 'epic')) && p('wait') && e(',8,7,6,');

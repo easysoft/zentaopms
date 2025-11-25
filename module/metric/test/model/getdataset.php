@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getDataset();
 timeout=0
-cid=0
+cid=17087
 
 - 执行metricTest模块的getDatasetTest方法 属性className @dataset
 - 执行metricTest模块的getDatasetTest方法 属性dao @object

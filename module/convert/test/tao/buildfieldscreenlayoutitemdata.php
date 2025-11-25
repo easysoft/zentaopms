@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildFieldScreenLayoutItemData();
 timeout=0
-cid=0
+cid=15811
 
 - 步骤1：正常完整数据ID检查属性id @1001
 - 步骤1：正常完整数据字段标识符检查属性fieldidentifier @field_summary

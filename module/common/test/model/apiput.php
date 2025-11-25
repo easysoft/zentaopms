@@ -5,7 +5,7 @@
 
 title=测试 commonModel::apiPut();
 timeout=0
-cid=0
+cid=15643
 
 - 步骤1：正常成功请求属性code @200
 - 步骤2：业务错误请求属性code @400

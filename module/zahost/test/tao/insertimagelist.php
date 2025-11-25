@@ -5,7 +5,7 @@
 
 title=测试 zahostTao::insertImageList();
 timeout=0
-cid=0
+cid=19758
 
 - 执行zahost模块的insertImageListTest方法，参数是$imageList, $hostID, $downloadedImageList  @0
 - 执行zahost模块的insertImageListTest方法，参数是$imageList, $hostID, $downloadedImageList 第0条的name属性 @centos7

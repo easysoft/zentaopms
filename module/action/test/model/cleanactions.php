@@ -9,7 +9,7 @@ zenData('actionrecent')->gen(10);
 
 title=测试 actionModel->cleanActions();
 timeout=0
-cid=1
+cid=14882
 
 - 第一次执行，检查返回结果 @1
 - 清空缓存动态，检查条目数 @8

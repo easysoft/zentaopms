@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getActionByObject();
-cid=1
+cid=16068
 
 - 测试空数据 @0
 - 测试查询docID=1的数据 @0

@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getUniqueKeyByRecord();
 timeout=0
-cid=0
+cid=17130
 
 - 步骤1：正常情况 @product1_project2_nametest
 - 步骤2：包含忽略字段 @product2_namedemo

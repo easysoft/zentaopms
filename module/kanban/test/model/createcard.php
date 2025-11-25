@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 kanbanModel->createCard();
 timeout=0
-cid=1
+cid=16886
 
 - 测试创建卡片1
  - 属性name @测试创建卡片1

@@ -5,7 +5,7 @@
 
 title=测试 userZen::prepareRolesAndGroups();
 timeout=0
-cid=0
+cid=19679
 
 - 步骤1：正常情况，检查管理员权限组名称第groupList条的1属性 @管理员
 - 步骤2：检查管理员角色映射到权限组ID第roleGroup条的admin属性 @1

@@ -195,6 +195,12 @@ formBatchPanel
         set::label($lang->task->name),
         set::width('240px')
     ),
+    formBatchItem
+    (
+        set::name('isParent'),
+        set::control('hidden'),
+        set::value('0')
+    ),
     $regionItem,
     $laneItem,
     formBatchItem

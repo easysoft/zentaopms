@@ -5,7 +5,7 @@
 
 title=测试 repoModel::saveRecord();
 timeout=0
-cid=0
+cid=18099
 
 - 执行repoTest模块的saveRecordTest方法，参数是$action, $log, $repoRoot, $scm
  - 属性action @gitcommited

@@ -5,7 +5,7 @@
 
 title=测试 qaModel::setMenu();
 timeout=0
-cid=0
+cid=17979
 
 - 执行qaTest模块的setMenuTest方法  @1
 - 执行qaTest模块的setMenuTest方法，参数是1  @1

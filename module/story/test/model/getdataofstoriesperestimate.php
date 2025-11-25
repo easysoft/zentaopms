@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerEstimate();
 timeout=0
-cid=0
+cid=18515
 
 - 测试默认story类型的预计工时统计 @6
 - 测试返回的工时分组数据结构

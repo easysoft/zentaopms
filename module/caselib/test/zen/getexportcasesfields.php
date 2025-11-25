@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getExportCasesFields();
 timeout=0
-cid=0
+cid=15546
 
 - 步骤1：测试默认配置字段数量 @19
 - 步骤2：测试默认配置包含id字段 @1

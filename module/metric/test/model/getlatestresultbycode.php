@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getLatestResultByCode();
 timeout=0
-cid=0
+cid=17102
 
 - 步骤1：正常获取有效度量代码的最新结果 @TypeError: Metric not found or invalid
 - 步骤2：测试不存在的度量代码 @TypeError: Metric not found or invalid

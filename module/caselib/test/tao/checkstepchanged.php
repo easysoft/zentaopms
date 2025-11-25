@@ -5,7 +5,7 @@
 
 title=测试 caselibTao::checkStepChanged();
 timeout=0
-cid=0
+cid=15538
 
 - 步骤1：相同的步骤比较 @0
 - 步骤2：步骤描述不同 @1

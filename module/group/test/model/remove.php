@@ -5,7 +5,7 @@
 
 title=测试 groupModel::remove();
 timeout=0
-cid=0
+cid=16722
 
 - 测试步骤1：删除存在的组ID @1
 - 测试步骤2：删除不存在的组ID @1

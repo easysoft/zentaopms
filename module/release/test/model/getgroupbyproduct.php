@@ -10,7 +10,7 @@ zenData('release')->loadYaml('release')->gen(30);
 
 title=releaseModel->getGroupByProduct();
 timeout=0
-cid=1
+cid=17989
 
 - 获取系统内所有产品下的发布数据
  - 第0条的product属性 @1

@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getDefaultManagers();
 timeout=0
-cid=0
+cid=16311
 
 - 步骤1：获取执行3关联产品1的PO管理者属性PO @admin
 - 步骤2：获取执行4关联产品2的QD管理者属性QD @user2

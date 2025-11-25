@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 releaseModel->setStoriesStage();
 timeout=0
-cid=1
+cid=18013
 
 - 测试草稿需求属性stage @released
 - 测试激活需求属性stage @released

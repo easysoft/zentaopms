@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getProductStats();
-cid=0
+cid=17551
 
 - 获取系统内所有产品的统计信息
  - 第1条的draftStories属性 @0

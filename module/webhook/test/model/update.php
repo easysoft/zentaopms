@@ -10,7 +10,7 @@ zenData('webhook')->gen(1);
 
 title=测试 webhookModel->update();
 timeout=0
-cid=1
+cid=19708
 
 - 修改第一个webhook的name属性name @新加的webhook12
 - 只修改了name属性name @修改后的数据

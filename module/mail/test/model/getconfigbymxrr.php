@@ -5,7 +5,7 @@
 
 title=测试 mailModel::getConfigByMXRR();
 timeout=0
-cid=0
+cid=17007
 
 - 执行mail模块的getConfigByMXRRTest方法，参数是'qq.com', 'test' 属性host @smtp.qq.com
 - 执行mail模块的getConfigByMXRRTest方法，参数是'263.net', 'test' 属性host @smtp.263.net

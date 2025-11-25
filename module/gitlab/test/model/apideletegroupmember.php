@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiDeleteGroupMember();
 timeout=0
-cid=1
+cid=16587
 
 - 使用空的groupID删除gitlab群组属性message @404 Group Not Found
 - 使用空的memberID删除gitlab群组属性message @404 Not found

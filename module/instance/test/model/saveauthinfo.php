@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::saveAuthInfo();
 timeout=0
-cid=0
+cid=16814
 
 - 步骤1：非devops应用 @notDevopsApp
 - 步骤2：已存在pipeline记录 @pipelineExists

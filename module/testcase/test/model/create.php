@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel->create();
 timeout=0
-cid=0
+cid=18969
 
 - 测试创建用例1属性status @1
 - 测试创建用例2属性status @2

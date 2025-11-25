@@ -18,7 +18,7 @@ $program->gen(2);
 
 title=测试 programModel::setTreePath();
 timeout=0
-cid=1
+cid=17710
 
 - 设置之前的项目集的path属性path @,10,
 - 设置之后的项目集的path属性path @,1,10,

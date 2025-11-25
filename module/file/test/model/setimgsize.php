@@ -4,7 +4,7 @@
 
 title=测试 fileModel->setImgSize();
 timeout=0
-cid=0
+cid=16533
 
 - 测试非图片内容 @<div>AaBbCcDd</div>
 - 测试设置图片大小后的内容 @<img onload="setImageSize(this,0)"

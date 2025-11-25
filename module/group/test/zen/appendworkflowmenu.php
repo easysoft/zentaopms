@@ -5,7 +5,7 @@
 
 title=测试 groupZen::appendWorkflowMenu();
 timeout=0
-cid=0
+cid=16730
 
 - 步骤1：browse方法有menus @1
 - 步骤2：browse方法无menus @1

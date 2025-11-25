@@ -1,0 +1,20 @@
+title: 测试setFormOptionsForBatchEdit方法的计划数据
+desc: 包含产品计划数据用于测试
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1,2,4,1,2,4,1,2,4,1
+- field: branch
+  range: 0{5},1,2,0,1,2
+- field: title
+  range: 计划1,计划2,计划3,计划4,计划5{5}
+- field: status
+  range: wait{3},doing{4},done{3}
+- field: begin
+  range: 2023-01-01
+- field: end
+  range: 2023-12-31
+- field: deleted
+  range: 0

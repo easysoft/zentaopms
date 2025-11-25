@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testtaskModel->batchAssign();
 timeout=0
-cid=1
+cid=19155
 
 - 测试单参数为 0 返回 false。 @0
 - 指派给参数为空返回 false。 @0

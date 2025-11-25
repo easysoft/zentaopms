@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareScopeList();
 timeout=0
-cid=0
+cid=17202
 
 - 步骤1：正常情况下返回完整的范围列表数组，验证数组长度 @7
 - 步骤2：验证第一个项目范围的键 @project

@@ -4,26 +4,47 @@
 /**
 
 title=测试 searchZen::setOptionOperators();
-cid=0
+timeout=0
+cid=18351
 
-- 测试步骤1：测试setOptionOperators方法返回的数据结构是否为数组 >> 期望返回数组类型
-- 测试步骤2：测试返回的操作符数组中包含'='操作符且结构正确 >> 期望包含value和title属性
-- 测试步骤3：测试返回的操作符数组中包含'包含'操作符且值正确 >> 期望包含'include'值和'包含'标题
-- 测试步骤4：测试返回的操作符数组长度是否符合预期 >> 期望至少包含8个操作符
-- 测试步骤5：测试每个操作符对象都包含必需的value和title属性 >> 期望所有对象都包含value和title
+- 执行$result1 @1
+- 执行$result2 @10
+- 执行$result3第0条的value属性 @=
+- 执行$result4第0条的title属性 @=
+- 执行$result5第1条的value属性 @!=
+- 执行$result6第1条的title属性 @!=
+- 执行$result7第6条的value属性 @include
+- 执行$result8第6条的title属性 @包含
+- 执行$result9第7条的value属性 @between
+- 执行$result10第7条的title属性 @介于
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$searchTest = new searchZenTest();
 
-$operators = $searchTest->setOptionOperatorsTest();
-r($operators) && p() && e('array'); // 步骤1：测试返回数据类型
-r($operators) && p('0:value,title') && e('=,='); // 步骤2：测试第一个操作符结构
-r($operators) && p('6:value,title') && e('include,包含'); // 步骤3：测试包含操作符
-r(count($operators)) && p() && e('10'); // 步骤4：测试操作符数量（从实际运行中看到是10个）
-r($operators) && p('3:value') && e('>='); // 步骤5：测试>=操作符值
+$result1 = $searchTest->setOptionOperatorsTest();
+$result2 = $searchTest->setOptionOperatorsTest();
+$result3 = $searchTest->setOptionOperatorsTest();
+$result4 = $searchTest->setOptionOperatorsTest();
+$result5 = $searchTest->setOptionOperatorsTest();
+$result6 = $searchTest->setOptionOperatorsTest();
+$result7 = $searchTest->setOptionOperatorsTest();
+$result8 = $searchTest->setOptionOperatorsTest();
+$result9 = $searchTest->setOptionOperatorsTest();
+$result10 = $searchTest->setOptionOperatorsTest();
+
+r(is_array($result1)) && p() && e('1');
+r(count($result2)) && p() && e('10');
+r($result3) && p('0:value') && e('=');
+r($result4) && p('0:title') && e('=');
+r($result5) && p('1:value') && e('!=');
+r($result6) && p('1:title') && e('!=');
+r($result7) && p('6:value') && e('include');
+r($result8) && p('6:title') && e('包含');
+r($result9) && p('7:value') && e('between');
+r($result10) && p('7:title') && e('介于');

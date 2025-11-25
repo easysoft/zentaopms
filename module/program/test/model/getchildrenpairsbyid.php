@@ -5,7 +5,7 @@
 
 title=测试 programModel::getChildrenPairsByID();
 timeout=0
-cid=0
+cid=17683
 
 - 测试步骤1：获取有子项目集的项目集ID为1的子项目集和项目
  - 属性3 @子项目集1

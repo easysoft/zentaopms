@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildMindConfig();
 timeout=0
-cid=0
+cid=19083
 
 - 期望返回第一个配置项的key为module第0条的key属性 @module
 - 期望返回第二个配置项的key为scene第1条的key属性 @scene

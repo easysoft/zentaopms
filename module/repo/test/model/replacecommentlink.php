@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->replaceCommentLink();
 timeout=0
-cid=1
+cid=18091
 
 - 替换完成任务 @Finish task #<a href='task-view-8.html'  >8</a>.
 - 替换完成多个任务 @Finish task #<a href='task-view-1.html'  >1</a>,<a href='task-view-8.html'  >8</a>,<a href='task-view-12.html'  >12</a>.

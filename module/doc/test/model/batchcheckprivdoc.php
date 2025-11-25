@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->batchCheckPrivDoc();
-cid=1
+cid=16042
 
 - 传入空数组 @0
 - 检查管理员有权限的文档数 @5

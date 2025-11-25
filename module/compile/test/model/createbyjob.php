@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 compileModel::createByJob();
 timeout=0
-cid=0
+cid=15743
 
 - 执行compileTest模块的createByJobTest方法，参数是1, 'v1.0.0', 'tag'
  - 属性name @Job1

@@ -5,37 +5,40 @@
 
 title=测试 storyZen::getResponseInModal();
 timeout=0
-cid=0
+cid=18695
 
-- 步骤1：非弹窗环境 @0
-- 步骤2：execution且kanban属性callback @refreshKanban()
-- 步骤3：execution但非kanban属性load @1
-- 步骤4：非execution的tab属性load @1
-- 步骤5：没有execution ID属性load @1
+- 步骤1：不在弹窗中，返回false @0
+- 步骤2：弹窗中+execution tab+kanban类型
+ - 属性result @success
+ - 属性callback @refreshKanban()
+ - 属性closeModal @1
+- 步骤3：弹窗中+execution tab+非kanban类型
+ - 属性result @success
+ - 属性load @1
+ - 属性closeModal @1
+- 步骤4：弹窗中+project tab
+ - 属性result @success
+ - 属性load @1
+ - 属性closeModal @1
+- 步骤5：弹窗中+story tab
+ - 属性result @success
+ - 属性load @1
+ - 属性closeModal @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$executionTable = zenData('project');
-$executionTable->id->range('1-10');
-$executionTable->type->range('sprint{3},stage{3},kanban{4}');
-$executionTable->name->range('Execution{10}');
-$executionTable->model->range('scrum{10}');
-$executionTable->gen(10);
+zenData('project')->loadYaml('execution')->gen(10);
+zenData('story')->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+$storyTest = new storyZenTest();
 
-// 5. 测试步骤：必须包含至少5个测试步骤
-r($storyTest->getResponseInModalTest('', false, '', 0, 'sprint')) && p() && e('0'); // 步骤1：非弹窗环境
-r($storyTest->getResponseInModalTest('Test Message', true, 'execution', 1, 'kanban')) && p('callback') && e('refreshKanban()'); // 步骤2：execution且kanban
-r($storyTest->getResponseInModalTest('Test Message', true, 'execution', 2, 'sprint')) && p('load') && e('1'); // 步骤3：execution但非kanban
-r($storyTest->getResponseInModalTest('Test Message', true, 'product', 3, 'sprint')) && p('load') && e('1'); // 步骤4：非execution的tab
-r($storyTest->getResponseInModalTest('Test Message', true, 'execution', 0, 'sprint')) && p('load') && e('1'); // 步骤5：没有execution ID
+r($storyTest->getResponseInModalTest('', false, '', '', 0)) && p() && e('0'); // 步骤1：不在弹窗中，返回false
+r($storyTest->getResponseInModalTest('', true, 'execution', 'kanban', 1)) && p('result,callback,closeModal') && e('success,refreshKanban(),1'); // 步骤2：弹窗中+execution tab+kanban类型
+r($storyTest->getResponseInModalTest('', true, 'execution', 'stage', 1)) && p('result,load,closeModal') && e('success,1,1'); // 步骤3：弹窗中+execution tab+非kanban类型
+r($storyTest->getResponseInModalTest('', true, 'project', '', 1)) && p('result,load,closeModal') && e('success,1,1'); // 步骤4：弹窗中+project tab
+r($storyTest->getResponseInModalTest('', true, 'story', '', 1)) && p('result,load,closeModal') && e('success,1,1'); // 步骤5：弹窗中+story tab

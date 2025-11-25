@@ -5,36 +5,50 @@
 
 title=测试 repoZen::getViewTree();
 timeout=0
-cid=0
+cid=18147
 
-- 步骤1：Gitlab版本库 @2
-- 步骤2：Git版本库 @2
-- 步骤3：SVN版本库 @2
-- 步骤4：空entry参数 @2
-- 步骤5：未知SCM类型 @0
+- 测试步骤1:空repo对象 @0
+- 测试步骤2:Gitlab类型repo @2
+- 测试步骤3:Git类型repo @2
+- 测试步骤4:Subversion类型repo @2
+- 测试步骤5:Subversion类型repo验证目录kind属性第1条的kind属性 @dir
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
-// 2. zendata数据准备
-$table = zenData('repo');
-$table->id->range('1-3');
-$table->name->range('test-repo,git-repo,svn-repo');
-$table->SCM->range('Gitlab,Git,Subversion');
-$table->gen(3);
+zendata('repo')->gen(0);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$repoZenTest = new repoZenTest();
+$repoTest = new repoZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r(count($repoZenTest->getViewTreeTest((object)array('id' => 1, 'SCM' => 'Gitlab'), '', 'main'))) && p() && e('2'); // 步骤1：Gitlab版本库
-r(count($repoZenTest->getViewTreeTest((object)array('id' => 2, 'SCM' => 'Git'), '', 'HEAD'))) && p() && e('2'); // 步骤2：Git版本库
-r(count($repoZenTest->getViewTreeTest((object)array('id' => 3, 'SCM' => 'Subversion'), '/', '1'))) && p() && e('2'); // 步骤3：SVN版本库
-r(count($repoZenTest->getViewTreeTest((object)array('id' => 2, 'SCM' => 'Git'), '', 'HEAD'))) && p() && e('2'); // 步骤4：空entry参数
-r(count($repoZenTest->getViewTreeTest((object)array('id' => 999, 'SCM' => 'Unknown'), '', ''))) && p() && e('0'); // 步骤5：未知SCM类型
+// 测试步骤1:空repo对象
+$emptyRepo = null;
+$entry = '';
+$revision = '';
+
+// 测试步骤2:Gitlab类型repo
+$gitlabRepo = new stdClass();
+$gitlabRepo->id = 1;
+$gitlabRepo->SCM = 'Gitlab';
+$gitlabRepo->name = 'test-gitlab';
+
+// 测试步骤3:Git类型repo
+$gitRepo = new stdClass();
+$gitRepo->id = 2;
+$gitRepo->SCM = 'Git';
+$gitRepo->name = 'test-git';
+
+// 测试步骤4:Subversion类型repo
+$svnRepo = new stdClass();
+$svnRepo->id = 3;
+$svnRepo->SCM = 'Subversion';
+$svnRepo->name = 'test-svn';
+
+r($repoTest->getViewTreeTest($emptyRepo, $entry, $revision)) && p() && e('0'); // 测试步骤1:空repo对象
+r(count($repoTest->getViewTreeTest($gitlabRepo, $entry, $revision))) && p() && e('2'); // 测试步骤2:Gitlab类型repo
+r(count($repoTest->getViewTreeTest($gitRepo, $entry, $revision))) && p() && e('2'); // 测试步骤3:Git类型repo
+r(count($repoTest->getViewTreeTest($svnRepo, '/trunk', 'HEAD'))) && p() && e('2'); // 测试步骤4:Subversion类型repo
+r($repoTest->getViewTreeTest($svnRepo, '/trunk', 'HEAD')) && p('1:kind') && e('dir'); // 测试步骤5:Subversion类型repo验证目录kind属性

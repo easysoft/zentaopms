@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::setPercentage();
 timeout=0
-cid=0
+cid=17433
 
 - 执行$result1['col1']['percentage'][1] @500
 - 执行$result2['col1']['percentage'][1] @400

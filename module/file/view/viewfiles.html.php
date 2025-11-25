@@ -37,16 +37,7 @@ function deleteFile(fileID, obj)
     $('<input />').attr('type', 'hidden').attr('name', 'deleteFiles[' + fileID + ']').attr('value', fileID).appendTo('ul.files-list');
     $(obj).closest('li.file').addClass('hidden');
     <?php else:?>
-    url = $.createLink('file', 'delete', 'fileID=' + fileID);
-    $.ajax(
-    {
-        url: url,
-        dataType: 'json',
-        success: function(data)
-        {
-            if(data.callback) eval(data.callback);
-        }
-    });
+    hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
     <?php endif;?>
 }
 

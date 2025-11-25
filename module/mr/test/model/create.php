@@ -5,7 +5,7 @@
 
 title=测试 mrModel::create();
 timeout=0
-cid=0
+cid=17241
 
 - hostID为空第hostID条的0属性 @『服务器』不能为空。
 - 使用已存在的mr请求数据 @存在重复并且未关闭的合并请求: ID1

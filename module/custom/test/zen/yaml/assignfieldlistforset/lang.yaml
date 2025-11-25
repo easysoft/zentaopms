@@ -1,0 +1,61 @@
+---
+title: 自定义语言项测试数据
+desc: 用于测试 assignFieldListForSet 方法的测试数据
+
+fields:
+- field: id
+  note: 主键ID
+  range: 1-100
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lang
+  note: 语言标识
+  range: '[zh-cn]{30}, [zh-tw]{20}, [en]{20}, [all]{30}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块名称
+  range: '[story]{25}, [task]{25}, [bug]{25}, [project]{25}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: section
+  note: 配置节
+  range: '[priList]{25}, [typeList]{25}, [statusList]{25}, [sourceList]{25}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: key
+  note: 配置键
+  range: '1-4, wait, doing, done, closed, custom1, custom2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: value
+  note: 配置值
+  range: '[\u4f18\u5148\u7ea71]{3}, [\u4f18\u5148\u7ea72]{3}, [\u4f18\u5148\u7ea73]{3}, [\u4f18\u5148\u7ea74]{3}, [\u7b49\u5f85]{5}, [\u8fdb\u884c\u4e2d]{5}, [\u5df2\u5b8c\u6210]{5}, [\u5df2\u5173\u95ed]{5}, [\u81ea\u5b9a\u4e491]{10}, [\u81ea\u5b9a\u4e492]{10}, [Priority 1]{10}, [Priority 2]{10}, [Wait]{10}, [Doing]{10}, [Done]{10}, [Closed]{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: system
+  note: 是否系统字段
+  range: '[1]{80}, [0]{20}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: vision
+  note: 视图
+  range: '[rnd]{60}, [lite]{20}, [all]{20}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

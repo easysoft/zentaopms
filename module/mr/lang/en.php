@@ -28,12 +28,13 @@ $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
 $lang->mr->action->imported = '$date, <strong>$actor</strong> imported this Merge Request.';
 
-$lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
-$lang->mr->linkStory = 'Link Stories';
-$lang->mr->linkBug   = 'Link Bugs';
-$lang->mr->linkTask  = 'Link Tasks';
-$lang->mr->unlink    = 'UnLink of stories,Bugs,tasks';
-$lang->mr->addReview = 'Add Review';
+$lang->mr->linkList   = 'Link List of stories,Bugs,tasks';
+$lang->mr->linkStory  = 'Link Stories';
+$lang->mr->linkBug    = 'Link Bugs';
+$lang->mr->linkTask   = 'Link Tasks';
+$lang->mr->unlinkTask = 'Remove Tasks';
+$lang->mr->unlink     = 'UnLink of stories,Bugs,tasks';
+$lang->mr->addReview  = 'Add Review';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";

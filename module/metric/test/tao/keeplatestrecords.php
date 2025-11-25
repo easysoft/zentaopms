@@ -5,7 +5,7 @@
 
 title=测试 metricTao::keepLatestRecords();
 timeout=0
-cid=0
+cid=17176
 
 - 步骤1：使用正常字段列表保留最新记录 @1
 - 步骤2：使用包含时间字段的字段列表保留记录 @4

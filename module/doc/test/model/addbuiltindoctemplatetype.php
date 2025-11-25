@@ -5,7 +5,7 @@
 
 title=测试 docModel->addBuiltInDocTemplateType();
 timeout=0
-cid=1
+cid=16039
 
 - 检查计划分类 @1
 - 检查项目计划分类 @1

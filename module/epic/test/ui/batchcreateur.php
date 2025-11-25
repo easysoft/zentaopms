@@ -75,6 +75,10 @@ $projectproduct->gen(0);
 $projectstory = zenData('projectstory');
 $projectstory->gen(0);
 
+$task = zenData('task')->gen(0);
+
+$case = zenData('case')->gen(0);
+
 $action = zenData('action');
 $action->id->range('1-4');
 $action->objectType->range('product,story,story,story');
@@ -87,6 +91,13 @@ $action->action->range('opened');
 $action->read->range('0');
 $action->vision->range('rnd');
 $action->gen(4);
+
+$user = zenData('user');
+$user->id->range('1-3');
+$user->account->range('admin, user1, user2');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->realname->range('admin, USER1, USER2');
+$user->gen(3);
 
 $tester = new createChildStoryTester();
 $tester->login();

@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->identifyUser();
-cid=0
+cid=19643
 
 - 用户名不存在，密码不为空，返回 false。 @0
 - 用户名存在，密码使用 md5 加密，密码不正确，返回 false。 @0

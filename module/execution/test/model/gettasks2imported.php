@@ -48,7 +48,7 @@ su('admin');
 
 title=测试executionModel->getTasks2ImportedTest();
 timeout=0
-cid=1
+cid=16344
 
 - 敏捷执行任务查看第1条的name属性 @任务1
 - 瀑布执行任务查看第2条的type属性 @devel

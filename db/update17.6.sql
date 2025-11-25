@@ -10,8 +10,8 @@ CREATE TABLE `zt_taskteam` (
   `order` tinyint(3) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `task` (`task`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 ALTER TABLE `zt_taskestimate` ADD `order` tinyint unsigned NOT NULL DEFAULT '0';
 ALTER TABLE `zt_effort` ADD `order` tinyint unsigned NOT NULL DEFAULT '0' AFTER `end`;
 ALTER TABLE `zt_storyspec` ADD `files` text NOT NULL AFTER `verify`;
-ALTER TABLE `zt_block` CHANGE `block` `block` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `source`;
+ALTER TABLE `zt_block` CHANGE `block` `block` varchar(30) NOT NULL AFTER `source`;

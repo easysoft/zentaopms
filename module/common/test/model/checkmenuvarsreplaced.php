@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkMenuVarsReplaced();
 timeout=0
-cid=0
+cid=15658
 
 - 执行commonTest模块的checkMenuVarsReplacedTest方法，参数是1  @public_static_method
 - 执行commonTest模块的checkMenuVarsReplacedTest方法，参数是2  @no_return_type

@@ -3,7 +3,7 @@
 /**
 
 title=测试 scoreModel->computeTaskScore();
-cid=1
+cid=18197
 
 - 测试空数据 @0
 - 计算完成普通任务的积分第1条的score属性 @3

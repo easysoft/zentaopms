@@ -859,7 +859,13 @@ class projectTao extends projectModel
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($status && !in_array($status, array('all', 'undone', 'unclosed')))->andWhere('status')->eq($status)->fi()
+            ->beginIF($status && !in_array($status, array('all', 'undone', 'unclosed', 'involved')))->andWhere('status')->eq($status)->fi()
+            ->beginIF($status == 'involved')
+            ->andWhere('openedBy', true)->eq($this->app->user->account)
+            ->orWhere('PM')->eq($this->app->user->account)
+            ->orWhere("CONCAT(',', whitelist, ',')")->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->fi()
             ->beginIF($projectID)->orWhere('id')->eq($projectID)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
@@ -976,8 +982,8 @@ class projectTao extends projectModel
      */
     protected function accessDenied(): string
     {
-        $this->session->set('project', '');
-        return $this->app->control->sendError($this->lang->project->accessDenied, helper::createLink('project', 'index'));
+        $this->session->set('project', '0');
+        return $this->app->control->sendError($this->lang->project->accessDenied, helper::createLink('project', 'browse'));
     }
 
     /**
@@ -1179,13 +1185,13 @@ class projectTao extends projectModel
      */
     protected function createMilestoneReport(int $projectID): bool
     {
-        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('module')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
+        $reportID = $this->dao->select('id')->from(TABLE_DOC)->where('project')->eq($projectID)->andWhere('reportModule')->eq('milestone')->andWhere('type')->eq('projectReport')->fetch('id');
         if(!empty($reportID)) return true;
 
         $report = new stdclass();
         $report->title        = $this->lang->project->milestoneReport;
         $report->project      = $projectID;
-        $report->module       = 'milestone';
+        $report->reportModule = 'milestone';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
         $report->addedDate    = helper::now();

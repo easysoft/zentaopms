@@ -1,0 +1,20 @@
+--- a/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Security/XmlScanner.php
++++ b/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Reader/Security/XmlScanner.php
+@@ -63,7 +63,7 @@ class XmlScanner
+
+     private function disableEntityLoaderCheck()
+     {
+-        if (Settings::getLibXmlDisableEntityLoader()) {
++        if (\PHP_VERSION_ID < 80000) {
+             $libxmlDisableEntityLoaderValue = libxml_disable_entity_loader(true);
+
+             if (self::$libxmlDisableEntityLoaderValue === null) {
+@@ -74,7 +74,7 @@ class XmlScanner
+
+     public static function shutdown()
+     {
+-        if (self::$libxmlDisableEntityLoaderValue !== null) {
++        if (self::$libxmlDisableEntityLoaderValue !== null && \PHP_VERSION_ID < 80000) {
+             libxml_disable_entity_loader(self::$libxmlDisableEntityLoaderValue);
+             self::$libxmlDisableEntityLoaderValue = null;
+         }

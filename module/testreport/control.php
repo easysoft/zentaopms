@@ -103,8 +103,9 @@ class testreport extends control
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
+            $taskIdList = empty($_POST['taskIdList']) ? $extra : implode(',', $_POST['taskIdList']);
             if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
-            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra=" . implode(',', $_POST['taskIdList']);
+            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$taskIdList}";
             if($param)
             {
                 $url = $this->createLink('testreport', 'create', $param);
@@ -131,7 +132,7 @@ class testreport extends control
         $this->view->extra        = $extra;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->tasks        = $tasks ? $this->loadModel('testtask')->getPairsByList($tasks) : array();
-        $this->view->executions   = $executions ? $this->loadModel('execution')->getPairsByList($executions) : array();
+        $this->view->executions   = $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs();
         $this->view->canBeChanged = common::canModify($objectType, $object); // Determines whether an object is editable.
         $this->display();
     }
@@ -168,8 +169,8 @@ class testreport extends control
 
         if($objectType == 'testtask')
         {
-            if($productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
-            if($task->build == 'trunk')      return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+            if(empty($task->joint) && $productID != $task->product) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->error->accessDenied, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
+            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->errorTrunk, 'confirmed' => inlink('browse', "proudctID={$productID}"), 'canceled' => inlink('browse', "proudctID={$productID}"))));
 
             $reportData = $this->testreportZen->assignTesttaskReportData($objectID, $begin, $end, $productID, $task, 'create');
         }
@@ -180,7 +181,7 @@ class testreport extends control
 
             $reportData = $this->testreportZen->assignProjectReportDataForCreate($objectID, $objectType, $extra, $begin, $end, $executionID);
 
-            if(count($reportData['productIdList']) > 1) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink('project', 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink('project', 'testtask', "objectID={$objectID}"))));
+            if(count($reportData['productIdList']) > 1 && !in_array($this->config->edition, array('max', 'ipd'))) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $this->lang->testreport->moreProduct, 'confirmed' => $this->createLink($objectType, 'testtask', "objectID={$objectID}"), 'canceled' => $this->createLink($objectType, 'testtask', "objectID={$objectID}"))));
         }
 
         $this->testreportZen->assignReportData($reportData, 'create');

@@ -36,7 +36,7 @@ CREATE TABLE `zt_chart` (
   `createdDate` datetime NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE TABLE `zt_dashboard` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE `zt_dashboard` (
   `createdDate` datetime NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE TABLE `zt_dataset` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(155) NOT NULL,
@@ -59,4 +59,4 @@ CREATE TABLE `zt_dataset` (
   `createdDate` datetime NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;

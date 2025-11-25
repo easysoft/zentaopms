@@ -10,7 +10,7 @@ zenData('docaction')->gen(0);
 /**
 
 title=测试 upgradeModel->convertDocCollect();
-cid=1
+cid=19508
 
 - 检查 doc 表 collector 字段是否存在。 @0
 - 检查 doc 表 collects 字段是否存在。 @1

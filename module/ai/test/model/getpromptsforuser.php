@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getPromptsForUser();
 timeout=0
-cid=0
+cid=15045
 
 - 步骤1：正常情况 - story模块有数据 @3
 - 步骤2：边界值 - 不存在的模块 @0

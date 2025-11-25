@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiCreateUser();
 timeout=0
-cid=1
+cid=16584
 
 - 使用空的name创建gitlab用户 @0
 - 使用空的username创建gitlab用户 @0

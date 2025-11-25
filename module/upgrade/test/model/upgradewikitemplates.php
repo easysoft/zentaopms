@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->upgradeWikiTemplates();
 timeout=0
-cid=1
+cid=19566
 
 - 更新文档模板1
  - 属性version @2

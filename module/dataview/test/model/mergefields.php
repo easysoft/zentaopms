@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 dataviewModel::mergeFields();
 timeout=0
-cid=1
+cid=15959
 
 - 测试合并字段。
  - 第0条的id属性 @Bug编号

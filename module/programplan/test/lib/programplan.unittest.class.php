@@ -722,7 +722,15 @@ class programplanTest
 
             if(dao::isError()) return dao::getError();
 
-            return $result;
+            // 将数组的键转换为逗号分隔的字符串,便于测试断言
+            $formattedResult = array();
+            $formattedResult[0] = ',' . implode(',', array_keys($result[0])); // visibleFields
+            $formattedResult[1] = ',' . implode(',', array_keys($result[1])); // requiredFields
+            $formattedResult[2] = $result[2]; // customFields保持不变
+            $formattedResult[3] = $result[3]; // showFields保持不变
+            $formattedResult[4] = $result[4]; // defaultFields保持不变
+
+            return $formattedResult;
         }
         catch(Throwable $e)
         {

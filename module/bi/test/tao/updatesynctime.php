@@ -5,7 +5,7 @@
 
 title=测试 biTao::updateSyncTime();
 timeout=0
-cid=0
+cid=15223
 
 - 执行biTest模块的updateSyncTimeTest方法，参数是array  @0
 - 执行biTest模块的updateSyncTimeTest方法，参数是array  @1

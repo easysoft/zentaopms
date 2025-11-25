@@ -493,14 +493,12 @@ class metricTao extends metricModel
         if(empty($intersect)) $fields[] = 'left(date, 10)';
         $table = TABLE_METRICLIB;
 
-        $sql  = " UPDATE $table AS m";
-        $sql .= " JOIN (";
+        $sql  = " UPDATE $table SET deleted = '0' WHERE id IN (";
         $sql .= "    SELECT MAX(id) AS maxid";
         $sql .= "    FROM $table";
         $sql .= "    WHERE metricCode = '$code'";
         $sql .= "    GROUP BY ". implode(',', $fields);
-        $sql .= " ) AS max_ids ON m.id = max_ids.maxid";
-        $sql .= " SET m.deleted = '0'";
+        $sql .= " )";
 
         $this->dao->exec($sql);
     }
@@ -530,6 +528,8 @@ class metricTao extends metricModel
      */
     protected function rebuildIdColumn()
     {
+        if($this->config->db->driver != 'mysql') return;
+
         $table = TABLE_METRICLIB;
         $tableRowCount = $this->dao->select('COUNT(id) as rowcount')->from(TABLE_METRICLIB)->fetch('rowcount');
         $autoIncrement = $tableRowCount + 1;

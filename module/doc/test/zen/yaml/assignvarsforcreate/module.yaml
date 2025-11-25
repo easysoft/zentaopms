@@ -1,0 +1,20 @@
+title: module data for assignVarsForCreate test
+author: Claude
+version: 1.0
+
+fields:
+  - field: id
+    range: 1-5
+  - field: name
+    range: 1-5
+    prefix: 模块
+  - field: root
+    range: 1,2,3,4,5
+  - field: path
+    range: "`,1,`,`,2,`,`,3,`,`,4,`,`,5,`"
+  - field: grade
+    range: 1
+  - field: type
+    range: doc
+  - field: owner
+    range: admin

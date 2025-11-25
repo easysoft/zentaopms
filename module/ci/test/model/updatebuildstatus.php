@@ -5,7 +5,7 @@
 
 title=测试 ciModel->updateBuildStatus();
 timeout=0
-cid=1
+cid=15596
 
 - 更新构建任务状态为构建中属性status @building
 - 更新构建任务状态为成功属性status @success

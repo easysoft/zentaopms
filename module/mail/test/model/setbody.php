@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setBody();
 timeout=0
-cid=0
+cid=17018
 
 - 步骤1：正常文本内容设置属性Body @Hello World
 - 步骤2：HTML格式内容设置属性Body @<p>HTML content</p>

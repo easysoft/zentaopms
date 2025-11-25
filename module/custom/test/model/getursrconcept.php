@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 customModel->getURSRConcept();
 timeout=0
-cid=1
+cid=15904
 
 - 获取key=1的需求概念
  - 属性SRName @软件需求

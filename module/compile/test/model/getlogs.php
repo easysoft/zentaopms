@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getLogs();
 timeout=0
-cid=0
+cid=15750
 
 - 执行compileTest模块的getLogsTest方法  @1
 - 执行compileTest模块的getLogsTest方法  @1

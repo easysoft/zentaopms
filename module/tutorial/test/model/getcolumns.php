@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getColumns();
 timeout=0
-cid=0
+cid=19416
 
 - 步骤1：正常获取看板列，验证返回数组包含3个对象类型 @3
 - 步骤2：验证story类型第一列的类型为backlog @1

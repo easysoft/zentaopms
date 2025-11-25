@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 title=测试 actionTao->fetchBaseInfo().
 timeout=0
-cid=1
+cid=14941
 
 - 测试获取id为1的action的基本信息
- - 属性id @3
+ - 属性id @1
  - 属性objectType @product
  - 属性objectID @1
  - 属性action @common
@@ -23,7 +23,7 @@ cid=1
  - 属性objectType @productplan
  - 属性objectID @3
  - 属性action @opened
-- 测试获取id为0的action的基本信息,由于id为0的action不存在,所以返回false @
+- 测试获取id为0的action的基本信息,由于id为0的action不存在,所以返回false @0
 
 */
 

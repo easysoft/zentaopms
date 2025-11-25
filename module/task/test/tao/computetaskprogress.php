@@ -13,7 +13,7 @@ $task->gen(5);
 
 title=测试computeTaskProgress
 timeout=0
-cid=1
+cid=18868
 
 - 测试任务消耗工时为0，剩余工时为0的情况 @0
 - 测试任务消耗工时不为0，剩余工时为0的情况 @100

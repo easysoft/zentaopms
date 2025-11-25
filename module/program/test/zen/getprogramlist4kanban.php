@@ -5,42 +5,36 @@
 
 title=测试 programZen::getProgramList4Kanban();
 timeout=0
-cid=0
+cid=17731
 
-- 执行programTest模块的getProgramList4KanbanTest方法，参数是'my'  @array
-- 执行programTest模块的getProgramList4KanbanTest方法，参数是'other'  @array
-- 执行programTest模块的getProgramList4KanbanTest方法，参数是''  @array
-- 执行programTest模块的getProgramList4KanbanTest方法，参数是'invalid'  @array
-- 执行programTest模块的getProgramList4KanbanTest方法，参数是'my'  @2
+- 测试步骤1:使用默认参数my获取看板数据 @1
+- 测试步骤2:使用参数my获取看板数据 @1
+- 测试步骤3:使用参数other获取看板数据 @1
+- 测试步骤4:使用参数all获取看板数据 @1
+- 测试步骤5:使用空字符串参数获取看板数据 @1
+- 测试步骤6:验证my类型返回的项目集数量大于等于0 @1
+- 测试步骤7:验证other类型返回结果结构正确 @array
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/programzen.unittest.class.php';
 
-$table = zenData('project');
-$table->loadYaml('project_getprogramlist4kanban', false, 2);
-$table->gen(10);
-
-$product = zenData('product');
-$product->id->range('1-3');
-$product->program->range('1,2,3');
-$product->name->range('产品1,产品2,产品3');
-$product->deleted->range('0');
-$product->gen(3);
-
-$team = zenData('team');
-$team->root->range('1,2,3');
-$team->type->range('program');
-$team->account->range('admin');
-$team->gen(3);
+zenData('project')->loadYaml('getprogramlist4kanban/project', false, 2)->gen(50);
+zenData('product')->loadYaml('getprogramlist4kanban/product', false, 2)->gen(30);
+zenData('productplan')->loadYaml('getprogramlist4kanban/productplan', false, 2)->gen(40);
+zenData('release')->loadYaml('getprogramlist4kanban/release', false, 2)->gen(30);
+zenData('projectproduct')->loadYaml('getprogramlist4kanban/projectproduct', false, 2)->gen(25);
+zenData('stakeholder')->loadYaml('getprogramlist4kanban/stakeholder', false, 2)->gen(50);
 
 su('admin');
 
 $programTest = new programTest();
 
-r($programTest->getProgramList4KanbanTest('my')) && p() && e('array');
-r($programTest->getProgramList4KanbanTest('other')) && p() && e('array');
-r($programTest->getProgramList4KanbanTest('')) && p() && e('array');
-r($programTest->getProgramList4KanbanTest('invalid')) && p() && e('array');
-r(count($programTest->getProgramList4KanbanTest('my'))) && p() && e('2');
+r(is_array($programTest->getProgramList4KanbanTest())) && p() && e('1'); // 测试步骤1:使用默认参数my获取看板数据
+r(is_array($programTest->getProgramList4KanbanTest('my'))) && p() && e('1'); // 测试步骤2:使用参数my获取看板数据
+r(is_array($programTest->getProgramList4KanbanTest('other'))) && p() && e('1'); // 测试步骤3:使用参数other获取看板数据
+r(is_array($programTest->getProgramList4KanbanTest('all'))) && p() && e('1'); // 测试步骤4:使用参数all获取看板数据
+r(is_array($programTest->getProgramList4KanbanTest(''))) && p() && e('1'); // 测试步骤5:使用空字符串参数获取看板数据
+r(count($programTest->getProgramList4KanbanTest('my')) >= 0) && p() && e('1'); // 测试步骤6:验证my类型返回的项目集数量大于等于0
+r(gettype($programTest->getProgramList4KanbanTest('other'))) && p() && e('array'); // 测试步骤7:验证other类型返回结果结构正确

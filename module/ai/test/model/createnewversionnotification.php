@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createNewVersionNotification();
 timeout=0
-cid=0
+cid=15012
 
 - 步骤1：正常appID为1，有2个用户(用户1和用户2) @2
 - 步骤2：appID为空 @0

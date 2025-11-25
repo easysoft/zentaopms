@@ -1,0 +1,29 @@
+---
+title: todo测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: account
+  note: 所属用户
+  range: admin{10}
+- field: name
+  note: 待办名称
+  range: Todo 1,Todo 2,Todo 3,Todo 4,Todo 5,Todo 6,Todo 7,Todo 8,Todo 9,Todo 10
+- field: type
+  note: 类型
+  range: custom{10}
+- field: status
+  note: 状态
+  range: wait{10}
+- field: pri
+  note: 优先级
+  range: 1{10}
+- field: date
+  note: 日期
+  range: 2024-01-01{10}

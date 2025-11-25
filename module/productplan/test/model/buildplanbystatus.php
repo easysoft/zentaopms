@@ -4,7 +4,7 @@
 
 title=测试productplanModel->buildPlanByStatus();
 timeout=0
-cid=1
+cid=17621
 
 - 测试构造doing状态的计划
  - 属性status @doing

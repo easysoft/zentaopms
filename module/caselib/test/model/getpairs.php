@@ -5,59 +5,38 @@
 
 title=测试 caselibModel::getPairs();
 timeout=0
-cid=0
+cid=15534
 
-- 执行caselibTest模块的getPairsTest方法，参数是'all', 'id_desc'
- - 属性8 @Test Lib
- - 属性7 @Case Library
- - 属性6 @测试库2
- - 属性5 @测试库1
-- 执行caselibTest模块的getPairsTest方法，参数是'review', 'id_desc'  @0
-- 执行caselibTest模块的getPairsTest方法，参数是'all', 'name_asc'
- - 属性7 @Case Library
- - 属性3 @Library01
- - 属性4 @Library02
- - 属性8 @Test Lib
-- 执行caselibTest模块的getPairsTest方法，参数是'invalid', 'id_desc'
- - 属性8 @Test Lib
- - 属性7 @Case Library
- - 属性6 @测试库2
- - 属性5 @测试库1
-- 执行caselibTest模块的getPairsTest方法，参数是'all', 'id_desc'  @8
+- 测试type=all,orderBy=id_desc,获取所有用例库的键值对
+ - 属性402 @这是测试套件名称402
+ - 属性201 @这是测试套件名称201
+- 测试type=all,orderBy=id_asc,获取所有用例库的键值对
+ - 属性201 @这是测试套件名称201
+ - 属性402 @这是测试套件名称402
+- 测试返回的键值对数量 @2
+- 测试返回的键列表(降序) @402,201
+
+- 测试返回的键列表(升序) @201,402
+
+- 测试type=review,获取需要评审的用例库 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 
-global $tester;
-$dao = $tester->dao;
-
-// 清理现有数据
-$dao->delete()->from(TABLE_TESTSUITE)->where('type')->eq('library')->exec();
-
-// 直接插入测试数据，避免zendata工具问题
-$testLibraries = array(
-    array('id' => 1, 'name' => '用例库A', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 2, 'name' => '用例库B', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 3, 'name' => 'Library01', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 4, 'name' => 'Library02', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 5, 'name' => '测试库1', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 6, 'name' => '测试库2', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 7, 'name' => 'Case Library', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s')),
-    array('id' => 8, 'name' => 'Test Lib', 'product' => 0, 'type' => 'library', 'deleted' => 0, 'addedBy' => 'admin', 'addedDate' => date('Y-m-d H:i:s'))
-);
-
-foreach($testLibraries as $library) {
-    $dao->insert(TABLE_TESTSUITE)->data($library)->exec();
-}
+zenData('testsuite')->gen(405);
+zenData('user')->gen(1);
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselib = new caselibTest();
 
-r($caselibTest->getPairsTest('all', 'id_desc')) && p('8,7,6,5') && e('Test Lib,Case Library,测试库2,测试库1');
-r($caselibTest->getPairsTest('review', 'id_desc')) && p() && e('0');
-r($caselibTest->getPairsTest('all', 'name_asc')) && p('7,3,4,8') && e('Case Library,Library01,Library02,Test Lib');
-r($caselibTest->getPairsTest('invalid', 'id_desc')) && p('8,7,6,5') && e('Test Lib,Case Library,测试库2,测试库1');
-r(count($caselibTest->getPairsTest('all', 'id_desc'))) && p() && e('8');
+$orderList = array('id_desc', 'id_asc');
+
+r($caselib->getPairsTest('all', $orderList[0], null)) && p('402,201') && e('这是测试套件名称402,这是测试套件名称201'); // 测试type=all,orderBy=id_desc,获取所有用例库的键值对
+r($caselib->getPairsTest('all', $orderList[1], null)) && p('201,402') && e('这是测试套件名称201,这是测试套件名称402'); // 测试type=all,orderBy=id_asc,获取所有用例库的键值对
+r(count($caselib->getPairsTest('all', $orderList[0], null))) && p() && e('2'); // 测试返回的键值对数量
+r(implode(',', array_keys($caselib->getPairsTest('all', $orderList[0], null)))) && p() && e('402,201'); // 测试返回的键列表(降序)
+r(implode(',', array_keys($caselib->getPairsTest('all', $orderList[1], null)))) && p() && e('201,402'); // 测试返回的键列表(升序)
+r($caselib->getPairsTest('review', $orderList[0], null)) && p() && e('0'); // 测试type=review,获取需要评审的用例库

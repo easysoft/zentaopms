@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::getXmindImport();
 timeout=0
-cid=0
+cid=19007
 
 - 步骤1：正常XML文件 @{"root":{"node1":{"attr":"value1","text":"Content1"},"node2":"Content2","nested":{"child":"Child content"}}}
 

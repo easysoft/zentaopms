@@ -14,7 +14,7 @@ su('admin');
 /**
 
 title=测试 messageModel->send();
-cid=1
+cid=17058
 
 - 发送 需求 2 动态 2 的消息 @0
 - 发送 需求 2 动态 2 的消息 @0

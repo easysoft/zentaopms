@@ -7,11 +7,13 @@ title=测试 testcaseZen::assignModuleOptionMenuForEdit();
 timeout=0
 cid=0
 
-- 步骤1：普通产品用例属性1001 @/1
-- 步骤2：空模块处理 @/
-- 步骤3：缺失模块处理属性9999 @~~
-- 步骤4：空分支处理属性1002 @/2
-- 步骤5：大ID模块处理属性1005 @/5
+- 步骤1：普通产品用例(branch=0)属性1 @/模块A
+- 步骤2：分支产品用例(branch=1)属性4 @/模块D
+- 步骤3：分支产品用例(branch=2)属性7 @/模块G
+- 步骤4：产品1的第一个模块属性2 @/模块B
+- 步骤5：产品1的第二个模块属性3 @/模块C
+- 步骤6：产品2的模块属性6 @/模块F
+- 步骤7：产品2分支用例属性8 @/模块H
 
 */
 
@@ -20,12 +22,40 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 // 2. zendata数据准备（根据需要配置）
+// 产品数据
+$productTable = zenData('product');
+$productTable->id->range('1-5');
+$productTable->name->range('产品1,产品2,产品3,产品4,产品5');
+$productTable->type->range('normal{2},branch{2},platform{1}');
+$productTable->status->range('normal');
+$productTable->deleted->range('0');
+$productTable->gen(5);
+
+// 模块数据
 $moduleTable = zenData('module');
-$moduleTable->id->range('1001-1010');
-$moduleTable->root->range('1{5}, 2{5}');
-$moduleTable->name->range('模块A,模块B,模块C,模块D,模块E,模块F,模块G,模块H,模块I,模块J');
+$moduleTable->id->range('1-20');
+$moduleTable->root->range('1{5},2{5},3{5},4{3},5{2}');
+$moduleTable->branch->range('0{5},1{5},2{5},0{3},1{2}');
+$moduleTable->name->range('模块A,模块B,模块C,模块D,模块E,模块F,模块G,模块H,模块I,模块J,模块K,模块L,模块M,模块N,模块O,模块P,模块Q,模块R,模块S,模块T');
 $moduleTable->type->range('case');
-$moduleTable->gen(10);
+$moduleTable->parent->range('0');
+$moduleTable->grade->range('1');
+$moduleTable->deleted->range('0');
+$moduleTable->gen(20);
+
+// 用例数据
+$caseTable = zenData('case');
+$caseTable->id->range('1-10');
+$caseTable->product->range('1{5},2{3},3{2}');
+$caseTable->module->range('1,2,3,4,5,6,7,8,11,12');
+$caseTable->branch->range('0{3},1{4},2{3}');
+$caseTable->lib->range('0');
+$caseTable->fromCaseID->range('0');
+$caseTable->title->range('测试用例A,测试用例B,测试用例C,测试用例D,测试用例E,测试用例F,测试用例G,测试用例H,测试用例I,测试用例J');
+$caseTable->type->range('feature');
+$caseTable->status->range('normal');
+$caseTable->deleted->range('0');
+$caseTable->gen(10);
 
 // 3. 用户登录（选择合适角色）
 su('admin');
@@ -34,47 +64,10 @@ su('admin');
 $testcaseTest = new testcaseTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-// 步骤1：测试普通产品用例的模块选项菜单分配
-$case1 = new stdclass();
-$case1->product = 1;
-$case1->module = 1001;
-$case1->branch = '1';
-$case1->lib = 0;
-$case1->fromCaseID = 0;
-r($testcaseTest->assignModuleOptionMenuForEditTest($case1)) && p('1001') && e('/1'); // 步骤1：普通产品用例
-
-// 步骤2：测试空模块的边界情况处理
-$case2 = new stdclass();
-$case2->product = 1;
-$case2->module = 0;
-$case2->branch = '1';
-$case2->lib = 0;
-$case2->fromCaseID = 0;
-r($testcaseTest->assignModuleOptionMenuForEditTest($case2)) && p('0') && e('/'); // 步骤2：空模块处理
-
-// 步骤3：测试用例模块不在当前菜单中的处理
-$case3 = new stdclass();
-$case3->product = 1;
-$case3->module = 9999;
-$case3->branch = '1';
-$case3->lib = 0;
-$case3->fromCaseID = 0;
-r($testcaseTest->assignModuleOptionMenuForEditTest($case3)) && p('9999') && e('~~'); // 步骤3：缺失模块处理
-
-// 步骤4：测试空分支的用例模块选项菜单分配
-$case4 = new stdclass();
-$case4->product = 1;
-$case4->module = 1002;
-$case4->branch = '';
-$case4->lib = 0;
-$case4->fromCaseID = 0;
-r($testcaseTest->assignModuleOptionMenuForEditTest($case4)) && p('1002') && e('/2'); // 步骤4：空分支处理
-
-// 步骤5：测试大模块ID的边界情况
-$case5 = new stdclass();
-$case5->product = 2;
-$case5->module = 1005;
-$case5->branch = '0';
-$case5->lib = 0;
-$case5->fromCaseID = 0;
-r($testcaseTest->assignModuleOptionMenuForEditTest($case5)) && p('1005') && e('/5'); // 步骤5：大ID模块处理
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(1))) && p('1') && e('/模块A'); // 步骤1：普通产品用例(branch=0)
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(4))) && p('4') && e('/模块D'); // 步骤2：分支产品用例(branch=1)
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(7))) && p('7') && e('/模块G'); // 步骤3：分支产品用例(branch=2)
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(2))) && p('2') && e('/模块B'); // 步骤4：产品1的第一个模块
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(3))) && p('3') && e('/模块C'); // 步骤5：产品1的第二个模块
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(6))) && p('6') && e('/模块F'); // 步骤6：产品2的模块
+r($testcaseTest->assignModuleOptionMenuForEditTest($testcaseTest->objectModel->loadModel('testcase')->getByID(8))) && p('8') && e('/模块H'); // 步骤7：产品2分支用例

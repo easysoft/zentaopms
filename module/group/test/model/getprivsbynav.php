@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getPrivsByNav();
 timeout=0
-cid=1
+cid=16711
 
 - 验证my菜单的权限
  - 属性my-todo @my-todo

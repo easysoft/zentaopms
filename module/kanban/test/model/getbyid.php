@@ -10,7 +10,7 @@ zenData('kanban')->gen(5);
 
 title=测试 kanbanModel->getByID();
 timeout=0
-cid=1
+cid=16902
 
 - 测试查询看板1的信息
  - 属性name @通用看板1

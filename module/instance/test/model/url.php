@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::url();
 timeout=0
-cid=0
+cid=16827
 
 - 步骤1：正常情况 @//example.com
 - 步骤2：端口443不添加 @//test.example.com

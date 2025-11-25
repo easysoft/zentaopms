@@ -10,7 +10,7 @@ $config->user->availableBatchCreateFields = 'dept,email,gender,commiter,join,sky
 $config->user->availableBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 
 $config->user->list = new stdclass();
-$config->user->list->customBatchCreateFields = 'dept,email,gender,commiter,join,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
+$config->user->list->customBatchCreateFields = 'email,gender,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 $config->user->list->customBatchEditFields   = 'dept,email,commiter,skype,qq,dingding,weixin,mobile,slack,whatsapp,phone,address,zipcode';
 
 $config->user->custom = new stdclass();

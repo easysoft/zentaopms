@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::processRowspanForUnitCases();
 timeout=0
-cid=0
+cid=19240
 
 - 期望返回空数组 @0
 - 第一个用例rowspan=3，其他为0

@@ -11,7 +11,7 @@ zenData('kanbancell')->gen(4);
 
 title=测试 kanbanModel->processCards();
 timeout=0
-cid=1
+cid=16951
 
 - 处理列1的卡片 @2:,3,4,803,3:,5,6,805,4:,7,8,807,
 - 处理列2的卡片 @1:,1,2,801,3,4,803,3:,5,6,805,4:,7,8,807,

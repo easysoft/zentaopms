@@ -5,7 +5,7 @@
 
 title=测试 jobTao::getCustomParam();
 timeout=0
-cid=0
+cid=16856
 
 - 返回true @1
 - 错误信息第paramName条的0属性 @请输入参数名称。

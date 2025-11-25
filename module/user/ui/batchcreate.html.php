@@ -65,7 +65,7 @@ formBatchPanel
         set::items($depts),
         set::value($deptID ? $deptID : ''),
         set::ditto(true),
-        set::hidden(!in_array('dept', $showFields) || $type != 'inside')
+        set::hidden($type != 'inside')
     ),
     formBatchItem
     (
@@ -197,7 +197,7 @@ formBatchPanel
         set::label($lang->user->join),
         set::control('date'),
         set::width('120px'),
-        set::hidden(!in_array('join', $showFields) || $type != 'inside')
+        set::hidden($type != 'inside')
     ),
     formBatchItem
     (

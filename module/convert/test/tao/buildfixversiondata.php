@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildFixVersionData();
 timeout=0
-cid=0
+cid=15813
 
 - 执行convertTest模块的buildFixVersionDataTest方法，参数是array 属性issue @TASK-123
 - 执行convertTest模块的buildFixVersionDataTest方法，参数是array 属性version @v2

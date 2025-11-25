@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 title=测试 screenModel->buildSelect();
 timeout=0
-cid=1
+cid=18218
 
 - 判断生成的年份过滤条件是否正确第testChart条的year属性 @testField
 - 判断不传入年份的情况下，是否生成了默认值。

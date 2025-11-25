@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getActivateStatus();
-cid=0
+cid=18496
 
 - 执行storyModel模块的getActivateStatus方法，参数是1  @active
 - 执行storyModel模块的getActivateStatus方法，参数是2  @active

@@ -5,7 +5,7 @@
 
 title=测试 searchModel::buildQuery();
 timeout=0
-cid=0
+cid=18295
 
 - 执行$form第0条的field属性 @title
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))

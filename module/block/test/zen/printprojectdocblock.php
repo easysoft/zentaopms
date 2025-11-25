@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printProjectDocBlock();
 timeout=0
-cid=0
+cid=15274
 
 - 步骤1：正常情况属性success @1
 - 步骤2：参与项目类型属性type @involved

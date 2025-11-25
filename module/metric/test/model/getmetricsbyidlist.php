@@ -5,7 +5,7 @@
 
 title=getMetricsByIDList
 timeout=0
-cid=1
+cid=17110
 
 - 使用字符串传入获取metric
  - 第0条的code属性 @count_of_program

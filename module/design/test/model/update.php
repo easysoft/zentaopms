@@ -5,7 +5,7 @@
 
 title=测试 designModel->update();
 timeout=0
-cid=1
+cid=15997
 
 - 修改设计的所属产品
  - 第0条的field属性 @product

@@ -5,7 +5,7 @@
 
 title=测试 convertModel::processJiraUser();
 timeout=0
-cid=0
+cid=15794
 
 - 步骤1：account模式正常用户名 @testuser
 - 步骤2：长用户名截取 @verylongusernameexceedsthi

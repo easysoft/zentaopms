@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->getPointEndDate()
-cid=0
+cid=17770
 
 - 传入point->end不为空 @2023-09-28
 - 传入point->end为空 @2023-12-21

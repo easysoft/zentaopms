@@ -5,7 +5,7 @@
 
 title=测试 docModel->moveLib();
 timeout=0
-cid=0
+cid=16143
 
 - 数据为空，libID=0时，检查返回结果 @0
 - 数据为空，libID=1时，检查返回结果 @0

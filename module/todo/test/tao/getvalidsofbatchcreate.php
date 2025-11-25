@@ -9,6 +9,7 @@ zenData('todo')->gen(0);
 
 title=测试 todoTao->getValidsOfBatchCreate();
 timeout=0
+cid=19815
 
 - 获取批量创建有效的数据，结果为1
  - 属性account @admin

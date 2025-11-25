@@ -5,7 +5,7 @@
 
 title=测试 programModel::getTopByPath();
 timeout=0
-cid=1
+cid=17702
 
 - 传入一个path，返回最顶级path @2
 - 传入一个path，返回最顶级path @1

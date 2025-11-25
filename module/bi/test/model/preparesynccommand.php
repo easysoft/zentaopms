@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareSyncCommand();
 timeout=0
-cid=0
+cid=15208
 
 - 执行biTest模块的prepareSyncCommandTest方法，参数是$binPath, $extensionPath, $copySQL  @1
 - 执行$result, $binPath) !== false @1

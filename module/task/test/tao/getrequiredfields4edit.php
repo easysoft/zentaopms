@@ -5,7 +5,7 @@
 
 title=测试 taskTao::getRequiredFields4Edit();
 timeout=0
-cid=0
+cid=18883
 
 - 步骤1：正常任务且执行阶段有故事需求 @execution,name,type
 

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::standardizeParams();
 timeout=0
-cid=0
+cid=15067
 
 - 步骤1：正常对象参数转换
  - 属性camel_case_property @value1

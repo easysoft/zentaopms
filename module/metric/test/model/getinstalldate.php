@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getInstallDate();
 timeout=0
-cid=0
+cid=17101
 
 - 步骤1：从config表获取有效安装日期 @2024
 - 步骤2：config表中安装日期为无效年份时从action表获取 @2024-01-10 10:00:00

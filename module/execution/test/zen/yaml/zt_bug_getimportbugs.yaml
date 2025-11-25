@@ -21,15 +21,31 @@ fields:
   range: 0
   note: 关联执行ID，0表示未关联
 
+- field: toTask
+  range: 0
+  note: 是否已转为任务
+
+- field: toStory
+  range: 0
+  note: 是否已转为需求
+
+- field: branch
+  range: 0
+  note: 分支ID
+
+- field: status
+  range: '[active{3}, resolved{2}, active{2}, resolved{1}, closed{2}]'
+  note: Bug状态
+
+- field: resolution
+  range: '[""{3}, "postponed"{2}, ""{2}, "postponed"{1}, "fixed"{2}]'
+  note: 解决方案
+
 - field: title
   range: 'Bug标题{10}'
   prefix: "[BUG-"
   postfix: "] "
   note: Bug标题
-
-- field: status
-  range: '[active{5}, resolved{2}, postponed{3}]'
-  note: Bug状态
 
 - field: assignedTo
   range: '[admin{3}, user1{2}, user2{2}, {3}]'

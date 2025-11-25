@@ -5,66 +5,157 @@
 
 title=测试 bugZen::buildEditForm();
 timeout=0
-cid=0
+cid=15438
 
-- 执行bugTest模块的buildEditFormTest方法 
- - 属性hasBug @1
- - 属性hasProduct @1
- - 属性hasExecutions @1
-- 执行bugTest模块的buildEditFormTest方法 
- - 属性hasBug @1
- - 属性hasProduct @1
- - 属性hasBranchTagOption @1
-- 执行bugTest模块的buildEditFormTest方法 
- - 属性hasBug @1
- - 属性hasProjects @1
- - 属性hasExecutions @0
-- 执行bugTest模块的buildEditFormTest方法 
- - 属性hasBug @1
- - 属性hasExecutions @1
- - 属性hasAssignedToList @1
-- 执行bugTest模块的buildEditFormTest方法 
- - 属性hasBug @1
- - 属性hasStories @0
- - 属性hasCases @1
+- 步骤1:正常情况下编辑bug,验证基本视图属性
+ - 属性bug @1
+ - 属性product @1
+ - 属性moduleOptionMenu @5
+- 步骤2:编辑有项目和执行的bug,验证项目和执行数据
+ - 属性projects @1
+ - 属性executions @1
+- 步骤3:编辑有分支的产品bug,验证分支选项属性branchTagOption @0
+- 步骤4:编辑有重复bug的情况,验证duplicateBugs数量属性duplicateBugs @0
+- 步骤5:验证编辑表单的projectID属性projectID @1
+- 步骤6:无项目的bug,验证项目数据为空
+ - 属性projectID @0
+ - 属性projects @0
+- 步骤7:有项目无执行的bug,验证执行数据为空
+ - 属性projectID @1
+ - 属性executions @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 准备基础数据
-$bug = zenData('bug');
-$bug->id->range('1-5');
-$bug->product->range('1{3},2{2}');
-$bug->branch->range('0{4},1{1}');
-$bug->module->range('1-5');
-$bug->execution->range('1{2},0{2},99{1}');
-$bug->project->range('1{3},2{2}');
-$bug->title->range('Test Bug{1-5}');
-$bug->type->range('codeerror{3},designdefect{1},others{1}');
-$bug->status->range('active{3},resolved{1},closed{1}');
-$bug->assignedTo->range('admin{2},user1{1},user2{1},closed{1}');
-$bug->gen(5);
-
-$product = zenData('product');
-$product->id->range('1-3');
-$product->name->range('Product{1-3}');
-$product->type->range('normal{2},branch{1}');
-$product->gen(3);
-
-$user = zenData('user');
-$user->id->range('1-5');
-$user->account->range('admin,user1,user2,user3,user4');
-$user->realname->range('Admin,User1,User2,User3,User4');
-$user->gen(5);
+zenData('product')->gen(5);
+zenData('project')->gen(5);
+zenData('bug')->gen(15);
+zenData('build')->gen(5);
+zenData('story')->gen(5);
+zenData('task')->gen(5);
+zenData('case')->gen(5);
+zenData('user')->gen(10);
+zenData('module')->gen(5);
+zenData('branch')->gen(3);
+zenData('productplan')->gen(5);
+zenData('testtask')->gen(3);
+zenData('action')->gen(10);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
-r($bugTest->buildEditFormTest((object)['id' => 1, 'product' => 1, 'branch' => 0, 'module' => 1, 'execution' => 1, 'project' => 1, 'type' => 'codeerror', 'assignedTo' => 'admin', 'story' => 0, 'status' => 'active', 'title' => 'Test Bug 1', 'openedBy' => 'admin', 'openedBuild' => '1', 'resolvedBy' => '', 'storyTitle' => '', 'testtask' => 0])) && p('hasBug,hasProduct,hasExecutions') && e('1,1,1');
-r($bugTest->buildEditFormTest((object)['id' => 2, 'product' => 2, 'branch' => 1, 'module' => 2, 'execution' => 0, 'project' => 2, 'type' => 'designdefect', 'assignedTo' => 'user1', 'story' => 0, 'status' => 'active', 'title' => 'Test Bug 2', 'openedBy' => 'user1', 'openedBuild' => '2', 'resolvedBy' => '', 'storyTitle' => '', 'testtask' => 0])) && p('hasBug,hasProduct,hasBranchTagOption') && e('1,1,1');
-r($bugTest->buildEditFormTest((object)['id' => 3, 'product' => 1, 'branch' => 0, 'module' => 3, 'execution' => 0, 'project' => 1, 'type' => 'others', 'assignedTo' => 'user2', 'story' => 0, 'status' => 'active', 'title' => 'Test Bug 3', 'openedBy' => 'user2', 'openedBuild' => '1', 'resolvedBy' => '', 'storyTitle' => '', 'testtask' => 0])) && p('hasBug,hasProjects,hasExecutions') && e('1,1,0');
-r($bugTest->buildEditFormTest((object)['id' => 4, 'product' => 1, 'branch' => 0, 'module' => 1, 'execution' => 99, 'project' => 1, 'type' => 'codeerror', 'assignedTo' => 'admin', 'story' => 0, 'status' => 'resolved', 'title' => 'Test Bug 4', 'openedBy' => 'admin', 'openedBuild' => '1', 'resolvedBy' => 'admin', 'storyTitle' => '', 'testtask' => 0])) && p('hasBug,hasExecutions,hasAssignedToList') && e('1,1,1');
-r($bugTest->buildEditFormTest((object)['id' => 5, 'product' => 1, 'branch' => 0, 'module' => 1, 'execution' => 1, 'project' => 1, 'type' => 'codeerror', 'assignedTo' => 'closed', 'story' => 0, 'status' => 'closed', 'title' => 'Test Bug 5', 'openedBy' => 'admin', 'openedBuild' => '1', 'resolvedBy' => 'admin', 'storyTitle' => '', 'testtask' => 0])) && p('hasBug,hasStories,hasCases') && e('1,0,1');
+$bug1 = (object)array(
+    'id' => 1,
+    'product' => 1,
+    'branch' => 0,
+    'project' => 1,
+    'execution' => 1,
+    'module' => 1,
+    'title' => 'Test Bug 1',
+    'type' => 'codeerror',
+    'story' => 1,
+    'storyTitle' => 'Story 1',
+    'plan' => 1,
+    'openedBuild' => '1,2',
+    'assignedTo' => 'admin',
+    'resolvedBy' => '',
+    'closedBy' => '',
+    'openedBy' => 'admin',
+    'status' => 'active',
+    'testtask' => 1
+);
+
+$bug2 = (object)array(
+    'id' => 2,
+    'product' => 2,
+    'branch' => 0,
+    'project' => 2,
+    'execution' => 2,
+    'module' => 2,
+    'title' => 'Test Bug 2',
+    'type' => 'codeerror',
+    'story' => 2,
+    'storyTitle' => 'Story 2',
+    'plan' => 2,
+    'openedBuild' => '3',
+    'assignedTo' => 'user1',
+    'resolvedBy' => '',
+    'closedBy' => '',
+    'openedBy' => 'admin',
+    'status' => 'active',
+    'testtask' => 2
+);
+
+$bug3 = (object)array(
+    'id' => 3,
+    'product' => 1,
+    'branch' => 1,
+    'project' => 1,
+    'execution' => 1,
+    'module' => 1,
+    'title' => 'Test Bug 3 with Branch',
+    'type' => 'codeerror',
+    'story' => 1,
+    'storyTitle' => 'Story 1',
+    'plan' => 1,
+    'openedBuild' => '1',
+    'assignedTo' => 'admin',
+    'resolvedBy' => '',
+    'closedBy' => '',
+    'openedBy' => 'admin',
+    'status' => 'active',
+    'testtask' => 1
+);
+
+$bug4 = (object)array(
+    'id' => 4,
+    'product' => 1,
+    'branch' => 0,
+    'project' => 0,
+    'execution' => 0,
+    'module' => 1,
+    'title' => 'Test Bug 4 No Project',
+    'type' => 'codeerror',
+    'story' => 1,
+    'storyTitle' => 'Story 1',
+    'plan' => 1,
+    'openedBuild' => '1',
+    'assignedTo' => 'admin',
+    'resolvedBy' => '',
+    'closedBy' => '',
+    'openedBy' => 'admin',
+    'status' => 'active',
+    'testtask' => 1
+);
+
+$bug5 = (object)array(
+    'id' => 5,
+    'product' => 1,
+    'branch' => 0,
+    'project' => 1,
+    'execution' => 0,
+    'module' => 1,
+    'title' => 'Test Bug 5 with Project Only',
+    'type' => 'codeerror',
+    'story' => 1,
+    'storyTitle' => 'Story 1',
+    'plan' => 1,
+    'openedBuild' => '1',
+    'assignedTo' => 'admin',
+    'resolvedBy' => '',
+    'closedBy' => '',
+    'openedBy' => 'admin',
+    'status' => 'active',
+    'testtask' => 1
+);
+
+r($bugTest->buildEditFormTest($bug1)) && p('bug,product,moduleOptionMenu') && e('1,1,5'); // 步骤1:正常情况下编辑bug,验证基本视图属性
+r($bugTest->buildEditFormTest($bug2)) && p('projects,executions') && e('1,1'); // 步骤2:编辑有项目和执行的bug,验证项目和执行数据
+r($bugTest->buildEditFormTest($bug3)) && p('branchTagOption') && e('0'); // 步骤3:编辑有分支的产品bug,验证分支选项
+r($bugTest->buildEditFormTest($bug1)) && p('duplicateBugs') && e('0'); // 步骤4:编辑有重复bug的情况,验证duplicateBugs数量
+r($bugTest->buildEditFormTest($bug1)) && p('projectID') && e('1'); // 步骤5:验证编辑表单的projectID
+r($bugTest->buildEditFormTest($bug4)) && p('projectID,projects') && e('0,0'); // 步骤6:无项目的bug,验证项目数据为空
+r($bugTest->buildEditFormTest($bug5)) && p('projectID,executions') && e('1,0'); // 步骤7:有项目无执行的bug,验证执行数据为空

@@ -5,142 +5,108 @@
 
 title=测试 convertTao::createWorkflowField();
 timeout=0
-cid=0
+cid=15851
 
-PASS
-PASS
-PASS
-PASS
-PASS
-
+- 执行convertTest模块的createWorkflowFieldTest方法，参数是$relations1, array 第zentaoObject条的Story属性 @story
+- 执行convertTest模块的createWorkflowFieldTest方法，参数是$relations2, array 第zentaoObject条的Story属性 @story
+- 执行$result3['zentaoFieldStory']['customfield_10001']) && strpos($result3['zentaoFieldStory']['customfield_10001'], 'jirafield') === 0 ? 1 : 0 @1
+- 执行convertTest模块的createWorkflowFieldTest方法，参数是$relations4, $fields4, array 第zentaoFieldStory条的customfield_10002属性 @existingfield001
+- 执行$result5['zentaoFieldBug']['customfield_10003']) && strpos($result5['zentaoFieldBug']['customfield_10003'], 'jirafield') === 0 ? 1 : 0 @1
 
 */
 
-// 简单的测试框架函数
-function r($result) {
-    global $testResult;
-    $testResult = $result;
-    return true;
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+
+// 定义常量
+if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', 'jiratmprelation');
+
+global $tester, $config;
+
+// 创建临时表
+$sql = "CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `AType` char(30) NOT NULL DEFAULT '',
+  `AID` char(100) NOT NULL DEFAULT '',
+  `BType` char(30) NOT NULL DEFAULT '',
+  `BID` char(100) NOT NULL DEFAULT '',
+  `extra` char(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+try {
+    $tester->dbh->exec($sql);
+    $tester->dbh->exec('TRUNCATE TABLE jiratmprelation');
+} catch (Exception $e) {
+    // 忽略表创建错误
 }
 
-function p($path = '') {
-    global $testResult, $checkPath;
-    $checkPath = $path;
-    return true;
-}
+zenData('workflowfield')->gen(0);
+zenData('workflow')->gen(0);
 
-function e($expected) {
-    global $testResult, $checkPath;
+// 设置必要的配置
+if(!isset($config->workflowfield)) $config->workflowfield = new stdclass();
+if(!isset($config->workflowfield->numberTypes)) $config->workflowfield->numberTypes = array('int', 'decimal', 'float');
 
-    if($checkPath == '') {
-        $actual = $testResult;
-    } else {
-        $pathParts = explode(':', $checkPath);
-        $actual = $testResult;
-        foreach($pathParts as $part) {
-            if(is_array($actual) && isset($actual[$part])) {
-                $actual = $actual[$part];
-            } else {
-                $actual = null;
-                break;
-            }
-        }
-    }
+su('admin');
 
-    if($actual === $expected) {
-        echo "PASS\n";
-        return true;
-    } else {
-        echo "FAIL - Expected: ";
-        var_export($expected);
-        echo ", Actual: ";
-        var_export($actual);
-        echo "\n";
-        return false;
-    }
-}
+$convertTest = new convertTest();
 
-class convertWorkflowFieldTest
-{
-    private $config;
+// 测试步骤1: 开源版直接返回relations
+$originalEdition = $config->edition;
+$config->edition = 'open';
+$relations1 = array('zentaoObject' => array('Story' => 'story'), 'zentaoFieldStory' => array());
+r($convertTest->createWorkflowFieldTest($relations1, array(), array(), array(), array())) && p('zentaoObject:Story') && e('story');
 
-    public function __construct()
-    {
-        // 模拟配置
-        $this->config = new stdclass();
-        $this->config->edition = 'open';
-    }
+// 测试步骤2: 企业版无自定义字段的情况
+$config->edition = 'biz';
+$relations2 = array('zentaoObject' => array('Story' => 'story'));
+r($convertTest->createWorkflowFieldTest($relations2, array(), array(), array(), array())) && p('zentaoObject:Story') && e('story');
 
-    /**
-     * Test createWorkflowField method.
-     *
-     * @param  array $relations
-     * @param  array $fields
-     * @param  array $fieldOptions
-     * @param  array $jiraResolutions
-     * @param  array $jiraPriList
-     * @access public
-     * @return array
-     */
-    public function createWorkflowFieldTest($relations = array(), $fields = array(), $fieldOptions = array(), $jiraResolutions = array(), $jiraPriList = array())
-    {
-        // 开源版本直接返回relations
-        if($this->config->edition == 'open') return $relations;
-
-        // 模拟商业版本的逻辑
-        foreach($relations as $stepKey => $fieldList)
-        {
-            if(strpos($stepKey, 'zentaoField') === false) continue;
-
-            foreach($fieldList as $jiraField => $zentaoField)
-            {
-                if($zentaoField != 'add_field') continue;
-
-                // 模拟字段创建逻辑
-                $fieldName = 'jirafield' . substr(uniqid(), 0, 8);
-                $relations[$stepKey][$jiraField] = $fieldName;
-            }
-        }
-
-        return $relations;
-    }
-
-    public function setBizVersion()
-    {
-        $this->config->edition = 'biz';
-    }
-}
-
-$convertTest = new convertWorkflowFieldTest();
-
-r($convertTest->createWorkflowFieldTest(array('test' => 'data'), array(), array(), array(), array())) && p('test') && e('data');
-
-$convertTest->setBizVersion();
-$relations = array(
-    'zentaoObject' => array('issue' => 'testmodule'),
-    'zentaoFieldissue' => array('customfield_10002' => 'add_field')
+// 测试步骤3: 正常创建工作流字段
+$relations3 = array(
+    'zentaoObject' => array('Story' => 'story'),
+    'zentaoFieldStory' => array('customfield_10001' => 'add_field')
 );
-$result = $convertTest->createWorkflowFieldTest($relations, array(), array(), array(), array());
-r(isset($result['zentaoFieldissue']['customfield_10002']) && strpos($result['zentaoFieldissue']['customfield_10002'], 'jirafield') === 0) && p() && e(true);
-
-$relations = array(
-    'zentaoObject' => array('issue' => 'testmodule'),
-    'zentaoFieldissue' => array('customfield_10001' => 'existing_field')
+$fields3 = array(
+    'customfield_10001' => (object)array(
+        'cfname' => 'Test Custom Field',
+        'customfieldtypekey' => 'com.atlassian.jira.plugin.system.customfieldtypes:textfield'
+    )
 );
-$result = $convertTest->createWorkflowFieldTest($relations, array(), array(), array(), array());
-r($result['zentaoFieldissue']['customfield_10001'] == 'existing_field') && p() && e(true);
+$result3 = $convertTest->createWorkflowFieldTest($relations3, $fields3, array(), array(), array());
+r(isset($result3['zentaoFieldStory']['customfield_10001']) && strpos($result3['zentaoFieldStory']['customfield_10001'], 'jirafield') === 0 ? 1 : 0) && p() && e('1');
 
-$relations = array(
-    'zentaoObject' => array('issue' => 'testmodule'),
-    'zentaoFieldissue' => array()
+// 测试步骤4: 字段已存在时重用
+$tester->dbh->exec("INSERT INTO jiratmprelation (AType, AID, BType, BID, extra) VALUES ('jcustomfield', 'customfield_10002', 'zworkflowfield', 'existingfield001', 'story')");
+$relations4 = array(
+    'zentaoObject' => array('Story' => 'story'),
+    'zentaoFieldStory' => array('customfield_10002' => 'add_field')
 );
-$result = $convertTest->createWorkflowFieldTest($relations, array(), array(), array(), array());
-r(empty($result['zentaoFieldissue'])) && p() && e(true);
+$fields4 = array(
+    'customfield_10002' => (object)array(
+        'cfname' => 'Existing Field',
+        'customfieldtypekey' => 'com.atlassian.jira.plugin.system.customfieldtypes:textfield'
+    )
+);
+r($convertTest->createWorkflowFieldTest($relations4, $fields4, array(), array(), array())) && p('zentaoFieldStory:customfield_10002') && e('existingfield001');
 
-$relations = array(
-    'zentaoObject' => array('issue' => 'testmodule'),
-    'zentaoFieldissue' => array('customfield_10004' => 'add_field'),
-    'normalKey' => array('field1' => 'value1')
+// 测试步骤5: 包含选项的自定义字段
+$relations5 = array(
+    'zentaoObject' => array('Bug' => 'bug'),
+    'zentaoFieldBug' => array('customfield_10003' => 'add_field')
 );
-$result = $convertTest->createWorkflowFieldTest($relations, array(), array(), array(), array());
-r(isset($result['zentaoFieldissue']['customfield_10004']) && strpos($result['zentaoFieldissue']['customfield_10004'], 'jirafield') === 0 && $result['normalKey']['field1'] == 'value1') && p() && e(true);
+$fields5 = array(
+    'customfield_10003' => (object)array(
+        'cfname' => 'Select Field',
+        'customfieldtypekey' => 'com.atlassian.jira.plugin.system.customfieldtypes:select'
+    )
+);
+$fieldOptions5 = array(
+    '1001' => (object)array('customfield' => 'customfield_10003', 'customvalue' => 'Option 1'),
+    '1002' => (object)array('customfield' => 'customfield_10003', 'customvalue' => 'Option 2')
+);
+$result5 = $convertTest->createWorkflowFieldTest($relations5, $fields5, $fieldOptions5, array(), array());
+r(isset($result5['zentaoFieldBug']['customfield_10003']) && strpos($result5['zentaoFieldBug']['customfield_10003'], 'jirafield') === 0 ? 1 : 0) && p() && e('1');
+
+$config->edition = $originalEdition;

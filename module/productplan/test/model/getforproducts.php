@@ -4,7 +4,7 @@
 
 title=productpanModel->getForProducts();
 timeout=0
-cid=1
+cid=17633
 
 - 测试传入一个数组，取出产品名称count属性1 @计划1
 - 测试传入一个不存在的product数组,应为空 @0

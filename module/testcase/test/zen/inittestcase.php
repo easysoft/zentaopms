@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::initTestcase();
 timeout=0
-cid=0
+cid=19100
 
 - 步骤1：基础初始化测试
  - 属性type @feature

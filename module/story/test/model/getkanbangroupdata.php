@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getKanbanGroupData();
 timeout=0
-cid=0
+cid=18539
 
 - 查看获取到的第一个需求看板分组数据数量 @3
 - 查看获取到的第二个需求看板分组数据数量 @3

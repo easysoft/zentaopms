@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::createProject();
 timeout=0
-cid=0
+cid=18382
 
 - 步骤1：正常数据创建项目 @1
 - 步骤2：无效sonarqubeID创建项目 @return false

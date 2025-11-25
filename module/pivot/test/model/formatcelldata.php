@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::formatCellData();
 timeout=0
-cid=0
+cid=17368
 
 - 执行pivotTest模块的formatCellDataTest方法，参数是'test', array 第col1条的value属性 @100
 - 执行pivotTest模块的formatCellDataTest方法，参数是'data', array 第item1条的value属性 @hello

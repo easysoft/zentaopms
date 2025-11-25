@@ -5,7 +5,7 @@
 
 title=测试 groupModel->getProjectAdmins();
 timeout=0
-cid=1
+cid=16715
 
 - 获取admin的管理信息
  - 第admin,user9条的programs属性 @all

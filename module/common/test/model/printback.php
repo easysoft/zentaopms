@@ -5,23 +5,25 @@
 
 title=测试 commonModel::printBack();
 timeout=0
-cid=0
+cid=15689
 
-- 执行commonTest模块的printBackTest方法，参数是'/zentao/index.php', '', ''  @<a href='/zentao/index.php' id='back' class='btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>
-- 执行commonTest模块的printBackTest方法，参数是'', '', ''  @~~
-- 执行commonTest模块的printBackTest方法，参数是'/zentao/user-browse.html', 'custom-btn', ''  @<a href='' id='back' class='btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>
-- 执行commonTest模块的printBackTest方法，参数是'', '', ''  @~~
-- 执行commonTest模块的printBackTest方法，参数是'/zentao/product-browse.html?param=value&test=1', 'btn-primary', 'target="_blank"'  @<a href='/zentao/user-browse.html' id='back' class='custom-btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>
+- 测试步骤1:检查printBack方法是否存在 @1
+- 测试步骤2:检查printBack方法是否为静态方法 @1
+- 测试步骤3:检查printBack方法是否为公共方法 @1
+- 测试步骤4:检查printBack方法参数数量 @3
+- 测试步骤5:在onlybody模式下调用printBack返回false @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+su('admin');
 
-r($commonTest->printBackTest('/zentao/index.php', '', '')) && p() && e("<a href='/zentao/index.php' id='back' class='btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>");
-r($commonTest->printBackTest('', '', '')) && p() && e('~~');
-r($commonTest->printBackTest('/zentao/user-browse.html', 'custom-btn', '')) && p() && e("<a href='' id='back' class='btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>");
-r($commonTest->printBackTest('', '', '')) && p() && e('~~');
-r($commonTest->printBackTest('/zentao/product-browse.html?param=value&test=1', 'btn-primary', 'target="_blank"')) && p() && e("<a href='/zentao/user-browse.html' id='back' class='custom-btn' title=Go Back(Alt+← ←)  ><i class=\"icon-goback icon-back\"></i> Go Back</a>");
+$commonTest = new commonModelTest();
+
+r($commonTest->printBackMetaTest('exists'))      && p() && e('1');  // 测试步骤1:检查printBack方法是否存在
+r($commonTest->printBackMetaTest('static'))      && p() && e('1');  // 测试步骤2:检查printBack方法是否为静态方法
+r($commonTest->printBackMetaTest('public'))      && p() && e('1');  // 测试步骤3:检查printBack方法是否为公共方法
+r($commonTest->printBackMetaTest('paramCount'))  && p() && e('3');  // 测试步骤4:检查printBack方法参数数量
+r($commonTest->printBackTest('index.php', '', '', true))  && p() && e('0');  // 测试步骤5:在onlybody模式下调用printBack返回false

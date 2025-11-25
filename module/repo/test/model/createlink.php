@@ -5,7 +5,7 @@
 
 title=测试 repoModel::createLink();
 timeout=0
-cid=0
+cid=18038
 
 - 测试PATH_INFO请求类型无路径参数 @repo-showSyncCommit-1.html
 - 测试entry参数转换 @repo-showSyncCommit-1-.html?repoPath=ZXh0ZW50aW9u

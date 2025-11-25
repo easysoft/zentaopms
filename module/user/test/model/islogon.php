@@ -5,7 +5,7 @@
 
 title=测试 userModel::isLogon();
 timeout=0
-cid=0
+cid=19646
 
 - 步骤1：正常登录用户admin的状态检查 @1
 - 步骤2：正常登录用户user1的状态检查 @1

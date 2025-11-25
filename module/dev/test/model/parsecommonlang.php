@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
 /**
 
 title=测试 devModel::parseCommonLang();
-cid=1
+cid=16017
 pid=1
 
 解析空字符串 >> null

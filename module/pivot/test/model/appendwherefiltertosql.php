@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::appendWhereFilterToSql();
 timeout=0
-cid=0
+cid=17356
 
 - 执行pivotTest模块的appendWhereFilterToSqlTest方法，参数是$sql, $filters, $driver  @select * from ( SELECT * FROM zt_user ) tt where tt.`account` = 'admin'
 - 执行pivotTest模块的appendWhereFilterToSqlTest方法，参数是$sql, $filters, $driver  @select * from ( SELECT * FROM zt_user ) tt where 1=0

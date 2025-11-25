@@ -5,63 +5,73 @@
 
 title=测试 productZen::assignBrowseData();
 timeout=0
-cid=0
+cid=17561
 
-- 步骤1：正常产品需求浏览数据分配
- - 属性success @1
+- 测试步骤1: 空需求列表
+ - 属性productID @1
  - 属性storyType @story
-- 步骤2：项目需求浏览数据分配
- - 属性success @1
- - 属性isProjectStory @1
-- 步骤3：空需求列表数据分配
- - 属性success @1
- - 属性stories @0
-- 步骤4：不同需求类型数据分配
- - 属性success @1
+- 测试步骤2: 普通产品story类型
+ - 属性productID @1
+ - 属性storyType @story
+- 测试步骤3: requirement类型
+ - 属性productID @1
  - 属性storyType @requirement
-- 步骤5：不同分支数据分配
- - 属性success @1
- - 属性branch @branch1
- - 属性branchID @branch1
+- 测试步骤4: 项目需求场景属性isProjectStory @1
+- 测试步骤5: 带分支产品属性branch @1
+- 测试步骤6: from为doc
+ - 属性productID @1
+ - 属性storyType @story
+- 测试步骤7: browseType为bysearch属性browseType @bysearch
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备
-$product = zenData('product');
-$product->id->range('1-10');
-$product->name->range('产品A,产品B,产品C');
-$product->status->range('normal{8},closed{2}');
-$product->type->range('normal{6},branch{4}');
-$product->PO->range('admin,user1,user2');
-$product->gen(10);
+zenData('product')->gen(10);
+zenData('project')->gen(10);
+zenData('story')->gen(20);
+zenData('user')->gen(10);
 
-$story = zenData('story');
-$story->id->range('1-20');
-$story->product->range('1-3');
-$story->title->range('需求标题1,需求标题2,需求标题3');
-$story->type->range('story{15},requirement{5}');
-$story->status->range('active{10},draft{5},closed{5}');
-$story->gen(20);
-
-$project = zenData('project');
-$project->id->range('1-5');
-$project->name->range('项目A,项目B,项目C');
-$project->status->range('doing{3},wait{2}');
-$project->gen(5);
-
-// 3. 用户登录
 su('admin');
 
-// 4. 创建测试实例
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 测试步骤
-r($productTest->assignBrowseDataTest(array(), 'all', 'story', false, (object)array('id' => 1, 'name' => '产品A', 'type' => 'normal'), null, 'all', 'all', '')) && p('success,storyType') && e('1,story'); // 步骤1：正常产品需求浏览数据分配
-r($productTest->assignBrowseDataTest(array(), 'all', 'story', true, (object)array('id' => 1, 'name' => '产品A', 'type' => 'normal'), (object)array('id' => 1, 'name' => '项目A'), 'all', 'all', '')) && p('success,isProjectStory') && e('1,1'); // 步骤2：项目需求浏览数据分配
-r($productTest->assignBrowseDataTest(array(), 'closed', 'story', false, null, null, '', '', '')) && p('success,stories') && e('1,0'); // 步骤3：空需求列表数据分配
-r($productTest->assignBrowseDataTest(array(), 'all', 'requirement', false, (object)array('id' => 2, 'name' => '产品B', 'type' => 'normal'), null, 'all', 'all', '')) && p('success,storyType') && e('1,requirement'); // 步骤4：不同需求类型数据分配
-r($productTest->assignBrowseDataTest(array(), 'all', 'story', false, (object)array('id' => 3, 'name' => '产品C', 'type' => 'branch'), null, 'branch1', 'branch1', '')) && p('success,branch,branchID') && e('1,branch1,branch1'); // 步骤5：不同分支数据分配
+/* 准备测试数据 */
+$emptyStories = array();
+
+$story1 = new stdclass();
+$story1->id = 1;
+$story1->title = 'Test Story 1';
+$story1->type = 'story';
+$story1->status = 'active';
+
+$story2 = new stdclass();
+$story2->id = 2;
+$story2->title = 'Test Story 2';
+$story2->type = 'requirement';
+$story2->status = 'active';
+
+$stories = array(1 => $story1, 2 => $story2);
+
+$product = new stdclass();
+$product->id = 1;
+$product->name = 'Test Product';
+$product->type = 'normal';
+
+$productWithBranch = new stdclass();
+$productWithBranch->id = 2;
+$productWithBranch->name = 'Test Product with Branch';
+$productWithBranch->type = 'branch';
+
+$project = new stdclass();
+$project->id = 1;
+$project->name = 'Test Project';
+
+r($productTest->assignBrowseDataTest($emptyStories, 'all', 'story', false, $product, null, '', '', '')) && p('productID,storyType') && e('1,story'); // 测试步骤1: 空需求列表
+r($productTest->assignBrowseDataTest($stories, 'unclosed', 'story', false, $product, null, '', '', '')) && p('productID,storyType') && e('1,story'); // 测试步骤2: 普通产品story类型
+r($productTest->assignBrowseDataTest($stories, 'unclosed', 'requirement', false, $product, null, '', '', '')) && p('productID,storyType') && e('1,requirement'); // 测试步骤3: requirement类型
+r($productTest->assignBrowseDataTest($stories, 'unclosed', 'story', true, $product, $project, '', '', '')) && p('isProjectStory') && e('1'); // 测试步骤4: 项目需求场景
+r($productTest->assignBrowseDataTest($stories, 'unclosed', 'story', false, $productWithBranch, null, '1', '1', '')) && p('branch') && e('1'); // 测试步骤5: 带分支产品
+r($productTest->assignBrowseDataTest($stories, 'bysearch', 'story', false, $product, null, '', '', 'doc')) && p('productID,storyType') && e('1,story'); // 测试步骤6: from为doc
+r($productTest->assignBrowseDataTest($stories, 'bysearch', 'requirement', false, $product, null, '', '', '')) && p('browseType') && e('bysearch'); // 测试步骤7: browseType为bysearch

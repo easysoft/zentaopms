@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getPrivsAfterVersion();
 timeout=0
-cid=0
+cid=16709
 
 - 步骤1：空版本号获取所有权限属性doc-sort @doc-sort
 - 步骤2：版本号18.0获取权限属性doc-sort @~~

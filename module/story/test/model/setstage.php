@@ -5,7 +5,7 @@
 
 title=测试 storyModel->setStage();
 timeout=0
-cid=0
+cid=18584
 
 - 不传入需求; @0
 - 传入已经分解任务的需求，检查需求阶段。属性stage @testing

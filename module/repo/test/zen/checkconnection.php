@@ -5,7 +5,7 @@
 
 title=测试 repoZen::checkConnection();
 timeout=0
-cid=0
+cid=18131
 
 - 步骤1：空POST数据边界验证 @0
 - 步骤2：无效SCM类型验证 @0

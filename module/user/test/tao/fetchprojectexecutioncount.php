@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 userTao->fetchProjectExecutionCount();
-cid=1
+cid=19669
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

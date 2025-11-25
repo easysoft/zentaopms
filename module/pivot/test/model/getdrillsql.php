@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getDrillSQL();
 timeout=0
-cid=0
+cid=17382
 
 - 执行pivotModel模块的getDrillSQL方法，参数是'task', 'WHERE status="active"', array  @SELECT t1.* FROM (SELECT t1.*  FROM zt_task AS t1 WHERE status="active") AS t1 WHERE 1=1
 - 执行pivotModel模块的getDrillSQL方法，参数是'user', '', array  @SELECT t1.* FROM (SELECT t1.*  FROM zt_user AS t1 ) AS t1 WHERE 1=1

@@ -5,7 +5,7 @@
 
 title=测试 groupModel->updatePrivByGroup();
 timeout=0
-cid=1
+cid=16724
 
 - 更新my的权限，检查my模块的权限是否更新正确属性my @index|work
 - 更新my的权限，检查其他nav的权限是否有影响属性module1 @method1

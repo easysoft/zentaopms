@@ -5,7 +5,7 @@
 
 title=测试 buildModel::isClickable();
 timeout=0
-cid=0
+cid=15501
 
 - 执行buildTest模块的isClickableTest方法，参数是'create', 'bug', false  @1
 - 执行buildTest模块的isClickableTest方法，参数是'create', 'testtask', false  @1

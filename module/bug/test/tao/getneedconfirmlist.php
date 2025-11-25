@@ -29,7 +29,7 @@ su('admin');
 
 title=bugModel->getNeedConfirmList();
 timeout=0
-cid=1
+cid=15419
 
 - 获取产品 1 项目 0 执行 空 分支 all 模块 空 的待确认bug @4
 - 获取产品 1 项目 2 执行 空 分支 all 模块 空 的待确认bug @0

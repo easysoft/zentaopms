@@ -105,6 +105,15 @@ class dbh
     public static $durations = [];
 
     /**
+     * 数据库的标识符引号。
+     * identifier quote character.
+     *
+     * @var string
+     * @access public
+    */
+    public $iqchar = '`';
+
+    /**
      * Constructor
      *
      * @param  object $dbConfig
@@ -121,47 +130,30 @@ class dbh
         $driverAlias = array('oceanbase' => 'mysql', 'highgo' => 'pgsql', 'postgres' => 'pgsql');
         $driver      = isset($driverAlias[$dbConfig->driver]) ? $driverAlias[$dbConfig->driver] : $dbConfig->driver;
 
-        $pdo = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->dbConfig = $dbConfig;
+        $this->flag     = $flag;
 
         $queries = [];
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $queries[] = "SET NAMES {$dbConfig->encoding}";
+            $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
-        else if($setSchema)
+        else
         {
-            $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+            $this->iqchar = '"';
+
+            if($setSchema)
+            {
+                $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+            }
         }
         if(!empty($queries))
         {
-            foreach($queries as $query)
-            {
-                try
-                {
-                    $begin = microtime(true);
-                    $pdo->exec($query);
-                    $duration = microtime(true) - $begin;
-                }
-                catch (PDOException $e)
-                {
-                    $duration = microtime(true) - $begin;
-                    $this->sqlError($e);
-                }
-                finally
-                {
-                    dbh::$flags[]     = $flag;
-                    dbh::$queries[]   = $query;
-                    dbh::$durations[] = round($duration, 6);
-                    if(!empty($config->debug)) dbh::$traces[] = 'vim +' . (__LINE__ - 12) . ' ' . __FILE__;
-                }
-            }
+            foreach($queries as $query) $this->rawQuery($query);
         }
-
-        $this->pdo      = $pdo;
-        $this->dbConfig = $dbConfig;
-        $this->flag     = $flag;
     }
 
     /**
@@ -435,6 +427,45 @@ class dbh
     }
 
     /**
+     * 获取数据库支持的字符集和排序规则。
+     * Get the database charset and collation.
+     *
+     * @param  string $database
+     * @access public
+     * @return array
+     */
+    public function getDatabaseCharsetAndCollation(string $database = ''): array
+    {
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
+
+        if(empty($database)) $database = $this->dbConfig->name;
+
+        $sql    = "SELECT DEFAULT_CHARACTER_SET_NAME AS charset, DEFAULT_COLLATION_NAME AS collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$database}';";
+        $result = $this->rawQuery($sql)->fetch();
+        if($result) return (array)$result;
+
+        return $this->getServerCharsetAndCollation();
+    }
+
+    /**
+     * 获取服务器支持的字符集和排序规则。
+     * Get the server charset and collation.
+     *
+     * @access public
+     * @return array
+     */
+    public function getServerCharsetAndCollation(): array
+    {
+        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
+
+        $charsets  = [];
+        $statement = $this->rawQuery("SHOW CHARSET WHERE Charset LIKE 'utf8%';");
+        while($charset = $statement->fetch(PDO::FETCH_ASSOC)) $charsets[$charset['Charset']] = ['charset' => $charset['Charset'], 'collation' => $charset['Default collation']];
+
+        return $charsets['utf8mb4'] ?? $charsets['utf8mb3'] ?? ['charset' => 'utf8', 'collation' => 'utf8_general_ci'];
+    }
+
+    /**
      * Create database.
      *
      * @param  string    $version
@@ -446,15 +477,8 @@ class dbh
         switch($this->dbConfig->driver)
         {
             case 'mysql':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                if(version_compare($version, '5.6', '>='))
-                {
-                    $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
-                }
-                elseif(version_compare($version, '4.1', '>='))
-                {
-                    $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-                }
+                $result = $this->getServerCharsetAndCollation();
+                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
                 return $this->rawQuery($sql);
             case 'dm':
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
@@ -600,6 +624,12 @@ class dbh
                     $sql = preg_replace($pattern, '', $sql);
                 }
 
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
+
+                $sql = $this->formatAttr($sql);
+
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
@@ -702,6 +732,10 @@ class dbh
                     $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
+
+                /* Remove comment. */
+                $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
+                $sql     = preg_replace($pattern, '', $sql);
             case 'ALTER':
                 $sql = $this->formatField($sql);
                 $sql = $this->formatAttr($sql);
@@ -778,6 +812,8 @@ class dbh
         switch($this->dbConfig->driver)
         {
             case 'dm':
+            case 'postgres':
+            case 'highgo':
                 $sql = str_replace('`', '"', $sql);
                 return $sql;
 
@@ -983,14 +1019,6 @@ class dbh
      */
     public function convertAlterTableSql($sql)
     {
-        /* If table has datas and sql no default values defined, add default ''/0. */
-        if(strpos($sql, "NOT NULL") !== false && strpos($sql, "DEFAULT") === false)
-        {
-            $default = '';
-            if(strpos($sql, "integer") !== false) $default = 0;
-            $sql = str_replace("NOT NULL", "NOT NULL DEFAULT '" . $default ."'", $sql);
-        }
-
         $pattern = '/ALTER TABLE "(.*?)" CHANGE "(.*?)" "(.*?)" (.*?)(?:;|$)/';
         preg_match($pattern, $sql, $matches);
         if(count($matches) != 5) return $sql;

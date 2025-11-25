@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::printStorageUsage();
 timeout=0
-cid=0
+cid=16811
 
 - 测试步骤1：10%使用率外部实例颜色属性color @secondary
 - 测试步骤2：60%使用率外部实例颜色属性color @warning

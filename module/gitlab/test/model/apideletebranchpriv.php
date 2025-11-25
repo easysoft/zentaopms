@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiDeleteBranchPriv();
 timeout=0
-cid=0
+cid=16585
 
 - 步骤1：gitlabID为0 @0
 - 步骤2：项目不存在属性message @404 Project Not Found

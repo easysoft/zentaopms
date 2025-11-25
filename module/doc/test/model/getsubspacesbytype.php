@@ -5,7 +5,7 @@
 
 title=测试 docModel::getSubSpacesByType();
 timeout=0
-cid=0
+cid=16129
 
 - 步骤1：获取所有类型子空间
  - 属性1 @我的空间/我的文档库1

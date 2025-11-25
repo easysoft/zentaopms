@@ -611,8 +611,8 @@ class dataset
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_RELATION)->alias('t3')->on('t1.id = t3.AID and t3.AType = "story" and t3.BType = "bug"')
-            ->leftJoin(TABLE_BUG)->alias('t4')->on('t3.BType = "bug" and t3.BID = t4.id')
+            ->leftJoin(TABLE_RELATION)->alias('t3')->on("t1.id = t3.AID and t3.AType = 'story' and t3.BType = 'bug'")
+            ->leftJoin(TABLE_BUG)->alias('t4')->on("t3.BType = 'bug' and t3.BID = t4.id")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')

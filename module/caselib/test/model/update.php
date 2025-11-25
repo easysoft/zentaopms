@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 caselibModel->update();
 timeout=0
-cid=1
+cid=15537
 
 - 测试更新名称为空时候返回第name条的0属性 @『名称』不能为空。
 - 测试更新之后名称信息属性name @测试修改名称

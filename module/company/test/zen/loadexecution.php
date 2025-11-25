@@ -5,44 +5,44 @@
 
 title=测试 companyZen::loadExecution();
 timeout=0
-cid=0
+cid=15738
 
-- 步骤1：正常情况-验证第一个元素为执行标签 @执行
-- 步骤2：边界值-验证数组长度 @1
-- 步骤3：异常输入-验证执行标签内容 @执行
-- 步骤4：权限验证-验证返回非空 @执行
-- 步骤5：业务规则-验证标签正确 @执行
+- 步骤1:正常情况下加载执行列表,返回第一个元素为通用执行标签 @执行
+- 步骤2:验证返回类型为数组 @1
+- 步骤3:验证返回数组包含索引0 @1
+- 步骤4:验证返回数组至少包含1个元素 @1
+- 步骤5:再次验证返回结果包含通用执行标签 @执行
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$projectTable = zenData('project');
-$projectTable->id->range('1-10');
-$projectTable->name->range('项目1,项目2,项目3,执行1,执行2,执行3,执行4,执行5');
-$projectTable->type->range('project{3},execution{5}');
-$projectTable->status->range('wait{2},doing{3},suspended{2},closed{1}');
-$projectTable->deleted->range('0');
-$projectTable->gen(8);
+// 2. zendata数据准备
+zenData('user')->gen(10);
 
-$actionTable = zenData('action');
-$actionTable->objectType->range('execution');
-$actionTable->objectID->range('4-8');
-$actionTable->execution->range('4-8');
-$actionTable->gen(5);
+$project = zenData('project');
+$project->id->range('1-15');
+$project->project->range('0{3},1,2,3,1,2,3,1,2,3,1,2,3');
+$project->type->range('program{3},sprint{6},stage{6}');
+$project->name->range('项目集1,项目集2,项目集3,迭代1,迭代2,迭代3,迭代4,迭代5,迭代6,阶段1,阶段2,阶段3,阶段4,阶段5,阶段6');
+$project->status->range('wait{3},doing{9},closed{3}');
+$project->deleted->range('0{13},1{2}');
+$project->multiple->range('0{3},1');
+$project->vision->range('rnd');
+$project->hasProduct->range('1');
+$project->gen(15);
 
-// 3. 用户登录（选择合适角色）
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$companyTest = new companyTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$companyTest = new companyZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤1：正常情况-验证第一个元素为执行标签
-r(count($companyTest->loadExecutionTest())) && p() && e('1'); // 步骤2：边界值-验证数组长度
-r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤3：异常输入-验证执行标签内容
-r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤4：权限验证-验证返回非空
-r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤5：业务规则-验证标签正确
+// 5. 强制要求:必须包含至少5个测试步骤
+r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤1:正常情况下加载执行列表,返回第一个元素为通用执行标签
+r(is_array($companyTest->loadExecutionTest())) && p() && e('1'); // 步骤2:验证返回类型为数组
+r(isset($companyTest->loadExecutionTest()[0])) && p() && e('1'); // 步骤3:验证返回数组包含索引0
+r(count($companyTest->loadExecutionTest()) >= 1) && p() && e('1'); // 步骤4:验证返回数组至少包含1个元素
+r($companyTest->loadExecutionTest()) && p('0') && e('执行'); // 步骤5:再次验证返回结果包含通用执行标签

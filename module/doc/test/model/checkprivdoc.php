@@ -5,7 +5,7 @@
 
 title=测试 docModel->checkPrivDoc();
 timeout=0
-cid=1
+cid=16054
 
 - 检查管理员对于没有libID文档权限 @0
 - 检查管理员对于资产库下文档权限 @1

@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getSysURL();
-cid=1
+cid=18168
 
 - 测试获取 config->mail->demain the demain argv1 https:localhost 的 system url @the demain
 - 测试获取 config->mail->demain the demain argv1 https:localhost:8080 的 system url @the demain

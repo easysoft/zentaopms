@@ -5,7 +5,7 @@
 
 title=测试 storyZen::removeFormFieldsForCreate();
 timeout=0
-cid=0
+cid=18703
 
 - 执行storyTest模块的removeFormFieldsForCreateTest方法，参数是$baseFields, 'story', 1, 'story' 第product条的control属性 @select
 - 执行storyTest模块的removeFormFieldsForCreateTest方法，参数是$baseFields, 'requirement', 1, 'story' 属性branches @~~

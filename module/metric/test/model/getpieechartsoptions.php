@@ -5,7 +5,7 @@
 
 title=getPieEchartsOptions
 timeout=0
-cid=1
+cid=17120
 
 - 测试数据集1的legend
  - 第legend条的orient属性 @vertical

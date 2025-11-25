@@ -5,7 +5,7 @@
 
 title=测试 screenTao::processRadarData();
 timeout=0
-cid=0
+cid=18287
 
 - 步骤1：正常情况，第一个指标值为5第result条的0属性 @5
 - 步骤2：空结果，第一个指标值为0第result条的0属性 @0

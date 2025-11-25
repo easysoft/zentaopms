@@ -5,7 +5,7 @@
 
 title=测试 docModel::getSpaces();
 timeout=0
-cid=0
+cid=16126
 
 - 测试获取all类型的空间返回空间数组长度 @0
 - 测试获取mine类型的空间返回空间数组长度 @0

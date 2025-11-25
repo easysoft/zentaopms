@@ -5,7 +5,7 @@
 
 title=测试 repoModel::setHideMenu();
 timeout=0
-cid=0
+cid=18103
 
 - 步骤1：execution环境下有Gitlab代码库时返回对象ID @101
 - 步骤2：execution环境下无代码库时返回对象ID @102

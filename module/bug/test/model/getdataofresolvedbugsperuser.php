@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDataOfResolvedBugsPerUser();
 timeout=0
-cid=0
+cid=15379
 
 - 测试步骤1：验证admin用户解决的bug数量第admin条的value属性 @8
 - 测试步骤2：验证user1用户解决的bug数量第user1条的value属性 @6

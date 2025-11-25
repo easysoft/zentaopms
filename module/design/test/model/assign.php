@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->assign();
-cid=1
+cid=15982
 
 - 测试设计ID为0，分配给admin @0
 - 测试设计ID为1，分配给admin

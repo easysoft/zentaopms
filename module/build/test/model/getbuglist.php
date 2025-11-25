@@ -5,7 +5,7 @@
 
 title=测试 buildModel::getBugList();
 timeout=0
-cid=0
+cid=15488
 
 - 测试步骤1：传入空字符串 @0
 - 测试步骤2：传入有效bugId列表第4条的title属性 @Bug5

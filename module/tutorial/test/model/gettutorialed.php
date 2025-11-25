@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 tutorialModel->getTutorialed();
 timeout=0
-cid=1
+cid=19493
 
 - 测试是否能拿到 admin 的数据 @3
 - 测试是否能拿到 user1 的数据 @4

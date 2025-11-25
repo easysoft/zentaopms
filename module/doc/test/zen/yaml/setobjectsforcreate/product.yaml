@@ -1,0 +1,37 @@
+---
+title: product表测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: program
+  note: 项目集ID
+  range: '0'
+- field: name
+  note: 产品名称
+  range: 测试产品{$}
+- field: code
+  note: 产品代号
+  range: PROD{$}
+- field: type
+  note: 产品类型
+  range: normal
+- field: status
+  note: 产品状态
+  range: normal
+- field: acl
+  note: 访问控制
+  range: open
+- field: createdBy
+  note: 创建人
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: (w)-(-w)
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 是否删除
+  range: '0'

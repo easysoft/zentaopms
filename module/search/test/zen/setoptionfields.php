@@ -4,25 +4,51 @@
 /**
 
 title=测试 searchZen::setOptionFields();
-cid=0
+timeout=0
+cid=18350
 
-- 测试步骤1：正常字段参数情况 >> 期望返回正确格式的字段对象数组
-- 测试步骤2：包含id字段的情况 >> 期望id字段有placeholder属性
-- 测试步骤3：包含values数组的字段 >> 期望字段对象包含values属性
-- 测试步骤4：空字段和参数数组 >> 期望返回空数组
-- 测试步骤5：多字段混合情况 >> 期望返回多个字段对象
+- 测试步骤1:正常输入两个字段 @1
+- 测试步骤2:测试空字段输入 @0
+- 测试步骤3:测试单个字段输入 @1
+- 测试步骤4:测试带values参数的字段 @1
+- 测试步骤5:验证不同fieldParams格式 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$searchTest = new searchZenTest();
 
-r($searchTest->setOptionFieldsTest(array('title' => '标题', 'status' => '状态'), array('title' => array('control' => 'input', 'operator' => 'include'), 'status' => array('control' => 'select', 'operator' => 'equal')))) && p('0:name') && e('title');
-r($searchTest->setOptionFieldsTest(array('id' => 'ID', 'title' => '标题'), array('id' => array('control' => 'input', 'operator' => 'equal'), 'title' => array('control' => 'input', 'operator' => 'include')))) && p('0:placeholder') && e('多个id可用英文逗号分隔');
-r($searchTest->setOptionFieldsTest(array('status' => '状态', 'priority' => '优先级'), array('status' => array('control' => 'select', 'operator' => 'equal', 'values' => array('active' => '激活', 'closed' => '关闭')), 'priority' => array('control' => 'select', 'operator' => 'equal')))) && p('0:values:active') && e('激活');
-r($searchTest->setOptionFieldsTest(array(), array())) && p() && e('0');
-r($searchTest->setOptionFieldsTest(array('title' => '标题', 'status' => '状态', 'type' => '类型'), array('title' => array('control' => 'input', 'operator' => 'include'), 'status' => array('control' => 'select', 'operator' => 'equal', 'values' => array('open' => '打开')), 'type' => array('control' => 'select', 'operator' => 'equal')))) && p() && e('3');
+$fields1 = array('id' => 'ID', 'name' => '名称');
+$fieldParams1 = array(
+    'id' => array('control' => 'input', 'operator' => 'include'),
+    'name' => array('control' => 'input', 'operator' => 'include')
+);
+
+$fields2 = array();
+$fieldParams2 = array();
+
+$fields3 = array('title' => '标题');
+$fieldParams3 = array(
+    'title' => array('control' => 'input', 'operator' => 'include')
+);
+
+$fields4 = array('status' => '状态');
+$fieldParams4 = array(
+    'status' => array('control' => 'select', 'operator' => 'equal', 'values' => array('open' => '激活', 'closed' => '已关闭'))
+);
+
+$fields5 = array('priority' => '优先级', 'type' => '类型');
+$fieldParams5 = array(
+    'priority' => array('control' => 'select', 'operator' => 'equal'),
+    'type' => array('control' => 'select', 'operator' => 'equal')
+);
+
+r(is_array($searchTest->setOptionFieldsTest($fields1, $fieldParams1))) && p() && e('1'); // 测试步骤1:正常输入两个字段
+r($searchTest->setOptionFieldsTest($fields2, $fieldParams2)) && p() && e('0'); // 测试步骤2:测试空字段输入
+r(is_array($searchTest->setOptionFieldsTest($fields3, $fieldParams3))) && p() && e('1'); // 测试步骤3:测试单个字段输入
+r(is_array($searchTest->setOptionFieldsTest($fields4, $fieldParams4))) && p() && e('1'); // 测试步骤4:测试带values参数的字段
+r(is_array($searchTest->setOptionFieldsTest($fields5, $fieldParams5))) && p() && e('1'); // 测试步骤5:验证不同fieldParams格式

@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::apiErrorHandling();
 timeout=0
-cid=0
+cid=18375
 
 - 执行sonarqubeTest模块的apiErrorHandlingTest方法，参数是null  @0
 - 执行sonarqubeTest模块的apiErrorHandlingTest方法，参数是$responseWithSingleError  @0

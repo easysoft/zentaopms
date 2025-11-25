@@ -5,7 +5,7 @@
 
 title=测试 groupModel::processDepends();
 timeout=0
-cid=0
+cid=16721
 
 - 执行groupTest模块的processDependsTest方法，参数是array 属性user-view @user-view
 - 执行groupTest模块的processDependsTest方法，参数是array 属性user-view @user-view

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::buildStoriesForBatchClose();
 timeout=0
-cid=0
+cid=18666
 
 - 步骤1：正常情况
  - 第1条的status属性 @closed

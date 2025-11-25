@@ -4,7 +4,7 @@
 /**
 
 title=productTao->checkLocateCreate();
-cid=0
+cid=17532
 
 - 没有任何产品 @1
 - 已经存在产品 @0

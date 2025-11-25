@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::addChildColumnCell();
 timeout=0
-cid=0
+cid=16968
 
 - 步骤1：正常情况，i=0属性success @1
 - 步骤2：正常情况，i=1属性success @1

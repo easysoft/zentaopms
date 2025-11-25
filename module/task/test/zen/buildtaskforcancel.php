@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTaskForCancel();
 timeout=0
-cid=0
+cid=18907
 
 - 步骤1：等待中任务取消情况
  - 属性status @cancel

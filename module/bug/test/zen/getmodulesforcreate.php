@@ -5,59 +5,72 @@
 
 title=测试 bugZen::getModulesForCreate();
 timeout=0
-cid=0
+cid=15455
 
-- 执行bugTest模块的getModulesForCreateTest方法，参数是$bug1 属性moduleID @3
-- 执行bugTest模块的getModulesForCreateTest方法，参数是$bug2 属性moduleID @6
-- 执行bugTest模块的getModulesForCreateTest方法，参数是$bug3 属性moduleID @9
-- 执行bugTest模块的getModulesForCreateTest方法，参数是$bug4 属性moduleID @~~
-- 执行bugTest模块的getModulesForCreateTest方法，参数是$bug5 属性moduleID @~~
+- 步骤1:正常产品,有效的模块ID属性moduleID @1
+- 步骤2:正常产品,无效的模块ID属性moduleID @~~
+- 步骤3:分支产品,指定有效分支属性moduleID @2
+- 步骤4:分支为all的情况属性moduleID @1
+- 步骤5:模块ID为0的情况属性moduleID @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('product')->loadYaml('product', false, 2)->gen(5);
-zenData('module')->loadYaml('module_bug', false, 2)->gen(10);
-zenData('user')->loadYaml('user_getmodulesforcreate', false, 2)->gen(5);
+zenData('product')->gen(10);
+
+$module = zenData('module');
+$module->id->range('1-20');
+$module->root->range('1-10');
+$module->branch->range('0{15},1{3},2{2}');
+$module->type->range('bug');
+$module->name->range('模块1,模块2,模块3,模块4,模块5');
+$module->parent->range('0');
+$module->path->range('`,1,`,`,2,`,`,3,`,`,4,`,`,5,`');
+$module->grade->range('1');
+$module->deleted->range('0');
+$module->gen(20);
+
+zenData('branch')->gen(10);
+zenData('user')->gen(10);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
-$bug1 = new stdclass();
+$bug1 = new stdClass();
 $bug1->productID = 1;
-$bug1->branch = '';
-$bug1->moduleID = 3;
-$bug1->branches = array('' => '');
+$bug1->branch = '0';
+$bug1->moduleID = 1;
+$bug1->branches = array();
 
-$bug2 = new stdclass();
+$bug2 = new stdClass();
 $bug2->productID = 1;
-$bug2->branch = '';
-$bug2->moduleID = 6;
-$bug2->branches = array('' => '');
+$bug2->branch = '0';
+$bug2->moduleID = 999;
+$bug2->branches = array();
 
-$bug3 = new stdclass();
-$bug3->productID = 1;
-$bug3->branch = '';
-$bug3->moduleID = 9;
-$bug3->branches = array('' => '');
+$bug3 = new stdClass();
+$bug3->productID = 2;
+$bug3->branch = '1';
+$bug3->moduleID = 2;
+$bug3->branches = array('1' => 'Branch1');
 
-$bug4 = new stdclass();
+$bug4 = new stdClass();
 $bug4->productID = 1;
-$bug4->branch = '';
-$bug4->moduleID = 999;
-$bug4->branches = array('' => '');
+$bug4->branch = 'all';
+$bug4->moduleID = 1;
+$bug4->branches = array('all' => 'All');
 
-$bug5 = new stdclass();
-$bug5->productID = 999;
-$bug5->branch = '';
-$bug5->moduleID = 1;
-$bug5->branches = array('' => '');
+$bug5 = new stdClass();
+$bug5->productID = 1;
+$bug5->branch = '0';
+$bug5->moduleID = 0;
+$bug5->branches = array();
 
-r($bugTest->getModulesForCreateTest($bug1)) && p('moduleID') && e('3');
-r($bugTest->getModulesForCreateTest($bug2)) && p('moduleID') && e('6');
-r($bugTest->getModulesForCreateTest($bug3)) && p('moduleID') && e('9');
-r($bugTest->getModulesForCreateTest($bug4)) && p('moduleID') && e('~~');
-r($bugTest->getModulesForCreateTest($bug5)) && p('moduleID') && e('~~');
+r($bugTest->getModulesForCreateTest($bug1)) && p('moduleID') && e('1'); // 步骤1:正常产品,有效的模块ID
+r($bugTest->getModulesForCreateTest($bug2)) && p('moduleID') && e('~~'); // 步骤2:正常产品,无效的模块ID
+r($bugTest->getModulesForCreateTest($bug3)) && p('moduleID') && e('2'); // 步骤3:分支产品,指定有效分支
+r($bugTest->getModulesForCreateTest($bug4)) && p('moduleID') && e('1'); // 步骤4:分支为all的情况
+r($bugTest->getModulesForCreateTest($bug5)) && p('moduleID') && e('0'); // 步骤5:模块ID为0的情况

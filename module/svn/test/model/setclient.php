@@ -5,7 +5,7 @@
 
 title=测试 svnModel::setClient();
 timeout=0
-cid=0
+cid=18722
 
 - 执行svnTest模块的setClientTest方法，参数是$repo 属性client @svn --non-interactive
 - 执行svnTest模块的setClientTest方法，参数是$repo 属性client @svn --non-interactive

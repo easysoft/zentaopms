@@ -9,7 +9,7 @@ zenData('instance')->gen(5);
 
 title=instanceModel->getList();
 timeout=0
-cid=1
+cid=16803
 
 - 查看获取到的所有instance的数量 @5
 - 通过搜索条件查看获取到的所有instance的数量 @1

@@ -5,7 +5,7 @@
 
 title=测试 dataviewModel::replace4Workflow();
 timeout=0
-cid=0
+cid=15960
 
 - 执行dataviewTest模块的replace4WorkflowTest方法，参数是'产品名称'  @产品名称
 - 执行dataviewTest模块的replace4WorkflowTest方法，参数是'这个产品很好'  @这个产品很好

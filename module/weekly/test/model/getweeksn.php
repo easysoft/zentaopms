@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getWeekSN();
-cid=1
+cid=19737
 
 - 开始时间和结束时间都不为空 @1
 - 开始时间不为空，结束时间为空 @-2730

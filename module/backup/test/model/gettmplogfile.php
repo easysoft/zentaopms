@@ -5,7 +5,7 @@
 
 title=测试 backupModel::getTmpLogFile();
 timeout=0
-cid=0
+cid=15138
 
 - 执行backupTest模块的getTmpLogFileTest方法，参数是'/tmp/backup_test'  @/tmp/backup_test.tmp.summary
 - 执行backupTest模块的getTmpLogFileTest方法，参数是''  @.tmp.summary

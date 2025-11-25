@@ -5,7 +5,7 @@
 
 title=测试 userModel->login();
 timeout=0
-cid=0
+cid=19648
 
 - 用户名为空，返回 false。 @0
 - 登录成功，返回的用户是 admin，是超级管理员。

@@ -5,7 +5,7 @@
 
 title=测试 ciModel::getCompileByID();
 timeout=0
-cid=0
+cid=15588
 
 - 执行ciTest模块的getCompileByIdTest方法，参数是1
  - 属性id @1

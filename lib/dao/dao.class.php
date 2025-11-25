@@ -60,7 +60,7 @@ class dao extends baseDAO
 
                 if(isset($currentMainTable))
                 {
-                    if($currentMainTable == $this->table)
+                    if(trim($currentMainTable, '`') == trim($this->table, '`'))
                     {
                         $data = $this->processData($data);
                     }

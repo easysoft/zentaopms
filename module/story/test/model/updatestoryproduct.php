@@ -5,7 +5,7 @@
 
 title=测试 storyModel->updateStoryProduct();
 timeout=0
-cid=0
+cid=18598
 
 - 没有跟随父需求变化的情况属性product @1
 - 没有跟随父需求变化的情况属性product @1

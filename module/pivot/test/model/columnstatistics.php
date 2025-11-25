@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::columnStatistics();
 timeout=0
-cid=0
+cid=17360
 
 - 步骤1：正常数量统计 @5
 - 步骤2：数值求和 @435

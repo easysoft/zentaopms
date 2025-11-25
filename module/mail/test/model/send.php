@@ -5,7 +5,7 @@
 
 title=测试 mailModel::send();
 timeout=0
-cid=0
+cid=17016
 
 - 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body'  @0
 - 执行mailTest模块的sendTest方法，参数是'admin', 'test subject', 'test body'  @1

@@ -5,7 +5,7 @@
 
 title=测试 adminModel::getSignature();
 timeout=0
-cid=0
+cid=14982
 
 - 步骤1：正常参数包含u键的情况 @cd7f3c22953ae195924d7ffaeaa4e2c7
 - 步骤2：参数不包含u键的情况 @cd7f3c22953ae195924d7ffaeaa4e2c7

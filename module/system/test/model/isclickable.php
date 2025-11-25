@@ -6,7 +6,7 @@ su('admin');
 
 title=测试 systemModel::isClickable();
 timeout=0
-cid=1
+cid=18742
 
 - 上架状态，不显示上键按钮 @0
 - 上架状态，显示下键按钮 @1

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::tryAllocate();
 timeout=0
-cid=0
+cid=15632
 
 PASS
 PASS

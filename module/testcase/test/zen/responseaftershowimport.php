@@ -7,39 +7,61 @@ title=测试 testcaseZen::responseAfterShowImport();
 timeout=0
 cid=0
 
-- 步骤1：DAO错误情况属性result @fail
-- 步骤2：最后一页项目标签属性result @success
-- 步骤3：最后一页普通标签属性result @success
-- 步骤4：非最后一页属性result @success
-- 步骤5：自定义消息
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是1, '0', 0, '', '', $mockData1
+ - 属性result @fail
+ - 属性message @Database error occurred
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是1, '0', 100, '/tmp/test.csv', '', $mockData2
  - 属性result @success
- - 属性message @自定义成功消息
+ - 属性load @/testcase-browse-productID=1.html
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是2, '1', 100, '', '', $mockData3
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是3, '0', 200, '', '', $mockData4
+ - 属性result @success
+ - 属性load @/testcase-showImport-productID=3&branch=0&pagerID=2&maxImport=200&insert=.html
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是4, '2', 50, '', 'Import completed', $mockData5
+ - 属性result @success
+ - 属性message @/Import completed
+- 执行testcaseZenTest模块的responseAfterShowImportTest方法，参数是5, '', 100, '', '', $mockData6
+ - 属性result @success
+ - 属性load @/testcase-browse-productID=5.html
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('case');
-$table->id->range('1-10');
-$table->product->range('1-3');
-$table->title->range('测试用例1,测试用例2,测试用例3');
-$table->status->range('normal');
-$table->openedBy->range('admin');
-$table->openedDate->range('`2023-01-01 00:00:00`');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $testcaseTest = new testcaseTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->responseAfterShowImportTest(1, '0', 10, '/tmp/test.csv', '', true)) && p('result') && e('fail'); // 步骤1：DAO错误情况
-r($testcaseTest->responseAfterShowImportTest(1, '0', 10, '/tmp/test.csv', '', false, true)) && p('result') && e('success'); // 步骤2：最后一页项目标签
-r($testcaseTest->responseAfterShowImportTest(1, '0', 10, '/tmp/test.csv', '', false, false)) && p('result') && e('success'); // 步骤3：最后一页普通标签
-r($testcaseTest->responseAfterShowImportTest(1, '0', 10, '/tmp/test.csv', '', false, false, false)) && p('result') && e('success'); // 步骤4：非最后一页
-r($testcaseTest->responseAfterShowImportTest(1, '0', 10, '/tmp/test.csv', '自定义成功消息', false, false, true)) && p('result,message') && e('success,自定义成功消息'); // 步骤5：自定义消息
+// 测试步骤1:测试存在 DAO 错误时的响应
+$mockData1 = array('daoError' => array('Database error occurred'));
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData1)) && p('result,message') && e('fail,Database error occurred');
+
+// 测试步骤2:测试 Ajax 模态框请求时的响应
+$mockData2 = array(
+    'request' => array('HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'),
+    'app' => array('rawParams' => array('modal'))
+);
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData2)) && p('result,closeModal,load') && e('success,1,1');
+
+// 测试步骤3:测试 JSON 视图类型时的响应
+$mockData3 = array('viewType' => 'json');
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData3)) && p('result') && e('success');
+
+// 测试步骤4:测试在 QA tab 下的默认响应
+$mockData4 = array('app' => array('tab' => 'qa'));
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData4)) && p('result,load') && e('success,/testcase-browse-productID=1&branch=0.html');
+
+// 测试步骤5:测试在 project tab 下的默认响应
+$mockData5 = array(
+    'app' => array('tab' => 'project'),
+    'session' => array('project' => 10)
+);
+r($testcaseTest->responseAfterBatchCreateTest(2, 1, $mockData5)) && p('result,load') && e('success,/project-testcase-projectID=10&productID=2&branch=1.html');
+
+// 测试步骤6:测试在 execution tab 下的默认响应
+$mockData6 = array(
+    'app' => array('tab' => 'execution'),
+    'session' => array('execution' => 20)
+);
+r($testcaseTest->responseAfterBatchCreateTest(3, 2, $mockData6)) && p('result,load') && e('success,/execution-testcase-executionID=20&productID=3&branch=2.html');

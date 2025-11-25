@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiAcceptMR();
 timeout=0
-cid=0
+cid=17221
 
 - 不存在的主机 @0
 - 已关闭的gitlab合并请求属性message @404 Not found

@@ -12,7 +12,7 @@ zenData('user')->gen(20);
 /**
 
 title=测试 personnelModel->deleteExecutionWhitelist();
-cid=1
+cid=17321
 
 - 从执行 0 删除账号 admin 的白名单 @0
 - 从执行 0 删除账号 user1 的白名单 @0

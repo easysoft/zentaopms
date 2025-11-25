@@ -4,7 +4,7 @@
 
 title=测试 docModel->copyTemplate();
 timeout=0
-cid=1
+cid=16056
 
 - 测试复制文档模板1
  - 第all条的0属性 @6

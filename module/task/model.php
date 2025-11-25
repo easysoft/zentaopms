@@ -158,14 +158,14 @@ class taskModel extends model
             $oldTask = zget($oldTasks, $taskID);
 
             /* Record effort. */
-            if(!empty($task->consumed) && $task->consumed != $oldTask->consumed)
+            if(!empty($task->consumed) && $task->consumed > $oldTask->consumed)
             {
                 $record = new stdclass();
                 $record->account  = $currentAccount;
                 $record->task     = $taskID;
                 $record->date     = $today;
                 $record->left     = $task->left;
-                $record->consumed = $task->consumed;
+                $record->consumed = $task->consumed - $oldTask->consumed;
                 $this->addTaskEffort($record);
             }
 
@@ -526,16 +526,33 @@ class taskModel extends model
     {
         $this->loadModel('story');
 
+        $requireEstimate = strpos($this->config->task->create->requiredFields, 'estimate') !== false;
+
         $executionID = !empty($tasks) ? current($tasks)->execution : 0;
         $taskIdList  = array();
         $parents     = array();
-        foreach($tasks as $task)
+        foreach($tasks as $rowIndex => $task)
         {
             /* Get the lane and column of the current task. */
             $laneID   = $task->lane;
             $columnID = $task->column;
             $level    = $task->level;
             unset($task->lane, $task->column, $task->level);
+
+            if($requireEstimate)
+            {
+                $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
+                if($this->post->isParent[$rowIndex] == '1')
+                {
+                    $requiredFields = str_replace(',estimate,', ',', $requiredFields);
+                }
+                elseif(strpos($requiredFields, ',estimate,') === false)
+                {
+                    $requiredFields .= 'estimate';
+                }
+
+                $this->config->task->create->requiredFields = trim(',', $requiredFields);
+            }
 
             /* Create a task. */
             $taskID = $this->create($task);
@@ -758,8 +775,7 @@ class taskModel extends model
             if(in_array($task->status, array('pause', 'cancel', 'closed'))) return false;
             if($task->status == 'doing') return $effort->account == $this->app->user->account;
         }
-        if($this->app->user->account == $effort->account) return true;
-        return false;
+        return $this->loadModel('common')->canOperateEffort($effort);
     }
 
     /**
@@ -3554,7 +3570,7 @@ class taskModel extends model
     public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
         /* Get child task info. */
-        $childTask = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,assignedTo,parent,path,realStarted')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
         $taskIdList = $childTask->path;
@@ -3755,7 +3771,7 @@ class taskModel extends model
             ->leftJoin(TABLE_TASK)->alias('t3')->on("t2.AType='task' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
-            ->andWhere('t3.id')->ne('')
+            ->andWhere('t3.id')->notNULL()
             ->fetchGroup('revision', 'id');
     }
 

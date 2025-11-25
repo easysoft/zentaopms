@@ -8,7 +8,7 @@ su('admin');
 
 title=bugModel->getList();
 timeout=0
-cid=1
+cid=15385
 
 - 获取全部产品1下的全部bug列表，查看数量是否正确 @5
 - 获取产品1模块下的bug列表，查看数量是否正确 @5

@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWaterfallReportBlock();
 timeout=0
-cid=0
+cid=15313
 
 - 执行blockTest模块的printWaterfallReportBlockTest方法  @1
 - 执行blockTest模块的printWaterfallReportBlockTest方法  @1

@@ -5,7 +5,7 @@
 
 title=测试 executionTao::buildBatchUpdateExecutions();
 timeout=0
-cid=0
+cid=16382
 
 - 执行executionTest模块的buildBatchUpdateExecutionsTest方法，参数是$validPostData, $oldExecutions 第1条的name属性 @更新的执行1
 - 执行executionTest模块的buildBatchUpdateExecutionsTest方法，参数是$duplicateNameData, $oldExecutions 属性name[2] @阶段名称不能相同！

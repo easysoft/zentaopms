@@ -4,7 +4,7 @@
 
 title=测试 buildModel->unlinkBug();
 timeout=0
-cid=1
+cid=15508
 
 - 测试版本跟Bug为空
  - 属性id @0

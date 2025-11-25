@@ -4,7 +4,7 @@
 /**
 
 title=测试 customModel::getURSRList();
-cid=0
+cid=15905
 
 - 测试步骤1：正常查询返回数据结构 >> 期望返回5条需求概念数据
 - 测试步骤2：验证第一条数据完整属性 >> 期望包含key、ERName、SRName、URName、system

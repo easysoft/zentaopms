@@ -4,7 +4,7 @@
 /**
 
 title=测试 todoZen::beforeCreate();
-cid=0
+cid=19291
 
 - 测试正常表单数据处理 >> 期望返回包含所有默认字段的对象
 - 测试具有模块类型对象的表单数据 >> 期望正确设置objectID

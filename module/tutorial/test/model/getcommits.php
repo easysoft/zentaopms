@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getCommits();
 timeout=0
-cid=0
+cid=19417
 
 - 步骤1：验证返回数组长度为1 @1
 - 步骤2：验证提交记录ID第bedeaaf39ef7084b9a455b9d9dba71e2db357201条的id属性 @1

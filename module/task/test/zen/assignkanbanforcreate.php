@@ -5,7 +5,7 @@
 
 title=测试 taskZen::assignKanbanForCreate();
 timeout=0
-cid=0
+cid=18897
 
 - 步骤1：正常情况，使用默认区域和泳道
  - 属性regionID @1

@@ -5,7 +5,7 @@
 
 title=测试 actionZen::restoreStages();
 timeout=0
-cid=0
+cid=14974
 
 - 执行actionTest模块的restoreStagesTest方法，参数是16, 'no'  @1
 - 执行actionTest模块的restoreStagesTest方法，参数是17, 'no'  @父阶段未创建过任务，不能恢复子阶段。

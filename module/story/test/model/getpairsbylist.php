@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getPairsByList();
 timeout=0
-cid=0
+cid=18546
 
 - 步骤1：传入有效的需求ID列表，返回4个元素（空选项+3个需求） @4
 - 步骤2：验证ID为1的需求标题属性1 @需求标题1

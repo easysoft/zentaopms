@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getCommitByID();
-cid=1
+cid=15990
 
 - 测试提交记录的ID为0的情况 @0
 - 测试提交记录的ID为1的情况

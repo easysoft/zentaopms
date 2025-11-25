@@ -4,7 +4,7 @@
 /**
 
 title=测试创建产品 productModel->create();
-cid=0
+cid=17481
 
 - 测试正常的创建属性name @product1
 - 测试传入name和code

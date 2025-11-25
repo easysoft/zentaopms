@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getByPlan();
-cid=0
+cid=18506
 
 - 获取产品1计划1下的需求2
  - 第2条的title属性 @软件需求2

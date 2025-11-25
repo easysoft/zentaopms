@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getProject();
-cid=1
+cid=19455
 
 - 测试是否能拿到 admin 的数据
  - 属性id @2

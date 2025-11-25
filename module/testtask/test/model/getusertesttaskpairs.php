@@ -11,7 +11,7 @@ zenData('product')->loadYaml('product')->gen(2);
 /**
 
 title=测试 testtaskModel->getUserTestTaskPairs();
-cid=1
+cid=19197
 pid=1
 
 */

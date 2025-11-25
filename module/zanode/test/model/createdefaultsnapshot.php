@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel::createDefaultSnapshot();
 timeout=0
-cid=0
+cid=19822
 
 - 步骤1：测试节点1创建默认快照
  - 属性name @请检查执行节点状态

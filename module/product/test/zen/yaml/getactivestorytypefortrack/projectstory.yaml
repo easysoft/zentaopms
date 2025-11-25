@@ -1,0 +1,39 @@
+---
+title: 测试 projectstory 表数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1{25},2{25}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1{25},2{25}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 需求ID
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-50
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

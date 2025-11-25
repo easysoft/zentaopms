@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::replaceTableNames();
 timeout=0
-cid=0
+cid=17429
 
 - 执行pivot模块的replaceTableNamesTest方法，参数是''  @0
 - 执行pivot模块的replaceTableNamesTest方法，参数是'select * from TABLE_USER'  @select * from zt_user

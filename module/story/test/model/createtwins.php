@@ -5,7 +5,7 @@
 
 title=测试 storyModel::createTwins();
 timeout=0
-cid=0
+cid=18488
 
 - 步骤1：正常多分支孪生需求创建 @5
 - 步骤2：空分支数组情况 @7

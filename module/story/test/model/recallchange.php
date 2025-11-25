@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->recallChange();
-cid=0
+cid=18576
 
 - 执行$storyList[28]
  - 属性title @用户需求版本二89

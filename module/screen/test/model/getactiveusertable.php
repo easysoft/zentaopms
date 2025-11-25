@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getActiveUserTable();
 timeout=0
-cid=0
+cid=18234
 
 - 执行screenTest模块的getActiveUserTableTest方法，参数是'2024', '01', $validProjectList  @3
 - 执行screenTest模块的getActiveUserTableTest方法，参数是'2024', '01', $emptyProjectList  @0

@@ -5,7 +5,7 @@
 
 title=测试 executionZen::assignCountForStory();
 timeout=0
-cid=0
+cid=16402
 
 - 执行executionZenTest模块的assignCountForStoryTest方法，参数是1, $normalStories, 'story' 第summary条的storyCount属性 @3
 - 执行executionZenTest模块的assignCountForStoryTest方法，参数是1, $normalStories, 'requirement' 第summary条的storyCount属性 @3

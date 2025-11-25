@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processMaxDocObjectLink();
 timeout=0
-cid=0
+cid=14965
 
 - 执行actionTest模块的processMaxDocObjectLinkTest方法，参数是1, 'doc', 'view', 'docID=%s'
  - 属性moduleName @assetlib

@@ -5,7 +5,7 @@
 
 title=测试 groupModel::updatePrivByModule();
 timeout=0
-cid=0
+cid=16725
 
 - 执行group模块的updatePrivByModuleTest方法，参数是'my', array 属性my @index|work
 - 执行group模块的updatePrivByModuleTest方法，参数是'task', array 属性task @create

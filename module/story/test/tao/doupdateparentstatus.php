@@ -5,7 +5,7 @@
 
 title=测试 storyModel->doUpdateSpec();
 timeout=0
-cid=0
+cid=18622
 
 - 执行storyModel模块的doUpdateParentStatus方法，参数是1, 'active'
  - 属性status @active

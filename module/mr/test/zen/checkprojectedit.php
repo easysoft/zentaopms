@@ -5,70 +5,84 @@
 
 title=测试 mrZen::checkProjectEdit();
 timeout=0
-cid=0
+cid=17266
 
-- 步骤1：gitlab正常权限检查 @1
-- 步骤2：gitea允许合并提交 @1
-- 步骤3：gogs有推送权限 @1
-- 步骤4：不支持的主机类型 @unsupported_hosttype
-- 步骤5：无效的主机类型参数 @invalid_hosttype
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gitlab', $sourceProject, $MR  @0
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gitlab', $sourceProject, $MR  @0
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gitea', $sourceProject, $MR  @1
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gitea', $sourceProject, $MR  @0
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gogs', $sourceProject, $MR  @1
+- 执行mrTest模块的checkProjectEditTest方法，参数是'gogs', $sourceProject, $MR  @0
+- 执行mrTest模块的checkProjectEditTest方法，参数是'unknown', $sourceProject, $MR  @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('mr');
-$table->id->range('1-10');
-$table->hostID->range('1-3');
-$table->sourceProject->range('project1,project2,project3');
-$table->sourceBranch->range('main,develop,feature');
-$table->targetProject->range('project1,project2,project3');
-$table->targetBranch->range('main,develop,feature');
-$table->mriid->range('1-10');
-$table->title->range('Test MR 1,Test MR 2,Test MR 3');
-$table->status->range('opened,merged,closed');
-$table->gen(5);
+global $app;
+$app->setMethodName('view');
 
-// 3. 用户登录（选择合适角色）
+zenData('mr')->gen(0);
+zenData('pipeline')->gen(0);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$mrTest = new mrTest();
+$mrTest = new mrZenTest();
 
-// 创建测试用的sourceProject对象
-$gitlabProject = new stdclass();
-$gitlabProject->id = 123;
-$gitlabProject->name = 'test-project';
-
-$giteaProject = new stdclass();
-$giteaProject->allow_merge_commits = true;
-$giteaProject->name = 'gitea-project';
-
-$gogsProject = new stdclass();
-$gogsProject->permissions = new stdclass();
-$gogsProject->permissions->push = true;
-$gogsProject->name = 'gogs-project';
-
-$giteaProjectNoPermission = new stdclass();
-$giteaProjectNoPermission->allow_merge_commits = false;
-$giteaProjectNoPermission->name = 'gitea-no-permission';
-
-// 创建测试用的MR对象
+// 测试步骤1: GitLab类型,用户已绑定且有开发者权限
+$sourceProject = new stdclass();
+$sourceProject->id = 1;
 $MR = new stdclass();
-$MR->id = 1;
 $MR->hostID = 1;
-$MR->sourceProject = 'project1';
-$MR->sourceBranch = 'feature';
-$MR->targetProject = 'project1';
-$MR->targetBranch = 'main';
-$MR->title = 'Test MR';
+$MR->sourceProject = 1;
+r($mrTest->checkProjectEditTest('gitlab', $sourceProject, $MR)) && p() && e('0');
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($mrTest->checkProjectEditTest('gitlab', $gitlabProject, $MR)) && p() && e('1'); // 步骤1：gitlab正常权限检查
-r($mrTest->checkProjectEditTest('gitea', $giteaProject, $MR)) && p() && e('1'); // 步骤2：gitea允许合并提交
-r($mrTest->checkProjectEditTest('gogs', $gogsProject, $MR)) && p() && e('1'); // 步骤3：gogs有推送权限
-r($mrTest->checkProjectEditTest('bitbucket', $gitlabProject, $MR)) && p() && e('unsupported_hosttype'); // 步骤4：不支持的主机类型
-r($mrTest->checkProjectEditTest('', $gitlabProject, $MR)) && p() && e('invalid_hosttype'); // 步骤5：无效的主机类型参数
+// 测试步骤2: GitLab类型,用户未绑定
+$sourceProject = new stdclass();
+$sourceProject->id = 2;
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 2;
+r($mrTest->checkProjectEditTest('gitlab', $sourceProject, $MR)) && p() && e('0');
+
+// 测试步骤3: Gitea类型,项目允许合并提交
+$sourceProject = new stdclass();
+$sourceProject->allow_merge_commits = true;
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 1;
+r($mrTest->checkProjectEditTest('gitea', $sourceProject, $MR)) && p() && e('1');
+
+// 测试步骤4: Gitea类型,项目不允许合并提交
+$sourceProject = new stdclass();
+$sourceProject->allow_merge_commits = false;
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 2;
+r($mrTest->checkProjectEditTest('gitea', $sourceProject, $MR)) && p() && e('0');
+
+// 测试步骤5: Gogs类型,用户有推送权限
+$sourceProject = new stdclass();
+$sourceProject->permissions = new stdclass();
+$sourceProject->permissions->push = true;
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 1;
+r($mrTest->checkProjectEditTest('gogs', $sourceProject, $MR)) && p() && e('1');
+
+// 测试步骤6: Gogs类型,用户无推送权限
+$sourceProject = new stdclass();
+$sourceProject->permissions = new stdclass();
+$sourceProject->permissions->push = false;
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 2;
+r($mrTest->checkProjectEditTest('gogs', $sourceProject, $MR)) && p() && e('0');
+
+// 测试步骤7: 未知主机类型
+$sourceProject = new stdclass();
+$MR = new stdclass();
+$MR->hostID = 1;
+$MR->sourceProject = 1;
+r($mrTest->checkProjectEditTest('unknown', $sourceProject, $MR)) && p() && e('0');

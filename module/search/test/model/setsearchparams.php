@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 searchModel->setSearchParams();
 timeout=0
-cid=1
+cid=18312
 
 - 测试module的值属性module @bug
 - 测试actionURL的值属性actionURL @/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bySearch&queryID=myQueryID

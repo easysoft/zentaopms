@@ -30,7 +30,7 @@ su('admin');
 /**
 
 title=测试executionModel->buildSearchForm();
-cid=1
+cid=16273
 
 - 错误的queryID @0
 - 正确的queryID @1

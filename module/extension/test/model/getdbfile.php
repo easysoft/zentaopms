@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->getDBFile();
 timeout=0
-cid=1
+cid=16456
 
 - 获取代号为code1的插件包安装SQL文件。 @/apps/zentao/extension/pkg/code1/db/install.sql
 - 获取代号为code1的插件包升级SQL文件。 @/apps/zentao/extension/pkg/code1/db/upgrade.sql

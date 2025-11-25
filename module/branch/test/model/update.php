@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->update();
 timeout=0
-cid=1
+cid=15340
 
 */
 $changeName   = array('name' => '修改后的分支1');

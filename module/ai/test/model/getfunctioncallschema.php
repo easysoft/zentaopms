@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getFunctionCallSchema();
 timeout=0
-cid=0
+cid=15031
 
 - 步骤1：有效的表单路径story.create属性title @需求
 - 步骤2：有效的表单路径task.edit属性title @任务

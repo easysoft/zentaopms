@@ -19,7 +19,7 @@ initData();
 
 title=测试 testcaseModel->getCasesToExport();
 timeout=0
-cid=1
+cid=18987
 
 - 测试获取产品 1 的用例
  - 第1条的title属性 @这个是测试用例1

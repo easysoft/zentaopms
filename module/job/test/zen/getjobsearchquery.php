@@ -5,36 +5,38 @@
 
 title=测试 jobZen::getJobSearchQuery();
 timeout=0
-cid=0
+cid=16863
 
-- 执行jobTest模块的getJobSearchQueryTest方法  @ 1 = 1
-- 执行jobTest模块的getJobSearchQueryTest方法，参数是1  @t1.`name` like "%test%"
-- 执行jobTest模块的getJobSearchQueryTest方法，参数是999  @ 1 = 1
-- 执行jobTest模块的getJobSearchQueryTest方法，参数是-1  @ 1 = 1
-- 执行jobTest模块的getJobSearchQueryTest方法，参数是2  @t1.`repo` = 1
+- 测试查询ID为0时，返回默认查询条件 @1 = 1
+- 测试查询ID为1时，返回对应的SQL查询语句并添加t1.前缀 @(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'
+- 测试查询ID为2时，返回对应的SQL查询语句并添加t1.前缀 @(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'
+- 测试查询ID为3时，返回对应的SQL查询语句并添加t1.前缀 @(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'
+- 测试查询ID为99（不存在）时，返回默认查询条件 @ 1 = 1
+- 测试查询ID为-1（无效值）时，返回默认查询条件 @ 1 = 1
+- 测试session中没有jobQuery时，自动设置默认查询条件 @ 1 = 1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$table = zenData('userquery');
-$table->id->range('1-5');
-$table->module->range('job{5}');
-$table->title->range('搜索1,搜索2,搜索3,搜索4,搜索5');
-$table->sql->range('`name` like "%test%",`repo` = 1,`id` > 0,`status` != "deleted",`product` in (1,2,3)');
-$table->form->range('');  // Empty form to avoid unserialize issues
-$table->account->range('admin{5}');
-$table->shortcut->range('0{5}');
-$table->common->range('0{5}');
-$table->gen(5);
+zenData('userquery')->loadYaml('getjobsearchquery/userquery', false, 2)->gen(10);
 
 su('admin');
 
-$jobTest = new jobTest();
+global $tester;
+$jobTest = new jobZenTest();
 
-r($jobTest->getJobSearchQueryTest(0)) && p() && e(' 1 = 1');
-r($jobTest->getJobSearchQueryTest(1)) && p() && e('t1.`name` like "%test%"');
-r($jobTest->getJobSearchQueryTest(999)) && p() && e(' 1 = 1');
-r($jobTest->getJobSearchQueryTest(-1)) && p() && e(' 1 = 1');
-r($jobTest->getJobSearchQueryTest(2)) && p() && e('t1.`repo` = 1');
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(0))  && p() && e('1 = 1');                                                       // 测试查询ID为0时，返回默认查询条件
+r($jobTest->getJobSearchQueryTest(1))  && p() && e("(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'");  // 测试查询ID为1时，返回对应的SQL查询语句并添加t1.前缀
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(2))  && p() && e("(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'");  // 测试查询ID为2时，返回对应的SQL查询语句并添加t1.前缀
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(3))  && p() && e("(( 1   AND t1.`name`  LIKE '%aa%' ) AND ( 1  )) AND deleted = '0'");  // 测试查询ID为3时，返回对应的SQL查询语句并添加t1.前缀
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(99)) && p() && e(' 1 = 1');                                                      // 测试查询ID为99（不存在）时，返回默认查询条件
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(-1)) && p() && e(' 1 = 1');                                                      // 测试查询ID为-1（无效值）时，返回默认查询条件
+unset($_SESSION['jobQuery']);
+r($jobTest->getJobSearchQueryTest(0))  && p() && e(' 1 = 1');                                                      // 测试session中没有jobQuery时，自动设置默认查询条件

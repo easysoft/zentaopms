@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getSavePath();
 timeout=0
-cid=0
+cid=16239
 
 - 步骤1：测试extendModel操作生成正确路径属性pathMatch @1
 - 步骤2：测试extendControl操作生成正确路径属性pathMatch @1

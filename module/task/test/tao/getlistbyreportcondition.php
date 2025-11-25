@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=taskModel->getListByReportCondition();
 timeout=0
-cid=1
+cid=18880
 
 - 获取任务id，execution列表信息在执行2中
  - 第2条的id属性 @2

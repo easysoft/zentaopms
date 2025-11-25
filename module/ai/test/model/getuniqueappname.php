@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getUniqueAppName();
 timeout=0
-cid=0
+cid=15051
 
 - 执行aiTest模块的getUniqueAppNameTest方法，参数是'独特应用名称'  @独特应用名称
 - 执行aiTest模块的getUniqueAppNameTest方法，参数是'重复名称'  @重复名称_1_1

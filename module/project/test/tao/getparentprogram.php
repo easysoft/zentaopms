@@ -39,7 +39,7 @@ function initData()
 /**
 
 title=测试 projectTao::getParentProgram();
-cid=1
+cid=17911
 
 
 */

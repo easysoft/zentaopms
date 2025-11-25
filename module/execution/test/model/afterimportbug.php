@@ -28,7 +28,7 @@ su('admin');
 
 title=测试executionModel->afterImportBug();
 timeout=0
-cid=1
+cid=16260
 
 - 测试导入Bug1后的数据处理 @1
 - 测试导入Bug2后的数据处理 @1

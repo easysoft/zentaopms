@@ -5,7 +5,7 @@
 
 title=测试 markModel::hasMark();
 timeout=0
-cid=0
+cid=17045
 
 - 步骤1：正常情况，查询存在的标记 @1
 - 步骤2：查询不存在对象的标记 @0

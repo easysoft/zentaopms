@@ -5,7 +5,7 @@
 
 title=测试 transferModel::getPageDatas();
 timeout=0
-cid=0
+cid=19316
 
 - 执行transferTest模块的getPageDatasTest方法，参数是$testDatas, 1 属性allCount @25
 - 执行transferTest模块的getPageDatasTest方法，参数是$smallDatas, 1 属性allCount @5

@@ -1,11 +1,11 @@
 -- 20100128 修改user表中ip字段的默认值，解决install失败的问题。
-ALTER TABLE `zt_user` CHANGE `ip` `ip` CHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
+ALTER TABLE `zt_user` CHANGE `ip` `ip` CHAR( 15 ) NOT NULL DEFAULT '';
 
 -- 20100128: 调整casestep表。
 ALTER TABLE `zt_caseStep` CHANGE `caseVersion` `version` SMALLINT( 3 ) UNSIGNED NOT NULL DEFAULT '0';
-ALTER TABLE `zt_caseStep` CHANGE `step` `desc` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
-ALTER TABLE `zt_caseStep` CHANGE `expect` `expect` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
-ALTER TABLE `zt_caseStep` ADD INDEX ( `case` , `version` ) ;
+ALTER TABLE `zt_caseStep` CHANGE `step` `desc` TEXT NOT NULL DEFAULT '';
+ALTER TABLE `zt_caseStep` CHANGE `expect` `expect` TEXT NOT NULL DEFAULT '';
+ALTER TABLE `zt_caseStep` ADD INDEX ( `case` , `version` );
 
 -- 20100128 转换case中的step字段
 update zt_case set version = 1 where version = 0;
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `zt_testTask` (
   `desc` text NOT NULL,
   `status` char(30) NOT NULL,
   PRIMARY KEY  (`id`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 DROP TABLE `zt_planCase`;
 CREATE TABLE IF NOT EXISTS `zt_testRun` (
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `zt_testRun` (
   `status` char(30) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `task` (`task`,`case`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 DROP TABLE `zt_caseResult`;
 DROP TABLE `zt_resultStep`;
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `zt_testResult` (
   PRIMARY KEY  (`id`),
   KEY `run` (`run`),
   KEY `case` (`case`,`version`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM;
 
 -- 20100204 adjust the story.
 ALTER TABLE `zt_story` DROP `attatchment`;
@@ -68,7 +68,7 @@ UPDATE zt_story SET status = 'draft' WHERE status = 'wait';
 UPDATE zt_story SET status = 'active' WHERE status = 'doing';
 ALTER TABLE `zt_story` CHANGE `bug` `fromBug` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `zt_story` ADD `toBug` MEDIUMINT NOT NULL AFTER `closedReason`;
-ALTER TABLE `zt_story` ADD `childStories` VARCHAR( 255 ) NOT NULL AFTER `toBug` ,
+ALTER TABLE `zt_story` ADD `childStories` VARCHAR( 255 ) NOT NULL AFTER `toBug`,
 ADD `linkStories` VARCHAR( 255 ) NOT NULL AFTER `childStories`;
 ALTER TABLE `zt_story` ADD `duplicateStory` MEDIUMINT UNSIGNED NOT NULL AFTER `linkStories`;
 
@@ -78,21 +78,21 @@ CREATE TABLE IF NOT EXISTS `zt_storySpec` (
   `title` VARCHAR( 90 ) NOT NULL,
   `spec` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 INSERT INTO zt_storySpec select id,version,title,spec FROM zt_story;
 ALTER TABLE `zt_story` DROP `spec`;
-ALTER TABLE `zt_file` ADD `extra` VARCHAR( 255 ) NOT NULL ;
+ALTER TABLE `zt_file` ADD `extra` VARCHAR( 255 ) NOT NULL;
 update `zt_file` set extra = 1 where objectType = 'story';
 
 ALTER TABLE `zt_bug` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
 ALTER TABLE `zt_bug` ADD `caseVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `case`;
-ALTER TABLE `zt_bug` DROP `field1` ,
-DROP `field2` ,
-DROP `feild3` ;
+ALTER TABLE `zt_bug` DROP `field1`,
+DROP `field2`,
+DROP `feild3`;
 
-ALTER TABLE `zt_case` DROP `field1` ,
-DROP `field2` ,
-DROP `feidl3` ;
+ALTER TABLE `zt_case` DROP `field1`,
+DROP `field2`,
+DROP `feidl3`;
 ALTER TABLE `zt_case` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
 ALTER TABLE `zt_projectStory` ADD `version` SMALLINT NOT NULL DEFAULT '1';
 ALTER TABLE `zt_task` ADD `storyVersion` SMALLINT NOT NULL DEFAULT '1' AFTER `story`;
@@ -109,6 +109,6 @@ ALTER TABLE `zt_story` CHANGE `reviewedDate` `reviewedDate` DATE NOT NULL;
 
 -- 20100220 action: convert the date from timestamp to datetime
 ALTER TABLE `zt_action` ADD `datetmp` VARCHAR( 255 ) NOT NULL AFTER `date`;
-UPDATE zt_action SET datetmp = FROM_UNIXTIME( date ) ;
+UPDATE zt_action SET datetmp = FROM_UNIXTIME( date );
 ALTER TABLE `zt_action` DROP `date`;
 ALTER TABLE `zt_action` CHANGE `datetmp` `date` DATETIME NOT NULL;

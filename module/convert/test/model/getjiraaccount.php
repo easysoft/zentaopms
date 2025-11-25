@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraAccount();
 timeout=0
-cid=0
+cid=15772
 
 - 步骤1：空userKey输入 @0
 - 步骤2：有效JIRAUSER前缀ID @jirauser

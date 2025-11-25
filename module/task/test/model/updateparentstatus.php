@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=taskModel->updateParentStatus();
 timeout=0
-cid=1
+cid=18858
 
 - 执行task模块的updateParentStatusTest方法，参数是10 属性status @doing
 - 执行task模块的updateParentStatusTest方法，参数是12 属性status @doing

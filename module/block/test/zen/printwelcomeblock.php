@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printWelcomeBlock();
 timeout=0
-cid=0
+cid=15315
 
 - 步骤1：验证todaySummary是非空字符串 @1
 - 步骤2：验证welcomeType是时间段标识 @1

@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 todoModel->getByExportList();
 timeout=0
-cid=1
+cid=19256
 
 - 获取待办的数量 @1
 - 获取id为1的待办name和status

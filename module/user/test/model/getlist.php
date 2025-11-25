@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getList();
-cid=0
+cid=19615
 
 - 查找系统中第一个未删除的、内部用户真实姓名,根据account正序排第0条的realname属性 @用户名1
 - 查找系统中第二个未删除的、内部用户真实姓名,根据account正序排第1条的realname属性 @用户名3

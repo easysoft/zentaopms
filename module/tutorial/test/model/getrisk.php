@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRisk();
 timeout=0
-cid=0
+cid=19469
 
 - 步骤1：验证ID值属性id @1
 - 步骤2：验证名称属性name @Test risk

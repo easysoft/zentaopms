@@ -5,7 +5,7 @@
 
 title=测试 cronModel::logCron();
 timeout=0
-cid=0
+cid=15884
 
 - 执行cron模块的logCronTest方法，参数是'test_log_content'  @0
 - 执行$cliFile @1

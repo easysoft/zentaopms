@@ -4,7 +4,7 @@
 
 title=测试 groupModel->copy();
 timeout=0
-cid=1
+cid=16736
 
 - 有历史数据设置DevOps权限第repo-import条的vision属性 @rnd
 - 无历史数据DevOps权限个数 @5

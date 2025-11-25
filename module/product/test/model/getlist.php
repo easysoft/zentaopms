@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getList();
-cid=0
+cid=17493
 
 - 获取项目集1下的所有产品
  - 第1条的name属性 @产品1

@@ -5,53 +5,50 @@
 
 title=测试 docZen::previewUR();
 timeout=0
-cid=0
+cid=16209
 
-- 执行docTest模块的previewURTest方法，参数是'setting', array  @1
-- 执行docTest模块的previewURTest方法，参数是'setting', array  @1
-- 执行docTest模块的previewURTest方法，参数是'list', array  @1
-- 执行docTest模块的previewURTest方法，参数是'', array  @1
-- 执行docTest模块的previewURTest方法，参数是'setting', array  @1
+- 步骤1:setting视图下customSearch条件预览用户需求列表,status=active @5
+- 步骤2:setting视图下customSearch条件预览用户需求列表,pri=1 @2
+- 步骤3:list视图下根据ID列表预览用户需求 @3
+- 步骤4:空idList的list视图预览用户需求 @0
+- 步骤5:不存在的product预览用户需求列表 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('story');
-$story = zenData('story');
-$story->id->range('1-10');
-$story->title->range('用户需求{1-10}');
-$story->product->range('1-3');
-$story->type->range('requirement{10}');
-$story->status->range('active{5},draft{3},closed{2}');
-$story->pri->range('1-3:R');
-$story->openedBy->range('admin,user1,user2');
-$story->openedDate->range('2024-01-01 00:00:00,2024-01-02 00:00:00,2024-01-03 00:00:00')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
-$story->version->range('1');
-$story->deleted->range('0');
-$story->gen(10);
+$storyTable = zenData('story');
+$storyTable->id->range('1-20');
+$storyTable->product->range('1{10},2{10}');
+$storyTable->type->range('requirement{15},story{3},epic{2}');
+$storyTable->title->range('1-20')->prefix('用户需求标题');
+$storyTable->status->range('active{5},draft{5},closed{5},changing{5}');
+$storyTable->pri->range('1{2},2{8},3{8},4{2}');
+$storyTable->version->range('1');
+$storyTable->deleted->range('0');
+$storyTable->gen(20);
 
-zenData('product');
-$product = zenData('product');
-$product->id->range('1-3');
-$product->name->range('产品1,产品2,产品3');
-$product->code->range('product1,product2,product3');
-$product->type->range('normal');
-$product->status->range('normal');
-$product->deleted->range('0');
-$product->gen(3);
+$storySpecTable = zenData('storyspec');
+$storySpecTable->story->range('1-20');
+$storySpecTable->version->range('1');
+$storySpecTable->title->range('1-20')->prefix('用户需求标题');
+$storySpecTable->gen(20);
+
+zenData('user')->gen(5);
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-r($docTest->previewURTest('setting', array('action' => 'preview', 'product' => 1, 'condition' => 'all'), '')) && p() && e('1');
+$settingsCustomSearch1 = array('action' => 'preview', 'product' => 1, 'condition' => 'customSearch', 'field' => array('status'), 'operator' => array('='), 'value' => array('active'), 'andor' => array('and'));
+$settingsCustomSearch2 = array('action' => 'preview', 'product' => 1, 'condition' => 'customSearch', 'field' => array('pri'), 'operator' => array('='), 'value' => array('1'), 'andor' => array('and'));
+$settingsNoProduct = array('action' => 'preview', 'product' => 999, 'condition' => 'customSearch', 'field' => array('status'), 'operator' => array('='), 'value' => array('active'), 'andor' => array('and'));
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
 
-r($docTest->previewURTest('setting', array('action' => 'preview', 'product' => 2, 'condition' => 'customSearch', 'field' => array('status'), 'operator' => array('='), 'value' => array('active'), 'andor' => array('')), '')) && p() && e('1');
-
-r($docTest->previewURTest('list', array(), '1,2,3')) && p() && e('1');
-
-r($docTest->previewURTest('', array(), '')) && p() && e('1');
-
-r($docTest->previewURTest('setting', array('action' => 'preview', 'product' => 999, 'condition' => 'all'), '')) && p() && e('1');
+r(count($docTest->previewURTest('setting', $settingsCustomSearch1, '')['data'])) && p() && e('5'); // 步骤1:setting视图下customSearch条件预览用户需求列表,status=active
+r(count($docTest->previewURTest('setting', $settingsCustomSearch2, '')['data'])) && p() && e('2'); // 步骤2:setting视图下customSearch条件预览用户需求列表,pri=1
+r(count($docTest->previewURTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤3:list视图下根据ID列表预览用户需求
+r(count($docTest->previewURTest('list', $settingsList, '')['data'])) && p() && e('0'); // 步骤4:空idList的list视图预览用户需求
+r(count($docTest->previewURTest('setting', $settingsNoProduct, '')['data'])) && p() && e('0'); // 步骤5:不存在的product预览用户需求列表

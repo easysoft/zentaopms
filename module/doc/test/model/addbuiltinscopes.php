@@ -5,7 +5,7 @@
 
 title=测试 docModel->addBuiltInScopes();
 timeout=0
-cid=1
+cid=16040
 
 - 测试添加研发界面内置产品范围
  - 第1条的name属性 @产品

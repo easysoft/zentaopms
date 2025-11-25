@@ -21,7 +21,7 @@ zenData('product')->gen(10);
 
 title=测试 messageModel->getToList();
 timeout=0
-cid=1
+cid=17055
 
 - 测试获取 todo 1 action 0 的 toList @admin
 - 测试获取 testtask 1 action 0 的 toList @user3

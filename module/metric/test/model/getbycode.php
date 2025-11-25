@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getByCode();
 timeout=0
-cid=0
+cid=17078
 
 - 测试步骤1：获取有效code的完整度量信息
  - 属性name @按系统统计的年度关闭一级项目集数

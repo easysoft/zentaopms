@@ -5,7 +5,7 @@
 
 title=测试 buildModel::getStoryList();
 timeout=0
-cid=0
+cid=15500
 
 - 测试传入空字符串获取story列表数据 @0
 - 测试传入有效storyId列表获取story列表数据第1条的title属性 @需求1

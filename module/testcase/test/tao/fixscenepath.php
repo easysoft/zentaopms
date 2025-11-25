@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 testcaseTao->fixScenePath();
 timeout=0
-cid=1
+cid=19036
 
 - 测试将场景 2 移动到场景 1 下面 @id:2, parent:1, path:,1,2,, grade:2
 

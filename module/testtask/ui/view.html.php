@@ -49,6 +49,7 @@ detailBody
     (
         section
         (
+            setID('descBox'),
             set::title($lang->testtask->desc),
             set::content($task->desc ? $task->desc : $lang->noData),
             set::useHtml(true)
@@ -82,11 +83,15 @@ detailBody
                     !empty($execution->multiple) ? item
                     (
                         set::name($lang->testtask->execution),
-                        $isInModal ? $task->executionName : a
+                        span
                         (
-                            set('href', createLink('execution', 'story', "executionID=$task->execution")),
-                            set('title', $task->executionName),
-                            $task->executionName
+                            setID('executionText'),
+                            $isInModal ? $task->executionName : a
+                            (
+                                set('href', createLink('execution', 'story', "executionID=$task->execution")),
+                                set('title', $task->executionName),
+                                $task->executionName
+                            )
                         )
                     ) : null,
                     item
@@ -94,6 +99,7 @@ detailBody
                         set::name($lang->testtask->build),
                         span
                         (
+                            setID('buildText'),
                             $isInModal ? $buildName : a
                             (
                                 set::href(createLink('build', 'view', "buildID=$task->build")),

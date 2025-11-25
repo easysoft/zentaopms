@@ -11,7 +11,7 @@ zenData('build')->gen(10);
 
 title=bugModel->getDataOfBugsPerBuild();
 timeout=0
-cid=1
+cid=15366
 
 - 获取版本为空 bug 数
  - 属性name @未设定

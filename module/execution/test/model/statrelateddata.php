@@ -5,7 +5,7 @@
 
 title=测试 executionModel::statRelatedData();
 timeout=0
-cid=0
+cid=16368
 
 - 执行executionTest模块的statRelatedDataTest方法，参数是3
  - 属性storyCount @3

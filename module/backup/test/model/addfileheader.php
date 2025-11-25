@@ -5,7 +5,7 @@
 
 title=测试 backupModel::addFileHeader();
 timeout=0
-cid=0
+cid=15128
 
 - 执行backupTest模块的addFileHeaderTest方法，参数是$file1  @1
 - 执行backupTest模块的addFileHeaderTest方法，参数是$file2  @1

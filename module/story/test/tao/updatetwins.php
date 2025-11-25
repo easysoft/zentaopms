@@ -5,7 +5,7 @@
 
 title=测试 storyModel->updateTwins();
 timeout=0
-cid=0
+cid=18664
 
 - 不传入需求，也不传入产品。 @0
 - 传入需求列表，检查twins字段。

@@ -1,0 +1,61 @@
+---
+title: 产品计划测试数据
+desc: 用于getKanbanList方法的产品计划测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-40
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1-30:R
+- field: branch
+  note: 分支
+  range: '0'
+- field: parent
+  note: 父计划
+  range: 0
+- field: title
+  note: 计划名称
+  range: '计划1.0{10},计划2.0{10},计划3.0{10},计划4.0{5},计划5.0{5}'
+- field: status
+  note: 状态
+  range: '[wait]{10},[doing]{15},[done]{10},[closed]{5}'
+- field: desc
+  note: 描述
+  range: ''
+- field: begin
+  note: 开始时间
+  range: '(-3M)-(-1M):30D'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  note: 结束时间
+  range: '(+1M)-(+6M):60D'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: finishedDate
+  note: 完成时间
+  range: '[]'
+- field: closedDate
+  note: 关闭时间
+  range: '[]'
+- field: order
+  note: 排序
+  range: ''
+- field: closedReason
+  note: 关闭原因
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: admin
+- field: createdDate
+  note: 创建时间
+  range: '(-3M)-(-1M):30D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 已删除
+  range: '0'

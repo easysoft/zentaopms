@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::isVersionChange();
 timeout=0
-cid=0
+cid=17413
 
 - 执行pivotTest模块的isVersionChangeTest方法，参数是$pivot1, true 属性versionChange @1
 - 执行pivotTest模块的isVersionChangeTest方法，参数是$pivot2, true 属性versionChange @~~

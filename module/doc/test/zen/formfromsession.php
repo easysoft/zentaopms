@@ -7,45 +7,45 @@ title=测试 docZen::formFromSession();
 timeout=0
 cid=0
 
-- 步骤1：正常情况测试存在的session数据的URL @http://test.com/product
-- 步骤2：空字符串参数测试返回空URL @~~
-- 步骤3：不存在的类型参数返回空URL @~~
-- 步骤4：特殊字符类型参数返回空URL @~~
-- 步骤5：数字字符串类型参数返回空URL @~~
+- 测试session中存在完整数据
+ - 属性0 @http://test.com
+ - 属性1 @1,2,3
+- 测试session中不存在数据
+ - 属性0 @~~
+ - 属性1 @~~
+- 测试session中存在部分数据
+ - 属性0 @http://project.com
+ - 属性1 @10,20
+- 测试session数据被删除
+ - 属性0 @~~
+ - 属性1 @~~
+- 测试不同type获取不同session
+ - 属性0 @http://execution.com
+ - 属性1 @5,6,7
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 不需要zendata数据准备，因为这个方法主要处理session数据
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
+// 测试步骤1:session中存在完整数据,验证url和idList
+$_SESSION['zentaoListproduct'] = array('url' => 'http://test.com', 'idList' => '1,2,3', 'cols' => array('id', 'name'), 'data' => array('item1', 'item2'));
+r($docTest->formFromSessionTest('product')) && p('0;1') && e('http://test.com,1,2,3');
 
-// 步骤1：正常情况测试存在的session数据
-$_SESSION['zentaoListProduct'] = array(
-    'url' => 'http://test.com/product',
-    'idList' => '1,2,3',
-    'cols' => array('id', 'name', 'status'),
-    'data' => array('product1', 'product2', 'product3')
-);
-r($docTest->formFromSessionTest('Product')) && p('0') && e('http://test.com/product'); // 步骤1：正常情况测试存在的session数据的URL
+// 测试步骤2:session中不存在数据,返回空值
+r($docTest->formFromSessionTest('nonexistent')) && p('0;1') && e(',');
 
-// 步骤2：空字符串参数测试
-r($docTest->formFromSessionTest('')) && p('0') && e('~~'); // 步骤2：空字符串参数测试返回空URL
+// 测试步骤3:session中存在部分数据(仅url和idList)
+$_SESSION['zentaoListproject'] = array('url' => 'http://project.com', 'idList' => '10,20');
+r($docTest->formFromSessionTest('project')) && p('0;1') && e('http://project.com,10,20');
 
-// 步骤3：不存在的类型参数测试
-r($docTest->formFromSessionTest('NonExistent')) && p('0') && e('~~'); // 步骤3：不存在的类型参数返回空URL
+// 测试步骤4:验证session数据被删除(再次调用同一type返回空)
+r($docTest->formFromSessionTest('product')) && p('0;1') && e(',');
 
-// 步骤4：特殊字符类型参数测试
-r($docTest->formFromSessionTest('Special@#$%')) && p('0') && e('~~'); // 步骤4：特殊字符类型参数返回空URL
-
-// 步骤5：数字字符串类型参数测试
-r($docTest->formFromSessionTest('123')) && p('0') && e('~~'); // 步骤5：数字字符串类型参数返回空URL
+// 测试步骤5:不同type参数获取不同session
+$_SESSION['zentaoListexecution'] = array('url' => 'http://execution.com', 'idList' => '5,6,7', 'cols' => array('status'), 'data' => array('test'));
+r($docTest->formFromSessionTest('execution')) && p('0;1') && e('http://execution.com,5,6,7');

@@ -10,7 +10,7 @@ zenData('dept')->gen(10);
 
 title=测试 deptModel::createMemberLink();
 timeout=0
-cid=0
+cid=15964
 
 - 步骤1：正常部门ID生成成员链接 @index.php?m=company&f=browse&browseType=inside&dept=1
 - 步骤2：部门ID为2的链接生成 @index.php?m=company&f=browse&browseType=inside&dept=2

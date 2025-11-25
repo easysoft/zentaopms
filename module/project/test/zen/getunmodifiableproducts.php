@@ -5,7 +5,7 @@
 
 title=测试 projectZen::getUnmodifiableProducts();
 timeout=0
-cid=0
+cid=17946
 
 - 步骤1：瀑布项目有关联需求的产品1和2
  - 属性1 @1

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->mergeRepo();
-cid=1
+cid=19537
 
 - 更新id为1的repo的product字段为1,2，测试是否更新成功 @1,2
 - 更新id为2的repo的product字段为3,4，测试是否更新成功 @3,4

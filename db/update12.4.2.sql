@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `story` mediumint(8) unsigned NOT NULL,
   `order` mediumint(9) NOT NULL,
   UNIQUE KEY `plan_story` (`plan`,`story`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 ALTER TABLE `zt_case` change `fromCaseVersion` `fromCaseVersion` mediumint(8) unsigned NOT NULL default '1' AFTER `fromCaseID`;

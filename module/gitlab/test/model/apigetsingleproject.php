@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->apiGetSingleProject();
 timeout=0
-cid=1
+cid=16620
 
 - 查询正确的project信息属性name @testHtml
 - 使用不存在的gitlabID查询project信息 @0

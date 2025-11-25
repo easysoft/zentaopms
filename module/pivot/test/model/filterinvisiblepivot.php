@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::filterInvisiblePivot();
 timeout=0
-cid=0
+cid=17364
 
 - 步骤1：空数组测试 @0
 - 步骤2：包含可见pivot @1

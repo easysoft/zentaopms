@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   KEY `public` (`public`),
   KEY `createdBy` (`createdBy`),
   KEY `editedBy` (`editedBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_message` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
   KEY `mtype` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `cgid` char(40) NOT NULL DEFAULT '',
@@ -57,10 +57,10 @@ CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   KEY `star` (`star`),
   KEY `hide` (`hide`),
   UNIQUE KEY `chatuser` (`cgid`, `user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `gid` char(40) NOT NULL DEFAULT '',
   `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
   UNIQUE KEY `user` (`user`,`gid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

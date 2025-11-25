@@ -23,7 +23,7 @@ function initData()
 
 title=测试 blockModel->getByID();
 timeout=0
-cid=1
+cid=15225
 
 - 测试新加入的区块宽度为2的时候，top是否为6。 @6
 - 测试新加入的区块宽度为1的时候，top是否为15。 @15

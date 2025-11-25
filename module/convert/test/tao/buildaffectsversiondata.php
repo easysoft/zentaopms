@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildAffectsVersionData();
 timeout=0
-cid=0
+cid=15800
 
 - 步骤1：正常情况
  - 属性issue @BUG-001

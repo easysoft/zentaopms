@@ -111,6 +111,7 @@ class ColumnCellIterator extends CellIterator
     /**
      * Rewind the iterator to the starting row.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentRow = $this->startRow;
@@ -121,6 +122,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return null|\PhpOffice\PhpSpreadsheet\Cell\Cell
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->worksheet->getCellByColumnAndRow($this->columnIndex, $this->currentRow);
@@ -131,6 +133,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->currentRow;
@@ -139,6 +142,7 @@ class ColumnCellIterator extends CellIterator
     /**
      * Set the iterator to its next value.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         do {
@@ -165,6 +169,7 @@ class ColumnCellIterator extends CellIterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->currentRow <= $this->endRow && $this->currentRow >= $this->startRow;

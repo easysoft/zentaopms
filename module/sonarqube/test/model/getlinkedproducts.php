@@ -5,7 +5,7 @@
 
 title=测试 sonarqubeModel::getLinkedProducts();
 timeout=0
-cid=0
+cid=18385
 
 - 步骤1：无效sonarqubeID和空projectKey @0
 - 步骤2：有效sonarqubeID但无效projectKey @0

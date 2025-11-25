@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::cancelDownload();
 timeout=0
-cid=0
+cid=19740
 
 - 状态为inprogress的镜像可以取消下载 @1
 - 不存在的镜像ID @0

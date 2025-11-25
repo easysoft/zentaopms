@@ -223,7 +223,7 @@ class docTao extends docModel
     protected function getCollectedDocs(array $hasPrivDocIdList, string $sort, object $pager = null): array
     {
         return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
+            ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc AND t2.action='collect'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->ne(0)
             ->andWhere('t1.templateType')->eq('')

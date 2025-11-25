@@ -11,7 +11,7 @@ $projectTable->gen(20);
 
 title=测试 projectModel->activate();
 timeout=0
-cid=1
+cid=17796
 
 - 测试激活瀑布项目
  - 第0条的field属性 @status

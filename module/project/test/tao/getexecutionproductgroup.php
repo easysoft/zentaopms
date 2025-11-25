@@ -22,7 +22,7 @@ function initData()
 
 title=测试 projectTao::getExecutionProductGroup();
 timeout=0
-cid=1
+cid=17909
 
 - 执行$project1[1][1]
  - 属性project @1

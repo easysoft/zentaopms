@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getLatestMiniPrograms();
 timeout=0
-cid=0
+cid=15037
 
 - 执行aiTest模块的getLatestMiniProgramsTest方法  @15
 - 执行aiTest模块的getLatestMiniProgramsTest方法，参数是null, 'name_asc'  @15

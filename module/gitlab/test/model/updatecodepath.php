@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->updateCodePath();
 timeout=0
-cid=1
+cid=16668
 
 - 更新版本库的代码地址属性path @https://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml
 - 使用不存在的gitlabID更新代码库的代码地址 @0

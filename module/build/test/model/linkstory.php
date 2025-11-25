@@ -5,7 +5,7 @@
 
 title=测试 buildModel::linkStory();
 timeout=0
-cid=0
+cid=15504
 
 - 步骤1：正常情况下关联需求属性result @1
 - 步骤2：空需求列表输入属性result @0

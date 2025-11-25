@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getCustomCategories();
 timeout=0
-cid=0
+cid=15029
 
 - 步骤1：空数据情况 - 期望返回空数组 @0
 - 步骤2：有数据情况 - 期望返回3个配置项 @3

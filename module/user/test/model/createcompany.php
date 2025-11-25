@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->createCompany);
-cid=0
+cid=19597
 
 - 公司名称为空，返回 0。属性result @0
 - 公司名称为空，提示错误信息。第errors条的newCompany属性 @『所属公司』不能为空。

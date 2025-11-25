@@ -5,7 +5,7 @@
 
 title=checkCalcExists
 timeout=0
-cid=1
+cid=17068
 
 - 测试存在的度量项 count_of_bug @true
 - 测试存在的度量项 count_of_annual_created_product @true

@@ -38,7 +38,7 @@ su('admin');
 /**
 
 title=测试 docModel->getModuleTree();
-cid=1
+cid=16111
 
 - 检查产品库高亮第0条的active属性 @1
 - 检查产品库是否有同时高亮问题第1条的active属性 @0

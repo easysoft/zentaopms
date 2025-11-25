@@ -14,7 +14,7 @@ CREATE TABLE `zt_api_lib_release`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_api`;
 CREATE TABLE `zt_api`
@@ -44,7 +44,7 @@ CREATE TABLE `zt_api`
     `editedDate`      datetime     NOT NULL,
     `deleted`         enum ('0', '1') NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_apispec`;
 CREATE TABLE `zt_apispec`
@@ -69,7 +69,7 @@ CREATE TABLE `zt_apispec`
     `addedBy`         varchar(30)  NOT NULL DEFAULT 0,
     `addedDate`       datetime NULL,
     PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_apistruct`;
 CREATE TABLE `zt_apistruct`
@@ -87,7 +87,7 @@ CREATE TABLE `zt_apistruct`
     `editedDate` datetime     NOT NULL,
     `deleted`    enum ('0', '1') NOT NULL DEFAULT '0',
     primary key (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_apistruct_spec`;
 CREATE TABLE `zt_apistruct_spec`
@@ -101,4 +101,4 @@ CREATE TABLE `zt_apistruct_spec`
     `addedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `addedDate` datetime     NOT NULL,
     primary key (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::removeExtensionFiles();
 timeout=0
-cid=0
+cid=16469
 
 - 步骤1：空文件列表输入 @0
 - 步骤2：空JSON对象 @0

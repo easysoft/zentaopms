@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getAllGroupMembers();
 timeout=0
-cid=0
+cid=16701
 
 - 步骤1：验证group1的正常成员属性1 @user1|user2|user7|user8
 - 步骤2：验证group2的成员分布属性2 @user3|user4

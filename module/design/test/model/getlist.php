@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getList();
-cid=1
+cid=15992
 
 - 测试空数据 @0
 - 获取projectID=1,prouctID=0,type='',query=0时，所有按照id倒序排列设计数据 @0

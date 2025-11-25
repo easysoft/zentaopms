@@ -1,0 +1,24 @@
+---
+title: table zt_pivotdrill
+author: automated export
+version: "1.0"
+fields:
+- field: pivot
+  range: 1-1000
+- field: version
+  range: '1'
+- field: field
+  range: status
+- field: object
+  range: bug
+- field: whereSql
+  range: ''
+- field: condition
+  range: '{}'
+- field: status
+  range: published
+- field: account
+  range: admin
+- field: type
+  range: manual
+...

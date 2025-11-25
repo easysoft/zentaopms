@@ -5,33 +5,52 @@
 
 title=测试 pivotTao::getExecutionList();
 timeout=0
-cid=0
+cid=17441
 
-- 步骤1：正常时间范围查询，有4个closed状态的执行 @4
-- 步骤2：空时间参数查询，有4个closed状态的执行 @4
-- 步骤3：指定执行ID列表，返回2条记录 @2
-- 步骤4：未来时间范围查询，无记录 @0
-- 步骤5：验证返回数据结构中第一条的执行ID第0条的executionID属性 @6
+- 执行pivotTest模块的getExecutionListTest方法，参数是'', '', array  @5
+- 执行pivotTest模块的getExecutionListTest方法，参数是'2024-06-01', '2024-06-29', array  @0
+- 执行pivotTest模块的getExecutionListTest方法，参数是'2024-07-01', '2024-07-31', array  @2
+- 执行pivotTest模块的getExecutionListTest方法，参数是'', '', array  @2
+- 执行pivotTest模块的getExecutionListTest方法，参数是'', '', array
+ - 属性projectID @5
+ - 属性executionID @10
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-// 2. zendata数据准备
-zenData('project')->loadYaml('project_getexecutionlist')->gen(15);
-zenData('task')->loadYaml('task_getexecutionlist')->gen(20);
+$task = zenData('task');
+$task->id->range('1-20');
+$task->project->range('1{4},2{4},3{4},4{4},5{4}');
+$task->execution->range('6{4},7{4},8{4},9{4},10{4}');
+$task->parent->range('0');
+$task->status->range('wait{4},doing{6},done{10}');
+$task->estimate->range('1{4},2{4},4{4},8{4},16{4}');
+$task->consumed->range('0.5{4},1{4},2{4},4{4},8{4}');
+$task->deleted->range('0');
+$task->gen(20);
 
-// 3. 用户登录
+$project = zenData('project');
+$project->id->range('1-15');
+$project->project->range('0{5},1{2},2{2},3{2},4{2},5{2}');
+$project->type->range('project{5},sprint{10}');
+$project->name->range('项目1,项目2,项目3,项目4,项目5,执行6,执行7,执行8,执行9,执行10,执行11,执行12,执行13,执行14,执行15');
+$project->begin->range('`2024-01-01`');
+$project->end->range('`2024-06-30`{4},`2024-07-31`{3},`2024-08-31`{3},`2024-12-31`{5}');
+$project->realBegan->range('`2024-06-01`{4},`2024-07-01`{3},`2024-08-01`{3},`2024-01-01`{5}');
+$project->realEnd->range('`2024-06-30`{4},`2024-07-31`{3},`2024-08-31`{3},`2024-12-31`{5}');
+$project->status->range('doing{5},closed{10}');
+$project->multiple->range('1');
+$project->deleted->range('0');
+$project->gen(15);
+
 su('admin');
 
-// 4. 创建测试实例
-$pivotTest = new pivotTest();
+$pivotTest = new pivotTaoTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r(count($pivotTest->getExecutionListTest('2024-01-01', '2024-12-31', array()))) && p() && e('4'); // 步骤1：正常时间范围查询，有4个closed状态的执行
-r(count($pivotTest->getExecutionListTest('', '', array()))) && p() && e('4'); // 步骤2：空时间参数查询，有4个closed状态的执行
-r(count($pivotTest->getExecutionListTest('2024-01-01', '2024-12-31', array(6, 7)))) && p() && e('2'); // 步骤3：指定执行ID列表，返回2条记录
-r(count($pivotTest->getExecutionListTest('2025-01-01', '2025-12-31', array()))) && p() && e('0'); // 步骤4：未来时间范围查询，无记录
-r($pivotTest->getExecutionListTest('2024-01-01', '2024-12-31', array())) && p('0:executionID') && e('6'); // 步骤5：验证返回数据结构中第一条的执行ID
+r(count($pivotTest->getExecutionListTest('', '', array()))) && p() && e('5');
+r(count($pivotTest->getExecutionListTest('2024-06-01', '2024-06-29', array()))) && p() && e('0');
+r(count($pivotTest->getExecutionListTest('2024-07-01', '2024-07-31', array()))) && p() && e('2');
+r(count($pivotTest->getExecutionListTest('', '', array(7, 8)))) && p() && e('2');
+r($pivotTest->getExecutionListTest('', '', array())[0]) && p('projectID,executionID') && e('5,10');

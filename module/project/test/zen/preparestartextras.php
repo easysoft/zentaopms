@@ -5,60 +5,65 @@
 
 title=测试 projectZen::prepareStartExtras();
 timeout=0
-cid=0
+cid=17953
 
-- 执行projectTest模块的prepareStartExtrasTest方法，参数是$postData1
+- 步骤1:正常的postData对象处理
  - 属性status @doing
- - 属性lastEditedBy @guest
-- 执行projectTest模块的prepareStartExtrasTest方法，参数是$postData2
+ - 属性lastEditedBy @admin
+- 步骤2:空postData对象处理
  - 属性status @doing
- - 属性lastEditedBy @guest
-- 执行projectTest模块的prepareStartExtrasTest方法，参数是$postData3
+ - 属性lastEditedBy @admin
+- 步骤3:包含其他字段的postData对象处理
  - 属性status @doing
- - 属性lastEditedBy @guest
- - 属性name @Extended Project
- - 属性PM @user1
-- 执行projectTest模块的prepareStartExtrasTest方法，参数是$postData4
+ - 属性lastEditedBy @admin
+ - 属性name @测试项目
+- 步骤4:验证所有字段都已正确设置
  - 属性status @doing
- - 属性lastEditedBy @guest
-- 执行projectTest模块的prepareStartExtrasTest方法，参数是$postData5
+ - 属性lastEditedBy @admin
+- 步骤5:多次调用方法验证数据独立性
  - 属性status @doing
- - 属性lastEditedBy @guest
+ - 属性lastEditedBy @admin
 
 */
 
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 创建fixer类数据用于测试
-global $tester;
-$tester->app->loadClass('filter', true);
-
+// 2. 用户登录（选择合适角色）
 su('admin');
 
-$projectTest = new projectTest();
+// 3. 创建测试实例（变量名与模块名一致）
+$projectTest = new projectZenTest();
 
-// 测试步骤1：正常输入包含基础字段的postData对象
-$_POST = array('name' => 'Test Project', 'desc' => 'Test Description');
-$postData1 = fixer::input('post');
-r($projectTest->prepareStartExtrasTest($postData1)) && p('status,lastEditedBy') && e('doing,guest');
+// 创建测试用的postData对象
+class testPostData {
+    public function add($key, $value) {
+        $this->{$key} = $value;
+        return $this;
+    }
 
-// 测试步骤2：空的postData对象
-$_POST = array();
-$postData2 = fixer::input('post');
-r($projectTest->prepareStartExtrasTest($postData2)) && p('status,lastEditedBy') && e('doing,guest');
+    public function get() {
+        return $this;
+    }
+}
 
-// 测试步骤3：包含额外属性的postData对象
-$_POST = array('name' => 'Extended Project', 'PM' => 'user1', 'budget' => 10000);
-$postData3 = fixer::input('post');
-r($projectTest->prepareStartExtrasTest($postData3)) && p('status,lastEditedBy,name,PM') && e('doing,guest,Extended Project,user1');
+// 创建不同的测试数据对象
+$testPostData1 = new testPostData();
 
-// 测试步骤4：测试postData包含已存在status字段的情况（应被覆盖为doing）
-$_POST = array('status' => 'wait', 'name' => 'Override Status Project');
-$postData4 = fixer::input('post');
-r($projectTest->prepareStartExtrasTest($postData4)) && p('status,lastEditedBy') && e('doing,guest');
+$testPostData2 = new testPostData();
 
-// 测试步骤5：测试postData包含已存在lastEditedBy字段的情况（应被覆盖为guest）
-$_POST = array('lastEditedBy' => 'user2', 'name' => 'Override Editor Project');
-$postData5 = fixer::input('post');
-r($projectTest->prepareStartExtrasTest($postData5)) && p('status,lastEditedBy') && e('doing,guest');
+$testPostData3 = new testPostData();
+$testPostData3->name = '测试项目';
+$testPostData3->desc = '这是一个测试项目';
+
+$testPostData4 = new testPostData();
+
+$testPostData5 = new testPostData();
+
+// 5. 🔴 强制要求：必须包含至少5个测试步骤
+r($projectTest->prepareStartExtrasTest($testPostData1)) && p('status,lastEditedBy') && e('doing,admin'); // 步骤1:正常的postData对象处理
+r($projectTest->prepareStartExtrasTest($testPostData2)) && p('status,lastEditedBy') && e('doing,admin'); // 步骤2:空postData对象处理
+r($projectTest->prepareStartExtrasTest($testPostData3)) && p('status,lastEditedBy,name') && e('doing,admin,测试项目'); // 步骤3:包含其他字段的postData对象处理
+r($projectTest->prepareStartExtrasTest($testPostData4)) && p('status,lastEditedBy') && e('doing,admin'); // 步骤4:验证所有字段都已正确设置
+r($projectTest->prepareStartExtrasTest($testPostData5)) && p('status,lastEditedBy') && e('doing,admin'); // 步骤5:多次调用方法验证数据独立性

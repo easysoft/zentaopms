@@ -5,7 +5,7 @@
 
 title=测试 svnModel::cat();
 timeout=0
-cid=0
+cid=18712
 
 - 执行svnTest模块的catTest方法，参数是$validUrl, $validRevision  @0
 - 执行svnTest模块的catTest方法，参数是$invalidUrl, $validRevision  @0

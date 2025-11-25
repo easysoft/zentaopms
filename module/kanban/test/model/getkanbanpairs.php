@@ -11,7 +11,7 @@ zenData('kanban')->gen(100);
 
 title=测试 kanbanModel->getKanbanPairs();
 timeout=0
-cid=1
+cid=16926
 
 - 获取用户admin可以看到的看板pairs @100
 - 获取用户po1可以看到的看板pairs @100

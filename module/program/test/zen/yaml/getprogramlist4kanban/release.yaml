@@ -1,0 +1,60 @@
+---
+title: 发布测试数据
+desc: 用于getProgramList4Kanban方法的发布测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-30
+- field: product
+  note: 所属产品
+  range: 1-30:R
+- field: branch
+  note: 分支
+  range: 0
+- field: build
+  note: 构建
+  range: 1-30:R
+- field: name
+  note: 发布名称
+  range: '版本1.0,版本1.1,版本1.2,版本2.0,版本2.1,版本3.0,正式版1,正式版2,正式版3,测试版A,测试版B,测试版C,迭代版D,迭代版E,迭代版F,发布G,发布H,发布I,发布J,发布K,发布L,发布M,发布N,发布O,发布P,发布Q,发布R,发布S,发布T,发布U'
+- field: marker
+  note: 标记
+  range: '0{20},1{10}'
+- field: date
+  note: 发布日期
+  range: '`(-30D)-(+30D):5D`'
+  type: timestamp
+  format: YYYY-MM-DD
+- field: stories
+  note: 需求
+  range: ''
+- field: bugs
+  note: 缺陷
+  range: ''
+- field: leftBugs
+  note: 遗留缺陷
+  range: ''
+- field: desc
+  note: 描述
+  range: '这是一个测试发布'
+- field: mailto
+  note: 通知人员
+  range: ''
+- field: status
+  note: 状态
+  range: '[normal]{25},[terminate]{5}'
+- field: subStatus
+  note: 子状态
+  range: ''
+- field: createdBy
+  note: 创建者
+  range: 'admin{15},user1{10},user2{5}'
+- field: createdDate
+  note: 创建日期
+  range: '`(-60D)-(-10D):5D`'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  note: 已删除
+  range: '0'

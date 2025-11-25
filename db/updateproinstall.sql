@@ -13,7 +13,7 @@ ALTER TABLE `zt_effort` ADD `product` varchar(255) NOT NULL AFTER `objectID`;
 ALTER TABLE `zt_effort` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_effort` ADD `execution` mediumint(8) unsigned NOT NULL AFTER `project`;
 ALTER TABLE `zt_effort` ADD `account` varchar(30) NOT NULL AFTER `execution`;
-ALTER TABLE `zt_effort` ADD `work` text COLLATE 'utf8_general_ci' NULL AFTER `account`;
+ALTER TABLE `zt_effort` ADD `work` text NULL AFTER `account`;
 ALTER TABLE `zt_effort` ADD `left` float NOT NULL AFTER `date`;
 ALTER TABLE `zt_effort` ADD `consumed` float NOT NULL AFTER `left`;
 ALTER TABLE `zt_effort` CHANGE `begin` `begin` smallint(4) unsigned zerofill NOT NULL AFTER `consumed`;
@@ -278,15 +278,15 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8,'bug','showImport');
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
-  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `execution` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `condition` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-  `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL ,
-  `action` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+  `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `execution` MEDIUMINT(8) UNSIGNED NOT NULL,
+  `pretask` MEDIUMINT(8) UNSIGNED NOT NULL,
+  `condition` ENUM( 'begin', 'end' ) NOT NULL,
+  `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL,
+  `action` ENUM( 'begin', 'end' ) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `relationoftasks` (`execution`,`task`)
-) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+) ENGINE=MyISAM;
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'execution','gantt'),
 (1,'execution','relation'),
@@ -469,7 +469,7 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
   `addedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,COUNT(1) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
 CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,COUNT(1) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum((if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0) + if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0))) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;

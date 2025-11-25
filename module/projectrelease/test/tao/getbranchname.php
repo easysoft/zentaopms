@@ -5,7 +5,7 @@
 
 title=测试 projectreleaseTao::getBranchName();
 timeout=0
-cid=0
+cid=17973
 
 - 执行projectreleaseTest模块的getBranchNameTest方法，参数是1, '1', $branchGroup  @branch1
 - 执行projectreleaseTest模块的getBranchNameTest方法，参数是1, '1, 2, 3', $branchGroup  @branch1,branch2,branch3

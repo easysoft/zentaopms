@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getRealPathName();
-cid=0
+cid=16512
 
 - 获取 202205/1.txt 的实际存储路径 @202205/1
 - 获取 202204/2.png 的实际存储路径 @202204/2

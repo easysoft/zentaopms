@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getPrivsByGroup();
 timeout=0
-cid=0
+cid=16710
 
 - 步骤1：正常分组权限查询（分组1有3个权限） @3
 - 步骤2：不存在的分组ID查询 @0

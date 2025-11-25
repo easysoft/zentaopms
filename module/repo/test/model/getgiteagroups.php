@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getGiteaGroups();
 timeout=0
-cid=0
+cid=18058
 
 - 步骤1：验证返回值是数组类型 @1
 - 步骤2：有效giteaID(4)查询，期望返回空数组 @0

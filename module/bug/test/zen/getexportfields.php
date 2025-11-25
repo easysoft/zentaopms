@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 bugZen::getExportFields();
 timeout=0
-cid=0
+cid=15453
 
 - 执行$containsBasicFields @1
 - 执行$branchRemoved @1

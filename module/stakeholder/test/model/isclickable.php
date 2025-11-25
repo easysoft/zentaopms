@@ -5,7 +5,7 @@
 
 title=测试 stakeholderModel::isClickable();
 timeout=0
-cid=0
+cid=18445
 
 - 测试存在的干系人使用普通操作按钮 @1
 - 测试存在的干系人使用notexists操作 @0

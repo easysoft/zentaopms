@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->getExtensionsByAPI();
 timeout=0
-cid=1
+cid=0
 
 - 判断返回的数据是否包含title,layouts,extensions,dbPager,pager字段。
  -  @title

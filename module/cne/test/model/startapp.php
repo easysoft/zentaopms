@@ -5,7 +5,7 @@
 
 title=测试 cneModel::startApp();
 timeout=0
-cid=0
+cid=15629
 
 - 执行cneTest模块的startAppTest方法 属性code @200
 - 执行cneTest模块的startAppWithEmptyChannelTest方法 第data条的channel属性 @stable

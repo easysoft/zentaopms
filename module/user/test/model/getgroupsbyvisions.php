@@ -5,7 +5,7 @@
 
 title=测试 userModel->getGroupsByVisions();
 timeout=0
-cid=0
+cid=19612
 
 - 传空字符串，返回空数组。 @0
 - 传只包含逗号的字符串，返回空数组。 @0

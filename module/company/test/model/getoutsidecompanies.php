@@ -5,7 +5,7 @@
 
 title=测试 companyModel::getOutsideCompanies();
 timeout=0
-cid=0
+cid=15733
 
 - 步骤1：测试获取外部公司列表返回数组长度为4 @4
 - 步骤2：验证第一个外部公司名称为外部公司A属性2 @外部公司A

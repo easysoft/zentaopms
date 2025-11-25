@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->resetPassword();
-cid=0
+cid=19652
 
 - user2 用户不存在，返回 false。属性result @0
 - user2 用户不存在，提示错误信息。第errors条的0属性 @用户不存在

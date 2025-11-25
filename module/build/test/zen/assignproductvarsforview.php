@@ -5,121 +5,116 @@
 
 title=测试 buildZen::assignProductVarsForView();
 timeout=0
-cid=0
+cid=15517
 
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build1, 'story', 'id_desc', $storyPager 属性branchName @主干
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build2, 'story', 'title_asc', $storyPager 属性branchName @开发分支
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build3, 'bug', 'id_asc', $storyPager 属性branchName @主干
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build4, 'story', 'pri_desc', $storyPager 属性branchName @主干
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build5, 'story', 'id_asc', $storyPager 
- - 属性branchName @开发分支
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build6, 'story', 'status_asc', $storyPager 属性storyCount @4
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build7, 'story', 'id_desc', $storyPager 属性branchName @主干
-- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build8, 'story', 'title_asc', $storyPager 
- - 属性branchName @主干
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build1, '', '', $pager 属性branchName @主干
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build2, 'story', '', $pager 属性branchName @V1
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build3, 'story', '', $pager 属性branchName @V2
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build1, '', '', $pager 属性storyCount @3
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build4, '', '', $pager 属性storyCount @0
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build1, 'story', '', $pager 属性hasStoryPager @1
+- 执行buildTest模块的assignProductVarsForViewTest方法，参数是$build5, '', '', $pager 属性branchName @主干
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 准备测试数据
-$table = zenData('build');
-$table->id->range('1-10');
-$table->product->range('1{4},2{3},3{3}');
-$table->branch->range('0{5},1{3},2{2}');
-$table->name->range('构建版本{10}');
-$table->stories->range('"1,2,3"{3},"4,5,6"{3},"7,8"{2},"1,3,5,7"{2}');
-$table->gen(10);
+$story = zenData('story');
+$story->id->range('1-20');
+$story->product->range('1-3');
+$story->branch->range('0{10},1{5},2{5}');
+$story->title->range('Story 1-20')->prefix('Story ');
+$story->status->range('active{10},closed{5},draft{5}');
+$story->type->range('story');
+$story->gen(20);
 
-$table = zenData('product');
-$table->id->range('1-5');
-$table->name->range('产品A,产品B,产品C,多分支产品,普通产品');
-$table->type->range('normal{2},branch{2},platform{1}');
-$table->gen(5);
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('Product 1-5')->prefix('Product ');
+$product->type->range('normal{2},branch{2},platform{1}');
+$product->gen(5);
 
-$table = zenData('branch');
-$table->id->range('1-5');
-$table->product->range('2{3},4{2}');
-$table->name->range('开发分支,测试分支,发布分支,热修复分支,主分支');
-$table->gen(5);
+$build = zenData('build');
+$build->id->range('1-10');
+$build->product->range('1-3');
+$build->branch->range('0{5},1{3},2{2}');
+$build->name->range('Build 1-10')->prefix('Build ');
+$build->gen(10);
 
-$table = zenData('story');
-$table->id->range('1-10');
-$table->product->range('1{4},2{3},3{3}');
-$table->title->range('用户登录功能{2},数据统计功能{2},报表导出功能{2},权限管理功能{2},系统配置功能{2}');
-$table->status->range('active');
-$table->gen(10);
+$branch = zenData('branch');
+$branch->id->range('1-5');
+$branch->product->range('3{3},4{2}');
+$branch->name->range('V1,V2,V3,V4,V5');
+$branch->status->range('active');
+$branch->gen(5);
+
+zenData('project')->gen(5);
+zenData('user')->gen(5);
+
+global $tester;
+$tester->app->loadClass('pager', true);
+$tester->app->rawModule = 'build';
+$tester->app->rawMethod = 'view';
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildZenTest();
 
-// 构建分页对象
-$storyPager = new stdclass();
-$storyPager->pageID = 1;
-$storyPager->recPerPage = 20;
-
-// 测试步骤1：测试正常产品类型的分支名称处理
 $build1 = new stdclass();
-$build1->product = 1;
-$build1->productType = 'normal';
-$build1->branch = '0';
-$build1->allStories = '1,2,3';
-r($buildTest->assignProductVarsForViewTest($build1, 'story', 'id_desc', $storyPager)) && p('branchName') && e('主干');
+$build1->id           = 1;
+$build1->project      = 1;
+$build1->product      = 1;
+$build1->branch       = '0';
+$build1->productType  = 'normal';
+$build1->allStories   = '1,2,3';
 
-// 测试步骤2：测试多分支产品类型的分支名称处理
 $build2 = new stdclass();
-$build2->product = 2;
-$build2->productType = 'branch';
-$build2->branch = '1';
-$build2->allStories = '4,5,6';
-r($buildTest->assignProductVarsForViewTest($build2, 'story', 'title_asc', $storyPager)) && p('branchName') && e('开发分支');
+$build2->id           = 2;
+$build2->project      = 1;
+$build2->product      = 3;
+$build2->branch       = '1';
+$build2->productType  = 'branch';
+$build2->allStories   = '11,12,13';
 
-// 测试步骤3：测试平台产品类型的分支名称处理
 $build3 = new stdclass();
-$build3->product = 4;
-$build3->productType = 'platform';
-$build3->branch = '0';
-$build3->allStories = '7,8';
-r($buildTest->assignProductVarsForViewTest($build3, 'bug', 'id_asc', $storyPager)) && p('branchName') && e('主干');
+$build3->id           = 3;
+$build3->project      = 1;
+$build3->product      = 3;
+$build3->branch       = '2';
+$build3->productType  = 'branch';
+$build3->allStories   = '16,17';
 
-// 测试步骤4：测试空分支情况的处理
-$build4 = new stdclass();
-$build4->product = 3;
-$build4->productType = 'branch';
-$build4->branch = '';
-$build4->allStories = '';
-r($buildTest->assignProductVarsForViewTest($build4, 'story', 'pri_desc', $storyPager)) && p('branchName') && e('主干');
-
-// 测试步骤5：测试多个分支的处理
-$build5 = new stdclass();
-$build5->product = 2;
-$build5->productType = 'branch';
-$build5->branch = '1,2';
-$build5->allStories = '4,5';
-r($buildTest->assignProductVarsForViewTest($build5, 'story', 'id_asc', $storyPager)) && p('branchName') && e('开发分支,测试分支');
-
-// 测试步骤6：测试故事列表的正确获取
 $build6 = new stdclass();
-$build6->product = 1;
-$build6->productType = 'normal';
-$build6->branch = '0';
-$build6->allStories = '1,3,5,7';
-r($buildTest->assignProductVarsForViewTest($build6, 'story', 'status_asc', $storyPager)) && p('storyCount') && e('4');
+$build6->id           = 6;
+$build6->project      = 1;
+$build6->product      = 3;
+$build6->branch       = '1,2';
+$build6->productType  = 'branch';
+$build6->allStories   = '11,12,13,16,17';
 
-// 测试步骤7：测试主干分支标识的处理
-$build7 = new stdclass();
-$build7->product = 2;
-$build7->productType = 'branch';
-$build7->branch = '0';
-$build7->allStories = '4';
-r($buildTest->assignProductVarsForViewTest($build7, 'story', 'id_desc', $storyPager)) && p('branchName') && e('主干');
+$build4 = new stdclass();
+$build4->id           = 4;
+$build4->project      = 1;
+$build4->product      = 1;
+$build4->branch       = '0';
+$build4->productType  = 'normal';
+$build4->allStories   = '';
 
-// 测试步骤8：测试混合分支的处理（包含主干和普通分支）
-$build8 = new stdclass();
-$build8->product = 2;
-$build8->productType = 'branch';
-$build8->branch = '0,1';
-$build8->allStories = '4,5,6';
-r($buildTest->assignProductVarsForViewTest($build8, 'story', 'title_asc', $storyPager)) && p('branchName') && e('主干,开发分支');
+$build5 = new stdclass();
+$build5->id           = 5;
+$build5->project      = 1;
+$build5->product      = 1;
+$build5->branch       = '';
+$build5->productType  = 'normal';
+$build5->allStories   = '1,2';
+
+$pager = new pager(0, 10, 1);
+
+r($buildTest->assignProductVarsForViewTest($build1, '', '', $pager)) && p('branchName') && e('主干');
+r($buildTest->assignProductVarsForViewTest($build2, 'story', '', $pager)) && p('branchName') && e('V1');
+r($buildTest->assignProductVarsForViewTest($build3, 'story', '', $pager)) && p('branchName') && e('V2');
+r($buildTest->assignProductVarsForViewTest($build1, '', '', $pager)) && p('storyCount') && e('3');
+r($buildTest->assignProductVarsForViewTest($build4, '', '', $pager)) && p('storyCount') && e('0');
+r($buildTest->assignProductVarsForViewTest($build1, 'story', '', $pager)) && p('hasStoryPager') && e('1');
+r($buildTest->assignProductVarsForViewTest($build5, '', '', $pager)) && p('branchName') && e('主干');

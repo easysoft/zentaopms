@@ -5,7 +5,7 @@
 
 title=测试 metricModel::calculateDefaultMetric();
 timeout=0
-cid=0
+cid=17064
 
 - 步骤1：正常情况，有数据集的calculator @1
 - 步骤2：有数据集且使用SCM的calculator @1

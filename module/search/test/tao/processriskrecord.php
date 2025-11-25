@@ -5,93 +5,91 @@
 
 title=测试 searchTao::processRiskRecord();
 timeout=0
-cid=0
+cid=18340
 
-
+- 执行searchTao模块的processRiskRecordTest方法,module为risk,lib为0 >> url属性包含risk-view-1
+- 执行searchTao模块的processRiskRecordTest方法,module为risk,lib不为0 >> url属性包含assetlib-riskView-2
+- 执行searchTao模块的processRiskRecordTest方法,module为opportunity,lib为0 >> url属性包含opportunity-view-3
+- 执行searchTao模块的processRiskRecordTest方法,module为opportunity,lib不为0 >> url属性包含assetlib-opportunityView-4
+- 执行searchTao模块的processRiskRecordTest方法,module为risk,objectID为100,lib为0 >> url属性包含risk-view-100
+- 执行searchTao模块的processRiskRecordTest方法,module为opportunity,objectID为200,lib为0 >> url属性包含opportunity-view-200
+- 执行searchTao模块的processRiskRecordTest方法,module为risk,objectID为50,lib为15 >> url属性包含assetlib-riskView-50
 
 */
 
-// 定义模拟测试框架函数
-$testResult = null;
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-function r($result) {
-    global $testResult;
-    $testResult = $result;
-    return true;
-}
+zenData('risk')->gen(10);
 
-function p($property = '') {
-    global $testResult;
-    if(empty($property)) return true;
-    if(is_object($testResult) && isset($testResult->$property)) {
-        $testResult = $testResult->$property;
-    }
-    return true;
-}
+su('admin');
 
-function e($expected) {
-    global $testResult;
-    return $testResult == $expected;
-}
+global $config;
+$config->edition = 'max';
 
-// 创建测试类
-class searchTest
-{
-    public function processRiskRecordTest($record, $module, $objectList)
-    {
-        $object = isset($objectList[$module][$record->objectID]) ? $objectList[$module][$record->objectID] : new stdClass();
-        $method = 'view';
-        $targetModule = $module;
+$searchTest = new searchTaoTest();
 
-        if(!empty($object->lib))
-        {
-            $method = $module == 'risk' ? 'riskView' : 'opportunityView';
-            $targetModule = 'assetlib';
-        }
+$record1 = new stdClass();
+$record1->objectType = 'risk';
+$record1->objectID = 1;
 
-        $record->url = "index.php?m={$targetModule}&f={$method}&id={$record->objectID}";
-        return $record;
-    }
-}
+$record2 = new stdClass();
+$record2->objectType = 'risk';
+$record2->objectID = 2;
 
-$searchTest = new searchTest();
+$record3 = new stdClass();
+$record3->objectType = 'opportunity';
+$record3->objectID = 3;
 
-// 创建测试记录对象
-$riskRecord1 = new stdClass();
-$riskRecord1->objectID = 1;
-$riskRecord1->objectType = 'risk';
+$record4 = new stdClass();
+$record4->objectType = 'opportunity';
+$record4->objectID = 4;
 
-$riskRecord2 = new stdClass();
-$riskRecord2->objectID = 6;
-$riskRecord2->objectType = 'risk';
+$record5 = new stdClass();
+$record5->objectType = 'risk';
+$record5->objectID = 100;
 
-$opportunityRecord1 = new stdClass();
-$opportunityRecord1->objectID = 11;
-$opportunityRecord1->objectType = 'opportunity';
+$record6 = new stdClass();
+$record6->objectType = 'opportunity';
+$record6->objectID = 200;
 
-$opportunityRecord2 = new stdClass();
-$opportunityRecord2->objectID = 16;
-$opportunityRecord2->objectType = 'opportunity';
+$record7 = new stdClass();
+$record7->objectType = 'risk';
+$record7->objectID = 50;
 
-$simpleRecord = new stdClass();
-$simpleRecord->objectID = 3;
-$simpleRecord->objectType = 'risk';
+$risk1 = new stdClass();
+$risk1->lib = 0;
 
-// 创建objectList参数
-$objectList = array(
-    'risk' => array(
-        1 => (object)array('id' => 1, 'lib' => 0),
-        3 => (object)array('id' => 3, 'lib' => 0),
-        6 => (object)array('id' => 6, 'lib' => 1)
-    ),
-    'opportunity' => array(
-        11 => (object)array('id' => 11, 'lib' => 0),
-        16 => (object)array('id' => 16, 'lib' => 1)
-    )
-);
+$risk2 = new stdClass();
+$risk2->lib = 5;
 
-r($searchTest->processRiskRecordTest($riskRecord1, 'risk', $objectList)) && p('url') && e('index.php?m=risk&f=view&id=1');
-r($searchTest->processRiskRecordTest($riskRecord2, 'risk', $objectList)) && p('url') && e('index.php?m=assetlib&f=riskView&id=6');
-r($searchTest->processRiskRecordTest($opportunityRecord1, 'opportunity', $objectList)) && p('url') && e('index.php?m=opportunity&f=view&id=11');
-r($searchTest->processRiskRecordTest($opportunityRecord2, 'opportunity', $objectList)) && p('url') && e('index.php?m=assetlib&f=opportunityView&id=16');
-r($searchTest->processRiskRecordTest($simpleRecord, 'risk', $objectList)) && p('url') && e('index.php?m=risk&f=view&id=3');
+$opportunity1 = new stdClass();
+$opportunity1->lib = 0;
+
+$opportunity2 = new stdClass();
+$opportunity2->lib = 10;
+
+$risk3 = new stdClass();
+$risk3->lib = 0;
+
+$opportunity3 = new stdClass();
+$opportunity3->lib = 0;
+
+$risk4 = new stdClass();
+$risk4->lib = 15;
+
+$objectList1 = array('risk' => array(1 => $risk1));
+$objectList2 = array('risk' => array(2 => $risk2));
+$objectList3 = array('opportunity' => array(3 => $opportunity1));
+$objectList4 = array('opportunity' => array(4 => $opportunity2));
+$objectList5 = array('risk' => array(100 => $risk3));
+$objectList6 = array('opportunity' => array(200 => $opportunity3));
+$objectList7 = array('risk' => array(50 => $risk4));
+
+r($searchTest->processRiskRecordTest($record1, 'risk', $objectList1)) && p('url') && e('*/risk-view-1.html');
+r($searchTest->processRiskRecordTest($record2, 'risk', $objectList2)) && p('url') && e('*/assetlib-riskView-2.html');
+r($searchTest->processRiskRecordTest($record3, 'opportunity', $objectList3)) && p('url') && e('*/opportunity-view-3.html');
+r($searchTest->processRiskRecordTest($record4, 'opportunity', $objectList4)) && p('url') && e('*/assetlib-opportunityView-4.html');
+r($searchTest->processRiskRecordTest($record5, 'risk', $objectList5)) && p('url') && e('*/risk-view-100.html');
+r($searchTest->processRiskRecordTest($record6, 'opportunity', $objectList6)) && p('url') && e('*/opportunity-view-200.html');
+r($searchTest->processRiskRecordTest($record7, 'risk', $objectList7)) && p('url') && e('*/assetlib-riskView-50.html');

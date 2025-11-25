@@ -27,7 +27,7 @@ $project->gen(4);
 
 title=测试 projectModel::fetchProjectInfo();
 timeout=0
-cid=1
+cid=17904
 
 - 获取ID等于2的项目
  - 属性id @2

@@ -5,39 +5,70 @@
 
 title=测试 projectZen::processGroupPrivs();
 timeout=0
-cid=0
+cid=17958
 
-- 步骤1：有产品项目权限处理 @1
-- 步骤2：无产品项目权限处理 @1
-- 步骤3：瀑布模型项目权限处理 @1
-- 步骤4：敏捷模型项目权限处理 @1
-- 步骤5：无迭代无产品项目权限处理 @1
+- 步骤1:有产品的项目,productplan资源应被移除 @0
+- 步骤2:有产品的项目,tree资源应被移除 @0
+- 步骤3:无产品的项目,projectstory资源应存在 @1
+- 步骤4:瀑布模型项目,productplan资源应被移除 @0
+- 步骤5:瀑布模型项目,projectplan资源应被移除 @0
+- 步骤6:Scrum模型项目,projectstory.track应被移除 @0
+- 步骤7:无迭代且无产品的项目,story资源应存在 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('project');
-$table->id->range('1-10');
-$table->name->range('项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10');
-$table->hasProduct->range('1{5},0{5}');
-$table->model->range('scrum{2},waterfall{2},kanban{1},scrum{2},waterfall{2},kanban{1}');
-$table->multiple->range('1{5},0{5}');
-$table->status->range('wait{3},doing{4},closed{3}');
-$table->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$projectTest = new projectTest();
+$projectTest = new projectZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($projectTest->processGroupPrivsTest((object)array('hasProduct' => 1, 'model' => 'scrum', 'multiple' => 1))) && p() && e('1'); // 步骤1：有产品项目权限处理
-r($projectTest->processGroupPrivsTest((object)array('hasProduct' => 0, 'model' => 'scrum', 'multiple' => 1))) && p() && e('1'); // 步骤2：无产品项目权限处理
-r($projectTest->processGroupPrivsTest((object)array('hasProduct' => 1, 'model' => 'waterfall', 'multiple' => 1))) && p() && e('1'); // 步骤3：瀑布模型项目权限处理
-r($projectTest->processGroupPrivsTest((object)array('hasProduct' => 1, 'model' => 'scrum', 'multiple' => 1))) && p() && e('1'); // 步骤4：敏捷模型项目权限处理
-r($projectTest->processGroupPrivsTest((object)array('hasProduct' => 0, 'model' => 'scrum', 'multiple' => 0))) && p() && e('1'); // 步骤5：无迭代无产品项目权限处理
+$project1 = new stdclass();
+$project1->hasProduct = 1;
+$project1->model = 'scrum';
+$project1->multiple = 1;
+$result1 = $projectTest->processGroupPrivsTest($project1);
+r(property_exists($result1, 'productplan')) && p() && e('0'); // 步骤1:有产品的项目,productplan资源应被移除
+
+$project2 = new stdclass();
+$project2->hasProduct = 1;
+$project2->model = 'scrum';
+$project2->multiple = 1;
+$result2 = $projectTest->processGroupPrivsTest($project2);
+r(property_exists($result2, 'tree')) && p() && e('0'); // 步骤2:有产品的项目,tree资源应被移除
+
+$project3 = new stdclass();
+$project3->hasProduct = 0;
+$project3->model = 'scrum';
+$project3->multiple = 1;
+$result3 = $projectTest->processGroupPrivsTest($project3);
+r(property_exists($result3, 'projectstory')) && p() && e('1'); // 步骤3:无产品的项目,projectstory资源应存在
+
+$project4 = new stdclass();
+$project4->hasProduct = 1;
+$project4->model = 'waterfall';
+$project4->multiple = 1;
+$result4 = $projectTest->processGroupPrivsTest($project4);
+r(property_exists($result4, 'productplan')) && p() && e('0'); // 步骤4:瀑布模型项目,productplan资源应被移除
+
+$project5 = new stdclass();
+$project5->hasProduct = 1;
+$project5->model = 'waterfall';
+$project5->multiple = 1;
+$result5 = $projectTest->processGroupPrivsTest($project5);
+r(property_exists($result5, 'projectplan')) && p() && e('0'); // 步骤5:瀑布模型项目,projectplan资源应被移除
+
+$project6 = new stdclass();
+$project6->hasProduct = 1;
+$project6->model = 'scrum';
+$project6->multiple = 1;
+$result6 = $projectTest->processGroupPrivsTest($project6);
+r(isset($result6->projectstory->track)) && p() && e('0'); // 步骤6:Scrum模型项目,projectstory.track应被移除
+
+$project7 = new stdclass();
+$project7->hasProduct = 0;
+$project7->model = 'scrum';
+$project7->multiple = 0;
+$result7 = $projectTest->processGroupPrivsTest($project7);
+r(property_exists($result7, 'story')) && p() && e('1'); // 步骤7:无迭代且无产品的项目,story资源应存在

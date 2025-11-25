@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStoryGrade();
 timeout=0
-cid=0
+cid=19477
 
 - 步骤1：验证返回数组长度 @3
 - 步骤2：验证story层级类型第0条的type属性 @story

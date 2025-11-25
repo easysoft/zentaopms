@@ -46,7 +46,7 @@ su('admin');
 
 title=测试executionModel->linkCasesTest();
 timeout=0
-cid=1
+cid=16352
 
 - 敏捷执行关联用例
  - 第0条的project属性 @3

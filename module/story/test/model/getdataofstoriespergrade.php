@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getDataOfStoriesPerGrade();
 timeout=0
-cid=0
+cid=18516
 
 - 步骤1：测试story类型需求按等级统计，验证第一个等级数据第0条的value属性 @6
 - 步骤2：验证第二个等级数据第1条的value属性 @6

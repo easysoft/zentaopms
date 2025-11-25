@@ -5,7 +5,7 @@
 
 title=测试 jobModel::getListByTriggerType();
 timeout=0
-cid=0
+cid=16846
 
 - 测试步骤1：正常获取tag类型job列表数量 @4
 - 测试步骤2：正常获取commit类型job列表数量 @3

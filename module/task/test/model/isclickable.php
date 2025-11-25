@@ -10,7 +10,7 @@ su('admin');
 
 title=taskModel->isClickable();
 timeout=0
-cid=1
+cid=18829
 
 - 计算任务为父任务 状态为wait 能否进行start操作属性1 @1
 - 计算任务为父任务 状态为doing 能否进行finished操作属性1 @1

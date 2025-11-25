@@ -5,7 +5,7 @@
 
 title=测试 aiModel::createPrompt();
 timeout=0
-cid=0
+cid=15013
 
 - 步骤1：正常情况创建成功 @2
 - 步骤2：空name字段返回错误第name条的0属性 @『name』不能为空。

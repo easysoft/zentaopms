@@ -3,7 +3,7 @@
 /**
 
 title=测试 treeModel->buildMenuQuery();
-cid=0
+cid=19343
 
 - 测试查询root 1 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '1' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`
 

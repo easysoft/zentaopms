@@ -5,7 +5,7 @@
 
 title=测试 entryModel::getLogs();
 timeout=0
-cid=0
+cid=16250
 
 - 步骤1：正常情况-获取ID为1的entry日志列表数量 @6
 - 步骤2：边界值-获取不存在ID的entry日志列表数量 @5

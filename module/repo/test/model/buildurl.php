@@ -5,7 +5,7 @@
 
 title=测试 repoModel::buildURL();
 timeout=0
-cid=0
+cid=18030
 
 - 测试步骤1：SVN系统cat方法构建URL @svn-cat--1.html?repoUrl=dGVzdA==
 - 测试步骤2：Git系统diff方法构建URL @git-diff--123.html?repoUrl=cHJvamVjdC9yZXBv

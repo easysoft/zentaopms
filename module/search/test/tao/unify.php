@@ -5,32 +5,33 @@
 
 title=测试 searchTao::unify();
 timeout=0
-cid=0
+cid=18347
 
-- 步骤1：测试下划线替换 @hello,world
+- 测试将多种特殊符号统一替换为逗号 @hello,world,test,data
 
-- 步骤2：测试多种特殊符号 @test,hello,world,test,end,symbol,more,data,back,plus,star,slash,back,dot,comma
+- 测试将特殊符号替换为空格 @hello world test data
+- 测试将多个连续符号合并为一个 @hello,world
 
-- 步骤3：测试连续特殊符号去重 @multiple,commas,spaces,dashes
+- 测试去除首尾的目标符号 @hello,world,test
 
-- 步骤4：测试自定义分隔符 @custom|separator
-- 步骤5：测试空字符串 @
+- 测试包含中文标点的字符串替换 @你好,世界,测试
+
+- 测试空字符串输入 @0
+- 测试仅包含特殊符号的字符串 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$searchTest = new searchTest();
+$searchTest = new searchTaoTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($searchTest->unifyTest('hello_world')) && p() && e('hello,world'); // 步骤1：测试下划线替换
-r($searchTest->unifyTest('test、hello world-test?end@symbol&more%data~back`plus+star*slash/back\\dot。comma，')) && p() && e('test,hello,world,test,end,symbol,more,data,back,plus,star,slash,back,dot,comma'); // 步骤2：测试多种特殊符号
-r($searchTest->unifyTest('multiple___commas、、、spaces   dashes---')) && p() && e('multiple,commas,spaces,dashes'); // 步骤3：测试连续特殊符号去重
-r($searchTest->unifyTest('custom_separator', '|')) && p() && e('custom|separator'); // 步骤4：测试自定义分隔符
-r($searchTest->unifyTest('')) && p() && e(''); // 步骤5：测试空字符串
+r($searchTest->unifyTest('hello_world、test-data')) && p() && e('hello,world,test,data'); // 测试将多种特殊符号统一替换为逗号
+r($searchTest->unifyTest('hello_world、test-data', ' ')) && p() && e('hello world test data'); // 测试将特殊符号替换为空格
+r($searchTest->unifyTest('hello___world', ',')) && p() && e('hello,world'); // 测试将多个连续符号合并为一个
+r($searchTest->unifyTest('_hello、world-test_', ',')) && p() && e('hello,world,test'); // 测试去除首尾的目标符号
+r($searchTest->unifyTest('你好、世界。测试')) && p() && e('你好,世界,测试'); // 测试包含中文标点的字符串替换
+r($searchTest->unifyTest('')) && p() && e('0'); // 测试空字符串输入
+r($searchTest->unifyTest('_、-。，', ',')) && p() && e('0'); // 测试仅包含特殊符号的字符串

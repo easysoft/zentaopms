@@ -5,7 +5,7 @@
 
 title=测试 convertModel::splitFile();
 timeout=0
-cid=0
+cid=15796
 
 - 执行convertTest模块的splitFileTest方法  @success
 - 执行convertTest模块的splitFileTest方法  @no_files

@@ -5,88 +5,106 @@
 
 title=测试 productplanZen::buildDataForBrowse();
 timeout=0
-cid=0
+cid=17661
 
-
+- 执行productplanTest模块的buildDataForBrowseTest方法，参数是$emptyPlans, $branchOption  @0
+- 执行branchName) ? '0' : $result[0]模块的branchName方法  @0
+- 执行$result[0]->desc @这是描述
+- 执行$result[0]->branchName @分支1
+- 执行$result[0]->begin @待定
+- 执行$result[0]->end @待定
+- 执行$result[0]->branchName @分支1,分支2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/productplanzen.unittest.class.php';
-
-zenData('productplan')->loadYaml('zt_productplan_builddataforbrowse', false, 2)->gen(5);
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
 $productplanTest = new productplanZenTest();
 
-// 测试步骤1：空计划数组测试
-try {
-    $result = $productplanTest->buildDataForBrowseTest(array(), array());
-    r(is_array($result) && empty($result)) && p() && e('1');
-} catch (Exception $e) {
-    r(1) && p() && e('1');
-}
+// 测试场景1: 空计划数组
+$emptyPlans = array();
+$branchOption = array();
+r(count($productplanTest->buildDataForBrowseTest($emptyPlans, $branchOption))) && p() && e('0');
 
-// 测试步骤2：基本功能测试
-$plan = new stdClass();
-$plan->id = 1;
-$plan->branch = '0';
-$plan->begin = '2024-01-01';
-$plan->end = '2024-12-31';
-$plan->desc = '<p>测试描述</p>';
-$plan->projects = array('proj1' => 'Project 1');
-$plan->status = 'wait';
-
-// 准备环境
-global $config, $lang, $session;
-if(!isset($config->productplan)) $config->productplan = new stdClass();
+// 测试场景2: normal产品类型的单个计划
+global $config, $lang;
 $config->productplan->future = '2030-01-01';
-if(!isset($lang->productplan)) $lang->productplan = new stdClass();
 $lang->productplan->future = '待定';
-if(!isset($session)) $session = new stdClass();
-$session->currentProductType = 'normal';
 
-try {
-    $result = $productplanTest->buildDataForBrowseTest(array($plan), array('0' => '主干'));
-    r(is_array($result) && count($result) == 1) && p() && e('1');
-} catch (Exception $e) {
-    r(1) && p() && e('1');
-}
+$normalPlan = new stdClass();
+$normalPlan->id = 1;
+$normalPlan->product = 1;
+$normalPlan->branch = '0';
+$normalPlan->title = '计划1';
+$normalPlan->status = 'wait';
+$normalPlan->begin = '2024-01-01';
+$normalPlan->end = '2024-12-31';
+$normalPlan->desc = '<p>这是描述</p>';
+$normalPlan->projects = array(1 => 'Project1', 2 => 'Project2');
 
-// 测试步骤3：分支处理测试
-$session->currentProductType = 'branch';
-try {
-    $plan->branch = '1,2';
-    $result = $productplanTest->buildDataForBrowseTest(array($plan), array('1' => '分支1', '2' => '分支2'));
-    r(is_array($result)) && p() && e('1');
-} catch (Exception $e) {
-    r(1) && p() && e('1');
-}
+// 设置 session 为 normal 类型产品
+global $app;
+$app->session->currentProductType = 'normal';
 
-// 测试步骤4：future时间处理测试
-try {
-    $plan->begin = '2030-01-01';
-    $plan->end = '2030-01-01';
-    $result = $productplanTest->buildDataForBrowseTest(array($plan), array());
-    r(is_array($result)) && p() && e('1');
-} catch (Exception $e) {
-    r(1) && p() && e('1');
-}
+$plans = array($normalPlan);
+$result = $productplanTest->buildDataForBrowseTest($plans, array());
+r(empty($result[0]->branchName) ? '0' : $result[0]->branchName) && p() && e('0');
+r(strip_tags($result[0]->desc)) && p() && e('这是描述');
 
-// 测试步骤5：多计划处理测试
-try {
-    $plan2 = new stdClass();
-    $plan2->id = 2;
-    $plan2->branch = '0';
-    $plan2->begin = '2024-02-01';
-    $plan2->end = '2024-02-28';
-    $plan2->desc = 'Plan 2';
-    $plan2->projects = array();
-    $plan2->status = 'doing';
-    
-    $result = $productplanTest->buildDataForBrowseTest(array($plan, $plan2), array());
-    r(is_array($result) && count($result) == 2) && p() && e('1');
-} catch (Exception $e) {
-    r(1) && p() && e('1');
-}
+// 测试场景3: branch产品类型的计划
+$app->session->currentProductType = 'branch';
+
+$branchPlan = new stdClass();
+$branchPlan->id = 2;
+$branchPlan->product = 2;
+$branchPlan->branch = '1';
+$branchPlan->title = '计划2';
+$branchPlan->status = 'doing';
+$branchPlan->begin = '2024-02-01';
+$branchPlan->end = '2024-11-30';
+$branchPlan->desc = '无HTML标签的描述';
+$branchPlan->projects = array(3 => 'Project3');
+
+$branchOptions = array('0' => '主干', '1' => '分支1', '2' => '分支2');
+$plans = array($branchPlan);
+$result = $productplanTest->buildDataForBrowseTest($plans, $branchOptions);
+r($result[0]->branchName) && p() && e('分支1');
+
+// 测试场景4: 未来日期的计划
+$futurePlan = new stdClass();
+$futurePlan->id = 3;
+$futurePlan->product = 1;
+$futurePlan->branch = '0';
+$futurePlan->title = '计划3';
+$futurePlan->status = 'wait';
+$futurePlan->begin = '2030-01-01';
+$futurePlan->end = '2030-01-01';
+$futurePlan->desc = '';
+$futurePlan->projects = array();
+
+$app->session->currentProductType = 'normal';
+$plans = array($futurePlan);
+$result = $productplanTest->buildDataForBrowseTest($plans, array());
+r($result[0]->begin) && p() && e('待定');
+r($result[0]->end) && p() && e('待定');
+
+// 测试场景5: 多分支计划
+$app->session->currentProductType = 'branch';
+
+$multiBranchPlan = new stdClass();
+$multiBranchPlan->id = 4;
+$multiBranchPlan->product = 3;
+$multiBranchPlan->branch = '1,2';
+$multiBranchPlan->title = '计划4';
+$multiBranchPlan->status = 'done';
+$multiBranchPlan->begin = '2024-03-01';
+$multiBranchPlan->end = '2024-10-31';
+$multiBranchPlan->desc = '<strong>加粗文本</strong><br>换行';
+$multiBranchPlan->projects = array(4 => 'Project4', 5 => 'Project5');
+
+$plans = array($multiBranchPlan);
+$result = $productplanTest->buildDataForBrowseTest($plans, $branchOptions);
+r($result[0]->branchName) && p() && e('分支1,分支2');

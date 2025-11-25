@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getPlan();
 timeout=0
-cid=0
+cid=19446
 
 - 执行tutorialTest模块的getPlanTest方法 属性id @1
 - 执行tutorialTest模块的getPlanTest方法 属性title @Test plan

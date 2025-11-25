@@ -5,7 +5,7 @@
 
 title=测试 actionModel::printActionForGitLab();
 timeout=0
-cid=0
+cid=14919
 
 - 执行actionTest模块的printActionForGitLabTest方法，参数是$invalidAction  @0
 - 执行actionTest模块的printActionForGitLabTest方法，参数是$validActionWithExtra  @首次创建。

@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->updateProgramView();
-cid=0
+cid=19662
 
 - 测试更新ID为2的项目集的用户视图。 @1
 - 查看ID为2的项目集的用户视图是否更新成功属性programs @,2

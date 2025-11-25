@@ -5,7 +5,7 @@
 
 title=测试 treeModel::buildTree();
 timeout=0
-cid=0
+cid=19344
 
 - 步骤1：case类型但无对象数据时返回false @0
 - 步骤2：story类型模块构建tree正常情况属性id @1

@@ -13,7 +13,7 @@ su('admin');
 
 title=bugModel->getActiveBugs();
 timeout=0
-cid=1
+cid=15355
 
 - 查询产品1 2 3 不存在的产品1000001下 且不排除bug的bug @BUG9,bug8,缺陷!()(){}|+=%^&*$#测试bug名称到底可以有多长！#￥%&*":.<>。?/（）;7,BUG6,BUG5,BUG4,BUG3,BUG2,BUG1
 

@@ -5,7 +5,7 @@
 
 title=测试 mailModel::sendmail();
 timeout=0
-cid=0
+cid=17017
 
 - 测试步骤1：空参数输入情况属性processed @1
 - 测试步骤2：只传入actionID无objectID属性processed @1

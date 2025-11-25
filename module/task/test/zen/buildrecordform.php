@@ -5,101 +5,88 @@
 
 title=测试 taskZen::buildRecordForm();
 timeout=0
-cid=0
+cid=18905
 
-- 步骤1：正常情况
- - 属性taskID @1
- - 属性title @任务日志
-- 步骤2：团队模式排序处理
- - 属性taskID @1
- - 属性from @execution
- - 属性orderBy @order_desc
-- 步骤3：默认折叠状态
- - 属性taskID @2
- - 属性taskEffortFold @0
-- 步骤4：当前用户分配的任务
- - 属性taskID @1
- - 属性taskAssignedTo @admin
+- 执行taskZenTest模块的buildRecordFormTest方法，参数是1, 'taskList', 'id_desc' 属性taskEffortFold @1
+- 执行taskZenTest模块的buildRecordFormTest方法，参数是6, 'taskList', ''
  - 属性taskEffortFold @1
-- 步骤5：用户列表验证
- - 属性taskID @3
- - 属性from @kanban
+ - 属性orderBy @id_desc
+- 执行taskZenTest模块的buildRecordFormTest方法，参数是3, 'taskList', 'order_desc' 属性orderBy @order_desc
+- 执行taskZenTest模块的buildRecordFormTest方法，参数是2, 'taskList', 'id_desc'
+ - 属性taskID @2
+ - 属性from @taskList
  - 属性usersCount @10
+- 执行taskZenTest模块的buildRecordFormTest方法，参数是3, 'taskList', 'id_asc'
+ - 属性taskID @3
+ - 属性orderBy @id_asc
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/taskzen.unittest.class.php';
-
-// 2. zendata数据准备（根据需要配置）
-$project = zenData('project');
-$project->id->range('1');
-$project->name->range('测试项目');
-$project->type->range('project');
-$project->status->range('doing');
-$project->gen(1);
-
-$execution = zenData('project');
-$execution->id->range('2');
-$execution->parent->range('1');
-$execution->name->range('测试执行');
-$execution->type->range('sprint');
-$execution->status->range('doing');
-$execution->gen(1);
-
-$story = zenData('story');
-$story->id->range('1');
-$story->title->range('测试需求');
-$story->type->range('story');
-$story->status->range('active');
-$story->version->range('1');
-$story->gen(1);
 
 $task = zenData('task');
 $task->id->range('1-10');
 $task->project->range('1');
-$task->execution->range('2');
-$task->name->range('测试任务{1-10}');
+$task->execution->range('3');
+$task->module->range('0');
+$task->story->range('0');
+$task->name->range('Task1,Task2,Task3,Task4,Task5,Task6,Task7,Task8,Task9,Task10');
 $task->type->range('devel');
-$task->mode->range('linear{5},');
-$task->assignedTo->range('admin{3},user1{3},user2{4}');
+$task->mode->range('[]{5},linear{3},multi{2}');
 $task->status->range('wait{3},doing{4},done{3}');
-$task->story->range('0{8},1{2}');
-$task->storyVersion->range('1');
+$task->assignedTo->range('admin{4},user1{3},user2{3}');
+$task->openedBy->range('admin');
+$task->openedDate->range('2024-11-01 00:00:00')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
+$task->deleted->range('0');
 $task->gen(10);
 
-$taskTeam = zenData('taskteam');
-$taskTeam->id->range('1-15');
-$taskTeam->task->range('1{3},2{3},3{3},4{3},5{3}');
-$taskTeam->account->range('admin,user1,user2');
-$taskTeam->status->range('wait{5},doing{5},done{5}');
-$taskTeam->gen(15);
+$taskteam = zenData('taskteam');
+$taskteam->id->range('1-20');
+$taskteam->task->range('6{4},7{4},8{4},9{4},10{4}');
+$taskteam->account->range('admin,user1,user2,user3');
+$taskteam->estimate->range('5-10:1');
+$taskteam->consumed->range('0-5:1');
+$taskteam->left->range('0-5:1');
+$taskteam->status->range('wait{5},doing{10},done{5}');
+$taskteam->order->range('1-20');
+$taskteam->gen(20);
 
-$taskEstimate = zenData('taskestimate');
-$taskEstimate->id->range('1-20');
-$taskEstimate->task->range('1{4},2{4},3{4},4{4},5{4}');
-$taskEstimate->account->range('admin,user1,user2,user3');
-$taskEstimate->consumed->range('1.0{5},2.0{5},3.0{5},1.5{5}');
-$taskEstimate->left->range('0.5{5},1.0{5},0{5},2.0{5}');
-$taskEstimate->gen(20);
+$effort = zenData('effort');
+$effort->id->range('1-50');
+$effort->objectType->range('task');
+$effort->objectID->range('1{5},2{5},3{5},4{5},5{5},6{5},7{5},8{5},9{5},10{5}');
+$effort->project->range('1');
+$effort->execution->range('3');
+$effort->account->range('admin{20},user1{15},user2{15}');
+$effort->work->range('开发任务,测试任务,修复Bug,代码审查,文档编写');
+$effort->vision->range('rnd');
+$effort->date->range('2024-11-01 00:00:00:1D')->type('timestamp')->format('YYYY-MM-DD');
+$effort->left->range('0-10:1');
+$effort->consumed->range('1-8:1');
+$effort->begin->range('0900,1000,1100,1300,1400,1500,1600');
+$effort->end->range('1200,1300,1400,1600,1700,1800,1900');
+$effort->order->range('0');
+$effort->deleted->range('0');
+$effort->gen(50);
 
 $user = zenData('user');
 $user->id->range('1-10');
 $user->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
-$user->realname->range('管理员,用户一,用户二,用户三,用户四,用户五,用户六,用户七,用户八,用户九');
+$user->realname->range('Admin,User1,User2,User3,User4,User5,User6,User7,User8,User9');
+$user->role->range('admin,dev{4},qa{5}');
+$user->password->range('1234567890');
 $user->deleted->range('0');
 $user->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$taskTest = new taskZenTest();
+global $tester;
+$tester->loadModel('task');
+$taskZenTest = new taskZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($taskTest->buildRecordFormTest(1, '', '')) && p('taskID,title') && e('1,任务日志'); // 步骤1：正常情况
-r($taskTest->buildRecordFormTest(1, 'execution', 'order_desc')) && p('taskID,from,orderBy') && e('1,execution,order_desc,id_desc'); // 步骤2：团队模式排序处理
-r($taskTest->buildRecordFormTest(2, '', '')) && p('taskID,taskEffortFold') && e('2,0'); // 步骤3：默认折叠状态
-r($taskTest->buildRecordFormTest(1, '', '')) && p('taskID,taskAssignedTo,taskEffortFold') && e('1,admin,1'); // 步骤4：当前用户分配的任务
-r($taskTest->buildRecordFormTest(3, 'kanban', 'date_asc')) && p('taskID,from,usersCount') && e('3,kanban,10'); // 步骤5：用户列表验证
+r($taskZenTest->buildRecordFormTest(1, 'taskList', 'id_desc')) && p('taskEffortFold') && e('1');
+r($taskZenTest->buildRecordFormTest(6, 'taskList', '')) && p('taskEffortFold;orderBy') && e('1;id_desc');
+r($taskZenTest->buildRecordFormTest(3, 'taskList', 'order_desc')) && p('orderBy') && e('order_desc');
+r($taskZenTest->buildRecordFormTest(2, 'taskList', 'id_desc')) && p('taskID;from;usersCount') && e('2;taskList;10');
+r($taskZenTest->buildRecordFormTest(3, 'taskList', 'id_asc')) && p('taskID;orderBy') && e('3;id_asc');

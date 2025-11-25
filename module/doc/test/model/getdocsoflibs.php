@@ -5,7 +5,7 @@
 
 title=测试 docModel->getDocsOfLibs();
 timeout=0
-cid=1
+cid=16084
 
 - 获取产品库26下的文档列表
  - 第41条的lib属性 @26

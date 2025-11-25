@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::setMenu();
 timeout=0
-cid=0
+cid=19110
 
 - 步骤1：project标签测试
  - 属性projectID @1

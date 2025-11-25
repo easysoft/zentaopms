@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createBuildinField();
 timeout=0
-cid=0
+cid=15833
 
 - 执行convertTest模块的createBuildinFieldTest方法，参数是'testmodule', array  @1
 - 执行convertTest模块的createBuildinFieldTest方法，参数是'testmodule', array  @1

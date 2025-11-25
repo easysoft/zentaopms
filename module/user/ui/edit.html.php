@@ -97,6 +97,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->group),
+            set::required(strpos($this->config->user->edit->requiredFields, 'group') !== false),
             picker
             (
                 set::name('group[]'),

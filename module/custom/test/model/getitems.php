@@ -4,7 +4,7 @@
 
 title=测试 customModel->getItems();
 timeout=0
-cid=1
+cid=15898
 
 - 测试参数为空
  - 第1条的lang属性 @zh-cn

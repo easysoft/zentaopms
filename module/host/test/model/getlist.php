@@ -4,7 +4,7 @@
 
 title=测试 hostModel->getList();
 timeout=0
-cid=1
+cid=16756
 
 - 测试默认参数是否为获取全部主机。 @30
 - 测试获取全部主机的数量。 @30

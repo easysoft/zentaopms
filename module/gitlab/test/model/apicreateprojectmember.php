@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiCreateProjectMember();
 timeout=0
-cid=1
+cid=16581
 
 - 使用空的user_id创建gitlab群组 @return false
 - 使用空的access_level创建gitlab群组 @return false

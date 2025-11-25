@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::addDrills();
 timeout=0
-cid=0
+cid=17354
 
 - 步骤1：正常情况 @1
 - 步骤2：空settings @1

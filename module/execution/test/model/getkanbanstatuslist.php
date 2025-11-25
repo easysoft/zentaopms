@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getKanbanStatusList();
 timeout=0
-cid=0
+cid=16322
 
 - 步骤1：验证状态列表数量 @7
 - 步骤2：验证wait状态值属性wait @未开始

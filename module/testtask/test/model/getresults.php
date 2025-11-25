@@ -13,7 +13,7 @@ zenData('host')->gen(0);
 
 title=测试 testtaskModel->getResults();
 timeout=0
-cid=1
+cid=19187
 
 - 获取执行 0 用例 0 执行结果。 @0
 - 获取执行 0 用例 1 执行结果。

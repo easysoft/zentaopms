@@ -5,7 +5,7 @@
 
 title=测试 transferZen::formatFields();
 timeout=0
-cid=0
+cid=19337
 
 - 执行transferTest模块的formatFieldsTest方法，参数是'story', $normalFields, $sessionData
  - 属性name @field1

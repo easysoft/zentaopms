@@ -5,7 +5,7 @@
 
 title=测试 apiModel::createDemoStructSpec();
 timeout=0
-cid=0
+cid=15098
 
 - 执行apiTest模块的createDemoStructSpecTest方法，参数是'16.0', 'admin'  @1
 - 执行apiTest模块的createDemoStructSpecTest方法，参数是'16.0', 'user'  @1

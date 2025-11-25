@@ -7,33 +7,62 @@ title=测试 testcaseZen::responseAfterBatchCreate();
 timeout=0
 cid=0
 
-- 步骤1：正常QA tab环境
- - 属性result @success
- - 属性load @/testcase-browse-productID=1&branch=all.html
-- 步骤2：项目tab环境属性result @success
-- 步骤3：模态框AJAX请求
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是1, 0, $mockData1
+ - 属性result @fail
+ - 属性message @Database error occurred
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是1, 0, $mockData2
  - 属性result @success
  - 属性closeModal @1
-- 步骤4：JSON视图类型属性result @success
-- 步骤5：DAO错误情况
- - 属性result @fail
- - 属性message @测试错误信息
+ - 属性load @1
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是1, 0, $mockData3 属性result @success
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是1, 0, $mockData4
+ - 属性result @success
+ - 属性load @/testcase-browse-productID=1&branch=0.html
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是2, 1, $mockData5
+ - 属性result @success
+ - 属性load @/project-testcase-projectID=10&productID=2&branch=1.html
+- 执行testcaseTest模块的responseAfterBatchCreateTest方法，参数是3, 2, $mockData6
+ - 属性result @success
+ - 属性load @/execution-testcase-executionID=20&productID=3&branch=2.html
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
 $testcaseTest = new testcaseTest();
 
-// 4. 测试步骤：必须包含至少5个测试步骤
-r($testcaseTest->responseAfterBatchCreateTest(1, 'all', array('app' => array('tab' => 'qa')))) && p('result,load') && e('success,/testcase-browse-productID=1&branch=all.html'); // 步骤1：正常QA tab环境
-r($testcaseTest->responseAfterBatchCreateTest(1, 'all', array('app' => array('tab' => 'project'), 'session' => array('project' => 5)))) && p('result') && e('success'); // 步骤2：项目tab环境
-r($testcaseTest->responseAfterBatchCreateTest(1, 'all', array('request' => array('HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'), 'app' => array('requestType' => 'GET', 'rawParams' => array('modal'))))) && p('result,closeModal') && e('success,1'); // 步骤3：模态框AJAX请求
-r($testcaseTest->responseAfterBatchCreateTest(1, 'all', array('viewType' => 'json'))) && p('result') && e('success'); // 步骤4：JSON视图类型
-r($testcaseTest->responseAfterBatchCreateTest(1, 'all', array('daoError' => array('测试错误信息')))) && p('result,message') && e('fail,测试错误信息'); // 步骤5：DAO错误情况
+// 测试步骤1:测试存在 DAO 错误时的响应
+$mockData1 = array('daoError' => array('Database error occurred'));
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData1)) && p('result,message') && e('fail,Database error occurred');
+
+// 测试步骤2:测试 Ajax 模态框请求时的响应
+$mockData2 = array(
+    'request' => array('HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest'),
+    'app' => array('rawParams' => array('modal'))
+);
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData2)) && p('result,closeModal,load') && e('success,1,1');
+
+// 测试步骤3:测试 JSON 视图类型时的响应
+$mockData3 = array('viewType' => 'json');
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData3)) && p('result') && e('success');
+
+// 测试步骤4:测试在 QA tab 下的默认响应
+$mockData4 = array('app' => array('tab' => 'qa'));
+r($testcaseTest->responseAfterBatchCreateTest(1, 0, $mockData4)) && p('result,load') && e('success,/testcase-browse-productID=1&branch=0.html');
+
+// 测试步骤5:测试在 project tab 下的默认响应
+$mockData5 = array(
+    'app' => array('tab' => 'project'),
+    'session' => array('project' => 10)
+);
+r($testcaseTest->responseAfterBatchCreateTest(2, 1, $mockData5)) && p('result,load') && e('success,/project-testcase-projectID=10&productID=2&branch=1.html');
+
+// 测试步骤6:测试在 execution tab 下的默认响应
+$mockData6 = array(
+    'app' => array('tab' => 'execution'),
+    'session' => array('execution' => 20)
+);
+r($testcaseTest->responseAfterBatchCreateTest(3, 2, $mockData6)) && p('result,load') && e('success,/execution-testcase-executionID=20&productID=3&branch=2.html');

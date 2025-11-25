@@ -28,7 +28,7 @@ function initData()
 
 title=测试 blockModel::updateLayout();
 timeout=0
-cid=1
+cid=15236
 
 - 执行block模块的updateLayout方法，参数是array  @1
 - 执行block模块的updateLayout方法，参数是array  @1

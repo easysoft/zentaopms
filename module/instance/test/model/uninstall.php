@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::uninstall();
 timeout=0
-cid=0
+cid=16818
 
 - 步骤1：验证external类型实例卸载 @1
 - 步骤2：验证不同ID的external实例卸载 @1

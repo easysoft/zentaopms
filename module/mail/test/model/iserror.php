@@ -5,7 +5,7 @@
 
 title=测试 mailModel::isError();
 timeout=0
-cid=0
+cid=17013
 
 - 步骤1：初始状态无错误信息 @0
 - 步骤2：添加单个错误信息 @1

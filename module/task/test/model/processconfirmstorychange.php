@@ -5,7 +5,7 @@
 
 title=taskModel->processConfirmStoryChange();
 timeout=0
-cid=0
+cid=18836
 
 - 测试普通任务没有操作按钮时，处理确认变更按钮 @0
 - 测试指派给admin的普通任务处理确认变更按钮

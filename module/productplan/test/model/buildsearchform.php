@@ -11,7 +11,7 @@ su('admin');
 
 title=测试planModel->buildSearchForm();
 timeout=0
-cid=1
+cid=17622
 
 - 正确的queryid @1
 - 错误的queryid @0

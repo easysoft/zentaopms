@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printDynamicBlock();
 timeout=0
-cid=0
+cid=15260
 
 - 步骤1：验证actions是数组 @1
 - 步骤2：验证users是数组 @1

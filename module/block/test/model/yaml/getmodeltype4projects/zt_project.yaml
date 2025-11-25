@@ -1,0 +1,16 @@
+---
+title: 项目表测试数据
+desc: 用于测试 getModelType4Projects 方法
+
+fields:
+  - field: name
+    note: 项目名称
+    fields:
+    - field: name1
+      range: 项目
+    - field: name2
+      range: 1-20
+  - field: type
+    range: project
+  - field: model
+    range: scrum,scrum,scrum,kanban,kanban,kanban,agileplus,agileplus,agileplus,waterfall,waterfall,waterfall,waterfallplus,waterfallplus,waterfallplus,'','','','',''

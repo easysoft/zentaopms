@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiCreate();
 timeout=0
-cid=0
+cid=17223
 
 - 不存在的代码库ID @No matched gitlab.
 - 源分支为空，流水线为空情况

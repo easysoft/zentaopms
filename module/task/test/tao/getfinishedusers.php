@@ -19,7 +19,7 @@ su('admin');
 
 title=taskModel->getFinishedUsers();
 timeout=0
-cid=1
+cid=18878
 
 - 测试普通任务获取多人任务的完成者 @0
 - 测试父任务获取多人任务的完成者 @0

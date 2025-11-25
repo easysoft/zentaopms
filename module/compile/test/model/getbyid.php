@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getByID();
 timeout=0
-cid=0
+cid=15746
 
 - 执行compileTest模块的getByIDTest方法，参数是1
  - 属性id @1

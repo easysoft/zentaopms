@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 miscModel->getTableAndStatus();
 timeout=0
-cid=1
+cid=17215
 
 - 输入表名，查看数据库表状态使用情况等，正常输出ok属性zt_user @ok
 - 如被占用返回：1 client is using or hasn't closed the table properly（由于动态更新，此处断言两张表正常状态）属性zt_zoutput @ok

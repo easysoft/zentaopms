@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getExecutionPairs();
 timeout=0
-cid=0
+cid=18055
 
 - 执行repoTest模块的getExecutionPairsTest方法，参数是1  @0
 - 执行repoTest模块的getExecutionPairsTest方法，参数是999  @0

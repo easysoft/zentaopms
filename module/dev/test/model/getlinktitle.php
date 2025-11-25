@@ -5,7 +5,7 @@
 
 title=测试 devModel::getLinkTitle();
 timeout=0
-cid=0
+cid=16004
 
 - 执行devTest模块的getLinkTitleTest方法，参数是$arrayMenus
  - 属性product @产品

@@ -23,6 +23,6 @@ class assignDesignTester extends tester
         /* 跳转到设计列表，检查指派给字段信息。 */
         $browsePage = $this->loadPage('design', 'browse');
         if($browsePage->dom->assigned->getText() != $design['assignedTo']) return $this->failed('指派给错误');
-        return $this->success();
+        return $this->success('指派成功');
     }
 }

@@ -14,7 +14,7 @@ $project->gen(3);
 
 title=测试 projectTao::doClosed();
 timeout=0
-cid=1
+cid=17898
 
 - #测试项目关闭时间realEnd小于今天 返回值1 @1
 - #测试项目关闭时间realEnd大于项目开始时间realBegin 返回值0 @0

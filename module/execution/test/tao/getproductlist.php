@@ -12,7 +12,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(60);
 
 title=测试 executionModel->getProductList();
 timeout=0
-cid=1
+cid=16391
 
 - 测试空数据 @0
 - 测试获取敏捷项目下执行的产品个数 @5

@@ -5,7 +5,7 @@
 
 title=测试 metricTao::fetchMetricsByCollect();
 timeout=0
-cid=0
+cid=17170
 
 - 步骤1：获取管理员收藏的全部度量项 @3
 - 步骤2：获取管理员收藏的已发布阶段度量项 @1

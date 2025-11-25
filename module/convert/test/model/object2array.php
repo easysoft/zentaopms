@@ -5,7 +5,7 @@
 
 title=测试 convertModel::object2Array();
 timeout=0
-cid=0
+cid=15793
 
 - 步骤1：正常对象转换
  - 属性name @test

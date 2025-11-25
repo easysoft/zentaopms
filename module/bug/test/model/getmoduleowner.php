@@ -12,7 +12,7 @@ zenData('product')->loadYaml('product')->gen(2);
 
 title=bugModel->getModuleOwner();
 timeout=0
-cid=1
+cid=15386
 
 - 没有模块，返回产品测试负责人 @admin
 

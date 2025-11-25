@@ -114,7 +114,6 @@ class myTao extends myModel
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->groupBy('t1.id')
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')

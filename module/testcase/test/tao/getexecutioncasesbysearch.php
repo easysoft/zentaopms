@@ -14,7 +14,7 @@ $userquery->gen(10);
 
 title=测试 testcaseModel->getExecutionCasesBySearch();
 timeout=0
-cid=1
+cid=19038
 
 - 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 倒序排序的用例 @4;3;2;1
 - 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 正序排序的用例 @1;2;3;4

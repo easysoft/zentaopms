@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::buildData();
 timeout=0
-cid=0
+cid=19686
 
 - 步骤1：正常参数测试 @rue
 - 步骤2：空objectType参数 @rue

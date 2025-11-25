@@ -20,7 +20,7 @@ function initData()
 
 title=测试 projectModel->close();
 timeout=0
-cid=1
+cid=17809
 
 - 测试关闭项目1
  - 第1条的field属性 @status

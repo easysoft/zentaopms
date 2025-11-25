@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRisks();
 timeout=0
-cid=0
+cid=19470
 
 - 步骤1：获取风险列表，验证数组长度 @1
 - 步骤2：验证第一个风险对象的ID第1条的id属性 @1

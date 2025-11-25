@@ -5,49 +5,29 @@
 
 title=测试 productZen::getEditedLocate();
 timeout=0
-cid=0
+cid=17579
 
-- 步骤1：正常情况-有产品ID和项目集ID
+- 测试步骤1:programID不为0,跳转到program模块
  - 属性result @success
  - 属性message @保存成功
-- 步骤2：边界值-只有产品ID没有项目集ID
+- 测试步骤2:programID为0,跳转到product模块的view页面
  - 属性result @success
  - 属性message @保存成功
-- 步骤3：边界值-产品ID为0但有项目集ID
- - 属性result @success
- - 属性message @保存成功
-- 步骤4：边界值-产品ID和项目集ID都为0
- - 属性result @success
- - 属性message @保存成功
-- 步骤5：业务规则-验证无项目集时的session设置
- - 属性result @success
- - 属性message @保存成功
+- 测试步骤3:programID不为0,且productID不同,验证跳转参数属性result @success
+- 测试步骤4:programID为0,且productID较大,验证跳转参数属性result @success
+- 测试步骤5:验证programID为0时session被设置属性result @success
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->id->range('1-5');
-$table->name->range('产品1,产品2,产品3,产品4,产品5');
-$table->code->range('product1,product2,product3,product4,product5');
-$table->program->range('0,1,2,0,1');
-$table->status->range('normal{5}');
-$table->PO->range('admin');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->getEditedLocateTest(1, 1)) && p('result,message') && e('success,保存成功'); // 步骤1：正常情况-有产品ID和项目集ID
-r($productTest->getEditedLocateTest(1, 0)) && p('result,message') && e('success,保存成功'); // 步骤2：边界值-只有产品ID没有项目集ID
-r($productTest->getEditedLocateTest(0, 1)) && p('result,message') && e('success,保存成功'); // 步骤3：边界值-产品ID为0但有项目集ID
-r($productTest->getEditedLocateTest(0, 0)) && p('result,message') && e('success,保存成功'); // 步骤4：边界值-产品ID和项目集ID都为0
-r($productTest->getEditedLocateTest(5, 0)) && p('result,message') && e('success,保存成功'); // 步骤5：业务规则-验证无项目集时的session设置
+r($productTest->getEditedLocateTest(1, 10)) && p('result,message') && e('success,保存成功'); // 测试步骤1:programID不为0,跳转到program模块
+r($productTest->getEditedLocateTest(1, 0)) && p('result,message') && e('success,保存成功'); // 测试步骤2:programID为0,跳转到product模块的view页面
+r($productTest->getEditedLocateTest(5, 20)) && p('result') && e('success'); // 测试步骤3:programID不为0,且productID不同,验证跳转参数
+r($productTest->getEditedLocateTest(100, 0)) && p('result') && e('success'); // 测试步骤4:programID为0,且productID较大,验证跳转参数
+r($productTest->getEditedLocateTest(2, 0)) && p('result') && e('success'); // 测试步骤5:验证programID为0时session被设置

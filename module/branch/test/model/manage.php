@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 branchModel::manage();
 timeout=0
-cid=0
+cid=15334
 
 - 执行branchTest模块的manageTest方法，参数是4, array  @2
 - 执行branchTest模块的manageTest方法，参数是1, array  @0

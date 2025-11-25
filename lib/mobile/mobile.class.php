@@ -19,6 +19,6 @@ class mobile extends baseDelegate
 
     public function __construct(?array $headers = null, $userAgent = null)
     {
-        $this->instance = new self::$className($headers, $userAgent);
+        $this->instance = new static::$className($headers, $userAgent);
     }
 }

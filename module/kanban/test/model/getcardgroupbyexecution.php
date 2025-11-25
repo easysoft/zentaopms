@@ -16,7 +16,7 @@ zenData('task')->loadYaml('rdkanbantask')->gen(20);
 
 title=测试 kanbanModel->getCardGroupByExecution();
 timeout=0
-cid=1
+cid=16905
 
 - 测试查询execution1的卡片数量 @2
 - 测试查询execution1的task卡片数量 @2

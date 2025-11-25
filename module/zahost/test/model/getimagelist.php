@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::getImageList();
 timeout=0
-cid=0
+cid=19747
 
 - 执行zahost模块的getImageListTest方法，参数是1 第Ubuntu 20.04条的name属性 @Ubuntu 20.04
 - 执行zahost模块的getImageListTest方法，参数是999  @0

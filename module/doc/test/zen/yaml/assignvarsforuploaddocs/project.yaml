@@ -1,0 +1,34 @@
+---
+title: 项目表
+desc: 用于测试 assignVarsForUploadDocs 方法的项目数据
+
+fields:
+- field: id
+  note: 项目ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 项目名称
+  range: 项目1,项目2,项目3,项目4,项目5
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 项目类型
+  range: project
+  prefix: ""
+  postfix: ""
+
+- field: status
+  note: 项目状态
+  range: doing
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""

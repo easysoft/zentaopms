@@ -11,22 +11,19 @@ su('admin');
 /**
 
 title=测试 testsuiteModel->getSuitePairs();
-cid=1
-pid=1
+timeout=0
+cid=19144
 
-测试productID值为1,orderBy为id_desc           >> 这是测试套件名称1
-测试productID值为1,orderBy为id_asc            >> 这是测试套件名称3
-测试productID值为1,orderBy为name_desc,id_desc >> 这是测试套件名称1
-测试productID值为1,orderBy为name_asc,id_desc  >> 这是测试套件名称3
-测试productID值为1,orderBy为id_desc           >> 0
-测试productID值为1,orderBy为id_asc            >> 0
-测试productID值为1,orderBy为name_desc,id_desc >> 0
-测试productID值为1,orderBy为name_asc,id_desc  >> 0
-
-切换用户dev1
-
-测试productID值为1,orderBy为id_desc >> ~~
-测试productID值为1,orderBy为id_desc >> 这是测试套件名称1
+- 测试productID值为1,orderBy为id_desc属性1 @这是测试套件名称1
+- 测试productID值为1,orderBy为id_asc属性3 @这是测试套件名称3
+- 测试productID值为1,orderBy为name_desc,id_desc属性1 @这是测试套件名称1
+- 测试productID值为1,orderBy为name_asc,id_desc属性3 @这是测试套件名称3
+- 测试productID值为1,orderBy为id_desc @0
+- 测试productID值为1,orderBy为id_asc @0
+- 测试productID值为1,orderBy为name_desc,id_desc @0
+- 测试productID值为1,orderBy为name_asc,id_desc @0
+- 测试productID值为1,orderBy为id_desc属性2 @~~
+- 测试productID值为1,orderBy为id_desc属性1 @这是测试套件名称1
 
  */
 

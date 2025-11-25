@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getStatusList();
 timeout=0
-cid=0
+cid=18555
 
 - 步骤1：获取noclosed状态列表
  - 属性1 @draft

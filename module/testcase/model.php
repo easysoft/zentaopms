@@ -2757,7 +2757,7 @@ class testcaseModel extends model
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id and t1.product = t2.root')
             ->where('t1.product')->eq($productID)
             ->andWhere('t1.lib')->eq($libID)
-            ->andWhere('t1.fromCaseID')->ne('')
+            ->andWhere('t1.fromCaseID')->ne('0')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('((t2.type')->in('story,case')->andWhere('t2.deleted')->eq('0')->markRight(1)
             ->orWhere('t1.module')->eq('0')->markRight(1)
@@ -2821,7 +2821,7 @@ class testcaseModel extends model
             ->where('product')->eq($productID)
             ->andWhere('lib')->eq($libID)
             ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->andWhere('fromCaseID')->ne('')
+            ->andWhere('fromCaseID')->ne('0')
             ->andWhere('deleted')->eq('0')
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));

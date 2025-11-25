@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeTao->getNoMergedSprints();
-cid=1
+cid=0
 
 - 检查查询到的冲刺是否是未归并的
  - 第101条的project属性 @0

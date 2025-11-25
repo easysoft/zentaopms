@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 storeModel->searchAppsTest().
 timeout=0
-cid=1
+cid=18458
 
 - 测试不传参使用默认值获取 @Success
 - 测试按照最近更新获取 @Success

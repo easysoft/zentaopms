@@ -5,7 +5,7 @@
 
 title=测试 fileModel::setPathName();
 timeout=0
-cid=0
+cid=16534
 
 - 测试正常的文件ID和扩展名属性reg @1
 - 测试边界值文件ID为0和空扩展名属性reg @1

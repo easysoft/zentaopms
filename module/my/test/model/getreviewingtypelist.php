@@ -22,7 +22,7 @@ zenData('action')->gen('0');
 
 title=测试 myModel->getReviewingTypeList();
 timeout=0
-cid=1
+cid=17299
 
 - 测试获取用户 admin 的待评审类型。 @all,story,requirement,testcase
 - 测试获取用户 user1 的待评审类型。 @all

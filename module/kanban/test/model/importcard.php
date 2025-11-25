@@ -12,7 +12,7 @@ zenData('kanbancell')->gen(10);
 
 title=测试 kanbanModel->importCard();
 timeout=0
-cid=1
+cid=16947
 
 - 测试导入卡片72 73 74到column 1属性cards @,72,73,74,1,2,801,
 - 测试导入卡片75 77 77到column 5属性cards @,75,76,77,9,10,809,

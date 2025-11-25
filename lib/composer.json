@@ -34,11 +34,13 @@
         }
     },
     "require-dev": {
-        "cweagans/composer-patches": "^1.7",
-        "rector/rector": "^2.2"
+        "cweagans/composer-patches": "^1.7"
     },
     "extra": {
         "patches": {
+            "box/spout": {
+                "Add return type declarations to Iterator methods": "patches/box-spout-php8-compatibility.patch"
+            },
             "erusev/parsedown": {
                 "Add namespace to Parsedown class": "patches/parsedown-add-namespace.patch"
             },
@@ -52,12 +54,16 @@
                 "Add namespace to Spyc class": "patches/spyc-add-namespace.patch"
             },
             "pclzip/pclzip": {
-                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch",
+                "Fix memory limit calculation in privOptionDefaultThreshold method": "patches/pclzip-memory-limit-fix.patch"
             },
             "phpoffice/phpspreadsheet": {
                 "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
                 "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
-                "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch"
+                "Optimize DefaultValueBinder type checking and safety": "patches/phpspreadsheet-optimize-defaultvaluebinder.patch",
+                "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
+                "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch",
+                "Fix alignment check condition in Styles reader": "patches/phpspreadsheet-fix-alignment-check.patch"
             }
         }
     },

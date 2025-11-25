@@ -5,39 +5,45 @@
 
 title=测试 storyZen::getFormFieldsForEdit();
 timeout=0
-cid=0
+cid=18686
 
-- 步骤1：正常需求编辑表单字段第title条的name属性 @title
-- 步骤2：不存在的需求ID属性error @story_not_found
-- 步骤3：无效需求ID属性error @story_not_found
-- 步骤4：检查产品字段配置第product条的name属性 @product
-- 步骤5：检查阶段字段配置第stage条的name属性 @stage
+- 测试获取普通产品的软件需求编辑表单字段
+ - 第product条的control属性 @select
+ - 第product条的title属性 @所属产品
+- 测试获取多分支产品的软件需求编辑表单字段
+ - 第branch条的control属性 @select
+ - 第branch条的title属性 @平台/分支
+- 测试获取用户需求的编辑表单字段
+ - 第assignedTo条的control属性 @select
+ - 第assignedTo条的title属性 @指派给
+- 测试获取业务需求的编辑表单字段
+ - 第stage条的control属性 @select
+ - 第stage条的title属性 @所处阶段
+- 测试获取已关闭需求的编辑表单字段
+ - 第status条的control属性 @hidden
+ - 第status条的title属性 @当前状态
+- 测试获取有父需求的子需求编辑表单字段
+ - 第parent条的control属性 @select
+ - 第parent条的title属性 @父需求
 
 */
-
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$story = zenData('story');
-$story->loadYaml('story_getformfieldsforedit', false, 2)->gen(10);
+zenData('product')->loadYaml('product')->gen(3);
+zenData('story')->loadYaml('story')->gen(20);
+zenData('user')->gen(5);
+zenData('productplan')->gen(5);
+zenData('module')->gen(5);
 
-$product = zenData('product');
-$product->loadYaml('product_getformfieldsforedit', false, 2)->gen(3);
-
-$user = zenData('user');
-$user->loadYaml('user_getformfieldsforedit', false, 2)->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+$storyIDs = array(1, 11, 6, 16, 8, 2);
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($storyTest->getFormFieldsForEditTest(1)) && p('title:name') && e('title'); // 步骤1：正常需求编辑表单字段
-r($storyTest->getFormFieldsForEditTest(999)) && p('error') && e('story_not_found'); // 步骤2：不存在的需求ID
-r($storyTest->getFormFieldsForEditTest(0)) && p('error') && e('story_not_found'); // 步骤3：无效需求ID
-r($storyTest->getFormFieldsForEditTest(2)) && p('product:name') && e('product'); // 步骤4：检查产品字段配置
-r($storyTest->getFormFieldsForEditTest(3)) && p('stage:name') && e('stage'); // 步骤5：检查阶段字段配置
+$storyTester = new storyZenTest();
+r($storyTester->getFormFieldsForEditTest($storyIDs[0])) && p('product:control,title')    && e('select,所属产品');   // 测试获取普通产品的软件需求编辑表单字段
+r($storyTester->getFormFieldsForEditTest($storyIDs[1])) && p('branch:control,title')     && e('select,平台/分支');  // 测试获取多分支产品的软件需求编辑表单字段
+r($storyTester->getFormFieldsForEditTest($storyIDs[2])) && p('assignedTo:control,title') && e('select,指派给');     // 测试获取用户需求的编辑表单字段
+r($storyTester->getFormFieldsForEditTest($storyIDs[3])) && p('stage:control,title')      && e('select,所处阶段');   // 测试获取业务需求的编辑表单字段
+r($storyTester->getFormFieldsForEditTest($storyIDs[4])) && p('status:control,title')     && e('hidden,当前状态');   // 测试获取已关闭需求的编辑表单字段
+r($storyTester->getFormFieldsForEditTest($storyIDs[5])) && p('parent:control,title')     && e('select,父需求');     // 测试获取有父需求的子需求编辑表单字段

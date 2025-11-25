@@ -5,54 +5,71 @@
 
 title=测试 projectZen::recordExecutionsOfUnlinkedProducts();
 timeout=0
-cid=0
+cid=17960
 
-- 步骤1：正常情况 @0
-- 步骤2：空的取消关联产品列表 @0
-- 步骤3：空的执行ID列表 @0
-- 步骤4：执行有多个取消关联的产品 @0
-- 步骤5：多个执行取消不同产品关联 @0
+- 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array  @0
+- 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array 第101条的action属性 @unlinkproduct
+- 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array
+ - 第101条的objectID属性 @101
+ - 第103条的objectID属性 @103
+- 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array  @0
+- 执行projectTest模块的recordExecutionsOfUnlinkedProductsTest方法，参数是array
+ - 第101条的action属性 @unlinkproduct
+ - 第103条的action属性 @unlinkproduct
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$project = zenData('project');
-$project->id->range('1-10');
-$project->name->range('项目{1-10}');
-$project->model->range('scrum,kanban');
-$project->multiple->range('1');
-$project->gen(5);
+zenData('project')->gen(30);
 
 $product = zenData('product');
 $product->id->range('1-10');
-$product->name->range('产品{1-10}');
-$product->gen(5);
+$product->name->range('ProductA,ProductB,ProductC,ProductD,ProductE,ProductF,ProductG,ProductH,ProductI,ProductJ');
+$product->gen(10);
 
-$execution = zenData('project');
-$execution->id->range('11-20');
-$execution->name->range('执行{1-10}');
-$execution->type->range('sprint');
-$execution->parent->range('1-5');
-$execution->gen(10);
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('101,101,102,102,103,103,103');
+$projectproduct->product->range('1,2,3,4,1,5,6');
+$projectproduct->gen(7);
 
-$projectProduct = zenData('projectproduct');
-$projectProduct->project->range('11-20');
-$projectProduct->product->range('1-5');
-$projectProduct->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$projectTest = new projectTest();
+$projectTest = new projectZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => (object)array('name' => '产品1'), 2 => (object)array('name' => '产品2')), array(3, 4, 5), array(11, 12, 13))) && p() && e('0'); // 步骤1：正常情况
-r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(), array(), array(11, 12))) && p() && e('0'); // 步骤2：空的取消关联产品列表
-r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => (object)array('name' => '产品1')), array(2), array())) && p() && e('0'); // 步骤3：空的执行ID列表
-r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => (object)array('name' => '产品1'), 2 => (object)array('name' => '产品2'), 3 => (object)array('name' => '产品3')), array(4, 5), array(14, 15))) && p() && e('0'); // 步骤4：执行有多个取消关联的产品
-r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => (object)array('name' => '产品1'), 3 => (object)array('name' => '产品3')), array(1, 3), array(16, 17, 18))) && p() && e('0'); // 步骤5：多个执行取消不同产品关联
+// 准备测试数据
+$product1 = new stdclass();
+$product1->id = 1;
+$product1->name = 'ProductA';
+
+$product2 = new stdclass();
+$product2->id = 2;
+$product2->name = 'ProductB';
+
+$product3 = new stdclass();
+$product3->id = 3;
+$product3->name = 'ProductC';
+
+$product4 = new stdclass();
+$product4->id = 4;
+$product4->name = 'ProductD';
+
+$product5 = new stdclass();
+$product5->id = 5;
+$product5->name = 'ProductE';
+
+$product7 = new stdclass();
+$product7->id = 7;
+$product7->name = 'ProductG';
+
+// 测试步骤1:无取消关联产品时不创建action记录
+r(count($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => $product1, 2 => $product2), array(1, 2), array(101, 102)))) && p() && e('0');
+// 测试步骤2:取消一个产品关联且该产品在一个执行中
+r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => $product1, 2 => $product2), array(2), array(101, 102))) && p('101:action') && e('unlinkproduct');
+// 测试步骤3:取消多个执行中的产品关联
+r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => $product1, 2 => $product2, 3 => $product3), array(2, 3), array(101, 102, 103))) && p('101:objectID;103:objectID') && e('101;103');
+// 测试步骤4:取消产品关联但执行未关联该产品
+r(count($projectTest->recordExecutionsOfUnlinkedProductsTest(array(7 => $product7), array(), array(101, 102, 103)))) && p() && e('0');
+// 测试步骤5:取消产品关联且多个执行都关联了该产品
+r($projectTest->recordExecutionsOfUnlinkedProductsTest(array(1 => $product1, 3 => $product3), array(3), array(101, 102, 103))) && p('101:action;103:action') && e('unlinkproduct;unlinkproduct');

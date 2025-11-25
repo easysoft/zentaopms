@@ -5,7 +5,7 @@
 
 title=测试 jobModel::initJob();
 timeout=0
-cid=0
+cid=16852
 
 - 步骤1：正常情况-schedule类型当天触发 @1
 - 步骤2：正常情况-commit类型触发器 @1

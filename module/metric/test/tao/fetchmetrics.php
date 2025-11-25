@@ -5,7 +5,7 @@
 
 title=fetchMetrics
 timeout=0
-cid=1
+cid=17168
 
 - 查询项目范围的第一个度量项
  - 第0条的id属性 @306

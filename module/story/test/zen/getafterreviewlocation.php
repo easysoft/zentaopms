@@ -5,41 +5,49 @@
 
 title=测试 storyZen::getAfterReviewLocation();
 timeout=0
-cid=0
+cid=18679
 
-- 步骤1：from为project的情况 @execution-storyView-1.html
-- 步骤2：from为project多执行项目 @execution-storyView-2.html
-- 步骤3：from不为execution @story-view-3-0-0-story.html
-- 步骤4：from为execution @execution-storyView-4.html
-- 步骤5：from为空字符串 @requirement-view-5-0-0-requirement.html
+- 执行storyTest模块的getAfterReviewLocationTest方法，参数是1, 'story', 'project'  @getafterreviewlocation.php?m=execution&f=storyView&storyID=1
+- 执行storyTest模块的getAfterReviewLocationTest方法，参数是2, 'story', 'project'  @getafterreviewlocation.php?m=projectstory&f=view&storyID=2&projectID=6
+- 执行storyTest模块的getAfterReviewLocationTest方法，参数是3, 'story', ''  @getafterreviewlocation.php?m=story&f=view&storyID=3&version=0&param=0&storyType=story
+- 执行storyTest模块的getAfterReviewLocationTest方法，参数是4, 'story', 'execution'  @getafterreviewlocation.php?m=execution&f=storyView&storyID=4
+- 执行storyTest模块的getAfterReviewLocationTest方法，参数是5, 'epic', ''  @getafterreviewlocation.php?m=epic&f=view&storyID=5&version=0&param=0&storyType=epic
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$projectTable = zenData('project');
-$projectTable->id->range('1-10');
-$projectTable->name->range('项目{1-10}');
-$projectTable->type->range('project');
-$projectTable->multiple->range('0{5},1{5}');  // 前5个单执行项目，后5个多执行项目
-$projectTable->gen(10);
+zendata('story')->gen(10);
 
-// 3. 用户登录（选择合适角色）
+$project = zenData('project');
+$project->id->range('1-10');
+$project->name->range('项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10');
+$project->type->range('project{5},sprint{5}');
+$project->multiple->range('0{5},1{5}');
+$project->status->range('doing');
+$project->deleted->range('0');
+$project->gen(10);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$storyZenTest = new storyZenTest();
+$storyTest = new storyZenTest();
 
-// 设置session项目
-global $tester;
-$tester->session->project = 1;
+global $app;
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($storyZenTest->getAfterReviewLocationTest(1, 'story', 'project')) && p() && e('execution-storyView-1.html'); // 步骤1：from为project的情况
-r($storyZenTest->getAfterReviewLocationTest(2, 'requirement', 'project')) && p() && e('execution-storyView-2.html'); // 步骤2：from为project多执行项目
-r($storyZenTest->getAfterReviewLocationTest(3, 'story', 'other')) && p() && e('story-view-3-0-0-story.html'); // 步骤3：from不为execution
-r($storyZenTest->getAfterReviewLocationTest(4, 'story', 'execution')) && p() && e('execution-storyView-4.html'); // 步骤4：from为execution
-r($storyZenTest->getAfterReviewLocationTest(5, 'requirement', '')) && p() && e('requirement-view-5-0-0-requirement.html'); // 步骤5：from为空字符串
+// 步骤1:测试from='project',项目为非多项目类型,评审后跳转
+$app->session->project = 1;
+r($storyTest->getAfterReviewLocationTest(1, 'story', 'project')) && p() && e('getafterreviewlocation.php?m=execution&f=storyView&storyID=1');
+
+// 步骤2:测试from='project',项目为多项目类型,评审后跳转
+$app->session->project = 6;
+r($storyTest->getAfterReviewLocationTest(2, 'story', 'project')) && p() && e('getafterreviewlocation.php?m=projectstory&f=view&storyID=2&projectID=6');
+
+// 步骤3:测试from='',story类型需求评审后跳转
+r($storyTest->getAfterReviewLocationTest(3, 'story', '')) && p() && e('getafterreviewlocation.php?m=story&f=view&storyID=3&version=0&param=0&storyType=story');
+
+// 步骤4:测试from='execution',评审后跳转
+r($storyTest->getAfterReviewLocationTest(4, 'story', 'execution')) && p() && e('getafterreviewlocation.php?m=execution&f=storyView&storyID=4');
+
+// 步骤5:测试from='',epic类型需求评审后跳转
+r($storyTest->getAfterReviewLocationTest(5, 'epic', '')) && p() && e('getafterreviewlocation.php?m=epic&f=view&storyID=5&version=0&param=0&storyType=epic');

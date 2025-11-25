@@ -5,7 +5,7 @@
 
 title=测试 programModel::getProductPairsByID();
 timeout=0
-cid=0
+cid=17694
 
 - 获取项目集ID为1的所有产品键值对
  - 属性1 @产品1

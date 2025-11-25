@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildCaseForCreate();
 timeout=0
-cid=0
+cid=19076
 
 - 步骤1：从project来源创建
  - 属性status @normal

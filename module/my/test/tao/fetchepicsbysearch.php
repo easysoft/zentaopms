@@ -5,7 +5,7 @@
 
 title=测试 myTao::fetchEpicsBySearch();
 timeout=0
-cid=0
+cid=17307
 
 - 执行myTest模块的fetchEpicsBySearchTest方法，参数是't1.deleted = 0', 'contribute', 'id_desc', null, array  @0
 - 执行myTest模块的fetchEpicsBySearchTest方法，参数是't1.deleted = 0', 'assigned', 'id_desc'  @0

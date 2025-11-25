@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByReviewBy();
 timeout=0
-cid=0
+cid=18507
 
 - 步骤1：正常情况 - admin用户查询需要审核的story数量 @3
 - 步骤2：边界值 - admin用户查询需要审核的requirement数量 @0

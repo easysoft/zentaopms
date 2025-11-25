@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::getFilesFromPackage();
 timeout=0
-cid=0
+cid=16460
 
 - 测试获取存在插件包testpkg1的文件列表 @5
 - 测试获取不存在插件包的文件列表 @0

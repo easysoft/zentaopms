@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->checkBeforeBatchUpdate();
-cid=0
+cid=19583
 
 - 检查未通过，返回 false。属性result @0
 - 姓名为空错误提示。第errors条的realname[0]属性 @『姓名』不能为空。

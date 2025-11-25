@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildMemberShipData();
 timeout=0
-cid=0
+cid=15818
 
 - 执行convertTest模块的buildMemberShipDataTest方法，参数是$testData1 属性id @1
 - 执行convertTest模块的buildMemberShipDataTest方法，参数是$testData1 属性parent_id @1001

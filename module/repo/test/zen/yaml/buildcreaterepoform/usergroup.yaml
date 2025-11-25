@@ -1,0 +1,26 @@
+---
+title: 用户组测试数据for buildCreateRepoForm
+desc: 用于测试repoZen::buildCreateRepoForm()方法的用户组表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 用户组ID
+  range: 1-5
+  format: ''
+- field: name
+  note: 用户组名称
+  range: '管理员,开发,测试,产品,项目经理'
+- field: role
+  note: 角色
+  range: 'admin,dev,qa,po,pm'
+- field: desc
+  note: 描述
+  range: '管理员组,开发组,测试组,产品组,项目经理组'
+- field: project
+  note: 项目视图
+  range: '1{5}'
+- field: deleted
+  note: 删除标记
+  range: '0{5}'

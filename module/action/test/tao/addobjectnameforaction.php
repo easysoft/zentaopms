@@ -5,7 +5,7 @@
 
 title=测试 actionTao::addObjectNameForAction();
 timeout=0
-cid=0
+cid=14938
 
 - 步骤1：正常情况属性objectName @测试Bug
 - 步骤2：任务对象属性objectName @测试任务

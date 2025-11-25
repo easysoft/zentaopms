@@ -5,7 +5,7 @@
 
 title=测试 cneModel->validateDB();
 timeout=0
-cid=1
+cid=15638
 
 - 空的数据
  - 属性user @1

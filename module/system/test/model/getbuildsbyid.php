@@ -10,7 +10,7 @@ zenData('build')->gen(10);
 
 title=测试 systemModel::getList();
 timeout=0
-cid=1
+cid=18732
 
 - 查询应用id为1的应用关联的构建名称第1条的name属性 @项目11版本1
 - 查询应用id为1的应用关联的构建数量 @1

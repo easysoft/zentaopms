@@ -7,53 +7,83 @@ title=测试 testcaseZen::assignShowImportVars();
 timeout=0
 cid=0
 
-- 执行testcaseTest模块的assignShowImportVarsTest方法，参数是1, '0', $caseData1, 10, 1, 100 属性allCount @3
-- 执行testcaseTest模块的assignShowImportVarsTest方法，参数是1, '0', array 属性error @noData
-- 执行testcaseTest模块的assignShowImportVarsTest方法，参数是1, '0', $largeCaseData, 50, 1, 10 属性allCount @150
-- 执行testcaseTest模块的assignShowImportVarsTest方法，参数是1, '0', $largeCaseData, 50, 1, 0 属性showMaxImportPage @1
-- 执行testcaseTest模块的assignShowImportVarsTest方法，参数是1, '0', $largeCaseData, 50, 2, 10 属性allPager @15
+- 步骤1:正常用例数据导入
+ - 属性caseDataCount @2
+ - 属性hasModules @1
+ - 属性hasStories @1
+- 步骤2:空用例数据处理 @noData
+- 步骤3:小数据量不触发分页
+ - 属性caseDataCount @3
+ - 属性pagerID @1
+ - 属性isEndPage @1
+ - 属性allCount @3
+- 步骤4:验证pagerID参数传递
+ - 属性caseDataCount @3
+ - 属性pagerID @2
+- 步骤5:检查suhosin限制提示属性hasSuhosinInfo @0
+- 步骤6:多分支产品导入
+ - 属性caseDataCount @2
+ - 属性hasBranches @1
+- 步骤7:验证allCount和isEndPage
+ - 属性caseDataCount @2
+ - 属性allCount @2
+ - 属性isEndPage @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-zenData('product')->gen('5');
-zenData('branch')->gen('5');
-zenData('module')->gen('10');
-zenData('story')->gen('15');
-zenData('user')->gen('1');
+// 2. zendata数据准备(根据需要配置)
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('产品1,产品2,产品3,产品4,产品5');
+$product->type->range('normal{3},branch{2}');
+$product->gen(5);
 
-// 3. 用户登录（选择合适角色）
+$branch = zenData('branch');
+$branch->id->range('1-5');
+$branch->product->range('4{3},5{2}');
+$branch->name->range('分支1,分支2,分支3,分支4,分支5');
+$branch->status->range('active{5}');
+$branch->gen(5);
+
+$module = zenData('module');
+$module->id->range('1-10');
+$module->root->range('1-5{2}');
+$module->branch->range('0{6},1{2},2{2}');
+$module->name->range('模块1,模块2,模块3,模块4,模块5,模块6,模块7,模块8,模块9,模块10');
+$module->type->range('case{10}');
+$module->parent->range('0{10}');
+$module->grade->range('1{10}');
+$module->path->range('`,1,`,`,2,`,`,3,`,`,4,`,`,5,`,`,6,`,`,7,`,`,8,`,`,9,`,`,10,`');
+$module->deleted->range('0{10}');
+$module->gen(10);
+
+$story = zenData('story');
+$story->id->range('1-10');
+$story->product->range('1-5{2}');
+$story->branch->range('0{6},1{2},2{2}');
+$story->module->range('1-10');
+$story->title->range('需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10');
+$story->type->range('story{10}');
+$story->status->range('active{10}');
+$story->stage->range('wait{5},planned{5}');
+$story->version->range('1{10}');
+$story->gen(10);
+
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$testcaseTest = new testcaseZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-
-// 测试步骤1：正常情况 - 提供有效数据
-$caseData1 = array(
-    array('title' => '测试用例1', 'module' => 1),
-    array('title' => '测试用例2', 'module' => 2),
-    array('title' => '测试用例3', 'module' => 3)
-);
-r($testcaseTest->assignShowImportVarsTest(1, '0', $caseData1, 10, 1, 100)) && p('allCount') && e('3');
-
-// 测试步骤2：空用例数据 - 期望错误处理
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(), 0, 1, 100)) && p('error') && e('noData');
-
-// 测试步骤3：大量用例数据 - 超过最大导入数量(创建150个用例，超过系统限制100)
-$largeCaseData = array();
-for($i = 1; $i <= 150; $i++) {
-    $largeCaseData[] = array('title' => "测试用例{$i}", 'module' => ($i % 5) + 1);
-}
-r($testcaseTest->assignShowImportVarsTest(1, '0', $largeCaseData, 50, 1, 10)) && p('allCount') && e('150');
-
-// 测试步骤4：边界值测试 - maxImport=0，应该显示导入限制页面
-r($testcaseTest->assignShowImportVarsTest(1, '0', $largeCaseData, 50, 1, 0)) && p('showMaxImportPage') && e('1');
-
-// 测试步骤5：分页功能测试 - 测试第二页
-r($testcaseTest->assignShowImportVarsTest(1, '0', $largeCaseData, 50, 2, 10)) && p('allPager') && e('15');
+// 5. 强制要求:必须包含至少5个测试步骤
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1, 'title' => '测试用例1'), array('id' => 2, 'title' => '测试用例2')), 10, 1, 0)) && p('caseDataCount,hasModules,hasStories') && e('2,1,1'); // 步骤1:正常用例数据导入
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(), 0, 1, 0)) && p() && e('noData'); // 步骤2:空用例数据处理
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 1, 2)) && p('caseDataCount,pagerID,isEndPage,allCount') && e('3,1,1,3'); // 步骤3:小数据量不触发分页
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 2, 2)) && p('caseDataCount,pagerID') && e('3,2'); // 步骤4:验证pagerID参数传递
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 500, 1, 0)) && p('hasSuhosinInfo') && e('0'); // 步骤5:检查suhosin限制提示
+r($testcaseTest->assignShowImportVarsTest(4, '1', array(array('id' => 1), array('id' => 2)), 0, 1, 0)) && p('caseDataCount,hasBranches') && e('2,1'); // 步骤6:多分支产品导入
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 0, 1, 1)) && p('caseDataCount,allCount,isEndPage') && e('2,2,1'); // 步骤7:验证allCount和isEndPage
