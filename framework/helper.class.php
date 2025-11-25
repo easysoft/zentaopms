@@ -88,6 +88,11 @@ class helper extends baseHelper
     {
         global $config;
 
+        if(in_array($feature, array('waterfall', 'waterfallplus')))
+        {
+            return !str_contains(",$config->disabledFeatures,", ",{$feature},"); // 轻量级模式排除瀑布、融合瀑布模型
+        }
+
         if(str_contains($feature, '_'))
         {
             $code = explode('_', $feature);
@@ -107,8 +112,6 @@ class helper extends baseHelper
                 $hasFeature |= helper::hasFeature("{$group}_{$module}");
             }
         }
-
-        if(in_array($feature, array('waterfall', 'waterfallplus'))) $canConfigFeature = true; // 轻量级模式关闭瀑布、融合瀑布
 
         return !$canConfigFeature || ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));
     }
