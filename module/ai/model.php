@@ -1805,7 +1805,7 @@ class aiModel extends model
         if(empty($sources)) return '';
 
         $storyData = [];
-        if(in_array(['task', 'story'], $sources, true))
+        if(in_array(['task', 'story'], $sources, true) && $data['task']['story'])
         {
             $story     = $this->loadModel('story')->getById($data['task']['story']);
             $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
@@ -2752,7 +2752,7 @@ class aiModel extends model
     public function getTestPromptData(object $prompt): array
     {
         $module       = $prompt->module;
-        $promptSource = str_replace('task.story,', '', $prompt->source);
+        $promptSource = $prompt->source;
         $source       = explode(',', $promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
@@ -2803,6 +2803,8 @@ class aiModel extends model
             {
                 foreach($pathInfo as $value)
                 {
+                    if($groupKey == 'task' && $value == 'story') continue;
+
                     $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
                     $result .= $testData[$groupKey][$value] . "\n";
                 }

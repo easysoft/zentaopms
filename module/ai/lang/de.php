@@ -300,6 +300,7 @@ $lang->ai->prompts->testData['task']['task']['estimate']    = '40h';
 $lang->ai->prompts->testData['task']['task']['consumed']    = '40h';
 $lang->ai->prompts->testData['task']['task']['left']        = '0h';
 $lang->ai->prompts->testData['task']['task']['progress']    = '100%';
+$lang->ai->prompts->testData['task']['task']['story']       = 0;
 $lang->ai->prompts->testData['task']['task']['estStarted']  = '2025-04-01';
 $lang->ai->prompts->testData['task']['task']['realStarted'] = '2025-04-01';
 
