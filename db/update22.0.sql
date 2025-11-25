@@ -230,3 +230,4 @@ ALTER TABLE `zt_story`   ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AF
 ALTER TABLE `zt_design`  ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `desc`;
 ALTER TABLE `zt_project` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `vision`;
 ALTER TABLE `zt_doc`     ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `builtIn`;
+ALTER TABLE `zt_projectdeliverable` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `version`;
