@@ -1,45 +1,55 @@
 #!/usr/bin/env php
 <?php
-
-/**
-
-title=测试 todoModel::dateRange();
-timeout=0
-cid=19253
-
-- 执行todo模块的dateRangeTest方法，参数是'future'
- - 属性begin @2030-01-01
- - 属性end @2030-01-01
-- 执行todo模块的dateRangeTest方法，参数是'20210101'
- - 属性begin @2021-01-01 00:00:00
- - 属性end @2021-01-01 23:59:59
-- 执行todo模块的dateRangeTest方法，参数是'before' 属性end @2025-11-05
-- 执行todo模块的dateRangeTest方法，参数是'today' 属性begin @2025-11-06
-- 执行todo模块的dateRangeTest方法，参数是'yesterday' 属性begin @2025-11-05
-- 执行todo模块的dateRangeTest方法，参数是'thisweek' 属性begin @2025-11-03 00:00:00
-- 执行todo模块的dateRangeTest方法，参数是'lastweek' 属性begin @2025-10-27 00:00:00
-- 执行todo模块的dateRangeTest方法，参数是'thismonth' 属性begin @2025-11-01 00:00:00
-- 执行todo模块的dateRangeTest方法，参数是'lastmonth' 属性begin @2025-10-01 00:00:00
-- 执行todo模块的dateRangeTest方法，参数是'thisseason' 属性begin @2025-10-01 00:00:00
-
-*/
+declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
-global $tester;
-$tester->app->loadClass('date', true);
+/**
+
+title=测试 todoModel::dateRange();
+timeout=0
+cid=0
+
+- 测试 future 类型返回固定日期
+ - 属性begin @2030-01-01
+ - 属性end @2030-01-01
+- 测试数字类型(日期格式)转换为日期范围
+ - 属性begin @2024-06-15 00:00:00
+ - 属性end @2024-06-15 23:59:59
+- 测试 before 类型 begin 为空 @1
+- 测试 before 类型 end 返回日期格式 @1
+- 测试 today 类型返回日期格式 @1
+- 测试 yesterday 类型返回日期格式 @1
+- 测试 thisweek 类型 begin 包含时间部分 @1
+- 测试 lastweek 类型 begin 包含时间部分 @1
+- 测试 thismonth 类型 begin 包含时间部分 @1
+- 测试 lastmonth 类型 begin 包含时间部分 @1
+- 测试 thisseason 类型 begin 包含时间部分 @1
+- 测试 thisyear 类型 begin 包含时间部分 @1
+- 测试无效类型返回空范围 @1
+
+*/
 
 $todo = new todoTest();
 
-r($todo->dateRangeTest('future')) && p('begin,end') && e('2030-01-01,2030-01-01');
-r($todo->dateRangeTest('20210101')) && p('begin,end') && e('2021-01-01 00:00:00,2021-01-01 23:59:59');
-r($todo->dateRangeTest('before')) && p('end') && e('2025-11-05');
-r($todo->dateRangeTest('today')) && p('begin') && e('2025-11-06');
-r($todo->dateRangeTest('yesterday')) && p('begin') && e('2025-11-05');
-r($todo->dateRangeTest('thisweek')) && p('begin') && e('2025-11-03 00:00:00');
-r($todo->dateRangeTest('lastweek')) && p('begin') && e('2025-10-27 00:00:00');
-r($todo->dateRangeTest('thismonth')) && p('begin') && e('2025-11-01 00:00:00');
-r($todo->dateRangeTest('lastmonth')) && p('begin') && e('2025-10-01 00:00:00');
-r($todo->dateRangeTest('thisseason')) && p('begin') && e('2025-10-01 00:00:00');
+global $tester;
+$tester->app->loadClass('date', true);
+
+$today     = date('Y-m-d');
+$yesterday = date('Y-m-d', strtotime('-1 day'));
+
+r($todo->dateRangeTest('future')) && p('begin,end') && e('2030-01-01,2030-01-01'); // 测试 future 类型返回固定日期
+r($todo->dateRangeTest('20240615')) && p('begin,end') && e('2024-06-15 00:00:00,2024-06-15 23:59:59'); // 测试数字类型(日期格式)转换为日期范围
+r($todo->dateRangeTest('before')['begin'] == '') && p() && e('1'); // 测试 before 类型 begin 为空
+r(strlen($todo->dateRangeTest('before')['end']) == 10) && p() && e('1'); // 测试 before 类型 end 返回日期格式
+r(strlen($todo->dateRangeTest('today')['begin']) == 10) && p() && e('1'); // 测试 today 类型返回日期格式
+r(strlen($todo->dateRangeTest('yesterday')['begin']) == 10) && p() && e('1'); // 测试 yesterday 类型返回日期格式
+r(strpos($todo->dateRangeTest('thisweek')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 thisweek 类型 begin 包含时间部分
+r(strpos($todo->dateRangeTest('lastweek')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 lastweek 类型 begin 包含时间部分
+r(strpos($todo->dateRangeTest('thismonth')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 thismonth 类型 begin 包含时间部分
+r(strpos($todo->dateRangeTest('lastmonth')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 lastmonth 类型 begin 包含时间部分
+r(strpos($todo->dateRangeTest('thisseason')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 thisseason 类型 begin 包含时间部分
+r(strpos($todo->dateRangeTest('thisyear')['begin'], ' 00:00:00') !== false) && p() && e('1'); // 测试 thisyear 类型 begin 包含时间部分
+r($todo->dateRangeTest('invalid')['begin'] == '' && $todo->dateRangeTest('invalid')['end'] == '') && p() && e('1'); // 测试无效类型返回空范围

@@ -1,0 +1,34 @@
+---
+title: metriclib数据定义
+author: ''
+version: ''
+
+fields:
+- field: id
+  range: 1-100
+- field: metricID
+  range: 1{30},2{30},3{30},4{5},5{5}
+- field: metricCode
+  range: 'test_metric_1{30},test_metric_2{30},test_metric_3{30},invalid_code{5},empty_result{5}'
+- field: product
+  range: '1{25},2{25},3{25},4{15},5{10}'
+- field: project
+  range: '1{25},2{25},3{25},4{15},5{10}'
+- field: year
+  range: '2024{80},2023{20}'
+- field: month
+  range: '01{10},02{10},03{10},04{10},05{10},06{10},07{10},08{10},09{10},10{10}'
+- field: week
+  range: '01{20},02{20},03{20},04{20},00{20}'
+- field: day
+  range: '0'
+- field: value
+  range: 10-100
+- field: date
+  range: '20240101 000000-20241231 235959:3D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: calcType
+  range: cron
+- field: deleted
+  range: '0'

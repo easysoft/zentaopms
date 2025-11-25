@@ -3694,7 +3694,7 @@ CREATE TABLE `zt_testtask` (
   `product` mediumint unsigned NOT NULL DEFAULT '0',
   `name` char(90) NOT NULL DEFAULT '',
   `execution` mediumint unsigned NOT NULL DEFAULT '0',
-  `build` char(30) NOT NULL DEFAULT '',
+  `build` int unsigned NOT NULL DEFAULT 0,
   `type` varchar(255) NOT NULL DEFAULT '',
   `owner` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT '0',

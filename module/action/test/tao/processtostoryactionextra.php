@@ -1,72 +1,53 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
 
 /**
 
-title=- 测试非影子产品的故事action extra处理属性extra @*
+title=- 执行actionTest模块的processToStoryActionExtraTest方法,参数是1, '1' 属性extra @
 timeout=0
-cid=14968
+cid=1
 
-- 测试非影子产品的故事action extra处理属性extra @*#1 用户故事1*
-- 测试影子产品的故事action extra处理(有项目关联)属性extra @*#4 需求1*
-- 测试影子产品的故事action extra处理(无项目关联)属性extra @*#8 Feature1*
-- 测试不存在的故事ID属性extra @999
-- 测试产品字段为空的情况属性extra @*#2 用户故事2*
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是1, '1' 属性extra @#1 用户需求1
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是2, '2' 属性extra @#2 软件需求2
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是3, '2' 属性extra @#3 用户需求3
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是4, '2' 属性extra @#4 软件需求4
+- 执行actionTest模块的processToStoryActionExtraTest方法，参数是999, '2' 属性extra @#999
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
+
+$productTable = zenData('product');
+$productTable->id->range('1-10');
+$productTable->name->range('正常产品,影子产品{5},测试产品{4}');
+$productTable->shadow->range('0,1,1,1,1,1,0,0,0,0');
+$productTable->status->range('normal{10}');
+$productTable->type->range('normal{10}');
+$productTable->gen(10);
+
+$storyTable = zenData('story');
+$storyTable->id->range('1-10');
+$storyTable->product->range('1,2,2,2,6,6,1,8,9,10');
+$storyTable->type->range('story{10}');
+$storyTable->status->range('active{10}');
+$storyTable->stage->range('wait{5},planned{5}');
+$storyTable->version->range('1{10}');
+$storyTable->gen(10);
+
+$projectStoryTable = zenData('projectstory');
+$projectStoryTable->project->range('10,20,30,40,50');
+$projectStoryTable->product->range('2,2,2,6,6');
+$projectStoryTable->story->range('2,3,4,5,6');
+$projectStoryTable->version->range('1{5}');
+$projectStoryTable->gen(5);
 
 su('admin');
 
-$product = zenData('product');
-$product->id->range('1-5');
-$product->name->range('产品1,产品2,产品3,影子产品1,影子产品2');
-$product->shadow->range('0{3},1{2}');
-$product->gen(5);
+$actionTest = new actionTaoTest();
 
-$story = zenData('story');
-$story->id->range('1-10');
-$story->product->range('1-5');
-$story->title->range('用户故事1,用户故事2,用户故事3,需求1,需求2,Epic1,Epic2,Feature1,Feature2,Story10');
-$story->type->range('story{7},requirement{2},epic');
-$story->gen(10);
-
-$projectstory = zenData('projectstory');
-$projectstory->project->range('101-105');
-$projectstory->story->range('4,5,4,6,7');
-$projectstory->gen(5);
-
-$actionTest = new actionTest();
-
-$action1 = new stdClass();
-$action1->objectID = 1;
-$action1->product = '1';
-$action1->extra = '1';
-r($actionTest->processToStoryActionExtraTest($action1)) && p('extra') && e('*#1 用户故事1*'); // 测试非影子产品的故事action extra处理
-
-$action2 = new stdClass();
-$action2->objectID = 2;
-$action2->product = '4';
-$action2->extra = '4';
-r($actionTest->processToStoryActionExtraTest($action2)) && p('extra') && e('*#4 需求1*'); // 测试影子产品的故事action extra处理(有项目关联)
-
-$action3 = new stdClass();
-$action3->objectID = 3;
-$action3->product = '5';
-$action3->extra = '8';
-r($actionTest->processToStoryActionExtraTest($action3)) && p('extra') && e('*#8 Feature1*'); // 测试影子产品的故事action extra处理(无项目关联)
-
-$action4 = new stdClass();
-$action4->objectID = 4;
-$action4->product = '1';
-$action4->extra = '999';
-r($actionTest->processToStoryActionExtraTest($action4)) && p('extra') && e('999'); // 测试不存在的故事ID
-
-$action5 = new stdClass();
-$action5->objectID = 5;
-$action5->product = '';
-$action5->extra = '2';
-r($actionTest->processToStoryActionExtraTest($action5)) && p('extra') && e('*#2 用户故事2*'); // 测试产品字段为空的情况
+r($actionTest->processToStoryActionExtraTest(1, '1')) && p('extra') && e('#1 用户需求1');
+r($actionTest->processToStoryActionExtraTest(2, '2')) && p('extra') && e('#2 软件需求2');
+r($actionTest->processToStoryActionExtraTest(3, '2')) && p('extra') && e('#3 用户需求3');
+r($actionTest->processToStoryActionExtraTest(4, '2')) && p('extra') && e('#4 软件需求4');
+r($actionTest->processToStoryActionExtraTest(999, '2')) && p('extra') && e('#999');

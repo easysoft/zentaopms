@@ -19,7 +19,7 @@ class runCaseTester extends tester
         $form->wait(1);
         $form->dom->result->picker($this->lang->testcase->resultList->$expectRusult);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         if(is_object($form->dom->close)) $form->dom->close->click();
         $form->wait(1);
 

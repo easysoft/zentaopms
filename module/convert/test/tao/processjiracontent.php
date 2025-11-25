@@ -5,13 +5,14 @@
 
 title=测试 convertTao::processJiraContent();
 timeout=0
-cid=15869
+cid=0
 
 - 执行convertTest模块的processJiraContentTest方法，参数是'', array  @0
-- 执行convertTest模块的processJiraContentTest方法，参数是'This is plain text without image markers.', array  @0
-- 执行convertTest模块的processJiraContentTest方法，参数是'This has !image.png|width=100! marker but no files', array  @This has !image.png|width=100! marker but no files
-- 执行convertTest模块的processJiraContentTest方法，参数是'Check this !test.png|width=100! image', array  @Check this <img src="{1.png}" alt="file-read-png-1.html"/> image
-- 执行convertTest模块的processJiraContentTest方法，参数是'!image1.jpg|width=100! and !image2.png|height=200!', array  @<img src="{1.jpg}" alt="file-read-jpg-1.html"/> and <img src="{2.png}" alt="file-read-png-2.html"/>
+- 执行convertTest模块的processJiraContentTest方法，参数是'This is a test !screenshot.png|thumbnail! image', $fileList1  @This is a test <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> image
+- 执行convertTest模块的processJiraContentTest方法，参数是'Two images: !screenshot.png|thumb! and !image.jpg|width=100!', $fileList2  @Two images: <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> and <img src="{2.jpg}" alt="processjiracontent.php?m=file&f=read&t=jpg&fileID=2"/>
+- 执行convertTest模块的processJiraContentTest方法，参数是'Missing file: !notfound.png|thumb!', $fileList3  @Missing file: !notfound.png|thumb!
+- 执行convertTest模块的processJiraContentTest方法，参数是'No image markers here', $fileList1  @0
+- 执行convertTest模块的processJiraContentTest方法，参数是'Image with options !screenshot.png|width=100, height=80! here', $fileList1  @Image with options <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> here
 
 */
 
@@ -22,8 +23,26 @@ su('admin');
 
 $convertTest = new convertTaoTest();
 
+// 准备测试数据
+$file1 = new stdClass();
+$file1->id = 1;
+$file1->extension = 'png';
+
+$file2 = new stdClass();
+$file2->id = 2;
+$file2->extension = 'jpg';
+
+$file3 = new stdClass();
+$file3->id = 3;
+$file3->extension = 'gif';
+
+$fileList1 = array('screenshot.png' => $file1);
+$fileList2 = array('screenshot.png' => $file1, 'image.jpg' => $file2);
+$fileList3 = array();
+
 r($convertTest->processJiraContentTest('', array())) && p() && e('0');
-r($convertTest->processJiraContentTest('This is plain text without image markers.', array())) && p() && e('0');
-r($convertTest->processJiraContentTest('This has !image.png|width=100! marker but no files', array())) && p() && e('This has !image.png|width=100! marker but no files');
-r($convertTest->processJiraContentTest('Check this !test.png|width=100! image', array('test.png' => (object)array('id' => 1, 'extension' => 'png')))) && p() && e('Check this <img src="{1.png}" alt="file-read-png-1.html"/> image');
-r($convertTest->processJiraContentTest('!image1.jpg|width=100! and !image2.png|height=200!', array('image1.jpg' => (object)array('id' => 1, 'extension' => 'jpg'), 'image2.png' => (object)array('id' => 2, 'extension' => 'png')))) && p() && e('<img src="{1.jpg}" alt="file-read-jpg-1.html"/> and <img src="{2.png}" alt="file-read-png-2.html"/>');
+r($convertTest->processJiraContentTest('This is a test !screenshot.png|thumbnail! image', $fileList1)) && p() && e('This is a test <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> image');
+r($convertTest->processJiraContentTest('Two images: !screenshot.png|thumb! and !image.jpg|width=100!', $fileList2)) && p() && e('Two images: <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> and <img src="{2.jpg}" alt="processjiracontent.php?m=file&f=read&t=jpg&fileID=2"/>');
+r($convertTest->processJiraContentTest('Missing file: !notfound.png|thumb!', $fileList3)) && p() && e('Missing file: !notfound.png|thumb!');
+r($convertTest->processJiraContentTest('No image markers here', $fileList1)) && p() && e('0');
+r($convertTest->processJiraContentTest('Image with options !screenshot.png|width=100,height=80! here', $fileList1)) && p() && e('Image with options <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> here');
