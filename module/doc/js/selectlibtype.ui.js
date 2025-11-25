@@ -121,7 +121,19 @@ window.reloadApi = function()
  * @access public
  * @return void
  */
-window.redirectParentWindow = function(link)
+window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
 {
+    if(from === 'ai' && localStorage.getItem('aiResult'))
+    {
+        const aiResult = JSON.parse(localStorage.getItem('aiResult'));
+        zui.DocApp.storeNextCreatingDoc({
+            content: aiResult.content || '',
+            contentType: 'markdown',
+            space: Number(spaceID),
+            lib: Number(libID),
+            module: Number(moduleID),
+        });
+        localStorage.removeItem('aiResult');
+    }
     openUrl(link, 'doc');
 }

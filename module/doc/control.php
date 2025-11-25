@@ -1573,7 +1573,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function selectLibType($objectType = 'mine', $params = '')
+    public function selectLibType($objectType = 'mine', $params = '', $from = '')
     {
         if($_POST)
         {
@@ -1585,6 +1585,7 @@ class doc extends control
             $docType   = isset($_POST['type']) ? $_POST['type'] : 'doc';
             if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
 
+            $spaceID = 0;
             if(in_array($rootSpace, array('mine', 'custom', 'product', 'project')))
             {
                 $methodList = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'product' => 'productSpace', 'project' => 'projectSpace');
@@ -1601,7 +1602,7 @@ class doc extends control
 
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$url}\")";
+            $response['callback']   = "redirectParentWindow(\"{$url}\", \"{$from}\", \"{$spaceID}\", \"{$libID}\", \"{$moduleID}\")";
             return $this->send($response);
         }
 
