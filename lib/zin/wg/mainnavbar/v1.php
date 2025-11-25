@@ -88,6 +88,9 @@ class mainNavbar extends nav
             $app->control->loadModel('admin')->setMenu((int)$groupID);
         }
 
+        /* When use workflow then set rawModule to moduleName. */
+        if($currentModule == 'flow') $currentModule = $app->rawModule;
+
         \commonModel::replaceMenuLang();
         \commonModel::setMainMenu();
         $activeMenu = \commonModel::getActiveMainMenu();
