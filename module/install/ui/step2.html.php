@@ -69,7 +69,7 @@ div
                         ),
                         h::td()
                     ),
-                    $config->edition != 'open' ? h::tr
+                    count($lang->install->dbDriverList) > 1 ? h::tr
                     (
                         $config->inQuickon ? setClass('hidden') : null,
                         h::th(setClass('text-right'), $lang->install->dbDriver),
