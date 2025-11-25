@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel::updateCommitDate();
 timeout=0
-cid=0
+cid=18112
 
 - 步骤1：更新Gitlab版本库属性lastCommit @2023-12-23 11:39:02
 - 步骤2：更新Gitea版本库属性lastCommit @~~

@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::erasePackage();
 timeout=0
-cid=0
+cid=16452
 
 - 步骤1：正常清除已安装插件包并验证返回数组 @0
 - 步骤2：清除不存在的插件包验证处理结果 @0

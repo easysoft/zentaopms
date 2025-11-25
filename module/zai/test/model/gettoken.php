@@ -5,7 +5,7 @@
 
 title=测试 zaiModel::getToken();
 timeout=0
-cid=0
+cid=19775
 
 - 测试获取Token时配置不完整情况 @fail
 - 测试普通用户正常获取Token @success

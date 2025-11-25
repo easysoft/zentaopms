@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getListByIdList();
-cid=0
+cid=19617
 
 - 参数为空数组，返回空数组。 @0
 - id 为 0 的用户不存在，返回空数组。 @0

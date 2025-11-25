@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getPlans();
-cid=1
+cid=18438
 
 - 获取项目ID为0的干预列表 @0
 - 获取项目ID为60的干预列表

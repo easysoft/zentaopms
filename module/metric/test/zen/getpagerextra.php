@@ -5,7 +5,7 @@
 
 title=测试 metricZen::getPagerExtra();
 timeout=0
-cid=0
+cid=17192
 
 - 执行metricZenTest模块的getPagerExtraZenTest方法，参数是500  @0
 - 执行metricZenTest模块的getPagerExtraZenTest方法，参数是400  @0

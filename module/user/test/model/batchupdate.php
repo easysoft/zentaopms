@@ -5,7 +5,7 @@
 
 title=测试 userModel->batchUpdate();
 timeout=0
-cid=0
+cid=19580
 
 - 传入空数组，返回 false。属性result @0
 - 更新用户失败，返回 false。属性result @0

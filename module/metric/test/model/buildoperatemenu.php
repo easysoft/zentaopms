@@ -5,7 +5,7 @@
 
 title=测试 metricModel::buildOperateMenu();
 timeout=0
-cid=0
+cid=17062
 
 - 测试步骤1：内置metric生成空main菜单 @0
 - 测试步骤2：wait阶段metric生成edit菜单第edit条的icon属性 @edit

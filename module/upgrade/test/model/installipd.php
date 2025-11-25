@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->installIPD().
 timeout=0
-cid=1
+cid=19535
 
 - 开源18.2版本低于18.5版本，需要安装IPD，所以应该生成日志文件 @1
 - 开源18.6版本高于18.5版本，不需要安装IPD，所以不应该生成日志文件 @0

@@ -5,7 +5,7 @@
 
 title=测试 myTao::fetchRequirementsBySearch();
 timeout=0
-cid=0
+cid=17308
 
 - 执行myTest模块的fetchRequirementsBySearchTest方法，参数是"t1.deleted = '0'", 'contribute', 'id_desc', null, array  @3
 - 执行myTest模块的fetchRequirementsBySearchTest方法，参数是"t1.deleted = '0'", 'assigned', 'id_desc', null, array  @3

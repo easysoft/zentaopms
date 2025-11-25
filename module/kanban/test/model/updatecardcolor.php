@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(5);
 
 title=- 属性color @
 timeout=0
-cid=2
+cid=16963
 
 - 更新卡片1的颜色
  - 属性id @1

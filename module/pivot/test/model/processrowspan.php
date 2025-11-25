@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processRowSpan();
 timeout=0
-cid=0
+cid=17427
 
 - 步骤1：基础分组合并测试
  - 第0条的group1:rowSpan属性 @2

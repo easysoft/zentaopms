@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=PHP Deprecated:  substr(): Passing null to parameter
 timeout=0
-cid=1
+cid=16604
 
 - 通过gitlabID,projectID,获取GitLab hook列表 @1
 - 通过gitlabID,projectID,获取GitLab hook数量 @1

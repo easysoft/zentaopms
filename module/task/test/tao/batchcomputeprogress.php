@@ -13,7 +13,7 @@ $task->gen(5);
 
 title=taskModel->batchComputeProgress();
 timeout=0
-cid=2
+cid=18861
 
 */
 $tester->loadModel('task');

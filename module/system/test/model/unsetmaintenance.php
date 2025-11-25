@@ -5,7 +5,7 @@
 
 title=测试 systemModel::unsetMaintenance();
 timeout=0
-cid=0
+cid=18748
 
 - 步骤1：正常情况 - 存在维护配置时删除 @deleted
 - 步骤2：边界值 - 无维护配置时调用 @deleted

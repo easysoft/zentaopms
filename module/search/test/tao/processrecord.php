@@ -5,53 +5,91 @@
 
 title=测试 searchTao::processRecord();
 timeout=0
-cid=0
+cid=18338
 
-- 步骤1：测试任务记录URL包含task模块 @1
-- 步骤2：测试kanban项目URL包含index方法 @1
-- 步骤3：测试执行记录的额外类型 @sprint
-- 步骤4：测试需求记录URL包含storyView方法 @1
-- 步骤5：测试文档记录URL包含doc模块 @1
+- 测试issue类型的记录处理,lib为空 >> url属性包含issue-view-1
+- 测试project类型的记录处理,项目模型为scrum >> url属性包含project-view-2
+- 测试execution类型的记录处理,执行类型为stage >> url属性包含execution-view-3
+- 测试project类型的记录处理,项目模型为kanban >> url属性包含project-index-4
+- 测试bug类型的记录处理 >> url属性包含bug-view-5
+- 测试story类型的记录处理,lib为空 >> url属性包含story-storyView-6
+- 测试普通类型的记录处理(testcase) >> url属性包含testcase-view-7
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$taskTable = zenData('task');
-$taskTable->id->range('1-10');
-$taskTable->project->range('1-3');
-$taskTable->name->range('任务{1-10}');
-$taskTable->status->range('wait{3},doing{4},done{3}');
-$taskTable->gen(10);
+zenData('project')->gen(10);
+zenData('task')->gen(10);
 
-$projectTable = zenData('project');
-$projectTable->id->range('1-10');
-$projectTable->name->range('项目{1-10}');
-$projectTable->model->range('waterfall{3},scrum{3},kanban{2}');
-$projectTable->multiple->range('1{8},0{2}');
-$projectTable->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$searchTest = new searchTest();
+$searchTest = new searchTaoTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-$taskResult = $searchTest->processRecordTest((object)array('objectType' => 'task', 'objectID' => 1), array());
-r(strpos($taskResult->url, 'm=task') !== false) && p() && e('1'); // 步骤1：测试任务记录URL包含task模块
+$record1 = new stdClass();
+$record1->objectType = 'issue';
+$record1->objectID = 1;
 
-$projectResult = $searchTest->processRecordTest((object)array('objectType' => 'project', 'objectID' => 3), array('project' => array(3 => (object)array('model' => 'kanban'))));
-r(strpos($projectResult->url, 'f=index') !== false) && p() && e('1'); // 步骤2：测试kanban项目URL包含index方法
+$record2 = new stdClass();
+$record2->objectType = 'project';
+$record2->objectID = 2;
 
-$executionResult = $searchTest->processRecordTest((object)array('objectType' => 'execution', 'objectID' => 2), array('execution' => array(2 => (object)array('type' => 'sprint', 'project' => 1))));
-r($executionResult->extraType) && p() && e('sprint'); // 步骤3：测试执行记录的额外类型
+$record3 = new stdClass();
+$record3->objectType = 'execution';
+$record3->objectID = 3;
 
-$storyResult = $searchTest->processRecordTest((object)array('objectType' => 'story', 'objectID' => 1), array('story' => array(1 => (object)array('type' => 'story', 'lib' => 0))));
-r(strpos($storyResult->url, 'f=storyView') !== false) && p() && e('1'); // 步骤4：测试需求记录URL包含storyView方法
+$record4 = new stdClass();
+$record4->objectType = 'project';
+$record4->objectID = 4;
 
-$docResult = $searchTest->processRecordTest((object)array('objectType' => 'doc', 'objectID' => 7), array('doc' => array(7 => (object)array('assetLib' => 0))));
-r(strpos($docResult->url, 'm=doc') !== false) && p() && e('1'); // 步骤5：测试文档记录URL包含doc模块
+$record5 = new stdClass();
+$record5->objectType = 'bug';
+$record5->objectID = 5;
+
+$record6 = new stdClass();
+$record6->objectType = 'story';
+$record6->objectID = 6;
+
+$record7 = new stdClass();
+$record7->objectType = 'testcase';
+$record7->objectID = 7;
+
+$issue1 = new stdClass();
+$issue1->lib = '';
+$issue1->owner = '';
+$issue1->project = 1;
+
+$project2 = new stdClass();
+$project2->id = 2;
+$project2->model = 'scrum';
+
+$execution3 = new stdClass();
+$execution3->id = 3;
+$execution3->type = 'stage';
+$execution3->project = 1;
+
+$project4 = new stdClass();
+$project4->id = 4;
+$project4->model = 'kanban';
+
+$story6 = new stdClass();
+$story6->id = 6;
+$story6->type = 'story';
+$story6->lib = '';
+
+$objectList1 = array('issue' => array(1 => $issue1));
+$objectList2 = array('project' => array(2 => $project2));
+$objectList3 = array('execution' => array(3 => $execution3));
+$objectList4 = array('project' => array(4 => $project4));
+$objectList5 = array();
+$objectList6 = array('story' => array(6 => $story6));
+$objectList7 = array();
+
+r($searchTest->processRecordTest($record1, $objectList1)) && p('url') && e('*/issue-view-1.html');
+r($searchTest->processRecordTest($record2, $objectList2)) && p('url') && e('*/project-view-2.html');
+r($searchTest->processRecordTest($record3, $objectList3)) && p('url') && e('*/execution-view-3.html');
+r($searchTest->processRecordTest($record4, $objectList4)) && p('url') && e('*/project-index-4.html');
+r($searchTest->processRecordTest($record5, $objectList5)) && p('url') && e('*/bug-view-5.html');
+r($searchTest->processRecordTest($record6, $objectList6)) && p('url') && e('*/story-storyView-6.html');
+r($searchTest->processRecordTest($record7, $objectList7)) && p('url') && e('*/testcase-view-7.html');

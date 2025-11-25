@@ -5,7 +5,7 @@
 
 title=测试 commonModel::checkIP();
 timeout=0
-cid=0
+cid=15656
 
 - 步骤1：通配符允许所有IP @1
 - 步骤2：精确匹配当前IP @1

@@ -9,7 +9,7 @@ zenData('product')->gen(100);
 /**
 
 title=bugModel->getUserBugPairs();
-cid=1
+cid=15399
 
 - 测试获取用户admin 的bug @30
 - 测试获取用户admin 追加产品名称 的bug @30

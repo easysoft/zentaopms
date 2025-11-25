@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getAssistantById();
 timeout=0
-cid=0
+cid=15026
 
 - 步骤1：查询存在的助手ID
  - 属性id @1

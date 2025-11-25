@@ -5,7 +5,7 @@
 
 title=测试 zanodeTao::getZaNodeListByQuery();
 timeout=0
-cid=0
+cid=19850
 
 - 步骤1：查询所有节点属性count @15
 - 步骤2：按状态查询属性count @10

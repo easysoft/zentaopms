@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTaskForFinish();
 timeout=0
-cid=0
+cid=18911
 
 - 步骤1：正常情况
  - 属性status @done

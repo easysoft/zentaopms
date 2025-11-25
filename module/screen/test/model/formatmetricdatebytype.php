@@ -5,7 +5,7 @@
 
 title=测试 screenModel::formatMetricDateByType();
 timeout=0
-cid=0
+cid=18224
 
 - 步骤1：year类型属性year @2021
 - 步骤2：month类型

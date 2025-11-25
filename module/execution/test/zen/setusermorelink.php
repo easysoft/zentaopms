@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setUserMoreLink();
 timeout=0
-cid=0
+cid=16446
 
 - 返回4个数组 @4
 - 返回4个数组 @4

@@ -1,0 +1,158 @@
+---
+title: buildBuildForEdit方法测试数据
+desc: 为buildBuildForEdit方法提供版本测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 版本ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 项目ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: branch
+  note: 分支ID
+  range: '0,1,2,3'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: execution
+  note: 执行ID
+  range: '0,1,2,3'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: builds
+  note: 关联版本
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: system
+  note: 系统ID
+  range: 0-2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 版本名称
+  range: 'Build{10}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: scmPath
+  note: SCM路径
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: filePath
+  note: 文件路径
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: date
+  note: 创建日期
+  range: '2023-01-01:2023-12-31'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD"
+
+- field: stories
+  note: 关联需求
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: bugs
+  note: 关联Bug
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: artifactRepoID
+  note: 制品库ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: builder
+  note: 构建者
+  range: 'admin,user1,user2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: desc
+  note: 描述
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdBy
+  note: 创建者
+  range: 'admin,user1,user2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00:2023-12-31 23:59:59'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

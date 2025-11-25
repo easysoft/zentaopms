@@ -10,7 +10,7 @@ su('user1');
 /**
 
 title=测试 testcaseModel->forceNotReview();
-cid=1
+cid=18972
 
 - 测试检查needReview true forceReviewList false forceNotReviewList false 时是否强制审核 @2
 - 测试检查needReview true forceReviewList false forceNotReviewList user1,user2 时是否强制审核 @1

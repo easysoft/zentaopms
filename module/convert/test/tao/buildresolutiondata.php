@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildResolutionData();
 timeout=0
-cid=0
+cid=15825
 
 - 步骤1：完整数据输入
  - 属性id @1

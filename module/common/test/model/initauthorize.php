@@ -5,7 +5,7 @@
 
 title=测试 commonModel::initAuthorize();
 timeout=0
-cid=0
+cid=15682
 
 - 步骤1：无用户登录情况属性result @0
 - 步骤2：升级过程中的用户属性result @1

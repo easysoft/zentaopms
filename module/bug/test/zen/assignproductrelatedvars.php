@@ -5,55 +5,70 @@
 
 title=测试 bugZen::assignProductRelatedVars();
 timeout=0
-cid=0
+cid=15427
 
-- 步骤1：空数组输入情况 @0
-- 步骤2：空Bug数组，正常产品类型 @0
-- 步骤3：正常Bug数组，空产品数组 @0
-- 步骤4：正常Bug和产品数组 @0
-- 步骤5：混合类型Bug和产品数组 @2
+- 步骤1:空数据
+ - 属性branchProduct @0
+ - 属性modulesCount @0
+- 步骤2:正常产品类型无bugs
+ - 属性branchProduct @0
+ - 属性modulesCount @3
+- 步骤3:分支产品类型
+ - 属性branchProduct @1
+ - 属性modulesCount @2
+- 步骤4:混合产品类型
+ - 属性branchProduct @1
+ - 属性modulesCount @2
+- 步骤5:多个分支产品
+ - 属性branchProduct @1
+ - 属性modulesCount @3
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$productTable = zenData('product');
-$productTable->loadYaml('product_assignproductrelatedvars', false, 2)->gen(10);
+zenData('product')->loadYaml('product_assignproductrelatedvars', false, 2)->gen(10);
+zenData('bug')->loadYaml('bug_assignproductrelatedvars', false, 2)->gen(20);
+zenData('branch')->loadYaml('branch_assignproductrelatedvars', false, 2)->gen(10);
+zenData('module')->gen(20);
+zenData('productplan')->gen(10);
 
-$bugTable = zenData('bug');
-$bugTable->loadYaml('bug_assignproductrelatedvars', false, 2)->gen(20);
-
-$branchTable = zenData('branch');
-$branchTable->loadYaml('branch_assignproductrelatedvars', false, 2)->gen(10);
-
-$moduleTable = zenData('module');
-$moduleTable->id->range('1-20');
-$moduleTable->name->range('模块{1-20}');
-$moduleTable->type->range('bug');
-$moduleTable->parent->range('0');
-$moduleTable->grade->range('1');
-$moduleTable->order->range('1-20');
-$moduleTable->gen(20);
-
-$planTable = zenData('productplan');
-$planTable->id->range('1-10');
-$planTable->product->range('1-10');
-$planTable->title->range('计划{1-10}');
-$planTable->status->range('wait{5},doing{3},done{2}');
-$planTable->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($bugTest->assignProductRelatedVarsTest(array(), array())) && p() && e(0); // 步骤1：空数组输入情况
-r($bugTest->assignProductRelatedVarsTest(array(), 'normal')) && p() && e(0); // 步骤2：空Bug数组，正常产品类型
-r($bugTest->assignProductRelatedVarsTest('normal', array())) && p() && e(0); // 步骤3：正常Bug数组，空产品数组
-r($bugTest->assignProductRelatedVarsTest('normal', 'normal')) && p() && e(0); // 步骤4：正常Bug和产品数组
-r($bugTest->assignProductRelatedVarsTest('mixed', 'mixed')) && p() && e(2); // 步骤5：混合类型Bug和产品数组
+$emptyBugs = array();
+$emptyProducts = array();
+
+$normalProducts = array(
+    (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'),
+    (object)array('id' => 2, 'name' => '产品2', 'type' => 'normal'),
+    (object)array('id' => 3, 'name' => '产品3', 'type' => 'normal')
+);
+
+$branchProducts = array(
+    (object)array('id' => 6, 'name' => 'Product6', 'type' => 'branch'),
+    (object)array('id' => 7, 'name' => 'Product7', 'type' => 'branch')
+);
+
+$mixedProducts = array(
+    (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'),
+    (object)array('id' => 6, 'name' => 'Product6', 'type' => 'branch')
+);
+
+$singleNormalProduct = array(
+    (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal')
+);
+
+$multipleBranchProducts = array(
+    (object)array('id' => 6, 'name' => 'Product6', 'type' => 'branch'),
+    (object)array('id' => 7, 'name' => 'Product7', 'type' => 'branch'),
+    (object)array('id' => 8, 'name' => 'Product8', 'type' => 'platform')
+);
+
+r($bugTest->assignProductRelatedVarsTest($emptyBugs, $emptyProducts)) && p('branchProduct,modulesCount') && e('0,0'); // 步骤1:空数据
+r($bugTest->assignProductRelatedVarsTest($emptyBugs, $normalProducts)) && p('branchProduct,modulesCount') && e('0,3'); // 步骤2:正常产品类型无bugs
+r($bugTest->assignProductRelatedVarsTest($emptyBugs, $branchProducts)) && p('branchProduct,modulesCount') && e('1,2'); // 步骤3:分支产品类型
+r($bugTest->assignProductRelatedVarsTest($emptyBugs, $mixedProducts)) && p('branchProduct,modulesCount') && e('1,2'); // 步骤4:混合产品类型
+r($bugTest->assignProductRelatedVarsTest($emptyBugs, $multipleBranchProducts)) && p('branchProduct,modulesCount') && e('1,3'); // 步骤5:多个分支产品

@@ -5,7 +5,7 @@
 
 title=测试 aiModel::tryPunctuate();
 timeout=0
-cid=0
+cid=15073
 
 - 执行aiTest模块的tryPunctuateTest方法，参数是'Hello world.', false  @Hello world.
 - 执行aiTest模块的tryPunctuateTest方法，参数是'Hello world', false  @Hello world.

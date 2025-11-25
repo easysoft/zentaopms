@@ -3,33 +3,43 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zenData('projectproduct')->loadYaml('projectproduct_getexecutionproductgroup', false, 2)->gen(15);
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('1{3},2{2},3{2},4,5{2}');
+$projectproduct->product->range('1,2,3,4,5,6,7,8,9,10');
+$projectproduct->branch->range('0');
+$projectproduct->gen(10);
 
 /**
 
-title=测试 projectModel->getExecutionProductGroup();
+title=测试 projectModel::getExecutionProductGroup();
 timeout=0
-cid=0
+cid=17826
 
-- 测试获取多个执行ID的产品分组，检查项目11的第一个产品 @1
-- 测试获取多个执行ID的产品分组，检查项目12的第一个产品 @2
-- 测试获取单个执行ID的产品分组，检查结果的项目数量 @1
-- 测试传入空数组的情况，检查结果数量 @0
-- 测试传入不存在执行ID的情况，检查结果数量 @0
+- 传入多个执行ID,获取执行1的产品数量 @3
+- 传入多个执行ID,获取执行2的产品数量 @2
+- 传入多个执行ID,获取执行3的产品数量 @2
+- 传入多个执行ID,获取执行1的第一个产品ID @1
+- 传入单个执行ID,检查执行1的产品数量 @3
+- 传入不存在的执行ID,返回空数组 @0
+- 传入空数组,返回空数组 @0
+- 传入包含有效和无效执行ID的混合数组,检查返回的执行数量 @2
 
 */
 
 global $tester;
 $tester->loadModel('project');
 
-$result1 = $tester->project->getExecutionProductGroup(array(11, 12, 13));
-$result2 = $tester->project->getExecutionProductGroup(array(11));
-$result3 = $tester->project->getExecutionProductGroup(array());
-$result4 = $tester->project->getExecutionProductGroup(array(999, 1000));
-$result5 = $tester->project->getExecutionProductGroup(array(11, 999, 12));
+$result1 = $tester->project->getExecutionProductGroup(array(1, 2, 3));
+$result2 = $tester->project->getExecutionProductGroup(array(1));
+$result3 = $tester->project->getExecutionProductGroup(array(999));
+$result4 = $tester->project->getExecutionProductGroup(array());
+$result5 = $tester->project->getExecutionProductGroup(array(1, 999, 2));
 
-r($result1[11][0]) && p('') && e('1'); // 测试获取多个执行ID的产品分组，检查项目11的第一个产品
-r($result1[12][0]) && p('') && e('2'); // 测试获取多个执行ID的产品分组，检查项目12的第一个产品
-r(count($result2))  && p('') && e('1'); // 测试获取单个执行ID的产品分组，检查结果的项目数量
-r(count($result3))  && p('') && e('0'); // 测试传入空数组的情况，检查结果数量
-r(count($result4))  && p('') && e('0'); // 测试传入不存在执行ID的情况，检查结果数量
+r(count($result1[1])) && p('') && e('3'); // 传入多个执行ID,获取执行1的产品数量
+r(count($result1[2])) && p('') && e('2'); // 传入多个执行ID,获取执行2的产品数量
+r(count($result1[3])) && p('') && e('2'); // 传入多个执行ID,获取执行3的产品数量
+r(key($result1[1])) && p('') && e('1'); // 传入多个执行ID,获取执行1的第一个产品ID
+r(count($result2[1])) && p('') && e('3'); // 传入单个执行ID,检查执行1的产品数量
+r(count($result3)) && p('') && e('0'); // 传入不存在的执行ID,返回空数组
+r(count($result4)) && p('') && e('0'); // 传入空数组,返回空数组
+r(count($result5)) && p('') && e('2'); // 传入包含有效和无效执行ID的混合数组,检查返回的执行数量

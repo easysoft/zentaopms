@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getAssistants();
 timeout=0
-cid=0
+cid=15027
 
 - 执行aiTest模块的getAssistantsTest方法  @10
 - 执行aiTest模块的getAssistantsTest方法，参数是null, 'id_desc' 第10条的name属性 @助手10

@@ -5,7 +5,7 @@
 
 title=getModuleTreeList
 timeout=0
-cid=1
+cid=17111
 
 - 测试范围为system的模块树
  - 第0条的object属性 @application

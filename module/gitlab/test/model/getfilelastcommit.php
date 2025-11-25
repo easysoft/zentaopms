@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::getFileLastCommit();
 timeout=0
-cid=1
+cid=16650
 
 - 空的路径和分支 @0
 - 错误的分支 @0

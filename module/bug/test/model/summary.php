@@ -9,7 +9,7 @@ zenData('bug')->gen(20);
 
 title=bugModel->summary();
 timeout=0
-cid=1
+cid=15406
 
 - 测试获取bugID 1,2,3,4,5 的统计信息 @本页共 <strong>5</strong> 个Bug，未解决 <strong>5</strong>。
 

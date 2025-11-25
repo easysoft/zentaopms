@@ -5,7 +5,7 @@
 
 title=测试 programplanModel->getDataForGanttGroupByAssignedTo();
 timeout=0
-cid=0
+cid=17742
 
 - 测试获取阶段数据第0条的type属性 @group
 - 测试获取任务数据

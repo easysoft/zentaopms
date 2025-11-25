@@ -5,7 +5,7 @@
 
 title=测试 bugZen::getBranchOptions();
 timeout=0
-cid=0
+cid=15449
 
 - 执行$result @array
 - 执行$result @6

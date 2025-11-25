@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildIssueData();
 timeout=0
-cid=0
+cid=15814
 
 - 执行convertTest模块的buildIssueDataTest方法，参数是$fullData
  - 属性id @12345

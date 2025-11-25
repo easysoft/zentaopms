@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::deleteIssue();
 timeout=0
-cid=1
+cid=16643
 
 - 测试步骤1：删除存在的任务关联Issue @1
 - 测试步骤2：删除存在的Bug关联Issue @1

@@ -5,7 +5,7 @@
 
 title=测试 biModel::getTableFieldsMenu();
 timeout=0
-cid=0
+cid=15186
 
 - 测试正常调用返回数组类型 @array
 - 测试返回空数组的情况 @not_empty

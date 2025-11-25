@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getStories();
-cid=0
+cid=17518
 
 - 测试获取产品1 browseType为unclosed的需求数量 @2
 - 测试获取产品2 browseType为unclosed的需求数量 @2

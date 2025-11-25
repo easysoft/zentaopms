@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::importRunOfUnitResult();
 timeout=0
-cid=0
+cid=19200
 
 - 步骤1：正常导入测试运行数据 @success
 - 步骤2：测试不同参数的测试运行数据 @success

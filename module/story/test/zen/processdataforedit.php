@@ -5,70 +5,84 @@
 
 title=测试 storyZen::processDataForEdit();
 timeout=0
-cid=0
+cid=18700
 
-- 执行storyTest模块的processDataForEditTest方法，参数是1, $story1 属性linkStories @
-- 执行storyTest模块的processDataForEditTest方法，参数是2, $story2 属性linkRequirements @
-- 执行storyTest模块的processDataForEditTest方法，参数是3, $story3 属性status @changing
-- 执行storyTest模块的processDataForEditTest方法，参数是4, $story4
- - 属性plan @1
-- 执行storyTest模块的processDataForEditTest方法，参数是4, $story5 属性stagedBy @admin
+- 执行storyTest模块的processDataForEditTest方法，参数是4, $storyData, $oldStory 属性status @changing
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性plan @5
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性branch @0
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性stagedBy @admin
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性stagedBy @admin
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性stagedBy @admin
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性stagedBy @admin
+- 执行storyTest模块的processDataForEditTest方法，参数是1, $storyData, $oldStory 属性stagedBy @admin
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('story');
-$table->id->range('1-10');
-$table->type->range('story{5}, requirement{5}');
-$table->status->range('active{3}, changing{2}, draft{2}, closed{3}');
-$table->stage->range('wait{4}, planned{2}, testing{2}, tested{2}');
-$table->title->range('测试故事1, 测试需求1, 测试史诗1, 功能需求1, 性能需求1');
-$table->gen(10);
+$story = zenData('story');
+$story->id->range('1-10');
+$story->product->range('1');
+$story->title->range('需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10');
+$story->type->range('story{5},requirement{5}');
+$story->status->range('draft{3},changing{2},active{5}');
+$story->stage->range('wait{5},planned{5}');
+$story->version->range('1');
+$story->gen(10);
 
-// 3. 用户登录（选择合适角色）
+zenData('user')->gen(5);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+$storyTest = new storyZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 测试1：changing状态需求修改为draft时保持changing状态
+$storyData = new stdClass();
+$storyData->status = 'draft';
+$oldStory = array('id' => 4, 'type' => 'story', 'status' => 'changing', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(4, $storyData, $oldStory)) && p('status') && e('changing');
 
-// 清理全局变量
-unset($_POST);
-
-// 步骤1：测试story类型设置linkStories字段
-$story1 = new stdClass();
-$story1->type = 'story';
-$story1->status = 'active';
-r($storyTest->processDataForEditTest(1, $story1)) && p('linkStories') && e('');
-
-// 步骤2：测试requirement类型设置linkRequirements字段
-$story2 = new stdClass();
-$story2->type = 'requirement';
-$story2->status = 'active';
-r($storyTest->processDataForEditTest(2, $story2)) && p('linkRequirements') && e('');
-
-// 步骤3：测试changing状态保持不变
-$story3 = new stdClass();
-$story3->type = 'story';
-$story3->status = 'draft';
-r($storyTest->processDataForEditTest(3, $story3)) && p('status') && e('changing');
-
-// 步骤4：测试计划数组转换
-$_POST['plan'] = array('1', '2', '3');
-$story4 = new stdClass();
-$story4->type = 'story';
-$story4->status = 'active';
-r($storyTest->processDataForEditTest(4, $story4)) && p('plan') && e('1,2,3');
-
-// 步骤5：测试阶段变更设置stagedBy
+// 测试2：plan参数为数组时转换为字符串并去除首尾逗号
+$_POST['plan'] = array('', '5', '');
+$storyData = new stdClass();
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('plan') && e('5');
 unset($_POST['plan']);
-$story5 = new stdClass();
-$story5->type = 'story';
-$story5->status = 'active';
-$story5->stage = 'tested';
-r($storyTest->processDataForEditTest(4, $story5)) && p('stagedBy') && e('admin');
+
+// 测试3：branch参数为0时设置branch为0
+$_POST['branch'] = 0;
+$storyData = new stdClass();
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('branch') && e('0');
+unset($_POST['branch']);
+
+// 测试4：stage变更为tested时设置stagedBy为当前用户
+$storyData = new stdClass();
+$storyData->stage = 'tested';
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('stagedBy') && e('admin');
+
+// 测试5：stage变更为verified时设置stagedBy为当前用户
+$storyData = new stdClass();
+$storyData->stage = 'verified';
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('stagedBy') && e('admin');
+
+// 测试6：stage变更为released时设置stagedBy为当前用户
+$storyData = new stdClass();
+$storyData->stage = 'released';
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('stagedBy') && e('admin');
+
+// 测试7：stage变更为closed时设置stagedBy为当前用户
+$storyData = new stdClass();
+$storyData->stage = 'closed';
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('stagedBy') && e('admin');
+
+// 测试8：stage变更为rejected时设置stagedBy为当前用户
+$storyData = new stdClass();
+$storyData->stage = 'rejected';
+$oldStory = array('id' => 1, 'type' => 'story', 'status' => 'draft', 'stage' => 'wait');
+r($storyTest->processDataForEditTest(1, $storyData, $oldStory)) && p('stagedBy') && e('admin');

@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::appendTeamMember();
 timeout=0
-cid=0
+cid=16969
 
 - 步骤1：正常情况 @Array
 - 步骤2：空数组 @(

@@ -5,41 +5,38 @@
 
 title=测试 pivotZen::projectDeviation();
 timeout=0
-cid=0
+cid=17464
 
-- 步骤1：正常情况，不传递时间参数
- - 属性title @项目偏差表
- - 属性pivotName @项目偏差表
- - 属性currentMenu @projectdeviation
-- 步骤2：传递有效的开始时间和结束时间参数
- - 属性begin @2024-01-01
- - 属性end @2024-12-31
-- 步骤3：传递无效的时间格式参数属性begin @2025-09-01
-- 步骤4：传递空字符串时间参数验证数据获取
- - 属性hasExecutions @1
- - 属性sessionSet @1
-- 步骤5：传递未来时间参数验证处理
- - 属性begin @2030-01-01
- - 属性end @2030-12-31
+- 执行pivotTest模块的projectDeviationTest方法，参数是'', ''
+ - 属性begin @2025-11-01
+ - 属性end @2025-11-30
+- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-10-01', '2025-11-10'
+ - 属性begin @2025-10-01
+ - 属性end @2025-11-10
+- 执行pivotTest模块的projectDeviationTest方法，参数是'', ''
+ - 属性begin @2025-11-01
+ - 属性end @2025-11-30
+- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-10-15', ''
+ - 属性begin @2025-10-15
+ - 属性end @2025-11-30
+- 执行pivotTest模块的projectDeviationTest方法，参数是'', '2025-11-15'
+ - 属性begin @2025-11-01
+ - 属性end @2025-11-15
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-// 不生成复杂的数据，避免数据库错误影响测试
+zenData('task')->loadYaml('projectdeviation', false, 2)->gen(30);
+zenData('project')->loadYaml('projectdeviation', false, 2)->gen(6);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$pivotTest = new pivotTest();
+$pivotTest = new pivotZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($pivotTest->projectDeviationTest('', '')) && p('title,pivotName,currentMenu') && e('项目偏差表,项目偏差表,projectdeviation'); // 步骤1：正常情况，不传递时间参数
-r($pivotTest->projectDeviationTest('2024-01-01', '2024-12-31')) && p('begin,end') && e('2024-01-01,2024-12-31'); // 步骤2：传递有效的开始时间和结束时间参数
-r($pivotTest->projectDeviationTest('invalid-date', '2024-12-31')) && p('begin') && e('2025-09-01'); // 步骤3：传递无效的时间格式参数
-r($pivotTest->projectDeviationTest('', '')) && p('hasExecutions,sessionSet') && e('1,1'); // 步骤4：传递空字符串时间参数验证数据获取
-r($pivotTest->projectDeviationTest('2030-01-01', '2030-12-31')) && p('begin,end') && e('2030-01-01,2030-12-31'); // 步骤5：传递未来时间参数验证处理
+r($pivotTest->projectDeviationTest('', '')) && p('begin,end') && e('2025-11-01,2025-11-30');
+r($pivotTest->projectDeviationTest('2025-10-01', '2025-11-10')) && p('begin,end') && e('2025-10-01,2025-11-10');
+r($pivotTest->projectDeviationTest('', '')) && p('begin,end') && e('2025-11-01,2025-11-30');
+r($pivotTest->projectDeviationTest('2025-10-15', '')) && p('begin,end') && e('2025-10-15,2025-11-30');
+r($pivotTest->projectDeviationTest('', '2025-11-15')) && p('begin,end') && e('2025-11-01,2025-11-15');

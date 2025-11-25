@@ -1,0 +1,69 @@
+---
+title: 为assignCasesForBrowse方法提供模块数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 模块ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: root
+  note: 所属产品或项目
+  range: 1{5},2{3},3{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: branch
+  note: 分支ID
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 模块名称
+  range: '模块1,模块2,模块3,模块4,模块5,登录模块,注册模块,权限模块,导入模块,导出模块'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: parent
+  note: 父模块ID
+  range: '0{7},1{2},2{1}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 模块类型
+  range: 'case'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: grade
+  note: 模块级别
+  range: 1{7},2{2},3{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

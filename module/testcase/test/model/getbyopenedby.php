@@ -11,7 +11,7 @@ $caseData->loadYaml('openedby')->gen(10);
 
 title=测试 testcaseModel->getByOpenedBy();
 timeout=0
-cid=1
+cid=18978
 
 - 测试查询由 test1 创建的case信息
  - 第1条的title属性 @这个是测试用例1

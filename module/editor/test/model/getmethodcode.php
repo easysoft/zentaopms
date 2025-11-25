@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getMethodCode();
 timeout=0
-cid=0
+cid=16236
 
 - 测试步骤1：获取todo控制器create方法代码 @1
 - 测试步骤2：获取todo模型create方法代码 @1

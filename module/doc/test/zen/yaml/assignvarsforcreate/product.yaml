@@ -1,0 +1,24 @@
+title: product data for assignVarsForCreate test
+author: Claude
+version: 1.0
+
+fields:
+  - field: id
+    range: 1-5
+  - field: name
+    range: 1-5
+    prefix: 产品
+  - field: program
+    range: 1{3},2{2}
+  - field: line
+    range: 1{3},2{2}
+  - field: status
+    range: normal{4},closed
+  - field: PO
+    range: admin{3},user1{2}
+  - field: acl
+    range: open{3},private{2}
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: now

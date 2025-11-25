@@ -5,94 +5,49 @@
 
 title=测试 commonModel::apiError();
 timeout=0
-cid=0
+cid=15640
 
-200,Success
-600
-600
-600
-400,Bad Request
-
+- 执行commonTest模块的apiErrorTest方法，参数是null 属性code @600
+- 执行commonTest模块的apiErrorTest方法，参数是$validError
+ - 属性code @400
+ - 属性message @Bad Request
+- 执行commonTest模块的apiErrorTest方法，参数是$zeroCodeError 属性code @600
+- 执行commonTest模块的apiErrorTest方法，参数是$completeError
+ - 属性code @404
+ - 属性message @Not Found
+- 执行commonTest模块的apiErrorTest方法，参数是null 属性message @服务器错误
+- 执行commonTest模块的apiErrorTest方法，参数是$negativeCodeError
+ - 属性code @-1
+ - 属性message @Invalid
 
 */
 
-// 独立测试实现，直接测试apiError方法逻辑
-define('RUN_MODE', 'test');
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 模拟全局语言包
-$lang = new stdClass();
-$lang->error = new stdClass();
-$lang->error->httpServerError = 'HTTP Server Error';
+su('admin');
 
-// 复制apiError方法的逻辑进行测试
-function testApiError($result)
-{
-    global $lang;
+$commonTest = new commonModelTest();
 
-    if($result && isset($result->code) && $result->code) return $result;
+$validError = new stdclass;
+$validError->code = 400;
+$validError->message = 'Bad Request';
 
-    $error = new stdclass;
-    $error->code = 600;
-    $error->message = $lang->error->httpServerError;
-    return $error;
-}
+$zeroCodeError = new stdclass;
+$zeroCodeError->code = 0;
+$zeroCodeError->message = 'No Error';
 
-// 模拟ztf的测试辅助函数
-function r($result)
-{
-    global $_result;
-    $_result = $result;
-    return true;
-}
+$completeError = new stdclass;
+$completeError->code = 404;
+$completeError->message = 'Not Found';
 
-function p($keys = '', $delimiter = ',')
-{
-    global $_result;
-    if(empty($_result)) return print("0\n");
-    if($keys === '' || !is_array($_result) && !is_object($_result)) return print((string) $_result . "\n");
+$negativeCodeError = new stdclass;
+$negativeCodeError->code = -1;
+$negativeCodeError->message = 'Invalid';
 
-    if(is_object($_result)) $_result = (array) $_result;
-    if($keys === '') return print_r($_result);
-
-    $keys = explode($delimiter, $keys);
-    $output = array();
-    foreach($keys as $key)
-    {
-        if(empty($key)) continue;
-        if(isset($_result[$key])) {
-            $output[] = $_result[$key];
-        }
-    }
-    echo implode($delimiter, $output) . "\n";
-    return true;
-}
-
-function e($expect)
-{
-    // 简化的期望值处理
-    return true;
-}
-
-// 测试步骤1：传入有code属性的结果对象
-$validResult = new stdclass;
-$validResult->code = 200;
-$validResult->message = 'Success';
-r(testApiError($validResult)) && p('code,message') && e('200,Success');
-
-// 测试步骤2：传入null参数
-r(testApiError(null)) && p('code') && e('600');
-
-// 测试步骤3：传入空对象（无code属性）
-$emptyResult = new stdclass;
-r(testApiError($emptyResult)) && p('code') && e('600');
-
-// 测试步骤4：传入有code属性为0的结果对象
-$zeroCodeResult = new stdclass;
-$zeroCodeResult->code = 0;
-r(testApiError($zeroCodeResult)) && p('code') && e('600');
-
-// 测试步骤5：传入有效code属性（非0）的结果对象
-$errorResult = new stdclass;
-$errorResult->code = 400;
-$errorResult->message = 'Bad Request';
-r(testApiError($errorResult)) && p('code,message') && e('400,Bad Request');
+r($commonTest->apiErrorTest(null)) && p('code') && e('600');
+r($commonTest->apiErrorTest($validError)) && p('code,message') && e('400,Bad Request');
+r($commonTest->apiErrorTest($zeroCodeError)) && p('code') && e('600');
+r($commonTest->apiErrorTest($completeError)) && p('code,message') && e('404,Not Found');
+r($commonTest->apiErrorTest(null)) && p('message') && e('服务器错误');
+r($commonTest->apiErrorTest($negativeCodeError)) && p('code,message') && e('-1,Invalid');

@@ -9,7 +9,7 @@ zenData('case')->loadYaml('case')->gen(24);
 
 title=测试 testtaskModel->getAllLinkableCases();
 timeout=0
-cid=1
+cid=19163
 
 - 获取可关联到测试单 1 的用例，检查数量。 @5
 - 获取可关联到测试单 2 的用例，检查数量。 @10

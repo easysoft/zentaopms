@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getDocsByBrowseType();
-cid=1
+cid=16080
 
 - 测试空数据 @0
 - 获取类型为所有时，按照id倒序排列的文档

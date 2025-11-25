@@ -15,7 +15,7 @@ $result->gen(12);
 
 title=upgradeModel->processLinkStories();
 timeout=0
-cid=1
+cid=19543
 
 - 获取ID为1的关联关系。
  - 第1条的AType属性 @story

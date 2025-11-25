@@ -5,7 +5,7 @@
 
 title=测试 aiModel::filterPromptsForExecution();
 timeout=0
-cid=0
+cid=15024
 
 - 执行aiTest模块的filterPromptsForExecutionTest方法，参数是array  @0
 - 执行aiTest模块的filterPromptsForExecutionTest方法，参数是array  @1

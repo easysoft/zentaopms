@@ -5,7 +5,7 @@
 
 title=测试 apiModel::publishLib();
 timeout=0
-cid=0
+cid=15120
 
 - 执行apiTest模块的publishLibTest方法，参数是$formData1  @1
 - 执行apiTest模块的publishLibTest方法，参数是$formData2 第version条的0属性 @『版本号』不能为空。

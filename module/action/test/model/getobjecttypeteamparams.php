@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getObjectTypeTeamParams();
 timeout=0
-cid=0
+cid=14907
 
 - 步骤1：action对象有project属性 @project
 - 步骤2：action对象有execution属性 @execution

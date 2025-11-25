@@ -5,7 +5,7 @@
 
 title=测试productModel->fetchPairs();
 timeout=0
-cid=0
+cid=17538
 
 - 执行product模块的fetchPairsTest方法  @40
 - 执行product模块的fetchPairsTest方法，参数是'all'  @45

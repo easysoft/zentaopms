@@ -5,7 +5,7 @@
 
 title=测试 bugZen::responseAfterOperate();
 timeout=0
-cid=0
+cid=15474
 
 - 执行bugTest模块的responseAfterOperateTest方法，参数是1, array
  - 属性result @success

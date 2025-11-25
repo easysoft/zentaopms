@@ -5,50 +5,58 @@
 
 title=测试 repoZen::prepareCreateRepo();
 timeout=0
-cid=0
+cid=18151
 
-- 步骤1：正常情况测试属性name @test-repo
-- 步骤2：验证路径设置属性path @https://gitlabdev.qc.oop.cc/test-group/test-repo
-- 步骤3：服务主机为空 @0
-- 步骤4：命名空间为空 @0
-- 步骤5：版本库名称为空 @0
+- 执行result1 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$normalRepo, 'normal' 属性acl @{"acl":"open"}
+- 执行result2 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$aclErrorRepo, 'acl_error'  @0
+- 执行result3 = $repoZenTest模块的prepareCreateRepoTest方法，参数是null, 'normal'  @0
+- 执行result4 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$fullRepo, 'normal' 属性path @https://test.example.com/dev-group/full-test-repo
+- 执行acl) && strpos($result1模块的acl, 'open') !== false方法  @1
+- 执行acl) && json_decode($result4模块的acl) !== null方法  @1
+- 执行result5 = $repoZenTest模块的prepareCreateRepoTest方法，参数是$noAclRepo, 'normal' 属性name @no-acl-repo
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
-
-zendata('repo')->loadYaml('repo_preparecreaterepo', false, 2)->gen(5);
-zendata('pipeline')->loadYaml('pipeline_preparecreaterepo', false, 2)->gen(3);
+include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoZenTest = new repoZenTest();
 
-$validRepo = new stdclass();
-$validRepo->serviceHost = '1';
-$validRepo->namespace = 'test-group';
-$validRepo->name = 'test-repo';
+// 准备测试数据 - 正常的代码库对象
+$normalRepo = new stdclass();
+$normalRepo->name = 'test-repo';
+$normalRepo->acl = '{"acl":"open"}';
+$normalRepo->serviceHost = '1';
+$normalRepo->namespace = 'test-group';
+$normalRepo->SCM = 'Gitlab';
 
-$noServiceHostRepo = new stdclass();
-$noServiceHostRepo->namespace = 'test-group';
-$noServiceHostRepo->name = 'test-repo';
+// ACL错误场景的代码库对象
+$aclErrorRepo = new stdclass();
+$aclErrorRepo->name = 'test-repo-acl-error';
+$aclErrorRepo->acl = '{"acl":"custom","groups":[],"users":[]}';
+$aclErrorRepo->serviceHost = '1';
+$aclErrorRepo->namespace = 'test-group';
 
-$noNamespaceRepo = new stdclass();
-$noNamespaceRepo->serviceHost = '1';
-$noNamespaceRepo->name = 'test-repo';
+// 包含必要字段的完整代码库对象
+$fullRepo = new stdclass();
+$fullRepo->name = 'full-test-repo';
+$fullRepo->acl = '{"acl":"private"}';
+$fullRepo->serviceHost = '2';
+$fullRepo->namespace = 'dev-group';
+$fullRepo->SCM = 'Gitlab';
 
-$noNameRepo = new stdclass();
-$noNameRepo->serviceHost = '1';
-$noNameRepo->namespace = 'test-group';
+// 无ACL字段的代码库对象
+$noAclRepo = new stdclass();
+$noAclRepo->name = 'no-acl-repo';
+$noAclRepo->serviceHost = '1';
+$noAclRepo->namespace = 'no-acl-group';
 
-$invalidACLRepo = new stdclass();
-$invalidACLRepo->serviceHost = '1';
-$invalidACLRepo->namespace = 'test-group';
-$invalidACLRepo->name = 'test-repo';
-
-r($repoTest->prepareCreateRepoTest($validRepo)) && p('name') && e('test-repo'); // 步骤1：正常情况测试
-r($repoTest->prepareCreateRepoTest($validRepo)) && p('path') && e('https://gitlabdev.qc.oop.cc/test-group/test-repo'); // 步骤2：验证路径设置
-r($repoTest->prepareCreateRepoTest($noServiceHostRepo)) && p() && e('0'); // 步骤3：服务主机为空
-r($repoTest->prepareCreateRepoTest($noNamespaceRepo)) && p() && e('0'); // 步骤4：命名空间为空
-r($repoTest->prepareCreateRepoTest($noNameRepo)) && p() && e('0'); // 步骤5：版本库名称为空
+r($result1 = $repoZenTest->prepareCreateRepoTest($normalRepo, 'normal')) && p('acl') && e('{"acl":"open"}');
+r($result2 = $repoZenTest->prepareCreateRepoTest($aclErrorRepo, 'acl_error')) && p() && e('0');
+r($result3 = $repoZenTest->prepareCreateRepoTest(null, 'normal')) && p() && e('0');
+r($result4 = $repoZenTest->prepareCreateRepoTest($fullRepo, 'normal')) && p('path') && e('https://test.example.com/dev-group/full-test-repo');
+r(is_object($result1) && isset($result1->acl) && strpos($result1->acl, 'open') !== false) && p() && e('1');
+r(is_object($result4) && isset($result4->acl) && json_decode($result4->acl) !== null) && p() && e('1');
+r($result5 = $repoZenTest->prepareCreateRepoTest($noAclRepo, 'normal')) && p('name') && e('no-acl-repo');

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getResearchStageStats();
 timeout=0
-cid=0
+cid=19464
 
 - 步骤1：获取调研阶段统计数据，期望返回3个元素 @3
 - 步骤2：验证第一个元素的type属性第0条的type属性 @stage

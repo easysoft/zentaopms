@@ -5,7 +5,7 @@
 
 title=测试 ssoModel::checkKey();
 timeout=0
-cid=0
+cid=18402
 
 - 步骤1：SSO功能未开启 @0
 - 步骤2：密钥为空 @0

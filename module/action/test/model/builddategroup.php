@@ -5,7 +5,7 @@
 
 title=测试 actionModel::buildDateGroup();
 timeout=0
-cid=0
+cid=14878
 
 - 执行actionTest模块的buildDateGroupTest方法，参数是$emptyActions 属性dateCount @0
 - 执行actionTest模块的buildDateGroupTest方法，参数是$singleAction 属性dateCount @1

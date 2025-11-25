@@ -5,7 +5,7 @@
 
 title=测试 actionModel::getTrashObjectTypes();
 timeout=0
-cid=0
+cid=14913
 
 - 步骤1：正常查询可恢复删除类型(extra=1) @0
 - 步骤2：正常查询隐藏删除类型(extra=2)第testcase条的objectType属性 @testcase

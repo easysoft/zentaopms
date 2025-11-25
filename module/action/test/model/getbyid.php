@@ -10,7 +10,7 @@ zenData('action')->loadYaml('action')->gen(5);
 
 title=测试 actionModel->getById();
 timeout=0
-cid=1
+cid=14890
 
 - 测试获取动态1的信息
  - 属性objectType @product

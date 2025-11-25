@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 releaseModel->getReleasedBuilds();
 timeout=0
-cid=1
+cid=17999
 
 - branch为'all'时数据查询查询属性1 @0
 - branch为'0'时数据查询查询属性1 @0

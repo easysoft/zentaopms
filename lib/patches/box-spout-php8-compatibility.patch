@@ -1,0 +1,284 @@
+diff --git a/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php b/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
+index 0c35e8572a9..f8727c3ca44 100644
+--- a/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/CSV/RowIterator.php
+@@ -84,6 +84,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->rewindAndSkipBom();
+@@ -114,6 +115,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return ($this->filePointer && !$this->hasReachedEndOfFile);
+@@ -126,6 +128,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\EncodingConversionException If unable to convert data to UTF-8
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         $this->hasReachedEndOfFile = $this->globalFunctionsHelper->feof($this->filePointer);
+@@ -224,6 +227,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row|null
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->rowBuffer;
+@@ -235,6 +239,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->numReadRows;
+diff --git a/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
+index da675221a06..42bc0999e69 100644
+--- a/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/CSV/SheetIterator.php
+@@ -30,6 +30,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->hasReadUniqueSheet = false;
+@@ -41,6 +42,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return (!$this->hasReadUniqueSheet);
+@@ -52,6 +54,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         $this->hasReadUniqueSheet = true;
+@@ -63,6 +66,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\CSV\Sheet
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->sheet;
+@@ -74,6 +78,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return 1;
+diff --git a/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php b/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
+index 0cd87759e39..2fbdd5e043c 100644
+--- a/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/ODS/RowIterator.php
+@@ -118,6 +118,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Reader\Exception\IteratorNotRewindableException If the iterator is rewound more than once
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         // Because sheet and row data is located in the file, we can't rewind both the
+@@ -142,6 +143,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return (!$this->hasReachedEndOfFile);
+@@ -155,6 +157,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         if ($this->doesNeedDataForNextRowToBeProcessed()) {
+@@ -356,6 +359,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->rowBuffer;
+@@ -367,6 +371,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->lastRowIndexProcessed;
+diff --git a/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
+index 6d5a0fcb2ef..0a070f9c007 100644
+--- a/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/ODS/SheetIterator.php
+@@ -79,6 +79,7 @@ class SheetIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to open the XML file containing sheets' data
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->xmlReader->close();
+@@ -131,6 +132,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return $this->hasFoundSheet;
+@@ -142,6 +144,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         $this->hasFoundSheet = $this->xmlReader->readUntilNodeFound(self::XML_NODE_TABLE);
+@@ -157,6 +160,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\ODS\Sheet
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         $escapedSheetName = $this->xmlReader->getAttribute(self::XML_ATTRIBUTE_TABLE_NAME);
+@@ -214,6 +218,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->currentSheetIndex + 1;
+diff --git a/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php b/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
+index 8551d756c17..9e782f7cdec 100644
+--- a/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
++++ b/vendor/box/spout/src/Spout/Reader/Wrapper/XMLReader.php
+@@ -83,6 +83,7 @@ class XMLReader extends \XMLReader
+      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
+      * @return bool TRUE on success or FALSE on failure
+      */
++    #[\ReturnTypeWillChange]
+     public function read()
+     {
+         $this->useXMLInternalErrors();
+@@ -119,6 +120,7 @@ class XMLReader extends \XMLReader
+      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
+      * @return bool TRUE on success or FALSE on failure
+      */
++    #[\ReturnTypeWillChange]
+     public function next($localName = null)
+     {
+         $this->useXMLInternalErrors();
+diff --git a/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php b/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
+index cafe72e2348..14dd4f0f13c 100644
+--- a/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/XLSX/RowIterator.php
+@@ -139,6 +139,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If the sheet data XML cannot be read
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->xmlReader->close();
+@@ -163,6 +164,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return (!$this->hasReachedEndOfFile);
+@@ -176,6 +178,7 @@ class RowIterator implements IteratorInterface
+      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         $this->nextRowIndexToBeProcessed++;
+@@ -374,6 +377,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return Row|null
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         $rowToBeProcessed = $this->rowBuffer;
+@@ -399,6 +403,7 @@ class RowIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         // TODO: This should return $this->nextRowIndexToBeProcessed
+diff --git a/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php b/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
+index e79a2cda95f..602370f2354 100644
+--- a/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
++++ b/vendor/box/spout/src/Spout/Reader/XLSX/SheetIterator.php
+@@ -38,6 +38,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function rewind()
+     {
+         $this->currentSheetIndex = 0;
+@@ -49,6 +50,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return bool
+      */
++    #[\ReturnTypeWillChange]
+     public function valid()
+     {
+         return ($this->currentSheetIndex < \count($this->sheets));
+@@ -60,6 +62,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return void
+      */
++    #[\ReturnTypeWillChange]
+     public function next()
+     {
+         // Using isset here because it is way faster than array_key_exists...
+@@ -77,6 +80,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return \Box\Spout\Reader\XLSX\Sheet
+      */
++    #[\ReturnTypeWillChange]
+     public function current()
+     {
+         return $this->sheets[$this->currentSheetIndex];
+@@ -88,6 +92,7 @@ class SheetIterator implements IteratorInterface
+      *
+      * @return int
+      */
++    #[\ReturnTypeWillChange]
+     public function key()
+     {
+         return $this->currentSheetIndex + 1;

@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiCreateBranch();
 timeout=0
-cid=1
+cid=16573
 
 - 使用空的gitlabID,projectID,分支对象创建GitLab分支 @return false
 - 使用空的gitlabID、projectID,正确的分支对象创建GitLab分支 @return null

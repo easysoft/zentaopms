@@ -10,7 +10,7 @@ zenData('dept')->loadYaml('dept')->gen(13);
 
 title=测试 deptModel->getSons();
 timeout=0
-cid=1
+cid=15976
 
 - 有子部门查询
  - 第0条的name属性 @一级部门8

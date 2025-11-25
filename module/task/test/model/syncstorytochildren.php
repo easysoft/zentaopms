@@ -5,7 +5,7 @@
 
 title=taskModel->syncStoryToChildren();
 timeout=0
-cid=0
+cid=18845
 
 - 同步任务 id 1 的需求 2 到其未关联需求的子任务 @6:1;7:0
 - 同步任务 id 2 的需求 3 到其未关联需求的子任务 @8:2;9:2

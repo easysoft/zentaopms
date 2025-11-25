@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::getLatestMiniPrograms();
 timeout=0
-cid=0
+cid=15085
 
 - 步骤1：正常情况获取最新小程序总数 @15
 - 步骤2：排序测试（按发布时间倒序，最新的是test）第18条的name属性 @test

@@ -12,7 +12,7 @@ function initData ()
 
 title=测试 todoTao::buildCycleTodo();
 timeout=0
-cid=1
+cid=19268
 
 - 根据待办数据构建一个周期待办数据，验证name,type,status字段的结果为：我的待办,cycle,wait
  - 属性name @我的待办

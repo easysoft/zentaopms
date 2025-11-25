@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->insertProjectSpec()
-cid=0
+cid=17777
 
 - 传入空参数 @0
 - 检查插入的spec数据。

@@ -5,7 +5,7 @@
 
 title=测试 cronModel->update();
 timeout=0
-cid=1
+cid=15888
 
 - 命令为空时候返回值属性command @『命令』不能为空。
 - 更新之后对比更新数据信息

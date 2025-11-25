@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->batchUnlinkStory();
 timeout=0
-cid=1
+cid=17981
 
 - 测试发布ID为空时，解除跟需求ID=1,2的关联 @0
 - 测试发布ID=1时，解除跟需求ID=1,2的关联

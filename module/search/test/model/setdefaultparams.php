@@ -5,7 +5,7 @@
 
 title=测试 searchModel->setDefaultParams();
 timeout=0
-cid=1
+cid=18310
 
 - 测试设置 products 的默认参数 @1,2,3,4,5,6,7,8,9,10,null
 

@@ -5,7 +5,7 @@
 
 title=测试 devModel::setField();
 timeout=0
-cid=0
+cid=16019
 
 - 执行devTest模块的setFieldTest方法，参数是$enumField, $enumRawField, 'enum', 4
  - 第options条的enum属性 @open

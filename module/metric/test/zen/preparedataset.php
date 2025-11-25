@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareDataset();
 timeout=0
-cid=0
+cid=17199
 
 - 执行metricZenTest模块的prepareDatasetZenTest方法，参数是$calcGroup1 属性type @statement
 - 执行$result2) ? 'object' : $result2 @object

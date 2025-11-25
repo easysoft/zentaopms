@@ -7,27 +7,23 @@ title=测试 testcaseZen::getBrowseBranch();
 timeout=0
 cid=0
 
-- 步骤1：空字符串时返回cookie中的preBranch @test_branch
-- 步骤2：非空字符串直接返回 @main
-- 步骤3：空字符串且preBranch也为空时返回0 @0
-- 步骤4：另一个非空字符串测试 @develop
-- 步骤5：包含特殊字符的分支名 @feature/test
+- 步骤1:传入正常分支名称 @branch1
+- 步骤2:传入空字符串且preBranch为branch2 @branch2
+- 步骤3:传入空字符串且preBranch为空 @0
+- 步骤4:传入有效分支名称忽略preBranch @main
+- 步骤5:传入分支名称为0 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseZenTest = new testcaseZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($testcaseTest->getBrowseBranchTest('', 'test_branch')) && p() && e('test_branch'); // 步骤1：空字符串时返回cookie中的preBranch
-r($testcaseTest->getBrowseBranchTest('main', 'test_branch')) && p() && e('main'); // 步骤2：非空字符串直接返回
-r($testcaseTest->getBrowseBranchTest('', '')) && p() && e('0'); // 步骤3：空字符串且preBranch也为空时返回0
-r($testcaseTest->getBrowseBranchTest('develop', 'test_branch')) && p() && e('develop'); // 步骤4：另一个非空字符串测试
-r($testcaseTest->getBrowseBranchTest('feature/test', 'test_branch')) && p() && e('feature/test'); // 步骤5：包含特殊字符的分支名
+r($testcaseZenTest->getBrowseBranchTest('branch1', 'default')) && p() && e('branch1'); // 步骤1:传入正常分支名称
+r($testcaseZenTest->getBrowseBranchTest('', 'branch2')) && p() && e('branch2'); // 步骤2:传入空字符串且preBranch为branch2
+r($testcaseZenTest->getBrowseBranchTest('', '')) && p() && e('0'); // 步骤3:传入空字符串且preBranch为空
+r($testcaseZenTest->getBrowseBranchTest('main', 'ignored')) && p() && e('main'); // 步骤4:传入有效分支名称忽略preBranch
+r($testcaseZenTest->getBrowseBranchTest('0', 'default')) && p() && e('0'); // 步骤5:传入分支名称为0

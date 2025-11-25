@@ -4,7 +4,7 @@
 
 title=测试 storyModel->update();
 timeout=0
-cid=0
+cid=18593
 
 - 编辑需求，判断返回的信息
  - 属性title @编辑后的名称1

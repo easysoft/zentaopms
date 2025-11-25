@@ -5,7 +5,7 @@
 
 title=测试 devModel::trimSpace();
 timeout=0
-cid=0
+cid=16021
 
 - 执行devTest模块的trimSpaceTest方法，参数是'* test '  @test
 - 执行devTest模块的trimSpaceTest方法，参数是" \t\n\r * hello world \t\n\r "  @hello world

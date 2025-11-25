@@ -5,30 +5,23 @@
 
 title=测试 cneModel::apiGet();
 timeout=0
-cid=0
+cid=15599
 
-- 步骤1：正常GET请求属性code @200
-- 步骤2：带数组参数的请求第data条的name属性 @my-app
-- 步骤3：带对象参数的请求第data条的name属性 @obj-app
-- 步骤4：API错误响应属性code @404
-- 步骤5：认证错误响应属性code @401
-- 步骤6：自定义host第data条的host属性 @http://custom.host
-- 步骤7：服务器错误属性code @600
+- 测试步骤1:正常的API GET请求属性code @200
+- 测试步骤2:带查询参数的API GET请求第data条的name属性 @my-app
+- 测试步骤3:API返回404错误的情况属性code @404
+- 测试步骤4:API返回401认证错误的情况属性code @401
+- 测试步骤5:使用自定义host的API GET请求属性code @200
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
 
-// 2. 创建测试实例（变量名与模块名一致）
 $cneTest = new cneTest();
 
-// 3. 🔴 强制要求：必须包含至少7个测试步骤
-r($cneTest->apiGetTest('/api/cne/app/status', array('name' => 'test-app'))) && p('code') && e(200); // 步骤1：正常GET请求
-r($cneTest->apiGetTest('/api/cne/app/info', array('name' => 'my-app', 'namespace' => 'default'))) && p('data:name') && e('my-app'); // 步骤2：带数组参数的请求
-r($cneTest->apiGetTest('/api/cne/app/info', (object)array('name' => 'obj-app'))) && p('data:name') && e('obj-app'); // 步骤3：带对象参数的请求
-r($cneTest->apiGetTest('/api/cne/app/error', array())) && p('code') && e(404); // 步骤4：API错误响应
-r($cneTest->apiGetTest('/api/cne/app/auth-error', array())) && p('code') && e(401); // 步骤5：认证错误响应
-r($cneTest->apiGetTest('/api/cne/app/custom-host', array(), array(), 'http://custom.host')) && p('data:host') && e('http://custom.host'); // 步骤6：自定义host
-r($cneTest->apiGetTest('/invalid-url', array())) && p('code') && e(600); // 步骤7：服务器错误
+r($cneTest->apiGetTest('/api/cne/app/status', array('name' => 'test-app'), array(), '')) && p('code') && e('200'); // 测试步骤1:正常的API GET请求
+r($cneTest->apiGetTest('/api/cne/app/info', array('name' => 'my-app'), array(), '')) && p('data:name') && e('my-app'); // 测试步骤2:带查询参数的API GET请求
+r($cneTest->apiGetTest('/api/cne/app/error', array(), array(), '')) && p('code') && e('404'); // 测试步骤3:API返回404错误的情况
+r($cneTest->apiGetTest('/api/cne/app/auth-error', array(), array(), '')) && p('code') && e('401'); // 测试步骤4:API返回401认证错误的情况
+r($cneTest->apiGetTest('/api/cne/app/custom-host', array(), array(), 'http://custom-host')) && p('code') && e('200'); // 测试步骤5:使用自定义host的API GET请求

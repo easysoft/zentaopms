@@ -5,7 +5,7 @@
 
 title=测试 webhookModel::saveLog();
 timeout=0
-cid=0
+cid=19704
 
 - 执行webhookTest模块的saveLogTest方法，参数是$webhook1, 101, 'test data', 'test result'
  - 属性objectType @webhook

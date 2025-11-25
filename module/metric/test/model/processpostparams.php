@@ -5,7 +5,7 @@
 
 title=processPostParams
 timeout=0
-cid=1
+cid=17150
 
 - 传入varName1和queryValue1
  - 属性var1 @query1

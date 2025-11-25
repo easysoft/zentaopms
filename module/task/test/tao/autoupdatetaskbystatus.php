@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskTao->autoUpdateTaskByStatus();
-cid=0
+cid=18860
 
 - 执行task模块的autoUpdateTaskByStatusTest方法，参数是$parentTask, $childTask, 'done'
  - 属性status @done
@@ -64,7 +64,9 @@ su('user4');
 
 $task = new taskTest();
 
-zenData('task')->gen(10);
+$taskTable = zenData('task');
+$taskTable->story->range(0);
+$taskTable->gen(10);
 
 $parentTask = new stdclass();
 $parentTask->id         = 1;

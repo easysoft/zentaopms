@@ -8,7 +8,7 @@ zenData('company')->gen(1);
 
 title=测试 commonModel::setApproval();
 timeout=0
-cid=1
+cid=15709
 
 - 查看开源版是否开启了审批流程 @0
 - 查看企业版是否开启了审批流程 @1

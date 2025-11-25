@@ -5,7 +5,7 @@
 
 title=测试 mrModel::apiGetMRCommits();
 timeout=0
-cid=0
+cid=17229
 
 - 正确的Gitlab合并请求
  - 属性short_id @59b9ec0f

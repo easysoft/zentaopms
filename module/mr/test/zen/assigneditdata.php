@@ -7,81 +7,112 @@ title=测试 mrZen::assignEditData();
 timeout=0
 cid=0
 
-- 步骤1：gitlab类型正常情况属性title @编辑合并请求
-- 步骤2：gitea类型正常情况属性title @编辑合并请求
-- 步骤3：gogs类型且不同项目属性title @编辑合并请求
-- 步骤4：空MR对象 @0
-- 步骤5：空SCM类型 @0
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR1, 'gitlab' 属性title @编辑合并请求
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR2, 'gitlab' 第MR条的canDeleteBranch属性 @1
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR3, 'gitlab' 第MR条的canDeleteBranch属性 @1
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR4, 'gitea' 属性title @编辑合并请求
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR5, 'gogs' 属性title @编辑合并请求
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR6, 'gitlab' 第MR条的canDeleteBranch属性 @1
+- 执行mrTest模块的assignEditDataTest方法，参数是$MR7, 'gitlab' 属性repo @~~
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备
-$mrTable = zenData('mr');
-$mrTable->id->range('1-5');
-$mrTable->hostID->range('1-3');
-$mrTable->sourceProject->range('1-10');
-$mrTable->sourceBranch->range('feature-branch,develop,test-branch');
-$mrTable->targetProject->range('1-10');
-$mrTable->targetBranch->range('master,main,develop');
-$mrTable->repoID->range('1-5');
-$mrTable->gen(5);
+global $app;
+$app->setMethodName('edit');
 
-$repoTable = zenData('repo');
-$repoTable->id->range('1-5');
-$repoTable->SCM->range('Gitlab,Gitea,Gogs');
-$repoTable->serviceHost->range('1-3');
-$repoTable->serviceProject->range('1-10');
-$repoTable->gen(5);
+zenData('mr')->gen(0);
+zenData('repo')->gen(0);
+zenData('job')->gen(0);
+zenData('user')->gen(10);
 
-$jobTable = zenData('job');
-$jobTable->id->range('1-5');
-$jobTable->name->range('Test Job 1,Build Job,Deploy Job');
-$jobTable->repo->range('1-5');
-$jobTable->gen(5);
-
-$userTable = zenData('user');
-$userTable->account->range('admin,user1,user2,user3');
-$userTable->realname->range('管理员,用户1,用户2,用户3');
-$userTable->password->range('123456{4}');
-$userTable->role->range('admin,user{3}');
-$userTable->gen(4);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$mrTest = new mrTest();
+$mrTest = new mrZenTest();
 
-// 构造测试MR对象
-$validMR = new stdclass();
-$validMR->id = 1;
-$validMR->hostID = 1;
-$validMR->sourceProject = 3;
-$validMR->sourceBranch = 'feature-branch';
-$validMR->targetProject = 3;
-$validMR->targetBranch = 'master';
-$validMR->repoID = 1;
-$validMR->canDeleteBranch = true;
+// 准备测试数据1:gitlab类型MR,有repoID,源项目和目标项目相同
+$MR1 = new stdclass();
+$MR1->id = 1;
+$MR1->hostID = 1;
+$MR1->sourceProject = 100;
+$MR1->targetProject = 100;
+$MR1->sourceBranch = 'feature-branch';
+$MR1->targetBranch = 'main';
+$MR1->repoID = 0;
+$MR1->mriid = 1;
 
-$validMRWithDifferentProjects = new stdclass();
-$validMRWithDifferentProjects->id = 2;
-$validMRWithDifferentProjects->hostID = 1;
-$validMRWithDifferentProjects->sourceProject = 3;
-$validMRWithDifferentProjects->sourceBranch = 'develop';
-$validMRWithDifferentProjects->targetProject = 5;
-$validMRWithDifferentProjects->targetBranch = 'main';
-$validMRWithDifferentProjects->repoID = 2;
-$validMRWithDifferentProjects->canDeleteBranch = true;
+// 准备测试数据2:gitlab类型MR,有repoID,源项目和目标项目相同
+$MR2 = new stdclass();
+$MR2->id = 2;
+$MR2->hostID = 1;
+$MR2->sourceProject = 200;
+$MR2->targetProject = 200;
+$MR2->sourceBranch = 'dev-branch';
+$MR2->targetBranch = 'master';
+$MR2->repoID = 0;
+$MR2->mriid = 2;
 
-$emptyMR = new stdclass();
+// 准备测试数据3:gitlab类型MR,有repoID,源项目和目标项目不同
+$MR3 = new stdclass();
+$MR3->id = 3;
+$MR3->hostID = 1;
+$MR3->sourceProject = 300;
+$MR3->targetProject = 301;
+$MR3->sourceBranch = 'feature-x';
+$MR3->targetBranch = 'main';
+$MR3->repoID = 0;
+$MR3->mriid = 3;
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($mrTest->assignEditDataTest($validMR, 'gitlab')) && p('title') && e('编辑合并请求'); // 步骤1：gitlab类型正常情况
-r($mrTest->assignEditDataTest($validMR, 'gitea')) && p('title') && e('编辑合并请求'); // 步骤2：gitea类型正常情况  
-r($mrTest->assignEditDataTest($validMRWithDifferentProjects, 'gogs')) && p('title') && e('编辑合并请求'); // 步骤3：gogs类型且不同项目
-r($mrTest->assignEditDataTest($emptyMR, 'gitlab')) && p() && e('0'); // 步骤4：空MR对象
-r($mrTest->assignEditDataTest($validMR, '')) && p() && e('0'); // 步骤5：空SCM类型
+// 准备测试数据4:gitea类型MR
+$MR4 = new stdclass();
+$MR4->id = 4;
+$MR4->hostID = 2;
+$MR4->sourceProject = '400';
+$MR4->targetProject = '400';
+$MR4->sourceBranch = 'feature-y';
+$MR4->targetBranch = 'develop';
+$MR4->repoID = 0;
+$MR4->mriid = 4;
+
+// 准备测试数据5:gogs类型MR
+$MR5 = new stdclass();
+$MR5->id = 5;
+$MR5->hostID = 3;
+$MR5->sourceProject = '500';
+$MR5->targetProject = '500';
+$MR5->sourceBranch = 'hotfix';
+$MR5->targetBranch = 'master';
+$MR5->repoID = 0;
+$MR5->mriid = 5;
+
+// 准备测试数据6:MR没有repoID
+$MR6 = new stdclass();
+$MR6->id = 6;
+$MR6->hostID = 1;
+$MR6->sourceProject = 600;
+$MR6->targetProject = 600;
+$MR6->sourceBranch = 'test-branch';
+$MR6->targetBranch = 'main';
+$MR6->repoID = 0;
+$MR6->mriid = 6;
+
+// 准备测试数据7:gitlab类型MR,源项目和目标项目不同,无repoID
+$MR7 = new stdclass();
+$MR7->id = 7;
+$MR7->hostID = 1;
+$MR7->sourceProject = 700;
+$MR7->targetProject = 701;
+$MR7->sourceBranch = 'release';
+$MR7->targetBranch = 'production';
+$MR7->repoID = 0;
+$MR7->mriid = 7;
+
+r($mrTest->assignEditDataTest($MR1, 'gitlab')) && p('title') && e('编辑合并请求');
+r($mrTest->assignEditDataTest($MR2, 'gitlab')) && p('MR:canDeleteBranch') && e('1');
+r($mrTest->assignEditDataTest($MR3, 'gitlab')) && p('MR:canDeleteBranch') && e('1');
+r($mrTest->assignEditDataTest($MR4, 'gitea')) && p('title') && e('编辑合并请求');
+r($mrTest->assignEditDataTest($MR5, 'gogs')) && p('title') && e('编辑合并请求');
+r($mrTest->assignEditDataTest($MR6, 'gitlab')) && p('MR:canDeleteBranch') && e('1');
+r($mrTest->assignEditDataTest($MR7, 'gitlab')) && p('repo') && e('~~');

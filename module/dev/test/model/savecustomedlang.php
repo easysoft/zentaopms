@@ -9,7 +9,7 @@ zenData('config')->gen(0);
 
 title=测试 devModel']']saveCustomedLang();
 timeout=0
-cid=1
+cid=16018
 
 - 自定义公共语言项 @产品2|项目2|迭代2|用需2|软需2
 - 自定义一级菜单语言项 @我的地盘

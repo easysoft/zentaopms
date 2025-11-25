@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 testtaskModel->activate();
 timeout=0
-cid=1
+cid=19152
 
 - 测试单 ID 为 0 返回 false。 @0
 - 测试单 ID 为空字符串返回 false。 @0

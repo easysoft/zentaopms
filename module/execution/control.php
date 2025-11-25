@@ -764,6 +764,7 @@ class execution extends control
      * Browse test tasks of execution.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -771,7 +772,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -787,7 +788,7 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', 'product_asc,' . $sort, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', 'product_asc,' . $sort, $pager);
 
         $this->executionZen->assignTesttaskVars($tasks);
 
@@ -795,11 +796,12 @@ class execution extends control
         $this->view->execution     = $execution;
         $this->view->project       = $this->loadModel('project')->getByID($execution->project);
         $this->view->executionID   = $executionID;
+        $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->products      = $this->loadModel('product')->getPairs('', 0);
+        $this->view->products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         $this->view->canBeChanged  = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -2504,7 +2506,7 @@ class execution extends control
         $this->view->executionID  = $object->id;
         $this->view->projectID    = $object->id;
         $this->view->storyType    = $storyType;
-        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs($productPairs);
+        if($this->config->edition == 'ipd') $this->view->roadmaps = $this->loadModel('roadmap')->getPairs(array_keys($productPairs));
 
         $this->display();
     }
@@ -3041,6 +3043,7 @@ class execution extends control
      */
     public function export(string $status, int $productID, string $orderBy, string $from)
     {
+        $lowerStatus = strtolower($status);
         if($_POST)
         {
             $executionLang          = $this->lang->execution;
@@ -3067,10 +3070,10 @@ class execution extends control
 
             $users    = $this->loadModel('user')->getPairs('noletter');
             $showTask = ($this->app->tab == 'project' && (bool)$this->cookie->showTask);
-            if($showTask && strtolower($status) == 'bysearch')
+            if($showTask && $lowerStatus == 'bysearch')
             {
                 $executionIdList = $this->loadModel('programplan')->getStageList($projectID, $productID, 'all', 'order');
-                $tasks = $this->programplan->getGanttTasks($projectID, array_keys($executionIdList), strtolower($status), 0, null);
+                $tasks = $this->programplan->getGanttTasks($projectID, array_keys($executionIdList), $lowerStatus, 0, null);
                 $executionTasks  = array();
                 $executionIdList = array();
                 foreach($tasks as $task)
@@ -3085,7 +3088,7 @@ class execution extends control
             }
             else
             {
-                $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, (bool)$showTask, 'withchild', $orderBy);
+                $executionStats = $this->execution->getStatData($projectID, $lowerStatus == 'byproduct' ? 'all' : $status, $productID, 0, (bool)$showTask, 'withchild', $orderBy);
             }
             $executionStats = $this->flattenObjectArray($executionStats);
 
@@ -3149,7 +3152,7 @@ class execution extends control
             $fileName = $project->name . ' - ' . $executionConcept;
         }
 
-        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
+        if($lowerStatus != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? zget($this->lang->execution, $status, '') : zget($this->lang->execution->statusList, $status, '')) . $executionConcept;
         $this->view->fileName = !empty($fileName) ? $fileName : $executionConcept;
         $this->display();
     }

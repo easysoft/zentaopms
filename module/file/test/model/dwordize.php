@@ -5,7 +5,7 @@
 
 title=测试 fileModel::dwordize();
 timeout=0
-cid=0
+cid=16498
 
 - 步骤1：最大RGB值 @16777215
 - 步骤2：全零值 @0

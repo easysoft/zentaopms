@@ -18,7 +18,7 @@ zenData('bug')->gen(0);
 
 title=测试 kanbanModel->getExecutionKanban();
 timeout=0
-cid=1
+cid=16916
 
 - 测试获取execution2的执行看板信息 @columns:0, lanes:0, cards:0
 

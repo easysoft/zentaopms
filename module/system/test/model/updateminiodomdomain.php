@@ -5,7 +5,7 @@
 
 title=测试 systemModel::updateMinioDomain();
 timeout=0
-cid=0
+cid=18751
 
 - 执行systemTest模块的updateMinioDomainTest方法  @0
 - 执行systemTest模块的updateMinioDomainTest方法  @0

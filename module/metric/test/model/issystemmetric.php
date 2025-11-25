@@ -5,7 +5,7 @@
 
 title=isSystemMetric
 timeout=0
-cid=1
+cid=17143
 
 - 测试records[1]是否是系统度量项 @1
 - 测试records[2]是否是系统度量项 @0

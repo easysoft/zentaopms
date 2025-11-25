@@ -5,7 +5,7 @@
 
 title=productpanModel->updateStatus();
 timeout=0
-cid=1
+cid=17653
 
 - 修改状态为doing
  - 属性id @1

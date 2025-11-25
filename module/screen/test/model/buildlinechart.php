@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildLineChart();
 timeout=0
-cid=0
+cid=18212
 
 - 步骤1：无settings默认配置返回key @LineCommon
 - 步骤2：空settings处理返回key @LineCommon

@@ -25,7 +25,7 @@ su('admin');
 
 title=测试 kanbanModel->getKanban4Group();
 timeout=0
-cid=1
+cid=16921
 
 - 查看执行1按需求的优先级分组的泳道
  - 第0条的id属性 @pri0

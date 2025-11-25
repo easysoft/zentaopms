@@ -4,7 +4,7 @@
 
 title=测试 chartModel::processChart();
 timeout=0
-cid=1
+cid=15580
 
 - 测试解密langs字段第langs[name]条的zh-cn属性 @项目名称
 - 测试解密filters字段第filters[0]条的field属性 @closedDate

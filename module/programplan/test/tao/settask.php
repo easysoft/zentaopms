@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->setTask()
-cid=0
+cid=17781
 
 - 传入空数据，检查datas数据。 @0
 - 传入空数据，检查stageIndex数据。 @0

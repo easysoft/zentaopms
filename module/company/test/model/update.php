@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试companyModel->update();
-cid=1
+cid=15735
 pid=1
 
 修改公司名称 >> 修改公司名一

@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::appendWorkflowFields();
 timeout=0
-cid=0
+cid=15940
 
 - 执行datatableTest模块的appendWorkflowFieldsTest方法，参数是'user', 'browse'  @0
 - 执行datatableTest模块的appendWorkflowFieldsTest方法，参数是'build', 'build'  @0

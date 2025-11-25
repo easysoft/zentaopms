@@ -5,7 +5,7 @@
 
 title=测试 screenModel::checkIFChartInUse();
 timeout=0
-cid=0
+cid=18222
 
 - 步骤1：检查chart类型图表被使用 @1
 - 步骤2：检查pivot类型图表被使用 @1

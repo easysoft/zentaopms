@@ -5,7 +5,7 @@
 
 title=测试 groupZen::buildUpdateViewForm();
 timeout=0
-cid=0
+cid=16732
 
 - 步骤1：正常情况下的表单数据构造 @1
 - 步骤2：包含空值的表单数据处理 @1

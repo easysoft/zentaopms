@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->setCurrentUserFirst();
-cid=0
+cid=19655
 
 - 传入参数为空数组，返回传入参数。 @0
 - 传入参数为非空数组，当前用户账号为空，返回数组包含 3 个用户。 @3

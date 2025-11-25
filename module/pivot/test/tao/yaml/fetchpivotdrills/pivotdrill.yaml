@@ -1,0 +1,71 @@
+---
+title: pivotdrill测试数据
+desc: fetchPivotDrills方法测试数据
+author: Claude
+version: 1.0
+noid: true
+
+fields:
+- field: pivot
+  note: 透视表ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1{5}, 2{3}, 3{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: field
+  note: 字段名
+  range: status{3}, priority{2}, type{2}, assignedTo{2}, resolution{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: object
+  note: 对象类型
+  range: bug{5}, task{3}, story{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: whereSql
+  note: WHERE SQL语句
+  range: "WHERE status = 'active'{5}, WHERE priority > 1{3}, WHERE type = 'bug'{2}"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: condition
+  note: 条件JSON
+  range: '{"status":"active"}{5}, {"priority":"high"}{3}, {"type":"bug"}{2}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: published{8}, design{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账户
+  range: admin{5}, user1{3}, user2{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: manual{7}, auto{3}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

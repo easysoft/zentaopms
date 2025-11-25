@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::prepareEditExtras();
 timeout=0
-cid=0
+cid=15553
 
 - 执行caselibTest模块的prepareEditExtrasTest方法，参数是$formData1, 1 
  - 属性id @1

@@ -5,46 +5,72 @@
 
 title=测试 blockZen::printScrumProductBlock();
 timeout=0
-cid=0
+cid=15290
 
-- 步骤1：正常情况 @1
-- 步骤2：设置count参数 @1
-- 步骤3：默认参数 @1
-- 步骤4：无效参数 @1
-- 步骤5：边界值测试 @1
+- 执行blockTest模块的printScrumProductBlockTest方法，参数是$block1 属性productsCount @15
+- 执行blockTest模块的printScrumProductBlockTest方法，参数是$block2 属性productsCount @5
+- 执行blockTest模块的printScrumProductBlockTest方法，参数是$block3 属性productsCount @10
+- 执行blockTest模块的printScrumProductBlockTest方法，参数是$block4 属性productsCount @20
+- 执行blockTest模块的printScrumProductBlockTest方法，参数是$block5
+ - 属性productsCount @15
+ - 属性storiesCount @15
+ - 属性bugsCount @15
+ - 属性releasesCount @15
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-// 简化测试，不生成复杂数据
+$product = zenData('product');
+$product->program->range('1');
+$product->name->range('`产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10,产品11,产品12,产品13,产品14,产品15,产品16,产品17,产品18,产品19,产品20`');
+$product->deleted->range('0');
+$product->gen(20);
 
-// 3. 用户登录（选择合适角色）
+$story = zenData('story');
+$story->product->range('1-20');
+$story->deleted->range('0');
+$story->gen(60);
+
+$bug = zenData('bug');
+$bug->product->range('1-20');
+$bug->deleted->range('0');
+$bug->gen(40);
+
+$release = zenData('release');
+$release->product->range('1-20');
+$release->deleted->range('0');
+$release->gen(30);
+
+global $tester;
+$tester->session->set('program', 1);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($blockTest->printScrumProductBlockTest(null)) && p() && e('1'); // 步骤1：正常情况
+$block1 = new stdClass();
+$block1->params = new stdClass();
+$block1->params->count = 15;
+r($blockTest->printScrumProductBlockTest($block1)) && p('productsCount') && e('15');
 
-$block1 = new stdclass();
-$block1->params = new stdclass();
-$block1->params->count = 10;
-r($blockTest->printScrumProductBlockTest($block1)) && p() && e('1'); // 步骤2：设置count参数
+$block2 = new stdClass();
+$block2->params = new stdClass();
+$block2->params->count = 5;
+r($blockTest->printScrumProductBlockTest($block2)) && p('productsCount') && e('5');
 
-$block2 = new stdclass();
-$block2->params = new stdclass();
-r($blockTest->printScrumProductBlockTest($block2)) && p() && e('1'); // 步骤3：默认参数
+$block3 = new stdClass();
+$block3->params = new stdClass();
+$block3->params->count = 10;
+r($blockTest->printScrumProductBlockTest($block3)) && p('productsCount') && e('10');
 
-$block3 = new stdclass();
-$block3->params = (object)array('invalid' => 'test');
-r($blockTest->printScrumProductBlockTest($block3)) && p() && e('1'); // 步骤4：无效参数
+$block4 = new stdClass();
+$block4->params = new stdClass();
+$block4->params->count = 100;
+r($blockTest->printScrumProductBlockTest($block4)) && p('productsCount') && e('20');
 
-$block4 = new stdclass();
-$block4->params = new stdclass();
-$block4->params->count = 0;
-r($blockTest->printScrumProductBlockTest($block4)) && p() && e('1'); // 步骤5：边界值测试
+$block5 = new stdClass();
+$block5->params = new stdClass();
+$block5->params->count = 15;
+r($blockTest->printScrumProductBlockTest($block5)) && p('productsCount,storiesCount,bugsCount,releasesCount') && e('15,15,15,15');

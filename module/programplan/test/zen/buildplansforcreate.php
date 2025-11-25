@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::buildPlansForCreate();
 timeout=0
-cid=0
+cid=17789
 
 - 执行 @0
 - 执行属性end[0] @"计划完成时间"必须大于"计划开始时间"

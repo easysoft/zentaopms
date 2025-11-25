@@ -5,7 +5,7 @@
 
 title=测试 commonTao::queryListForPreAndNext();
 timeout=0
-cid=0
+cid=15727
 
 - 执行$list['objectList'] @1,2,3,4,5
 

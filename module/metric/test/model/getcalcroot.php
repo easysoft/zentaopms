@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getCalcRoot();
 timeout=0
-cid=0
+cid=17081
 
 - 步骤1：正常情况获取路径 @module/metric/calc/
 - 步骤2：验证完整路径包含module @1

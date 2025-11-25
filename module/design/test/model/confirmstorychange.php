@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->confirmStoryChange();
-cid=1
+cid=15984
 
 - 确认id 1 的设计需求变更 @1
 - 确认id 2 的设计需求变更 @1

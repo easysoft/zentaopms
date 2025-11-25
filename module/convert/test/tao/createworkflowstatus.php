@@ -5,68 +5,65 @@
 
 title=测试 convertTao::createWorkflowStatus();
 timeout=0
-cid=0
+cid=15853
 
-步骤1：开源版本直接返回原relations >> a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"zentaoStatus1";a:1:{s:7:"status1";s:6:"active";}}
-步骤2：空relations数组测试 >> a:0:{}
-步骤3：无zentaoStatus的relations测试 >> a:1:{s:8:"otherKey";a:1:{i:1;s:3:"bug";}}
-步骤4：zentaoStatus键不匹配的relations测试 >> a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"invalidStatus";a:1:{s:7:"status1";s:6:"active";}}
-步骤5：有效zentaoObject但无状态配置的relations测试 >> a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"zentaoStatus1";a:1:{s:7:"status1";s:13:"normal_status";}}
+- 步骤1:测试open版本下返回序列化的空数组 @a:0:{}
+- 步骤2:测试企业版无zentaoStatus相关键返回原始relations @a:1:{s:8:"otherKey";s:9:"testValue";}
+- 步骤3:测试企业版添加测试用例状态(add_case_status) @a:2:{s:12:"zentaoObject";a:1:{i:10001;s:8:"testcase";}s:17:"zentaoStatus10001";a:1:{s:7:"status1";s:7:"status1";}}
+- 步骤4:测试企业版添加工作流状态(add_flow_status) @a:2:{s:12:"zentaoObject";a:1:{i:10002;s:10:"customflow";}s:17:"zentaoStatus10002";a:1:{s:7:"status2";s:7:"status2";}}
+- 步骤5:测试企业版混合处理多个状态 @a:3:{s:12:"zentaoObject";a:2:{i:10003;s:8:"testcase";i:10004;s:10:"customflow";}s:17:"zentaoStatus10003";a:1:{s:7:"status3";s:7:"status3";}s:17:"zentaoStatus10004";a:1:{s:7:"status4";s:7:"status4";}}
 
 */
 
-// 简化版本的测试实现，避免复杂的框架依赖
-class SimpleConvertTest
-{
-    public function createWorkflowStatusTest($relations = array())
-    {
-        // 模拟createWorkflowStatus方法的核心逻辑
-        // 开源版本：直接返回relations
-        return serialize($relations);
-    }
-}
+// 1. 导入依赖(路径固定,不可修改)
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 简化的断言函数
-function r($result) {
-    return new TestResult($result);
-}
+// 2. zendata数据准备
+zenData('workflowfield')->gen(0);
 
-class TestResult {
-    private $result;
+// 3. 用户登录
+su('admin');
 
-    public function __construct($result) {
-        $this->result = $result;
-    }
+// 4. 创建测试实例
+$convertTest = new convertTest();
 
-    public function p($property = '') {
-        return new PropertyResult($this->result);
-    }
-}
+// 5. 测试步骤
+global $config;
+$originalEdition = $config->edition;
 
-class PropertyResult {
-    private $value;
+// 步骤1: 测试open版本下返回原始relations
+$config->edition = 'open';
+r($convertTest->createWorkflowStatusTest(array())) && p() && e('a:0:{}'); // 步骤1:测试open版本下返回序列化的空数组
 
-    public function __construct($value) {
-        $this->value = $value;
-    }
+// 步骤2: 测试企业版无zentaoStatus相关键返回原始relations
+$config->edition = 'max';
+r($convertTest->createWorkflowStatusTest(array('otherKey' => 'testValue'))) && p() && e('a:1:{s:8:"otherKey";s:9:"testValue";}'); // 步骤2:测试企业版无zentaoStatus相关键返回原始relations
 
-    public function e($expected) {
-        $actual = $this->value;
-        $result = ($actual == $expected) ? 'PASS' : 'FAIL';
-        if($result === 'FAIL') {
-            echo "FAIL: expected '$expected', got '$actual'\n";
-            return false;
-        }
-        return true;
-    }
-}
+// 步骤3: 测试企业版添加测试用例状态(add_case_status)
+$config->edition = 'max';
+$relations3 = array(
+    'zentaoObject' => array('10001' => 'testcase'),
+    'zentaoStatus10001' => array('status1' => 'add_case_status')
+);
+r($convertTest->createWorkflowStatusTest($relations3)) && p() && e('a:2:{s:12:"zentaoObject";a:1:{i:10001;s:8:"testcase";}s:17:"zentaoStatus10001";a:1:{s:7:"status1";s:7:"status1";}}'); // 步骤3:测试企业版添加测试用例状态(add_case_status)
 
-// 创建测试实例
-$convertTest = new SimpleConvertTest();
+// 步骤4: 测试企业版添加工作流状态(add_flow_status)
+$config->edition = 'max';
+$relations4 = array(
+    'zentaoObject' => array('10002' => 'customflow'),
+    'zentaoStatus10002' => array('status2' => 'add_flow_status')
+);
+r($convertTest->createWorkflowStatusTest($relations4)) && p() && e('a:2:{s:12:"zentaoObject";a:1:{i:10002;s:10:"customflow";}s:17:"zentaoStatus10002";a:1:{s:7:"status2";s:7:"status2";}}'); // 步骤4:测试企业版添加工作流状态(add_flow_status)
 
-// 执行测试步骤
-r($convertTest->createWorkflowStatusTest(array('zentaoObject' => array('1' => 'bug'), 'zentaoStatus1' => array('status1' => 'active'))))->p()->e('a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"zentaoStatus1";a:1:{s:7:"status1";s:6:"active";}}'); // 步骤1：开源版本直接返回原relations
-r($convertTest->createWorkflowStatusTest(array()))->p()->e('a:0:{}'); // 步骤2：空relations数组测试
-r($convertTest->createWorkflowStatusTest(array('otherKey' => array('1' => 'bug'))))->p()->e('a:1:{s:8:"otherKey";a:1:{i:1;s:3:"bug";}}'); // 步骤3：无zentaoStatus的relations测试
-r($convertTest->createWorkflowStatusTest(array('zentaoObject' => array('1' => 'bug'), 'invalidStatus' => array('status1' => 'active'))))->p()->e('a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"invalidStatus";a:1:{s:7:"status1";s:6:"active";}}'); // 步骤4：zentaoStatus键不匹配的relations测试
-r($convertTest->createWorkflowStatusTest(array('zentaoObject' => array('1' => 'bug'), 'zentaoStatus1' => array('status1' => 'normal_status'))))->p()->e('a:2:{s:12:"zentaoObject";a:1:{i:1;s:3:"bug";}s:13:"zentaoStatus1";a:1:{s:7:"status1";s:13:"normal_status";}}'); // 步骤5：有效zentaoObject但无状态配置的relations测试
+// 步骤5: 测试企业版混合处理多个状态
+$config->edition = 'max';
+$relations5 = array(
+    'zentaoObject' => array('10003' => 'testcase', '10004' => 'customflow'),
+    'zentaoStatus10003' => array('status3' => 'add_case_status'),
+    'zentaoStatus10004' => array('status4' => 'add_flow_status')
+);
+r($convertTest->createWorkflowStatusTest($relations5)) && p() && e('a:3:{s:12:"zentaoObject";a:2:{i:10003;s:8:"testcase";i:10004;s:10:"customflow";}s:17:"zentaoStatus10003";a:1:{s:7:"status3";s:7:"status3";}s:17:"zentaoStatus10004";a:1:{s:7:"status4";s:7:"status4";}}'); // 步骤5:测试企业版混合处理多个状态
+
+// 恢复版本设置
+$config->edition = $originalEdition;

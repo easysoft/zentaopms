@@ -5,7 +5,7 @@
 
 title=测试 repoZen::updateLastCommit();
 timeout=0
-cid=0
+cid=18157
 
 - 步骤1：正常情况-空lastCommit需要更新 @1
 - 步骤2：没有committed_date字段直接返回 @1

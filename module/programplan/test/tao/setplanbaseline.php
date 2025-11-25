@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::setPlanBaseline()
 timeout=0
-cid=0
+cid=17779
 
 - 执行programplan模块的setPlanBaseline方法，参数是$oldPlans, $newPlans 
  - 第1条的name属性 @Plan A

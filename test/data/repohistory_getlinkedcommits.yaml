@@ -1,0 +1,19 @@
+title: zt_repohistory for getLinkedCommits test
+desc: 仓库历史记录测试数据
+author: Claude
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: repo
+    range: 1{5},2{5}
+  - field: revision
+    range: rev001,rev002,rev003,rev004,rev005,rev006,rev007,rev008,rev009,rev010
+  - field: commit
+    range: 1-10
+  - field: comment
+    range: Fix bug
+  - field: committer
+    range: admin
+  - field: time
+    range: "2024-01-01 00:00:00"

@@ -5,43 +5,54 @@
 
 title=测试 jobZen::getCompileData();
 timeout=0
-cid=0
+cid=16861
 
-- 步骤1：正常情况属性taskID @1
-- 步骤2：空测试任务属性taskID @0
-- 步骤3：不存在的测试任务属性taskID @999
-- 步骤4：获取套件数量 @2
-- 步骤5：包含统计信息第summary条的1属性 @共1个用例，失败0个，耗时1秒
+- 执行jobTest模块的getCompileDataTest方法，参数是$compile1 属性taskID @1
+- 执行jobTest模块的getCompileDataTest方法，参数是$compile2 属性taskID @2
+- 执行jobTest模块的getCompileDataTest方法，参数是$compile3 属性taskID @3
+- 执行jobTest模块的getCompileDataTest方法，参数是$compile4 属性groupCases @1
+- 执行jobTest模块的getCompileDataTest方法，参数是$compile5 属性suites @5
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
-
-// 2. zendata数据准备（根据需要配置）
-$testtask = zenData('testtask');
-$testtask->id->range('1-3');
-$testtask->name->range('测试任务1,测试任务2,测试任务3');
-$testtask->product->range('1{3}');
-$testtask->status->range('wait,doing,done');
-$testtask->gen(3);
-
-$product = zenData('product');
-$product->id->range('1');
-$product->name->range('测试产品');
-$product->status->range('normal');
-$product->gen(1);
-
-// 3. 用户登录（选择合适角色）
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$jobTest = new jobTest();
+zenData('product')->gen(10);
+zenData('story')->gen(20);
+zenData('compile')->gen(10);
+zenData('user')->gen(5);
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($jobTest->getCompileDataTest((object)array('testtask' => 1))) && p('taskID') && e('1'); // 步骤1：正常情况
-r($jobTest->getCompileDataTest((object)array('testtask' => 0))) && p('taskID') && e('0'); // 步骤2：空测试任务
-r($jobTest->getCompileDataTest((object)array('testtask' => 999))) && p('taskID') && e('999'); // 步骤3：不存在的测试任务
-r(count($jobTest->getCompileDataTest((object)array('testtask' => 1))['suites'])) && p() && e('2'); // 步骤4：获取套件数量
-r($jobTest->getCompileDataTest((object)array('testtask' => 1))) && p('summary:1') && e('共1个用例，失败0个，耗时1秒'); // 步骤5：包含统计信息
+$testtask = zenData('testtask');
+$testtask->id->range('1-3');
+$testtask->product->range('1,1,2');
+$testtask->gen(3);
+
+zenData('testrun')->gen(15);
+zenData('case')->gen(20);
+zenData('testresult')->gen(15);
+zenData('testsuite')->gen(5);
+zenData('suitecase')->gen(15);
+
+$jobTest = new jobZenTest();
+
+$compile1 = new stdClass();
+$compile1->testtask = 1;
+r($jobTest->getCompileDataTest($compile1)) && p('taskID') && e('1');
+
+$compile2 = new stdClass();
+$compile2->testtask = 2;
+r($jobTest->getCompileDataTest($compile2)) && p('taskID') && e('2');
+
+$compile3 = new stdClass();
+$compile3->testtask = 3;
+r($jobTest->getCompileDataTest($compile3)) && p('taskID') && e('3');
+
+$compile4 = new stdClass();
+$compile4->testtask = 1;
+r($jobTest->getCompileDataTest($compile4)) && p('groupCases') && e('1');
+
+$compile5 = new stdClass();
+$compile5->testtask = 2;
+r($jobTest->getCompileDataTest($compile5)) && p('suites') && e('5');

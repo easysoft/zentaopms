@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::jsonEncode();
 timeout=0
-cid=0
+cid=15191
 
 - 步骤1：空值情况 @0
 - 步骤2：标量情况 @test_string

@@ -5,28 +5,43 @@
 
 title=测试 jobZen::buildSearchForm();
 timeout=0
-cid=0
+cid=16859
 
-- 执行jobTest模块的buildSearchFormTest方法，参数是array 第searchConfig条的module属性 @job
-- 执行jobTest模块的buildSearchFormTest方法，参数是array 第searchConfig条的queryID属性 @0
-- 执行jobTest模块的buildSearchFormTest方法，参数是array 第searchConfig条的actionURL属性 @/job-browse.html
-- 执行jobTest模块的buildSearchFormTest方法 第searchConfig条的module属性 @job
-- 执行jobTest模块的buildSearchFormTest方法，参数是array 第searchConfig条的queryID属性 @10
+- 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
+- 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
+- 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
+- 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
+- 执行jobZenTest模块的buildSearchFormTest方法，参数是array  @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zendata('repo')->gen(3);
-zendata('product')->gen(5);
+$repo = zenData('repo');
+$repo->id->range('1-5');
+$repo->name->range('repo1,repo2,repo3,repo4,repo5');
+$repo->path->range('http://test1.com,http://test2.com,http://test3.com,http://test4.com,http://test5.com');
+$repo->SCM->range('Git,Gitlab,Subversion,Git,Gitlab');
+$repo->deleted->range('0');
+$repo->product->range('1-5');
+$repo->gen(5);
+
+$product = zenData('product');
+$product->id->range('1-10');
+$product->name->range('产品1,产品2,产品3,产品4,产品5,产品6,产品7,产品8,产品9,产品10');
+$product->code->range('code1-code10');
+$product->type->range('normal');
+$product->status->range('normal');
+$product->deleted->range('0');
+$product->gen(10);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobZenTest = new jobZenTest();
 
-r($jobTest->buildSearchFormTest(array('module' => 'job', 'fields' => array('name' => '名称'), 'params' => array('name' => array('operator' => 'include', 'control' => 'input', 'values' => ''))), 0, '/job-browse.html')) && p('searchConfig:module') && e('job');
-r($jobTest->buildSearchFormTest(array('module' => 'job', 'fields' => array('repo' => '版本库'), 'params' => array('repo' => array('operator' => '=', 'control' => 'select', 'values' => array()))), 0, '/job-browse.html')) && p('searchConfig:queryID') && e('0');
-r($jobTest->buildSearchFormTest(array('module' => 'job', 'fields' => array('product' => '产品'), 'params' => array('product' => array('operator' => '=', 'control' => 'select', 'values' => array()))), 0, '/job-browse.html')) && p('searchConfig:actionURL') && e('/job-browse.html');
-r($jobTest->buildSearchFormTest()) && p('searchConfig:module') && e('job');
-r($jobTest->buildSearchFormTest(array('module' => 'job', 'fields' => array('name' => '名称'), 'params' => array('name' => array('operator' => 'include', 'control' => 'input', 'values' => ''))), 10, '/job-browse-10.html')) && p('searchConfig:queryID') && e('10');
+r($jobZenTest->buildSearchFormTest(array('module' => 'job', 'fields' => array(), 'params' => array('repo' => array())), 1, 'browse')) && p() && e('0');
+r($jobZenTest->buildSearchFormTest(array('module' => 'job', 'fields' => array(), 'params' => array('product' => array())), 2, 'search')) && p() && e('0');
+r($jobZenTest->buildSearchFormTest(array('module' => 'job', 'fields' => array()), 0, '')) && p() && e('0');
+r($jobZenTest->buildSearchFormTest(array('module' => 'job', 'fields' => array(), 'params' => array('repo' => array())), 'test', 'test-url')) && p() && e('0');
+r($jobZenTest->buildSearchFormTest(array('module' => 'job', 'fields' => array(), 'params' => array('repo' => array())), -1, 'browse?type=all&param=1')) && p() && e('0');

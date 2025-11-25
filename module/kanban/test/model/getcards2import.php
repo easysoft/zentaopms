@@ -11,7 +11,7 @@ zenData('kanban')->gen(10);
 
 title=测试 kanbanModel->getCards2Import();
 timeout=0
-cid=1
+cid=16907
 
 - 测试获取可以导入的卡片数量 @80
 - 测试获取看板1可以导入的卡片数量 @8

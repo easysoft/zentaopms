@@ -5,46 +5,54 @@
 
 title=测试 storyZen::getAfterEditLocation();
 timeout=0
-cid=0
+cid=18678
 
-- 步骤1：非项目标签页跳转 @story-view-1-0-0-story.html
-- 步骤2：单执行项目跳转 @execution-storyView-2-2.html
-- 步骤3：多执行项目跳转 @projectstory-view-3-3.html
-- 步骤4：不同storyType处理 @epic-view-4-0-0-epic.html
-- 步骤5：项目不存在处理 @story-view-5-0-0-story.html
+- 执行storyTest模块的getAfterEditLocationTest方法，参数是1, 'story'  @getaftereditlocation.php?m=story&f=view&storyID=1&version=0&param=0&storyType=story
+- 执行storyTest模块的getAfterEditLocationTest方法，参数是2, 'requirement'  @getaftereditlocation.php?m=requirement&f=view&storyID=2&version=0&param=0&storyType=requirement
+- 执行storyTest模块的getAfterEditLocationTest方法，参数是3, 'story'  @getaftereditlocation.php?m=execution&f=storyView&storyID=3&project=1
+- 执行storyTest模块的getAfterEditLocationTest方法，参数是4, 'story'  @getaftereditlocation.php?m=projectstory&f=view&storyID=4&project=6
+- 执行storyTest模块的getAfterEditLocationTest方法，参数是5, 'epic'  @getaftereditlocation.php?m=epic&f=view&storyID=5&version=0&param=0&storyType=epic
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. 准备测试数据
-$table = zenData('story');
-$table->id->range('1-10');
-$table->product->range('1-3');
-$table->title->range('需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10');
-$table->type->range('story,requirement,epic');
-$table->status->range('active{6},draft{2},closed{2}');
-$table->gen(10);
+zendata('story')->gen(10);
 
 $project = zenData('project');
-$project->id->range('1-5');
-$project->name->range('项目1,项目2,项目3,项目4,项目5');
-$project->type->range('project{3},sprint{2}');
-$project->multiple->range('1,0,1,0,1');
-$project->status->range('wait,doing,suspended,closed,wait');
-$project->gen(5);
+$project->id->range('1-10');
+$project->name->range('项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10');
+$project->type->range('project{5},sprint{5}');
+$project->multiple->range('0{5},1{5}');
+$project->status->range('doing');
+$project->deleted->range('0');
+$project->gen(10);
 
-// 3. 用户登录
 su('admin');
 
-// 4. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyZenTest();
 
-// 5. 执行测试步骤
-r($storyTest->getAfterEditLocationTest(1, 'story', 'product', 1, 1)) && p() && e('story-view-1-0-0-story.html'); // 步骤1：非项目标签页跳转
-r($storyTest->getAfterEditLocationTest(2, 'requirement', 'project', 2, 0)) && p() && e('execution-storyView-2-2.html'); // 步骤2：单执行项目跳转
-r($storyTest->getAfterEditLocationTest(3, 'story', 'project', 3, 1)) && p() && e('projectstory-view-3-3.html'); // 步骤3：多执行项目跳转
-r($storyTest->getAfterEditLocationTest(4, 'epic', 'product', 4, 0)) && p() && e('epic-view-4-0-0-epic.html'); // 步骤4：不同storyType处理
-r($storyTest->getAfterEditLocationTest(5, 'story', 'project', 0, 0)) && p() && e('story-view-5-0-0-story.html'); // 步骤5：项目不存在处理
+global $app;
+
+// 步骤1：测试product标签下的story类型需求编辑后跳转
+$app->tab = 'product';
+r($storyTest->getAfterEditLocationTest(1, 'story')) && p() && e('getaftereditlocation.php?m=story&f=view&storyID=1&version=0&param=0&storyType=story');
+
+// 步骤2：测试product标签下的requirement类型需求编辑后跳转
+$app->tab = 'product';
+r($storyTest->getAfterEditLocationTest(2, 'requirement')) && p() && e('getaftereditlocation.php?m=requirement&f=view&storyID=2&version=0&param=0&storyType=requirement');
+
+// 步骤3：测试project标签下的story类型需求,项目为非多项目类型,编辑后跳转
+$app->tab = 'project';
+$app->session->project = 1;
+r($storyTest->getAfterEditLocationTest(3, 'story')) && p() && e('getaftereditlocation.php?m=execution&f=storyView&storyID=3&project=1');
+
+// 步骤4：测试project标签下的story类型需求,项目为多项目类型,编辑后跳转
+$app->tab = 'project';
+$app->session->project = 6;
+r($storyTest->getAfterEditLocationTest(4, 'story')) && p() && e('getaftereditlocation.php?m=projectstory&f=view&storyID=4&project=6');
+
+// 步骤5：测试product标签下的epic类型需求编辑后跳转
+$app->tab = 'product';
+r($storyTest->getAfterEditLocationTest(5, 'epic')) && p() && e('getaftereditlocation.php?m=epic&f=view&storyID=5&version=0&param=0&storyType=epic');

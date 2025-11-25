@@ -5,51 +5,97 @@
 
 title=测试 taskZen::responseAfterRecord();
 timeout=0
-cid=0
+cid=18947
 
-- 步骤1：正常情况，验证错误处理属性error @Zen object not available
-- 步骤2：有变更情况，验证错误处理属性error @Zen object not available
-- 步骤3：模态请求，验证错误处理属性error @Zen object not available
-- 步骤4：列表来源，验证错误处理属性error @Zen object not available
-- 步骤5：看板来源，验证错误处理属性error @Zen object not available
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task1, $changes1, '', false 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task2, $changes2, '', false 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task3, $changes3, '', false 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task4, $changes4, '', false 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task5, $changes5, '', true 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task6, $changes5, '', true 属性result @success
+- 执行taskTest模块的responseAfterRecordTest方法，参数是$task7, $changes5, 'taskkanban', true 属性callback @refreshKanban()
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/taskzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('task');
-$table->id->range('1-10');
-$table->execution->range('1-5');
-$table->name->range('测试任务1,测试任务2,测试任务3,测试任务4,测试任务5');
-$table->status->range('wait,doing,done,pause,cancel');
-$table->type->range('design,devel,test,study,misc');
-$table->assignedTo->range('admin,user1,user2,user3');
-$table->consumed->range('0-10');
-$table->left->range('0-5');
-$table->gen(10);
+$task = zenData('task');
+$task->id->range('1-10');
+$task->project->range('1');
+$task->execution->range('1{5},2{5}');
+$task->fromBug->range('0,1,2,3,0,0,0,0,0,0');
+$task->status->range('doing{5},done{5}');
+$task->gen(10);
 
-// 3. 用户登录（选择合适角色）
+$bug = zenData('bug');
+$bug->id->range('1-10');
+$bug->status->range('active{5},resolved{5}');
+$bug->gen(10);
+
+$project = zenData('project');
+$project->id->range('1-5');
+$project->project->range('0,1,1,0,4');
+$project->name->range('项目1,执行1,执行2,项目2,执行3');
+$project->type->range('project,sprint,sprint,project,sprint');
+$project->gen(5);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$taskTest = new taskTest();
+$taskTest = new taskZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$task = new stdClass();
-$task->id = 1;
-$task->execution = 1;
-$task->name = '测试任务';
-$task->status = 'doing';
-$task->type = 'devel';
-$task->assignedTo = 'admin';
-$task->consumed = 5;
-$task->left = 2;
+$task1 = new stdclass();
+$task1->id = 1;
+$task1->execution = 1;
+$task1->fromBug = 0;
+$task1->status = 'doing';
 
-r($taskTest->responseAfterRecordTest($task, array(), '')) && p('error') && e('Zen object not available'); // 步骤1：正常情况，验证错误处理
-r($taskTest->responseAfterRecordTest($task, array('status' => 'done'), '')) && p('error') && e('Zen object not available'); // 步骤2：有变更情况，验证错误处理
-r($taskTest->responseAfterRecordTest($task, array(), 'modal')) && p('error') && e('Zen object not available'); // 步骤3：模态请求，验证错误处理
-r($taskTest->responseAfterRecordTest($task, array(), 'list')) && p('error') && e('Zen object not available'); // 步骤4：列表来源，验证错误处理
-r($taskTest->responseAfterRecordTest($task, array('left' => '0'), 'kanban')) && p('error') && e('Zen object not available'); // 步骤5：看板来源，验证错误处理
+$task2 = new stdclass();
+$task2->id = 2;
+$task2->execution = 1;
+$task2->fromBug = 1;
+$task2->status = 'doing';
+
+$task3 = new stdclass();
+$task3->id = 3;
+$task3->execution = 1;
+$task3->fromBug = 2;
+$task3->status = 'done';
+
+$task4 = new stdclass();
+$task4->id = 4;
+$task4->execution = 1;
+$task4->fromBug = 6;
+$task4->status = 'done';
+
+$task5 = new stdclass();
+$task5->id = 5;
+$task5->execution = 1;
+$task5->fromBug = 0;
+$task5->status = 'done';
+
+$task6 = new stdclass();
+$task6->id = 6;
+$task6->execution = 2;
+$task6->fromBug = 0;
+$task6->status = 'done';
+
+$task7 = new stdclass();
+$task7->id = 7;
+$task7->execution = 2;
+$task7->fromBug = 0;
+$task7->status = 'done';
+
+$changes1 = array();
+$changes2 = array();
+$changes3 = array(array('field' => 'status', 'old' => 'doing', 'new' => 'done'));
+$changes4 = array(array('field' => 'status', 'old' => 'doing', 'new' => 'done'));
+$changes5 = array(array('field' => 'status', 'old' => 'doing', 'new' => 'done'));
+
+r($taskTest->responseAfterRecordTest($task1, $changes1, '', false)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task2, $changes2, '', false)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task3, $changes3, '', false)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task4, $changes4, '', false)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task5, $changes5, '', true)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task6, $changes5, '', true)) && p('result') && e('success');
+r($taskTest->responseAfterRecordTest($task7, $changes5, 'taskkanban', true)) && p('callback') && e('refreshKanban()');

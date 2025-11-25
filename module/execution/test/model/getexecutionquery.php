@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试 executionModel->getExecutionQuery();
 timeout=0
-cid=1
+cid=16314
 
 - 没有queryID时，获取查询执行的SQL @(( 1 ) AND ( 1  AND t1.`status` = 'doing'))
 - 有queryID时，获取查询执行的SQL @(( 1   AND t1.`name`  LIKE '迭代' ) AND ( 1  AND t1.`status` = 'doing'  ))

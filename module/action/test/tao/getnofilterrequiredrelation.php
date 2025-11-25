@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->fetchBaseInfo().
 timeout=0
-cid=1
+cid=14950
 
 - 测试获取id为1的product的关联关系
  - 第0条的0属性 @11

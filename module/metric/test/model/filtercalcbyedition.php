@@ -5,7 +5,7 @@
 
 title=测试 metricModel::filterCalcByEdition();
 timeout=0
-cid=0
+cid=17075
 
 - 步骤1：开源版本过滤 @2
 - 步骤2：商业版本过滤 @4

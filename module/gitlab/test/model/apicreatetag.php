@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiCreateTag();
 timeout=0
-cid=0
+cid=16582
 
 - 执行$result @return empty
 - 执行gitlabTest模块的apiCreateTagTest方法，参数是1, 1, $emptyTagName  @0

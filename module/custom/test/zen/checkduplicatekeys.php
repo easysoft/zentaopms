@@ -5,25 +5,25 @@
 
 title=测试 customZen::checkDuplicateKeys();
 timeout=0
-cid=0
+cid=15933
 
-- 执行customTest模块的checkDuplicateKeysTest方法，参数是array  @1
-- 执行customTest模块的checkDuplicateKeysTest方法，参数是array  @1键重复
-- 执行customTest模块的checkDuplicateKeysTest方法，参数是array  @1
-- 执行customTest模块的checkDuplicateKeysTest方法，参数是array  @key1键重复
-- 执行customTest模块的checkDuplicateKeysTest方法，参数是array  @1
+- 执行customTest模块的checkDuplicateKeysTest方法，参数是'story', 'priList', array  @1
+- 执行customTest模块的checkDuplicateKeysTest方法，参数是'story', 'priList', array 属性message @key1键重复
+- 执行customTest模块的checkDuplicateKeysTest方法，参数是'testtask', 'typeList', array  @1
+- 执行customTest模块的checkDuplicateKeysTest方法，参数是'bug', 'severityList', array 属性message @2键重复
+- 执行customTest模块的checkDuplicateKeysTest方法，参数是'story', 'priList', array  @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$customTest = new customTest();
+$customTest = new customZenTest();
 
-r($customTest->checkDuplicateKeysTest(array('1', '2', '3'), 'story', 'priList')) && p() && e('1');
-r($customTest->checkDuplicateKeysTest(array('1', '2', '1'), 'story', 'priList')) && p() && e('1键重复');
-r($customTest->checkDuplicateKeysTest(array('', '1', '2'), 'testtask', 'typeList')) && p() && e('1');
-r($customTest->checkDuplicateKeysTest(array('key1', 'key2', 'key1'), 'bug', 'statusList')) && p() && e('key1键重复');
-r($customTest->checkDuplicateKeysTest(array(''), 'story', 'priList')) && p() && e('1');
+r($customTest->checkDuplicateKeysTest('story', 'priList', array('1', '2', '3', '4'))) && p() && e('1');
+r($customTest->checkDuplicateKeysTest('story', 'priList', array('key1', 'key2', 'key1', 'key3'))) && p('message') && e('key1键重复');
+r($customTest->checkDuplicateKeysTest('testtask', 'typeList', array('', 'key1', '', 'key2'))) && p() && e('1');
+r($customTest->checkDuplicateKeysTest('bug', 'severityList', array('1', '2', '3', '2', '4'))) && p('message') && e('2键重复');
+r($customTest->checkDuplicateKeysTest('story', 'priList', array())) && p() && e('1');

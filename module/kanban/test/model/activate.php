@@ -9,7 +9,7 @@ zenData('kanban')->gen(3);
 
 title=测试 kanbanModel->activate();
 timeout=0
-cid=1
+cid=16866
 
 - 查看激活后的字段
  - 属性status @active

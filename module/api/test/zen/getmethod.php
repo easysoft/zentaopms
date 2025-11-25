@@ -5,22 +5,15 @@
 
 title=测试 apiZen::getMethod();
 timeout=0
-cid=0
+cid=15125
 
-- 执行apiTest模块的getMethodTest方法，参数是'/repo/zentaopms/module/api/model.php/create' 
- - 属性className @api
- - 属性methodName @create
-- 执行apiTest模块的getMethodTest方法，参数是'/repo/zentaopms/module/api/model.php/publishLib', 'Model' 
- - 属性className @api
- - 属性methodName @publishLib
-- 执行apiTest模块的getMethodTest方法，参数是'/repo/zentaopms/module/api/model.php/deleteRelease' 
- - 属性className @api
- - 属性methodName @deleteRelease
-- 执行apiTest模块的getMethodTest方法，参数是'/repo/zentaopms/module/api/model.php/nonExistentMethod' 属性error @Method api::nonExistentMethod() does not exist
-- 执行apiTest模块的getMethodTest方法，参数是'/repo/zentaopms/module/api/model.php/create' 
- - 属性startLine @695
- - 属性endLine @726
- - 属性post @~~
+- 执行apiTest模块的getMethodTest方法，参数是$filePath1, 'Zen' 属性className @api
+- 执行apiTest模块的getMethodTest方法，参数是$filePath1, 'Zen' 属性methodName @getMethod
+- 执行apiTest模块的getMethodTest方法，参数是$filePath2, 'Zen' 属性methodName @generateLibsDropMenu
+- 执行apiTest模块的getMethodTest方法，参数是$filePath3, 'Zen' 属性methodName @parseDocSpaceParam
+- 执行apiTest模块的getMethodTest方法，参数是$filePath4, 'Zen' 属性methodName @request
+- 执行apiTest模块的getMethodTest方法，参数是$filePath4, 'Zen' 属性post @1
+- 执行apiTest模块的getMethodTest方法，参数是$invalidPath, 'Zen' 属性error @Class "toZen" does not exist
 
 */
 
@@ -31,8 +24,17 @@ su('admin');
 
 $apiTest = new apiTest();
 
-r($apiTest->getMethodTest('/repo/zentaopms/module/api/model.php/create')) && p('className,methodName') && e('api,create');
-r($apiTest->getMethodTest('/repo/zentaopms/module/api/model.php/publishLib', 'Model')) && p('className,methodName') && e('api,publishLib');
-r($apiTest->getMethodTest('/repo/zentaopms/module/api/model.php/deleteRelease')) && p('className,methodName') && e('api,deleteRelease');
-r($apiTest->getMethodTest('/repo/zentaopms/module/api/model.php/nonExistentMethod')) && p('error') && e('Method api::nonExistentMethod() does not exist');
-r($apiTest->getMethodTest('/repo/zentaopms/module/api/model.php/create')) && p('startLine,endLine,post') && e('695,726,~~');
+$zenFile = realpath(dirname(__FILE__, 3) . '/zen.php');
+$filePath1 = $zenFile . '/getMethod';
+$filePath2 = $zenFile . '/generateLibsDropMenu';
+$filePath3 = $zenFile . '/parseDocSpaceParam';
+$filePath4 = $zenFile . '/request';
+$invalidPath = '/invalid/path/to/file.php/method';
+
+r($apiTest->getMethodTest($filePath1, 'Zen')) && p('className') && e('api');
+r($apiTest->getMethodTest($filePath1, 'Zen')) && p('methodName') && e('getMethod');
+r($apiTest->getMethodTest($filePath2, 'Zen')) && p('methodName') && e('generateLibsDropMenu');
+r($apiTest->getMethodTest($filePath3, 'Zen')) && p('methodName') && e('parseDocSpaceParam');
+r($apiTest->getMethodTest($filePath4, 'Zen')) && p('methodName') && e('request');
+r($apiTest->getMethodTest($filePath4, 'Zen')) && p('post') && e('1');
+r($apiTest->getMethodTest($invalidPath, 'Zen')) && p('error') && e('Class "toZen" does not exist');

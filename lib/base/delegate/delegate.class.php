@@ -20,7 +20,7 @@ require_once dirname(__FILE__, 3) . '/vendor/autoload.php';
  *     protected static $className = 'ThirdPartyClass';
  *     public function __construct()
  *     {
- *         $this->instance = new self::$className();
+ *         $this->instance = new static::$className();
  *     }
  * }
  *
@@ -49,7 +49,8 @@ class baseDelegate
     public function __get($name)
     {
         // 如果有实例，尝试从实例中获取属性
-        if (!is_null($this->instance) && property_exists($this->instance, $name)) {
+        if(!is_null($this->instance) && property_exists($this->instance, $name))
+        {
             return $this->instance->$name;
         }
 
@@ -70,7 +71,8 @@ class baseDelegate
     public function __set($name, $value)
     {
         // 如果有实例，尝试写入实例属性
-        if (!is_null($this->instance) && property_exists($this->instance, $name)) {
+        if(!is_null($this->instance) && property_exists($this->instance, $name))
+        {
             $this->instance->$name = $value;
             return;
         }
@@ -91,11 +93,13 @@ class baseDelegate
      */
     public function __call(string $name, array $arguments)
     {
-        if (is_null($this->instance)) {
+        if(is_null($this->instance))
+        {
             throw new BadMethodCallException('The instance is not initialized.');
         }
 
-        if (is_callable([$this->instance, $name])) {
+        if(is_callable([$this->instance, $name]))
+        {
             return call_user_func_array([$this->instance, $name], $arguments);
         }
 
@@ -115,42 +119,51 @@ class baseDelegate
     public static function __callStatic(string $name, array $arguments)
     {
         $calledClass = get_called_class();
-        if (!property_exists($calledClass, 'className')) {
+        if(!property_exists($calledClass, 'className'))
+        {
             throw new BadMethodCallException("The static property className does not exist in the class {$calledClass}.");
         }
 
         $className = $calledClass::$className;
-        if (empty($className)) {
+        if(empty($className))
+        {
             throw new BadMethodCallException("The static property className is not set in the class {$calledClass}.");
         }
 
-        if (!class_exists($className)) {
+        if(!class_exists($className))
+        {
             throw new BadMethodCallException("The class {$className} does not exist.");
         }
 
-        if (is_callable([$className, $name])) {
+        if(is_callable([$className, $name]))
+        {
             return call_user_func_array([$className, $name], $arguments);
         }
 
-        if (property_exists($className, $name) && count($arguments) === 1) {
+        $argumentCount = count($arguments);
+        if(property_exists($className, $name) && $argumentCount === 1)
+        {
             // 支持静态属性的直接赋值
             $className::$$name = $arguments[0];
             return;
         }
 
-        if (property_exists($className, $name) && count($arguments) === 0) {
+        if(property_exists($className, $name) && $argumentCount === 0)
+        {
             // 支持静态属性的直接读取
             return $className::$$name;
         }
 
-        if (strpos($name, 'set') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 1) {
+        if(strpos($name, 'set') === 0 && property_exists($className, lcfirst(substr($name, 3))) && $argumentCount === 1)
+        {
             // 支持静态属性的 set 方法
             $property = lcfirst(substr($name, 3));
             $className::$$property = $arguments[0];
             return;
         }
 
-        if (strpos($name, 'get') === 0 && property_exists($className, lcfirst(substr($name, 3))) && count($arguments) === 0) {
+        if(strpos($name, 'get') === 0 && property_exists($className, lcfirst(substr($name, 3))) && $argumentCount === 0)
+        {
             // 支持静态属性的 get 方法
             $property = lcfirst(substr($name, 3));
             return $className::$$property;

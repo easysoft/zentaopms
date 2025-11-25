@@ -5,7 +5,7 @@
 
 title=测试 actionTao::getLinkedExtra();
 timeout=0
-cid=0
+cid=14949
 
 - 步骤1：正常情况 @1
 - 步骤2：类型转换 @1

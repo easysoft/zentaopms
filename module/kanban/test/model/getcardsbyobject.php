@@ -10,7 +10,7 @@ zenData('kanbancard')->gen(20);
 
 title=测试 kanbanModel->getCardsByObject();
 timeout=0
-cid=1
+cid=16908
 
 - 测试查询kanban 1的卡片数量 @8
 - 测试查询kanban 2的卡片数量 @8

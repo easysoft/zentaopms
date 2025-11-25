@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiUpdateProject();
 timeout=0
-cid=1
+cid=16631
 
 - 执行gitlab模块的apiUpdateProject方法，参数是$gitlabID, $emptyProject  @0
 - 执行gitlab模块的apiUpdateProject方法，参数是0, $invalidProject  @0

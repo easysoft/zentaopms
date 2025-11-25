@@ -7,10 +7,10 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 
 title=测试taskModel->doUpdate();
 timeout=0
-cid=1
+cid=18874
 
 timeout=0
-cid=1
+cid=18874
 
 - 测试修改任务名称和截止日期
  - 属性name @修改后的任务名称

@@ -5,7 +5,7 @@
 
 title=测试 actionZen::recoverObject();
 timeout=0
-cid=0
+cid=14973
 
 - 步骤1：名称和代码都重复时恢复对象
  - 属性name @产品1_1

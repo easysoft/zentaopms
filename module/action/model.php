@@ -1247,7 +1247,7 @@ class actionModel extends model
     {
         $actionCondition = $this->getActionCondition();
         $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
-        $hasProduct      = preg_match('/t2\.(`?)product/', $sql);
+        $hasProduct      = preg_match('/t2\.([`"]?)product/', $sql);
 
         /* 构建权限搜索条件。 */
         /* Build has priv search condition. */
@@ -1959,7 +1959,7 @@ class actionModel extends model
         if(empty($condition)) return false;
 
         $beginAndEnd = $this->computeBeginAndEnd($period, '', $direction);
-        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.([`"]?)product/', $condition);
         $condition  = preg_replace("/AND +`?date`?\s*(<|>|<=|>=)\s*'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -2573,7 +2573,7 @@ class actionModel extends model
         if(empty($condition)) return 0;
 
         $table       = $this->actionTao->getActionTable($period);
-        $hasProduct  = preg_match('/t2\.(`?)product/', $condition);
+        $hasProduct  = preg_match('/t2\.([`"]?)product/', $condition);
         $useIndex    = $hasProduct && strpos('mysql,oceanbase', $this->config->db->driver) !== false ? ' USE INDEX (`vision_date`)' : ''; // 关联产品时指定索引以提高查询性能。Specify index to improve query performance when associated with product.
         $beginAndEnd = $this->computeBeginAndEnd($period, '', 'next');
         $condition   = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
@@ -2633,7 +2633,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
-        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.([`"]?)product/', $condition);
         $lastDate   = substr($lastAction->originalDate, 0, 10);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
@@ -2662,7 +2662,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return array();
 
-        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.([`"]?)product/', $condition);
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
         $lastDate   = substr($lastAction->date, 0, 10);
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')

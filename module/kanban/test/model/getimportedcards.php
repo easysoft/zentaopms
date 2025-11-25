@@ -15,7 +15,7 @@ zenData('project')->loadYaml('execution')->gen('300');
 
 title=测试 kanbanModel->getImportedCards();
 timeout=0
-cid=1
+cid=16920
 
 - 查看看板1的普通卡片和productplan卡片 @,1,2,3,4,5,6,7,8,801,802,803,804,805,806,807,808
 - 查看看板1的普通卡片和release卡片 @,1,2,3,4,5,6,7,8

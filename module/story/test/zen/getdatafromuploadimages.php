@@ -5,29 +5,44 @@
 
 title=测试 storyZen::getDataFromUploadImages();
 timeout=0
-cid=0
+cid=18682
 
-- 步骤1：无session图片文件，返回默认批量创建模板10个 @10
-- 步骤2：有session图片文件，返回2个故事 @2
-- 步骤3：切换产品ID，清除session后返回10个默认模板 @10
-- 步骤4：边界值测试productID为0，返回10个默认模板 @10
-- 步骤5：使用默认参数moduleID和planID为0，检查第一个故事的module字段第0条的module属性 @0
+- 步骤1:无session数据时返回默认空需求数组数量 @10
+- 步骤2:产品ID相同时保留session数据第0条的title属性 @图片需求1
+- 步骤3:产品ID不同时清除session数据第0条的title属性 @~~
+- 步骤4:session包含多个图片文件时返回数组数量 @3
+- 步骤5:session包含图片时返回需求的uploadImage字段第0条的uploadImage属性 @test_image1.jpg
+- 步骤6:设置moduleID时返回第一个需求的module字段第0条的module属性 @5
+- 步骤7:设置planID时返回第一个需求的plan字段第0条的plan属性 @10
 
 */
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/storyzen.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
+// 2. 用户登录
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+// 3. 创建测试实例
+$storyZenTest = new storyZenTest();
 
-// 4. 强制要求：必须包含至少5个测试步骤
-r(count($storyTest->getDataFromUploadImagesTest(1, 1, 1, array(), ''))) && p() && e('10'); // 步骤1：无session图片文件，返回默认批量创建模板10个
-r(count($storyTest->getDataFromUploadImagesTest(1, 1, 1, array('image1.jpg' => array('title' => 'Test Story 1'), 'image2.jpg' => array('title' => 'Test Story 2')), '1'))) && p() && e('2'); // 步骤2：有session图片文件，返回2个故事
-r(count($storyTest->getDataFromUploadImagesTest(2, 1, 1, array(), '1'))) && p() && e('10'); // 步骤3：切换产品ID，清除session后返回10个默认模板
-r(count($storyTest->getDataFromUploadImagesTest(0, 1, 1, array(), ''))) && p() && e('10'); // 步骤4：边界值测试productID为0，返回10个默认模板
-r($storyTest->getDataFromUploadImagesTest(1)) && p('0:module') && e('0'); // 步骤5：使用默认参数moduleID和planID为0，检查第一个故事的module字段
+// 4. 准备测试数据
+$emptySession = array();
+$singleImageSession = array(
+    'test_image1.jpg' => array('title' => '图片需求1', 'file' => 'test_image1.jpg')
+);
+$multiImageSession = array(
+    'test_image1.jpg' => array('title' => '图片需求1', 'file' => 'test_image1.jpg'),
+    'test_image2.jpg' => array('title' => '图片需求2', 'file' => 'test_image2.jpg'),
+    'test_image3.jpg' => array('title' => '图片需求3', 'file' => 'test_image3.jpg')
+);
+
+// 5. 测试步骤 - 必须包含至少5个测试步骤
+r(count($storyZenTest->getDataFromUploadImagesTest(1, 0, 0, $emptySession, 0))) && p() && e('10'); // 步骤1:无session数据时返回默认空需求数组数量
+r($storyZenTest->getDataFromUploadImagesTest(1, 0, 0, $singleImageSession, 1)) && p('0:title') && e('图片需求1'); // 步骤2:产品ID相同时保留session数据
+r($storyZenTest->getDataFromUploadImagesTest(2, 0, 0, $singleImageSession, 1)) && p('0:title') && e('~~'); // 步骤3:产品ID不同时清除session数据
+r(count($storyZenTest->getDataFromUploadImagesTest(1, 0, 0, $multiImageSession, 1))) && p() && e('3'); // 步骤4:session包含多个图片文件时返回数组数量
+r($storyZenTest->getDataFromUploadImagesTest(1, 0, 0, $singleImageSession, 1)) && p('0:uploadImage') && e('test_image1.jpg'); // 步骤5:session包含图片时返回需求的uploadImage字段
+r($storyZenTest->getDataFromUploadImagesTest(1, 5, 0, $emptySession, 1)) && p('0:module') && e('5'); // 步骤6:设置moduleID时返回第一个需求的module字段
+r($storyZenTest->getDataFromUploadImagesTest(1, 0, 10, $emptySession, 1)) && p('0:plan') && e('10'); // 步骤7:设置planID时返回第一个需求的plan字段

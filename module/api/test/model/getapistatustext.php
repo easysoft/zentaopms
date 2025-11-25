@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getApiStatusText();
 timeout=0
-cid=0
+cid=15104
 
 - 步骤1：正常状态doing @开发中
 - 步骤2：正常状态done @开发完成

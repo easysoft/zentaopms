@@ -5,7 +5,7 @@
 
 title=测试 docModel::getParamFromTargetSpace();
 timeout=0
-cid=0
+cid=16121
 
 - 步骤1：正常情况提取类型 @product
 - 步骤2：正常情况提取ID @1

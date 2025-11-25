@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getUserRoles();
-cid=0
+cid=19636
 
 - 参数为空字符串返回空数组。 @0
 - 参数为空数组返回空数组。 @0

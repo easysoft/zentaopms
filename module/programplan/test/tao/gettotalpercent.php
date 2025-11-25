@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanTao->getTotalPercent();
-cid=0
+cid=17775
 
 - 统计普通阶段下百分比。 @70
 - 统计含有子阶段百分比。 @80

@@ -5,7 +5,7 @@
 
 title=测试 aiappModel::getSquareCategoryArray();
 timeout=0
-cid=0
+cid=15086
 
 - 执行aiappTest模块的getSquareCategoryArrayTest方法，参数是array 
  - 属性collection @我的收藏

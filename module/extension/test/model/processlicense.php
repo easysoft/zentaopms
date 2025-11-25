@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->processLicense();
 timeout=0
-cid=1
+cid=16467
 
 - 处理并返回授权协议内容为APACHE的协议内容。 @Apache License
 - 处理并返回授权协议内容为BSD的协议内容。 @Copyright <year> <copyright holder>. All rights re

@@ -5,7 +5,7 @@
 
 title=测试 commonModel::getSysURL();
 timeout=0
-cid=0
+cid=15677
 
 - 执行commonTest模块的getSysURLTest方法，参数是1  @0
 - 执行commonTest模块的getSysURLTest方法，参数是2  @https://example.com

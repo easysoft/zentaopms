@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getStorySpecs();
 timeout=0
-cid=0
+cid=18561
 
 - 根据传入的需求ID列表，获取最新版本的需求描述信息
  - 第1条的spec属性 @这是一个软件需求描述1

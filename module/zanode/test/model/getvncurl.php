@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::getVncUrl();
 timeout=0
-cid=0
+cid=19839
 
 - 步骤1：正常节点VNC URL（由于HTTP请求失败） @0
 - 步骤2：宿主机节点（无vnc）获取VNC URL @0

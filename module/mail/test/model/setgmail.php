@@ -4,7 +4,7 @@
 /**
 
 title=测试 mailModel->setGMail();
-cid=0
+cid=17021
 
 - 获取Gmail主机
  - 属性Mailer @smtp

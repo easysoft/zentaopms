@@ -208,6 +208,7 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
     const nextGid = this._idSeed++;
     this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
     $row.find('input[data-name="estimate"]').prop('readonly', true); // 如果有子任务，不允许修改预计工时
+    $row.find('input[data-name="isParent"]').val('1'); // 如果有子任务，该任务为父任务
 
     const nextLevel = level + 1;
     while(true)
@@ -280,7 +281,11 @@ window.handleRenderRow = function($row, index)
     /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
     $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" data-name="level" name="level[${index + 1}]" value="${level}">`);
     $row.find('.form-batch-col-actions').addClass('is-pinned');
-    if($prevRow.length && $prevRow.attr('data-level') >= level) $prevRow.find('input[data-name="estimate"]').prop('readonly', false); // 如果没有子任务，重置预计字段的可编辑状态。
+    if($prevRow.length && $prevRow.attr('data-level') >= level)
+    {
+        $prevRow.find('input[data-name="estimate"]').prop('readonly', false); // 如果没有子任务，重置预计字段的可编辑状态。
+        $prevRow.find('input[data-name="isParent"]').val('0'); // 如果没有子任务，该任务不是父任务
+    }
     if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
 
     /* 复制上一行的人员下拉。*/

@@ -5,7 +5,7 @@
 
 title=测试 userModel::getLatestUserView();
 timeout=0
-cid=0
+cid=19613
 
 - 执行userTest模块的getLatestUserViewTest方法，参数是'user1', '2, 3', $project1, 'project', array  @2,3,1
 

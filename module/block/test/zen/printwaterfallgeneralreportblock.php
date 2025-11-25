@@ -5,60 +5,95 @@
 
 title=测试 blockZen::printWaterfallGeneralReportBlock();
 timeout=0
-cid=0
+cid=15310
 
-- 步骤1：无项目ID情况
+- 测试项目1：有任务、有工时数据、部分任务已完成
+ - 属性pv @2000
+ - 属性ev @1680
+ - 属性ac @240.00
+ - 属性sv @-16.00
+ - 属性cv @600.00
+ - 属性progress @37.5
+- 测试项目2：有工时数据但无任务数据
  - 属性pv @0
  - 属性ev @0
- - 属性ac @55.00
+ - 属性ac @240.00
  - 属性sv @0
  - 属性cv @-100.00
  - 属性progress @100
-- 步骤2：项目ID为0情况
+- 测试项目3：有工时数据但无任务数据
  - 属性pv @0
  - 属性ev @0
- - 属性ac @55.00
+ - 属性ac @240.00
  - 属性sv @0
  - 属性cv @-100.00
  - 属性progress @100
-- 步骤3：项目ID为1情况
+- 测试项目4：有工时数据但无任务数据
  - 属性pv @0
  - 属性ev @0
- - 属性ac @0.00
-- 步骤4：项目ID为2情况
- - 属性pv @0
- - 属性ev @0
- - 属性ac @0.00
-- 步骤5：不存在的项目ID情况
- - 属性pv @0
- - 属性ev @0
- - 属性ac @0.00
+ - 属性ac @240.00
  - 属性sv @0
- - 属性cv @0
- - 属性progress @0
+ - 属性cv @-100.00
+ - 属性progress @100
+- 测试项目5：有工时数据但无任务数据
+ - 属性pv @0
+ - 属性ev @0
+ - 属性ac @240.00
+ - 属性sv @0
+ - 属性cv @-100.00
+ - 属性progress @100
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备
-$projectTable = zenData('project');
-$projectTable->loadYaml('project_printwaterfallgeneralreportblock', false, 2)->gen(10);
+zenData('project')->loadYaml('project', false, 2)->gen(50);
 
-$taskTable = zenData('task');
-$taskTable->loadYaml('task_printwaterfallgeneralreportblock', false, 2)->gen(50);
+$execution = zenData('project');
+$execution->id->range('101-150');
+$execution->project->range('1{10},2{10},3{10},4{10},5{10}');
+$execution->type->range('stage');
+$execution->vision->range('rnd');
+$execution->deleted->range('0');
+$execution->gen(50);
 
-// 3. 用户登录（选择合适角色）
+$task = zenData('task');
+$task->id->range('1-100');
+$task->project->range('1{20},2{20},3{20},4{20},5{20}');
+$task->execution->range('101-110{10}');
+$task->name->range('任务1,任务2,任务3')->prefix('task_')->postfix('');
+$task->type->range('design,devel,test');
+$task->estimate->range('10,20,30,15,25');
+$task->consumed->range('8,16,24,12,20');
+$task->left->range('2,4,6,3,5');
+$task->status->range('wait{40},doing{40},done{20}');
+$task->isParent->range('0');
+$task->deleted->range('0');
+$task->closedReason->range('0{80},done{20}');
+$task->gen(100);
+
+$effort = zenData('effort');
+$effort->id->range('1-200');
+$effort->project->range('1{40},2{40},3{40},4{40},5{40}');
+$effort->execution->range('101-110{20}');
+$effort->objectType->range('task');
+$effort->objectID->range('1-100{2}');
+$effort->consumed->range('2,4,6,8,10');
+$effort->deleted->range('0');
+$effort->gen(200);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
-
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv,ev,ac,sv,cv,progress') && e('0,0,55.00,0,-100.00,100'); // 步骤1：无项目ID情况
-r($blockTest->printWaterfallGeneralReportBlockTest(0)) && p('pv,ev,ac,sv,cv,progress') && e('0,0,55.00,0,-100.00,100'); // 步骤2：项目ID为0情况
-r($blockTest->printWaterfallGeneralReportBlockTest(1)) && p('pv,ev,ac') && e('0,0,0.00'); // 步骤3：项目ID为1情况
-r($blockTest->printWaterfallGeneralReportBlockTest(2)) && p('pv,ev,ac') && e('0,0,0.00'); // 步骤4：项目ID为2情况
-r($blockTest->printWaterfallGeneralReportBlockTest(999)) && p('pv,ev,ac,sv,cv,progress') && e('0,0,0.00,0,0,0'); // 步骤5：不存在的项目ID情况
+global $tester;
+$tester->session->project = 1;
+$blockTest = new blockZenTest();
+r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv;ev;ac;sv;cv;progress') && e('2000;1680;240.00;-16.00;600.00;37.5'); // 测试项目1：有任务、有工时数据、部分任务已完成
+$tester->session->project = 2;
+r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv;ev;ac;sv;cv;progress') && e('0;0;240.00;0;-100.00;100'); // 测试项目2：有工时数据但无任务数据
+$tester->session->project = 3;
+r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv;ev;ac;sv;cv;progress') && e('0;0;240.00;0;-100.00;100'); // 测试项目3：有工时数据但无任务数据
+$tester->session->project = 4;
+r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv;ev;ac;sv;cv;progress') && e('0;0;240.00;0;-100.00;100'); // 测试项目4：有工时数据但无任务数据
+$tester->session->project = 5;
+r($blockTest->printWaterfallGeneralReportBlockTest()) && p('pv;ev;ac;sv;cv;progress') && e('0;0;240.00;0;-100.00;100'); // 测试项目5：有工时数据但无任务数据

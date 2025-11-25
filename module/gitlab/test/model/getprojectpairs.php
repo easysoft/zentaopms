@@ -8,7 +8,7 @@ su('admin');
 
 title=测试gitlabModel->getProjectPairs();
 timeout=0
-cid=1
+cid=16656
 
 - 获取gitlab服务器1的项目1的名称。属性1 @GitLab Instance / Monitoring
 - 获取gitlab服务器1的项目2的名称。属性2 @GitLab Instance / testHtml

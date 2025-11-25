@@ -5,7 +5,7 @@
 
 title=测试 todoZen::getUserById();
 timeout=0
-cid=0
+cid=19302
 
 - 步骤1：正常用户查询属性account @admin
 - 步骤2：边界值ID查询（ID为0） @0

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::checkName();
 timeout=0
-cid=0
+cid=18033
 
 - 步骤1：正常英文名称 @1
 - 步骤2：数字开头无效 @0

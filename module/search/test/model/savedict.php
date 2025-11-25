@@ -5,7 +5,7 @@
 
 title=测试 searchModel::saveDict();
 timeout=0
-cid=0
+cid=18307
 
 - 测试步骤1：保存有效字典数据属性result @1
 - 测试步骤2：测试有效边界值属性count @2

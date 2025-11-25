@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->getSiblingsTypeByParentID();
 timeout=0
-cid=1
+cid=16338
 
 - 查找parent为1的类型属性project @project
 - 查找parent为2的类型属性sprint @sprint

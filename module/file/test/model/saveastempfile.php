@@ -5,7 +5,7 @@
 
 title=测试 fileModel->saveAsTempFile();
 timeout=0
-cid=0
+cid=16526
 
 - 测试传入空realPath的文件对象 @
 - 测试fs存储类型下的有效文件路径 @/tmp/test.txt

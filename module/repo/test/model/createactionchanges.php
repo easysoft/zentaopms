@@ -5,7 +5,7 @@
 
 title=测试 repoModel::createActionChanges();
 timeout=0
-cid=0
+cid=18036
 
 - 测试步骤1：SVN单个文件修改第0条的field属性 @subversion
 - 测试步骤2：Git多种操作类型第0条的field属性 @git

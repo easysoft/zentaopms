@@ -5,7 +5,7 @@
 
 title=测试 todoZen::exportAssociated();
 timeout=0
-cid=0
+cid=19298
 
 - 步骤1：测试max版本返回3个数组 @3
 - 步骤2：测试qcVersion版本属性1 @审核1

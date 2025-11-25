@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDocLib();
 timeout=0
-cid=0
+cid=19424
 
 - 步骤1：正常调用getDocLib方法
  - 属性id @2

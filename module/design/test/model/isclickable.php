@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->isClickable();
-cid=1
+cid=15994
 
 - 确认needConfirm true 动作 confirmStoryChange 的设计是否可以操作 @1
 - 确认needConfirm false 动作 confirmStoryChange 的设计是否可以操作 @0

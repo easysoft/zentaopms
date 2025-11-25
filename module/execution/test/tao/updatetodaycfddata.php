@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 executionModel->updateTodayCFDData();
 timeout=0
-cid=1
+cid=16400
 
 - 更新迭代1今日需求未开始列无卡片累计流图数据
  - 属性execution @1

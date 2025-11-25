@@ -9,7 +9,7 @@ zenData('product')->gen(10);
 
 title=测试 systemModel::initSystem();
 timeout=0
-cid=1
+cid=18741
 
 - 传入字符串11测试是否初始化失败 @0
 - 传入字符串22测试是否初始化失败 @0

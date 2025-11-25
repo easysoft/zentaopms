@@ -5,7 +5,7 @@
 
 title=测试 groupModel::getUserPairs();
 timeout=0
-cid=0
+cid=16717
 
 - 步骤1：正常分组查询，验证admin用户属性admin @管理员
 - 步骤2：同分组查询，验证user1用户属性user1 @用户1

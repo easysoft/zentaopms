@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignCaseForView();
 timeout=0
-cid=0
+cid=19060
 
 - 步骤1：正常用例来源为testcase
  - 属性executed @1

@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 title=测试 screenModel->getRadarChartOption();
 timeout=0
-cid=1
+cid=18255
 
 - 测试组件类型 @VRadar
 - 判断radarIndicator存在 @1

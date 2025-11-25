@@ -5,29 +5,25 @@
 
 title=测试 productZen::responseNotFound4View();
 timeout=0
-cid=0
+cid=17604
 
-- 步骤1：API模式返回失败状态属性status @fail
-- 步骤2：非API模式返回成功结果属性result @success
-- 步骤3：API模式返回404错误码属性code @404
-- 步骤4：非API模式跳转地址第load条的locate属性 @/zentao/product-all.html
-- 步骤5：API模式错误消息属性message @404 Not found
+- 测试步骤1:Web模式下返回的响应结构包含result字段属性result @success
+- 测试步骤2:Web模式下返回的load字段包含alert第load条的alert属性 @抱歉，您访问的对象不存在！
+- 测试步骤3:Web模式下返回的load字段包含locate第load条的locate属性 @product-all.html
+- 测试步骤4:API模式下返回的响应包含status字段属性status @fail
+- 测试步骤5:API模式下返回的响应包含code字段属性code @404
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->responseNotFound4ViewTest('api')) && p('status') && e('fail'); // 步骤1：API模式返回失败状态
-r($productTest->responseNotFound4ViewTest('normal')) && p('result') && e('success'); // 步骤2：非API模式返回成功结果
-r($productTest->responseNotFound4ViewTest('api')) && p('code') && e(404); // 步骤3：API模式返回404错误码
-r($productTest->responseNotFound4ViewTest('normal')) && p('load:locate') && e('/zentao/product-all.html'); // 步骤4：非API模式跳转地址
-r($productTest->responseNotFound4ViewTest('api')) && p('message') && e('404 Not found'); // 步骤5：API模式错误消息
+r($productTest->responseNotFound4ViewTest('')) && p('result') && e('success'); // 测试步骤1:Web模式下返回的响应结构包含result字段
+r($productTest->responseNotFound4ViewTest('')) && p('load:alert') && e('抱歉，您访问的对象不存在！'); // 测试步骤2:Web模式下返回的load字段包含alert
+r($productTest->responseNotFound4ViewTest('')) && p('load:locate') && e('product-all.html'); // 测试步骤3:Web模式下返回的load字段包含locate
+r($productTest->responseNotFound4ViewTest('api')) && p('status') && e('fail'); // 测试步骤4:API模式下返回的响应包含status字段
+r($productTest->responseNotFound4ViewTest('api')) && p('code') && e('404'); // 测试步骤5:API模式下返回的响应包含code字段

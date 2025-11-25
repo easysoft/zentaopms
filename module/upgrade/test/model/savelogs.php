@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->saveLogs();
-cid=1
+cid=19551
 
 - 测试记录日志 log 1，然后获取最后一条日志 @log 1
 - 测试记录日志 log 2，然后获取最后一条日志 @log 2

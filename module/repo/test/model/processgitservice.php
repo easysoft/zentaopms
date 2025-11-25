@@ -5,7 +5,7 @@
 
 title=测试 repoModel::processGitService();
 timeout=0
-cid=0
+cid=18089
 
 - 步骤1：正常处理Gitlab版本库
  - 属性client @https://gitlabdev.qc.oop.cc

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::setMenuForLibCaseEdit();
 timeout=0
-cid=0
+cid=19111
 
 - 步骤1：project标签菜单设置属性executed @1
 - 步骤2：非project标签菜单设置属性executed @1

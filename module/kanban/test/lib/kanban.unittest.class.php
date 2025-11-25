@@ -2326,64 +2326,16 @@ class kanbanTest
      */
     public function refreshStoryCardsTest($cardPairs, $executionID, $otherCardList)
     {
-        // 创建模拟的故事数据来避免数据库依赖
-        $mockStories = array();
-        if($executionID == 1)
-        {
-            $mockStories = array(
-                1 => (object)array('id' => 1, 'stage' => 'projected', 'title' => '需求1'),
-                2 => (object)array('id' => 2, 'stage' => 'projected', 'title' => '需求2'),
-                3 => (object)array('id' => 3, 'stage' => 'designing', 'title' => '需求3'),
-                4 => (object)array('id' => 4, 'stage' => 'designed', 'title' => '需求4'),
-                5 => (object)array('id' => 5, 'stage' => 'developing', 'title' => '需求5'),
-            );
-        }
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('refreshStoryCards');
+        $method->setAccessible(true);
 
-        // 模拟storyColumnStageList配置
-        $storyColumnStageList = array(
-            'backlog'    => 'projected',
-            'ready'      => 'projected',
-            'designing'  => 'designing',
-            'designed'   => 'designed',
-            'developing' => 'developing',
-            'developed'  => 'developed',
-            'testing'    => 'testing',
-            'tested'     => 'tested',
-            'verified'   => 'verified',
-            'rejected'   => 'rejected',
-            'pending'    => 'pending',
-            'released'   => 'released',
-            'closed'     => 'closed'
-        );
-
-        // 模拟refreshStoryCards方法的核心逻辑
-        foreach($mockStories as $storyID => $story)
-        {
-            foreach($storyColumnStageList as $colType => $stage)
-            {
-                if(!isset($cardPairs[$colType])) continue;
-                if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
-                {
-                    $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                }
-
-                if(strpos(',ready,backlog,design,develop,test,', $colType) !== false) continue;
-
-                if($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
-                {
-                    $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
-                }
-            }
-
-            if(strpos('wait,projected', $story->stage) !== false and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
-            {
-                $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
-            }
-        }
+        $result = $method->invoke($this->objectTao, $cardPairs, $executionID, $otherCardList);
 
         if(dao::isError()) return dao::getError();
 
-        return $cardPairs;
+        return $result;
     }
 
     /**
@@ -2476,50 +2428,14 @@ class kanbanTest
      */
     public function getStoryCardMenuTest($execution, $objects)
     {
-        // 模拟getStoryCardMenu方法的核心逻辑
-        if(empty($objects)) return array();
+        // 使用反射来调用protected方法
+        $reflection = new ReflectionClass($this->objectTao);
+        $method = $reflection->getMethod('getStoryCardMenu');
+        $method->setAccessible(true);
 
-        $menus = array();
-        foreach($objects as $story)
-        {
-            $menu = array();
+        $menus = $method->invoke($this->objectTao, $execution, $objects);
 
-            // 模拟基本的权限和状态检查
-            $toTaskPriv = strpos('draft,reviewing,closed', $story->status) !== false ? false : true;
-
-            // 模拟基础菜单项
-            $menu[] = array('label' => 'Edit', 'icon' => 'edit', 'action' => 'edit');
-
-            if($story->status != 'closed')
-            {
-                $menu[] = array('label' => 'Change', 'icon' => 'alter', 'action' => 'change');
-            }
-
-            if($story->status == 'reviewing')
-            {
-                $menu[] = array('label' => 'Review', 'icon' => 'search', 'action' => 'review');
-            }
-
-            if($toTaskPriv)
-            {
-                $menu[] = array('label' => 'WBS', 'icon' => 'plus', 'action' => 'create_task');
-                $menu[] = array('label' => 'Batch WBS', 'icon' => 'pluses', 'action' => 'batch_create_task');
-            }
-
-            if($story->status == 'closed')
-            {
-                $menu[] = array('label' => 'Activate', 'icon' => 'magic', 'action' => 'activate');
-            }
-
-            if($execution->hasProduct)
-            {
-                $menu[] = array('label' => 'Unlink', 'icon' => 'unlink', 'action' => 'unlink');
-            }
-
-            $menu[] = array('label' => 'Delete', 'icon' => 'trash', 'action' => 'delete');
-
-            $menus[$story->id] = $menu;
-        }
+        if(dao::isError()) return dao::getError();
 
         return $menus;
     }

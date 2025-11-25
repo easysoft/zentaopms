@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 /**
 
 title=测试executionModel->getSwitcher();
-cid=1
+cid=16341
 
 - 测试设置迭代仪表盘1.5级下拉 @0
 - 测试设置阶段仪表盘1.5级下拉 @0

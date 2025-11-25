@@ -4,7 +4,7 @@
 
 title=测试 installModel->getDatabaseVersion();
 timeout=0
-cid=1
+cid=16771
 
 - 检查是否能成功获取当前数据库版本。 @1
 - 当driver为dm时候，获取数据库版本。 @8

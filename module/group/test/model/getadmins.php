@@ -10,7 +10,7 @@ zenData('projectadmin')->gen(50);
 
 title=测试 groupModel->getAdmins();
 timeout=0
-cid=1
+cid=16700
 
 - 测试不传入任何数据 @0
 - 测试获取 programID = 1 的管理员数 @18

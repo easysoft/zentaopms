@@ -171,10 +171,10 @@ $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
 /* Set the wide window size and timeout(ms). */
-$config->wideSize      = 1400;
-$config->timeout       = 30000;
-$config->maxCount      = 500;
-$config->moreLinks     = array();
+$config->wideSize  = 1400;
+$config->timeout   = 30000;
+$config->maxCount  = 500;
+$config->moreLinks = array();
 
 /* Docker Compose设置。 */
 $config->inCompose = strtolower((string)getenv('PROVIDER')) == 'docker';
@@ -273,4 +273,9 @@ else
     unset($config->ipdVersion);
 }
 
-if(strtolower($config->db->encoding) == 'utf8') $config->db->encoding = 'utf8mb4';
+if($config->db->driver == 'mysql')
+{
+    if($config->db->encoding != 'utf8mb4')                          $config->db->encoding  = 'utf8mb4';
+    if(!isset($config->db->collation))                              $config->db->collation = '';
+    if(strpos($config->db->collation, $config->db->encoding) !== 0) $config->db->collation = '';
+}

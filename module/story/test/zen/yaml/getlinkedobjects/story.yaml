@@ -1,0 +1,75 @@
+---
+title: Story测试数据
+desc: 用于getLinkedObjects方法的Story测试数据
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: module
+  note: 模块ID
+  range: 0,1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 需求标题
+  range: Story1,Story2,Story3,Story4,Story5,Story6,Story7,Story8,Story9,Story10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 需求类型
+  range: story,requirement,epic
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: draft,active,closed,changed
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fromBug
+  note: 来源Bug ID
+  range: 0,1,2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: twins
+  note: 孪生需求
+  range: "[],'2,3','4,5'"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

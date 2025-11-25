@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 testtaskModel->getToAndCcList();
 timeout=0
-cid=1
+cid=0
 
 - 测试单对象无任何属性，查看返回值。 @0
 - 测试单对象只有一个负责人属性，其值为空，查看返回值。 @0

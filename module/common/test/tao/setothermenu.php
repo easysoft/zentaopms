@@ -9,7 +9,7 @@ zenData('user')->gen(10);
 
 title=测试 commonTao->setOtherMenu();
 timeout=0
-cid=1
+cid=0
 
 - 查看admin是否可以打印看板空间的菜单
  -  @~~

@@ -3,7 +3,7 @@
 /**
 
 title=测试 testsuiteModel->isClickable();
-cid=1
+cid=19148
 
 - 测试 browse 方法是否可以点击 @1
 - 测试 create 方法是否可以点击 @1

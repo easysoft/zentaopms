@@ -5,7 +5,7 @@
 
 title=测试 treeZen::updateBrowseLang();
 timeout=0
-cid=0
+cid=19398
 
 - 执行treeTest模块的updateBrowseLangTest方法，参数是'host' 属性manage @模块维护
 - 执行treeTest模块的updateBrowseLangTest方法，参数是'caselib' 属性manage @模块维护

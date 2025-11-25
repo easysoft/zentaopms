@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao::getReleaseRelated();
 timeout=0
-cid=0
+cid=14953
 
 - 步骤1：正常情况
  - 第0条的0属性 @1

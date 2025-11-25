@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel::deleteByObject();
 timeout=0
-cid=0
+cid=17343
 
 - 执行pipelineTest模块的deleteByObjectTest方法，参数是0, 'gitlab'  @0
 - 执行pipelineTest模块的deleteByObjectTest方法，参数是1, 'gitlab'  @0

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::batchQueryStatus();
 timeout=0
-cid=0
+cid=15605
 
 - 步骤1：正常实例列表 @2
 - 步骤2：空实例列表 @0

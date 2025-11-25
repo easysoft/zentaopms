@@ -5,7 +5,7 @@
 
 title=测试 zahostTao->getCurrentTask();
 timeout=0
-cid=1
+cid=19757
 
 - 测试有下载中的任务，当前任务为下载中的任务
  - 属性status @inprogress

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::setUniqueSlices();
 timeout=0
-cid=0
+cid=17434
 
 - 步骤1：正常分片字段category属性slice @category
 - 步骤2：noSlice情况不添加uniqueSlices属性slice @noSlice

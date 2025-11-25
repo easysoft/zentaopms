@@ -5,7 +5,7 @@
 
 title=测试 apiZen::request();
 timeout=0
-cid=0
+cid=15127
 
 - 执行apiTest模块的requestTest方法，参数是'user', 'getById', 'extendModel', array 属性content @mock_response_content
 - 执行apiTest模块的requestTest方法，参数是'user', 'getList', 'extendModel', array 属性content @mock_response_content

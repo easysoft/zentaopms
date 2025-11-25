@@ -5,59 +5,48 @@
 
 title=测试 repoZen::getSyncBranches();
 timeout=0
-cid=0
+cid=18146
 
-- 执行repoZenTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID  @6
-- 执行repoZenTest模块的getSyncBranchesTest方法，参数是$emptyRepo, $branchID2  @0
-- 执行repoZenTest模块的getSyncBranchesTest方法，参数是$svnRepo, $branchID3  @0
-- 执行repoZenTest模块的getSyncBranchesTest方法，参数是null, $branchID4  @0
-- 执行repoZenTest模块的getSyncBranchesTest方法，参数是$gitlabRepo, $branchID5  @5
+- 执行repoTest模块的getSyncBranchesTest方法，参数是$svnRepo, $branchID1, array  @0
+- 执行repoTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID2, array  @0
+- 执行repoTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID3, $mockBranches2, array  @2
+- 执行repoTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID4, $mockBranches3, $mockTags, ''  @4
+- 执行repoTest模块的getSyncBranchesTest方法，参数是$gitRepo, $branchID5, $mockBranches3, $mockTags, 'develop'  @3
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
-zenData('repo')->gen(10);
+zendata('repo')->gen(0);
 
 su('admin');
 
-$repoZenTest = new repoZenTest();
+$repoTest = new repoZenTest();
 
-// 测试步骤1：Git仓库正常获取同步分支情况
-$gitRepo = new stdClass();
-$gitRepo->SCM = 'Git';
-$gitRepo->id = 1;
-$gitRepo->name = 'test-repo';
-$branchID = '';
-r(count($repoZenTest->getSyncBranchesTest($gitRepo, $branchID))) && p() && e('6');
-
-// 测试步骤2：空仓库获取同步分支情况
-$emptyRepo = new stdClass();
-$emptyRepo->SCM = 'Git';
-$emptyRepo->id = 2;
-$emptyRepo->name = 'empty-repo';
-$emptyRepo->isEmpty = true;
-$branchID2 = '';
-r(count($repoZenTest->getSyncBranchesTest($emptyRepo, $branchID2))) && p() && e('0');
-
-// 测试步骤3：非Git类型仓库获取同步分支情况
-$svnRepo = new stdClass();
+$svnRepo = new stdclass();
+$svnRepo->id = 1;
 $svnRepo->SCM = 'Subversion';
-$svnRepo->id = 3;
 $svnRepo->name = 'svn-repo';
+
+$gitRepo = new stdclass();
+$gitRepo->id = 2;
+$gitRepo->SCM = 'Git';
+$gitRepo->name = 'git-repo';
+
+$branchID1 = '';
+$branchID2 = '';
 $branchID3 = '';
-r(count($repoZenTest->getSyncBranchesTest($svnRepo, $branchID3))) && p() && e('0');
-
-// 测试步骤4：无效参数获取同步分支情况
 $branchID4 = '';
-r(count($repoZenTest->getSyncBranchesTest(null, $branchID4))) && p() && e('0');
-
-// 测试步骤5：带有cookie的分支ID获取同步分支情况
-$_COOKIE['syncBranch'] = 'develop';
-$gitlabRepo = new stdClass();
-$gitlabRepo->SCM = 'Gitlab';
-$gitlabRepo->id = 4;
-$gitlabRepo->name = 'gitlab-repo';
 $branchID5 = '';
-r(count($repoZenTest->getSyncBranchesTest($gitlabRepo, $branchID5))) && p() && e('5');
+
+$mockBranches1 = array();
+$mockBranches2 = array('master' => 'master', 'develop' => 'develop', 'feature' => 'feature');
+$mockBranches3 = array('master' => 'master', 'develop' => 'develop', 'feature' => 'feature');
+$mockTags = array('v1.0', 'v2.0');
+
+r(count($repoTest->getSyncBranchesTest($svnRepo, $branchID1, array(), array(), ''))) && p() && e('0');
+r(count($repoTest->getSyncBranchesTest($gitRepo, $branchID2, array(), array(), ''))) && p() && e('0');
+r(count($repoTest->getSyncBranchesTest($gitRepo, $branchID3, $mockBranches2, array(), ''))) && p() && e('2');
+r(count($repoTest->getSyncBranchesTest($gitRepo, $branchID4, $mockBranches3, $mockTags, ''))) && p() && e('4');
+r(count($repoTest->getSyncBranchesTest($gitRepo, $branchID5, $mockBranches3, $mockTags, 'develop'))) && p() && e('3');

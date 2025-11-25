@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->getEditedDocIdList();
-cid=1
+cid=16170
 
 - 获取编辑过的文档ID列表 @1
 - 获取编辑过的文档ID列表 @2

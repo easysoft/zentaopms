@@ -5,7 +5,7 @@
 
 title=测试 storeModel::appVersionList();
 timeout=0
-cid=0
+cid=18450
 
 - 步骤1：正常情况获取版本列表（API无响应返回空数组） @0
 - 步骤2：测试不同页面大小（返回计数0） @0

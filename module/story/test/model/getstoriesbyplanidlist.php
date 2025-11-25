@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getStoriesByPlanIdList();
-cid=0
+cid=18557
 
 - 传入计划ID列表，获取其下面的需求数量 @3
 - 传入计划ID列表，获取其下面的需求数量 @3

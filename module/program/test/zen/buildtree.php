@@ -5,79 +5,71 @@
 
 title=测试 programZen::buildTree();
 timeout=0
-cid=0
+cid=17726
 
-- 步骤1：正常构建根节点树形结构
- - 第0条的id属性 @1
- - 第0条的text属性 @项目集1
-- 步骤2：构建子节点树形结构
- - 第0条的id属性 @2
- - 第0条的text属性 @子项目集1
-- 步骤3：空数组输入处理 @0
-- 步骤4：无效父级ID处理 @0
-- 步骤5：包含非program类型数据过滤第1条的text属性 @项目集2
+- 测试步骤1:空数组输入 >> 返回空数组
+- 测试步骤2:单层顶级项目集(parent=0) >> 返回包含所有顶级项目集
+- 测试步骤3:多层嵌套项目集树形结构 >> 正确构建父子关系和递归子节点
+- 测试步骤4:指定父ID构建子树 >> 返回指定父ID的子项目集
+- 测试步骤5:包含project类型的混合数组 >> 过滤掉project类型只保留program
+- 测试步骤6:树节点属性完整性 >> 包含id、text、label、keys等必需属性
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
-
-zenData('project');
+include dirname(__FILE__, 2) . '/lib/programzen.unittest.class.php';
 
 su('admin');
 
 $programTest = new programTest();
 
-// 准备测试数据
-$programs = array();
-
-// 创建根级项目集
-$program1 = new stdclass();
+$program1 = new stdClass();
 $program1->id = 1;
-$program1->name = '项目集1';
+$program1->name = '顶级项目集A';
 $program1->type = 'program';
 $program1->parent = 0;
-$program1->grade = 1;
-$programs[] = $program1;
 
-// 创建子级项目集
-$program2 = new stdclass();
+$program2 = new stdClass();
 $program2->id = 2;
-$program2->name = '子项目集1';
+$program2->name = '顶级项目集B';
 $program2->type = 'program';
-$program2->parent = 1;
-$program2->grade = 2;
-$programs[] = $program2;
+$program2->parent = 0;
 
-// 创建另一个根级项目集
-$program3 = new stdclass();
+$program3 = new stdClass();
 $program3->id = 3;
-$program3->name = '项目集2';
+$program3->name = '子项目集C';
 $program3->type = 'program';
-$program3->parent = 0;
-$program3->grade = 1;
-$programs[] = $program3;
+$program3->parent = 1;
 
-// 创建非program类型数据
-$project1 = new stdclass();
-$project1->id = 4;
-$project1->name = '项目1';
-$project1->type = 'project';
-$project1->parent = 1;
-$project1->grade = 2;
-$programs[] = $project1;
-
-// 创建深层子项目集
-$program4 = new stdclass();
-$program4->id = 5;
-$program4->name = '深层子项目集';
+$program4 = new stdClass();
+$program4->id = 4;
+$program4->name = '子项目集D';
 $program4->type = 'program';
-$program4->parent = 2;
-$program4->grade = 3;
-$programs[] = $program4;
+$program4->parent = 1;
 
-r($programTest->buildTreeTest($programs, 0)) && p('0:id,text') && e('1,项目集1'); // 步骤1：正常构建根节点树形结构
-r($programTest->buildTreeTest($programs, 1)) && p('0:id,text') && e('2,子项目集1'); // 步骤2：构建子节点树形结构
-r($programTest->buildTreeTest(array(), 0)) && p() && e('0'); // 步骤3：空数组输入处理
-r($programTest->buildTreeTest($programs, 999)) && p() && e('0'); // 步骤4：无效父级ID处理
-r($programTest->buildTreeTest($programs, 0)) && p('1:text') && e('项目集2'); // 步骤5：包含非program类型数据过滤
+$program5 = new stdClass();
+$program5->id = 5;
+$program5->name = '孙项目集E';
+$program5->type = 'program';
+$program5->parent = 3;
+
+$project1 = new stdClass();
+$project1->id = 8;
+$project1->name = '独立项目1';
+$project1->type = 'project';
+$project1->parent = 0;
+
+$project2 = new stdClass();
+$project2->id = 9;
+$project2->name = '独立项目2';
+$project2->type = 'project';
+$project2->parent = 0;
+
+$programs = array(1 => $program1, 2 => $program2, 3 => $program3, 4 => $program4, 5 => $program5, 8 => $project1, 9 => $project2);
+
+r($programTest->buildTreeTest(array(), 0)) && p() && e('0');
+r($programTest->buildTreeTest($programs, 0)) && p('0:id;1:id') && e('1;2');
+r($programTest->buildTreeTest($programs, 0)) && p('0:text') && e('顶级项目集A');
+r($programTest->buildTreeTest($programs, 1)) && p('0:id;1:id') && e('3;4');
+r($programTest->buildTreeTest($programs, 3)) && p('0:id,text') && e('5,孙项目集E');
+r($programTest->buildTreeTest($programs, 0)) && p('0:id,text,keys') && e('1,顶级项目集A,dingjixiangmujia djxmja');

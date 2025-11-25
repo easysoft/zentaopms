@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::buildCasesByXmind();
 timeout=0
-cid=0
+cid=19077
 
 - 步骤1：正常情况
  - 第0条的title属性 @新测试用例

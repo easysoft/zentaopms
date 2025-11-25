@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildFunnelChart();
 timeout=0
-cid=0
+cid=18210
 
 - 步骤1：正常情况属性key @Funnel
 - 步骤2：settings为null属性key @Funnel

@@ -10,7 +10,7 @@ zenData('testsuite')->loadYaml('testsuite')->gen(9);
 
 title=测试 testsuiteModel->getUnitSuites();
 timeout=0
-cid=1
+cid=19146
 
 - 测试productID值为1,orderBy为id_desc @0
 - 测试productID值为1,orderBy为id_desc

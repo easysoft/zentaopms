@@ -14,7 +14,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getYearCaseStat();
-cid=1
+cid=18181
 
 - 测试获取本年度 admin 的用例数 @0
 - 测试获取本年度 dev17 的用例数 @0

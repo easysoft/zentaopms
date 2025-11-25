@@ -3,7 +3,7 @@
 /**
 
 title=测试 holidayModel->updateProjectRealDuration();
-cid=1
+cid=16751
 
 - 测试插入id为 10 的节假日时迭代 11 项目的实际工期 @250
 - 测试插入id为 10 的节假日时迭代 60 项目的实际工期 @252

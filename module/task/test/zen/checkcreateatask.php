@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkCreateTask();
 timeout=0
-cid=0
+cid=18920
 
 - 步骤1：正常任务创建检查 @1
 - 步骤2：预计工时为负数的异常情况属性estimate @预计不能为负数

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::extractAccountsFromSingle();
 timeout=0
-cid=0
+cid=18491
 
 - 步骤1：包含全部不同账号字段 @4
 - 步骤2：只包含openedBy字段 @1

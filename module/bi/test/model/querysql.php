@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::querySQL();
 timeout=0
-cid=0
+cid=15212
 
 - 测试有效SQL查询，期望result为success @success
 - 测试无效SQL语法，期望result为fail @fail

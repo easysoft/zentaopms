@@ -5,7 +5,7 @@
 
 title=测试 editorModel::extendControl();
 timeout=0
-cid=0
+cid=16230
 
 - 测试isExtends为'yes'生成继承类扩展代码
  - 属性hasMyClass @1

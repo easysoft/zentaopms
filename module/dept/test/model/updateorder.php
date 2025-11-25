@@ -5,7 +5,7 @@
 
 title=测试 deptModel::updateOrder();
 timeout=0
-cid=0
+cid=15981
 
 - 测试步骤1：正常多部门排序更新 @1
 - 测试步骤2：单个部门排序更新 @1

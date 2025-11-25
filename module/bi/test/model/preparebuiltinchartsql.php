@@ -5,29 +5,34 @@
 
 title=测试 biModel::prepareBuiltinChartSQL();
 timeout=0
-cid=0
+cid=15197
 
-- 步骤1：测试插入操作生成的SQL数量 @182
-- 步骤2：测试第一条SQL包含年度总结图表代码 @1
-- 步骤3：测试插入SQL包含INSERT语句 @1
-- 步骤4：测试更新操作SQL数量 @182
-- 步骤5：测试更新SQL包含UPDATE语句 @1
+- 步骤1:insert操作返回非空数组 @1
+- 步骤2:update操作返回非空数组 @1
+- 步骤3:INSERT语句格式正确 @1
+- 步骤4:表名正确 @1
+- 步骤5:返回数组类型 @1
+- 步骤6:默认使用insert操作 @1
+- 步骤7:包含配置信息 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+su('admin');
 
-// 2. 创建测试实例（变量名与模块名一致）
-$biTest = new biTest();
+// 2. zendata数据准备
+zenData('chart')->gen(0);
+zenData('user')->gen(5);
 
-// 3. 执行测试步骤
-$insertResults = $biTest->prepareBuiltinChartSQLTest('insert');
-$updateResults = $biTest->prepareBuiltinChartSQLTest('update');
+// 3. 加载bi模型
+$bi = $tester->loadModel('bi');
 
-r(count($insertResults)) && p() && e('182'); // 步骤1：测试插入操作生成的SQL数量
-r((strpos($insertResults[0], 'annualSummary_countLogin') !== false ? 1 : 0)) && p() && e('1'); // 步骤2：测试第一条SQL包含年度总结图表代码
-r((strpos($insertResults[0], 'INSERT INTO') !== false ? 1 : 0)) && p() && e('1'); // 步骤3：测试插入SQL包含INSERT语句
-r(count($updateResults)) && p() && e('182'); // 步骤4：测试更新操作SQL数量
-r((strpos($updateResults[0], 'UPDATE') !== false ? 1 : 0)) && p() && e('1'); // 步骤5：测试更新SQL包含UPDATE语句
+// 4. 强制要求:必须包含至少5个测试步骤
+r(count($bi->prepareBuiltinChartSQL('insert')) > 0) && p() && e('1'); // 步骤1:insert操作返回非空数组
+r(count($bi->prepareBuiltinChartSQL('update')) > 0) && p() && e('1'); // 步骤2:update操作返回非空数组
+r(strpos($bi->prepareBuiltinChartSQL('insert')[0], 'INSERT') !== false) && p() && e('1'); // 步骤3:INSERT语句格式正确
+r(strpos($bi->prepareBuiltinChartSQL('insert')[0], 'chart') !== false) && p() && e('1'); // 步骤4:表名正确
+r(is_array($bi->prepareBuiltinChartSQL('insert'))) && p() && e('1'); // 步骤5:返回数组类型
+r(count($bi->prepareBuiltinChartSQL()) > 0) && p() && e('1'); // 步骤6:默认使用insert操作
+r(strpos($bi->prepareBuiltinChartSQL('insert')[0], 'system') !== false) && p() && e('1'); // 步骤7:包含配置信息

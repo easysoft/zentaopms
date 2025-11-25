@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::getSceneCases();
 timeout=0
-cid=0
+cid=19194
 
 - 步骤1：正常情况，返回两个元素数组 @2
 - 步骤2：无场景用例，仍返回两个元素数组 @2

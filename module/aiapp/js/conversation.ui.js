@@ -8,10 +8,19 @@ const toggleEleClass  = 'aiapp-conversation-toggle';
 
 function openInAIPanel(chat, params)
 {
-    if(!params || !aiPanel) return;
+    if(!aiPanel) return;
     if(typeof params === 'string') try {params = JSON.parse(params);} catch {}
-    if(!params || typeof params !== 'object') return;
-    aiPanel.open({chatID: chat, postMessage: params});
+    params = params || {};
+    if(typeof params !== 'object') return;
+    const options = {};
+    if(params.postMessage)
+    {
+        options.postMessage = params.postMessage;
+        delete params.postMessage;
+    }
+    if(!chat || chat === 'NEW')       options.chat = params;
+    else if(typeof chat === 'string') options.chat = chat;
+    aiPanel.open(options);
 }
 
 function injectEmbedStyle()

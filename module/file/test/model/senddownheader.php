@@ -5,7 +5,7 @@
 
 title=测试 fileModel::sendDownHeader();
 timeout=0
-cid=0
+cid=16531
 
 - 执行fileTest模块的sendDownHeaderTest方法，参数是'document.pdf', 'pdf', 'test content', 'content'  @test content
 - 执行fileTest模块的sendDownHeaderTest方法，参数是'test.txt', 'txt', $testFile, 'file'  @file_success

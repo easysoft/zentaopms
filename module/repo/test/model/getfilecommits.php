@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getFileCommits();
 timeout=0
-cid=8
+cid=18056
 
 - 获取代码文件得提交信息
  - 第0条的revision属性 @c808480afe22d3a55d94e91c59a8f3170212ade0

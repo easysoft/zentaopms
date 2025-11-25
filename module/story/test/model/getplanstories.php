@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getPlanStories();
 timeout=0
-cid=0
+cid=18548
 
 - 执行storyTest模块的getPlanStoriesTest方法，参数是1, 'all', 'id_desc'  @4
 - 执行storyTest模块的getPlanStoriesTest方法，参数是1, 'all', 'module, id_desc'  @4

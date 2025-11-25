@@ -579,7 +579,7 @@ class customModel extends model
             if($moduleName == 'user' && $method == 'edit') $this->app->loadConfig('user');
             foreach(explode(',', $fieldList) as $fieldName)
             {
-                if($moduleName == 'user' && $method == 'edit' && strpos($this->config->user->contactField, $fieldName) === false) continue;
+                if($moduleName == 'user' && $method == 'edit' && strpos($this->config->user->contactField, $fieldName) === false && !in_array($fieldName, array('dept', 'role', 'group', 'email', 'commiter'))) continue;
                 if($moduleName == 'project' && $fieldName == 'budget' && $this->config->vision == 'lite') continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->{$fieldName}) && is_string($moduleLang->{$fieldName})) $fields[$fieldName] = $moduleLang->$fieldName;
@@ -757,8 +757,8 @@ class customModel extends model
      */
     public function saveRequiredFields(string $moduleName, array $data): void
     {
-        if(isset($this->config->system->$moduleName))   unset($this->config->system->$moduleName);
-        if(isset($this->config->personal->$moduleName)) unset($this->config->personal->$moduleName);
+        if(isset($this->config->systemDB->$moduleName))   unset($this->config->systemDB->$moduleName);
+        if(isset($this->config->personalDB->$moduleName)) unset($this->config->personalDB->$moduleName);
 
         $this->loadModel($moduleName);
         $systemFields = $this->getRequiredFields($this->config->$moduleName);
@@ -844,13 +844,13 @@ class customModel extends model
     public function setURAndSR(array $data): bool
     {
         $lang   = $this->app->getClientLang();
-        $maxKey = $this->dao->select('max(cast(`key` as SIGNED)) as maxKey')->from(TABLE_LANG)
+        $maxKey = $this->dao->select('max(cast(`key` as DECIMAL)) as maxKey')->from(TABLE_LANG)
             ->where('section')->eq('URSRList')
             ->andWhere('module')->eq('custom')
             ->andWhere('lang')->eq($lang)
             ->fetch('maxKey');
 
-        $maxKey = $maxKey ? $maxKey : 1;
+        $maxKey = $maxKey ? (int)$maxKey : 1;
 
         /* If has custom UR and SR name. */
         foreach($data['SRName'] as $key => $SRName)

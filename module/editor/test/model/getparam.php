@@ -5,7 +5,7 @@
 
 title=测试 editorModel::getParam();
 timeout=0
-cid=0
+cid=16238
 
 - 测试获取控制器方法参数（包含默认值）
  - 属性params @$date=\'today\'

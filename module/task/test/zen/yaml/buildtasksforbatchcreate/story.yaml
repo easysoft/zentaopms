@@ -1,0 +1,27 @@
+---
+title: 需求数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: 1,1,1,1,2,2,2,3,3,3
+- field: title
+  note: 需求标题
+  range: 需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10
+- field: type
+  note: 需求类型
+  range: story,story,story,story,story,story,story,requirement,requirement,requirement
+- field: status
+  note: 状态
+  range: active,active,active,active,active,closed,closed,closed,draft,draft
+- field: version
+  note: 版本号
+  range: 1,1,2,2,3,3,4,4,5,5
+- field: deleted
+  note: 是否删除
+  range: '0'

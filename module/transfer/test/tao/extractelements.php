@@ -38,7 +38,7 @@ $rows[3]->estimate = 2;
 
 title=测试 transfer->extractElements();
 timeout=0
-cid=1
+cid=19331
 
 - 测试当产品为单选时，是否正常识别第3条的product属性 @2
 - 测试语言项是否正常第3条的source属性 @market

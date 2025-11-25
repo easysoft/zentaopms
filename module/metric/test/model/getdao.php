@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getDAO();
 timeout=0
-cid=0
+cid=17086
 
 - 执行metricTest模块的getDAOTest方法 属性driver @mysql
 - 执行metricTest模块的getDAOTest方法 属性driver @mysql

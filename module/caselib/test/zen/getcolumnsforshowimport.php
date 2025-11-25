@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getColumnsForShowImport();
 timeout=0
-cid=0
+cid=15544
 
 - 步骤1：正常完整映射 @5
 - 步骤2：包含空值情况 @1

@@ -8,7 +8,7 @@ zenData('system')->gen(10);
 
 title=测试 systemModel::getPairsByProducts();
 timeout=0
-cid=1
+cid=18738
 
 - 传空数组返回全部应用取属性1 @应用1
 - 传空数组返回全部应用的总数量 @5

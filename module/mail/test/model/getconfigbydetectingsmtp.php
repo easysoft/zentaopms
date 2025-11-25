@@ -5,7 +5,7 @@
 
 title=测试 mailModel::getConfigByDetectingSMTP();
 timeout=0
-cid=0
+cid=17006
 
 - 测试步骤1：465端口SSL配置检测属性host @smtp.qq.com
 - 测试步骤2：25端口普通配置检测属性secure @0

@@ -10,7 +10,7 @@ zenData('project')->gen(5);
 
 title=测试 projectTao::doSuspend();
 timeout=0
-cid=1
+cid=17901
 
 - 更新项目2 @1
 - 更新不存在的项目 @1

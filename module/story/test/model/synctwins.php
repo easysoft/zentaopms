@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->syncTwins();
-cid=0
+cid=18591
 
 - 执行$twins[0]
  - 属性id @6

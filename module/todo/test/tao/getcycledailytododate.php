@@ -5,7 +5,7 @@
 
 title=测试 todoTao::getCycleDailyTodoDate();
 timeout=0
-cid=0
+cid=19273
 
 - 执行todoTest模块的getCycleDailyTodoDateTest方法，参数是$todo1, $lastCycle1, $today1  @2024-01-04
 - 执行todoTest模块的getCycleDailyTodoDateTest方法，参数是$todo2, $lastCycle2, $today2  @0

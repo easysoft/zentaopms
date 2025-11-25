@@ -9,7 +9,7 @@ zenData('project')->loadYaml('project_isnostoryexecution')->gen(9);
 
 title=taskModel->isNoStoryExecution();
 timeout=0
-cid=1
+cid=18830
 
 - 测试执行为短期执行 阶段类型为mix的执行是否有需求列表 @0
 - 测试执行为短期执行 阶段类型request为的执行是否有需求列表 @0

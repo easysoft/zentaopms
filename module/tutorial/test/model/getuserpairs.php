@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getUserPairs();
-cid=1
+cid=19494
 
 - 测试是否能拿到 admin 数据 admin属性admin @admin
 - 测试是否能拿到 admin 数据 test属性test @Test

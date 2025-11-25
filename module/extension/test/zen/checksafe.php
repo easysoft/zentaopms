@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 extensionZen::checkSafe();
 timeout=0
-cid=1
+cid=16482
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, []  @0
 - 执行invokeArgs($zen模块的newInstance方法，参数是, []  @0

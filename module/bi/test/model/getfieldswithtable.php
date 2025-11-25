@@ -5,7 +5,7 @@
 
 title=测试 biModel::getFieldsWithTable();
 timeout=0
-cid=0
+cid=15173
 
 - 步骤1：简单单表查询
  - 属性account @zt_user

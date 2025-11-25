@@ -5,93 +5,154 @@
 
 title=测试 projectZen::prepareProject();
 timeout=0
-cid=0
+cid=17952
 
-- 执行projectTest模块的prepareProjectTest方法，参数是$testData1, 1
- - 属性name @测试项目1
- - 属性budget @15000.57
-- 执行projectTest模块的prepareProjectTest方法，参数是$testData2, 0
- - 属性name @测试项目2
- - 属性team @测试项目2
-- 执行projectTest模块的prepareProjectTest方法，参数是$testData3, 1 属性products[0] @请关联产品或创建产品。
-- 执行projectTest模块的prepareProjectTest方法，参数是$testData4, 0 属性days @0
-- 执行projectTest模块的prepareProjectTest方法，参数是$testData5, 0 属性budget @25000.79
+- 步骤1属性team @Test Project 1
+- 步骤2属性team @Test Project 2
+- 步骤3
+ - 属性end @2059-12-31
+ - 属性days @0
+- 步骤4属性budget @0
+- 步骤5属性products[0] @最少关联一个产品
+- 步骤6属性days @可用工作日不能超过『10』天
+- 步骤7属性budget @1234.57
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备
-$table = zenData('project');
-$table->id->range('1-5');
-$table->name->range('项目1,项目2,项目3,项目4,项目5');
-$table->parent->range('1,2,3,4,5');
-$table->begin->range('`2024-01-01`,`2024-02-01`,`2024-03-01`,`2024-04-01`,`2024-05-01`');
-$table->end->range('`2024-12-31`,`2024-11-30`,`2024-10-31`,`2024-09-30`,`2024-08-31`');
-$table->days->range('100,200,150,180,120');
-$table->budget->range('10000,20000,30000,40000,50000');
-$table->status->range('wait,doing,closed,suspended,wait');
-$table->hasProduct->range('1,0,1,1,0');
-$table->type->range('project');
-$table->gen(5);
+zenData('project')->gen(5);
+zenData('product')->gen(5);
+zenData('branch')->gen(5);
 
-// 3. 用户登录
 su('admin');
 
-// 4. 创建测试实例
+global $tester, $app;
+$app->rawModule = 'project';
+$app->rawMethod = 'edit';
+
 $projectTest = new projectZenTest();
 
-// 5. 测试步骤 - 必须包含至少5个测试步骤
+// 步骤1:正常情况-有产品的项目
+$_POST = array();
+$_POST['name'] = 'Test Project 1';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-12-31';
+$_POST['days'] = 200;
+$_POST['parent'] = 1;
+$_POST['products'] = array(1);
+$_POST['branch'] = array(array(0));
+$_POST['longTime'] = false;
+$_POST['delta'] = '100';
+$_POST['future'] = false;
+$_POST['budget'] = 1000;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData1 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData1, 1)) && p('team') && e('Test Project 1'); // 步骤1
 
-// 步骤1：有产品项目的正常数据准备
-$testData1 = array(
-    'name' => '测试项目1',
-    'budget' => '15000.567',
-    'begin' => '2024-01-01',
-    'end' => '2024-12-31',
-    'days' => '200',
-    'parent' => 1,
-    'products' => array(1, 2),
-    'branch' => array(array(0), array(0))
-);
+// 步骤2:无产品的项目
+$_POST = array();
+$_POST['name'] = 'Test Project 2';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-06-30';
+$_POST['days'] = 100;
+$_POST['parent'] = 1;
+$_POST['longTime'] = false;
+$_POST['delta'] = '50';
+$_POST['future'] = false;
+$_POST['budget'] = 500;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData2 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData2, 0)) && p('team') && e('Test Project 2'); // 步骤2
 
-r($projectTest->prepareProjectTest($testData1, 1)) && p('name,budget') && e('测试项目1,15000.57');
+// 步骤3:长期项目
+$_POST = array();
+$_POST['name'] = 'Test Project 3';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-12-31';
+$_POST['days'] = 200;
+$_POST['parent'] = 1;
+$_POST['longTime'] = true;
+$_POST['delta'] = '999';
+$_POST['future'] = false;
+$_POST['budget'] = 0;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData3 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData3, 0)) && p('end,days') && e('2059-12-31,0'); // 步骤3
 
-// 步骤2：无产品项目的正常数据准备
-$testData2 = array(
-    'name' => '测试项目2',
-    'budget' => '20000'
-);
+// 步骤4:预算为0时保持0
+$_POST = array();
+$_POST['name'] = 'Test Project 4';
+$_POST['begin'] = '2025-01-01';
+$_POST['end'] = '2025-12-31';
+$_POST['days'] = 200;
+$_POST['parent'] = 1;
+$_POST['longTime'] = false;
+$_POST['delta'] = '100';
+$_POST['future'] = false;
+$_POST['budget'] = 0;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData4 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData4, 0)) && p('budget') && e('0'); // 步骤4
 
-r($projectTest->prepareProjectTest($testData2, 0)) && p('name,team') && e('测试项目2,测试项目2');
+// 步骤5:产品为空时返回错误
+$_POST = array();
+$_POST['name'] = 'Test Project 5';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-12-31';
+$_POST['days'] = 200;
+$_POST['parent'] = 1;
+$_POST['longTime'] = false;
+$_POST['delta'] = '100';
+$_POST['future'] = false;
+$_POST['budget'] = 0;
+$_POST['products'] = array();
+$_POST['branch'] = array();
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData5 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData5, 1)) && p('products[0]') && e('最少关联一个产品'); // 步骤5
 
-// 步骤3：有产品项目但产品列表为空的情况
-$testData3 = array(
-    'name' => '测试项目3',
-    'products' => array(''),
-    'branch' => array(array(''))
-);
-global $app;
-$app->rawMethod = 'create';
+// 步骤6:工作日超出范围
+$_POST = array();
+$_POST['name'] = 'Test Project 6';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-01-10';
+$_POST['days'] = 50;
+$_POST['parent'] = 1;
+$_POST['longTime'] = false;
+$_POST['delta'] = '50';
+$_POST['future'] = false;
+$_POST['budget'] = 0;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData6 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData6, 0)) && p('days') && e('可用工作日不能超过『10』天'); // 步骤6
 
-r($projectTest->prepareProjectTest($testData3, 1)) && p('products[0]') && e('请关联产品或创建产品。');
-
-// 步骤4：长期项目的数据处理
-$testData4 = array(
-    'name' => '测试项目4',
-    'longTime' => true,
-    'delta' => '999'
-);
-
-r($projectTest->prepareProjectTest($testData4, 0)) && p('days') && e('0');
-
-// 步骤5：预算字段的数据处理和格式化
-$testData5 = array(
-    'name' => '测试项目5',
-    'budget' => '25000.789',
-    'future' => false
-);
-
-r($projectTest->prepareProjectTest($testData5, 0)) && p('budget') && e('25000.79');
+// 步骤7:预算四舍五入
+$_POST = array();
+$_POST['name'] = 'Test Project 7';
+$_POST['begin'] = '2024-01-01';
+$_POST['end'] = '2024-12-31';
+$_POST['days'] = 200;
+$_POST['parent'] = 1;
+$_POST['longTime'] = false;
+$_POST['delta'] = '100';
+$_POST['future'] = false;
+$_POST['budget'] = 1234.567;
+$_POST['whitelist'] = array();
+$_POST['auth'] = array();
+$_POST['storyType'] = array();
+$formData7 = form::data($tester->config->project->form->edit);
+r($projectTest->prepareProjectTest($formData7, 0)) && p('budget') && e('1234.57'); // 步骤7

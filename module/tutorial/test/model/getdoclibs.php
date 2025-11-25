@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getDocLibs();
 timeout=0
-cid=0
+cid=19425
 
 - 测试获取文档库列表的基本信息
  - 第2条的id属性 @2

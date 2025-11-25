@@ -1,0 +1,14 @@
+---
+title: assignBatchEditVars测试的项目产品关联数据
+desc: 用于测试bugZen::assignBatchEditVars()方法的项目产品关联数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: '1{5},2{5}'
+- field: product
+  note: 产品ID
+  range: '1{3},2{3},3{2},4{2}'
+- field: branch
+  note: 分支ID
+  range: '0{5},1{3},2{2}'

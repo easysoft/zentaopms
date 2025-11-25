@@ -5,7 +5,7 @@
 
 title=测试 repoZen::getLinkStories();
 timeout=0
-cid=0
+cid=18143
 
 - 步骤1：正常情况获取需求数量 @2
 - 步骤2：搜索方式获取需求数量 @1

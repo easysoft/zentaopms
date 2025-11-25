@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->checkPrivLib();
-cid=1
+cid=16055
 
 - 测试ID=1的文档库的权限 @1
 - 测试ID=5的文档库的权限 @1

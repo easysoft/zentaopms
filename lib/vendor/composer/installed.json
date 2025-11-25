@@ -34,6 +34,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.1.x-dev"
+                },
+                "patches_applied": {
+                    "Add return type declarations to Iterator methods": "patches/box-spout-php8-compatibility.patch"
                 }
             },
             "installation-source": "dist",
@@ -1117,7 +1120,8 @@
             "type": "library",
             "extra": {
                 "patches_applied": {
-                    "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch"
+                    "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch",
+                    "Fix memory limit calculation in privOptionDefaultThreshold method": "patches/pclzip-memory-limit-fix.patch"
                 }
             },
             "installation-source": "dist",
@@ -1289,7 +1293,10 @@
                 "patches_applied": {
                     "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
                     "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
-                    "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch"
+                    "Optimize DefaultValueBinder type checking and safety": "patches/phpspreadsheet-optimize-defaultvaluebinder.patch",
+                    "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
+                    "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch",
+                    "Fix alignment check condition in Styles reader": "patches/phpspreadsheet-fix-alignment-check.patch"
                 }
             },
             "installation-source": "dist",
@@ -1569,62 +1576,6 @@
             "install-path": "../phpseclib/phpseclib"
         },
         {
-            "name": "phpstan/phpstan",
-            "version": "2.1.31",
-            "version_normalized": "2.1.31.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ead89849d879fe203ce9292c6ef5e7e76f867b96",
-                "reference": "ead89849d879fe203ce9292c6ef5e7e76f867b96",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4|^8.0"
-            },
-            "conflict": {
-                "phpstan/phpstan-shim": "*"
-            },
-            "time": "2025-10-10T14:14:11+00:00",
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHPStan - PHP Static Analysis Tool",
-            "keywords": [
-                "dev",
-                "static analysis"
-            ],
-            "support": {
-                "docs": "https://phpstan.org/user-guide/getting-started",
-                "forum": "https://github.com/phpstan/phpstan/discussions",
-                "issues": "https://github.com/phpstan/phpstan/issues",
-                "security": "https://github.com/phpstan/phpstan/security/policy",
-                "source": "https://github.com/phpstan/phpstan-src"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/phpstan",
-                    "type": "github"
-                }
-            ],
-            "install-path": "../phpstan/phpstan"
-        },
-        {
             "name": "psr/simple-cache",
             "version": "1.0.1",
             "version_normalized": "1.0.1.0",
@@ -1677,69 +1628,6 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "install-path": "../psr/simple-cache"
-        },
-        {
-            "name": "rector/rector",
-            "version": "2.2.3",
-            "version_normalized": "2.2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rectorphp/rector.git",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d27f976a332a87b5d03553c2e6f04adbe5da034f",
-                "reference": "d27f976a332a87b5d03553c2e6f04adbe5da034f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.26"
-            },
-            "conflict": {
-                "rector/rector-doctrine": "*",
-                "rector/rector-downgrade-php": "*",
-                "rector/rector-phpunit": "*",
-                "rector/rector-symfony": "*"
-            },
-            "suggest": {
-                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
-            },
-            "time": "2025-10-11T21:50:23+00:00",
-            "bin": [
-                "bin/rector"
-            ],
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
-            "homepage": "https://getrector.com/",
-            "keywords": [
-                "automation",
-                "dev",
-                "migration",
-                "refactoring"
-            ],
-            "support": {
-                "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.3"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "install-path": "../rector/rector"
         },
         {
             "name": "rmccue/requests",
@@ -1898,8 +1786,6 @@
     ],
     "dev": true,
     "dev-package-names": [
-        "cweagans/composer-patches",
-        "phpstan/phpstan",
-        "rector/rector"
+        "cweagans/composer-patches"
     ]
 }

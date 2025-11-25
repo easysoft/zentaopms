@@ -5,7 +5,7 @@
 
 title=测试 screenModel::removeScheme();
 timeout=0
-cid=0
+cid=18280
 
 - 步骤1：正常情况 - 包含scheme的screens数组
  - 第0条的id属性 @1

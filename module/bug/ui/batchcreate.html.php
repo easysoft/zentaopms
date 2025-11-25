@@ -102,6 +102,8 @@ $items[] = array('name' => 'browser', 'label' => $lang->bug->browser, 'control' 
 /* Field of keywords. */
 $items[] = array('name' => 'keywords', 'label' => $lang->bug->keywords, 'width' => '200px', 'required' => isset($requiredFields['keywords']));
 
+$items[] = array('name' => 'assignedTo', 'label' => $lang->bug->assignedTo, 'control' => 'picker', 'items' => $users, 'width' => '200px');
+
 formBatchPanel
 (
     set::title($lang->bug->batchCreate),

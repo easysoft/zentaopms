@@ -5,7 +5,7 @@
 
 title=测试 storyTao::checkCanSplit();
 timeout=0
-cid=0
+cid=18609
 
 - 步骤1：正常需求无子需求 @1
 - 步骤2：需求已有相同类型子需求 @0

@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getByID();
 timeout=0
-cid=1
+cid=19364
 
 - 测试获取不存在模块的信息
  - 属性root @0

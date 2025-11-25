@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getRDRegionActions();
 timeout=0
-cid=0
+cid=16940
 
 - 测试步骤1：admin用户在单个区域时获取操作数量 @3
 - 测试步骤2：admin用户在多个区域时获取操作数量 @4

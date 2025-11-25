@@ -5,7 +5,7 @@
 
 title=测试 myTao::fetchStoriesBySearch();
 timeout=0
-cid=0
+cid=17309
 
 - 步骤1：contribute类型搜索，包含指定的需求 @0
 - 步骤2：assigned类型搜索，当前用户指派的需求 @0

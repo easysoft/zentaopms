@@ -5,7 +5,7 @@
 
 title=测试 executionModel::computeBurn();
 timeout=0
-cid=0
+cid=16286
 
 - 执行executionTester模块的computeBurnTest方法，参数是'' 第3条的executionName属性 @code3
 - 执行executionTester模块的computeBurnTest方法，参数是3 第3条的executionName属性 @code3

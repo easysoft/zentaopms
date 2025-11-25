@@ -5,124 +5,96 @@
 
 title=测试 searchTao::processStoryRecord();
 timeout=0
-cid=0
+cid=18341
 
-
+- 执行searchTao模块的processStoryRecordTest方法,story不存在于objectList中 >> url为空字符串
+- 执行searchTao模块的processStoryRecordTest方法,story类型,lib为0,vision为rnd >> url包含story-storyView-1
+- 执行searchTao模块的processStoryRecordTest方法,story类型,lib不为0 >> url包含assetlib-storyView-2
+- 执行searchTao模块的processStoryRecordTest方法,requirement类型,lib为0 >> extraType为requirement
+- 执行searchTao模块的processStoryRecordTest方法,epic类型,lib为0 >> extraType为epic
+- 执行searchTao模块的processStoryRecordTest方法,vision为lite >> url包含projectstory-storyView-6
+- 执行searchTao模块的processStoryRecordTest方法,story类型,lib为5,vision为rnd >> url包含assetlib-storyView-7且extraType为story
 
 */
 
-// 定义模拟测试框架函数
-$testResult = null;
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-function r($result) {
-    global $testResult;
-    $testResult = $result;
-    return true;
-}
+zenData('story')->gen(10);
 
-function p($property = '') {
-    global $testResult;
-    if(empty($property)) return true;
-    if(is_object($testResult) && isset($testResult->$property)) {
-        $testResult = $testResult->$property;
-    }
-    return true;
-}
+su('admin');
 
-function e($expected) {
-    global $testResult;
-    return $testResult == $expected;
-}
+global $config;
 
-// 模拟zget函数
-function zget($data, $key, $default = null)
-{
-    if(is_array($data)) {
-        return isset($data[$key]) ? $data[$key] : $default;
-    } elseif(is_object($data)) {
-        return isset($data->$key) ? $data->$key : $default;
-    }
-    return $default;
-}
+$searchTest = new searchTaoTest();
 
-// 创建测试类
-class searchTest
-{
-    public function processStoryRecordTest($record, $module, $objectList)
-    {
-        // 按照原始processStoryRecord方法的精确实现
-        $story = zget($objectList[$module], $record->objectID, null);
-        if(empty($story))
-        {
-            $record->url = '';
-            return $record;
-        }
-
-        $module = 'story';
-        $method = 'storyView';
-        if(!empty($story->lib))
-        {
-            $module = 'assetlib';
-            $method = 'storyView';
-        }
-
-        // 模拟helper::createLink的结果，包含参数字符串
-        $record->url = "index.php?m={$module}&f={$method}&id={$record->objectID}";
-
-        // 模拟zget设置extraType
-        $record->extraType = zget($story, 'type', '');
-
-        return $record;
-    }
-}
-
-$searchTest = new searchTest();
-
-// 创建测试对象列表
-$objectList = array(
-    'story' => array(
-        1 => (object)array('id' => 1, 'lib' => 0, 'type' => 'story'),
-        2 => (object)array('id' => 2, 'lib' => 1, 'type' => 'story')
-    ),
-    'requirement' => array(
-        3 => (object)array('id' => 3, 'lib' => 0, 'type' => 'requirement')
-    ),
-    'epic' => array(
-        4 => (object)array('id' => 4, 'lib' => 0, 'type' => 'epic')
-    )
-);
-
-// 测试步骤1：正常需求记录处理（story类型，无lib）
 $record1 = new stdClass();
 $record1->objectType = 'story';
-$record1->objectID = 1;
+$record1->objectID = 999;
 
-r($searchTest->processStoryRecordTest($record1, 'story', $objectList)) && p('url') && e('index.php?m=story&f=storyView&id=1');
-
-// 测试步骤2：需求记录处理（story类型，有lib）
 $record2 = new stdClass();
 $record2->objectType = 'story';
-$record2->objectID = 2;
+$record2->objectID = 1;
 
-r($searchTest->processStoryRecordTest($record2, 'story', $objectList)) && p('url') && e('index.php?m=assetlib&f=storyView&id=2');
-
-// 测试步骤3：用户需求记录处理（requirement类型）
 $record3 = new stdClass();
-$record3->objectType = 'requirement';
-$record3->objectID = 3;
+$record3->objectType = 'story';
+$record3->objectID = 2;
 
-r($searchTest->processStoryRecordTest($record3, 'requirement', $objectList)) && p('extraType') && e('requirement');
-
-// 测试步骤4：业务需求记录处理（epic类型）
 $record4 = new stdClass();
-$record4->objectType = 'epic';
-$record4->objectID = 4;
+$record4->objectType = 'requirement';
+$record4->objectID = 3;
 
-r($searchTest->processStoryRecordTest($record4, 'epic', $objectList)) && p('extraType') && e('epic');
-
-// 测试步骤5：空故事对象处理
 $record5 = new stdClass();
-$record5->objectType = 'story';
-$record5->objectID = 999;
+$record5->objectType = 'epic';
+$record5->objectID = 4;
 
-r($searchTest->processStoryRecordTest($record5, 'story', $objectList)) && p('url') && e('');
+$record6 = new stdClass();
+$record6->objectType = 'story';
+$record6->objectID = 6;
+
+$record7 = new stdClass();
+$record7->objectType = 'story';
+$record7->objectID = 7;
+
+$story1 = new stdClass();
+$story1->lib = 0;
+$story1->type = 'story';
+
+$story2 = new stdClass();
+$story2->lib = 10;
+$story2->type = 'story';
+
+$requirement1 = new stdClass();
+$requirement1->lib = 0;
+$requirement1->type = 'requirement';
+
+$epic1 = new stdClass();
+$epic1->lib = 0;
+$epic1->type = 'epic';
+
+$story6 = new stdClass();
+$story6->lib = 0;
+$story6->type = 'story';
+
+$story7 = new stdClass();
+$story7->lib = 5;
+$story7->type = 'story';
+
+$objectList1 = array('story' => array());
+$objectList2 = array('story' => array(1 => $story1));
+$objectList3 = array('story' => array(2 => $story2));
+$objectList4 = array('requirement' => array(3 => $requirement1));
+$objectList5 = array('epic' => array(4 => $epic1));
+$objectList6 = array('story' => array(6 => $story6));
+$objectList7 = array('story' => array(7 => $story7));
+
+$config->vision = 'rnd';
+r($searchTest->processStoryRecordTest($record1, 'story', $objectList1)) && p('url') && e('');
+r($searchTest->processStoryRecordTest($record2, 'story', $objectList2)) && p('url') && e('*/story-storyView-1.html');
+r($searchTest->processStoryRecordTest($record3, 'story', $objectList3)) && p('url') && e('*/assetlib-storyView-2.html');
+r($searchTest->processStoryRecordTest($record4, 'requirement', $objectList4)) && p('extraType') && e('requirement');
+r($searchTest->processStoryRecordTest($record5, 'epic', $objectList5)) && p('extraType') && e('epic');
+$config->vision = 'lite';
+r($searchTest->processStoryRecordTest($record6, 'story', $objectList6)) && p('url') && e('*/projectstory-storyView-6.html');
+$config->vision = 'rnd';
+r($searchTest->processStoryRecordTest($record7, 'story', $objectList7)) && p('url,extraType') && e('*/assetlib-storyView-7.html,story');

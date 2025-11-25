@@ -5,7 +5,7 @@
 
 title=测试 metricZen::calcMetric();
 timeout=0
-cid=0
+cid=17183
 
 - 步骤1：测试空statement和空calcList @1
 - 步骤2：测试false statement和空calcList @1

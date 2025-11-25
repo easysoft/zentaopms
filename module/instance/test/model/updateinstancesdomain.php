@@ -18,7 +18,7 @@ $configData->gen(2);
 
 title=instanceModel->updateInstancesDomain();
 timeout=0
-cid=1
+cid=16822
 
 - 测试步骤1：正常情况下批量更新所有实例域名 @0
 - 测试步骤2：无需要更新的实例时正常执行 @0

@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::isClickable();
 timeout=0
-cid=0
+cid=16808
 
 - 步骤1：store类型，start动作，stopped状态 @1
 - 步骤2：store类型，stop动作，running状态 @1

@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraSprint();
 timeout=0
-cid=0
+cid=15780
 
 - 步骤1：正常项目列表，无API配置返回空数组显示为0 @0
 - 步骤2：空项目列表，返回空数组显示为0 @0

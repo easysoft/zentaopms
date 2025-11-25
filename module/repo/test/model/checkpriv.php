@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 title=测试 repoModel->checkPriv();
 timeout=0
-cid=1
+cid=18034
 
 - 超级管理员检查私有项目权限 @1
 - 有权限权限用户检查私有项目权限 @1

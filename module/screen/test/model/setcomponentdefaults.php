@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 title=测试 screenModel->buildChart();
 timeout=0
-cid=1
+cid=18281
 
 - 测试componet属性都为空的情况下，生成的默认值是否正确。
  - 第styles条的hueRotate属性 @0

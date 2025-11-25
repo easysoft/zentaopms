@@ -10,7 +10,7 @@ zenData('project')->loadYaml('project')->gen(8);
 
 title=测试 projectTao::sortAndReduceClosedProjects();
 timeout=0
-cid=1
+cid=17919
 
 - 测试$projectsStats['my'][0]中排序和缩减后的进行中的项目包含的个数为1 @1
 - 测试$projectsStats['my'][0]中排序和缩减后的已关闭的项目包含的个数为1 @1

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 /**
 
 title=bugModel->getStatistic();
-cid=1
+cid=15395
 pid=1
 
 - 查询product id为0创建日期在今天的统计信息第openedDate条的num属性 @0

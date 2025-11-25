@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildComponentList();
 timeout=0
-cid=0
+cid=18208
 
 - 执行screen模块的buildComponentListTest方法，参数是array  @2
 - 执行screen模块的buildComponentListTest方法，参数是array  @0

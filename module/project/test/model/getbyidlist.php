@@ -8,7 +8,7 @@ $project = zenData('project')->gen(100);
 
 title=测试 projectModel::getByIdList();
 timeout=0
-cid=1
+cid=17820
 
 - 获取projectIdList对应的项目名称
  - 第11条的name属性 @项目11

@@ -5,74 +5,76 @@
 
 title=测试 searchZen::setOptions();
 timeout=0
-cid=0
+cid=18352
 
- >> id,include,and,搜索
- >> 1,测试查询2
- >> 0
- >> 高,低
- >> 可以用逗号连接多个ID进行搜索。
+- 测试步骤1:正常输入完整参数属性savedQueryTitle @已保存的查询条件
+- 测试步骤2:测试空字段和fieldParams属性searchBtnText @搜索
+- 测试步骤3:测试带savedQuery的情况 @2
+- 测试步骤4:验证options对象包含fields属性 @1
+- 测试步骤5:验证options对象包含operators属性 @1
+- 测试步骤6:验证options对象包含andOr属性 @1
+- 测试步骤7:验证options对象包含formConfig属性第formConfig条的method属性 @post
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
-
-$table = zenData('userquery');
-$table->id->range('1-10');
-$table->account->range('admin,user1,user2');
-$table->module->range('story,task,bug');
-$table->title->range('查询1,查询2,查询3,查询4,查询5,查询6,查询7,查询8,查询9,查询10');
-$table->form->range('form1,form2,form3');
-$table->sql->range('sql1,sql2,sql3');
-$table->gen(5);
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$searchTest = new searchZenTest();
 
-r($searchTest->setOptionsTest(
-    array('id' => 'ID', 'title' => '标题', 'status' => '状态'),
-    array(
-        'id' => array('operator' => 'include', 'control' => 'input'),
-        'title' => array('operator' => 'include', 'control' => 'input'),
-        'status' => array('operator' => '=', 'control' => 'select', 'values' => array('active' => '激活', 'closed' => '关闭'))
-    ),
-    array()
-)) && p('fields:0:name,operators:0:value,andOr:0:value,searchBtnText') && e('id,include,and,搜索');
+$fields1 = array('id' => 'ID', 'name' => '名称', 'status' => '状态');
+$fieldParams1 = array(
+    'id' => array('control' => 'input', 'operator' => 'include'),
+    'name' => array('control' => 'input', 'operator' => 'include'),
+    'status' => array('control' => 'select', 'operator' => 'equal', 'values' => array('open' => '激活', 'closed' => '已关闭'))
+);
+$queries1 = array();
 
-r($searchTest->setOptionsTest(
-    array('title' => '标题', 'content' => '内容'),
-    array(
-        'title' => array('operator' => 'include', 'control' => 'input'),
-        'content' => array('operator' => 'include', 'control' => 'textarea')
-    ),
-    array(
-        (object)array('id' => 1, 'title' => '测试查询1'),
-        (object)array('id' => 2, 'title' => '测试查询2')
-    )
-)) && p('savedQuery:0:id,savedQuery:1:title') && e('1,测试查询2');
+$fields2 = array();
+$fieldParams2 = array();
+$queries2 = array();
 
-r($searchTest->setOptionsTest(
-    array(),
-    array(),
-    array()
-)) && p('fields') && e('0');
+$query1 = new stdclass();
+$query1->id = 1;
+$query1->title = '测试查询1';
+$query1->form = 'test';
+$query1->sql = 'test sql';
 
-r($searchTest->setOptionsTest(
-    array('priority' => '优先级', 'assignedTo' => '指派给'),
-    array(
-        'priority' => array('operator' => '=', 'control' => 'select', 'values' => array('1' => '高', '2' => '中', '3' => '低')),
-        'assignedTo' => array('operator' => '=', 'control' => 'select')
-    ),
-    array()
-)) && p('fields:0:values:1,fields:0:values:3') && e('高,低');
+$query2 = new stdclass();
+$query2->id = 2;
+$query2->title = '测试查询2';
+$query2->form = 'test2';
+$query2->sql = 'test sql2';
 
-r($searchTest->setOptionsTest(
-    array('id' => 'ID', 'name' => '名称'),
-    array(
-        'id' => array('operator' => 'include', 'control' => 'input'),
-        'name' => array('operator' => 'include', 'control' => 'input')
-    ),
-    array()
-)) && p('fields:0:placeholder') && e('可以用逗号连接多个ID进行搜索。');
+$queries3 = array($query1, $query2);
+
+$fields4 = array('title' => '标题', 'priority' => '优先级');
+$fieldParams4 = array(
+    'title' => array('control' => 'input', 'operator' => 'include'),
+    'priority' => array('control' => 'select', 'operator' => 'equal')
+);
+$queries4 = array();
+
+$fields5 = array('id' => 'ID');
+$fieldParams5 = array(
+    'id' => array('control' => 'input', 'operator' => 'include')
+);
+$queries5 = array();
+
+$result1 = $searchTest->setOptionsTest($fields1, $fieldParams1, $queries1);
+$result2 = $searchTest->setOptionsTest($fields2, $fieldParams2, $queries2);
+$result3 = $searchTest->setOptionsTest($fields1, $fieldParams1, $queries3);
+$result4 = $searchTest->setOptionsTest($fields4, $fieldParams4, $queries4);
+$result5 = $searchTest->setOptionsTest($fields4, $fieldParams4, $queries4);
+$result6 = $searchTest->setOptionsTest($fields5, $fieldParams5, $queries5);
+$result7 = $searchTest->setOptionsTest($fields1, $fieldParams1, $queries1);
+
+r($result1) && p('savedQueryTitle') && e('已保存的查询条件'); // 测试步骤1:正常输入完整参数
+r($result2) && p('searchBtnText') && e('搜索'); // 测试步骤2:测试空字段和fieldParams
+r(count($result3->savedQuery)) && p() && e('2'); // 测试步骤3:测试带savedQuery的情况
+r(is_array($result4->fields)) && p() && e('1'); // 测试步骤4:验证options对象包含fields属性
+r(is_array($result5->operators)) && p() && e('1'); // 测试步骤5:验证options对象包含operators属性
+r(is_array($result6->andOr)) && p() && e('1'); // 测试步骤6:验证options对象包含andOr属性
+r($result7) && p('formConfig:method') && e('post'); // 测试步骤7:验证options对象包含formConfig属性

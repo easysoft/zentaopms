@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBuilds();
 timeout=0
-cid=0
+cid=19409
 
 - 步骤1：正常调用，验证返回数组长度为1 @1
 - 步骤2：验证返回数组包含版本ID为1的对象第1条的id属性 @1

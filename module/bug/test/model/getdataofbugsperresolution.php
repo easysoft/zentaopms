@@ -10,7 +10,7 @@ zenData('bug')->loadYaml('resolution')->gen(15);
 
 title=bugModel->getDataOfBugsPerResolution();
 timeout=0
-cid=1
+cid=15370
 
 - 获取解决方案为fixed的数据
  - 第fixed条的name属性 @已解决

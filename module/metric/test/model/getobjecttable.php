@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getObjectTable();
 timeout=0
-cid=0
+cid=17114
 
 - 执行$result1[0]第0条的name属性 @project
 - 执行$result2[0]第1条的headerGroup属性 @2023年

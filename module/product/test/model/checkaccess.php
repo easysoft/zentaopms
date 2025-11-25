@@ -5,7 +5,7 @@
 
 title=测试 productModel::checkAccess;
 timeout=0
-cid=0
+cid=17476
 
 - 不传入ID @1
 - 传入存在ID的值 @2

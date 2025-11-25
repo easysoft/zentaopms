@@ -7,54 +7,96 @@ title=测试 testcaseZen::prepareReviewData();
 timeout=0
 cid=0
 
-- 步骤1：正常情况属性status @normal
-- 步骤2：边界值属性status @blocked
-- 步骤3：异常输入属性result @必须选择评审结果
-- 步骤4：权限验证
+- 执行testcaseTest模块的prepareReviewDataTest方法，参数是1, $oldCase1, $postData1
+ - 属性status @normal
+ - 属性result @pass
+- 执行testcaseTest模块的prepareReviewDataTest方法，参数是2, $oldCase2, $postData2
+ - 属性status @normal
+ - 属性result @fail
+- 执行testcaseTest模块的prepareReviewDataTest方法，参数是3, $oldCase3, $postData3  @0
+- 执行testcaseTest模块的prepareReviewDataTest方法，参数是4, $oldCase4, $postData4
+ - 属性status @normal
+ - 属性reviewedBy @admin,user1,user2
+- 执行testcaseTest模块的prepareReviewDataTest方法，参数是5, $oldCase5, $postData5
+ - 属性status @normal
  - 属性reviewedBy @admin
-- 步骤5：业务规则属性id @5
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-zendata('case')->loadYaml('case_preparereviewdata', false, 2)->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-$_POST['result'] = 'pass';
-$_POST['reviewedBy'] = array('admin', 'user1');
-$_POST['comment'] = '评审通过';
-$_POST['uid'] = 'test123';
+// 创建测试用例对象
+$oldCase1 = new stdClass();
+$oldCase1->id = 1;
+$oldCase1->status = 'wait';
 
-$oldCase = new stdclass();
-$oldCase->status = 'wait';
+$oldCase2 = new stdClass();
+$oldCase2->id = 2;
+$oldCase2->status = 'normal';
 
-r($testcaseTest->prepareReviewDataTest(1, $oldCase)) && p('status') && e('normal'); // 步骤1：正常情况
+$oldCase3 = new stdClass();
+$oldCase3->id = 3;
+$oldCase3->status = 'wait';
 
-$_POST['result'] = 'fail';
-$oldCase->status = 'blocked';
+$oldCase4 = new stdClass();
+$oldCase4->id = 4;
+$oldCase4->status = 'normal';
 
-r($testcaseTest->prepareReviewDataTest(2, $oldCase)) && p('status') && e('blocked'); // 步骤2：边界值
+$oldCase5 = new stdClass();
+$oldCase5->id = 5;
+$oldCase5->status = 'wait';
 
-unset($_POST['result']);
+// 测试数据1: 评审通过
+$postData1 = array(
+    'result' => 'pass',
+    'reviewedBy' => array('admin'),
+    'reviewedDate' => '2024-01-15',
+    'comment' => '评审通过',
+    'uid' => ''
+);
 
-r($testcaseTest->prepareReviewDataTest(3, $oldCase)) && p('result') && e('必须选择评审结果'); // 步骤3：异常输入
+// 测试数据2: 评审不通过
+$postData2 = array(
+    'result' => 'fail',
+    'reviewedBy' => array('admin'),
+    'reviewedDate' => '2024-01-15',
+    'comment' => '需要修改',
+    'uid' => ''
+);
 
-$_POST['result'] = 'pass';
-$_POST['reviewedBy'] = array('admin', 'user1', 'user2');
+// 测试数据3: 未选择评审结果
+$postData3 = array(
+    'result' => '',
+    'reviewedBy' => array('admin'),
+    'reviewedDate' => '2024-01-15',
+    'uid' => ''
+);
 
-r($testcaseTest->prepareReviewDataTest(4, $oldCase)) && p('reviewedBy') && e('admin,user1,user2'); // 步骤4：权限验证
+// 测试数据4: 多个评审人员
+$postData4 = array(
+    'result' => 'pass',
+    'reviewedBy' => array('admin', 'user1', 'user2'),
+    'reviewedDate' => '2024-01-15',
+    'comment' => '多人评审通过',
+    'uid' => ''
+);
 
-$_POST['result'] = 'pass';
-$_POST['comment'] = '评审通过';
+// 测试数据5: 单个评审人员
+$postData5 = array(
+    'result' => 'pass',
+    'reviewedBy' => array('admin'),
+    'reviewedDate' => '2024-01-15',
+    'comment' => '单人评审通过',
+    'uid' => ''
+);
 
-r($testcaseTest->prepareReviewDataTest(5, $oldCase)) && p('id') && e('5'); // 步骤5：业务规则
+r($testcaseTest->prepareReviewDataTest(1, $oldCase1, $postData1)) && p('status,result') && e('normal,pass');
+r($testcaseTest->prepareReviewDataTest(2, $oldCase2, $postData2)) && p('status,result') && e('normal,fail');
+r($testcaseTest->prepareReviewDataTest(3, $oldCase3, $postData3)) && p() && e('0');
+r($testcaseTest->prepareReviewDataTest(4, $oldCase4, $postData4)) && p('status,reviewedBy') && e('normal,admin,user1,user2');
+r($testcaseTest->prepareReviewDataTest(5, $oldCase5, $postData5)) && p('status,reviewedBy') && e('normal,admin');

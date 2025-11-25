@@ -5,68 +5,73 @@
 
 title=测试 blockZen::printProjectStatisticBlock();
 timeout=0
-cid=0
+cid=15277
 
-- 执行blockTest模块的printProjectStatisticBlockTest方法，参数是$normalBlock  @1
-- 执行blockTest模块的printProjectStatisticBlockTest方法，参数是$emptyBlock  @1
-- 执行blockTest模块的printProjectStatisticBlockTest方法，参数是$invalidBlock  @1
-- 执行blockTest模块的printProjectStatisticBlockTest方法，参数是$largeBlock  @1
-- 执行blockTest模块的printProjectStatisticBlockTest方法，参数是$waitBlock  @1
+- 步骤1:标准区块对象正常获取项目统计数据属性projectCount @10
+- 步骤2:验证用户数量正确加载属性userCount @11
+- 步骤3:使用type为wait过滤项目状态属性projectCount @3
+- 步骤4:设置count为5限制项目数量属性projectCount @5
+- 步骤5:使用type为doing过滤项目状态属性projectCount @3
 
 */
 
+// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('project');
+// 2. zendata数据准备
 $project = zenData('project');
-$project->id->range('1-50');
-$project->name->range('项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10');
-$project->status->range('wait{10},doing{15},done{20},suspended{5}');
-$project->model->range('scrum{20},waterfall{15},kanban{10},agileplus{5}');
-$project->type->range('project{40},program{10}');
-$project->deleted->range('0{45},1{5}');
-$project->gen(50);
+$project->id->range('1-20');
+$project->name->range('项目{1-20}');
+$project->status->range('wait{5},doing{5},suspended{5},closed{5}');
+$project->type->range('project');
+$project->model->range('scrum');
+$project->PM->range('admin,user1,user2,user3,user4');
+$project->deleted->range('0');
+$project->gen(20);
 
-zenData('user');
 $user = zenData('user');
-$user->account->range('admin,user1,user2,user3,user4,user5');
-$user->realname->range('管理员,用户1,用户2,用户3,用户4,用户5');
+$user->id->range('1-10');
+$user->account->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
+$user->realname->range('管理员,用户1,用户2,用户3,用户4,用户5,用户6,用户7,用户8,用户9');
 $user->deleted->range('0');
-$user->gen(6);
+$user->gen(10);
 
+// 3. 用户登录
 su('admin');
 
-$blockTest = new blockTest();
+// 4. 创建测试实例
+$blockTest = new blockZenTest();
 
-// 创建测试块参数对象
-$normalBlock = new stdclass();
-$normalBlock->params = new stdclass();
-$normalBlock->params->type = 'all';
-$normalBlock->params->count = 15;
+// 5. 创建测试数据对象
+$block1 = new stdclass();
+$block1->params = new stdclass();
+$block1->params->type = 'all';
+$block1->params->count = 15;
 
-$emptyBlock = new stdclass();
-$emptyBlock->params = new stdclass();
-$emptyBlock->params->type = '';
-$emptyBlock->params->count = 0;
+$block2 = new stdclass();
+$block2->params = new stdclass();
+$block2->params->type = 'all';
+$block2->params->count = 15;
 
-$invalidBlock = new stdclass();
-$invalidBlock->params = new stdclass();
-$invalidBlock->params->type = 'test@#$';
-$invalidBlock->params->count = 10;
+$block3 = new stdclass();
+$block3->params = new stdclass();
+$block3->params->type = 'wait';
+$block3->params->count = 15;
 
-$largeBlock = new stdclass();
-$largeBlock->params = new stdclass();
-$largeBlock->params->type = 'all';
-$largeBlock->params->count = 100;
+$block4 = new stdclass();
+$block4->params = new stdclass();
+$block4->params->type = 'all';
+$block4->params->count = 5;
 
-$waitBlock = new stdclass();
-$waitBlock->params = new stdclass();
-$waitBlock->params->type = 'wait';
-$waitBlock->params->count = 15;
+$block5 = new stdclass();
+$block5->params = new stdclass();
+$block5->params->type = 'doing';
+$block5->params->count = 15;
 
-r($blockTest->printProjectStatisticBlockTest($normalBlock)) && p() && e('1');
-r($blockTest->printProjectStatisticBlockTest($emptyBlock)) && p() && e('1');
-r($blockTest->printProjectStatisticBlockTest($invalidBlock)) && p() && e('1');
-r($blockTest->printProjectStatisticBlockTest($largeBlock)) && p() && e('1');
-r($blockTest->printProjectStatisticBlockTest($waitBlock)) && p() && e('1');
+// 6. 必须包含至少5个测试步骤
+r($blockTest->printProjectStatisticBlockTest($block1)) && p('projectCount') && e('10'); // 步骤1:标准区块对象正常获取项目统计数据
+r($blockTest->printProjectStatisticBlockTest($block2)) && p('userCount') && e('11'); // 步骤2:验证用户数量正确加载
+r($blockTest->printProjectStatisticBlockTest($block3)) && p('projectCount') && e('3'); // 步骤3:使用type为wait过滤项目状态
+r($blockTest->printProjectStatisticBlockTest($block4)) && p('projectCount') && e('5'); // 步骤4:设置count为5限制项目数量
+r($blockTest->printProjectStatisticBlockTest($block5)) && p('projectCount') && e('3'); // 步骤5:使用type为doing过滤项目状态

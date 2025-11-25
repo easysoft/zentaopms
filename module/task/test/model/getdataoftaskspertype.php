@@ -10,7 +10,7 @@ zenData('task')->loadYaml('task')->gen(30);
 
 title=taskModel->getDataOfTasksPerType();
 timeout=0
-cid=1
+cid=18805
 
 - 统计类型为devel的任务数量
  - 第devel条的name属性 @开发

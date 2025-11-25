@@ -5,7 +5,7 @@
 
 title=测试 docModel->copyTemplate();
 timeout=0
-cid=1
+cid=16150
 
 - 超级管理员可以查看和编辑自己的文档
  - 属性readable @1

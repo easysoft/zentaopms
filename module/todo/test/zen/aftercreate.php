@@ -5,7 +5,7 @@
 
 title=测试 todoZen::afterCreate();
 timeout=0
-cid=0
+cid=19286
 
 - 执行todoTest模块的afterCreateTest方法，参数是$todo1, $form1 属性fileUpdated @1
 - 执行todoTest模块的afterCreateTest方法，参数是$todo2, $form2 属性fileUpdated @0

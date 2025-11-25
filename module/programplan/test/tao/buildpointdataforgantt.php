@@ -5,7 +5,7 @@
 
 title=测试 programplanTao::buildPointDataForGantt();
 timeout=0
-cid=0
+cid=17764
 
 - 步骤1：正常评审点数据构建属性id @1-pointPP-1
 - 步骤2：验证数据类型属性type @point

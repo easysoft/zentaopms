@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getIssues();
 timeout=0
-cid=0
+cid=19441
 
 - 步骤1：问题列表数量 @2
 - 步骤2：第1个问题ID第1条的id属性 @1

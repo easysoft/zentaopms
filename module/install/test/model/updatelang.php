@@ -4,7 +4,7 @@
 
 title=测试 installModel->updateLang();
 timeout=0
-cid=1
+cid=16776
 
 - 检查stage表的语言项是否变更成对应的中文语言项。
  - 属性id @1

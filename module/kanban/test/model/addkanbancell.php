@@ -10,7 +10,7 @@ zenData('kanbancell')->gen(0);
 
 title=测试 kanbanModel->addKanbanCell();
 timeout=0
-cid=1
+cid=16869
 
 - 更新类型为common的kanbancell
  - 属性type @common

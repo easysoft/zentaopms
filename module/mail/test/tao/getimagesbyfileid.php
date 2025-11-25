@@ -5,7 +5,7 @@
 
 title=测试 mailTao::getImagesByFileID();
 timeout=0
-cid=0
+cid=17031
 
 - 步骤1：正常情况-有效图片文件ID @2
 - 步骤2：空数组 @0

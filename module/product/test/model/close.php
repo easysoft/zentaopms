@@ -4,7 +4,7 @@
 /**
 
 title=productModel->close();
-cid=0
+cid=17478
 
 - 测试关闭产品1
  - 第0条的field属性 @status

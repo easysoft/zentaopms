@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setSMTP();
 timeout=0
-cid=0
+cid=17024
 
 - 测试步骤1：默认SMTP配置验证
  - 属性host @localhost

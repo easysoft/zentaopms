@@ -5,31 +5,57 @@
 
 title=测试 docZen::previewTask();
 timeout=0
-cid=0
+cid=16208
 
-- 步骤1：正常预览执行任务（设置视图） @3
-- 步骤2：列表视图显示任务列表 @3
-- 步骤3：空执行ID情况 @0
-- 步骤4：无效ID列表情况 @0
-- 步骤5：其他action类型处理 @0
+- 步骤1:setting视图下根据execution ID预览任务列表 @1
+- 步骤2:list视图下根据ID列表预览任务 @3
+- 步骤3:空idList的list视图预览任务 @0
+- 步骤4:没有任务的execution预览任务列表 @0
+- 步骤5:验证返回的cols数组不为空 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（不需要实际数据库，模拟数据即可）
+$taskTable = zenData('task');
+$taskTable->id->range('1-20');
+$taskTable->execution->range('1{10},2{10}');
+$taskTable->name->range('1-20')->prefix('任务标题');
+$taskTable->type->range('devel{10},test{5},design{3},study{2}');
+$taskTable->status->range('wait{5},doing{5},done{5},cancel{3},closed{2}');
+$taskTable->pri->range('1{5},2{5},3{5},4{5}');
+$taskTable->assignedTo->range('admin,user1,user2,user3,user4');
+$taskTable->openedBy->range('admin');
+$taskTable->estimate->range('1-10');
+$taskTable->consumed->range('0-5');
+$taskTable->left->range('0-5');
+$taskTable->parent->range('0');
+$taskTable->isParent->range('0');
+$taskTable->deleted->range('0');
+$taskTable->gen(20);
 
-// 3. 用户登录（选择合适角色）
+$projectTable = zenData('project');
+$projectTable->id->range('1-5');
+$projectTable->name->range('1-5')->prefix('执行');
+$projectTable->type->range('sprint{3},stage{2}');
+$projectTable->status->range('doing{3},wait{2}');
+$projectTable->deleted->range('0');
+$projectTable->gen(5);
+
+zenData('user')->gen(5);
+
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($docTest->previewTaskTest('setting', array('action' => 'preview', 'execution' => 1), '')) && p() && e('3'); // 步骤1：正常预览执行任务（设置视图）
-r($docTest->previewTaskTest('list', array('action' => 'list'), '1,2,3')) && p() && e('3'); // 步骤2：列表视图显示任务列表  
-r($docTest->previewTaskTest('setting', array('action' => 'preview', 'execution' => 0), '')) && p() && e('0'); // 步骤3：空执行ID情况
-r($docTest->previewTaskTest('list', array('action' => 'list'), 'abc,xyz')) && p() && e('0'); // 步骤4：无效ID列表情况
-r($docTest->previewTaskTest('setting', array('action' => 'other', 'execution' => 1), '')) && p() && e('0'); // 步骤5：其他action类型处理
+$settingsExecution1 = array('action' => 'preview', 'execution' => 1);
+$settingsExecution5 = array('action' => 'preview', 'execution' => 5);
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
+
+r(count($docTest->previewTaskTest('setting', $settingsExecution1, '')['data']) > 0) && p() && e('1'); // 步骤1:setting视图下根据execution ID预览任务列表
+r(count($docTest->previewTaskTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤2:list视图下根据ID列表预览任务
+r(count($docTest->previewTaskTest('list', $settingsList, '')['data'])) && p() && e('0'); // 步骤3:空idList的list视图预览任务
+r(count($docTest->previewTaskTest('setting', $settingsExecution5, '')['data'])) && p() && e('0'); // 步骤4:没有任务的execution预览任务列表
+r(count($docTest->previewTaskTest('setting', $settingsExecution1, '')['cols']) > 0) && p() && e('1'); // 步骤5:验证返回的cols数组不为空

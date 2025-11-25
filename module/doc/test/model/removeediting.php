@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->removeEditing();
-cid=1
+cid=16148
 
 - 测试空数据 @0
 - 测试移除当前用户的正在编辑信息属性editing @~~

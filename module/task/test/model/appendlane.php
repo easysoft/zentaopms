@@ -14,7 +14,7 @@ zenData('kanbancell')->loadYaml('kanbancell')->gen(18);
 
 title=taskModel->appendLane();
 timeout=0
-cid=1
+cid=18765
 
 - 测试空数据 @0
 - 测试给任务1、2追加泳道名称第1条的lane属性 @lane1

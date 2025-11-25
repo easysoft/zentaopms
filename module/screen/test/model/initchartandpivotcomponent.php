@@ -5,7 +5,7 @@
 
 title=测试 screenModel::initChartAndPivotComponent();
 timeout=0
-cid=0
+cid=18262
 
 - 执行screenTest模块的initChartAndPivotComponentTest方法，参数是null, 'chart' 属性1 @1
 - 执行screenTest模块的initChartAndPivotComponentTest方法，参数是$chart, 'chart' 第0条的id属性 @cluBarX

@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::apiGetSingleBranch();
 timeout=0
-cid=0
+cid=16563
 
 - 错误的服务器ID @0
 - 错误的项目ID第errors条的0属性 @user redirect does not exist [name: branches]

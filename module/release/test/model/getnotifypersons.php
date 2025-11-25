@@ -5,7 +5,7 @@
 
 title=测试 releaseModel->getNotifyPersons();
 timeout=0
-cid=1
+cid=17995
 
 - 测试获取状态为正常的发布的通知人员属性admin @admin
 - 测试获取状态为停止维护的发布的通知人员 @0

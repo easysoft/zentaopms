@@ -108,7 +108,6 @@ class executionModel extends model
         $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
-        if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
         $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
         if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
@@ -446,7 +445,6 @@ class executionModel extends model
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
-            ->limit(1)
             ->exec();
 
         if(dao::isError()) return false;
@@ -561,7 +559,6 @@ class executionModel extends model
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
-                ->limit(1)
                 ->exec();
 
             if(dao::isError()) return false;
@@ -2653,6 +2650,7 @@ class executionModel extends model
             if(isset($task->estimate)) $task->estimate = round((float)$task->estimate, 2);
             if(isset($task->left)) $task->left = round((float)$task->left, 2);
             if(!$bug->confirmed) $this->dao->update(TABLE_BUG)->set('confirmed')->eq(1)->where('id')->eq($bug->id)->exec();
+            $task->version = 1;
             $this->dao->insert(TABLE_TASK)->data($task)->exec();
             if(dao::isError()) return false;
 
@@ -3015,7 +3013,7 @@ class executionModel extends model
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
             if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
-        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
+        $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->exec();
 
         /* Resolve TABLE_KANBANCELL's field cards. */
         if($execution->type == 'kanban')
@@ -3119,7 +3117,7 @@ class executionModel extends model
             /* Sync unlink case in no multiple execution. */
             if(empty($execution->multiple) && $execution->type != 'project')
             {
-                $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->limit(1)->exec();
+                $this->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($execution->project)->andWhere('`case`')->eq($caseID)->exec();
                 $this->action->create('case', $caseID, 'unlinkedfromproject', '', $execution->project);
             }
         }
@@ -4920,6 +4918,9 @@ class executionModel extends model
             }
         }
 
+        $canCreateChildStage = commonModel::hasPriv('programplan', 'create');
+        $canCreateTask       = commonModel::hasPriv('task', 'create');
+        $canEditStage        = commonModel::hasPriv('programplan', 'edit');
         foreach($executionList as $execution)
         {
             $execution->rawID       = $execution->id;
@@ -4936,14 +4937,16 @@ class executionModel extends model
             $canModify = common::canModify('execution', $execution);
             if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
+                $isStage = in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd'));
                 foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
                     $action  = array();
                     $actions = explode('|', $actionKey);
                     foreach($actions as $actionName)
                     {
-                        if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
-                        if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
+                        if($actionName == 'createChildStage' && !$canCreateChildStage) continue;
+                        if($actionName == 'createTask' && !$canCreateTask)  continue;
+                        if($actionName == 'edit' && $isStage && !$canEditStage) continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
 
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
@@ -4999,6 +5002,18 @@ class executionModel extends model
         $this->loadModel('task');
         $this->app->loadConfig('project');
 
+        $flowActionConditions = array();
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+
+            $flowActions = $this->loadModel('workflowaction')->getList('task');
+            foreach($flowActions as $flowAction)
+            {
+                if(!empty($flowAction->conditions)) $flowActionConditions[$flowAction->action] = $flowAction->conditions;
+            }
+        }
+
         foreach($tasks as $task)
         {
             if(!$canModify) continue;
@@ -5020,7 +5035,9 @@ class executionModel extends model
                     if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
 
                     $clickable = $this->task->isClickable($task, $rawAction);
-                    $action    = array('name' => $action);
+                    if($clickable && !empty($flowActionConditions[$rawAction])) $clickable = $this->flow->checkConditions($flowActionConditions[$rawAction], $task);
+
+                    $action = array('name' => $action);
                     if(!$clickable) $action['disabled'] = true;
                     $task->actions[] = $action;
                 }

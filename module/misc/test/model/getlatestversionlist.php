@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 /**
 
 title=测试 miscModel->getLatestVersionList();
-cid=1
+cid=17210
 
 - 不传入URL。 @0
 - 检查请求内容。 @1

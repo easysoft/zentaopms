@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->updateApiLib();
-cid=1
+cid=16157
 
 - 正常修改接口库
  - 第0条的field属性 @name

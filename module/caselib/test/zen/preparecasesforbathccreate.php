@@ -5,58 +5,61 @@
 
 title=测试 caselibZen::prepareCasesForBathcCreate();
 timeout=0
-cid=0
+cid=15552
 
-- 步骤1：正常libID测试 - 返回3个用例 @3
-- 步骤2：不同libID测试 - 检查第一个用例的lib字段第0条的lib属性 @2
-- 步骤3：边界值测试 - 检查第一个用例的lib字段第0条的lib属性 @0
-- 步骤4：必填字段验证 - 检查返回空数组 @0
-- 步骤5：默认值设置测试 - 检查返回2个用例 @2
+- 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是1
+ - 第0条的title属性 @Test Case Title 1
+ - 第0条的type属性 @feature
+ - 第0条的lib属性 @1
+ - 第0条的project属性 @0
+ - 第0条的status属性 @normal
+ - 第0条的version属性 @1
+- 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是1, 'empty'  @1
+- 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是1, 'empty'  @1
+- 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是2, 'count'  @3
+- 执行caselibTest模块的prepareCasesForBathcCreateTest方法，参数是3
+ - 第0条的openedBy属性 @guest
+ - 第0条的version属性 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
 
-// 准备测试数据
-$user = zenData('user');
-$user->id->range('1-10');
-$user->account->range('admin,user1,user2');
-$user->password->range('123456{10}');
-$user->gen(3);
-
-$caselib = zenData('case');
-$caselib->id->range('1-10');
-$caselib->lib->range('1-3');
-$caselib->title->range('测试用例{1-10}');
-$caselib->type->range('feature,interface,performance,config');
-$caselib->gen(10);
-
-// 模拟用户登录
 su('admin');
-
-// 设置POST数据来模拟form::batchData
-global $_POST;
-$_POST['title'] = array('批量创建用例1', '批量创建用例2', '批量创建用例3');
-$_POST['type'] = array('feature', 'interface', 'performance');
-$_POST['pri'] = array(1, 2, 3);
-$_POST['module'] = array(1, 2, 1);
-$_POST['precondition'] = array('前置条件1', '前置条件2', '');
-$_POST['keywords'] = array('关键词1', '关键词2', '关键词3');
-$_POST['stage'] = array('unittest', 'feature', 'intergrate');
 
 $caselibTest = new caselibTest();
 
-r($caselibTest->prepareCasesForBathcCreateTest(1)) && p('') && e('3'); // 步骤1：正常libID测试 - 返回3个用例
-r($caselibTest->prepareCasesForBathcCreateTest(2)) && p('0:lib') && e('2'); // 步骤2：不同libID测试 - 检查第一个用例的lib字段
-r($caselibTest->prepareCasesForBathcCreateTest(0)) && p('0:lib') && e('0'); // 步骤3：边界值测试 - 检查第一个用例的lib字段
+// 测试步骤1：正常输入情况，包含所有必填字段
+$_POST['title'] = array(0 => 'Test Case Title 1');
+$_POST['type'] = array(0 => 'feature');
+$_POST['pri'] = array(0 => 3);
+$_POST['module'] = array(0 => 0);
+$_POST['stage'] = array(0 => 'unittest');
+r($caselibTest->prepareCasesForBathcCreateTest(1)) && p('0:title,type,lib,project,status,version') && e('Test Case Title 1,feature,1,0,normal,1');
 
-// 测试必填字段验证 - 清空title
-$_POST['title'] = array('', '', '');
-r($caselibTest->prepareCasesForBathcCreateTest(1)) && p('') && e('0'); // 步骤4：必填字段验证 - 检查返回空数组
+// 测试步骤2：缺少title字段的情况
+$_POST['title'] = array(0 => '');
+$_POST['type'] = array(0 => 'feature');
+r($caselibTest->prepareCasesForBathcCreateTest(1, 'empty')) && p() && e('1');
 
-// 重置数据测试默认值
-$_POST['title'] = array('默认测试用例1', '默认测试用例2');
-$_POST['type'] = array('', '');
-$_POST['pri'] = array('', '');
-r($caselibTest->prepareCasesForBathcCreateTest(1)) && p('') && e('2'); // 步骤5：默认值设置测试 - 检查返回2个用例
+// 测试步骤3：缺少type字段的情况
+$_POST['title'] = array(0 => 'Test Case Title 2');
+$_POST['type'] = array(0 => '');
+r($caselibTest->prepareCasesForBathcCreateTest(1, 'empty')) && p() && e('1');
+
+// 测试步骤4：批量创建多个用例的情况
+$_POST['title'] = array(0 => 'Test Case 1', 1 => 'Test Case 2', 2 => 'Test Case 3');
+$_POST['type'] = array(0 => 'feature', 1 => 'performance', 2 => 'interface');
+$_POST['pri'] = array(0 => 1, 1 => 2, 2 => 3);
+r($caselibTest->prepareCasesForBathcCreateTest(2, 'count')) && p() && e('3');
+
+// 测试步骤5：验证返回用例的字段完整性
+$_POST['title'] = array(0 => 'Complete Test Case');
+$_POST['type'] = array(0 => 'feature');
+$_POST['pri'] = array(0 => 2);
+$_POST['module'] = array(0 => 5);
+$_POST['precondition'] = array(0 => 'Test precondition');
+$_POST['keywords'] = array(0 => 'keyword1,keyword2');
+$_POST['stage'] = array(0 => 'unittest');
+r($caselibTest->prepareCasesForBathcCreateTest(3)) && p('0:openedBy,version') && e('guest,1');

@@ -4,7 +4,7 @@
 /**
 
 title=productModel->manageLine();
-cid=0
+cid=17522
 
 - 不传入数据。
  - 第1条的root属性 @1

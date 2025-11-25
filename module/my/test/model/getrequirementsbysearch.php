@@ -18,7 +18,7 @@ su('admin');
 
 title=测试 myModel->getRequirementsBySearch();
 timeout=0
-cid=1
+cid=17288
 
 - 测试获取 queryID 0 类型 other 排序 id_desc 的需求。 @19,10,4
 

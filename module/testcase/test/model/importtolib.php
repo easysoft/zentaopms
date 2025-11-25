@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 testcaseTao->importToLib();
 timeout=0
-cid=1
+cid=19011
 
 - 测试将case id 1,2 导入到用例库 @1: 21,22,23,24,25,26,27,28,29,30,31,32 21,22; 2: 33 23,24;
 

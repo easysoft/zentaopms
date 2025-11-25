@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 tutorialModel->getProjectStats();
-cid=1;
+cid=19457;
 
 - 测试 admin 登录时是否能拿到 browseType 空 数据
  - 第2条的id属性 @2

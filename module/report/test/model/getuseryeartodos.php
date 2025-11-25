@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserYearTodos();
-cid=1
+cid=18180
 pid=1
 
 */

@@ -18,9 +18,11 @@ class treeTest
      */
     public function setRootTest(int $rootID = 0, string $viewType = '', string $branch = '')
     {
+        ob_start();
         $method = $this->objectZen->getMethod('setRoot');
         $method->setAccessible(true);
         $result = $method->invokeArgs($this->objectZen->newInstance(), array($rootID, $viewType, $branch));
+        ob_end_clean();
         if(dao::isError()) return dao::getError();
 
         return $result;

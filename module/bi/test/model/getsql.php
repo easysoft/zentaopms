@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getSQL();
 timeout=0
-cid=0
+cid=15180
 
 - 测试mysql驱动，简单SELECT语句，默认分页 @2
 - 测试mysql驱动，带WHERE条件，自定义分页 @2

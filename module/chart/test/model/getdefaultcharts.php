@@ -4,7 +4,7 @@
 
 title=测试 chartModel::getDefaultCharts();
 timeout=0
-cid=1
+cid=15571
 
 - 测试传入的分组是子分组时，返回空数据 @0
 - 测试查询不存在的分组 @0

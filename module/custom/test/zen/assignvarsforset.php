@@ -5,39 +5,53 @@
 
 title=测试 customZen::assignVarsForSet();
 timeout=0
-cid=0
+cid=15932
 
-- 步骤1：正常story模块priList字段 @executed
-- 步骤2：project模块unitList字段特殊处理 @executed_unitList
-- 步骤3：story模块review字段特殊处理 @executed_review
-- 步骤4：bug模块longlife字段特殊处理 @executed_longlife
-- 步骤5：其他模块字段的一般情况 @executed
+- 执行customTest模块的assignVarsForSetTest方法，参数是'story', 'priList', 'zh-cn', 'zh-cn' 属性lang2Set @zh-cn
+- 执行customTest模块的assignVarsForSetTest方法，参数是'project', 'unitList', 'zh-cn', 'zh-cn'
+ - 属性hasUnitList @1
+ - 属性hasDefaultCurrency @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'story', 'reviewRules', 'zh-cn', 'zh-cn'
+ - 属性hasReviewRule @1
+ - 属性hasUsers @1
+ - 属性hasSuperReviewers @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'requirement', 'gradeRule', 'zh-cn', 'zh-cn' 属性hasGradeRule @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'epic', 'grade', 'zh-cn', 'zh-cn' 属性hasStoryGrades @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'story', 'review', 'zh-cn', 'zh-cn'
+ - 属性hasUsers @1
+ - 属性hasNeedReview @1
+ - 属性hasForceReview @1
+ - 属性hasForceNotReview @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'testcase', 'review', 'zh-cn', 'zh-cn'
+ - 属性hasUsers @1
+ - 属性hasNeedReview @1
+ - 属性hasForceReview @1
+ - 属性hasForceNotReview @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'bug', 'longlife', 'zh-cn', 'zh-cn' 属性hasLonglife @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'block', 'closed', 'zh-cn', 'zh-cn'
+ - 属性hasBlockPairs @1
+ - 属性hasClosedBlock @1
+- 执行customTest模块的assignVarsForSetTest方法，参数是'user', 'deleted', 'zh-cn', 'zh-cn' 属性hasShowDeleted @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('lang');
-$table->lang->range('zh-cn, en, all');
-$table->module->range('story, project, bug');
-$table->section->range('priList, unitList, longlife');
-$table->key->range('test1, test2, test3');
-$table->value->range('高, 中, 低');
-$table->vision->range('rnd');
-$table->gen(3);
+zenData('user')->gen(20);
+zenData('dept')->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$customTest = new customTest();
+$customTest = new customZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($customTest->assignVarsForSetTest('story', 'priList', 'zh-cn', 'zh-cn')) && p() && e('executed'); // 步骤1：正常story模块priList字段
-r($customTest->assignVarsForSetTest('project', 'unitList', 'zh-cn', 'zh-cn')) && p() && e('executed_unitList'); // 步骤2：project模块unitList字段特殊处理
-r($customTest->assignVarsForSetTest('story', 'review', 'zh-cn', 'zh-cn')) && p() && e('executed_review'); // 步骤3：story模块review字段特殊处理
-r($customTest->assignVarsForSetTest('bug', 'longlife', 'zh-cn', 'zh-cn')) && p() && e('executed_longlife'); // 步骤4：bug模块longlife字段特殊处理
-r($customTest->assignVarsForSetTest('task', 'typeList', 'all', 'zh-cn')) && p() && e('executed'); // 步骤5：其他模块字段的一般情况
+r($customTest->assignVarsForSetTest('story', 'priList', 'zh-cn', 'zh-cn')) && p('lang2Set') && e('zh-cn');
+r($customTest->assignVarsForSetTest('project', 'unitList', 'zh-cn', 'zh-cn')) && p('hasUnitList;hasDefaultCurrency') && e('1;1');
+r($customTest->assignVarsForSetTest('story', 'reviewRules', 'zh-cn', 'zh-cn')) && p('hasReviewRule;hasUsers;hasSuperReviewers') && e('1;1;1');
+r($customTest->assignVarsForSetTest('requirement', 'gradeRule', 'zh-cn', 'zh-cn')) && p('hasGradeRule') && e('1');
+r($customTest->assignVarsForSetTest('epic', 'grade', 'zh-cn', 'zh-cn')) && p('hasStoryGrades') && e('1');
+r($customTest->assignVarsForSetTest('story', 'review', 'zh-cn', 'zh-cn')) && p('hasUsers;hasNeedReview;hasForceReview;hasForceNotReview') && e('1;1;1;1');
+r($customTest->assignVarsForSetTest('testcase', 'review', 'zh-cn', 'zh-cn')) && p('hasUsers;hasNeedReview;hasForceReview;hasForceNotReview') && e('1;1;1;1');
+r($customTest->assignVarsForSetTest('bug', 'longlife', 'zh-cn', 'zh-cn')) && p('hasLonglife') && e('1');
+r($customTest->assignVarsForSetTest('block', 'closed', 'zh-cn', 'zh-cn')) && p('hasBlockPairs;hasClosedBlock') && e('1;1');
+r($customTest->assignVarsForSetTest('user', 'deleted', 'zh-cn', 'zh-cn')) && p('hasShowDeleted') && e('1');

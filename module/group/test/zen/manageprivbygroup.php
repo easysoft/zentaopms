@@ -5,7 +5,7 @@
 
 title=测试 groupZen::managePrivByGroup();
 timeout=0
-cid=0
+cid=16734
 
 - 步骤1：正常情况
  - 属性groupID @1

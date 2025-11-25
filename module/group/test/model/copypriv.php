@@ -5,7 +5,7 @@
 
 title=测试 groupModel->copyPriv();
 timeout=0
-cid=1
+cid=16697
 
 - 复制分组1权限到分组1 @1
 - 复制分组1权限到分组2 @1

@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getPostponed();
-cid=1
+cid=19727
 
 - 测试project值为0，date值为2022-07-30第13条的name属性 @开发任务60
 - 测试project值为0，date值为空第3条的name属性 @开发任务53

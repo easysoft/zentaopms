@@ -5,7 +5,7 @@
 
 title=测试 taskZen::checkBatchEditTask();
 timeout=0
-cid=0
+cid=18919
 
 - 步骤1：正常情况 @1
 - 步骤2：负数预估工时属性estimate[1] @『预估』不能为负数

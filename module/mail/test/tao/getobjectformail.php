@@ -5,7 +5,7 @@
 
 title=测试 mailModel->getObjectForMail();
 timeout=0
-cid=0
+cid=17035
 
 - 不传入任何参数 @0
 - 只传入objectType参数 @0

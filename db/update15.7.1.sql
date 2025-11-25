@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `lastEditedTime` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `cards` text NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `zt_stage` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_design`;
 CREATE TABLE IF NOT EXISTS `zt_design` (
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `version` smallint(6) NOT NULL,
   `type` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_designspec`;
 CREATE TABLE IF NOT EXISTS `zt_designspec` (
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
   `desc` text NOT NULL,
   `files` varchar(255) NOT NULL,
   UNIQUE KEY `design` (`design`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_weeklyreport`;
 CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
   `workload` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `week` (`project`,`weekStart`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_holiday`;
 CREATE TABLE IF NOT EXISTS `zt_holiday` (
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   PRIMARY KEY (`id`),
   KEY `year` (`year`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_mrapproval`;
 CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
   `action` char(30) NOT NULL,
   `comment` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
 ('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),

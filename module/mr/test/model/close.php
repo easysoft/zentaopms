@@ -5,7 +5,7 @@
 
 title=测试 mrModel::close();
 timeout=0
-cid=0
+cid=17239
 
 - 测试步骤1：正常打开状态的MR关闭操作属性message @已关闭合并请求。
 - 测试步骤2：已关闭状态的MR重复关闭操作属性message @请勿重复操作

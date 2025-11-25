@@ -4,39 +4,31 @@
 
 title=测试 customZen::checkKeysForSet();
 timeout=0
-cid=0
+cid=15935
 
-- 执行customTest模块的checkKeysForSetTest方法，参数是array  @success
-- 执行customTest模块的checkKeysForSetTest方法，参数是array  @duplicate_error
-- 执行customTest模块的checkKeysForSetTest方法，参数是array  @invalid_format
-- 执行customTest模块的checkKeysForSetTest方法，参数是array  @number_range_error
-- 执行customTest模块的checkKeysForSetTest方法，参数是array  @length_error_10
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array  @1
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array 属性message @1键重复
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'sourceList', 'zh-cn', array 属性message @键值应当为大小写英文字母、数字或下划线的组合
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array 属性message @值不能为空！
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'priList', 'zh-cn', array 属性message @键值应为不大于255的数字
+- 执行customTest模块的checkKeysForSetTest方法，参数是'story', 'sourceList', 'zh-cn', array  @1
+- 执行customTest模块的checkKeysForSetTest方法，参数是'user', 'roleList', 'zh-cn', array 属性message @键的长度必须小于10个字符！
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录
+zenData('config')->gen(0);
+
 su('admin');
 
-// 3. 创建测试实例
-$customTest = new customTest();
+$customTest = new customZenTest();
 
-// 4. 测试步骤
-
-// 测试步骤1：正常输入情况（有效key值）
-r($customTest->checkKeysForSetTest(array('1', '2', '3'), 'story', 'priList')) && p() && e('success');
-
-// 测试步骤2：重复key值输入
-r($customTest->checkKeysForSetTest(array('1', '2', '1'), 'story', 'priList')) && p() && e('duplicate_error');
-
-// 测试步骤3：无效key值输入（特殊字符）
-r($customTest->checkKeysForSetTest(array('key@#', 'valid_key', 'key-1'), 'story', 'sourceList')) && p() && e('invalid_format');
-
-// 测试步骤4：数值类型key超出范围
-r($customTest->checkKeysForSetTest(array('300', '2', '3'), 'story', 'priList')) && p() && e('number_range_error');
-
-// 测试步骤5：字符串长度超出限制
-r($customTest->checkKeysForSetTest(array('verylongkey', 'key2'), 'user', 'roleList')) && p() && e('length_error_10');
+r($customTest->checkKeysForSetTest('story', 'priList', 'zh-cn', array('1', '2', '3'), array('高', '中', '低'), array('0', '0', '0'))) && p() && e('1');
+r($customTest->checkKeysForSetTest('story', 'priList', 'zh-cn', array('1', '2', '1'), array('高', '中', '低'), array('0', '0', '0'))) && p('message') && e('1键重复');
+r($customTest->checkKeysForSetTest('story', 'sourceList', 'zh-cn', array('valid_key', 'invalid-key'), array('来源1', '来源2'), array('0', '0'))) && p('message') && e('键值应当为大小写英文字母、数字或下划线的组合');
+r($customTest->checkKeysForSetTest('story', 'priList', 'zh-cn', array('1', '2'), array('高', ''), array('0', '0'))) && p('message') && e('值不能为空！');
+r($customTest->checkKeysForSetTest('story', 'priList', 'zh-cn', array('1', '256'), array('高', '中'), array('0', '0'))) && p('message') && e('键值应为不大于255的数字');
+r($customTest->checkKeysForSetTest('story', 'sourceList', 'zh-cn', array('customer', 'market', 'internal'), array('客户', '市场', '内部'), array('0', '0', '0'))) && p() && e('1');
+r($customTest->checkKeysForSetTest('user', 'roleList', 'zh-cn', array('short', 'this_is_too_long_key'), array('角色1', '角色2'), array('0', '0'))) && p('message') && e('键的长度必须小于10个字符！');

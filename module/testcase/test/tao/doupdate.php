@@ -4,13 +4,15 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 su('admin');
 
-zenData('case')->gen(10);
+$caseTable = zenData('case');
+$caseTable->story->range(0);
+$caseTable->gen(10);
 
 /**
 
 title=测试 testcaseModel->doUpdate();
 timeout=0
-cid=1
+cid=19032
 
 - 测试更新用例名称
  - 属性title @修改后的用例

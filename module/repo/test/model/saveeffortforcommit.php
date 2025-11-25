@@ -5,7 +5,7 @@
 
 title=测试 repoModel::saveEffortForCommit();
 timeout=0
-cid=0
+cid=18095
 
 - 执行$result1
  - 属性status @doing

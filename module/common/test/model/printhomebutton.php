@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel::printHomeButton();
 timeout=0
-cid=1
+cid=15694
 
 - 打印project应用下的appName按钮。 @<div class='btn-group header-btn'><a href='pms/printhomebutton.php?m=project&f=browse' class='btn' style='padding-top: 2px' ><i class='icon icon-project'></i> 项目</a></div>
 - 打印product应用下的appName按钮。 @<div class='btn-group header-btn'><a href='pms/printhomebutton.php?m=product&f=all' class='btn' style='padding-top: 2px' ><i class='icon icon-product'></i> 产品</a></div>

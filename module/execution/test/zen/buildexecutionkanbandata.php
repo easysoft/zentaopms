@@ -5,7 +5,7 @@
 
 title=测试 executionZen::buildExecutionKanbanData();
 timeout=0
-cid=0
+cid=16412
 
 - 步骤1：正常情况测试返回数组结构 @0
 - 步骤2：空项目列表返回项目计数 @0

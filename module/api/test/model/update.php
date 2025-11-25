@@ -9,7 +9,7 @@ zenData('api')->gen(10);
 
 title=测试 apiModel->update();
 timeout=0
-cid=1
+cid=15122
 
 - 测试正常变更接口文档。 @1
 - 测试接口名称为空。 @0

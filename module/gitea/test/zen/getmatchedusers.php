@@ -5,7 +5,7 @@
 
 title=测试 giteaZen::getMatchedUsers();
 timeout=0
-cid=0
+cid=16571
 
 - 执行$result1第1条的zentaoAccount属性 @admin
 - 执行$result2第2条的zentaoAccount属性 @user1

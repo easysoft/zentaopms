@@ -12,7 +12,7 @@ zenData('user')->gen(5);
 
 title=测试 commonModel::resetProjectPriv();
 timeout=0
-cid=1
+cid=15705
 
 - 查看重设权限之前user1的权限数量 @2
 - 查看重设权限之后user1的权限数量 @4

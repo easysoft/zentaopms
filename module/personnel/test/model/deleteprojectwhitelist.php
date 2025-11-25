@@ -13,7 +13,7 @@ zenData('user')->gen(20);
 /**
 
 title=测试 personnelModel->deleteProjectWhitelist();
-cid=1
+cid=17324
 
 - 从项目 0 删除账号 admin 的白名单 @0
 - 从项目 0 删除账号 user11 的白名单 @0

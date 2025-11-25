@@ -5,7 +5,7 @@
 
 title=测试 zaiModel->syncNextTarget();
 timeout=0
-cid=0
+cid=19779
 
 - 测试同步不存在的类型 @0
 - 测试同步不存在的目标 @0

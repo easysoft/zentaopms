@@ -5,7 +5,7 @@
 
 title=测试 programplanZen::buildEditView();
 timeout=0
-cid=0
+cid=17788
 
 - 步骤1：正常阶段编辑场景属性success @1
 - 步骤2：IPD项目模型场景属性success @1

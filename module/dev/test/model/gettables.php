@@ -5,7 +5,7 @@
 
 title=测试 devModel::getTables();
 timeout=0
-cid=0
+cid=16011
 
 - 测试步骤1：正常获取所有数据表并验证my分组下todo表第my条的todo属性 @zt_todo
 - 测试步骤2：验证product分组下product表的完整名称第product条的product属性 @zt_product

@@ -5,7 +5,7 @@
 
 title=测试 executionModel::changeStatus2Inactive();
 timeout=0
-cid=0
+cid=16279
 
 - 步骤1：修改顶级父阶段状态为suspended，子阶段未全部挂起/关闭 @'顶级阶段A',
 

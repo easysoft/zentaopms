@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getExecutionStoryPairs();
-cid=0
+cid=18531
 
 - 获取执行11下的需求数量 @50
 - 获取执行11下的需求详情属性8 @8:软件需求8 (优先级:2,预计工时:1)

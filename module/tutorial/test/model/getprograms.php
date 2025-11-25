@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getPrograms();
 timeout=0
-cid=0
+cid=19454
 
 - 执行tutorialTest模块的getProgramsTest方法 第1条的name属性 @Test program
 - 执行tutorialTest模块的getProgramsTest方法 第1条的id属性 @1

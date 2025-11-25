@@ -4,7 +4,7 @@
 /**
 
 title=taskModel->afterSplitTask();
-cid=0
+cid=18762
 
 - 测试如果父任务有工时消耗时是否成功克隆子任务。属性9 @9
 - 测试父任务状态是否改变。属性status @wait

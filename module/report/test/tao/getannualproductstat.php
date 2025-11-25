@@ -5,7 +5,7 @@
 
 title=测试 reportTao::getAnnualProductStat();
 timeout=0
-cid=0
+cid=18186
 
 - 步骤1：正常情况，测试2024年admin账户统计，返回4个元素的数组 @4
 - 步骤2：测试2023年多个账户统计，返回产品数组 @1

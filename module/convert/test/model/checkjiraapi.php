@@ -5,7 +5,7 @@
 
 title=测试 convertModel::checkJiraApi();
 timeout=0
-cid=0
+cid=15764
 
 - 步骤1：session无jiraApi数据时返回false @0
 - 步骤2：domain为空时返回false @0

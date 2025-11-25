@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->parseComment();
 timeout=0
-cid=1
+cid=18088
 
 - 解析完成任务第tasks条的8属性 @8
 - 解析完成多个任务

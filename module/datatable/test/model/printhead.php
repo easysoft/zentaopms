@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::printHead();
 timeout=0
-cid=0
+cid=15946
 
 - 步骤1：正常列配置 @1
 - 步骤2：隐藏列配置 @0

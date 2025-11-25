@@ -16,7 +16,7 @@ su('admin');
 
 title=测试 reportModel->getYearObjectStat();
 timeout=0
-cid=1
+cid=18183
 
 - 测试获取 admin story @draft:3;
 - 测试获取 admin task @wait:3;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->initUserView();
-cid=1
+cid=19534
 
 - 测试初始化用户视图 @0
 

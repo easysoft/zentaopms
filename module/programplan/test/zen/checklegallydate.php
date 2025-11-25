@@ -5,7 +5,7 @@
 
 title=测试 loadModel->checkLegallyDate()
 timeout=0
-cid=0
+cid=17791
 
 - 不能超过项目的起止日期属性end[0] @阶段的结束时间不能大于所属项目的结束时间2025-02-01
 - 没有错误 @0

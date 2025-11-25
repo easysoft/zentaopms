@@ -8,7 +8,7 @@ zenData('module')->loadYaml('module_caselib')->gen('60');
 /**
 
 title=测试 testcaseModel->importCaseRelatedModules();
-cid=1
+cid=19010
 
 - 测试将模块 1 导入用例库 1 中 @61
 - 测试将模块 2 导入用例库 1 中 @12

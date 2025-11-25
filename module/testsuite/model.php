@@ -39,17 +39,17 @@ class testsuiteModel extends model
      * 获取一个产品下的测试套件。
      * Get test suites of a product.
      *
-     * @param  int    $productID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  string $param
+     * @param  int|array $productID
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @param  string    $param
      * @access public
      * @return array
      */
-    public function getSuites(int $productID, string $orderBy = 'id_desc', ?object $pager = null, string $param = ''): array
+    public function getSuites(int|array $productID, string $orderBy = 'id_desc', ?object $pager = null, string $param = ''): array
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
-            ->where('product')->eq($productID)
+            ->where('product')->in($productID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq('0')
             ->andWhere('`type`', true)->eq('public')
@@ -66,14 +66,14 @@ class testsuiteModel extends model
      * 获取一个产品下的测试套件对。
      * Get test suites pairs of a product.
      *
-     * @param  int    $productID
+     * @param  int|array $productID
      * @access public
      * @return array
      */
-    public function getSuitePairs(int $productID): array
+    public function getSuitePairs(int|array $productID): array
     {
         return $this->dao->select('id, name')->from(TABLE_TESTSUITE)
-            ->where('product')->eq($productID)
+            ->where('product')->in($productID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq('0')
             ->andWhere("(`type` = 'public' OR (`type` = 'private' AND `addedBy` = '{$this->app->user->account}'))")

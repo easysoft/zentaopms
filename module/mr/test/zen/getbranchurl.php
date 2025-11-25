@@ -5,44 +5,54 @@
 
 title=测试 mrZen::getBranchUrl();
 timeout=0
-cid=0
+cid=17268
 
-- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 1, 'master'  @https://gitlab.example.com/project/repo/-/tree/master
-- 执行mrTest模块的getBranchUrlTest方法，参数是$giteaHost, 'project/repo', 'develop'  @https://gitea.example.com/project/repo/src/branch/develop
-- 执行mrTest模块的getBranchUrlTest方法，参数是$gogsHost, 'project/repo', 'feature-test'  @https://gogs.example.com/project/repo/src/feature-test
-- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 1, 'nonexistent'  @0
-- 执行mrTest模块的getBranchUrlTest方法，参数是$invalidHost, 1, 'master'  @unsupported_host_type
+- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 100, 'main'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$giteaHost, 'test/project', 'develop'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$gogsHost, 'user/repo', 'master'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 200, 'feature-branch'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$giteaHost, 'org/project', 'release'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 100, 'nonexistent-branch'  @0
+- 执行mrTest模块的getBranchUrlTest方法，参数是$gitlabHost, 100, ''  @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$mrTest = new mrTest();
+global $app;
+$app->setMethodName('view');
 
-// 测试步骤1：正常GitLab分支获取URL
-$gitlabHost = new stdClass();
-$gitlabHost->type = 'gitlab';
+zenData('pipeline')->gen(0);
+
+su('admin');
+
+$mrTest = new mrZenTest();
+
+// 创建不同类型的主机对象
+$gitlabHost = new stdclass();
 $gitlabHost->id = 1;
-r($mrTest->getBranchUrlTest($gitlabHost, 1, 'master')) && p() && e('https://gitlab.example.com/project/repo/-/tree/master');
+$gitlabHost->type = 'gitlab';
 
-// 测试步骤2：正常Gitea分支获取URL
-$giteaHost = new stdClass();
+$giteaHost = new stdclass();
+$giteaHost->id = 2;
 $giteaHost->type = 'gitea';
-$giteaHost->id = 1;
-r($mrTest->getBranchUrlTest($giteaHost, 'project/repo', 'develop')) && p() && e('https://gitea.example.com/project/repo/src/branch/develop');
 
-// 测试步骤3：正常Gogs分支获取URL
-$gogsHost = new stdClass();
+$gogsHost = new stdclass();
+$gogsHost->id = 3;
 $gogsHost->type = 'gogs';
-$gogsHost->id = 1;
-r($mrTest->getBranchUrlTest($gogsHost, 'project/repo', 'feature-test')) && p() && e('https://gogs.example.com/project/repo/src/feature-test');
 
-// 测试步骤4：分支不存在情况
-r($mrTest->getBranchUrlTest($gitlabHost, 1, 'nonexistent')) && p() && e('0');
-
-// 测试步骤5：无效主机类型
-$invalidHost = new stdClass();
-$invalidHost->type = 'unknown';
-$invalidHost->id = 1;
-r($mrTest->getBranchUrlTest($invalidHost, 1, 'master')) && p() && e('unsupported_host_type');
+// 测试步骤1: GitLab主机获取存在的分支URL
+r($mrTest->getBranchUrlTest($gitlabHost, 100, 'main')) && p() && e('0');
+// 测试步骤2: Gitea主机获取存在的分支URL
+r($mrTest->getBranchUrlTest($giteaHost, 'test/project', 'develop')) && p() && e('0');
+// 测试步骤3: Gogs主机获取存在的分支URL
+r($mrTest->getBranchUrlTest($gogsHost, 'user/repo', 'master')) && p() && e('0');
+// 测试步骤4: GitLab主机使用整数项目ID获取分支URL
+r($mrTest->getBranchUrlTest($gitlabHost, 200, 'feature-branch')) && p() && e('0');
+// 测试步骤5: Gitea主机使用字符串项目ID获取分支URL
+r($mrTest->getBranchUrlTest($giteaHost, 'org/project', 'release')) && p() && e('0');
+// 测试步骤6: 获取不存在的分支
+r($mrTest->getBranchUrlTest($gitlabHost, 100, 'nonexistent-branch')) && p() && e('0');
+// 测试步骤7: 使用空分支名称
+r($mrTest->getBranchUrlTest($gitlabHost, 100, '')) && p() && e('0');

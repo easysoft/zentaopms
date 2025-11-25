@@ -10,7 +10,7 @@ zenData('effort')->loadYaml('effort')->gen(3);
 
 title=taskModel->copyTaskData();
 timeout=0
-cid=2
+cid=18871
 
 - 测试父任务日志的objectID是否更改为子任务ID属性objectID @10
 - 测试更新的日志类型是否为task属性objectType @task

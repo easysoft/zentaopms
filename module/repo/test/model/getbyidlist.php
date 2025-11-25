@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getByIdList();
 timeout=0
-cid=0
+cid=18049
 
 - 执行repoTest模块的getByIdListTest方法，参数是array  @4
 - 执行repoTest模块的getByIdListTest方法，参数是array 第1条的name属性 @repo1

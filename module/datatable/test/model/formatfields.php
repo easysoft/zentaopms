@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 datatableModel::formatFields();
 timeout=0
-cid=1
+cid=15941
 
 - 获取产品模块的目标配置
  - 第id条的order属性 @1

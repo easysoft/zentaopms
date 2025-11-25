@@ -5,7 +5,7 @@
 
 title=测试 blockZen::printShortProductOverview();
 timeout=0
-cid=0
+cid=15294
 
 - 步骤1：正常情况获取产品数量属性productCount @0
 - 步骤2：正常情况获取发布数量属性releaseCount @0

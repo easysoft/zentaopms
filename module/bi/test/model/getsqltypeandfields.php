@@ -5,7 +5,7 @@
 
 title=测试 biModel::getSqlTypeAndFields();
 timeout=0
-cid=0
+cid=15182
 
 - 步骤1：正常SQL语句解析，测试第一个元素id字段类型第0条的id属性 @number
 - 步骤2：正常SQL语句解析，测试第一个元素account字段类型第0条的account属性 @string

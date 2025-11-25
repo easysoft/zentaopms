@@ -11,7 +11,7 @@ $execution = new executionTest();
 
 title=- 测试步骤1：获取默认看板颜色列表属性wait @
 timeout=0
-cid=7
+cid=16318
 
 - 测试步骤1：获取默认看板颜色列表属性wait @#7EC5FF
 - 测试步骤2：验证wait状态的颜色值 @#7EC5FF

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getGradeGroup();
 timeout=0
-cid=0
+cid=18533
 
 - 步骤1：正常获取等级分组数据 @3
 - 步骤2：测试story类型数据 @3

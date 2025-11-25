@@ -148,6 +148,11 @@ class install extends control
 
             $myConfig = array();
             foreach($data as $key => $value) $myConfig[$key] = $value;
+
+            $result = $this->install->dbh->getDatabaseCharsetAndCollation($myConfig['dbName']);
+            $myConfig['dbEncoding']  = $result['charset'];
+            $myConfig['dbCollation'] = $result['collation'];
+
             $this->session->set('myConfig', $myConfig);
             return $this->send(array('result' => 'success', 'load' => inlink('showTableProgress')));
         }
@@ -160,10 +165,6 @@ class install extends control
         if(getenv('MYSQL_DB'))       $dbName     = getenv('MYSQL_DB');
         if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
         if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
-
-        /* IPD版本不支持达梦数据库。*/
-        /* The IPD version does not support the Da Meng database. */
-        if($this->config->edition == 'ipd') unset($this->lang->install->dbDriverList['dm']);
 
         $this->view->title      = $this->lang->install->setConfig;
         $this->view->dbHost     = $dbHost ? $dbHost : '127.0.0.1';
@@ -423,16 +424,12 @@ class install extends control
 
         if($this->config->inQuickon)
         {
-            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
-            $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
         }
-        elseif($this->config->edition != 'ipd')
-        {
-            $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
-            $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
-        }
+
+        $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+        $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
         $installFile = $this->app->getAppRoot() . 'www/install.php';

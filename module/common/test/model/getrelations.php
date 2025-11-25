@@ -5,7 +5,7 @@
 
 title=测试 commonModel::getRelations();
 timeout=0
-cid=0
+cid=15676
 
 - 执行$result1 @method_exists
 - 执行$result2 @1

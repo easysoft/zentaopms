@@ -10,7 +10,7 @@ zenData('kanbancell')->gen(10);
 
 title=测试 kanbanModel->moveCard();
 timeout=0
-cid=1
+cid=16950
 
 - 将卡片1从泳道1 列1转移到泳道1 列2属性cards @,3,4,803,1,
 - 将卡片2从泳道1 列1转移到泳道1 列2属性cards @,3,4,803,1,2, 

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::updateCommitCount();
 timeout=0
-cid=0
+cid=18111
 
 - 测试步骤1：正常更新版本库提交计数
  - 属性id @1

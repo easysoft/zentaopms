@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getPublishedCustomCategories();
 timeout=0
-cid=0
+cid=15047
 
 - 步骤1：测试空数据情况 @0
 - 步骤2：测试已发布小程序的分类数量 @4

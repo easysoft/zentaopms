@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getByAssignedby();
-cid=0
+cid=18499
 
 - 查看产品 1 由我指派的需求 @0
 - 查看产品 2 由我指派的需求 @0

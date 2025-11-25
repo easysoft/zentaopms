@@ -15,7 +15,7 @@ su('admin');
 /**
 
 title=测试 personnelModel->getBugAndStoryInvest();
-cid=1
+cid=17326
 pid=1
 
 admin在项目集1下创建的bug数量      >> 3

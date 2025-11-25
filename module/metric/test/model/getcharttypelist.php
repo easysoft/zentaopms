@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getChartTypeList();
 timeout=0
-cid=0
+cid=17083
 
 - 步骤1：测试系统度量表头 @4
 - 步骤2：测试对象度量表头（含date） @3

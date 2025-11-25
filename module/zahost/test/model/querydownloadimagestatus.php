@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::queryDownloadImageStatus();
 timeout=0
-cid=0
+cid=19755
 
 - 步骤1：正常创建状态镜像属性id @1
 - 步骤2：进行中状态镜像属性id @2

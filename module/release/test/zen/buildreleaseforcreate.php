@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::buildReleaseForCreate();
 timeout=0
-cid=0
+cid=18023
 
 - 步骤1：正常情况
  - 属性product @1

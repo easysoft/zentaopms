@@ -15,7 +15,7 @@ $branch->gen(10);
 
 title=测试 branchModel->getByID();
 timeout=0
-cid=1
+cid=15324
 
 */
 $branchIdList  = array(0, 1, 11);

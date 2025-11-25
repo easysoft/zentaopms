@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getCommitsByRevisions();
 timeout=0
-cid=0
+cid=18054
 
 - 测试步骤1：单个有效版本号 @1
 - 测试步骤2：多个有效版本号 @3

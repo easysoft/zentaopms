@@ -3,118 +3,112 @@
 
 /**
 
-title=- 步骤1：正常情况项目名称映射属性project @项目一(
+title=测试 taskZen::formatExportTask();
 timeout=0
-cid=1
+cid=18928
 
-- 步骤1：正常情况项目名称映射属性project @项目一(#1)
-- 步骤2：CSV格式特殊字符处理属性desc @包含\n换行和""引号""还有 空格
-- 步骤3：日期格式处理属性openedDate @2023-01-01
-- 步骤4：用户名称映射属性openedBy @管理员
-- 步骤5：零值日期处理属性finishedDate @
+- 测试CSV格式导出时工时consumed字段单位添加 >> 期望工时带有单位
+- 测试HTML格式导出时工时left字段单位添加 >> 期望工时带有单位
+- 测试用户字段的ID转名称映射 >> 期望用户名正确转换
+- 测试日期字段的零值处理 >> 期望零值日期显示为空
+- 测试工时estimate字段的单位添加 >> 期望工时带有单位
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/taskzen.unittest.class.php';
 
-// 2. zendata数据准备（不使用数据库数据生成）
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
+$projects   = array(1 => 'ProjectA', 2 => 'ProjectB', 3 => 'ProjectC');
+$executions = array(11 => 'SprintX', 12 => 'SprintY', 13 => 'SprintZ');
+$users      = array('admin' => 'Admin', 'user1' => 'User1', 'user2' => 'User2');
+
+$task1 = new stdClass();
+$task1->id             = 1;
+$task1->project        = 1;
+$task1->execution      = 11;
+$task1->name           = '任务01';
+$task1->type           = 'devel';
+$task1->mode           = 'linear';
+$task1->pri            = 1;
+$task1->estimate       = 5;
+$task1->consumed       = 2;
+$task1->left           = 3;
+$task1->status         = 'doing';
+$task1->desc           = '任务描述';
+$task1->openedBy       = 'admin';
+$task1->openedDate     = '2024-01-01 10:00:00';
+$task1->assignedTo     = 'user1';
+$task1->assignedDate   = '2024-01-02 11:00:00';
+$task1->finishedBy     = '';
+$task1->finishedDate   = '0000-00-00 00:00:00';
+$task1->canceledBy     = '';
+$task1->canceledDate   = '0000-00-00 00:00:00';
+$task1->closedBy       = '';
+$task1->closedDate     = '0000-00-00 00:00:00';
+$task1->closedReason   = '';
+$task1->lastEditedBy   = 'admin';
+$task1->lastEditedDate = '2024-01-06 18:00:00';
+
+$task2 = new stdClass();
+$task2->id             = 2;
+$task2->project        = 2;
+$task2->execution      = 12;
+$task2->name           = '任务02';
+$task2->type           = 'test';
+$task2->mode           = 'multi';
+$task2->pri            = 2;
+$task2->estimate       = 8;
+$task2->consumed       = 4;
+$task2->left           = 4;
+$task2->status         = 'done';
+$task2->desc           = '普通描述';
+$task2->openedBy       = 'user1';
+$task2->openedDate     = '2024-01-02 11:00:00';
+$task2->assignedTo     = 'user2';
+$task2->assignedDate   = '2024-01-03 12:00:00';
+$task2->finishedBy     = 'user2';
+$task2->finishedDate   = '2024-01-05 15:00:00';
+$task2->canceledBy     = '';
+$task2->canceledDate   = '0000-00-00 00:00:00';
+$task2->closedBy       = 'admin';
+$task2->closedDate     = '2024-01-06 17:00:00';
+$task2->closedReason   = 'done';
+$task2->lastEditedBy   = 'user1';
+$task2->lastEditedDate = '2024-01-07 18:00:00';
+
+$task3 = new stdClass();
+$task3->id             = 3;
+$task3->project        = 3;
+$task3->execution      = 13;
+$task3->name           = '任务03';
+$task3->type           = 'design';
+$task3->mode           = 'linear';
+$task3->pri            = 3;
+$task3->estimate       = 10;
+$task3->consumed       = 0;
+$task3->left           = 10;
+$task3->status         = 'wait';
+$task3->desc           = '简单描述';
+$task3->openedBy       = 'user2';
+$task3->openedDate     = '2024-01-03 12:00:00';
+$task3->assignedTo     = '';
+$task3->assignedDate   = '0000-00-00 00:00:00';
+$task3->finishedBy     = '';
+$task3->finishedDate   = '0000-00-00 00:00:00';
+$task3->canceledBy     = '';
+$task3->canceledDate   = '0000-00-00 00:00:00';
+$task3->closedBy       = '';
+$task3->closedDate     = '0000-00-00 00:00:00';
+$task3->closedReason   = '';
+$task3->lastEditedBy   = '';
+$task3->lastEditedDate = '0000-00-00 00:00:00';
+
 $taskTest = new taskZenTest();
 
-// 准备测试数据
-$projects = array(
-    1 => '项目一',
-    2 => '项目二',
-    3 => '项目三'
-);
-
-$executions = array(
-    1 => '执行一',
-    2 => '执行二',
-    3 => '执行三'
-);
-
-$users = array(
-    'admin' => '管理员',
-    'user1' => '用户一',
-    'user2' => '用户二',
-    'user3' => '用户三'
-);
-
-// 创建任务对象进行测试
-$normalTask = (object)array(
-    'id' => 1,
-    'name' => '测试任务',
-    'project' => 1,
-    'execution' => 1,
-    'type' => 'devel',
-    'pri' => 3,
-    'status' => 'doing',
-    'closedReason' => '',
-    'mode' => 'linear',
-    'openedBy' => 'admin',
-    'assignedTo' => 'user1',
-    'finishedBy' => '',
-    'canceledBy' => '',
-    'closedBy' => '',
-    'lastEditedBy' => 'admin',
-    'openedDate' => '2023-01-01 10:00:00',
-    'assignedDate' => '2023-01-02 11:00:00',
-    'finishedDate' => '0000-00-00 00:00:00',
-    'canceledDate' => '0000-00-00 00:00:00',
-    'closedDate' => '0000-00-00 00:00:00',
-    'lastEditedDate' => '2023-01-15 10:00:00',
-    'estimate' => 16.0,
-    'consumed' => 8.0,
-    'left' => 8.0,
-    'desc' => '普通任务描述'
-);
-
-$csvTask = (object)array(
-    'id' => 2,
-    'name' => 'CSV测试任务',
-    'project' => 2,
-    'execution' => 2,
-    'type' => 'test',
-    'pri' => 2,
-    'status' => 'done',
-    'closedReason' => 'done',
-    'mode' => 'multi',
-    'openedBy' => 'user1',
-    'assignedTo' => 'user2',
-    'finishedBy' => 'user2',
-    'canceledBy' => '',
-    'closedBy' => 'user2',
-    'lastEditedBy' => 'user2',
-    'openedDate' => '2023-01-03 10:00:00',
-    'assignedDate' => '2023-01-04 11:00:00',
-    'finishedDate' => '2023-01-05 12:00:00',
-    'canceledDate' => '0000-00-00 00:00:00',
-    'closedDate' => '2023-01-06 13:00:00',
-    'lastEditedDate' => '2023-01-16 10:00:00',
-    'estimate' => 24.0,
-    'consumed' => 20.0,
-    'left' => 4.0,
-    'desc' => '包含<br />换行和"引号"还有&nbsp;空格的描述'
-);
-
-// 模拟CSV导出的post数据
-$_POST['fileType'] = 'excel';
-
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$_POST['fileType'] = 'excel';
-r($taskTest->formatExportTaskTest($normalTask, $projects, $executions, $users)) && p('project') && e('项目一(#1)'); // 步骤1：正常情况项目名称映射
-$_POST['fileType'] = 'csv';
-r($taskTest->formatExportTaskTest($csvTask, $projects, $executions, $users)) && p('desc') && e('包含\n换行和""引号""还有 空格'); // 步骤2：CSV格式特殊字符处理
-$_POST['fileType'] = 'excel';
-r($taskTest->formatExportTaskTest($normalTask, $projects, $executions, $users)) && p('openedDate') && e('2023-01-01'); // 步骤3：日期格式处理
-r($taskTest->formatExportTaskTest($normalTask, $projects, $executions, $users)) && p('openedBy') && e('管理员'); // 步骤4：用户名称映射
-$zeroDateTask = clone $normalTask;
-$zeroDateTask->finishedDate = '0000-00-00 00:00:00';
-r($taskTest->formatExportTaskTest($zeroDateTask, $projects, $executions, $users)) && p('finishedDate') && e(''); // 步骤5：零值日期处理
+r($taskTest->formatExportTaskTest(clone $task1, $projects, $executions, $users, 'csv')) && p('consumed') && e('2h');
+r($taskTest->formatExportTaskTest(clone $task1, $projects, $executions, $users, 'html')) && p('left') && e('3h');
+r($taskTest->formatExportTaskTest(clone $task2, $projects, $executions, $users, 'html')) && p('openedBy') && e('User1');
+r($taskTest->formatExportTaskTest(clone $task3, $projects, $executions, $users, 'html')) && p('assignedDate') && e('~~');
+r($taskTest->formatExportTaskTest(clone $task1, $projects, $executions, $users, 'html')) && p('estimate') && e('5h');

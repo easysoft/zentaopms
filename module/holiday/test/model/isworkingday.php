@@ -5,7 +5,7 @@
 
 title=测试 holidayModel::isWorkingDay();
 timeout=0
-cid=0
+cid=16748
 
 - 测试工作日期间的日期（春节补班） @It is a working day
 - 测试工作日期间的日期（劳动节补班） @It is a working day

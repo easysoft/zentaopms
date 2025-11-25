@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->isClickable();
-cid=1
+cid=19012
 
 - 测试用例1，是否可以进行 confirmchange 操作 @0
 - 测试用例1，是否可以进行 confirmstorychange 操作 @0

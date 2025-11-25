@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTasksForBatchAssignTo();
 timeout=0
-cid=0
+cid=18913
 
 - 步骤1：指派普通任务给指定用户 @3
 - 步骤2：多人任务指派给团队成员 @2

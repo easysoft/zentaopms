@@ -20,7 +20,7 @@ $program->gen(20);
 
 title=测试 programModel::getList();
 timeout=0
-cid=1
+cid=17686
 
 - 查看所有项目和项目集的个数 @20
 - 查看分页后项目集和项目的个数 @10

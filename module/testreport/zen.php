@@ -102,7 +102,8 @@ class testreportZen extends testreport
         if($objectID)
         {
             $task      = $this->testtask->getByID($objectID);
-            $productID = $this->commonAction($task->product, 'product');
+            $productID = !empty($_SESSION['product']) && !empty($task->joint) ? $this->session->product : $task->product;
+            $productID = $this->commonAction($productID, 'product');
         }
 
         $taskPairs = array();
@@ -121,7 +122,8 @@ class testreportZen extends testreport
         {
             $objectID  = key($taskPairs);
             $task      = $this->testtask->getByID($objectID);
-            $productID = $this->commonAction($task->product, 'product');
+            $productID = !empty($_SESSION['product']) && !empty($task->joint) ? $this->session->product : $task->product;
+            $productID = $this->commonAction($productID, 'product');
         }
 
         $this->view->taskPairs = $taskPairs;
@@ -139,10 +141,10 @@ class testreportZen extends testreport
      * @param  int       $productID
      * @param  object    $task
      * @param  string    $method
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function assignTesttaskReportData(int $objectID, string $begin = '', string $end = '', int $productID = 0, ?object $task = null, string $method = 'create'): array
+    public function assignTesttaskReportData(int $objectID, string $begin = '', string $end = '', int $productID = 0, ?object $task = null, string $method = 'create'): array
     {
         $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
         $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
@@ -185,15 +187,15 @@ class testreportZen extends testreport
      * @param  string    $begin
      * @param  string    $end
      * @param  int       $executionID
-     * @access protected
+     * @access public
      * @return array
      */
-    protected function assignProjectReportDataForCreate(int $objectID, string $objectType, string $extra, string $begin = '', string $end = '', int $executionID = 0): array
+    public function assignProjectReportDataForCreate(int $objectID, string $objectType, string $extra, string $begin = '', string $end = '', int $executionID = 0): array
     {
         $owners        = array();
         $buildIdList   = array();
         $productIdList = array();
-        $tasks         = $this->testtask->getExecutionTasks($executionID, $objectType);
+        $tasks         = $this->testtask->getExecutionTasks($executionID, 0, $objectType);
         $taskBegin     = '';
         $taskEnd       = '';
         foreach($tasks as $i => $task)
@@ -347,11 +349,11 @@ class testreportZen extends testreport
      * 为创建查看测试报告数据构建报告数据。
      * Build testreport data for view.
      *
-     * @param  object    $report
-     * @access protected
+     * @param  object $report
+     * @access public
      * @return array
      */
-    protected function buildReportDataForView(object $report): array
+    public function buildReportDataForView(object $report): array
     {
         $reportData = array();
         $reportData['begin']         = $report->begin;

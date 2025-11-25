@@ -4,7 +4,7 @@
 /**
 
 title=测试 storeModel::getAppMapByNames();
-cid=0
+cid=18453
 
 - 测试步骤1：传入空数组参数 >> 期望返回0（无数据）
 - 测试步骤2：传入单个应用名称adminer >> 期望返回adminer应用信息

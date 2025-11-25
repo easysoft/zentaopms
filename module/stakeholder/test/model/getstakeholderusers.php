@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getStakeholderUsers();
-cid=1
+cid=18444
 
 - 获取项目ID=0的干系人id=>realname的键值对 @0
 - 获取项目ID=11的干系人id=>realname的键值对属性1 @易软天创网络科技有限公司/admin

@@ -5,7 +5,7 @@
 
 title=测试 metricTao::rebuildIdColumn();
 timeout=0
-cid=0
+cid=17178
 
 - 步骤1：空表情况属性result @empty_table
 - 步骤2：正常数据重建属性result @success

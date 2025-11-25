@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->upgradeInExecutionMode();
 timeout=0
-cid=1
+cid=19561
 
 - 测试生成的项目
  - 第131条的name属性 @2020

@@ -1,0 +1,68 @@
+---
+title: 编译记录数据
+desc: 用于测试 getCompileData 方法的编译记录数据
+
+fields:
+- field: id
+  note: 编译ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 编译名称
+  range: compile1,compile2,compile3,compile4,compile5,compile6,compile7,compile8,compile9,compile10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: job
+  note: 流水线ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: queue
+  note: 队列
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: success,failure,running,pending
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: testtask
+  note: 测试任务ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdBy
+  note: 创建者
+  range: admin,user1,user2
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: createdDate
+  note: 创建时间
+  range: (M)-(d)
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: deleted
+  note: 是否删除
+  range: "0"
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

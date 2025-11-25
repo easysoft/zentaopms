@@ -5,79 +5,85 @@
 
 title=测试 repoZen::encodingDiff();
 timeout=0
-cid=0
+cid=18134
 
-- 步骤1：正常的diff数据和UTF-8编码第0条的fileName属性 @test.php
-- 步骤2：包含中文文件名的diff数据和GBK编码第0条的fileName属性 @测试文件.php
-- 步骤3：空的diff数组和任意编码 @0
-- 步骤4：diff对象没有contents属性时的处理第0条的fileName属性 @nocontent.php
-- 步骤5：contents为空数组时的处理第0条的fileName属性 @empty.php
+- 步骤1:空数组 @0
+- 步骤2:文件名UTF-8第0条的fileName属性 @test.php
+- 步骤3:GBK编码转换第0条的fileName属性 @index.php
+- 步骤4:多层嵌套第0条的fileName属性 @utils.php
+- 步骤5:空contents第0条的fileName属性 @empty.php
+- 步骤6:空lines第0条的fileName属性 @noline.php
+- 步骤7:空line字段第0条的fileName属性 @emptyline.php
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
-// 2. zendata数据准备（根据需要配置）
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $repoTest = new repoZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 测试步骤1: 空diff数组输入
+$emptyDiffs = array();
+r($repoTest->encodingDiffTest($emptyDiffs, 'UTF-8')) && p() && e('0'); // 步骤1:空数组
 
-// 创建测试数据
-$normalDiff = new stdClass();
-$normalDiff->fileName = 'test.php';
-$normalDiff->contents = array();
+// 测试步骤2: 单个diff文件名编码转换
+$diff1 = new stdClass();
+$diff1->fileName = 'test.php';
+$diff1->contents = array();
+$diffs1 = array($diff1);
+r($repoTest->encodingDiffTest($diffs1, 'UTF-8')) && p('0:fileName') && e('test.php'); // 步骤2:文件名UTF-8
 
-$content1 = new stdClass();
-$content1->lines = array();
-
+// 测试步骤3: 包含内容行的diff编码转换
 $line1 = new stdClass();
 $line1->line = 'echo "Hello World";';
-$content1->lines[] = $line1;
+$content1 = new stdClass();
+$content1->lines = array($line1);
+$diff2 = new stdClass();
+$diff2->fileName = 'index.php';
+$diff2->contents = array($content1);
+$diffs2 = array($diff2);
+r($repoTest->encodingDiffTest($diffs2, 'GBK')) && p('0:fileName') && e('index.php'); // 步骤3:GBK编码转换
 
-$line2 = new stdClass();
-$line2->line = 'function test() { return true; }';
-$content1->lines[] = $line2;
+// 测试步骤4: 多层嵌套结构的diff
+$line2a = new stdClass();
+$line2a->line = 'function test() {';
+$line2b = new stdClass();
+$line2b->line = '    return true;';
+$content2a = new stdClass();
+$content2a->lines = array($line2a);
+$content2b = new stdClass();
+$content2b->lines = array($line2b);
+$diff3 = new stdClass();
+$diff3->fileName = 'utils.php';
+$diff3->contents = array($content2a, $content2b);
+$diffs3 = array($diff3);
+$result3 = $repoTest->encodingDiffTest($diffs3, 'UTF-8');
+r($result3) && p('0:fileName') && e('utils.php'); // 步骤4:多层嵌套
 
-$normalDiff->contents[] = $content1;
+// 测试步骤5: 包含空contents的diff
+$diff4 = new stdClass();
+$diff4->fileName = 'empty.php';
+$diff4->contents = null;
+$diffs4 = array($diff4);
+r($repoTest->encodingDiffTest($diffs4, 'UTF-8')) && p('0:fileName') && e('empty.php'); // 步骤5:空contents
 
-$chineseDiff = new stdClass();
-$chineseDiff->fileName = '测试文件.php';
-$chineseDiff->contents = array();
+// 测试步骤6: 包含空lines的content
+$content3 = new stdClass();
+$content3->lines = null;
+$diff5 = new stdClass();
+$diff5->fileName = 'noline.php';
+$diff5->contents = array($content3);
+$diffs5 = array($diff5);
+r($repoTest->encodingDiffTest($diffs5, 'UTF-8')) && p('0:fileName') && e('noline.php'); // 步骤6:空lines
 
-$content2 = new stdClass();
-$content2->lines = array();
-
+// 测试步骤7: 包含空line字段的lines
 $line3 = new stdClass();
-$line3->line = '// 这是一个测试文件';
-$content2->lines[] = $line3;
-
-$chineseDiff->contents[] = $content2;
-
-$emptyContentDiff = new stdClass();
-$emptyContentDiff->fileName = 'empty.php';
-$emptyContentDiff->contents = array();
-
-$noContentDiff = new stdClass();
-$noContentDiff->fileName = 'nocontent.php';
-
-// 步骤1：正常情况
-r($repoTest->encodingDiffTest(array($normalDiff), 'UTF-8')) && p('0:fileName') && e('test.php'); // 步骤1：正常的diff数据和UTF-8编码
-
-// 步骤2：中文文件名编码转换
-r($repoTest->encodingDiffTest(array($chineseDiff), 'GBK')) && p('0:fileName') && e('测试文件.php'); // 步骤2：包含中文文件名的diff数据和GBK编码
-
-// 步骤3：空diff数组
-r($repoTest->encodingDiffTest(array(), 'UTF-8')) && p() && e('0'); // 步骤3：空的diff数组和任意编码
-
-// 步骤4：没有contents属性的diff对象
-r($repoTest->encodingDiffTest(array($noContentDiff), 'UTF-8')) && p('0:fileName') && e('nocontent.php'); // 步骤4：diff对象没有contents属性时的处理
-
-// 步骤5：contents为空数组的情况
-r($repoTest->encodingDiffTest(array($emptyContentDiff), 'UTF-8')) && p('0:fileName') && e('empty.php'); // 步骤5：contents为空数组时的处理
+$line3->line = '';
+$content4 = new stdClass();
+$content4->lines = array($line3);
+$diff6 = new stdClass();
+$diff6->fileName = 'emptyline.php';
+$diff6->contents = array($content4);
+$diffs6 = array($diff6);
+r($repoTest->encodingDiffTest($diffs6, 'UTF-8')) && p('0:fileName') && e('emptyline.php'); // 步骤7:空line字段

@@ -8,7 +8,7 @@ zenData('system')->gen(10);
 
 title=测试 systemModel::getPairs();
 timeout=0
-cid=1
+cid=18737
 
 - 查询默认键值对属性1 @应用1
 - 查询默认键值对数量 @10

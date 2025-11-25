@@ -5,7 +5,7 @@
 
 title=测试 treeModel->checkUnique();
 timeout=0
-cid=1
+cid=19346
 
 - 测试module1是否与已存在的模块重名 @0
 - 测试module2是否与已存在的模块重名 @模块2

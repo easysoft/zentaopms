@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel::setFileWebAndRealPaths();
-cid=0
+cid=16532
 
 - 测试步骤1：普通文件的路径设置 >> 期望正确设置realPath和webPath
 - 测试步骤2：traincourse类型文件的特殊路径设置 >> 期望使用course目录路径

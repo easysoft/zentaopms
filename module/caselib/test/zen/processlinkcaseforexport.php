@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::processLinkCaseForExport();
 timeout=0
-cid=0
+cid=15556
 
 - 步骤1：单个ID @123
 - 步骤2：多个ID包含分号 @1

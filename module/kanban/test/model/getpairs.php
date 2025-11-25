@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getPairs();
 timeout=0
-cid=0
+cid=16935
 
 - 管理员可以看到所有5个看板 @5
 - user3只能看到2个有权限的看板 @2

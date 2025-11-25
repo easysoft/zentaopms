@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getWeakUsers();
-cid=0
+cid=19638
 
 - 检测出 10 个弱密码用户。 @10
 - user11 密码为强密码，未检测出。 @0

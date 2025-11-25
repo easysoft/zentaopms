@@ -5,26 +5,36 @@
 
 title=测试 chartModel::genWaterpolo();
 timeout=0
-cid=0
+cid=15569
 
-- 执行chartTest模块的genWaterpoloTest方法，参数是'normal' 第series条的0:type属性 @liquidFill
-- 执行chartTest模块的genWaterpoloTest方法，参数是'zeroPercent' 第series条的0:data:0属性 @0
-- 执行chartTest模块的genWaterpoloTest方法，参数是'highPercent' 第series条的0:data:0属性 @0.95
-- 执行chartTest模块的genWaterpoloTest方法，参数是'lowPercent' 第series条的0:data:0属性 @0.05
-- 执行chartTest模块的genWaterpoloTest方法，参数是'exactOne' 第series条的0:data:0属性 @1
+- 执行$result1
+ - 第series[0]条的type属性 @liquidFill
+ - 第tooltip条的show属性 @1
+- 执行$result2['series'][0]['data'][0]) ? $result2['series'][0]['data'][0] :  @0
+- 执行$result3['series'][0]['data'][0]) ? $result3['series'][0]['data'][0] :  @0.95
+- 执行$result4['series'][0]['data'][0]) ? $result4['series'][0]['data'][0] :  @0.05
+- 执行$result5['series'][0]['data'][0]) ? $result5['series'][0]['data'][0] :  @1
 
 */
 
-chdir(dirname(__FILE__, 5));
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
 
+zenData('chart')->loadYaml('chart')->gen(50);
+zenData('module')->loadYaml('module')->gen(27)->fixPath();
+zenData('user')->gen(5);
 su('admin');
 
-$chartTest = new chartTest();
+$chart = new chartTest();
 
-r($chartTest->genWaterpoloTest('normal')) && p('series:0:type') && e('liquidFill');
-r($chartTest->genWaterpoloTest('zeroPercent')) && p('series:0:data:0') && e('0');
-r($chartTest->genWaterpoloTest('highPercent')) && p('series:0:data:0') && e('0.95');
-r($chartTest->genWaterpoloTest('lowPercent')) && p('series:0:data:0') && e('0.05');
-r($chartTest->genWaterpoloTest('exactOne')) && p('series:0:data:0') && e('1');
+$result1 = $chart->genWaterpoloTest('normal');
+$result2 = $chart->genWaterpoloTest('zeroPercent');
+$result3 = $chart->genWaterpoloTest('highPercent');
+$result4 = $chart->genWaterpoloTest('lowPercent');
+$result5 = $chart->genWaterpoloTest('exactOne');
+
+r($result1) && p('series[0]:type;tooltip:show') && e('liquidFill;1');
+r(isset($result2['series'][0]['data'][0]) ? $result2['series'][0]['data'][0] : '') && p() && e('0');
+r(isset($result3['series'][0]['data'][0]) ? $result3['series'][0]['data'][0] : '') && p() && e('0.95');
+r(isset($result4['series'][0]['data'][0]) ? $result4['series'][0]['data'][0] : '') && p() && e('0.05');
+r(isset($result5['series'][0]['data'][0]) ? $result5['series'][0]['data'][0] : '') && p() && e('1');

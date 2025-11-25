@@ -1,0 +1,54 @@
+---
+title: 执行数据for assignEditData测试
+desc: 为assignEditData方法提供执行测试数据
+author: system
+version: 1.0
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: project
+  note: 项目ID
+  range: 1-3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: name
+  note: 执行名称
+  range: 'Sprint{5},迭代{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: type
+  note: 执行类型
+  range: 'sprint{5},stage{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 执行状态
+  range: 'wait{2},doing{5},done{3}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

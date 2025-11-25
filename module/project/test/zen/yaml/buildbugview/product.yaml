@@ -1,0 +1,44 @@
+---
+title: 产品测试数据
+desc: 用于buildBugView方法测试的产品数据
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-5
+- field: program
+  note: 项目集ID
+  range: 0
+- field: name
+  note: 产品名称
+  range: 产品1,产品2,产品3,产品4,产品5
+- field: code
+  note: 产品代号
+  range: product1,product2,product3,product4,product5
+- field: shadow
+  note: 是否影子产品
+  range: 0
+- field: bind
+  note: 是否绑定
+  range: '0'
+- field: line
+  note: 产品线
+  range: 0
+- field: type
+  note: 产品类型
+  range: normal{3},branch{1},platform{1}
+- field: status
+  note: 状态
+  range: normal{4},closed{1}
+- field: desc
+  note: 产品描述
+  range: <p>产品描述内容</p>
+- field: PO
+  note: 产品负责人
+  range: admin{3},user1{2}
+- field: acl
+  note: 访问控制
+  range: open{3},private{2}
+- field: deleted
+  note: 是否删除
+  range: '0'

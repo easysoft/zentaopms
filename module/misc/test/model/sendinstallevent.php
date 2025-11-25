@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 miscModel->sendInstallEvent();
 timeout=0
-cid=1
+cid=17217
 
 - 测试发送安装过程埋点是否成功 @true
 - 测试location = '' @false

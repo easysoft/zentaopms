@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
 
 title=测试 dataviewModel::isClickable();
 timeout=0
-cid=1
+cid=15958
 
 - 测试create操作可点击验证 @1
 - 测试edit操作可点击验证 @1

@@ -5,84 +5,148 @@
 
 title=测试 userModel::mergeAclsToUserView();
 timeout=0
-cid=0
+cid=19649
 
-- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'admin', $adminView, $acls, ''
- - 属性programs @3
-- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user1', $userView1, $acls, ''
- - 属性programs @3
-- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user2', $userView1, $acls, '5, 6'
- - 属性projects @3
-- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user3', $userView2, $emptyAcls, ''
- - 属性programs @7
-- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'manager', $userView1, $acls, ''
- - 属性sprints @3
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'admin', $userView1, $acls1, '' 属性programs @1,2,3
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user1', $userView2, $acls2, '' 属性programs @100,200
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user2', $userView3, $acls3, '' 属性products @5,6,7
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user3', $userView4, $acls4, '' 属性sprints @8,9,,18
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user4', $userView5, $acls2, '3, 4' 属性projects @100,200,3,4
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user5', $userView6, $acls5, '' 属性programs @10,11,12
+- 执行userTest模块的mergeAclsToUserViewTest方法，参数是'user6', $userView7, $acls6, ''
+ - 属性programs @15,16
+ - 属性products @13,14
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$company = zendata('company');
-$company->id->range('1');
-$company->name->range('测试公司');
-$company->admins->range(',admin,');
-$company->gen(1);
+zenData('user')->gen(10);
+zenData('userview')->gen(5);
+zenData('project')->loadYaml('project')->gen(20);
+zenData('projectadmin')->gen(5);
 
-$project = zendata('project');
-$project->id->range('1-20');
-$project->name->range('项目1,项目2,项目3,迭代1,迭代2,迭代3');
-$project->type->range('project{10},sprint{5},stage{3},kanban{2}');
-$project->status->range('open{15},closed{3},suspended{2}');
-$project->project->range('1{5},2{3},3{2},0{10}');
-$project->acl->range('open{10},private{5},custom{5}');
-$project->gen(20);
-
-$projectadmin = zendata('projectadmin');
-$projectadmin->group->range('1-5');
-$projectadmin->account->range('admin,manager,user1');
-$projectadmin->programs->range('1,2,3');
-$projectadmin->projects->range('1,2,3');
-$projectadmin->products->range('1,2,3');
-$projectadmin->executions->range('1,2,3,all');
-$projectadmin->gen(3);
+global $app;
+if(!isset($app->company)) $app->company = new stdClass();
+$app->company->admins = ',admin,';
 
 su('admin');
 
 $userTest = new userTest();
 
-// 准备测试数据
-$adminView = new stdClass();
-$adminView->programs = '1,2';
-$adminView->products = '1,2';
-$adminView->projects = '1,2';
-$adminView->sprints = '1,2';
+// 准备测试数据:userView对象
+$userView1 = new stdclass();
+$userView1->account  = 'admin';
+$userView1->programs = '1,2,3';
+$userView1->products = '1,2,3';
+$userView1->sprints  = '1,2,3';
+$userView1->projects = '1,2,3';
 
-$userView1 = new stdClass();
-$userView1->programs = '1,2';
-$userView1->products = '1,2';
-$userView1->projects = '1,2';
-$userView1->sprints = '1,2';
+$userView2 = new stdclass();
+$userView2->account  = 'user1';
+$userView2->programs = '1,2,3';
+$userView2->products = '1,2,3';
+$userView2->sprints  = '1,2,3';
+$userView2->projects = '1,2,3';
 
-$userView2 = new stdClass();
-$userView2->programs = '7,8';
-$userView2->products = '7,8';
-$userView2->projects = '7,8';
-$userView2->sprints = '7,8';
+$userView3 = new stdclass();
+$userView3->account  = 'user2';
+$userView3->programs = '4,5,6';
+$userView3->products = '4,5,6';
+$userView3->sprints  = '4,5,6';
+$userView3->projects = '4,5,6';
 
-$acls = array(
-    'programs' => array(3, 4),
-    'products' => array(3, 4),
-    'projects' => array(3, 4),
-    'sprints' => array(3, 4)
+$userView4 = new stdclass();
+$userView4->account  = 'user3';
+$userView4->programs = '7,8,9';
+$userView4->products = '7,8,9';
+$userView4->sprints  = '7,8,9';
+$userView4->projects = '7,8,9';
+
+$userView5 = new stdclass();
+$userView5->account  = 'user4';
+$userView5->programs = '1,2';
+$userView5->products = '1,2';
+$userView5->sprints  = '1,2';
+$userView5->projects = '1,2';
+
+$userView6 = new stdclass();
+$userView6->account  = 'user5';
+$userView6->programs = '10,11,12';
+$userView6->products = '10,11,12';
+$userView6->sprints  = '10,11,12';
+$userView6->projects = '10,11,12';
+
+$userView7 = new stdclass();
+$userView7->account  = 'user6';
+$userView7->programs = '13,14';
+$userView7->products = '13,14';
+$userView7->sprints  = '13,14';
+$userView7->projects = '13,14';
+
+// 准备测试数据:acls数组
+$acls1 = array(
+    'programs' => array(10, 20, 30),
+    'products' => array(10, 20, 30),
+    'sprints'  => array(10, 20, 30),
+    'projects' => array(10, 20, 30),
 );
 
-$emptyAcls = array();
+$acls2 = array(
+    'programs' => array(100, 200),
+    'products' => array(100, 200),
+    'sprints'  => array(100, 200),
+    'projects' => array(100, 200),
+);
+
+$acls3 = array(
+    'programs' => array(5, 6, 7),
+    'products' => array(5, 6, 7),
+    'sprints'  => array(5, 6, 7),
+    'projects' => array(5, 6, 7),
+);
+
+$acls4 = array(
+    'programs' => array(8, 9),
+    'products' => array(8, 9),
+    'sprints'  => array(8, 9),
+    'projects' => array(8, 9),
+);
+
+$acls5 = array();
+
+$acls6 = array(
+    'programs' => array(15, 16),
+    'products' => array(),
+    'sprints'  => array(),
+    'projects' => array(),
+);
+
+$acls7 = array(
+    'programs' => array(),
+    'products' => array(17, 18),
+    'sprints'  => array(),
+    'projects' => array(),
+);
 
 su('admin');
-r($userTest->mergeAclsToUserViewTest('admin', $adminView, $acls, '')) && p('programs') && e('3,4');
-su('user');
-r($userTest->mergeAclsToUserViewTest('user1', $userView1, $acls, '')) && p('programs') && e('3,4');
-r($userTest->mergeAclsToUserViewTest('user2', $userView1, $acls, '5,6')) && p('projects') && e('3,4,5,6');
-r($userTest->mergeAclsToUserViewTest('user3', $userView2, $emptyAcls, '')) && p('programs') && e('7,8');
-r($userTest->mergeAclsToUserViewTest('manager', $userView1, $acls, '')) && p('sprints') && e('3,4,,2');
+r($userTest->mergeAclsToUserViewTest('admin', $userView1, $acls1, '')) && p('programs', '|') && e('1,2,3');
+
+su('user1');
+r($userTest->mergeAclsToUserViewTest('user1', $userView2, $acls2, '')) && p('programs', '|') && e('100,200');
+
+su('user2');
+r($userTest->mergeAclsToUserViewTest('user2', $userView3, $acls3, '')) && p('products', '|') && e('5,6,7');
+
+su('user3');
+r($userTest->mergeAclsToUserViewTest('user3', $userView4, $acls4, '')) && p('sprints', '|') && e('8,9,,18');
+
+su('user4');
+r($userTest->mergeAclsToUserViewTest('user4', $userView5, $acls2, '3,4')) && p('projects', '|') && e('100,200,3,4');
+
+su('user5');
+r($userTest->mergeAclsToUserViewTest('user5', $userView6, $acls5, '')) && p('programs', '|') && e('10,11,12');
+
+su('user6');
+r($userTest->mergeAclsToUserViewTest('user6', $userView7, $acls6, '')) && p('programs|products', '|') && e('15,16|13,14');

@@ -5,77 +5,28 @@
 
 title=测试 bugZen::prepareBrowseParams();
 timeout=0
-cid=0
+cid=15465
 
-- 执行$result[0] @1
-- 执行$result[1] @0
-- 执行$result[2] @id_desc
-- 执行$result[0] @5
-- 执行$result[1] @0
-- 执行$result[0] @1
-- 执行$result[1] @10
-- 执行$result[2] @severity,id_desc
-
-- 执行$result[3]->recTotal @150
-- 执行$result[3]->recPerPage @30
-- 执行$result[3]->pageID @5
-- 执行$result[3]->recTotal @0
-- 执行$result[0] @1
-- 执行$result[1] @0
-- 执行$result[0] @100
-- 执行$result[3]->recTotal @10000
-- 执行$result[3]->pageID @10
+- 测试 browseType 为 all 时的参数准备属性moduleID @0
+- 测试 browseType 为 all 时的参数准备属性queryID @0
+- 测试 browseType 为 bymodule 时的参数准备属性moduleID @5
+- 测试 browseType 为 bysearch 时的参数准备属性queryID @10
+- 测试 orderBy 添加 id 排序规则 @13
+- 测试分页器类型正确属性pagerClass @pager
+- 测试分页器 recTotal 参数传递属性recTotal @100
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
-
-// 2. 用户登录
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 su('admin');
 
-// 3. 创建测试实例
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
-// 忽略警告信息
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_WARNING);
-
-// 4. 执行测试步骤（至少5个）
-// 步骤1：browseType为all时的正常处理
-$result = $bugTest->prepareBrowseParamsTest('all', 0, 'id_desc', 100, 20, 1);
-r($result[0]) && p() && e('1');
-r($result[1]) && p() && e('0');
-r($result[2]) && p() && e('id_desc');
-
-// 步骤2：browseType为bymodule时设置moduleID
-$result = $bugTest->prepareBrowseParamsTest('bymodule', 5, 'status', 50, 10, 2);
-r($result[0]) && p() && e('5');
-r($result[1]) && p() && e('0');
-
-// 步骤3：browseType为bysearch时设置queryID
-$result = $bugTest->prepareBrowseParamsTest('bysearch', 10, 'pri_asc', 200, 25, 3);
-r($result[0]) && p() && e('1');
-r($result[1]) && p() && e('10');
-
-// 步骤4：验证orderBy添加id排序规则
-$result = $bugTest->prepareBrowseParamsTest('all', 0, 'severity', 30, 15, 1);
-r($result[2]) && p() && e('severity,id_desc');
-
-// 步骤5：验证分页参数设置
-$result = $bugTest->prepareBrowseParamsTest('all', 0, 'id', 150, 30, 5);
-r($result[3]->recTotal) && p() && e('150');
-r($result[3]->recPerPage) && p() && e('30');
-r($result[3]->pageID) && p() && e('5');
-
-// 步骤6：测试边界值recTotal为0
-$result = $bugTest->prepareBrowseParamsTest('all', 0, 'id', 0, 20, 1);
-r($result[3]->recTotal) && p() && e('0');
-r($result[0]) && p() && e('1');
-r($result[1]) && p() && e('0');
-
-// 步骤7：测试大数据量分页
-$result = $bugTest->prepareBrowseParamsTest('bymodule', 100, 'pri_desc', 10000, 50, 10);
-r($result[0]) && p() && e('100');
-r($result[3]->recTotal) && p() && e('10000');
-r($result[3]->pageID) && p() && e('10');
+r($bugTest->prepareBrowseParamsTest('all', 0, 'id_desc', 100, 20, 1)) && p('moduleID') && e('0'); // 测试 browseType 为 all 时的参数准备
+r($bugTest->prepareBrowseParamsTest('all', 0, 'id_desc', 100, 20, 1)) && p('queryID') && e('0'); // 测试 browseType 为 all 时的参数准备
+r($bugTest->prepareBrowseParamsTest('bymodule', 5, 'id_desc', 100, 20, 1)) && p('moduleID') && e('5'); // 测试 browseType 为 bymodule 时的参数准备
+r($bugTest->prepareBrowseParamsTest('bysearch', 10, 'id_desc', 100, 20, 1)) && p('queryID') && e('10'); // 测试 browseType 为 bysearch 时的参数准备
+r(strlen($bugTest->prepareBrowseParamsTest('all', 0, 'status', 100, 20, 1)['realOrderBy'])) && p() && e('13'); // 测试 orderBy 添加 id 排序规则
+r($bugTest->prepareBrowseParamsTest('all', 0, 'id_desc', 100, 20, 1)) && p('pagerClass') && e('pager'); // 测试分页器类型正确
+r($bugTest->prepareBrowseParamsTest('all', 0, 'id_desc', 100, 20, 1)) && p('recTotal') && e('100'); // 测试分页器 recTotal 参数传递

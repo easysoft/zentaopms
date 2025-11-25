@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::afterCreate();
 timeout=0
-cid=0
+cid=19058
 
 - 步骤1：正常情况属性cookiesSet @1
 - 步骤2：包含文件列表

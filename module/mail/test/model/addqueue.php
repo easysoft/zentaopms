@@ -5,7 +5,7 @@
 
 title=测试 mailModel::addQueue();
 timeout=0
-cid=0
+cid=17002
 
 - 执行mailTest模块的addQueueTest方法，参数是'', ''  @没有数据提交
 - 执行mailTest模块的addQueueTest方法，参数是'user3', '测试邮件主题', '测试邮件内容' 

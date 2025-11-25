@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::cleanModelCache();
 timeout=0
-cid=0
+cid=16451
 
 - 步骤1：正常清理缓存 @1
 - 步骤2：重复清理缓存 @1

@@ -5,7 +5,7 @@
 
 title=测试 docModel->upgradeTemplateLibAndModule();
 timeout=0
-cid=1
+cid=16164
 
 - 更新模板1的字段值
  - 属性lib @1

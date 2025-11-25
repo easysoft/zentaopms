@@ -5,7 +5,7 @@
 
 title=测试 commonModel::setCompany();
 timeout=0
-cid=0
+cid=15710
 
 - 步骤1：测试设置的公司名称 @易软天创网络科技有限公司
 - 步骤2：测试设置的公司ID @1

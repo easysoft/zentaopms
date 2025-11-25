@@ -30,7 +30,7 @@ $footToolbar = array(
 
 searchForm
 (
-    set::module('task'),
+    set::module('mrTask'),
     set::simple(true),
     set::show(true),
     set::extraHeight('+144'),
@@ -62,5 +62,3 @@ dtable
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=task"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
 );
-
-render();

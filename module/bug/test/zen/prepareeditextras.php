@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 bugZen::prepareEditExtras();
 timeout=0
-cid=0
+cid=15467
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData1, $oldBug1] 属性id @1
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData2, $oldBug2]  @0

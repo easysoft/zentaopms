@@ -5,7 +5,7 @@
 
 title=测试 storyModel::checkGrade();
 timeout=0
-cid=0
+cid=18481
 
 - 正常情况返回true @1
 - 层级不变返回true @1

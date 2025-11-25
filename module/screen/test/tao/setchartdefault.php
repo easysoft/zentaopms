@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->buildChart();
 timeout=0
-cid=1
+cid=18288
 
 - 当type为line的时候，判断是否生成了默认属性 @1
 - 当type为table的时候，判断是否生成了默认属性 @1

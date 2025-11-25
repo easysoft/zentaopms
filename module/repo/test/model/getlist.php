@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 title=测试 repoModel->getList();
 timeout=0
-cid=1
+cid=18069
 
 - 获取Gitlab类型版本库列表第1条的name属性 @testHtml
 - 获取Gitlab类型版本库列表数量 @2

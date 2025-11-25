@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->getNoMergedProductCount();
 timeout=0
-cid=1
+cid=19525
 
 - 获取没有项目集的产品数量 @5
 

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getRestoreStatus();
 timeout=0
-cid=0
+cid=15622
 
 - 步骤1：正常实例和有效备份名查询恢复状态
  - 属性code @600

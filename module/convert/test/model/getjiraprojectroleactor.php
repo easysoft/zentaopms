@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraProjectRoleActor();
 timeout=0
-cid=0
+cid=15779
 
 - 执行convertTest模块的getJiraProjectRoleActorTest方法，参数是'normal' 第1001条的admin属性 @admin
 - 执行convertTest模块的getJiraProjectRoleActorTest方法，参数是'normal' 第1001条的JIRAUSER100属性 @JIRAUSER100

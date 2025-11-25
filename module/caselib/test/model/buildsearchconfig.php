@@ -8,7 +8,7 @@ su('admin');
 /**
 
 title=caselibModel->buildSearchConfig();
-cid=1
+cid=15525
 - 测试字段名称
  - 属性title @用例名称
  - 属性story @关联需求

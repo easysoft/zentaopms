@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel->getHostByID().
 timeout=0
-cid=1
+cid=19834
 
 - 测试当browseType为all时，param为0，并且排序为默认值，返回所有节点,并且检查节点的状态是否正确。
  - 第0条的id属性 @10

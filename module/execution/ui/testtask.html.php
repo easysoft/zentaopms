@@ -14,6 +14,18 @@ jsVar('allTasks', $lang->testtask->allTasks);
 jsVar('pageSummary', sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount));
 jsVar('checkedAllSummary', $lang->testtask->checkedAllSummary);
 
+$productItems[] = array('text' => $lang->testtask->all, 'url' => createLink('execution', 'testtask', array('executionID' => $executionID)));
+foreach($products as $currentProductID => $productName)
+{
+    $productItems[] = array('text' => $productName, 'url' => createLink('execution', 'testtask', array('executionID' => $executionID, 'productID' => $currentProductID)));
+}
+
+$productDropdown = dropdown
+(
+    to('trigger', btn($productID ? zget($products, $productID) : $lang->testtask->all, setClass('ghost'))),
+    set::items($productItems)
+);
+
 featureBar
 (
     li
@@ -24,7 +36,8 @@ featureBar
             set('class', 'active'),
             $lang->testtask->browse
         )
-    )
+    ),
+    to::before($productDropdown)
 );
 
 $canCreate = $canBeChanged && hasPriv('testtask', 'create');
@@ -62,14 +75,14 @@ dtable
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'testtask', "executionID={$execution->id}&productID={$productID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'testtask', "executionID={$execution->id}&productID={$productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->testtask->noTesttask),

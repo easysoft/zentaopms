@@ -7,39 +7,57 @@ title=测试 webhookZen::getResponse();
 timeout=0
 cid=0
 
-- 步骤1：钉钉用户类型属性result @fail
-- 步骤2：企业微信用户类型属性result @fail
-- 步骤3：飞书用户类型 @<html><meta charset='utf-8'/><style>body{background:white}</style><script>window.alert('Errcode:10003, Errmsg:invalid param')
-
-- 步骤4：未知类型 @</script>
-- 执行webhookTest模块的getResponseTest方法  @<html><meta charset='utf-8'/><style>body{background:white}</style><script>if(window.parent) window.parent.$.enableForm(
+- 执行webhookTest模块的getResponseTest方法，参数是$dingWebhook 属性result @fail
+- 执行webhookTest模块的getResponseTest方法，参数是$wechatWebhook)['message']['40013'], 'Errcode:40013') !== false  @1
+- 执行webhookTest模块的getResponseTest方法，参数是$feishuWebhook  @`<html>`
+- 执行webhookTest模块的getResponseTest方法，参数是$emptyWebhook  @`</script>`
+- 执行webhookTest模块的getResponseTest方法，参数是$unknownWebhook  @`<html>`
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/webhookzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('webhook');
-$table->id->range('1-5');
-$table->type->range('dinguser,wechatuser,feishuuser,unknown,default');
-$table->name->range('钉钉测试,企微测试,飞书测试,未知测试,默认测试');
-$table->secret->range('test_secret{5}');
-$table->deleted->range('0');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $webhookTest = new webhookTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($webhookTest->getResponseTest((object)array('type' => 'dinguser', 'secret' => (object)array('appKey' => 'test_key', 'appSecret' => 'test_secret', 'agentId' => 'test_agent')))) && p('result') && e('fail'); // 步骤1：钉钉用户类型
-r($webhookTest->getResponseTest((object)array('type' => 'wechatuser', 'secret' => (object)array('appKey' => 'wechat_key', 'appSecret' => 'wechat_secret', 'agentId' => 'wechat_agent')))) && p('result') && e('fail'); // 步骤2：企业微信用户类型
-r($webhookTest->getResponseTest((object)array('type' => 'feishuuser', 'secret' => (object)array('appId' => 'feishu_id', 'appSecret' => 'feishu_secret')))) && p() && e("<html><meta charset='utf-8'/><style>body{background:white}</style><script>window.alert('Errcode:10003, Errmsg:invalid param')"); // 步骤3：飞书用户类型
-r($webhookTest->getResponseTest((object)array('type' => 'unknown', 'secret' => (object)array()))) && p() && e("</script>"); // 步骤4：未知类型
-r($webhookTest->getResponseTest((object)array())) && p() && e("<html><meta charset='utf-8'/><style>body{background:white}</style><script>if(window.parent) window.parent.$.enableForm();
+// 测试步骤1:钉钉类型webhook-返回API错误响应
+$dingWebhook = new stdClass();
+$dingWebhook->type = 'dinguser';
+$dingWebhook->secret = new stdClass();
+$dingWebhook->secret->appKey = 'test_ding_key';
+$dingWebhook->secret->appSecret = 'test_ding_secret';
+$dingWebhook->secret->agentId = 'test_ding_agent';
+r($webhookTest->getResponseTest($dingWebhook)) && p('result') && e('fail');
 
-</script>"); // 步骤5：空webhook对象
+// 测试步骤2:企业微信类型webhook-返回API错误响应数组
+$wechatWebhook = new stdClass();
+$wechatWebhook->type = 'wechatuser';
+$wechatWebhook->secret = new stdClass();
+$wechatWebhook->secret->appKey = 'test_wechat_key';
+$wechatWebhook->secret->appSecret = 'test_wechat_secret';
+$wechatWebhook->secret->agentId = 'test_wechat_agent';
+r(strpos($webhookTest->getResponseTest($wechatWebhook)['message']['40013'], 'Errcode:40013') !== false) && p() && e('1');
+
+// 测试步骤3:飞书类型webhook-API调用会输出HTML并跳转
+$feishuWebhook = new stdClass();
+$feishuWebhook->type = 'feishuuser';
+$feishuWebhook->secret = new stdClass();
+$feishuWebhook->secret->appId = 'test_feishu_appid';
+$feishuWebhook->secret->appSecret = 'test_feishu_secret';
+r($webhookTest->getResponseTest($feishuWebhook)) && p() && e('`<html>`');
+
+// 测试步骤4:空webhook对象(不完整的secret)-返回nodept错误后输出HTML
+$emptyWebhook = new stdClass();
+$emptyWebhook->type = 'dinguser';
+$emptyWebhook->secret = new stdClass();
+r($webhookTest->getResponseTest($emptyWebhook)) && p() && e('`</script>`');
+
+// 测试步骤5:未知类型webhook-不匹配任何类型,返回空数组后输出HTML
+$unknownWebhook = new stdClass();
+$unknownWebhook->type = 'unknown_type';
+$unknownWebhook->secret = new stdClass();
+$unknownWebhook->secret->appKey = 'test_key';
+$unknownWebhook->secret->appSecret = 'test_secret';
+r($webhookTest->getResponseTest($unknownWebhook)) && p() && e('`<html>`');

@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 transfer->commonActions();
 timeout=0
-cid=1
+cid=19310
 
 - 测试获取Task模块创建的必填字段第execution条的title属性 @所属执行
 - 测试获取Task模块legendEffort语言项属性legendEffort @工时信息

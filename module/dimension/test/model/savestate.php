@@ -17,7 +17,7 @@ $table->gen(10);
 
 title=测试 dimensionModel::saveState();
 timeout=0
-cid=0
+cid=16037
 
 - 步骤1：正常传入有效维度ID @1
 - 步骤2：传入0获取第一个维度 @1

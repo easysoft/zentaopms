@@ -5,7 +5,7 @@
 
 title=测试 projectModel::unlinkStoryByType();
 timeout=0
-cid=0
+cid=17872
 
 - 执行projectTest模块的unlinkStoryByTypeTest方法，参数是1, 'story'  @0
 - 执行projectTest模块的unlinkStoryByTypeTest方法，参数是999, 'story'  @0

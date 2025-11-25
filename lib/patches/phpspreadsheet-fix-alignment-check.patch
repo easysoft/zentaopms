@@ -1,0 +1,12 @@
+diff --git a/src/PhpSpreadsheet/Reader/Xlsx/Styles.php b/src/PhpSpreadsheet/Reader/Xlsx/Styles.php
+index 3a5c17f2dc5..6d77d7c2420 100644
+--- a/src/PhpSpreadsheet/Reader/Xlsx/Styles.php
++++ b/src/PhpSpreadsheet/Reader/Xlsx/Styles.php
+@@ -163,7 +163,7 @@ class Styles extends BaseParserClass
+             self::readBorderStyle($docStyle->getBorders(), $style->border);
+         }
+
+-        if (isset($style->alignment)) {
++        if (isset($style->alignment->alignment)) {
+             self::readAlignmentStyle($docStyle->getAlignment(), $style->alignment);
+         }

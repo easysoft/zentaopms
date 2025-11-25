@@ -5,7 +5,7 @@
 
 title=测试 storyModel->doUpdateLinkStories();
 timeout=0
-cid=0
+cid=18621
 
 - 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(2)->fetch()属性linkStories @1
 - 执行$storyModel->dao->select('*')->from(TABLE_STORY)->where('id')->eq(4)->fetch()属性linkStories @~~

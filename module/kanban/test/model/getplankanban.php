@@ -12,7 +12,7 @@ zenData('branch')->gen(50);
 
 title=测试 kanbanModel->getPlanKanban();
 timeout=0
-cid=1
+cid=16936
 
 - 测试获取产品1的计划看板
  - 第0条的name属性 @laneall

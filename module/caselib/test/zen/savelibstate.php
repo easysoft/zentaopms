@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::saveLibState();
 timeout=0
-cid=0
+cid=15560
 
 - 执行caselibTest模块的saveLibStateTest方法，参数是1, array  @0
 - 执行caselibTest模块的saveLibStateTest方法，参数是5, array  @5

@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareActionPriv();
 timeout=0
-cid=0
+cid=17198
 
 - 执行metricZenTest模块的prepareActionPrivZenTest方法，参数是$metrics 第0条的canEdit属性 @1
 - 执行metricZenTest模块的prepareActionPrivZenTest方法，参数是$metrics 第0条的canImplement属性 @1

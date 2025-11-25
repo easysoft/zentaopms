@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 systemModel::backup();
 timeout=0
-cid=1
+cid=18727
 
 - 查询默认备份模式为空属性result @fail
 - 查询备份模式为手动属性message @CNE服务器出错

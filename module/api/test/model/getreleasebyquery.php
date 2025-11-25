@@ -9,7 +9,7 @@ zenData('api_lib_release')->gen(110);
 
 title=测试 apiModel->getReleaseByQuery();
 timeout=0
-cid=1
+cid=15113
 
 - 测试获取文档库ID为1的发布列表。
  - 第0条的id属性 @1

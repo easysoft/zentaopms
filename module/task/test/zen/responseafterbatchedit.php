@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterBatchEdit();
 timeout=0
-cid=0
+cid=18943
 
 - 步骤1：空变更数组
  - 属性result @success

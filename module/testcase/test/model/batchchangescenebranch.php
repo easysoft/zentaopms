@@ -10,7 +10,7 @@ zenData('scene')->gen(2);
 
 title=测试 testcaseModel->batchChangeSceneBranch();
 timeout=0
-cid=1
+cid=18959
 
 - 场景参数为空返回 false。 @0
 - 场景参数不为空、所属分支参数小于 mediumint unsigned 类型最小值返回 false。 @0

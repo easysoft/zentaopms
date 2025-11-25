@@ -1,0 +1,46 @@
+---
+title: 测试数据定义 - assignVarsForSet方法 - config表
+desc: 自定义字段设置测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-30
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lang
+  note: 语言
+  range: zh-cn{10}, en{5}, all{10}, zh-tw{3}, fr{2}
+  format: ""
+- field: module
+  note: 模块名
+  range: story{8}, project{3}, bug{3}, user{3}, testcase{3}, block{3}, task{3}, requirement{2}, epic{2}
+  format: ""
+- field: section
+  note: 字段类型
+  range: priList{5}, unitList{2}, longlife{2}, review{5}, typeList{3}, roleList{3}, statusList{3}, sourceList{2}, reviewRules{3}, gradeRule{2}, grade{2}, closed{2}
+  format: ""
+- field: key
+  note: 键值
+  range: 1{8}, 2{8}, 3{8}, 4{6}
+  format: ""
+- field: value
+  note: 显示值
+  range: 高{8}, 中{8}, 低{8}, 紧急{6}
+  format: ""
+- field: system
+  note: 系统字段
+  range: 1{15}, 0{15}
+  format: ""
+- field: vision
+  note: 版本
+  range: rnd{20}, lite{10}
+  format: ""
+- field: owner
+  note: 所有者
+  range: ''{20}, system{10}
+  format: ""

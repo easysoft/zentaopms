@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiGetSingleUser();
 timeout=0
-cid=0
+cid=16622
 
 - 步骤1：正常查询（无真实API连接） @0
 - 步骤2：无效gitlabID查询 @0

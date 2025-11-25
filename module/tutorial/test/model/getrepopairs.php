@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getRepoPairs();
 timeout=0
-cid=0
+cid=19462
 
 - 步骤1：验证返回数组包含预期的键值对属性1 @[git] Test repo
 - 步骤2：验证返回数组长度为1 @1

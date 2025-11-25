@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->checkEffort();
 timeout=0
-cid=1
+cid=18866
 
 - 检查正常编辑的工时信息，查看返回的信息 @1
 

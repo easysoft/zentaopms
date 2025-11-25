@@ -5,61 +5,64 @@
 
 title=测试 blockZen::printSinglePlanBlock();
 timeout=0
-cid=0
+cid=15299
 
-- 执行blockTest模块的printSinglePlanBlockTest方法，参数是$block1 属性count @10
-- 执行blockTest模块的printSinglePlanBlockTest方法，参数是$block2 
- - 属性count @0
- - 属性planCount @5
-- 执行blockTest模块的printSinglePlanBlockTest方法，参数是$block3 属性error @block对象必须包含params属性
-- 执行blockTest模块的printSinglePlanBlockTest方法，参数是'invalid' 属性error @参数必须是对象
-- 执行blockTest模块的printSinglePlanBlockTest方法，参数是$block5 
- - 属性count @15
- - 属性sessionSet @1
- - 属性productLoaded @1
- - 属性viewSet @1
+- 测试步骤1：测试正常显示产品计划数据，包含5个计划属性plansCount @5
+- 测试步骤2：测试显示产品计划数据时显示计划数量限制为3属性plansCount @3
+- 测试步骤3：测试产品没有计划时的情况属性plansCount @0
+- 测试步骤4：测试计划数量限制为10时显示所有计划属性plansCount @5
+- 测试步骤5：测试计划数量限制为0时应该显示所有计划属性plansCount @5
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$productTable = zenData('product');
-$productTable->loadYaml('product_printsingleplanblock', false, 2)->gen(5);
-
-$productplanTable = zenData('productplan');
-$productplanTable->loadYaml('productplan_printsingleplanblock', false, 2)->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$product = zenData('product');
+$product->id->range('1-5');
+$product->name->range('产品1,产品2,产品3,产品4,产品5');
+$product->status->range('normal');
+$product->type->range('normal');
+$product->deleted->range('0');
+$product->gen(5);
 
-// 5. 强制要求：必须包含至少5个测试步骤
-// 步骤1：正常情况 - count=10
-$block1 = new stdclass();
-$block1->params = new stdclass();
-$block1->params->count = 10;
-r($blockTest->printSinglePlanBlockTest($block1)) && p('count') && e('10');
+$productplan = zenData('productplan');
+$productplan->id->range('1-10');
+$productplan->product->range('1{5},2{5}');
+$productplan->branch->range('0');
+$productplan->title->range('计划1,计划2,计划3,计划4,计划5,计划6,计划7,计划8,计划9,计划10');
+$productplan->status->range('wait{3},doing{4},done{3}');
+$productplan->begin->range('`2024-01-01`,`2024-02-01`,`2024-03-01`,`2024-04-01`,`2024-05-01`')->type('timestamp')->format('YYYY-MM-DD');
+$productplan->end->range('`2024-02-01`,`2024-03-01`,`2024-04-01`,`2024-05-01`,`2024-06-01`')->type('timestamp')->format('YYYY-MM-DD');
+$productplan->deleted->range('0');
+$productplan->gen(10);
 
-// 步骤2：边界值 - count=0
-$block2 = new stdclass();
-$block2->params = new stdclass();
-$block2->params->count = 0;
-r($blockTest->printSinglePlanBlockTest($block2)) && p('count,planCount') && e('0,5');
+$blockTest = new blockZenTest();
 
-// 步骤3：异常输入 - 没有params属性
-$block3 = new stdclass();
-r($blockTest->printSinglePlanBlockTest($block3)) && p('error') && e('block对象必须包含params属性');
+$block1 = new stdClass();
+$block1->params = new stdClass();
+$block1->params->count = 5;
 
-// 步骤4：异常输入 - 传入字符串而非对象
-r($blockTest->printSinglePlanBlockTest('invalid')) && p('error') && e('参数必须是对象');
+$block2 = new stdClass();
+$block2->params = new stdClass();
+$block2->params->count = 3;
 
-// 步骤5：业务规则验证 - count=15的完整验证
-$block5 = new stdclass();
-$block5->params = new stdclass();
-$block5->params->count = 15;
-r($blockTest->printSinglePlanBlockTest($block5)) && p('count,sessionSet,productLoaded,viewSet') && e('15,1,1,1');
+$block3 = new stdClass();
+$block3->params = new stdClass();
+$block3->params->count = 5;
+
+$block4 = new stdClass();
+$block4->params = new stdClass();
+$block4->params->count = 10;
+
+$block5 = new stdClass();
+$block5->params = new stdClass();
+$block5->params->count = 0;
+
+r($blockTest->printSinglePlanBlockTest($block1, 1)) && p('plansCount') && e('5'); // 测试步骤1：测试正常显示产品计划数据，包含5个计划
+r($blockTest->printSinglePlanBlockTest($block2, 1)) && p('plansCount') && e('3'); // 测试步骤2：测试显示产品计划数据时显示计划数量限制为3
+r($blockTest->printSinglePlanBlockTest($block3, 3)) && p('plansCount') && e('0'); // 测试步骤3：测试产品没有计划时的情况
+r($blockTest->printSinglePlanBlockTest($block4, 1)) && p('plansCount') && e('5'); // 测试步骤4：测试计划数量限制为10时显示所有计划
+r($blockTest->printSinglePlanBlockTest($block5, 1)) && p('plansCount') && e('5'); // 测试步骤5：测试计划数量限制为0时应该显示所有计划

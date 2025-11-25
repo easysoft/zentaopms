@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->linkCommit();
-cid=1
+cid=15995
 
 - 测试空数据 @0
 - 测试designID为空的情况 @0

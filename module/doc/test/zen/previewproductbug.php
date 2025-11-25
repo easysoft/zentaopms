@@ -5,51 +5,43 @@
 
 title=测试 docZen::previewProductBug();
 timeout=0
-cid=0
+cid=16202
 
-- 步骤1：正常情况测试setting视图，检查返回数组 @1
-- 步骤2：测试另一个产品，检查data键存在 @1
-- 步骤3：list视图模式，检查cols键存在 @1
-- 步骤4：测试resolved条件，检查数据数量 @5
-- 步骤5：无效产品ID，检查data数组为空 @0
+- 步骤1:在setting视图下预览产品1的Bug @5
+- 步骤2:在list视图下根据ID列表预览Bug @3
+- 步骤3:空idList的list视图 @10
+- 步骤4:不存在的产品ID @0
+- 步骤5:产品ID为0的情况 @2
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$product = zenData('product');
-$product->id->range('1-5');
-$product->name->range('产品1,产品2,产品3,产品4,产品5');
-$product->code->range('product1,product2,product3,product4,product5');
-$product->status->range('normal{5}');
-$product->gen(5);
+$bugTable = zenData('bug');
+$bugTable->id->range('1-10');
+$bugTable->product->range('1{5},2{3},0{2}');
+$bugTable->execution->range('0');
+$bugTable->plan->range('0');
+$bugTable->title->range('1-10')->prefix('Bug标题');
+$bugTable->status->range('active{5},resolved{3},closed{2}');
+$bugTable->deleted->range('0');
+$bugTable->gen(10);
 
-$bug = zenData('bug');
-$bug->id->range('1-20');
-$bug->product->range('1-5');
-$bug->title->range('Bug标题1,Bug标题2,Bug标题3,Bug标题4,Bug标题5');
-$bug->status->range('active{10},resolved{5},closed{5}');
-$bug->pri->range('1-4');
-$bug->assignedTo->range('admin,user1,user2,user3,user4');
-$bug->gen(20);
+zenData('user')->gen(5);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-$result1 = $docTest->previewProductBugTest('setting', array('action' => 'preview', 'product' => 1, 'condition' => 'active'), '');
-r(is_array($result1)) && p() && e('1'); // 步骤1：正常情况测试setting视图，检查返回数组
-$result2 = $docTest->previewProductBugTest('setting', array('action' => 'preview', 'product' => 2, 'condition' => 'active'), '');
-r(isset($result2['data'])) && p() && e('1'); // 步骤2：测试另一个产品，检查data键存在
-$result3 = $docTest->previewProductBugTest('list', array(), '1,2,3');
-r(isset($result3['cols'])) && p() && e('1'); // 步骤3：list视图模式，检查cols键存在
-$result4 = $docTest->previewProductBugTest('setting', array('action' => 'preview', 'product' => 1, 'condition' => 'resolved'), '');
-r(count($result4['data'])) && p() && e('5'); // 步骤4：测试resolved条件，检查数据数量
-$result5 = $docTest->previewProductBugTest('setting', array('action' => 'preview', 'product' => 999, 'condition' => 'active'), '');
-r(count($result5['data'])) && p() && e('0'); // 步骤5：无效产品ID，检查data数组为空
+$settingsProduct1 = array('action' => 'preview', 'product' => 1, 'condition' => 'all');
+$settingsProduct999 = array('action' => 'preview', 'product' => 999, 'condition' => 'all');
+$settingsProduct0 = array('action' => 'preview', 'product' => 0, 'condition' => 'all');
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
+
+r(count($docTest->previewProductBugTest('setting', $settingsProduct1, '')['data'])) && p() && e('5'); // 步骤1:在setting视图下预览产品1的Bug
+r(count($docTest->previewProductBugTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤2:在list视图下根据ID列表预览Bug
+r(count($docTest->previewProductBugTest('list', $settingsList, '')['data'])) && p() && e('10'); // 步骤3:空idList的list视图
+r(count($docTest->previewProductBugTest('setting', $settingsProduct999, '')['data'])) && p() && e('0'); // 步骤4:不存在的产品ID
+r(count($docTest->previewProductBugTest('setting', $settingsProduct0, '')['data'])) && p() && e('2'); // 步骤5:产品ID为0的情况

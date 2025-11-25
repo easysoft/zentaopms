@@ -16,6 +16,7 @@ $lang->testreport->bugTitle    = 'Bug 标题';
 $lang->testreport->storyTitle  = "{$lang->SRCommon}标题";
 $lang->testreport->project     = '所属' . $lang->projectCommon;
 $lang->testreport->execution   = '所属执行';
+$lang->testreport->object      = "所属{$lang->projectCommon}/执行";
 $lang->testreport->testtask    = '测试单';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = '起止时间';

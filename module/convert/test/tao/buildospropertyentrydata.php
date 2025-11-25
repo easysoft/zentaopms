@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildOSPropertyEntryData();
 timeout=0
-cid=0
+cid=15821
 
 - 步骤1：正常完整数据id字段属性id @1001
 - 步骤2：正常完整数据entity_name字段属性entity_name @Issue

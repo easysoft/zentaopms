@@ -5,44 +5,37 @@
 
 title=测试 executionZen::setRecentExecutions();
 timeout=0
-cid=0
+cid=16442
 
-- 空的recentExecutions设置第一个ID @1
-- ID移到最前面 @1,2,3,4
+- 测试首次添加执行ID @1
+- 测试添加新执行ID到已有列表 @2,1
 
-- 新ID添加到最前面 @5,1,2,3,4
+- 测试添加重复执行ID并去重 @1,2,3
 
-- 超过5个时只保留前5个 @6,5,1,2,3
+- 测试列表超过5个时截断 @7,1,2,3,4
 
-- 非多项目模式不执行操作 @no_operation
+- 测试session非multiple模式 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/executionzen.unittest.class.php';
 
+zenData('user')->gen(5);
 su('admin');
 
-// 模拟setRecentExecutions方法的核心逻辑
-function testSetRecentExecutions($executionID, $currentRecentExecutions = '', $isMultiple = true) {
-    if(!$isMultiple) return 'no_operation';
-    
-    $recentExecutions = empty($currentRecentExecutions) ? array() : explode(',', $currentRecentExecutions);
-    array_unshift($recentExecutions, $executionID);
-    $recentExecutions = array_slice(array_unique($recentExecutions), 0, 5);
-    return implode(',', $recentExecutions);
-}
+$execution = zenData('project');
+$execution->id->range('1-100');
+$execution->name->range('执行1,执行2,执行3,执行4,执行5,执行6,执行7,执行8,执行9,执行10');
+$execution->type->range('sprint');
+$execution->status->range('doing');
+$execution->deleted->range('0');
+$execution->gen(10);
 
-// 测试步骤1：正常情况下设置执行ID  
-r(testSetRecentExecutions(1, '', true)) && p() && e('1'); // 空的recentExecutions设置第一个ID
+$executionTest = new executionZenTest();
 
-// 测试步骤2：重复设置相同执行ID
-r(testSetRecentExecutions(1, '2,3,4', true)) && p() && e('1,2,3,4'); // ID移到最前面
-
-// 测试步骤3：设置多个不同执行ID
-r(testSetRecentExecutions(5, '1,2,3,4', true)) && p() && e('5,1,2,3,4'); // 新ID添加到最前面
-
-// 测试步骤4：设置超过5个执行ID
-r(testSetRecentExecutions(6, '5,1,2,3,4', true)) && p() && e('6,5,1,2,3'); // 超过5个时只保留前5个
-
-// 测试步骤5：非多项目模式下测试
-r(testSetRecentExecutions(1, '', false)) && p() && e('no_operation'); // 非多项目模式不执行操作
+r($executionTest->setRecentExecutionsTest(1, '', true)) && p() && e('1'); // 测试首次添加执行ID
+r($executionTest->setRecentExecutionsTest(2, '1', true)) && p() && e('2,1'); // 测试添加新执行ID到已有列表
+r($executionTest->setRecentExecutionsTest(1, '2,1,3', true)) && p() && e('1,2,3'); // 测试添加重复执行ID并去重
+r($executionTest->setRecentExecutionsTest(7, '1,2,3,4,5', true)) && p() && e('7,1,2,3,4'); // 测试列表超过5个时截断
+r($executionTest->setRecentExecutionsTest(1, '', false)) && p() && e('0'); // 测试session非multiple模式

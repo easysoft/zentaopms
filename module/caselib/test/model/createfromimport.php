@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 caselibModel->createFromImport();
-cid=1
+cid=15527
 
 - 添加两条数据之后查询数据条数是否正确 @2
 - 添加数据之后查询新加用例 221 的名称，关键字

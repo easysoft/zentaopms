@@ -11,7 +11,7 @@ zenData('project')->loadYaml('execution')->gen(35);
 
 title=测试executionModel->getBurnByExecution();
 timeout=0
-cid=1
+cid=16388
 
 - 获取迭代的燃尽图数据 @0
 - 获取阶段的燃尽图数据 @0

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStoryPairs();
 timeout=0
-cid=0
+cid=19479
 
 - 步骤1：验证返回结果是数组格式 @1
 - 步骤2：验证数组包含正确数量的需求键值对 @4

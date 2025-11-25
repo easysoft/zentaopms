@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getSceneByProductAndModule();
-cid=1
+cid=18995
 
 - 获取产品 0 模块 0 的场景信息 @0
 - 获取产品 1 模块 0 的场景信息 @sceneMaps:1 2 3 4;topScenes:1;

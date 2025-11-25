@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 bugZen::getBrowseBranch();
 timeout=0
-cid=0
+cid=15450
 
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['main', 'normal']  @all
 - 执行invokeArgs($zen模块的newInstance方法，参数是, ['branch1', 'branch']  @branch1

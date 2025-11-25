@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 biModel::getTableAndFields();
 timeout=0
-cid=0
+cid=15183
 
 - 执行biModel模块的getTableAndFields方法，参数是'SELECT id, name FROM zt_user' 第tables条的0属性 @zt_user
 - 执行biModel模块的getTableAndFields方法，参数是'SELECT id, name FROM zt_user' 第fields条的id属性 @id

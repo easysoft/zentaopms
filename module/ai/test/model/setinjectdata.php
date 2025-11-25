@@ -5,7 +5,7 @@
 
 title=测试 aiModel::setInjectData();
 timeout=0
-cid=0
+cid=15065
 
 - 执行aiTest模块的setInjectDataTest方法，参数是'story.create', 'test story data'  @0
 - 执行aiTest模块的setInjectDataTest方法，参数是'story.change', 'test change data'  @0

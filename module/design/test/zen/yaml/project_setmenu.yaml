@@ -5,38 +5,50 @@ author: Claude
 version: 1.0
 
 fields:
-- field: id
-  note: 项目ID
-  range: 1-10
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
-- field: name
-  note: 项目名称
-  range: 项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10
-  format: ""
-- field: model
-  note: 项目模型
-  range: waterfall{3},waterfallplus{2},scrum{3},ipd{2}
-  format: ""
-- field: status
-  note: 项目状态
-  range: wait{2},doing{5},suspended{1},closed{2}
-  format: ""
-- field: type
-  note: 项目类型
-  range: project{10}
-  format: ""
-- field: parent
-  note: 父项目ID
-  range: 0{10}
-  format: ""
-- field: begin
-  note: 开始日期
-  range: (2024-01-01)-(2024-12-31):30D
-  format: YYYY-MM-DD
-- field: end
-  note: 结束日期
-  range: (2024-02-01)-(2025-01-31):30D
-  format: YYYY-MM-DD
+  - field: id
+    note: 项目ID
+    range: 1-10
+
+  - field: project
+    note: 所属项目集
+    range: 0
+
+  - field: isTpl
+    note: 是否模板
+    range: 0
+
+  - field: name
+    note: 项目名称
+    range: 项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10
+
+  - field: model
+    note: 项目模型
+    range: waterfall,waterfall,ipd,waterfallplus,scrum,kanban,agile,sprint,stage,build
+
+  - field: type
+    note: 项目类型
+    range: project
+
+  - field: begin
+    note: 开始日期
+    range: 2024-01-01
+
+  - field: end
+    note: 结束日期
+    range: 2024-12-31
+
+  - field: status
+    note: 项目状态
+    range: wait
+
+  - field: acl
+    note: 访问控制
+    range: open
+
+  - field: order
+    note: 排序
+    range: 1-10
+
+  - field: deleted
+    note: 是否删除
+    range: 0

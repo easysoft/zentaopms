@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getStakeHolderPairs();
-cid=1
+cid=18442
 
 - 获取objectID=0的干系人键值对 @0
 - 获取objectID=1的干系人键值对属性user1 @用户1

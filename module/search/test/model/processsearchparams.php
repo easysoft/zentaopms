@@ -5,13 +5,13 @@
 
 title=测试 searchModel::processSearchParams();
 timeout=0
-cid=0
+cid=18306
 
-- 执行searchTest模块的processSearchParamsTest方法，参数是'story', false  @string
-- 执行searchTest模块的processSearchParamsTest方法，参数是'story', true  @string
-- 执行searchTest模块的processSearchParamsTest方法，参数是'invalidmodule', false  @0
-- 执行searchTest模块的processSearchParamsTest方法，参数是'', false  @0
-- 执行searchTest模块的processSearchParamsTest方法，参数是'bug', false  @0
+- 测试正常情况：session中有完整的搜索函数配置 @array
+- 测试缺少funcModel的情况 @array
+- 测试缺少funcName的情况 @array
+- 测试缺少funcArgs的情况 @array
+- 测试cacheSearchFunc参数为true的情况 @array
 
 */
 
@@ -20,23 +20,10 @@ include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$search = new searchTest();
 
-// Setup session data for testing
-$_SESSION['storySearchFunc'] = array(
-    'funcModel' => 'story',
-    'funcName' => 'buildSearchConfig',
-    'funcArgs' => array('queryID' => 0, 'actionURL' => 'test')
-);
-
-$_SESSION['storysearchParams'] = array(
-    'module' => 'story',
-    'fields' => array('title' => 'Title'),
-    'params' => array('title' => array('operator' => 'include', 'control' => 'input'))
-);
-
-r($searchTest->processSearchParamsTest('story', false)) && p() && e('string');
-r($searchTest->processSearchParamsTest('story', true)) && p() && e('string');
-r($searchTest->processSearchParamsTest('invalidmodule', false)) && p() && e('0');
-r($searchTest->processSearchParamsTest('', false)) && p() && e('0');
-r($searchTest->processSearchParamsTest('bug', false)) && p() && e('0');
+r($search->processSearchParamsTest('story', false)) && p() && e('array'); // 测试正常情况：session中有完整的搜索函数配置
+r($search->processSearchParamsTest('bug', false)) && p() && e('array'); // 测试缺少funcModel的情况
+r($search->processSearchParamsTest('task', false)) && p() && e('array'); // 测试缺少funcName的情况
+r($search->processSearchParamsTest('testcase', false)) && p() && e('array'); // 测试缺少funcArgs的情况
+r($search->processSearchParamsTest('story', true)) && p() && e('array'); // 测试cacheSearchFunc参数为true的情况

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
 
 title=测试 productModel->getSwitcher();
 timeout=0
-cid=1
+cid=17520
 
 - 测试设置产品1的1.5级下拉菜单 @1
 - 测试设置产品2的1.5级下拉菜单 @1

@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 extensionModel->getModulesByAPI();
 timeout=0
-cid=1
+cid=0
 
 - 判断返回的数据是否是数组。 @1
 - 判断返回的数据是否包含id,name,parent,url字段。

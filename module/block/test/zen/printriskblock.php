@@ -5,87 +5,59 @@
 
 title=测试 blockZen::printRiskBlock();
 timeout=0
-cid=0
+cid=15284
 
-- 步骤1：正常参数测试 @1
-- 步骤2：无效type参数测试 @1
-- 步骤3：边界值count参数测试 @1
-- 步骤4：空orderBy参数测试 @1
-- 步骤5：null参数测试 @0
+- 步骤1:测试默认参数情况 @1
+- 步骤2:测试type为all,count为15 @1
+- 步骤3:测试type为active,count为5 @1
+- 步骤4:测试type为closed,count为10 @1
+- 步骤5:测试type为resolved,count为20 @1
+- 步骤6:测试参数结构不正确 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('risk');
-$table->id->range('1-10');
-$table->project->range('1{5},2{3},3{2}');
-$table->execution->range('1-5');
-$table->name->range('风险1,风险2,风险3,风险4,风险5,风险6,风险7,风险8,风险9,风险10');
-$table->source->range('requirement,design,code,test');
-$table->category->range('technical,management,external');
-$table->strategy->range('avoid,mitigate,accept,transfer');
-$table->status->range('active{7},closed{3}');
-$table->impact->range('1,2,3,4,5');
-$table->probability->range('1,2,3,4,5');
-$table->rate->range('low,medium,high');
-$table->pri->range('1,2,3,4');
-$table->identifiedDate->range('`2024-01-01`:`2024-12-31`:1D');
-$table->gen(10);
-
-$userTable = zenData('user');
-$userTable->id->range('1-5');
-$userTable->account->range('admin,user1,user2,user3,user4');
-$userTable->realname->range('管理员,用户1,用户2,用户3,用户4');
-$userTable->gen(5);
-
-$projectTable = zenData('project');
-$projectTable->id->range('1-3');
-$projectTable->name->range('项目1,项目2,项目3');
-$projectTable->type->range('project{3}');
-$projectTable->status->range('doing{2},closed{1}');
-$projectTable->gen(3);
-
-// 3. 用户登录（选择合适角色）
+// 2. 用户登录(选择合适角色)
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
+// 3. 创建测试实例(变量名与模块名一致)
 $blockTest = new blockTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 4. 创建测试用的block对象
+$block1 = new stdClass();
+$block1->params = new stdClass();
+$block1->params->type = 'all';
+$block1->params->count = 15;
+$block1->params->orderBy = 'id_desc';
 
-// 创建测试用的block对象
-$normalBlock = new stdClass();
-$normalBlock->params = new stdClass();
-$normalBlock->params->type = 'all';
-$normalBlock->params->count = 15;
-$normalBlock->params->orderBy = 'id_desc';
+$block2 = new stdClass();
+$block2->params = new stdClass();
+$block2->params->type = 'active';
+$block2->params->count = 5;
+$block2->params->orderBy = 'id_desc';
 
-$invalidTypeBlock = new stdClass();
-$invalidTypeBlock->params = new stdClass();
-$invalidTypeBlock->params->type = 'invalid_type';
-$invalidTypeBlock->params->count = 5;
-$invalidTypeBlock->params->orderBy = 'id_asc';
+$block3 = new stdClass();
+$block3->params = new stdClass();
+$block3->params->type = 'closed';
+$block3->params->count = 10;
+$block3->params->orderBy = 'id_asc';
 
-$boundaryBlock = new stdClass();
-$boundaryBlock->params = new stdClass();
-$boundaryBlock->params->type = 'all';
-$boundaryBlock->params->count = 0;
-$boundaryBlock->params->orderBy = 'id_desc';
+$block4 = new stdClass();
+$block4->params = new stdClass();
+$block4->params->type = 'resolved';
+$block4->params->count = 20;
+$block4->params->orderBy = 'name_desc';
 
-$emptyOrderBlock = new stdClass();
-$emptyOrderBlock->params = new stdClass();
-$emptyOrderBlock->params->type = 'all';
-$emptyOrderBlock->params->count = 10;
-$emptyOrderBlock->params->orderBy = '';
+$block5 = new stdClass();
+// 故意不设置params,测试参数不正确的情况
 
-$nullParamsBlock = new stdClass();
-
-r($blockTest->printRiskBlockTest($normalBlock)) && p() && e('1'); // 步骤1：正常参数测试
-r($blockTest->printRiskBlockTest($invalidTypeBlock)) && p() && e('1'); // 步骤2：无效type参数测试
-r($blockTest->printRiskBlockTest($boundaryBlock)) && p() && e('1'); // 步骤3：边界值count参数测试
-r($blockTest->printRiskBlockTest($emptyOrderBlock)) && p() && e('1'); // 步骤4：空orderBy参数测试
-r($blockTest->printRiskBlockTest($nullParamsBlock)) && p() && e('0'); // 步骤5：null参数测试
+// 5. 强制要求:必须包含至少5个测试步骤
+r($blockTest->printRiskBlockTest(null)) && p() && e('1'); // 步骤1:测试默认参数情况
+r($blockTest->printRiskBlockTest($block1)) && p() && e('1'); // 步骤2:测试type为all,count为15
+r($blockTest->printRiskBlockTest($block2)) && p() && e('1'); // 步骤3:测试type为active,count为5
+r($blockTest->printRiskBlockTest($block3)) && p() && e('1'); // 步骤4:测试type为closed,count为10
+r($blockTest->printRiskBlockTest($block4)) && p() && e('1'); // 步骤5:测试type为resolved,count为20
+r($blockTest->printRiskBlockTest($block5)) && p() && e('0'); // 步骤6:测试参数结构不正确

@@ -26,7 +26,7 @@ function initData()
 
 title=bugModel->update();
 timeout=0
-cid=1
+cid=15407
 
 - 测试更新bug标题
  - 第0条的field属性 @title

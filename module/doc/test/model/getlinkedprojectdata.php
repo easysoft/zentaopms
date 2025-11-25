@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getLinkedProjectData();
-cid=1
+cid=16108
 
 - 获取开源版系统中所有关联项目的数据属性4 @SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'
 - 获取旗舰版系统中所有关联项目的数据属性1 @SELECT id FROM `zt_issue` WHERE `project`  = '0' AND  `deleted`  = '0'

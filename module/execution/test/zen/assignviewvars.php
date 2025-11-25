@@ -4,7 +4,7 @@
 
 title=测试 executionZen::assignViewVars();
 timeout=0
-cid=1
+cid=16410
 
 - 获取产品数据
  - 第5条的name属性 @正常产品5

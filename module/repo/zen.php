@@ -342,13 +342,14 @@ class repoZen extends repo
                 return false;
             }
 
+            if(!is_writable($path) || !is_executable($path))
+            {
+                dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
+                return false;
+            }
+
             if(!chdir($path))
             {
-                if(!is_executable($path))
-                {
-                    dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
-                    return false;
-                }
                 dao::$errors['path'] = $this->lang->repo->error->path;
                 return false;
             }

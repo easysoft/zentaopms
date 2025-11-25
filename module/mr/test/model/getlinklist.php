@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getLinkList();
 timeout=0
-cid=0
+cid=17250
 
 - 查询关联的需求数量 @4
 - 查询关联的需求列表

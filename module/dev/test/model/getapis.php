@@ -5,7 +5,7 @@
 
 title=测试 devModel::getAPIs();
 timeout=0
-cid=0
+cid=16001
 
 - 测试API扩展路径功能属性hasExtPaths @1
 - 测试common模块特殊处理 @array

@@ -5,7 +5,7 @@
 
 title=测试 backupModel::getBackupDirProgress();
 timeout=0
-cid=0
+cid=15132
 
 - 执行backupTest模块的getBackupDirProgressTest方法，参数是$testBackupName1
  - 属性allCount @0

@@ -5,7 +5,7 @@
 
 title=测试 chartTao::switchFieldName();
 timeout=0
-cid=0
+cid=15583
 
 - 执行chartTest模块的switchFieldNameTest方法，参数是$fields1, $langs1, $metrics1, '0'  @状态字段
 - 执行chartTest模块的switchFieldNameTest方法，参数是$fields2, $langs2, $metrics2, '0'  @Bug状态

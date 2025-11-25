@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getAffectedBugs();
 timeout=0
-cid=0
+cid=18629
 
 - 获取需求2关联bug数 @3
 - 获取需求2关联的第1条bug

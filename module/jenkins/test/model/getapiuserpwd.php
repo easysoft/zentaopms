@@ -4,7 +4,7 @@
 /**
 
 title=测试jenkinsModel->getApiUserPWD();
-cid=1
+cid=16830
 
 - 测试获取 jenkins 1 的jenkins api 密码串 @root:glpat-b8Sa1pM9k9ygxMZYPN6w
 - 测试获取 jenkins 2 的jenkins api 密码串 @sonar:squ_00a8b5794f6fa527bfb8f2a6f382264b5d306b17

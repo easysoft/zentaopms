@@ -10,7 +10,7 @@ su('admin');
 
 title=测试branchModel->isClickable();
 timeout=0
-cid=1
+cid=15332
 
 */
 $branch = new branchTest('admin');

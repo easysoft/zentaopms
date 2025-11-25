@@ -1,0 +1,30 @@
+---
+title: assignBatchCreateVars测试的执行数据
+desc: 用于测试bugZen::assignBatchCreateVars()方法的执行相关数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: name
+  note: 执行名称
+  range: '正常迭代,看板迭代,阶段1,阶段2,已关闭迭代'
+  loop: 2
+- field: type
+  note: 执行类型
+  range: 'sprint{3},kanban{2},stage{5}'
+- field: status
+  note: 执行状态
+  range: 'wait{3},doing{4},suspended{1},closed{2}'
+- field: project
+  note: 所属项目
+  range: 1-5
+- field: deleted
+  note: 是否删除
+  range: '0'
+- field: begin
+  note: 开始日期
+  range: '2023-06-01,2023-07-01,2023-08-01'
+- field: end
+  note: 结束日期
+  range: '2023-09-30,2023-10-31,2023-11-30'

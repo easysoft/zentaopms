@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 kanbanModel->getLaneById();
 timeout=0
-cid=1
+cid=16927
 
 - 测试通过id1获取泳道信息
  - 属性name @默认泳道

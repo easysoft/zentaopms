@@ -5,33 +5,46 @@
 
 title=测试 productZen::buildProductForClose();
 timeout=0
-cid=0
+cid=17564
 
-- 步骤1：有效产品ID关闭属性status @close
-- 步骤2：不存在产品ID关闭属性status @close
-- 步骤3：产品ID为0关闭属性status @close
-- 步骤4：产品ID为负数关闭属性status @close
-- 步骤5：验证关闭日期为当前日期属性closedDate @2025-09-15
+- 执行productTest模块的buildProductForCloseTest方法，参数是1
+ - 属性status @close
+ - 属性closedDate @2025-11-11
+- 执行productTest模块的buildProductForCloseTest方法 属性status @close
+- 执行productTest模块的buildProductForCloseTest方法，参数是999 属性status @close
+- 执行productTest模块的buildProductForCloseTest方法，参数是1 属性status @close
+- 执行productTest模块的buildProductForCloseTest方法，参数是1 属性status @close
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->loadYaml('product_buildproductforclose', false, 2)->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->buildProductForCloseTest(1)) && p('status') && e('close'); // 步骤1：有效产品ID关闭
-r($productTest->buildProductForCloseTest(999)) && p('status') && e('close'); // 步骤2：不存在产品ID关闭
-r($productTest->buildProductForCloseTest(0)) && p('status') && e('close'); // 步骤3：产品ID为0关闭
-r($productTest->buildProductForCloseTest(-1)) && p('status') && e('close'); // 步骤4：产品ID为负数关闭
-r($productTest->buildProductForCloseTest(5)) && p('closedDate') && e('2025-09-15'); // 步骤5：验证关闭日期为当前日期
+$_POST['status'] = 'close';
+$_POST['closedDate'] = date('Y-m-d');
+$_POST['comment'] = 'Test close comment';
+r($productTest->buildProductForCloseTest(1)) && p('status,closedDate') && e('close,2025-11-11');
+
+$_POST['status'] = 'close';
+$_POST['closedDate'] = date('Y-m-d');
+$_POST['comment'] = '';
+r($productTest->buildProductForCloseTest(0)) && p('status') && e('close');
+
+$_POST['status'] = 'close';
+$_POST['closedDate'] = date('Y-m-d');
+$_POST['comment'] = 'Close non-existent product';
+r($productTest->buildProductForCloseTest(999)) && p('status') && e('close');
+
+$_POST['status'] = 'close';
+$_POST['closedDate'] = date('Y-m-d');
+$_POST['comment'] = '';
+r($productTest->buildProductForCloseTest(1)) && p('status') && e('close');
+
+$_POST['status'] = 'close';
+$_POST['closedDate'] = date('Y-m-d');
+$_POST['comment'] = 'This is a very long comment for closing the product. It should be processed correctly by the buildProductForClose method. The method should handle long text comments without any issues and store them properly in the database.';
+r($productTest->buildProductForCloseTest(1)) && p('status') && e('close');

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getSystemPairs();
 timeout=0
-cid=0
+cid=19483
 
 - 测试步骤1：验证键1对应的值属性1 @Test App
 - 测试步骤2：再次验证键1的值属性1 @Test App

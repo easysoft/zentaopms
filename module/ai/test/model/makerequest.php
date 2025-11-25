@@ -5,7 +5,7 @@
 
 title=测试 aiModel::makeRequest();
 timeout=0
-cid=0
+cid=15057
 
 - 步骤1：正常chat请求属性result @fail
 - 步骤2：正常completion请求属性result @fail

@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->getRealNameAndEmails();
-cid=0
+cid=19632
 
 - 参数为空数组，返回空数组。 @0
 - 参数包含 3个账号，返回 3个账号的邮箱和真实姓名。 @3

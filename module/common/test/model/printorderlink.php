@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printOrderLink();
 timeout=0
-cid=0
+cid=15700
 
 - 步骤1：基本排序链接生成 @<a href='/user-browse-orderBy=id_asc.html'  class='header' data-app=system>ID</a>
 - 步骤2：当前字段升序排序链接 @<a href='/user-browse-orderBy=id_desc.html'  class='sort-up' data-app=system>ID</a>

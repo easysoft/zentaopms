@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getByIdList();
-cid=1
+cid=16072
 
 - 测试传入空的文档ID数组时，获取文档数据 @0
 - 测试传入文档ID数组时，获取文档数据

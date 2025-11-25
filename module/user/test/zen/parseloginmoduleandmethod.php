@@ -5,7 +5,7 @@
 
 title=测试 userZen::parseLoginModuleAndMethod();
 timeout=0
-cid=0
+cid=19677
 
 - 执行userTest模块的parseLoginModuleAndMethodTest方法，参数是'/zentao/user-login.html'  @user
 - 执行userTest模块的parseLoginModuleAndMethodTest方法，参数是'/zentao/user-login.html' 属性1 @login

@@ -5,25 +5,29 @@
 
 title=测试 chartZen::getChartsToView();
 timeout=0
-cid=0
+cid=15584
 
-- 测试步骤1：正常图表列表输入情况第0条的id属性 @1
-- 测试步骤2：空图表列表输入情况 @0
-- 测试步骤3：不存在的图表ID输入情况 @0
-- 测试步骤4：混合存在和不存在图表ID的情况第0条的id属性 @1
-- 测试步骤5：包含重复chartID但groupID不同的情况第1条的currentGroup属性 @2
+- 执行chartTest模块的getChartsToViewTest方法，参数是array  @0
+- 执行chartTest模块的getChartsToViewTest方法，参数是array
+ - 第0条的id属性 @1
+ - 第0条的currentGroup属性 @5
+- 执行chartTest模块的getChartsToViewTest方法，参数是array  @3
+- 执行chartTest模块的getChartsToViewTest方法，参数是array  @0
+- 执行chartTest模块的getChartsToViewTest方法，参数是array  @2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zendata('chart')->loadYaml('zt_chart_getchartstoview', false, 2)->gen(20);
+zendata('chart')->loadYaml('getchartstoview', false, 2)->gen(10);
+
 su('admin');
 
-$chartTest = new chartTest();
-r($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 1))))                           && p('0:id')  && e('1'); //测试步骤1：正常图表列表输入情况
-r($chartTest->getChartsToViewTest(array()))                                                                 && p()        && e('0'); //测试步骤2：空图表列表输入情况
-r($chartTest->getChartsToViewTest(array(array('chartID' => 999, 'groupID' => 1))))                        && p()        && e('0'); //测试步骤3：不存在的图表ID输入情况
-r($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 1), array('chartID' => 999, 'groupID' => 2)))) && p('0:id') && e('1'); //测试步骤4：混合存在和不存在图表ID的情况
-r($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 1), array('chartID' => 1, 'groupID' => 2))))   && p('1:currentGroup') && e('2'); //测试步骤5：包含重复chartID但groupID不同的情况
+$chartTest = new chartZenTest();
+
+r(count($chartTest->getChartsToViewTest(array()))) && p() && e('0');
+r($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 5)))) && p('0:id,currentGroup') && e('1,5');
+r(count($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 5), array('chartID' => 2, 'groupID' => 6), array('chartID' => 3, 'groupID' => 7))))) && p() && e('3');
+r(count($chartTest->getChartsToViewTest(array(array('chartID' => 999, 'groupID' => 5))))) && p() && e('0');
+r(count($chartTest->getChartsToViewTest(array(array('chartID' => 1, 'groupID' => 5), array('chartID' => 999, 'groupID' => 6), array('chartID' => 2, 'groupID' => 7))))) && p() && e('2');

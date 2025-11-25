@@ -94,7 +94,7 @@ class treeModel extends model
                 ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                 ->beginIF($branch !== 'all' && $branch !== '' && strpos($param, 'noMainBranch') === false)
                 ->andWhere("(branch")->eq(0)
-                ->orWhere('branch')->eq($branch)
+                ->orWhere('branch')->in($branch)
                 ->markRight(1)
                 ->fi()
                 ->beginIF($branch !== 'all' && $branch !== '' && strpos($param, 'noMainBranch') !== false)
@@ -256,13 +256,13 @@ class treeModel extends model
      * 获取模块对列表。
      * Get module pairs.
      *
-     * @param  int    $rootID
-     * @param  string $viewType
-     * @param  string $showModule
+     * @param  int|array $rootID
+     * @param  string    $viewType
+     * @param  string    $showModule
      * @access public
      * @return array
      */
-    public function getModulePairs(int $rootID, string $viewType = 'story', string $showModule = 'end', string $extra = '')
+    public function getModulePairs(int|array $rootID, string $viewType = 'story', string $showModule = 'end', string $extra = '')
     {
         if(common::isTutorialMode()) $modulePairs = $this->loadModel('tutorial')->getModulePairs();
 
@@ -271,7 +271,7 @@ class treeModel extends model
             $products = array_keys($this->loadModel('product')->getProductPairsByProject($rootID));
             if(!$this->isMergeModule($rootID, $viewType) || !$products)
             {
-                $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
+                $modules = $this->dao->select('id,name,path,short')->from(TABLE_MODULE)->where('root')->in($rootID)->andWhere('type')->in($viewType)->andWhere('deleted')->eq(0)->fetchAll('id');
             }
             else
             {
@@ -290,7 +290,7 @@ class treeModel extends model
             if($this->isMergeModule($rootID, $viewType) || !$rootID) $viewType .= ',story';
             $modules += $this->dao->select('id,name,path,short')->from(TABLE_MODULE)
                 ->where('type')->in($viewType)
-                ->beginIF($rootID)->andWhere('root')->eq($rootID)->fi()
+                ->beginIF($rootID)->andWhere('root')->in($rootID)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
         }
@@ -1878,7 +1878,7 @@ class treeModel extends model
             }
 
             $newOrder = $newOrders[$parent][$grade][$branch] * 10;
-            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->limit(1)->exec();
+            $this->dao->update(TABLE_MODULE)->set('`order`')->eq($newOrder)->where('id')->eq((int)$moduleID)->exec();
         }
     }
 
@@ -1973,7 +1973,7 @@ class treeModel extends model
                 $moduleID       = $this->dao->lastInsertID();
                 $createIdList[] = $moduleID;
                 $childPath      = $parentPath . "$moduleID,";
-                $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
             }
             else
@@ -1991,7 +1991,7 @@ class treeModel extends model
                 $data->order  = $order;
                 $data->branch = isset($branches[$originID]) ? $branches[$originID] : 0;
 
-                $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
+                $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->exec();
                 if(dao::isError()) return false;
 
                 $newModule = $this->getByID($moduleID);
@@ -2344,7 +2344,7 @@ class treeModel extends model
         }
 
         /* Save modules to database. */
-        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->limit(1)->exec();
+        foreach($modules as $module) $this->dao->update(TABLE_MODULE)->data($module)->where('id')->eq($module->id)->exec();
     }
 
     /**
@@ -2401,19 +2401,19 @@ class treeModel extends model
      * 检查是否是已合并模块。4.1后task,case,bug也会使用story的模块。
      * Check merge module version.
      *
-     * @param  int    $rootID
-     * @param  string $viewType
+     * @param  int|array $rootID
+     * @param  string    $viewType
      * @access public
      * @return bool
      */
-    public function isMergeModule(int $rootID, string $viewType): bool
+    public function isMergeModule(int|array $rootID, string $viewType): bool
     {
         if(!in_array($viewType, array('bug', 'case', 'task'))) return false;
 
         /* Get createdVersion. */
         $table          = $viewType == 'task' ? TABLE_PROJECT : TABLE_PRODUCT;
         $versionField   = $viewType == 'task' ? 'openedVersion' : 'createdVersion';
-        $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
+        $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->in($rootID)->fetch($versionField);
         if(!$createdVersion) return true;
 
         if(is_numeric($createdVersion[0]) && version_compare($createdVersion, '4.1', '<=')) return false;

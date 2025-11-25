@@ -5,7 +5,7 @@
 
 title=测试 executionModel::createDefaultSprint();
 timeout=0
-cid=0
+cid=16289
 
 - 步骤1：正常敏捷项目创建默认迭代 @6
 - 步骤2：看板项目创建默认看板 @7

@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel::setMenuVarsEx();
 timeout=0
-cid=1
+cid=15713
 
 - 查看替换后的菜单链接 @/execution-task-1
 - 查看替换后的菜单链接属性link @/task-create-1

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createBuild();
 timeout=0
-cid=0
+cid=15832
 
 - 步骤1：正常情况
  - 属性product @1

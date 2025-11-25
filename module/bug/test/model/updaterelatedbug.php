@@ -26,7 +26,7 @@ function initData()
 
 title=bugModel->updateRelatedBug();
 timeout=0
-cid=1
+cid=15409
 
 - 测试关联bug2的关联bug同步更新为1属性2 @1
 

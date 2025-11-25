@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->updateLinkedLane();
-cid=0
+cid=18662
 
 - 不传入任何数据。 @0
 - 只传入需求 ID。 @0

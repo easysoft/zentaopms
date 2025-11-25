@@ -8,7 +8,7 @@ zenData('module')->loadYaml('module_caselib')->gen('60');
 /**
 
 title=测试 testcaseModel->checkModuleImported();
-cid=1
+cid=18968
 
 - 测试用例库 1 中 module 1 是否已经导入 @0
 - 测试用例库 1 中 module 2 是否已经导入 @12

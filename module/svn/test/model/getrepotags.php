@@ -5,7 +5,7 @@
 
 title=测试 svnModel::getRepoTags();
 timeout=0
-cid=0
+cid=18718
 
 - 步骤1：正常情况-查询根目录tag信息无输出 @0
 - 步骤2：边界值-查询空路径返回空结果 @0

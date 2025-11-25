@@ -5,7 +5,7 @@
 
 title=测试 cneModel::backupDetail();
 timeout=0
-cid=0
+cid=15604
 
 - 测试步骤1：空实例对象输入 @0
 - 测试步骤2：缺少k8name属性的实例 @0

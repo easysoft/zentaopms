@@ -5,7 +5,7 @@
 
 title=测试 executionModel::getBurnData();
 timeout=0
-cid=0
+cid=16300
 
 - 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:value属性 @75
 - 执行executionTest模块的getBurnDataTest方法，参数是4 第4条的01-12:value属性 @75

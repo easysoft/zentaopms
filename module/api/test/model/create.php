@@ -9,7 +9,7 @@ zenData('api')->gen(0);
 
 title=测试 apiModel->create();
 timeout=0
-cid=1
+cid=15090
 
 - 测试正常添加接口文档。 @1
 - 测试接口名称为空。 @0

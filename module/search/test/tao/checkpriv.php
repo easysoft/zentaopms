@@ -5,111 +5,98 @@
 
 title=测试 searchTao::checkPriv();
 timeout=0
-cid=0
+cid=18318
 
-0
-2
-1
-2
-0
-
+- 执行searchTest模块的checkPrivTest方法，参数是$results1, $objectPairs1  @3
+- 执行searchTest模块的checkPrivTest方法，参数是$results2, $objectPairs2  @1
+- 执行searchTest模块的checkPrivTest方法，参数是$results3, $objectPairs3  @0
+- 执行searchTest模块的checkPrivTest方法，参数是$results4, $objectPairs4  @1
+- 执行searchTest模块的checkPrivTest方法，参数是$results5, $objectPairs5  @0
+- 执行searchTest模块的checkPrivTest方法，参数是$results6, array  @2
+- 执行searchTest模块的checkPrivTest方法，参数是$results7, $objectPairs7  @2
+- 执行searchTest模块的checkPrivTest方法，参数是$results8, $objectPairs8  @1
 
 */
 
-// 简化的searchTest类，避免复杂的框架依赖
-class searchTest {
-    public function checkPrivTest($results, $objectPairs = array(), $isAdmin = false, $userProducts = '1,2,3', $userExecutions = '1,2,3') {
-        // 管理员直接返回结果数量
-        if($isAdmin) return count($results);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-        // 空结果返回0
-        if(empty($results)) return 0;
+$product = zenData('product');
+$product->id->range('1-10');
+$product->name->range('Product 1,Product 2,Product 3,Product 4,Product 5,Product 6,Product 7,Product 8,Product 9,Product 10');
+$product->shadow->range('0');
+$product->gen(10);
 
-        $filteredResults = $results;
+$project = zenData('project');
+$project->id->range('1-20');
+$project->name->range('Program 1-5,Project 6-10,Sprint 11-20');
+$project->type->range('program{5},project{5},sprint{10}');
+$project->gen(20);
 
-        // 如果没有提供objectPairs，从results中构建
-        if(empty($objectPairs)) {
-            foreach($results as $record) {
-                if(isset($record->objectType) && isset($record->objectID)) {
-                    $objectPairs[$record->objectType][$record->objectID] = $record->id;
-                }
-            }
-        }
+$doc = zenData('doc');
+$doc->id->range('1-5');
+$doc->title->range('Doc 1,Doc 2,Doc 3,Doc 4,Doc 5');
+$doc->lib->range('1,2,3,4,5');
+$doc->deleted->range('0');
+$doc->gen(5);
 
-        // 权限检查逻辑
-        foreach($objectPairs as $objectType => $objectIdList) {
-            switch($objectType) {
-                case 'story':
-                    // 需求权限检查：如果用户没有产品权限，移除所有需求
-                    if(empty($userProducts)) {
-                        foreach($objectIdList as $storyID => $recordID) {
-                            foreach($filteredResults as $key => $result) {
-                                if($result->id == $recordID || (isset($result->objectID) && $result->objectID == $storyID)) {
-                                    unset($filteredResults[$key]);
-                                }
-                            }
-                        }
-                    }
-                    break;
+$doclib = zenData('doclib');
+$doclib->id->range('1-5');
+$doclib->name->range('Lib 1,Lib 2,Lib 3,Lib 4,Lib 5');
+$doclib->deleted->range('0');
+$doclib->gen(5);
 
-                case 'product':
-                    // 产品权限检查
-                    foreach($objectIdList as $productID => $recordID) {
-                        if(strpos(",$userProducts,", ",$productID,") === false) {
-                            foreach($filteredResults as $key => $result) {
-                                if($result->id == $recordID || (isset($result->objectID) && $result->objectID == $productID)) {
-                                    unset($filteredResults[$key]);
-                                }
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
+su('admin');
 
-        return count($filteredResults);
-    }
-}
+global $app;
+$searchTest = new searchTaoTest();
 
-// 简化测试函数
-function r($result) {
-    global $lastResult;
-    $lastResult = $result;
-    return true;
-}
-function p() { return true; }
-function e($expected) {
-    global $lastResult;
-    echo ($lastResult == $expected) ? $expected : $lastResult;
-    echo "\n";
-    return ($lastResult == $expected);
-}
-
-$searchTest = new searchTest();
-
-// 测试用例1：管理员用户权限检查（空结果）
-r($searchTest->checkPrivTest(array(), array(), true)) && p() && e('0');
-
-// 测试用例2：管理员用户权限检查（有结果）
-$results = array(
-    (object)array('id' => 1, 'title' => 'test1'),
-    (object)array('id' => 2, 'title' => 'test2')
+$app->user->admin = true;
+$results1 = array(
+    1 => (object)array('id' => 1, 'objectType' => 'product', 'objectID' => 1),
+    2 => (object)array('id' => 2, 'objectType' => 'product', 'objectID' => 2),
+    3 => (object)array('id' => 3, 'objectType' => 'product', 'objectID' => 3)
 );
-r($searchTest->checkPrivTest($results, array(), true)) && p() && e('2');
+$objectPairs1 = array('product' => array(1 => 1, 2 => 2, 3 => 3));
 
-// 测试用例3：普通用户权限检查（单个记录）
-$results = array((object)array('id' => 1, 'title' => 'test1', 'objectType' => 'product', 'objectID' => 1));
-r($searchTest->checkPrivTest($results, array(), false, '1,2,3', '1,2,3')) && p() && e('1');
+$app->user->admin = false;
+$app->user->view = new stdClass();
+$app->user->view->products = '1,2,3';
+$app->user->view->programs = '1,2,3';
+$app->user->view->projects = '6,7,8';
+$app->user->view->sprints = '11,12,13';
 
-// 测试用例4：普通用户权限检查（多个记录，有产品权限）
-$results = array(
-    (object)array('id' => 1, 'objectType' => 'story', 'objectID' => 1),
-    (object)array('id' => 2, 'objectType' => 'story', 'objectID' => 2)
+$results2 = array(1 => (object)array('id' => 1, 'objectType' => 'product', 'objectID' => 1));
+$objectPairs2 = array('product' => array(1 => 1));
+
+$results3 = array(1 => (object)array('id' => 1, 'objectType' => 'product', 'objectID' => 5));
+$objectPairs3 = array('product' => array(5 => 1));
+
+$results4 = array(1 => (object)array('id' => 1, 'objectType' => 'project', 'objectID' => 6));
+$objectPairs4 = array('project' => array(6 => 1));
+
+$results5 = array(1 => (object)array('id' => 1, 'objectType' => 'execution', 'objectID' => 15));
+$objectPairs5 = array('execution' => array(15 => 1));
+
+$results6 = array(
+    1 => (object)array('id' => 1, 'objectType' => 'product', 'objectID' => 1),
+    2 => (object)array('id' => 2, 'objectType' => 'product', 'objectID' => 2)
 );
-$objectPairs = array('story' => array(1 => 1, 2 => 2));
-r($searchTest->checkPrivTest($results, $objectPairs, false, '1,2', '1,2')) && p() && e('2');
 
-// 测试用例5：普通用户权限检查（单个记录，无产品权限）
-$results = array((object)array('id' => 1, 'objectType' => 'story', 'objectID' => 1));
-$objectPairs = array('story' => array(1 => 1));
-r($searchTest->checkPrivTest($results, $objectPairs, false, '', '')) && p() && e('0');
+$results7 = array(
+    1 => (object)array('id' => 1, 'objectType' => 'product', 'objectID' => 1),
+    2 => (object)array('id' => 2, 'objectType' => 'project', 'objectID' => 6)
+);
+$objectPairs7 = array('product' => array(1 => 1), 'project' => array(6 => 2));
+
+$results8 = array(1 => (object)array('id' => 1, 'objectType' => 'unknown', 'objectID' => 1));
+$objectPairs8 = array('unknown' => array(1 => 1));
+
+r(count($searchTest->checkPrivTest($results1, $objectPairs1))) && p() && e('3');
+r(count($searchTest->checkPrivTest($results2, $objectPairs2))) && p() && e('1');
+r(count($searchTest->checkPrivTest($results3, $objectPairs3))) && p() && e('0');
+r(count($searchTest->checkPrivTest($results4, $objectPairs4))) && p() && e('1');
+r(count($searchTest->checkPrivTest($results5, $objectPairs5))) && p() && e('0');
+r(count($searchTest->checkPrivTest($results6, array()))) && p() && e('2');
+r(count($searchTest->checkPrivTest($results7, $objectPairs7))) && p() && e('2');
+r(count($searchTest->checkPrivTest($results8, $objectPairs8))) && p() && e('1');

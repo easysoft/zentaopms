@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 miscModel->getStatisticsForAPI();
 timeout=0
-cid=1
+cid=17214
 
 - 不启用用户体验 @0
 - 检查数据键值。 @user,project,execution,task,product,story,bug,case,doc,OS,phpversion,dbversion

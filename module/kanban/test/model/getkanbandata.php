@@ -16,7 +16,7 @@ zenData('kanbancard')->gen(100);
 
 title=测试 kanbanModel->getKanbanData();
 timeout=0
-cid=1
+cid=16924
 
 - 查看获取到的kanban1下的列数据
  - 第0条的title属性 @未开始

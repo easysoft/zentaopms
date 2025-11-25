@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 title=测试 screenModel->buildWaterPolo()。
 timeout=0
-cid=1
+cid=18220
 
 - 测试key @WaterPolo
 - 测试chartKey，conKey以及标题。

@@ -13,7 +13,7 @@ $query->gen(10);
 
 title=测试 searchModel->getQueryList();
 timeout=0
-cid=1
+cid=18304
 
 - 查询 task 模块的搜索查询列表的第1条记录的名称和用户
  - 第0条的title属性 @这是搜索条件名称6

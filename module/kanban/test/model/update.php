@@ -10,7 +10,7 @@ zenData('kanban')->gen(5);
 
 title=测试 kanbanModel->update();
 timeout=0
-cid=1
+cid=16961
 
 - 正常编辑看板，查看编辑后的数据
  - 属性name @测试编辑看板1

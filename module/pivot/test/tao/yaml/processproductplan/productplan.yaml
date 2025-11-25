@@ -1,0 +1,134 @@
+---
+title: Product plan data for processProductPlan test
+desc: Test data for pivot processProductPlan method
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 计划ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: product
+  note: 产品ID
+  range: 1,1,1,1,1,2,2,2,3,5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: branch
+  note: 分支ID
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: parent
+  note: 父计划ID
+  range: 0,0,2,0,2,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: title
+  note: 计划标题
+  range: 版本1.0计划,版本1.1计划,子计划A,版本2.0计划,子计划B,热修复计划,功能优化计划,性能提升计划,安全增强计划,测试计划
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: status
+  note: 计划状态
+  range: wait
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: desc
+  note: 计划描述
+  range: 这是一个测试计划描述
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: begin
+  note: 开始日期
+  range: 2024-01-01
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: end
+  note: 结束日期
+  range: 2026-12-31,2026-11-30,2026-10-31,2026-09-30,2026-08-31,2026-06-30,2024-10-31,2026-05-31,2026-04-30,2026-03-31
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: finishedDate
+  note: 完成日期
+  range: ``
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: closedDate
+  note: 关闭日期
+  range: ``
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: order
+  note: 排序
+  range: ``
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: closedReason
+  note: 关闭原因
+  range: ``
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdBy
+  note: 创建人
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: createdDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

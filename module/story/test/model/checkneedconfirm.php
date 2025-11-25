@@ -5,7 +5,7 @@
 
 title=测试 storyModel::checkNeedConfirm();
 timeout=0
-cid=0
+cid=18482
 
 - 执行checkNeedConfirmTest($data1)模块的needconfirm方法  @0
 - 执行checkNeedConfirmTest($data2)模块的needconfirm方法  @1

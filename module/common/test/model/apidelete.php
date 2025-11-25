@@ -5,7 +5,7 @@
 
 title=测试 commonModel::apiDelete();
 timeout=0
-cid=0
+cid=15639
 
 - 步骤1：成功删除请求属性code @200
 - 步骤2：业务错误请求属性code @400

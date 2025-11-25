@@ -5,25 +5,32 @@
 
 title=测试 personnelZen::setSelectObjectTips();
 timeout=0
-cid=0
+cid=17341
 
-- 执行personnelTest模块的setSelectObjectTipsTest方法，参数是1, 'project', 'project' 属性tips @请选择一个项目白名单
-- 执行personnelTest模块的setSelectObjectTipsTest方法，参数是1, 'product', 'product' 属性tips @请选择一个产品白名单
-- 执行personnelTest模块的setSelectObjectTipsTest方法，参数是1, 'program', 'program' 属性tips @请选择一个项目集白名单
-- 执行personnelTest模块的setSelectObjectTipsTest方法，参数是1, 'sprint', 'execution' 属性tips @请选择一个项目或执行白名单
-- 执行personnelTest模块的setSelectObjectTipsTest方法，参数是1, 'sprint', 'project' 属性tips @请选择一个项目或执行白名单
+- 测试objectType为program时的objectName属性属性objectName @项目集
+- 测试objectType为product时的objectName属性属性objectName @产品
+- 测试objectType为project时的objectName属性属性objectName @项目
+- 测试objectType为sprint时的objectName属性属性objectName @项目或执行
+- 测试objectType为空时的objectName属性属性objectName @项目或执行
+- 测试objectType为program时的tips属性属性tips @请选择一个项目集白名单
+- 测试objectType为product时的tips属性属性tips @请选择一个产品白名单
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
+zenData('user')->gen(5);
+zenData('project')->gen(10);
 
 su('admin');
 
-$personnelTest = new personnelTest();
+$personnelTest = new personnelZenTest();
 
-r($personnelTest->setSelectObjectTipsTest(1, 'project', 'project')) && p('tips') && e('请选择一个项目白名单');
-r($personnelTest->setSelectObjectTipsTest(1, 'product', 'product')) && p('tips') && e('请选择一个产品白名单');
-r($personnelTest->setSelectObjectTipsTest(1, 'program', 'program')) && p('tips') && e('请选择一个项目集白名单');
-r($personnelTest->setSelectObjectTipsTest(1, 'sprint', 'execution')) && p('tips') && e('请选择一个项目或执行白名单');
-r($personnelTest->setSelectObjectTipsTest(1, 'sprint', 'project')) && p('tips') && e('请选择一个项目或执行白名单');
+r($personnelTest->setSelectObjectTipsTest(1, 'program', 'personnel')) && p('objectName') && e('项目集'); // 测试objectType为program时的objectName属性
+r($personnelTest->setSelectObjectTipsTest(1, 'product', 'personnel')) && p('objectName') && e('产品'); // 测试objectType为product时的objectName属性
+r($personnelTest->setSelectObjectTipsTest(1, 'project', 'personnel')) && p('objectName') && e('项目'); // 测试objectType为project时的objectName属性
+r($personnelTest->setSelectObjectTipsTest(1, 'sprint', 'personnel')) && p('objectName') && e('项目或执行'); // 测试objectType为sprint时的objectName属性
+r($personnelTest->setSelectObjectTipsTest(1, '', 'personnel')) && p('objectName') && e('项目或执行'); // 测试objectType为空时的objectName属性
+r($personnelTest->setSelectObjectTipsTest(1, 'program', 'personnel')) && p('tips') && e('请选择一个项目集白名单'); // 测试objectType为program时的tips属性
+r($personnelTest->setSelectObjectTipsTest(1, 'product', 'personnel')) && p('tips') && e('请选择一个产品白名单'); // 测试objectType为product时的tips属性

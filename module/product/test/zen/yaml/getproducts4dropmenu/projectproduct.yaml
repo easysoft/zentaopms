@@ -1,0 +1,28 @@
+---
+title: 项目产品关联数据定义
+desc: 用于测试 getProducts4DropMenu 方法的项目产品关联数据
+
+fields:
+- field: project
+  note: 项目ID
+  range: 1,1,1,2,2,3,3,4,5,6
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1,2,3,4,5,6,7,8,9,10
+  prefix: ""
+  postfix: ""
+
+- field: branch
+  note: 分支
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: plan
+  note: 计划
+  range: 0
+  prefix: ""
+  postfix: ""

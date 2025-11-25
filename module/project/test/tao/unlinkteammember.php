@@ -5,7 +5,7 @@
 
 title=测试 projectTao::unlinkTeamMember();
 timeout=0
-cid=0
+cid=17920
 
 - 步骤1：删除单个项目的团队成员 @1
 - 步骤2：删除多个项目的团队成员 @1

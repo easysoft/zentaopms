@@ -12,7 +12,7 @@ CREATE TABLE `zt_queue` (
   `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 UPDATE `zt_dimension` SET `desc` = '为管理层提供洞察力和决策支持，从而推动业务增长和发展' WHERE `id` = 1;
 UPDATE `zt_dimension` SET `desc` = '识别项目管理流程中的关键步骤、瓶颈和性能指标，从而做出有针对性的改进措施，达到优化项目管理流程和降本增效的目的' WHERE `id` = 2;

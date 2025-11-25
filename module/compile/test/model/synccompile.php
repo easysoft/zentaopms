@@ -5,7 +5,7 @@
 
 title=测试 compileModel::syncCompile();
 timeout=0
-cid=0
+cid=15754
 
 - 测试步骤1：无参数调用 @1
 - 测试步骤2：仅指定repoID @1

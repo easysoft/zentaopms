@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processFilters();
 timeout=0
-cid=0
+cid=17420
 
 - 步骤1：published状态移除design过滤器 @2
 - 步骤2：design状态只保留当前用户过滤器 @1

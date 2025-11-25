@@ -5,7 +5,7 @@
 
 title=测试 kanbanModel::getRegionActions();
 timeout=0
-cid=0
+cid=16941
 
 - 步骤1：管理员用户多区域情况 @8
 - 步骤2：单区域情况下操作按钮数量（无删除按钮） @7

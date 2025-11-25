@@ -101,16 +101,18 @@ foreach($reviewList as $review)
         $statusList = $lang->charter->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'mr', 'pullreq')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
         if(isset($flows[$review->type]) && $rawMethod != 'audit') $statusList = $lang->approval->statusList;
     }
 
-    if($type == 'mr')
+    if(in_array($type, array('mr', 'pullreq')))
     {
         $this->app->loadLang('mr');
+
+        if(empty($review->status)) $review->status = 'notReviewed';
         $statusList = $lang->mr->approvalStatusList;
     }
 

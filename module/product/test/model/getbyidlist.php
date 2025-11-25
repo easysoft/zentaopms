@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getByIdList();
-cid=0
+cid=17487
 
 - 测试获取产品列表中产品1的信息
  - 第1条的name属性 @产品1

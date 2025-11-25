@@ -5,56 +5,43 @@
 
 title=测试 docZen::previewPlanBug();
 timeout=0
-cid=0
+cid=16200
 
-- 步骤1：正常情况测试setting视图，检查返回数组 @1
-- 步骤2：list视图模式，检查data键存在 @1
-- 步骤3：测试计划2的Bug数量 @3
-- 步骤4：测试空计划ID情况，数据为空 @0
-- 步骤5：测试其他视图类型处理，数据为空 @0
+- 步骤1:在setting视图下预览计划关联的Bug @3
+- 步骤2:在list视图下根据ID列表预览Bug @3
+- 步骤3:空idList的list视图 @10
+- 步骤4:不存在的计划ID @0
+- 步骤5:计划ID为0 @4
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$bug = zenData('bug');
-$bug->id->range('1-20');
-$bug->title->range('Bug1,Bug2,Bug3,计划Bug4,计划Bug5,Plan Bug6,计划缺陷7,Bug Test8,计划问题9,Bug Issue10{10}');
-$bug->plan->range('1,1,1,2,2,2,3,3,3,0{10}');
-$bug->product->range('1{20}');
-$bug->status->range('active{15},resolved{3},closed{2}');
-$bug->pri->range('1{5},2{5},3{5},4{5}');
-$bug->severity->range('1{5},2{5},3{5},4{5}');
-$bug->type->range('codeerror{10},designdefect{5},others{5}');
-$bug->openedBy->range('admin{20}');
-$bug->assignedTo->range('admin{10},user1{5},user2{5}');
-$bug->deleted->range('0{20}');
-$bug->gen(20);
+$bugTable = zenData('bug');
+$bugTable->id->range('1-10');
+$bugTable->product->range('1');
+$bugTable->execution->range('0');
+$bugTable->plan->range('1{3},2{3},0{4}');
+$bugTable->title->range('1-10')->prefix('Bug标题');
+$bugTable->status->range('active{5},resolved{3},closed{2}');
+$bugTable->deleted->range('0');
+$bugTable->gen(10);
 
-$productplan = zenData('productplan');
-$productplan->id->range('1-10');
-$productplan->product->range('1{10}');
-$productplan->title->range('计划1,计划2,计划3,计划4,计划5,Plan6,Plan7,Plan8,Plan9,Plan10');
-$productplan->status->range('wait{3},doing{4},done{3}');
-$productplan->gen(10);
+zenData('user')->gen(5);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-$result1 = $docTest->previewPlanBugTest('setting', array('action' => 'preview', 'plan' => 1), '');
-r(is_array($result1)) && p() && e('1'); // 步骤1：正常情况测试setting视图，检查返回数组
-$result2 = $docTest->previewPlanBugTest('list', array('action' => 'list'), '1,2,3');
-r(isset($result2['data'])) && p() && e('1'); // 步骤2：list视图模式，检查data键存在
-$result3 = $docTest->previewPlanBugTest('setting', array('action' => 'preview', 'plan' => 2), '');
-r(count($result3['data'])) && p() && e('3'); // 步骤3：测试计划2的Bug数量
-$result4 = $docTest->previewPlanBugTest('setting', array('action' => 'preview', 'plan' => 0), '');
-r(count($result4['data'])) && p() && e('0'); // 步骤4：测试空计划ID情况，数据为空
-$result5 = $docTest->previewPlanBugTest('other', array('action' => 'other'), '');
-r(count($result5['data'])) && p() && e('0'); // 步骤5：测试其他视图类型处理，数据为空
+$settingsPlan1 = array('action' => 'preview', 'plan' => 1);
+$settingsPlan999 = array('action' => 'preview', 'plan' => 999);
+$settingsPlan0 = array('action' => 'preview', 'plan' => 0);
+$settingsList = array('action' => 'list');
+$idList = '1,2,3';
+
+r(count($docTest->previewPlanBugTest('setting', $settingsPlan1, '')['data'])) && p() && e('3'); // 步骤1:在setting视图下预览计划关联的Bug
+r(count($docTest->previewPlanBugTest('list', $settingsList, $idList)['data'])) && p() && e('3'); // 步骤2:在list视图下根据ID列表预览Bug
+r(count($docTest->previewPlanBugTest('list', $settingsList, '')['data'])) && p() && e('10'); // 步骤3:空idList的list视图
+r(count($docTest->previewPlanBugTest('setting', $settingsPlan999, '')['data'])) && p() && e('0'); // 步骤4:不存在的计划ID
+r(count($docTest->previewPlanBugTest('setting', $settingsPlan0, '')['data'])) && p() && e('4'); // 步骤5:计划ID为0

@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoStatus();
 timeout=0
-cid=0
+cid=15791
 
 - 步骤1：测试task模块，task有7个状态（包括空字符串） @7
 - 步骤2：测试testcase模块，包含额外add_case_status状态 @6

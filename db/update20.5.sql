@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowui` (
   `name` varchar(30) NOT NULL,
   `conditions` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `module` ON `zt_workflowui` (`module`);
 CREATE INDEX `action` ON `zt_workflowui` (`action`);
 
@@ -39,4 +39,4 @@ UPDATE `zt_workflowaction` SET `method`='operate',        `type`='single' WHERE 
 UPDATE `zt_workflow` SET `table` = 'zt_story' WHERE `table` = '`zt_story`';
 UPDATE `zt_workflowfield` SET `role` = 'buildin' WHERE `module` = 'epic';
 
-ALTER TABLE `zt_basicmeas` CHANGE `unit` `unit` varchar(100) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `code`;
+ALTER TABLE `zt_basicmeas` CHANGE `unit` `unit` varchar(100) NOT NULL DEFAULT '' AFTER `code`;

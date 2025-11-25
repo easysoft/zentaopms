@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->moveSprintStoryToProject()。
-cid=1
+cid=19572
 
 - 检查所有的执行是否都被转移到了对应的项目中。@1
 

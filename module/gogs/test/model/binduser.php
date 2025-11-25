@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::bindUser();
 timeout=0
-cid=1
+cid=16690
 
 - 用户列表为空 @0
 - 用户列表不为空

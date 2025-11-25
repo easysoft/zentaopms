@@ -5,69 +5,98 @@
 
 title=测试 gitlabZen::webhookParseObject();
 timeout=0
-cid=0
+cid=16681
 
-- 步骤1：解析有效story标签
- - 属性type @story
- - 属性id @123
-- 步骤2：解析有效task标签
- - 属性type @task
- - 属性id @456
-- 步骤3：解析有效bug标签
+- 测试解析带bug标签的labels
  - 属性type @bug
+ - 属性id @123
+- 测试解析带story标签的labels
+ - 属性type @story
+ - 属性id @456
+- 测试解析带task标签的labels
+ - 属性type @task
  - 属性id @789
-- 步骤4：解析空标签数组 @0
-- 步骤5：解析无效标签格式 @0
+- 测试解析空labels数组 @0
+- 测试解析无效格式标签的labels @0
+- 测试解析混合标签
+ - 属性type @bug
+ - 属性id @999
+- 测试解析多个zentao标签
+ - 属性type @story
+ - 属性id @222
+- 测试解析标签ID为0的情况
+ - 属性type @task
+ - 属性id @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$gitlabTest = new gitlabTest();
+/* 设置 methodName 避免 gitlab 控制器构造函数报错 */
+global $app;
+$app->setMethodName('test');
 
-// 4. 准备测试数据
-// 有效的story标签
-$storyLabels = array();
-$storyLabel = new stdclass();
-$storyLabel->title = 'zentao_story/123';
-$storyLabels[] = $storyLabel;
+$gitlabTest = new gitlabZenTest();
 
-// 有效的task标签
-$taskLabels = array();
-$taskLabel = new stdclass();
-$taskLabel->title = 'zentao_task/456';
-$taskLabels[] = $taskLabel;
+/* 准备测试数据1:带bug标签的labels */
+$labels1 = array();
+$label1 = new stdclass;
+$label1->title = 'zentao_bug/123';
+$labels1[] = $label1;
 
-// 有效的bug标签
-$bugLabels = array();
-$bugLabel = new stdclass();
-$bugLabel->title = 'zentao_bug/789';
-$bugLabels[] = $bugLabel;
+/* 准备测试数据2:带story标签的labels */
+$labels2 = array();
+$label2 = new stdclass;
+$label2->title = 'zentao_story/456';
+$labels2[] = $label2;
 
-// 空标签数组
-$emptyLabels = array();
+/* 准备测试数据3:带task标签的labels */
+$labels3 = array();
+$label3 = new stdclass;
+$label3->title = 'zentao_task/789';
+$labels3[] = $label3;
 
-// 无效标签格式
-$invalidLabels = array();
-$invalidLabel1 = new stdclass();
-$invalidLabel1->title = 'invalid-format';
-$invalidLabel2 = new stdclass();
-$invalidLabel2->title = 'zentao_invalid/123';
-$invalidLabel3 = new stdclass();
-$invalidLabel3->title = 'zentao_story/abc';
-$invalidLabels[] = $invalidLabel1;
-$invalidLabels[] = $invalidLabel2;
-$invalidLabels[] = $invalidLabel3;
+/* 准备测试数据4:空labels数组 */
+$labels4 = array();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($gitlabTest->webhookParseObjectTest($storyLabels)) && p('type,id') && e('story,123'); // 步骤1：解析有效story标签
-r($gitlabTest->webhookParseObjectTest($taskLabels)) && p('type,id') && e('task,456');   // 步骤2：解析有效task标签
-r($gitlabTest->webhookParseObjectTest($bugLabels)) && p('type,id') && e('bug,789');     // 步骤3：解析有效bug标签
-r($gitlabTest->webhookParseObjectTest($emptyLabels)) && p() && e('0');                   // 步骤4：解析空标签数组
-r($gitlabTest->webhookParseObjectTest($invalidLabels)) && p() && e('0');                 // 步骤5：解析无效标签格式
+/* 准备测试数据5:无效格式标签的labels */
+$labels5 = array();
+$label5 = new stdclass;
+$label5->title = 'invalid_label_format';
+$labels5[] = $label5;
+
+/* 准备测试数据6:混合标签(包含bug标签和普通标签) */
+$labels6 = array();
+$label6a = new stdclass;
+$label6a->title = 'normal_tag';
+$labels6[] = $label6a;
+$label6b = new stdclass;
+$label6b->title = 'zentao_bug/999';
+$labels6[] = $label6b;
+
+/* 准备测试数据7:多个zentao标签(包含bug和story) */
+$labels7 = array();
+$label7a = new stdclass;
+$label7a->title = 'zentao_bug/111';
+$labels7[] = $label7a;
+$label7b = new stdclass;
+$label7b->title = 'zentao_story/222';
+$labels7[] = $label7b;
+
+/* 准备测试数据8:标签ID为0的情况 */
+$labels8 = array();
+$label8 = new stdclass;
+$label8->title = 'zentao_task/0';
+$labels8[] = $label8;
+
+r($gitlabTest->webhookParseObjectTest($labels1)) && p('type,id') && e('bug,123'); // 测试解析带bug标签的labels
+r($gitlabTest->webhookParseObjectTest($labels2)) && p('type,id') && e('story,456'); // 测试解析带story标签的labels
+r($gitlabTest->webhookParseObjectTest($labels3)) && p('type,id') && e('task,789'); // 测试解析带task标签的labels
+r($gitlabTest->webhookParseObjectTest($labels4)) && p() && e('0'); // 测试解析空labels数组
+r($gitlabTest->webhookParseObjectTest($labels5)) && p() && e('0'); // 测试解析无效格式标签的labels
+r($gitlabTest->webhookParseObjectTest($labels6)) && p('type,id') && e('bug,999'); // 测试解析混合标签
+r($gitlabTest->webhookParseObjectTest($labels7)) && p('type,id') && e('story,222'); // 测试解析多个zentao标签
+r($gitlabTest->webhookParseObjectTest($labels8)) && p('type,id') && e('task,0'); // 测试解析标签ID为0的情况

@@ -5,54 +5,57 @@
 
 title=测试 buildZen::getExcludeStoryIdList();
 timeout=0
-cid=0
+cid=15522
 
-- 步骤1：正常版本获取排除需求ID列表 @3
-- 步骤2：版本无已关联需求情况 @0
-- 步骤3：产品无父需求情况 @2
-- 步骤4：版本无已关联需求且产品无父需求 @0
-- 步骤5：版本已关联需求包含父需求的情况 @3
+- 测试产品1有父需求和已关联需求的情况,期望返回包含父需求和已关联需求的ID列表 @4
+- 测试产品1只有父需求无已关联需求的情况,期望返回只包含父需求的ID列表 @1
+- 测试产品2有多个父需求和已关联需求的情况,期望返回包含所有父需求和已关联需求的ID列表 @3
+- 测试产品无父需求但有已关联需求的情况,期望返回只包含已关联需求的ID列表 @3
+- 测试产品无父需求也无已关联需求的情况,期望返回空数组 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('story')->loadYaml('zt_story_getexcludestoryidlist', false, 2)->gen(20);
-zenData('build')->loadYaml('zt_build_getexcludestoryidlist', false, 2)->gen(5);
+$story = zenData('story');
+$story->id->range('1-20');
+$story->vision->range('rnd');
+$story->parent->range('0');
+$story->isParent->range('0,0,0,1,0,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0');
+$story->product->range('1{10},2{7},3{3}');
+$story->type->range('story');
+$story->status->range('active{15},closed{5}');
+$story->stage->range('wait{10},developed{10}');
+$story->openedBy->range('admin');
+$story->gen(20);
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildZenTest();
 
-// 测试数据准备
 $build1 = new stdclass();
-$build1->id = 1;
-$build1->product = 1;
-$build1->allStories = '1,2,3';
+$build1->product    = 1;
+$build1->allStories = '3,5,7';
 
 $build2 = new stdclass();
-$build2->id = 2;
-$build2->product = 1;
+$build2->product    = 1;
 $build2->allStories = '';
 
 $build3 = new stdclass();
-$build3->id = 3;
-$build3->product = 2;
-$build3->allStories = '4,5';
+$build3->product    = 2;
+$build3->allStories = '13,15';
 
 $build4 = new stdclass();
-$build4->id = 4;
-$build4->product = 3;
-$build4->allStories = '';
+$build4->product    = 1;
+$build4->allStories = '8,9';
 
 $build5 = new stdclass();
-$build5->id = 5;
-$build5->product = 1;
-$build5->allStories = '16,17,18';
+$build5->product    = 3;
+$build5->allStories = '';
 
-r($buildTest->getExcludeStoryIdListTest($build1)) && p() && e('3'); // 步骤1：正常版本获取排除需求ID列表
-r($buildTest->getExcludeStoryIdListTest($build2)) && p() && e('0'); // 步骤2：版本无已关联需求情况  
-r($buildTest->getExcludeStoryIdListTest($build3)) && p() && e('2'); // 步骤3：产品无父需求情况
-r($buildTest->getExcludeStoryIdListTest($build4)) && p() && e('0'); // 步骤4：版本无已关联需求且产品无父需求
-r($buildTest->getExcludeStoryIdListTest($build5)) && p() && e('3'); // 步骤5：版本已关联需求包含父需求的情况
+r($buildTest->getExcludeStoryIdListTest($build1)) && p() && e('4'); // 测试产品1有父需求和已关联需求的情况,期望返回包含父需求和已关联需求的ID列表
+r($buildTest->getExcludeStoryIdListTest($build2)) && p() && e('1'); // 测试产品1只有父需求无已关联需求的情况,期望返回只包含父需求的ID列表
+r($buildTest->getExcludeStoryIdListTest($build3)) && p() && e('3'); // 测试产品2有多个父需求和已关联需求的情况,期望返回包含所有父需求和已关联需求的ID列表
+r($buildTest->getExcludeStoryIdListTest($build4)) && p() && e('3'); // 测试产品无父需求但有已关联需求的情况,期望返回只包含已关联需求的ID列表
+r($buildTest->getExcludeStoryIdListTest($build5)) && p() && e('0'); // 测试产品无父需求也无已关联需求的情况,期望返回空数组

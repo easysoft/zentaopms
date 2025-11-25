@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 projectModel->getStoriesByProject();
 timeout=0
-cid=1
+cid=17851
 
 - 获取项目1关联的所有产品数量 @1
 - 获取项目1关联的产品ID为1的详情第0条的product属性 @1

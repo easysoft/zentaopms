@@ -142,6 +142,7 @@ class form extends fixer
         /* 复制项目使用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
 
+        if(empty($app->control)) return $configObject;
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 
@@ -332,6 +333,8 @@ class form extends fixer
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))
                 {
+                    if($app->moduleName == 'task' && $app->methodName == 'batchcreate' && $field == 'estimate' && $this->rawdata->isParent[$rowIndex] == '1') continue;
+
                     $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
                     $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
                     if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();

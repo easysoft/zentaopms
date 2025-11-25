@@ -5,7 +5,7 @@
 
 title=getOldMetricByID
 timeout=0
-cid=1
+cid=17115
 
 - 测试第1个旧的度量项
  - 属性purpose @duration

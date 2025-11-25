@@ -5,7 +5,7 @@
 
 title=测试 programModel::checkAccess();
 timeout=0
-cid=1
+cid=17675
 
 - 不传入ID @1
 - 传入存在ID的值 @2

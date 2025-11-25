@@ -5,7 +5,7 @@
 
 title=测试 programplanModel->getGanttTasks();
 timeout=0
-cid=0
+cid=17744
 
 - 测试查询项目 11 执行 101 browseType 空 queryID 0 的甘特图任务 @1
 - 测试查询项目 11 执行 101 browseType 空 queryID 1 的甘特图任务 @1

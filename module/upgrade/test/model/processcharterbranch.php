@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->processCharterBranch().
 timeout=0
-cid=1
+cid=19540
 
 - 获取立项1的产品和分支
  - 属性product @1

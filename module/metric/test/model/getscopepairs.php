@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getScopePairs();
 timeout=0
-cid=0
+cid=17126
 
 - 获取全部scope的数量 @7
 - 第一个scope的value第0条的value属性 @project

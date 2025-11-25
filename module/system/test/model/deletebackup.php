@@ -5,7 +5,7 @@
 
 title=测试 systemModel::deleteBackup();
 timeout=0
-cid=0
+cid=18729
 
 - 执行systemTest模块的deleteBackupTest方法，参数是$validInstance, 'test-backup-001' 属性result @fail
 - 执行systemTest模块的deleteBackupTest方法，参数是$emptyInstance, 'test-backup-002' 属性result @fail

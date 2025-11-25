@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 branchModel->getPairs();
 timeout=0
-cid=1
+cid=15327
 
 - 获取正常产品下的分支信息 @0
 - 获取多分支产品下的分支信息属性1 @分支1

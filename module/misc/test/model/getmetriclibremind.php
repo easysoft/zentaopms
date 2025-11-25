@@ -12,7 +12,7 @@ su('user1');
 
 title=测试 miscModel->getMetriclibRemind();
 timeout=0
-cid=1
+cid=17211
 
 - 非管理员用户返回空字符串。 @0
 - 管理员用户开源版返回空字符串。 @0

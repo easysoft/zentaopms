@@ -5,7 +5,7 @@
 
 title=测试 taskZen::responseAfterAssignTo();
 timeout=0
-cid=0
+cid=18941
 
 - 步骤1：正常分配任务返回成功响应
  - 属性result @success

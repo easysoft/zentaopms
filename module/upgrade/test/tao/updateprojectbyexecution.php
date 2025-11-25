@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->updateProjectByExecution()。
-cid=1
+cid=19576
 
 - 测试执行id为1和2的执行相关的数据，是否都转移到了项目id为1的项目中。@1
 - 测试执行id为3和4的执行相关的数据，是否都转移到了项目id为2的项目中。@1

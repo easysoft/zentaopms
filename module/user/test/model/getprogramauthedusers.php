@@ -5,7 +5,7 @@
 
 title=测试 userModel::getProgramAuthedUsers();
 timeout=0
-cid=0
+cid=19626
 
 - 步骤1：正常情况 @2
 - 步骤2：包含利益相关者 @4

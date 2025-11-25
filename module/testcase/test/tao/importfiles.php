@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseTao->importFiles();
-cid=1
+cid=19047
 pid=1
 
 - 测试获取case id 21 插入 case id 1 的步骤 @21,22

@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStoryByID();
 timeout=0
-cid=0
+cid=19476
 
 - 步骤1：获取业务需求
  - 属性id @1

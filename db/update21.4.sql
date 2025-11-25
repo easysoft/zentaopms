@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `zt_extuser` (
   `code` varchar(255) NOT NULL,
   `account` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_releaserelated` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -23,7 +23,7 @@ CREATE TABLE `zt_releaserelated` (
   `objectID` int(11) unsigned NOT NULL,
   `objectType` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `objectID` ON `zt_releaserelated` (`objectID`);
 CREATE INDEX `objectType` ON `zt_releaserelated` (`objectType`);
 CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `objectType`);

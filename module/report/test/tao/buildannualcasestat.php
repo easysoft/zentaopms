@@ -5,7 +5,7 @@
 
 title=测试 reportTao::buildAnnualCaseStat();
 timeout=0
-cid=0
+cid=18184
 
 - 步骤1：正常情况 - actionStat检查 @1
 - 步骤2：正常情况 - resultStat检查 @1

@@ -5,7 +5,7 @@
 
 title=测试 repoModel::checkGiteaConnection();
 timeout=0
-cid=0
+cid=18032
 
 - 步骤1：测试参数全为空的情况 @0
 - 步骤2：测试name为空的情况 @0
