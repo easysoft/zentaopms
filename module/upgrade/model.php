@@ -344,7 +344,7 @@ class upgradeModel extends model
             $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
             if($result->rowCount() > 0)
             {
-                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
+                $this->dbh->exec("UPDATE $table SET company = '{$this->app->company->id}'");
             }
         }
     }
@@ -10863,7 +10863,7 @@ class upgradeModel extends model
         if($dbCharset != $serverCharset || $dbCollation != $serverCollation)
         {
             /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
-            $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
+            $this->dbh->exec("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
         }
 
         /* 获取当前数据库中所有表的排序规则。Get all tables collation in current database. */
@@ -10877,7 +10877,7 @@ class upgradeModel extends model
             if($tableCollation == $serverCollation) continue;
 
             /* 转换表的字符集和排序规则。Convert table charset and collation. */
-            $this->dao->query("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            $this->dbh->exec("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
         }
 
         $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
