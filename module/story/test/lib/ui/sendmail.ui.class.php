@@ -14,7 +14,7 @@ class SendmailTester extends tester
     private function renderStoryMail($story)
     {
         global $app;
-        //  以下两个变量在sendmail.html.php模板中会被使用
+        // 以下两个变量在sendmail.html.php模板中会被使用
         $this->app = $app;
         $object    = $story;
 
@@ -55,13 +55,13 @@ class SendmailTester extends tester
      */
     public function testLinkFunctionality($story)
     {
-        $content  = $this->renderStoryMail($story);
-        $expected = helper::createLink('story', 'view', "storyID={$story->id}", 'html');
-        $fullUrl  = rtrim($this->domain ?? '', '/') . $expected;
-        $hasHref  = strpos($content, 'href=') !== false;
+        $content   = $this->renderStoryMail($story);
+        $expected  = helper::createLink('story', 'view', "storyID={$story->id}", 'html');
+        $fullUrl   = rtrim($this->domain ?? '', '/') . $expected;
+        $hasHref   = strpos($content, 'href=') !== false;
         $hasLegend = strpos($content, '<legend') !== false;
-        $hasUrl   = strpos($content, $fullUrl) !== false;
-        $hasSlug  = strpos($content, 'story-view') !== false;
+        $hasUrl    = strpos($content, $fullUrl) !== false;
+        $hasSlug   = strpos($content, 'story-view') !== false;
         if($hasLegend && $hasHref && ($hasUrl || $hasSlug)) return $this->success('需求邮件链接功能验证成功');
         return $this->failed('需求邮件链接生成失败');
     }
@@ -78,13 +78,15 @@ class SendmailTester extends tester
         $mailModel = $uiTester->loadModel('mail');
         $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
         if(!isset($mailModel->config->mail)) $mailModel->config->mail = new stdclass();
+
         $mailModel->config->mail->domain = rtrim($this->domain ?? 'http://localhost', '/');
-        $mailModel->config->webRoot = '/';
-        $mailModel->config->requestType = 'PATH_INFO';
+        $mailModel->config->webRoot      = '/';
+        $mailModel->config->requestType  = 'PATH_INFO';
+
         $object = $mailModel->getObjectForMail('story', (int)$story->id);
         if(!$object)
         {
-            $object = new stdclass();
+            $object        = new stdclass();
             $object->type  = 'story';
             $object->id    = (int)$story->id;
             $object->title = isset($story->title) ? $story->title : 'SendmailTest';
@@ -93,8 +95,8 @@ class SendmailTester extends tester
         }
         else $object->type = $object->type ?: 'story';
 
-        $action = new stdClass();
-        $action->id = 1;
+        $action         = new stdClass();
+        $action->id     = 1;
         $action->action = 'created';
 
         // 通过getMailContent方法获取邮件内容
