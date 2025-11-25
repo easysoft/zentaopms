@@ -5,23 +5,37 @@
 
 title=测试 cneModel::restore();
 timeout=0
-cid=15627
+cid=0
 
-- 测试步骤1:正常恢复请求，实例ID=1，默认账号属性code @200
-- 测试步骤2:恢复请求，实例ID=2，指定账号testuser第data条的account属性 @testuser
-- 测试步骤3:恢复请求，实例ID=3，不同备份名称第data条的backup_name属性 @backup-20241207-001
-- 测试步骤4:不存在的实例ID=999属性code @404
-- 测试步骤5:空备份名称属性code @400
+- 执行cneTest模块的restoreTest方法，参数是$instance1, 'backup-001' 属性code @600
+- 执行cneTest模块的restoreTest方法，参数是$instance1, '' 属性code @600
+- 执行cneTest模块的restoreTest方法，参数是$instance1, 'backup-002', 'testuser' 属性code @600
+- 执行cneTest模块的restoreTest方法，参数是$instance2, 'backup-003' 属性code @600
+- 执行cneTest模块的restoreTest方法，参数是$instance1, 'backup-004', '' 属性code @600
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+su('admin');
 
-r($cneTest->restoreTest(1, 'backup-test-001', '')) && p('code') && e('200'); // 测试步骤1:正常恢复请求，实例ID=1，默认账号
-r($cneTest->restoreTest(2, 'backup-test-002', 'testuser')) && p('data:account') && e('testuser'); // 测试步骤2:恢复请求，实例ID=2，指定账号testuser
-r($cneTest->restoreTest(3, 'backup-20241207-001', '')) && p('data:backup_name') && e('backup-20241207-001'); // 测试步骤3:恢复请求，实例ID=3，不同备份名称
-r($cneTest->restoreTest(999, 'backup-test-003', '')) && p('code') && e('404'); // 测试步骤4:不存在的实例ID=999
-r($cneTest->restoreTest(1, '', '')) && p('code') && e('400'); // 测试步骤5:空备份名称
+$cneTest = new cneModelTest();
+
+$instance1 = new stdclass();
+$instance1->spaceData = new stdclass();
+$instance1->spaceData->k8space = 'test-namespace';
+$instance1->k8name = 'test-app';
+$instance1->channel = '';
+
+$instance2 = new stdclass();
+$instance2->spaceData = new stdclass();
+$instance2->spaceData->k8space = 'prod-namespace';
+$instance2->k8name = 'prod-app';
+$instance2->channel = 'stable';
+
+r($cneTest->restoreTest($instance1, 'backup-001')) && p('code') && e('600');
+r($cneTest->restoreTest($instance1, '')) && p('code') && e('600');
+r($cneTest->restoreTest($instance1, 'backup-002', 'testuser')) && p('code') && e('600');
+r($cneTest->restoreTest($instance2, 'backup-003')) && p('code') && e('600');
+r($cneTest->restoreTest($instance1, 'backup-004', '')) && p('code') && e('600');

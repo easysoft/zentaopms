@@ -542,32 +542,20 @@ class extensionModel extends model
         $sqls = file_get_contents($this->getDBFile($extension, $method));
         $sqls = explode(';', $sqls);
 
+        $this->loadModel('install');
+
         $ignoreCode = '|1050|1060|1062|1091|1169|';
         foreach($sqls as $sql)
         {
             $sql = trim($sql);
             if(empty($sql)) continue;
 
-            /* 将zt_替换成prefix配置项。 */
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-            $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
-            $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
-            $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
-
-            if(strpos($sql, 'CREATE TABLE') === 0)
-            {
-                $sql = substr($sql, 0, stripos($sql, ' DEFAULT CHARSET'));
-                if($this->config->db->driver == 'mysql')
-                {
-                    $result = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
-                    $sql .= " DEFAULT CHARSET {$result['charset']} COLLATE {$result['collation']}";
-                }
-            }
+            $sql = $this->install->replaceContantsInSQL($sql);
+            $sql = $this->install->appendMySQLTableOptions($sql);
 
             try
             {
                 $this->dbh->query($sql);
-
                 $this->dao->setTableCache($sql);
             }
             catch(PDOException $e)

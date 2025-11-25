@@ -5,47 +5,52 @@
 
 title=测试 kanbanTao::refreshERURCards();
 timeout=0
-cid=16990
+cid=0
 
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs0, 999, '', 'story'  @7
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs1, 101, '', 'story'
- - 属性wait @,2,1,
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs2, 101, '', 'story'
- - 属性planned @,3,
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs3, 101, '', 'story' 属性projected @~~
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs4, 101, '', 'story' 属性developing @~~
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs5, 101, '', 'story' 属性delivering @~~
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs6, 101, '', 'story' 属性delivered @~~
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs7, 101, '', 'parentStory'
- - 属性wait @,10,9,
-- 执行kanbanTest模块的refreshERURCardsTest方法，参数是$cardPairs8, 101, '', 'epic'
- - 属性wait @,8,7,6,
+- 步骤1:测试用需(epic)类型需求卡片刷新,处于已计划状态
+ - 属性planned @
+- 步骤2:测试业需(requirement)类型需求卡片刷新,处于已立项状态
+ - 属性projected @
+- 步骤3:测试用需(epic)类型需求,处于已立项状态
+ - 属性projected @
+- 步骤4:测试需求已在列中的情况
+ - 属性planned @
+- 步骤5:测试包含已有卡片的刷新
+ - 属性planned @
 
 */
 
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
+// 2. zendata数据准备(根据需要配置)
+$story = zenData('story');
+$story->id->range('1-20');
+$story->type->range('epic{5},requirement{5},story{10}');
+$story->isParent->range('0,1{4},0{15}');
+$story->stage->range('planned,projected,developing,delivering,delivered,closed,wait,planned,projected,developing,delivered,closed,planned,projected,developing,delivering,delivered,closed,wait,planned');
+$story->status->range('active{15},closed{5}');
+$story->deleted->range('0{18},1{2}');
+$story->gen(20);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('101');
+$projectStory->product->range('1');
+$projectStory->story->range('1-20');
+$projectStory->version->range('1');
+$projectStory->gen(20);
+
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-$kanbanTest = new kanbanTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$kanbanTest = new kanbanTaoTest();
 
-$cardPairs0 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs1 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs2 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs3 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs4 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs5 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs6 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs7 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-$cardPairs8 = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
-
-r(count($kanbanTest->refreshERURCardsTest($cardPairs0, 999, '', 'story'))) && p() && e('7');
-r($kanbanTest->refreshERURCardsTest($cardPairs1, 101, '', 'story')) && p('wait') && e(',2,1,');
-r($kanbanTest->refreshERURCardsTest($cardPairs2, 101, '', 'story')) && p('planned') && e(',3,');
-r($kanbanTest->refreshERURCardsTest($cardPairs3, 101, '', 'story')) && p('projected') && e('~~');
-r($kanbanTest->refreshERURCardsTest($cardPairs4, 101, '', 'story')) && p('developing') && e('~~');
-r($kanbanTest->refreshERURCardsTest($cardPairs5, 101, '', 'story')) && p('delivering') && e('~~');
-r($kanbanTest->refreshERURCardsTest($cardPairs6, 101, '', 'story')) && p('delivered') && e('~~');
-r($kanbanTest->refreshERURCardsTest($cardPairs7, 101, '', 'parentStory')) && p('wait') && e(',10,9,');
-r($kanbanTest->refreshERURCardsTest($cardPairs8, 101, '', 'epic')) && p('wait') && e(',8,7,6,');
+// 5. 强制要求:必须包含至少5个测试步骤
+$cardPairs = array('wait' => '', 'planned' => '', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => '');
+r($kanbanTest->refreshERURCardsTest($cardPairs, 101, '', 'epic')) && p('planned') && e(',1,'); // 步骤1:测试用需(epic)类型需求卡片刷新,处于已计划状态
+r($kanbanTest->refreshERURCardsTest($cardPairs, 101, '', 'requirement')) && p('projected') && e(',9,'); // 步骤2:测试业需(requirement)类型需求卡片刷新,处于已立项状态
+r($kanbanTest->refreshERURCardsTest($cardPairs, 101, '', 'epic')) && p('projected') && e(',2,'); // 步骤3:测试用需(epic)类型需求,处于已立项状态
+r($kanbanTest->refreshERURCardsTest(array('wait' => '', 'planned' => ',1,', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => ''), 101, '', 'epic')) && p('planned') && e(',1,'); // 步骤4:测试需求已在列中的情况
+r($kanbanTest->refreshERURCardsTest(array('wait' => '', 'planned' => ',100,', 'projected' => '', 'developing' => '', 'delivering' => '', 'delivered' => '', 'closed' => ''), 101, '', 'epic')) && p('planned') && e(',1,100,'); // 步骤5:测试包含已有卡片的刷新

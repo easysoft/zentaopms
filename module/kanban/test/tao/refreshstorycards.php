@@ -5,72 +5,59 @@
 
 title=测试 kanbanTao::refreshStoryCards();
 timeout=0
-cid=16991
+cid=0
 
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs0, 999, ''  @10
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs1, 101, ''
- - 属性backlog @
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs2, 101, '' 属性designing @~~
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs3, 101, ''
- - 属性designed @
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs4, 101, '' 属性developing @~~
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs5, 101, ''
- - 属性developed @
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs6, 101, '' 属性testing @~~
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs7, 101, ''
+- 步骤1:测试处于开发中(developing)状态的需求卡片刷新
+ - 属性developing @
+- 步骤2:测试处于已测试(tested)状态的需求卡片刷新
  - 属性tested @
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs8, 101, '' 属性verified @~~
-- 执行kanbanTest模块的refreshStoryCardsTest方法，参数是$cardPairs9, 101, ''
- - 属性closed @
+- 步骤3:测试处于已发布(released)状态的需求卡片刷新
+ - 属性released @
+- 步骤4:测试处于等待和已立项(wait/projected)状态的需求添加到backlog列
+ - 属性backlog @
+- 步骤5:测试包含已有卡片的刷新
+ - 属性developing @
 
 */
 
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
+// 2. zendata数据准备(根据需要配置)
 $project = zenData('project');
-$project->id->range('101,999');
-$project->name->range('项目101,项目999');
-$project->type->range('sprint');
-$project->status->range('doing');
-$project->gen(2);
+$project->id->range('101');
+$project->type->range('project');
+$project->hasProduct->range('1');
+$project->gen(1);
 
 $story = zenData('story');
-$story->id->range('1-10');
+$story->id->range('1-20');
 $story->product->range('1');
-$story->status->range('active');
-$story->stage->range('projected{2},designing,designed,developing,developed,testing,tested,verified,closed');
-$story->title->range('需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10');
-$story->gen(10);
+$story->type->range('story');
+$story->isParent->range('0');
+$story->stage->range('wait,projected,designing,designed,developing,developed,testing,tested,verified,rejected,delivering,delivered,released,closed,wait,projected,developing,tested,released,closed');
+$story->status->range('active{18},closed{2}');
+$story->deleted->range('0{18},1{2}');
+$story->gen(20);
 
 $projectStory = zenData('projectstory');
 $projectStory->project->range('101');
 $projectStory->product->range('1');
-$projectStory->story->range('1-10');
-$projectStory->gen(10);
+$projectStory->story->range('1-20');
+$projectStory->version->range('1');
+$projectStory->gen(20);
 
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-$kanbanTest = new kanbanTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$kanbanTest = new kanbanTaoTest();
 
-$cardPairs0 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs1 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs2 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs3 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs4 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs5 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs6 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs7 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs8 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-$cardPairs9 = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'developing' => '', 'developed' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'closed' => '');
-
-r(count($kanbanTest->refreshStoryCardsTest($cardPairs0, 999, ''))) && p() && e('10');
-r($kanbanTest->refreshStoryCardsTest($cardPairs1, 101, '')) && p('backlog') && e(',2,');
-r($kanbanTest->refreshStoryCardsTest($cardPairs2, 101, '')) && p('designing') && e('~~');
-r($kanbanTest->refreshStoryCardsTest($cardPairs3, 101, '')) && p('designed') && e(',4,');
-r($kanbanTest->refreshStoryCardsTest($cardPairs4, 101, '')) && p('developing') && e('~~');
-r($kanbanTest->refreshStoryCardsTest($cardPairs5, 101, '')) && p('developed') && e(',6,');
-r($kanbanTest->refreshStoryCardsTest($cardPairs6, 101, '')) && p('testing') && e('~~');
-r($kanbanTest->refreshStoryCardsTest($cardPairs7, 101, '')) && p('tested') && e(',8,');
-r($kanbanTest->refreshStoryCardsTest($cardPairs8, 101, '')) && p('verified') && e('~~');
-r($kanbanTest->refreshStoryCardsTest($cardPairs9, 101, '')) && p('closed') && e(',10,');
+// 5. 强制要求:必须包含至少5个测试步骤
+$cardPairs = array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'develop' => '', 'developing' => '', 'developed' => '', 'test' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'rejected' => '', 'pending' => '', 'released' => '', 'closed' => '');
+r($kanbanTest->refreshStoryCardsTest($cardPairs, 101, '')) && p('developing') && e(',17,5,'); // 步骤1:测试处于开发中(developing)状态的需求卡片刷新
+r($kanbanTest->refreshStoryCardsTest($cardPairs, 101, '')) && p('tested') && e(',18,8,'); // 步骤2:测试处于已测试(tested)状态的需求卡片刷新
+r($kanbanTest->refreshStoryCardsTest($cardPairs, 101, '')) && p('released') && e(',13,'); // 步骤3:测试处于已发布(released)状态的需求卡片刷新
+r($kanbanTest->refreshStoryCardsTest($cardPairs, 101, '')) && p('backlog') && e(',16,15,2,1,'); // 步骤4:测试处于等待和已立项(wait/projected)状态的需求添加到backlog列
+r($kanbanTest->refreshStoryCardsTest(array('backlog' => '', 'ready' => '', 'designing' => '', 'designed' => '', 'develop' => '', 'developing' => ',100,', 'developed' => '', 'test' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'rejected' => '', 'pending' => '', 'released' => '', 'closed' => ''), 101, '')) && p('developing') && e(',17,5,100,'); // 步骤5:测试包含已有卡片的刷新

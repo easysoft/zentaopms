@@ -17,7 +17,6 @@ class createExecutionTester extends tester
         $form = $this->loadPage();
         $form->wait(1);
         if(isset($execution['name']))  $form->dom->name->setValue($execution['name']);
-        if(isset($execution['code']))  $form->dom->code->setValue($execution['code']);
         if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
         if(isset($execution['end']))   $form->dom->end->datePicker($execution['end']);
         $form->dom->btn($this->lang->save)->click();
@@ -25,20 +24,18 @@ class createExecutionTester extends tester
     }
 
     /**
-     * 看板名称、看板代号已存在时获取提示信息。
+     * 看板名称已存在时获取提示信息。
      * Get error info of repeat name.
      *
-     * @param  string $field name|code
      * @access public
      * @return bool
      */
-    public function checkRepeatInfo($field)
+    public function checkRepeatInfo()
     {
         $form = $this->loadPage();
         $form->wait(1);
-        $text = $form->dom->{$field . 'Tip'}->getText();
-        if($field == 'name') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->name, $form->dom->name->getValue());
-        if($field == 'code') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->common . $this->lang->code, $form->dom->code->getValue());
+        $text = $form->dom->nameTip->getText();
+        $info = sprintf($this->lang->error->repeat, $this->lang->kanban->name, $form->dom->name->getValue());
 
         return $text == $info;
     }
@@ -106,38 +103,35 @@ class createExecutionTester extends tester
     }
 
     /**
-     * 看板名称、看板代号为空创建执行。
+     * 看板名称为空创建执行。
      *
      * @param  array  $execution
-     * @param  string $field
      * @access public
      * @return object
      */
-    public function createWithEmptyName($execution, $field)
+    public function createWithEmptyName($execution)
     {
         $this->inputFields($execution);
         $form = $this->loadPage();
-        $text = $form->dom->{$field . 'Tip'}->getText();
-        if($field == 'name') $info = sprintf($this->lang->error->notempty, $this->lang->kanban->name);
-        if($field == 'code') $info = sprintf($this->lang->error->notempty, $this->lang->kanban->common . $this->lang->code);
+        $text = $form->dom->nameTip->getText();
+        $info = sprintf($this->lang->error->notempty, $this->lang->kanban->name);
 
         if($text == $info) return $this->success('创建看板表单页提示信息正确');
         return $this->failed('创建看板表单页提示信息不正确');
     }
 
     /**
-     * 看板名称、看板代号已存在创建执行。
-     * Create execution with repeat name or code.
+     * 看板名称已存在创建执行。
+     * Create execution with repeat name.
      *
      * @param  array  $execution
-     * @param  string $field     name|code
      * @access public
      * @return object
      */
-    public function createWithRepeatName($execution, $field)
+    public function createWithRepeatName($execution)
     {
         $this->inputFields($execution);
-        if($this->checkRepeatInfo($field)) return $this->success('创建看板表单页提示信息正确');
+        if($this->checkRepeatInfo()) return $this->success('创建看板表单页提示信息正确');
         return $this->failed('创建看板表单页提示信息不正确');
     }
 

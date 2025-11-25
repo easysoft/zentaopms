@@ -492,10 +492,25 @@ class transferTest
         // 如果模块为空，返回错误信息
         if(empty($module)) return 'Module is empty';
 
-        global $tester, $app;
+        global $tester, $app, $lang;
+
+        // 备份原始session和cookie数据
+        $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
+        $originalSessionExtension = isset($_SESSION['fileImportExtension']) ? $_SESSION['fileImportExtension'] : null;
+        $originalSessionTemplateFields = isset($_SESSION[$module . 'TemplateFields']) ? $_SESSION[$module . 'TemplateFields'] : null;
 
         try
         {
+            // 清除之前的错误状态
+            dao::$errors = array();
+
+            // 确保excel语言包存在
+            if(!isset($lang->excel))
+            {
+                $lang->excel = new stdClass();
+                $lang->excel->noData = '没有数据';
+            }
+
             // 设置临时文件路径和会话数据
             $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
             if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
@@ -516,8 +531,29 @@ class transferTest
             // 初始化配置
             $this->initConfig($module);
 
-            // 通过TAO层调用format方法
-            $result = $this->objectTao->format($module, $filter);
+            // 确保 templateFields 存在
+            if(!isset($app->config->$module->templateFields))
+            {
+                $app->config->$module->templateFields = 'title';
+            }
+
+            // 创建临时数据文件(模拟 checkTmpFile 返回的文件)
+            $tmpFile = $tmpPath . DS . md5(basename($testCSVPath));
+            $testData = array(
+                2 => (object)array('title' => '测试数据1'),
+                3 => (object)array('title' => '测试数据2')
+            );
+            file_put_contents($tmpFile, serialize($testData));
+
+            // 设置 maxImport 让 checkTmpFile 返回 tmpFile
+            $_COOKIE['maxImport'] = 10;
+
+            // 使用反射访问protected方法
+            $reflection = new ReflectionClass($this->objectModel);
+            $method = $reflection->getMethod('format');
+            $method->setAccessible(true);
+            $result = $method->invoke($this->objectModel, $module, $filter);
+
             if(dao::isError()) return dao::getError();
 
             return $result ? 'Success' : 'Failed';
@@ -528,10 +564,43 @@ class transferTest
         }
         finally
         {
+            // 恢复原始数据
+            if($originalSessionFileName !== null)
+            {
+                $_SESSION['fileImportFileName'] = $originalSessionFileName;
+            }
+            elseif(isset($_SESSION['fileImportFileName']))
+            {
+                unset($_SESSION['fileImportFileName']);
+            }
+
+            if($originalSessionExtension !== null)
+            {
+                $_SESSION['fileImportExtension'] = $originalSessionExtension;
+            }
+            elseif(isset($_SESSION['fileImportExtension']))
+            {
+                unset($_SESSION['fileImportExtension']);
+            }
+
+            if($originalSessionTemplateFields !== null)
+            {
+                $_SESSION[$module . 'TemplateFields'] = $originalSessionTemplateFields;
+            }
+            elseif(isset($_SESSION[$module . 'TemplateFields']))
+            {
+                unset($_SESSION[$module . 'TemplateFields']);
+            }
+
             // 清理临时文件
             if(isset($testCSVPath) && file_exists($testCSVPath)) unlink($testCSVPath);
-            if(isset($_SESSION['fileImportFileName'])) unset($_SESSION['fileImportFileName']);
-            if(isset($_SESSION['fileImportExtension'])) unset($_SESSION['fileImportExtension']);
+
+            // 清理临时数据文件
+            if(isset($testCSVPath))
+            {
+                $tmpFile = $tmpPath . DS . md5(basename($testCSVPath));
+                if(file_exists($tmpFile)) unlink($tmpFile);
+            }
         }
     }
 

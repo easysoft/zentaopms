@@ -465,7 +465,7 @@ class testtask extends control
         }
 
         $task = $this->testtask->getByID($taskID);
-        $this->testtaskZen->setMenu($task->product, $branchID, $projectID, $task->execution, $task);
+        $this->testtaskZen->setMenu($task->product, $branchID, $task->project, $task->execution, $task);
         $this->testtaskZen->setDropMenu($task->product, $task);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/

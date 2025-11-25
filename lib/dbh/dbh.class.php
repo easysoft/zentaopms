@@ -478,7 +478,7 @@ class dbh
         {
             case 'mysql':
                 $result = $this->getServerCharsetAndCollation();
-                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
+                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` DEFAULT CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
                 return $this->rawQuery($sql);
             case 'dm':
                 $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
