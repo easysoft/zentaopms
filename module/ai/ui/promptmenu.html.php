@@ -56,7 +56,7 @@ $promptMenuInject = function()
     $objectVarName   = empty($menuOptions->objectVarName) ? $menuOptions->module : $menuOptions->objectVarName;
     $currentObjectId = !empty($this->view->$objectVarName) ? $this->view->$objectVarName->id : 0;
     $btnName         = sprintf($this->lang->ai->promptMenu->dropdownTitle, isset($this->lang->ai->dataSource[$module]['common']) ? $this->lang->ai->dataSource[$module]['common'] : '');
-    $html .= '<div class="prompts dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn ai-styled size-sm size-sm font-medium' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown" data-placement="' . zget($menuOptions, 'buttonPlacement', 'bottom-end') . '">' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
+    $html .= '<div class="prompts dropdown inline-block' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn ai-styled size-sm size-sm font-medium' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown" data-placement="' . zget($menuOptions, 'buttonPlacement', 'bottom-end') . '">' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
     foreach($prompts as $prompt)
     {
         $html .= '<li class="menu-item">';
