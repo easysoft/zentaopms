@@ -1570,6 +1570,9 @@ class doc extends control
      * 设置选择文档库类型的范围。
      * Set the scope of the document library type to be selected.
      *
+     * @param  string $objectType
+     * @param  string $params
+     * @param  string $from
      * @access public
      * @return void
      */

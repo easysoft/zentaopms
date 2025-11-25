@@ -115,9 +115,11 @@ window.reloadApi = function()
 /**
  * Redirect the parent window.
  *
- * @param  string objectType
- * @param  int    libID
- * @param  string docType
+ * @param  string link
+ * @param  string from
+ * @param  string spaceID
+ * @param  string libID
+ * @param  string moduleID
  * @access public
  * @return void
  */
