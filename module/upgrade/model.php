@@ -9388,7 +9388,7 @@ class upgradeModel extends model
             $data->app = $app;
             foreach($appModules as $module => $options)
             {
-                if($importModule && $importModule != $module) continue;
+                if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
                 $this->app->loadLang($module);
 
@@ -9420,7 +9420,7 @@ class upgradeModel extends model
         $data->createdDate   = $now;
         foreach($actions as $module => $moduleActions)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $data->module = $module;
             foreach($moduleActions as $action)
@@ -9468,7 +9468,7 @@ class upgradeModel extends model
         $data->createdDate = $now;
         foreach($fields as $module => $moduleFields)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $order = 1;
             $data->module = $module;
@@ -9509,7 +9509,7 @@ class upgradeModel extends model
         $data = new stdclass();
         foreach($layouts as $module => $moduleLayouts)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $data->module = $module;
             foreach($moduleLayouts as $action => $layoutFields)
@@ -9547,7 +9547,7 @@ class upgradeModel extends model
         {
             foreach($appModules as $module => $options)
             {
-                if($importModule && $importModule != $module) continue;
+                if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
                 $labels = array();
                 if($module == 'product')
