@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
   `sql`        text          NULL,
   `setting`    text          NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 DELETE t1
 FROM `zt_workflowlayout` t1

@@ -1144,6 +1144,8 @@ class taskZen extends task
             /* Check if the required fields are empty. */
             foreach($requiredFields as $field)
             {
+                if($field == 'estimate' && $this->post->isParent[$rowIndex] == '1') continue;
+
                 if(empty($task->$field)) dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
             }
         }

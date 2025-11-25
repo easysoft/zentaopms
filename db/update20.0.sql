@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
     `publishedDate` datetime DEFAULT NULL,
     `deleted` enum('0','1') NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_kanbancell` MODIFY `cards` mediumtext NULL;
 ALTER TABLE `zt_user` MODIFY `ip` varchar(255) NOT NULL DEFAULT '';

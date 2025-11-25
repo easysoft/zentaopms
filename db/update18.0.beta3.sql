@@ -94,7 +94,7 @@ CREATE TABLE `zt_image` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_automation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -105,7 +105,7 @@ CREATE TABLE `zt_automation` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_repofiles` ADD `oldPath` varchar(255) DEFAULT '' AFTER `path`;
 ALTER TABLE `zt_case` ADD `script` longtext NOT NULL AFTER `howRun`;

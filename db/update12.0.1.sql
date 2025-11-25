@@ -1,4 +1,4 @@
-ALTER TABLE `zt_story` CHANGE `type` `type` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'story' AFTER `keywords`;
+ALTER TABLE `zt_story` CHANGE `type` `type` varchar(30) NOT NULL DEFAULT 'story' AFTER `keywords`;
 UPDATE zt_story SET `type` = 'story' WHERE `type` = '';
 
 CREATE TABLE IF NOT EXISTS `zt_jenkins` (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `zt_jenkins` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `zt_job` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `lastTag` varchar(255) DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `zt_compile` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `updateDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('1',    '0',    '*',    '*',    '*',    'moduleName=ci&methodName=initQueue', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),

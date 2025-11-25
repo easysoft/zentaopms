@@ -76,10 +76,11 @@ window.executeZentaoPrompt = async function(info, auto)
             type: 'object',
             properties:
             {
-                data:    info.schema,
-                title:   {type: 'string',description: langData.promptResultTitle},
-                explain: {type: 'string',description: langData.changeExplainDesc},
-            }
+                data:     info.schema,
+                title:    {type: 'string', description: langData.promptResultTitle},
+                explain:  {type: 'string', description: langData.changeExplainDesc},
+            },
+            required: ['data', 'explain'],
         },
         fn: (response) => {
             const result     = response.data;
@@ -162,20 +163,17 @@ window.executeZentaoPrompt = async function(info, auto)
             };
         },
     }];
-    const postMessage = {
-        content  : info.name,
-        prompt   : [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n'),
-        chatTools: tools,
-        model    : info.model,
-        chatType : 'agent',
+    const postMessage =
+    {
+        content: info.name,
+        chat:    {type: 'agent', model: info.model, tools: tools, prompt: [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n')},
     };
-    zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: 600, postMessage: postMessage});
+    zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: info.content ? 800 : 600, postMessage: postMessage});
 };
 
 function registerZentaoAIPlugin(lang)
 {
-    const TWO_BREAKS = '\n\n';
-    const plugin     = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
+    const plugin = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
 
     plugin.defineAgent('storyReviewer',
     {
@@ -226,22 +224,22 @@ function registerZentaoAIPlugin(lang)
         recommend: true,
         when: () => $.apps,
         data: () => {
-            const pageWindow = $.apps.getLastApp().iframe.contentWindow;
-            const page$ = pageWindow.$;
+            const pageWindow     = $.apps.getLastApp().iframe.contentWindow;
+            const page$          = pageWindow.$;
             const $mainContainer = page$('#mainContainer');
-            const pageContent = $mainContainer.length ? $mainContainer.text() : page$('body').text();
+            const pageContent    = $mainContainer.length ? $mainContainer.text() : page$('body').text();
             return {
                 prompt: [
                     `当前页面标题：${document.title}`,
                     "当前页面内容：",
                     pageContent
-                ].join(TWO_BREAKS)
+                ].join('\n\n')
             };
         },
-        generate: (userPrompt, {plugin}) => {
+        generate: ({userPrompt}) => {
             if(new RegExp(`@(${lang.currentPage})`, 'i').test(userPrompt)) return {};
         }
-    })
+    });
 
     const objectIcons = {
         story   : 'file-text',
@@ -266,7 +264,7 @@ function registerZentaoAIPlugin(lang)
             {
                 memory: {collections: ['$global'], content_filter: {attrs: {objectType}}},
             },
-            generate: (userPrompt) => {
+            generate: ({userPrompt}) => {
                 const objectName = lang[objectType] || objectType;
                 const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
                 if(matches.length)
@@ -313,9 +311,9 @@ function registerZentaoAIPlugin(lang)
             const editor     = page$("[z-use-editor]").zui();
             const html       = await editor.getHtml();
             const text       = $(html).text();
-            return {prompt: ["当前文档内容：", text].join(TWO_BREAKS)};
+            return {prompt: ["当前文档内容：", text].join('\n\n')};
         },
-        generate: (userPrompt, { plugin }) => {
+        generate: ({userPrompt}) => {
             if (new RegExp(`@(${lang.currentDocContent})`, 'i').test(userPrompt)) return {};
         }
     });
@@ -355,18 +353,14 @@ function bindAICommandsInApp(win, delay)
 
 $(() =>
 {
-    if(getZentaoPageType() !== 'home')
-    {
-        bindAICommandsInApp(window);
-        return;
-    }
+    if(getZentaoPageType() !== 'home') return bindAICommandsInApp(window);
 
     const zentaoConfig = window.config
     if(!zentaoConfig || zentaoConfig.currentModule !== 'index' || zentaoConfig.currentMethod !== 'index') return;
 
     const zaiConfig = window.zai || window.top.zai;
     if(zaiConfig)
-    {;
+    {
         registerZentaoAIPlugin(zaiLang);
 
         const aiStore = zui.ZAIStore.createFromZentao(zaiConfig);

@@ -148,7 +148,11 @@ class install extends control
 
             $myConfig = array();
             foreach($data as $key => $value) $myConfig[$key] = $value;
-            $myConfig['dbCollation'] = $this->install->dbh->getDatabaseCollation();
+
+            $result = $this->install->dbh->getDatabaseCharsetAndCollation($myConfig['dbName']);
+            $myConfig['dbEncoding']  = $result['charset'];
+            $myConfig['dbCollation'] = $result['collation'];
+
             $this->session->set('myConfig', $myConfig);
             return $this->send(array('result' => 'success', 'load' => inlink('showTableProgress')));
         }
@@ -206,9 +210,8 @@ class install extends control
 
         $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
         $this->config->db = $config->db;
-        $version          = $this->install->getDatabaseVersion();
         $isClearDB        = isset($config->post->clearDB) ? $config->post->clearDB : 0;
-        if($this->install->createTable($version, true, $isClearDB)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
+        if($this->install->createTable(true, $isClearDB)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
     }
 
     /**

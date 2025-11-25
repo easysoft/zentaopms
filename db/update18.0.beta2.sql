@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `editedDate` datetime NOT NULL,
   `deleted` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_screen` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_chart` ADD `dimension` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `name`;
 ALTER TABLE `zt_chart` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `type`;

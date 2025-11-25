@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `desc` char(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 -- 20100115: 重新修改release的结构。
 DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `desc` text NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`)
-  ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- 20100115: fix bug 14
-ALTER TABLE `zt_productPlan` CHANGE `title` `title` VARCHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-CHANGE `desc` `desc` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_productPlan` CHANGE `title` `title` VARCHAR( 90 ) NOT NULL,
+CHANGE `desc` `desc` VARCHAR( 255 ) NOT NULL;
 
 -- 20100125 user表增加status字段。
 ALTER TABLE `zt_user` ADD `status` VARCHAR( 30 ) NOT NULL DEFAULT 'active',

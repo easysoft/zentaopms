@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `zt_system` (
   `editedDate` DATETIME NULL,
   `deleted` ENUM('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_product` ON `zt_system`(`product`);
 CREATE INDEX `idx_status` ON `zt_system`(`status`);
 
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `settings` text NULL,
   `filters` text NULL,
   `createdDate` datetime NULL
-) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `idx_pivot_version` ON `zt_pivotspec`(`pivot`, `version`);
 
 ALTER TABLE `zt_pivot` ADD `version` varchar(10) NOT NULL DEFAULT '1' AFTER `builtin`;
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `zt_mark` (
   `mark` varchar(50) NOT NULL DEFAULT '',
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `idx_object` ON `zt_mark`(`objectType`,`objectID`);
 CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 

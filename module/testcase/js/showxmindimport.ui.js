@@ -1075,6 +1075,10 @@ ztmindmap.Wraper.prototype.paserXmindNode = function(nodeData, level)
         obj.$.type = "stepGroup";
         obj.$.typeBy.import = true;
     }
+    else
+    {
+        obj.text = nodeData.title;
+    }
 
     return obj;
 

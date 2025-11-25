@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `lastEditedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_workflowgroup` ADD `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowgroup` ADD COLUMN `deliverable` text NULL AFTER `editedDate`;

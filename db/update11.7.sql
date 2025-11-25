@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `lastSync` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_repobranch`;
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_repohistory`;
 CREATE TABLE IF NOT EXISTS `zt_repohistory` (
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
   PRIMARY KEY (`id`),
   KEY `repo` (`repo`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
@@ -56,15 +56,15 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   KEY `parent` (`parent`),
   KEY `repo` (`repo`),
   KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_bug` CHANGE `caseVersion` `caseVersion` smallint(6) NOT NULL DEFAULT 1 AFTER `case`;
 ALTER TABLE `zt_bug` ADD `repo` mediumint(8) unsigned NOT NULL AFTER `result`;
-ALTER TABLE `zt_bug` ADD `lines` varchar(10) COLLATE 'utf8_general_ci' NOT NULL AFTER `repo`;
-ALTER TABLE `zt_bug` ADD `v1` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFTER `lines`;
-ALTER TABLE `zt_bug` ADD `v2` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFTER `v1`;
-ALTER TABLE `zt_bug` ADD `repoType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `v2`;
-ALTER TABLE `zt_bug` ADD `entry` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `repo`;
+ALTER TABLE `zt_bug` ADD `lines` varchar(10) NOT NULL AFTER `repo`;
+ALTER TABLE `zt_bug` ADD `v1` varchar(40) NOT NULL AFTER `lines`;
+ALTER TABLE `zt_bug` ADD `v2` varchar(40) NOT NULL AFTER `v1`;
+ALTER TABLE `zt_bug` ADD `repoType` varchar(30) NOT NULL DEFAULT '' AFTER `v2`;
+ALTER TABLE `zt_bug` ADD `entry` varchar(255) NOT NULL AFTER `repo`;
 ALTER TABLE `zt_repobranch` ADD INDEX `revision` (`revision`);
 
 DELETE FROM `zt_grouppriv` WHERE `module` = 'api' AND `method` = 'sql';

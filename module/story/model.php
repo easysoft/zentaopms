@@ -4078,6 +4078,26 @@ class storyModel extends model
             ->fi()
             ->fetchAll('id');
 
+        /* 获取关联对象。*/
+        if($this->config->edition != 'open')
+        {
+            $requirements = array();
+            $childStories = array();
+            foreach($children as $child)
+            {
+                if($child->type == 'requirement') $requirements[$child->id] = $child->id;
+                if($child->type == 'story') $childStories[$child->id] = $child->id;
+            }
+            $this->loadModel('custom');
+            $requirementRelatedObjectList = $this->custom->getRelatedObjectList($requirements, 'requirement', 'byRelation', true);
+            $storyRelatedObjectList       = $this->custom->getRelatedObjectList($childStories, 'story', 'byRelation', true);
+            foreach($children as $child)
+            {
+                if($child->type == 'requirement') $child->relatedObject = zget($requirementRelatedObjectList, $child->id, 0);
+                if($child->type == 'story')       $child->relatedObject = zget($storyRelatedObjectList, $child->id, 0);
+            }
+        }
+
         if($children)
         {
             $children = $this->storyTao->mergePlanTitleAndChildren($productID, $children, $storyType);
