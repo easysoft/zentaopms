@@ -226,8 +226,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '项目变更状态',     'projectchangeStatus',       '1', 'rnd', 'admin', null, 'projectchangeStatus',       '', '', ''),
 ('lang', '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd', 'admin', null, 'projectchangeReviewResult', '', '', '');
 
-ALTER TABLE `zt_story`   ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `verifiedDate`;
-ALTER TABLE `zt_design`  ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `desc`;
-ALTER TABLE `zt_project` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `vision`;
-ALTER TABLE `zt_doc`     ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `builtIn`;
-ALTER TABLE `zt_projectdeliverable` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `version`;
+ALTER TABLE `zt_story`   ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `verifiedDate` COMMENT '是否基线';
+ALTER TABLE `zt_design`  ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `desc` COMMENT '是否基线';
+ALTER TABLE `zt_project` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `vision` COMMENT '是否基线';
+ALTER TABLE `zt_doc`     ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `builtIn` COMMENT '是否基线';
+ALTER TABLE `zt_projectdeliverable` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `version` COMMENT '是否基线';
