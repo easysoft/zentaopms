@@ -225,3 +225,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '项目变更类型',     'projectchangeTypeList',     '1', 'rnd', 'admin', null, 'projectchangeTypeList',     '', '', ''),
 ('lang', '项目变更状态',     'projectchangeStatus',       '1', 'rnd', 'admin', null, 'projectchangeStatus',       '', '', ''),
 ('lang', '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd', 'admin', null, 'projectchangeReviewResult', '', '', '');
+
+ALTER TABLE `zt_story`   ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `verifiedDate`;
+ALTER TABLE `zt_design`  ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `desc`;
+ALTER TABLE `zt_project` ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `vision`;
+ALTER TABLE `zt_doc`     ADD `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 AFTER `builtIn`;
