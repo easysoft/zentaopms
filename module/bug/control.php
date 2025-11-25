@@ -1373,6 +1373,7 @@ class bug extends control
         $bug->id           = $bugID;
         $bug->storyVersion = $oldBug->latestStoryVersion;
         $this->bug->update($bug);
+        $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $oldBug->latestStoryVersion);
 
         $message = $this->executeHooks($bugID);
 
