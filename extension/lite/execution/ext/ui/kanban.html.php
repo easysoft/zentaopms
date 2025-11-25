@@ -236,12 +236,14 @@ toolbar
 div
 (
     set::id('kanbanList'),
-    setClass('bg-canvas'),
     zui::kanbanList
     (
+        set('$replace', false),
         set::key('kanban'),
         set::items($kanbanList),
-        set::height('calc(100vh - 120px)')
+        set::height('calc(100vh - 120px)'),
+        set::selectable(true),
+        set::showLinkOnSelected(true)
     )
 );
 
