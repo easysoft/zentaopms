@@ -450,7 +450,7 @@ CREATE TABLE `zt_approval` (
   `createdDate` int(11) NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalflow` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -463,7 +463,7 @@ CREATE TABLE `zt_approvalflow` (
   `type` varchar(30) NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalflowobject` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -473,7 +473,7 @@ CREATE TABLE `zt_approvalflowobject` (
   `objectID` mediumint(9) NOT NULL,
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalflowspec` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -483,7 +483,7 @@ CREATE TABLE `zt_approvalflowspec` (
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalnode` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -504,7 +504,7 @@ CREATE TABLE `zt_approvalnode` (
   `reviewedBy` char(30) NOT NULL,
   `reviewedDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalobject` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -513,7 +513,7 @@ CREATE TABLE `zt_approvalobject` (
   `objectID` mediumint(8) NOT NULL,
   `extra` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE `zt_approvalrole` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -523,7 +523,7 @@ CREATE TABLE `zt_approvalrole` (
   `users` longtext NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `type`, `deleted`) VALUES
 (1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', 'project', 0);

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `date`     ON `zt_actionrecent`(`date`);
 CREATE INDEX `actor`    ON `zt_actionrecent`(`actor`);
 CREATE INDEX `project`  ON `zt_actionrecent`(`project`);

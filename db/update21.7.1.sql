@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `zt_solution`;
 CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
   `action` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB;
 CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 CREATE INDEX `product` ON `zt_actionproduct`(`product`);
 

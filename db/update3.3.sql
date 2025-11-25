@@ -1,4 +1,4 @@
-ALTER TABLE  `zt_user` ADD  `fails` TINYINT( 5 ) NOT NULL DEFAULT  '0' AFTER  `last` ,
+ALTER TABLE  `zt_user` ADD  `fails` TINYINT( 5 ) NOT NULL DEFAULT  '0' AFTER  `last`,
 ADD  `locked` DATE NOT NULL DEFAULT  '0000-00-00' AFTER  `fails`;
 ALTER TABLE  `zt_user` CHANGE  `locked`  `locked` DATETIME NOT NULL DEFAULT  '0000-00-00 00:00:00';
 
@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS `zt_webapp` (
   `addType` varchar(20) NOT NULL default 'system',
   `views` mediumint(9) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=MyISAM;

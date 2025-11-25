@@ -21,7 +21,7 @@ CREATE TABLE `zt_testtaskproduct` (
   `execution` int unsigned NOT NULL default 0 COMMENT '所属执行',
   `project` int unsigned NOT NULL default 0 COMMENT '所属项目',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`,`task`);
 
 ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
@@ -34,4 +34,10 @@ CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `uk_spaceuser` ON `zt_ops_spaceuser` (`space`,`account`);
 
+ALTER TABLE `zt_repo` ADD `space` int unsigned NOT NULL DEFAULT 0 AFTER `id`;
+ALTER TABLE `zt_artifactrepo` ADD `space` int unsigned NOT NULL DEFAULT 0 AFTER `id`;
 ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;
+
+UPDATE `zt_testtask` SET `build` = 0 WHERE `build` = 'trunk' OR `build` = '' OR `build` IS NULL;
+
+ALTER TABLE `zt_testtask` MODIFY `build` int unsigned NOT NULL DEFAULT 0;

@@ -17,7 +17,7 @@ CREATE TABLE `zt_kanbanspace` (
   `closedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_kanban`;
 CREATE TABLE `zt_kanban` (
@@ -40,7 +40,7 @@ CREATE TABLE `zt_kanban` (
   `closedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_kanbanregion`;
 CREATE TABLE `zt_kanbanregion` (
@@ -55,7 +55,7 @@ CREATE TABLE `zt_kanbanregion` (
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_kanbancard`;
 CREATE TABLE `zt_kanbancard` (
@@ -87,7 +87,7 @@ CREATE TABLE `zt_kanbancard` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
@@ -96,7 +96,7 @@ CREATE TABLE `zt_kanbangroup` (
   `region` mediumint(8) unsigned NOT NULL,
   `order` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
@@ -115,14 +115,14 @@ ALTER TABLE `zt_bug` ADD `mr` mediumint(8) unsigned NOT NULL AFTER `repo`;
 
 UPDATE `zt_grouppriv` SET `method`='addReview' where `module`='mr' and `method`='addBug';
 
-ALTER TABLE `zt_repo` ADD `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0' AFTER `extra`;
+ALTER TABLE `zt_repo` ADD `preMerge` enum('0','1') NOT NULL DEFAULT '0' AFTER `extra`;
 ALTER TABLE `zt_repo` ADD `job` mediumint unsigned NOT NULL AFTER `preMerge`;
-ALTER TABLE `zt_mr` ADD `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1';
-ALTER TABLE `zt_mr` ADD `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0';
-ALTER TABLE `zt_mr` ADD `diffs` longtext COLLATE 'utf8_general_ci' NULL AFTER `synced`;
+ALTER TABLE `zt_mr` ADD `synced` enum('0','1') NOT NULL DEFAULT '1';
+ALTER TABLE `zt_mr` ADD `hasNoConflict` enum('0','1') NOT NULL DEFAULT '0';
+ALTER TABLE `zt_mr` ADD `diffs` longtext NULL AFTER `synced`;
 ALTER TABLE `zt_mr` ADD `removeSourceBranch` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `compileStatus`;
 ALTER TABLE `zt_mr` ADD `syncError` VARCHAR(255) NOT NULL AFTER `synced`;
 
-ALTER TABLE zt_repo ADD `fileServerUrl` text COLLATE 'utf8_general_ci' NULL AFTER `job`;
+ALTER TABLE zt_repo ADD `fileServerUrl` text NULL AFTER `job`;
 ALTER TABLE zt_repo ADD `fileServerAccount` varchar(40) NOT NULL default '' AFTER `fileServerUrl`;
 ALTER TABLE zt_repo ADD `fileServerPassword` varchar(100) NOT NULL default '' AFTER `fileServerAccount`;

@@ -16,6 +16,7 @@ $lang->testreport->bugTitle    = 'Bug Titel';
 $lang->testreport->storyTitle  = 'Story Titel';
 $lang->testreport->project     = $lang->projectCommon;
 $lang->testreport->execution   = 'Execution';
+$lang->testreport->object      = "{$lang->projectCommon}/Execution";
 $lang->testreport->testtask    = 'Test Task';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = 'Start&Ende';

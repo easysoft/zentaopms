@@ -57,5 +57,5 @@ CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `plan` varchar(255) NOT NULL DEFAULT '',
   `roadmap` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);

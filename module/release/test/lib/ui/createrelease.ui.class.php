@@ -21,6 +21,7 @@ class createReleaseTeaster extends Tester
 
         /* 查看跳转页面*/
         $viewPage = $this->loadPage('release', 'view');
+        $viewPage->wait(3);
         $viewPage->dom->releaseInfo->click();
 
         /*检查发布信息*/

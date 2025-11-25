@@ -1,5 +1,5 @@
 ALTER TABLE `zt_vmtemplate` ADD COLUMN `name` varchar(255) NOT NULL AFTER `id`;
-ALTER TABLE `zt_vmtemplate` CHANGE COLUMN `status` `osVersion`  varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' AFTER `osCategory`;
+ALTER TABLE `zt_vmtemplate` CHANGE COLUMN `status` `osVersion`  varchar(50) NOT NULL DEFAULT '' AFTER `osCategory`;
 ALTER TABLE `zt_vmtemplate` ADD COLUMN `osLang` varchar(50) NOT NULL AFTER `osVersion`;
 ALTER TABLE `zt_vmtemplate` ADD COLUMN `osArch` varchar(50) NOT NULL AFTER `osLang`;
 ALTER TABLE `zt_vmtemplate` ADD COLUMN `cpuCoreNum` smallint(4) NOT NULL DEFAULT 0 AFTER `osLang`;

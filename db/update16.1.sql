@@ -7,7 +7,7 @@ CREATE TABLE `zt_kanbancell` (
   `cards` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_kanban` ADD `displayCards` smallint(6) NOT NULL default '0' AFTER `order`;
 ALTER TABLE `zt_project` ADD `displayCards` smallint(6) NOT NULL default '0' AFTER `order`;

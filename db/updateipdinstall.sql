@@ -10,7 +10,7 @@ CREATE TABLE `zt_demandpool` (
   `acl` char(30) NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_demand` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -55,7 +55,7 @@ CREATE TABLE `zt_demand` (
   `distributedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_demandspec` (
   `demand` mediumint(9) NOT NULL DEFAULT '0',
@@ -64,7 +64,7 @@ CREATE TABLE `zt_demandspec` (
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
   `files` text NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 CREATE TABLE `zt_demandreview` (
@@ -73,7 +73,7 @@ CREATE TABLE `zt_demandreview` (
   `reviewer` varchar(30) NOT NULL DEFAULT '',
   `result` varchar(30) NOT NULL DEFAULT '',
   `reviewDate` datetime NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
 CREATE TABLE `zt_charter` (
@@ -107,7 +107,7 @@ CREATE TABLE `zt_charter` (
   `meetingMinutes` mediumtext NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'reviewRules', 'allpass');
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'needReview', 1);
@@ -115,7 +115,7 @@ REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`
 ALTER TABLE `zt_story` ADD `BSA` char(30) NOT NULL AFTER `notifyEmail`;
 ALTER TABLE `zt_story` ADD `duration` char(30) NOT NULL AFTER `notifyEmail`;
 ALTER TABLE `zt_story` ADD `demand` mediumint(8)  NOT NULL AFTER `notifyEmail`;
-ALTER TABLE `zt_product` ADD `PMT` text COLLATE 'utf8_general_ci' NOT NULL AFTER `reviewer`;
+ALTER TABLE `zt_product` ADD `PMT` text NOT NULL AFTER `reviewer`;
 ALTER TABLE `zt_story` ADD `submitedBy` varchar(30) NOT NULL AFTER `changedDate`;
 ALTER TABLE `zt_story` ADD `roadmap` VARCHAR(255)  NOT NULL  DEFAULT ''  AFTER `plan`;
 
@@ -135,19 +135,19 @@ CREATE TABLE `zt_roadmap` (
   `closedReason` enum('done','canceled') DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE `zt_roadmapstory` (
   `roadmap` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` MEDIUMINT  UNSIGNED  NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `roadmap_story` ON `zt_roadmapstory`(`roadmap`,`story`);
 
 ALTER TABLE `zt_story` MODIFY `status` enum('','changing','active','draft','closed','reviewing','launched','developing') NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_project` ADD `charter` mediumint(8) NOT NULL DEFAULT 0 AFTER `project`;
-ALTER TABLE `zt_project` ADD `category` char(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_project` ADD `category` char(30) NOT NULL DEFAULT '' AFTER `type`;
 
 DELETE FROM `zt_stage` WHERE `projectType` = 'ipd';
 REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `projectType`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES

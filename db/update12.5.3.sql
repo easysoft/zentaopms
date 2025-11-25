@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
  `editedBy` char(30) NOT NULL,
  `editedDate` date NOT NULL,
  `deleted` enum('0','1') NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_expect`;
 CREATE TABLE IF NOT EXISTS `zt_expect` (
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `zt_expect` (
   `createdBy` char(30) NOT NULL,
   `createdDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectspec` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   UNIQUE KEY `project` (`project`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE `zt_projectcase` (
@@ -124,7 +124,7 @@ CREATE TABLE `zt_projectcase` (
   `version` smallint(6) NOT NULL DEFAULT '1',
   `order` smallint(6) unsigned NOT NULL,
   UNIQUE KEY `project` (`project`,`case`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_task` ADD `design` mediumint(8) unsigned NOT NULL AFTER `module`;
 ALTER TABLE `zt_task` ADD `version` smallint(6) NOT NULL AFTER `desc`;
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
   `estStarted` date NOT NULL,
   `deadline` date NOT NULL,
   UNIQUE KEY `task` (`task`,`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 ALTER TABLE `zt_block` ADD `type` char(30) NOT NULL AFTER `module`;
 ALTER TABLE `zt_block` ADD UNIQUE `account_module_type_order` (`account`, `module`, `type`, `order`), DROP INDEX `accountModuleOrder`;
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `zt_planstory` (
   `story` mediumint(8) unsigned NOT NULL,
   `order` mediumint(9) NOT NULL,
   UNIQUE KEY `unique` (`plan`,`story`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `zt_acl` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
   `type` char(40) NOT NULL DEFAULT 'whitelist',
   `source` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
@@ -184,14 +184,14 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   KEY `addedDate` (`addedDate`),
   FULLTEXT KEY `content` (`content`),
   FULLTEXT KEY `title` (`title`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   `key` smallint(5) unsigned NOT NULL,
   `value` char(3) NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,  'product',      'dashboard'),

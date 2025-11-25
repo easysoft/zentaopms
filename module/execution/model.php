@@ -5003,6 +5003,18 @@ class executionModel extends model
         $this->loadModel('task');
         $this->app->loadConfig('project');
 
+        $flowActionConditions = array();
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+
+            $flowActions = $this->loadModel('workflowaction')->getList('task');
+            foreach($flowActions as $flowAction)
+            {
+                if(!empty($flowAction->conditions)) $flowActionConditions[$flowAction->action] = $flowAction->conditions;
+            }
+        }
+
         foreach($tasks as $task)
         {
             if(!$canModify) continue;
@@ -5024,7 +5036,9 @@ class executionModel extends model
                     if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
 
                     $clickable = $this->task->isClickable($task, $rawAction);
-                    $action    = array('name' => $action);
+                    if($clickable && !empty($flowActionConditions[$rawAction])) $clickable = $this->flow->checkConditions($flowActionConditions[$rawAction], $task);
+
+                    $action = array('name' => $action);
                     if(!$clickable) $action['disabled'] = true;
                     $task->actions[] = $action;
                 }

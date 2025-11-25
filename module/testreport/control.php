@@ -132,7 +132,7 @@ class testreport extends control
         $this->view->extra        = $extra;
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
         $this->view->tasks        = $tasks ? $this->loadModel('testtask')->getPairsByList($tasks) : array();
-        $this->view->executions   = $executions ? $this->loadModel('execution')->getPairsByList($executions) : array();
+        $this->view->executions   = $this->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs();
         $this->view->canBeChanged = common::canModify($objectType, $object); // Determines whether an object is editable.
         $this->display();
     }

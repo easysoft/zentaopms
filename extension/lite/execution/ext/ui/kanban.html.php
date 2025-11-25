@@ -203,7 +203,7 @@ toolbar
                 array
                 (
                     'class' => 'btn ghost btn-default',
-                    'url'   => 'javascript:fullScreen();',
+                    'url'   => 'javascript:$("#kanbanList").fullscreen();',
                     'icon'  => 'fullscreen'
                 )
             ),
@@ -236,6 +236,7 @@ toolbar
 div
 (
     set::id('kanbanList'),
+    setClass('bg-canvas'),
     zui::kanbanList
     (
         set::key('kanban'),

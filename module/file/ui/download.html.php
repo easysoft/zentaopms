@@ -22,28 +22,6 @@ if(!empty($error))
 }
 else
 {
-    $fileContent = trim(file_get_contents($file->realPath));
-    $fromOld     = !empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'ajaxIframeModal') !== false;
-    if($charset != $config->charset)
-    {
-        $fileContent = helper::convertEncoding($fileContent, $charset . "//IGNORE", $config->charset);
-    }
-    else
-    {
-        if(extension_loaded('mbstring'))
-        {
-            $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
-            if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, (string)$encoding, $config->charset);
-        }
-        else
-        {
-            $encoding = 'UTF-8';
-            if($config->default->lang == 'zh-cn') $encoding = 'GBK';
-            if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
-            $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
-        }
-    }
-
     modalHeader
     (
         set::title($lang->file->preview),
@@ -55,6 +33,8 @@ else
             )
         ) : null
     );
+
+    $fromOld = !empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'ajaxIframeModal') !== false;
 
     if($fileType == 'image')
     {
@@ -79,6 +59,27 @@ else
     }
     else
     {
+        $fileContent = trim(file_get_contents($file->realPath));
+        if($charset != $config->charset)
+        {
+            $fileContent = helper::convertEncoding($fileContent, $charset . "//IGNORE", $config->charset);
+        }
+        else
+        {
+            if(extension_loaded('mbstring'))
+            {
+                $encoding = mb_detect_encoding($fileContent, array('ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5'));
+                if($encoding != 'UTF-8') $fileContent = helper::convertEncoding($fileContent, (string)$encoding, $config->charset);
+            }
+            else
+            {
+                $encoding = 'UTF-8';
+                if($config->default->lang == 'zh-cn') $encoding = 'GBK';
+                if($config->default->lang == 'zh-tw') $encoding = 'BIG5';
+                $fileContent = helper::convertEncoding($fileContent, $encoding, $config->charset);
+            }
+        }
+
         $fileContent = div
         (
             setID('txtFile'),

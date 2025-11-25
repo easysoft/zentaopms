@@ -14,4 +14,4 @@ CREATE TABLE `zt_relation` (
   `BVersion` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
   UNIQUE KEY `relation` (`relation`,`AType`,`BType`, `AID`, `BID`)
-) ENGINE='MyISAM' DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

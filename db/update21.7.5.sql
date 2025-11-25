@@ -21,9 +21,6 @@ UPDATE `zt_ai_miniprogram` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_prompt` SET `model` = '' WHERE `model` = '0';
 UPDATE `zt_ai_promptrole` SET `model` = '' WHERE `model` = '0';
 
-ALTER TABLE `zt_repo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
-ALTER TABLE `zt_artifactrepo` ADD `space` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `id`;
-
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('all',	  'weekly', 'categoryList', 'month',    '月报',       '1', 'rnd'),
 ('all',	  'weekly', 'categoryList', 'week',     '周报',       '1', 'rnd'),

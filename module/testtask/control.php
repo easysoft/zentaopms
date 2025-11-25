@@ -291,7 +291,7 @@ class testtask extends control
         /* Execute extended actions configured in the workflow. */
         $this->executeHooks($testtaskID);
 
-        if(!empty($testtask->execution)) $this->view->execution = $this->loadModel('project')->getByID($executionID);
+        if(!empty($testtask->execution)) $this->view->execution = $this->loadModel('project')->getByID($testtask->execution);
 
         $this->view->title      = "TASK #$testtask->id $testtask->name/" . $products[$testtask->product];
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -465,7 +465,7 @@ class testtask extends control
         }
 
         $task = $this->testtask->getByID($taskID);
-        $this->testtaskZen->setMenu($task->product, $branchID, $projectID, $task->execution, $task);
+        $this->testtaskZen->setMenu($task->product, $branchID, $task->project, $task->execution, $task);
         $this->testtaskZen->setDropMenu($task->product, $task);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/

@@ -111,7 +111,7 @@ $config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsCh
 $config->upgrade->execFlow['21_6_beta']   = array('functions' => 'processCharterBranch');
 $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan9.1.2.sql");
 $config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
-$config->upgrade->execFlow['21_7_1']      = array('functions' => 'convertCharset,processActionProduct');
+$config->upgrade->execFlow['21_7_1']      = array('functions' => 'processActionProduct');
 $config->upgrade->execFlow['21_7_5']      = array('functions' => 'weekly-addBuiltinWeeklyTemplate,adjustPriv21_7_5');
 
 if(!empty($config->isINT))
