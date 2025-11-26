@@ -1882,10 +1882,15 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('download') || $link.attr('data-on') || $link.attr('zui-on') || $link.attr('zui-toggle') || $link.attr('zui-command') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
-        if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;
-
         if($link.hasClass('disabled') || $link.prop('disabled'))
         {
+            e.preventDefault();
+            return;
+        }
+
+        if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app'))
+        {
+            window.open(href, '_blank', 'noopener,noreferrer');
             e.preventDefault();
             return;
         }
