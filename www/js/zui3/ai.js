@@ -170,7 +170,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 };
                 diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
-            localStorage.setItem('aiResult', JSON.stringify(result));
+            sessionStorage.setItem('aiResult', JSON.stringify(result));
 
             return {
                 view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
