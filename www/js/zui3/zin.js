@@ -1460,7 +1460,7 @@
             return;
         }
         if(getUrlID(url) === 'index-index') return top.location.href = url;
-        $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
+        return $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
     function autoLoad(id)
@@ -1521,6 +1521,23 @@
             options.url = url;
         }
 
+        if(url.includes('#'))
+        {
+            const hash = url.split('#')[1];
+            if(hash === 'open-modal' || hash.startsWith('open-modal?'))
+            {
+                const openModalParams = hash.includes('?') ? hash.split('?')[1] : '';
+                const openModalOptions = $.extend({}, {url: url, type: 'ajax'}, options);
+                if(openModalParams)
+                {
+                    const searchParams = new URLSearchParams(openModalParams);
+                    for(const key of searchParams.keys()) openModalOptions[key] = searchParams.getAll(key).join(',');
+                }
+                zui.Modal.open(openModalOptions);
+                return;
+            }
+        }
+
         if(DEBUG) showLog('Open url', url, options);
 
         if(options.app === 'current') options.app = currentCode;
@@ -1560,7 +1577,7 @@
 
         if(typeof options.back === 'string') return goBack(options.back, url);
 
-        openPage(url, options.app);
+        return openPage(url, options.app);
     }
 
     /**
