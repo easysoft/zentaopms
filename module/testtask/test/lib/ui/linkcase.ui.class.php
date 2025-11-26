@@ -19,7 +19,7 @@ class linkCaseTester extends tester
         $form->dom->checkbox->click();
         $form->wait(1);
         $form->dom->saveBtn->click();
-        $form->wait(1);
+        $form->wait(2);
 
         $casesForm = $this->loadPage('testtask', 'cases', array('taskID' => '1'), 'appIframe-qa');
         if(intval($casesForm->dom->allCasesNum->getText()) == $allNum + 1) return $this->success('测试单关联用例成功');
