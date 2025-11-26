@@ -2006,7 +2006,7 @@ class aiTest
 
             $targetFormVars = array(
                 'story' => array(
-                    'change' => array('format' => '%d', 'args' => array('story' => 1), 'app' => 'product')
+                    'change' => array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product')
                 ),
                 'task' => array(
                     'edit' => array('format' => '%d', 'args' => array('task' => 1), 'app' => 'execution')
