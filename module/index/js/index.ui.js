@@ -841,7 +841,7 @@ function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + '#appsItemsData',
+        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + '#appsItemsData,#configJS',
         complete: () => initAppsMenu(window.appsItems),
     });
 }
