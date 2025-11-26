@@ -143,8 +143,6 @@ class form extends fixer
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
 
         if(empty($app->control)) return $configObject;
-        $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
-        if(!$flow) return $configObject;
 
         $app->control->loadModel('workflowgroup');
         if($flowGroupID)
@@ -153,13 +151,16 @@ class form extends fixer
             $groupID = (empty($group) || $group->main) ? 0 : $flowGroupID;
         }
 
-        $groupID = isset($groupID) ? $groupID : $app->control->workflowgroup->getGroupIDByDataID($flow->module, $objectID);
-        $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
+        $groupID = isset($groupID) ? $groupID : $app->control->workflowgroup->getGroupIDByDataID($moduleName, $objectID);
+        $flow = $app->control->loadModel('workflow')->getByModule($moduleName, false, $groupID);
+        if(!$flow) return $configObject;
+
+        $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
         $uiID         = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
-        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
-        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $groupID);
+        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
+        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $flow->group);
         $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
         {
