@@ -817,6 +817,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
   `desc` mediumtext NULL,
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
@@ -885,6 +886,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readUsers` text NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '1',
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -1668,6 +1670,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `tplWhiteList` text NULL,
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `stageBy` enum('project','product') NOT NULL DEFAULT 'product',
   `displayCards` smallint(6) NOT NULL default '0',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
@@ -1739,6 +1742,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
   `version` varchar(255) NULL,
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
@@ -2097,6 +2101,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
   `verifiedDate` datetime,
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -14436,7 +14441,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `version` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `status` char(30) NOT NULL DEFAULT '',
-  `isBaseline` tinyint(1) DEFAULT '0',
+  `isBaseline` tinyint(1) DEFAULT '0' COMMENT '是否基线',
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
