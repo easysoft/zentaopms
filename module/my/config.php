@@ -27,3 +27,4 @@ $config->my->openedDateField['build']       = 'createdDate';
 $config->my->openedDateField['testtask']    = 'createdDate';
 $config->my->openedDateField['testsuite']   = 'addedDate';
 $config->my->openedDateField['caselib']     = 'addedDate';
+$config->my->openedDateField['baseline']    = 'createdDate';
