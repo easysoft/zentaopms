@@ -75,6 +75,7 @@ $config->action->objectNameFields['system']       = 'name';
 $config->action->objectNameFields['deliverable']  = 'name';
 $config->action->objectNameFields['cm']           = 'title';
 $config->action->objectNameFields['baseline']     = 'title';
+$config->action->objectNameFields['projectchange'] = 'name';
 
 $config->action->commonImgSize = 870;
 
