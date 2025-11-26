@@ -1409,7 +1409,6 @@ $lang->devopsspace->methodOrder[20] = 'delete';
 
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
-$lang->resource->repo->visit           = 'visit';
 $lang->resource->repo->view            = 'view';
 $lang->resource->repo->log             = 'log';
 $lang->resource->repo->revision        = 'revisionAction';
