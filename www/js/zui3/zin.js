@@ -1888,11 +1888,15 @@
             return;
         }
 
-        if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app'))
+        if($link.is('a'))
         {
-            window.open(href, '_blank', 'noopener,noreferrer');
-            e.preventDefault();
-            return;
+            if(href.startsWith('javascript:')) return;
+            if(/^https?:/.test(href) && !$link.data('app'))
+            {
+                e.preventDefault();
+                window.open(href, '_blank', 'noopener,noreferrer');
+                return;
+            }
         }
 
         const options = $link.dataset();
