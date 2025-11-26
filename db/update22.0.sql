@@ -97,6 +97,7 @@ ALTER TABLE `zt_object` ADD `categoryVersion` text DEFAULT NULL AFTER `category`
 ALTER TABLE `zt_object` ADD `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑' AFTER `createdDate`;
 ALTER TABLE `zt_object` ADD `editedDate` datetime DEFAULT NULL COMMENT '编辑时间' AFTER `editedBy`;
 ALTER TABLE `zt_object` MODIFY `category` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `zt_object` MODIFY `createdDate` datetime DEFAULT NULL;
 
 ALTER TABLE `zt_designspec` ADD `docs` text NULL AFTER `files`;
 ALTER TABLE `zt_designspec` ADD `docVersions` text NULL AFTER `docs`;
