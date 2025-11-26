@@ -19,7 +19,8 @@ window.checkZAIPanel = async function(showMessage)
 window.openPageForm = function(url, data, callback)
 {
     return new Promise((resolve, reject) => {
-        const openedApp = $.apps.openApp(url);
+        const openedApp = openUrl(url);
+        if(!openedApp) return;
         let updateTimer = 0;
         const tryUpdateForm = () =>
         {
@@ -46,10 +47,11 @@ window.openPageForm = function(url, data, callback)
 function getPromptFormConfig(fields, extraConfig)
 {
     if(!Array.isArray(fields) || !fields.length) return;
-    const typeMap    = {radio: 'picker', checkbox: 'multiPicker'};
+    const typeMap    = {radio: 'picker', checkbox: 'multiPicker', text: 'input'};
     const required   = [];
     const properties = fields.reduce((properties, field, index) => {
-        properties[field.name] = {
+        field.code = `field-${field.id}`;
+        properties[field.code] = {
             type    : 'string',
             widget  : typeMap[field.type] || field.type,
             title   : field.name,
@@ -57,13 +59,12 @@ function getPromptFormConfig(fields, extraConfig)
             required: field.required && field.required !== '0',
             props   : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
         };
-        if(field.required) required.push(field.name);
         return properties;
     }, {});
     return $.extend(
     {
         schema: {type: 'object', properties: properties, required: required},
-        prompt: (data) => fields.map(x => `* ${x.name}: ${data[x.name] || ''}`).join('\n')
+        prompt: (data) => fields.map(x => `* ${x.name}: ${data[x.code] || ''}`).join('\n')
     }, extraConfig);
 }
 
