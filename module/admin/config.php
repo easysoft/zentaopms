@@ -15,7 +15,7 @@ $config->admin->menuGroup['extension']     = array('extension');
 $config->admin->menuGroup['convert']       = array('convert');
 $config->admin->menuGroup['adminregister'] = array('admin|register');
 
-$config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'issue', 'risk', 'opportunity', 'nc', 'todo', 'block', 'epic', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
+$config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'issue', 'risk', 'opportunity', 'nc', 'todo', 'block', 'epic', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket', 'projectchange');
 $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'build', 'bug', 'doc', 'product', 'epic', 'requirement', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
 if($config->vision == 'lite')
 {
@@ -80,7 +80,7 @@ $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/65
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
 $config->admin->navsGroup['feature']['product']   = ',product,epic,requirement,story,productplan,release,';
-$config->admin->navsGroup['feature']['project']   = ',project,build,issue,risk,opportunity,nc,';
+$config->admin->navsGroup['feature']['project']   = ',project,build,issue,risk,opportunity,nc,projectchange,';
 $config->admin->navsGroup['feature']['execution'] = ',execution,task,';
 $config->admin->navsGroup['feature']['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
 if($config->vision == 'lite') $config->admin->navsGroup['feature']['my'] .= 'task,';
