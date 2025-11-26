@@ -14423,8 +14423,10 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `data` text NULL DEFAULT NULL,
   `items` text NULL DEFAULT NULL COMMENT '评审条目列表',
   `end` date NULL,
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdDate` date NULL,
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
+  `createdDate` date DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
+  `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
