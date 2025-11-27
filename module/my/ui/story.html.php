@@ -107,6 +107,7 @@ foreach($stories as $id => $story)
         foreach($story->actions as $key => $action)
         {
             if($action['name'] == 'create' && $story->isParent == '1') $stories[$id]->actions[$key]['disabled'] = 1;
+            if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
         }
     }
     $story->estimate = helper::formatHours($story->estimate);
