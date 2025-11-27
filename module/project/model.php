@@ -190,7 +190,7 @@ class projectModel extends model
 
         if($action == 'publishtemplate')   return $project->status == 'wait' || $project->status == 'closed';
         if($action == 'disabletemplate')   return $project->status == 'doing';
-        if($action == 'deletedeliverable') return !$project->review && empty($project->builtin);
+        if($action == 'deletedeliverable') return !$project->review && empty($project->systemList) && $project->status == 'draft';
 
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
