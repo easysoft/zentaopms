@@ -550,6 +550,8 @@ $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
 
+$lang->story->frozenTip = "需求打基线后不允许%s";
+
 $lang->story->changeTip = "只有激活状态的需求，才能进行变更";
 
 $lang->story->reviewTip = array();

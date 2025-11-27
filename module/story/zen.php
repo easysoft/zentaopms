@@ -1006,6 +1006,12 @@ class storyZen extends story
         $twins = '';
         foreach($stories as $id => $story)
         {
+            if(!empty($story->frozen))
+            {
+                unset($stories[$id]);
+                continue;
+            }
+
             if(empty($story->twins)) continue;
             $twins .= "#$id ";
             unset($stories[$id]);

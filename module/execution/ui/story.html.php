@@ -78,6 +78,12 @@ if($isFromDoc)
     );
 }
 
+$frozenStories = 0;
+foreach($stories as $story)
+{
+    if(!empty($story->frozen)) $frozenStories ++;
+}
+
 /* Show feature bar. */
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}&recTotal={$pager->recTotal}&recPerPae={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
@@ -226,7 +232,7 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if(!$isFromDoc)
+if(!$isFromDoc && empty($frozenStories))
 {
     if($canOpreate['create'])
     {
@@ -293,7 +299,7 @@ if($product && !$isFromDoc) toolbar
 
     $createBtnGroup,
 
-    $canLinkStory && $canlinkPlanStory ? btngroup
+    $canLinkStory && $canlinkPlanStory && empty($frozenStories) ? btngroup
     (
         btn(
             setClass('btn primary'),
@@ -310,8 +316,8 @@ if($product && !$isFromDoc) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory && empty($frozenStories) ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory && empty($frozenStories) ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
 $isFromDoc ? null : sidebar

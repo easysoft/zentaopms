@@ -3879,6 +3879,7 @@ class storyModel extends model
         global $app, $config;
         $action = strtolower($action);
 
+        if(in_array($action, array('edit', 'batchcreate', 'change', 'delete')) && !empty($story->frozen)) return false;
         if($action == 'subdivide') $action = 'batchcreate';
 
         if($action == 'recall')             return $story->status == 'reviewing' || $story->status == 'changing';

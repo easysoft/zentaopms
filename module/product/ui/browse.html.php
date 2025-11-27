@@ -32,6 +32,7 @@ $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
+$frozenStories     = 0;
 
 $isFromDoc = $from === 'doc';
 
@@ -247,6 +248,7 @@ foreach($stories as $story)
     $story->from         = $app->tab;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
+    if($isProjectStory && !empty($story->frozen)) $frozenStories ++;
 }
 
 /* Generate toolbar of DataTable footer. */
@@ -515,8 +517,8 @@ toolbar
     ))),
     (!$canReport || !$productID) ? null : item(set(array('id' => 'reportBtn', 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => $reportUrl))),
     item(set(array('id' => 'exportBtn', 'icon' => 'export', 'class' => 'ghost' . ($canExport ? '' : ' hidden'), 'url' => $exportUrl, 'data-toggle' => 'modal'))),
-    $fnBuildCreateStoryButton(),
-    $fnBuildLinkStoryButton()
+    empty($frozenStories) ? $fnBuildCreateStoryButton() : null,
+    empty($frozenStories) ? $fnBuildLinkStoryButton() : null
 );
 
 if(!$isFromDoc) $fnGenerateSideBar();
