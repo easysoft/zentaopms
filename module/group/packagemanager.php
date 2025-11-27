@@ -101,6 +101,10 @@ $config->group->subset->cm = new stdclass();
 $config->group->subset->cm->order = 250;
 $config->group->subset->cm->nav   = 'project';
 
+$config->group->subset->projectchange = new stdclass();
+$config->group->subset->projectchange->order = 255;
+$config->group->subset->projectchange->nav   = 'project';
+
 $config->group->subset->projectqa = new stdclass();
 $config->group->subset->projectqa->order = 260;
 $config->group->subset->projectqa->nav   = 'project';
