@@ -1521,7 +1521,7 @@
             options.url = url;
         }
 
-        if(url.includes('#'))
+        if(typeof url === 'string' && url.includes('#'))
         {
             const hash = url.split('#')[1];
             if(hash === 'open-modal' || hash.startsWith('open-modal?'))
