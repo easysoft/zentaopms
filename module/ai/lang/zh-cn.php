@@ -692,6 +692,7 @@ $lang->ai->miniPrograms->field->debug               = '调试区';
 $lang->ai->miniPrograms->field->preview             = '预览区';
 $lang->ai->miniPrograms->field->fields              = '表单配置';
 $lang->ai->miniPrograms->field->prompt              = '提词';
+$lang->ai->miniPrograms->field->fieldConfig         = '字段配置';
 $lang->ai->miniPrograms->field->knowledgeLibs       = '知识库挂载';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
