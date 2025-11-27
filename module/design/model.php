@@ -518,6 +518,7 @@ class designModel extends model
     {
         $action = strtolower($action);
         if($action == 'confirmstorychange') return !empty($object->needConfirm);
+        if(in_array($action, array('edit', 'delete')) && !empty($object->frozen)) return false;
         return true;
     }
 }

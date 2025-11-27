@@ -58,7 +58,7 @@ foreach($config->design->view->operateList['main'] as $operate)
 $commonActions = array();
 foreach($config->design->view->operateList['common'] as $operate)
 {
-    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted) continue;
+    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted || !empty($design->frozen)) continue;
     if($operate == 'delete') $config->design->actionList['delete']['class'] = 'ajax-submit';
     $commonActions[] = $config->design->actionList[$operate];
 }
