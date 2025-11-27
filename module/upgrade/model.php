@@ -12381,6 +12381,8 @@ class upgradeModel extends model
                     $this->dao->insert(TABLE_REVIEWCL)->data($reviewclData)->exec();
                     $reviewclID = $this->dao->lastInsertID();
 
+                    $this->dao->update(TABLE_REVIEWISSUE)->set('listID')->eq($reviewclID)->where('listID')->eq($reviewcl->id)->exec();
+
                     /* 迁移检查清单历史记录。 */
                     if(empty($reviewclActions[$reviewcl->id])) continue;
                     foreach($reviewclActions[$reviewcl->id] as $action)
