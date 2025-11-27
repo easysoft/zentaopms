@@ -179,8 +179,11 @@ class executionModel extends model
 
             if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
             {
-                $this->lang->execution->menu->pssp      = $this->lang->execution->menu->other['dropMenu']->pssp;
-                $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+                $this->lang->execution->menu->pssp = $this->lang->execution->menu->other['dropMenu']->pssp;
+                if(isset($this->lang->execution->menu->other['dropMenu']->auditplan))
+                {
+                    $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+                }
 
                 $docOrder = 0;
                 foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
