@@ -16885,6 +16885,7 @@ CREATE INDEX `idx_account` ON `zt_mark`(`account`);
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `space` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间',
+  `repo` int unsigned NOT NULL DEFAULT 0 COMMENT '所属仓库',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
