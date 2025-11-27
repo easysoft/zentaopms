@@ -180,7 +180,9 @@ class form extends fixer
                 }
                 else
                 {
-                    $type = $field->type == 'int' ? 'int' : 'string';
+                    $type = 'string';
+                    if($field->type == 'int')     $type = 'int';
+                    if($field->type == 'decimal') $type = 'float';
                     $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => '');
                     if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
                 }
