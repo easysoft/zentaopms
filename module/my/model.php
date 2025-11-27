@@ -1316,6 +1316,8 @@ class myModel extends model
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
+            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
+            ->beginIF(!helper::hasFeature('project_change'))->andWhere('objectType')->ne('projectchange')->fi()
             ->orderBy("t2.{$orderBy}")
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
