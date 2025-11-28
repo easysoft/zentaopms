@@ -163,6 +163,9 @@ $lang->execution->typeTip            = "The sub-stages of other types can be cre
 $lang->execution->waterfallTip       = "In the Waterfall {$lang->projectCommon} or in the Waterfall + {$lang->projectCommon},";
 $lang->execution->progressTip        = 'All Progress = Consumed / (Consumed + Left)';
 $lang->execution->limitedTip         = "Limited users can only edit tasks that are relevant to them and cannot create new tasks. Relevant tasks include those assigned to them, completed tasks, canceled tasks, closed tasks, and the last edited tasks, but exclude those copied to them. \nIf a user was not a limited user before but is now classified as one, they will still have permissions for tasks they created in the past.";
+$lang->execution->stageFrozenTip     = 'After the stage are baselined, %s is not allowed.';
+$lang->execution->createChildStage   = 'create child stage';
+$lang->execution->ganttDrag          = 'Drag';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';

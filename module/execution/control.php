@@ -1066,6 +1066,13 @@ class execution extends control
         $this->loadModel('project')->checkAccess($projectID, $allProjects);
         if(empty($projectID)) $projectID = key($allProjects) ? key($allProjects) : 0;
 
+        /* 过滤掉阶段已打基线的项目。*/
+        $executionList = $this->project->getExecutionList(array_keys($allProjects));
+        foreach($executionList as $executionInfo)
+        {
+            if(!empty($executionInfo->frozen)) unset($allProjects[$executionInfo->project]);
+        }
+
         $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
         $project ? $this->executionZen->correctExecutionCommonLang($project, $execution->type) : $project = null;
         $products = $this->executionZen->getLinkedProducts($copyExecutionID, $planID, $project);
@@ -1376,6 +1383,11 @@ class execution extends control
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id', false);
         $relatedProjects = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs(); /* 获取执行所属的项目列表。*/
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
+
+        foreach($executions as $key => $execution)
+        {
+            if(!empty($execution->frozen)) unset($executions[$key]);
+        }
 
         list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($executions);
 

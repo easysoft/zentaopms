@@ -3390,8 +3390,15 @@ class taskModel extends model
      */
     public function updateExecutionEsDateByGantt(object $postData): bool
     {
+        $stage = $this->dao->select('project,parent,frozen')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
+        if(!empty($stage->frozen))
+        {
+            $this->app->loadLang('execution');
+            dao::$errors[] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->ganttDrag);
+            return false;
+        }
+
         /* Get parent information. */
-        $stage      = $this->dao->select('project,parent')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
         $parentID   = $stage->project != $stage->parent ? $stage->parent : 0;
         $parentData = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($parentID ? $parentID : $stage->project)->fetch();
 
