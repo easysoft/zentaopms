@@ -10875,7 +10875,7 @@ class upgradeModel extends model
         {
             if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
             if($tableCollation == $serverCollation) continue;
-            if($tableName == TABLE_METRICLIB) continue;
+            if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
 
             /* 转换表的字符集和排序规则。Convert table charset and collation. */
             $this->dbh->exec("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
