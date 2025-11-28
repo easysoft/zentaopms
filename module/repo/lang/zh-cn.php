@@ -44,6 +44,7 @@ $lang->repo->unlink          = '解除关联';
 $lang->repo->visit           = '访问';
 $lang->repo->space           = '所属空间';
 $lang->repo->allSpace        = '全部空间';
+$lang->repo->members         = '成员';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->createTagAction    = '创建标签';
@@ -201,9 +202,8 @@ if(!$config->inQuickon && !$config->inCompose)
     $lang->repo->scmList['Subversion'] = 'Subversion';
 }
 
-$lang->repo->aclList['private'] = '私有 (所属产品人员可访问)';
-$lang->repo->aclList['open']    = '公开 (有DevOps视图权限即可访问)';
-$lang->repo->aclList['custom']  = '自定义';
+$lang->repo->aclList['open']    = '公开 (代码库所属空间内可访问)';
+$lang->repo->aclList['private'] = '私有 (仅代码库成员可访问)';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';
