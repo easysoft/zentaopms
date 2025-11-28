@@ -429,7 +429,7 @@ class zaiTest
     }
 
     /**
-     * Test isCanViewObject method.
+     * Test canViewObject method.
      *
      * @param  string $objectType
      * @param  int $objectID
@@ -437,9 +437,9 @@ class zaiTest
      * @access public
      * @return bool
      */
-    public function isCanViewObjectTest($objectType, $objectID, $attrs = null)
+    public function canViewObjectTest($objectType, $objectID, $attrs = null)
     {
-        $result = $this->objectModel->isCanViewObject($objectType, $objectID, $attrs);
+        $result = $this->objectModel->canViewObject($objectType, $objectID, $attrs);
         if(dao::isError()) return dao::getError();
 
         return $result;

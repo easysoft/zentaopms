@@ -614,7 +614,7 @@ class zaiModel extends model
      * @param int    $objectID
      * @return bool
      */
-    public function isCanViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
+    public function canViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
         if($objectType === 'knowledge') return true;
 
@@ -694,7 +694,7 @@ class zaiModel extends model
             if(!empty($attrs['objectType'])) $objectType = $attrs['objectType'];
             if(!empty($attrs['objectID']))   $objectID = $attrs['objectID'];
 
-            if(!$this->isCanViewObject($objectType, $objectID, $attrs)) continue;
+            if(!$this->canViewObject($objectType, $objectID, $attrs)) continue;
 
             $filteredKnowledges[] = $knowledge;
 
