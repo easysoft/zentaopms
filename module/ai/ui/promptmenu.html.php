@@ -86,7 +86,8 @@ $promptMenuInject = function()
     JAVASCRIPT;
     $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
     $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
-    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
+    $script .= 'else $aiMenu.find(".prompts.dropdown").remove();';
+    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 20);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
     JAVASCRIPT;
