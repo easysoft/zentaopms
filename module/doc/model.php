@@ -36,6 +36,7 @@ class docModel extends model
         global $app;
         $action = strtolower($action);
 
+        if(!empty($doc->frozen) && in_array($action, array('edit', 'delete'))) return false;
         if($action == 'movedoc') return $doc->addedBy == $app->user->account;
         return true;
     }
