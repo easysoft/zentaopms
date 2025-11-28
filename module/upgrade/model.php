@@ -11603,7 +11603,7 @@ class upgradeModel extends model
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         $deliverableID = $this->dao->lastInsertID();
 
-        $stageList = $this->loadModel('deliverable')->buildStageList($workflowGroupID);
+        $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
         foreach($stageList as $key => $stage)
         {
             $deliverableStage = new stdclass();
