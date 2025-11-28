@@ -329,6 +329,7 @@ $lang->doc->moveTo             = 'Move to';
 $lang->doc->notSupportExport   = 'This document does not support export';
 $lang->doc->downloadTemplate   = 'Download Template';
 $lang->doc->addFile            = 'Add File';
+$lang->doc->frozenTips         = 'After the doc are baselined, %s is not allowed.';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
@@ -792,6 +793,7 @@ $lang->doc->docLang->editing                     = 'Editing';
 $lang->doc->docLang->restoreVersionHint          = 'Restore to version';
 $lang->doc->docLang->restoreVersion              = 'Restore';
 $lang->doc->docLang->restoreVersionConfirm       = 'This will create a new version using the content of version {version}. Are you sure you want to continue?';
+$lang->doc->docLang->frozenTips                  = $lang->doc->frozenTips;
 
 $lang->docTemplate->types = array();
 $lang->docTemplate->types['plan']   = 'Plan';

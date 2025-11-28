@@ -329,6 +329,7 @@ $lang->doc->moveTo             = '移动至';
 $lang->doc->notSupportExport   = '（此文档暂不支持导出）';
 $lang->doc->downloadTemplate   = '下载模板';
 $lang->doc->addFile            = '提交文件';
+$lang->doc->frozenTips         = '文档打基线后不允许%s';
 
 $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';
@@ -792,6 +793,7 @@ $lang->doc->docLang->editing                     = '正在编辑';
 $lang->doc->docLang->restoreVersionHint          = '恢复到版本';
 $lang->doc->docLang->restoreVersion              = '恢复';
 $lang->doc->docLang->restoreVersionConfirm       = '这将使用文档版本 {version} 的内容创建一个新的版本，确定要继续吗？';
+$lang->doc->docLang->frozenTips                  = $lang->doc->frozenTips;
 
 $lang->docTemplate->types = array();
 $lang->docTemplate->types['plan']   = '计划';
