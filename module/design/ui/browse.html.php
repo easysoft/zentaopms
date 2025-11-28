@@ -46,6 +46,17 @@ toolbar
 jsVar('confirmDelete', $lang->design->confirmDelete);
 
 $tableData = initTableData($designs, $config->design->dtable->fieldList, $this->design);
+foreach($tableData as $design)
+{
+    if(!isset($design->actions)) continue;
+    foreach($design->actions as &$action)
+    {
+        $actionName = $action['name'];
+        if(!empty($design->frozen) && in_array($actionName, array('edit', 'delete'))) $action['hint'] = sprintf($this->lang->design->frozenTip, $this->lang->design->$actionName);
+
+    }
+}
+
 dtable
 (
     set::userMap($users),
