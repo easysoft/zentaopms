@@ -3008,8 +3008,15 @@ class executionModel extends model
      */
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
+        $storyFrozen = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('frozen');
+        if(!empty($storyFrozen))
+        {
+            $this->app->loadLang('story');
+            dao::$errors[] = sprintf($this->lang->story->frozenTip, $this->lang->story->unlink);
+            return false;
+        }
+
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
         if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');

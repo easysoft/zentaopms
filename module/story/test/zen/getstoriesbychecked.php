@@ -32,6 +32,8 @@ $story->twins->range('``');
 $story->deleted->range('0');
 $story->gen(10);
 
+zenData('storyspec')->gen(10);
+zenData('product')->gen(10);
 zenData('user')->gen(5);
 
 su('admin');
