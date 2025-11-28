@@ -3929,6 +3929,7 @@ class executionModel extends model
      */
     public static function isClickable(object $execution, string $action): bool
     {
+        if(!empty($execution->frozen) && in_array($action, array('edit', 'createChildStage', 'delete', 'putoff'))) return false;
         if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
@@ -4964,6 +4965,7 @@ class executionModel extends model
                         if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
+                        if(!empty($execution->frozen) && in_array($actionName, array('edit', 'createChildStage', 'delete', 'putoff'))) $action['hint'] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->$actionName);
                     }
 
                     if(!empty($action))
