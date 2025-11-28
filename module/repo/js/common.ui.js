@@ -350,13 +350,14 @@ window.onScmChange = function()
 window.onAclChange = function(event)
 {
     const acl = $(event.target).val();
-    if(acl == 'private' || acl == 'custom')
+    if(acl == 'private')
     {
-        $('#whitelist').removeClass('hidden');
+        $('#members').removeClass('hidden');
+        loadMembers();
     }
     else
     {
-        $('#whitelist').addClass('hidden');
+        $('#members').addClass('hidden');
     }
 }
 
@@ -385,5 +386,20 @@ window.searchList = function()
         const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
         const keyword = dom.body.textContent;
         loadPage(searchUrl.replace('%s', encodeURIComponent(Base64.encode(keyword))));
+    });
+}
+
+window.loadMembers = function()
+{
+    const space = $('[name=space]').val();
+    const url   = $.createLink('repo', 'ajaxGetSpaceMembers', "space=" + space);
+
+    toggleLoading('#members', true);
+    const $memberPicker = $('[name^=members]').zui('picker');
+    $memberPicker.$.clear();
+    $.getJSON(url, function(data)
+    {
+        $memberPicker.render({items: data});
+        toggleLoading('#members', false);
     });
 }
