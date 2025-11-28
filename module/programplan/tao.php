@@ -687,6 +687,7 @@ class programplanTao extends programplanModel
         /* Set default progress from database. */
         $data->progress      = $plan->progress / 100;
         $data->taskProgress  = $plan->progress . '%';
+        $data->frozen        = $plan->frozen;
 
         if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
