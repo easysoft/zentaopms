@@ -110,12 +110,16 @@ class messageModel extends model
             if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
-                global $config;
+                global $config, $filter;
                 $requestType = $config->requestType;
                 if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
+                    /* 保存当前的 $filter，避免重新引入配置文件时丢失*/
+                    $savedFilter = isset($filter) ? unserialize(serialize($filter)) : null;
                     $configRoot = $this->app->getConfigRoot();
                     include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
+                    /* 恢复之前的 $filter */
+                    if($savedFilter !== null) $filter = $savedFilter;
                 }
 
                 if($objectType == 'feedback' || $objectType == 'ticket')
