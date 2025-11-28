@@ -14532,7 +14532,7 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `impact` char(30) NOT NULL DEFAULT '',
   `probability` char(30) NOT NULL DEFAULT '',
   `rate` char(30) NOT NULL DEFAULT '',
-  `pri` tinyint unsigned NOT NULL DEFAULT 3,
+  `pri` tinyint unsigned NOT NULL DEFAULT 2,
   `identifiedDate` date NULL,
   `prevention` mediumtext NULL,
   `remedy` mediumtext NULL,
