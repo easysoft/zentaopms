@@ -88,7 +88,8 @@ class extensionZen extends extension
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+            $okFile = str_replace($this->app->getBasePath(), '', $statusFile);
+            $this->view->error = sprintf($this->lang->noticeOkFile, $okFile, $statusFile);
             return false;
         }
 
