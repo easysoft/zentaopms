@@ -54,12 +54,10 @@ $footToolbar = $canBatchAction ? array('items' => array
 $stories = initTableData($stories, $config->testcase->zerocase->dtable->fieldList, $this->story);
 foreach($stories as $id => $story)
 {
-    if(isset($story->actions))
+    if(!isset($story->actions)) continue;
+    foreach($story->actions as $key => $action)
     {
-        foreach($story->actions as $key => $action)
-        {
-            if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
-        }
+        if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
     }
 }
 
