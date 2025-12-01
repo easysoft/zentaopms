@@ -255,6 +255,7 @@ class ai extends control
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} $prompt->name";
+        $this->view->fieldConfig = $this->ai->getPromptFields($id);
 
         $this->display();
     }
