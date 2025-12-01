@@ -84,7 +84,8 @@ $fnBuildFieldConfig = function() use ($lang, $fieldConfig)
     {
         $control  = $lang->ai->miniPrograms->field->typeList[$field->type];
         $required = $lang->ai->requiredList[$field->required];
-        $fields[] = div(setClass('mb-1'), $field->name . ' (' . $control . ', ' . $required . ') : ' . $field->options);
+        $options  = $field->options ?: '-';
+        $fields[] = div(setClass('mb-1'), $field->name . ' (' . $control . ', ' . $required . ') : ' . $options);
     }
     return section(set::title($lang->ai->miniPrograms->field->fields), $fields);
 };
