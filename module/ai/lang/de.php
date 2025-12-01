@@ -102,6 +102,9 @@ $lang->ai->maintenanceGroup = 'Maintenance Group';
 
 $lang->ai->maintenanceGroupDuplicated = 'The group name cannot be duplicated.';
 
+$lang->ai->requiredList['0'] = 'Non-required';
+$lang->ai->requiredList['1'] = 'Required';
+
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s cannot be empty.';
 $lang->ai->validate->dirtyForm     = 'The design step of %s has changed. Do you want to save and return it?';

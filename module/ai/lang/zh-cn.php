@@ -102,6 +102,9 @@ $lang->ai->maintenanceGroup = '维护分组';
 
 $lang->ai->maintenanceGroupDuplicated = '分组名不能重复';
 
+$lang->ai->requiredList['0'] = '非必填';
+$lang->ai->requiredList['1'] = '必填';
+
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s不能为空。';
 $lang->ai->validate->dirtyForm     = '%s的参数配置已变动，是否保存并返回？';
