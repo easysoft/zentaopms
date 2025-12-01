@@ -158,11 +158,7 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        $members = zget($repo, 'members', '');
-        unset($repo->members);
-        unset($repo->serviceHost);
-
-        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
+        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken,members,serviceHost')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF(!in_array($repo->SCM, $this->config->repo->notSyncSCM), 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceProject', 'notempty')
@@ -173,9 +169,9 @@ class repoModel extends model
 
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
-        if($repoID && !empty($members))
+        if($repoID && !empty($repo->members))
         {
-            $members = explode(',', $members);
+            $members = explode(',', $repo->members);
             foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repoID' => $repoID, 'account' => $member))->exec();
         }
 
