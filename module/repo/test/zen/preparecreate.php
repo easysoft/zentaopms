@@ -50,22 +50,22 @@ $gitlabFormData = array(
 );
 
 // 测试步骤1: 正常Git仓库创建
-r($result1 = $repoZenTest->prepareCreateTest($normalFormData, false, 'normal')) && p('acl') && e('{"acl":"open"}');
+r($result1 = $repoZenTest->prepareCreateTest($normalFormData, 'normal')) && p('acl') && e('{"acl":"open"}');
 
 // 测试步骤2: 容器环境下Git仓库
-r($result2 = $repoZenTest->prepareCreateTest($containerFormData, false, 'container_git')) && p('acl') && e('{"acl":"open"}');
+r($result2 = $repoZenTest->prepareCreateTest($containerFormData, 'container_git')) && p('acl') && e('{"acl":"open"}');
 
 // 测试步骤3: Gitlab仓库特殊字段处理 - 验证extra字段
-r($result3 = $repoZenTest->prepareCreateTest($gitlabFormData, false, 'gitlab')) && p('extra') && e('123');
+r($result3 = $repoZenTest->prepareCreateTest($gitlabFormData, 'gitlab')) && p('extra') && e('123');
 
 // 测试步骤4: ACL配置验证失败
-r($result4 = $repoZenTest->prepareCreateTest($normalFormData, false, 'acl_error')) && p() && e('0');
+r($result4 = $repoZenTest->prepareCreateTest($normalFormData, 'acl_error')) && p() && e('0');
 
 // 测试步骤5: 流水线服务器重复项目检查
-r($result5 = $repoZenTest->prepareCreateTest($normalFormData, true, 'duplicate_project')) && p() && e('0');
+r($result5 = $repoZenTest->prepareCreateTest($normalFormData, 'duplicate_project')) && p() && e('0');
 
 // 测试步骤6: 正常非流水线服务器场景 - 验证返回对象类型
-r(is_object($repoZenTest->prepareCreateTest($normalFormData, false, 'normal'))) && p() && e('1');
+r(is_object($repoZenTest->prepareCreateTest($normalFormData, 'normal'))) && p() && e('1');
 
 // 测试步骤7: 验证ACL字段格式包含open
-r(strpos(json_encode($repoZenTest->prepareCreateTest($normalFormData, false, 'normal')), 'open') !== false) && p() && e('1');
+r(strpos(json_encode($repoZenTest->prepareCreateTest($normalFormData, 'normal')), 'open') !== false) && p() && e('1');

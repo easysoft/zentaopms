@@ -656,6 +656,7 @@ if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
 
 define('TABLE_DEVOPSSPACE', '`' . $config->db->prefix . 'ops_space`');
 define('TABLE_DEVOPSSPACEUSER', '`' . $config->db->prefix . 'ops_spaceuser`');
+define('TABLE_DEVOPSREPOUSER', '`' . $config->db->prefix . 'ops_repouser`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;

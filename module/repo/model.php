@@ -23,29 +23,15 @@ class repoModel extends model
     public function checkPriv(object $repo): bool
     {
         $account = $this->app->user->account;
-        $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
-        if(empty($repo->acl))         $repo->acl = new stdclass();
-        if(empty($repo->acl->users))  $repo->acl->users  = array();
-        if(empty($repo->acl->groups)) $repo->acl->groups = array();
+        $acl     = $repo->acl;
 
         if(strpos(",{$this->app->company->admins},", ",$account,") !== false || $acl == 'open') return true;
-        if($acl == 'custom' && empty(array_filter($repo->acl->groups)) && empty(array_filter($repo->acl->users))) return true;
 
         if($acl == 'private')
         {
-            $userProducts = explode(',', $this->app->user->view->products);
-            $repoProducts = explode(',', $repo->product);
-            if(array_intersect($userProducts, $repoProducts)) return true;
+            $repoUsers = $this->getRepoUsers($repo->id);
+            return in_array($account, $repoUsers);
         }
-
-        if(!empty($repo->acl->groups))
-        {
-            foreach($this->app->user->groups as $group)
-            {
-                if(in_array($group, $repo->acl->groups)) return true;
-            }
-        }
-        if(!empty($repo->acl->users) and in_array($account, $repo->acl->users)) return true;
         return false;
     }
 
@@ -172,18 +158,22 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
+        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken,members,serviceHost')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF(!in_array($repo->SCM, $this->config->repo->notSyncSCM), 'path,client', 'notempty')
-            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->autoCheck()
             ->exec();
 
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
+        if($repoID && !empty($repo->members))
+        {
+            $members = explode(',', $repo->members);
+            foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repoID' => $repoID, 'account' => $member))->exec();
+        }
 
         $repo = $this->getByID($repoID);
         if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
@@ -674,23 +664,9 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
-        /* Update repo table for old version. */
-        if(empty($repo->serviceHost) && in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
-        {
-            $repo->serviceHost    = $repo->client;
-            $repo->serviceProject = $repo->extra;
-            $this->dao->update(TABLE_REPO)->data(array('serviceHost' => $repo->serviceHost, 'serviceProject' => $repo->serviceProject))->where('id')->eq($repoID)->exec();
-
-            /* Add webhook. */
-            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
-        }
-
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->codePath = $repo->path;
         if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
-        $repo->acl = json_decode($repo->acl);
-        if(empty($repo->acl)) $repo->acl = new stdclass();
-        if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
 
         $repo->serviceHost    = (int)$repo->serviceHost;
         $repo->gitService     = $repo->serviceHost;
@@ -3150,5 +3126,20 @@ class repoModel extends model
     {
         $pattern = "/^[a-z_]{1}[a-z0-9_\-\.]*$/i";
         return preg_match($pattern, $name);
+    }
+
+    /**
+     * 获取指定代码库的所有成员。
+     * Get all members.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getRepoUsers(int $repoID): array
+    {
+        return $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)
+            ->where('repo')->eq($repoID)
+            ->fetchPairs('account', 'account');
     }
 }

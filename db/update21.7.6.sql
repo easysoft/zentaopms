@@ -26,13 +26,24 @@ CREATE UNIQUE INDEX `uk_productbuild` ON `zt_testtaskproduct` (`product`,`build`
 
 ALTER TABLE `zt_testtask` ADD `joint` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否为联调测试单' AFTER `build`;
 
+-- DROP TABLE IF EXISTS `zt_ops_spaceuser`;
 CREATE TABLE IF NOT EXISTS `zt_ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
   `space` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间',
+  `role` varchar(10) NOT NULL DEFAULT '' COMMENT '角色',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `uk_spaceuser` ON `zt_ops_spaceuser` (`space`,`account`);
+
+-- DROP TABLE IF EXISTS `zt_ops_repouser`;
+CREATE TABLE IF NOT EXISTS `zt_ops_repouser` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `repo` int unsigned NOT NULL DEFAULT 0 COMMENT '所属代码库',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '用户帐号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `uk_repouser` ON `zt_ops_repouser` (`repo`,`account`);
 
 ALTER TABLE `zt_repo` ADD `space` int unsigned NOT NULL DEFAULT 0 AFTER `id`;
 ALTER TABLE `zt_artifactrepo` ADD `space` int unsigned NOT NULL DEFAULT 0 AFTER `id`;

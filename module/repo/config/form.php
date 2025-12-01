@@ -35,19 +35,18 @@ $config->repo->form->edit['password']       = array('required' => false, 'type' 
 $config->repo->form->edit['encrypt']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
 
-
 $config->repo->form->createRepo = array();
 $config->repo->form->createRepo['space']       = array('required' => true,  'type' => 'int', 'default' => 0);
 $config->repo->form->createRepo['product']     = array('required' => true,  'type' => 'array', 'default' => array(), 'filter' => 'join');
 $config->repo->form->createRepo['projects']    = array('required' => false, 'type' => 'array', 'default' => array(), 'filter' => 'join');
 $config->repo->form->createRepo['serviceHost'] = array('required' => false, 'type' => 'int');
-$config->repo->form->createRepo['namespace']   = array('required' => true,  'type' => 'string');
 $config->repo->form->createRepo['name']        = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->repo->form->createRepo['desc']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->repo->form->createRepo['client']      = array('required' => false, 'type' => 'string', 'default' => 'git');
-$config->repo->form->createRepo['SCM']         = array('required' => false, 'type' => 'string', 'default' => 'Gitlab');
+$config->repo->form->createRepo['SCM']         = array('required' => false, 'type' => 'string', 'default' => 'GitFox');
 $config->repo->form->createRepo['encoding']    = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->createRepo['encrypt']     = array('required' => false, 'type' => 'string', 'default' => 'plain');
+$config->repo->form->createRepo['members']     = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->repo->form->createRepo['acl']         = array('required' => true,  'type' => 'string', 'default' => 'open');
 
 $config->repo->form->createBranch = array();
 $config->repo->form->createBranch['codeRepo']   = array('required' => true, 'type' => 'int');

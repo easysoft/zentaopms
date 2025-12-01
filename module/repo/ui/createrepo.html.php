@@ -27,31 +27,8 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 
 formPanel
 (
-    on::change('#serviceHost')->call('onHostChange'),
+    on::change('#space')->call('loadMembers'),
     set::title($lang->repo->createRepoAction),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("serviceHost"),
-            set::label($lang->repo->serviceHost),
-            set::required(true),
-            set::value(""),
-            set::control("picker"),
-            set::items($serviceHosts)
-        )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("namespace"),
-        set::label($lang->repo->namespace),
-        set::required(true),
-        set::items($repoGroups),
-        set::control("picker")
-    ),
     formGroup
     (
         set::width('1/2'),
@@ -61,6 +38,7 @@ formPanel
     ),
     formGroup
     (
+        setID('space'),
         set::width('1/2'),
         set::name("space"),
         set::label($lang->repo->space),
@@ -89,57 +67,26 @@ formPanel
         set::control("input"),
         set::placeholder($lang->repo->descPlaceholder)
     ),
-    formRow
+    formGroup
     (
         set::id('aclList'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('acl[acl]'),
-            set::label($lang->repo->acl),
-            set::control('radioList'),
-            set::items($lang->repo->aclList),
-            set::value('open'),
-            on::change('onAclChange')
-        )
+        set::width('1/2'),
+        set::name('acl'),
+        set::label($lang->repo->acl),
+        set::control('radioList'),
+        set::items($lang->repo->aclList),
+        set::value('open'),
+        on::change('onAclChange')
     ),
-    formRow
+    formGroup
     (
-        set::id('whitelist'),
+        setID('members'),
         setClass('hidden'),
-        formGroup
-        (
-            set::label($lang->product->whitelist),
-            inputGroup
-            (
-                $lang->repo->group,
-                width('full'),
-                control(set(array
-                (
-                    'name' => "acl[groups][]",
-                    'id' => "aclgroups",
-                    'value' => NULL,
-                    'type' => "picker",
-                    'items' => $groups,
-                    'multiple' => true
-                )))
-            ),
-            inputGroup
-            (
-                $lang->repo->user,
-                control(set(array
-                (
-                    'name' => "acl[users][]",
-                    'id' => "aclusers",
-                    'value' => NULL,
-                    'type' => "picker",
-                    'items' => $users,
-                    'multiple' => true
-                ))),
-                setClass('mt-2')
-            )
-        )
+        set::width('1/2'),
+        set::name('members'),
+        set::label($lang->repo->members),
+        set::required(true),
+        set::items(array()),
+        set::multiple(true)
     )
 );
-
-render();

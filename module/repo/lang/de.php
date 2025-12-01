@@ -44,6 +44,7 @@ $lang->repo->unlink          = 'Unlink';
 $lang->repo->visit           = 'Visit';
 $lang->repo->space           = 'Space';
 $lang->repo->allSpace        = 'All Spaces';
+$lang->repo->members         = 'Members';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->createTagAction    = 'Create Tag';
@@ -201,9 +202,8 @@ if(!$config->inQuickon && !$config->inCompose)
     $lang->repo->scmList['Subversion'] = 'SVN';
 }
 
-$lang->repo->aclList['private'] = 'Private(The product personnel can access it)';
-$lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';
-$lang->repo->aclList['custom']  = 'Custom';
+$lang->repo->aclList['open']    = 'Open(Space members can access it)';
+$lang->repo->aclList['private'] = 'Private(Only repository members can access it)';
 
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';

@@ -95,11 +95,6 @@ class repoZen extends repo
      */
     protected function prepareCreateRepo(object $repo): object|false
     {
-        $acl = $this->checkACL();
-        if(!$acl) return false;
-
-        $repo->acl  = json_encode($acl);
-
         $group  = $this->repo->getGroups($repo->serviceHost, $repo->namespace);
         $server = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         $repo->path = "{$server->url}/{$group}/{$repo->name}";

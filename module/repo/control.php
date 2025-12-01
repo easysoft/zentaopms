@@ -160,7 +160,7 @@ class repo extends control
         {
             /* Prepare data. */
             $formData         = form::data($this->config->repo->form->create);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList);
             $repo             = $this->repoZen->prepareCreate($formData, $isPipelineServer);
 
             /* Create a repo. */
@@ -202,10 +202,10 @@ class repo extends control
         {
             /* Prepare data. */
             $formData = form::data($this->config->repo->form->createRepo)->get();
-            $repo     = $this->repoZen->prepareCreateRepo($formData);
+            if($formData->acl == 'private') $this->config->repo->createRepo->requiredFields .= ',members';
 
             /* Create a repo. */
-            if($repo) $repoID = $this->repo->createRepo($repo);
+            $repoID = $this->repo->createRepo($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(in_array($formData->SCM, $this->config->repo->notSyncSCM))
@@ -2023,5 +2023,24 @@ class repo extends control
             return print(json_encode($options[0]['items']));
         }
         return print(json_encode(array()));
+    }
+
+    /**
+     * 通过ajax获取空间的成员列表。
+     * Ajax: Get space members.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceMembers(int $spaceID)
+    {
+        $users     = $this->loadModel('user')->getPairs('noletter');
+        $spaceUser = $this->loadModel('devopsspace')->getSpaceUsers($spaceID);
+
+        $userList = array();
+        foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
+
+        return print(json_encode($userList));
     }
 }
