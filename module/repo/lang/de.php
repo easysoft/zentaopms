@@ -202,7 +202,7 @@ if(!$config->inQuickon && !$config->inCompose)
     $lang->repo->scmList['Subversion'] = 'SVN';
 }
 
-$lang->repo->aclList['open']    = 'Open(space members can access it)';
+$lang->repo->aclList['open']    = 'Open(Space members can access it)';
 $lang->repo->aclList['private'] = 'Private(Only repository members can access it)';
 
 $lang->repo->gitlabHost    = 'GitLab Host';

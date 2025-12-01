@@ -173,9 +173,9 @@ class repoModel extends model
 
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
-        if($repoID && !empty($repo->members))
+        if($repoID && !empty($members))
         {
-            $members = explode(',', $repo->members);
+            $members = explode(',', $members);
             foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repoID' => $repoID, 'account' => $member))->exec();
         }
 

@@ -2029,14 +2029,14 @@ class repo extends control
      * 通过ajax获取空间的成员列表。
      * Ajax: Get space members.
      *
-     * @param  int $space
+     * @param  int $spaceID
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceMembers(int $space)
+    public function ajaxGetSpaceMembers(int $spaceID)
     {
         $users     = $this->loadModel('user')->getPairs('noletter');
-        $spaceUser = $this->loadModel('devopsspace')->getSpaceUsers($space);
+        $spaceUser = $this->loadModel('devopsspace')->getSpaceUsers($spaceID);
 
         $userList = array();
         foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
