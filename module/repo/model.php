@@ -180,7 +180,7 @@ class repoModel extends model
         }
 
         $repo = $this->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM))
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
         {
             $token = uniqid();
             $res   = $this->loadModel($repo->SCM)->addPushWebhook($repo, $token);
