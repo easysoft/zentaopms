@@ -198,8 +198,8 @@ $batchItems  = array();
 if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
 if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
 {
-    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink);
-    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink);
+    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');
+    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->epic->create) : '');
     if($canOpreate['batchCreateRequirement']) $batchItems[]  = array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink);
     if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
 }
@@ -208,7 +208,7 @@ if(!empty($product->id))
 {
     if(count($batchItems) > 1)
     {
-        $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+        $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->story->batchCreate) : '');
     }
     else
     {
@@ -228,11 +228,11 @@ if(commonModel::isTutorialMode())
     $canlinkPlanStory = false;
 }
 
-$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
-$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->story->linkStory) : '');
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm', 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStoryByPlan) : '');
 
 $createBtnGroup = null;
-if(!$isFromDoc && empty($frozenStories))
+if(!$isFromDoc)
 {
     if($canOpreate['create'])
     {
@@ -243,9 +243,11 @@ if(!$isFromDoc && empty($frozenStories))
                 setClass('btn secondary'),
                 set::icon('plus'),
                 set::url($createLink),
+                set::disabled(!empty($frozenStories)),
+                $frozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->create)) : null,
                 $lang->story->create
             ),
-            empty($createItems) ? null : dropdown
+            empty($createItems) || $frozenStories ? null : dropdown
             (
                 btn(setClass('btn secondary dropdown-toggle'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -256,7 +258,7 @@ if(!$isFromDoc && empty($frozenStories))
     }
     elseif(count($createItems) == 1)
     {
-        $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+        $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary' . ($frozenStories ? ' disabled' : ''), 'icon' => 'plus')));
     }
 }
 
@@ -299,16 +301,18 @@ if($product && !$isFromDoc) toolbar
 
     $createBtnGroup,
 
-    $canLinkStory && $canlinkPlanStory && empty($frozenStories) ? btngroup
+    $canLinkStory && $canlinkPlanStory ? btngroup
     (
         btn(
             setClass('btn primary'),
             set::icon('link'),
             set::url($linkStoryUrl),
+            set::disabled(!empty($frozenStories)),
+            $frozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->linkStory)) : null,
             setData('app', $app->tab),
             $lang->story->linkStory
         ),
-        dropdown
+        $frozenStories ? null : dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -316,8 +320,8 @@ if($product && !$isFromDoc) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory && empty($frozenStories) ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory && empty($frozenStories) ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn' . ($frozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary' . ($frozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null
 );
 
 $isFromDoc ? null : sidebar
