@@ -39,13 +39,15 @@ $promptMenuInject = function()
     $menuOptions = $this->config->ai->menuPrint->locations[$module][$method];
     $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
+    $btnName     = sprintf($this->lang->ai->promptMenu->dropdownTitle, isset($this->lang->ai->dataSource[$module]['common']) ? $this->lang->ai->dataSource[$module]['common'] : '');
+
 
     if($isDocApp)
     {
         h::globalJS
         (
             'window.docAIPrompts = ' . json_encode($prompts) . ";\n",
-            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $this->lang->ai->promptMenu->dropdownTitle, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
+            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $btnName, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
         );
         return;
     }
@@ -55,7 +57,6 @@ $promptMenuInject = function()
     $html            = '';
     $objectVarName   = empty($menuOptions->objectVarName) ? $menuOptions->module : $menuOptions->objectVarName;
     $currentObjectId = !empty($this->view->$objectVarName) ? $this->view->$objectVarName->id : 0;
-    $btnName         = sprintf($this->lang->ai->promptMenu->dropdownTitle, isset($this->lang->ai->dataSource[$module]['common']) ? $this->lang->ai->dataSource[$module]['common'] : '');
     $html .= '<div class="prompts dropdown inline-block' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn ai-styled size-sm size-sm font-medium' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown" data-placement="' . zget($menuOptions, 'buttonPlacement', 'bottom-end') . '">' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
     foreach($prompts as $prompt)
     {
