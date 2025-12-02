@@ -1798,14 +1798,17 @@ class repoModel extends model
 
             $server = $this->loadModel('gitfox')->getServer();
 
-            $repo->path     = (!$repo->path && $service) ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : $repo->path;
-            $repo->apiPath  = sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->gitfoxID);
+            $repo->path     = (!$repo->path && $server) ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->gitfoxID) : $repo->path;
+            $repo->apiPath  = $repo->path;
             $repo->client   = $server ? $server->url : '';
             $repo->password = $server ? $server->token : '';
             $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
         }
         else
         {
+            $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
+            if(!$service) return $repo;
+
             if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
             {
                 $path = $this->app->getAppRoot() . "www/data/repo/{$repo->name}_{$repo->SCM}";
