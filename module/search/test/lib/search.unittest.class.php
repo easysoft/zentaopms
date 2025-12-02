@@ -1214,7 +1214,7 @@ class searchTest
         }
 
         try {
-            $result = $this->objectModel->saveIndex($objectType, $object);
+            $result = $tester->loadModel('search')->saveIndex($objectType, $object);
             if(dao::isError()) return dao::getError();
 
             // 返回保存后的索引记录
