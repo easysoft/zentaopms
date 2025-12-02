@@ -74,25 +74,25 @@ window.executeZentaoPrompt = async function(info, testingMode)
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
 
-    let openedFormApp;
-    if(auto && info.formLocation)
+    const htmlDiff      = await zui.HTMLDiff.loadModule();
+    const langData      = zaiPanel.options.langData || {};
+    const noTargetForm  = !info.targetForm || info.targetForm === 'empty.empty';
+    const toolName      = `zentao_tool_${info.promptID}`;
+    const dataPropNames = info.dataPropNames || {};
+    const propNames     = dataPropNames[info.objectType] || {};
+    const isChange      = info.schema.title === dataPropNames.common;
+
+    if(!noTargetForm)
     {
-        zaiPanel.closePopup('zentao-prompt-popoup');
-        openedFormApp = await openPageForm(info.formLocation);
+        const properties    = info.schema.properties;
+        if(propNames.title === undefined) propNames.title = info.schema.title;
+        Object.keys(properties).forEach(key =>
+        {
+            if(propNames[key] === undefined) propNames[key] = properties[key].title || properties[key].description;
+        });
     }
 
-    const langData  = zaiPanel.options.langData || {};
-    const toolName  = `zentao_tool_${info.promptID}`;
-    const dataPropNames = info.dataPropNames || {};
-    let   propNames = dataPropNames[info.objectType] || {};
-    const isChange  = info.schema.title === dataPropNames.common;
-    if(!isChange)
-    {
-        const properties = info.schema.properties;
-        propNames = {title: info.schema.title};
-        Object.keys(properties).forEach(key => propNames[key] = properties[key].title || properties[key].description);
-    }
-    const tools = [{
+    const tools = noTargetForm ? [] : [{
         name       : toolName,
         displayName: info.name,
         description: info.name,
@@ -189,18 +189,26 @@ window.executeZentaoPrompt = async function(info, testingMode)
             };
         },
     }];
-    const postMessage =
-    {
-        content: info.name,
-        chat:    {type: 'agent', model: info.model, tools: tools, prompt: [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n')},
-    };
-    zaiPanel.openPopup({id: 'zentao-prompt-popoup', viewType: 'chat', width: info.content ? 800 : 600, postMessage: postMessage});
+    const formConfig  = getPromptFormConfig(info.fields, info.formConfig);
+    zaiPanel.openPopup({
+        id         : 'zentao-prompt-popoup',
+        viewType   : 'chat',
+        width      : info.content ? 800 : 600,
+        postMessage: formConfig ? undefined : {content: [{role: 'system', content: info.dataPrompt}]},
+        creatingChat: {
+            tempTitle: info.name,
+            type     : 'agent',
+            model    : info.model,
+            tools    : tools,
+            prompt   : [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n'),
+            form     : formConfig,
+        },
+    });
 };
 
 function registerZentaoAIPlugin(lang)
 {
     const plugin = zui.AIPlugin.define('zentao', {name: lang.name, icon: 'zentao'});
-
     plugin.defineContextProvider(
     {
         code: 'currentPage',
