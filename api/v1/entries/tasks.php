@@ -154,6 +154,26 @@ class tasksEntry extends entry
         if($this->request('multiple'))
         {
             if(count($this->request('team')) != count($this->request('teamEstimate'))) return $this->sendError(400, 'Arrays team and teamEstimate should be the same length');
+
+            /* Check if team estimate is greater than 0. */
+            $team         = $this->request('team', array());
+            $teamEstimate = $this->request('teamEstimate', array());
+            $users        = $this->loadModel('user')->getPairs('noletter');
+            foreach($teamEstimate as $index => $estimate)
+            {
+                if(!isset($team[$index]) || empty($team[$index])) continue;
+
+                $estimateValue = (float)$estimate;
+                if(!is_numeric($estimate) || $estimateValue <= 0)
+                {
+                    $account  = $team[$index];
+                    $realname = zget($users, $account);
+                    $errorMsg = sprintf($this->lang->error->gt, $this->lang->task->estimateAB, '0');
+                    if($realname) $errorMsg = $realname . ' ' . $errorMsg;
+                    return $this->sendError(400, $errorMsg);
+                }
+            }
+
             $this->setPost('mode', $this->request('mode', 'linear'));
             $this->setPost('teamSource', array_fill(0, count($this->request('team')), ''));
         }
