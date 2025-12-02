@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 /**
 
 title=测试 docModel->getFileIcon();
-cid=1
+cid=16093
 
 - 获取txt类型文件的图标 @<i class='file-icon icon icon-file-text'></i>
 - 获取doc类型文件的图标 @<i class='file-icon icon icon-file-word'></i>

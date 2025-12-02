@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getStepByProductAndModule();
-cid=1
+cid=19002
 
 - 获取产品 0 模块 0 的步骤信息 @0
 - 获取产品 1 模块 0 的步骤信息 @testcaseID:1 stepID: 1. testcaseID:2 stepID: 2. testcaseID:3 stepID: 3. testcaseID:4 stepID: 4.

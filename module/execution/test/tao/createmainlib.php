@@ -11,7 +11,7 @@ $doclib->gen(1);
 /**
 
 title=productModel->createmainlib();
-cid=1
+cid=16385
 pid=1
 
 */

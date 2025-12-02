@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::getPathsFromPackage();
 timeout=0
-cid=0
+cid=16465
 
 - 测试步骤1：正常插件包提取路径列表 @array
 - 测试步骤2：不存在的插件包代号 @array

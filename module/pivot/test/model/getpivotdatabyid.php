@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getPivotDataByID();
 timeout=0
-cid=0
+cid=17393
 
 - 步骤1：正常情况-获取存在的透视表ID属性id @1001
 - 步骤2：正常情况-验证透视表分组属性group @85

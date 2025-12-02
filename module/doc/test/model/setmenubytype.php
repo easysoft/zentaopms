@@ -5,7 +5,7 @@
 
 title=测试 docModel->setMenuByType();
 timeout=0
-cid=1
+cid=16153
 
 - 测试空数据
  - 第45条的type属性 @mine

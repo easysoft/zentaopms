@@ -1,0 +1,50 @@
+---
+title: Pipeline测试数据for buildCreateRepoForm
+desc: 用于测试repoZen::buildCreateRepoForm()方法的pipeline表数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Pipeline ID
+  range: 1-5
+  format: ''
+- field: type
+  note: Pipeline类型
+  range: 'gitlab{2},gitea{2},gogs{1}'
+- field: name
+  note: Pipeline名称
+  range: 'GitLab服务器{2},Gitea服务器{2},Gogs服务器{1}'
+- field: url
+  note: 服务器URL
+  range: 'https://gitlab.example.com{2},https://gitea.example.com{2},https://gogs.example.com{1}'
+- field: account
+  note: 账号
+  range: 'admin{3},user{2}'
+- field: password
+  note: 密码
+  range: 'password123{3},test123{2}'
+- field: token
+  note: 访问令牌
+  range: 'token_gitlab_123{2},token_gitea_456{2},token_gogs_789{1}'
+- field: private
+  note: 私有密钥
+  range: '[]{5}'
+- field: instanceID
+  note: 实例ID
+  range: '0{3},1{2}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{4},user{1}'
+- field: createdDate
+  note: 创建时间
+  range: '2023-01-01 00:00:00{2},2023-06-01 00:00:00{2},2023-12-01 00:00:00{1}'
+- field: editedBy
+  note: 编辑者
+  range: 'admin{3},user{1},[]{1}'
+- field: editedDate
+  note: 编辑时间
+  range: '2023-01-01 00:00:00{2},2023-06-01 00:00:00{2},2023-12-01 00:00:00{1}'
+- field: deleted
+  note: 删除标记
+  range: '0{5}'

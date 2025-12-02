@@ -1,0 +1,105 @@
+---
+title: 文档内容测试数据
+desc: 用于测试appendFiles方法的文档内容数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: doc
+  note: 文档ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 标题
+  range: test document 1, test document 2, test document 3, test document 4, test document 5, test document 6, test document 7, test document 8, test document 9, test document 10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: digest
+  note: 摘要
+  range: digest content
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: content
+  note: 内容
+  range: test content for document
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: rawContent
+  note: 原始内容
+  range: '[]'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: files
+  note: 附件ID列表
+  range: '[]{5},1{2},2,1,2,3'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 类型
+  range: text
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: addedDate
+  note: 创建时间
+  range: 2024-01-01 00:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedBy
+  note: 编辑者
+  range: admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: editedDate
+  note: 编辑时间
+  range: 2024-01-01 00:00:00
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本号
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fromVersion
+  note: 来源版本
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

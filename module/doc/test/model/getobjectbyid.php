@@ -4,7 +4,7 @@
 /**
 
 title=测试 docModel->getObjectByID();
-cid=1
+cid=16114
 
 - 测试空数据 @0
 - 获取id=0的产品信息 @0

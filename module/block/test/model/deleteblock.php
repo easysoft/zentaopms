@@ -23,7 +23,7 @@ function initData()
 
 title=测试 block 模块的update 方法
 timeout=0
-cid=39
+cid=15227
 
 - 测试ID为2的区块是否存在属性id @2
 

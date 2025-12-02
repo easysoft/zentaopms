@@ -4,7 +4,7 @@
 /**
 
 title=测试 programplanModel->saveCustomSetting();
-cid=0
+cid=17756
 
 - 比较 stageCustom 的值 @2
 - 比较 ganttFields 的值 @3

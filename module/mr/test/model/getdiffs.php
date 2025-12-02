@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getDiffs();
 timeout=0
-cid=1
+cid=17245
 
 - 执行mrTest模块的getDiffsTest方法，参数是new stdclass  @0
 - 执行mrTest模块的getDiffsTest方法，参数是$emptyMR  @0

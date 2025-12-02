@@ -13,7 +13,7 @@ zenData('product')->gen(82);
 
 title=bugModel->confirm();
 timeout=0
-cid=1
+cid=15349
 
 - 确认指派人变化的bug
  - 第1条的field属性 @assignedTo

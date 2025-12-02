@@ -5,120 +5,106 @@
 
 title=测试 mrZen::saveMrData();
 timeout=0
-cid=0
+cid=17270
 
-- 执行mrTest模块的saveMrDataTest方法，参数是$testRepo, $singleMR  @1
-- 执行mrTest模块的saveMrDataTest方法，参数是$testRepo, $multipleMR  @1
-- 执行mrTest模块的saveMrDataTest方法，参数是$testRepo, $emptyMRList  @1
-- 执行mrTest模块的saveMrDataTest方法，参数是$testRepo, $incompleteMR  @1
-- 执行mrTest模块的saveMrDataTest方法，参数是$testRepo, $specialCharsMR  @1
+- 执行mrTest模块的saveMrDataTest方法，参数是$repo, array  @1
+- 执行mrTest模块的saveMrDataTest方法，参数是$repo, $rawMRList  @1
+- 执行mrTest模块的saveMrDataTest方法，参数是$repo, array  @1
+- 执行mrTest模块的saveMrDataTest方法，参数是$repo, array  @1
+- 执行mrTest模块的saveMrDataTest方法，参数是$repo, array  @1
+- 执行$savedMR属性status @opened
+- 执行$actionCount > 0 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$mr = zenData('mr');
-$mr->id->range('1-1000');
-$mr->hostID->range('1-5');
-$mr->sourceProject->range('1-100');
-$mr->sourceBranch->range('branch1,branch2,feature,develop,master');
-$mr->targetProject->range('1-100');
-$mr->targetBranch->range('main,master,develop');
-$mr->title->range('Fix bug,Add feature,Update docs,Refactor code');
-$mr->status->range('opened,closed,merged');
-$mr->gen(10);
+global $app, $tester;
+$app->setMethodName('view');
 
-$repo = zenData('repo');
-$repo->id->range('1-10');
-$repo->serviceHost->range('1-5');
-$repo->SCM->range('gitlab,gitea,gogs');
-$repo->gen(5);
+zenData('repo')->loadYaml('savemrdata/repo', false, 2)->gen(10);
+zenData('mr')->loadYaml('savemrdata/mr', false, 2)->gen(0);
+zenData('action')->loadYaml('savemrdata/action', false, 2)->gen(0);
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrZenTest();
 
-$testRepo = new stdclass();
-$testRepo->id = 1;
-$testRepo->serviceHost = 1;
-$testRepo->SCM = 'gitlab';
+// 测试步骤1: 保存单个普通MR数据(状态为open,需转换为opened)
+$repo = new stdclass();
+$repo->id = 1;
+$repo->serviceHost = 1;
+$repo->SCM = 'Gitlab';
 
-$singleMR = array(
-    (object)array(
-        'iid' => 1,
-        'source_project_id' => '10',
-        'source_branch' => 'feature-branch',
-        'target_project_id' => '10',
-        'target_branch' => 'master',
-        'title' => 'Test merge request',
-        'created_at' => '2023-12-01T10:00:00Z',
-        'updated_at' => '2023-12-01T11:00:00Z',
-        'merge_status' => 'can_be_merged',
-        'state' => 'opened'
-    )
-);
+$rawMR = new stdclass();
+$rawMR->iid = 100;
+$rawMR->source_project_id = '10';
+$rawMR->source_branch = 'feature-test';
+$rawMR->target_project_id = '1';
+$rawMR->target_branch = 'main';
+$rawMR->title = 'Test MR 1';
+$rawMR->created_at = '2025-11-10T10:00:00Z';
+$rawMR->updated_at = '2025-11-10T12:00:00Z';
+$rawMR->merge_status = 'can_be_merged';
+$rawMR->state = 'open';
+r($mrTest->saveMrDataTest($repo, array($rawMR))) && p() && e('1');
 
-$multipleMR = array(
-    (object)array(
-        'iid' => 2,
-        'source_project_id' => '20',
-        'source_branch' => 'bug-fix',
-        'target_project_id' => '20',
-        'target_branch' => 'develop',
-        'title' => 'Fix critical bug',
-        'created_at' => '2023-12-01T12:00:00Z',
-        'updated_at' => '2023-12-01T13:00:00Z',
-        'merge_status' => 'can_be_merged',
-        'state' => 'opened'
-    ),
-    (object)array(
-        'iid' => 3,
-        'source_project_id' => '30',
-        'source_branch' => 'feature-new',
-        'target_project_id' => '30',
-        'target_branch' => 'main',
-        'title' => 'Add new feature',
-        'created_at' => '2023-12-01T14:00:00Z',
-        'updated_at' => '2023-12-01T15:00:00Z',
-        'merge_status' => 'cannot_be_merged',
-        'state' => 'closed'
-    )
-);
+// 测试步骤2: 保存多个MR数据(包含3个MR)
+$rawMRList = array();
+for($i = 1; $i <= 3; $i++)
+{
+    $rawMR = new stdclass();
+    $rawMR->iid = 200 + $i;
+    $rawMR->source_project_id = (string)(10 + $i);
+    $rawMR->source_branch = 'feature-' . $i;
+    $rawMR->target_project_id = '1';
+    $rawMR->target_branch = 'main';
+    $rawMR->title = 'Test MR ' . $i;
+    $rawMR->created_at = '2025-11-10T10:00:00Z';
+    $rawMR->updated_at = '2025-11-10T12:00:00Z';
+    $rawMR->merge_status = 'can_be_merged';
+    $rawMR->state = 'opened';
+    $rawMRList[] = $rawMR;
+}
+r($mrTest->saveMrDataTest($repo, $rawMRList)) && p() && e('1');
 
-$emptyMRList = array();
+// 测试步骤3: 保存pullreq类型数据(flow字段存在)
+$rawMR = new stdclass();
+$rawMR->iid = 300;
+$rawMR->source_project_id = '20';
+$rawMR->source_branch = 'feature-flow';
+$rawMR->target_project_id = '1';
+$rawMR->target_branch = 'main';
+$rawMR->title = 'Test Flow MR';
+$rawMR->created_at = '2025-11-10T10:00:00Z';
+$rawMR->updated_at = '2025-11-10T12:00:00Z';
+$rawMR->merge_status = 'can_be_merged';
+$rawMR->state = 'opened';
+$rawMR->flow = 1;
+r($mrTest->saveMrDataTest($repo, array($rawMR))) && p() && e('1');
 
-$incompleteMR = array(
-    (object)array(
-        'iid' => 4,
-        'source_project_id' => '40',
-        'source_branch' => 'incomplete',
-        'target_project_id' => '40',
-        'target_branch' => 'master',
-        'title' => 'Incomplete MR',
-        'created_at' => '2023-12-01T16:00:00Z',
-        'updated_at' => '2023-12-01T17:00:00Z',
-        'state' => 'opened'
-    )
-);
+// 测试步骤4: 保存使用毫秒时间戳的MR数据
+$rawMR = new stdclass();
+$rawMR->iid = 400;
+$rawMR->source_project_id = '30';
+$rawMR->source_branch = 'feature-timestamp';
+$rawMR->target_project_id = '1';
+$rawMR->target_branch = 'main';
+$rawMR->title = 'Test Timestamp MR';
+$rawMR->created = 1699603200000;
+$rawMR->updated = 1699610400000;
+$rawMR->merge_status = 'can_be_merged';
+$rawMR->state = 'opened';
+r($mrTest->saveMrDataTest($repo, array($rawMR))) && p() && e('1');
 
-$specialCharsMR = array(
-    (object)array(
-        'iid' => 5,
-        'source_project_id' => '50',
-        'source_branch' => 'special-chars',
-        'target_project_id' => '50',
-        'target_branch' => 'master',
-        'title' => 'Fix issue with special chars: & < > " \'',
-        'created_at' => '2023-12-01T18:00:00Z',
-        'updated_at' => '2023-12-01T19:00:00Z',
-        'merge_status' => 'can_be_merged',
-        'state' => 'opened'
-    )
-);
+// 测试步骤5: 保存空的MR列表
+r($mrTest->saveMrDataTest($repo, array())) && p() && e('1');
 
-r($mrTest->saveMrDataTest($testRepo, $singleMR)) && p() && e(1);
-r($mrTest->saveMrDataTest($testRepo, $multipleMR)) && p() && e(1);
-r($mrTest->saveMrDataTest($testRepo, $emptyMRList)) && p() && e(1);
-r($mrTest->saveMrDataTest($testRepo, $incompleteMR)) && p() && e(1);
-r($mrTest->saveMrDataTest($testRepo, $specialCharsMR)) && p() && e(1);
+// 测试步骤6: 验证保存的MR状态已转换(open -> opened)
+$savedMR = $tester->dao->select('*')->from(TABLE_MR)->where('mriid')->eq(100)->fetch();
+r($savedMR) && p('status') && e('opened');
+
+// 测试步骤7: 验证action记录已创建
+$actionCount = $tester->dao->select('count(*) as count')->from(TABLE_ACTION)->where('objectType')->in('mr,pullreq')->fetch('count');
+r($actionCount > 0) && p() && e('1');

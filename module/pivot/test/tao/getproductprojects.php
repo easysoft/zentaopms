@@ -5,98 +5,42 @@
 
 title=测试 pivotTao::getProductProjects();
 timeout=0
-cid=0
+cid=17447
 
-步骤1：hasProduct=0且无关联产品的项目 >> 0
-步骤2：hasProduct=1的项目不符合条件 >> 0
-步骤3：非project类型的项目不符合条件 >> 0
-步骤4：符合条件的项目返回产品项目关联 >> 2
-步骤5：验证返回的数据结构正确 >> 1
+- 测试步骤1:验证产品101关联项目11(type=project,hasProduct=0)属性101 @11
+- 测试步骤2:验证产品102关联项目12(type=project,hasProduct=0)属性102 @12
+- 测试步骤3:验证产品103关联项目13(type=project,hasProduct=0)属性103 @13
+- 测试步骤4:验证产品104关联项目14(type=project,hasProduct=0)属性104 @14
+- 测试步骤5:验证返回5条关联关系(type=project且hasProduct=0的项目) @5
 
 */
 
-// Mock测试框架，避免框架依赖问题
-class MockPivotTest
-{
-    public function getProductProjectsTest($projects, $projectProducts): array
-    {
-        // 模拟pivotTao::getProductProjects方法的SQL逻辑:
-        // SELECT t2.product, t2.project FROM zt_project t1
-        // LEFT JOIN zt_projectproduct t2 ON t1.id = t2.project
-        // WHERE t1.type = 'project' AND t1.hasProduct = 0
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-        $result = array();
+$project = zenData('project');
+$project->id->range('11-15');
+$project->project->range('1');
+$project->type->range('project{5}');
+$project->hasProduct->range('0{5}');
+$project->name->range('项目11,项目12,项目13,项目14,项目15');
+$project->deleted->range('0{5}');
+$project->gen(5);
 
-        foreach($projects as $project) {
-            // 检查项目类型和hasProduct条件
-            if($project->type == 'project' && $project->hasProduct == 0) {
-                // 左连接projectproduct表
-                foreach($projectProducts as $pp) {
-                    if($pp->project == $project->id) {
-                        $result[$pp->product] = $pp->project;
-                    }
-                }
-            }
-        }
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('11-15');
+$projectproduct->product->range('101-105');
+$projectproduct->branch->range('0{5}');
+$projectproduct->plan->range('``{5}');
+$projectproduct->roadmap->range('``{5}');
+$projectproduct->gen(5);
 
-        return $result;
-    }
-}
+su('admin');
 
-// 创建测试实例
-$pivotTest = new MockPivotTest();
+$pivotTest = new pivotTaoTest();
 
-// 测试步骤1：hasProduct=0且无关联产品的项目
-$result1 = $pivotTest->getProductProjectsTest(
-    array(
-        (object)array('id' => 1, 'type' => 'project', 'hasProduct' => 0, 'name' => '项目1')
-    ),
-    array() // 没有产品关联
-);
-echo count($result1) . "\n";
-
-// 测试步骤2：hasProduct=1的项目不符合条件
-$result2 = $pivotTest->getProductProjectsTest(
-    array(
-        (object)array('id' => 1, 'type' => 'project', 'hasProduct' => 1, 'name' => '项目1')
-    ),
-    array(
-        (object)array('project' => 1, 'product' => 101, 'branch' => 0)
-    )
-);
-echo count($result2) . "\n";
-
-// 测试步骤3：非project类型的项目不符合条件
-$result3 = $pivotTest->getProductProjectsTest(
-    array(
-        (object)array('id' => 1, 'type' => 'sprint', 'hasProduct' => 0, 'name' => '迭代1')
-    ),
-    array(
-        (object)array('project' => 1, 'product' => 101, 'branch' => 0)
-    )
-);
-echo count($result3) . "\n";
-
-// 测试步骤4：符合条件的项目返回产品项目关联
-$result4 = $pivotTest->getProductProjectsTest(
-    array(
-        (object)array('id' => 1, 'type' => 'project', 'hasProduct' => 0, 'name' => '项目1'),
-        (object)array('id' => 2, 'type' => 'project', 'hasProduct' => 0, 'name' => '项目2')
-    ),
-    array(
-        (object)array('project' => 1, 'product' => 101, 'branch' => 0),
-        (object)array('project' => 2, 'product' => 102, 'branch' => 0)
-    )
-);
-echo count($result4) . "\n";
-
-// 测试步骤5：验证返回的数据结构正确
-$result5 = $pivotTest->getProductProjectsTest(
-    array(
-        (object)array('id' => 1, 'type' => 'project', 'hasProduct' => 0, 'name' => '项目1')
-    ),
-    array(
-        (object)array('project' => 1, 'product' => 101, 'branch' => 0)
-    )
-);
-echo (is_array($result5) ? 1 : 0) . "\n";
+r($pivotTest->getProductProjectsTest()) && p('101') && e('11'); // 测试步骤1:验证产品101关联项目11(type=project,hasProduct=0)
+r($pivotTest->getProductProjectsTest()) && p('102') && e('12'); // 测试步骤2:验证产品102关联项目12(type=project,hasProduct=0)
+r($pivotTest->getProductProjectsTest()) && p('103') && e('13'); // 测试步骤3:验证产品103关联项目13(type=project,hasProduct=0)
+r($pivotTest->getProductProjectsTest()) && p('104') && e('14'); // 测试步骤4:验证产品104关联项目14(type=project,hasProduct=0)
+r(count($pivotTest->getProductProjectsTest())) && p() && e('5'); // 测试步骤5:验证返回5条关联关系(type=project且hasProduct=0的项目)

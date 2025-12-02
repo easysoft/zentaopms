@@ -1,0 +1,30 @@
+---
+title: Project data for getStories test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Project ID
+  range: 11-13
+- field: name
+  note: Project name
+  range: 项目1,项目2,项目3
+- field: type
+  note: Project type
+  range: project
+- field: status
+  note: Project status
+  range: doing
+- field: hasProduct
+  note: Has product flag
+  range: 1
+- field: vision
+  note: Vision
+  range: rnd
+- field: model
+  note: Project model
+  range: scrum
+- field: deleted
+  note: Deleted flag
+  range: 0

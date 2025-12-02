@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::parseXMLResult();
 timeout=0
-cid=0
+cid=19211
 
 - 执行$result1['suites']) && isset($result1['cases']) && isset($result1['results'] @1
 - 执行$result2['suites']) && count($result2['cases']) > 0 @1

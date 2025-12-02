@@ -5,7 +5,7 @@
 
 title=测试 customModel::disableFeaturesByMode();
 timeout=0
-cid=0
+cid=15894
 
 - 测试步骤1：全生命周期管理模式 @0
 - 测试步骤2：轻量级管理模式 @productER,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap

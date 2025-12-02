@@ -5,7 +5,7 @@
 
 title=测试 zaiModel->enableVectorization();
 timeout=0
-cid=0
+cid=19769
 
 - 测试在没有ZAI设置时启用向量化 @failed
 - 测试向量化已启用时再次启用 @failed

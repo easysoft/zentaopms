@@ -21,7 +21,7 @@ $program->gen(5);
 
 title=测试 programModel::getTopPairs();
 timeout=0
-cid=1
+cid=17703
 
 - 获取系统中有权限的顶级项目集数量 @3
 - 获取系统中有权限的未关闭的顶级项目集数量 @2

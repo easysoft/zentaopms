@@ -5,156 +5,35 @@
 
 title=测试 chartModel::genCluBar();
 timeout=0
-cid=0
+cid=15565
 
-
+- 执行$result1) && isset($result1['series'][0]['name'] @1
+- 执行$result2) && isset($result2['series'][0]['stack'] @1
+- 执行$result3) && $result3['xAxis']['type'] == 'value @1
+- 执行$result4) && isset($result4['series'][0]['data'][0] @1
+- 执行$result5) && isset($result5['series'][0]['name'] @1
 
 */
 
-// 独立测试实现，避免框架依赖
-class chartTest
-{
-    public function genCluBarTest(string $testType = 'normal'): array
-    {
-        switch($testType)
-        {
-            case 'normal':
-                return array(
-                    'series' => array(
-                        array(
-                            'name' => 'count(计数)',
-                            'data' => array(15, 8, 3),
-                            'type' => 'bar',
-                            'stack' => '',
-                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
-                        )
-                    ),
-                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => 1),
-                    'xAxis' => array('type' => 'category', 'data' => array('active', 'resolved', 'closed'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
-                    'yAxis' => array('type' => 'value'),
-                    'tooltip' => array('trigger' => 'axis')
-                );
-            case 'stackedBar':
-                return array(
-                    'series' => array(
-                        array(
-                            'name' => 'count(合计)',
-                            'data' => array(45, 20, 12),
-                            'type' => 'bar',
-                            'stack' => 'total',
-                            'label' => array('show' => true, 'position' => 'inside', 'formatter' => '{c}')
-                        )
-                    ),
-                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => 1),
-                    'xAxis' => array('type' => 'category', 'data' => array('active', 'resolved', 'closed'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
-                    'yAxis' => array('type' => 'value'),
-                    'tooltip' => array('trigger' => 'axis')
-                );
-            case 'cluBarY':
-                return array(
-                    'series' => array(
-                        array(
-                            'name' => 'count(计数)',
-                            'data' => array(10, 8, 6),
-                            'type' => 'bar',
-                            'stack' => '',
-                            'label' => array('show' => true, 'position' => 'right', 'formatter' => '{c}')
-                        )
-                    ),
-                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => 1),
-                    'xAxis' => array('type' => 'value'),
-                    'yAxis' => array('type' => 'category', 'data' => array('admin', 'user1', 'user2'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
-                    'tooltip' => array('trigger' => 'axis')
-                );
-            case 'withFilters':
-                return array(
-                    'series' => array(
-                        array(
-                            'name' => 'count(计数)',
-                            'data' => array(12, 8),
-                            'type' => 'bar',
-                            'stack' => '',
-                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
-                        )
-                    ),
-                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => 1),
-                    'xAxis' => array('type' => 'category', 'data' => array('module1', 'module2'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
-                    'yAxis' => array('type' => 'value'),
-                    'tooltip' => array('trigger' => 'axis')
-                );
-            case 'withLangs':
-                return array(
-                    'series' => array(
-                        array(
-                            'name' => '数量统计(计数)',
-                            'data' => array(20, 15, 8, 2),
-                            'type' => 'bar',
-                            'stack' => '',
-                            'label' => array('show' => true, 'position' => 'top', 'formatter' => '{c}')
-                        )
-                    ),
-                    'grid' => array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => 1),
-                    'xAxis' => array('type' => 'category', 'data' => array('代码错误', '配置问题', '安装问题', '安全问题'), 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true)),
-                    'yAxis' => array('type' => 'value'),
-                    'tooltip' => array('trigger' => 'axis')
-                );
-            default:
-                return array();
-        }
-    }
-}
+// 1. 导入依赖
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
 
-// 模拟测试框架函数
-function r($result) {
-    global $__test_result;
-    $__test_result = $result;
-    return $result;
-}
+// 2. 用户登录
+su('admin');
 
-function p($path) {
-    global $__test_result;
-    if(empty($path)) return $__test_result;
-
-    $value = $__test_result;
-    $parts = explode(':', $path);
-    $arrayPart = $parts[0];
-    $propertyPart = isset($parts[1]) ? $parts[1] : null;
-
-    if(preg_match('/(\w+)\[(\d+)\]/', $arrayPart, $matches)) {
-        $key = $matches[1];
-        $index = (int)$matches[2];
-        if(is_array($value) && isset($value[$key]) && is_array($value[$key]) && isset($value[$key][$index])) {
-            $value = $value[$key][$index];
-        } else {
-            return null;
-        }
-    } else {
-        if(is_array($value) && isset($value[$arrayPart])) {
-            $value = $value[$arrayPart];
-        } else {
-            return null;
-        }
-    }
-
-    if($propertyPart !== null) {
-        if(is_array($value) && isset($value[$propertyPart])) {
-            $value = $value[$propertyPart];
-        } else {
-            return null;
-        }
-    }
-
-    return $value;
-}
-
-function e($expected) {
-    return true; // 简化为总是返回true，因为我们的mock数据是正确的
-}
-
+// 3. 创建测试实例
 $chartTest = new chartTest();
 
-r($chartTest->genCluBarTest('normal')) && p('series[0]:type') && e('bar');
-r($chartTest->genCluBarTest('stackedBar')) && p('series[0]:stack') && e('total');
-r($chartTest->genCluBarTest('cluBarY')) && p('xAxis:type') && e('value');
-r($chartTest->genCluBarTest('withFilters')) && p('tooltip:trigger') && e('axis');
-r($chartTest->genCluBarTest('withLangs')) && p('grid:containLabel') && e('1');
+// 4. 执行测试步骤(至少5个)
+$result1 = $chartTest->genCluBarTest('normal');
+$result2 = $chartTest->genCluBarTest('stackedBar');
+$result3 = $chartTest->genCluBarTest('cluBarY');
+$result4 = $chartTest->genCluBarTest('withFilters');
+$result5 = $chartTest->genCluBarTest('withLangs');
+
+r(is_array($result1) && isset($result1['series'][0]['name'])) && p() && e('1');
+r(is_array($result2) && isset($result2['series'][0]['stack'])) && p() && e('1');
+r(is_array($result3) && $result3['xAxis']['type'] == 'value') && p() && e('1');
+r(is_array($result4) && isset($result4['series'][0]['data'][0])) && p() && e('1');
+r(is_array($result5) && isset($result5['series'][0]['name'])) && p() && e('1');

@@ -5,7 +5,7 @@
 
 title=测试 loadModel->buildGroupDataForGantt()
 timeout=0
-cid=0
+cid=17762
 
 - 检查构建分组Gantt数据。
  - 属性id @1

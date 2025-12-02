@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::dbListToOptions();
 timeout=0
-cid=0
+cid=16787
 
 - 执行instanceTest模块的dbListToOptionsTest方法，参数是$dbListWithAlias 属性mysql @mysql-server
 - 执行instanceTest模块的dbListToOptionsTest方法，参数是$dbListWithoutAlias 属性mongodb @mongodb

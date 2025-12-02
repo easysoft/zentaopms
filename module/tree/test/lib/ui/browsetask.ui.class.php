@@ -91,7 +91,7 @@ class browsetaskTester extends tester
         $form->dom->name->setValue($newName);
         $form->wait(1);
         $form->dom->editSubmitBtn->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if(empty($newName) || ctype_space($newName))
         {
@@ -125,7 +125,7 @@ class browsetaskTester extends tester
         $form->wait(1);
         if($form->dom->modalText->getText() != $this->lang->tree->confirmDelete) return $this->failed('删除模块提示信息错误');
         $form->dom->modalConfirm->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if(preg_replace('/\[.*]/', '', $form->dom->lastChildModule->getText()) == $moduleName) return $this->failed('删除模块失败');
         return $this->success('删除模块成功');

@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 transfer->initSysDataFields();
 timeout=0
-cid=1
+cid=19324
 
 - 测试通过project模块的getpairs方法获取数据第project条的11属性 @项目11
 - 测试通过user模块的getpairs方法获取数据第user条的admin属性 @admin

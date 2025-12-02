@@ -5,7 +5,7 @@
 
 title=测试 customModel::buildMenuItem();
 timeout=0
-cid=0
+cid=15891
 
 - 测试步骤1：分割线菜单项属性type @divider
 - 测试步骤2：普通菜单项

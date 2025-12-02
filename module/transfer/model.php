@@ -696,19 +696,14 @@ class transferModel extends model
                 $queryCondition = str_replace("`type` = '$module'", '1 = 1', $queryCondition);
             }
 
-            $selectedFields = 't1.*';
-            if($orderBy && strpos($orderBy, 'priOrder') !== false) $selectedFields .= ",IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
-            if($orderBy && strpos($orderBy, 'severityOrder') !== false) $selectedFields .= ",IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder";
+            $selectedFields = '*';
+            if($orderBy && strpos($orderBy, 'priOrder') !== false)      $selectedFields .= ",IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder";
+            if($orderBy && strpos($orderBy, 'severityOrder') !== false) $selectedFields .= ",IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder";
 
             $table = zget($this->config->objectTables, $module); //获取对应的表
-            $sql   = $this->dao->select($selectedFields)->from($table)->alias('t1');
-            if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
-            {
-                preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $queryCondition, $matches);
-                $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and t2.account $matches[1]");
-            }
-            $moduleDatas = $sql->where($queryCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
+            $moduleDatas = $this->dao->select($selectedFields)->from($table)
+                ->where($queryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($checkedItem)->fi()
                 ->beginIF($orderBy)->orderBy($orderBy)->fi()
                 ->fetchAll('id', false);
         }

@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getGradePairs();
 timeout=0
-cid=0
+cid=18537
 
 - 步骤1：默认参数获取story类型启用等级
  - 属性1 @SR

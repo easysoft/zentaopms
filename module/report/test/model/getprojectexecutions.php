@@ -11,7 +11,7 @@ su('admin');
 
 title=reportModel->getProjectExecutions();
 timeout=0
-cid=1
+cid=18165
 
 - 获取执行ID为101的名称属性101 @敏捷项目1/迭代5
 - 获取执行ID为102的名称属性102 @敏捷项目1/迭代6

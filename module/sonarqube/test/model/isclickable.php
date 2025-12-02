@@ -4,7 +4,7 @@
 /**
 
 title=测试 sonarqubeModel::isClickable();
-cid=0
+cid=18387
 
 - 页面模块是 repo， sonarqube 中 exec 字段有值，检查 execJob 方法的结果。 @0
 - 页面模块是 repo， sonarqube 中 exec 字段无值，检查 execJob 方法的结果。 @1

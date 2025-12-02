@@ -5,7 +5,7 @@
 
 title=测试 searchModel->getParamValuesTest();
 timeout=0
-cid=1
+cid=18327
 
 - 测试获取产品变量的产品数据
  - 第0条的admin属性 @A:admin

@@ -22,4 +22,6 @@ function loadConfig()
     $config->zin->wgVer    = isset($config->wgVer) ? $config->wgVer : '1';
     $config->zin->wgVerMap = isset($config->wgVerMap) ? $config->wgVerMap : array();
     $config->zin->zuiPath  = isset($config->zuiPath) ? $config->zuiPath : ($app->getWebRoot() . 'js/zui3/');
+
+    if(empty($config->zin->allowCommands)) $config->zin->allowCommands = array('zinDebug', 'hookCode');
 }

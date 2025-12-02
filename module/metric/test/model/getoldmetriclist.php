@@ -5,7 +5,7 @@
 
 title=getOldMetricList
 timeout=0
-cid=1
+cid=17116
 
 - 测试第10条数据
  - 第10条的scope属性 @project

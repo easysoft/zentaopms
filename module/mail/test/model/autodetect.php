@@ -5,7 +5,7 @@
 
 title=测试 mailModel::autoDetect();
 timeout=0
-cid=0
+cid=17003
 
 - 步骤1：正常QQ邮箱配置检测属性host >> smtp.qq.com
 - 步骤2：正常163邮箱配置检测属性host >> smtp.163.com

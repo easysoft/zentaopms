@@ -5,7 +5,7 @@
 
 title=测试 caselibZen::getDataForImport();
 timeout=0
-cid=0
+cid=15545
 
 - 步骤1：正常导入CSV数据（跳过空标题行） @3
 - 步骤2：从缓存文件读取数据 @缓存用例

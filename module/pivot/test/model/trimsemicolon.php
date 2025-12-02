@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->trimSemicolon().
 timeout=0
-cid=1
+cid=17436
 
 - 测试末尾存在分号。 @select id,name from zt_project
 

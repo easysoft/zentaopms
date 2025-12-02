@@ -5,7 +5,7 @@
 
 title=测试 biModel::prepareCopySQL();
 timeout=0
-cid=0
+cid=15202
 
 - 步骤1：测试有效duckdb路径返回字符串类型 @1
 - 步骤2：测试空路径参数返回结果类型验证 @1

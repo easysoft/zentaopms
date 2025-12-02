@@ -14,7 +14,7 @@ su('admin');
 
 title=- 测试导出任务时所属项目字段第rows[0]条的project属性 @项目11(
 timeout=0
-cid=11
+cid=19312
 
 - 测试导出任务时任务名称字段第rows[0]条的name属性 @开发任务11
 - 测试导出任务的状态字段第rows[0]条的status属性 @wait

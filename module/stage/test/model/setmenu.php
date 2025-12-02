@@ -3,7 +3,7 @@
 /**
 
 title=测试 stageModel->setMenu();
-cid=1
+cid=18423
 
 - 测试传入错误类型 @0
 - 设置瀑布模型导航 @baseline-templatetype,stage-settype,stage-plusbrowse

@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setTO();
 timeout=0
-cid=0
+cid=17026
 
 - 步骤1：空toList列表情况 @0
 - 步骤2：toList包含有效用户但emails为空 @0

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getDomain();
 timeout=0
-cid=0
+cid=15619
 
 - 步骤1：使用默认实例获取域名信息 @0
 - 步骤2：使用默认实例和空组件名获取域名 @0

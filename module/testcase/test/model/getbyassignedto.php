@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 testcaseModel->getByAssignedTo();
 timeout=0
-cid=1
+cid=18975
 
 - 测试获取指派给 admin 的用例执行 @5,1
 

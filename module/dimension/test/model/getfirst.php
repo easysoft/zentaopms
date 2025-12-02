@@ -5,7 +5,7 @@
 
 title=测试 dimensionModel::getFirst();
 timeout=0
-cid=0
+cid=16035
 
 - 执行dimensionTest模块的getFirstTest方法，参数是'1, 2, 3, 4, 5' 属性name @维度1
 - 执行dimensionTest模块的getFirstTest方法，参数是'1, 2, 3, 4, 5' 属性id @1

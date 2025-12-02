@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::apiDeleteTagPriv();
 timeout=0
-cid=0
+cid=16594
 
 - 步骤1：空gitlabID @~~
 - 步骤2：无效projectID @~~

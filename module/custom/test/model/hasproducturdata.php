@@ -5,7 +5,7 @@
 
 title=测试 customModel::hasProductURData();
 timeout=0
-cid=0
+cid=15909
 
 - 步骤1：测试空数据库中无用户需求数据 @0
 - 步骤2：测试非requirement类型story时返回0 @0

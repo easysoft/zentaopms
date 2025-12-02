@@ -5,7 +5,7 @@
 
 title=测试 searchTao::markKeywords();
 timeout=0
-cid=0
+cid=18331
 
 - 执行searchTest模块的markKeywordsDirectTest方法，参数是'This is a test content', 'test'  @This is a <span class='text-danger'>test</span>  content
 - 执行searchTest模块的markKeywordsDirectTest方法，参数是'This contains key1 and key2 words', 'key1 key2'  @This contains <span class='text-danger'>key1</span>  and <span class='text-danger'>key2</span>  words

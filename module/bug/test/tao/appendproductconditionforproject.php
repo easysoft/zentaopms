@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 title=bugTao->appendProductConditionForProject();
 timeout=0
-cid=1
+cid=15412
 
 - 处理 查询语句 1=1 产品 1 分支 all 的查询语句 @1=1 AND `product` = 1
 - 处理 查询语句 1=1 产品 2 分支 all 的查询语句 @1=1 AND `product` = 2

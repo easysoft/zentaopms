@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 pivotModel->getBugs();
-cid=1
+cid=17372
 pid=1
 
 测试获取一个月内的bug数据统计                       >> admin,10,1;user1,33.33%,10,1

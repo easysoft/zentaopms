@@ -5,7 +5,7 @@
 
 title=测试 executionModel::buildCaseSearchForm();
 timeout=0
-cid=0
+cid=16270
 
 - 执行executionTest模块的buildCaseSearchFormTest方法，参数是$normalProducts, 1, '/execution-testcase-1.html', 1  @executionCase
 - 执行executionTest模块的buildCaseSearchFormTest方法，参数是$normalProducts, 2, '/execution-testcase-2.html', 2  @executionCase

@@ -39,7 +39,7 @@ $config->doc->form->create['version']      = array('type' => 'int',      'requir
 $config->doc->form->create['product']      = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['project']      = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['execution']    = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->doc->form->create['module']       = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->create['module']       = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['lib']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['status']       = array('type' => 'string',   'required' => false, 'default' => 'normal');
 $config->doc->form->create['parent']       = array('type' => 'int',      'required' => false, 'default' => 0);
@@ -70,7 +70,7 @@ $config->doc->form->edit['title']       = array('type' => 'string',   'required'
 $config->doc->form->edit['product']     = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['project']     = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['execution']   = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->doc->form->edit['module']      = array('type' => 'string',   'required' => false, 'default' => '');
+$config->doc->form->edit['module']      = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['lib']         = array('type' => 'int',      'required' => false, 'default' => 0, 'skipRequired' => true);
 $config->doc->form->edit['status']      = array('type' => 'string',   'required' => false, 'default' => 'normal');
 $config->doc->form->edit['parent']      = array('type' => 'int',      'required' => false, 'default' => 0);
@@ -100,7 +100,7 @@ $config->doc->form->movelib['groups'] = array('type' => 'array',    'required' =
 $config->doc->form->movelib['users']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 
 $config->doc->form->movedoc['lib']        = array('type' => 'int',      'required' => true,  'default' => '');
-$config->doc->form->movedoc['module']     = array('type' => 'int',      'required' => false, 'default' => '');
+$config->doc->form->movedoc['module']     = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->movedoc['acl']        = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movedoc['groups']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->movedoc['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
@@ -109,7 +109,7 @@ $config->doc->form->movedoc['readUsers']  = array('type' => 'array',    'require
 $config->doc->form->movedoc['parent']     = array('type' => 'int',      'required' => false, 'default' => 0);
 
 $config->doc->form->movetemplate['lib']    = array('type' => 'int',    'required' => true,  'default' => '');
-$config->doc->form->movetemplate['module'] = array('type' => 'int',    'required' => true,  'default' => '');
+$config->doc->form->movetemplate['module'] = array('type' => 'int',    'required' => true,  'default' => 0);
 $config->doc->form->movetemplate['parent'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->doc->form->movetemplate['acl']    = array('type' => 'string', 'required' => true,  'default' => '');
 

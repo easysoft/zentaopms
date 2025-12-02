@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 commonModel->formatDate();
 timeout=0
-cid=1
+cid=15670
 
 - 查看格式化后的日期 @2023-01-01
 - 查看格式化后的日期 @2023-01-01 00:00:00

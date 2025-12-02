@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 compileModel->getBuildUrl();
 timeout=0
-cid=1
+cid=15745
 
 - 检测password为空时获取的信息属性userPWD @123456:zxd
 - 检测token为空时获取的信息属性url @https://gitlabdev.qc.oop.cc/job/11/build/api/json

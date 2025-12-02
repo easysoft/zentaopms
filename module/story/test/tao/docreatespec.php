@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->doCreateSpec();
-cid=0
+cid=18618
 
 - 不传入任何数据。 @0
 - 验证spec信息。

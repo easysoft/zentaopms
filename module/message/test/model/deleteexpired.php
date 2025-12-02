@@ -5,7 +5,7 @@
 
 title=测试 messageModel::deleteExpired();
 timeout=0
-cid=0
+cid=17049
 
 - 执行messageTest模块的deleteExpiredTest方法，参数是30  @4
 - 执行messageTest模块的deleteExpiredTest方法，参数是7  @4

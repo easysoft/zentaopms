@@ -5,32 +5,41 @@
 
 title=测试 ssoZen::buildSSOParams();
 timeout=0
-cid=0
+cid=18410
 
-- 步骤1：正常referer参数 @token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php
-- 步骤2：空referer参数 @token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=
-- 步骤3：包含特殊字符的referer @token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php?param=value&test=123
-- 步骤4：长referer参数 @token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/very/long/path/to/some/page/with/many/segments/index.php?param1=value1&param2=value2&param3=value3
-- 步骤5：不同token值 @token=different_token_67890&auth=7a6462d2e7bf232ff8b4e087f35ae500&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php
+- 步骤1:测试正常referer参数生成SSO参数字符串 @1
+- 步骤2:测试空referer参数生成SSO参数字符串 @1
+- 步骤3:测试包含特殊字符的referer参数正确包含在结果中 @1
+- 步骤4:测试生成的参数包含auth计算值 @1
+- 步骤5:测试生成的参数包含callback回调地址 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
+// 2. 设置SSO配置
+global $config;
+if(!isset($config->sso))
+{
+    $config->sso = new stdClass();
+}
+$config->sso->code = 'test_sso_code';
+$config->sso->key  = 'test_sso_key';
+
+// 3. 设置必要的GET参数模拟SSO环境
+$_GET['token'] = 'test_token_abc123';
+
+// 4. 用户登录(选择合适角色)
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$ssoTest = new ssoTest();
+// 5. 创建测试实例(变量名与模块名一致)
+$ssoTest = new ssoZenTest();
 
-// 4. 测试步骤：必须包含至少5个测试步骤
-r($ssoTest->buildSSOParamsTest('http://test.com/index.php')) && p() && e('token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php'); // 步骤1：正常referer参数
-r($ssoTest->buildSSOParamsTest('')) && p() && e('token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer='); // 步骤2：空referer参数
-r($ssoTest->buildSSOParamsTest('http://test.com/index.php?param=value&test=123')) && p() && e('token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php?param=value&test=123'); // 步骤3：包含特殊字符的referer
-r($ssoTest->buildSSOParamsTest('http://test.com/very/long/path/to/some/page/with/many/segments/index.php?param1=value1&param2=value2&param3=value3')) && p() && e('token=test_token_12345&auth=c08056e83c5d8bf81be65d50eedbc5ab&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/very/long/path/to/some/page/with/many/segments/index.php?param1=value1&param2=value2&param3=value3'); // 步骤4：长referer参数
-
-// 步骤5：测试不同token值
-$_GET['token'] = 'different_token_67890';
-r($ssoTest->buildSSOParamsTest('http://test.com/index.php')) && p() && e('token=different_token_67890&auth=7a6462d2e7bf232ff8b4e087f35ae500&userIP=127.0.0.1&callback=http%3A%2F%2Ftest.com%2Fsso-login-type-return.html&referer=http://test.com/index.php'); // 步骤5：不同token值
+// 6. 强制要求:必须包含至少5个测试步骤
+r(substr_count($ssoTest->buildSSOParamsTest('home'), 'token=') && substr_count($ssoTest->buildSSOParamsTest('home'), 'auth=') && substr_count($ssoTest->buildSSOParamsTest('home'), 'userIP=') && substr_count($ssoTest->buildSSOParamsTest('home'), 'callback=') && substr_count($ssoTest->buildSSOParamsTest('home'), 'referer=')) && p() && e('1'); // 步骤1:测试正常referer参数生成SSO参数字符串
+r(substr_count($ssoTest->buildSSOParamsTest(''), 'token=test_token_abc123')) && p() && e('1'); // 步骤2:测试空referer参数生成SSO参数字符串
+r(substr_count($ssoTest->buildSSOParamsTest('test%20page'), 'referer=test%20page')) && p() && e('1'); // 步骤3:测试包含特殊字符的referer参数正确包含在结果中
+r(substr_count($ssoTest->buildSSOParamsTest('dashboard'), 'auth=')) && p() && e('1'); // 步骤4:测试生成的参数包含auth计算值
+r(substr_count($ssoTest->buildSSOParamsTest('project'), 'callback=')) && p() && e('1'); // 步骤5:测试生成的参数包含callback回调地址

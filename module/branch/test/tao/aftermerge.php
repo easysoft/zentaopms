@@ -21,7 +21,7 @@ su('admin');
 
 title=测试 branchModel->afterMerge();
 timeout=0
-cid=1
+cid=15341
 
 - 测试合并分支1 到 分支2 @0
 - 测试合并分支4 到 新建分支 @1

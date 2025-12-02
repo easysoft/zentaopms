@@ -46,6 +46,6 @@ ALTER TABLE `zt_kanbanregion` CHANGE `order` `order` mediumint NOT NULL DEFAULT 
 ALTER TABLE `zt_kanbanspace` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_projectstory` CHANGE `branch` `branch` mediumint unsigned NOT NULL AFTER `product`;
 
-ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text NOT NULL DEFAULT '' AFTER `type`;
 
 ALTER TABLE `zt_mr` ADD `squash` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `removeSourceBranch`;

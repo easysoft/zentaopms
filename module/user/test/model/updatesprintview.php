@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->updateSprintView();
-cid=0
+cid=19664
 
 - 测试更新ID为107的迭代的用户视图。 @1
 - 查看ID为107的迭代的用户视图是否更新成功属性sprints @,107

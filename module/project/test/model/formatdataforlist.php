@@ -5,7 +5,7 @@
 
 title=测试 projectModel::formatDataForList();
 timeout=0
-cid=0
+cid=17812
 
 - 执行projectTest模块的formatDataForListTest方法，参数是$project1, $PMList1 
  - 属性budget @¥ 5万

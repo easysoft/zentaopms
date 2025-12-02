@@ -5,7 +5,7 @@
 
 title=测试 projectModel::recordFirstEnd();
 timeout=0
-cid=0
+cid=17866
 
 - 步骤1：正常项目，有有效end日期 @1
 - 步骤2：正常项目，end为零日期 @1

@@ -4,7 +4,7 @@
 
 title=测试 weeklyModel->getReportData();
 timeout=0
-cid=1
+cid=19729
 
 - 检查是否存在pv属性 @1
 - 检查是否存在ev属性 @1

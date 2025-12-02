@@ -5,7 +5,7 @@
 
 title=测试 storyTao::updateLane();
 timeout=0
-cid=0
+cid=18661
 
 - 步骤1：正常需求story类型 @success
 - 步骤2：正常需求requirement类型 @success

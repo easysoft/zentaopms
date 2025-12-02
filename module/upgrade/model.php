@@ -180,6 +180,7 @@ class upgradeModel extends model
             $this->addSubStatus();
         }
 
+        $this->convertCharset();
         $this->loadModel('program')->refreshStats(true);
         $this->loadModel('product')->refreshStats(true);
         $this->deletePatch();
@@ -343,7 +344,7 @@ class upgradeModel extends model
             $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
             if($result->rowCount() > 0)
             {
-                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
+                $this->dbh->exec("UPDATE $table SET company = '{$this->app->company->id}'");
             }
         }
     }
@@ -657,10 +658,11 @@ class upgradeModel extends model
      * 删除无用的文件。
      * Delete Useless Files.
      *
+     * @param  string $script
      * @access public
      * @return array
      */
-    public function deleteFiles(): array
+    public function deleteFiles(string $script): array
     {
         $result = array();
         $zfile  = $this->app->loadClass('zfile');
@@ -681,7 +683,7 @@ class upgradeModel extends model
                     if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
                        (!$isDir && !$zfile->removeFile($fullPath)))
                     {
-                        $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
+                        $result[] = 'rm -fr ' . $fullPath;
                     }
                 }
             }
@@ -696,11 +698,19 @@ class upgradeModel extends model
             if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
                 (!$isDir && !$zfile->removeDir($patchPath)))
             {
-                $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
+                $result[] = 'rm -fr ' . $patchPath;
             }
         }
 
-        return $result;
+        if(empty($result)) return $result;
+
+        asort($result);
+
+        $content = "#!/bin/bash\n";
+        foreach($result as $cmd) $content .= "$cmd\n";
+        file_put_contents($script, $content);
+
+        return ["/bin/bash $script"];
     }
 
     /**
@@ -1106,20 +1116,12 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        static $mysqlVersion;
-        if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
 
         $ignoreCode = '|1050|1054|1060|1091|1061|';
         $sqls       = $this->parseToSqls($sqlFile); // Get sqls in the file.
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
-
-            /* Replace sql that don't meet the version requirements. */
-            if($mysqlVersion <= 4.1) $sql = str_replace(array('DEFAULT CHARSET=utf8', 'CHARACTER SET utf8 COLLATE utf8_general_ci'), '', $sql);
-            if(stripos($sql, 'fulltext') !== false && stripos($sql, 'innodb') !== false && $mysqlVersion < 5.6) $sql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
-            /* Replace constants in SQL. */
-            $sql = str_replace(array('zt_', '__DELIMITER__', '__TABLE__'), array($this->config->db->prefix, ';', $this->config->db->name), $sql);
 
             try
             {
@@ -1158,17 +1160,27 @@ class upgradeModel extends model
     public function parseToSqls(string $sqlFile): array
     {
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
-        $sqlList = array();
-        $sqls    = explode("\n", file_get_contents($sqlFile));
-        foreach($sqls as $line)
+        $sqls  = array();
+        $lines = explode("\n", file_get_contents($sqlFile));
+        foreach($lines as $line)
         {
             $line = trim($line);
             /* Skip sql that is note and empty sql. */
             if(!$line || preg_match('/^--|^#|^\/\*/', $line)) continue;
-            $sqlList[] = $line;
+            $sqls[] = $line;
         }
 
-        return array_filter(explode(';', join("\n", $sqlList)));
+        $this->loadModel('install');
+        $sqls = array_filter(explode(';', implode("\n", $sqls)));
+        foreach($sqls as $key => $sql)
+        {
+            $sql = trim($sql); // Trim \n and space.
+            $sql = $this->install->replaceContantsInSQL($sql);
+            $sql = $this->install->appendMySQLTableOptions($sql);
+            $sqls[$key] = $sql;
+        }
+
+        return $sqls;
     }
 
 
@@ -10835,25 +10847,41 @@ class upgradeModel extends model
         $dbVersion = $this->loadModel('install')->getDatabaseVersion();
         if(version_compare($dbVersion, '5.6', '<')) return true;
 
-        /* 转换数据库的字符集。Convert database charset. */
-        $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        /* 获取服务器的字符集和排序规则。Get server charset and collation. */
+        $result          = $this->dbh->getServerCharsetAndCollation($this->config->db->name);
+        $serverCharset   = $result['charset'];
+        $serverCollation = $result['collation'];
 
-        /* 转换自定义工作流表的字符集。Convert custom workflow tables charset. */
-        $flowTables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
-        foreach($flowTables as $flowTable) $this->dao->query("ALTER TABLE `$flowTable` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        /* 如果服务器的字符集不支持配置的字符集，则不转换。If server charset does not support configured charset, do not convert. */
+        if($this->config->db->encoding != $serverCharset) return true;
 
-        /* 获取数据库文件中的表名。Get table names from database file. */
-        $dbFile  = $this->app->getBasePath() . 'db' . DS . 'zentao.sql';
-        $content = file_get_contents($dbFile);
-        preg_match_all('/CREATE TABLE IF NOT EXISTS `(\w+)`/', $content, $matches);
-        if(empty($matches[1])) return true;
+        /* 获取当前数据库的字符集和排序规则。Get current database charset and collation. */
+        $result      = $this->dbh->getDatabaseCharsetAndCollation($this->config->db->name);
+        $dbCharset   = $result['charset'];
+        $dbCollation = $result['collation'];
 
-        /* 转换数据库文件中的表的字符集。Convert tables charset. */
-        foreach($matches[1] as $table)
+        if($dbCharset != $serverCharset || $dbCollation != $serverCollation)
         {
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
-            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
+            $this->dbh->exec("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
         }
+
+        /* 获取当前数据库中所有表的排序规则。Get all tables collation in current database. */
+        $tableCollations = $this->dao->select('TABLE_NAME AS name, TABLE_COLLATION AS collation')->from('information_schema.TABLES')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->andWhere('TABLE_TYPE')->eq('BASE TABLE')
+            ->fetchPairs();
+        foreach($tableCollations as $tableName => $tableCollation)
+        {
+            if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
+            if($tableCollation == $serverCollation) continue;
+            if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
+
+            /* 转换表的字符集和排序规则。Convert table charset and collation. */
+            $this->dbh->exec("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+        }
+
+        $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
 
         return true;
     }
@@ -10995,7 +11023,7 @@ class upgradeModel extends model
         $templateList = $this->dao->select('t1.*, t2.title, t2.content, t2.type AS contentType, t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc && t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.templateType')->ne('')
+            ->andWhere('t1.templateType')->notIn(array('', 'reportTemplate', 'projectReport'))
             ->andWhere('t1.lib')->eq(0)
             ->andWhere('t1.module')->eq('')
             ->fetchAll('id', false);
@@ -11263,22 +11291,26 @@ class upgradeModel extends model
             $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
             $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
-            $report->project    = $data['project'];
-            $report->title      = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
-            $report->module     = 'week';
-            $report->addedDate  = $data['weekStart'] . ' 00:00:00';
-            $report->weeklyDate = str_replace('-', '', $data['weekStart']);
+            $report->project      = $data['project'];
+            $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+            $report->reportModule = 'week';
+            $report->addedDate    = $data['weekStart'] . ' 00:00:00';
+            $report->editedDate   = $data['weekStart'] . ' 00:00:00';
+            $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
         }
         else
         {
-            $report->title     = $this->lang->upgrade->milestoneTitle;
-            $report->module    = 'milestone';
-            $report->project   = $data['id'];
-            $report->addedDate = helper::now();
+            $report->title        = $this->lang->upgrade->milestoneTitle;
+            $report->reportModule = 'milestone';
+            $report->project      = $data['id'];
+            $report->addedDate    = helper::now();
+            $report->editedDate   = helper::now();
         }
 
+        $report->template     = '0';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
+        $report->editedBy     = 'system';
         $this->dao->insert(TABLE_DOC)->data($report)->exec();
 
         return !dao::isError();

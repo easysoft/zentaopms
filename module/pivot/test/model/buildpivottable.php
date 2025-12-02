@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::buildPivotTable();
 timeout=0
-cid=0
+cid=17357
 
 - 执行pivotTest模块的buildPivotTableTest方法，参数是$emptyData, array  @1
 - 执行pivotTest模块的buildPivotTableTest方法，参数是$standardData, array  @1

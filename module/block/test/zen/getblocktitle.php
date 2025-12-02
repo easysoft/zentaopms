@@ -5,7 +5,7 @@
 
 title=测试 blockZen::getBlockTitle();
 timeout=0
-cid=0
+cid=15242
 
 - 执行blockTest模块的getBlockTitleTest方法，参数是array  @正常的产品列表
 - 执行blockTest模块的getBlockTitleTest方法，参数是array  @测试列表

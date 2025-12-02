@@ -5,7 +5,7 @@
 
 title=测试 compileModel::getLastResult();
 timeout=0
-cid=0
+cid=15747
 
 - 测试步骤1：正常jobID查询最新编译结果属性job @1
 - 测试步骤2：查询有多条记录的jobID属性job @2

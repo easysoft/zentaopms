@@ -5,7 +5,7 @@
 
 title=测试 storyModel->replaceAllProductQuery();
 timeout=0
-cid=0
+cid=18657
 
 - 不传入数据。 @0
 - 传入符合条件的查询语句。 @1 = 1

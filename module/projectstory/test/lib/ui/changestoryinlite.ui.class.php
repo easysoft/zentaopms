@@ -21,12 +21,13 @@ class changeStoryInLiteTester extends tester
      */
     public function changeStoryInLite($storyName, $reviewer)
     {
-        $this->switchVision('lite', 8);
+        $this->switchVision('lite');
         if($this->page->getCookie('vision') != 'lite')
         {
             $this->switchVision('lite', 8);
         }
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project'); //变更目标前需要进入列表页面，获取项目ID
+        $form->wait(3);
         $form = $this->initForm('story', 'change', array('storyID' => '1', 'from' => 'project'), 'appIframe-project');
         $form->dom->title->setValue($storyName);
         if($reviewer != NULL)

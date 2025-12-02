@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::checkTokenAccess();
 timeout=0
-cid=1
+cid=16568
 
 - 不存在的服务器 @0
 - 错误的服务器 @0

@@ -1,7 +1,7 @@
 <?php
 class product extends control
 {
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
+    public function browse(int $productID = 0, int $branch = 0, string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
         /* Load datatable and execution. */
         $this->loadModel('execution');
@@ -24,7 +24,7 @@ class product extends control
         $this->loadModel('project')->setMenu($projectID);
 
         $branches  = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+        $branch    = ($this->cookie->preBranch and $branch === 0 and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
         $branchID  = $branch;
 
         /* Lower browse type. */
@@ -62,7 +62,7 @@ class product extends control
         }
         else
         {
-            $branch = $this->cookie->treeBranch;
+            $branch = $this->cookie->treeBranch ? $this->cookie->treeBranch : 0;
         }
 
         /* Process the order by field. */

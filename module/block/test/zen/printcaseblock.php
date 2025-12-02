@@ -5,82 +5,100 @@
 
 title=测试 blockZen::printCaseBlock();
 timeout=0
-cid=0
+cid=15253
 
-- 执行blockTest模块的printCaseBlockTest方法，参数是$block1 属性type @assigntome
-- 执行blockTest模块的printCaseBlockTest方法，参数是$block2 属性type @openedbyme
-- 执行blockTest模块的printCaseBlockTest方法，参数是$block3 属性type @invalid<>
-- 执行blockTest模块的printCaseBlockTest方法，参数是$block4 属性count @5
-- 执行blockTest模块的printCaseBlockTest方法，参数是$block5 属性projectID @0
+- 执行blockTest模块的printCaseBlockTest方法，参数是$block1 属性count @5
+- 执行blockTest模块的printCaseBlockTest方法，参数是$block2 属性count @4
+- 执行blockTest模块的printCaseBlockTest方法，参数是$block2 属性count @3
+- 执行blockTest模块的printCaseBlockTest方法，参数是$block3 属性count @5
+- 执行blockTest模块的printCaseBlockTest方法，参数是$block4 属性count @2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $case = zenData('case');
-$case->id->range('1-30');
-$case->title->range('测试用例{30}');
-$case->type->range('feature{15},unit{15}');
-$case->status->range('normal{25},blocked{5}');
-$case->openedBy->range('admin{15},user1{15}');
-$case->deleted->range('0{30}');
-$case->gen(30);
-
-$testrun = zenData('testrun');
-$testrun->id->range('1-20');
-$testrun->task->range('1{10},2{10}');
-$testrun->case->range('1-20');
-$testrun->assignedTo->range('admin{10},user1{10}');
-$testrun->status->range('wait{15},done{5}');
-$testrun->gen(20);
+$case->id->range('1-15');
+$case->project->range('1-3');
+$case->product->range('1-3');
+$case->title->range('测试用例`1-15`');
+$case->openedBy->range('admin{6},user1{5},user2{4}');
+$case->deleted->range('0');
+$case->gen(15);
 
 $testtask = zenData('testtask');
 $testtask->id->range('1-5');
-$testtask->name->range('测试任务{5}');
-$testtask->status->range('doing{3},done{2}');
-$testtask->deleted->range('0{5}');
+$testtask->name->range('测试单`1-5`');
+$testtask->status->range('wait{3},doing{2}');
+$testtask->deleted->range('0');
 $testtask->gen(5);
 
+$testrun = zenData('testrun');
+$testrun->id->range('1-12');
+$testrun->task->range('1-5');
+$testrun->case->range('1-12');
+$testrun->assignedTo->range('admin{5},user1{4},user2{3}');
+$testrun->status->range('wait{8},doing{4}');
+$testrun->gen(12);
+
+$projectadmin = zenData('projectadmin');
+$projectadmin->account->range('admin,user1,user2');
+$projectadmin->programs->range('[]');
+$projectadmin->projects->range('[]');
+$projectadmin->products->range('[]');
+$projectadmin->executions->range('[]');
+$projectadmin->gen(3);
+
+zenData('product')->loadYaml('product')->gen(3);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('user')->loadYaml('user')->gen(5);
+
 su('admin');
-$blockTest = new blockTest();
 
-$block1 = new stdclass();
-$block1->dashboard = 'qa';
-$block1->params = new stdclass();
+$blockTest = new blockZenTest();
+
+$block1 = new stdClass();
+$block1->dashboard = 'my';
+$block1->params = new stdClass();
 $block1->params->type = 'assigntome';
-$block1->params->count = '10';
+$block1->params->orderBy = 'id_desc';
+$block1->params->count = 15;
 
-r($blockTest->printCaseBlockTest($block1)) && p('type') && e('assigntome');
+$block2 = new stdClass();
+$block2->dashboard = 'my';
+$block2->params = new stdClass();
+$block2->params->type = 'assigntome';
+$block2->params->orderBy = 'id_desc';
+$block2->params->count = 15;
 
-$block2 = new stdclass();
-$block2->dashboard = 'qa';
-$block2->params = new stdclass();
-$block2->params->type = 'openedbyme';
-$block2->params->count = '10';
+$block3 = new stdClass();
+$block3->dashboard = 'my';
+$block3->params = new stdClass();
+$block3->params->type = 'assigntome';
+$block3->params->orderBy = 'id_asc';
+$block3->params->count = 10;
 
-r($blockTest->printCaseBlockTest($block2)) && p('type') && e('openedbyme');
+$block4 = new stdClass();
+$block4->dashboard = 'my';
+$block4->params = new stdClass();
+$block4->params->type = 'assigntome';
+$block4->params->orderBy = 'id_asc';
+$block4->params->count = 2;
 
-$block3 = new stdclass();
-$block3->dashboard = 'qa';
-$block3->params = new stdclass();
-$block3->params->type = 'invalid<>';
-$block3->params->count = '10';
-
-r($blockTest->printCaseBlockTest($block3)) && p('type') && e('invalid<>');
-
-$block4 = new stdclass();
-$block4->dashboard = 'qa';
-$block4->params = new stdclass();
-$block4->params->type = '';
-$block4->params->count = '5';
-
-r($blockTest->printCaseBlockTest($block4)) && p('count') && e('5');
-
-$block5 = new stdclass();
-$block5->dashboard = 'my';
-$block5->params = new stdclass();
+$block5 = new stdClass();
+$block5->dashboard = 'project';
+$block5->params = new stdClass();
 $block5->params->type = 'assigntome';
-$block5->params->count = '8';
+$block5->params->orderBy = 'id_desc';
+$block5->params->count = 15;
 
-r($blockTest->printCaseBlockTest($block5)) && p('projectID') && e('0');
+r($blockTest->printCaseBlockTest($block1)) && p('count') && e('5');
+su('user1');
+r($blockTest->printCaseBlockTest($block2)) && p('count') && e('4');
+su('user2');
+r($blockTest->printCaseBlockTest($block2)) && p('count') && e('3');
+su('admin');
+r($blockTest->printCaseBlockTest($block3)) && p('count') && e('5');
+su('user1');
+r($blockTest->printCaseBlockTest($block4)) && p('count') && e('2');

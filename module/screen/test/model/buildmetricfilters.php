@@ -8,7 +8,7 @@ zenData('metric')->gen(1);
 
 title=测试 screenModel->buildMetricFilters();
 timeout=0
-cid=1
+cid=18213
 
 - 测试传入metric属性,isObjectMetric和isDateMetric为false的情况下，生成的值是否正确; @0
 - 测试传入metric属性,isObjectMetric为false,isDateMetric为true的情况下，生成的值是否正确;第0条的field属性 @date

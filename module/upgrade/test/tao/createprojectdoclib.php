@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeTao->createProjectDocLib();
-cid=1
+cid=19568
 
 - 测试为私有控制权限项目创建项目主库
  - 属性name @项目主库

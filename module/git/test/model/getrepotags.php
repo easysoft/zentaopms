@@ -5,7 +5,7 @@
 
 title=测试 gitModel::getRepoTags();
 timeout=0
-cid=0
+cid=16548
 
 - 测试步骤1：使用现有仓库获取标签列表 @tag1
 - 测试步骤2：使用缺少client属性的仓库对象 @0

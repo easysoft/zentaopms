@@ -42,7 +42,7 @@ su('admin');
 
 title=测试 programModel::getProjectList();
 timeout=0
-cid=1
+cid=17696
 
 - 获取所有项目列表数量 @6
 - 获取未完成项目列表数量 @3

@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::ping();
 timeout=0
-cid=0
+cid=19754
 
 - 步骤1：测试本地回环地址 @yes
 - 步骤2：测试localhost域名 @yes

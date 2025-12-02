@@ -3,6 +3,19 @@ include dirname(__FILE__, 6) . '/test/lib/ui.php';
 class storyTester extends tester
 {
     /**
+     * 打开页面。
+     * Open page.
+     *
+     * @access public
+     * @return object
+     */
+    public function open()
+    {
+        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
+    }
+
+    /**
      * 检查Tab标签下的数据。
      * Check the data of the Tab tag.
      *
@@ -13,10 +26,10 @@ class storyTester extends tester
      */
     public function checkTab($tab, $expectNum)
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
-        $form->wait(3);
-        $form->dom->$tab->click();
+        $form = $this->loadPage();
         $form->wait(1);
+        $form->dom->$tab->click();
+        $form->wait(3);
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
         return $this->failed($tab . '下显示条数不正确');
     }
@@ -30,16 +43,16 @@ class storyTester extends tester
      */
     public function unlinkStory()
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
-        $form->wait(3);
+        $form = $this->loadPage();
+        $form->wait(1);
         $name = $form->dom->firstName->getText();
         $form->dom->firstUnlinkBtn->click();
         $form->wait(1);
         $form->dom->alertModal();
-        $form->wait(1);
+        $form->wait(3);
 
         $form->dom->search(array("{$this->lang->story->name},=,{$name}"));
-        $form->wait(1);
+        $form->wait(3);
         if($form->dom->firstName === false) return $this->success('需求移除成功');
         return $this->failed('需求移除失败');
     }
@@ -53,18 +66,20 @@ class storyTester extends tester
      */
     public function batchUnlinkStory()
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form = $this->loadPage();
+        $form->dom->allTab->click();
         $form->wait(3);
+
         $name = $form->dom->firstName->getText();
         $form->dom->firstCheckbox->click();
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->btn($this->lang->execution->unlinkStory)->click();
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->alertModal();
-        $form->wait(1);
+        $form->wait(3);
 
         $form->dom->search(array("{$this->lang->story->name},=,{$name}"));
-        $form->wait(1);
+        $form->wait(2);
         if($form->dom->firstName === false) return $this->success('需求批量移除成功');
         return $this->failed('需求批量移除失败');
     }
@@ -80,7 +95,7 @@ class storyTester extends tester
      */
     public function batchEditPhase($status, $phase)
     {
-        $form        = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
         $form->wait(3);
         $storyStatus = $this->lang->story->statusList->$status;
         $storyPhase  = $this->lang->story->stageList->$phase;
@@ -88,7 +103,7 @@ class storyTester extends tester
         $form->dom->xpath['stage'] = $form->dom->xpath['phases'] . "//*[text() = '{$storyPhase}']";
 
         $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
-        $form->wait(1);
+        $form->wait(2);
         /* 因为阶段字段被遮挡，所以需要滚动到可见区域 */
         $form->dom->firstPhase->scrollToElement();
 
@@ -97,9 +112,12 @@ class storyTester extends tester
         $form->dom->phaseBtn->click();
         $form->wait(1);
         $form->dom->stage->click();
-        $form->wait(1);
-        if($status == 'draft' || $status == 'closed') $form->dom->alertModal();
-        $form->wait(1);
+        if($status == 'draft' || $status == 'closed')
+        {
+            $form->wait(1);
+            $form->dom->alertModal();
+        }
+        $form->wait(2);
 
         $afterPhase = $form->dom->firstPhase->getText();
         if($status == 'draft' || $status == 'closed')
@@ -124,8 +142,9 @@ class storyTester extends tester
      */
     public function assignTo($user)
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
-        $form->dom->waitElement($form->dom->xpath['firstAssignTo'], 10);
+        $form = $this->loadPage();
+        $form->dom->allTab->click();
+        $form->wait(3);
         $form->dom->firstAssignTo->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($user);
@@ -150,13 +169,14 @@ class storyTester extends tester
      */
     public function batchAssignTo()
     {
-        $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form = $this->loadPage();
+        $form->wait(1);
         $form->dom->firstCheckbox->click();
         $form->wait(1);
         $form->dom->batchAssignBtn->click();
         $form->wait(1);
         $form->dom->assignToAdmin->click();
-        $form->wait(1);
+        $form->wait(3);
 
         /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
         $form->dom->firstAssignTo->scrollToElement();

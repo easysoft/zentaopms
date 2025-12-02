@@ -45,6 +45,31 @@
     const isTutorial  = top.config.currentModule === 'tutorial';
     let openedOldPage = false;
     let oldPageCofnig = null;
+    const zinCallbacks = {
+        onSelectLang: null,
+        onSelectTheme: null,
+        onSelectVision: null,
+        onChangeApp: null
+    };
+
+    /**
+     * 注册Zin回调函数。
+     * Register a Zin callback function.
+     *
+     * @param {string} name - 回调函数名称。
+     * @param {function} callback - 回调函数。
+     */
+    function registerZinCallback(name, callback)
+    {
+        if(typeof callback === 'function')
+        {
+            zinCallbacks[name] = callback;
+        }
+        else
+        {
+            console.warn('[ZIN] registerZinCallback expects a function for', name);
+        }
+    }
 
     function getPageInfo()
     {
@@ -983,8 +1008,19 @@
         clearTimer();
         if($page.hasClass('hidden')) $page.addClass('loading').removeClass('hidden');
         const $iframe = $page.find('iframe').removeClass('in').addClass('invisible');
-        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url) $iframe[0].contentWindow.location.reload();
-        else $iframe.attr('src', url);
+        if($iframe.attr('src') === url && $iframe[0].contentWindow.location.href === url)
+        {
+            $iframe[0].contentWindow.location.reload();
+        }
+        else
+        {
+            $iframe.attr('src', url);
+            setTimeout(() =>
+            {
+                /* Fix firefox not load page when iframe is not ready. */
+                if($iframe[0].contentWindow.location.href === 'about:blank') $iframe[0].contentWindow.location.href = url;
+            }, 500);
+        }
         currentAppUrl = url;
         openedOldPage = url;
         triggerEvent('openOldPage');
@@ -1678,6 +1714,12 @@
         $.cookie.set('lang', lang, {expires: config.cookieLife, path: config.webRoot});
         ajaxSendScore('selectLang');
         $.apps.changeAppsLang(lang);
+
+        const callback = zinCallbacks.onSelectLang;
+        if(typeof callback === 'function')
+        {
+            try { callback(lang); } catch (e) { console.error('[ZIN] onSelectLang callback error:', e); }
+        }
     }
 
     /**
@@ -1689,6 +1731,12 @@
         $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
         $.ajaxSendScore('selectTheme');
         $.apps.changeAppsTheme(theme);
+
+        const callback = zinCallbacks.onSelectTheme;
+        if(typeof callback === 'function')
+        {
+            try { callback(theme); } catch (e) { console.error('[ZIN] onSelectTheme callback error:', e); }
+        }
     }
 
     /**
@@ -1697,10 +1745,35 @@
      */
     function selectVision(vision)
     {
-        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function()
+        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function(result)
         {
-            window.top.location.href = $.createLink('index', 'index');
+            const response = JSON.parse(result);
+            if(response.result == 'fail')
+            {
+                return zui.Messager.error(response.message);
+            }
+            if(response.result == 'success' && response.load)
+            {
+                const callback = zinCallbacks.onSelectVision;
+                if(typeof callback === 'function')
+                {
+                    try { callback(getVisions(vision)); } catch (e) { console.error('[ZIN] onSelectVision callback error:', e); }
+                }
+                window.top.location.href = response.load;
+            }
         });
+    }
+
+    /**
+     * 获取所有界面列表。
+     * @param {string} vision
+     * @returns {Array<{id: string, label: string, active: boolean}>
+     */
+    function getVisions(vision)
+    {
+        const userVisions  = window.getUserVisions();
+        const activeVision = vision !== undefined ? vision : config.vision;
+        return userVisions.map(key => ({id: key, label: config.visions[key], active: key === activeVision}));
     }
 
     function fetchMessage(force, fetchUrl)
@@ -1883,7 +1956,7 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData, applyFormData: applyFormData});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData, applyFormData: applyFormData, zinCallbacks: zinCallbacks, registerZinCallback: registerZinCallback, getVisions: getVisions});
     $.extend($.apps, {openUrl: openUrl, getAppUrl: () => currentAppUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::getIssueData();
 timeout=0
-cid=0
+cid=15854
 
 - 步骤1：正常情况，返回2条记录 @2
 - 步骤2：BID为空被过滤，返回1条记录 @1

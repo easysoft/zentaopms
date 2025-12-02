@@ -1,0 +1,32 @@
+title: 测试setFormOptionsForBatchEdit方法的需求数据
+desc: 包含不同状态和产品的需求数据用于测试
+
+fields:
+- field: id
+  range: 1-10
+- field: product
+  range: 1,2,4,1,2,4,1,2,4,1
+- field: branch
+  range: 0{5},1,2,0,1,2
+- field: module
+  range: 1-10
+- field: plan
+  range: 1,2,3,0,0,1,2,0,0,1
+- field: title
+  range: 需求1,需求2,需求3,需求4,需求5{5}
+- field: type
+  range: story{8},requirement{2}
+- field: pri
+  range: 1-4
+- field: status
+  range: active{6},closed{4}
+- field: stage
+  range: wait{3},planned{3},developing{2},closed{2}
+- field: version
+  range: 1
+- field: openedBy
+  range: admin
+- field: openedDate
+  range: 2023-01-01 00:00:00
+- field: deleted
+  range: 0

@@ -5,7 +5,7 @@
 
 title=测试 treeModel::createSceneLink();
 timeout=0
-cid=0
+cid=19356
 
 - 步骤1：正常情况验证id和name
  - 属性id @1

@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 title=测试 mrModel::link();
 timeout=0
-cid=1
+cid=17256
 
 - 错误的合并请求 @0
 - 错误的关联类型 @0

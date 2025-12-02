@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::parseZTFFuncResult();
 timeout=0
-cid=0
+cid=19212
 
 - 步骤1：正常情况 @1
 - 步骤2：多个用例 @2

@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::sendMail2Feedback();
 timeout=0
-cid=0
+cid=18012
 
 - 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release1, '版本发布通知'  @no_data
 - 执行releaseTest模块的sendMail2FeedbackTest方法，参数是$release2, '版本发布通知'  @no_email

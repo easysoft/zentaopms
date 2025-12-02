@@ -5,7 +5,7 @@
 
 title=测试 aiModel::tryGetRelatedObjects();
 timeout=0
-cid=0
+cid=15072
 
 - 步骤1：空的objectNames数组，返回空数组 @0
 - 步骤2：story模块获取task，实际返回0 @0

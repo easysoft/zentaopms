@@ -44,7 +44,7 @@ class backBtn extends btn
 
         $backs = array(
             'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index,feedback-adminview,projectstory-track,execution-calendar,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,task-view',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort,company-effort,company-calendar,demandpool-track,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,roadmap-view,charter-view,demand-view,review-assess,review-audit,action-trash,execution-task,testcase-browse',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort,company-effort,company-calendar,demandpool-track,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,roadmap-view,charter-view,demand-view,review-assess,review-audit,action-trash,execution-task,testcase-browse,story-view',
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review,feedback-adminview,my-index,projectstory-track,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,productplan-view',
             'testcase'       => 'testcase-browse,testcase-browseScene,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index,projectstory-track,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,testreport-view,bug-browse,project-bug,bug-view',
             'testsuite'      => 'testsuite-browse,testsuite-view,testtask-cases,my-index,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view',
@@ -58,7 +58,7 @@ class backBtn extends btn
             'programplan'    => 'project-execution',
             'projectrelease' => 'projectrelease-browse',
             'projectstory'   => 'projectstory-story',
-            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse,my-effort,company-effort,company-calendar,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse,my-effort,company-effort,company-calendar,my-index,project-dynamic,execution-dynamic,project-view,execution-view,testtask-view',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view,project-index',
             'repo'           => 'repo-maintain,repo-log,repo-browse,repo-view,repo-review,mr-view,repo-browsewebhooks,repo-browserule',
             'mr'             => 'pullreq-browse,mr-browse,my-audit',
@@ -68,7 +68,7 @@ class backBtn extends btn
             'space'          => 'space-browse',
             'serverroom'     => 'serverroom-browse',
             'project'        => 'program-browse,program-project,project-browse,project-view,project-team,charter-view,project-template',
-            'product'        => 'product-all,program-productview,program-product,product-view,product-dynamic,my-index,charter-view',
+            'product'        => 'product-all,program-productview,program-product,product-view,product-dynamic,my-index,charter-view,testtask-view',
             'gitlab'         => 'space-browse,gitlab-browseproject',
             'gitfox'         => 'space-browse',
             'zanode'         => 'zanode-browse,zanode-view',

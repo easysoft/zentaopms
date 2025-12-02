@@ -5,7 +5,7 @@
 
 title=测试 stakeholderModel::deleteExpect();
 timeout=0
-cid=0
+cid=18427
 
 - 测试步骤1：删除有效期望记录属性deleted @1
 - 测试步骤2：删除无效ID(0)的期望记录 @0

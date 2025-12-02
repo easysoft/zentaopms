@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::k8nameExists();
 timeout=0
-cid=0
+cid=16809
 
 - 执行instanceTest模块的k8nameExistsTest方法，参数是'test-k8name-1'  @1
 - 执行instanceTest模块的k8nameExistsTest方法，参数是'nonexistent-k8name'  @0

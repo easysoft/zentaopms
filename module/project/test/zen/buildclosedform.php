@@ -5,7 +5,7 @@
 
 title=测试 projectZen::buildClosedForm();
 timeout=0
-cid=0
+cid=17926
 
 - 步骤1：有效项目ID且项目是非多迭代项目
  - 属性title @关闭项目

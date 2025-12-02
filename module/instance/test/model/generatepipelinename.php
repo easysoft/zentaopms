@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::generatePipelineName();
 timeout=0
-cid=0
+cid=16796
 
 - 步骤1：新名称不存在，返回原名称 @newapp
 - 步骤2：名称存在但版本不同，返回名称+版本 @testapp-2.0.0

@@ -15,7 +15,7 @@ zenData('project')->loadYaml('execution')->gen(1);
 
 title=测试 actionModel->create();
 timeout=0
-cid=1
+cid=14884
 
 - 测试创建task，1，edited
  - 属性objectType @task
@@ -62,7 +62,7 @@ cid=1
 
 */
 $objectTypeList      = array('task', 'project', 'user', 'bug', 'story');
-$objectIDList        = array('1', '11');
+$objectIDList        = array(1, 11);
 $actionTypeList      = array('commented', 'edited', 'editestimate', 'login', 'closed', 'comments', 'logout');
 $storyActionTypeList = array('reviewpassed', 'reviewrejected', 'reviewclarified', 'reviewreverted', 'synctwins');
 $actor               = 'guest';

@@ -5,7 +5,7 @@
 
 title=测试 cneModel->getAppLogs();
 timeout=0
-cid=1
+cid=15612
 
 - 获取CNE平台的日志 status @0
 - 获取CNE平台的日志 status @0

@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignModulesForCreate();
 timeout=0
-cid=0
+cid=19073
 
 - 步骤1：有moduleID和storyID的正常情况属性currentModuleID @5
 - 步骤2：无moduleID但有storyID，应使用cookie的lastCaseModule属性currentModuleID @2

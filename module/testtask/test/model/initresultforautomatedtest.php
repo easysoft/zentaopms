@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::initResultForAutomatedTest();
 timeout=0
-cid=0
+cid=19205
 
 - 执行testtaskTest模块的initResultForAutomatedTestTest方法，参数是1, 2, 1, 3  @1
 - 执行testtaskTest模块的initResultForAutomatedTestTest方法，参数是0, 0, 0, 0  @2

@@ -5,7 +5,7 @@
 
 title=productModel->getMultiBranchPairs();
 timeout=0
-cid=0
+cid=17496
 
 - 测试获取不传入项目集的产品id @,7,9,11,13,15
 

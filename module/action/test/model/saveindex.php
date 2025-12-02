@@ -15,7 +15,7 @@ zenData('casestep')->gen(1);
 
 title=测试 actionModel->saveIndex();
 timeout=0
-cid=1
+cid=14931
 
 - 测试保存空数据 @0
 - 测试保存$objectId为0, action为空的数据 @0

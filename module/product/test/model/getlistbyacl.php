@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 productModel->getlistbyacl();
 timeout=0
-cid=1
+cid=17494
 
 - 获取权限为公开ID为1的产品属性。
  - 第1条的id属性 @1

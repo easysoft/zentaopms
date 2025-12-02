@@ -5,7 +5,7 @@
 
 title=测试 blockModel::reset();
 timeout=0
-cid=0
+cid=15234
 
 - 执行blockTest模块的resetTest方法，参数是'my'  @1
 - 执行blockTest模块的resetTest方法，参数是''  @1

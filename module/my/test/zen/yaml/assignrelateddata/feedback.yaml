@@ -1,0 +1,32 @@
+---
+title: feedback测试数据
+author: claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: product
+  note: 所属产品
+  range: 1{10}
+- field: title
+  note: 反馈标题
+  range: Feedback 1,Feedback 2,Feedback 3,Feedback 4,Feedback 5,Feedback 6,Feedback 7,Feedback 8,Feedback 9,Feedback 10
+- field: status
+  note: 反馈状态
+  range: active{10}
+- field: solution
+  note: 解决方案
+  range: tobug{2},tostory{2},totodo{2},totask{2},ticket{2}
+- field: result
+  note: 关联结果ID
+  range: 1{2},2{2},3{2},4{2},5{2}
+- field: openedBy
+  note: 由谁创建
+  range: admin{10}
+- field: openedDate
+  note: 创建日期
+  range: 2024-01-01 00:00:00{10}

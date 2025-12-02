@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel::getApposeDiff();
 timeout=0
-cid=1
+cid=18046
 
 - 获取gitlab代码库对比信息文件第0条的fileName属性 @.gitlab-ci.yml
 - 获取gitlab代码库比信息行信息

@@ -5,7 +5,7 @@
 
 title=测试 storyZen::getShowFields();
 timeout=0
-cid=0
+cid=18696
 
 - 步骤1：normal产品移除branch但platform前逗号也被移除 @id,titleplatform,status
 

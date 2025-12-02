@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 /**
 
 title=executionModel->appendTaskChildren();
-cid=0
+cid=16381
 
 - 不传入子任务，检查返回值
  - 属性id @1

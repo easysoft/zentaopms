@@ -28,12 +28,13 @@ $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
 $lang->mr->action->imported = '$date, 由 <strong>$actor</strong> 导入了合并请求。';
 
-$lang->mr->linkList  = '浏览关联需求、Bug、任务';
-$lang->mr->linkStory = '关联需求';
-$lang->mr->linkBug   = '关联Bug';
-$lang->mr->linkTask  = '关联任务';
-$lang->mr->unlink    = '取消关联需求、Bug、任务';
-$lang->mr->addReview = '添加评审';
+$lang->mr->linkList   = '浏览关联需求、Bug、任务';
+$lang->mr->linkStory  = '关联需求';
+$lang->mr->linkBug    = '关联Bug';
+$lang->mr->linkTask   = '关联任务';
+$lang->mr->unlinkTask = '移除任务';
+$lang->mr->unlink     = '取消关联需求、Bug、任务';
+$lang->mr->addReview  = '添加评审';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";

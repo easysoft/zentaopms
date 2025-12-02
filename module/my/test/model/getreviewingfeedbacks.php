@@ -8,7 +8,7 @@ include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
 title=测试 myModel->getReviewingFeedbacks();
 timeout=0
-cid=1
+cid=17293
 
 - 测试获取排序 id_desc 的审批id。 @15,8,1
 

@@ -13,7 +13,7 @@ $project->gen(10);
 
 title=测试executionModel->removeMenu();
 timeout=0
-cid=1
+cid=16360
 
 - 测试移除燃尽图的导航 @1
 - 测试移除版本的导航 @1

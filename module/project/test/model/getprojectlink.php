@@ -10,7 +10,7 @@ $project->gen(4);
 
 title=测试 projectModel->getProjectLink();
 timeout=0
-cid=1
+cid=17846
 
 */
 

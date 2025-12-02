@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::importUnitResult();
 timeout=0
-cid=0
+cid=19202
 
 - 执行testtaskTest模块的parseXMLResultTest方法，参数是$validXML, 1, 'junit' 属性cases @2
 - 执行testtaskTest模块的parseXMLResultTest方法，参数是$emptyXML, 1, 'junit' 属性cases @0

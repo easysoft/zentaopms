@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试bugModel->linkBugToBuild();
-cid=1
+cid=15402
 
 - 把bug 1关联到build 1属性bugs @1
 

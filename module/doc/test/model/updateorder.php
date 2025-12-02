@@ -5,7 +5,7 @@
 
 title=测试 docModel->updateOrder();
 timeout=0
-cid=1
+cid=16162
 
 - 测试ID为1的目录，order值不变的情况 @10
 - 测试ID为2的目录，order值需要更新的情况 @1

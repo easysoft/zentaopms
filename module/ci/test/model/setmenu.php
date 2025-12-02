@@ -5,7 +5,7 @@
 
 title=测试 ciModel::setMenu();
 timeout=0
-cid=0
+cid=15592
 
 - 执行ci模块的setMenuTest方法 第code条的link属性 @代码|repo|browse|repoID=1
 - 执行ci模块的setMenuTest方法，参数是2 第code条的link属性 @代码|repo|browse|repoID=2

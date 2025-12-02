@@ -7,7 +7,7 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getThisSunday();
-cid=1
+cid=19734
 
 - 查询日期为空 @1970-01-04
 - 查询日期为星期日 @2022-05-08

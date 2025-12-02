@@ -4,7 +4,7 @@
 
 title=测试 installModel->grantPriv();
 timeout=0
-cid=1
+cid=16774
 
 - 没有提交信息时候的报错信息。
  - 第company条的0属性 @『公司名称』不能为空。

@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel->getPairs();
 timeout=0
-cid=1
+cid=17349
 
 - 获取type为空的流水线信息属性1 @gitLab
 - 获取type为gitlab的流水线信息属性1 @gitLab

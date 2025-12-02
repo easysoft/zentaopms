@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getJiraDataFromDB();
 timeout=0
-cid=0
+cid=15776
 
 - 步骤1：测试获取user模块数据，无数据库连接返回空数组 @0
 - 步骤2：测试获取nodeassociation模块数据，无数据库连接返回空数组 @0

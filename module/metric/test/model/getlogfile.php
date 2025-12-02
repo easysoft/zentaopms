@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getLogFile();
 timeout=0
-cid=0
+cid=17106
 
 - 执行metricTest模块的getLogFileTest方法，参数是, 'metriclib') !== false  @1
 - 执行metricTest模块的getLogFileTest方法，参数是, -8) === '.log.php  @1

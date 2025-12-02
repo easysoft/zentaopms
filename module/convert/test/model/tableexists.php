@@ -5,7 +5,7 @@
 
 title=测试 convertModel::tableExists();
 timeout=0
-cid=0
+cid=15797
 
 - 步骤1：检查方法是否存在 @1
 - 步骤2：检查方法是否可调用 @1

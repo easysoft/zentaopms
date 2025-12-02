@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getReviewerPairs();
 timeout=0
-cid=0
+cid=18553
 
 - 执行storyTest模块的getReviewerPairsTest方法，参数是1, 1 属性admin @pass
 - 执行storyTest模块的getReviewerPairsTest方法，参数是1, 1 属性user1 @reject

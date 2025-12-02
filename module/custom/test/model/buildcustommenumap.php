@@ -5,7 +5,7 @@
 
 title=测试 customModel->buildCustomMenuMap();
 timeout=0
-cid=1
+cid=15890
 
 - 查看task菜单的名称第task条的name属性 @task
 - 查看kanban菜单的顺序第kanban条的order属性 @2

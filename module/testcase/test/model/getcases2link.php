@@ -10,7 +10,7 @@ zenData('case')->gen('100');
 
 title=测试 testcaseModel->getCases2Link();
 timeout=0
-cid=1
+cid=18986
 
 - 获取相关的用例的数量 @3
 - 获取相关的用例

@@ -313,34 +313,12 @@ class storyZenTest
      */
     public function getInitStoryByBugTest(int $bugID, object $initStory): object
     {
-        // 使用简化的逻辑来避免数据库错误，直接模拟getInitStoryByBug的核心逻辑
-        if(empty($bugID) || $bugID <= 0) return $initStory;
+        $method = $this->storyZenTest->getMethod('getInitStoryByBug');
+        $method->setAccessible(true);
 
-        // 模拟从数据库获取的bug数据，基于测试数据配置
-        if($bugID == 1) {
-            $initStory->product  = 1;
-            $initStory->source   = 'bug';
-            $initStory->title    = 'Bug标题1';
-            $initStory->keywords = '关键词1';
-            $initStory->spec     = '步骤1';
-            $initStory->pri      = '1';
-            $initStory->mailto   = 'user1@test.com,admin,';
-            $initStory->files    = array();
-        } elseif($bugID == 2) {
-            $initStory->product  = 1;
-            $initStory->source   = 'bug';
-            $initStory->title    = 'Bug标题2';
-            $initStory->keywords = '关键词2';
-            $initStory->spec     = '步骤2';
-            $initStory->pri      = '2';
-            $initStory->mailto   = 'user2@test.com';
-            $initStory->files    = array();
-        } else {
-            // 对于不存在的bug ID，返回原始的initStory
-            return $initStory;
-        }
-
-        return $initStory;
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$bugID, $initStory]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -953,5 +931,686 @@ class storyZenTest
         $result = callZenMethod('story', 'buildStoryForReview', [$storyID]);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * 构建批量转任务数据。
+     * Build data for batch to task.
+     *
+     * @param  int   $executionID
+     * @param  int   $projectID
+     * @param  array $postData
+     * @access public
+     * @return array|false
+     */
+    public function buildDataForBatchToTaskTest(int $executionID, int $projectID = 0, array $postData = array()): array|false
+    {
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) $_POST[$key] = $value;
+        }
+
+        $method = $this->storyZenTest->getMethod('buildDataForBatchToTask');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$executionID, $projectID]);
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) unset($_POST[$key]);
+        }
+
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    /**
+     * 构建需求变更数据。
+     * Build story for change.
+     *
+     * @param  int   $storyID
+     * @param  array $postData
+     * @access public
+     * @return object|array|false
+     */
+    public function buildStoryForChangeTest(int $storyID, array $postData = array()): object|array|false
+    {
+        global $config, $tester;
+
+        // 设置必要的配置 - 必须在设置POST之前
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->change)) $config->story->change = new stdclass();
+        if(!isset($config->story->change->requiredFields)) $config->story->change->requiredFields = 'spec,comment';
+        if(!isset($config->story->form)) $config->story->form = new stdclass();
+        if(!isset($config->story->form->change)) $config->story->form->change = array();
+        if(!isset($config->story->editor)) $config->story->editor = new stdclass();
+        if(!isset($config->story->editor->change)) $config->story->editor->change = array('id' => 'spec,verify');
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) $_POST[$key] = $value;
+        }
+
+        $result = callZenMethod('story', 'buildStoryForChange', [$storyID]);
+
+        if(!empty($postData))
+        {
+            foreach($postData as $key => $value) unset($_POST[$key]);
+        }
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test convertChildID method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array
+     */
+    public function convertChildIDTest(array $storyIdList): array
+    {
+        $method = $this->storyZenTest->getMethod('convertChildID');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$storyIdList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getAfterBatchCreateLocation method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getAfterBatchCreateLocationTest(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    {
+        global $app;
+
+        $method = $this->storyZenTest->getMethod('getAfterBatchCreateLocation');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $executionID, $storyID, $storyType]);
+        if(dao::isError()) return implode(', ', dao::getError());
+
+        return $result;
+    }
+
+    /**
+     * Test getAfterEditLocation method.
+     *
+     * @param  int    $storyID
+     * @param  string $storyType
+     * @access public
+     * @return string
+     */
+    public function getAfterEditLocationTest(int $storyID, string $storyType = 'story'): string
+    {
+        $result = callZenMethod('story', 'getAfterEditLocation', [$storyID, $storyType]);
+        if(dao::isError()) return implode(', ', dao::getError());
+        return $result;
+    }
+
+    /**
+     * Test getAssignMeBlockID method.
+     *
+     * @access public
+     * @return int
+     */
+    public function getAssignMeBlockIDTest(): int
+    {
+        $method = $this->storyZenTest->getMethod('getAssignMeBlockID');
+        $method->setAccessible(true);
+
+        try {
+            $result = $method->invokeArgs($this->storyZenTest->newInstance(), []);
+            if(dao::isError()) return 0;
+            return (int)$result;
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Test getCustomFields method.
+     *
+     * @param  string $storyType
+     * @param  bool   $hiddenPlan
+     * @param  object $product
+     * @param  string $tab
+     * @access public
+     * @return array
+     */
+    public function getCustomFieldsTest(string $storyType, bool $hiddenPlan, object $product, string $tab = 'product'): array
+    {
+        global $config, $app;
+
+        // 保存原始tab值
+        $oldTab = isset($app->tab) ? $app->tab : '';
+
+        // 设置测试环境的tab
+        $app->tab = $tab;
+
+        // 准备config对象
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->list)) $config->story->list = new stdclass();
+        if(!isset($config->story->custom)) $config->story->custom = new stdclass();
+        $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+        $config->story->custom->batchCreateFields = 'module,parent,%s,story,roadmap,plan,assignedTo,spec,source,verify,pri,estimate,keywords,mailto';
+
+        // 准备storyType配置
+        if(!isset($config->{$storyType})) $config->{$storyType} = new stdclass();
+        if(!isset($config->{$storyType}->custom)) $config->{$storyType}->custom = new stdclass();
+
+        $method = $this->storyZenTest->getMethod('getCustomFields');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [&$config, $storyType, $hiddenPlan, $product]);
+
+        // 恢复原始tab
+        $app->tab = $oldTab;
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getDataFromUploadImages method.
+     *
+     * @param  int   $productID
+     * @param  int   $moduleID
+     * @param  int   $planID
+     * @param  array $sessionData
+     * @param  int   $preProductID
+     * @access public
+     * @return array
+     */
+    public function getDataFromUploadImagesTest(int $productID, int $moduleID = 0, int $planID = 0, array $sessionData = array(), int $preProductID = 0): array
+    {
+        global $config;
+
+        // 设置session数据
+        if(!empty($sessionData)) {
+            $_SESSION['storyImagesFile'] = $sessionData;
+        } else {
+            unset($_SESSION['storyImagesFile']);
+        }
+
+        // 设置配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->batchCreate)) $config->story->batchCreate = 10;
+        if(!isset($config->story->defaultPriority)) $config->story->defaultPriority = 3;
+
+        $method = $this->storyZenTest->getMethod('getDataFromUploadImages');
+        $method->setAccessible(true);
+
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->branchID = 0;
+
+        // 模拟cookie对象
+        $storyInstance->cookie = new stdclass();
+        $storyInstance->cookie->preProductID = $preProductID;
+
+        // 模拟session对象
+        $storyInstance->session = new stdclass();
+        if(!empty($sessionData)) {
+            $storyInstance->session->storyImagesFile = $sessionData;
+        }
+
+        $result = $method->invokeArgs($storyInstance, [$productID, $moduleID, $planID]);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 获取需求变更表单字段。
+     * Get form fields for change story.
+     *
+     * @param  int   $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForChangeTest(int $storyID): array
+    {
+        global $tester;
+
+        // 获取story和product数据用于测试
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $product = $tester->loadModel('product')->getByID($story->product);
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForChange');
+        $method->setAccessible(true);
+
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+        $storyInstance->view->product = $product;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 获取创建需求的表单字段。
+     * Get form fields for create story.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $objectID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForCreateTest(int $productID, string $branch, int $objectID, string $storyType = 'story'): array
+    {
+        global $tester, $config;
+
+        // 设置必要的配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->gradeRule)) $config->story->gradeRule = '';
+        if(!isset($config->requirement)) $config->requirement = new stdclass();
+        if(!isset($config->requirement->gradeRule)) $config->requirement->gradeRule = '';
+        if(!isset($config->epic)) $config->epic = new stdclass();
+        if(!isset($config->epic->gradeRule)) $config->epic->gradeRule = '';
+
+        // 准备initStory对象
+        $initStory = new stdclass();
+        $initStory->source     = '';
+        $initStory->sourceNote = '';
+        $initStory->pri        = 3;
+        $initStory->estimate   = '';
+        $initStory->title      = '';
+        $initStory->spec       = '';
+        $initStory->verify     = '';
+        $initStory->keywords   = '';
+        $initStory->mailto     = '';
+        $initStory->color      = '';
+        $initStory->plan       = 0;
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForCreate');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $objectID, $initStory, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 获取编辑需求的表单字段。
+     * Get form fields for edit story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForEditTest(int $storyID): array
+    {
+        global $tester, $config;
+
+        // 设置必要的配置
+        if(!isset($config->story)) $config->story = new stdclass();
+        if(!isset($config->story->gradeRule)) $config->story->gradeRule = '';
+        if(!isset($config->requirement)) $config->requirement = new stdclass();
+        if(!isset($config->requirement->gradeRule)) $config->requirement->gradeRule = '';
+        if(!isset($config->epic)) $config->epic = new stdclass();
+        if(!isset($config->epic->gradeRule)) $config->epic->gradeRule = '';
+
+        // 获取story和product对象
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $product = $tester->loadModel('product')->getByID($story->product);
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForEdit');
+        $method->setAccessible(true);
+
+        // 创建实例并设置view属性
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+        $storyInstance->view->product = $product;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 获取评审需求的表单字段。
+     * Get form fields for review story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getFormFieldsForReviewTest(int $storyID): array
+    {
+        global $tester;
+
+        // 获取story对象
+        $story = $tester->loadModel('story')->getByID($storyID);
+        if(empty($story)) return array();
+
+        $method = $this->storyZenTest->getMethod('getFormFieldsForReview');
+        $method->setAccessible(true);
+
+        // 创建实例并设置view属性
+        $storyInstance = $this->storyZenTest->newInstance();
+        $storyInstance->view = new stdclass();
+        $storyInstance->view->story = $story;
+
+        $result = $method->invokeArgs($storyInstance, [$storyID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  object $story
+     * @access public
+     * @return object
+     */
+    public function getLinkedObjectsTest(object $story): object
+    {
+        global $tester;
+
+        $method = $this->storyZenTest->getMethod('getLinkedObjects');
+        $method->setAccessible(true);
+
+        // 创建storyZen实例并初始化dao等属性
+        $storyZen = $this->storyZenTest->newInstance();
+
+        // 初始化必要的属性
+        global $app;
+        $storyZen->app   = $app;
+        $storyZen->dao   = $app->dao;
+        $storyZen->dbh   = $app->dbh;
+        $storyZen->tree  = $tester->loadModel('tree');
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->view  = new stdclass();
+
+        // 调用方法
+        $method->invokeArgs($storyZen, [$story]);
+        if(dao::isError()) return dao::getError();
+
+        // 返回view对象，包含所有设置的数据
+        return $storyZen->view;
+    }
+
+    /**
+     * 获取产品列表，并排序，将我负责的产品排前面。
+     * Get products for edit.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProductsForEditTest(): array
+    {
+        $method = $this->storyZenTest->getMethod('getProductsForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getResponseInModal method.
+     *
+     * @param  string $message
+     * @param  bool   $inModal
+     * @param  string $tab
+     * @param  string $executionType
+     * @param  int    $executionID
+     * @access public
+     * @return array|false
+     */
+    public function getResponseInModalTest(string $message = '', bool $inModal = false, string $tab = '', string $executionType = '', int $executionID = 0): array|false
+    {
+        global $tester, $app;
+        if($inModal) { $_SERVER['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest'; $_SERVER['HTTP_X_ZUI_MODAL'] = true; }
+        else { unset($_SERVER['HTTP_X_REQUESTED_WITH']); unset($_SERVER['HTTP_X_ZUI_MODAL']); }
+        if(!empty($executionType) && $executionID > 0) $tester->dao->update(TABLE_EXECUTION)->set('type')->eq($executionType)->where('id')->eq($executionID)->exec();
+        if($executionID > 0) $tester->session->set('execution', $executionID);
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->app = $app; $storyZen->session = $tester->session;
+        $storyZen->execution = $tester->loadModel('execution'); $storyZen->lang = $tester->lang;
+        if(!empty($tab)) $storyZen->app->tab = $tab;
+        $method = $this->storyZenTest->getMethod('getResponseInModal'); $method->setAccessible(true);
+        try { $result = $method->invokeArgs($storyZen, [$message]); }
+        catch(EndResponseException $e) { $result = json_decode($e->getContent(), true); }
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getStoriesByChecked method.
+     *
+     * @param  array $storyIdList
+     * @access public
+     * @return array|false
+     */
+    public function getStoriesByCheckedTest(array $storyIdList = []): array|false
+    {
+        global $tester;
+        $_POST['storyIdList'] = $storyIdList;
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->lang = $tester->lang;
+        $method = $this->storyZenTest->getMethod('getStoriesByChecked');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($storyZen, []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test hiddenFormFieldsForEdit method.
+     *
+     * @param  array  $fields
+     * @param  string $storyType
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function hiddenFormFieldsForEditTest(array $fields, string $storyType, object $product)
+    {
+        global $tester;
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->view->product = $product;
+        $storyZen->project = $tester->loadModel('project');
+        $storyZen->lang = $tester->lang;
+        $storyZen->config = $tester->config;
+
+        $method = $this->storyZenTest->getMethod('hiddenFormFieldsForEdit');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($storyZen, [$fields, $storyType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processDataForEdit method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  array  $oldStory
+     * @access public
+     * @return object
+     */
+    public function processDataForEditTest(int $storyID, object $story, array $oldStory = []): object
+    {
+        global $tester;
+        if(!empty($oldStory)) {
+            $mockOldStory = (object)$oldStory;
+            $mockStoryModel = new class($mockOldStory) {
+                private $mockData;
+                public function __construct($data) { $this->mockData = $data; }
+                public function fetchByID($id) { return $this->mockData; }
+                public function __call($name, $arguments) { return null; }
+            };
+            $storyZen = $this->storyZenTest->newInstance();
+            $storyZen->story = $mockStoryModel;
+        } else {
+            $storyZen = $this->storyZenTest->newInstance();
+            $storyZen->story = $tester->loadModel('story');
+        }
+        $storyZen->app = $tester->app;
+        $storyZen->app->user = new stdClass();
+        $storyZen->app->user->account = 'admin';
+        $method = $this->storyZenTest->getMethod('processDataForEdit');
+        $method->setAccessible(true);
+        $method->invokeArgs($storyZen, [$storyID, $story]);
+        if(dao::isError()) return dao::getError();
+        return $story;
+    }
+
+    /**
+     * Test removeFormFieldsForBatchCreate method.
+     *
+     * @param  array  $fields
+     * @param  bool   $hiddenPlan
+     * @param  string $executionType
+     * @param  int    $executionID
+     * @param  string $appTab
+     * @access public
+     * @return array
+     */
+    public function removeFormFieldsForBatchCreateTest(array $fields, bool $hiddenPlan, string $executionType, int $executionID = 0, string $appTab = ''): array
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('removeFormFieldsForBatchCreate');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->project = $tester->loadModel('project');
+        $storyZen->app = $tester->app;
+        $storyZen->app->tab = $appTab;
+        $storyZen->dao = $tester->dao;
+
+        $result = $method->invokeArgs($storyZen, [$fields, $hiddenPlan, $executionType, $executionID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test setFormOptionsForBatchEdit method.
+     *
+     * @param  int   $productID
+     * @param  int   $executionID
+     * @param  array $stories
+     * @access public
+     * @return object
+     */
+    public function setFormOptionsForBatchEditTest(int $productID, int $executionID, array $stories): object
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('setFormOptionsForBatchEdit');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->product = $tester->loadModel('product');
+        $storyZen->tree = $tester->loadModel('tree');
+        $storyZen->branch = $tester->loadModel('branch');
+        $storyZen->productplan = $tester->loadModel('productplan');
+        $storyZen->user = $tester->loadModel('user');
+        $storyZen->story = $tester->loadModel('story');
+        $storyZen->dao = $tester->dao;
+        $storyZen->lang = $tester->lang;
+
+        $method->invokeArgs($storyZen, [$productID, $executionID, $stories]);
+        if(dao::isError()) return dao::getError();
+
+        return $storyZen->view;
+    }
+
+    /**
+     * Test setHiddenFieldsForView method.
+     *
+     * @param  object $product
+     * @access public
+     * @return object
+     */
+    public function setHiddenFieldsForViewTest(object $product): mixed
+    {
+        global $tester;
+        $method = $this->storyZenTest->getMethod('setHiddenFieldsForView');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->view = new stdClass();
+        $storyZen->dao = $tester->dao;
+
+        $method->invokeArgs($storyZen, [$product]);
+        if(dao::isError()) return dao::getError();
+
+        return isset($storyZen->view->hiddenPlan) ? $storyZen->view->hiddenPlan : false;
+    }
+
+    /**
+     * Test setViewVarsForKanban method.
+     *
+     * @param  int    $objectID
+     * @param  array  $kanbanSetting
+     * @param  string $storyType
+     * @access public
+     * @return mixed
+     */
+    public function setViewVarsForKanbanTest(int $objectID, array $kanbanSetting, string $storyType = 'story'): mixed
+    {
+        global $tester, $config;
+
+        $emptyResult = (object)['executionType' => '', 'regionOptions' => [], 'regionDefault' => 0, 'laneOptions' => [], 'laneDefault' => 0];
+        if(empty($objectID)) return $emptyResult;
+
+        $execution = $tester->dao->findById($objectID)->from(TABLE_EXECUTION)->fetch();
+        if(!$execution || $execution->type != 'kanban') return $emptyResult;
+
+        $method = $this->storyZenTest->getMethod('setViewVarsForKanban');
+        $method->setAccessible(true);
+
+        $storyZen = $this->storyZenTest->newInstance();
+        $storyZen->dao = $tester->dao;
+        $storyZen->view = new stdClass();
+        $storyZen->config = $config;
+        $storyZen->lang = $tester->lang;
+        $storyZen->kanban = $tester->loadModel('kanban');
+
+        if(!isset($config->story->form->create)) {
+            if(!isset($config->story)) $config->story = new stdClass();
+            if(!isset($config->story->form)) $config->story->form = new stdClass();
+            $config->story->form->create = array();
+        }
+
+        $method->invokeArgs($storyZen, [$objectID, $kanbanSetting, $storyType]);
+        if(dao::isError()) return dao::getError();
+
+        return (object)[
+            'executionType' => $storyZen->view->executionType ?? '',
+            'regionOptions' => $config->story->form->create['region']['options'] ?? [],
+            'regionDefault' => $config->story->form->create['region']['default'] ?? 0,
+            'laneOptions' => $config->story->form->create['lane']['options'] ?? [],
+            'laneDefault' => $config->story->form->create['lane']['default'] ?? 0
+        ];
     }
 }

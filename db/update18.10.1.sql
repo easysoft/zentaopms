@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_model` (
   `enabled` enum('0', '1') NOT NULL DEFAULT '1',
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `prompt` text NOT NULL,
   `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 REPLACE INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
 (1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 0, 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <更多感兴趣的领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_message` (
   `content` text NOT NULL,
   `createdDate` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (1, '教育背景', 'textarea', '学历/专业', NULL, '0'),
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `createdDate` datetime NOT NULL,
   UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 RENAME TABLE `zt_prompt` TO `zt_ai_prompt`;
 RENAME TABLE `zt_promptrole` TO `zt_ai_promptrole`;

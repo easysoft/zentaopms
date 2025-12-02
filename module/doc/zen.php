@@ -1664,7 +1664,7 @@ class docZen extends doc
         {
             if(isset($col->show) && !$col->show) continue;
             $width = null;
-            if(is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            if(isset($col->width) && is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
             $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
         }
         foreach($data as $row)
@@ -1677,7 +1677,7 @@ class docZen extends doc
                 if(isset($col->map)) $value = zget($col->map, $value);
                 if(isset($col->type) && $col->type == 'user'   && isset($users[$value]))  $value = zget($users, $value);
                 if(isset($col->type) && $col->type == 'status' && isset($col->statusMap)) $value = zget($col->statusMap, $value);
-                $rowData[$col->name] = array('text' => "$value");
+                $rowData[$col->name] = array('text' => (is_array($value) || is_object($value)) ? '' : strval($value));
             }
             $tableProps['data'][] = $rowData;
         }

@@ -1903,6 +1903,89 @@ class cneTest
     }
 
     /**
+     * Test installApp method with full parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function installAppWithFullParamsTest(): object|null
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'test-app';
+        $apiParams->chart     = 'zentao';
+        $apiParams->namespace = 'test-namespace';
+        $apiParams->channel   = 'stable';
+
+        return $this->installAppTest($apiParams);
+    }
+
+    /**
+     * Test installApp method with empty channel parameter.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function installAppWithEmptyChannelTest(): object|null
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'test-app';
+        $apiParams->chart     = 'zentao';
+        $apiParams->namespace = 'test-namespace';
+        $apiParams->channel   = '';
+
+        return $this->installAppTest($apiParams);
+    }
+
+    /**
+     * Test installApp method with different chart parameter.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function installAppWithDifferentChartTest(): object|null
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'gitlab-app';
+        $apiParams->chart     = 'gitlab';
+        $apiParams->namespace = 'test-namespace';
+        $apiParams->channel   = 'stable';
+
+        return $this->installAppTest($apiParams);
+    }
+
+    /**
+     * Test installApp method with different namespace parameter.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function installAppWithDifferentNamespaceTest(): object|null
+    {
+        $apiParams = new stdclass();
+        $apiParams->cluster   = '';
+        $apiParams->name      = 'prod-app';
+        $apiParams->chart     = 'zentao';
+        $apiParams->namespace = 'production';
+        $apiParams->channel   = 'stable';
+
+        return $this->installAppTest($apiParams);
+    }
+
+    /**
+     * Test installApp method with null parameters.
+     *
+     * @access public
+     * @return object|null
+     */
+    public function installAppWithNullParamsTest(): object|null
+    {
+        return $this->installAppTest(null);
+    }
+
+    /**
      * Test getAppVolumes method.
      *
      * @param  int         $instanceID

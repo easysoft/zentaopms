@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->getRoadmapOfReleases();
-cid=0
+cid=17524
 
 - 刷新产品的统计信息
  - 第1条的draftStories属性 @0

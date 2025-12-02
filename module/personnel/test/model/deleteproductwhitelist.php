@@ -12,7 +12,7 @@ zenData('user')->gen(20);
 /**
 
 title=测试 personnelModel->deleteProductWhitelist();
-cid=1
+cid=17322
 
 - 把 test6 从 产品 8 的白名单内删除 test6不在产品8的白名单内，所以不会删 @,6
 - 把 test6 从 产品 6 的白名单内删除 @,6

@@ -10,7 +10,7 @@ zenData('kanbanspace')->gen(100);
 
 title=测试 kanbanModel->getCanViewObjects();
 timeout=0
-cid=1
+cid=16903
 
 - 测试查询admin有权限查看的看板个数 @32
 - 测试查询admin有权限查看的空间个数 @33

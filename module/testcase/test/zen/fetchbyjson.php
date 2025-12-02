@@ -4,7 +4,7 @@
 /**
 
 title=测试 testcaseZen::fetchByJSON();
-cid=0
+cid=19088
 
 - 测试正常JSON文件解析 >> 期望返回成功结果
 - 测试带产品ID的JSON文件解析 >> 期望返回带产品ID的成功结果

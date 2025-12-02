@@ -4,7 +4,7 @@
 /**
 
 title=测试 fileModel->getUpload();
-cid=0
+cid=16514
 
 - 测试获取上传的文件信息1
  - 第0条的title属性 @file1.jpg

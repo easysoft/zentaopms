@@ -5,7 +5,7 @@
 
 title=测试 userModel::checkProjectPriv();
 timeout=0
-cid=0
+cid=19591
 
 - 执行userTest模块的checkProjectPrivTest方法  @1
 - 执行userTest模块的checkProjectPrivTest方法  @1

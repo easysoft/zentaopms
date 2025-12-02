@@ -14,7 +14,7 @@ su('admin');
 
 /**
 title=测试executionModel->startTest();
-cid=1
+cid=16367
 pid=1
 
 - 敏捷执行开始

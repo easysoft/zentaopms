@@ -26,7 +26,7 @@ class closeStoryTester extends tester
         $form->wait(1);
         $form->dom->closedReason->picker($closeReason); //选择关闭原因
         $form->dom->getElement("//*[@id='zin_story_close_{$storyID}_form']/div[4]/div/button")->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage();
         if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
@@ -49,9 +49,9 @@ class closeStoryTester extends tester
         $browsePage = $this->initForm('product', 'browse', array('product' => '1'));
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchMore->click();
-        sleep(1);
+        $browsePage->wait(1);
         $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
-        sleep(1);
+        $browsePage->wait(3);
 
         $batchClose = $this->loadPage('story', 'batchClose');
         $batchClose->dom->batchClosedReason->picker($closeReason);

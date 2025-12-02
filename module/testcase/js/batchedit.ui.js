@@ -19,8 +19,13 @@ window.handleRenderRow = function($row, index, row)
 
     $row.find('.form-batch-control[data-name="story"] .picker-box').on('inited', function(e, info)
     {
-        let $story = info[0];
-        $story.render({limitValueInList: false});
+        const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + row.product + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+        $.getJSON(storyLink, function(stories)
+        {
+            let $story = info[0];
+            $story.render({items: stories});
+            $story.$.setValue(row.story);
+        });
     });
 
     /* Set the scenes for the row. */
@@ -29,44 +34,5 @@ window.handleRenderRow = function($row, index, row)
         let $scene = info[0];
         $scene.render({items: scenePairs[row.id]});
         $scene.$.setValue(row.scene);
-    });
-}
-
-/**
- * Set stories.
- *
- * @param  int     productID
- * @param  int     moduleID
- * @param  int     num
- * @access public
- * @return void
- */
-window.loadStoriesForBatch = function(productID, moduleID, num, $currentRow = null)
-{
-    let branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
-    if(!branchID) branchID = 0;
-
-    const storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
-    $.getJSON(storyLink, function(stories)
-    {
-        if(!stories) return;
-
-        /* Append case's stories. */
-        var storyIdList = stories.map(function(story) { return story.value; });
-        let mergeStories = caseStories.filter(function(story){return storyIdList.some(function(id){return id != story.value;});});
-
-        stories.append(mergeStories);
-
-        let $row = $currentRow;
-        while($row.length)
-        {
-            const $story = $row.find('.form-batch-control[data-name="story"] .picker').zui('picker');
-            $story.render({items: stories});
-            $story.$.setValue($story.$.value);
-
-            $row = $row.next('tr');
-
-            if(($row.find('td[data-name="branch"]').length && !$row.find('td[data-name="branch"][data-ditto="on"]').length) || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
-        }
     });
 }

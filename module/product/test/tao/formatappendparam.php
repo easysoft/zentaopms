@@ -4,7 +4,7 @@
 /**
 
 title=productTao->formatAppendParam();
-cid=0
+cid=17541
 
 - 执行productTao模块的formatAppendParam方法，参数是''  @0
 - 执行productTao模块的formatAppendParam方法，参数是array  @0

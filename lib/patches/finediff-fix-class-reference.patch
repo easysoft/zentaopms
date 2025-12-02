@@ -1,0 +1,10 @@
+--- a/vendor/gorhill/php-fine-diff/GorHill/FineDiff/FineDiff.php
++++ b/vendor/gorhill/php-fine-diff/GorHill/FineDiff/FineDiff.php
+@@ -174,7 +174,7 @@
+      */
+     public static function renderDiffToHTMLFromOpcodes($from, $opcodes) {
+         ob_start();
+-        FineDiff::renderFromOpcodes($from, $opcodes, array('FineDiff','renderDiffToHTMLFromOpcode'));
++        FineDiff::renderFromOpcodes($from, $opcodes, array(__NAMESPACE__ . '\FineDiff','renderDiffToHTMLFromOpcode'));
+         return ob_get_clean();
+     }

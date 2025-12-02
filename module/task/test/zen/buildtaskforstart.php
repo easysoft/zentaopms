@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTaskForStart();
 timeout=0
-cid=0
+cid=18912
 
 - 步骤1：正常开始wait状态任务属性status @doing
 - 步骤2：剩余工时为0自动完成属性status @done

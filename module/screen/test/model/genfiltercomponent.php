@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 
 title=测试 screenModel->genFilterComponent();
 timeout=0
-cid=1
+cid=18229
 
 - 生成项目筛选器
  - 第0条的value属性 @11

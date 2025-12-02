@@ -5,7 +5,7 @@
 
 title=测试 datatableModel::sortCols();
 timeout=0
-cid=0
+cid=15948
 
 - 测试步骤1：正常排序order值小的在前 @-1
 - 测试步骤2：正常排序order值大的在前 @1

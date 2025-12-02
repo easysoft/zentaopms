@@ -4,7 +4,7 @@
 /**
 
 title=测试productModel->update();
-cid=0
+cid=17529
 
 - 测试更新产品名称
  - 第0条的field属性 @name

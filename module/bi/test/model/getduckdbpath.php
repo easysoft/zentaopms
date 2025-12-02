@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getDuckDBPath();
 timeout=0
-cid=0
+cid=15168
 
 - 步骤1：正常调用getDuckDBPath方法返回对象或false @1
 - 步骤2：验证方法调用无错误 @1

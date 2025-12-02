@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getProductStories();
-cid=0
+cid=18549
 
 - 获取产品1下的所有软件需求数量 @2
 - 获取产品1下的所有用户需求数量 @2

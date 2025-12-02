@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getParentStoryPairs();
 timeout=0
-cid=0
+cid=18547
 
 - 步骤1：测试story类型父需求 @0
 - 步骤2：测试requirement类型父需求 @0

@@ -42,12 +42,13 @@ class createStoryTester extends tester
             'storyType'  => $storyType
         );
         $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');  //由于创建需求后会跳转到记录了session的页面，所以先进入一次对应需求的列表页面
+        $form->wait(3);
         $form = $this->initForm($storyType, 'create', $createStoryParam, 'appIframe-product'); //再进入创建需求页面
         $form->dom->title->setValue($storyName);
         $form->dom->assignedTo->picker('admin');
         $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if($this->response('method') != 'browse')
         {
@@ -74,7 +75,7 @@ class createStoryTester extends tester
         $browsePage->dom->search($searchList = array("需求名称,包含,$storyName"));
         $form->wait(1);
         $browsePage->dom->browseStoryName->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
@@ -128,7 +129,7 @@ class createStoryTester extends tester
         {
             $form->dom->storySave->click();
         }
-        $form->wait(1);
+        $form->wait(3);
 
         if($this->response('method') != 'browse')
         {
@@ -155,7 +156,7 @@ class createStoryTester extends tester
         $browsePage->dom->search($searchList = array("需求名称,包含,$storyName"));
         $form->wait(1);
         $browsePage->dom->browseStoryName->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');

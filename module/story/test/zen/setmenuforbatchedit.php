@@ -5,7 +5,7 @@
 
 title=测试 storyZen::setMenuForBatchEdit();
 timeout=0
-cid=0
+cid=18708
 
 - 步骤1：产品标签下的批量编辑导航设置 @product_menu_set
 - 步骤2：执行标签下的批量编辑导航设置 @execution_menu_set

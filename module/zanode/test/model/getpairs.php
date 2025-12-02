@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 zanodeModel->getPairs().
 timeout=0
-cid=1
+cid=19837
 
 - 判断获取的键值对是否正确。
  - 属性1 @node1

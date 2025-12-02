@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试 executionModel->getStatData();
 timeout=0
-cid=1
+cid=16340
 
 - 测试默认值 @3
 - 测试传入空值 @3

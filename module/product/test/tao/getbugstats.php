@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getBugStats();
-cid=0
+cid=17542
 
 - 测试系统中所有产品下的Bug统计信息
  - 第1条的unresolved属性 @3

@@ -19,7 +19,7 @@ $execution->gen(5);
 
 title=测试 executionModel->checkPriv();
 timeout=0
-cid=1
+cid=16283
 
 - 测试传入空值 @0
 - 测试传入0 @0

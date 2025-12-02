@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getStage();
 timeout=0
-cid=0
+cid=19472
 
 - 步骤1：验证stage的id属性属性id @3
 - 步骤2：验证stage的name属性属性name @Development stage

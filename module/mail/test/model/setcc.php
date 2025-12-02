@@ -5,7 +5,7 @@
 
 title=测试 mailModel::setCC();
 timeout=0
-cid=0
+cid=17019
 
 - 执行mailTest模块的setCCTest方法，参数是array  @0
 - 执行mailTest模块的setCCTest方法，参数是array 第admin条的sended属性 @1

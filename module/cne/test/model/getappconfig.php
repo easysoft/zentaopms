@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getAppConfig();
 timeout=0
-cid=0
+cid=15611
 
 - 执行cneTest模块的getAppConfigTest方法，参数是1  @0
 - 执行cneTest模块的getAppConfigTest方法，参数是999  @0

@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 gitlabModel::editUser();
 timeout=0
-cid=1
+cid=16646
 
 - 使用空的account更新gitlab用户第account条的0属性 @禅道用户不能为空
 - 设置了密码的情况下更新gitlab用户 @二次密码不一致！

@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::getReferSQL();
 timeout=0
-cid=0
+cid=17398
 
 - 执行pivotTest模块的getReferSQLTest方法，参数是'user'  @SELECT t1.*  FROM zt_user AS t1 
 - 执行pivotTest模块的getReferSQLTest方法，参数是'task', 'WHERE t1.status = "active"'  @SELECT t1.*  FROM zt_task AS t1 WHERE t1.status = "active"

@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getStakeholderIssue();
-cid=1
+cid=18441
 
 - 获取项目ID=0、用户名为空的问题信息 @0
 - 获取项目ID=0、用户名=admin的问题信息 @0

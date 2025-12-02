@@ -5,7 +5,7 @@
 
 title=测试 metricZen::prepareReuseMetricResult();
 timeout=0
-cid=0
+cid=17201
 
 - 执行metricZenTest模块的prepareReuseMetricResultZenTest方法，参数是new mockCalc  @0
 - 执行metricZenTest模块的prepareReuseMetricResultZenTest方法，参数是new mockCalc  @0

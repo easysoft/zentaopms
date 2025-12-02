@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 testreportModel->create();
-cid=1
+cid=19113
 
 - 正常新增
  - 属性id @1

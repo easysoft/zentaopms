@@ -4,7 +4,7 @@
 /**
 
 title=测试 zaiModel::setSetting();
-cid=0
+cid=19777
 
 - 测试设置null配置 @1
 - 测试设置空配置 @1

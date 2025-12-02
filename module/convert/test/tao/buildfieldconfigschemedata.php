@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildFieldConfigSchemeData();
 timeout=0
-cid=0
+cid=15809
 
 - 执行convertTest模块的buildFieldConfigSchemeDataTest方法，参数是$testData1 属性id @1001
 - 执行convertTest模块的buildFieldConfigSchemeDataTest方法，参数是$testData2 属性configname @Basic Config Scheme

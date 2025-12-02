@@ -281,7 +281,7 @@ class storyModel extends model
 
         $sqlCondition = '';
         $showGrades   = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : null;
-        if($showGrades)
+        if($showGrades && $this->config->vision != 'lite')
         {
             $items = explode(',', $showGrades);
             $conditions = array();
@@ -795,12 +795,12 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $oldStory->type);
 
         $specChanged = $oldStory->version != $story->version;
         if($specChanged)
         {
-            $this->loadModel('file')->processFileDiffsForObject('story', $oldStory, $story, (string)$story->version);
+            $this->loadModel('file')->processFileDiffsForObject($oldStory->type, $oldStory, $story, (string)$story->version);
 
             $this->storyTao->doCreateSpec($storyID, $story, $story->files);
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer, $story->version);
@@ -871,8 +871,8 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         $this->loadModel('action');
-        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
-        $this->file->processFileDiffsForObject('story', $oldStory, $story, (string)$oldStory->version);
+        $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $oldStory->type);
+        $this->file->processFileDiffsForObject($oldStory->type, $oldStory, $story, (string)$oldStory->version);
         $this->storyTao->doUpdateSpec($storyID, $story, $oldStory);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
@@ -2774,11 +2774,11 @@ class storyModel extends model
             $products = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
         }
 
-        $type = in_array($type, array('requirement', 'epic')) ? $type : 'story';
-        $this->loadModel('search')->setQuery($type, $queryID);
+        $module = in_array($type, array('requirement', 'epic')) ? $type : 'story';
+        $this->loadModel('search')->setQuery($module, $queryID);
 
         $allProduct     = "`product` = 'all'";
-        $queryVar       = "{$type}Query";
+        $queryVar       = "{$module}Query";
         $storyQuery     = $this->session->{$queryVar};
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
@@ -4077,6 +4077,26 @@ class storyModel extends model
             ->markRight(1)
             ->fi()
             ->fetchAll('id');
+
+        /* 获取关联对象。*/
+        if($this->config->edition != 'open')
+        {
+            $requirements = array();
+            $childStories = array();
+            foreach($children as $child)
+            {
+                if($child->type == 'requirement') $requirements[$child->id] = $child->id;
+                if($child->type == 'story') $childStories[$child->id] = $child->id;
+            }
+            $this->loadModel('custom');
+            $requirementRelatedObjectList = $this->custom->getRelatedObjectList($requirements, 'requirement', 'byRelation', true);
+            $storyRelatedObjectList       = $this->custom->getRelatedObjectList($childStories, 'story', 'byRelation', true);
+            foreach($children as $child)
+            {
+                if($child->type == 'requirement') $child->relatedObject = zget($requirementRelatedObjectList, $child->id, 0);
+                if($child->type == 'story')       $child->relatedObject = zget($storyRelatedObjectList, $child->id, 0);
+            }
+        }
 
         if($children)
         {
@@ -5615,7 +5635,7 @@ class storyModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.AType='story' AND t2.AID=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
-            ->andWhere('t3.id')->ne('')
+            ->andWhere('t3.id')->notNULL()
             ->fetchGroup('revision', 'id');
     }
 }

@@ -5,7 +5,7 @@
 
 title=测试 messageZen::assignDropmenuVars();
 timeout=0
-cid=0
+cid=17059
 
 - 执行view模块的active方法  @unread
 - 执行view模块的active方法  @all

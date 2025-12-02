@@ -5,40 +5,36 @@
 
 title=测试 pivotZen::productSummary();
 timeout=0
-cid=0
+cid=17463
 
 - 执行pivotTest模块的productSummaryTest方法，参数是'', 0, 'normal', 'normal' 属性title @产品汇总表
-- 执行pivotTest模块的productSummaryTest方法，参数是'status=normal', 1, 'normal', 'normal' 属性conditions @status=normal
-- 执行pivotTest模块的productSummaryTest方法，参数是'', 2, 'normal', 'normal' 第filters条的productID属性 @2
+- 执行pivotTest模块的productSummaryTest方法，参数是'', 1, 'normal', 'normal' 第filters条的productID属性 @1
 - 执行pivotTest模块的productSummaryTest方法，参数是'', 0, 'closed', 'normal' 第filters条的productStatus属性 @closed
 - 执行pivotTest模块的productSummaryTest方法，参数是'', 0, 'normal', 'branch' 第filters条的productType属性 @branch
+- 执行pivotTest模块的productSummaryTest方法，参数是'all', 5, 'normal', 'normal'
+ - 第filters条的productID属性 @5
+ - 第filters条的productStatus属性 @normal
+ - 第filters条的productType属性 @normal
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
-$table = zenData('product');
-$table->id->range('1-5');
-$table->name->range('正常产品1,正常产品2,已删除产品3,暂停产品4,新产品5');
-$table->status->range('normal{3},closed{1},normal{1}');
-$table->type->range('normal{4},branch{1}');
-$table->deleted->range('0{4},1{1}');
-$table->gen(5);
+global $tester;
+$tester->app->loadLang('pivot');
 
-$table = zenData('user');
-$table->id->range('1-3');
-$table->account->range('admin,user1,user2');
-$table->realname->range('管理员,用户1,用户2');
-$table->deleted->range('0');
-$table->gen(3);
+zenData('product')->loadYaml('product', false, 2)->gen(20);
+zenData('productplan')->loadYaml('productplan', false, 2)->gen(30);
+zenData('story')->loadYaml('story', false, 2)->gen(50);
+zenData('user')->gen(10);
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotZenTest();
 
 r($pivotTest->productSummaryTest('', 0, 'normal', 'normal')) && p('title') && e('产品汇总表');
-r($pivotTest->productSummaryTest('status=normal', 1, 'normal', 'normal')) && p('conditions') && e('status=normal');
-r($pivotTest->productSummaryTest('', 2, 'normal', 'normal')) && p('filters:productID') && e('2');
+r($pivotTest->productSummaryTest('', 1, 'normal', 'normal')) && p('filters:productID') && e('1');
 r($pivotTest->productSummaryTest('', 0, 'closed', 'normal')) && p('filters:productStatus') && e('closed');
 r($pivotTest->productSummaryTest('', 0, 'normal', 'branch')) && p('filters:productType') && e('branch');
+r($pivotTest->productSummaryTest('all', 5, 'normal', 'normal')) && p('filters:productID,productStatus,productType') && e('5,normal,normal');

@@ -5,7 +5,7 @@
 
 title=测试 personnelModel::updateParentWhitelist();
 timeout=0
-cid=0
+cid=17339
 
 - 步骤1：product类型更新父级program白名单 @parent_whitelist:user3,user1,user2;parent_acls:user3:sync,user1:sync,user2:sync;
 

@@ -8,7 +8,7 @@ zendata('system')->gen(0);
 
 title=测试 systemModel::create();
 timeout=0
-cid=1
+cid=18728
 
 - 默认创建 @1
 - 重复创建第name条的0属性 @『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。

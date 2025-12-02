@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getCardGroup();
 timeout=0
-cid=0
+cid=19410
 
 - 步骤1：正常获取卡片组，验证返回数组的顶级键数量 @3
 - 步骤2：验证story卡片类型 @story

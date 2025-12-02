@@ -5,7 +5,7 @@
 
 title=测试 entryModel::getById();
 timeout=0
-cid=0
+cid=16247
 
 - 步骤1：查询存在的entry记录
  - 属性name @应用名称1

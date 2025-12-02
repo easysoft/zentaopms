@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::getToAndCcList();
 timeout=0
-cid=0
+cid=18003
 
 - 测试有创建者和邮件通知人员的发布
  - 属性1 @user1

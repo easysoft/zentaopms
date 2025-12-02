@@ -2,7 +2,7 @@
 <?php
 /**
 title=测试 screenModel->getSysOptions();
-cid=1
+cid=17403
 
 - 测试type为user，对象类型为空，字段为空，sql为空的情况下，用户列表获取是否正确。
  - 属性admin @admin

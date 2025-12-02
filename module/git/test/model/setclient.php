@@ -5,7 +5,7 @@
 
 title=测试 gitModel::setClient();
 timeout=0
-cid=0
+cid=16553
 
 - 步骤1：正常设置git客户端 @git
 - 步骤2：正常设置http客户端 @http://https-test

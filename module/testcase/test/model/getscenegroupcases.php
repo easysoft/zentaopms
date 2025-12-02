@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getSceneGroupCases();
-cid=1
+cid=18996
 
 - 获取产品 1 分支 all 模块 0 用例类型 空 id_desc 的场景分组 @4: 4; 3: 3; 2: 2; 1: 1;
 - 获取产品 1 分支 0 模块 0 用例类型 空 id_desc 的场景分组 @4: 4; 3: 3; 2: 2; 1: 1;

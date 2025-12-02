@@ -146,9 +146,6 @@ $lang->install->working        = '工作方式';
 
 $lang->install->dbDriverList = array();
 $lang->install->dbDriverList['mysql']     = 'MySQL';
-$lang->install->dbDriverList['dm']        = '达梦';
-$lang->install->dbDriverList['oceanbase'] = 'OceanBase';
-//$lang->install->dbDriverList['highgo']    = '瀚高';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
@@ -308,11 +305,11 @@ $lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定�
 $lang->install->dbProgress = "正在安装数据库表";
 $lang->install->dbFinish   = "数据库表安装完毕";
 $lang->install->success    = "安装成功";
-$lang->install->login      = '登录禅道管理系统';
+$lang->install->login      = '登录禅道项目管理软件';
 $lang->install->register   = '禅道社区注册';
 
-$lang->install->successLabel       = "<p>您已经成功安装禅道管理系统%s。</p>";
-$lang->install->successNoticeLabel = "<p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。</p>";
+$lang->install->successLabel       = "<p>您已经成功安装禅道项目管理软件%s。</p>";
+$lang->install->successNoticeLabel = "<p>您已经成功安装禅道项目管理软件%s，<strong class='text-danger'>请及时删除install.php</strong>。</p>";
 $lang->install->congratulations    = "恭喜您，禅道安装成功！";
 $lang->install->joinZentao         = <<<EOT
 <p>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)进行登记。</p>

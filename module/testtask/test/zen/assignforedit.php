@@ -5,7 +5,7 @@
 
 title=测试 testtaskZen::assignForEdit();
 timeout=0
-cid=0
+cid=19224
 
 - 步骤1：正常情况 @success
 - 步骤2：无效产品ID @invalid_product_id

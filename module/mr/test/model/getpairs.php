@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getPairs();
 timeout=0
-cid=0
+cid=17253
 
 - 测试步骤1：正常获取有效仓库的MR键值对
  - 属性1 @Test MR 1

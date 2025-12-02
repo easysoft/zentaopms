@@ -3,7 +3,7 @@
 /**
 
 title=测试 stakeholderModel->getStakeholderGroup();
-cid=1
+cid=18440
 
 - 测试传入空的对象ID列表 @0
 - 测试传入对象ID列表第1条的admin属性 @admin

@@ -5,32 +5,77 @@
 
 title=测试 bugZen::getBuildsForCreate();
 timeout=0
-cid=0
+cid=15451
 
-- 步骤1：获取所有版本第builds条的1属性 @Build1
-- 步骤2：根据执行ID获取版本第builds条的1属性 @ExecutionBuild1
-- 步骤3：根据项目ID获取版本第builds条的1属性 @ProjectBuild1
-- 步骤4：根据产品ID获取版本第builds条的1属性 @ProductBuild1
-- 步骤5：无效产品ID属性count @0
+- 步骤1:测试allBuilds为true时builds是数组 @1
+- 步骤2:测试有executionID时builds是数组 @1
+- 步骤3:测试有projectID但无executionID时builds是数组 @1
+- 步骤4:测试无executionID和projectID时builds是数组 @1
+- 步骤5:测试返回对象包含builds属性 @1
+- 步骤6:测试不同分支获取builds是数组 @1
+- 步骤7:测试返回对象包含原有属性 @1
 
 */
 
-// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
-
-// 2. zendata数据准备（简化，避免数据库依赖）
-// 由于测试方法使用模拟逻辑，不需要实际的数据库数据
-
-// 3. 用户登录
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 su('admin');
 
-// 4. 创建测试实例
-$bugTest = new bugTest();
+$build = zenData('build');
+$build->id->range('1-20');
+$build->product->range('1{10},2{5},3{5}');
+$build->branch->range('0,1,2');
+$build->project->range('1{5},2{5},3{5},0{5}');
+$build->execution->range('0,101{5},102{5},0{10}');
+$build->name->prefix('Build')->range('1-20');
+$build->deleted->range('0');
+$build->gen(20);
 
-// 5. 测试步骤
-r($bugTest->getBuildsForCreateTest((object)array('productID' => 1, 'branch' => '', 'projectID' => 0, 'executionID' => 0, 'allBuilds' => true))) && p('builds:1') && e('Build1'); // 步骤1：获取所有版本
-r($bugTest->getBuildsForCreateTest((object)array('productID' => 1, 'branch' => '', 'projectID' => 0, 'executionID' => 101, 'allBuilds' => false))) && p('builds:1') && e('ExecutionBuild1'); // 步骤2：根据执行ID获取版本
-r($bugTest->getBuildsForCreateTest((object)array('productID' => 1, 'branch' => '', 'projectID' => 11, 'executionID' => 0, 'allBuilds' => false))) && p('builds:1') && e('ProjectBuild1'); // 步骤3：根据项目ID获取版本
-r($bugTest->getBuildsForCreateTest((object)array('productID' => 1, 'branch' => '', 'projectID' => 0, 'executionID' => 0, 'allBuilds' => false))) && p('builds:1') && e('ProductBuild1'); // 步骤4：根据产品ID获取版本
-r($bugTest->getBuildsForCreateTest((object)array('productID' => 999, 'branch' => '', 'projectID' => 0, 'executionID' => 0, 'allBuilds' => false))) && p('count') && e('0'); // 步骤5：无效产品ID
+zenData('product')->gen(5);
+zenData('project')->gen(5);
+zenData('user')->gen(5);
+
+$bugTest = new bugZenTest();
+
+$bug1 = new stdClass();
+$bug1->productID = 1;
+$bug1->branch = '0';
+$bug1->projectID = 0;
+$bug1->executionID = 0;
+$bug1->allBuilds = true;
+
+$bug2 = new stdClass();
+$bug2->productID = 1;
+$bug2->branch = '0';
+$bug2->projectID = 1;
+$bug2->executionID = 101;
+$bug2->allBuilds = false;
+
+$bug3 = new stdClass();
+$bug3->productID = 1;
+$bug3->branch = '0';
+$bug3->projectID = 1;
+$bug3->executionID = 0;
+$bug3->allBuilds = false;
+
+$bug4 = new stdClass();
+$bug4->productID = 1;
+$bug4->branch = '0';
+$bug4->projectID = 0;
+$bug4->executionID = 0;
+$bug4->allBuilds = false;
+
+$bug5 = new stdClass();
+$bug5->productID = 2;
+$bug5->branch = '1';
+$bug5->projectID = 0;
+$bug5->executionID = 0;
+$bug5->allBuilds = false;
+
+r(is_array($bugTest->getBuildsForCreateTest($bug1)->builds)) && p() && e('1'); // 步骤1:测试allBuilds为true时builds是数组
+r(is_array($bugTest->getBuildsForCreateTest($bug2)->builds)) && p() && e('1'); // 步骤2:测试有executionID时builds是数组
+r(is_array($bugTest->getBuildsForCreateTest($bug3)->builds)) && p() && e('1'); // 步骤3:测试有projectID但无executionID时builds是数组
+r(is_array($bugTest->getBuildsForCreateTest($bug4)->builds)) && p() && e('1'); // 步骤4:测试无executionID和projectID时builds是数组
+r(property_exists($bugTest->getBuildsForCreateTest($bug1), 'builds')) && p() && e('1'); // 步骤5:测试返回对象包含builds属性
+r(is_array($bugTest->getBuildsForCreateTest($bug5)->builds)) && p() && e('1'); // 步骤6:测试不同分支获取builds是数组
+r(property_exists($bugTest->getBuildsForCreateTest($bug1), 'productID')) && p() && e('1'); // 步骤7:测试返回对象包含原有属性

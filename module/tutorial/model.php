@@ -393,6 +393,8 @@ class tutorialModel extends model
         $story->spec           = '';
         $story->verify         = '';
         $story->files          = array();
+        $story->docs           = '';
+        $story->docVersions    = '';
         return $story;
     }
 
@@ -1171,6 +1173,7 @@ class tutorialModel extends model
         $testtask->name             = 'Test testtask';
         $testtask->execution        = 3;
         $testtask->build            = 1;
+        $testtask->joint            = 0;
         $testtask->type             = '';
         $testtask->owner            = '';
         $testtask->pri              = 3;
@@ -1547,6 +1550,8 @@ class tutorialModel extends model
         $design->type         = 'HLDS';
         $design->files        = array();
         $design->productName  = 'Test product';
+        $design->docs         = '';
+        $design->docVersions  = '';
         return $design;
     }
 

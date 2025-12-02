@@ -399,18 +399,18 @@ class commonModel extends model
         /* Get configs of system and current user. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
         if($this->config->db->name) $config = $this->loadModel('setting')->getSysAndPersonalConfig($account);
-        $this->config->system   = isset($config['system']) ? $config['system'] : array();
-        $this->config->personal = isset($config[$account]) ? $config[$account] : array();
+        $this->config->systemDB   = isset($config['system']) ? $config['system'] : array();
+        $this->config->personalDB = isset($config[$account]) ? $config[$account] : array();
 
         /* Web root cannot be changed by api request. */
         if(!$this->app->apiVersion)
         {
-            $this->commonTao->updateDBWebRoot($this->config->system);
+            $this->commonTao->updateDBWebRoot($this->config->systemDB);
         }
 
         /* Override the items defined in config/config.php and config/my.php. */
-        if(isset($this->config->system->common))   $this->app->mergeConfig($this->config->system->common, 'common');
-        if(isset($this->config->personal->common)) $this->app->mergeConfig($this->config->personal->common, 'common');
+        if(isset($this->config->systemDB->common))   $this->app->mergeConfig($this->config->systemDB->common, 'common');
+        if(isset($this->config->personalDB->common)) $this->app->mergeConfig($this->config->personalDB->common, 'common');
 
         $this->config->disabledFeatures = $this->config->disabledFeatures . ',' . $this->config->closedFeatures;
     }
@@ -1709,8 +1709,8 @@ eof;
 
         if($notConvertedItems)
         {
-            $convertedPinYin = $pinyin->romanize(implode($sign, $notConvertedItems));
-            $itemsPinYin     = explode(trim($sign), $convertedPinYin);
+            $convertedPinYin = $pinyin->convert(implode($sign, $notConvertedItems), PINYIN_KEEP_NUMBER | PINYIN_KEEP_ENGLISH);
+            $itemsPinYin     = explode(trim($sign), implode("\t", $convertedPinYin));
             foreach($notConvertedItems as $item)
             {
                 $key        = key($itemsPinYin);
@@ -2341,11 +2341,7 @@ eof;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedown');
-
-        $parsedown = new parsedown;
-
-        $parsedown->voidElementSuffix = '>'; // HTML5
+        $parsedown = $app->loadClass('parsedown');
 
         return $parsedown->text($markdown);
     }

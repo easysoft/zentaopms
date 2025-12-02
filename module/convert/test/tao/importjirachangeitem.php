@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraChangeItem();
 timeout=0
-cid=0
+cid=15857
 
 - 步骤1：导入空数组数据 @true
 - 步骤2：导入有效的ChangeItem数据 @true

@@ -3,7 +3,7 @@
 /**
 
 title=测试 spaceModel->getByID();
-cid=1
+cid=18394
 
 - 获取ID=0的空间 @0
 - 获取ID=1的空间

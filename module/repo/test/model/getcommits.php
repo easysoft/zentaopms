@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getCommits();
 timeout=0
-cid=0
+cid=18052
 
 - 步骤1：获取指定代码库的所有提交记录 @1
 - 步骤2：获取指定路径的提交记录 @1

@@ -5,7 +5,7 @@
 
 title=测试 gitlabModel::isWebhookExists();
 timeout=0
-cid=0
+cid=16662
 
 - 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, 'http://api.php/v1/gitlab/webhook?repoID=1'  @1
 - 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, 'http://api.php/v1/gitlab/webhook?repoID=999'  @0

@@ -3,28 +3,54 @@
 
 /**
 
-title=测试 pivotTao->fetchPivot();
+title=测试 pivotTao::fetchPivot();
 timeout=0
-cid=1
+cid=17437
 
-- 测试查询存在的透视表ID=1，不指定版本属性id @1
-- 测试查询存在的透视表ID=2，指定版本=2属性id @2
-- 测试查询不存在的透视表ID=999 @0
-- 测试查询存在的透视表ID=3，指定不存在版本属性id @3
-- 测试查询已删除的透视表ID=9 @0
+- 执行pivotTest模块的fetchPivotTest方法，参数是1, null
+ - 属性id @1
+ - 属性deleted @0
+- 执行pivotTest模块的fetchPivotTest方法，参数是2, '1'
+ - 属性id @2
+ - 属性version @1
+- 执行pivotTest模块的fetchPivotTest方法，参数是999, null  @0
+- 执行pivotTest模块的fetchPivotTest方法，参数是10, null  @0
+- 执行pivotTest模块的fetchPivotTest方法，参数是3, '99'
+ - 属性id @3
+ - 属性deleted @0
+- 执行pivotTest模块的fetchPivotTest方法，参数是4, '2'
+ - 属性id @4
+ - 属性version @2
+- 执行pivotTest模块的fetchPivotTest方法，参数是5, null
+ - 属性id @5
+ - 属性deleted @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-zenData('pivot')->gen(10);
-zenData('pivotspec')->gen(5);
+$pivotTable = zenData('pivot');
+$pivotTable->id->range('1-10');
+$pivotTable->name->range('测试透视表1,测试透视表2,测试透视表3,测试透视表4,测试透视表5,测试透视表6,测试透视表7,测试透视表8,测试透视表9,测试透视表10');
+$pivotTable->deleted->range('0,0,0,0,0,0,0,0,0,1');
+$pivotTable->version->range('1,1,1,1,1,2,2,2,3,3');
+$pivotTable->gen(10);
 
-$pivot = new pivotTest();
+$pivotspecTable = zenData('pivotspec');
+$pivotspecTable->pivot->range('1-5');
+$pivotspecTable->version->range('1,1,1,2,2,2,3,3');
+$pivotspecTable->name->range('版本1名称,版本1名称,版本1名称,版本2名称,版本2名称,版本2名称,版本3名称,版本3名称');
+$pivotspecTable->gen(8);
 
-r($pivot->fetchPivotTest(1)) && p('id') && e('1');       //测试查询存在的透视表ID=1，不指定版本
-r($pivot->fetchPivotTest(2, '2')) && p('id') && e('2');  //测试查询存在的透视表ID=2，指定版本=2
-r($pivot->fetchPivotTest(999)) && p('') && e('0');      //测试查询不存在的透视表ID=999
-r($pivot->fetchPivotTest(3, '99')) && p('id') && e('3'); //测试查询存在的透视表ID=3，指定不存在版本
-r($pivot->fetchPivotTest(9)) && p('') && e('0');        //测试查询已删除的透视表ID=9
+su('admin');
+
+$pivotTest = new pivotTaoTest();
+
+r($pivotTest->fetchPivotTest(1, null)) && p('id,deleted') && e('1,0');
+r($pivotTest->fetchPivotTest(2, '1')) && p('id,version') && e('2,1');
+r($pivotTest->fetchPivotTest(999, null)) && p() && e('0');
+r($pivotTest->fetchPivotTest(10, null)) && p() && e('0');
+r($pivotTest->fetchPivotTest(3, '99')) && p('id,deleted') && e('3,0');
+r($pivotTest->fetchPivotTest(4, '2')) && p('id,version') && e('4,2');
+r($pivotTest->fetchPivotTest(5, null)) && p('id,deleted') && e('5,0');

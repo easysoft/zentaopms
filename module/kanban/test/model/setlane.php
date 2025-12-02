@@ -10,7 +10,7 @@ zenData('kanbanlane')->gen(5);
 
 title=测试设置泳道1 >> 修改泳道1,
 timeout=0
-cid=333
+cid=16956
 
 - 测试设置泳道1
  - 属性name @修改泳道1

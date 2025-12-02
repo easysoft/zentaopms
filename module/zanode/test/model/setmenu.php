@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::setMenu();
 timeout=0
-cid=0
+cid=19845
 
 - 执行zanodeTest模块的setMenuTest方法，参数是true 
  - 属性beforeCall @1

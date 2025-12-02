@@ -5,7 +5,7 @@
 
 title=测试 treeModel->getBugTreeMenu();
 timeout=0
-cid=1
+cid=19363
 
 - 测试获取产品1的Bug模块 @正常产品1|模块4
 - 测试获取产品2的Bug模块 @正常产品2

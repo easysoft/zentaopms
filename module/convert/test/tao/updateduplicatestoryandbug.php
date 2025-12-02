@@ -5,7 +5,7 @@
 
 title=测试 convertTao::updateDuplicateStoryAndBug();
 timeout=0
-cid=0
+cid=15873
 
 - 步骤1：正常需求重复关联 @1
 - 步骤2：正常缺陷重复关联 @1

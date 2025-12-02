@@ -14,7 +14,7 @@ $effort->gen(1);
 
 title=taskModel->deleteWorkhour();
 timeout=0
-cid=1
+cid=18786
 
 - 根据estimateID查看消耗工时
  - 第0条的field属性 @consumed

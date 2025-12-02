@@ -5,7 +5,7 @@
 
 title=测试 screenModel::mergeChartAndPivotFilters();
 timeout=0
-cid=0
+cid=18267
 
 - 执行screenTest模块的mergeChartAndPivotFiltersTest方法，参数是'chart', $chartObject, 1, $filters 第0条的filters属性 @[]
 - 执行screenTest模块的mergeChartAndPivotFiltersTest方法，参数是'pivot', $pivotObject, 1, $pivotFilters 第0条的sql属性 @SELECT * FROM pivot_test

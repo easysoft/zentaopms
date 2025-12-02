@@ -5,7 +5,7 @@
 
 title=测试 testtaskModel::linkImportedCaseToSuite();
 timeout=0
-cid=0
+cid=19209
 
 - 步骤1：正常关联 @1
 - 步骤2：空对象但有必需属性 @1

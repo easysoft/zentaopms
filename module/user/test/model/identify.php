@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->identify();
-cid=0
+cid=19640
 
 - 用户名不为空，密码为空，返回 false。 @0
 - 用户名为空，密码不为空，返回 false。 @0

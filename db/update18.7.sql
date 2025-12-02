@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `value`      varchar(100) NOT NULL DEFAULT '0',
   `date`       datetime              DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_repo` ADD `lastCommit` DATETIME NULL DEFAULT NULL AFTER `lastSync`;
 ALTER TABLE `zt_story` ADD `releasedDate` datetime DEFAULT NULL AFTER `reviewedDate`;
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `zt_market` (
   `lastEditedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_marketreport`;
 CREATE TABLE IF NOT EXISTS `zt_marketreport` (
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `zt_marketreport` (
   `publishedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 
 ALTER TABLE `zt_project` ADD COLUMN `market` mediumint(8) NOT NULL DEFAULT 0;
 ALTER TABLE `zt_project` ADD COLUMN `closedReason` varchar(20) NOT NULL DEFAULT '';

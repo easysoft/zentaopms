@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 transfer->initItems();
 timeout=0
-cid=1
+cid=19322
 
 - 测试初始化导出任务时所属项目字段属性11 @项目11
 - 测试初始化导出任务时优先级字段属性1 @1

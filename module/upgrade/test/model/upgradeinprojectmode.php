@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->upgradeInProjectMode();
-cid=1
+cid=19562
 
 - 测试将历史的项目作为项目升级 放在项目集 1 下 原有模式为 classic @111:1,0;112:1,0;113:1,0;114:1,0;115:1,0;116:1,0;117:1,0;118:1,0;119:1,0;120:1,0
 

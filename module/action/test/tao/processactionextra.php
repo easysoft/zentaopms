@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processActionExtra();
 timeout=0
-cid=0
+cid=14958
 
 - 步骤1：正常情况生成链接（bug转任务场景）属性result @bug_to_task
 - 步骤2：禁用链接时生成纯文本属性result @no_link

@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试executionModel->processProductPlans();
 timeout=0
-cid=1
+cid=16357
 
 - 处理产品的计划信息第5条的15属性 @计划15 待定
 - 处理产品的带主干计划信息第4条的10属性 @计划10 待定

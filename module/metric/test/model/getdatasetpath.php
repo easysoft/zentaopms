@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getDatasetPath();
 timeout=0
-cid=0
+cid=17088
 
 - 步骤1：正常获取dataset路径 @dataset.php
 - 步骤2：验证文件扩展名 @.php

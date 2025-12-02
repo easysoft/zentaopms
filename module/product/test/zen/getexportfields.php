@@ -5,29 +5,25 @@
 
 title=测试 productZen::getExportFields();
 timeout=0
-cid=0
+cid=17582
 
-- 执行productTest模块的getExportFieldsTest方法 属性fieldCount @7
-- 执行productTest模块的getExportFieldsTest方法，参数是'light' 
- - 属性noProductLine @1
- - 属性noProgram @1
-- 执行productTest模块的getExportFieldsTest方法，参数是'normal', true 属性hasExtendFields @1
-- 执行productTest模块的getExportFieldsTest方法，参数是'normal', false, true 属性hasHeaderGroup @1
-- 执行productTest模块的getExportFieldsTest方法 属性type @array
+- 步骤1:测试返回的字段数组包含name字段且值为产品名称属性name @产品名称
+- 步骤2:测试返回的字段数组包含productLine字段且值为所属产品线属性productLine @所属产品线
+- 步骤3:测试返回的字段数组包含PO字段且值为负责人属性PO @负责人
+- 步骤4:测试返回的字段包含draftStories字段且包含草稿关键词属性draftStories @ - 草稿
+- 步骤5:测试返回的字段数据类型是数组 @array
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
-
-zenData('product')->gen(5);
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-r($productTest->getExportFieldsTest()) && p('fieldCount') && e('7');
-r($productTest->getExportFieldsTest('light')) && p('noProductLine,noProgram') && e('1,1');
-r($productTest->getExportFieldsTest('normal', true)) && p('hasExtendFields') && e('1');
-r($productTest->getExportFieldsTest('normal', false, true)) && p('hasHeaderGroup') && e('1');
-r($productTest->getExportFieldsTest()) && p('type') && e('array');
+r($productTest->getExportFieldsTest()) && p('name') && e('产品名称'); // 步骤1:测试返回的字段数组包含name字段且值为产品名称
+r($productTest->getExportFieldsTest()) && p('productLine') && e('所属产品线'); // 步骤2:测试返回的字段数组包含productLine字段且值为所属产品线
+r($productTest->getExportFieldsTest()) && p('PO') && e('负责人'); // 步骤3:测试返回的字段数组包含PO字段且值为负责人
+r($productTest->getExportFieldsTest()) && p('draftStories') && e(' - 草稿'); // 步骤4:测试返回的字段包含draftStories字段且包含草稿关键词
+r(gettype($productTest->getExportFieldsTest())) && p() && e('array'); // 步骤5:测试返回的字段数据类型是数组

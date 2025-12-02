@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->batchChangeModule();
-cid=0
+cid=18467
 
 - 批量修改6个需求的模块，查看被修改模块的需求数量 @6
 - 批量修改6个需求的模块，查看需求1修改后的模块ID第1条的module属性 @1366

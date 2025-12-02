@@ -5,7 +5,7 @@
 
 title=测试 myModel::getOverview();
 timeout=0
-cid=0
+cid=17285
 
 - 步骤1：管理员用户获取项目总览数据
  - 属性projectTotal @4

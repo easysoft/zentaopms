@@ -5,7 +5,7 @@
 
 title=svnModel->getRepoByURL();
 timeout=0
-cid=1
+cid=18715
 
 - 不匹配的URL @0
 - 部分匹配的URL @0

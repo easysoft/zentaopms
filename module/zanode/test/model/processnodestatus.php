@@ -5,7 +5,7 @@
 
 title=测试 zanodeModel::processNodeStatus();
 timeout=0
-cid=0
+cid=19842
 
 - 测试正常运行状态的节点，心跳超时
  - 属性id @1

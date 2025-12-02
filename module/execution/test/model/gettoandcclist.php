@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 
 title=测试 executionModel::getToAndCcList();
 timeout=0
-cid=1
+cid=0
 
 - 获取执行 101 的通知人员
  -  @user4

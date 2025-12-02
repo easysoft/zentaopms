@@ -5,7 +5,7 @@
 
 title=测试 giteaModel::parseApiError();
 timeout=0
-cid=0
+cid=16569
 
 - 测试步骤1：解析未知错误消息 @unknown error message
 - 测试步骤2：解析已知API错误消息属性name @名称已存在。

@@ -9,7 +9,7 @@ su('admin');
 
 title=测试 transfer->getFiles();
 timeout=0
-cid=1
+cid=19315
 
 - 测试ID为2的bug附件是否存在 @File isset
 - 测试ID为3的bug附件是否存在 @No File

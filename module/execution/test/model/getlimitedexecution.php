@@ -19,7 +19,7 @@ su('admin');
 
 title=测试 executionModel::getLimitedExecution();
 timeout=0
-cid=1
+cid=16326
 
 - 测试管理员用户权限 @1
 - 测试受限项目成员权限 @103

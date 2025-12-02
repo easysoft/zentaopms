@@ -5,7 +5,7 @@
 
 title=测试 personnelModel::isClickable();
 timeout=0
-cid=0
+cid=17337
 
 - 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, 'unbindWhitelist'  @1
 - 执行personnelTest模块的isClickableTest方法，参数是$whitelistObject, ''  @1

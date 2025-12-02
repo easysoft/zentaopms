@@ -1,0 +1,82 @@
+{
+    "name": "markbaker/matrix",
+    "type": "library",
+    "description": "PHP Class for working with matrices",
+    "keywords": ["matrix", "vector", "mathematics"],
+    "homepage": "https://github.com/MarkBaker/PHPMatrix",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mark Baker",
+            "email": "mark@lange.demon.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^5.6.0|^7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7|^6.0|7.0",
+        "phpmd/phpmd": "dev-master",
+        "sebastian/phpcpd": "^3.0",
+        "phploc/phploc": "^4",
+        "squizlabs/php_codesniffer": "^3.0@dev",
+        "phpcompatibility/php-compatibility": "dev-master",
+        "dealerdirect/phpcodesniffer-composer-installer": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matrix\\": "classes/src/"
+        },
+        "files": [
+            "classes/src/Functions/adjoint.php",
+            "classes/src/Functions/antidiagonal.php",
+            "classes/src/Functions/cofactors.php",
+            "classes/src/Functions/determinant.php",
+            "classes/src/Functions/diagonal.php",
+            "classes/src/Functions/identity.php",
+            "classes/src/Functions/inverse.php",
+            "classes/src/Functions/minors.php",
+            "classes/src/Functions/trace.php",
+            "classes/src/Functions/transpose.php",
+            "classes/src/Operations/add.php",
+            "classes/src/Operations/directsum.php",
+            "classes/src/Operations/subtract.php",
+            "classes/src/Operations/multiply.php",
+            "classes/src/Operations/divideby.php",
+            "classes/src/Operations/divideinto.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MatrixTest\\": "unitTests/classes/src/"
+        },
+        "files": [
+            "classes/src/Functions/adjoint.php",
+            "classes/src/Functions/antidiagonal.php",
+            "classes/src/Functions/cofactors.php",
+            "classes/src/Functions/determinant.php",
+            "classes/src/Functions/diagonal.php",
+            "classes/src/Functions/identity.php",
+            "classes/src/Functions/inverse.php",
+            "classes/src/Functions/minors.php",
+            "classes/src/Functions/trace.php",
+            "classes/src/Functions/transpose.php",
+            "classes/src/Operations/add.php",
+            "classes/src/Operations/directsum.php",
+            "classes/src/Operations/subtract.php",
+            "classes/src/Operations/multiply.php",
+            "classes/src/Operations/divideby.php",
+            "classes/src/Operations/divideinto.php"
+        ]
+    },
+    "scripts": {
+        "style": "phpcs --standard=PSR2 --report-width=200 --report=summary,full classes/src/ unitTests/classes/src -n",
+        "test": "phpunit -c phpunit.xml.dist",
+        "mess": "phpmd classes/src/ xml codesize,unusedcode,design,naming -n",
+        "lines": "phploc classes/src/ -n",
+        "cpd": "phpcpd classes/src/ -n",
+        "versions": "phpcs --report-width=200 --report=summary,full classes/src/ --standard=PHPCompatibility --runtime-set testVersion 5.6- -n",
+        "coverage": "phpunit -c phpunit.xml.dist --coverage-text --coverage-html ./build/coverage"
+    },
+    "minimum-stability": "dev"
+}

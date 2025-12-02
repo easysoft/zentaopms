@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getByStatus();
 timeout=0
-cid=0
+cid=18511
 
 - 执行storyTest模块的getByStatusTest方法，参数是1, 'all', '', 'active'  @5
 - 执行storyTest模块的getByStatusTest方法，参数是1, 'all', '', 'draft'  @2

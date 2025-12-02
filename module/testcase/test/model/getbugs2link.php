@@ -21,7 +21,7 @@ su('admin');
 
 title=测试 testcaseModel->getCases2Link();
 timeout=0
-cid=1
+cid=18974
 
 - 获取相关的 case 1 browse bySearch bug @1,2,3
 

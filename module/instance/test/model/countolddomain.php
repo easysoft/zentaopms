@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::countOldDomain();
 timeout=0
-cid=0
+cid=16785
 
 - 执行instanceTest模块的countOldDomainTest方法  @6
 - 执行instanceTest模块的countOldDomainTest方法  @0

@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildPriorityData();
 timeout=0
-cid=0
+cid=15822
 
 - 执行convertTest模块的buildPriorityDataTest方法，参数是$testData1 属性id @1
 - 执行convertTest模块的buildPriorityDataTest方法，参数是$testData1 属性pname @High

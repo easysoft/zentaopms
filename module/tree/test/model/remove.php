@@ -5,7 +5,7 @@
 
 title=测试 treeModel->delete();
 timeout=0
-cid=1
+cid=19390
 
 - 测试删除module 0属性deleted @0
 - 测试删除module 1属性deleted @1

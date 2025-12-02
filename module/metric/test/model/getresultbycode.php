@@ -14,7 +14,7 @@ $metric = new metricTest();
 
 title=getMetricByCode
 timeout=0
-cid=1
+cid=17122
 
 - 测试按产品统计的计划数第1个结果
  - 属性product @1

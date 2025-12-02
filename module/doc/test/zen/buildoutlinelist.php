@@ -5,64 +5,48 @@
 
 title=测试 docZen::buildOutlineList();
 timeout=0
-cid=0
+cid=16184
 
-- 执行docTest模块的buildOutlineListTest方法，参数是$topLevel, $content, $includeHeadElement 第0条的level属性 @1
-- 执行$result2 @0
-- 执行$result3 @0
-- 执行docTest模块的buildOutlineListTest方法，参数是2, $mixedContent, array 第1条的parent属性 @0
-- 执行$result5 @3
+- 步骤1:测试空内容数组 @0
+- 步骤2:测试单个h1标题
+ - 第0条的hint属性 @Title 1
+ - 第0条的level属性 @1
+- 步骤3:测试h1和h2标题层级
+ - 第0条的level属性 @1
+ - 第1条的level属性 @2
+ - 第1条的parent属性 @0
+- 步骤4:测试h2和h3标题层级
+ - 第0条的level属性 @2
+ - 第1条的level属性 @3
+ - 第1条的parent属性 @0
+- 步骤5:测试多个同级h1标题
+ - 第0条的level属性 @1
+ - 第0条的parent属性 @-1
+ - 第1条的level属性 @1
+ - 第1条的parent属性 @-1
+- 步骤6:测试h1-h3多层级标题
+ - 第0条的level属性 @1
+ - 第1条的level属性 @2
+ - 第1条的parent属性 @0
+ - 第2条的level属性 @3
+ - 第2条的parent属性 @1
+- 步骤7:测试标题中包含HTML标签第0条的hint属性 @Bold Title
+- 步骤8:测试空标题内容第1条的hint属性 @Valid Title
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录
 su('admin');
 
-// 3. 创建测试实例
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 4. 测试步骤：必须包含至少5个测试步骤
-
-// 步骤1：正常HTML内容构建大纲列表 - 验证第一个元素的level属性
-$topLevel = 1;
-$content = array(
-    0 => '<h1>第一级标题1</h1>',
-    1 => '<h2>第二级标题1</h2>',
-    2 => '<p>段落内容</p>',
-    3 => '<h2>第二级标题2</h2>',
-    4 => '<h3>第三级标题1</h3>',
-    5 => '<h1>第一级标题2</h1>'
-);
-$includeHeadElement = array('h1', 'h2', 'h3');
-r($docTest->buildOutlineListTest($topLevel, $content, $includeHeadElement)) && p('0:level') && e('1');
-
-// 步骤2：空内容数组测试 - 应该返回空数组
-$result2 = $docTest->buildOutlineListTest(1, array(), array('h1', 'h2'));
-r(count($result2)) && p() && e('0');
-
-// 步骤3：无标题内容测试 - 应该返回空数组
-$noHeadContent = array('<p>段落1</p>', '<div>内容</div>', '<span>文本</span>');
-$result3 = $docTest->buildOutlineListTest(1, $noHeadContent, array('h1', 'h2'));
-r(count($result3)) && p() && e('0');
-
-// 步骤4：混合层级标题测试 - 测试父子关系建立
-$mixedContent = array(
-    0 => '<h2>二级标题A</h2>',
-    1 => '<h3>三级标题A1</h3>',
-    2 => '<h3>三级标题A2</h3>',
-    3 => '<h2>二级标题B</h2>'
-);
-r($docTest->buildOutlineListTest(2, $mixedContent, array('h2', 'h3'))) && p('1:parent') && e('0');
-
-// 步骤5：单一层级标题测试 - 验证结果数量正确
-$singleLevelContent = array(
-    0 => '<h1>标题一</h1>',
-    1 => '<h1>标题二</h1>',
-    2 => '<h1>标题三</h1>'
-);
-$result5 = $docTest->buildOutlineListTest(1, $singleLevelContent, array('h1'));
-r(count($result5)) && p() && e('3');
+r($docTest->buildOutlineListTest(1, array(), array('h1'))) && p() && e('0'); // 步骤1:测试空内容数组
+r($docTest->buildOutlineListTest(1, array(0 => '<h1>Title 1</h1>'), array('h1'))) && p('0:hint;0:level') && e('Title 1;1'); // 步骤2:测试单个h1标题
+r($docTest->buildOutlineListTest(1, array(0 => '<h1>Title 1</h1>', 1 => '<h2>Title 2</h2>'), array('h1', 'h2'))) && p('0:level;1:level;1:parent') && e('1;2;0'); // 步骤3:测试h1和h2标题层级
+r($docTest->buildOutlineListTest(2, array(0 => '<h2>Title 2</h2>', 1 => '<h3>Title 3</h3>'), array('h2', 'h3'))) && p('0:level;1:level;1:parent') && e('2;3;0'); // 步骤4:测试h2和h3标题层级
+r($docTest->buildOutlineListTest(1, array(0 => '<h1>Title 1</h1>', 1 => '<h1>Title 2</h1>'), array('h1'))) && p('0:level;0:parent;1:level;1:parent') && e('1;-1;1;-1'); // 步骤5:测试多个同级h1标题
+r($docTest->buildOutlineListTest(1, array(0 => '<h1>Title 1</h1>', 1 => '<h2>Title 2</h2>', 2 => '<h3>Title 3</h3>'), array('h1', 'h2', 'h3'))) && p('0:level;1:level;1:parent;2:level;2:parent') && e('1;2;0;3;1'); // 步骤6:测试h1-h3多层级标题
+r($docTest->buildOutlineListTest(1, array(0 => '<h1><strong>Bold</strong> Title</h1>'), array('h1'))) && p('0:hint') && e('Bold Title'); // 步骤7:测试标题中包含HTML标签
+r($docTest->buildOutlineListTest(1, array(0 => '<h1></h1>', 1 => '<h1>Valid Title</h1>'), array('h1'))) && p('1:hint') && e('Valid Title'); // 步骤8:测试空标题内容

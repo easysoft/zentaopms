@@ -1,0 +1,131 @@
+---
+title: Product data for checkProductPriv test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Product ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: program
+  note: Program ID
+  range: 0
+
+- field: name
+  note: Product name
+  range: Product1,Product2,Product3,Product4,Product5,Product6,Product7,Product8,Product9,Product10
+  prefix: ""
+  postfix: ""
+
+- field: code
+  note: Product code
+  range: code1,code2,code3,code4,code5,code6,code7,code8,code9,code10
+  prefix: ""
+  postfix: ""
+
+- field: shadow
+  note: Shadow flag (0=normal, 1=shadow)
+  range: 0,0,0,0,0,0,0,1,1,1
+
+- field: bind
+  note: Bind flag
+  range: '0'
+
+- field: line
+  note: Product line
+  range: 0
+
+- field: type
+  note: Product type
+  range: normal
+
+- field: status
+  note: Product status
+  range: normal
+
+- field: subStatus
+  note: Product sub status
+  range: ""
+
+- field: desc
+  note: Product description
+  range: Test product description
+
+- field: PO
+  note: Product owner
+  range: admin
+
+- field: QD
+  note: QD
+  range: ""
+
+- field: RD
+  note: RD
+  range: ""
+
+- field: feedback
+  note: Feedback
+  range: ""
+
+- field: ticket
+  note: Ticket
+  range: ""
+
+- field: workflowGroup
+  note: Workflow group
+  range: 0
+
+- field: acl
+  note: ACL
+  range: open
+
+- field: groups
+  note: Groups
+  range: ""
+
+- field: whitelist
+  note: Whitelist
+  range: ""
+
+- field: reviewer
+  note: Reviewer
+  range: ""
+
+- field: PMT
+  note: PMT
+  range: ""
+
+- field: draftEpics
+  note: Draft epics
+  range: 0
+
+- field: activeEpics
+  note: Active epics
+  range: 0
+
+- field: changingEpics
+  note: Changing epics
+  range: 0
+
+- field: reviewingEpics
+  note: Reviewing epics
+  range: 0
+
+- field: finishedEpics
+  note: Finished epics
+  range: 0
+
+- field: closedEpics
+  note: Closed epics
+  range: 0
+
+- field: totalEpics
+  note: Total epics
+  range: 0
+
+- field: draftRequirements
+  note: Draft requirements
+  range: 0

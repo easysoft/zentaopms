@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->getUpgradeDocTemplates();
 timeout=0
-cid=1
+cid=0
 
 - 获取旧文档模板67
  -  @6

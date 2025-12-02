@@ -10,7 +10,7 @@ zenData('project')->loadYaml('project')->gen(5);
 
 title=测试 projectModel->buildBatchUpdateProjects();
 timeout=0
-cid=1
+cid=17886
 
 - 测试空数据 @0
 - 测试构造项目ID为1、2、3的更新数据

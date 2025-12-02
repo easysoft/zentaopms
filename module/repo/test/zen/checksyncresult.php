@@ -5,75 +5,63 @@
 
 title=测试 repoZen::checkSyncResult();
 timeout=0
-cid=0
+cid=18133
 
-- 执行repoTest模块的checkSyncResultTest方法，参数是$gitRepo, $branchesEmpty, 'master', 5, 'batch'  @5
-- 执行repoTest模块的checkSyncResultTest方法，参数是$gitRepo, $branchesEmpty, 'master', 5, 'normal'  @finish
-- 执行repoTest模块的checkSyncResultTest方法，参数是$syncedRepo, $branchesEmpty, 'master', 0, 'batch'  @0
-- 执行repoTest模块的checkSyncResultTest方法，参数是$gitRepo, $branchesWithData, 'master', 0, 'normal'  @finish
-- 执行repoTest模块的checkSyncResultTest方法，参数是$gitRepo, $branchesEmpty, 'master', 0, 'normal'  @finish
-- 执行repoTest模块的checkSyncResultTest方法，参数是$gitlabRepo, $branchesEmpty, 'master', 0, 'normal'  @finish
-- 执行repoTest模块的checkSyncResultTest方法，参数是null, $branchesEmpty, 'master', 0, 'normal'  @0
+- 测试步骤1:Git类型仓库,有提交数量,batch类型 @10
+- 测试步骤2:Git类型仓库,有提交数量,sync类型 @finish
+- 测试步骤3:Git类型仓库,无提交,未同步,有剩余分支 @finish
+- 测试步骤4:Git类型仓库,无提交,未同步,无剩余分支 @finish
+- 测试步骤5:Gitlab类型仓库,无提交,未同步 @finish
+- 测试步骤6:Subversion类型仓库,有提交数量,batch类型 @20
+- 测试步骤7:Git类型仓库,已同步,有提交数量 @15
+- 测试步骤8:无效的repo对象参数 @0
+- 测试步骤9:无效的type参数 @0
+- 测试步骤10:Git类型仓库,无提交,未同步,当前分支为空 @finish
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('repo');
-$table->id->range('1-10');
-$table->name->range('repo1,repo2,repo3');
-$table->SCM->range('Git{3},Gitlab{3},Subversion{3}');
-$table->synced->range('0{8},1{2}');
-$table->commits->range('10-100:10');
-$table->gen(10);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $repoTest = new repoZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
+// 创建测试用的repo对象
+$repo1 = new stdClass();
+$repo1->id = 101;
+$repo1->SCM = 'Git';
+$repo1->synced = 0;
+$repo1->commits = 0;
 
-// 准备测试数据
-$gitRepo = new stdClass();
-$gitRepo->id = 1;
-$gitRepo->SCM = 'Git';
-$gitRepo->synced = 0;
+$repo2 = new stdClass();
+$repo2->id = 102;
+$repo2->SCM = 'Gitlab';
+$repo2->synced = 0;
+$repo2->commits = 0;
 
-$gitlabRepo = new stdClass();
-$gitlabRepo->id = 2;
-$gitlabRepo->SCM = 'Gitlab';
-$gitlabRepo->synced = 0;
+$repo3 = new stdClass();
+$repo3->id = 103;
+$repo3->SCM = 'Subversion';
+$repo3->synced = 0;
+$repo3->commits = 0;
 
-$syncedRepo = new stdClass();
-$syncedRepo->id = 3;
-$syncedRepo->SCM = 'Git';
-$syncedRepo->synced = 1;
+$repo4 = new stdClass();
+$repo4->id = 104;
+$repo4->SCM = 'Git';
+$repo4->synced = 1;
+$repo4->commits = 100;
 
-$branchesWithData = array('develop', 'feature');
-$branchesEmpty = array();
+$branches1 = array('develop', 'feature/test');
+$branches2 = array();
 
-// 步骤1：正常情况，有提交计数，返回批处理模式下的提交计数
-r($repoTest->checkSyncResultTest($gitRepo, $branchesEmpty, 'master', 5, 'batch')) && p() && e('5');
-
-// 步骤2：正常情况，有提交计数，返回完成标志
-r($repoTest->checkSyncResultTest($gitRepo, $branchesEmpty, 'master', 5, 'normal')) && p() && e('finish');
-
-// 步骤3：同步情况，无提交计数且版本库已同步，返回批处理模式下的提交计数
-r($repoTest->checkSyncResultTest($syncedRepo, $branchesEmpty, 'master', 0, 'batch')) && p() && e('0');
-
-// 步骤4：Git类型版本库，无提交计数且未同步，有分支时处理下一个分支
-r($repoTest->checkSyncResultTest($gitRepo, $branchesWithData, 'master', 0, 'normal')) && p() && e('finish');
-
-// 步骤5：Git类型版本库，无提交计数且未同步，无分支时标记同步完成
-r($repoTest->checkSyncResultTest($gitRepo, $branchesEmpty, 'master', 0, 'normal')) && p() && e('finish');
-
-// 步骤6：Gitlab类型版本库，无提交计数且未同步，直接标记同步完成
-r($repoTest->checkSyncResultTest($gitlabRepo, $branchesEmpty, 'master', 0, 'normal')) && p() && e('finish');
-
-// 步骤7：无效参数测试，空的repo对象
-r($repoTest->checkSyncResultTest(null, $branchesEmpty, 'master', 0, 'normal')) && p() && e('0');
+r($repoTest->checkSyncResultTest($repo1, $branches1, 'master', 10, 'batch')) && p() && e('10'); // 测试步骤1:Git类型仓库,有提交数量,batch类型
+r($repoTest->checkSyncResultTest($repo1, $branches1, 'master', 5, 'sync')) && p() && e('finish'); // 测试步骤2:Git类型仓库,有提交数量,sync类型
+r($repoTest->checkSyncResultTest($repo1, $branches1, 'master', 0, 'sync')) && p() && e('finish'); // 测试步骤3:Git类型仓库,无提交,未同步,有剩余分支
+r($repoTest->checkSyncResultTest($repo1, $branches2, '', 0, 'sync')) && p() && e('finish'); // 测试步骤4:Git类型仓库,无提交,未同步,无剩余分支
+r($repoTest->checkSyncResultTest($repo2, $branches2, '', 0, 'sync')) && p() && e('finish'); // 测试步骤5:Gitlab类型仓库,无提交,未同步
+r($repoTest->checkSyncResultTest($repo3, array(), '', 20, 'batch')) && p() && e('20'); // 测试步骤6:Subversion类型仓库,有提交数量,batch类型
+r($repoTest->checkSyncResultTest($repo4, array(), '', 15, 'batch')) && p() && e('15'); // 测试步骤7:Git类型仓库,已同步,有提交数量
+r($repoTest->checkSyncResultTest(null, array(), '', 0, 'batch')) && p() && e('0'); // 测试步骤8:无效的repo对象参数
+r($repoTest->checkSyncResultTest($repo1, array(), '', 10, 'invalid')) && p() && e('0'); // 测试步骤9:无效的type参数
+r($repoTest->checkSyncResultTest($repo1, array(), '', 0, 'sync')) && p() && e('finish'); // 测试步骤10:Git类型仓库,无提交,未同步,当前分支为空

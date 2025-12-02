@@ -16,7 +16,7 @@ zenData('userquery')->loadYaml('userquery')->gen(1);
 
 title=测试 actionModel->getDynamicBySearch();
 timeout=0
-cid=1
+cid=14898
 
 - 获取排序为id倒序的所有动态
  - 第0条的id属性 @90

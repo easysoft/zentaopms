@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getLanguageModels();
 timeout=0
-cid=0
+cid=15035
 
 - 执行aiTest模块的getLanguageModelsTest方法  @8
 - 执行aiTest模块的getLanguageModelsTest方法，参数是'gpt'  @2

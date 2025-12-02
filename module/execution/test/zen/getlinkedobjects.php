@@ -5,53 +5,36 @@
 
 title=测试 executionZen::getLinkedObjects();
 timeout=0
-cid=0
+cid=16431
 
-- 执行executionTest模块的getLinkedObjectsTest方法，参数是$execution1  @Array
-- 执行executionTest模块的getLinkedObjectsTest方法，参数是$execution2  @(
-- 执行executionTest模块的getLinkedObjectsTest方法，参数是$execution3 属性error @[error] =>
-- 执行executionTest模块的getLinkedObjectsTest方法，参数是$execution4  @)
-- 执行executionTest模块的getLinkedObjectsTest方法，参数是$execution5  @Array
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是1 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是2 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是3 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是4 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是5 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是6 属性currentPlan @0
+- 执行executionTest模块的getLinkedObjectsTest方法，参数是7 属性currentPlan @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/executionzen.unittest.class.php';
 
-zenData('project')->loadYaml('project_getlinkedobjects')->gen(10);
-zenData('product')->loadYaml('product_getlinkedobjects')->gen(10);
-zenData('productplan')->loadYaml('productplan_getlinkedobjects')->gen(15);
-zenData('projectproduct')->loadYaml('projectproduct_getlinkedobjects')->gen(13);
-zenData('projectstory')->loadYaml('projectstory_getlinkedobjects')->gen(17);
-zenData('branch')->loadYaml('branch_getlinkedobjects')->gen(5);
+zenData('project')->gen(50);
+zenData('product')->gen(10);
+zenData('projectproduct')->gen(30);
+zenData('productplan')->gen(20);
+zenData('projectstory')->gen(30);
+zenData('branch')->gen(10);
 
 su('admin');
 
 $executionTest = new executionZenTest();
 
-// 构建测试执行对象
-$execution1 = new stdClass();
-$execution1->id = 6;
-$execution1->project = 1;
-
-$execution2 = new stdClass();
-$execution2->id = 7;
-$execution2->project = 2;
-
-$execution3 = new stdClass();
-$execution3->id = 8;
-$execution3->project = 2;
-
-$execution4 = new stdClass();
-$execution4->id = 9;
-$execution4->project = 3;
-
-$execution5 = new stdClass();
-$execution5->id = 10;
-$execution5->project = 3;
-
-r($executionTest->getLinkedObjectsTest($execution1)) && p() && e('Array');
-r($executionTest->getLinkedObjectsTest($execution2)) && p() && e('(');
-r($executionTest->getLinkedObjectsTest($execution3)) && p('error') && e('[error] =>');
-r($executionTest->getLinkedObjectsTest($execution4)) && p() && e(')');
-r($executionTest->getLinkedObjectsTest($execution5)) && p() && e('Array');
+r($executionTest->getLinkedObjectsTest(1)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(2)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(3)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(4)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(5)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(6)) && p('currentPlan') && e('0');
+r($executionTest->getLinkedObjectsTest(7)) && p('currentPlan') && e('0');

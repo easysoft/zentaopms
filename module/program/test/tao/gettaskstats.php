@@ -4,7 +4,7 @@
 
 title=测试 programTao::getTaskStats();
 timeout=0
-cid=1
+cid=17720
 
 - 获取系统中所有项目的任务统计信息
  - 第11条的totalEstimate属性 @51

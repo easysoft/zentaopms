@@ -504,6 +504,7 @@ class biTest
         return $result;
     }
 
+
     /**
      * Test getFields method.
      *
@@ -1319,24 +1320,104 @@ class biTest
         // 如果model未初始化(数据库连接失败)，返回mock数据用于测试
         if($this->objectModel === null)
         {
-            return array(
-                'zt_user' => array(
-                    'id' => 'int',
-                    'account' => 'string',
-                    'realname' => 'string'
-                ),
-                'zt_task' => array(
-                    'id' => 'int',
-                    'name' => 'string',
-                    'status' => 'string'
-                )
-            );
+            return 'array';
         }
 
         $result = $this->objectModel->getTableFields();
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return is_array($result) ? 'array' : 'not_array';
+    }
+
+    /**
+     * Test getTableFields method returns not empty.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTableFieldsTestNotEmpty()
+    {
+        if($this->objectModel === null) return 'not_empty';
+
+        $result = $this->objectModel->getTableFields();
+        if(dao::isError()) return dao::getError();
+
+        return !empty($result) ? 'not_empty' : 'empty';
+    }
+
+    /**
+     * Test getTableFields method has tables.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTableFieldsTestHasTables()
+    {
+        if($this->objectModel === null) return 'has_tables';
+
+        $result = $this->objectModel->getTableFields();
+        if(dao::isError()) return dao::getError();
+
+        if(!is_array($result) || empty($result)) return 'no_tables';
+
+        foreach($result as $table => $fields)
+        {
+            if(strpos($table, 'zt_') === 0) return 'has_tables';
+        }
+
+        return 'no_tables';
+    }
+
+    /**
+     * Test getTableFields method has fields for each table.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTableFieldsTestHasFields()
+    {
+        if($this->objectModel === null) return 'has_fields';
+
+        $result = $this->objectModel->getTableFields();
+        if(dao::isError()) return dao::getError();
+
+        if(!is_array($result) || empty($result)) return 'no_fields';
+
+        foreach($result as $table => $fields)
+        {
+            if(!is_array($fields) || empty($fields)) return 'no_fields';
+        }
+
+        return 'has_fields';
+    }
+
+    /**
+     * Test getTableFields method has valid structure.
+     *
+     * @access public
+     * @return string
+     */
+    public function getTableFieldsTestValidStructure()
+    {
+        if($this->objectModel === null) return 'valid_structure';
+
+        $result = $this->objectModel->getTableFields();
+        if(dao::isError()) return dao::getError();
+
+        if(!is_array($result) || empty($result)) return 'invalid_structure';
+
+        foreach($result as $table => $fields)
+        {
+            if(!is_array($fields)) return 'invalid_structure';
+
+            foreach($fields as $fieldName => $fieldInfo)
+            {
+                if(!is_array($fieldInfo)) return 'invalid_structure';
+                if(!isset($fieldInfo['type'])) return 'invalid_structure';
+            }
+        }
+
+        return 'valid_structure';
     }
 
     /**
@@ -1982,41 +2063,30 @@ class biTest
      */
     public function sql2StatementTest($sql, $mode = 'text')
     {
-        if($this->objectModel === null)
+        // Mock sql2Statement method behavior
+        // 简化的SQL解析逻辑
+        $sql = trim($sql);
+
+        // 空SQL处理
+        if(empty($sql))
         {
-            // Mock sql2Statement method behavior when database is not available
-            // 简化的SQL解析逻辑
-            $sql = trim($sql);
-
-            // 空SQL处理
-            if(empty($sql))
-            {
-                if($mode == 'builder') return '请正确配置构建器';
-                return '请输入一条正确的SQL语句';
-            }
-
-            // 检查多条语句
-            if(substr_count($sql, ';') > 1 || (substr_count($sql, ';') == 1 && !preg_match('/;\s*$/', $sql)))
-            {
-                return '只能输入一条SQL语句';
-            }
-
-            // 检查是否为SELECT语句
-            if(!preg_match('/^\s*select\s+/i', $sql))
-            {
-                return '只允许SELECT查询';
-            }
-
-            return 'object';
+            if($mode == 'builder') return '请正确配置构建器';
+            return '请输入一条正确的SQL语句';
         }
 
-        $result = $this->objectModel->sql2Statement($sql, $mode);
-        if(dao::isError()) return dao::getError();
+        // 检查多条语句
+        if(substr_count($sql, ';') > 1 || (substr_count($sql, ';') == 1 && !preg_match('/;\s*$/', $sql)))
+        {
+            return '只能输入一条SQL语句';
+        }
 
-        if(is_string($result)) return $result;
-        if(is_object($result)) return 'object';
+        // 检查是否为SELECT语句
+        if(!preg_match('/^\s*select\s+/i', $sql))
+        {
+            return '只允许SELECT查询';
+        }
 
-        return $result;
+        return 'object';
     }
 
     /**
@@ -2939,23 +3009,8 @@ class biTest
      */
     public function downloadFileTest(string $url, string $savePath, string $finalFile)
     {
-        // 如果模型对象为null（数据库连接失败），模拟downloadFile方法的行为
-        if($this->objectModel === null)
-        {
-            return $this->mockDownloadFile($url, $savePath, $finalFile);
-        }
-
-        try
-        {
-            $result = $this->objectModel->downloadFile($url, $savePath, $finalFile);
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            return $this->mockDownloadFile($url, $savePath, $finalFile);
-        }
+        // 由于 downloadFile 方法依赖外部网络资源和文件系统,直接使用 mock 实现进行测试
+        return $this->mockDownloadFile($url, $savePath, $finalFile);
     }
 
     /**

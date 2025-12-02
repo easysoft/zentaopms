@@ -4,7 +4,7 @@
 
 title=测试 userZen::getFeatureBarMenus();
 timeout=0
-cid=1
+cid=19674
 
 - 检查返回菜单个数。 @12
 - 检查日程菜单信息。

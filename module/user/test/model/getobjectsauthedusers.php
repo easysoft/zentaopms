@@ -5,7 +5,7 @@
 
 title=测试 userModel::getObjectsAuthedUsers();
 timeout=0
-cid=0
+cid=19620
 
 - 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array 属性admin @admin
 - 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array 属性admin @admin

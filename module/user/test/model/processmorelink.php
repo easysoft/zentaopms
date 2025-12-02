@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->processMoreLink();
-cid=0
+cid=19651
 
 - maxCount 参数为 0，更多链接为空。
  - 属性batchCreate @10

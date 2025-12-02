@@ -1,0 +1,56 @@
+---
+title: 需求数据定义
+desc: 用于测试processCreateRequirementsActionExtra方法的需求数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 需求ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: title
+  note: 需求标题
+  range: 需求1,需求2,需求3,需求4,需求5,需求6,需求7,需求8,需求9,需求10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: 1
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: type
+  note: 需求类型
+  range: requirement
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 需求状态
+  range: active,draft,closed
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: stage
+  note: 需求阶段
+  range: wait,planned,projected,developing,developed,testing,tested,verified,released,closed
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

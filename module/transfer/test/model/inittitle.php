@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 transfer->initTitle();
 timeout=0
-cid=1
+cid=19325
 
 - 测试获取task模块id字段语言项 @编号
 - 测试获取bug模块product字段语言项 @所属产品

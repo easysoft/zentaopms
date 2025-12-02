@@ -4,7 +4,7 @@
 
 title=测试 releaseModel->update();
 timeout=0
-cid=1
+cid=18017
 
 - 修改正常发布
  - 属性id @1

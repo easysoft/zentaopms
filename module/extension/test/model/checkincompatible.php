@@ -5,7 +5,7 @@
 
 title=测试 extensionModel::checkIncompatible();
 timeout=0
-cid=0
+cid=16449
 
 - 步骤1：正常插件版本输入 @1
 - 步骤2：空版本数组输入 @1

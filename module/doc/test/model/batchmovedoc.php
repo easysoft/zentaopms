@@ -5,7 +5,7 @@
 
 title=测试 docModel->batchMoveDoc();
 timeout=0
-cid=1
+cid=16043
 
 - 测试ID为空时 @0
 - 测试文档1文档2的字段

@@ -3,22 +3,24 @@
 declare(strict_types=1);
 
 /**
-title= 业务需求细分用户需求测试
+
+title=业务需求细分用户需求测试
 timeout=0
 cid=79
 
-- 评审中业务需求，不打印细分按钮
+-评审中业务需求，不打印细分按钮
  -最终测试状态 @SUCCESS
  -测试结果 @细分按钮高亮正确
-- 已关闭业务需求，不打印细分按钮
+-已关闭业务需求，不打印细分按钮
  -最终测试状态 @SUCCESS
  -测试结果 @细分按钮高亮正确
-- 激活业务需求，打印细分按钮
+-激活业务需求，打印细分按钮
  -最终测试状态 @SUCCESS
  -测试结果 @批量创建需求页面名称为空提示正确
-- 激活业务需求，打印细分按钮
+-激活业务需求，打印细分按钮
  -最终测试状态 @SUCCESS
  -测试结果 @拆分业务需求成功
+
 */
 chdir(__DIR__);
 include '../lib/ui/batchcreatur.ui.class.php';
@@ -64,6 +66,19 @@ $storyspec->gen(3);
 $storyreview = zenData('storyreview');
 $storyreview->gen(0);
 
+$project = zenData('project');
+$project->gen(0);
+
+$projectproduct = zenData('projectproduct');
+$projectproduct->gen(0);
+
+$projectstory = zenData('projectstory');
+$projectstory->gen(0);
+
+$task = zenData('task')->gen(0);
+
+$case = zenData('case')->gen(0);
+
 $action = zenData('action');
 $action->id->range('1-4');
 $action->objectType->range('product,story,story,story');
@@ -76,6 +91,13 @@ $action->action->range('opened');
 $action->read->range('0');
 $action->vision->range('rnd');
 $action->gen(4);
+
+$user = zenData('user');
+$user->id->range('1-3');
+$user->account->range('admin, user1, user2');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->realname->range('admin, USER1, USER2');
+$user->gen(3);
 
 $tester = new createChildStoryTester();
 $tester->login();

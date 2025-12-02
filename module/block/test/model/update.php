@@ -23,7 +23,7 @@ function initData()
 
 title=测试 block 模块的update 方法
 timeout=0
-cid=39
+cid=15235
 
 - 测试获取正常的block的内容
  - 属性account @admin

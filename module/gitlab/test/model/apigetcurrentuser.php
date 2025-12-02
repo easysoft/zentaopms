@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiGetCurrentUser();
 timeout=0
-cid=1
+cid=16601
 
 - 使用空的数据获取用户信息 @0
 - 使用错误的host获取用户信息 @return null

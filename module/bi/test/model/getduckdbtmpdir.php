@@ -7,7 +7,7 @@ include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
 title=测试 biModel::getDuckDBTmpDir();
 timeout=0
-cid=0
+cid=15169
 
 - 步骤1：正常获取DuckDB临时目录路径，static=false @1
 - 步骤2：获取静态路径，static=true @1

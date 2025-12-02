@@ -6,13 +6,13 @@
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "release/12.5"
+      "gitVersion": "release/12.6"
     },
     "zentaomax": {
-      "gitVersion": "release/7.5"
+      "gitVersion": "release/7.6"
     },
     "zentaoipd": {
-      "gitVersion": "release/4.5"
+      "gitVersion": "release/4.6"
     },
     "devops": {
       "gitRepo": "zentao/devops"
@@ -56,7 +56,7 @@
   "push_version": "true",
   "deploy": {
     "zentaopaas": {
-      "enabled": true,
+      "enabled": false,
       "server": "https://b7du.corp.cc"
     }
   },

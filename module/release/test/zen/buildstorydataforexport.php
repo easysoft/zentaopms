@@ -5,7 +5,7 @@
 
 title=测试 releaseZen::buildStoryDataForExport();
 timeout=0
-cid=0
+cid=18025
 
 - 执行releaseTest模块的buildStoryDataForExportTest方法，参数是$release1), '<h3>需求</h3><table>') !== false  @1
 - 执行releaseTest模块的buildStoryDataForExportTest方法，参数是$release2  @<h3>需求</h3>

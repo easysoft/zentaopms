@@ -4,7 +4,7 @@
 /**
 
 title=测试 loadModel->getLinkProductsForCreate()
-cid=0
+cid=17767
 
 - projectID=0, productID=0，检查产品数据。 @3
 - projectID=0, productID=0，检查分支数据。 @0;1;2;3;4

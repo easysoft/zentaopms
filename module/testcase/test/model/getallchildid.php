@@ -11,7 +11,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getAllChildId();
-cid=1
+cid=18973
 
 - 测试获取场景 1 所有的子场景 id @1,2
 

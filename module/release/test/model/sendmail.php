@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::sendmail();
 timeout=0
-cid=0
+cid=18011
 
 - 步骤1：空releaseID @empty
 - 步骤2：正常releaseID @success

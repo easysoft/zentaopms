@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getTableChartOption();
 timeout=0
-cid=0
+cid=18257
 
 - 测试有SQL的图表情况，检查styles属性属性styles @default-styles
 - 测试有SQL的图表情况，检查status属性属性status @default-status

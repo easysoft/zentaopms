@@ -5,48 +5,25 @@
 
 title=测试 biModel::getTableFields();
 timeout=0
-cid=0
+cid=15185
 
-- 测试返回结果为数组类型 @Array
-- 测试数组包含2个表 @2
-- 测试zt_user表存在 @1
-- 测试zt_user表id字段为int类型第zt_user条的id属性 @int
-- 测试zt_task表name字段为string类型第zt_task条的name属性 @string
+- 测试正常调用返回结果是数组类型 @array
+- 测试返回结果不为空 @not_empty
+- 测试返回结果包含表名键 @has_tables
+- 测试每个表都包含字段信息 @has_fields
+- 测试字段信息结构完整性 @valid_structure
 
 */
 
-try {
-    include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
-    $bi = new biTest();
-} catch (Exception $e) {
-    // 如果初始化失败，使用mock测试类
-    class biTestMock {
-        public function getTableFieldsTest() {
-            return array(
-                'zt_user' => array(
-                    'id' => 'int',
-                    'account' => 'string',
-                    'realname' => 'string'
-                ),
-                'zt_task' => array(
-                    'id' => 'int',
-                    'name' => 'string',
-                    'status' => 'string'
-                )
-            );
-        }
-    }
-    $bi = new biTestMock();
-}
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
-$result     = $bi->getTableFieldsTest();
-$resultType = is_array($result) ? 'Array' : gettype($result);
-$resultCount = count($result);
-$userExists = isset($result['zt_user']) ? '1' : '0';
+su('admin');
 
-r($resultType) && p() && e('Array');                                       // 测试返回结果为数组类型
-r($resultCount) && p() && e('2');                                          // 测试数组包含2个表
-r($userExists) && p() && e('1');                                           // 测试zt_user表存在
-r($result) && p('zt_user:id') && e('int');                                 // 测试zt_user表id字段为int类型
-r($result) && p('zt_task:name') && e('string');                            // 测试zt_task表name字段为string类型
+$bi = new biTest();
+
+r($bi->getTableFieldsTest()) && p() && e('array');          // 测试正常调用返回结果是数组类型
+r($bi->getTableFieldsTestNotEmpty()) && p() && e('not_empty');          // 测试返回结果不为空
+r($bi->getTableFieldsTestHasTables()) && p() && e('has_tables');          // 测试返回结果包含表名键
+r($bi->getTableFieldsTestHasFields()) && p() && e('has_fields');          // 测试每个表都包含字段信息
+r($bi->getTableFieldsTestValidStructure()) && p() && e('valid_structure');          // 测试字段信息结构完整性

@@ -5,7 +5,7 @@
 
 title=测试 todoTao::getCycleTodoDate();
 timeout=0
-cid=0
+cid=19275
 
 - 按天类型测试，返回0说明不符合间隔要求 @0
 - 按周类型测试，返回1说明符合周配置 @1

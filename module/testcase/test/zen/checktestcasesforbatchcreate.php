@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::checkTestcasesForBatchCreate();
 timeout=0
-cid=0
+cid=19086
 
 - 执行testcaseTest模块的checkTestcasesForBatchCreateTest方法，参数是$validTestcases 第0条的title属性 @正常测试用例1
 - 执行testcaseTest模块的checkTestcasesForBatchCreateTest方法，参数是$emptyTestcases  @0

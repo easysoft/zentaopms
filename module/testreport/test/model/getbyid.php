@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testreportModel->getById();
 timeout=0
-cid=1
+cid=19115
 
 - 正常查询 1
  - 属性id @1

@@ -3,7 +3,7 @@
 /**
 
 title=测试 designModel->getCommit();
-cid=1
+cid=15989
 
 - 测试空数据 @0
 - 测试未关联提交记录的设计 @0

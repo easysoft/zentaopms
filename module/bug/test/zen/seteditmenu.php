@@ -5,7 +5,7 @@
 
 title=测试 bugZen::setEditMenu();
 timeout=0
-cid=0
+cid=15479
 
 - 步骤1：project tab情况 @1
 - 步骤2：execution tab情况 @1

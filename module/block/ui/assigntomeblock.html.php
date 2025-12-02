@@ -114,7 +114,16 @@ foreach($hasViewPriv as $type => $bool)
                 $this->app->loadLang('charter');
                 $statusList = array_merge($statusList, $lang->charter->reviewStatusList);
             }
-            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
+            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review', 'mr', 'pullreq')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
+
+            if(in_array($reviewType, array('mr', 'pullreq')))
+            {
+                $typeName = $lang->devops->mr;
+                if(empty($review->status)) $review->status = 'notReviewed';
+
+                $this->app->loadLang('mr');
+                $statusList = array_merge($statusList, $lang->mr->approvalStatusList);
+            }
 
             $review->type = $typeName;
             if(isset($review->project) && $review->project == 0) $review->project = '';
@@ -139,6 +148,7 @@ foreach($hasViewPriv as $type => $bool)
         setID("assigntome{$type}Tab{$blockNavCode}"),
         dtable
         (
+            set::id($type),
             set::height(318),
             set::bordered(false),
             $type == 'todo'  || $type == 'task' ? set::fixedLeftWidth('0.44') : '',

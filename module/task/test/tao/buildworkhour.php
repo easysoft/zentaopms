@@ -8,7 +8,7 @@ su('admin');
 
 title=- 无消耗工时给出提示 @『ID \
 timeout=0
-cid=1
+cid=18865
 
 - 以admin账号登录，构造待创建的工时信息
  - 第1条的consumed属性 @5

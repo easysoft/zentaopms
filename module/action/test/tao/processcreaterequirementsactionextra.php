@@ -3,43 +3,38 @@
 
 /**
 
-title=- 步骤1：正常单个需求属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >
+title=- 步骤1:单个需求ID属性extra @
 timeout=0
 cid=1
 
-- 步骤1：正常单个需求属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>
-- 步骤2：多个需求
- - 属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>
-- 步骤3：单个需求ID2属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求标题2</a>
-- 步骤4：单个需求ID3属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求标题3</a>
-- 步骤5：混合有效无效ID
- - 属性extra @<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1' 属性extra @#1 需求A
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 2, 3'
+ - 属性extra @#1 需求A
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'999' 属性extra @~~
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'' 属性extra @~~
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 999, 2'
+ - 属性extra @#1 需求A
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$story = zenData('story');
-$story->id->range('1-10');
-$story->title->range('需求标题1,需求标题2,需求标题3,需求标题4,需求标题5{5}');
-$story->product->range('1{10}');
-$story->type->range('requirement{10}');
-$story->status->range('active{10}');
-$story->openedBy->range('admin{10}');
-$story->gen(10);
+$storyTable = zenData('story');
+$storyTable->id->range('1-10');
+$storyTable->title->range('需求A,需求B,需求C,需求D,需求E,需求F,需求G,需求H,需求I,需求J');
+$storyTable->type->range('requirement');
+$storyTable->product->range('1-3');
+$storyTable->status->range('active{5},closed{3},draft{2}');
+$storyTable->openedBy->range('admin,user1,user2,admin,user1,user2,admin,user1,user2,admin');
+$storyTable->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
 $actionTest = new actionTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e("<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>"); // 步骤1：正常单个需求  
-r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e("<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>, <a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求标题2</a>, <a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求标题3</a>"); // 步骤2：多个需求
-r($actionTest->processCreateRequirementsActionExtraTest('2')) && p('extra') && e("<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求标题2</a>"); // 步骤3：单个需求ID2
-r($actionTest->processCreateRequirementsActionExtraTest('3')) && p('extra') && e("<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求标题3</a>"); // 步骤4：单个需求ID3  
-r($actionTest->processCreateRequirementsActionExtraTest('1,,2')) && p('extra') && e("<a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求标题1</a>, <a href='/home/z/rzto/module/action/test/tao/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求标题2</a>"); // 步骤5：混合有效无效ID
+r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e('#1 需求A');
+r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e('#1 需求A, #2 需求B, #3 需求C');
+r($actionTest->processCreateRequirementsActionExtraTest('999')) && p('extra') && e('~~');
+r($actionTest->processCreateRequirementsActionExtraTest('')) && p('extra') && e('~~');
+r($actionTest->processCreateRequirementsActionExtraTest('1,999,2')) && p('extra') && e('#1 需求A, #2 需求B');

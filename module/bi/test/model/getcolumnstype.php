@@ -5,7 +5,7 @@
 
 title=测试 biModel::getColumnsType();
 timeout=0
-cid=0
+cid=15162
 
 - 步骤1：正常情况测试ID字段类型属性id @number
 - 步骤2：指定MySQL驱动测试account字段类型属性account @string

@@ -5,7 +5,7 @@
 
 title=测试 bugZen::setBrowseCookie();
 timeout=0
-cid=0
+cid=15476
 
 - 执行bugTest模块的setBrowseCookieTest方法，参数是$product, 'all', 'bymodule', 100, 'id_desc'  @1
 - 执行bugTest模块的setBrowseCookieTest方法，参数是$product2, 'all', 'all', 0, 'id_desc'  @1

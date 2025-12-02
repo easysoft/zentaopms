@@ -8,7 +8,7 @@ zenData('extension')->gen(10);
 
 title=测试 extensionModel->getInfoFromDB();
 timeout=0
-cid=1
+cid=16461
 
 - 获取插件1的详细信息
  - 属性id @1

@@ -5,83 +5,85 @@
 
 title=测试 convertTao::createProject();
 timeout=0
-cid=0
+cid=15842
 
-- 执行convertTest模块的createProjectTest方法，参数是$data1, $projectRoleActor1 
- - 属性name @测试项目名称
+- 步骤1:正常情况,完整的项目数据,无团队成员
+ - 属性name @测试项目1
  - 属性code @TEST1
+ - 属性status @doing
+ - 属性type @project
+- 步骤2:包含团队成员的项目创建
+ - 属性name @测试项目2
+ - 属性code @TEST2
  - 属性status @wait
- - 属性type @project
-- 执行convertTest模块的createProjectTest方法，参数是$data2, array 属性name @长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
-- 执行convertTest模块的createProjectTest方法，参数是$data3, array 属性desc @
-- 执行convertTest模块的createProjectTest方法，参数是$data4, $projectRoleActor4 
- - 属性name @团队项目
- - 属性type @project
- - 属性model @scrum
-- 执行convertTest模块的createProjectTest方法，参数是$data5, array 
- - 属性storyType @story
+- 步骤3:缺少description字段的项目
+ - 属性name @测试项目3
+ - 属性code @TEST3
+- 步骤4:缺少created字段的项目
+ - 属性name @测试项目4
+ - 属性code @TEST4
+ - 属性status @wait
+- 步骤5:缺少lead字段的项目
+ - 属性name @测试项目5
+ - 属性code @TEST5
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+
 su('admin');
 
-global $tester;
 $convertTest = new convertTest();
 
-// 步骤1：正常情况 - 基本Jira项目数据
+// 测试步骤1:正常情况,完整的项目数据,无团队成员
 $data1 = new stdclass();
-$data1->pname = '测试项目名称';
+$data1->id = 1001;
+$data1->pname = '测试项目1';
 $data1->pkey = 'TEST1';
-$data1->description = '项目描述内容';
-$data1->status = 'wait';
-$data1->lead = 'jira_admin';
+$data1->description = '这是一个测试项目';
+$data1->status = 'doing';
 $data1->created = '2024-01-01 10:00:00';
-$data1->id = 1;
-$projectRoleActor1 = array();
-r($convertTest->createProjectTest($data1, $projectRoleActor1)) && p('name,code,status,type') && e('测试项目名称,TEST1,wait,project');
+$data1->lead = 'admin';
+r($convertTest->createProjectTest($data1, array())) && p('name,code,status,type') && e('测试项目1,TEST1,doing,project'); // 步骤1:正常情况,完整的项目数据,无团队成员
 
-// 步骤2：边界值 - 长项目名称截取测试（90字符限制）
+// 测试步骤2:包含团队成员的项目创建
 $data2 = new stdclass();
-$data2->pname = '长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长名称';
-$data2->pkey = 'LONG';
-$data2->description = '长名称测试';
-$data2->status = 'doing';
-$data2->lead = 'jira_user1';
-$data2->created = '2024-02-15 14:30:00';
-$data2->id = 2;
-r($convertTest->createProjectTest($data2, array())) && p('name') && e('长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长');
+$data2->id = 1002;
+$data2->pname = '测试项目2';
+$data2->pkey = 'TEST2';
+$data2->description = '包含团队成员的项目';
+$data2->status = 'wait';
+$data2->created = '2024-02-01 10:00:00';
+$data2->lead = 'admin';
+r($convertTest->createProjectTest($data2, array(1002 => array('user1', 'user2')))) && p('name,code,status') && e('测试项目2,TEST2,wait'); // 步骤2:包含团队成员的项目创建
 
-// 步骤3：异常输入 - 空描述处理
+// 测试步骤3:缺少description字段的项目
 $data3 = new stdclass();
-$data3->pname = '无描述项目';
-$data3->pkey = 'NODESC';
+$data3->id = 1003;
+$data3->pname = '测试项目3';
+$data3->pkey = 'TEST3';
 $data3->status = 'done';
-$data3->lead = 'jira_lead';
-$data3->created = '2024-03-10 09:15:00';
-$data3->id = 3;
-r($convertTest->createProjectTest($data3, array())) && p('desc') && e('');
+$data3->created = '2024-03-01 10:00:00';
+$data3->lead = 'admin';
+r($convertTest->createProjectTest($data3, array())) && p('name,code') && e('测试项目3,TEST3'); // 步骤3:缺少description字段的项目
 
-// 步骤4：权限验证 - 包含团队成员的项目
+// 测试步骤4:缺少created字段的项目
 $data4 = new stdclass();
-$data4->pname = '团队项目';
-$data4->pkey = 'TEAM';
-$data4->description = '包含团队成员的项目';
+$data4->id = 1004;
+$data4->pname = '测试项目4';
+$data4->pkey = 'TEST4';
+$data4->description = '缺少创建时间字段';
 $data4->status = 'wait';
-$data4->lead = 'jira_admin';
-$data4->created = '2024-04-01 16:00:00';
-$data4->id = 4;
-$projectRoleActor4 = array(4 => array('jira_user1', 'jira_user2'));
-r($convertTest->createProjectTest($data4, $projectRoleActor4)) && p('name,type,model') && e('团队项目,project,scrum');
+$data4->lead = 'admin';
+r($convertTest->createProjectTest($data4, array())) && p('name,code,status') && e('测试项目4,TEST4,wait'); // 步骤4:缺少created字段的项目
 
-// 步骤5：业务规则 - 项目默认设置验证
+// 测试步骤5:缺少lead字段的项目
 $data5 = new stdclass();
-$data5->pname = '默认设置项目';
-$data5->pkey = 'DEFAULT';
-$data5->description = '验证默认设置';
-$data5->status = 'closed';
-$data5->lead = '';
-$data5->created = '';
-$data5->id = 5;
-r($convertTest->createProjectTest($data5, array())) && p('storyType') && e('story,epic,requirement');
+$data5->id = 1005;
+$data5->pname = '测试项目5';
+$data5->pkey = 'TEST5';
+$data5->description = '缺少负责人字段';
+$data5->status = 'doing';
+$data5->created = '2024-05-01 10:00:00';
+r($convertTest->createProjectTest($data5, array())) && p('name,code') && e('测试项目5,TEST5'); // 步骤5:缺少lead字段的项目

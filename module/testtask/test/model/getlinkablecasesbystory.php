@@ -11,7 +11,7 @@ zenData('story')->gen(2);
 
 title=测试 testtaskModel->getLinkableCasesByStory();
 timeout=0
-cid=1
+cid=19178
 
 - 产品 0 测试单 4 可关联的用例数为 0。 @0
 - 产品 2 测试单 4 可关联的用例数为 0。 @0

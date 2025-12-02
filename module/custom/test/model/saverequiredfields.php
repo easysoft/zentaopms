@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 customModel->saveRequiredFields();
 timeout=0
-cid=1
+cid=15923
 
 - 测试moduleName为product，requiredFields为空属性value @name
 - 测试moduleName为product，requiredFields中的create存在一个值属性value @name,PO

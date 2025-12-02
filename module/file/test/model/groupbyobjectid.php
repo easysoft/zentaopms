@@ -5,7 +5,7 @@
 
 title=测试 fileModel->groupByObjectID();
 timeout=0
-cid=0
+cid=16515
 
 - 获取 traincourse id 5 的文件
  - 第5条的title属性 @文件标题5

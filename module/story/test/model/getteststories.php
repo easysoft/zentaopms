@@ -5,7 +5,7 @@
 
 title=测试 storyModel->getTestStories();
 timeout=0
-cid=0
+cid=18563
 
 - 获取和执行103关联的ID为9的测试类型的需求属性9 @9
 - 获取和执行109关联的ID为73的测试类型的需求 @0

@@ -4,7 +4,7 @@
 /**
 
 title=测试 gitlabModel::apiGetSingleIssue();
-cid=0
+cid=16617
 
 - 测试步骤1：正常获取存在的issue信息 >> 返回有效issue对象的title属性
 - 测试步骤2：使用不存在的gitlabID查询issue >> 返回空结果或空字符串

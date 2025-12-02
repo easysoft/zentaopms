@@ -31,7 +31,7 @@ $user = zenData('user')->gen(100);
 
 title=测试 projectModel->manageMembers();
 timeout=0
-cid=1
+cid=17865
 
 - 查看维护团队之后的成员数量 @3
 - 查看维护团队之后的成员角色第user1条的role属性 @研发

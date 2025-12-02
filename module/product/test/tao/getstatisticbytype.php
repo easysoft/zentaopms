@@ -4,7 +4,7 @@
 /**
 
 title=productTao->getStatisticByType();
-cid=0
+cid=17556
 
 - 获取计划数量属性1 @3
 - 获取发布数量属性2 @3

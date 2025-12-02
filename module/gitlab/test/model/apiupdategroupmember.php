@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::apiUpdateGroupMember();
 timeout=0
-cid=1
+cid=16629
 
 - 执行$result @return false
 - 执行$result @return false

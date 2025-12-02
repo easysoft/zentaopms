@@ -5,7 +5,7 @@
 
 title=测试 zahostModel::getByID();
 timeout=0
-cid=0
+cid=19744
 
 - 执行zahost模块的getByIDTest方法，参数是1
  - 属性hostID @1

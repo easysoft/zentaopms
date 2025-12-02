@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->batchChangeBranch();
-cid=0
+cid=18465
 
 - 批量修改需求的所属分支，判断被修改分支需求的数量 @3
 - 批量修改需求的所属分支，判断需求2修改后的分支ID第2条的branch属性 @2

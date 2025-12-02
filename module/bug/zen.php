@@ -680,6 +680,7 @@ class bugZen extends bug
             ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($formData->data->resolution  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($formData->data->resolution  != '' && $formData->data->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
+            ->setIF($formData->data->closedDate  != '' && $formData->data->closedBy     != '', 'closedDate',   formatTime($formData->data->closedDate, 'Y-m-d H:i:s'))
             ->setIF($formData->data->closedDate  != '' && $formData->data->closedBy     == '', 'closedBy',     $this->app->user->account)
             ->setIF($formData->data->closedBy    != '' && $formData->data->closedDate   == '', 'closedDate',   $now)
             ->setIF($formData->data->closedBy    != '' || $formData->data->closedDate   != '', 'assignedTo',   'closed')
@@ -848,7 +849,7 @@ class bugZen extends bug
         else
         {
             $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array('');
-            $branch = isset($branches[$branch]) ? $branch : '';
+            $branch   = isset($branches[$branch]) && $branch != 0 ? $branch : '';
         }
 
         return $this->updateBug($bug, array('branches' => $branches, 'branch' => $branch));
@@ -1295,7 +1296,6 @@ class bugZen extends bug
     protected function buildBugForResolve(object $oldBug): object
     {
         $bug = form::data($this->config->bug->form->resolve, $oldBug->id)
-            ->setDefault('assignedTo', $oldBug->openedBy)
             ->setDefault('resolvedDate', helper::now())
             ->add('id',        $oldBug->id)
             ->add('execution', $oldBug->execution)
@@ -2149,12 +2149,16 @@ class bugZen extends bug
         $bug = $this->bug->getByID($bugID);
         if($bug->toTask and !empty($changes))
         {
-            foreach($changes as $change)
+            $task = $this->loadModel('task')->fetchByID($bug->toTask);
+            if(in_array($task->status, array('wait', 'doing')))
             {
-                if($change['field'] == 'status')
+                foreach($changes as $change)
                 {
-                    $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
-                    return $this->send(array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->bug->notice->remindTask, $bug->toTask) . "').then((res) => {if(res) openUrl('{$confirmedURL}', {load: 'modal', size: 'lg'})});", 'closeModal' => true));
+                    if($change['field'] == 'status')
+                    {
+                        $confirmedURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                        return $this->send(array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->bug->notice->remindTask, $bug->toTask) . "').then((res) => {if(res) openUrl('{$confirmedURL}', {load: 'modal', size: 'lg'})});", 'closeModal' => true));
+                    }
                 }
             }
         }

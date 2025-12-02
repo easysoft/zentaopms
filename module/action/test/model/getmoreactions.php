@@ -12,7 +12,7 @@ zenData('actionproduct')->gen(0);
 
 title=测试 actionModel->getMoreActions();
 timeout=0
-cid=1
+cid=14904
 
 - 测试传入空SESSION @0
 - 测试传入条件 actor='admin'。 @0

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   KEY `public` (`public`),
   KEY `createdBy` (`createdBy`),
   KEY `editedBy` (`editedBy`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `cgid` char(40) NOT NULL DEFAULT '',
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   KEY `star` (`star`),
   KEY `hide` (`hide`),
   UNIQUE KEY `chatuser` (`cgid`, `user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_client` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `version` char(30) NOT NULL DEFAULT '',
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_client` (
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `status` enum('released','wait') NOT NULL DEFAULT 'wait',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_message` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `gid` char(40) NOT NULL DEFAULT '',
@@ -72,13 +72,13 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   KEY `mcgid` (`cgid`),
   KEY `muser` (`user`),
   KEY `mtype` (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_messagestatus` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `message` int(11) unsigned NOT NULL,
   `status` enum('waiting','sent','readed','deleted') NOT NULL DEFAULT 'waiting',
   UNIQUE KEY `user` (`user`,`message`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_queue` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `type` char(30) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_queue` (
   `result` text NOT NULL,
   `status` char(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `rid` char(24) NOT NULL DEFAULT '',
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_conference` (
   `openedBy` mediumint(8) NOT NULL DEFAULT 0,
   `openedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `rid` char(24) NOT NULL DEFAULT '',
@@ -106,4 +106,4 @@ CREATE TABLE IF NOT EXISTS `zt_im_conferenceaction` (
   `user` mediumint(8) NOT NULL DEFAULT 0,
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;

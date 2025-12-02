@@ -20,7 +20,7 @@ initData();
 
 title=测试 testcaseModel->linkBugs();
 timeout=0
-cid=1
+cid=19050
 
 - 测试修改用例 1 关联 bug 1
  - 第0条的id属性 @1

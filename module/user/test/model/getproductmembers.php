@@ -5,7 +5,7 @@
 
 title=测试 userModel->getProductMembers();
 timeout=0
-cid=0
+cid=19623
 
 - 产品列表为空，返回空数组。 @0
 - 产品1关联项目1，项目1有团队成员user1和干系人user2，返回正确的团队成员和干系人。第1条的user1属性 @user1

@@ -5,7 +5,7 @@
 
 title=测试 metricZen::initMetricRecords();
 timeout=0
-cid=0
+cid=17197
 
 - 步骤1：系统范围初始化 @1
 - 步骤2：产品范围初始化 @4

@@ -9,7 +9,7 @@ zenData('project')->loadYaml('project')->gen(4);
 
 title=测试 projectModel->getListByCurrentUser();
 timeout=0
-cid=1
+cid=17832
 
 - 执行projectModel模块的getListByCurrentUser方法  @0
 - 执行projectModel模块的getListByCurrentUser方法  @1

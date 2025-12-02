@@ -10,7 +10,7 @@ zenData('bug')->loadYaml('type')->gen(12);
 
 title=bugModel->getDataOfBugsPerType();
 timeout=0
-cid=1
+cid=15373
 
 - 获取类型为codeerror的数据
  - 第codeerror条的name属性 @代码错误

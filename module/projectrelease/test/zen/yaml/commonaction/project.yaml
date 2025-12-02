@@ -1,0 +1,301 @@
+---
+title: Project data for commonAction test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: Project ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+- field: project
+  note: Parent project
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: isTpl
+  note: Is template
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: charter
+  note: Charter
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: model
+  note: Model
+  range: scrum
+  prefix: ""
+  postfix: ""
+- field: type
+  note: Project type
+  range: project
+  prefix: ""
+  postfix: ""
+- field: category
+  note: Category
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: lifetime
+  note: Lifetime
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: budget
+  note: Budget
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: budgetUnit
+  note: Budget unit
+  range: CNY
+  prefix: ""
+  postfix: ""
+- field: attribute
+  note: Attribute
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: percent
+  note: Percent
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: milestone
+  note: Milestone
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: output
+  note: Output
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: auth
+  note: Auth
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: storyType
+  note: Story type
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: parent
+  note: Parent
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: path
+  note: Path
+  range: ',1,',',2,',',3,',',4,',',5,',',6,',',7,',',8,',',9,',',10,'
+  prefix: ""
+  postfix: ""
+- field: grade
+  note: Grade
+  range: 1
+  prefix: ""
+  postfix: ""
+- field: name
+  note: Project name
+  range: Project 1,Project 2,Project 3,Project 4,Project 5,Project 6,Project 7,Project 8,Project 9,Project 10
+  prefix: ""
+  postfix: ""
+- field: code
+  note: Project code
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: mark
+  note: Mark
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: begin
+  note: Begin date
+  range: '2025-01-01'
+  prefix: ""
+  postfix: ""
+- field: end
+  note: End date
+  range: '2025-12-31'
+  prefix: ""
+  postfix: ""
+- field: realBegan
+  note: Real began
+  range: '`0000-00-00`'
+  prefix: ""
+  postfix: ""
+- field: realEnd
+  note: Real end
+  range: '`0000-00-00`'
+  prefix: ""
+  postfix: ""
+- field: status
+  note: Status
+  range: doing
+  prefix: ""
+  postfix: ""
+- field: subStatus
+  note: Sub status
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: pri
+  note: Priority
+  range: 1
+  prefix: ""
+  postfix: ""
+- field: desc
+  note: Description
+  range: Project description
+  prefix: ""
+  postfix: ""
+- field: version
+  note: Version
+  range: 1
+  prefix: ""
+  postfix: ""
+- field: parentVersion
+  note: Parent version
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: planDuration
+  note: Plan duration
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: realDuration
+  note: Real duration
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: openedBy
+  note: Opened by
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: openedDate
+  note: Opened date
+  range: '`(M)-(w)`'
+  prefix: ""
+  postfix: ""
+- field: openedVersion
+  note: Opened version
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: lastEditedBy
+  note: Last edited by
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: lastEditedDate
+  note: Last edited date
+  range: '`0000-00-00 00:00:00`'
+  prefix: ""
+  postfix: ""
+- field: closedBy
+  note: Closed by
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: closedDate
+  note: Closed date
+  range: '`0000-00-00 00:00:00`'
+  prefix: ""
+  postfix: ""
+- field: canceledBy
+  note: Canceled by
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: canceledDate
+  note: Canceled date
+  range: '`0000-00-00 00:00:00`'
+  prefix: ""
+  postfix: ""
+- field: suspendedDate
+  note: Suspended date
+  range: '`0000-00-00`'
+  prefix: ""
+  postfix: ""
+- field: PO
+  note: PO
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: PM
+  note: PM
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: QD
+  note: QD
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: RD
+  note: RD
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: team
+  note: Team
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: acl
+  note: ACL
+  range: open
+  prefix: ""
+  postfix: ""
+- field: whitelist
+  note: Whitelist
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: order
+  note: Order
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: vision
+  note: Vision
+  range: rnd
+  prefix: ""
+  postfix: ""
+- field: displayCards
+  note: Display cards
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: fluidBoard
+  note: Fluid board
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: colWidth
+  note: Column width
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: minColWidth
+  note: Min column width
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: maxColWidth
+  note: Max column width
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: Deleted flag
+  range: '0'
+  prefix: ""
+  postfix: ""

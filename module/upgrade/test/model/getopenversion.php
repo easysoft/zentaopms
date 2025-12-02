@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getOpenVersion();
-cid=1
+cid=19527
 
 - 测试获取版本 18_1 的开源版版本 @18_1
 - 测试获取版本 pro8_1 的开源版版本 @11_2

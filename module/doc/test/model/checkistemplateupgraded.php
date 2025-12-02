@@ -5,7 +5,7 @@
 
 title=测试 docModel->checkIsTemplateUpgraded();
 timeout=0
-cid=1
+cid=16052
 
 - 检查文档模板已升级 @1
 - 检查文档模板已升级 @1

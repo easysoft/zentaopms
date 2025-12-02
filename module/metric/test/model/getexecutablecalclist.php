@@ -5,7 +5,7 @@
 
 title=getExecutableCalcList
 timeout=0
-cid=1
+cid=17098
 
 - 测试可执行的第1个度量项的代号第1条的code属性 @count_of_program
 - 测试可执行的第2个度量项的代号第2条的code属性 @count_of_doing_program

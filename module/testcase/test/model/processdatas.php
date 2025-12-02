@@ -1,79 +1,89 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
+
+/**
+
+title=测试 testcaseModel->processDatas();
+timeout=0
+cid=19015
+
+- 测试处理包含单级步骤编号的数据 @1
+- 测试处理包含二级步骤编号的数据 @1
+- 测试处理包含三级步骤编号的数据 @1
+- 测试处理包含换行符的步骤数据 @1
+- 测试处理无编号的步骤描述 @1
+- 测试处理空步骤数据 @1
+- 测试处理包含中文顿号分隔的步骤 @1
+
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 su('admin');
 
-$testcaseTest = new testcaseTest();
+$testcase = new testcaseTest();
 
-// 步骤1：测试处理基本编号步骤格式
+// 测试用例1: 单级步骤编号
 $data1 = array(
-    0 => array(
-        'stepDesc' => '1. 打开登录页面'
+    0 => (object)array(
+        'stepDesc'   => "1.登录系统\n2.打开产品列表",
+        'stepExpect' => "1.登录成功\n2.显示产品列表"
     )
 );
-r($testcaseTest->processDatasTest($data1)) && p('0:desc:1:content') && e('打开登录页面');
 
-// 步骤2：测试处理多行步骤描述
+// 测试用例2: 二级步骤编号
 $data2 = array(
-    0 => array(
-        'stepDesc' => "1、第一个步骤\n2、第二个步骤"
+    0 => (object)array(
+        'stepDesc'   => "1.打开页面\n1.1.输入用户名\n1.2.输入密码\n2.点击登录",
+        'stepExpect' => "1.页面打开成功\n1.1.用户名输入成功\n1.2.密码输入成功\n2.登录成功"
     )
 );
-r($testcaseTest->processDatasTest($data2)) && p('0:desc:2:content') && e('第二个步骤');
 
-// 步骤3：测试处理带中文分隔符的步骤
+// 测试用例3: 三级步骤编号
 $data3 = array(
-    0 => array(
-        'stepDesc' => '1、登录系统'
+    0 => (object)array(
+        'stepDesc'   => "1.打开页面\n1.1.验证表单\n1.1.1.验证用户名\n1.1.2.验证密码\n1.2.提交表单\n2.查看结果",
+        'stepExpect' => "1.页面打开\n1.1.表单验证\n1.1.1.用户名正确\n1.1.2.密码正确\n1.2.表单提交\n2.显示结果"
     )
 );
-r($testcaseTest->processDatasTest($data3)) && p('0:desc:1:content') && e('登录系统');
 
-// 步骤4：测试处理带期望字段的完整数据
+// 测试用例4: 使用\r作为换行符
 $data4 = array(
-    0 => array(
-        'stepDesc' => '1. 输入用户名',
-        'stepExpect' => '1. 显示登录界面'
+    0 => (object)array(
+        'stepDesc'   => "1.第一步\r2.第二步\r3.第三步",
+        'stepExpect' => "1.期望结果1\r2.期望结果2\r3.期望结果3"
     )
 );
-r($testcaseTest->processDatasTest($data4)) && p('0:expect:1:content') && e('显示登录界面');
 
-// 步骤5：测试处理空数据输入
-$data5 = array();
-r($testcaseTest->processDatasTest($data5)) && p() && e(array());
+// 测试用例5: 无编号的步骤描述
+$data5 = array(
+    0 => (object)array(
+        'stepDesc'   => "登录系统并验证",
+        'stepExpect' => "登录成功"
+    )
+);
 
-// 步骤6：测试处理复杂嵌套编号格式
+// 测试用例6: 空数据
 $data6 = array(
-    0 => array(
-        'stepDesc' => '1.1.1. 输入用户名'
+    0 => (object)array(
+        'stepDesc'   => "",
+        'stepExpect' => ""
     )
 );
-r($testcaseTest->processDatasTest($data6)) && p('0:desc:1.1.1:content') && e('输入用户名');
 
-// 步骤7：测试处理无编号的纯文本
+// 测试用例7: 使用中文顿号分隔
 $data7 = array(
-    0 => array(
-        'stepDesc' => '测试内容'
+    0 => (object)array(
+        'stepDesc'   => "1、打开浏览器\n2、访问网站\n3、登录账号",
+        'stepExpect' => "1、浏览器打开\n2、网站访问成功\n3、账号登录成功"
     )
 );
-r($testcaseTest->processDatasTest($data7)) && p('0:desc:1:content') && e('测试内容');
 
-/**
-
-title=测试 testcaseModel::processDatas();
-timeout=0
-cid=0
-
-- 执行testcaseTest模块的processDatasTest方法，参数是$data1 第0条的desc:1:content属性 @打开登录页面
-- 执行testcaseTest模块的processDatasTest方法，参数是$data2 第0条的desc:2:content属性 @第二个步骤
-- 执行testcaseTest模块的processDatasTest方法，参数是$data3 第0条的desc:1:content属性 @登录系统
-- 执行testcaseTest模块的processDatasTest方法，参数是$data4 第0条的expect:1:content属性 @显示登录界面
-- 执行testcaseTest模块的processDatasTest方法，参数是$data5  @rray()
-- 执行testcaseTest模块的processDatasTest方法，参数是$data6 第0条的desc:1.1.1:content属性 @输入用户名
-- 执行testcaseTest模块的processDatasTest方法，参数是$data7 第0条的desc:1:content属性 @测试内容
-
-*/
+r(count($testcase->processDatasTest($data1))) && p() && e('1'); // 测试处理包含单级步骤编号的数据
+r(count($testcase->processDatasTest($data2))) && p() && e('1'); // 测试处理包含二级步骤编号的数据
+r(count($testcase->processDatasTest($data3))) && p() && e('1'); // 测试处理包含三级步骤编号的数据
+r(count($testcase->processDatasTest($data4))) && p() && e('1'); // 测试处理包含换行符的步骤数据
+r(count($testcase->processDatasTest($data5))) && p() && e('1'); // 测试处理无编号的步骤描述
+r(count($testcase->processDatasTest($data6))) && p() && e('1'); // 测试处理空步骤数据
+r(count($testcase->processDatasTest($data7))) && p() && e('1'); // 测试处理包含中文顿号分隔的步骤

@@ -5,7 +5,7 @@
 
 title=测试 releaseModel::getPageSummary();
 timeout=0
-cid=0
+cid=17996
 
 - 步骤1：type为all的混合状态统计 @本页共 <strong>5</strong> 个发布，已发布 <strong>3</strong>，停止维护 <strong>1</strong>。
 - 步骤2：type不为all时的简单统计 @本页共 <strong>5</strong> 个发布。

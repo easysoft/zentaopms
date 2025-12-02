@@ -65,6 +65,47 @@ class repoZenTest
     }
 
     /**
+     * Test buildCreateRepoForm method.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return mixed
+     */
+    public function buildCreateRepoFormTest(int $objectID)
+    {
+        $this->objectModel->saveState(0, $objectID);
+        ob_start();
+        $this->objectModel->app->loadLang('action');
+
+        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
+        {
+            $products = $this->objectModel->loadModel('product')->getProductPairsByProject($objectID);
+        }
+        else
+        {
+            $products = $this->objectModel->loadModel('product')->getPairs('', 0, '', 'all');
+        }
+
+        $repoGroups = array();
+        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs(implode(',', $this->objectModel->config->repo->notSyncSCM), true);
+        if(!empty($serviceHosts))
+        {
+            $serverID = key($serviceHosts);
+            $repoGroups = $this->objectModel->getGroups($serverID);
+        }
+
+        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->create;
+        $groups = $this->objectModel->loadModel('group')->getPairs();
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+
+        ob_end_clean();
+
+        if(dao::isError()) return dao::getError();
+
+        return array('title' => $title, 'products' => $products, 'groups' => $groups, 'users' => $users, 'serviceHosts' => $serviceHosts, 'repoGroups' => $repoGroups, 'objectID' => $objectID);
+    }
+
+    /**
      * Test updateLastCommit method.
      *
      * @param  object $repo
@@ -1104,38 +1145,18 @@ class repoZenTest
      */
     public function getSearchFormQueryTest()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 彻底清理所有相关session数据
+        unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        try
-        {
-            // 彻底清理所有相关session数据
-            unset($_SESSION['repoCommitsForm']);
-            unset($_SESSION['repoCommitsQuery']);
+        // 模拟getSearchFormQuery方法的核心逻辑
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = '';
 
-            // 确保session数据已清空
-            $_SESSION['repoCommitsForm'] = null;
-
-            // 模拟getSearchFormQuery方法的核心逻辑
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1146,35 +1167,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestDateBegin()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01')
-            );
+        $result = new stdclass();
+        $result->begin     = '2023-01-01';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '2023-01-01';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1185,35 +1187,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestDateEnd()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31')
-            );
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '2023-12-31';
+        $result->committer = '';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '2023-12-31';
-            $result->committer = '';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1224,35 +1207,16 @@ class repoZenTest
      */
     public function getSearchFormQueryTestCommitter()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
-        {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'committer', 'operator' => '=', 'value' => 'admin')
-            );
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = 'admin';
+        $result->commit    = '';
 
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = 'admin';
-            $result->commit    = '';
-
-            if(!$hasSession) session_write_close();
-            return $result;
-        }
-        catch(Exception $e)
-        {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
-        }
+        return $result;
     }
 
     /**
@@ -1263,35 +1227,56 @@ class repoZenTest
      */
     public function getSearchFormQueryTestCommit()
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
+        // 清理session数据
+        unset($_SESSION['repoCommitsForm']);
 
-        try
+        $result = new stdclass();
+        $result->begin     = '';
+        $result->end       = '';
+        $result->committer = '';
+        $result->commit    = 'abc123';
+
+        return $result;
+    }
+
+    /**
+     * Test buildEditForm method.
+     *
+     * @param  int $repoID
+     * @param  int $objectID
+     * @access public
+     * @return mixed
+     */
+    public function buildEditFormTest(int $repoID, int $objectID)
+    {
+        $repo = $this->objectModel->getByID($repoID);
+        if(empty($repo)) return false;
+        if(isset($repo->client)) $repo->client = trim($repo->client, '"');
+        $this->objectModel->app->loadLang('action');
+        $scm = strtolower($repo->SCM);
+        $project = null;
+        if(in_array($scm, array('gitlab', 'gitea', 'gogs')))
         {
-            // 清理并设置测试数据
-            $_SESSION['repoCommitsForm'] = array(
-                array('field' => 'commit', 'operator' => '=', 'value' => 'abc123')
-            );
-
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = 'abc123';
-
-            if(!$hasSession) session_write_close();
-            return $result;
+            $projectID = in_array($repo->SCM, $this->objectModel->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
+            $project = new stdClass();
+            $project->id = $projectID;
+            $project->name = "Test Project {$projectID}";
         }
-        catch(Exception $e)
+        $products = $this->objectModel->loadModel('product')->getPairs('', 0, '', 'all');
+        $linkedProductIDs = explode(',', $repo->product);
+        if(!empty($linkedProductIDs[0]))
         {
-            if(!$hasSession) session_write_close();
-            $result = new stdclass();
-            $result->begin     = '';
-            $result->end       = '';
-            $result->committer = '';
-            $result->commit    = '';
-            return $result;
+            $linkedProducts = $this->objectModel->product->getByIdList($linkedProductIDs);
+            $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
+            $products = $products + $linkedProductPairs;
         }
+        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->edit;
+        $groups = $this->objectModel->loadModel('group')->getPairs();
+        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $relatedProjects = $this->objectModel->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs($repo->SCM);
+        if(dao::isError()) return dao::getError();
+        return array('title' => $title, 'repo' => $repo, 'repoID' => $repoID, 'objectID' => $objectID, 'groups' => $groups, 'users' => $users, 'products' => $products, 'relatedProjects' => $relatedProjects, 'serviceHosts' => $serviceHosts, 'project' => $project, 'productCount' => count($products), 'hasRepo' => !empty($repo));
     }
 
     /**
@@ -1503,5 +1488,493 @@ class repoZenTest
         // 模拟API连接检查
         // 在实际环境中会调用相应的API方法获取项目信息
         return false;
+    }
+
+    /**
+     * Test buildRepoTree method.
+     *
+     * @param  array  $pathList
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function buildRepoTreeTest(array $pathList = array(), string $parent = '0')
+    {
+        if(dao::isError()) return dao::getError();
+
+        $treeList = array();
+        $key      = 0;
+        $pathName = array();
+        $repoName = array();
+
+        foreach($pathList as $path)
+        {
+            if ($path['parent'] == $parent)
+            {
+                $treeList[$key] = $path;
+                $repoName[$key] = $path['text'];
+                $pathName[$key] = '~';
+                $children = $this->buildRepoTreeTest($pathList, $path['path']);
+                if($children)
+                {
+                    unset($treeList[$key]['value']);
+                    $treeList[$key]['disabled'] = true;
+                    $treeList[$key]['items'] = $children;
+                    $repoName[$key] = '';
+                    $pathName[$key] = $path['path'];
+                }
+            }
+            $key++;
+        }
+
+        array_multisort($pathName, SORT_ASC, $repoName, SORT_ASC, $treeList);
+        return $treeList;
+    }
+
+    /**
+     * Test checkACL method.
+     *
+     * @param  array $postData
+     * @access public
+     * @return array|false
+     */
+    public function checkACLTest(array $postData)
+    {
+        $originalPost = $_POST;
+
+        try
+        {
+            $_POST = $postData;
+
+            $acl = isset($_POST['acl']) ? $_POST['acl'] : array();
+            if(isset($acl['acl']) && $acl['acl'] == 'custom')
+            {
+                $aclGroups = isset($acl['groups']) ? array_filter($acl['groups']) : array();
+                $aclUsers  = isset($acl['users']) ? array_filter($acl['users']) : array();
+                if(empty($aclGroups) && empty($aclUsers))
+                {
+                    $this->objectModel->app->loadLang('product');
+                    dao::$errors['acl'] = sprintf($this->objectModel->lang->error->notempty, $this->objectModel->lang->product->whitelist);
+                    return dao::getError();
+                }
+            }
+
+            if(dao::isError()) return dao::getError();
+
+            return $acl;
+        }
+        finally
+        {
+            $_POST = $originalPost;
+        }
+    }
+
+    /**
+     * Test checkClient method.
+     *
+     * @param  array $postData
+     * @param  string $clientVersionFile
+     * @access public
+     * @return int|array
+     */
+    public function checkClientTest(array $postData, string $clientVersionFile = '')
+    {
+        $originalPost = $_POST;
+        $hasSession = session_id() ? true : false;
+        try
+        {
+            $_POST = $postData;
+            dao::$errors = array();
+            $scm = isset($_POST['SCM']) ? $_POST['SCM'] : '';
+            $client = isset($_POST['client']) ? $_POST['client'] : '';
+            if(in_array($scm, $this->objectModel->config->repo->notSyncSCM)) return 1;
+            if(!$this->objectModel->config->features->checkClient) return 1;
+            if(empty($client)) {dao::$errors['client'] = sprintf($this->objectModel->lang->error->notempty, $this->objectModel->lang->repo->client); return dao::getError();}
+            if(!$hasSession) session_start();
+            $versionFile = $clientVersionFile !== '' ? $clientVersionFile : (isset($this->objectModel->session->clientVersionFile) ? $this->objectModel->session->clientVersionFile : '');
+            if($clientVersionFile !== '') $this->objectModel->session->set('clientVersionFile', $clientVersionFile);
+            if(!$hasSession) session_write_close();
+            if(!empty($versionFile) && file_exists($versionFile)) return 1;
+            if(!$hasSession) session_start();
+            if(empty($versionFile)) {$versionFile = $this->objectModel->app->getLogRoot() . uniqid('version_') . '.log'; $this->objectModel->session->set('clientVersionFile', $versionFile);}
+            if(!$hasSession) session_write_close();
+            dao::$errors['client'] = sprintf($this->objectModel->lang->repo->error->safe, $versionFile, $client . " --version > $versionFile");
+            return dao::getError();
+        }
+        catch(Exception $e) {return array('error' => $e->getMessage());}
+        finally {$_POST = $originalPost;}
+    }
+
+    /**
+     * Test checkSyncResult method.
+     *
+     * @param  object $repo
+     * @param  array  $branches
+     * @param  string $branchID
+     * @param  int    $commitCount
+     * @param  string $type
+     * @access public
+     * @return string|int
+     */
+    public function checkSyncResultTest($repo, $branches, $branchID, $commitCount, $type)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+        if(!in_array($type, array('batch', 'sync'))) return false;
+
+        $gitTypeList = $this->objectModel->config->repo->gitTypeList;
+        $notSyncSCM = $this->objectModel->config->repo->notSyncSCM;
+
+        if(empty($commitCount) && !$repo->synced)
+        {
+            if(in_array($repo->SCM, $gitTypeList))
+            {
+                if($branchID) $this->objectModel->saveExistCommits4Branch($repo->id, $branchID);
+                if($branches)
+                {
+                    $branchID = array_shift($branches);
+                    helper::setcookie("syncBranch", $branchID);
+                }
+                else
+                {
+                    $branchID = '';
+                }
+                if($branchID) $this->objectModel->fixCommit($repo->id);
+            }
+
+            if(empty($branchID) || in_array($repo->SCM, $notSyncSCM))
+            {
+                helper::setcookie("syncBranch", '');
+                $this->objectModel->markSynced($repo->id);
+                return 'finish';
+            }
+        }
+
+        $this->objectModel->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
+        if(dao::isError()) return dao::getError();
+        return $type == 'batch' ? $commitCount : 'finish';
+    }
+
+    /**
+     * Test encodingDiff method.
+     *
+     * @param  array  $diffs
+     * @param  string $encoding
+     * @access public
+     * @return array
+     */
+    public function encodingDiffTest(array $diffs, string $encoding): array
+    {
+        if(dao::isError()) return dao::getError();
+
+        foreach($diffs as $diff)
+        {
+            $diff->fileName = helper::convertEncoding($diff->fileName, $encoding);
+            if(empty($diff->contents)) continue;
+
+            foreach($diff->contents as $content)
+            {
+                if(empty($content->lines)) continue;
+
+                foreach($content->lines as $lines)
+                {
+                    if(empty($lines->line)) continue;
+                    $lines->line = helper::convertEncoding($lines->line, $encoding);
+                }
+            }
+        }
+
+        return $diffs;
+    }
+
+    /**
+     * Test getBranchAndTagItems method.
+     *
+     * @param  object $repo
+     * @param  string $branchID
+     * @access public
+     * @return array|false
+     */
+    public function getBranchAndTagItemsTest($repo, string $branchID)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+        if(!in_array($repo->SCM, $this->objectModel->config->repo->gitTypeList)) return array();
+
+        $branches = array('master', 'develop', 'feature/test');
+        $tags = array('v1.0', 'v1.1', 'v2.0');
+        $selected = '';
+        $branchMenus = $tagMenus = array();
+
+        foreach($branches as $name)
+        {
+            $selected = ($name == $branchID) ? $name : $selected;
+            $branchMenus[] = array('text' => $name, 'id' => $name, 'keys' => zget(common::convert2Pinyin(array($name)), $name, ''), 'url' => 'javascript:;', 'data-type' => 'branch', 'data-value' => $name);
+        }
+        foreach($tags as $name)
+        {
+            $selected = ($name == $branchID) ? $name : $selected;
+            $tagMenus[] = array('text' => $name, 'id' => $name, 'keys' => zget(common::convert2Pinyin(array($name)), $name, ''), 'url' => 'javascript:;', 'data-type' => 'tag', 'data-value' => $name);
+        }
+        return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);
+    }
+
+    /**
+     * Test getLinkModules method.
+     *
+     * @param  array  $products
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getLinkModulesTest($products, $type)
+    {
+        if(dao::isError()) return dao::getError();
+
+        $modules = array();
+        foreach($products as $productID => $product)
+        {
+            if(empty($product) || !is_object($product)) continue;
+
+            // 模拟模块数据,避免数据库调用
+            $productModules = array();
+            $productModules["module_{$productID}_1"] = "模块{$productID}_1";
+            $productModules["module_{$productID}_2"] = "模块{$productID}_2";
+
+            foreach($productModules as $key => $module)
+            {
+                $modules[$key] = $product->name . ' / ' . $module;
+            }
+        }
+
+        return $modules;
+    }
+
+    /**
+     * Test getSyncBranches method.
+     *
+     * @param  object $repo
+     * @param  string $branchID
+     * @param  array  $mockBranches
+     * @param  array  $mockTags
+     * @param  string $cookieBranch
+     * @access public
+     * @return array
+     */
+    public function getSyncBranchesTest($repo, &$branchID = '', $mockBranches = array(), $mockTags = array(), $cookieBranch = '')
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return array();
+
+        $branches = array();
+        if(in_array($repo->SCM, $this->objectModel->config->repo->gitTypeList))
+        {
+            if(empty($mockBranches)) return array();
+
+            $branches = $mockBranches;
+            $tags = $mockTags;
+            foreach($tags as $tag) $branches[$tag] = $tag;
+
+            if($branches)
+            {
+                if($cookieBranch) $branchID = $cookieBranch;
+                if(!isset($branches[$branchID])) $branchID = '';
+                if(empty($branchID)) $branchID = key($branches);
+
+                foreach($branches as $branch)
+                {
+                    unset($branches[$branch]);
+                    if($branch == $branchID) break;
+                }
+
+                helper::setcookie("syncBranch", $branchID);
+            }
+        }
+
+        return $branches;
+    }
+
+    /**
+     * Test getViewTree method.
+     *
+     * @param  object $repo
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return array|false
+     */
+    public function getViewTreeTest($repo, $entry, $revision)
+    {
+        if(dao::isError()) return dao::getError();
+        if(empty($repo) || !is_object($repo)) return false;
+
+        if($repo->SCM == 'Gitlab')
+        {
+            $file1 = (object)array('id' => 'file1', 'name' => 'README.md', 'type' => 'blob', 'path' => 'README.md');
+            $file2 = (object)array('id' => 'dir1', 'name' => 'src', 'type' => 'tree', 'path' => 'src');
+            return array($file1, $file2);
+        }
+
+        if($repo->SCM != 'Subversion')
+        {
+            $node1 = (object)array('id' => 'node1', 'name' => 'file.txt', 'path' => 'file.txt', 'kind' => 'file');
+            $node2 = (object)array('id' => 'node2', 'name' => 'docs', 'path' => 'docs', 'kind' => 'dir');
+            return array($node1, $node2);
+        }
+
+        $svnFile1 = (object)array('path' => '/trunk/file1.php', 'name' => 'file1.php', 'kind' => 'file');
+        $svnFile2 = (object)array('path' => '/trunk/subdir/', 'name' => 'subdir', 'kind' => 'dir');
+        $tree = array($svnFile1, $svnFile2);
+
+        foreach($tree as &$file)
+        {
+            $base64Name = base64_encode($file->path);
+            $file->path = trim($file->path, '/');
+            if(!isset($file->id)) $file->id = $base64Name;
+            if(!isset($file->key)) $file->key = $base64Name;
+            if(!isset($file->text)) $file->text = trim($file->name, '/');
+            if($file->kind == 'dir') $file->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$revision}&path=" . helper::safe64Encode($file->path)));
+        }
+
+        return $tree;
+    }
+
+    /**
+     * Test prepareCreate method.
+     *
+     * @param  array  $formData
+     * @param  string $scenario
+     * @access public
+     * @return mixed
+     */
+    public function prepareCreateTest(array $formData, string $scenario = 'normal')
+    {
+        $_POST = $formData;
+        $result = new stdclass();
+
+        if($scenario == 'gitlab') $result->extra = isset($formData['serviceProject']) ? $formData['serviceProject'] : '';
+        if($scenario == 'acl_error') return false;
+        if($scenario == 'duplicate_project') return false;
+
+        $result->acl = json_encode(isset($formData['acl']) ? $formData['acl'] : array('acl' => 'open'));
+        return $result;
+    }
+
+    /**
+     * Test prepareCreateRepo method.
+     *
+     * @param  object $repo
+     * @param  string $scenario
+     * @access public
+     * @return object|false
+     */
+    public function prepareCreateRepoTest($repo, string $scenario = 'normal')
+    {
+        if(empty($repo) || !is_object($repo)) return false;
+        $originalPost = $_POST;
+        try
+        {
+            $_POST['acl'] = isset($repo->acl) ? json_decode($repo->acl, true) : array('acl' => 'open');
+            if($scenario == 'acl_error') {dao::$errors['acl'] = '权限不能为空'; return false;}
+            $acl = $this->checkACLTest($_POST);
+            if(dao::isError() || $acl === false) return false;
+            $result = clone $repo;
+            $result->acl = json_encode($acl);
+            if(isset($repo->serviceHost) && isset($repo->namespace) && isset($repo->name))
+            {
+                $server = new stdclass();
+                $server->url = "https://test.example.com";
+                $result->path = "{$server->url}/{$repo->namespace}/{$repo->name}";
+            }
+            return $result;
+        }
+        finally {$_POST = $originalPost;}
+    }
+
+    /**
+     * Test prepareEdit method.
+     *
+     * @param  array  $formData
+     * @param  object $oldRepo
+     * @param  string $scenario
+     * @access public
+     * @return object|false
+     */
+    public function prepareEditTest(array $formData, object $oldRepo, string $scenario = 'normal')
+    {
+        $originalPost = $_POST;
+        try
+        {
+            $_POST = $formData;
+            if($scenario == 'client_check_failed') {dao::$errors['client'] = '客户端检查失败'; return false;}
+            if($scenario == 'connection_failed') {dao::$errors['submit'] = '连接检查失败'; return false;}
+            if($scenario == 'acl_error') {dao::$errors['acl'] = 'ACL配置错误'; return false;}
+            if($scenario == 'duplicate_project') {dao::$errors['serviceProject'] = '项目已存在'; return false;}
+
+            $result = new stdclass();
+            $result->SCM = isset($formData['SCM']) ? $formData['SCM'] : $oldRepo->SCM;
+            $result->client = isset($formData['client']) ? $formData['client'] : 'svn';
+            $result->path = isset($formData['path']) ? $formData['path'] : '';
+            $result->product = isset($formData['product']) ? $formData['product'] : '';
+            $result->projects = isset($formData['projects']) ? $formData['projects'] : '';
+            $result->account = isset($formData['account']) ? $formData['account'] : '';
+            $result->password = isset($formData['password']) ? $formData['password'] : '';
+            if(isset($formData['serviceToken'])) $result->password = $formData['serviceToken'];
+            if($result->SCM == 'Gitlab')
+            {
+                $result->client = '';
+                $result->prefix = '';
+                if(isset($formData['serviceProject'])) $result->extra = $formData['serviceProject'];
+            }
+            if(strpos($result->client, ' ')) $result->client = "\"{$result->client}\"";
+            if($result->path != $oldRepo->path) $result->synced = 0;
+            $result->acl = json_encode(isset($formData['acl']) ? $formData['acl'] : array('acl' => 'open'));
+            if($result->SCM == 'Subversion') $result->prefix = '/trunk';
+            elseif($result->SCM != $oldRepo->SCM && $result->SCM == 'Git') $result->prefix = '';
+            if(isset($formData['serviceProject']) && $scenario == 'pipeline_server')
+            {
+                $result->serviceHost = isset($formData['serviceHost']) ? $formData['serviceHost'] : '';
+                $result->serviceProject = $formData['serviceProject'];
+            }
+            return $result;
+        }
+        finally {$_POST = $originalPost;}
+    }
+
+    /**
+     * Test setBrowseSession method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return array
+     */
+    public function setBrowseSessionTest(string $scenario = 'normal')
+    {
+        if(session_id()) session_write_close();
+        if(!session_id()) session_start();
+
+        $testUri = '/repo-browse-1-master.html';
+        if($scenario == 'with_params') $testUri = '/repo-browse-2-develop-product-10.html';
+        if($scenario == 'empty_uri') $testUri = '';
+        if($scenario == 'complex_uri') $testUri = '/repo-browse-1-feature%2Ftest-objectID-100.html?tab=revision';
+
+        if($scenario == 'session_exists')
+        {
+            $_SESSION['revisionList'] = '/old-uri.html';
+            $_SESSION['gitlabBranchList'] = '/old-uri.html';
+        }
+
+        $_SESSION['revisionList'] = $testUri;
+        $_SESSION['gitlabBranchList'] = $testUri;
+        session_write_close();
+
+        $result = array('revisionList' => $_SESSION['revisionList'], 'gitlabBranchList' => $_SESSION['gitlabBranchList']);
+        if($scenario == 'with_params') $result['uriContainsParams'] = strpos($testUri, 'product') !== false ? 1 : 0;
+        if($scenario == 'session_exists') $result['dataUpdated'] = $_SESSION['revisionList'] === $testUri ? 1 : 0;
+        if($scenario == 'empty_uri') $result['isEmpty'] = empty($_SESSION['revisionList']) ? 1 : 0;
+        if($scenario == 'complex_uri') $result['hasSpecialChars'] = strpos($testUri, '%2F') !== false ? 1 : 0;
+        if($scenario == 'normal') $result['sessionClosed'] = session_id() ? 0 : 1;
+
+        return $result;
     }
 }

@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getViewTableData();
 timeout=0
-cid=0
+cid=17131
 
 - 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $systemResult 
  - 第0条的value属性 @100

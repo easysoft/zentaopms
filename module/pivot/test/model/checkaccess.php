@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::checkAccess();
 timeout=0
-cid=0
+cid=17358
 
 - 步骤1：管理员访问有效pivot - 正常情况 @access_granted
 - 步骤2：管理员访问另一个有效pivot - 正常情况 @access_granted

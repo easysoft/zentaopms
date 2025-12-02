@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 settingModel->setItem();
 timeout=0
-cid=1
+cid=18367
 
 - 设置没有vision的空数据 @0
 - 设置没有vision的my模块的系统数据 @0

@@ -5,7 +5,7 @@
 
 title=测试 screenModel::buildChart();
 timeout=0
-cid=0
+cid=18206
 
 - 步骤1：card图表第option条的dataset属性 @200
 - 步骤2：另一个card图表第option条的dataset属性 @200

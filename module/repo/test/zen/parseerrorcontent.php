@@ -5,7 +5,7 @@
 
 title=测试 repoZen::parseErrorContent();
 timeout=0
-cid=0
+cid=18149
 
 - 执行repoZenTest模块的parseErrorContentTest方法，参数是"can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'"  @只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。
 - 执行repoZenTest模块的parseErrorContentTest方法，参数是"Branch is exists"  @分支名已存在。

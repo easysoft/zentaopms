@@ -10,7 +10,7 @@ zenData('userquery')->gen(6);
 
 title=测试 searchModel->getByID();
 timeout=0
-cid=1
+cid=18299
 
 - 查询ID为1的模块名及条件名
  - 属性module @task

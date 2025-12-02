@@ -10,7 +10,7 @@ zenData('kanbancolumn')->gen(1);
 
 title=测试 kanbanModel->createDefaultColumns();
 timeout=0
-cid=1
+cid=16888
 
 - 创建region 1 group 1的默认泳道列 @5
 - 创建region 2 group 2的默认泳道列 @4

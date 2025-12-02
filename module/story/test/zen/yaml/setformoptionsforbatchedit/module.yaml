@@ -1,0 +1,24 @@
+title: 测试setFormOptionsForBatchEdit方法的模块数据
+desc: 包含产品模块数据用于测试
+
+fields:
+- field: id
+  range: 1-20
+- field: root
+  range: 1,2,4,1,2,4,1,2,4,1,2,4,1,2,4,1,2,4,1,2
+- field: branch
+  range: 0{10},1{5},2{5}
+- field: parent
+  range: 0
+- field: name
+  range: 模块1,模块2,模块3,模块4,模块5{15}
+- field: path
+  range: ',1,',',2,',',3,',',4,',',5,'{15}
+- field: grade
+  range: 1
+- field: order
+  range: 1-20
+- field: type
+  range: story
+- field: deleted
+  range: 0

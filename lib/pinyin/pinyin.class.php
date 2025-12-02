@@ -1,82 +1,24 @@
 <?php
-
-/*
- * This file is part of the overtrue/pinyin.
+/**
+ * ZenTaoPMS - Open-source project management system.
  *
- * (c) 2016 overtrue <i@overtrue.me>
+ * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.chandao.com)
+ * @license   ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ *
+ * A third-party license is embedded for some of the code in this file:
+ * The use of the source code of this file is also subject to the terms
+ * and consitions of the license of "pinyin" (MIT, see
+ * </lib/vendor/overtrue/pinyin/LICENSE>).
  */
-class pinyin
+
+require_once dirname(__FILE__, 2) . '/base/delegate/delegate.class.php';
+
+class pinyin extends baseDelegate
 {
-    /**
-     * Segments.
-     * @var array
-     *
-     */
-    protected array $segments = array();
+    protected static $className = 'Overtrue\Pinyin\Pinyin';
 
-    /**
-     * Constructor.
-     *
-     */
-    public function __construct()
+    public function __construct($loaderName = null)
     {
-        $this->segments = array();
-        $segment = dirname(__FILE__) . '/data/words';
-        if(file_exists($segment)) $this->segments = include $segment;
-    }
-
-    /**
-     * Convert string to pinyin.
-     *
-     * @param string $string
-     * @param string $option
-     *
-     * @return array
-     */
-    public function convert($string)
-    {
-        $pinyin = $this->romanize($string);
-        $split  = array_filter(preg_split('/[^a-z]+/iu', $pinyin));
-        return array_values($split);
-    }
-
-
-    /**
-     * Preprocess.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public function prepare($string)
-    {
-        return preg_replace_callback('/[a-z0-9_-]+/i', array($this, 'prepareCallback'), $string);
-    }
-
-    /**
-     * Convert Chinese to pinyin.
-     *
-     * @param string $string
-     * @param bool   $isName
-     *
-     * @return string
-     */
-    public function romanize($string)
-    {
-        $string = $this->prepare($string);
-        $string = strtr($string, $this->segments);
-        return $string;
-    }
-
-    /**
-     * The callback for prepare method.
-     *
-     * @param  array    $matches
-     * @access public
-     * @return string
-     */
-    public function prepareCallback($matches)
-    {
-        return "\t" . $matches[0];
+        $this->instance = new static::$className($loaderName);
     }
 }

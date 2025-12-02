@@ -1,0 +1,16 @@
+title: 测试setFormOptionsForBatchEdit方法的用户数据
+desc: 包含用户数据用于测试
+
+fields:
+- field: id
+  range: 1-5
+- field: account
+  range: admin,user1,user2,user3,user4
+- field: realname
+  range: 管理员,用户1,用户2,用户3,用户4
+- field: password
+  range: 123456
+- field: role
+  range: admin,dev,qa,pm,po
+- field: deleted
+  range: 0

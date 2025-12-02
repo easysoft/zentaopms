@@ -5,7 +5,7 @@
 
 title=测试 bugZen::checkBugsForBatchCreate();
 timeout=0
-cid=0
+cid=15441
 
 - 执行$result @1
 - 执行$result @1

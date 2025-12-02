@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->mergeChartOption();
 timeout=0
-cid=1
+cid=18833
 
 - 合并按迭代任务数统计报表的配置
  - 第graph条的xAxisName属性 @迭代

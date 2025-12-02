@@ -5,7 +5,7 @@
 
 title=测试 pivotModel->getWorkload();
 timeout=0
-cid=1
+cid=0
 
 - 传入的每日工时为7的时候，判断计算的负载率是否正确
  -  @20

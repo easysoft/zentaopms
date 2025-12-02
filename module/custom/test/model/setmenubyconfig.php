@@ -5,7 +5,7 @@
 
 title=测试 customModel::setMenuByConfig();
 timeout=0
-cid=0
+cid=15926
 
 - 测试步骤1：使用标准对象菜单和空自定义菜单 @array
 - 测试步骤2：使用数组菜单和JSON字符串自定义菜单 @array

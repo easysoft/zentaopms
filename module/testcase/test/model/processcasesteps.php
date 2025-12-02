@@ -5,7 +5,7 @@
 
 title=测试 testcaseModel::processCaseSteps();
 timeout=0
-cid=0
+cid=19014
 
 - 执行$result1->steps[1] @打开系统
 - 执行$result2->steps['1.1'] @输入账号

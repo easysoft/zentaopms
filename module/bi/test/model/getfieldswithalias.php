@@ -5,7 +5,7 @@
 
 title=测试 biModel::getFieldsWithAlias();
 timeout=0
-cid=0
+cid=15172
 
 - 执行biTest模块的getFieldsWithAliasTest方法，参数是'SELECT id, account, realname FROM zt_user'
  - 属性id @id

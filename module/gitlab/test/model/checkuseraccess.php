@@ -6,7 +6,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 title=测试 gitlabModel::checkUserAccess();
 timeout=0
-cid=1
+cid=16636
 
 - 使用超级管理员判断权限 @1
 - 切换普通用户，使用错误的项目ID判断权限 @0

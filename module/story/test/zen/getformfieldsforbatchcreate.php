@@ -4,7 +4,7 @@
 
 title=测试 storyZen::getFormFieldsForBatchCreate();
 timeout=0
-cid=1
+cid=18683
 
 - 测试获取普通产品批量创建软件需求字段
  - 第assignedTo条的control属性 @select

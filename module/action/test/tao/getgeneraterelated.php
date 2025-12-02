@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 actionTao->getGenerateRelated().
 timeout=0
-cid=1
+cid=14948
 
 - 测试当objectType为bug,objectID为1时，返回的数据是否正确
  - 第0条的0属性 @1

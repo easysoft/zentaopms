@@ -1084,32 +1084,32 @@ class baseFixer
         global $app, $config;
         if(empty($allowedTags) and isset($config->allowedTags)) $allowedTags = $config->allowedTags;
         $usePurifier = isset($config->framework->purifier) ? $config->framework->purifier : false;
-        if($usePurifier)
+
+        if(!$usePurifier) return strip_tags($data, $allowedTags);
+
+        static $purifier;
+        if(empty($purifier))
         {
-            static $purifier;
-            if(empty($purifier))
+            $app->loadClass('purifier', true);
+            $purifierConfig = HTMLPurifier_Config::createDefault();
+            $purifierConfig->set('Filter.YouTube', 1);
+
+            /* Disable caching. */
+            $purifierConfig->set('Cache.DefinitionImpl', null);
+
+            /* The name attribute is allowed. */
+            $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
+
+            $purifier = new HTMLPurifier($purifierConfig);
+            $def      = $purifierConfig->getHTMLDefinition(true);
+            $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+
+            if(!empty($attributes))
             {
-                $app->loadClass('purifier', true);
-                $purifierConfig = HTMLPurifier_Config::createDefault();
-                $purifierConfig->set('Filter.YouTube', 1);
-
-                /* Disable caching. */
-                $purifierConfig->set('Cache.DefinitionImpl', null);
-
-                /* The name attribute is allowed. */
-                $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
-
-                $purifier = new HTMLPurifier($purifierConfig);
-                $def      = $purifierConfig->getHTMLDefinition(true);
-                $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
-
-                if(!empty($attributes))
+                foreach($attributes as $attribute)
                 {
-                    foreach($attributes as $attribute)
-                    {
-                        list($element, $attribute, $values) = explode('|', $attribute);
-                        $def->addAttribute($element, $attribute, $values);
-                    }
+                    list($element, $attribute, $values) = explode('|', $attribute);
+                    $def->addAttribute($element, $attribute, $values);
                 }
             }
         }
@@ -1118,9 +1118,9 @@ class baseFixer
          * purifier会把&nbsp;替换空格，kindeditor再会把行首的空格去掉。
          * purifier will change &nbsp; to ' ', and kindeditor will remove the header space again.
          **/
-        if($usePurifier) $data = str_replace('&nbsp;', '&spnb;', $data);
-        $data = $usePurifier ? $purifier->purify($data) : strip_tags($data, $allowedTags);
-        if($usePurifier) $data = str_replace('&amp;spnb;', '&nbsp;', $data);
+        $data = str_replace('&nbsp;', '&spnb;', $data);
+        $data = $purifier->purify($data);
+        $data = str_replace('&amp;spnb;', '&nbsp;', $data);
 
         return $data;
     }

@@ -1,0 +1,26 @@
+---
+title: assignBatchEditVars测试的执行数据
+desc: 用于测试bugZen::assignBatchEditVars()方法的执行数据
+
+fields:
+- field: id
+  note: 执行ID
+  range: 1-10
+- field: name
+  note: 执行名称
+  range: '迭代1,迭代2,迭代3,迭代4,迭代5{2},迭代6{2},迭代7{2}'
+- field: type
+  note: 执行类型
+  range: 'sprint{7},stage{3}'
+- field: project
+  note: 所属项目
+  range: '1{5},2{5}'
+- field: status
+  note: 执行状态
+  range: 'wait{2},doing{6},closed{2}'
+- field: acl
+  note: 访问控制
+  range: 'open'
+- field: deleted
+  note: 是否删除
+  range: '0'

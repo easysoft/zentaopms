@@ -5,7 +5,7 @@
 
 title=测试 gogsZen::getMatchedUsers();
 timeout=0
-cid=0
+cid=16694
 
 - 步骤1：已绑定用户但数据不匹配返回0 @0
 - 步骤2：账号精确匹配成功第2条的zentaoAccount属性 @user1

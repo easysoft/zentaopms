@@ -5,7 +5,7 @@
 
 title=测试 apiModel::buildSearchForm();
 timeout=0
-cid=0
+cid=15089
 
 - 执行apiTest模块的buildSearchFormTest方法，参数是$lib, 1, '/api/search' 属性module @api
 - 执行apiTest模块的buildSearchFormTest方法，参数是$emptyLib, 0, '' 属性module @api

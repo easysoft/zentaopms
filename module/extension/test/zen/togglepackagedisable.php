@@ -5,38 +5,61 @@
 
 title=测试 extensionZen::togglePackageDisable();
 timeout=0
-cid=0
+cid=16490
 
-- 步骤1：正常禁用插件 @0
-- 步骤2：正常激活插件 @0
-- 步骤3：不存在插件禁用 @0
-- 步骤4：不存在插件激活 @0
-- 步骤5：无效action参数 @0
+- 步骤1:插件目录不存在时返回true @1
+- 步骤2:禁用插件返回true @1
+- 步骤2:验证disabled文件已创建 @1
+- 步骤3:重复禁用返回true @1
+- 步骤3:验证disabled文件仍存在 @1
+- 步骤4:激活插件返回true @1
+- 步骤4:验证disabled文件已删除 @0
+- 步骤5:激活未禁用的插件返回true @1
+- 步骤6:插件目录不存在时返回true @1
+- 步骤7:空字符串返回true @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('extension');
-$table->code->range('testplugin,sample,demo');
-$table->name->range('测试插件,示例插件,演示插件');
-$table->status->range('installed{3}');
-$table->version->range('1.0,1.1,1.2');
-$table->type->range('extension{3}');
-$table->gen(3);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$extensionTest = new extensionTest();
+$extensionTest = new extensionZenTest();
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($extensionTest->togglePackageDisableTest('testplugin', 'disabled')) && p() && e('0');        // 步骤1：正常禁用插件
-r($extensionTest->togglePackageDisableTest('testplugin', 'active')) && p() && e('0');          // 步骤2：正常激活插件
-r($extensionTest->togglePackageDisableTest('nonexistent', 'disabled')) && p() && e('0');       // 步骤3：不存在插件禁用
-r($extensionTest->togglePackageDisableTest('nonexistent', 'active')) && p() && e('0');         // 步骤4：不存在插件激活
-r($extensionTest->togglePackageDisableTest('testplugin', 'invalid')) && p() && e('0');         // 步骤5：无效action参数
+/* 准备测试环境:创建测试插件目录 */
+$testExtension = 'testplugin';
+$pkgRoot = dirname(__FILE__, 5) . '/extension/pkg/';
+$testExtensionPath = $pkgRoot . $testExtension;
+if(!is_dir($pkgRoot)) mkdir($pkgRoot, 0777, true);
+if(!is_dir($testExtensionPath)) mkdir($testExtensionPath, 0777, true);
+
+/* 测试步骤1: 插件目录不存在时禁用插件 */
+r($extensionTest->togglePackageDisableTest('nonexistent', 'disabled')) && p() && e('1'); // 步骤1:插件目录不存在时返回true
+
+/* 测试步骤2: 插件目录存在时禁用插件 */
+$disabledFile = $testExtensionPath . '/disabled';
+if(file_exists($disabledFile)) unlink($disabledFile); // 清理环境
+r($extensionTest->togglePackageDisableTest($testExtension, 'disabled')) && p() && e('1'); // 步骤2:禁用插件返回true
+r(file_exists($disabledFile)) && p() && e('1'); // 步骤2:验证disabled文件已创建
+
+/* 测试步骤3: 禁用已禁用的插件 */
+r($extensionTest->togglePackageDisableTest($testExtension, 'disabled')) && p() && e('1'); // 步骤3:重复禁用返回true
+r(file_exists($disabledFile)) && p() && e('1'); // 步骤3:验证disabled文件仍存在
+
+/* 测试步骤4: 激活已禁用的插件 */
+r($extensionTest->togglePackageDisableTest($testExtension, 'active')) && p() && e('1'); // 步骤4:激活插件返回true
+r(file_exists($disabledFile)) && p() && e('0'); // 步骤4:验证disabled文件已删除
+
+/* 测试步骤5: 激活未禁用的插件 */
+r($extensionTest->togglePackageDisableTest($testExtension, 'active')) && p() && e('1'); // 步骤5:激活未禁用的插件返回true
+
+/* 测试步骤6: 激活插件目录不存在的插件 */
+r($extensionTest->togglePackageDisableTest('nonexistent2', 'active')) && p() && e('1'); // 步骤6:插件目录不存在时返回true
+
+/* 测试步骤7: 使用空字符串作为插件代号 */
+r($extensionTest->togglePackageDisableTest('', 'disabled')) && p() && e('1'); // 步骤7:空字符串返回true
+
+/* 清理测试环境 */
+if(file_exists($disabledFile)) unlink($disabledFile);
+if(is_dir($testExtensionPath)) rmdir($testExtensionPath);

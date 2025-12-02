@@ -6,7 +6,7 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskTao->createAutoUpdateTaskAction();
-cid=0
+cid=18872
 
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @adjusttasktowait
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @adjusttasktowait

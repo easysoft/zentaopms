@@ -7,31 +7,23 @@ title=测试 backupZen::restoreSQL();
 timeout=0
 cid=0
 
-- 步骤1：正常文件名属性result @success
-- 步骤2：空文件名参数属性result @success
-- 步骤3：不存在的备份文件属性result @fail
-- 步骤4：损坏的备份文件属性result @fail
-- 步骤5：权限不足属性result @fail
-- 步骤6：无效格式属性result @fail
-- 步骤7：还原失败测试属性result @fail
+- 测试不存在的备份文件属性result @success
+- 测试普通SQL备份文件还原属性result @success
+- 测试带php扩展的SQL备份文件还原属性result @success
+- 测试空文件名属性result @success
+- 测试特殊命名的SQL备份文件属性result @success
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$backupTest = new backupTest();
+$backupTest = new backupZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($backupTest->restoreSQLZenTest('test_backup')) && p('result') && e('success'); // 步骤1：正常文件名
-r($backupTest->restoreSQLZenTest('')) && p('result') && e('success'); // 步骤2：空文件名参数
-r($backupTest->restoreSQLZenTest('nonexistent')) && p('result') && e('fail'); // 步骤3：不存在的备份文件
-r($backupTest->restoreSQLZenTest('corrupted')) && p('result') && e('fail'); // 步骤4：损坏的备份文件
-r($backupTest->restoreSQLZenTest('permission_denied')) && p('result') && e('fail'); // 步骤5：权限不足
-r($backupTest->restoreSQLZenTest('invalid_format')) && p('result') && e('fail'); // 步骤6：无效格式
-r($backupTest->restoreSQLZenTest('restore_fail_test')) && p('result') && e('fail'); // 步骤7：还原失败测试
+r($backupTest->restoreSQLTest('test_nonexist')) && p('result') && e('success'); // 测试不存在的备份文件
+r($backupTest->restoreSQLTest('test_normal')) && p('result') && e('success'); // 测试普通SQL备份文件还原
+r($backupTest->restoreSQLTest('test_withphp')) && p('result') && e('success'); // 测试带php扩展的SQL备份文件还原
+r($backupTest->restoreSQLTest('')) && p('result') && e('success'); // 测试空文件名
+r($backupTest->restoreSQLTest('test_special_123')) && p('result') && e('success'); // 测试特殊命名的SQL备份文件

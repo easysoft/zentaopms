@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::createFreeMindXmlDoc();
 timeout=0
-cid=0
+cid=19087
 
 - 执行testcaseTest模块的createFreeMindXmlDocTest方法，参数是1, '产品1', $context  @DOMDocument
 - 执行testcaseTest模块的createFreeMindXmlDocTest方法，参数是2, '', $context  @DOMDocument

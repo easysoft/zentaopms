@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 apiModel->getDemoData();
 timeout=0
-cid=1
+cid=15107
 
 - 获取数据结构表的初始化数据。
  - 第0条的id属性 @1

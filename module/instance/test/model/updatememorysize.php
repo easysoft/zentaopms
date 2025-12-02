@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::updateMemorySize();
 timeout=0
-cid=0
+cid=16823
 
 - 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance1, 1024  @0
 - 执行instanceTest模块的updateMemorySizeTest方法，参数是$instance2, 0  @0

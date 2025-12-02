@@ -7,11 +7,11 @@ title=测试 transferZen::printCell();
 timeout=0
 cid=0
 
-- 步骤1：测试select控件 @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 步骤2：测试input控件 @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 步骤3：测试hidden控件 @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 步骤4：测试textarea控件 @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
-- 步骤5：测试date控件 @Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752
+- 步骤1：测试select控件生成 @1
+- 步骤2：测试hidden控件生成 @1
+- 步骤3：测试date控件生成 @1
+- 步骤4：测试textarea控件生成 @1
+- 步骤5：测试普通input控件生成 @1
 
 */
 
@@ -26,8 +26,8 @@ su('admin');
 $transferTest = new transferZenTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($transferTest->printCellTest('task', 'status', 'select', 'status[1]', 'wait', array('wait' => '未开始', 'doing' => '进行中', 'done' => '已完成'), 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752'); // 步骤1：测试select控件
-r($transferTest->printCellTest('task', 'name', 'input', 'name[1]', 'test task', array(), 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752'); // 步骤2：测试input控件
-r($transferTest->printCellTest('task', 'execution', 'hidden', 'execution[1]', '5', array(), 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752'); // 步骤3：测试hidden控件
-r($transferTest->printCellTest('bug', 'steps', 'textarea', 'steps[1]', 'test steps', array(), 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752'); // 步骤4：测试textarea控件
-r($transferTest->printCellTest('task', 'deadline', 'date', 'deadline[1]', '2023-12-31', array(), 1)) && p() && e('Exception:  in /home/z/repo/git/zentaopms/framework/base/router.class.php:3752'); // 步骤5：测试date控件
+r(strpos($transferTest->printCellTest('task', 'status', 'select', 'status[1]', 'wait', array('wait' => '未开始', 'doing' => '进行中', 'done' => '已完成'), 1), '<select') !== false) && p() && e('1'); // 步骤1：测试select控件生成
+r(strpos($transferTest->printCellTest('task', 'execution', 'hidden', 'execution[1]', '101', array(), 1), "type='hidden'") !== false) && p() && e('1'); // 步骤2：测试hidden控件生成
+r(strpos($transferTest->printCellTest('task', 'deadline', 'date', 'deadline[1]', '2025-12-31', array(), 1), 'form-date') !== false) && p() && e('1'); // 步骤3：测试date控件生成
+r(strpos($transferTest->printCellTest('task', 'desc', 'textarea', 'desc[1]', '任务描述', array(), 1), '<textarea') !== false) && p() && e('1'); // 步骤4：测试textarea控件生成
+r(strpos($transferTest->printCellTest('task', 'name', 'input', 'name[1]', '任务名称', array(), 1), 'form-control') !== false) && p() && e('1'); // 步骤5：测试普通input控件生成

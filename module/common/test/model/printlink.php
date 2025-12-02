@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printLink();
 timeout=0
-cid=0
+cid=15696
 
 - 执行commonTest模块的printLinkTest方法，参数是'misc', 'ping', '', 'Ping', '', '', true, false, null 属性result @1
 - 执行commonTest模块的printLinkTest方法，参数是'admin', 'forbidden', '', 'Forbidden', '', '', true, false, null  @0

@@ -1,5 +1,17 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=productpanModel->batchChangeStatus();
+timeout=0
+cid=17631
+
+- 如果存在，返回数组类型数据属性status @wait
+- 取出开始时间属性begin @2021-06-13
+- 取出结束时间属性end @2021-10-14
+- 如不存在，返回布尔值 @
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
 

@@ -5,7 +5,7 @@
 
 title=productModel->summary();
 timeout=0
-cid=0
+cid=17528
 
 - 获取正确的产品的需求统计 @本页共 <strong>2</strong> 个研发需求，预计 <strong>10</strong> 个工时，用例覆盖率 <strong>50%%</strong>。
 - 获取正确的产品的需求统计 @本页共 <strong>0</strong> 个用户需求，预计 <strong>0</strong> 个工时。

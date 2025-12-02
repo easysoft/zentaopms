@@ -5,7 +5,7 @@
 
 title=测试 repoModel::saveState();
 timeout=0
-cid=0
+cid=18101
 
 - 步骤1：正常设置有效的代码库ID @2
 - 步骤2：设置无效的代码库ID @1

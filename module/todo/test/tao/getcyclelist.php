@@ -5,7 +5,7 @@
 
 title=测试 todoTao::getCycleList();
 timeout=0
-cid=0
+cid=19274
 
 - 空输入返回0 @0
 - 验证返回5条记录 @5

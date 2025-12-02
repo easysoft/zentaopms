@@ -5,7 +5,7 @@
 
 title=测试 mrModel::update();
 timeout=0
-cid=0
+cid=17261
 
 - 测试步骤1：正常更新MR数据属性result @success
 - 测试步骤2：使用不存在的MRID属性message @此合并请求不存在。

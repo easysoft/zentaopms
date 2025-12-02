@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getLaneGroup();
 timeout=0
-cid=0
+cid=19442
 
 - 步骤1：验证返回结果包含3个泳道组 @3
 - 步骤2：验证story类型泳道组 @1

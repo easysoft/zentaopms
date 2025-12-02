@@ -5,7 +5,7 @@
 
 title=测试 mrModel::getGiteaProjects();
 timeout=0
-cid=0
+cid=17246
 
 - 测试步骤1：有效的服务器ID获取项目列表 @array
 - 测试步骤2：服务器ID为0的边界值测试 @0

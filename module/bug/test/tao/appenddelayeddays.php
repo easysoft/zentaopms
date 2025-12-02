@@ -11,7 +11,7 @@ su('admin');
 
 title=bugModel->appendDelayedDays();
 timeout=0
-cid=1
+cid=15410
 
 - 检查deadline在1天前 resolvedDate不存在 状态为未解决的bug是否延期属性delay @1
 - 检查deadline在1天前 resolvedDate不存在 状态为已解决的bug是否延期属性delay @0

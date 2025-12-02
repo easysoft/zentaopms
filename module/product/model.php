@@ -1062,7 +1062,11 @@ class productModel extends model
     public function getStatByID($productID, $storyType = 'story')
     {
         /* Check privilege. */
-        if(!$this->checkPriv($productID)) return false;
+        if(!$this->checkPriv($productID))
+        {
+            $this->accessDenied($this->lang->product->accessDenied);
+            return false;
+        }
 
         /* Get product. */
         $product = $this->getByID($productID);
@@ -1544,7 +1548,7 @@ class productModel extends model
                     $node       = array();
                     $node['href']    = common::hasPriv($moduleName, 'view') ? helper::createLink($moduleName, 'view', "id={$roadmap->id}") : '###';
                     $node['version'] = $isPlan ? $roadmap->title : $roadmap->name;
-                    $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : $roadmap->date;
+                    $node['date']    = $isPlan ? $roadmap->begin . '~' . $roadmap->end : (empty($roadmap->releasedDate) ? $roadmap->date : $roadmap->releasedDate);
                     $node['marker']  = !empty($roadmap->marker);
                     $yearNodes[] = $node;
                 }

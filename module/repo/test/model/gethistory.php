@@ -5,7 +5,7 @@
 
 title=测试 repoModel::getHistory();
 timeout=0
-cid=0
+cid=18064
 
 - 步骤1：正常查询有效revision列表 @2e0dd521b4a29930d5670a2c142a4400d7cffc1a
 - 步骤2：查询空revision数组 @empty

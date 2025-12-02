@@ -5,7 +5,7 @@
 
 title=测试 docModel->getScopeItems();
 timeout=0
-cid=1
+cid=16124
 
 - 获取产品范围
  - 第0条的value属性 @1

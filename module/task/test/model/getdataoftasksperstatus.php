@@ -11,7 +11,7 @@ su('admin');
 
 title=taskModel->getDataOfTasksPerStatus();
 timeout=0
-cid=1
+cid=18804
 
 - 统计状态为已完成的任务数量
  - 第done条的name属性 @已完成

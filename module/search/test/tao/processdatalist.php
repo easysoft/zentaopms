@@ -5,7 +5,7 @@
 
 title=测试 searchTao::processDataList();
 timeout=0
-cid=0
+cid=18333
 
 - 执行search模块的processDataListTest方法，参数是'bug', $bugField, array 第1条的comment属性 @创建bug测试附件.txt
 - 执行search模块的processDataListTest方法，参数是'case', $caseField, array 第1条的desc属性 @打开系统

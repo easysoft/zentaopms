@@ -4,7 +4,7 @@
 /**
 
 title=bugModel->getProductBugPairs();
-cid=64
+cid=15388
 
 - 测试获取productID为1的bug @3:BUG3,2:BUG2,1:BUG1
 

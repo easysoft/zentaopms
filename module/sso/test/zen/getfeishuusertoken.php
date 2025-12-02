@@ -4,34 +4,41 @@
 /**
 
 title=测试 ssoZen::getFeishuUserToken();
-cid=0
+timeout=0
+cid=18415
 
-- 测试步骤1：使用有效的授权码和访问令牌 >> 期望返回成功结果
-- 测试步骤2：使用空的授权码 >> 期望返回失败结果
-- 测试步骤3：使用空的访问令牌 >> 期望返回失败结果
-- 测试步骤4：使用无效的授权码格式 >> 期望返回失败结果
-- 测试步骤5：使用过期的访问令牌 >> 期望返回失败结果
+- 步骤1:测试有效的code和accessToken参数,返回失败(因为无效的凭证)属性result @fail
+- 步骤2:测试空code参数,返回失败信息属性result @fail
+- 步骤3:测试空accessToken参数,返回失败信息属性result @fail
+- 步骤4:测试无效的code格式,返回失败信息属性result @fail
+- 步骤5:测试无效的accessToken格式,返回失败信息属性result @fail
 
 */
 
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
+// 2. 设置SSO配置
+global $config;
+if(!isset($config->sso))
+{
+    $config->sso = new stdClass();
+}
+$config->sso->feishuTokenAPI = 'https://open.feishu.cn/open-apis/authen/v1/access_token';
+
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-$ssoTest = new ssoTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$ssoTest = new ssoZenTest();
 
-// 测试步骤1：使用有效的授权码和访问令牌
-r($ssoTest->getFeishuUserTokenTest('valid_code_123', 'valid_access_token_456')) && p('result') && e('fail'); // 由于是外部API调用，实际会失败
+// 5. 强制要求:必须包含至少5个测试步骤
+// 注意:由于该方法依赖外部HTTP API调用,测试将依赖真实的飞书API响应
+// 使用无效凭证测试,预期都会返回fail
 
-// 测试步骤2：使用空的授权码
-r($ssoTest->getFeishuUserTokenTest('', 'valid_access_token_456')) && p('result') && e('fail');
-
-// 测试步骤3：使用空的访问令牌
-r($ssoTest->getFeishuUserTokenTest('valid_code_123', '')) && p('result') && e('fail');
-
-// 测试步骤4：使用无效的授权码格式
-r($ssoTest->getFeishuUserTokenTest('invalid@code#format', 'valid_access_token_456')) && p('result') && e('fail');
-
-// 测试步骤5：使用过期的访问令牌
-r($ssoTest->getFeishuUserTokenTest('valid_code_123', 'expired_token_789')) && p('result') && e('fail');
+r($ssoTest->getFeishuUserTokenTest('test_code_001', 'test_token_001')) && p('result') && e('fail'); // 步骤1:测试有效的code和accessToken参数,返回失败(因为无效的凭证)
+r($ssoTest->getFeishuUserTokenTest('', 'test_token_002')) && p('result') && e('fail'); // 步骤2:测试空code参数,返回失败信息
+r($ssoTest->getFeishuUserTokenTest('test_code_003', '')) && p('result') && e('fail'); // 步骤3:测试空accessToken参数,返回失败信息
+r($ssoTest->getFeishuUserTokenTest('invalid_code_123', 'invalid_token_456')) && p('result') && e('fail'); // 步骤4:测试无效的code格式,返回失败信息
+r($ssoTest->getFeishuUserTokenTest('another_invalid_code', 'another_invalid_token')) && p('result') && e('fail'); // 步骤5:测试无效的accessToken格式,返回失败信息

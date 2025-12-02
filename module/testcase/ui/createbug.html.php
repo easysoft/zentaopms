@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('tab', $app->tab);
 jsVar('resultsLink', createLink('testtask', 'results', "runID={$runID}&caseID={$caseID}&version={$version}&status=all&result=fail") . '#casesResults');
 
 set::title($lang->testcase->createBug);

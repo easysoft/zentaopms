@@ -5,7 +5,7 @@
 
 title=测试 chartModel::getFirstGroup();
 timeout=0
-cid=0
+cid=15574
 
 - 执行chartTest模块的getFirstGroupTest方法，参数是1  @1
 - 执行chartTest模块的getFirstGroupTest方法，参数是2  @32

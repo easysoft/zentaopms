@@ -5,7 +5,7 @@
 
 title=测试 repoTao::processSearchQuery();
 timeout=0
-cid=0
+cid=18122
 
 - 步骤1：空queryID的情况 @ 1 = 1
 - 步骤2：有效queryID @name LIKE aa

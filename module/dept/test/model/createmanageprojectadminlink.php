@@ -5,7 +5,7 @@
 
 title=测试 deptModel::createManageProjectAdminLink();
 timeout=0
-cid=0
+cid=15963
 
 - 测试步骤1：正常部门和分组ID生成链接 @index.php?m=group&f=manageProjectAdmin&groupID=5&deptID=1
 - 测试步骤2：边界值部门ID(1)和分组ID测试 @index.php?m=group&f=manageProjectAdmin&groupID=1&deptID=1

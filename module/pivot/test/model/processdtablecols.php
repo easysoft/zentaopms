@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processDTableCols();
 timeout=0
-cid=0
+cid=17417
 
 - 执行$result1) && is_array($result1 @1
 - 执行$result2) && is_array($result2 @1

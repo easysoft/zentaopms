@@ -5,7 +5,7 @@
 
 title=测试 reportTao::getAnnualExecutionStat();
 timeout=0
-cid=0
+cid=18185
 
 - 步骤1：空账户列表查询当前年份统计 @4
 - 步骤2：有效账户列表查询 @4

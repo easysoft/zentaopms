@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processRecordsForDisplay();
 timeout=0
-cid=0
+cid=17426
 
 - 步骤1：正常情况名称第0条的name属性 @产品A
 - 步骤2：总计标识转换第0条的name属性 @总计

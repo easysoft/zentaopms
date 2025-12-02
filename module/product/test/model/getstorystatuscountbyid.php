@@ -4,7 +4,7 @@
 /**
 
 title=productModel->getStoryStatusCountByID();
-cid=0
+cid=17519
 
 - 测试获取空产品ID下的需求数据属性draft @0
 - 测试获取产品1下的需求数据属性draft @1

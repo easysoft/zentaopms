@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 branchModel->showBranch();
 timeout=0
-cid=1
+cid=15337
 
 - 测试验证产品 1 是否显示分支标签 @2
 - 测试验证产品 1 是否显示分支标签 @2

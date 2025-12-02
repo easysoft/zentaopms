@@ -1705,7 +1705,12 @@ class metricTest
      */
     public function checkHasInferenceOfDateTest($code, $dateType, $date)
     {
+        ob_start();
+        error_reporting(0);
         $result = $this->objectModel->checkHasInferenceOfDate($code, $dateType, $date);
+        error_reporting(E_ALL);
+        ob_end_clean();
+
         if(dao::isError()) return dao::getError();
 
         return $result ? 1 : 0;

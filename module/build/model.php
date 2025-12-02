@@ -268,7 +268,9 @@ class buildModel extends model
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 
         $buildIdList    = str_replace('trunk', '0', $buildIdList);
-        $shadows        = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
+        $shadows        = array();
+        if(!empty($productIdList))   $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
+        if($objectType == 'project') $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where("FIND_IN_SET({$objectID}, project)")->fetchPairs('shadow', 'shadow');
         $selectedBuilds = $this->buildTao->selectedBuildPairs($buildIdList, $productIdList, $params, $objectID, $objectType);
         $allBuilds      = $this->buildTao->fetchBuilds($productIdList, $params, $objectID, $objectType, $shadows, $system);
 
@@ -303,16 +305,21 @@ class buildModel extends model
     {
         $this->app->loadLang('branch');
 
-        $deletedExecutions     = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
+        $deletedProjects       = $this->dao->select('id, deleted')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('deleted')->eq('1')->fetchPairs();
+        $deletedExecutions     = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage,kanban')->andWhere('deleted')->eq('1')->fetchPairs();
         $branchPairs           = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
         $builds                = array();
         $excludedReleaseIdList = array();
         foreach($allBuilds as $id => $build)
         {
             if($build->branch === '') $build->branch = 0;
+
+            $isDeleted = false;
+            if(strpos($params, 'withexecution') !== false && $build->execution && isset($deletedExecutions[$build->execution])) $isDeleted = true;
+            if($build->project && !$build->execution && isset($deletedProjects[$build->project])) $isDeleted = true;
+
             $isDone        = empty($build->releaseID) && strpos($params, 'nodone') !== false && !empty($build->objectStatus) && $build->objectStatus === 'done';
             $isTerminate   = strpos($params, 'noterminate') !== false && $build->releaseStatus === 'terminate';
-            $isDeleted     = strpos($params, 'withexecution') !== false && $build->execution && isset($deletedExecutions[$build->execution]);
             $isNotInBranch = $branch !== '' && $branch !== 'all' && strpos(",{$build->branch},", ",{$branch},") === false;
             if(in_array(true, array($isDone, $isTerminate, $isDeleted, $isNotInBranch)))
             {

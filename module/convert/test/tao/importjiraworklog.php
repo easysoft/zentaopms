@@ -5,7 +5,7 @@
 
 title=测试 convertTao::importJiraWorkLog();
 timeout=0
-cid=0
+cid=15864
 
 - 步骤1：正常情况-空数组 @1
 - 步骤2：正常工作日志 @1

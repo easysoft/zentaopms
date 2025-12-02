@@ -5,37 +5,45 @@
 
 title=测试 pivotZen::getDrill();
 timeout=0
-cid=0
+cid=17457
 
-- 执行pivotTest模块的getDrillTest方法，参数是1, '1', 'name', 'published' 属性field @name
-- 执行pivotTest模块的getDrillTest方法，参数是1, '1', 'status', 'design' 属性field @status
-- 执行pivotTest模块的getDrillTest方法，参数是999, '1', 'name', 'published'  @{}
-- 执行pivotTest模块的getDrillTest方法，参数是1, '1', 'nonexistent', 'published'  @{}
-- 执行pivotTest模块的getDrillTest方法，参数是1, 'invalid', 'name', 'published'  @{}
+- 执行pivotTest模块的getDrillTest方法，参数是1, '1', 'status', 'published' 属性field @status
+- 执行pivotTest模块的getDrillTest方法，参数是2, '1', 'priority', 'published' 属性field @priority
+- 执行pivotTest模块的getDrillTest方法，参数是3, '1', 'severity', 'published' 属性field @severity
+- 执行pivotTest模块的getDrillTest方法，参数是4, '1', 'type', 'published' 属性field @type
+- 执行pivotTest模块的getDrillTest方法，参数是5, '1', 'openedBy', 'published' 属性field @openedBy
+- 执行pivotTest模块的getDrillTest方法，参数是6, '1', 'product', 'published' 属性field @product
+- 执行pivotTest模块的getDrillTest方法，参数是7, '1', 'status', 'published' 属性field @status
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
-global $tester;
-$tester->dbh->exec("DELETE FROM zt_pivotdrill");
-$tester->dbh->exec("
-INSERT INTO zt_pivotdrill (`pivot`, `version`, `field`, `object`, `whereSql`, `condition`, `status`, `account`, `type`)
-VALUES 
-(1, '1', 'name', 'bug', 'status = \"active\"', '{\"field\":\"status\",\"operator\":\"=\",\"value\":\"active\"}', 'published', 'admin', 'manual'),
-(1, '1', 'status', 'bug', 'deleted = \"0\"', '{\"field\":\"deleted\",\"operator\":\"=\",\"value\":\"0\"}', 'published', 'admin', 'auto'),
-(2, '1', 'category', 'story', 'type = \"story\"', '{\"field\":\"type\",\"operator\":\"=\",\"value\":\"story\"}', 'published', 'user1', 'manual'),
-(2, '2', 'name', 'story', 'name IS NOT NULL', '{\"field\":\"name\",\"operator\":\"!=\",\"value\":\"\"}', 'published', 'admin', 'auto'),
-(3, '1', 'priority', 'task', 'priority > 0', '{\"field\":\"priority\",\"operator\":\">\",\"value\":\"0\"}', 'design', 'user1', 'manual')
-");
+zenData('pivot')->gen(10);
+
+$pivotdrill = zenData('pivotdrill');
+$pivotdrill->pivot->range('1-7');
+$pivotdrill->version->range('1');
+$pivotdrill->field->range('status,priority,severity,type,openedBy,product,status');
+$pivotdrill->object->range('bug,bug,bug,bug,user,product,bug');
+$pivotdrill->whereSql->range('id > 0');
+$pivotdrill->condition->range('{"status":"active"}');
+$pivotdrill->status->range('published');
+$pivotdrill->account->range('admin');
+$pivotdrill->type->range('manual');
+$pivotdrill->gen(7);
+
+zenData('user')->gen(1);
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotZenTest();
 
-r($pivotTest->getDrillTest(1, '1', 'name', 'published')) && p('field') && e('name');
-r($pivotTest->getDrillTest(1, '1', 'status', 'design')) && p('field') && e('status');
-r($pivotTest->getDrillTest(999, '1', 'name', 'published')) && p() && e('{}');
-r($pivotTest->getDrillTest(1, '1', 'nonexistent', 'published')) && p() && e('{}');
-r($pivotTest->getDrillTest(1, 'invalid', 'name', 'published')) && p() && e('{}');
+r($pivotTest->getDrillTest(1, '1', 'status', 'published')) && p('field') && e('status');
+r($pivotTest->getDrillTest(2, '1', 'priority', 'published')) && p('field') && e('priority');
+r($pivotTest->getDrillTest(3, '1', 'severity', 'published')) && p('field') && e('severity');
+r($pivotTest->getDrillTest(4, '1', 'type', 'published')) && p('field') && e('type');
+r($pivotTest->getDrillTest(5, '1', 'openedBy', 'published')) && p('field') && e('openedBy');
+r($pivotTest->getDrillTest(6, '1', 'product', 'published')) && p('field') && e('product');
+r($pivotTest->getDrillTest(7, '1', 'status', 'published')) && p('field') && e('status');

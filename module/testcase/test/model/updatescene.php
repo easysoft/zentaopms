@@ -13,7 +13,7 @@ su('admin');
 /**
 
 title=测试 testcaseModel->updateScene();
-cid=1
+cid=19027
 pid=1
 
 */

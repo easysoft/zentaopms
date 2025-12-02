@@ -5,7 +5,7 @@
 
 title=测试通过项目id查询关联的产品id productModel->getProductIDByProject();
 timeout=0
-cid=0
+cid=17500
 
 - 查询项目ID为1的关联产品 @0
 - 查询项目ID为11的关联产品 @1

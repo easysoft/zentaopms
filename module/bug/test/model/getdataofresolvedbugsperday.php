@@ -5,7 +5,7 @@
 
 title=测试 bugModel::getDataOfResolvedBugsPerDay();
 timeout=0
-cid=0
+cid=15378
 
 - 步骤1：验证解决bug数量统计 - 测试统计功能的准确性第0条的value属性 @10
 - 步骤2：验证日期格式化功能 - 确保DATE_FORMAT函数正确工作第0条的name属性 @2025-09-19

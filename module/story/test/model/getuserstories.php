@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getUserStories();
-cid=0
+cid=18566
 
 - 获取指派给User2的所有需求数量 @103
 - 获取指派给User2的ID为6的需求详情

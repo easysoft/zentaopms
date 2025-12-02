@@ -5,54 +5,44 @@
 
 title=测试 bugZen::getExportFileName();
 timeout=0
-cid=0
+cid=15454
 
-- 执行$executionID1 > 0 @1
-- 执行$executionID2 == 0 && !empty($product2->name) @1
-- 执行$executionID3 == 0 && empty($product3->name) @1
-- 执行$executionID4 == 0 && $product4 === false @1
-- 执行$executionID5 == 0 && isset($browseType5) @1
+- 步骤1:有执行ID时,使用执行名称+Bug @执行一-Bug
+- 步骤2:无执行ID,有产品名称和browseType @产品一-全部Bug
+- 步骤3:无执行ID,browseType是未关闭 @产品二-未关闭Bug
+- 步骤4:无执行ID,browseType是assigntome @测试产品-指派给我Bug
+- 步骤5:无执行ID,产品名称为空,browseType为all @-全部Bug
+- 步骤6:有执行ID,执行名称包含特殊字符 @测试执行-Bug
+- 步骤7:有执行ID,ID不存在时返回空名称 @-Bug
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
+$project = zenData('project');
+$project->id->range('1-10');
+$project->name->range('执行一,执行二,测试执行,开发执行,Sprint01,Stage01,项目A,项目B,项目C,项目D');
+$project->type->range('sprint{4},stage,sprint,project{4}');
+$project->status->range('doing');
+$project->deleted->range('0');
+$project->gen(10);
+
+zenData('product')->gen(10);
 
 su('admin');
 
-// 由于测试环境限制和依赖复杂性，使用简化的测试逻辑
-// 该测试验证getExportFileName方法的参数处理和文件名生成逻辑
+$bugTest = new bugZenTest();
 
-// 模拟基本的lang配置
-global $lang;
-if(!isset($lang->bug->common)) $lang->bug->common = 'Bug';
-if(!isset($lang->dash)) $lang->dash = '-';
+$product1 = (object)array('id' => 1, 'name' => '产品一', 'type' => 'normal', 'shadow' => 0);
+$product2 = (object)array('id' => 2, 'name' => '产品二', 'type' => 'normal', 'shadow' => 0);
+$product3 = (object)array('id' => 3, 'name' => '测试产品', 'type' => 'normal', 'shadow' => 0);
+$emptyProduct = (object)array('id' => 0, 'name' => '', 'type' => 'normal', 'shadow' => 0);
 
-// 测试步骤1：有执行ID的情况，应该查询执行名称
-$executionID1 = 101;
-$browseType1 = 'all';
-$product1 = false;
-r($executionID1 > 0) && p() && e('1');
-
-// 测试步骤2：无执行ID，有产品名称的情况
-$executionID2 = 0;
-$browseType2 = 'active';
-$product2 = (object)array('name' => '测试产品');
-r($executionID2 == 0 && !empty($product2->name)) && p() && e('1');
-
-// 测试步骤3：无执行ID，产品名称为空的情况
-$executionID3 = 0;
-$browseType3 = 'resolved';
-$product3 = (object)array('name' => '');
-r($executionID3 == 0 && empty($product3->name)) && p() && e('1');
-
-// 测试步骤4：无执行ID，产品为false的情况
-$executionID4 = 0;
-$browseType4 = 'closed';
-$product4 = false;
-r($executionID4 == 0 && $product4 === false) && p() && e('1');
-
-// 测试步骤5：边界情况，执行ID为0，验证基本逻辑
-$executionID5 = 0;
-$browseType5 = 'all';
-$product5 = (object)array('name' => '');
-r($executionID5 == 0 && isset($browseType5)) && p() && e('1');
+r($bugTest->getExportFileNameTest(1, 'all', false)) && p() && e('执行一-Bug'); // 步骤1:有执行ID时,使用执行名称+Bug
+r($bugTest->getExportFileNameTest(0, 'all', $product1)) && p() && e('产品一-全部Bug'); // 步骤2:无执行ID,有产品名称和browseType
+r($bugTest->getExportFileNameTest(0, 'unclosed', $product2)) && p() && e('产品二-未关闭Bug'); // 步骤3:无执行ID,browseType是未关闭
+r($bugTest->getExportFileNameTest(0, 'assigntome', $product3)) && p() && e('测试产品-指派给我Bug'); // 步骤4:无执行ID,browseType是assigntome
+r($bugTest->getExportFileNameTest(0, 'all', $emptyProduct)) && p() && e('-全部Bug'); // 步骤5:无执行ID,产品名称为空,browseType为all
+r($bugTest->getExportFileNameTest(3, 'all', false)) && p() && e('测试执行-Bug'); // 步骤6:有执行ID,执行名称包含特殊字符
+r($bugTest->getExportFileNameTest(999, 'all', false)) && p() && e('-Bug'); // 步骤7:有执行ID,ID不存在时返回空名称

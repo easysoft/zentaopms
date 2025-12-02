@@ -431,8 +431,8 @@ class extensionModel extends model
         if(!file_exists($infoFile)) return $info;
 
         /* Load the yaml file and parse it into object. */
-        $this->app->loadClass('spyc', true);
-        $info = (object)spyc_load(file_get_contents($infoFile));
+        $spyc = $this->app->loadClass('spyc');
+        $info = (object)$spyc->loadFile($infoFile);
         if(isset($info->releases))
         {
             $info->version = key($info->releases);
@@ -542,19 +542,20 @@ class extensionModel extends model
         $sqls = file_get_contents($this->getDBFile($extension, $method));
         $sqls = explode(';', $sqls);
 
+        $this->loadModel('install');
+
         $ignoreCode = '|1050|1060|1062|1091|1169|';
         foreach($sqls as $sql)
         {
             $sql = trim($sql);
             if(empty($sql)) continue;
 
-            /* 将zt_替换成prefix配置项。 */
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = $this->install->replaceContantsInSQL($sql);
+            $sql = $this->install->appendMySQLTableOptions($sql);
 
             try
             {
                 $this->dbh->query($sql);
-
                 $this->dao->setTableCache($sql);
             }
             catch(PDOException $e)

@@ -1,0 +1,41 @@
+---
+title: 发布数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 发布ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 发布名称
+  range: 发布1.0,发布1.1,发布2.0,发布2.1,发布3.0
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 所属产品
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: project
+  note: 所属项目
+  range: 1-5
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: status
+  note: 状态
+  range: normal
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

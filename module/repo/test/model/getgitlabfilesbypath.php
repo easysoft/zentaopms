@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getGitlabFilesByPath();
 timeout=0
-cid=1
+cid=18059
 
 - 获取gitlab类型版本库1的master分支文件列表
  - 第0条的name属性 @public

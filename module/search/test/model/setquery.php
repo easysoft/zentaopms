@@ -5,7 +5,7 @@
 
 title=测试 searchModel::setQuery();
 timeout=0
-cid=0
+cid=18311
 
 - 执行searchTest模块的setQueryTest方法，参数是'task', 0  @1 = 1
 - 执行searchTest模块的setQueryTest方法，参数是'bug', 0  @1 = 1

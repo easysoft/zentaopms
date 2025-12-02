@@ -8,7 +8,7 @@ su('admin');
 
 title=taskModel->canOperateEffort();
 timeout=0
-cid=1
+cid=18771
 
 - 判断非多人任务 @1
 - 判断已完成的串行多人任务并且不判断日志 @0
@@ -45,6 +45,9 @@ $task = new stdclass();
 $task->mode = '';
 $task->openedBy   = 'dev1';
 $task->assignedTo = 'admin';
+
+global $app;
+$app->user->admin = false;
 
 $taskTest = new taskTest();
 r($taskTest->canOperateEffort($task)) && p() && e('1');  //判断非多人任务

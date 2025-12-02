@@ -11,7 +11,7 @@ zenData('suitecase')->loadYaml('suitecase')->gen(20);
 
 title=测试 testtaskModel->getLinkableCasesBySuite();
 timeout=0
-cid=1
+cid=19179
 
 - 产品 0 测试单 1 套件 1 可关联的用例数为 0。 @0
 - 产品 2 测试单 1 套件 1 可关联的用例数为 0。 @0

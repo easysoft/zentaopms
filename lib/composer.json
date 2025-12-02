@@ -1,0 +1,78 @@
+{
+    "require": {
+        "box/spout": "3.3.0",
+        "dragonmantank/cron-expression": "2.3.1",
+        "erusev/parsedown": "1.7.4",
+        "ezyang/htmlpurifier": "4.18.0",
+        "gorhill/php-fine-diff": "0.1.0",
+        "gregwar/captcha": "1.3.0",
+        "laminas/laminas-escaper": "2.6.1",
+        "laminas/laminas-zendframework-bridge": "1.1.1",
+        "markbaker/complex": "1.5.0",
+        "markbaker/matrix": "1.2.3",
+        "masterexploder/phpthumb": "2.1",
+        "mobiledetect/mobiledetectlib": "2.8.45",
+        "mustangostang/spyc": "0.6.3",
+        "overtrue/pinyin": "4.0.5",
+        "paragonie/constant_time_encoding": "2.7.0",
+        "paragonie/random_compat": "9.99.100",
+        "pclzip/pclzip": "2.8.2",
+        "phpmailer/phpmailer": "6.11.1",
+        "phpoffice/phpspreadsheet": "1.8.2",
+        "phpoffice/phpword": "0.18.3",
+        "phpseclib/phpseclib": "3.0.47",
+        "psr/simple-cache": "1.0.1",
+        "rmccue/requests": "2.0.15",
+        "symfony/finder": "3.4.47"
+    },
+    "config": {
+        "allow-plugins": {
+            "cweagans/composer-patches": true
+        },
+        "platform": {
+            "php": "7.0.33"
+        }
+    },
+    "require-dev": {
+        "cweagans/composer-patches": "^1.7"
+    },
+    "extra": {
+        "patches": {
+            "box/spout": {
+                "Add return type declarations to Iterator methods": "patches/box-spout-php8-compatibility.patch"
+            },
+            "erusev/parsedown": {
+                "Add namespace to Parsedown class": "patches/parsedown-add-namespace.patch"
+            },
+            "gorhill/php-fine-diff": {
+                "Fix class reference to work with namespaces": "patches/finediff-fix-class-reference.patch"
+            },
+            "masterexploder/phpthumb": {
+                "Fix options array initialization in GD class": "patches/phpthumb-fix-options-array-initialization.patch"
+            },
+            "mustangostang/spyc": {
+                "Add namespace to Spyc class": "patches/spyc-add-namespace.patch"
+            },
+            "pclzip/pclzip": {
+                "Add namespace to PclZip class": "patches/pclzip-add-namespace.patch",
+                "Fix memory limit calculation in privOptionDefaultThreshold method": "patches/pclzip-memory-limit-fix.patch"
+            },
+            "phpoffice/phpspreadsheet": {
+                "Add timezone helper methods to Date class": "patches/phpspreadsheet-add-timezone-helpers.patch",
+                "Add return types to Iterator methods for PHP 8 compatibility": "patches/phpspreadsheet-iterator-return-types.patch",
+                "Optimize DefaultValueBinder type checking and safety": "patches/phpspreadsheet-optimize-defaultvaluebinder.patch",
+                "Optimize OLE date conversion with improved type safety": "patches/phpspreadsheet-ole-date-optimization.patch",
+                "Fix libxml entity loader compatibility for PHP 8.0+": "patches/phpspreadsheet-fix-libxml-php8-compatibility.patch",
+                "Fix alignment check condition in Styles reader": "patches/phpspreadsheet-fix-alignment-check.patch",
+                "Fix Color brightness calculation type casting for PHP 8 compatibility": "patches/phpspreadsheet-fix-color-brightness-type-casting.patch"
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Parsedown\\": "vendor/erusev/parsedown/",
+            "Vendor\\PclZip\\": "vendor/pclzip/pclzip/",
+            "Vendor\\Spyc\\": "vendor/mustangostang/spyc/"
+        }
+    }
+}

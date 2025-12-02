@@ -5,7 +5,7 @@
 
 title=测试 projectZen::prepareActivateExtras();
 timeout=0
-cid=0
+cid=17947
 
 - 步骤1：正常项目激活数据
  - 属性id @1

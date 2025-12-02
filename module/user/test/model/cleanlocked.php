@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->cleanLocked();
-cid=0
+cid=19593
 
 - admin 用户的失败次数为 5，锁定时间为 2023-01-10 14:34:12。
  - 第0条的account属性 @admin

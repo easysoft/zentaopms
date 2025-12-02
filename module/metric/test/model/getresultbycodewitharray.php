@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getResultByCodeWithArray();
 timeout=0
-cid=0
+cid=17125
 
 - 步骤1：正常情况-返回空数组 @0
 - 步骤2：不存在的代码-返回空数组 @0

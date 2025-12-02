@@ -5,7 +5,7 @@
 
 title=测试 indexZen::getViewMethodForAssetLib();
 timeout=0
-cid=0
+cid=16766
 
 - 步骤1：doc对象，assetLibType为practice @practiceView
 - 步骤2：doc对象，assetLibType为component @componentView

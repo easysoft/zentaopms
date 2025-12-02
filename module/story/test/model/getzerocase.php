@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->getZeroCase();
-cid=0
+cid=18570
 
 - 获取产品1下的零用例需求数量 @1
 - 获取产品0下的零用例需求数量 @0

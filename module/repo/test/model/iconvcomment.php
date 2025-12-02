@@ -5,7 +5,7 @@
 
 title=测试 repoModel::iconvComment();
 timeout=0
-cid=0
+cid=18084
 
 - 测试步骤1：空编码参数情况 @test comment
 - 测试步骤2：UTF-8编码转换情况 @utf-8 test

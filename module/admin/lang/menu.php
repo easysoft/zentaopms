@@ -49,10 +49,10 @@ $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['subMenu']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
-if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
+if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
-if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
+if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
 $lang->admin->menuList->system['menuOrder']['15'] = 'trash';
 $lang->admin->menuList->system['menuOrder']['30'] = 'safe';
 $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
@@ -170,7 +170,7 @@ $lang->admin->menuList->message['menuOrder']['20'] = 'browser';
 $lang->admin->menuList->message['menuOrder']['25'] = 'setting';
 
 $lang->admin->menuList->dev['subMenu']['api']      = array('link' => "{$lang->api->doc}|dev|api|module=restapi");
-$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table=zt_todo");
+$lang->admin->menuList->dev['subMenu']['db']       = array('link' => "{$lang->database}|dev|db|table={$config->db->prefix}todo");
 $lang->admin->menuList->dev['subMenu']['langItem'] = array('link' => "{$lang->langItem}|dev|langitem|");
 $lang->admin->menuList->dev['subMenu']['editor']   = array('link' => "{$lang->editor->common}|dev|editor|", 'subModule' => 'editor');
 $lang->admin->menuList->dev['subMenu']['entry']    = array('link' => "{$lang->admin->entry}|entry|browse|", 'subModule' => 'entry');

@@ -5,7 +5,7 @@
 
 title=测试 cneModel::certInfo();
 timeout=0
-cid=0
+cid=15606
 
 - 步骤1：空证书名称查询 @0
 - 步骤2：无效证书名称查询 @0

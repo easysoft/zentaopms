@@ -4,7 +4,7 @@
 /**
 
 title=produ0tModel->getProjectStatsByProduct();
-cid=0
+cid=17508
 
 - 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 0, 'all', '', false, 'order_desc'  @0
 - 执行product模块的getProjectStatsByProductTest方法，参数是$productID = 1, 'all', '', false, 'order_desc'

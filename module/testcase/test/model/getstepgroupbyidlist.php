@@ -13,7 +13,7 @@ su('admin');
 
 title=测试 testcaseModel->getStepGroupByIdList();
 timeout=0
-cid=1
+cid=19003
 
 - 获取用例 1 2 3 的步骤 @1:4,5,6,7,8,9,10,11,12; 2:13; 3:14;
 

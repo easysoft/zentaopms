@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::buildRDRegionData();
 timeout=0
-cid=0
+cid=16974
 
 - 步骤1：正常情况测试属性laneCount @2
 - 步骤2：空分组测试属性laneCount @0

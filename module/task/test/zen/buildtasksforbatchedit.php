@@ -5,7 +5,7 @@
 
 title=测试 taskZen::buildTasksForBatchEdit();
 timeout=0
-cid=0
+cid=18915
 
 - 步骤1：正常批量编辑任务数据，名称变化导致version递增
  - 第1条的name属性 @任务1修改

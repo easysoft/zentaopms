@@ -42,6 +42,8 @@ class doc extends control
     public function lastViewedSpaceHome()
     {
         $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($this->config->vision == 'lite' && $lastViewedSpaceHome == 'api') $lastViewedSpaceHome = 'mine';
+
         if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
 
         $spaceMap = array(
@@ -66,6 +68,8 @@ class doc extends control
     public function lastViewedSpace()
     {
         $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($this->config->vision == 'lite' && $lastViewedSpaceHome == 'api') $lastViewedSpaceHome = 'mine';
+
         if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
 
         $spaceMap = array(
@@ -2419,6 +2423,12 @@ class doc extends control
             $doc->html    = $doc->content;
             $doc->content = $doc->rawContent;
             unset($doc->rawContent);
+
+            if($doc->contentType == 'doc' && preg_match('/ src="{([0-9]+)(\.(\w+))?}" /', $doc->html))
+            {
+                $doc->contentType = 'html';
+                $doc->content     = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $doc->html);
+            }
         }
         if($docID) $this->doc->createAction($docID, 'view');
 
@@ -2505,23 +2515,6 @@ class doc extends control
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID, $objectType == 'template' ? true : false);
-        if($objectType == 'template' && !empty($moduleID)) $chapterAndDocs = array_filter($chapterAndDocs, fn($docInfo) => $docInfo->module == $moduleID);
-        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-        $modulePairs = empty($libID) || $modalType == 'chapter' || $objectType == 'template' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-
-        if($objectType == 'template' && !empty($parentID))
-        {
-            $parentDoc   = $this->doc->fetchByID($parentID);
-            $parentPath  = trim($parentDoc->path, ',') . ",";
-            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $parentID;
-            foreach($chapterAndDocs as $key => $template)
-            {
-                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
-            }
-        }
-        $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-
         if($isCreate)
         {
             if(!$moduleID && $docID)
@@ -2559,6 +2552,23 @@ class doc extends control
             $this->view->doc        = $doc;
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
+
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID, $objectType == 'template' ? true : false);
+        if($objectType == 'template' && !empty($moduleID)) $chapterAndDocs = array_filter($chapterAndDocs, fn($docInfo) => $docInfo->module == $moduleID);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $modulePairs = empty($libID) || $modalType == 'chapter' || $objectType == 'template' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+
+        if($objectType == 'template' && !empty($parentID))
+        {
+            $parentDoc   = $this->doc->fetchByID($parentID);
+            $parentPath  = trim($parentDoc->path, ',') . ",";
+            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $parentID;
+            foreach($chapterAndDocs as $key => $template)
+            {
+                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
+            }
+        }
+        $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
 
         if($objectType == 'template')
         {

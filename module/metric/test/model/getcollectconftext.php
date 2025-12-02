@@ -5,7 +5,7 @@
 
 title=getCollectConfText
 timeout=0
-cid=1
+cid=17084
 
 - 测试week标签1 @每周的星期一,星期二,星期三,星期四,星期五,星期六,星期日的2023-1-1 10:10:10
 

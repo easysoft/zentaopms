@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 actionModel->computeBeginAndEnd();
 timeout=0
-cid=1
+cid=14883
 
 - 测试计算all的日期 @0
 - 测试计算today的日期 @1

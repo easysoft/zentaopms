@@ -1,0 +1,126 @@
+---
+title: doclib数据定义
+desc: 用于测试initLibForMySpace方法的文档库数据
+
+fields:
+- field: id
+  note: 文档库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 文档库类型
+  range: mine{3},custom{2},project{2},product{2},execution{1}
+  prefix: ""
+  postfix: ""
+
+- field: vision
+  note: 视图类型
+  range: rnd{8},lite{2}
+  prefix: ""
+  postfix: ""
+
+- field: parent
+  note: 父级ID
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: execution
+  note: 执行ID
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 文档库名称
+  range: 默认文档库{3},产品文档库{2},项目文档库{2},执行文档库{1},团队文档库{2}
+  prefix: ""
+  postfix: ""
+
+- field: baseUrl
+  note: 基础URL
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: private{5},open{3},custom{2}
+  prefix: ""
+  postfix: ""
+
+- field: groups
+  note: 分组
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: users
+  note: 用户
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: main
+  note: 是否主库
+  range: 1{3},0{7}
+  prefix: ""
+  postfix: ""
+
+- field: collector
+  note: 收藏者
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: desc
+  note: 描述
+  range: '[]'
+  prefix: ""
+  postfix: ""
+
+- field: order
+  note: 排序
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: addedBy
+  note: 创建者
+  range: admin,user1,user2,user3,user4,admin,user1,user2,user3,user4
+  prefix: ""
+  postfix: ""
+
+- field: addedDate
+  note: 创建时间
+  range: (-1D)-(0D):1H
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: 0
+  prefix: ""
+  postfix: ""
+
+- field: archived
+  note: 是否归档
+  range: 0
+  prefix: ""
+  postfix: ""

@@ -5,7 +5,7 @@
 
 title=测试 apiModel::getGroupedObjects();
 timeout=0
-cid=0
+cid=15108
 
 - 步骤1：获取分组对象数据包含product键 @1
 - 步骤2：获取分组对象数据包含project键 @1

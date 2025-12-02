@@ -5,7 +5,7 @@
 
 title=测试 buildModel::getByID();
 timeout=0
-cid=0
+cid=15491
 
 - 测试步骤1：正常获取版本信息属性name @版本1
 - 测试步骤2：获取第二个版本信息属性name @版本2

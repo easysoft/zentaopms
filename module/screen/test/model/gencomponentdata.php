@@ -4,7 +4,7 @@
 /**
 
 title=测试 screenModel::genComponentData();
-cid=0
+cid=18226
 
 - 测试步骤1：空图表输入时返回错误处理组件 @1
 - 测试步骤2：草稿状态图表返回错误处理组件 @1

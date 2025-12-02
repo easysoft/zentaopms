@@ -2,19 +2,19 @@
 ALTER TABLE `zt_story` CHANGE `pri` `pri` TINYINT( 3 ) UNSIGNED NOT NULL DEFAULT '3';
 
 -- 修改project code字段的长度。
-ALTER TABLE `zt_project` CHANGE `code` `code` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_project` CHANGE `code` `code` VARCHAR( 20 ) NOT NULL;
 
 -- task 暂时增加left字段：
  ALTER TABLE `zt_task` ADD `left` tinyINT(3) NOT NULL AFTER `consumed`;
 
 -- 修改日期字段
-ALTER TABLE `zt_bug` CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
-CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL ,
-CHANGE `resolvedDate` `resolvedDate` DATETIME NOT NULL ,
-CHANGE `closedDate` `closedDate` DATETIME NOT NULL ,
+ALTER TABLE `zt_bug` CHANGE `openedDate` `openedDate` DATETIME NOT NULL,
+CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL,
+CHANGE `resolvedDate` `resolvedDate` DATETIME NOT NULL,
+CHANGE `closedDate` `closedDate` DATETIME NOT NULL,
 CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL;
 
-RENAME TABLE `zt_division` TO `zt_dept` ;
+RENAME TABLE `zt_division` TO `zt_dept`;
 ALTER TABLE `zt_user` CHANGE `division` `dept` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 
 
@@ -22,8 +22,8 @@ ALTER TABLE `zt_user` CHANGE `division` `dept` MEDIUMINT( 8 ) UNSIGNED NOT NULL 
 --
 -- 修改task表name字段的长度。
 -- 修改task表的时间的类型，可以是浮点数。
-ALTER TABLE `zt_task` CHANGE `estimate` `estimate` FLOAT UNSIGNED NOT NULL ,
-CHANGE `consumed` `consumed` FLOAT UNSIGNED NOT NULL ,
+ALTER TABLE `zt_task` CHANGE `estimate` `estimate` FLOAT UNSIGNED NOT NULL,
+CHANGE `consumed` `consumed` FLOAT UNSIGNED NOT NULL,
 CHANGE `left` `left` FLOAT UNSIGNED NOT NULL;
 
 -- todo表
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `status` enum('wait','doing','done') NOT NULL default 'wait',
   PRIMARY KEY  (`id`),
   KEY `user` (`account`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- 更新product, project表中的company字段：
 update zt_product set company = 1;
@@ -52,20 +52,20 @@ update zt_project set company = 1;
 ALTER TABLE `zt_story` CHANGE `estimate` `estimate` FLOAT UNSIGNED NOT NULL;
 
 -- 还是使用datetime字段。
-ALTER TABLE `zt_story` CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
-CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL ,
-CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL ,
+ALTER TABLE `zt_story` CHANGE `openedDate` `openedDate` DATETIME NOT NULL,
+CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL,
+CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL,
 CHANGE `closedDate` `closedDate` DATETIME NOT NULL;
 
 -- 增加diff字段。
 ALTER TABLE `zt_history` ADD `diff` TEXT NOT NULL;
 
 -- 10.27
-ALTER TABLE `zt_todo` CHANGE `desc` `desc` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
-ALTER TABLE `zt_task` CHANGE `name` `name` VARCHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_todo` CHANGE `desc` `desc` TEXT NOT NULL;
+ALTER TABLE `zt_task` CHANGE `name` `name` VARCHAR( 90 ) NOT NULL;
 
-ALTER TABLE `zt_task` CHANGE `estimate` `estimate` FLOAT UNSIGNED NOT NULL ,
-CHANGE `consumed` `consumed` FLOAT UNSIGNED NOT NULL ,
+ALTER TABLE `zt_task` CHANGE `estimate` `estimate` FLOAT UNSIGNED NOT NULL,
+CHANGE `consumed` `consumed` FLOAT UNSIGNED NOT NULL,
 CHANGE `left` `left` FLOAT UNSIGNED NOT NULL;
 
 
@@ -79,74 +79,74 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `left` float NOT NULL,
   `consumed` float NOT NULL,
   PRIMARY KEY  (`project`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM;
 
 -- 11.5 project status字段更改。
-ALTER TABLE `zt_project` CHANGE `status` `status` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_project` CHANGE `status` `status` VARCHAR( 10 ) NOT NULL;
 
 -- 11.10.
 
-ALTER TABLE `zt_bug` CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
-CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL ,
-CHANGE `resolvedDate` `resolvedDate` DATETIME NOT NULL ,
-CHANGE `closedDate` `closedDate` DATETIME NOT NULL ,
+ALTER TABLE `zt_bug` CHANGE `openedDate` `openedDate` DATETIME NOT NULL,
+CHANGE `assignedDate` `assignedDate` DATETIME NOT NULL,
+CHANGE `resolvedDate` `resolvedDate` DATETIME NOT NULL,
+CHANGE `closedDate` `closedDate` DATETIME NOT NULL,
 CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL;
 
 -- 11.12
 
-ALTER TABLE `zt_bug` ADD `duplicateBug` MEDIUMINT UNSIGNED NOT NULL AFTER `closedDate` ,
-ADD `linkBug` VARCHAR( 255 ) NOT NULL AFTER `duplicateBug` ,
-ADD `case` MEDIUMINT UNSIGNED NOT NULL AFTER `linkBug` ,
+ALTER TABLE `zt_bug` ADD `duplicateBug` MEDIUMINT UNSIGNED NOT NULL AFTER `closedDate`,
+ADD `linkBug` VARCHAR( 255 ) NOT NULL AFTER `duplicateBug`,
+ADD `case` MEDIUMINT UNSIGNED NOT NULL AFTER `linkBug`,
 ADD `result` MEDIUMINT UNSIGNED NOT NULL AFTER `case`;
 
 -- 11.13
-ALTER TABLE `zt_case` CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
+ALTER TABLE `zt_case` CHANGE `openedDate` `openedDate` DATETIME NOT NULL,
 CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL;
 
 -- 11.16
 ALTER TABLE `zt_file` CHANGE `addedDate` `addedDate` DATETIME NOT NULL;
 ALTER TABLE `zt_file` ADD `title` CHAR( 90 ) NOT NULL AFTER `file`;
-ALTER TABLE `zt_file` ADD `objectType` CHAR( 10 ) NOT NULL AFTER `size` ,
-ADD `objectID` MEDIUMINT NOT NULL AFTER `objectType` ;
+ALTER TABLE `zt_file` ADD `objectType` CHAR( 10 ) NOT NULL AFTER `size`,
+ADD `objectID` MEDIUMINT NOT NULL AFTER `objectType`;
 
-ALTER TABLE `zt_file` CHANGE `file` `pathname` CHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
-ALTER TABLE `zt_file` CHANGE `type` `extension` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_file` CHANGE `file` `pathname` CHAR( 50 ) NOT NULL;
+ALTER TABLE `zt_file` CHANGE `type` `extension` CHAR( 30 ) NOT NULL;
 
-ALTER TABLE `zt_task` CHANGE `status` `status` ENUM( 'wait', 'doing', 'done', 'cancel' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'wait';
+ALTER TABLE `zt_task` CHANGE `status` `status` ENUM( 'wait', 'doing', 'done', 'cancel' ) NOT NULL DEFAULT 'wait';
 
-ALTER TABLE `zt_todo` CHANGE `name` `name` CHAR( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_todo` CHANGE `name` `name` CHAR( 150 ) NOT NULL;
 
 
 -- 12.10 新增productPlan表。
 CREATE TABLE `zt_productPlan` (
-  `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-  `product` MEDIUMINT UNSIGNED NOT NULL ,
-  `title` VARCHAR( 90 ) NOT NULL ,
-  `desc` VARCHAR( 255 ) NOT NULL ,
-  `begin` DATE NOT NULL ,
+  `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `product` MEDIUMINT UNSIGNED NOT NULL,
+  `title` VARCHAR( 90 ) NOT NULL,
+  `desc` VARCHAR( 255 ) NOT NULL,
+  `begin` DATE NOT NULL,
   `end` DATE NOT NULL
-) ENGINE = MYISAM ;
+) ENGINE=MyISAM;
 
 -- 将zt_story中的release改为plan。
 ALTER TABLE `zt_story` CHANGE `replease` `plan` MEDIUMINT( 8 ) UNSIGNED NOT NULL DEFAULT '0';
 
 -- 12.11 修改case表。
 
-ALTER TABLE `zt_case` CHANGE `type` `type` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1',
-CHANGE `status` `status` CHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1',
-CHANGE `openedDate` `openedDate` DATETIME NOT NULL ,
+ALTER TABLE `zt_case` CHANGE `type` `type` CHAR( 30 ) NOT NULL DEFAULT '1',
+CHANGE `status` `status` CHAR( 30 ) NOT NULL DEFAULT '1',
+CHANGE `openedDate` `openedDate` DATETIME NOT NULL,
 CHANGE `lastEditedDate` `lastEditedDate` DATETIME NOT NULL;
 
-ALTER TABLE `zt_case` CHANGE `title` `title` CHAR( 90 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `zt_case` CHANGE `title` `title` CHAR( 90 ) NOT NULL;
 
 -- 12.28 zt_task字段增加自定义排序字段。
-ALTER TABLE `zt_task` ADD `statusCustom` TINYINT UNSIGNED NOT NULL AFTER `status` ,
+ALTER TABLE `zt_task` ADD `statusCustom` TINYINT UNSIGNED NOT NULL AFTER `status`,
 ADD INDEX ( statusCustom );
 update zt_task set statusCustom = locate(status, 'wait,doing,done,cancel');
 
 -- 增加类型字段。--
-ALTER TABLE `zt_task` ADD `type` VARCHAR( 20 ) NOT NULL AFTER `name` ,
+ALTER TABLE `zt_task` ADD `type` VARCHAR( 20 ) NOT NULL AFTER `name`,
 ADD INDEX ( TYPE );
 
 -- todo 增加状态--
-ALTER TABLE `zt_todo` CHANGE `status` `status` CHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'wait';
+ALTER TABLE `zt_todo` CHANGE `status` `status` CHAR( 20 ) NOT NULL DEFAULT 'wait';

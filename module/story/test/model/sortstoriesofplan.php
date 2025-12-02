@@ -4,7 +4,7 @@
 /**
 
 title=测试 storyModel->sortStoriesOfPlan();
-cid=0
+cid=18586
 
 - 获取更新排序之前的需求在计划下的排序第1条的order属性 @5
 - 获取更新排序之前的需求在计划下的排序第2条的order属性 @10

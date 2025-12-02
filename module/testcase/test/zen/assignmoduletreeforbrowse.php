@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignModuleTreeForBrowse();
 timeout=0
-cid=0
+cid=19075
 
 - 步骤1：有产品ID和项目ID
  - 属性moduleTreeAssigned @1

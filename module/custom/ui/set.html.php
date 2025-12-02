@@ -409,14 +409,14 @@ elseif($module == 'feedback' && $field == 'review')
         set::multiple(true),
         set::tip(sprintf($lang->custom->notice->forceNotReview, $lang->feedback->common)),
     );
-    $users[''] = $lang->feedback->deptManager;
+    $users = arrayUnion(array(' ' => $lang->feedback->deptManager), $users);
     $formItems[] = formGroup
     (
         set::width('1/2'),
         set::labelWidth('100px'),
         set::label($lang->feedback->reviewedByAB),
         set::name('reviewer'),
-        set::value($reviewer),
+        set::value(empty($reviewer) ? ' ' : $reviewer),
         set::control('picker'),
         set::items($users)
     );

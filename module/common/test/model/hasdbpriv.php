@@ -12,7 +12,7 @@ zenData('bug')->gen(1);
 
 title=测试 commonModel::hasDBPriv();
 timeout=0
-cid=1
+cid=15679
 
 - 查看admin是否有bug-browse的权限 @1
 - 查看admin是否有bug-edit的权限 @1

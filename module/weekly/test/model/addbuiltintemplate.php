@@ -4,7 +4,7 @@
 
 title=测试 weeklyModel->addBuiltinTemplate();
 timeout=0
-cid=1
+cid=19716
 
 - 测试添加内置模板
  - 属性title @项目周报模板

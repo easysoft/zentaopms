@@ -8,7 +8,7 @@ su('admin');
 
 title=测试companyModel->buildSearchForm();
 timeout=0
-cid=1
+cid=15730
 
 - 执行companyTest模块的buildSearchFormTest方法，参数是1, '/company-browse-inside-0-id-1.html' 属性queryID @1
 - 执行companyTest模块的buildSearchFormTest方法，参数是0, '/company-browse-inside-0-id.html' 属性actionURL @/company-browse-inside-0-id.html

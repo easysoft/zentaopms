@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 branchModel->create();
 timeout=0
-cid=1
+cid=15323
 
 */
 $productID = 6;

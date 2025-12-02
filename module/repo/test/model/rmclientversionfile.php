@@ -5,7 +5,7 @@
 
 title=测试 repoModel::rmClientVersionFile();
 timeout=0
-cid=0
+cid=18092
 
 - 测试步骤1：有文件且文件存在 @1
 - 测试步骤2：有文件路径但文件不存在 @1

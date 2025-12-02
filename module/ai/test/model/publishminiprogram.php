@@ -5,7 +5,7 @@
 
 title=测试 aiModel::publishMiniProgram();
 timeout=0
-cid=0
+cid=15060
 
 - 步骤1：发布新的小程序（首次发布） @1
 - 步骤2：发布已发布的小程序（版本更新） @1

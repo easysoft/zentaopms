@@ -1,0 +1,22 @@
+---
+title: 分支数据定义
+desc: 用于测试 getBranchID 方法的分支数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: ID
+  range: 1-10
+- field: product
+  note: 所属产品
+  range: '2{10}'
+- field: name
+  note: 分支名称
+  range: '分支1,分支2,分支3,分支4,分支5,分支6,分支7,分支8,分支9,分支10'
+- field: status
+  note: 状态
+  range: 'active{8},closed{2}'
+- field: deleted
+  note: 是否删除
+  range: '0'

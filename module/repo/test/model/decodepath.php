@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->decodePath();
 timeout=0
-cid=1
+cid=18040
 
 - 测试正常解码 @extention
 - 测试数字解码 @5

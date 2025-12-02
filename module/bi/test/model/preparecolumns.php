@@ -5,100 +5,40 @@
 
 title=测试 biModel::prepareColumns();
 timeout=0
-cid=0
+cid=15201
 
-- 执行$result1) && count($result1) == 2 @1
-- 执行$result2[0]['id']['name']) && isset($result2[0]['id']['type'] @1
-- 执行$result3[0]['name']['name'] @name
-- 执行$result4[1]['id'] @user
-- 执行$result5[0] @3
+- 测试简单SELECT语句,验证返回结果包含两个元素 @2
+- 测试简单SELECT语句,验证第一个元素columns包含id字段第id条的name属性 @id
+- 测试简单SELECT语句,验证第一个元素columns包含account字段第account条的name属性 @account
+- 测试简单SELECT语句,验证第二个元素relatedObjects包含id字段属性id @user
+- 测试多字段SELECT语句,验证columns字段数量 @3
 
 */
 
-// 设置错误处理器来防止致命错误中断测试
-set_error_handler(function($severity, $message, $file, $line) {
-    // 对于数据库连接错误，我们将使用mock模式
-    return true;
-});
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
 
-$useMockMode = false;
+// zendata数据准备
+$table = zenData('user');
+$table->id->range('1-10');
+$table->account->range('admin,user1,user2,user3,test{1},qa{1},dev{1},pm{1},po{1},td{1}');
+$table->realname->range('管理员,用户1,用户2,用户3,测试{1},QA{1},开发{1},项目经理{1},产品经理{1},测试主管{1}');
+$table->role->range('admin,dev{3},qa{3},pm{2},po{1}');
+$table->gen(10);
 
-try {
-    include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+su('admin');
+$biTest = new biTest();
 
-    su('admin');
-    $biTest = new biTest();
-} catch (Exception $e) {
-    $useMockMode = true;
-} catch (Error $e) {
-    $useMockMode = true;
-} catch (Throwable $e) {
-    $useMockMode = true;
-}
+// 测试用例1：简单SELECT语句
+$sql1 = "SELECT id, account FROM zt_user LIMIT 1";
+$statement1 = $biTest->objectModel->sql2Statement($sql1);
 
-// 如果无法正常初始化，创建mock测试实例
-if ($useMockMode) {
-    class mockBiTest
-    {
-        public function prepareColumnsTest($sql, $statement, $driver)
-        {
-            // 模拟prepareColumns方法的返回值
-            // 模拟getSqlTypeAndFields返回值
-            $columnTypes = (object)array(
-                'id' => 'number',
-                'name' => 'string',
-                'account' => 'string'
-            );
+// 测试用例2：多字段SELECT语句
+$sql2 = "SELECT id, account, realname FROM zt_user LIMIT 1";
+$statement2 = $biTest->objectModel->sql2Statement($sql2);
 
-            // 模拟getParams4Rebuild返回值
-            $fieldPairs = array(
-                'id' => 'ID',
-                'name' => 'Name',
-                'account' => 'Account'
-            );
-            $relatedObjects = array(
-                'id' => 'user',
-                'name' => 'user',
-                'account' => 'user'
-            );
-
-            // 模拟prepareColumns方法的核心逻辑
-            $columns = array();
-            $clientLang = 'zh-cn';
-            foreach($fieldPairs as $field => $langName)
-            {
-                $columns[$field] = array(
-                    'name' => $field,
-                    'field' => $field,
-                    'type' => $columnTypes->$field,
-                    'object' => $relatedObjects[$field],
-                    $clientLang => $langName
-                );
-            }
-
-            return array($columns, $relatedObjects);
-        }
-    }
-    $biTest = new mockBiTest();
-}
-
-// 步骤1：测试方法返回的数组结构包含columns和relatedObjects
-$result1 = $biTest->prepareColumnsTest("SELECT 1 as id, 'test' as name", null, 'mysql');
-r(is_array($result1) && count($result1) == 2) && p() && e('1');
-
-// 步骤2：检查columns数组中字段包含必要属性name和type
-$result2 = $biTest->prepareColumnsTest("SELECT 1 as id, 'admin' as account", null, 'mysql');
-r(isset($result2[0]['id']['name']) && isset($result2[0]['id']['type'])) && p() && e('1');
-
-// 步骤3：测试字段名称映射正确性验证name字段
-$result3 = $biTest->prepareColumnsTest("SELECT 'test' as name", null, 'mysql');
-r($result3[0]['name']['name']) && p() && e('name');
-
-// 步骤4：测试字段对象关联性验证用户对象
-$result4 = $biTest->prepareColumnsTest("SELECT 1 as id", null, 'mysql');
-r($result4[1]['id']) && p() && e('user');
-
-// 步骤5：验证返回结果的完整性检查三个字段
-$result5 = $biTest->prepareColumnsTest("SELECT 1 as id, 'test' as name, 'admin' as account", null, 'mysql');
-r(count($result5[0])) && p() && e('3');
+r(count($biTest->prepareColumnsTest($sql1, $statement1, 'mysql'))) && p() && e('2');               // 测试简单SELECT语句,验证返回结果包含两个元素
+r($biTest->prepareColumnsTest($sql1, $statement1, 'mysql')[0]) && p('id:name') && e('id');        // 测试简单SELECT语句,验证第一个元素columns包含id字段
+r($biTest->prepareColumnsTest($sql1, $statement1, 'mysql')[0]) && p('account:name') && e('account'); // 测试简单SELECT语句,验证第一个元素columns包含account字段
+r($biTest->prepareColumnsTest($sql1, $statement1, 'mysql')[1]) && p('id') && e('user');           // 测试简单SELECT语句,验证第二个元素relatedObjects包含id字段
+r(count($biTest->prepareColumnsTest($sql2, $statement2, 'mysql')[0])) && p() && e('3');           // 测试多字段SELECT语句,验证columns字段数量

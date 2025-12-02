@@ -8,7 +8,7 @@ zenData('bug')->gen(400);
 /**
 
 title=bugModel->getStoryBugCounts();
-cid=1
+cid=15396
 pid=1
 
 测试获取关联storyID为2的bug数量 >> 4

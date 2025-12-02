@@ -15,6 +15,7 @@ $i            = 0;
 foreach($requiredFields as $method => $requiredField)
 {
     $fields = $this->custom->getFormFields($module, $method);
+
     if(empty($fields)) continue;
     if($module == 'caselib' and $method == 'createcase') continue;
 

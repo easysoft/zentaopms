@@ -1,0 +1,65 @@
+---
+title: 文档库表
+desc: 用于测试 assignVarsForUploadDocs 方法的文档库数据
+
+fields:
+- field: id
+  note: 库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+
+- field: type
+  note: 库类型
+  range: product{2},project{2},execution{2},custom{2},mine{2}
+  prefix: ""
+  postfix: ""
+
+- field: product
+  note: 产品ID
+  range: 1,2,0,0,0,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+
+- field: project
+  note: 项目ID
+  range: 0,0,1,2,0,0,0,0,0,0
+  prefix: ""
+  postfix: ""
+
+- field: execution
+  note: 执行ID
+  range: 0,0,0,0,1,2,0,0,0,0
+  prefix: ""
+  postfix: ""
+
+- field: name
+  note: 库名称
+  range: 产品文档库1,产品文档库2,项目文档库1,项目文档库2,执行文档库1,执行文档库2,自定义库1,自定义库2,我的文档库1,我的文档库2
+  prefix: ""
+  postfix: ""
+
+- field: acl
+  note: 访问控制
+  range: open{5},private{3},custom{2}
+  prefix: ""
+  postfix: ""
+
+- field: deleted
+  note: 是否删除
+  range: '0'
+  prefix: ""
+  postfix: ""
+
+- field: addedBy
+  note: 创建者
+  range: admin
+  prefix: ""
+  postfix: ""
+
+- field: addedDate
+  note: 创建时间
+  range: (-1M)-(now):1D
+  format: YYYY-MM-DD hh:mm:ss
+  prefix: ""
+  postfix: ""

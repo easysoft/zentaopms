@@ -4,25 +4,26 @@
 /**
 
 title=测试 commonModel::formConfig();
-cid=0
+timeout=0
+cid=15671
 
-- 测试开源版本返回空数组 >> 期望返回空数组长度为0
-- 测试企业版本正常模块方法调用 >> 期望返回表单配置数组
-- 测试表单字段类型配置 >> 期望返回正确的字段类型
-- 测试表单字段控制属性 >> 期望返回正确的控制类型
-- 测试空参数边界情况 >> 期望正确处理空参数输入
+- 步骤1:正常模块和方法 @0
+- 步骤2:带objectID参数 @0
+- 步骤3:空模块名 @0
+- 步骤4:空方法名 @0
+- 步骤5:较大的objectID @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
-r($commonTest->formConfigTest()) && p() && e('0');
-r($commonTest->formConfigTest('user', 'create')) && p() && e('0');
-r($commonTest->formConfigTest('task', 'edit')) && p('custom_field1:type') && e('string');
-r($commonTest->formConfigTest('product', 'view')) && p('custom_field1:control') && e('input');
-r($commonTest->formConfigTest('bug', 'create', 1)) && p('custom_field1:required') && e('0');
+r($commonTest->formConfigTest('user', 'create')) && p() && e('0');      // 步骤1:正常模块和方法
+r($commonTest->formConfigTest('task', 'edit', 1)) && p() && e('0');     // 步骤2:带objectID参数
+r($commonTest->formConfigTest('', 'create')) && p() && e('0');          // 步骤3:空模块名
+r($commonTest->formConfigTest('user', '')) && p() && e('0');            // 步骤4:空方法名
+r($commonTest->formConfigTest('product', 'view', 100)) && p() && e('0'); // 步骤5:较大的objectID

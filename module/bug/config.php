@@ -36,11 +36,11 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
 $config->bug->list->defaultFields           = 'id,title,severity,pri,openedBy,assignedTo,resolvedBy,resolution';
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
-$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,pri,deadline,severity,os,browser,keywords';
+$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,pri,deadline,severity,os,browser,keywords,assignedTo';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,%s';
+$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,assignedTo,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, plan, story, task,

@@ -5,7 +5,7 @@
 
 title=测试 deptModel::getList();
 timeout=0
-cid=0
+cid=15973
 
 - 步骤1：正常情况获取部门列表数量 @10
 - 步骤2：验证第一条记录ID第0条的id属性 @1

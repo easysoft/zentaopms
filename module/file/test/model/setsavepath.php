@@ -5,7 +5,7 @@
 
 title=测试 fileModel::setSavePath();
 timeout=0
-cid=0
+cid=16535
 
 - 步骤1：测试默认公司ID(1)的savePath设置 @/data/upload/1/
 - 步骤2：测试不同公司ID(2)的savePath设置 @/data/upload/2/

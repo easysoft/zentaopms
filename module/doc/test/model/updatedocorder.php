@@ -3,7 +3,7 @@
 /**
 
 title=测试 docModel->updateDocOrder();
-cid=1
+cid=16160
 
 - 检查ID为1的文档顺序 @3
 - 检查ID为2的文档顺序 @1

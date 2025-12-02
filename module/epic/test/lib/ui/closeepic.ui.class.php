@@ -26,7 +26,7 @@ class closeEpicTester extends tester
         $form->wait(1);
         $form->dom->closedReason->picker($closeReason); //选择关闭原因
         $form->dom->closedButton->click();
-        $form->wait(1);
+        $form->wait(3);
 
         $viewPage = $this->loadPage();
         if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
@@ -59,12 +59,12 @@ class closeEpicTester extends tester
         $browsePage->dom->batchMore->click();
         sleep(1);
         $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
-        sleep(1);
+        $browsePage->wait(3);
 
         $batchClose = $this->loadPage($storyType, 'batchClose');
         $batchClose->dom->batchClosedReason->picker($closeReason);
         $batchClose->dom->batchClosedSave->click();
-        $batchClose->wait(1);
+        $batchClose->wait(3);
 
         /*检查需求详情页需求状态和关闭原因*/
         $viewPage = $this->initForm('epic', 'view', array('id' => $storyID), 'appIframe-product');

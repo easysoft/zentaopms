@@ -1,0 +1,51 @@
+---
+title: System data for commonAction test
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: System ID
+  range: 1-5
+  prefix: ""
+  postfix: ""
+- field: product
+  note: Product ID
+  range: 1,2,3,4,5
+  prefix: ""
+  postfix: ""
+- field: name
+  note: System name
+  range: System 1,System 2,System 3,System 4,System 5
+  prefix: ""
+  postfix: ""
+- field: integrated
+  note: Integrated flag
+  range: '0'
+  prefix: ""
+  postfix: ""
+- field: createdBy
+  note: Created by
+  range: admin
+  prefix: ""
+  postfix: ""
+- field: createdDate
+  note: Created date
+  range: '`(M)-(w)`'
+  prefix: ""
+  postfix: ""
+- field: editedBy
+  note: Edited by
+  range: '[]'
+  prefix: ""
+  postfix: ""
+- field: editedDate
+  note: Edited date
+  range: '`0000-00-00 00:00:00`'
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: Deleted flag
+  range: '0'
+  prefix: ""
+  postfix: ""

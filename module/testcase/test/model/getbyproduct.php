@@ -18,7 +18,7 @@ initData();
 
 title=测试 testcaseModel->getBySuite();
 timeout=0
-cid=1
+cid=18979
 
 - 产品1的用例有6个 @6
 - 产品2的用例有4个 @4

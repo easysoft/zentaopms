@@ -4,7 +4,7 @@
 
 title=测试 projectModel::getByShadowProduct();
 timeout=0
-cid=1
+cid=17821
 
 - 获取ID为0的产品关联的项目 @0
 - 获取ID为2的产品关联的项目

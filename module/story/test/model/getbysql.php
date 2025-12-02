@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getBySQL();
 timeout=0
-cid=0
+cid=18510
 
 - 执行storyTest模块的getBySQLTest方法，参数是1, "1 = 1 AND `status` = 'active'", 'id_desc'  @2
 - 执行storyTest模块的getBySQLTest方法，参数是'all', "1 = 1 AND `type` = 'story'", 'id_asc'  @15

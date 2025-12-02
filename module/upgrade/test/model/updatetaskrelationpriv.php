@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->updateTaskRelationPriv();
-cid=1
+cid=19559
 
 - 测试添加任务关系权限属性createrelation @createrelation
 - 测试维护任务关系权限属性editrelation @editrelation

@@ -1,0 +1,48 @@
+---
+title: product数据定义
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 产品ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: program
+  note: 项目集ID
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: name
+  note: 产品名称
+  range: 测试产品{10}
+  prefix: ""
+  postfix: ""
+- field: code
+  note: 产品代码
+  range: product{10}
+  prefix: ""
+  postfix: ""
+- field: shadow
+  note: 影子产品
+  range: 0
+  prefix: ""
+  postfix: ""
+- field: status
+  note: 产品状态
+  range: normal{5},closed{5}
+  prefix: ""
+  postfix: ""
+- field: deleted
+  note: 删除标记
+  range: 0{8},1{2}
+  prefix: ""
+  postfix: ""
+- field: closedDate
+  note: 关闭日期
+  range: '`0000-00-00`{5},`2025-01-01`{3},`2020-01-01`{2}'
+  prefix: ""
+  postfix: ""

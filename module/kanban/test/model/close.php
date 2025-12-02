@@ -9,7 +9,7 @@ zenData('kanban')->gen(3);
 
 title=测试 kanbanModel->close();
 timeout=0
-cid=1
+cid=16879
 
 - 查看关闭前的字段
  - 属性status @active

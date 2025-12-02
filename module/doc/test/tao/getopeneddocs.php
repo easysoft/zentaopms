@@ -4,7 +4,7 @@
 
 title=测试 docModel->getOpenedDocs();
 timeout=0
-cid=1
+cid=16173
 
 - 获取没有可查看文档时，按id倒序排序的文档 @0
 - 获取没有可查看文档时，按id正序排序的文档 @0

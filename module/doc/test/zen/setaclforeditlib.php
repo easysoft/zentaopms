@@ -5,48 +5,74 @@
 
 title=测试 docZen::setAclForEditLib();
 timeout=0
-cid=0
+cid=16223
 
-- 执行docTest模块的setAclForEditLibTest方法，参数是$customLib 
- - 第aclList条的open属性 @Public
- - 第aclList条的private属性 @Private
- - 第aclList条的custom属性 @Custom
-- 执行docTest模块的setAclForEditLibTest方法，参数是$apiLibWithProduct 属性result @1
-- 执行docTest模块的setAclForEditLibTest方法，参数是$mineLib 
- - 第aclList条的open属性 @Public
- - 第aclList条的private属性 @Private
-- 执行docTest模块的setAclForEditLibTest方法，参数是$productLib 
- - 第aclList条的default属性 @Default (Product Team Member)
- - 第aclList条的private属性 @Private (accessible to Product team members only)
-- 执行docTest模块的setAclForEditLibTest方法，参数是$mainLib 第aclList条的default属性 @Default (Project Team Member)
+- 步骤1:测试custom类型文档库权限设置属性hasDefault @0
+- 步骤2:测试api类型文档库(product)权限设置属性hasApiLang @1
+- 步骤3:测试api类型文档库(project)权限设置属性hasApiLang @1
+- 步骤4:测试mine类型文档库权限设置属性isMySpaceAclList @1
+- 步骤5:测试product类型文档库权限设置属性hasOpen @0
+- 步骤6:测试project类型文档库权限设置属性hasOpen @0
+- 步骤7:测试execution类型文档库权限设置属性hasOpen @0
+- 步骤8:测试main库的product类型
+ - 属性hasPrivate @0
+ - 属性hasOpen @0
+- 步骤9:测试main库的mine类型属性isMySpaceAclList @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
-
-zenData('doclib')->loadYaml('doclib_setaclforeditlib', false, 2)->gen(10);
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docZenTest();
 
-// 测试步骤1：测试custom类型文档库，应该移除default选项，保留open,private,custom
-$customLib = (object)array('type' => 'custom', 'main' => 0);
-r($docTest->setAclForEditLibTest($customLib)) && p('aclList:open,private,custom') && e('Public,Private,Custom');
+$customLib = new stdClass();
+$customLib->type = 'custom';
+$customLib->main = '0';
+r($docTest->setAclForEditLibTest($customLib)) && p('hasDefault') && e('0'); // 步骤1:测试custom类型文档库权限设置
 
-// 测试步骤2：测试api类型文档库（product相关），应该返回成功结果
-$apiLibWithProduct = (object)array('type' => 'api', 'product' => 1, 'main' => 0);
-r($docTest->setAclForEditLibTest($apiLibWithProduct)) && p('result') && e('1');
+$apiProductLib = new stdClass();
+$apiProductLib->type = 'api';
+$apiProductLib->product = 1;
+$apiProductLib->project = 0;
+$apiProductLib->main = '0';
+r($docTest->setAclForEditLibTest($apiProductLib)) && p('hasApiLang') && e('1'); // 步骤2:测试api类型文档库(product)权限设置
 
-// 测试步骤3：测试mine类型文档库，应该使用我的空间访问控制列表，只有open和private
-$mineLib = (object)array('type' => 'mine', 'main' => 0);
-r($docTest->setAclForEditLibTest($mineLib)) && p('aclList:open,private') && e('Public,Private');
+$apiProjectLib = new stdClass();
+$apiProjectLib->type = 'api';
+$apiProjectLib->product = 0;
+$apiProjectLib->project = 1;
+$apiProjectLib->main = '0';
+r($docTest->setAclForEditLibTest($apiProjectLib)) && p('hasApiLang') && e('1'); // 步骤3:测试api类型文档库(project)权限设置
 
-// 测试步骤4：测试product类型文档库，应该设置default和private，移除open选项
-$productLib = (object)array('type' => 'product', 'main' => 0);
-r($docTest->setAclForEditLibTest($productLib)) && p('aclList:default,private') && e('Default (Product Team Member),Private (accessible to Product team members only)');
+$mineLib = new stdClass();
+$mineLib->type = 'mine';
+$mineLib->main = '0';
+r($docTest->setAclForEditLibTest($mineLib)) && p('isMySpaceAclList') && e('1'); // 步骤4:测试mine类型文档库权限设置
 
-// 测试步骤5：测试主库（main=1）且非mine类型，应该只保留default选项
-$mainLib = (object)array('type' => 'project', 'main' => 1);
-r($docTest->setAclForEditLibTest($mainLib)) && p('aclList:default') && e('Default (Project Team Member)');
+$productLib = new stdClass();
+$productLib->type = 'product';
+$productLib->main = '0';
+r($docTest->setAclForEditLibTest($productLib)) && p('hasOpen') && e('0'); // 步骤5:测试product类型文档库权限设置
+
+$projectLib = new stdClass();
+$projectLib->type = 'project';
+$projectLib->main = '0';
+r($docTest->setAclForEditLibTest($projectLib)) && p('hasOpen') && e('0'); // 步骤6:测试project类型文档库权限设置
+
+$executionLib = new stdClass();
+$executionLib->type = 'execution';
+$executionLib->main = '0';
+r($docTest->setAclForEditLibTest($executionLib)) && p('hasOpen') && e('0'); // 步骤7:测试execution类型文档库权限设置
+
+$mainProductLib = new stdClass();
+$mainProductLib->type = 'product';
+$mainProductLib->main = '1';
+r($docTest->setAclForEditLibTest($mainProductLib)) && p('hasPrivate;hasOpen') && e('0;0'); // 步骤8:测试main库的product类型
+
+$mainMineLib = new stdClass();
+$mainMineLib->type = 'mine';
+$mainMineLib->main = '1';
+r($docTest->setAclForEditLibTest($mainMineLib)) && p('isMySpaceAclList') && e('1'); // 步骤9:测试main库的mine类型

@@ -5,7 +5,7 @@
 
 title=测试 pipelineModel->getProviderPairsByAccount();
 timeout=0
-cid=1
+cid=17350
 
 - 获取providerType为空、account为空的providerID @0
 - 获取providerType为空、account为user1的providerID @0

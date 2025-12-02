@@ -10,7 +10,7 @@ zenData('task')->loadYaml('task')->gen(30);
 
 title=taskModel->getDataOfTasksPerConsumed();
 timeout=0
-cid=1
+cid=18796
 
 - 按消耗时间统计的数量 @3
 - 统计消耗工时为3的任务数量

@@ -5,50 +5,56 @@
 
 title=测试 blockZen::printDocMyCollectionBlock();
 timeout=0
-cid=0
+cid=15255
 
-- 执行blockTest模块的printDocMyCollectionBlockTest方法 属性success @1
-- 执行blockTest模块的printDocMyCollectionBlockTest方法 
- - 属性docCount @5
-- 执行blockTest模块的printDocMyCollectionBlockTest方法 
- - 属性docCount @0
-- 执行blockTest模块的printDocMyCollectionBlockTest方法 属性docList @array
-- 执行blockTest模块的printDocMyCollectionBlockTest方法 属性libList @array
+- 测试1:当用户有6个收藏文档时返回数量属性count @6
+- 测试2:验证返回文档的editedDate格式正确第1条的editedDate属性 @2024-11-07
+- 测试3:验证文档标题正确第1条的title属性 @我的文档1
+- 测试4:验证多次调用结果一致属性count @6
+- 测试5:验证当没有收藏文档时返回空属性count @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$docTable = zenData('doc');
-$docTable->id->range('1-10');
-$docTable->title->range('我关注的文档{10}');
-$docTable->status->range('normal{8},deleted{2}');
-$docTable->lib->range('1-5');
-$docTable->editedDate->range('2024-01-01 10:00:00,2024-01-02 11:00:00,2024-01-03 12:00:00');
-$docTable->deleted->range('0{8},1{2}');
-$docTable->gen(10);
+zenData('user')->gen(5);
 
-$doclibTable = zenData('doclib');
-$doclibTable->id->range('1-5');
-$doclibTable->name->range('文档库{5}');
-$doclibTable->deleted->range('0{5}');
-$doclibTable->gen(5);
+$doclib = zenData('doclib');
+$doclib->id->range('1');
+$doclib->name->range('测试文档库');
+$doclib->type->range('custom');
+$doclib->acl->range('open');
+$doclib->deleted->range('0');
+$doclib->gen(1);
 
-$docactionTable = zenData('docaction');
-$docactionTable->id->range('1-8');
-$docactionTable->doc->range('1-8');
-$docactionTable->action->range('collect{8}');
-$docactionTable->actor->range('admin{5},user1{3}');
-$docactionTable->date->range('2024-01-01 09:00:00,2024-01-02 09:00:00,2024-01-03 09:00:00');
-$docactionTable->gen(8);
+$doc = zenData('doc');
+$doc->id->range('1-10');
+$doc->lib->range('1');
+$doc->title->range('我的文档1,我的文档2,我的文档3,我的文档4,我的文档5,我的文档6,我的文档7,我的文档8,我的文档9,我的文档10');
+$doc->status->range('normal');
+$doc->deleted->range('0');
+$doc->vision->range('rnd');
+$doc->editedDate->range('`2024-11-07 10:00:00`');
+$doc->gen(10);
+
+$docaction = zenData('docaction');
+$docaction->id->range('1-6');
+$docaction->doc->range('1-6');
+$docaction->action->range('collect');
+$docaction->actor->range('admin');
+$docaction->date->range('`2024-11-07 10:00:00`');
+$docaction->gen(6);
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
-r($blockTest->printDocMyCollectionBlockTest()) && p('success') && e('1');
-r($blockTest->printDocMyCollectionBlockTest()) && p('docCount') && e('5,<=');
-r($blockTest->printDocMyCollectionBlockTest()) && p('docCount') && e('0,>=');
-r($blockTest->printDocMyCollectionBlockTest()) && p('docList') && e('array');
-r($blockTest->printDocMyCollectionBlockTest()) && p('libList') && e('array');
+r($blockTest->printDocMyCollectionBlockTest()) && p('count') && e('6'); // 测试1:当用户有6个收藏文档时返回数量
+r($blockTest->printDocMyCollectionBlockTest()) && p('1:editedDate') && e('2024-11-07'); // 测试2:验证返回文档的editedDate格式正确
+r($blockTest->printDocMyCollectionBlockTest()) && p('1:title') && e('我的文档1'); // 测试3:验证文档标题正确
+r($blockTest->printDocMyCollectionBlockTest()) && p('count') && e('6'); // 测试4:验证多次调用结果一致
+
+zenData('docaction')->gen(0);
+
+r($blockTest->printDocMyCollectionBlockTest()) && p('count') && e('0'); // 测试5:验证当没有收藏文档时返回空

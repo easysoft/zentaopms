@@ -11,7 +11,7 @@ zenData('kanban')->gen(30);
 
 title=测试 kanbanModel->getGroupBySpaceList();
 timeout=0
-cid=1
+cid=16917
 
 - 获取空间1 2 3的看板 @6
 - 获取空间1 2 3 看板1,2,3,4的看板 @2

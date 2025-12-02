@@ -19,7 +19,7 @@ initData();
 
 title=测试 testcaseModel->getRelatedCases();
 timeout=0
-cid=1
+cid=19041
 
 - 测试获取关联的用例
  - 属性1 @这个是测试用例1

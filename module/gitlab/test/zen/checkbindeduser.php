@@ -5,28 +5,39 @@
 
 title=测试 gitlabZen::checkBindedUser();
 timeout=0
-cid=0
+cid=16673
 
-- 执行gitlabTest模块的checkBindedUserTest方法，参数是1, 'admin', true  @admin_pass
-- 执行gitlabTest模块的checkBindedUserTest方法，参数是1, 'binded_user', false  @success
-- 执行gitlabTest模块的checkBindedUserTest方法，参数是1, 'unbinded_user', false  @error:必须先绑定GitLab用户
-- 执行gitlabTest模块的checkBindedUserTest方法，参数是1, '', false  @error:必须先绑定GitLab用户
-- 执行gitlabTest模块的checkBindedUserTest方法，参数是1, 'nonexistent_user', false  @error:必须先绑定GitLab用户
+- 测试管理员用户调用，不检查绑定 @success
+- 测试普通用户已绑定的情况 @success
+- 测试普通用户未绑定的情况 @您还未绑定GitLab用户，请联系管理员进行绑定
+- 测试不存在的gitlabID @您还未绑定GitLab用户，请联系管理员进行绑定
+- 测试其他未绑定账号的情况 @您还未绑定GitLab用户，请联系管理员进行绑定
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
 
-zenData('pipeline')->gen(5);
-zenData('oauth')->gen(5);
+zenData('user')->gen(5);
+zenData('pipeline')->gen(3);
+$oauth = zenData('oauth');
+$oauth->account->range('admin,user1,user2');
+$oauth->openID->range('100,200,300');
+$oauth->providerType->range('gitlab{3}');
+$oauth->providerID->range('1{3}');
+$oauth->gen(3);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+/* 设置 methodName 避免 gitlab 控制器构造函数报错 */
+global $app;
+$app->setMethodName('test');
 
-r($gitlabTest->checkBindedUserTest(1, 'admin', true)) && p() && e('admin_pass');
-r($gitlabTest->checkBindedUserTest(1, 'binded_user', false)) && p() && e('success');
-r($gitlabTest->checkBindedUserTest(1, 'unbinded_user', false)) && p() && e('error:必须先绑定GitLab用户');
-r($gitlabTest->checkBindedUserTest(1, '', false)) && p() && e('error:必须先绑定GitLab用户');
-r($gitlabTest->checkBindedUserTest(1, 'nonexistent_user', false)) && p() && e('error:必须先绑定GitLab用户');
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
+$gitlabTest = new gitlabZenTest();
+
+r($gitlabTest->checkBindedUserTest(1, 'admin', true)) && p() && e('success'); // 测试管理员用户调用，不检查绑定
+r($gitlabTest->checkBindedUserTest(1, 'user1', false)) && p() && e('success'); // 测试普通用户已绑定的情况
+r($gitlabTest->checkBindedUserTest(1, 'user3', false)) && p() && e('您还未绑定GitLab用户，请联系管理员进行绑定'); // 测试普通用户未绑定的情况
+r($gitlabTest->checkBindedUserTest(999, 'user1', false)) && p() && e('您还未绑定GitLab用户，请联系管理员进行绑定'); // 测试不存在的gitlabID
+r($gitlabTest->checkBindedUserTest(1, 'user4', false)) && p() && e('您还未绑定GitLab用户，请联系管理员进行绑定'); // 测试其他未绑定账号的情况

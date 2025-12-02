@@ -5,7 +5,7 @@
 
 title=测试 editorModel::addLink4File();
 timeout=0
-cid=0
+cid=16228
 
 - 测试view目录下文件的链接生成
  - 属性hasOverrideLink @1

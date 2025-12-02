@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::apiGetSingleProject();
 timeout=0
-cid=0
+cid=16688
 
 - 测试步骤1：不存在的gogsID @0
 - 测试步骤2：gogsID为0的边界值 @0

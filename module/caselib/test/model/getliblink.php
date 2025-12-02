@@ -11,7 +11,7 @@ su('admin');
 
 title=测试 caselibModel->getLibLink();
 timeout=0
-cid=1
+cid=15532
 
 - 测试获取模块 caselib 方法 browse 用例库 1.5 级下拉的链接
  - 属性isCaselibBrowse @1

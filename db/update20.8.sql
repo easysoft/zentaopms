@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `editedDate` datetime NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB;
 CREATE INDEX `type` ON `zt_workflowgroup` (`type`);
 
 ALTER TABLE `zt_workflow` ADD `group` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;

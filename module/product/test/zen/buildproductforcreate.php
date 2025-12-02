@@ -5,42 +5,76 @@
 
 title=测试 productZen::buildProductForCreate();
 timeout=0
-cid=0
+cid=17565
 
-- 步骤1：正常工作流组参数属性vision @rnd
-- 步骤2：零值工作流组参数属性vision @rnd
-- 步骤3：负数工作流组参数属性vision @rnd
-- 步骤4：检查返回对象包含必要字段属性name @测试产品
-- 步骤5：验证ACL逻辑和图片URL处理属性acl @open
+- 执行productTest模块的buildProductForCreateTest方法
+ - 属性name @Test Product 1
+ - 属性PO @admin
+ - 属性status @normal
+- 执行productTest模块的buildProductForCreateTest方法，参数是1
+ - 属性name @Test Product 2
+ - 属性PO @admin
+ - 属性status @normal
+ - 属性type @branch
+- 执行productTest模块的buildProductForCreateTest方法
+ - 属性name @Test Product 3
+ - 属性vision @rnd
+- 执行productTest模块的buildProductForCreateTest方法
+ - 属性name @Test Product 4
+ - 属性acl @open
+ - 属性whitelist @~~
+- 执行productTest模块的buildProductForCreateTest方法
+ - 属性name @Test Product 5
+ - 属性acl @private
+ - 属性whitelist @user1,user2
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('product');
-$table->id->range('1-10');
-$table->name->range('产品1,产品2,产品3,产品4,产品5');
-$table->code->range('product1,product2,product3,product4,product5');
-$table->program->range('0,1,2');
-$table->status->range('normal,closed');
-$table->type->range('normal,branch,platform');
-$table->PO->range('admin,user1,user2');
-$table->acl->range('open,private,custom');
-$table->vision->range('rnd,lite,or');
-$table->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$productTest = new productTest();
+$productTest = new productZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($productTest->buildProductForCreateTest(1)) && p('vision') && e('rnd'); // 步骤1：正常工作流组参数
-r($productTest->buildProductForCreateTest(0)) && p('vision') && e('rnd'); // 步骤2：零值工作流组参数
-r($productTest->buildProductForCreateTest(-1)) && p('vision') && e('rnd'); // 步骤3：负数工作流组参数
-r($productTest->buildProductForCreateTest(2)) && p('name') && e('测试产品'); // 步骤4：检查返回对象包含必要字段
-r($productTest->buildProductForCreateTest(5)) && p('acl') && e('open'); // 步骤5：验证ACL逻辑和图片URL处理
+// 测试步骤1:使用默认workflowGroup参数0创建产品数据
+$_POST['name'] = 'Test Product 1';
+$_POST['PO'] = 'admin';
+$_POST['type'] = 'normal';
+$_POST['acl'] = 'open';
+$_POST['desc'] = 'Test description';
+$_POST['status'] = 'normal';
+r($productTest->buildProductForCreateTest(0)) && p('name,PO,status') && e('Test Product 1,admin,normal');
+
+// 测试步骤2:使用workflowGroup参数1创建产品数据
+$_POST['name'] = 'Test Product 2';
+$_POST['PO'] = 'admin';
+$_POST['type'] = 'branch';
+$_POST['acl'] = 'private';
+$_POST['desc'] = 'Test description 2';
+$_POST['status'] = 'normal';
+r($productTest->buildProductForCreateTest(1)) && p('name,PO,status,type') && e('Test Product 2,admin,normal,branch');
+
+// 测试步骤3:验证默认情况下vision字段应存在
+$_POST['name'] = 'Test Product 3';
+$_POST['PO'] = 'admin';
+$_POST['type'] = 'normal';
+$_POST['acl'] = 'open';
+$_POST['status'] = 'normal';
+r($productTest->buildProductForCreateTest(0)) && p('name,vision') && e('Test Product 3,rnd');
+
+// 测试步骤4:测试acl为open时whitelist字段为空
+$_POST['name'] = 'Test Product 4';
+$_POST['PO'] = 'admin';
+$_POST['acl'] = 'open';
+$_POST['whitelist'] = 'user1,user2';
+$_POST['status'] = 'normal';
+r($productTest->buildProductForCreateTest(0)) && p('name,acl,whitelist') && e('Test Product 4,open,~~');
+
+// 测试步骤5:测试acl为private时whitelist字段保留
+$_POST['name'] = 'Test Product 5';
+$_POST['PO'] = 'admin';
+$_POST['acl'] = 'private';
+$_POST['whitelist'] = array('user1', 'user2');
+$_POST['status'] = 'normal';
+r($productTest->buildProductForCreateTest(0)) && p('name;acl;whitelist', ';') && e('Test Product 5;private;user1,user2');

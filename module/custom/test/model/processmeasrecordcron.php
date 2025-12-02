@@ -4,7 +4,7 @@
 
 title=测试 customModel->processMeasrecordCron();
 timeout=0
-cid=1
+cid=15921
 
 - 检查没有瀑布项目时，定时任务的状态 @normal
 - 检查没有融合项目时，定时任务的状态 @normal

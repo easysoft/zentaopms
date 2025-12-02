@@ -34,12 +34,13 @@ class createStoryInLiteTester extends tester
             'storyType' => 'story'
         );
 
-        $this->switchVision('lite', 8);
+        $this->switchVision('lite');
         if($this->page->getCookie('vision') != 'lite')
         {
             $this->switchVision('lite', 8);
         }
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project');  //由于创建目标后会跳转到记录了session的页面，所以先进入一次对应目标的列表页面
+        $form->wait(3);
         $form = $this->initForm('story', 'create', $createStoryParam, 'appIframe-project'); //再进入创建目标页面
         $form->dom->titleInLite->setValue($storyName);
         if($reviewer != NULL)
@@ -48,7 +49,7 @@ class createStoryInLiteTester extends tester
             $form->dom->reviewerAdmin->click();
         }
         $form->dom->saveInLite->click();
-        $form->wait(1);
+        $form->wait(3);
 
         //创建失败检查提示是否正确，名称为空和评审人为空提示
         if($this->response('method') != 'story')

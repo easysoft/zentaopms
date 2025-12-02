@@ -5,7 +5,7 @@
 
 title=测试 docModel->createLib();
 timeout=0
-cid=1
+cid=16060
 
 - 新建公有产品文档库
  - 属性type @product

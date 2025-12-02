@@ -9,7 +9,7 @@ su('admin');
 
 title=测试executionModel->getExecutionFeatures();
 timeout=0
-cid=1
+cid=16313
 
 - 获取运维类型迭代禁用的功能
  - 属性story @0

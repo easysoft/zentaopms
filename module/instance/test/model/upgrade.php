@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::upgrade();
 timeout=0
-cid=0
+cid=16826
 
 - 步骤1：正常升级情况（CNE API不可用时返回0） @0
 - 步骤2：升级版本为空字符串 @0

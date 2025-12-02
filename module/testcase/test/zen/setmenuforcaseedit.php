@@ -7,47 +7,62 @@ title=测试 testcaseZen::setMenuForCaseEdit();
 timeout=0
 cid=0
 
-- 步骤1：project标签页正常情况
- - 属性tab @project
- - 属性projectID @1
-- 步骤2：execution标签页正常情况
- - 属性tab @execution
- - 属性executionID @3
-- 步骤3：qa标签页正常情况属性tab @qa
-- 步骤4：execution标签页但executionID为0时使用case的execution
- - 属性tab @execution
- - 属性executionID @2
-- 步骤5：无效标签页情况
- - 属性tab @other
- - 属性projectID @~~
- - 属性executionID @~~
+- 执行testcaseTest模块的setMenuForCaseEditTest方法，参数是$case1, 0, 'project' 属性projectID @1
+- 执行testcaseTest模块的setMenuForCaseEditTest方法，参数是$case2, 10, 'execution' 属性executionID @10
+- 执行testcaseTest模块的setMenuForCaseEditTest方法，参数是$case3, 0, 'execution' 属性executionID @5
+- 执行testcaseTest模块的setMenuForCaseEditTest方法，参数是$case4, 0, 'qa' 属性tab @qa
+- 执行testcaseTest模块的setMenuForCaseEditTest方法，参数是$case5, 20, 'execution' 属性executionID @20
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-// 2. 不需要数据库数据准备（该方法只是设置菜单，不查询数据库）
+zendata('case')->gen(10);
+zendata('project')->gen(10);
+zendata('product')->gen(10);
 
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
+$case1 = new stdClass();
+$case1->id = 1;
+$case1->product = 1;
+$case1->project = 1;
+$case1->execution = 1;
+$case1->branch = 0;
 
-// 创建测试用例对象
-$case = new stdclass();
-$case->id = 1;
-$case->project = 1;
-$case->product = 1;
-$case->execution = 2;
-$case->branch = 1;
+$case2 = new stdClass();
+$case2->id = 2;
+$case2->product = 2;
+$case2->project = 2;
+$case2->execution = 5;
+$case2->branch = 0;
 
-r($testcaseTest->setMenuForCaseEditTest($case, 0, 'project')) && p('tab,projectID') && e('project,1'); // 步骤1：project标签页正常情况
-r($testcaseTest->setMenuForCaseEditTest($case, 3, 'execution')) && p('tab,executionID') && e('execution,3'); // 步骤2：execution标签页正常情况
-r($testcaseTest->setMenuForCaseEditTest($case, 0, 'qa')) && p('tab') && e('qa'); // 步骤3：qa标签页正常情况
-r($testcaseTest->setMenuForCaseEditTest($case, 0, 'execution')) && p('tab,executionID') && e('execution,2'); // 步骤4：execution标签页但executionID为0时使用case的execution
-r($testcaseTest->setMenuForCaseEditTest($case, 0, 'other')) && p('tab,projectID,executionID') && e('other,~~,~~'); // 步骤5：无效标签页情况
+$case3 = new stdClass();
+$case3->id = 3;
+$case3->product = 3;
+$case3->project = 3;
+$case3->execution = 5;
+$case3->branch = 0;
+
+$case4 = new stdClass();
+$case4->id = 4;
+$case4->product = 4;
+$case4->project = 4;
+$case4->execution = 4;
+$case4->branch = 1;
+
+$case5 = new stdClass();
+$case5->id = 5;
+$case5->product = 5;
+$case5->project = 5;
+$case5->execution = 15;
+$case5->branch = 0;
+
+r($testcaseTest->setMenuForCaseEditTest($case1, 0, 'project')) && p('projectID') && e('1');
+r($testcaseTest->setMenuForCaseEditTest($case2, 10, 'execution')) && p('executionID') && e('10');
+r($testcaseTest->setMenuForCaseEditTest($case3, 0, 'execution')) && p('executionID') && e('5');
+r($testcaseTest->setMenuForCaseEditTest($case4, 0, 'qa')) && p('tab') && e('qa');
+r($testcaseTest->setMenuForCaseEditTest($case5, 20, 'execution')) && p('executionID') && e('20');

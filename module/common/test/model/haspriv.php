@@ -9,7 +9,7 @@ zenData('user')->gen(10);
 
 title=测试 commonModel::hasPriv();
 timeout=0
-cid=1
+cid=15680
 
 - 查看admin是否有misc-changelog的权限 @1
 - 查看admin是否有my-index的权限 @1

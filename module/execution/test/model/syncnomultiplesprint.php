@@ -4,7 +4,7 @@
 
 title=测试executionModel->syncNoMultipleSprint();
 timeout=0
-cid=0
+cid=16371
 
 sed: can't read /repo/zentaopms/test/config/my.php: No such file or directory
 - 同步没有执行的项目

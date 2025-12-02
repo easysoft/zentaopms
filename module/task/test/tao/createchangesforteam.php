@@ -5,7 +5,7 @@
 
 title=测试 taskTao::createChangesForTeam();
 timeout=0
-cid=0
+cid=18873
 
 - 测试步骤1：正常团队信息格式化 @团队成员: 管理员, 预计: 8, 消耗: 2, 剩余: 6
 

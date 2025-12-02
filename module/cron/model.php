@@ -68,7 +68,7 @@ class cronModel extends model
                     $parsedCron = array();
                     $parsedCron['schema']   = trim($matches[0][0]);
                     $parsedCron['command']  = trim($matches[0][1]);
-                    $parsedCron['cron']     = CronExpression::factory($parsedCron['schema']);
+                    $parsedCron['cron']     = crontab::factory($parsedCron['schema']);
                     $parsedCron['time']     = $parsedCron['cron']->getNextRunDate($runTime);
                     $parsedCrons[$cron->id] = $parsedCron;
                 }

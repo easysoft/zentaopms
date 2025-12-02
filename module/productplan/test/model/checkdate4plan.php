@@ -4,7 +4,7 @@
 
 title=productpanModel->checkDate4Plan();
 timeout=0
-cid=1
+cid=17625
 
 - 父计划输入正确的开始日期，检查通过 @测试通过
 - 父计划输入正确的结束日期，检查通过 @测试通过

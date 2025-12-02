@@ -5,7 +5,7 @@
 
 title=测试 convertModel::tableExistsOfJira();
 timeout=0
-cid=0
+cid=15798
 
 - 步骤1：正常情况验证方法存在 @1
 - 步骤2：验证方法可调用 @1

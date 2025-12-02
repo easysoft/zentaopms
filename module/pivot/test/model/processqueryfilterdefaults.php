@@ -5,7 +5,7 @@
 
 title=测试 pivotModel::processQueryFilterDefaults();
 timeout=0
-cid=0
+cid=17425
 
 - 验证字段名第0条的field属性 @status
 - 期望返回空数组 @0

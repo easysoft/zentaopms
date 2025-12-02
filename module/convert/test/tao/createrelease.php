@@ -5,7 +5,7 @@
 
 title=测试 convertTao::createRelease();
 timeout=0
-cid=0
+cid=15843
 
 - 步骤1：正常创建发布版本 @1
 - 步骤2：创建已归档的发布版本 @1

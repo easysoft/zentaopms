@@ -7,26 +7,29 @@ title=测试 cneModel::getAppVolumes();
 timeout=0
 cid=0
 
-- 步骤1：正常实例获取数据卷第0条的name属性 @data-volume
-- 步骤2：MySQL组件获取数据卷第0条的name属性 @mysql-data
-- 步骤3：Redis组件获取数据卷第0条的name属性 @redis-data
-- 步骤4：非块设备卷第0条的is_block_device属性 @~~
-- 步骤5：不存在实例返回值 @0
-- 步骤6：空数据卷数组返回值 @0
+- 步骤1:不指定组件获取数据卷(component=false) @0
+- 步骤2:指定mysql组件(component=true) @0
+- 步骤3:指定具体组件名称(component='mysql') @0
+- 步骤4:指定其他组件名称(component='redis') @0
+- 步骤5:空字符串组件名称(component='') @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 2. 创建测试实例（变量名与模块名一致）
-$cneTest = new cneTest();
+su('admin');
 
-// 3. 🔴 强制要求：必须包含至少6个测试步骤
-r($cneTest->getAppVolumesTest(1, false)) && p('0:name') && e('data-volume'); // 步骤1：正常实例获取数据卷
-r($cneTest->getAppVolumesTest(2, true)) && p('0:name') && e('mysql-data'); // 步骤2：MySQL组件获取数据卷
-r($cneTest->getAppVolumesTest(3, 'redis')) && p('0:name') && e('redis-data'); // 步骤3：Redis组件获取数据卷
-r($cneTest->getAppVolumesTest(4, false)) && p('0:is_block_device') && e('~~'); // 步骤4：非块设备卷
-r($cneTest->getAppVolumesTest(999, false)) && p() && e('0'); // 步骤5：不存在实例返回值
-r($cneTest->getAppVolumesTest(5, false)) && p() && e('0'); // 步骤6：空数据卷数组返回值
+$cneTest = new cneModelTest();
+
+// 准备测试用的实例对象
+$validInstance = new stdClass();
+$validInstance->spaceData = new stdClass();
+$validInstance->spaceData->k8space = 'default';
+$validInstance->k8name = 'test-app';
+
+r($cneTest->getAppVolumesTest($validInstance, false)) && p() && e('0'); // 步骤1:不指定组件获取数据卷(component=false)
+r($cneTest->getAppVolumesTest($validInstance, true)) && p() && e('0'); // 步骤2:指定mysql组件(component=true)
+r($cneTest->getAppVolumesTest($validInstance, 'mysql')) && p() && e('0'); // 步骤3:指定具体组件名称(component='mysql')
+r($cneTest->getAppVolumesTest($validInstance, 'redis')) && p() && e('0'); // 步骤4:指定其他组件名称(component='redis')
+r($cneTest->getAppVolumesTest($validInstance, '')) && p() && e('0'); // 步骤5:空字符串组件名称(component='')

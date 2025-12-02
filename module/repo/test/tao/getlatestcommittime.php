@@ -5,7 +5,7 @@
 
 title=测试 repoTao::getLatestCommitTime();
 timeout=0
-cid=0
+cid=18118
 
 - 测试步骤1：正常获取版本库1的HEAD提交时间 @2023-12-13 19:00:25
 - 测试步骤2：正常获取版本库3的HEAD提交时间 @2023-12-18 19:00:25

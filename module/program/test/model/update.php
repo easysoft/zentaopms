@@ -5,7 +5,7 @@
 
 title=测试 programModel::update();
 timeout=0
-cid=1
+cid=17712
 
 - 正常更新项目集的情况属性name @测试更新项目集
 - 正常更新项目集的情况属性status @doing

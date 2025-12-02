@@ -5,7 +5,7 @@
 
 title=测试 taskTao::getTeamInfoList();
 timeout=0
-cid=0
+cid=18885
 
 - 执行taskTest模块的getTeamInfoListTest方法，参数是array 
  - 第0条的account属性 @admin

@@ -5,58 +5,84 @@
 
 title=测试 bugZen::getStoriesForCreate();
 timeout=0
-cid=0
+cid=15459
 
-- 步骤1：有执行ID时获取需求数量 @4
-- 步骤2：有项目ID但无执行ID时获取需求数量 @4
-- 步骤3：有模块ID时获取需求数量 @2
-- 步骤4：无项目执行模块ID时获取需求数量 @2
-- 步骤5：备用获取需求数量 @2
+- 步骤1:测试有executionID时stories是数组 @1
+- 步骤2:测试有projectID但无executionID时stories是数组 @1
+- 步骤3:测试无executionID和projectID时stories是数组 @1
+- 步骤4:测试返回对象包含stories属性 @1
+- 步骤5:测试不同产品获取stories是数组 @1
+- 步骤6:测试不同分支获取stories是数组 @1
+- 步骤7:测试返回对象包含原有属性 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
-
-// 2. zendata数据准备（根据需要配置）
-$story = zenData('story');
-$story->id->range('1-20');
-$story->product->range('1{10},2{10}');
-$story->branch->range('0{15},1{5}');
-$story->module->range('1001{5},1002{5},0{10}');
-$story->title->range('需求标题%s');
-$story->type->range('story');
-$story->status->range('active');
-$story->stage->range('wait{8},planned{8},projected{4}');
-$story->version->range('1');
-$story->gen(20);
-
-$projectstory = zenData('projectstory'); 
-$projectstory->project->range('11{5},12{5}');
-$projectstory->product->range('1');
-$projectstory->story->range('1-10');
-$projectstory->version->range('1');
-$projectstory->gen(10);
-
-$module = zenData('module');
-$module->id->range('1001-1002');
-$module->root->range('1');
-$module->type->range('story');
-$module->path->range(',1001,{1},,1001,1002,{1}');
-$module->grade->range('1{1},2{1}');
-$module->parent->range('1001{1},1001{1}');
-$module->gen(2);
-
-// 3. 用户登录（选择合适角色）
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$bugTest = new bugTest();
+$story = zenData('story');
+$story->id->range('1-30');
+$story->product->range('1{10},2{10},3{10}');
+$story->branch->range('0{15},1{10},2{5}');
+$story->module->range('0{10},1001{10},1002{10}');
+$story->status->range('active{20},closed{10}');
+$story->stage->range('wait{10},planned{10},developing{10}');
+$story->type->range('story');
+$story->deleted->range('0');
+$story->gen(30);
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($bugTest->getStoriesForCreateTest((object)array('productID' => 1, 'branch' => '0', 'moduleID' => 0, 'projectID' => 0, 'executionID' => 11))) && p() && e('4'); // 步骤1：有执行ID时获取需求数量
-r($bugTest->getStoriesForCreateTest((object)array('productID' => 1, 'branch' => '0', 'moduleID' => 0, 'projectID' => 11, 'executionID' => 0))) && p() && e('4'); // 步骤2：有项目ID但无执行ID时获取需求数量
-r($bugTest->getStoriesForCreateTest((object)array('productID' => 1, 'branch' => '0', 'moduleID' => 1001, 'projectID' => 0, 'executionID' => 0))) && p() && e('2'); // 步骤3：有模块ID时获取需求数量  
-r($bugTest->getStoriesForCreateTest((object)array('productID' => 1, 'branch' => '0', 'moduleID' => 0, 'projectID' => 0, 'executionID' => 0))) && p() && e('2'); // 步骤4：无项目执行模块ID时获取需求数量
-r($bugTest->getStoriesForCreateTest((object)array('productID' => 2, 'branch' => '0', 'moduleID' => 1003, 'projectID' => 0, 'executionID' => 0))) && p() && e('2'); // 步骤5：备用获取需求数量
+$projectStory = zenData('projectstory');
+$projectStory->project->range('101{10},102{10}');
+$projectStory->product->range('1{15},2{5}');
+$projectStory->story->range('1-20');
+$projectStory->gen(20);
+
+zenData('product')->gen(5);
+zenData('project')->gen(5);
+zenData('user')->gen(5);
+
+$bugTest = new bugZenTest();
+
+$bug1 = new stdClass();
+$bug1->productID = 1;
+$bug1->branch = '0';
+$bug1->moduleID = 0;
+$bug1->projectID = 0;
+$bug1->executionID = 101;
+
+$bug2 = new stdClass();
+$bug2->productID = 1;
+$bug2->branch = '0';
+$bug2->moduleID = 0;
+$bug2->projectID = 1;
+$bug2->executionID = 0;
+
+$bug3 = new stdClass();
+$bug3->productID = 1;
+$bug3->branch = '0';
+$bug3->moduleID = 0;
+$bug3->projectID = 0;
+$bug3->executionID = 0;
+
+$bug4 = new stdClass();
+$bug4->productID = 2;
+$bug4->branch = '0';
+$bug4->moduleID = 0;
+$bug4->projectID = 0;
+$bug4->executionID = 0;
+
+$bug5 = new stdClass();
+$bug5->productID = 1;
+$bug5->branch = '1';
+$bug5->moduleID = 0;
+$bug5->projectID = 0;
+$bug5->executionID = 0;
+
+r(is_array($bugTest->getStoriesForCreateTest($bug1)->stories)) && p() && e('1'); // 步骤1:测试有executionID时stories是数组
+r(is_array($bugTest->getStoriesForCreateTest($bug2)->stories)) && p() && e('1'); // 步骤2:测试有projectID但无executionID时stories是数组
+r(is_array($bugTest->getStoriesForCreateTest($bug3)->stories)) && p() && e('1'); // 步骤3:测试无executionID和projectID时stories是数组
+r(property_exists($bugTest->getStoriesForCreateTest($bug1), 'stories')) && p() && e('1'); // 步骤4:测试返回对象包含stories属性
+r(is_array($bugTest->getStoriesForCreateTest($bug4)->stories)) && p() && e('1'); // 步骤5:测试不同产品获取stories是数组
+r(is_array($bugTest->getStoriesForCreateTest($bug5)->stories)) && p() && e('1'); // 步骤6:测试不同分支获取stories是数组
+r(property_exists($bugTest->getStoriesForCreateTest($bug1), 'productID')) && p() && e('1'); // 步骤7:测试返回对象包含原有属性

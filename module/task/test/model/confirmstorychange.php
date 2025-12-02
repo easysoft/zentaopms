@@ -5,7 +5,7 @@
 
 title=taskModel->confirmStoryChange();
 timeout=0
-cid=0
+cid=18779
 
 - 测试普通任务确认需求变更
  - 属性storyVersion @2

@@ -3,7 +3,7 @@
 /**
 
 title=测试 fileModel->updateObjectID();
-cid=0
+cid=16538
 
 - 测试更新 id 1 的objectID 为 101 objectType 为 bug
  - 第1条的id属性 @1

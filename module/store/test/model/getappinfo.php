@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 title=测试 storeModel->getAppInfo().
 timeout=0
-cid=1
+cid=18452
 
 - 测试ID为0 @0
 - 测试使用查询不到数据的ID @0

@@ -5,7 +5,7 @@
 
 title=测试 screenModel::getDatasetForUsageReport();
 timeout=0
-cid=0
+cid=18241
 
 - 步骤1：chartID 20002(活跃用户表格) @0
 - 步骤2：chartID 20004(活跃产品卡片)第0条的count属性 @0

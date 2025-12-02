@@ -83,6 +83,69 @@ function isOldPage(url)
 }
 
 /**
+ * 提取纯文本标签（去除 HTML 标签）
+ * @param {string} html
+ * @returns {string}
+ */
+function extractLabelText(html)
+{
+    return html.replace(/<[^>]*>/g, '').trim();
+}
+
+/**
+ * 获取所有应用列表。
+ * @returns {Array<{id: string, label: string, active: boolean}>}
+ */
+function getApps()
+{
+    const lastAppCode = getLastAppCode();
+    return Array.from(allAppsItemsMap.values()).map(item => ({
+        id: item.code,
+        label: extractLabelText(item.title),
+        active: lastAppCode === item.code
+    }));
+}
+
+/**
+ * 获取所有可见的应用列表。
+ * @returns {Array<{id: string, label: string, active: boolean}>}
+ */
+function getVisibleApps()
+{
+    const $mainNav = $('#menuMainNav');
+    return getApps().filter(app => {
+        const $menuItem = $mainNav.find(`li[data-app="${app.id}"]`);
+        return $menuItem.length > 0 && !$menuItem.is('[data-hidden="1"]');
+    });
+}
+
+/**
+ * 获取所有已打开的应用列表。
+ * @returns {Array<{id: string, label: string, active: boolean}>}
+ */
+function getOpenedApps()
+{
+    const lastAppCode = getLastAppCode();
+    return Object.values(apps.openedMap).map(app => ({
+        id: app.code,
+        label: extractLabelText(app.title),
+        active: app.code === lastAppCode
+    }));
+}
+
+/**
+ * 触发 onChangeApp 回调函数。
+ */
+function changeApp()
+{
+    const callback = window.zinCallbacks.onChangeApp;
+    if(typeof callback === 'function')
+    {
+        try { callback(getVisibleApps(), getOpenedApps()); } catch (e) { console.error('[ZIN] onChangeApp callback error:', e); }
+    }
+}
+
+/**
  * Open app
  * @param {string} url
  * @param {string|object} [code]
@@ -255,6 +318,8 @@ function openApp(url, code, options)
     if(DEBUG) showLog(code, 'Open', getUrlID(url), openedApp, {options, forceReload, needLoad});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
+    changeApp();
+
     return openedApp;
 }
 
@@ -295,6 +360,8 @@ function reloadApp(code, url, options)
     }
 
     app.currentUrl = url;
+
+    changeApp();
 }
 
 function updateApp(code, url, title, type)
@@ -774,16 +841,8 @@ function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + 'appsItems()',
-        onRender: function(info)
-        {
-            if(info.name === 'appsItems')
-            {
-                initAppsMenu(info.data);
-                refreshMenu();
-                return true;
-            }
-        }
+        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + '#appsItemsData,#configJS',
+        complete: () => initAppsMenu(window.appsItems),
     });
 }
 
@@ -1087,6 +1146,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
                         $li.hide().attr('data-hidden', '1');
                         refreshMenu();
                         saveMenuNavToServer();
+                        changeApp();
                     },
                 disabled: hideDisabled,
             }
@@ -1188,6 +1248,9 @@ $.apps = $.extend(apps,
     closeApp:          closeApp,
     toggleMenu:        toggleMenu,
     triggerAppEvent:   triggerAppEvent,
+    getApps:           getApps,
+    getVisibleApps:    getVisibleApps,
+    getOpenedApps:     getOpenedApps,
 });
 
 window.notifyMessage = function(data)

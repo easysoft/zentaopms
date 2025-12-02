@@ -5,7 +5,7 @@
 
 title=测试 gogsModel::getApiRoot();
 timeout=0
-cid=0
+cid=16692
 
 - 步骤1：不存在的服务器ID @0
 - 步骤2：非gogs类型的服务器ID（gitlab） @0

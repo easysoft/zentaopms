@@ -4,29 +4,30 @@
 /**
 
 title=测试 searchZen::setSessionForIndex();
-cid=0
+timeout=0
+cid=18353
 
-- 测试步骤1：正常设置session，传入标准URI和搜索词 >> 期望所有列表session都被正确设置
-- 测试步骤2：测试字符串类型的搜索类型参数 >> 期望searchIngType被正确设置为字符串
-- 测试步骤3：测试数组类型的搜索类型参数 >> 期望searchIngType被正确设置为数组
-- 测试步骤4：测试空搜索词的情况 >> 期望searchIngWord被设置为空字符串
-- 测试步骤5：验证HTTP_REFERER不包含search时的referer设置 >> 期望referer被正确设置
+- 测试步骤1:正常输入完整参数验证bugList session属性bugList @测试URI地址
+- 测试步骤2:正常输入完整参数验证taskList session属性taskList @测试URI地址
+- 测试步骤3:正常输入完整参数验证searchIngWord属性searchIngWord @测试关键词
+- 测试步骤4:传入空uri验证searchIngWord属性searchIngWord @空字符串关键词
+- 测试步骤5:传入空words验证searchIngWord属性searchIngWord @~~
+- 测试步骤6:type为字符串类型验证searchIngType为字符串属性searchIngType @bug
+- 测试步骤7:type为数组类型验证searchIngType为数组 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$searchTest = new searchTest();
+$searchTest = new searchZenTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($searchTest->setSessionForIndexTest('/search/index.html', 'test keywords', 'bug')) && p('bugList,searchIngWord,searchIngType') && e('/search/index.html,test keywords,bug'); // 步骤1：正常情况
-r($searchTest->setSessionForIndexTest('/search/index.html', 'story search', 'story')) && p('storyList,searchIngType') && e('/search/index.html,story'); // 步骤2：字符串类型搜索类型
-r($searchTest->setSessionForIndexTest('/search/index.html', 'multi search', array('bug', 'story'))) && p('bugList,searchIngType:0') && e('/search/index.html,bug'); // 步骤3：数组类型搜索类型
-r($searchTest->setSessionForIndexTest('/product/index.html', '', 'task')) && p('taskList,searchIngWord') && e('/product/index.html,'); // 步骤4：空搜索词
-r($searchTest->setSessionForIndexTest('/project/task.html', 'project search', 'project')) && p('projectList,referer') && e('/project/task.html,http://example.com/test'); // 步骤5：referer设置验证
+r($searchTest->setSessionForIndexTest('测试URI地址', '测试关键词', 'bug')) && p('bugList') && e('测试URI地址'); // 测试步骤1:正常输入完整参数验证bugList session
+r($searchTest->setSessionForIndexTest('测试URI地址', '测试关键词', 'task')) && p('taskList') && e('测试URI地址'); // 测试步骤2:正常输入完整参数验证taskList session
+r($searchTest->setSessionForIndexTest('测试URI地址', '测试关键词', 'product')) && p('searchIngWord') && e('测试关键词'); // 测试步骤3:正常输入完整参数验证searchIngWord
+r($searchTest->setSessionForIndexTest('', '空字符串关键词', 'bug')) && p('searchIngWord') && e('空字符串关键词'); // 测试步骤4:传入空uri验证searchIngWord
+r($searchTest->setSessionForIndexTest('测试URI', '', 'task')) && p('searchIngWord') && e('~~'); // 测试步骤5:传入空words验证searchIngWord
+r($searchTest->setSessionForIndexTest('URI地址', 'word', 'bug')) && p('searchIngType') && e('bug'); // 测试步骤6:type为字符串类型验证searchIngType为字符串
+r(is_array($searchTest->setSessionForIndexTest('URI地址', 'word', array('bug', 'task'))->searchIngType)) && p() && e('1'); // 测试步骤7:type为数组类型验证searchIngType为数组

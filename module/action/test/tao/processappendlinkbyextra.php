@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processAppendLinkByExtra();
 timeout=0
-cid=0
+cid=14959
 
 - 执行actionTest模块的processAppendLinkByExtraTest方法，参数是'task:1' 属性extra @task
 - 执行actionTest模块的processAppendLinkByExtraTest方法，参数是'story:1|comment' 属性extra @story

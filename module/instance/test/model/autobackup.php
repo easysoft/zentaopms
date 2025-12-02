@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::autoBackup();
 timeout=0
-cid=0
+cid=16778
 
 - 步骤1：正常实例测试 @0
 - 步骤2：实例2测试 @0

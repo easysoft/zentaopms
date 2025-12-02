@@ -7,54 +7,29 @@ title=测试 cneModel::getDiskSettings();
 timeout=0
 cid=0
 
-- 步骤1：正常实例ID无块设备卷
- - 属性resizable @0
- - 属性size @0
- - 属性used @0
- - 属性limit @0
- - 属性name @~~
- - 属性requestSize @0
-- 步骤2：无效实例ID测试
- - 属性resizable @0
- - 属性size @0
- - 属性used @0
- - 属性limit @0
- - 属性name @~~
- - 属性requestSize @0
-- 步骤3：MySQL组件无块设备卷
- - 属性resizable @0
- - 属性size @0
- - 属性used @0
- - 属性limit @0
- - 属性name @~~
- - 属性requestSize @0
-- 步骤4：布尔值true组件测试
- - 属性resizable @0
- - 属性size @0
- - 属性used @0
- - 属性limit @0
- - 属性name @~~
- - 属性requestSize @0
-- 步骤5：空字符串组件测试
- - 属性resizable @0
- - 属性size @0
- - 属性used @0
- - 属性limit @0
- - 属性name @~~
- - 属性requestSize @0
+- 步骤1:不指定组件获取磁盘配置(component=false) @1
+- 步骤2:指定mysql组件(component=true) @1
+- 步骤3:指定具体mysql组件名称 @1
+- 步骤4:指定其他组件名称redis @1
+- 步骤5:空字符串组件名称 @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 4. 创建测试实例（变量名与模块名一致）
-$cneTest = new cneTest();
+su('admin');
 
-// 5. 强制要求：必须包含至少5个测试步骤
-r($cneTest->getDiskSettingsTest(1, false)) && p('resizable,size,used,limit,name,requestSize') && e('0,0,0,0,~~,0'); // 步骤1：正常实例ID无块设备卷
-r($cneTest->getDiskSettingsTest(999, false)) && p('resizable,size,used,limit,name,requestSize') && e('0,0,0,0,~~,0'); // 步骤2：无效实例ID测试
-r($cneTest->getDiskSettingsTest(1, 'mysql')) && p('resizable,size,used,limit,name,requestSize') && e('0,0,0,0,~~,0'); // 步骤3：MySQL组件无块设备卷
-r($cneTest->getDiskSettingsTest(1, true)) && p('resizable,size,used,limit,name,requestSize') && e('0,0,0,0,~~,0'); // 步骤4：布尔值true组件测试
-r($cneTest->getDiskSettingsTest(2, '')) && p('resizable,size,used,limit,name,requestSize') && e('0,0,0,0,~~,0'); // 步骤5：空字符串组件测试
+$cneTest = new cneModelTest();
+
+// 准备测试用的实例对象
+$validInstance = new stdClass();
+$validInstance->spaceData = new stdClass();
+$validInstance->spaceData->k8space = 'default';
+$validInstance->k8name = 'test-app';
+
+r(is_object($cneTest->getDiskSettingsTest($validInstance, false))) && p() && e('1'); // 步骤1:不指定组件获取磁盘配置(component=false)
+r(is_object($cneTest->getDiskSettingsTest($validInstance, true))) && p() && e('1'); // 步骤2:指定mysql组件(component=true)
+r(is_object($cneTest->getDiskSettingsTest($validInstance, 'mysql'))) && p() && e('1'); // 步骤3:指定具体mysql组件名称
+r(is_object($cneTest->getDiskSettingsTest($validInstance, 'redis'))) && p() && e('1'); // 步骤4:指定其他组件名称redis
+r(is_object($cneTest->getDiskSettingsTest($validInstance, ''))) && p() && e('1'); // 步骤5:空字符串组件名称

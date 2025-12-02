@@ -5,7 +5,7 @@
 
 title=测试 projectZen::responseAfterSuspend();
 timeout=0
-cid=0
+cid=17966
 
 - 步骤1：正常情况 @success
 - 步骤2：边界值 @success

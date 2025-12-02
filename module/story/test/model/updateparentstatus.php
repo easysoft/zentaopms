@@ -5,7 +5,7 @@
 
 title=测试 storyModel->updateParentStatus();
 timeout=0
-cid=0
+cid=18595
 
 - 只有一个子需求，并且需求状态为closed，检查父需求的状态。 @closed
 - 没有子需求的父需求，检查父需求的parent字段。 @0

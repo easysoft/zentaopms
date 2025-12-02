@@ -4,7 +4,7 @@
 
 title=测试 weeklyModel->addBuiltinCategory();
 timeout=0
-cid=1
+cid=19714
 
 - 测试添加内置分类
  - 属性id @1

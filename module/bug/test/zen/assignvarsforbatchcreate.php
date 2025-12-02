@@ -5,51 +5,73 @@
 
 title=测试 bugZen::assignVarsForBatchCreate();
 timeout=0
-cid=0
+cid=15430
 
-- 步骤1：正常产品和项目情况
- - 属性hasCustomFields @1
- - 属性productType @normal
-- 步骤2：分支产品类型情况
+- 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product1, $project1, $bugImagesFile1
+ - 属性customFields @12
+ - 属性titles @0
+ - 属性hasBranch @0
+ - 属性hasKanbanExecution @0
+- 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product2, $project1, $bugImagesFile1
+ - 属性customFields @13
+ - 属性titles @0
  - 属性hasBranch @1
- - 属性productType @branch
-- 步骤3：看板项目模式情况
- - 属性hasExecution @1
- - 属性projectModel @kanban
-- 步骤4：包含图片文件情况属性hasTitles @1
-- 步骤5：多个图片文件情况属性hasTitles @1
+ - 属性hasKanbanExecution @0
+- 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product1, $project2, $bugImagesFile1
+ - 属性customFields @12
+ - 属性titles @0
+ - 属性hasBranch @0
+ - 属性hasKanbanExecution @1
+- 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product1, $project1, $bugImagesFile2
+ - 属性customFields @12
+ - 属性titles @3
+ - 属性hasBranch @0
+ - 属性hasKanbanExecution @0
+- 执行bugTest模块的assignVarsForBatchCreateTest方法，参数是$product2, $project2, $bugImagesFile2
+ - 属性customFields @13
+ - 属性titles @3
+ - 属性hasBranch @1
+ - 属性hasKanbanExecution @1
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$productTable = zenData('product');
-$productTable->id->range('1-5');
-$productTable->name->range('产品1,产品2,产品3,产品4,产品5');
-$productTable->type->range('normal{2},branch{2},platform{1}');
-$productTable->status->range('normal');
-$productTable->gen(5);
-
-$projectTable = zenData('project');
-$projectTable->id->range('1-5');
-$projectTable->name->range('项目1,项目2,项目3,项目4,项目5');
-$projectTable->model->range('scrum{2},waterfall{2},kanban{1}');
-$projectTable->type->range('project');
-$projectTable->status->range('wait');
-$projectTable->gen(5);
-
-// 3. 用户登录（选择合适角色）
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$bugTest = new bugTest();
+$product1 = new stdClass();
+$product1->id   = 1;
+$product1->name = 'Normal Product';
+$product1->type = 'normal';
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($bugTest->assignVarsForBatchCreateTest((object)array('id' => 1, 'type' => 'normal'), (object)array('id' => 1, 'model' => 'scrum'), array())) && p('hasCustomFields,productType') && e('1,normal'); // 步骤1：正常产品和项目情况
-r($bugTest->assignVarsForBatchCreateTest((object)array('id' => 3, 'type' => 'branch'), (object)array('id' => 2, 'model' => 'waterfall'), array())) && p('hasBranch,productType') && e('1,branch'); // 步骤2：分支产品类型情况
-r($bugTest->assignVarsForBatchCreateTest((object)array('id' => 1, 'type' => 'normal'), (object)array('id' => 5, 'model' => 'kanban'), array())) && p('hasExecution,projectModel') && e('1,kanban'); // 步骤3：看板项目模式情况
-r($bugTest->assignVarsForBatchCreateTest((object)array('id' => 1, 'type' => 'normal'), (object)array('id' => 1, 'model' => 'scrum'), array('test.png' => array('title' => '测试图片')))) && p('hasTitles') && e('1'); // 步骤4：包含图片文件情况
-r($bugTest->assignVarsForBatchCreateTest((object)array('id' => 1, 'type' => 'normal'), (object)array('id' => 1, 'model' => 'scrum'), array('test1.png' => array('title' => '图片1'), 'test2.jpg' => array('title' => '图片2')))) && p('hasTitles') && e('1'); // 步骤5：多个图片文件情况
+$product2 = new stdClass();
+$product2->id   = 2;
+$product2->name = 'Branch Product';
+$product2->type = 'branch';
+
+$project1 = new stdClass();
+$project1->id    = 1;
+$project1->name  = 'Sprint Project';
+$project1->model = 'scrum';
+
+$project2 = new stdClass();
+$project2->id    = 2;
+$project2->name  = 'Kanban Project';
+$project2->model = 'kanban';
+
+$bugImagesFile1 = array();
+
+$bugImagesFile2 = array(
+    'image1.png' => array('title' => 'Bug Screenshot 1'),
+    'image2.png' => array('title' => 'Bug Screenshot 2'),
+    'image3.png' => array('title' => 'Bug Screenshot 3'),
+);
+
+$bugTest = new bugZenTest();
+
+r($bugTest->assignVarsForBatchCreateTest($product1, $project1, $bugImagesFile1)) && p('customFields,titles,hasBranch,hasKanbanExecution') && e('12,0,0,0');
+r($bugTest->assignVarsForBatchCreateTest($product2, $project1, $bugImagesFile1)) && p('customFields,titles,hasBranch,hasKanbanExecution') && e('13,0,1,0');
+r($bugTest->assignVarsForBatchCreateTest($product1, $project2, $bugImagesFile1)) && p('customFields,titles,hasBranch,hasKanbanExecution') && e('12,0,0,1');
+r($bugTest->assignVarsForBatchCreateTest($product1, $project1, $bugImagesFile2)) && p('customFields,titles,hasBranch,hasKanbanExecution') && e('12,3,0,0');
+r($bugTest->assignVarsForBatchCreateTest($product2, $project2, $bugImagesFile2)) && p('customFields,titles,hasBranch,hasKanbanExecution') && e('13,3,1,1');

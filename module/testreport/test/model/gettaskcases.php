@@ -14,7 +14,7 @@ su('admin');
 
 title=测试 testreportModel->getTaskCases();
 timeout=0
-cid=1
+cid=19124
 
 - 正常查询
  - 第1条的id属性 @1

@@ -12,7 +12,7 @@ su('admin');
 
 title=测试 zaiModel::getNextTarget();
 timeout=0
-cid=0
+cid=19772
 
 - 测试不存在的同步类型 @0
 - 测试story类型数据为空时 @0

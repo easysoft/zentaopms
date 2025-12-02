@@ -7,28 +7,23 @@ title=测试 cneModel::apiGet();
 timeout=0
 cid=0
 
-- 步骤1：正常GET请求属性code @200
-- 步骤2：带数组参数的请求第data条的name属性 @my-app
-- 步骤3：带对象参数的请求第data条的name属性 @obj-app
-- 步骤4：API错误响应属性code @404
-- 步骤5：认证错误响应属性code @401
-- 步骤6：自定义host第data条的host属性 @http://custom.host
-- 步骤7：服务器错误属性code @600
+- 测试正常GET请求：有效的URL和参数属性code @600
+- 测试空数据参数：验证空数组处理属性code @600
+- 测试带已有查询参数的URL属性code @600
+- 测试自定义header参数属性code @600
+- 测试自定义host参数属性code @600
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 2. 创建测试实例（变量名与模块名一致）
-$cneTest = new cneTest();
+su('admin');
 
-// 3. 🔴 强制要求：必须包含至少7个测试步骤
-r($cneTest->apiGetTest('/api/cne/app/status', array('name' => 'test-app'))) && p('code') && e(200); // 步骤1：正常GET请求
-r($cneTest->apiGetTest('/api/cne/app/info', array('name' => 'my-app', 'namespace' => 'default'))) && p('data:name') && e('my-app'); // 步骤2：带数组参数的请求
-r($cneTest->apiGetTest('/api/cne/app/info', (object)array('name' => 'obj-app'))) && p('data:name') && e('obj-app'); // 步骤3：带对象参数的请求
-r($cneTest->apiGetTest('/api/cne/app/error', array())) && p('code') && e(404); // 步骤4：API错误响应
-r($cneTest->apiGetTest('/api/cne/app/auth-error', array())) && p('code') && e(401); // 步骤5：认证错误响应
-r($cneTest->apiGetTest('/api/cne/app/custom-host', array(), array(), 'http://custom.host')) && p('data:host') && e('http://custom.host'); // 步骤6：自定义host
-r($cneTest->apiGetTest('/invalid-url', array())) && p('code') && e(600); // 步骤7：服务器错误
+$cneTest = new cneModelTest();
+
+r($cneTest->apiGetTest('/api/cne/test', array('param1' => 'value1'), array(), '')) && p('code') && e('600');  // 测试正常GET请求：有效的URL和参数
+r($cneTest->apiGetTest('/api/cne/test', array(), array(), '')) && p('code') && e('600');  // 测试空数据参数：验证空数组处理
+r($cneTest->apiGetTest('/api/cne/test?existing=param', array('new' => 'param'), array(), '')) && p('code') && e('600');  // 测试带已有查询参数的URL
+r($cneTest->apiGetTest('/api/cne/test', array('param' => 'value'), array('Authorization: Bearer token'), '')) && p('code') && e('600');  // 测试自定义header参数
+r($cneTest->apiGetTest('/api/cne/test', array('param' => 'value'), array(), 'http://custom-host.com')) && p('code') && e('600');  // 测试自定义host参数

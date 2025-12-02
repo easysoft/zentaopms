@@ -16,7 +16,7 @@ zenData('userview')->loadYaml('userview')->gen(2);
 
 title=测试 actionModel->getDynamicByAccount();
 timeout=0
-cid=1
+cid=14894
 
 - 查找用户admin动态 @12
 - 查找用户admin动态 @12

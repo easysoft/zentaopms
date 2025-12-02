@@ -8,7 +8,7 @@ zenData('release')->gen(10);
 
 title=测试 systemModel::getPairs();
 timeout=0
-cid=1
+cid=17997
 
 - 查询默认键值对属性1 @产品正常的正常的发布1
 - 查询默认键值对数量 @10

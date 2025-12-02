@@ -7,7 +7,7 @@ su('admin');
 
 title=测试 dataviewModel::getTypeOptions();
 timeout=0
-cid=0
+cid=15956
 
 - 步骤1：获取bug模块的字段信息
  - 第id条的name属性 @Bug编号

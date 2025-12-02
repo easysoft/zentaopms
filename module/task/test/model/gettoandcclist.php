@@ -11,7 +11,7 @@ su('admin');
 
 title=taskModel->getToAndCcList();
 timeout=0
-cid=1
+cid=0
 
 - 计算无assignedto 无mailto的发信列表 @1
 - 计算有assignedto 无mailto的发信列表 @admin

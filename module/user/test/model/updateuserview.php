@@ -4,7 +4,7 @@
 /**
 
 title=测试 userModel->updateUserView();
-cid=0
+cid=19665
 
 - 测试更新不存在对象类型的用户视图。 @0
 - 测试更新不存在的项目集的用户视图。 @0

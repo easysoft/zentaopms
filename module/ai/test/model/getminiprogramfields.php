@@ -5,7 +5,7 @@
 
 title=测试 aiModel::getMiniProgramFields();
 timeout=0
-cid=0
+cid=15039
 
 - 执行aiTest模块的getMiniProgramFieldsTest方法，参数是'1'  @5
 - 执行aiTest模块的getMiniProgramFieldsTest方法，参数是'2'  @5

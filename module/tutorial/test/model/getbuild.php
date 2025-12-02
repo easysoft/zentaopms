@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBuild();
 timeout=0
-cid=0
+cid=19407
 
 - 步骤1：正常情况，验证ID字段值属性id @1
 - 步骤2：验证name字段值属性name @Test build

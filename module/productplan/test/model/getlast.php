@@ -4,7 +4,7 @@
 
 title=productpanModel->getLast();
 timeout=0
-cid=1
+cid=17635
 
 - 获取产品1的最后一个创建的计划属性title @计划3
 - 获取产品2的最后一个创建的计划属性title @计划4

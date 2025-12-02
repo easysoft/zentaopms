@@ -16,7 +16,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserYearExecutions();
-cid=1
+cid=18177
 pid=1
 
 */

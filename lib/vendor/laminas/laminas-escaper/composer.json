@@ -1,0 +1,58 @@
+{
+    "name": "laminas/laminas-escaper",
+    "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "escaper"
+    ],
+    "homepage": "https://laminas.dev",
+    "support": {
+        "docs": "https://docs.laminas.dev/laminas-escaper/",
+        "issues": "https://github.com/laminas/laminas-escaper/issues",
+        "source": "https://github.com/laminas/laminas-escaper",
+        "rss": "https://github.com/laminas/laminas-escaper/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.6.x-dev",
+            "dev-develop": "2.7.x-dev"
+        }
+    },
+    "require": {
+        "php": "^5.6 || ^7.0",
+        "laminas/laminas-zendframework-bridge": "^1.0"
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "~1.0.0",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\Escaper\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaminasTest\\Escaper\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "replace": {
+        "zendframework/zend-escaper": "self.version"
+    }
+}

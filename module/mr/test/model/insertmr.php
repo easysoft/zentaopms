@@ -5,7 +5,7 @@
 
 title=测试 mrModel->insertMR();
 timeout=0
-cid=1
+cid=17254
 
 - 使用正确的mr请求数据
  - 属性id @1

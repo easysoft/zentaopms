@@ -5,7 +5,7 @@
 
 title=测试 fileZen::buildDownloadTable();
 timeout=0
-cid=0
+cid=16541
 
 - 执行fileZenTest模块的buildDownloadTableZenTest方法，参数是$fields, $rows, 'other'), 0, 7  @<table>
 - 执行fileZenTest模块的buildDownloadTableZenTest方法，参数是$storyFields, $storyRows, 'story'), 'href=') !== false  @1

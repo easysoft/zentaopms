@@ -9,7 +9,7 @@ zenData('doccontent')->gen(0);
 /**
 
 title=测试 upgradeModel->moveDocContent();
-cid=1
+cid=19538
 
 - 检查 docContent 数。 @5
 - 检查 doc 和 doccontent 标题是否一致。 @1

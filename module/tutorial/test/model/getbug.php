@@ -5,7 +5,7 @@
 
 title=测试 tutorialModel::getBug();
 timeout=0
-cid=0
+cid=19405
 
 - 步骤1：验证Bug对象ID属性id @1
 - 步骤2：验证Bug对象标题属性title @Test bug-active

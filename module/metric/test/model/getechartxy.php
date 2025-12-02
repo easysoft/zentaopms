@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getEchartXY();
 timeout=0
-cid=0
+cid=17097
 
 - 步骤1：2个元素的header数组 @calcTime,value
 

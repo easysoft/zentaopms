@@ -5,7 +5,7 @@
 
 title=测试 storyModel::getStoriesCountByProductID();
 timeout=0
-cid=0
+cid=18558
 
 - 步骤1：正常产品1需求draft状态统计第draft条的count属性 @3
 - 步骤2：正常产品1故事changing状态统计第changing条的count属性 @1

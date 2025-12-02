@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 projectModel->getPairsByModel();
 timeout=0
-cid=1
+cid=17839
 
 - 获取所有项目属性26 @项目集6 / 项目26
 - 获取敏捷项目属性21 @项目集1 / 项目21

@@ -7,53 +7,100 @@ title=测试 testcaseZen::processCasesForBrowse();
 timeout=0
 cid=0
 
-- 步骤1：空数组计数 @0
-- 步骤2：包含场景的用例计数 @2
-- 步骤3：不包含场景的用例计数 @1
-- 步骤4：包含无效场景ID计数 @2
-- 步骤5：验证ID转换第0条的id属性 @case_6
+- 步骤1:空数组输入 @0
+- 步骤2:无场景的用例
+ - 第0条的id属性 @case_1
+ - 第0条的parent属性 @0
+ - 第0条的isScene属性 @~~
+- 步骤3:有场景的用例 @3
+- 步骤4:HTML转义标题处理第0条的title属性 @测试用例5<html>
+- 步骤5:场景被删除的边界情况
+ - 第0条的id属性 @case_6
+ - 第0条的parent属性 @0
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-$table = zenData('case');
-$table->id->range('1-10');
-$table->title->range('测试用例1,测试用例2,测试用例3,测试用例4,测试用例5,测试用例6,测试用例7,测试用例8,测试用例9,测试用例10');
-$table->product->range('1,1,1,2,2,2,3,3,3,1');
-$table->module->range('1001,1002,1003,1001,1002,1003,1001,1002,1003,1001');
-$table->scene->range('1,2,3,0,0,1,2,3,0,0');
-$table->status->range('wait,normal,blocked,investigate,done,wait,normal,blocked,investigate,done');
-$table->type->range('feature,performance,config,install,feature,performance,config,install,feature,performance');
-$table->pri->range('1,2,3,4,1,2,3,4,1,2');
-$table->openedBy->range('admin,user1,user2,tester,admin,user1,user2,tester,admin,user1');
-$table->gen(10);
+// 2. zendata数据准备(根据需要配置)
+$scene = zenData('scene');
+$scene->id->range('1-5');
+$scene->product->range('1{5}');
+$scene->title->range('场景1,场景2,场景3,场景4,场景5');
+$scene->parent->range('0,0,1,1,0');
+$scene->grade->range('1,1,2,2,1');
+$scene->path->range(',1,;,2,;,1,3,;,1,4,;,5,');
+$scene->deleted->range('0{5}');
+$scene->gen(5);
 
-$sceneTable = zenData('scene');
-$sceneTable->id->range('1-5');
-$sceneTable->title->range('场景1,场景2,场景3,场景4,场景5');
-$sceneTable->product->range('1,1,2,2,3');
-$sceneTable->module->range('1001,1002,1001,1002,1001');
-$sceneTable->parent->range('0,1,0,3,0');
-$sceneTable->grade->range('1,2,1,2,1');
-$sceneTable->path->range(',1,,1,2,,3,,3,4,,5,');
-$sceneTable->sort->range('1,2,3,4,5');
-$sceneTable->openedBy->range('admin,user1,user2,admin,user1');
-$sceneTable->deleted->range('0');
-$sceneTable->gen(5);
-
-// 3. 用户登录（选择合适角色）
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-// 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$testcaseTest = new testcaseZenTest();
 
-// 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($testcaseTest->processCasesForBrowseTest(array()))) && p() && e('0'); // 步骤1：空数组计数
-r(count($testcaseTest->processCasesForBrowseTest(array((object)array('id' => 1, 'title' => '&lt;测试用例1&gt;', 'scene' => 1))))) && p() && e('2'); // 步骤2：包含场景的用例计数
-r(count($testcaseTest->processCasesForBrowseTest(array((object)array('id' => 4, 'title' => '测试用例4', 'scene' => 0))))) && p() && e('1'); // 步骤3：不包含场景的用例计数
-r(count($testcaseTest->processCasesForBrowseTest(array((object)array('id' => 5, 'title' => '测试用例5', 'scene' => 999))))) && p() && e('2'); // 步骤4：包含无效场景ID计数
-r($testcaseTest->processCasesForBrowseTest(array((object)array('id' => 6, 'title' => '测试用例6', 'scene' => 0)))) && p('0:id') && e('case_6'); // 步骤5：验证ID转换
+// 5. 强制要求:必须包含至少5个测试步骤
+
+// 步骤1:空数组输入
+$emptyCases = array();
+r($testcaseTest->processCasesForBrowseTest($emptyCases)) && p() && e('0'); // 步骤1:空数组输入
+
+// 步骤2:无场景的用例
+$case1 = new stdClass();
+$case1->id = 1;
+$case1->title = '测试用例1';
+$case1->scene = 0;
+$case1->status = 'normal';
+$case1->pri = 1;
+
+$case2 = new stdClass();
+$case2->id = 2;
+$case2->title = '测试用例2';
+$case2->scene = 0;
+$case2->status = 'wait';
+$case2->pri = 2;
+
+$casesWithoutScene = array($case1, $case2);
+r($testcaseTest->processCasesForBrowseTest($casesWithoutScene)) && p('0:id;0:parent;0:isScene') && e('case_1;0;~~'); // 步骤2:无场景的用例
+
+// 步骤3:有场景的用例
+$case3 = new stdClass();
+$case3->id = 3;
+$case3->title = '测试用例3';
+$case3->scene = 1;
+$case3->status = 'normal';
+$case3->pri = 1;
+
+$case4 = new stdClass();
+$case4->id = 4;
+$case4->title = '测试用例4';
+$case4->scene = 1;
+$case4->status = 'wait';
+$case4->pri = 2;
+
+$casesWithScene = array($case3, $case4);
+r(count($testcaseTest->processCasesForBrowseTest($casesWithScene))) && p() && e('3'); // 步骤3:有场景的用例
+
+// 步骤4:HTML转义标题处理
+$case5 = new stdClass();
+$case5->id = 5;
+$case5->title = '测试用例5&lt;html&gt;';
+$case5->scene = 0;
+$case5->status = 'normal';
+$case5->pri = 1;
+
+$casesWithHtml = array($case5);
+r($testcaseTest->processCasesForBrowseTest($casesWithHtml)) && p('0:title') && e('测试用例5<html>'); // 步骤4:HTML转义标题处理
+
+// 步骤5:场景被删除的边界情况
+$case6 = new stdClass();
+$case6->id = 6;
+$case6->title = '测试用例6';
+$case6->scene = 99;
+$case6->status = 'normal';
+$case6->pri = 1;
+
+$casesWithDeletedScene = array($case6);
+r($testcaseTest->processCasesForBrowseTest($casesWithDeletedScene)) && p('0:id;0:parent') && e('case_6;0'); // 步骤5:场景被删除的边界情况

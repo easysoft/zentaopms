@@ -17,7 +17,7 @@ su('admin');
 
 title=测试 reportModel->getUserYearContributions();
 timeout=0
-cid=1
+cid=18175
 
 - 测试获取本年度 admin 的贡献数 @repo:svnCommit:1;doc:create:1;case:run:10;
 - 测试获取本年度 dev17 的贡献数 @bug:close:1;product:close:1;repo:gitCommit:1;case:run:0;

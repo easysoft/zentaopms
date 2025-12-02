@@ -8,7 +8,7 @@ su('admin');
 
 title=测试 repoModel->getRevisionsFromDB();
 timeout=0
-cid=1
+cid=18079
 
 - 获取版本库提交记录第0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb条的id属性 @3
 - 获取limit为1版本库提交记录数量 @1

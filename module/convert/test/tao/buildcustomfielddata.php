@@ -5,7 +5,7 @@
 
 title=测试 convertTao::buildCustomFieldData();
 timeout=0
-cid=0
+cid=15806
 
 - 执行convertTest模块的buildCustomFieldDataTest方法，参数是$fullData
  - 属性id @12345

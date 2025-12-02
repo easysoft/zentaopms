@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 
 title=测试 upgradeModel->getUpgradeFile();
-cid=1
+cid=19530
 
 - 测试获取版本 18.1 的开源版版本 @update18.1.sql
 - 测试获取版本 18.2 的开源版版本 @update18.2.sql

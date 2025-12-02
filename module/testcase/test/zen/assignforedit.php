@@ -5,7 +5,7 @@
 
 title=测试 testcaseZen::assignForEdit();
 timeout=0
-cid=0
+cid=19067
 
 - 步骤1：正常情况
  - 属性executed @1

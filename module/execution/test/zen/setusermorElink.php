@@ -5,7 +5,7 @@
 
 title=测试 executionZen::setUserMoreLink();
 timeout=0
-cid=0
+cid=16445
 
 - 应返回4个用户列表数组 @4
 - 应返回4个用户列表数组 @4

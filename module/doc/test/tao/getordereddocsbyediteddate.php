@@ -5,7 +5,7 @@
 
 title=测试 docModel->getOrderedDocsByEditedDate();
 timeout=0
-cid=1
+cid=16174
 
 - 获取没有可查看文档、没有可查看文档库、按照编辑日期倒序排列的文档列表 @0
 - 获取没有可查看文档、有可查看文档库、按照编辑日期倒序排列的文档列表 @0

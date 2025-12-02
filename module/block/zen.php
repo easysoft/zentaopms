@@ -604,11 +604,11 @@ class blockZen extends block
      * 打印测试单区块。
      * Print testtask block.
      *
-     * @params object     $block
-     * @access protected
+     * @params object $block
+     * @access public
      * @return void
      */
-    protected function printTesttaskBlock($block): void
+    public function printTesttaskBlock(object $block): void
     {
         $this->app->loadLang('testtask');
 
@@ -621,7 +621,7 @@ class blockZen extends block
         $this->view->projects  = $this->loadModel('project')->getPairsByProgram();
         $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as projectName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=CAST(t3.id AS CHAR)')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution=t5.project')
             ->where('t1.deleted')->eq('0')
@@ -1556,11 +1556,11 @@ class blockZen extends block
      * 打印敏捷项目的测试统计区块。
      * Print srcum test block.
      *
-     * @param  object    $block
-     * @access protected
+     * @param  object $block
+     * @access public
      * @return void
      */
-    protected function printScrumTestBlock(object $block): void
+    public function printScrumTestBlock(object $block): void
     {
         $uri = $this->app->tab == 'my' ? $this->createLink('my', 'index') : $this->server->http_referer;
         $this->session->set('testtaskList', $uri, 'qa');
@@ -1572,7 +1572,7 @@ class blockZen extends block
         $this->view->project   = $this->loadModel('project')->getByID($this->session->project);
         $this->view->testtasks = $this->dao->select("DISTINCT t1.*,t2.name as productName,t2.shadow,t3.name as buildName,t4.name as executionName, CONCAT(t4.name, '/', t3.name) as executionBuild")->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=CAST(t3.id AS CHAR)')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')

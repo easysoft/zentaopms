@@ -5,7 +5,7 @@
 
 title=测试 aiModel::deleteModel();
 timeout=0
-cid=0
+cid=15018
 
 - 步骤1：删除存在的AI模型 @1
 - 步骤2：删除不存在的AI模型 @1

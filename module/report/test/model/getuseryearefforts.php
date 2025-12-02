@@ -12,7 +12,7 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserYearEfforts();
-cid=1
+cid=18176
 pid=1
 
 */

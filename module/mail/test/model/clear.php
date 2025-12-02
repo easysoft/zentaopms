@@ -5,7 +5,7 @@
 
 title=测试 mailModel::clear();
 timeout=0
-cid=0
+cid=17004
 
 - 执行mailTest模块的clearTest方法 属性processed @1
 - 执行mailTest模块的clearTest方法 属性cleared @1
