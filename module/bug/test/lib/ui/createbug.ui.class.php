@@ -112,6 +112,7 @@ class createBugTester extends tester
     public function browse($product = array(), $bugs = array())
     {
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(2);
         $bugIDList    = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugID'])->element);
         $bugTitleList = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugTitle'])->element);
         foreach($bugs as $bug)
