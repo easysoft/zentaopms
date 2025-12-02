@@ -1,16 +1,16 @@
 ALTER TABLE `zt_workflowgroup` CHANGE `projectModel` `projectModel` varchar(30) NOT NULL DEFAULT '';
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
-('project',	'agileplus',	  'product',	'融合敏捷式产品研发',	'agileplusproduct',	    'normal',	'rnd',	'1'),
-('project',	'agileplus',	  'project',	'融合敏捷式项目研发',	'agileplusproject',	    'normal',	'rnd',	'1'),
-('project',	'waterfallplus',  'product',	'融合瀑布式产品研发',	'waterfallplusproduct',	'normal',	'rnd',	'1'),
-('project',	'waterfallplus',  'project',	'融合瀑布式项目研发',	'waterfallplusproject',	'normal',	'rnd',	'1'),
-('project',	'kanban',	      'product',	'看板式产品研发',	    'kanbanproduct',	    'normal',	'rnd',	'1'),
-('project',	'kanban',	      'project',	'看板式项目研发',	    'kanbanproject',	    'normal',	'rnd',	'1'),
-('project',	'ipd',	          'ipd',	    'IPD集成产品研发',	    'ipdproduct',	        'normal',	'rnd',	'1'),
-('project',	'ipd',	          'tpd',	    'IPD预研产品研发',	    'tpdproduct',	        'normal',	'rnd',	'1'),
-('project',	'ipd',	          'cbb',	    'IPD平台产品研发',	    'cbbproduct',	        'normal',	'rnd',	'1'),
-('project',	'ipd',	          'cpdproduct',	'IPD定制产品研发',	    'cpdproduct',	        'normal',	'rnd',	'1'),
-('project',	'ipd',	          'cpdproject',	'IPD定制项目研发',	    'cpdproject',	        'normal',	'rnd',	'1');
+('project', 'agileplus',     'product',    '融合敏捷式产品研发',   'agileplusproduct',     'normal', 'rnd', '1'),
+('project', 'agileplus',     'project',    '融合敏捷式项目研发',   'agileplusproject',     'normal', 'rnd', '1'),
+('project', 'waterfallplus', 'product',    '融合瀑布式产品研发',   'waterfallplusproduct', 'normal', 'rnd', '1'),
+('project', 'waterfallplus', 'project',    '融合瀑布式项目研发',   'waterfallplusproject', 'normal', 'rnd', '1'),
+('project', 'kanban',        'product',    '看板式产品研发',       'kanbanproduct',        'normal', 'rnd', '1'),
+('project', 'kanban',        'project',    '看板式项目研发',       'kanbanproject',        'normal', 'rnd', '1'),
+('project', 'ipd',           'ipd',        'IPD集成产品研发',      'ipdproduct',           'normal', 'rnd', '1'),
+('project', 'ipd',           'tpd',        'IPD预研产品研发',      'tpdproduct',           'normal', 'rnd', '1'),
+('project', 'ipd',           'cbb',        'IPD平台产品研发',      'cbbproduct',           'normal', 'rnd', '1'),
+('project', 'ipd',           'cpdproduct', 'IPD定制产品研发',      'cpdproduct',           'normal', 'rnd', '1'),
+('project', 'ipd',           'cpdproject', 'IPD定制项目研发',      'cpdproject',           'normal', 'rnd', '1');
 
 ALTER TABLE `zt_doc` ADD `isDeliverable` tinyint unsigned NOT NULL DEFAULT 0 AFTER `acl`;
 ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
@@ -227,7 +227,29 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '项目变更紧急等级', 'projectchangeUrgencyList',  '1', 'rnd', 'admin', null, 'projectchangeUrgencyList',  '', '', ''),
 ('lang', '项目变更类型',     'projectchangeTypeList',     '1', 'rnd', 'admin', null, 'projectchangeTypeList',     '', '', ''),
 ('lang', '项目变更状态',     'projectchangeStatus',       '1', 'rnd', 'admin', null, 'projectchangeStatus',       '', '', ''),
-('lang', '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd', 'admin', null, 'projectchangeReviewResult', '', '', '');
+('lang', '项目变更审批结果', 'projectchangeReviewResult', '1', 'rnd', 'admin', null, 'projectchangeReviewResult', '', '', ''),
+('lang', '风险来源',         'riskSource',                '1', 'rnd', 'admin', null, 'riskSource',                '', '', ''),
+('lang', '风险类型',         'riskCategory',              '1', 'rnd', 'admin', null, 'riskCategory',              '', '', ''),
+('lang', '风险策略',         'riskStrategy',              '1', 'rnd', 'admin', null, 'riskStrategy',              '', '', ''),
+('lang', '风险状态',         'riskStatus',                '1', 'rnd', 'admin', null, 'riskStatus',                '', '', ''),
+('lang', '风险影响程度',     'riskImpact',                '1', 'rnd', 'admin', null, 'riskImpact',                '', '', ''),
+('lang', '风险发生概率',     'riskProbability',           '1', 'rnd', 'admin', null, 'riskProbability',           '', '', ''),
+('lang', '风险系数',         'riskRate',                  '1', 'rnd', 'admin', null, 'riskRate',                  '', '', ''),
+('lang', '风险优先级',       'riskPri',                   '1', 'rnd', 'admin', null, 'riskPri',                   '', '', ''),
+('lang', '风险取消原因',     'riskCancelReason',          '1', 'rnd', 'admin', null, 'riskCancelReason',          '', '', ''),
+('lang', '问题优先级',       'issuePri',                  '1', 'rnd', 'admin', null, 'issuePri',                  '', '', ''),
+('lang', '问题严重程度',     'issueSeverity',             '1', 'rnd', 'admin', null, 'issueSeverity',             '', '', ''),
+('lang', '问题类型',         'issueType',                 '1', 'rnd', 'admin', null, 'issueType',                 '', '', ''),
+('lang', '4问题解决方式',    'issueResolution',           '1', 'rnd', 'admin', null, 'issueResolution',           '', '', ''),
+('lang', '问题状态',         'issueStatus',               '1', 'rnd', 'admin', null, 'issueStatus',               '', '', ''),
+('lang', '机会来源',         'opportunitySource',         '1', 'rnd', 'admin', null, 'opportunitySource',         '', '', ''),
+('lang', '机会类型',         'opportunityType',           '1', 'rnd', 'admin', null, 'opportunityType',           '', '', ''),
+('lang', '机会策略',         'opportunityStrategy',       '1', 'rnd', 'admin', null, 'opportunityStrategy',       '', '', ''),
+('lang', '机会状态',         'opportunityStatus',         '1', 'rnd', 'admin', null, 'opportunityStatus',         '', '', ''),
+('lang', '机会影响程度',     'opportunityImpact',         '1', 'rnd', 'admin', null, 'opportunityImpact',         '', '', ''),
+('lang', '机会发生概率',     'opportunityChance',         '1', 'rnd', 'admin', null, 'opportunityChance',         '', '', ''),
+('lang', '机会优先级',       'opportunityPri',            '1', 'rnd', 'admin', null, 'opportunityPri',            '', '', ''),
+('lang', '机会取消原因',     'opportunityCancelReason',   '1', 'rnd', 'admin', null, 'opportunityCancelReason',   '', '', '');
 
 ALTER TABLE `zt_story`   ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `verifiedDate`;
 ALTER TABLE `zt_design`  ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `desc`;
