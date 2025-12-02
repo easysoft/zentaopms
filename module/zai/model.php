@@ -616,8 +616,6 @@ class zaiModel extends model
      */
     public function canViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
-        if($objectType === 'knowledge') return true;
-
         if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
 
         if(!isset(static::$objectViews[$objectType])) static::$objectViews[$objectType] = array();
