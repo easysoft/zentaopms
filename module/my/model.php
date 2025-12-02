@@ -1318,6 +1318,9 @@ class myModel extends model
             ->andWhere('t1.type')->eq('review')
             ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
             ->beginIF(!helper::hasFeature('project_change'))->andWhere('objectType')->ne('projectchange')->fi()
+            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
+            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
+            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
             ->orderBy("t2.{$orderBy}")
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
