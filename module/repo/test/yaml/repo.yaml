@@ -16,7 +16,7 @@ fields:
 - field: path
   range: "[http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea],[https://svn.qc.oop.cc/svn/unittest/]"
 - field: SCM
-  range: Gitlab{2},Gitea,Subversion
+  range: Subversion
 - field: client
   range: "git{3},svn{1}"
 - field: serviceHost
