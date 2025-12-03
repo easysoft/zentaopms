@@ -92,11 +92,11 @@ class scm
      * @param  string $comment An optional comment for the tag.
      * @return array|false  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
      */
-    public function createTag($tagName, $ref, $comment = '')
+    public function createTag($repoID, $tagName, $ref, $comment = '')
     {
         if(!in_array(get_class($this->engine), array('gitlabRepo', 'gitfoxRepo'))) return false;
 
-        return $this->engine->createTag($tagName, $ref, $comment);
+        return $this->engine->createTag($repoID, $tagName, $ref, $comment);
     }
 
     /**
