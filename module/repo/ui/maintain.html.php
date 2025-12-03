@@ -124,7 +124,7 @@ if($config->inCompose && empty($repoServers))
 {
     toolBar
     (
-        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
+        hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
         (
             'icon'  => 'plus',
             'class' => 'btn primary'
@@ -135,7 +135,7 @@ else
 {
     toolBar
     (
-        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
+        hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
         (
             'icon'  => 'plus',
             'class' => 'btn primary'
