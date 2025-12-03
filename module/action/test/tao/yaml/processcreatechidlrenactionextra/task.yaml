@@ -14,14 +14,14 @@ fields:
   format: ""
 - field: name
   note: 任务名称
-  range: '任务{1},测试任务{2},开发任务{3},Bug修复{4},代码审查{5},单元测试{6},接口开发{7},前端实现{8},数据库设计{9},需求分析{10},设计评审{11},性能优化{12},代码重构{13},文档编写{14},测试用例{15},集成测试{16},上线部署{17},问题修复{18},功能开发{19},任务管理{20}'
+  range: 任务1,测试任务2,开发任务3,Bug修复4,代码审查5,单元测试6,接口开发7,前端实现8,数据库设计9,需求分析10,设计评审11,性能优化12,代码重构13,文档编写14,测试用例15,集成测试16,上线部署17,问题修复18,功能开发19,任务管理20
   prefix: ""
   postfix: ""
   loop: 0
   format: ""
 - field: parent
   note: 父任务ID
-  range: '0{15},1{5}'
+  range: 0{15},1{5}
   prefix: ""
   postfix: ""
   loop: 0
@@ -42,28 +42,28 @@ fields:
   format: ""
 - field: story
   note: 关联需求ID
-  range: '0{10},1-10'
+  range: 0{10},1-10
   prefix: ""
   postfix: ""
   loop: 0
   format: ""
 - field: type
   note: 任务类型
-  range: '[design,devel,test,study,discuss,ui,affair]{20}'
+  range: design,devel,test,study,discuss,ui,affair,design,devel,test,study,discuss,ui,affair,design,devel,test,study,discuss,ui
   prefix: ""
   postfix: ""
   loop: 0
   format: ""
 - field: status
   note: 任务状态
-  range: '[wait,doing,done,pause,cancel,closed]{20}'
+  range: wait,doing,done,pause,cancel,closed,wait,doing,done,pause,cancel,closed,wait,doing,done,pause,cancel,closed,wait,doing
   prefix: ""
   postfix: ""
   loop: 0
   format: ""
 - field: pri
   note: 优先级
-  range: '1-4'
+  range: 1-4
   prefix: ""
   postfix: ""
   loop: 0
@@ -91,42 +91,42 @@ fields:
   format: ""
 - field: assignedTo
   note: 指派给
-  range: '[admin,user1,user2,user3,user4,]{20}'
+  range: admin,user1,user2,user3,user4,admin,user1,user2,user3,user4,admin,user1,user2,user3,user4,admin,user1,user2,user3,user4
   prefix: ""
   postfix: ""
   loop: 0
   format: ""
 - field: assignedDate
   note: 指派日期
-  range: '(-10D)-(-1D)'
+  range: (-10D)-(-1D)
   prefix: ""
   postfix: ""
   loop: 0
   format: YYYY-MM-DD hh:mm:ss
 - field: estStarted
   note: 预计开始时间
-  range: '(-5D)-(+5D)'
+  range: (-5D)-(+5D)
   prefix: ""
   postfix: ""
   loop: 0
   format: YYYY-MM-DD
 - field: realStarted
   note: 实际开始时间
-  range: '(-3D)-(-1D)'
+  range: (-3D)-(-1D)
   prefix: ""
   postfix: ""
   loop: 0
   format: YYYY-MM-DD
 - field: deadline
   note: 截止日期
-  range: '(+1D)-(+30D)'
+  range: (+1D)-(+30D)
   prefix: ""
   postfix: ""
   loop: 0
   format: YYYY-MM-DD
 - field: deleted
   note: 是否删除
-  range: '0{18},1{2}'
+  range: 0{18},1{2}
   prefix: ""
   postfix: ""
   loop: 0
