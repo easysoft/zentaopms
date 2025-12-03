@@ -100,6 +100,22 @@ class storyEntry extends entry
         $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail,status,needNotReview';
         $this->batchSetPost($fields, $oldStory);
 
+        /* 设置状态逻辑，与web端保持一致（参考 common.ui.js 中的 clickSubmit 函数） */
+        $reviewer = $this->request('reviewer');
+        $needNotReview = $this->request('needNotReview', 0);
+        $status = $this->request('status', $oldStory->status);
+
+        /* 如果状态是 'active' 且设置了评审人且未勾选不需要评审，则将状态设置为 'reviewing' */
+        if($status == 'active' && !empty($reviewer) && !$needNotReview)
+        {
+            $this->setPost('status', 'reviewing');
+        }
+        /* 如果原状态是 'draft' 或 'changing' 且设置了评审人，则将状态设置为 'reviewing' */
+        elseif(strpos('draft,changing', $oldStory->status) !== false && !empty($reviewer) && !isset($this->requestBody->status))
+        {
+            $this->setPost('status', 'reviewing');
+        }
+
         $control->edit($storyID);
 
         $data = $this->getData();
