@@ -105,13 +105,15 @@ class storyEntry extends entry
         $needNotReview = $this->request('needNotReview', 0);
         $status = $this->request('status', $oldStory->status);
 
-        /* 如果状态是 'active' 且设置了评审人且未勾选不需要评审，则将状态设置为 'reviewing' */
-        if($status == 'active' && !empty($reviewer) && !$needNotReview)
-        {
-            $this->setPost('status', 'reviewing');
-        }
-        /* 如果原状态是 'draft' 或 'changing' 且设置了评审人，则将状态设置为 'reviewing' */
-        elseif(strpos('draft,changing', $oldStory->status) !== false && !empty($reviewer) && !isset($this->requestBody->status))
+        /* 如果设置了评审人且满足以下条件之一，则将状态设置为 'reviewing'：
+         * 1. 状态是 'active' 且未勾选不需要评审
+         * 2. 原状态是 'draft' 或 'changing' 且未在请求中指定状态
+         */
+        $hasReviewer                  = !empty($reviewer);
+        $isActiveNeedReview           = $status == 'active' && !$needNotReview;
+        $isDraftChangingWithoutStatus = strpos('draft,changing', $oldStory->status) !== false && !isset($this->requestBody->status);
+
+        if($hasReviewer && ($isActiveNeedReview || $isDraftChangingWithoutStatus))
         {
             $this->setPost('status', 'reviewing');
         }
