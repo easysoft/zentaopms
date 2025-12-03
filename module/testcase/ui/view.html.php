@@ -102,20 +102,20 @@ if(!empty($case->steps) && $stepsType == 'table')
             setClass("step {$stepClass} border align-top flex"),
             cell
             (
-                setClass('text-left flex border-r step-id'),
+                setClass('text-left flex border-r step-id whitespace-pre-line'),
                 width('1/2'),
                 span
                 (
                     setClass('nowrap pr-2 pl-' . (($step->grade - 1) * 2)),
                     $step->name
                 ),
-                text(html_entity_decode(nl2br(str_replace(' ', '&nbsp;', $step->desc))))
+                text(html_entity_decode(str_replace(' ', '&nbsp;', $step->desc)))
             ),
             cell
             (
-                setClass('text-left flex'),
+                setClass('text-left flex whitespace-pre-line'),
                 width('1/2'),
-                text(html_entity_decode(nl2br(str_replace(' ', '&nbsp;', $step->expect))))
+                text(html_entity_decode(str_replace(' ', '&nbsp;', $step->expect)))
             )
         );
     }

@@ -328,14 +328,9 @@ class backup extends control
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            $this->app->loadLang('extension');
+            $okFile = str_replace($this->app->getBasePath(), '', $statusFile);
 
-            $search = $this->app->getBasePath();
-            $pos    = strpos($statusFile, $search);
-            $okFile = $statusFile;
-            if($pos !== false) $okFile = substr_replace($statusFile, '', $pos, strlen($search));
-
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $okFile, $statusFile);
+            $this->view->error = sprintf($this->lang->noticeOkFile, $okFile, $statusFile);
             return print($this->display());
         }
 

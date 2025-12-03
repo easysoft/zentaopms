@@ -927,6 +927,24 @@ class actionTest
     }
 
     /**
+     * Test processActionForAPI method specifically for history field mapping.
+     *
+     * @param  array|object $actions
+     * @param  array|object $users
+     * @param  array|object $objectLang
+     * @access public
+     * @return string
+     */
+    public function processActionForAPIHistoryTest($actions, $users = array(), $objectLang = array()): string
+    {
+        $result = $this->processActionForAPITest($actions, $users, $objectLang);
+        if(empty($result) || !isset($result[0]->history) || !is_array($result[0]->history) || empty($result[0]->history)) {
+            return '';
+        }
+        return $result[0]->history[0]->fieldName ?? '';
+    }
+
+    /**
      * Test buildTrashSearchForm method.
      *
      * @param  int    $queryID
@@ -1132,13 +1150,18 @@ class actionTest
     /**
      * Test processCreateRequirementsActionExtra method.
      *
-     * @param  object $action
+     * @param  string $storyIds
      * @access public
      * @return object
      */
-    public function processCreateRequirementsActionExtraTest(object $action): object
+    public function processCreateRequirementsActionExtraTest(string $storyIds): object
     {
+        // 创建模拟的action对象
+        $action = new stdClass();
+        $action->extra = $storyIds;
+
         $this->objectTao->processCreateRequirementsActionExtra($action);
+        if(dao::isError()) return dao::getError();
         return $action;
     }
 

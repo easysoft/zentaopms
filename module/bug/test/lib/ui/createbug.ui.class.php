@@ -112,6 +112,7 @@ class createBugTester extends tester
     public function browse($product = array(), $bugs = array())
     {
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(2);
         $bugIDList    = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugID'])->element);
         $bugTitleList = array_map(function($element) {return $element->getText();}, $form->dom->getELementList($form->dom->xpath['bugTitle'])->element);
         foreach($bugs as $bug)
@@ -143,6 +144,7 @@ class createBugTester extends tester
         $form->wait(1);
         $form->dom->dropdownPicker($assignee);
         $form->wait(2);
+        $form->dom->bugAssigned->scrollToElement();
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
         foreach($bugAssigned as $assigned)
         {
@@ -171,12 +173,14 @@ class createBugTester extends tester
         $form->wait(3);
         $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
+        $form->dom->bugAssigned->scrollToElement();
         $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($assignee);
         $form->wait(1);
         $form->dom->assign->click();
         $form->wait(1);
+        $form->dom->bugAssigned->scrollToElement();
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
         if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
         return $this->failed('bug直接修改指派失败');
@@ -207,6 +211,7 @@ class createBugTester extends tester
         $form->wait(1);
         $form->dom->dropdownPicker($assignee);
         $form->wait(1);
+        $form->dom->bugAssigned->scrollToElement();
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
         if($bugAssigned[$index] == $assignee) return $this->success('bug选择指派成功');
         return $this->failed('bug选择指派失败');

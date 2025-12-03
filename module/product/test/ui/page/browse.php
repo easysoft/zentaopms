@@ -42,7 +42,9 @@ class browsePage extends page
             'createdByMeNum'  => '//*[@id="featureBar"]/menu/li[4]/a/span[2]',
             'reviewByMeNum'   => '//*[@id="featureBar"]/menu/li[5]/a/span[2]',
             'draftNum'        => '//*[@id="featureBar"]/menu/li[6]/a/span[2]',
-            'moreNum'         => '//*[@id="featureBar"]/menu/li[7]/a/span[2]'
+            'moreNum'         => '//*[@id="featureBar"]/menu/li[7]/a/span[2]',
+            'exportBtn'       => "//*[@id='exportBtn']",
+            'firstStory'      => '//*[@id="stories"]/div[2]/div[1]/div/div[1]',
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

@@ -13,9 +13,6 @@ cid=1
 - 看板名称为空，创建失败
  - 最终测试状态 @SUCCESS
  - 测试结果 @创建看板表单页提示信息正确
-- 看板代号为空，创建失败
- - 最终测试状态 @SUCCESS
- - 测试结果 @创建看板表单页提示信息正确
 - 计划开始时间为空，创建失败
  - 最终测试状态 @SUCCESS
  - 测试结果 @创建看板表单页提示信息正确
@@ -26,9 +23,6 @@ cid=1
  - 最终测试状态 @SUCCESS
  - 测试结果 @创建看板成功
 - 看板名称重复，创建失败
- - 最终测试状态 @SUCCESS
- - 测试结果 @创建看板表单页提示信息正确
-- 看板代号重复，创建失败
  - 最终测试状态 @SUCCESS
  - 测试结果 @创建看板表单页提示信息正确
 - 看板的计划开始时间早于项目的计划开始时间，创建失败
@@ -91,71 +85,49 @@ $tester->login();
 $execution = array(
     '0' => array(
         'name'     => '测试看板1',
-        'code'     => '测试看板1',
         'project'  => '运营项目1',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
     ),
     '1' => array(
         'name'     => '',
-        'code'     => '测试看板2',
         'project'  => '运营项目1',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
     ),
     '2' => array(
-        'name'    => '测试看板3',
-        'code'    => '',
-        'project' => '运营项目1',
-        'begin'   => date('Y-m-d'),
-        'end'     => date('Y-m-d', strtotime('+2 days')),
-    ),
-    '3' => array(
         'name'    => '测试看板4',
-        'code'    => '测试看板4',
         'project' => '运营项目1',
         'begin'   => '',
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
-    '4' => array(
+    '3' => array(
         'name'    => '测试看板5',
-        'code'    => '测试看板5',
         'project' => '运营项目1',
         'begin'   => date('Y-m-d'),
         'end'     => '',
     ),
-    '5' => array(
+    '4' => array(
         'name'    => '测试看板1',
-        'code'    => '测试看板1',
         'project' => '运营项目2',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
-    '6' => array(
+    '5' => array(
         'name'    => '测试看板1',
-        'code'    => '测试看板6',
         'project' => '运营项目1',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
-    '7' => array(
-        'name'    => '测试看板7',
-        'code'    => '测试看板1',
-        'project' => '运营项目1',
-        'begin'   => date('Y-m-d'),
-        'end'     => date('Y-m-d', strtotime('+2 days')),
-    ),
-    '8' => array(
+    '6' => array(
         'name'     => '测试看板8',
-        'code'     => '测试看板8',
         'project'  => '运营项目1',
         'begin'    => date('Y-m-d', strtotime('-2 years')),
         'end'      => date('Y-m-d', strtotime('+2 days')),
         'products' => '',
     ),
-    '9' => array(
+    '7' => array(
         'name'     => '测试看板9',
-        'code'     => '测试看板9',
         'project'  => '运营项目1',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 years')),
@@ -164,13 +136,11 @@ $execution = array(
 );
 
 r($tester->create($execution['0']))                       && p('status,message') && e('SUCCESS,创建看板成功');               //创建看板成功
-r($tester->createWithEmptyName($execution['1'], 'name'))  && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板名称为空，创建失败
-r($tester->createWithEmptyName($execution['2'], 'code'))  && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板代号为空，创建失败
-r($tester->create($execution['3']))                       && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //计划开始时间为空，创建失败
-r($tester->create($execution['4']))                       && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //计划结束时间为空，创建失败
-r($tester->create($execution['5']))                       && p('status,message') && e('SUCCESS,创建看板成功');               //不同项目下同名看板、代号，创建成功
-r($tester->createWithRepeatName($execution['6'], 'name')) && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板名称重复，创建失败
-r($tester->createWithRepeatName($execution['7'], 'code')) && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板代号重复，创建失败
-r($tester->createWithDateError($execution['8'], 'begin')) && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板的计划开始时间早于项目的计划开始时间，创建失败
-r($tester->createWithDateError($execution['9'], 'end'))   && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板的计划结束时间晚于项目的计划结束时间，创建失败
+r($tester->createWithEmptyName($execution['1']))          && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板名称为空，创建失败
+r($tester->create($execution['2']))                       && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //计划开始时间为空，创建失败
+r($tester->create($execution['3']))                       && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //计划结束时间为空，创建失败
+r($tester->create($execution['4']))                       && p('status,message') && e('SUCCESS,创建看板成功');               //不同项目下同名看板、代号，创建成功
+r($tester->createWithRepeatName($execution['5']))         && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板名称重复，创建失败
+r($tester->createWithDateError($execution['6'], 'begin')) && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板的计划开始时间早于项目的计划开始时间，创建失败
+r($tester->createWithDateError($execution['7'], 'end'))   && p('status,message') && e('SUCCESS,创建看板表单页提示信息正确'); //看板的计划结束时间晚于项目的计划结束时间，创建失败
 $tester->closeBrowser();

@@ -1,5 +1,8 @@
 <?php
 declare(strict_types = 1);
+
+helper::import(dirname(__FILE__, 3) . '/model.php');
+
 class zaiTest
 {
     public function __construct()
@@ -162,6 +165,59 @@ class zaiTest
     }
 
     /**
+     * Test convertGenericToMarkdown protected static method via reflection.
+     *
+     * @param string $type
+     * @param object $target
+     * @access public
+     * @return array
+     */
+    public function convertGenericToMarkdownTest($type, $target)
+    {
+        return zaiModel::convertGenericToMarkdown($type, $target);
+    }
+
+    /**
+     * Test formatFieldValue protected static method.
+     *
+     * @param array  $langData
+     * @param string $field
+     * @param mixed  $value
+     * @access public
+     * @return string
+     */
+    public function formatFieldValueTest(array $langData, string $field, $value): string
+    {
+        return zaiModel::formatFieldValue($langData, $field, $value);
+    }
+
+    /**
+     * Test getFieldLabel protected static method.
+     *
+     * @param array  $langData
+     * @param string $field
+     * @access public
+     * @return string
+     */
+    public function getFieldLabelTest(array $langData, string $field): string
+    {
+        return zaiModel::getFieldLabel($langData, $field);
+    }
+
+    /**
+     * Test getSectionLabel protected static method.
+     *
+     * @param array  $langData
+     * @param string $section
+     * @access public
+     * @return string
+     */
+    public function getSectionLabelTest(array $langData, string $section): string
+    {
+        return zaiModel::getSectionLabel($langData, $section);
+    }
+
+    /**
      * Test convertStoryToMarkdown static method.
      *
      * @param  object $story
@@ -233,6 +289,18 @@ class zaiTest
     public function convertBugToMarkdownTest($bug)
     {
         return zaiModel::convertBugToMarkdown($bug);
+    }
+
+    /**
+     * Test convertTaskToMarkdown static method.
+     *
+     * @param  object $task
+     * @access public
+     * @return array
+     */
+    public function convertTaskToMarkdownTest($task)
+    {
+        return zaiModel::convertTaskToMarkdown($task);
     }
 
     /**
@@ -355,6 +423,392 @@ class zaiTest
     public function callAdminAPITest($path, $method = 'POST', $params = null, $postData = null)
     {
         $result = $this->objectModel->callAdminAPI($path, $method, $params, $postData);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test canViewObject method.
+     *
+     * @param  string $objectType
+     * @param  int $objectID
+     * @param  array|null $attrs
+     * @access public
+     * @return bool
+     */
+    public function canViewObjectTest($objectType, $objectID, $attrs = null)
+    {
+        $result = $this->objectModel->canViewObject($objectType, $objectID, $attrs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test searchKnowledges method.
+     *
+     * @param  string $query
+     * @param  string $collection
+     * @param  array $filter
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgesTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.5)
+    {
+        $result = $this->objectModel->searchKnowledges($query, $collection, $filter, $limit, $minSimilarity);
+        return $result;
+    }
+
+    /**
+     * Test searchKnowledgeChunks method.
+     *
+     * @param  string $query
+     * @param  string $collection
+     * @param  array $filter
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgeChunksTest($query, $collection, $filter, $limit = 20, $minSimilarity = 0.5)
+    {
+        $result = $this->objectModel->searchKnowledgeChunks($query, $collection, $filter, $limit, $minSimilarity);
+        return $result;
+    }
+
+    /**
+     * Test getCollectionKey method.
+     *
+     * @param  string|int $collection
+     * @access public
+     * @return string
+     */
+    public function getCollectionKeyTest($collection)
+    {
+        $result = $this->objectModel->getCollectionKey($collection);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test collectFieldPairs static method.
+     *
+     * @param  string $objectType
+     * @param  array  $langData
+     * @param  object $target
+     * @access public
+     * @return array
+     */
+    public function collectFieldPairsTest(string $objectType, array $langData, object $target): array
+    {
+        return zaiModel::collectFieldPairs($objectType, $langData, $target);
+    }
+
+    /**
+     * Test getFieldAliasMap static method.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getFieldAliasMapTest(string $objectType): array
+    {
+        return zaiModel::getFieldAliasMap($objectType);
+    }
+
+    /**
+     * Test extractFieldValue static method.
+     *
+     * @param  string $objectType
+     * @param  string $field
+     * @param  object $target
+     * @access public
+     * @return mixed
+     */
+    public function extractFieldValueTest(string $objectType, string $field, object $target)
+    {
+        return zaiModel::extractFieldValue($objectType, $field, $target);
+    }
+
+    /**
+     * Test convertCaseToMarkdown static method.
+     *
+     * @param  object     $case
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertCaseToMarkdownTest($case, ?array $langData = null): array
+    {
+        return zaiModel::convertCaseToMarkdown($case, $langData);
+    }
+
+    /**
+     * Test convertIssueToMarkdown static method.
+     *
+     * @param  object     $issue
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertIssueToMarkdownTest($issue, ?array $langData = null): array
+    {
+        return zaiModel::convertIssueToMarkdown($issue, $langData);
+    }
+
+    /**
+     * Test convertRiskToMarkdown static method.
+     *
+     * @param  object     $risk
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertRiskToMarkdownTest($risk, ?array $langData = null): array
+    {
+        return zaiModel::convertRiskToMarkdown($risk, $langData);
+    }
+
+    /**
+     * Test convertPlanToMarkdown static method.
+     *
+     * @param  object     $plan
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertPlanToMarkdownTest($plan, ?array $langData = null): array
+    {
+        return zaiModel::convertPlanToMarkdown($plan, $langData);
+    }
+
+    /**
+     * Test convertOpportunityToMarkdown static method.
+     *
+     * @param  object     $opportunity
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertOpportunityToMarkdownTest($opportunity, ?array $langData = null): array
+    {
+        return zaiModel::convertOpportunityToMarkdown($opportunity, $langData);
+    }
+
+    /**
+     * Test convertReleaseToMarkdown static method.
+     *
+     * @param  object     $release
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertReleaseToMarkdownTest($release, ?array $langData = null): array
+    {
+        return zaiModel::convertReleaseToMarkdown($release, $langData);
+    }
+
+    /**
+     * Test convertTicketToMarkdown static method.
+     *
+     * @param  object     $ticket
+     * @param  array      $langData
+     * @access public
+     * @return array
+     */
+    public function convertTicketToMarkdownTest($ticket, ?array $langData = null): array
+    {
+        return zaiModel::convertTicketToMarkdown($ticket, $langData);
+    }
+
+    /**
+     * Test searchKnowledgesInCollections method.
+     *
+     * @param  string $query
+     * @param  array $filters
+     * @param  string $type
+     * @param  int $limit
+     * @param  float $minSimilarity
+     * @access public
+     * @return array
+     */
+    public function searchKnowledgesInCollectionsTest($query, $filters, $type = 'content', $limit = 20, $minSimilarity = 0.5)
+    {
+        $result = $this->objectModel->searchKnowledgesInCollections($query, $filters, $type, $limit, $minSimilarity);
+        return $result;
+    }
+
+    /**
+     * Test filterKnowledgesByPriv method.
+     *
+     * @param  array $knowledges
+     * @param  string $type
+     * @param  int $limit
+     * @access public
+     * @return array
+     */
+    public function filterKnowledgesByPrivTest($knowledges, $type = 'content', $limit = 0)
+    {
+        $result = $this->objectModel->filterKnowledgesByPriv($knowledges, $type, $limit);
+        return $result;
+    }
+
+    /**
+     * Test appendFieldList static method.
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  array $fieldPairs
+     * @access public
+     * @return array
+     */
+    public function appendFieldListTest(array $content, array $langData, array $fieldPairs): array
+    {
+        zaiModel::appendFieldList($content, $langData, $fieldPairs);
+        return $content;
+    }
+
+    /**
+     * Test appendDetailSection static method.
+     *
+     * @param  array  $content
+     * @param  array  $langData
+     * @param  string $sectionKey
+     * @param  mixed  $rawValue
+     * @access public
+     * @return array
+     */
+    public function appendDetailSectionTest(array $content, array $langData, string $sectionKey, $rawValue): array
+    {
+        zaiModel::appendDetailSection($content, $langData, $sectionKey, $rawValue);
+        return $content;
+    }
+
+    /**
+     * Test appendMilestoneSection static method.
+     *
+     * @param  array $content
+     * @param  array $langData
+     * @param  mixed $milestones
+     * @access public
+     * @return array
+     */
+    public function appendMilestoneSectionTest(array $content, array $langData, $milestones): array
+    {
+        zaiModel::appendMilestoneSection($content, $langData, $milestones);
+        return $content;
+    }
+
+    /**
+     * Test buildCaseStepsText static method.
+     *
+     * @param  mixed $steps
+     * @param  array $langData
+     * @access public
+     * @return string
+     */
+    public function buildCaseStepsTextTest($steps, array $langData): string
+    {
+        return zaiModel::buildCaseStepsText($steps, $langData);
+    }
+
+    /**
+     * Test createKnowledgeLib method.
+     *
+     * @param  string $name
+     * @param  string $description
+     * @param  array|null $options
+     * @access public
+     * @return mixed
+     */
+    public function createKnowledgeLibTest(string $name, string $description = '', ?array $options = null)
+    {
+        $result = $this->objectModel->createKnowledgeLib($name, $description, $options);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test deleteKnowledgeLib method.
+     *
+     * @param  string $memoryID
+     * @access public
+     * @return mixed
+     */
+    public function deleteKnowledgeLibTest(string $memoryID)
+    {
+        $result = $this->objectModel->deleteKnowledgeLib($memoryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateKnowledgeItem method.
+     *
+     * @param  string $memoryID
+     * @param  string $key
+     * @param  string $content
+     * @param  string $contentType
+     * @param  array|null $attrs
+     * @access public
+     * @return mixed
+     */
+    public function updateKnowledgeItemTest(string $memoryID, string $key, string $content, string $contentType = 'markdown', ?array $attrs = null)
+    {
+        $result = $this->objectModel->updateKnowledgeItem($memoryID, $key, $content, $contentType, $attrs);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test deleteKnowledgeItem method.
+     *
+     * @param  string $memoryID
+     * @param  string $key
+     * @access public
+     * @return mixed
+     */
+    public function deleteKnowledgeItemTest(string $memoryID, string $key)
+    {
+        $result = $this->objectModel->deleteKnowledgeItem($memoryID, $key);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getKnowledgeChunks method.
+     *
+     * @param  string $memoryID
+     * @param  string $contentID
+     * @access public
+     * @return mixed
+     */
+    public function getKnowledgeChunksTest(string $memoryID, string $contentID)
+    {
+        $result = $this->objectModel->getKnowledgeChunks($memoryID, $contentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test extractFileContent method.
+     *
+     * @param  int $fileID
+     * @access public
+     * @return mixed
+     */
+    public function extractFileContentTest(int $fileID)
+    {
+        $result = $this->objectModel->extractFileContent($fileID);
         if(dao::isError()) return dao::getError();
 
         return $result;

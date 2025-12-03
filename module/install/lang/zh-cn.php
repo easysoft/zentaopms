@@ -146,9 +146,6 @@ $lang->install->working        = '工作方式';
 
 $lang->install->dbDriverList = array();
 $lang->install->dbDriverList['mysql']     = 'MySQL';
-$lang->install->dbDriverList['dm']        = '达梦';
-$lang->install->dbDriverList['oceanbase'] = 'OceanBase';
-$lang->install->dbDriverList['highgo']    = '瀚高';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';

@@ -39,52 +39,39 @@ $promptMenuInject = function()
     $menuOptions = $this->config->ai->menuPrint->locations[$module][$method];
     $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
+    $btnName     = sprintf($this->lang->ai->promptMenu->dropdownTitle, isset($this->lang->ai->dataSource[$module]['common']) ? $this->lang->ai->dataSource[$module]['common'] : '');
+
 
     if($isDocApp)
     {
         h::globalJS
         (
             'window.docAIPrompts = ' . json_encode($prompts) . ";\n",
-            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $this->lang->ai->promptMenu->dropdownTitle, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
+            'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $btnName, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
         );
         return;
     }
 
     if(empty($prompts)) return;
 
-    $html = '';
-    $objectVarName = empty($menuOptions->objectVarName) ? $menuOptions->module : $menuOptions->objectVarName;
+    $html            = '';
+    $objectVarName   = empty($menuOptions->objectVarName) ? $menuOptions->module : $menuOptions->objectVarName;
     $currentObjectId = !empty($this->view->$objectVarName) ? $this->view->$objectVarName->id : 0;
-    if(count($prompts) > 1)
+    $html .= '<div class="prompts dropdown inline-block' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn ai-styled size-sm size-sm font-medium' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown" data-placement="' . zget($menuOptions, 'buttonPlacement', 'bottom-end') . '">' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
+    foreach($prompts as $prompt)
     {
-        $html .= '<div class="prompts dropdown' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->dropdownClass) ? ' ' . $menuOptions->dropdownClass : '')) . '"><button class="btn ghost size-sm font-medium' . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : '') . '" type="button" data-toggle="dropdown" data-placement="' . zget($menuOptions, 'buttonPlacement', 'bottom-center') . '">' . $this->lang->ai->promptMenu->dropdownTitle . ' <span class="caret-down"></span></button><menu class="dropdown-menu menu">';
-        foreach($prompts as $prompt)
-        {
-            $html .= '<li class="menu-item">';
-            $html .= html::a
-            (
-                helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId&auto=0"),
-                $prompt->name . ($prompt->status != 'active' ? '<span class="label size-sm gray-500-pale ring-gray-500" style="margin-left: 4px; white-space: nowrap;">' . $this->lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''),
-                '',
-                "class='prompt ajax-submit' style='width: 100%;'" . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"),
-                'btn ghost size-sm font-medium text-left'
-            );
-            $html .= '</li>';
-        }
-        $html .= '</menu></div>';
-    }
-    else
-    {
-        $prompt   = current($prompts);
-        $btnClass = 'prompt btn ghost size-sm font-medium ajax-submit' . ((isset($menuOptions->class) ? ' ' . $menuOptions->class : '') . (isset($menuOptions->buttonClass) ? ' ' . $menuOptions->buttonClass : ''));
+        $html .= '<li class="menu-item">';
         $html .= html::a
         (
             helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId&auto=0"),
             $prompt->name . ($prompt->status != 'active' ? '<span class="label size-sm gray-500-pale ring-gray-500" style="margin-left: 4px; white-space: nowrap;">' . $this->lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''),
             '',
-            "class='$btnClass' " . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='bottom'")
+            "class='prompt ajax-submit' style='width: 100%;'" . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"),
+            'btn ghost size-sm font-medium text-left'
         );
+        $html .= '</li>';
     }
+    $html .= '</menu></div>';
 
     /* Assemble injector script. */
     $script = <<< JAVASCRIPT
@@ -100,7 +87,8 @@ $promptMenuInject = function()
     JAVASCRIPT;
     $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
     $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
-    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 2);\n";
+    $script .= 'else $aiMenu.find(".prompts.dropdown").remove();';
+    $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 20);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
     JAVASCRIPT;

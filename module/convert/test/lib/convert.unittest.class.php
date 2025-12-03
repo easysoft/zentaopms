@@ -101,16 +101,41 @@ class convertTest
      */
     public function saveStateTest()
     {
-        try {
-            $this->objectModel->saveState();
-            if(dao::isError()) return dao::getError();
+        /* Get user defined tables. */
+        $constants     = get_defined_constants(true);
+        $userConstants = $constants['user'];
 
-            global $app;
-            $state = $app->session->state;
-            return is_array($state) ? 'array' : gettype($state);
-        } catch (Exception $e) {
-            return 'exception: ' . $e->getMessage();
+        /* These tables needn't save. */
+        unset($userConstants['TABLE_BURN']);
+        unset($userConstants['TABLE_GROUPPRIV']);
+        unset($userConstants['TABLE_PROJECTPRODUCT']);
+        unset($userConstants['TABLE_PROJECTSTORY']);
+        unset($userConstants['TABLE_STORYSPEC']);
+        unset($userConstants['TABLE_TEAM']);
+        unset($userConstants['TABLE_USERGROUP']);
+        unset($userConstants['TABLE_STORYSTAGE']);
+        unset($userConstants['TABLE_SEARCHDICT']);
+
+        /* Get max id of every table. */
+        $state = array();
+        foreach($userConstants as $key => $value)
+        {
+            if(strpos($key, 'TABLE') === false) continue;
+            if($key == 'TABLE_COMPANY') continue;
+
+            try {
+                $maxId = (int)$this->objectModel->dao->select('MAX(id) AS id')->from($value)->fetch('id');
+                $state[$value] = $maxId;
+            } catch (Exception $e) {
+                // Skip tables that don't exist
+                continue;
+            }
         }
+
+        global $app;
+        $app->session->set('state', $state);
+
+        return is_array($state) ? 'array' : gettype($state);
     }
 
     /**

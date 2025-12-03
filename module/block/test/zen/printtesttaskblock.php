@@ -5,66 +5,60 @@
 
 title=测试 blockZen::printTesttaskBlock();
 timeout=0
-cid=15307
+cid=15300
 
-- 步骤1:测试正常情况下传入type参数为wait和count参数为10
- - 属性type @wait
- - 属性count @10
-- 步骤2:测试type参数包含特殊字符时验证失败属性type @invalid-type
-- 步骤3:测试type参数为all时查询所有测试单属性type @all
-- 步骤4:测试type参数为doing时查询进行中的测试单
- - 属性type @doing
- - 属性count @5
-- 步骤5:测试type参数为done时查询已完成的测试单属性type @done
-- 步骤6:测试count为0时的处理属性count @0
+- 执行blockTest模块的printTesttaskBlockTest方法，参数type=all 属性hasValidation @1
+- 执行blockTest模块的printTesttaskBlockTest方法，参数type=wait 属性type @wait
+- 执行blockTest模块的printTesttaskBlockTest方法，参数type=doing 属性type @doing
+- 执行blockTest模块的printTesttaskBlockTest方法，参数type=done 属性type @done
+- 执行blockTest模块的printTesttaskBlockTest方法，参数count=3 属性count @3
 
 */
 
-// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zen.class.php';
+include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
 
-// 2. 用户登录(选择合适角色)
 su('admin');
 
-// 3. 创建测试实例(变量名与模块名一致)
-$blockTest = new blockZenTest();
+$blockTest = new blockTest();
 
-// 4. 准备测试数据
-$block1 = new stdclass();
-$block1->params = new stdclass();
-$block1->params->type = 'wait';
-$block1->params->count = 10;
+// 测试参数 type=all
+$block1 = new stdClass();
+$block1->params = new stdClass();
+$block1->params->type = 'all';
+$block1->params->orderBy = 'id_desc';
+$block1->params->count = 15;
 
-$block2 = new stdclass();
-$block2->params = new stdclass();
-$block2->params->type = 'invalid-type';
-$block2->params->count = 10;
+// 测试参数 type=wait
+$block2 = new stdClass();
+$block2->params = new stdClass();
+$block2->params->type = 'wait';
+$block2->params->orderBy = 'id_desc';
+$block2->params->count = 15;
 
-$block3 = new stdclass();
-$block3->params = new stdclass();
-$block3->params->type = 'all';
-$block3->params->count = 10;
+// 测试参数 type=doing
+$block3 = new stdClass();
+$block3->params = new stdClass();
+$block3->params->type = 'doing';
+$block3->params->orderBy = 'id_desc';
+$block3->params->count = 15;
 
-$block4 = new stdclass();
-$block4->params = new stdclass();
-$block4->params->type = 'doing';
-$block4->params->count = 5;
+// 测试参数 type=done
+$block4 = new stdClass();
+$block4->params = new stdClass();
+$block4->params->type = 'done';
+$block4->params->orderBy = 'id_desc';
+$block4->params->count = 15;
 
-$block5 = new stdclass();
-$block5->params = new stdclass();
-$block5->params->type = 'done';
-$block5->params->count = 10;
+// 测试参数 count限制
+$block5 = new stdClass();
+$block5->params = new stdClass();
+$block5->params->type = 'all';
+$block5->params->orderBy = 'id_desc';
+$block5->params->count = 3;
 
-$block6 = new stdclass();
-$block6->params = new stdclass();
-$block6->params->type = 'wait';
-$block6->params->count = 0;
-
-// 5. 强制要求:必须包含至少5个测试步骤
-r($blockTest->printTesttaskBlockTest($block1)) && p('type,count') && e('wait,10'); // 步骤1:测试正常情况下传入type参数为wait和count参数为10
-r($blockTest->printTesttaskBlockTest($block2)) && p('type') && e('invalid-type'); // 步骤2:测试type参数包含特殊字符时验证失败
-r($blockTest->printTesttaskBlockTest($block3)) && p('type') && e('all'); // 步骤3:测试type参数为all时查询所有测试单
-r($blockTest->printTesttaskBlockTest($block4)) && p('type,count') && e('doing,5'); // 步骤4:测试type参数为doing时查询进行中的测试单
-r($blockTest->printTesttaskBlockTest($block5)) && p('type') && e('done'); // 步骤5:测试type参数为done时查询已完成的测试单
-r($blockTest->printTesttaskBlockTest($block6)) && p('count') && e('0'); // 步骤6:测试count为0时的处理
+r($blockTest->printTesttaskBlockTest($block1)) && p('hasValidation') && e('1'); // 测试type=all, 验证参数有效性
+r($blockTest->printTesttaskBlockTest($block2)) && p('type') && e('wait');       // 测试type=wait
+r($blockTest->printTesttaskBlockTest($block3)) && p('type') && e('doing');      // 测试type=doing
+r($blockTest->printTesttaskBlockTest($block4)) && p('type') && e('done');       // 测试type=done
+r($blockTest->printTesttaskBlockTest($block5)) && p('count') && e('3');         // 测试count限制

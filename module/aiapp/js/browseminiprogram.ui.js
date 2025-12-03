@@ -103,8 +103,8 @@ function clearErrorTip()
  */
 function sendMessagesToAI(message, renew)
 {
-    const chatID = (renew || aiChatView.$.chat.$local.id) ? 'NEW' : undefined;
-    aiChatView.$.postMessage({content: message, chatType: 'miniprogram'}, chatID);
+    const postOptions = {content: message, chat: {userPrompt: message, type: 'miniprogram', contexts: [{code: 'zentao-knowledgeLibs', data: {memory: {collections: (knowledgeLibs || '').split(',').filter(Boolean).map(x => `zentao:${x}`)}}}]}};
+    aiChatView.$.postMessage(postOptions);
 }
 
 window.aiBrowseMiniProgram.initAIChatView = function(options)

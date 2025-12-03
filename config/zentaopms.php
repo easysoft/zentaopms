@@ -236,7 +236,6 @@ $config->logonMethods[] = 'action.commentzin';
 $config->logonMethods[] = 'action.editcommentzin';
 $config->logonMethods[] = 'action.restorestages';
 $config->logonMethods[] = 'admin.ignore';
-$config->logonMethods[] = 'ai.adminindex';
 $config->logonMethods[] = 'caselib.index';
 $config->logonMethods[] = 'company.index';
 $config->logonMethods[] = 'cron.consume';
@@ -629,6 +628,7 @@ define('TABLE_INSTANCE',     '`' . $config->db->prefix . 'instance`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 define('TABLE_AI_PROMPT',           '`' . $config->db->prefix . 'ai_prompt`');
+define('TABLE_AI_PROMPTFIELD',      '`' . $config->db->prefix . 'ai_promptfield`');
 define('TABLE_AI_PROMPTROLE',       '`' . $config->db->prefix . 'ai_promptrole`');
 define('TABLE_AI_MINIPROGRAM',      '`' . $config->db->prefix . 'ai_miniprogram`');
 define('TABLE_AI_MINIPROGRAMFIELD', '`' . $config->db->prefix . 'ai_miniprogramfield`');

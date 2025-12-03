@@ -74,10 +74,10 @@ process_method() {
         local commits=$(git log --oneline --follow -- "$test_file" | awk '{print $1}')
         local all_generated=true
 
-        # 如果每一个提交信息都包含Claude Code则该文件是自动生成的。
+        # 如果提交信息内容为" + [unittest] add cid."或者"* [refac] Refactor the test class of user zen"或者包含Claude Code则认为该文件是自动生成的。
         for commit in $commits; do
             local commit_msg=$(git log -1 --format=%B "$commit")
-            if [[ "$commit_msg" != *"Claude Code"* ]]; then
+            if [[ "$commit_msg" != " + [unittest] add cid." && "$commit_msg" != "* [refac] Refactor the test class of user zen." && "$commit_msg" != *"Claude Code"* ]]; then
                 all_generated=false
                 break
             fi

@@ -139,7 +139,7 @@ class backupModel extends model
         {
             try
             {
-                $this->dbh->query("DROP $tableType IF EXISTS `$tableName`");
+                $this->dbh->exec("DROP $tableType IF EXISTS `$tableName`");
             }
             catch(PDOException $e){}
         }

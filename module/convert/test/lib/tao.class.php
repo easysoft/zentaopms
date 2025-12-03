@@ -78,4 +78,23 @@ class convertTaoTest extends baseTest
 
         return array();
     }
+
+    /**
+     * Test createTask method.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  object $data
+     * @param  array  $relations
+     * @access public
+     * @return mixed
+     */
+    public function createTaskTest($projectID = 0, $executionID = 0, $data = null, $relations = array())
+    {
+        if($data === null) return false;
+
+        $result = $this->invokeArgs('createTask', array($projectID, $executionID, $data, $relations));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

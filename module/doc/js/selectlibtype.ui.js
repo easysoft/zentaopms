@@ -115,13 +115,27 @@ window.reloadApi = function()
 /**
  * Redirect the parent window.
  *
- * @param  string objectType
- * @param  int    libID
- * @param  string docType
+ * @param  string link
+ * @param  string from
+ * @param  string spaceID
+ * @param  string libID
+ * @param  string moduleID
  * @access public
  * @return void
  */
-window.redirectParentWindow = function(link)
+window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
 {
+    if(from === 'ai' && sessionStorage.getItem('aiResult'))
+    {
+        const aiResult = JSON.parse(sessionStorage.getItem('aiResult'));
+        zui.DocApp.storeNextCreatingDoc({
+            content: aiResult.content || '',
+            contentType: 'markdown',
+            space: Number(spaceID),
+            lib: Number(libID),
+            module: Number(moduleID),
+        });
+        sessionStorage.removeItem('aiResult');
+    }
     openUrl(link, 'doc');
 }

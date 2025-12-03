@@ -36,7 +36,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(from == 'doc') return result;
+    if(from == 'doc' || from == 'ai') return result;
 
     if(result && col.name == 'title')
     {

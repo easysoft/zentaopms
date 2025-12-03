@@ -1,0 +1,30 @@
+---
+title: 保存 Prompt 字段测试数据
+desc: 用于测试savePromptFields方法的ai_promptfield表数据
+author: AI Assistant
+version: 1.0
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-20
+
+- field: appID
+  note: Prompt ID
+  range: 1{5},2{5},3{5},4{3},5{2}
+
+- field: name
+  note: 字段名称
+  range: 字段K{3},字段L{3},字段M{3},字段N{3},字段O{3},字段P{3},字段Q{2}
+
+- field: type
+  note: 字段类型
+  range: text{8},textarea{6},radio{4},checkbox{2}
+
+- field: options
+  note: 选项内容
+  range: '[]{10}, 选项A,选项B{3}, 选项C,选项D,选项E{2}, 是,否{2}, 高级,中级,初级{3}'
+
+- field: required
+  note: 是否必填
+  range: '1'{10}, '0'{10}

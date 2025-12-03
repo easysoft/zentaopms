@@ -23,4 +23,18 @@ class instanceModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test stop method.
+     *
+     * @param  object $instance
+     * @access public
+     * @return mixed
+     */
+    public function stopTest($instance = null)
+    {
+        $result = $this->invokeArgs('stop', [$instance]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

@@ -344,7 +344,7 @@ class upgradeModel extends model
             $result = $this->dbh->query("SHOW TABLES LIKE '$table'");
             if($result->rowCount() > 0)
             {
-                $this->dbh->query("UPDATE $table SET company = '{$this->app->company->id}'");
+                $this->dbh->exec("UPDATE $table SET company = '{$this->app->company->id}'");
             }
         }
     }
@@ -10863,7 +10863,7 @@ class upgradeModel extends model
         if($dbCharset != $serverCharset || $dbCollation != $serverCollation)
         {
             /* 转换数据库的字符集和排序规则。Convert database charset and collation. */
-            $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
+            $this->dbh->exec("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET={$serverCharset} COLLATE={$serverCollation}");
         }
 
         /* 获取当前数据库中所有表的排序规则。Get all tables collation in current database. */
@@ -10875,9 +10875,10 @@ class upgradeModel extends model
         {
             if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
             if($tableCollation == $serverCollation) continue;
+            if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
 
             /* 转换表的字符集和排序规则。Convert table charset and collation. */
-            $this->dao->query("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            $this->dbh->exec("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
         }
 
         $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
@@ -11401,5 +11402,64 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initAIPrompts(): void
+    {
+        $this->app->loadConfig('ai');
+        foreach($this->config->ai->initAIPrompts as $aiPrompt)
+        {
+            if(!$this->checkExistAIPrompt($aiPrompt)) return;
+
+            $index = $aiPrompt->id;
+            unset($aiPrompt->id);
+            $aiPrompt->createdBy   = 'system';
+            $aiPrompt->createdDate = helper::now();
+            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
+
+            $promptID = $this->dao->lastInsertID();
+            if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
+        }
+    }
+
+    /**
+     * 检查AI禅道智能体唯一性。
+     * Check AI zentao agent unique.
+     *
+     * @param  object $aiPrompt
+     * @access public
+     * @return bool
+     */
+    public function checkExistAIPrompt(object $aiPrompt): bool
+    {
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
+            ->where('name')->eq($aiPrompt->name)
+            ->fetch('count');
+        return $count == 0;
+    }
+
+    /**
+     * 内置AI禅道智能体和相关字段。
+     * Initialize the AI prompts and fields.
+     *
+     * @param  array  $aiPromptFields
+     * @param  int    $promptID
+     * @access public
+     * @return bool
+     */
+    public function initAIPromptFields(array $aiPromptFields, int $promptID): void
+    {
+        foreach($aiPromptFields as $field)
+        {
+            $field->appID = $promptID;
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
+        }
     }
 }

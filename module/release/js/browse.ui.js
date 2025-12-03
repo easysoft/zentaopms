@@ -21,7 +21,7 @@ window.renderCell = function(result, {col, row})
         if(!row.data.build.name) return result;
 
         let branchLabel = showBranch && typeof row.data.build.branchName != 'undefined' ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
-        if(isFromDoc)
+        if(isFromDoc || isFromAI)
         {
             result.push({html: branchLabel + row.data.build.name});
         }

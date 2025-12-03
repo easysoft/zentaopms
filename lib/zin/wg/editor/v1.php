@@ -130,7 +130,7 @@ class editor extends wg
         (
             setClass('editor-container p-px mt-px rounded relative', $this->prop('readonly') ? 'is-readonly' : ''),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
-            h::css(self::$css), // Inject CSS on page, for tippy menus.
+            h::css(static::$css . $addCss), // Inject CSS on page, for tippy menus.
             $templateType ? $this->buildTemplate($this->prop('name'), $templateType) : null,
             $editor,
             textarea
