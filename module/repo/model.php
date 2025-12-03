@@ -172,7 +172,7 @@ class repoModel extends model
         if($repoID && !empty($repo->members))
         {
             $members = explode(',', $repo->members);
-            foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repoID' => $repoID, 'account' => $member))->exec();
+            foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repo' => $repoID, 'account' => $member))->exec();
         }
 
         $repo = $this->getByID($repoID);
