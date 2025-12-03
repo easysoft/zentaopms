@@ -161,7 +161,7 @@ class tasksEntry extends entry
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($teamEstimate as $index => $estimate)
             {
-                if(!isset($team[$index]) || empty($team[$index])) continue;
+                if(empty($team[$index])) continue;
 
                 $estimateValue = (float)$estimate;
                 if(!is_numeric($estimate) || $estimateValue <= 0)
