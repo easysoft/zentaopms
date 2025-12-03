@@ -221,4 +221,21 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test validateCert method.
+     *
+     * @param  string $certName
+     * @param  string $pem
+     * @param  string $key
+     * @param  string $domain
+     * @access public
+     * @return mixed
+     */
+    public function validateCertTest(string $certName, string $pem, string $key, string $domain)
+    {
+        $result = $this->invokeArgs('validateCert', [$certName, $pem, $key, $domain]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
