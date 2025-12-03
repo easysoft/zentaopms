@@ -828,7 +828,7 @@ class repoModel extends model
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCommits();
 
         if(!isset($repo->id)) return array();
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end, $query);
+        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitfox')->getCommits($repo, $entry, $pager, $begin, $end, $query);
 
         $entry         = ltrim($entry, '/');
         $entry         = empty($entry) ? '' : '/' . $entry;
