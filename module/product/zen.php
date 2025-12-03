@@ -1477,7 +1477,7 @@ class productZen extends product
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
 
-        $module = $this->app->tab == 'product' || $from == 'doc' ? $storyType : $this->app->tab;
+        $module = ($this->app->tab == 'product' || $from == 'doc' || $from == 'ai') ? $storyType : $this->app->tab;
         $this->view->showGrades = !empty($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
         $storyType = $isProjectStory ? 'all' : $storyType;

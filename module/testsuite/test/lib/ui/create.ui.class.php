@@ -17,7 +17,7 @@ class createTestSuiteTester extends tester
             $form->dom->name->setValue('测试套件私有');
             $form->dom->typeprivate->click();
             $form->dom->saveBtn->click();
-            $form->wait(1);
+            $form->wait(3);
 
             $browsePage = $this->loadPage('testsuite', 'browse');
             if($browsePage->dom->type->getText() != '私有')         return $this->failed('创建测试套件类型误');

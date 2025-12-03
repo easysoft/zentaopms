@@ -75,6 +75,21 @@ $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
 if($prompt->status != 'draft' || !$this->ai->isExecutable($prompt)) unset($config->ai->actions->promptview['mainActions'][1]);
 $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 
+$fnBuildFieldConfig = function() use ($lang, $fieldConfig)
+{
+    if(empty($fieldConfig)) return array();
+
+    $fields = array();
+    foreach($fieldConfig as $field)
+    {
+        $control  = $lang->ai->miniPrograms->field->typeList[$field->type];
+        $required = $lang->ai->requiredList[$field->required];
+        $options  = $field->options ?: '-';
+        $fields[] = div(setClass('mb-1'), $field->name . ' (' . $control . ', ' . $required . ') : ' . $options);
+    }
+    return section(set::title($lang->ai->miniPrograms->field->fields), $fields);
+};
+
 detailBody
 (
     sectionList
@@ -87,6 +102,7 @@ detailBody
             set::content($prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : '')
         ),
         section(set::title($lang->ai->prompts->field), set::content($dataPreview)),
+        $fnBuildFieldConfig(),
         section(set::title($lang->ai->prompts->setPurpose), set::content($prompt->purpose)),
         section(set::title($lang->ai->prompts->elaboration), set::content($prompt->elaboration)),
         section(set::title($lang->ai->prompts->selectTargetForm), set::content($selectTargetForm))

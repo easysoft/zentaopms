@@ -144,7 +144,14 @@ $lang->customField     = 'Individualfeld';
 $lang->lineNumber      = 'Zeile Nr.';
 $lang->tutorialConfirm = 'Sie benutzen die Anleitung. Möchten Sie diese jetzt verlassen？';
 $lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
-$lang->noticeOkFile    = 'Aus Sicherheitsgrü nden muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
+$lang->noticeOkFile    = "<p class='font-bold mb-2'>For security reasons, your Admin account has to be confirmed.</p>
+    <p class='font-bold mb-2'>Please login your ZenTao server and create %s.</p>
+    <p class='mb-2'>Execute command: echo '' > %s </p>
+    <p class='mb-2'>Note</p>
+    <ul class='mb-2 pl-4' style='list-style: decimal'>
+      <li>The file you will create is empty.</li>
+      <li>If such file exists, delete it first, and then create one.</li>
+    </ul>";
 $lang->noticeDrag      = 'Click to add or drag to upload, no more than %s';
 $lang->allProgress     = 'All Progress';
 $lang->hasReviewed     = 'The content has already been reviewed and does not need further review !';

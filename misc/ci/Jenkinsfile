@@ -302,7 +302,7 @@ pipeline {
                 environment {
                   ARTIFACT_NAME = """${sh(
                             returnStdout: true,
-                            script: 'test ${ZLANG} = cn && echo -n ZenTaoPMS || echo -n ZenTaoALM'
+                            script: 'test ${ZLANG} = cn && echo -n zentao || echo -n ZenTaoALM'
                   ).trim()}"""
                   INT_FLAG = """${sh(
                             returnStdout: true,

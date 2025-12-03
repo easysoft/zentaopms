@@ -107,7 +107,6 @@ jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('appNotFound', $lang->appNotFound);
 jsVar('oldPages',    $config->index->oldPages);
-jsVar('appsItems',   $appsItems);
 jsVar('allAppsItems', $allAppsItems);
 jsVar('isTutorialMode', common::isTutorialMode());
 jsVar('defaultOpen', !empty($open) ? $open : '');
@@ -122,6 +121,8 @@ jsVar('showFeatures', $showFeatures);
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
+
+h::jsVar('window.appsItems', $appsItems, setID('appsItemsData'));
 
 /* The menu fixed on left */
 div
@@ -230,6 +231,13 @@ else
 {
     $zaiLang->zaiConfigNotValid = $lang->aiapp->langData->zaiConfigNotValid;
 }
+
+if($config->edition != 'open')
+{
+    $this->app->loadLang('ai');
+    $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
+}
+
 $zaiConfigUrl = createLink('zai', 'setting');
 $zaiLang->zaiConfigNotValid = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->zaiConfigNotValid);
 if(isset($zaiLang->unauthorizedError)) $zaiLang->unauthorizedError = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->unauthorizedError);

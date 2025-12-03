@@ -289,9 +289,9 @@ class Color extends Supervisor
         }
 
         $rgb = strtoupper(
-            str_pad(dechex($red), 2, '0', 0) .
-            str_pad(dechex($green), 2, '0', 0) .
-            str_pad(dechex($blue), 2, '0', 0)
+            str_pad(dechex((int)$red), 2, '0', 0) .
+            str_pad(dechex((int)$green), 2, '0', 0) .
+            str_pad(dechex((int)$blue), 2, '0', 0)
         );
 
         return (($rgba) ? 'FF' : '') . $rgb;

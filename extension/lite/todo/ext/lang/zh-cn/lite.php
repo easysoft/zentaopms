@@ -9,3 +9,5 @@ unset($lang->todo->typeList['issue']);
 unset($lang->todo->typeList['risk']);
 unset($lang->todo->typeList['opportunity']);
 unset($lang->todo->typeList['meeting']);
+unset($lang->todo->typeList['epic']);
+unset($lang->todo->typeList['requirement']);

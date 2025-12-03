@@ -391,7 +391,8 @@ class extension extends control
     public function safe(string $statusFile)
     {
         $statusFile = str_replace('\\', '/', helper::safe64Decode($statusFile));
-        $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+        $okFile     = str_replace($this->app->getBasePath(), '', $statusFile);
+        $this->view->error = sprintf($this->lang->noticeOkFile, $okFile, $statusFile);
         $this->view->title = $this->lang->extension->browse;
         $this->display();
     }

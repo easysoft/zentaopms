@@ -5,6 +5,14 @@
 title=测试单关联用例
 timeout=0
 cid=1
+
+- 执行tester模块的linkCase方法，参数是9?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @测试单关联用例成功
+- 执行tester模块的linkCase方法，参数是8?
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @测试单关联用例成功
+
  */
 
 chdir(__DIR__);

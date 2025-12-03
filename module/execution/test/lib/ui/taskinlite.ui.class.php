@@ -48,7 +48,7 @@ class taskExecutionTester extends tester
         if(is_object($form->dom->modal)) $form->dom->alertModal();
         $form->wait(1);
         $form->dom->search(array("{$this->lang->task->name},=,{$name}"));
-        $form->wait(1);
+        $form->wait(2);
         $statusAfter = $form->dom->firstStatus->getText();
         if($this->lang->task->statusList->$status == $statusAfter) return $this->success("批量修改状态为{$status}成功");
         return $this->failed("批量修改状态为{$status}失败");

@@ -486,7 +486,7 @@ class branchTest
         $_POST = array();
 
         // 设置POST数据以模拟实际提交
-        if(!empty($branchData)) $_POST['branch'] = $branchData;
+        $_POST['branch'] = $branchData; // 确保branch总是存在,即使是空数组
         $_POST['newbranch'] = $newBranches; // 确保newbranch总是存在
 
         // 调用被测方法

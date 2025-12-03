@@ -25,3 +25,7 @@ Fix alignment check condition in Styles reader
 Source: patches/phpspreadsheet-fix-alignment-check.patch
 
 
+Fix Color brightness calculation type casting for PHP 8 compatibility
+Source: patches/phpspreadsheet-fix-color-brightness-type-casting.patch
+
+

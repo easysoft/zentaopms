@@ -1,0 +1,42 @@
+---
+title: 项目需求关联测试数据
+desc: processToStoryActionExtra方法的项目需求关联测试数据
+author: Claude
+version: 1.0
+
+fields:
+- field: project
+  note: 项目ID
+  range: '10,20,30,40,50'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 产品ID
+  range: '2,2,2,6,6'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: story
+  note: 需求ID
+  range: '2,3,4,5,6'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: version
+  note: 版本
+  range: '1{5}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: order
+  note: 排序
+  range: '1-5'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

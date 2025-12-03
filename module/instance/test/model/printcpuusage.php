@@ -7,8 +7,8 @@ title=测试 instanceModel::printCpuUsage();
 timeout=0
 cid=16810
 
-- 步骤1：用户来源返回空值属性color @
-- 步骤2：停止状态显示灰色属性color @gray
+- 步骤1：停止状态显示灰色属性color @gray
+- 步骤2：用户来源返回空值属性color @~~
 - 步骤3：低使用率显示secondary属性color @secondary
 - 步骤4：高使用率显示warning属性color @warning
 - 步骤5：极高使用率显示danger属性color @danger
@@ -33,13 +33,6 @@ $userInstance = new stdClass();
 $userInstance->source = 'user';
 $userInstance->status = 'running';
 
-$metrics1 = new stdClass();
-$metrics1->rate = 50;
-$metrics1->usage = 50;
-$metrics1->limit = 100;
-
-r($instanceTest->printCpuUsageTest($userInstance, $metrics1)) && p('color') && e(''); // 步骤1：用户来源返回空值
-
 // 测试步骤2：停止状态实例应显示灰色
 $stoppedInstance = new stdClass();
 $stoppedInstance->source = 'cloud';
@@ -50,7 +43,14 @@ $metrics2->rate = 80;
 $metrics2->usage = 80;
 $metrics2->limit = 100;
 
-r($instanceTest->printCpuUsageTest($stoppedInstance, $metrics2)) && p('color') && e('gray'); // 步骤2：停止状态显示灰色
+r($instanceTest->printCpuUsageTest($stoppedInstance, $metrics2)) && p('color') && e('gray'); // 步骤1：停止状态显示灰色
+
+$metrics1 = new stdClass();
+$metrics1->rate = 50;
+$metrics1->usage = 50;
+$metrics1->limit = 100;
+
+r($instanceTest->printCpuUsageTest($userInstance, $metrics1)) && p('color') && e('~~'); // 步骤2：用户来源返回空值
 
 // 测试步骤3：正常运行低使用率应显示secondary颜色
 $runningInstance = new stdClass();

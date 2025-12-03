@@ -82,6 +82,12 @@ foreach($actions as $key => $action)
     {
         $actions[$key]['data-confirm'] = array('message' => $lang->task->confirmDeleteParent, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
     }
+
+    if($isInModal && isset($action['icon']) && $action['icon'] == 'edit')
+    {
+        $actions[$key]['data-toggle'] = 'modal';
+        $actions[$key]['data-size']   = 'lg';
+    }
 }
 
 /* 初始化主栏内容。Init sections in main column. */

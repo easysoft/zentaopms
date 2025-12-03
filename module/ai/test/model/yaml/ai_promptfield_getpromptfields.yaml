@@ -1,0 +1,29 @@
+---
+title: getPromptFields方法的测试数据
+desc: 用于测试getPromptFields方法的ai_promptfield表数据
+author: AI Assistant
+
+fields:
+- field: id
+  note: 字段ID
+  range: 1-20
+
+- field: appID
+  note: Prompt ID
+  range: 1{5},2{5},3{5},999{2},0{3}
+
+- field: name
+  note: 字段名称
+  range: 字段A{2},字段B{2},字段C{2},字段D{2},字段E{2},字段F{2},字段G{2},字段H{2},字段I{2},字段J{2}
+
+- field: type
+  note: 字段类型
+  range: text{8},textarea{6},radio{3},checkbox{3}
+
+- field: options
+  note: 选项内容
+  range: 选项1,选项2,选项3{2},是,否{2},高,中,低{2},必填,可选{2},[]{8}
+
+- field: required
+  note: 是否必填
+  range: 1{12},0{8}

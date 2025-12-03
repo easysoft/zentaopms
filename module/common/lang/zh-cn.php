@@ -144,7 +144,14 @@ $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
-$lang->noticeOkFile    = '为了安全起见，系统需要确认您的管理员身份。\n 请登录禅道所在的服务器，创建%s文件。\n 注意：\n 1. 文件内容为空。\n 2. 如果之前文件存在，删除之后重新创建。';
+$lang->noticeOkFile    = "<p class='font-bold mb-2'>为了安全起见，系统需要确认您的管理员身份</p>
+    <p class='font-bold mb-2'>请登录禅道所在的服务器，创建 %s 文件。</p>
+    <p class='mb-2'>可以执行命令：echo '' > %s </p>
+    <p class='mb-2'>注意：</p>
+    <ul class='mb-2 pl-4' style='list-style: decimal'>
+      <li>文件内容为空。</li>
+      <li>如果之前文件存在，删除之后重新创建。</li>
+    </ul>";
 $lang->noticeDrag      = '可点击添加或拖拽上传, 不超过 %s';
 $lang->allProgress     = '总进度';
 $lang->hasReviewed     = '该内容已经评审过，无需重复评审！';

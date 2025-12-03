@@ -1,0 +1,32 @@
+---
+title: metric数据定义
+author: ''
+version: ''
+
+fields:
+- field: id
+  range: 1-10
+- field: purpose
+  range: scale
+- field: scope
+  range: 'product{3},project{3},system{4}'
+- field: object
+  range: 'story{3},task{3},bug{2},[]'
+- field: stage
+  range: released
+- field: type
+  range: sql
+- field: name
+  range: '测试度量项1,测试度量项2,测试度量项3,无效代号,空结果{6}'
+- field: code
+  range: 'test_metric_1,test_metric_2,test_metric_3,invalid_code,empty_result{6}'
+- field: dateType
+  range: 'year,month,week,nodate{7}'
+- field: builtin
+  range: '0'
+- field: lastCalcTime
+  range: '20240101 000000-20241231 235959:30D'
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: '0'
