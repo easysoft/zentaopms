@@ -206,4 +206,19 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test uploadCert method.
+     *
+     * @param  object $cert
+     * @param  string $channel
+     * @access public
+     * @return mixed
+     */
+    public function uploadCertTest(object $cert, string $channel = '')
+    {
+        $result = $this->invokeArgs('uploadCert', [$cert, $channel]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
