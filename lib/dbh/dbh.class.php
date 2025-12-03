@@ -187,36 +187,6 @@ class dbh
     }
 
     /**
-     * 初始化PDO对象。
-     * Init pdo.
-     *
-     * @param  string $driver
-     * @param  object $dbConfig
-     * @param  bool   $setSchema
-     * @access private
-     * @return object
-     */
-    private function pdoInit($driver, $dbConfig, $setSchema)
-    {
-        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
-        if($setSchema)
-        {
-            $dsn .= ";dbname={$dbConfig->name}";
-        }
-        elseif($driver == 'pgsql') // pgsql(postgres,highgo) need database to connect
-        {
-            $dsn .= ";dbname={$dbConfig->driver}"; // default database
-        }
-
-        $password = helper::decryptPassword($dbConfig->password);
-        $pdo = new PDO($dsn, $dbConfig->user, $password);
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        return $pdo;
-    }
-
-    /**
      * Process PDO/SQL error.
      *
      * @param  object $exception
@@ -454,45 +424,6 @@ class dbh
 
         $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
         return $this->rawQuery($sql)->fetch();
-    }
-
-    /**
-     * 获取数据库支持的字符集和排序规则。
-     * Get the database charset and collation.
-     *
-     * @param  string $database
-     * @access public
-     * @return array
-     */
-    public function getDatabaseCharsetAndCollation(string $database = ''): array
-    {
-        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
-
-        if(empty($database)) $database = $this->dbConfig->name;
-
-        $sql    = "SELECT DEFAULT_CHARACTER_SET_NAME AS charset, DEFAULT_COLLATION_NAME AS collation FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '{$database}';";
-        $result = $this->rawQuery($sql)->fetch();
-        if($result) return (array)$result;
-
-        return $this->getServerCharsetAndCollation();
-    }
-
-    /**
-     * 获取服务器支持的字符集和排序规则。
-     * Get the server charset and collation.
-     *
-     * @access public
-     * @return array
-     */
-    public function getServerCharsetAndCollation(): array
-    {
-        if($this->dbConfig->driver != 'mysql') return ['charset' => 'utf8', 'collation' => ''];
-
-        $charsets  = [];
-        $statement = $this->rawQuery("SHOW CHARSET WHERE Charset LIKE 'utf8%';");
-        while($charset = $statement->fetch(PDO::FETCH_ASSOC)) $charsets[$charset['Charset']] = ['charset' => $charset['Charset'], 'collation' => $charset['Default collation']];
-
-        return $charsets['utf8mb4'] ?? $charsets['utf8mb3'] ?? ['charset' => 'utf8', 'collation' => 'utf8_general_ci'];
     }
 
     /**
