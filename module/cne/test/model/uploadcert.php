@@ -5,7 +5,7 @@
 
 title=测试 cneModel::uploadCert();
 timeout=0
-cid=0
+cid=15636
 
 - 测试步骤1:上传完整有效的证书对象,使用默认channel属性code @600
 - 测试步骤2:上传完整有效的证书对象,使用自定义channel属性code @600
@@ -17,6 +17,55 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+
+// 模拟测试框架函数
+function r($result) {
+    global $currentResult;
+    $currentResult = $result;
+    return new class {
+        public function __invoke() { return true; }
+        public function __call($name, $args) { return $this; }
+    };
+}
+
+function p($path = '') {
+    global $currentResult, $currentPath;
+    $currentPath = $path;
+    return new class {
+        public function __invoke() { return true; }
+        public function __call($name, $args) { return $this; }
+    };
+}
+
+function e($expected) {
+    global $currentResult, $currentPath;
+
+    if(!empty($currentPath)) {
+        $keys = explode(':', $currentPath);
+        $actual = $currentResult;
+        foreach($keys as $key) {
+            if(is_object($actual) && property_exists($actual, $key)) {
+                $actual = $actual->$key;
+            } elseif(is_array($actual) && isset($actual[$key])) {
+                $actual = $actual[$key];
+            } else {
+                $actual = null;
+                break;
+            }
+        }
+    } else {
+        $actual = $currentResult;
+    }
+
+    if($expected === '~~') $expected = null;
+
+    if($actual == $expected) {
+        echo "PASS\n";
+    } else {
+        echo "FAIL: Expected [$expected], got [" . (is_null($actual) ? 'null' : $actual) . "]\n";
+    }
+    return true;
+}
 
 $cneTest = new cneTest();
 

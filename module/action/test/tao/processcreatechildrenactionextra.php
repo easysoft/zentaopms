@@ -5,7 +5,7 @@
 
 title=测试 actionTao::processCreateChildrenActionExtra();
 timeout=0
-cid=0
+cid=14961
 
 - 步骤1:单个任务ID属性extra @#1 A
 - 步骤2:多个任务ID属性extra @#1 A, #2 B, #3 C

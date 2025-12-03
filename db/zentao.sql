@@ -16018,6 +16018,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   `name` varchar(20) NOT NULL,
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
+  `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
   `module` varchar(30) DEFAULT NULL,
   `source` text DEFAULT NULL,
   `targetForm` varchar(30) DEFAULT NULL,
@@ -16034,15 +16035,42 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `zt_ai_prompt` (`name`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
-('需求润色', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。直接给出你的润色结果，无需建议。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14', 'active'),
-('一键拆用例', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.testcasecreate', '为这个需求生成一个或多个对应的测试用例。', '', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14', 'active'),
-('任务润色', 0, 'task', ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,', 'task.edit', '优化其中各字段的表述，使表述清晰准确，明确任务目标。', '必要时指出任务的风险点。', '你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'system', '2023-08-10 13:24:14', 'active'),
-('需求转任务', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.totask', '将需求转化为对应的开发任务要求。', '', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。同时精通多种编程语言和框架、熟悉前后端技术。', 'system', '2023-08-10 13:24:14', 'active'),
-('Bug润色', 0, 'bug', ',bug.title,bug.steps,bug.severity,bug.pri,bug.status,bug.confirmed,bug.type,', 'bug.edit', '优化其中各字段的表述，使表述清晰准确。', 'Bug描述格式建议使用：[步骤]<一步一步复现Bug的步骤>[结果]<Bug导致的结果描述>[期望]<Bug修复后期望的描述>', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14', 'active'),
-('文档润色', 0, 'doc', ',doc.content,doc.title,', 'doc.edit', '我希望你能帮我润色标题和文档正文。', '要求语句要通顺，逻辑要清晰，没有错别字且更具结构化。', '你是一名文章写得很好的文案编辑。', '文笔流畅、条理清晰。精通广告文案写作和编辑，擅长创意思维和品牌策略，能够进行市场调研和竞品分析，具有敏锐的审美和语言表达能力，能够协调多部门合作和项目管理，具有良好的沟通和协调能力。', 'system', '2023-08-31 15:54:57', 'active'),
-('Bug转需求', 0, 'bug', ',bug.title,bug.steps,bug.severity,bug.pri,bug.status,bug.confirmed,bug.type,', 'story.create', '请将Bug转化为相应的研发需求。', '分条编写需求描述，分条编写验收标准，需求逻辑条理清晰。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active'),
-('拆分一个子计划', 0, 'productplan', ',productplan.title,productplan.desc,productplan.begin,productplan.end,', 'productplan.create', '根据给定计划名称、描述、计划开始时间和计划结束时间，将给定计划明确为其小范围的子计划。拆分出来的子计划可以更专注于给定计划中的某一类工作。	', '要求子计划的时间不能超出计划开始时间和计划结束时间，并且名称不能与原计划名称相同。润色子计划的描述。', '请你扮演一名资深的产品经理。', '负责产品计划、设计、用户体验等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active');
+INSERT INTO `zt_ai_prompt` (`id`, `name`, `desc`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
+(1, '需求润色', '优化需求中标题、描述和验收标准等字段，使表述清晰准确。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。直接给出你的润色结果，无需建议。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14', 'active'),
+(2, '一键拆用例', '为需求生成一个或多个对应的测试用例。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.testcasecreate', '为这个需求生成一个或多个对应的测试用例。', '', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14', 'active'),
+(3, '任务润色', '优化任务中标题、描述等字段的表述，使任务表述更清晰准确。', 0, 'task', ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,', 'task.edit', '优化其中各字段的表述，使表述清晰准确，明确任务目标。', '必要时指出任务的风险点。', '你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'system', '2023-08-10 13:24:14', 'active'),
+(4, '需求转任务', '根据需求的标题、描述和验收标准等，将需求转化为对应的可实施的开发任务。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.totask', '将需求转化为对应的开发任务要求。', '', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。同时精通多种编程语言和框架、熟悉前后端技术。', 'system', '2023-08-10 13:24:14', 'active'),
+(5, 'Bug润色', '优化需求中标题、描述和验收标准等字段，使表述清晰准确。', 0, 'bug', ',bug.title,bug.steps,bug.severity,bug.pri,bug.status,bug.confirmed,bug.type,', 'bug.edit', '优化其中各字段的表述，使表述清晰准确。', 'Bug描述格式建议使用：[步骤]<一步一步复现Bug的步骤>[结果]<Bug导致的结果描述>[期望]<Bug修复后期望的描述>', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14', 'active'),
+(6, '文档润色', '优化任务中标题、描述等字段的表述，使任务表述更清晰准确。', 0, 'doc', ',doc.content,doc.title,', 'doc.edit', '我希望你能帮我润色标题和文档正文。', '要求语句要通顺，逻辑要清晰，没有错别字且更具结构化。', '你是一名文章写得很好的文案编辑。', '文笔流畅、条理清晰。精通广告文案写作和编辑，擅长创意思维和品牌策略，能够进行市场调研和竞品分析，具有敏锐的审美和语言表达能力，能够协调多部门合作和项目管理，具有良好的沟通和协调能力。', 'system', '2023-08-31 15:54:57', 'active'),
+(7, 'Bug转需求', '根据Bug数据转化为相应的研发需求。', 0, 'bug', ',bug.title,bug.steps,bug.severity,bug.pri,bug.status,bug.confirmed,bug.type,', 'story.create', '请将Bug转化为相应的研发需求。', '分条编写需求描述，分条编写验收标准，需求逻辑条理清晰。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active'),
+(8, '拆分一个子计划', '优化需求中标题、描述和验收标准等字段，使表述清晰准确。', 0, 'productplan', ',productplan.title,productplan.desc,productplan.begin,productplan.end,', 'productplan.create', '根据给定计划名称、描述、计划开始时间和计划结束时间，将给定计划明确为其小范围的子计划。拆分出来的子计划可以更专注于给定计划中的某一类工作。	', '要求子计划的时间不能超出计划开始时间和计划结束时间，并且名称不能与原计划名称相同。润色子计划的描述。', '请你扮演一名资深的产品经理。', '负责产品计划、设计、用户体验等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-11-17 12:00:00', 'active'),
+(9, '需求评审', '对需求进行结构完整性、逻辑一致性和标准符合性评审，并输出优化改进建议。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'empty.empty', '## 核心专业能力\n\n- 结构完整性分析（角色、动作、目标、约束要素）\n- 逻辑一致性分析（单条及多条需求之间的合理性）\n- 评审标准适配（INVEST、SMART或自定义标准）\n- 优先级归类评审建议（突出最关键问题，辅助次要优化）\n- 正式、清晰、专业的输出风格（无emoji，注重结构）\n\n## 工作风格\n\n- 一轮输出，结构化归类\n- 引导用户先聚焦最关键问题\n- 提供清晰、专业、可操作的完善方向\n- 语言正式、客观，保持体验流畅且不压迫\n\n\n## 评审交互流程\n\n1. 接收需求文本（来源于需求详情点击或输入）\n2. 进行结构与逻辑完整性检查\n3. 按重要性将评审建议归为两大类：\n- 核心优先改进项（必须优先处理）\n- 次要优化建议（在有时间或资源时进一步完善）\n4. 一次性输出完整评审结果，不进行多轮追问\n5. 引导用户先集中处理核心问题，如有余力再逐步优化次要问题\n\n## 输出结构要求\n\n- 统一使用正式Markdown结构，分清主次\n- 首先输出【评审总结】，概述整体需求状态\n- 然后分为两个部分输出：\n- 第一部分：核心优先改进项\n- 第二部分：次要优化建议\n- 每个建议应简明扼要，突出问题与优化方向\n- 不使用emoji或花哨符号，保持专业正式风格\n\n## 输出示范结构\n\n## 需求评审结果总结\n\n本次评审分析显示，需求整体情况如下：\n- 结构完整性：基本完整/存在缺失\n- 逻辑一致性：连贯/存在冲突\n- 标准符合性（如INVEST）：符合/部分符合/存在明显缺口\n\n## 核心优先改进项\n\n以下问题建议优先处理，以保证需求的可实现性与后续交付质量：\n\n1. （最重要问题简述）\n2. （次重要问题简述）\n3. （其他关键问题简述）\n\n## 次要优化建议\n\n在核心问题处理完毕后，可进一步关注以下细节优化：\n\n1. （次要问题简述）\n2. （细节补充建议）\n3. （未来增强方向提示）\n\n## 小结\n\n根据用户本次的改进项目，给出总结。', '## 附加控制策略\n- 若检测到需求长度或复杂度超出正常范围，可适度缩减次要优化建议，只列出最相关的补充方向。\n- 若累计对话Token数接近10000时，友好提示建议保存成果并新开对话，避免性能下降。', '你是一位资深的需求评审专家，专注于帮助项目管理团队提升需求条目的完整性、逻辑性与可实现性。', '你的职责是基于专业评审方法，在一次完整分析中，系统性提出归类清晰、重点突出的评审建议，引导用户高效完善需求。如果用户问询需求评审以外的问题，可以给与简单响应后，拉回需求评审中。', 'system', '2025-10-31 12:00:00', 'active'),
+(10, '编写开发设计文档智能体', '根据任务的名称、描述、设计类型、后端框架、前端框架和数据库类型等信息生成一篇开发设计文档。', 0, 'task', ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,task.story,', 'doc.create', '请根据任务数据、 <设计类型> 、 <后端框架> 、 <前端框架>  和 <数据库类型>  生成一篇开发设计文档。', '', '你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'system', '2025-11-30 12:00:00', 'active'),
+(11, '绘制需求原型图智能体', '根据输入的需求信息, 生成一个HTML格式的原型图示例。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'empty.empty', '根据输入的需求信息，生成一个HTML格式的原型图示例。原型图应包含以下部分：
+1. 标题
+2. 整体结构框架（如导航栏、侧边栏、主要内容区）
+3. 各功能模块的简要设计（如按钮、表单、图表等）
+4. 交互设计提示（如如何进行用户操作）
+5. 请生成完整的 HTML5 页面代码，包括开始的 `<!DOCTYPE html>` 和 结束的 `</html>`，使用 markdown html 代码块表示，如果有多个页面请使用多个代码块表示。
+6. 如果页面有 CSS，应该直接在 HTML 页面内使用内联样式`<style>`表示，而不是链接单独的 CSS 文件。', '', '请你扮演一名资深的产品经理。', '负责绘制需求原型图的过程。您将需求转化为可视化的原型图，同时确保其符合需求描述和需求验收标准。', 'system', '2025-11-30 12:00:00', 'active');
+
+-- DROP TABLE IF EXISTS `zt_ai_promptfield`;
+CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_prompt.id',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '字段名称',
+  `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '字段类型',
+  `placeholder` text DEFAULT NULL COMMENT '输入提示',
+  `options` text DEFAULT NULL COMMENT '选项列表，逗号分隔',
+  `required` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否必填',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `zt_ai_promptfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
+(10, '设计类型', 'radio', '', '系统设计,架构设计,接口设计,数据库设计', 0),
+(10, '后端框架', 'radio', '', 'PHP,Go,Java,Python,Node.js,其他', 0),
+(10, '前端框架', 'radio', '', 'JavaScript,Vue,React,Angular,其他', 0),
+(10, '数据库类型', 'radio', '', 'MySQL,PostgreSQL,Oracle Database,Microsoft SQL Server,非关系型数据库', 0);
 
 -- DROP TABLE IF EXISTS `zt_ai_promptrole`;
 CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
@@ -16072,6 +16100,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   `category` varchar(30) NOT NULL,
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
+  `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
   `icon` varchar(30) NOT NULL DEFAULT 'writinghand-7',
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -16214,6 +16243,55 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+-- DROP TABLE IF EXISTS `zt_ai_knowledgelib`;
+CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '所属界面',
+  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库类型，目前包括：我的知识库（my）、组织知识库（team）',
+  `importType` varchar(20) NOT NULL DEFAULT '' COMMENT '知识库导入类型，目前包括：从文档库导入（doclib）、从资产库导入（assetlib）',
+  `importID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库名称',
+  `desc` text DEFAULT NULL COMMENT '知识库描述',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑者',
+  `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
+  `published` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已发布',
+  `publishedDate` datetime DEFAULT NULL COMMENT '上次发布时间',
+  `publishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次发布者',
+  `acl` varchar(10) NOT NULL DEFAULT 'open' COMMENT '权限控制',
+  `groups` varchar(255) NOT NULL DEFAULT '' COMMENT '权限控制组',
+  `users` text DEFAULT NULL COMMENT '权限控制用户',
+  `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_id，如果没有 ID，表示未在外部服务中创建对应知识库',
+  `syncedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次成功同步者',
+  `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
+  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DROP TABLE IF EXISTS `zt_ai_knowledgeitem`;
+CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
+  `lib` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
+  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识内容类型，目前包括：自定义文本（text）、文件（file）、禅道对象（object）',
+  `file` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
+  `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的类型，例如 bug',
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
+  `objectData` text DEFAULT NULL COMMENT '禅道对象数据，JSON 格式',
+  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text DEFAULT NULL COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
+  `contentType` varchar(10) NOT NULL DEFAULT 'markdown' COMMENT '内容类型',
+  `attrs` text DEFAULT NULL COMMENT '知识库内容条目属性，JSON 格式',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库内容条目创建者',
+  `createdDate` datetime DEFAULT NULL COMMENT '知识库内容条目创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库内容条目编辑者',
+  `editedDate` datetime DEFAULT NULL COMMENT '知识库内容条目编辑时间',
+  `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_content_id，如果没有 ID，表示未在外部服务中创建对应的内容条目',
+  `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
+  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (

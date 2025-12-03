@@ -109,7 +109,7 @@ class bug extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
-        if($from == 'doc')
+        if($from == 'doc' || $from === 'ai')
         {
             $this->app->loadLang('doc');
             $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');

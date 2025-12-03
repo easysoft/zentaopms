@@ -11346,4 +11346,63 @@ class upgradeModel extends model
         $this->dao->exec($sql);
         return true;
     }
+
+    /**
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initAIPrompts(): void
+    {
+        $this->app->loadConfig('ai');
+        foreach($this->config->ai->initAIPrompts as $aiPrompt)
+        {
+            if(!$this->checkExistAIPrompt($aiPrompt)) return;
+
+            $index = $aiPrompt->id;
+            unset($aiPrompt->id);
+            $aiPrompt->createdBy   = 'system';
+            $aiPrompt->createdDate = helper::now();
+            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
+
+            $promptID = $this->dao->lastInsertID();
+            if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
+        }
+    }
+
+    /**
+     * 检查AI禅道智能体唯一性。
+     * Check AI zentao agent unique.
+     *
+     * @param  object $aiPrompt
+     * @access public
+     * @return bool
+     */
+    public function checkExistAIPrompt(object $aiPrompt): bool
+    {
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
+            ->where('name')->eq($aiPrompt->name)
+            ->fetch('count');
+        return $count == 0;
+    }
+
+    /**
+     * 内置AI禅道智能体和相关字段。
+     * Initialize the AI prompts and fields.
+     *
+     * @param  array  $aiPromptFields
+     * @param  int    $promptID
+     * @access public
+     * @return bool
+     */
+    public function initAIPromptFields(array $aiPromptFields, int $promptID): void
+    {
+        foreach($aiPromptFields as $field)
+        {
+            $field->appID = $promptID;
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
+        }
+    }
 }

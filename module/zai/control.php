@@ -190,4 +190,36 @@ class zai extends control
         $this->zai->setVectorizedInfo($info);
         return $this->send(array('result' => 'success', 'data' => $info));
     }
+
+    /**
+     * Ajax: 搜索知识库。
+     * Ajax: Search knowledge base.
+     *
+     * @param string $type 'chunk'（块） | 'content'（内容）
+     * @param int    $limit
+     * @access public
+     * @return void
+     */
+    public function ajaxSearchKnowledges(string $type = 'content', int $limit = 10)
+    {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST')
+        {
+            return $this->send(array('result' => 'failed', 'message' => $this->lang->zai->onlyPostRequest));
+        }
+
+        $userPrompt = zget($_POST, 'userPrompt', '');
+        $filters    = json_decode(zget($_POST, 'filters', '{}'), true);
+
+        if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'failed', 'message' => $this->lang->fail));
+
+        $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit);
+        $prompts = array();
+        foreach($knowledges as $knowledge)
+        {
+            $prompts[] = $knowledge['content'];
+            if(count($prompts) >= $limit) break;
+        }
+
+        return $this->send(array('result' => 'success', 'data' => array('prompt' => implode("\n\n", $prompts))));
+    }
 }

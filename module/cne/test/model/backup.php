@@ -5,7 +5,7 @@
 
 title=测试 cneModel::backup();
 timeout=0
-cid=0
+cid=15603
 
 - 执行cneTest模块的backupTest方法，参数是$instance1, 'testuser', 'manual'  @1
 - 执行cneTest模块的backupTest方法，参数是$instance2, '', 'system'  @1

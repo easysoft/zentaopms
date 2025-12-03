@@ -5,7 +5,7 @@
 
 title=测试 instanceModel::stop();
 timeout=0
-cid=0
+cid=16817
 
 - 测试步骤1:成功停止实例属性code @200
 - 测试步骤2:API调用失败属性code @400

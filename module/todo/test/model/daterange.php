@@ -10,7 +10,7 @@ su('admin');
 
 title=测试 todoModel::dateRange();
 timeout=0
-cid=0
+cid=19253
 
 - 测试 future 类型返回固定日期
  - 属性begin @2030-01-01

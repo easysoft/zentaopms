@@ -5,7 +5,7 @@
 
 title=测试 commonModel::printDuration();
 timeout=0
-cid=0
+cid=15693
 
 - 执行commonTest模块的printDurationTest方法，参数是40000000, 'y-m-d-h-i-s'  @1年3月7天23小时6分40秒
 - 执行commonTest模块的printDurationTest方法，参数是3661, 'y-m-d-h-i-s'  @1小时1分1秒

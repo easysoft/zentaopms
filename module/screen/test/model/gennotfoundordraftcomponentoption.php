@@ -5,7 +5,7 @@
 
 title=测试 screenModel::genNotFoundOrDraftComponentOption();
 timeout=0
-cid=0
+cid=18231
 
 - 执行screenTest模块的genNotFoundOrDraftComponentOptionTest方法，参数是$component1, $chart1, 'chart' 属性notFoundText @图表 测试图表 未找到或处于草稿状态
 - 执行screenTest模块的genNotFoundOrDraftComponentOptionTest方法，参数是$component2, $chart2, 'pivot' 属性notFoundText @透视表 测试透视表 未找到或处于草稿状态

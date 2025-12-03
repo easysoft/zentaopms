@@ -5,7 +5,7 @@
 
 title=测试 kanbanTao::refreshERURCards();
 timeout=0
-cid=0
+cid=16990
 
 - 步骤1:测试用需(epic)类型需求卡片刷新,处于已计划状态
  - 属性planned @

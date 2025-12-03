@@ -5,7 +5,7 @@
 
 title=测试 convertModel::getZentaoFields();
 timeout=0
-cid=0
+cid=15788
 
 - 执行convertTest模块的getZentaoFieldsTest方法，参数是'story'
  - 属性module @所属模块

@@ -5,7 +5,7 @@
 
 title=测试 productModel::buildSearchConfig();
 timeout=0
-cid=0
+cid=17474
 
 - 测试步骤1:正常产品story类型第fields条的title属性 @需求名称
 - 测试步骤2:正常产品requirement类型第fields条的stage属性 @所处阶段

@@ -5,7 +5,7 @@
 
 title=- 步骤1:单个需求ID属性extra @
 timeout=0
-cid=1
+cid=14963
 
 - 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1' 属性extra @#1 需求A
 - 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 2, 3'

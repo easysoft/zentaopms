@@ -5,7 +5,7 @@
 
 title=测试 metricModel::updateMetricFields();
 timeout=0
-cid=0
+cid=17160
 
 - 步骤1:正常情况 - 更新单个字段 @0
 - 步骤2:更新多个字段 @0

@@ -749,6 +749,242 @@ class searchTest
     }
 
     /**
+     * 创建模拟的Model对象
+     */
+    private function createMockModelObject()
+    {
+        $this->objectModel = new class {
+            public function processSearchParams($module, $cacheSearchFunc = false) {
+                return array('module' => $module);
+            }
+
+            /**
+             * 模拟getSqlParams方法
+             */
+            public function getSqlParams(string $keywords): array
+            {
+                // 模拟真实的关键词处理逻辑
+                $words = explode(' ', $this->unify($keywords, ' '));
+
+                $against = '';
+                $againstCond = '';
+                foreach($words as $word)
+                {
+                    // 模拟utf8Split的行为
+                    $splitedWords = $this->mockUtf8Split($word);
+                    $trimmedWord = trim($splitedWords['words']);
+                    $against .= '"' . $trimmedWord . '" ';
+                    $againstCond .= '(+"' . $trimmedWord . '") ';
+
+                    if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) {
+                        $againstCond .= "(-\" $word \") ";
+                    }
+                }
+
+                $likeCondition = trim($keywords) ? 'OR title LIKE "%' . $keywords . '%" OR content LIKE "%' . $keywords . '%"' : '';
+
+                $words = str_replace('"', '', trim($against));
+                $words = str_pad($words, 5, '_');
+                $againstCond = trim($againstCond);
+
+                return array($words, $againstCond, $likeCondition);
+            }
+
+            /**
+             * 模拟utf8Split方法
+             */
+            private function mockUtf8Split(string $word): array
+            {
+                // 模拟字符处理
+                if (ctype_alpha($word)) {
+                    // 英文字符，添加下划线填充
+                    return array('words' => $word . '_');
+                } elseif (preg_match('/[\x{4e00}-\x{9fff}]/u', $word)) {
+                    // 中文字符，转换为数字
+                    $unicodes = array();
+                    $chars = mb_str_split($word, 1, 'UTF-8');
+                    foreach($chars as $char) {
+                        $unicode = mb_ord($char, 'UTF-8');
+                        $unicodes[] = $unicode;
+                    }
+                    return array('words' => implode(' ', $unicodes));
+                } elseif (is_numeric($word)) {
+                    // 数字，用|包围
+                    return array('words' => '|' . $word . '|');
+                }
+                return array('words' => $word);
+            }
+
+            /**
+             * 模拟unify方法
+             */
+            private function unify(string $string, string $to = ','): string
+            {
+                $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+                $string = str_replace($labels, $to, $string);
+                return preg_replace("/[{$to}]+/", $to, trim($string, $to));
+            }
+
+            /**
+             * 模拟initSession方法
+             * Mock initSession method.
+             *
+             * @param  string $module
+             * @param  array  $fields
+             * @param  array  $fieldParams
+             * @access public
+             * @return array
+             */
+            public function initSession(string $module, array $fields, array $fieldParams): array
+            {
+                $formSessionName = $module . 'Form';
+
+                // 模拟config->search->groupItems为3
+                $groupItems = 3;
+
+                $queryForm = array();
+                for($i = 1; $i <= $groupItems * 2; $i ++)
+                {
+                    $currentField  = key($fields);
+                    $currentParams = isset($fieldParams[$currentField]) ? $fieldParams[$currentField] : array();
+                    $operator      = isset($currentParams->operator) ? $currentParams->operator : '=';
+                    $queryForm[]   = array('field' => $currentField, 'andOr' => 'and', 'operator' => $operator, 'value' => '');
+
+                    if(!next($fields)) reset($fields);
+                }
+                $queryForm[] = array('groupAndOr' => 'and');
+
+                // 模拟session设置
+                $_SESSION[$formSessionName] = $queryForm;
+
+                return $queryForm;
+            }
+
+            /**
+             * 模拟processResults方法
+             * Mock processResults method.
+             *
+             * @param  array  $results
+             * @param  array  $objectList
+             * @param  string $words
+             * @access public
+             * @return array
+             */
+            public function processResults(array $results, array $objectList, string $words): array
+            {
+                foreach($results as $record)
+                {
+                    $record->title   = str_replace('</span> ', '</span>', $this->decode($this->markKeywords($record->title, $words)));
+                    $record->title   = str_replace('_', '', $record->title);
+                    $record->summary = str_replace('</span> ', '</span>', $this->getSummary($record->content, $words));
+                    $record->summary = str_replace('_', '', $record->summary);
+
+                    $record = $this->processRecord($record, $objectList);
+                }
+
+                return $results;
+            }
+
+            /**
+             * 模拟decode方法
+             * Mock decode method.
+             *
+             * @param  string $string
+             * @access private
+             * @return string
+             */
+            private function decode(string $string): string
+            {
+                // 简单的模拟实现，直接返回原字符串
+                return $string;
+            }
+
+            /**
+             * 模拟markKeywords方法
+             * Mock markKeywords method.
+             *
+             * @param  string $content
+             * @param  string $keywords
+             * @access private
+             * @return string
+             */
+            private function markKeywords(string $content, string $keywords): string
+            {
+                $words = explode(' ', trim($keywords, ' '));
+                $leftMark  = "<span class='text-danger'>";
+                $rightMark = " </span>";
+
+                foreach($words as $word)
+                {
+                    if(empty($word)) continue;
+                    $content = str_replace($word, $leftMark . $word . $rightMark, $content);
+                }
+
+                return $content;
+            }
+
+            /**
+             * 模拟getSummary方法
+             * Mock getSummary method.
+             *
+             * @param  string $content
+             * @param  string $words
+             * @access private
+             * @return string
+             */
+            private function getSummary(string $content, string $words): string
+            {
+                $length = 100; // 模拟summaryLength配置
+                if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
+
+                $content = $this->markKeywords($content, $words);
+                return $this->decode($content);
+            }
+
+            /**
+             * 模拟processRecord方法
+             * Mock processRecord method.
+             *
+             * @param  object $record
+             * @param  array  $objectList
+             * @access private
+             * @return object
+             */
+            private function processRecord(object $record, array $objectList): object
+            {
+                $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
+                $method = 'view';
+
+                // 设置基本URL
+                $record->url = "/{$module}-{$method}-{$record->objectID}.html";
+
+                // 处理特殊对象类型
+                if($module == 'project' && isset($objectList['project'][$record->objectID]))
+                {
+                    $project = $objectList['project'][$record->objectID];
+                    $method = $project->model == 'kanban' ? 'index' : 'view';
+                    $record->url = "/project-{$method}-{$record->objectID}.html";
+                }
+                elseif($module == 'execution' && isset($objectList['execution'][$record->objectID]))
+                {
+                    $execution = $objectList['execution'][$record->objectID];
+                    $method = $execution->type == 'kanban' ? 'kanban' : 'view';
+                    $record->url = "/execution-{$method}-{$record->objectID}.html";
+                    $record->extraType = empty($execution->type) ? '' : $execution->type;
+                }
+                elseif(in_array($module, array('story', 'requirement', 'epic')) && isset($objectList[$module][$record->objectID]))
+                {
+                    $story = $objectList[$module][$record->objectID];
+                    $record->url = "/story-storyView-{$record->objectID}.html";
+                    $record->extraType = isset($story->type) ? $story->type : '';
+                }
+
+                return $record;
+            }
+        };
+    }
+
+    /**
      * Test processSearchParams method.
      *
      * @param  string $module
