@@ -1799,7 +1799,7 @@ class repoModel extends model
             $server = $this->loadModel('gitfox')->getServer();
 
             $repo->path     = (!$repo->path && $server) ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->gitfoxID) : $repo->path;
-            $repo->apiPath  = $repo->path;
+            $repo->apiPath  = $server ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->gitfoxID) : $repo->path;
             $repo->client   = $server ? $server->url : '';
             $repo->password = $server ? $server->token : '';
             $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
