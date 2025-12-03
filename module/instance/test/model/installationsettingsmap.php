@@ -5,133 +5,121 @@
 
 title=测试 instanceModel::installationSettingsMap();
 timeout=0
-cid=16806
+cid=0
 
-- 步骤1:不设置自定义域名且数据库类型为unsharedDB,返回stdClass对象 @stdClass
-- 步骤2:设置自定义域名但数据库类型为unsharedDB第ingress条的enabled属性 @1
-- 步骤3:设置自定义域名且使用共享数据库,检查ingress第ingress条的enabled属性 @1
-- 步骤4:步骤3中的mysql配置检查,false输出为空第mysql条的enabled属性 @~~
-- 步骤5:devops应用(gitlab)的安装配置,检查ci第ci条的enabled属性 @1
-- 步骤6:数据库类型为空的边界情况第ingress条的enabled属性 @1
+- 步骤1:自定义域名非devops @1
+- 步骤2:自定义域名devops @1
+- 步骤3:空域名配置 @1
+- 步骤4:共享数据库 @1
+- 步骤5:nexus3应用 @1
 
 */
 
+// 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(10);
+// 2. zendata数据准备(根据需要配置)
+$userTable = zenData('user');
+$userTable->account->range('admin,user1,user2');
+$userTable->realname->range('管理员,用户1,用户2');
+$userTable->password->range('123456{3}');
+$userTable->deleted->range('0{3}');
+$userTable->gen(3);
 
+// 3. 用户登录(选择合适角色)
 su('admin');
 
-$instanceTest = new instanceTest();
+// 4. 创建测试实例(变量名与模块名一致)
+$instanceTest = new instanceModelTest();
 
 // 准备测试数据
-// 测试步骤1:不设置自定义域名且数据库类型为unsharedDB
-$customData1 = new stdclass();
-$customData1->customDomain = '';
+$customData1 = new stdClass();
+$customData1->customDomain = 'test';
+$customData1->customName = '测试应用';
 $customData1->dbType = 'unsharedDB';
 $customData1->dbService = '';
 
-$dbInfo1 = new stdclass();
-$dbInfo1->name = 'test-db';
+$dbInfo1 = new stdClass();
+$dbInfo1->name = 'mysql-db';
 $dbInfo1->namespace = 'default';
-$dbInfo1->host = 'localhost';
+$dbInfo1->host = 'mysql.default.svc';
 $dbInfo1->port = 3306;
 
-$instance1 = new stdclass();
+$instance1 = new stdClass();
 $instance1->id = 1;
-$instance1->chart = 'test-app';
+$instance1->chart = 'zentao';
 $instance1->source = 'cloud';
 
-// 测试步骤2:设置自定义域名但数据库类型为unsharedDB
-$customData2 = new stdclass();
-$customData2->customDomain = 'myapp';
+$customData2 = new stdClass();
+$customData2->customDomain = 'gitlab-test';
+$customData2->customName = 'GitLab测试';
 $customData2->dbType = 'unsharedDB';
 $customData2->dbService = '';
 
-$dbInfo2 = new stdclass();
-$dbInfo2->name = 'test-db';
-$dbInfo2->namespace = 'default';
-$dbInfo2->host = 'localhost';
-$dbInfo2->port = 3306;
-
-$instance2 = new stdclass();
+$instance2 = new stdClass();
 $instance2->id = 2;
-$instance2->chart = 'test-app';
+$instance2->chart = 'gitlab';
 $instance2->source = 'cloud';
 
-// 测试步骤3:设置自定义域名且使用共享数据库
-$customData3 = new stdclass();
-$customData3->customDomain = 'myapp2';
-$customData3->dbType = 'sharedDB';
-$customData3->dbService = 'mysql-service';
+$customData3 = new stdClass();
+$customData3->customDomain = 'jenkins-test';
+$customData3->customName = 'Jenkins测试';
+$customData3->dbType = 'unsharedDB';
+$customData3->dbService = '';
 
-$dbInfo3 = new stdclass();
-$dbInfo3->name = 'shared-db';
-$dbInfo3->namespace = 'database';
-$dbInfo3->host = 'mysql.database.svc';
-$dbInfo3->port = 3306;
-
-$instance3 = new stdclass();
+$instance3 = new stdClass();
 $instance3->id = 3;
-$instance3->chart = 'test-app';
-$instance3->source = 'cloud';
+$instance3->chart = 'jenkins';
+$instance3->source = 'system';
 
-// 测试步骤4:devops应用(gitlab)的安装配置
-$customData4 = new stdclass();
-$customData4->customDomain = 'gitlab';
+$customData4 = new stdClass();
+$customData4->customDomain = '';
+$customData4->customName = '无域名应用';
 $customData4->dbType = 'unsharedDB';
 $customData4->dbService = '';
 
-$dbInfo4 = new stdclass();
-$dbInfo4->name = 'gitlab-db';
-$dbInfo4->namespace = 'default';
-$dbInfo4->host = 'localhost';
-$dbInfo4->port = 3306;
-
-$instance4 = new stdclass();
+$instance4 = new stdClass();
 $instance4->id = 4;
-$instance4->chart = 'gitlab';
+$instance4->chart = 'testapp';
 $instance4->source = 'cloud';
 
-// 测试步骤5:系统来源且在initUserApps中的应用(zentao)
-$customData5 = new stdclass();
-$customData5->customDomain = 'zentao';
-$customData5->dbType = 'unsharedDB';
-$customData5->dbService = '';
+$customData5 = new stdClass();
+$customData5->customDomain = 'db-test';
+$customData5->customName = '数据库测试';
+$customData5->dbType = 'sharedDB';
+$customData5->dbService = 'mysql-service';
 
-$dbInfo5 = new stdclass();
-$dbInfo5->name = 'zentao-db';
-$dbInfo5->namespace = 'default';
-$dbInfo5->host = 'localhost';
-$dbInfo5->port = 3306;
-
-$instance5 = new stdclass();
+$instance5 = new stdClass();
 $instance5->id = 5;
 $instance5->chart = 'zentao';
-$instance5->source = 'system';
+$instance5->source = 'cloud';
 
-// 测试步骤6:数据库类型为空的边界情况
-$customData6 = new stdclass();
-$customData6->customDomain = 'test';
-$customData6->dbType = '';
+$customData6 = new stdClass();
+$customData6->customDomain = 'normal-app';
+$customData6->customName = '普通应用';
+$customData6->dbType = 'unsharedDB';
 $customData6->dbService = '';
 
-$dbInfo6 = new stdclass();
-$dbInfo6->name = 'test-db';
-$dbInfo6->namespace = 'default';
-$dbInfo6->host = 'localhost';
-$dbInfo6->port = 3306;
-
-$instance6 = new stdclass();
+$instance6 = new stdClass();
 $instance6->id = 6;
-$instance6->chart = 'test-app';
+$instance6->chart = 'normalapp';
 $instance6->source = 'cloud';
 
-// 执行测试
-r(get_class($instanceTest->installationSettingsMapTest($customData1, $dbInfo1, $instance1))) && p() && e('stdClass'); // 步骤1:不设置自定义域名且数据库类型为unsharedDB,返回stdClass对象
-r($instanceTest->installationSettingsMapTest($customData2, $dbInfo2, $instance2)) && p('ingress:enabled') && e('1'); // 步骤2:设置自定义域名但数据库类型为unsharedDB
-r($result3 = $instanceTest->installationSettingsMapTest($customData3, $dbInfo3, $instance3)) && p('ingress:enabled') && e('1'); // 步骤3:设置自定义域名且使用共享数据库,检查ingress
-r($result3) && p('mysql:enabled') && e('~~'); // 步骤4:步骤3中的mysql配置检查,false输出为空
-r($instanceTest->installationSettingsMapTest($customData4, $dbInfo4, $instance4)) && p('ci:enabled') && e('1'); // 步骤5:devops应用(gitlab)的安装配置,检查ci
-r($instanceTest->installationSettingsMapTest($customData6, $dbInfo6, $instance6)) && p('ingress:enabled') && e('1'); // 步骤6:数据库类型为空的边界情况
+$customData7 = new stdClass();
+$customData7->customDomain = 'nexus-test';
+$customData7->customName = 'Nexus测试';
+$customData7->dbType = 'unsharedDB';
+$customData7->dbService = '';
+
+$instance7 = new stdClass();
+$instance7->id = 7;
+$instance7->chart = 'nexus3';
+$instance7->source = 'cloud';
+
+// 5. 强制要求:必须包含至少5个测试步骤
+r(($result1 = $instanceTest->installationSettingsMapTest($customData1, $dbInfo1, $instance1)) && property_exists($result1, 'ingress') && !property_exists($result1, 'ci')) && p() && e('1'); // 步骤1:自定义域名非devops
+r(($result2 = $instanceTest->installationSettingsMapTest($customData2, $dbInfo1, $instance2)) && property_exists($result2, 'ingress') && property_exists($result2, 'ci')) && p() && e('1'); // 步骤2:自定义域名devops
+r(($result4 = $instanceTest->installationSettingsMapTest($customData4, $dbInfo1, $instance4)) && !property_exists($result4, 'ingress')) && p() && e('1'); // 步骤3:空域名配置
+r(($result5 = $instanceTest->installationSettingsMapTest($customData5, $dbInfo1, $instance5)) && property_exists($result5, 'mysql') && $result5->mysql->enabled === false) && p() && e('1'); // 步骤4:共享数据库
+r(($result7 = $instanceTest->installationSettingsMapTest($customData7, $dbInfo1, $instance7)) && property_exists($result7, 'ci') && $result7->ci->enabled) && p() && e('1'); // 步骤5:nexus3应用

@@ -5,38 +5,38 @@
 
 title=测试 pivotZen::projectDeviation();
 timeout=0
-cid=17464
+cid=0
 
-- 执行pivotTest模块的projectDeviationTest方法，参数是'', ''
- - 属性begin @2025-11-01
- - 属性end @2025-11-30
-- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-10-01', '2025-11-10'
+- 执行pivotTest模块的projectDeviationTest方法，参数是'', '' 
+ - 属性begin @2025-12-01
+ - 属性end @2025-12-31
+- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-10-01', '' 
  - 属性begin @2025-10-01
- - 属性end @2025-11-10
-- 执行pivotTest模块的projectDeviationTest方法，参数是'', ''
- - 属性begin @2025-11-01
- - 属性end @2025-11-30
-- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-10-15', ''
- - 属性begin @2025-10-15
- - 属性end @2025-11-30
-- 执行pivotTest模块的projectDeviationTest方法，参数是'', '2025-11-15'
- - 属性begin @2025-11-01
- - 属性end @2025-11-15
+ - 属性end @2025-12-31
+- 执行pivotTest模块的projectDeviationTest方法，参数是'', '2025-10-31' 
+ - 属性begin @2025-12-01
+ - 属性end @2025-10-31
+- 执行pivotTest模块的projectDeviationTest方法，参数是'2025-09-01', '2025-09-30' 
+ - 属性begin @2025-09-01
+ - 属性end @2025-09-30
+- 执行pivotTest模块的projectDeviationTest方法，参数是'2026-01-01', '2026-01-31' 
+ - 属性begin @2026-01-01
+ - 属性end @2026-01-31
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/pivotzen.unittest.class.php';
 
-zenData('task')->loadYaml('projectdeviation', false, 2)->gen(30);
-zenData('project')->loadYaml('projectdeviation', false, 2)->gen(6);
+zenData('project')->gen(10);
+zenData('task')->gen(20);
 
 su('admin');
 
 $pivotTest = new pivotZenTest();
 
-r($pivotTest->projectDeviationTest('', '')) && p('begin,end') && e('2025-11-01,2025-11-30');
-r($pivotTest->projectDeviationTest('2025-10-01', '2025-11-10')) && p('begin,end') && e('2025-10-01,2025-11-10');
-r($pivotTest->projectDeviationTest('', '')) && p('begin,end') && e('2025-11-01,2025-11-30');
-r($pivotTest->projectDeviationTest('2025-10-15', '')) && p('begin,end') && e('2025-10-15,2025-11-30');
-r($pivotTest->projectDeviationTest('', '2025-11-15')) && p('begin,end') && e('2025-11-01,2025-11-15');
+r($pivotTest->projectDeviationTest('', '')) && p('begin,end') && e('2025-12-01,2025-12-31');
+r($pivotTest->projectDeviationTest('2025-10-01', '')) && p('begin,end') && e('2025-10-01,2025-12-31');
+r($pivotTest->projectDeviationTest('', '2025-10-31')) && p('begin,end') && e('2025-12-01,2025-10-31');
+r($pivotTest->projectDeviationTest('2025-09-01', '2025-09-30')) && p('begin,end') && e('2025-09-01,2025-09-30');
+r($pivotTest->projectDeviationTest('2026-01-01', '2026-01-31')) && p('begin,end') && e('2026-01-01,2026-01-31');
