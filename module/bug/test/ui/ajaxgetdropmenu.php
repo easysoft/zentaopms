@@ -1,46 +1,82 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 2) . '/lib/ui/ajaxgetdropmenu.ui.class.php';
+chdir (__DIR__);
+include '../lib/ui/ajaxgetdropmenu.ui.class.php';
 
 /**
 
-title=Ajax获取project下拉菜单测试
+title=所属产品下拉菜单内容测试
 timeout=0
 cid=1
 
 - Ajaxgetdropmenu在Bug创建页面测试
  - 最终测试状态 @SUCCESS
- - 测试结果 @Ajaxgetdropmenu在Bug创建页面测试成功
+ - 测试结果 user1在Bug创建页面获取所属产品数据正确
+- Ajaxgetdropmenu在Bug创建页面测试
+ - 最终测试状态 @SUCCESS
+ - 测试结果 admin在Bug创建页面获取所属产品数据正确
 - Ajaxgetdropmenu在Bug编辑页面测试
  - 最终测试状态 @SUCCESS
- - 测试结果 @Ajaxgetdropmenu在Bug编辑页面测试成功
+ - 测试结果 user1在Bug编辑页面获取所属产品数据正确
+- Ajaxgetdropmenu在Bug编辑页面测试
+ - 最终测试状态 @SUCCESS
+ - 测试结果 admin在Bug编辑页面获取所属产品数据正确
 
 */
 
 $product = zenData('product');
-$product->id->range('1,2,3');
-$product->name->range('产品1,产品2,产品3');
+$product->id->range('1-3');
+$product->name->range('产品1公开, 产品2公开, 产品3私有');
+$product->shadow->range('0');
+$product->PO->range('admin');
+$product->program->range('0');
+$product->QD->range('[]');
+$product->RD->range('[]');
+$product->acl->range('open{2}, private');
+$product->vision->range('rnd');
 $product->gen(3);
 
-$products = array(
-    array('productID' => 1, 'name' => '产品1'),
-    array('productID' => 2, 'name' => '产品2'),
-    array('productID' => 3, 'name' => '产品3'),
-);
+$projectproduct = zenData('projectproduct')->gen(0);
 
-/*
 $bug = zenData('bug');
+$bug->id->range('1');
 $bug->product->range('1');
+$bug->title->range('产品1公开的Bug');
+$bug->project->range('0');
+$bug->module->range('0');
+$bug->execution->range('0');
+$bug->plan->range('0');
+$bug->story->range('0');
 $bug->openedBuild->range('trunk');
-$bug->gen(3);
-*/
+$bug->gen(1);
 
-global $lang;
-$bug = array('title' => 'bug' . time(), 'openedBuild' => array('multiPicker' => '主干'));
+$user = zenData('user');
+$user->id->range('1-3');
+$user->account->range('admin, user1, user2');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->realname->range('admin, USER1, USER2');
+$user->gen(3);
+
+$usergroup = zenData('usergroup');
+$usergroup->account->range('admin, user1, user2');
+$usergroup->group->range('1');
 
 $tester = new ajaxGetDropmenuTester();
 
-r($tester->ajaxGetDropmenuInBugCreate($products, $bug)) && p('status,message') && e('SUCCESS,Ajaxgetdropmenu在Bug创建页面测试成功'); //Ajaxgetdropmenu在Bug创建页面测试
-r($tester->ajaxGetDropmenuInBugEdit($products, $bug))   && p('status,message') && e('SUCCESS,Ajaxgetdropmenu在Bug编辑页面测试成功'); //Ajaxgetdropmenu在Bug编辑页面测试
+$products = array('产品1公开', '产品2公开');
+$productAll = array('产品1公开', '产品2公开', '产品3私有');
+
+
+global $lang;
+$bug = array('title' => 'bug' . time(), 'openedBuild' => array('multiPicker' => '主干'));
+$user = array(
+    'user1' => 'user1',
+    'admin' => 'admin'
+);
+
+r($tester->ajaxGetDropmenuInBugCreate($user['user1'], $products, $bug))   && p('status,message') && e('SUCCESS,user1在Bug创建页面获取所属产品数据正确'); //Ajaxgetdropmenu在Bug创建页面测试
+r($tester->ajaxGetDropmenuInBugCreate($user['admin'], $productAll, $bug)) && p('status,message') && e('SUCCESS,admin在Bug创建页面获取所属产品数据正确'); //Ajaxgetdropmenu在Bug创建页面测试
+r($tester->ajaxGetDropmenuInBugEdit($user['user1'], $products, $bug))     && p('status,message') && e('SUCCESS,user1在Bug编辑页面获取所属产品数据正确'); //Ajaxgetdropmenu在Bug编辑页面测试
+r($tester->ajaxGetDropmenuInBugEdit($user['admin'], $productAll, $bug))   && p('status,message') && e('SUCCESS,admin在Bug编辑页面获取所属产品数据正确'); //Ajaxgetdropmenu在Bug编辑页面测试
 
 $tester->closeBrowser();
