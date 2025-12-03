@@ -455,10 +455,11 @@ class adminModel extends model
      * 获取禅道使用时长。
      * Get date used object.
      *
+     * @param  string $end
      * @access public
      * @return object
      */
-    public function genDateUsed(): object
+    public function genDateUsed($end = ''): object
     {
         $firstUseDate = $this->dao->select('min(`date`) as `date`')->from(TABLE_ACTION)
             ->where('`date`')->ge(FIRST_RELEASE_DATE)
@@ -466,7 +467,7 @@ class adminModel extends model
             ->fetch('date');
 
         if($firstUseDate) $firstUseDate = substr($firstUseDate, 0, 10);
-        return helper::getDateInterval($firstUseDate);
+        return helper::getDateInterval($firstUseDate, $end);
     }
 
     /**

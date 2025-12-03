@@ -45,10 +45,10 @@ $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
 if($config->edition != 'open' && $config->vision == 'rnd') $lang->admin->menuList->system['subMenu']['metriclib'] = array('link' => "{$lang->metriclib->common}|admin|metriclib|");
-if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
+if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
-if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
+if(in_array($config->db->driver, $config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
 $lang->admin->menuList->system['menuOrder']['15'] = 'trash';
 $lang->admin->menuList->system['menuOrder']['30'] = 'safe';
 $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
