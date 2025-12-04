@@ -764,6 +764,13 @@ class baseRouter
         $this->dataRoot = $this->wwwRoot . 'data' . DS;
     }
 
+    /**
+     * 设置超级变量。
+     * Set the super vars.
+     *
+     * @access public
+     * @return void
+     */
     public function setSuperVars()
     {
         if(isset($_SERVER['REQUEST_URI']))
