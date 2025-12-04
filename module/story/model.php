@@ -636,21 +636,16 @@ class storyModel extends model
         foreach($storyData->branches as $key => $branchID)
         {
             $storyData->branch = (int)$branchID;
-            $storyData->module = !empty($storyData->modules[$key]) ? $storyData->modules[$key] : 0;
+            $storyData->module = $storyData->modules[$key];
             $storyData->plan   = isset($storyData->plans[$key]) ? $storyData->plans[$key] : 0;
 
             $storyID = $this->create($storyData, $objectID, $bugID, $extra, $todoID);
-            if($storyID === false) continue;
-
             $storyIdList[$storyID] = $storyID;
             if(empty($mainStoryID)) $mainStoryID = $storyID;
         }
 
-        if(!empty($storyIdList) && $mainStoryID > 0)
-        {
-            $this->storyTao->updateTwins($storyIdList, (int)$mainStoryID);
-        }
-        return $mainStoryID > 0 ? $mainStoryID : false;
+        $this->storyTao->updateTwins($storyIdList, $mainStoryID);
+        return $mainStoryID;
     }
 
     /**
