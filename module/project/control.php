@@ -1781,25 +1781,6 @@ class project extends control
     }
 
     /**
-     * Ajax get workflow group items.
-     *
-     * @param  string $model
-     * @param  int    $hasProduct
-     * @param  string $category
-     * @access public
-     * @return void
-     */
-    public function ajaxGetWorkflowGroups(string $model, int $hasProduct, string $category)
-    {
-        if($this->config->edition == 'open') return false;
-
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0', $category);
-
-        $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
-        return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
-    }
-
-    /**
      * 检查是否同步阶段数据。
      * AJAX: check whether stage data is sync.
      *
