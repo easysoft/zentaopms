@@ -392,7 +392,7 @@ class zaiModel extends model
             return $result;
         }
 
-        return array('result' => 'success', 'target' => $target, 'id' => $target->id, 'data' => $result['data']);
+        return array('result' => 'success', 'target' => $target, 'id' => $target->id, 'data' => $result['data'], 'syncedData' => $syncData);
     }
 
     /**

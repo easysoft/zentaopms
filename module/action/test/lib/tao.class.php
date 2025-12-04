@@ -50,4 +50,21 @@ class actionTaoTest
         if(dao::isError()) return dao::getError();
         return $action;
     }
+
+    /**
+     * Test processCreateChildrenActionExtra method.
+     *
+     * @param  string $taskIDs
+     * @access public
+     * @return object
+     */
+    public function processCreateChildrenActionExtraTest(string $taskIDs): object
+    {
+        $action = new stdClass();
+        $action->extra = $taskIDs;
+
+        $this->objectTao->processCreateChildrenActionExtra($action);
+        if(dao::isError()) return dao::getError();
+        return $action;
+    }
 }

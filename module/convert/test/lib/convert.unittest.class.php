@@ -12,6 +12,9 @@ class MockWorkflowField
 
 class convertTest
 {
+    public $objectModel;
+    public $objectTao;
+
     public function __construct()
     {
         global $tester;
@@ -4325,5 +4328,4 @@ class convertTest
 
         return '';
     }
-
 }

@@ -93,8 +93,41 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
-        $result = $this->invokeArgs('createTask', array($projectID, $executionID, $data, $relations));
-        if(dao::isError()) return dao::getError();
-        return $result;
+        global $app;
+
+        // Set up necessary session data for jira conversion
+        $originalJiraMethod = isset($app->session->jiraMethod) ? $app->session->jiraMethod : null;
+        $app->session->jiraMethod = 'jira';
+
+        try {
+            $result = $this->invokeArgs('createTask', array($projectID, $executionID, $data, $relations));
+            if(dao::isError())
+            {
+                // Restore original session data
+                if($originalJiraMethod !== null) {
+                    $app->session->jiraMethod = $originalJiraMethod;
+                } else {
+                    unset($app->session->jiraMethod);
+                }
+                return dao::getError();
+            }
+
+            // Restore original session data
+            if($originalJiraMethod !== null) {
+                $app->session->jiraMethod = $originalJiraMethod;
+            } else {
+                unset($app->session->jiraMethod);
+            }
+
+            return $result;
+        } catch (Exception | Error $e) {
+            // Restore session data even on exception
+            if($originalJiraMethod !== null) {
+                $app->session->jiraMethod = $originalJiraMethod;
+            } else {
+                unset($app->session->jiraMethod);
+            }
+            return false;
+        }
     }
 }

@@ -138,6 +138,7 @@ class zai extends control
             $info->synced = 0;
         }
 
+        $startSyncTime  = microtime(true) * 1000;
         $info->syncTime = time();
         $result = $this->zai->syncNextTarget($info->key, $info->syncingType, $info->syncingID);
 
@@ -157,7 +158,7 @@ class zai extends control
                 $info->syncFailedCount++;
                 $info->syncDetails->$syncingType->failed++;
                 $this->zai->setVectorizedInfo($info);
-                return $this->send(array('result' => 'failed', 'message' => $result['message'], 'data' => $info, '$result' => $result));
+                return $this->send(array('result' => 'failed', 'message' => $result['message'], 'data' => $info, 'request' => $this->app->config->debug > 5 ? $result : null));
             }
             if($result['result'] == 'success')
             {
@@ -170,6 +171,7 @@ class zai extends control
                 $info->syncDetails->$syncingType->failed++;
             }
             $info->syncingID = (isset($result['id']) ? $result['id'] : $info->syncingID) + 1;
+            $info->lastSync  = ['time' => (microtime(true) * 1000) - $startSyncTime, 'contentLength' => isset($result['syncedData']) ? strlen($result['syncedData']['content']) : 0, 'type' => $info->syncingType, 'id' => $info->syncingID];
         }
         else
         {
@@ -188,6 +190,8 @@ class zai extends control
             }
         }
         $this->zai->setVectorizedInfo($info);
+
+        unset($info->key);
         return $this->send(array('result' => 'success', 'data' => $info));
     }
 

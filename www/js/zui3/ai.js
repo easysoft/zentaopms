@@ -115,7 +115,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
 
             const applyFormFormat = langData.applyFormFormat;
             const originObject    = info.object && info.object[info.objectType];
-            const h               = zui.html;
+            const h               = zui.jsx;
             let   diffView        = null;
             const explainView     = response.explain ? h`<div><i class="icon icon-lightbulb text-gray"></i> ${response.explain}</div>` : null;
             const renderValue     = (value) =>

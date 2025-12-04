@@ -163,6 +163,7 @@ class VectorizedPanel extends zui.Component
     async syncNext(data)
     {
         const result = await this.post(['zai', 'ajaxSyncVectorization'], data);
+        await zui.delay(result.data.lastSync ? (result.data.lastSync.time * 2) : 100);
         return result;
     }
 

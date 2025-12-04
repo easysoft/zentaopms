@@ -3,17 +3,17 @@
 
 /**
 
-title=- 步骤1:单个需求ID属性extra @
+title=- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1' 属性extra @<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >
 timeout=0
-cid=14963
+cid=1
 
-- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1' 属性extra @#1 需求A
-- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 2, 3'
- - 属性extra @#1 需求A
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1' 属性extra @<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 2, 3' 
+ - 属性extra @<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>
 - 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'999' 属性extra @~~
 - 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'' 属性extra @~~
-- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 999, 2'
- - 属性extra @#1 需求A
+- 执行actionTest模块的processCreateRequirementsActionExtraTest方法，参数是'1, 999, 2' 
+ - 属性extra @<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>
 
 */
 
@@ -33,8 +33,8 @@ su('admin');
 
 $actionTest = new actionTest();
 
-r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e('#1 需求A');
-r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e('#1 需求A, #2 需求B, #3 需求C');
+r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>");
+r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求B</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求C</a>");
 r($actionTest->processCreateRequirementsActionExtraTest('999')) && p('extra') && e('~~');
 r($actionTest->processCreateRequirementsActionExtraTest('')) && p('extra') && e('~~');
-r($actionTest->processCreateRequirementsActionExtraTest('1,999,2')) && p('extra') && e('#1 需求A, #2 需求B');
+r($actionTest->processCreateRequirementsActionExtraTest('1,999,2')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求B</a>");
