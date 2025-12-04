@@ -1,0 +1,124 @@
+title: table zt_flow_risk
+desc: "项目风险"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 1-100
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "所属执行"
+    range: 101-700
+  - field: name
+    note: "机会名称"
+    range: 1-10000
+    prefix: "机会名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: source
+    note: "来源"
+    range: business,team,logistic,manage,sourcing,outsourcing,customer,others
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: strategy
+    note: "策略"
+    range: monitor,create,utilize,enhance,accept
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: status
+    note: "状态"
+    range: active,closed,hangup,canceled
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: impact
+    note: "影响程度"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: chance
+    note: "发生概率"
+    range: 1-5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: ratio
+    note: "风险系数"
+    range: 1-25
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: pri
+    note: "优先级"
+    range: 1-3
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: identifiedDate
+    note: "识别日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: prevention
+    note: "处理措施"
+    range: 1-10000
+    prefix: "这是处理措施"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: plannedClosedDate
+    note: "计划关闭日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: actualClosedDate
+    note: "实际关闭日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: createdBy
+    note: "由谁创建"
+    range: admin,user1
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: editedBy
+    note: "由谁编辑"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: editedDate
+    note: "编辑日期"
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: deleted
+    note: "是否删除"
+    range: 0
