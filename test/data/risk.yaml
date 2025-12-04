@@ -78,7 +78,7 @@ fields:
     format: ""
   - field: pri
     note: "优先级"
-    range: high,middle,low
+    range: 1,2,3
     prefix: ""
     postfix: ""
     loop: 0
