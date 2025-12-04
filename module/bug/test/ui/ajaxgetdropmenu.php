@@ -60,6 +60,13 @@ $user->gen(3);
 $usergroup = zenData('usergroup');
 $usergroup->account->range('admin, user1, user2');
 $usergroup->group->range('1');
+$usergroup->gen(3);
+
+$grouppriv = zenData('grouppriv');
+$grouppriv->group->range('1');
+$grouppriv->module->range('bug{26}, index, qa');
+$grouppriv->method->range('activate, assignTo, batchActivate, batchAssignTo, batchChangeBranch, batchChangeModule, batchChangePlan, batchClose, batchConfirm, batchCreate, batchEdit, batchResolve, browse, close, confirm, confirmStoryChange, create, createBranch, delete, edit, export, linkBugs, report, resolve, unlinkBranch, view');
+$grouppriv->gen(28);
 
 $tester = new ajaxGetDropmenuTester();
 
