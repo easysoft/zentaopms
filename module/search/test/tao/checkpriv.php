@@ -46,66 +46,6 @@ $doclib->name->range('Lib 1,Lib 2,Lib 3,Lib 4,Lib 5');
 $doclib->deleted->range('0');
 $doclib->gen(5);
 
-        $filteredResults = $results;
-
-        // 如果没有提供objectPairs，从results中构建
-        if(empty($objectPairs)) {
-            foreach($results as $record) {
-                if(isset($record->objectType) && isset($record->objectID)) {
-                    $objectPairs[$record->objectType][$record->objectID] = $record->id;
-                }
-            }
-        }
-
-        // 权限检查逻辑
-        foreach($objectPairs as $objectType => $objectIdList) {
-            switch($objectType) {
-                case 'story':
-                    // 需求权限检查：如果用户没有产品权限，移除所有需求
-                    if(empty($userProducts)) {
-                        foreach($objectIdList as $storyID => $recordID) {
-                            foreach($filteredResults as $key => $result) {
-                                if($result->id == $recordID || (isset($result->objectID) && $result->objectID == $storyID)) {
-                                    unset($filteredResults[$key]);
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-                case 'product':
-                    // 产品权限检查
-                    foreach($objectIdList as $productID => $recordID) {
-                        if(strpos(",$userProducts,", ",$productID,") === false) {
-                            foreach($filteredResults as $key => $result) {
-                                if($result->id == $recordID || (isset($result->objectID) && $result->objectID == $productID)) {
-                                    unset($filteredResults[$key]);
-                                }
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-
-        return count($filteredResults);
-    }
-}
-
-// 简化测试函数
-function r($result) {
-    global $lastResult;
-    $lastResult = $result;
-    return true;
-}
-function p() { return true; }
-function e($expected) {
-    global $lastResult;
-    echo ($lastResult == $expected) ? $expected : $lastResult;
-    echo "\n";
-    return ($lastResult == $expected);
-}
-
 global $app;
 $searchTest = new searchTaoTest();
 
