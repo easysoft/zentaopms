@@ -757,4 +757,59 @@ class api extends router
 
         $this->config->vision = $vision ? $vision : $defaultVision;
     }
+
+    /**
+     * 设置超级变量。
+     * Set the super vars.
+     *
+     * @access public
+     * @return void
+     */
+    public function setSuperVars()
+    {
+        if(isset($_SERVER['REQUEST_URI']))
+        {
+            $uri = $_SERVER['REQUEST_URI'];
+            if(str_contains((string) $uri, '?'))
+            {
+                $parsedURL = parse_url((string) $uri);
+                if(isset($parsedURL['query']))
+                {
+                    parse_str($parsedURL['query'], $parsedQuery);
+                    foreach($parsedQuery as $key => $value)
+                    {
+                        if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    }
+                }
+            }
+        }
+
+        $this->post    = new super('post');
+        $this->get     = new super('get');
+        $this->server  = new super('server');
+        $this->cookie  = new super('cookie');
+        $this->session = new super('session', $this->tab);
+
+        unset($_REQUEST);
+
+        $_FILES  = validater::filterFiles();
+        $_POST   = validater::filterSuper($_POST);
+        $_GET    = validater::filterSuper($_GET);
+        $_COOKIE = validater::filterSuper($_COOKIE);
+        $_SERVER = validater::filterSuper($_SERVER);
+
+        /* Filter common get and cookie vars. */
+        if($this->config->framework->filterParam == 2)
+        {
+            global $filter;
+            foreach($filter->default->get as $key => $rules)
+            {
+                if(isset($_GET[$key]) and !validater::checkByRule($_GET[$key], $rules)) unset($_GET[$key]);
+            }
+            foreach($filter->default->cookie as $key => $rules)
+            {
+                if(isset($_COOKIE[$key]) and !validater::checkByRule($_COOKIE[$key], $rules)) unset($_COOKIE[$key]);
+            }
+        }
+    }
 }
