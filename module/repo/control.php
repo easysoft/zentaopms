@@ -836,11 +836,8 @@ class repo extends control
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getByID($repoID);
 
-        if($isBranchOrTag)
-        {
-            $fromRevision = urldecode(helper::safe64Decode($fromRevision));
-            $toRevision   = urldecode(helper::safe64Decode($toRevision));
-        }
+        $fromRevision = urldecode(helper::safe64Decode($fromRevision));
+        $toRevision   = urldecode(helper::safe64Decode($toRevision));
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
@@ -1745,8 +1742,8 @@ class repo extends control
         $repo  = $this->repo->getByID((int)$this->post->repoID);
         $entry = $this->repo->decodePath($this->post->entry);
 
-        $revision       = helper::safe64Decode(urldecode($this->post->revision));
-        $sourceRevision = helper::safe64Decode(urldecode($this->post->sourceRevision));
+        $revision       = $this->post->revision == 'HEAD' ? 'HEAD' : helper::safe64Decode(urldecode($this->post->revision));
+        $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : helper::safe64Decode(urldecode($this->post->sourceRevision));
 
         $this->scm->setEngine($repo);
         $blames = $this->scm->blame($entry, $revision);
