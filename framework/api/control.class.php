@@ -281,6 +281,9 @@ class control extends baseControl
      */
     public function send($data, string $type = 'json')
     {
+        /* APIv1 send json in entries. */
+        if($this->app->apiVersion == 'v1') return;
+
         header('Content-Type: application/json');
 
         if($type != 'json') return helper::end();
