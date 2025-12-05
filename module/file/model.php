@@ -963,6 +963,36 @@ class fileModel extends model
     }
 
     /**
+     * Get upload by uid.
+     *
+     * @param  array|string|bool $uid
+     * @param  string            $filesName
+     * @param  string            $labelsName
+     * @access public
+     * @return array
+     */
+    public function getUploadByUID(array|string|bool $uid, string $filesName = 'files', string $labelsName = 'labels'): array
+    {
+        if(empty($uid)) return array();
+
+        if(is_string($uid)) $uid = array($uid);
+        if(!is_array($uid)) return array();
+
+        $files = array();
+        foreach($uid as $value)
+        {
+            if(empty($_SESSION['album']['used'][$value])) continue;
+
+            $uidFiles = $this->dao->select('id, title')->from(TABLE_FILE)->where('id')->in($_SESSION['album']['used'][$value])->fetchPairs();
+            foreach($uidFiles as $fileID => $fileName)
+            {
+                $files[$fileID] = $fileName;
+            }
+        }
+        return $files;
+    }
+
+    /**
      * Revert real src.
      *
      * @param  object    $data
@@ -1470,6 +1500,13 @@ class fileModel extends model
         }
 
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
+
+        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        {
+            $uidFiles = $this->getUploadByUID($this->post->uid, $filesName, $labelsName);
+
+            $addedFiles = $addedFiles + $uidFiles;
+        }
 
         if(!isset($oldObject->{$filesName})) $oldObject->{$filesName} = array();
         $files = array_diff(array_keys($oldObject->{$filesName}), array_keys($deleteFiles));
