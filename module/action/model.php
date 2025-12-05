@@ -1414,6 +1414,12 @@ class actionModel extends model
             $relatedProjects[$objectType] = $relatedProject;
         }
 
+        if(!empty($objectTypes['devopsspace']))
+        {
+            $devopsspaceList = $this->loadModel('devopsspace')->getByIdList($objectTypes['devopsspace']);
+            foreach($devopsspaceList as $devopsspace) $objectNames['devopsspace'][$devopsspace->id] = $devopsspace->name;
+        }
+
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
         return array($objectNames, $relatedProjects, $requirements, $epics);
