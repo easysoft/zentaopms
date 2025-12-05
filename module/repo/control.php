@@ -1692,8 +1692,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
-        $server = $this->loadModel('gitfox')->getServer();
-        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}?authorization={$server->token}')"));
+        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
     }
 
     /**
