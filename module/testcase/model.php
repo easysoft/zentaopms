@@ -356,7 +356,7 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('DISTINCT t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
         $sql->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
         return $sql->where($caseQuery)
@@ -367,7 +367,7 @@ class testcaseModel extends model
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id', false);
     }
 
