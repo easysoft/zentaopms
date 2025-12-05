@@ -61,13 +61,6 @@ fields:
   postfix: ""
   loop: 0
   format: ""
-- field: dataset
-  note: 数据集
-  range: '0{5}, 1{10}, 2{5}'
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
 - field: desc
   note: 图表描述
   range: '["这是一个用户统计图表", "这是一个项目进度图表", "这是一个Bug分析图表", "这是一个任务状态图表", "这是一个需求分布图表", ""]{3.33}'
