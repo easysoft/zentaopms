@@ -2582,7 +2582,6 @@ $config->group->package->activity->privs['activity-batchCreate'] = array('editio
 $config->group->package->activity->privs['activity-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-batchEdit', 'activity-delete',    'activity-assignTo'));
 $config->group->package->activity->privs['activity-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-delete',    'activity-assignTo'));
 $config->group->package->activity->privs['activity-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-batchEdit', 'activity-assignTo'));
-$config->group->package->activity->privs['activity-assignTo']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-batchEdit', 'activity-delete'));
 
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
