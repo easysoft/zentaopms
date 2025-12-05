@@ -1057,4 +1057,32 @@ class projectzenTest
 
         return 'success';
     }
+
+    /**
+     * Send variables to create page.
+     *
+     * @param  string $model
+     * @param  int    $programID
+     * @param  int    $copyProjectID
+     * @param  string $extra
+     * @access protected
+     * @return void
+     */
+    public function buildCreateFormTest(int $copyProjectID)
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('buildClosedForm');
+            $method->setAccessible(true);
+
+            $result = $this->objectModel->getByID($copyProjectID);
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }

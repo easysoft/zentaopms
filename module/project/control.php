@@ -500,6 +500,8 @@ class project extends control
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
+
+        $this->display('project', 'create');
     }
 
     /**
