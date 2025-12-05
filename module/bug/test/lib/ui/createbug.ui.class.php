@@ -175,11 +175,11 @@ class createBugTester extends tester
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
         $form->dom->bugAssigned->scrollToElement();
         $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->assignedTo->picker($assignee);
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->assign->click();
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->bugAssigned->scrollToElement();
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
         if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
