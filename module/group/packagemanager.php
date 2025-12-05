@@ -2605,6 +2605,17 @@ $config->group->package->deliverable->privs['deliverable-disable'] = array('edit
 $config->group->package->deliverable->privs['deliverable-delete']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-create', 'deliverable-view',   'deliverable-enable',  'deliverable-disable', 'deliverable-edit'));
 $config->group->package->deliverable->privs['deliverable-edit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-create', 'deliverable-view',   'deliverable-enable',  'deliverable-disable', 'deliverable-delete'));
 
+$config->group->package->stageSetting = new stdclass();
+$config->group->package->stageSetting->order  = 40;
+$config->group->package->stageSetting->subset = 'projectFlow';
+$config->group->package->stageSetting->privs  = array();
+$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),               'recommend' => array('stage-create',     'stage-batchCreate',  'stage-edit',    'stage-setType', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'), 'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-setType', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-edit',        'stage-setType', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setType', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-setType']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-delete'));
+$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-setType'));
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -3146,17 +3157,6 @@ $config->group->package->commonSetting->privs['custom-hours']          = array('
 $config->group->package->commonSetting->privs['custom-percent']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 20, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 $config->group->package->commonSetting->privs['subject-browse']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['baseline-templatetype'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->stageSetting = new stdclass();
-$config->group->package->stageSetting->order  = 15;
-$config->group->package->stageSetting->subset = 'featureconfig';
-$config->group->package->stageSetting->privs  = array();
-$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array('stage-batchCreate', 'stage-delete', 'stage-edit'));
-$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('stage-create'));
-$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('stage-create', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('stage-create', 'stage-edit'));
-$config->group->package->stageSetting->privs['stage-setType']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;
