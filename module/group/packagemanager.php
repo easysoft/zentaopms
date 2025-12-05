@@ -2572,7 +2572,7 @@ $config->group->package->process->privs['process-delete']       = array('edition
 $config->group->package->process->privs['process-manageModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('process-browse'), 'recommend' => array('process-create',      'process-batchCreate', 'process-view', 'process-edit',      'process-batchEdit', 'process-delete'));
 
 $config->group->package->activity = new stdclass();
-$config->group->package->activity->order  = 30;
+$config->group->package->activity->order  = 25;
 $config->group->package->activity->subset = 'projectFlow';
 $config->group->package->activity->privs  = array();
 $config->group->package->activity->privs['activity-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),                  'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-batchEdit', 'activity-delete', 'activity-assignTo'));
@@ -2582,6 +2582,16 @@ $config->group->package->activity->privs['activity-batchCreate'] = array('editio
 $config->group->package->activity->privs['activity-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-batchEdit', 'activity-delete',    'activity-assignTo'));
 $config->group->package->activity->privs['activity-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-delete',    'activity-assignTo'));
 $config->group->package->activity->privs['activity-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('activity-browse'), 'recommend' => array('activity-view',   'activity-create',      'activity-batchCreate', 'activity-edit',      'activity-batchEdit', 'activity-assignTo'));
+
+$config->group->package->auditcl = new stdclass();
+$config->group->package->auditcl->order  = 30;
+$config->group->package->auditcl->subset = 'projectFlow';
+$config->group->package->auditcl->privs  = array();
+$config->group->package->auditcl->privs['auditcl-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),                 'recommend' => array('auditcl-batchCreate', 'auditcl-edit',      'auditcl-batchEdit', 'auditcl-delete'));
+$config->group->package->auditcl->privs['auditcl-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('auditcl-browse'), 'recommend' => array('auditcl-edit',        'auditcl-batchEdit', 'auditcl-delete'));
+$config->group->package->auditcl->privs['auditcl-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('auditcl-browse'), 'recommend' => array('auditcl-batchCreate', 'auditcl-batchEdit', 'auditcl-delete'));
+$config->group->package->auditcl->privs['auditcl-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('auditcl-browse'), 'recommend' => array('auditcl-batchCreate', 'auditcl-edit',      'auditcl-delete'));
+$config->group->package->auditcl->privs['auditcl-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('auditcl-browse'), 'recommend' => array('auditcl-batchCreate', 'auditcl-edit',      'auditcl-batchEdit'));
 
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
@@ -3153,16 +3163,6 @@ $config->group->package->classify->order  = 30;
 $config->group->package->classify->subset = 'featureconfig';
 $config->group->package->classify->privs  = array();
 $config->group->package->classify->privs['classify-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->auditcl = new stdclass();
-$config->group->package->auditcl->order  = 20;
-$config->group->package->auditcl->subset = 'featureconfig';
-$config->group->package->auditcl->privs  = array();
-$config->group->package->auditcl->privs['auditcl-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array('auditcl-batchEdit', 'auditcl-delete', 'auditcl-edit'));
-$config->group->package->auditcl->privs['auditcl-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('auditcl-batchCreate', 'auditcl-delete', 'auditcl-edit'));
-$config->group->package->auditcl->privs['auditcl-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('auditcl-batchCreate', 'auditcl-batchEdit', 'auditcl-edit'));
-$config->group->package->auditcl->privs['auditcl-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('auditcl-batchCreate', 'auditcl-batchEdit', 'auditcl-delete'));
-$config->group->package->auditcl->privs['auditcl-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->reviewcl = new stdclass();
 $config->group->package->reviewcl->order  = 45;
