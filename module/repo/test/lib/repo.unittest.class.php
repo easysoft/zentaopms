@@ -2078,4 +2078,25 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * updateMembersTest
+     *
+     * @param  int $repoID
+     * @param  array $members
+     * @access public
+     * @return void
+     */
+    public function updateMembersTest(int $repoID, array $members = array())
+    {
+        $method = new ReflectionMethod($this->objectModel, 'updateMembers');
+        $method->setAccessible(true);
+        $method->invoke($this->objectModel, $repoID, $members);
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->getRepoUsers($repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
