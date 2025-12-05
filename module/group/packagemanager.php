@@ -2571,6 +2571,19 @@ $config->group->package->process->privs['process-batchEdit']    = array('edition
 $config->group->package->process->privs['process-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
 $config->group->package->process->privs['process-manageModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('process-browse'), 'recommend' => array());
 
+$config->group->package->activity = new stdclass();
+$config->group->package->activity->order  = 30;
+$config->group->package->activity->subset = 'projectFlow';
+$config->group->package->activity->privs  = array();
+$config->group->package->activity->privs['activity-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->activity->privs['activity-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('activity-browse'), 'recommend' => array('activity-outputList'));
+$config->group->package->activity->privs['activity-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('activity-browse'), 'recommend' => array('activity-assignTo', 'activity-batchCreate', 'activity-delete', 'activity-edit', 'activity-outputList', 'activity-updateOrder', 'activity-view'));
+$config->group->package->activity->privs['activity-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
+$config->group->package->activity->privs['activity-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('activity-browse'), 'recommend' => array('activity-assignTo', 'activity-batchCreate', 'activity-create', 'activity-delete', 'activity-outputList', 'activity-updateOrder', 'activity-view'));
+$config->group->package->activity->privs['activity-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
+$config->group->package->activity->privs['activity-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
+$config->group->package->activity->privs['activity-assignTo']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('activity-browse'), 'recommend' => array('activity-create', 'activity-edit'));
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -3166,21 +3179,6 @@ $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       =
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewcl-setCategory']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->activity = new stdclass();
-$config->group->package->activity->order  = 35;
-$config->group->package->activity->subset = 'featureconfig';
-$config->group->package->activity->privs  = array();
-$config->group->package->activity->privs['activity-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->activity->privs['activity-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('activity-browse'), 'recommend' => array('activity-assignTo', 'activity-batchCreate', 'activity-delete', 'activity-edit', 'activity-outputList', 'activity-updateOrder', 'activity-view'));
-$config->group->package->activity->privs['activity-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
-$config->group->package->activity->privs['activity-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
-$config->group->package->activity->privs['activity-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('activity-browse'), 'recommend' => array('activity-create'));
-$config->group->package->activity->privs['activity-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('activity-browse'), 'recommend' => array('activity-assignTo', 'activity-batchCreate', 'activity-create', 'activity-delete', 'activity-outputList', 'activity-updateOrder', 'activity-view'));
-$config->group->package->activity->privs['activity-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('activity-browse'), 'recommend' => array('activity-outputList'));
-$config->group->package->activity->privs['activity-assignTo']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('activity-browse'), 'recommend' => array('activity-create', 'activity-edit'));
-$config->group->package->activity->privs['activity-outputList']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('activity-browse'), 'recommend' => array('activity-create', 'activity-edit', 'activity-view'));
-$config->group->package->activity->privs['activity-updateOrder'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('activity-browse'), 'recommend' => array('activity-create', 'activity-edit'));
 
 $config->group->package->zoutput = new stdclass();
 $config->group->package->zoutput->order  = 40;
