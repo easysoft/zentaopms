@@ -2209,10 +2209,6 @@ $config->group->package->manageReview->order  = 10;
 $config->group->package->manageReview->subset = 'projectreview';
 $config->group->package->manageReview->privs  = array();
 $config->group->package->manageReview->privs['review-browse']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('project-index'), 'recommend' => array('review-view'));
-$config->group->package->manageReview->privs['review-admin']             = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1,  'depend' => array(), 'recommend' => array());
-$config->group->package->manageReview->privs['review-createFlow']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2,  'depend' => array('review-admin'), 'recommend' => array());
-$config->group->package->manageReview->privs['review-editFlow']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3,  'depend' => array('review-admin'), 'recommend' => array());
-$config->group->package->manageReview->privs['review-deleteFlow']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4,  'depend' => array('review-admin'), 'recommend' => array());
 $config->group->package->manageReview->privs['review-create']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-report', 'review-toAudit', 'review-submitDeliverable', 'review-submitBaseline', 'review-submitIpd'));
 $config->group->package->manageReview->privs['review-submitDeliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-report', 'review-toAudit'));
 $config->group->package->manageReview->privs['review-submitBaseline']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-report', 'review-toAudit'));
@@ -2615,6 +2611,15 @@ $config->group->package->stageSetting->privs['stage-batchCreate'] = array('editi
 $config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setType', 'stage-delete'));
 $config->group->package->stageSetting->privs['stage-setType']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-delete'));
 $config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-setType'));
+
+$config->group->package->reviewFlow = new stdclass();
+$config->group->package->reviewFlow->order  = 45;
+$config->group->package->reviewFlow->subset = 'projectFlow';
+$config->group->package->reviewFlow->privs  = array();
+$config->group->package->reviewFlow->privs['review-admin']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),               'recommend' => array('review-createFlow', 'review-editFlow', 'review-deleteFlow'));
+$config->group->package->reviewFlow->privs['review-createFlow'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('review-admin'), 'recommend' => array('review-editFlow',   'review-deleteFlow'));
+$config->group->package->reviewFlow->privs['review-editFlow']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('review-admin'), 'recommend' => array('review-createFlow', 'review-deleteFlow'));
+$config->group->package->reviewFlow->privs['review-deleteFlow'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-admin'), 'recommend' => array('review-createFlow', 'review-editFlow'));
 
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
