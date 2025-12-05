@@ -2558,6 +2558,20 @@ $config->group->package->flowReport->subset = 'projectFlow';
 $config->group->package->flowReport->privs  = array();
 $config->group->package->flowReport->privs['workflowgroup-report'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->process = new stdclass();
+$config->group->package->process->order  = 20;
+$config->group->package->process->subset = 'projectFlow';
+$config->group->package->process->privs  = array();
+$config->group->package->process->privs['process-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->process->privs['process-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('process-browse'), 'recommend' => array('process-batchCreate', 'process-delete', 'process-edit', 'process-updateOrder', 'process-view'));
+$config->group->package->process->privs['process-batchCreate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
+$config->group->package->process->privs['process-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('process-browse'), 'recommend' => array());
+$config->group->package->process->privs['process-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-delete', 'process-updateOrder', 'process-view'));
+$config->group->package->process->privs['process-batchEdit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
+$config->group->package->process->privs['process-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
+$config->group->package->process->privs['process-manageModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('process-browse'), 'recommend' => array());
+$config->group->package->process->privs['process-updateOrder']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-edit'));
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -3153,20 +3167,6 @@ $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       =
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewcl-setCategory']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->process = new stdclass();
-$config->group->package->process->order  = 25;
-$config->group->package->process->subset = 'featureconfig';
-$config->group->package->process->privs  = array();
-$config->group->package->process->privs['process-create']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('process-browse'), 'recommend' => array('process-batchCreate', 'process-delete', 'process-edit', 'process-updateOrder', 'process-view'));
-$config->group->package->process->privs['process-batchCreate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
-$config->group->package->process->privs['process-batchEdit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
-$config->group->package->process->privs['process-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('process-browse'), 'recommend' => array('process-create'));
-$config->group->package->process->privs['process-edit']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-delete', 'process-updateOrder', 'process-view'));
-$config->group->package->process->privs['process-view']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('process-browse'), 'recommend' => array());
-$config->group->package->process->privs['process-updateOrder']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-edit'));
-$config->group->package->process->privs['process-browse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 12, 'depend' => array(), 'recommend' => array());
-$config->group->package->process->privs['process-manageModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 13, 'depend' => array('process-browse'), 'recommend' => array());
 
 $config->group->package->activity = new stdclass();
 $config->group->package->activity->order  = 35;
