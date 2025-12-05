@@ -120,9 +120,6 @@ INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, 
 
 ALTER TABLE `zt_approvalnode` CHANGE `result` `result` varchar(20) NOT NULL DEFAULT '';
 
-DELETE FROM `zt_workflowgroup` WHERE `projectModel` = 'kanban';
-UPDATE `zt_project` SET `workflowGroup` = '0' WHERE `model` = 'kanban';
-
 CREATE TABLE IF NOT EXISTS `zt_decision` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
