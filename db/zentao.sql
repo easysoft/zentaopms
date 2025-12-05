@@ -2291,8 +2291,8 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `status` varchar(10) NOT NULL DEFAULT 'wait' COMMENT '状态',
   `testreport` int unsigned NOT NULL DEFAULT 0 COMMENT '相关联的测试报告',
   `auto` varchar(10) NOT NULL DEFAULT 'no' COMMENT '是否为自动化测试',
-  `subStatus` varchar(30) NOT NULL DEFAULT '' COMMENT '子状态',,
-  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',,
+  `subStatus` varchar(30) NOT NULL DEFAULT '' COMMENT '子状态',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `members` text DEFAULT NULL COMMENT '团队成员',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
@@ -2598,22 +2598,22 @@ REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`projectType`,`createdBy`,`crea
 ('总结评审','5','review','waterfallplus','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
-('',   'system', 'common',      '',       'CRProduct',       '1');
-('',   'system', 'common',      '',       'CRExecution',     '1');
-('',   'system', 'common',      '',       'closedFeatures',  'otherOA');
-('',   'system', 'common',      'global', 'mode',            'ALM');
-('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}');
-('',   'system', 'common',      'global', 'installedDate',   CURDATE());
-('',   'system', 'custom',      '',       'enableER',        '1');
-('',   'system', 'custom',      '',       'hourPoint',       '0');
-('',   'system', 'custom',      '',       'URSR',            '2');
-('',   'system', 'project',     '',       'defaultCurrency', 'CNY');
-('',   'system', 'project',     '',       'unitList',        'CNY,USD');
-('',   'system', 'epic',        '',       'gradeRule',       'stepwise');
-('',   'system', 'requirement', '',       'gradeRule',       'stepwise');
-('',   'system', 'story',       '',       'gradeRule',       'stepwise');
-('',   'system', 'story',       '',       'reviewRules',     'allpass');
-('or', 'system', 'demand',      '',       'reviewRules',     'allpass');
+('',   'system', 'common',      '',       'CRProduct',       '1'),
+('',   'system', 'common',      '',       'CRExecution',     '1'),
+('',   'system', 'common',      '',       'closedFeatures',  'otherOA'),
+('',   'system', 'common',      'global', 'mode',            'ALM'),
+('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}'),
+('',   'system', 'common',      'global', 'installedDate',   CURDATE()),
+('',   'system', 'custom',      '',       'enableER',        '1'),
+('',   'system', 'custom',      '',       'hourPoint',       '0'),
+('',   'system', 'custom',      '',       'URSR',            '2'),
+('',   'system', 'project',     '',       'defaultCurrency', 'CNY'),
+('',   'system', 'project',     '',       'unitList',        'CNY,USD'),
+('',   'system', 'epic',        '',       'gradeRule',       'stepwise'),
+('',   'system', 'requirement', '',       'gradeRule',       'stepwise'),
+('',   'system', 'story',       '',       'gradeRule',       'stepwise'),
+('',   'system', 'story',       '',       'reviewRules',     'allpass'),
+('or', 'system', 'demand',      '',       'reviewRules',     'allpass'),
 ('or', 'system', 'demand',      '',       'needReview',      '1');
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
