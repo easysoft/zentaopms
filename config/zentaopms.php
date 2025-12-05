@@ -654,7 +654,6 @@ define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
 if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
 
-define('TABLE_DEVOPSSPACE', '`' . $config->db->prefix . 'ops_space`');
 define('TABLE_DEVOPSSPACEUSER', '`' . $config->db->prefix . 'ops_spaceuser`');
 define('TABLE_DEVOPSREPOUSER', '`' . $config->db->prefix . 'ops_repouser`');
 
@@ -755,7 +754,6 @@ $config->objectTables['productline']    = TABLE_MODULE;
 $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 $config->objectTables['system']         = TABLE_SYSTEM;
 $config->objectTables['mark']           = TABLE_MARK;
-$config->objectTables['devopsspace']    = TABLE_DEVOPSSPACE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
