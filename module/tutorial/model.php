@@ -2065,7 +2065,7 @@ class tutorialModel extends model
         $main->default     = 1;
         $main->status      = 'active';
         $main->desc        = $this->lang->branch->defaultBranch;
-        $main->createdDate = helper::today();
+        $main->createdDate = helper::now();
         $main->closedDate  = '';
         $main->order       = 0;
         $main->deleted     = 0;
@@ -2077,7 +2077,7 @@ class tutorialModel extends model
         $branch->default     = 0;
         $branch->status      = 'active';
         $branch->desc        = '';
-        $branch->createdDate = helper::today();
+        $branch->createdDate = helper::now();
         $branch->closedDate  = '';
         $branch->order       = 1;
         $branch->deleted     = 0;
@@ -2349,7 +2349,7 @@ class tutorialModel extends model
         $demandpool->status      = 'normal';
         $demandpool->products    = '1';
         $demandpool->createdBy   = $this->app->user->account;
-        $demandpool->createdDate = helper::today();
+        $demandpool->createdDate = helper::now();
         $demandpool->owner       = $this->app->user->account;
         $demandpool->reviewer    = ",{$this->app->user->account},test";
         $demandpool->acl         = 'open';
