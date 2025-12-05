@@ -1918,7 +1918,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `feedback` int unsigned NOT NULL DEFAULT 0,
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT 'story',
+  `type` varchar(20) NOT NULL DEFAULT 'story',
   `category` varchar(30) NOT NULL DEFAULT 'feature',
   `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `estimate` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
@@ -1984,7 +1984,7 @@ CREATE INDEX `feedback` ON `zt_story` (`feedback`);
 -- DROP TABLE IF EXISTS `zt_storygrade`;
 CREATE TABLE IF NOT EXISTS `zt_storygrade` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(10) NOT NULL DEFAULT '',
+  `type` varchar(20) NOT NULL DEFAULT '',
   `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `name` varchar(30) NOT NULL DEFAULT '',
   `status` varchar(30) NOT NULL DEFAULT '',
