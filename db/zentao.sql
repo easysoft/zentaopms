@@ -15632,7 +15632,7 @@ CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `vars` text DEFAULT NULL,
   `objects` text DEFAULT NULL,
   `settings` text DEFAULT NULL,
-  `filters` text DEFAULT NULL
+  `filters` text DEFAULT NULL,
   `createdDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
