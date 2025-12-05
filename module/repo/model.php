@@ -3145,4 +3145,32 @@ class repoModel extends model
             ->where('repo')->eq($repoID)
             ->fetchPairs('account', 'account');
     }
+
+    /**
+     * 更新用户。
+     * Update users.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return bool
+     */
+    public function updateMembers(int $repoID, array $members): bool
+    {
+        $groupUsers = $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->fetchPairs('account');
+        $newUsers   = array_diff($members, $groupUsers);
+        $delUsers   = array_diff($groupUsers, $members);
+
+        if(!empty($delUsers)) $this->dao->delete()->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->andWhere('account')->in($delUsers)->exec();
+        if(empty($newUsers)) return !dao::isError();
+
+        $data = new stdclass();
+        $data->repo = $repoID;
+        foreach($newUsers as $account)
+        {
+            $data->account = $account;
+            $this->dao->insert(TABLE_DEVOPSREPOUSER)->data($data)->exec();
+        }
+
+        return !dao::isError();
+    }
 }
