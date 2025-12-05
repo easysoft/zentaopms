@@ -1242,7 +1242,7 @@ class repo extends control
         $this->view->showBug     = $showBug;
         $this->view->repoID      = $repoID;
         $this->view->repo        = $repo;
-        $this->view->revision    = $revision;
+        $this->view->revision    = base64_encode($revision);
         $this->view->oldRevision = '';
         $this->view->file        = $file;
         $this->view->lines       = $lines;
