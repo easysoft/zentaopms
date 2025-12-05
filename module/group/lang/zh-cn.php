@@ -448,6 +448,7 @@ $lang->group->package->workflowRule          = '工作流验证规则';
 $lang->group->package->workflowGroup         = '工作流流程管理';
 $lang->group->package->workflow              = '工作流';
 $lang->group->package->projectFlow           = '项目流程';
+$lang->group->package->flowReport            = '流程概览';
 $lang->group->package->rule                  = '规则引擎';
 $lang->group->package->downloadCode          = '下载代码';
 $lang->group->package->dev                   = '二次开发';

@@ -448,6 +448,7 @@ $lang->group->package->workflowRule          = 'Workflow Rule';
 $lang->group->package->workflowGroup         = 'Workflow Group';
 $lang->group->package->workflow              = 'Workflow';
 $lang->group->package->projectFlow           = 'Project Flow';
+$lang->group->package->flowReport            = 'Flow Report';
 $lang->group->package->rule                  = 'Rule';
 $lang->group->package->downloadCode          = 'Download Code';
 $lang->group->package->dev                   = 'Dev';
