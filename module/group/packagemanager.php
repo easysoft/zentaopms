@@ -402,6 +402,10 @@ $config->group->subset->tree->order = 1580;
 $config->group->subset->file = new stdclass();
 $config->group->subset->file->order = 1590;
 
+$config->group->subset->projectFlow = new stdclass();
+$config->group->subset->projectFlow->order = 1610;
+$config->group->subset->projectFlow->nav   = 'admin';
+
 $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'admin';
@@ -2536,6 +2540,18 @@ $config->group->package->gapAnalysis->privs['gapanalysis-batchEdit']   = array('
 $config->group->package->gapAnalysis->privs['gapanalysis-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('gapanalysis-view'), 'recommend' => array('gapanalysis-create'));
 $config->group->package->gapAnalysis->privs['gapanalysis-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('gapanalysis-browse'), 'recommend' => array());
 
+$config->group->package->projectFlow = new stdclass();
+$config->group->package->projectFlow->order  = 10;
+$config->group->package->projectFlow->subset = 'projectFlow';
+$config->group->package->projectFlow->privs  = array();
+$config->group->package->projectFlow->privs['workflowgroup-project']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-create']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-edit']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-release']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-deactivate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+$config->group->package->projectFlow->privs['workflowgroup-delete']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -2649,16 +2665,9 @@ $config->group->package->workflowGroup->order  = 65;
 $config->group->package->workflowGroup->subset = 'workflow';
 $config->group->package->workflowGroup->privs  = array();
 $config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-project']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-create']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-copy']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 18, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-edit']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-view']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-report']         = array('edition' => 'max,ipd',     'vision' => 'rnd,lite,or', 'order' => 30, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-delete']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-design']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-release']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 45, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflowGroup->privs['workflowgroup-deactivate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-setExclusive']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
