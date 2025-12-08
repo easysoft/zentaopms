@@ -74,9 +74,10 @@ class storiesEntry extends entry
         $fields = 'title,spec,verify,module,reviewer,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,status';
         $this->batchSetPost($fields);
 
+        $module = $this->request('module', 0) ? $this->request('module', 0) : 0;
         $this->setPost('plans', array($this->request('plan', 0)));
         $this->setPost('branches', array($this->request('branch')));
-        $this->setPost('modules', array($this->request('module', 0)));
+        $this->setPost('modules', array($module));
 
         /* If reviewer is not post, set needNotReview. */
         $reviewer = $this->request('reviewer');
