@@ -3204,8 +3204,6 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
-
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'account', 'browse'),
 (1, 'account', 'create'),
