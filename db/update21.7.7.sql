@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑者',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
-  `published` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已发布',
+  `published` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已发布',
   `publishedDate` datetime DEFAULT NULL COMMENT '上次发布时间',
   `publishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次发布者',
   `acl` varchar(10) NOT NULL DEFAULT 'open' COMMENT '权限控制',
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_id，如果没有 ID，表示未在外部服务中创建对应知识库',
   `syncedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次成功同步者',
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `editedDate` datetime DEFAULT NULL COMMENT '知识库内容条目编辑时间',
   `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_content_id，如果没有 ID，表示未在外部服务中创建对应的内容条目',
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
