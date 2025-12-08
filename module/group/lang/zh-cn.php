@@ -496,6 +496,7 @@ $lang->group->package->stageSetting          = '阶段配置';
 $lang->group->package->reviewFlow            = '评审流程';
 $lang->group->package->reviewCheck           = '评审流程检查清单';
 $lang->group->package->reviewCategory        = '评审流程检查单分类';
+$lang->group->package->setWorkflow           = '工作流';
 $lang->group->package->deliverable           = '交付物类型';
 $lang->group->package->classify              = '分类项设置';
 $lang->group->package->auditcl               = '质量保证';
