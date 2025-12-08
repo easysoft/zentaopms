@@ -447,6 +447,7 @@ $lang->group->package->workflowDatasource    = 'Workflow Datasource';
 $lang->group->package->workflowRule          = 'Workflow Rule';
 $lang->group->package->workflowGroup         = 'Workflow Group';
 $lang->group->package->workflow              = 'Workflow';
+$lang->group->package->productFlow           = 'Product Flow';
 $lang->group->package->projectFlow           = 'Project Flow';
 $lang->group->package->flowReport            = 'Flow Report';
 $lang->group->package->rule                  = 'Rule';

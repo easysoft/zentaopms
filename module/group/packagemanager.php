@@ -402,6 +402,10 @@ $config->group->subset->tree->order = 1580;
 $config->group->subset->file = new stdclass();
 $config->group->subset->file->order = 1590;
 
+$config->group->subset->productFlow = new stdclass();
+$config->group->subset->productFlow->order = 1605;
+$config->group->subset->productFlow->nav   = 'admin';
+
 $config->group->subset->projectFlow = new stdclass();
 $config->group->subset->projectFlow->order = 1610;
 $config->group->subset->projectFlow->nav   = 'admin';
@@ -2536,6 +2540,11 @@ $config->group->package->gapAnalysis->privs['gapanalysis-batchEdit']   = array('
 $config->group->package->gapAnalysis->privs['gapanalysis-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('gapanalysis-view'), 'recommend' => array('gapanalysis-create'));
 $config->group->package->gapAnalysis->privs['gapanalysis-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('gapanalysis-browse'), 'recommend' => array());
 
+$config->group->package->productFlow = new stdclass();
+$config->group->package->productFlow->order  = 10;
+$config->group->package->productFlow->subset = 'productFlow';
+$config->group->package->productFlow->privs['workflowgroup-product'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->projectFlow = new stdclass();
 $config->group->package->projectFlow->order  = 10;
 $config->group->package->projectFlow->subset = 'projectFlow';
@@ -2759,7 +2768,6 @@ $config->group->package->workflowGroup = new stdclass();
 $config->group->package->workflowGroup->order  = 65;
 $config->group->package->workflowGroup->subset = 'workflow';
 $config->group->package->workflowGroup->privs  = array();
-$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-copy']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 18, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-rule']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 70, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deliverable']    = array('edition' => 'max,ipd',     'vision' => 'rnd',         'order' => 75, 'depend' => array('workflowgroup-project'), 'recommend' => array());
