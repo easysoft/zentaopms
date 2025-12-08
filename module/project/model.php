@@ -956,14 +956,24 @@ class projectModel extends model
      * Get project priv data according by the project type.
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
+     * @param  int    $projectID
      * @access public
      * @return object|false
      */
-    public function getPrivsByModel(string $model = 'waterfall'): object|false
+    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+
+        $hasBaseline  = true;
+        $hasAuditplan = true;
+        if($this->config->edition != 'open')
+        {
+            $project      = $this->fetchByID($projectID);
+            $hasBaseline  = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
+            $hasAuditplan = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'auditplan');
+        }
 
         $this->app->loadLang('group');
         $privs = new stdclass();
@@ -972,6 +982,9 @@ class projectModel extends model
             if(empty($methods)) continue;
 
             if(!in_array($module, $this->config->programPriv->$model)) continue;
+
+            if($module == 'cm' && !$hasBaseline) continue;
+            if($module == 'auditplan' && !$hasAuditplan) continue;
 
             foreach($methods as $method => $label)
             {
