@@ -42,34 +42,37 @@ $projectProduct->gen(2);
 $pipeline = zendata('pipeline');
 $pipeline->id->range('1');
 $pipeline->type->range('gitlab');
-$pipeline->name->range('gitlab');
-$pipeline->url->range('https://gitlab.axb.oop.cc/');
-$pipeline->token->range('y2UBqwPPzaLxsniy8R6A');
-$pipeline->private->range('6708ece75bde4');
+$pipeline->name->range('gitlabnew');
+$pipeline->url->range('https://gitlabdev.qc.oop.cc');
+$pipeline->account->range('root');
+$pipeline->password->range('bGFjdTdCSUgwTEljY21tbnZRQUs=');
+$pipeline->token->range('glpat-b8Sa1pM9k9ygxMZYPN6w');
+$pipeline->private->range('6932a2750a805');
 $pipeline->gen(1);
 
 $repo = zendata('repo');
 $repo->id->range('1');
 $repo->product->range('1');
-$repo->name->range('Lproject 01');
-$repo->path->range('http://gitlab.axb.oop.cc/liutao/lproject-01');
+$repo->name->range('Lproject1');
+$repo->path->range('https://gitlabdev.qc.oop.cc/liutao/lproject1');
 $repo->encoding->range('utf-8');
 $repo->SCM->range('Gitlab');
 $repo->serviceHost->range('1');
-$repo->serviceProject->range('952');
-$repo->commits->range('31');
+$repo->serviceProject->range('1106');
+$repo->commits->range('0');
 $repo->account->range('[]');
-$repo->password->range('6708d3ae5d71a');
+$repo->password->range('6936284feb1f2');
 $repo->encrypt->range('base64');
+$repo->acl->range('{"acl":"open","groups":[""],"users":[""]}');
 $repo->synced->range('1');
-$repo->extra->range('952');
+$repo->extra->range('1106');
 $repo->gen(1);
 
 $repohistory = zendata('repohistory');
 $repohistory->id->range('1');
-$repohistory->repo->range('1');
-$repohistory->revision->range('b59be0c9604497ae26c621cc848a738cca73fc85');
-$repohistory->commit->range('31');
+$repohistory->repo->range('2');
+$repohistory->revision->range('7c2dab4e6ad91fa4105b5a9c369a5c494680b075');
+$repohistory->commit->range('1');
 $repohistory->gen(1);
 
 $design = zendata('design');
@@ -86,10 +89,10 @@ $tester = new linkCommitTester();
 $tester->login();
 
 $design = array(
-    array('begin' => '2024-10-01', 'end' => '2025-02-18'),
+    array('begin' => '2025-10-01', 'end' => '2025-12-08'),
 );
 
 /* 检查关联提交 */
-r($tester->linkCommit('3', $design['0'])) && p('message') && e('关联提交成功');
+r($tester->linkCommit('8', $design['0'])) && p('message') && e('关联提交成功');
 
 $tester->closeBrowser();
