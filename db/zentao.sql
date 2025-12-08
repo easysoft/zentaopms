@@ -16244,11 +16244,11 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
 
 -- DROP TABLE IF EXISTS `zt_ai_knowledgelib`;
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '所属界面',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库类型，目前包括：我的知识库（my）、组织知识库（team）',
   `importType` varchar(20) NOT NULL DEFAULT '' COMMENT '知识库导入类型，目前包括：从文档库导入（doclib）、从资产库导入（assetlib）',
-  `importID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
+  `importID` int unsigned NOT NULL DEFAULT 0 COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库名称',
   `desc` text DEFAULT NULL COMMENT '知识库描述',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
@@ -16270,12 +16270,12 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
 
 -- DROP TABLE IF EXISTS `zt_ai_knowledgeitem`;
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
-  `lib` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
+  `lib` int unsigned NOT NULL DEFAULT 0 COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识内容类型，目前包括：自定义文本（text）、文件（file）、禅道对象（object）',
-  `file` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
+  `file` int unsigned NOT NULL DEFAULT 0 COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
   `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的类型，例如 bug',
-  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
+  `objectID` int unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
   `objectData` text DEFAULT NULL COMMENT '禅道对象数据，JSON 格式',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `content` text DEFAULT NULL COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
