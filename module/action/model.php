@@ -510,6 +510,12 @@ class actionModel extends model
             }
         }
 
+        if(!empty($typeTrashes['devopsspace']))
+        {
+            $devopsspaceList = $this->loadModel('devopsspace')->getByIdList($typeTrashes['devopsspace']);
+            foreach($devopsspaceList as $devopsspace) $objectNames['devopsspace'][$devopsspace->id] = $devopsspace->name;
+        }
+
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
         foreach($trashes as $key => $trash)
@@ -1777,6 +1783,7 @@ class actionModel extends model
 
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
+        if($action->objectType == 'devopsspace') return $this->loadModel('devopsspace')->restore($action->objectID, $actionID);
 
         list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
         if(empty($queryKey)) $queryKey = 'id';
