@@ -183,7 +183,7 @@ class form extends fixer
                     $type = 'string';
                     if($field->type == 'int')     $type = 'int';
                     if($field->type == 'decimal') $type = 'float';
-                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => '');
+                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => $field->type == 'int' || $field->type == 'decimal' ? 0 : '');
                     if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
                 }
             }
