@@ -429,7 +429,7 @@ function registerZentaoAIPlugin(lang)
                 newPropms.push(item.content);
                 if(refKeys.has(item.key)) return;
                 const itemAttrs = item.attrs || {};
-                newRefs.push({key: item.key, name: itemAttrs.objectTitle, type: itemAttrs.objectType, id: itemAttrs.objectID})
+                newRefs.push({key: item.key, name: itemAttrs.objectTitle || item.knowledgeTitle, type: itemAttrs.objectType || 'knowledge', id: itemAttrs.objectID || item.knowledgeID})
                 refKeys.add(item.key);
             });
             info.chat.$local.ztChunks = ztChunks;
