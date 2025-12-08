@@ -968,7 +968,7 @@ class projectModel extends model
 
         $hasBaseline  = true;
         $hasAuditplan = true;
-        if($this->config->edition != 'open')
+        if($this->config->edition != 'open' && $projectID)
         {
             $project      = $this->fetchByID($projectID);
             $hasBaseline  = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
