@@ -2642,10 +2642,10 @@ $config->group->package->setWorkflow = new stdclass();
 $config->group->package->setWorkflow->order  = 60;
 $config->group->package->setWorkflow->subset = 'projectFlow';
 $config->group->package->setWorkflow->privs  = array();
-$config->group->package->setWorkflow->privs['workflowgroup-design']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->setWorkflow->privs['workflowgroup-setExclusive']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->setWorkflow->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->setWorkflow->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->setWorkflow->privs['workflowgroup-design']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('workflowgroup-design'), 'recommend' => array('workflowgroup-setExclusive', 'workflowgroup-activateFlow', 'workflowgroup-deactivateFlow'));
+$config->group->package->setWorkflow->privs['workflowgroup-setExclusive']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('workflowgroup-design'), 'recommend' => array('workflowgroup-activateFlow', 'workflowgroup-deactivateFlow'));
+$config->group->package->setWorkflow->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('workflowgroup-design'), 'recommend' => array('workflowgroup-setExclusive', 'workflowgroup-deactivateFlow'));
+$config->group->package->setWorkflow->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('workflowgroup-design'), 'recommend' => array('workflowgroup-setExclusive', 'workflowgroup-activateFlow'));
 
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
