@@ -281,12 +281,16 @@ class control extends baseControl
      */
     public function send($data, string $type = 'json')
     {
-        /* APIv1 send json in entries. */
-        if($this->app->apiVersion == 'v1') return;
-
         header('Content-Type: application/json');
 
         if($type != 'json') return helper::end();
+
+        /* APIv1 send json in entries, print data for getData method. */
+        if($this->app->apiVersion == 'v1')
+        {
+            $response = helper::removeUTF8Bom(json_encode($data, JSON_UNESCAPED_UNICODE));
+            return print($response);
+        }
 
         $data = (array)$data;
         if(isset($data['result']))
