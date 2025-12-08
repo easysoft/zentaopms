@@ -649,5 +649,6 @@ $lang->group->package->projectTemplate       = 'Project Template';
 $lang->group->package->browseReportTemplate  = 'Browse Report Template';
 $lang->group->package->manageReportTemplate  = 'Manage Report Template';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
+$lang->group->package->productSetting        = 'Product Setting';
 
 include (dirname(__FILE__) . '/resource.php');

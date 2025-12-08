@@ -3207,6 +3207,16 @@ $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       =
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->productSetting = new stdclass();
+$config->group->package->productSetting->order  = 4;
+$config->group->package->productSetting->subset = 'featureconfig';
+$config->group->package->productSetting->privs  = array();
+$config->group->package->productSetting->privs['custom-editStoryConcept']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
+$config->group->package->productSetting->privs['custom-browseStoryConcept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('custom-product'), 'recommend' => array());
+$config->group->package->productSetting->privs['custom-deleteStoryConcept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
+$config->group->package->productSetting->privs['custom-setStoryConcept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
+$config->group->package->productSetting->privs['custom-setDefaultConcept']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
+
 $config->group->package->custom = new stdclass();
 $config->group->package->custom->order  = 5;
 $config->group->package->custom->subset = 'featureconfig';
@@ -3216,12 +3226,7 @@ $config->group->package->custom->privs['custom-product']            = array('edi
 $config->group->package->custom->privs['custom-execution']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 $config->group->package->custom->privs['custom-required']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('custom-product', 'custom-execution'), 'recommend' => array());
 $config->group->package->custom->privs['custom-restore']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->custom->privs['custom-editStoryConcept']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
-$config->group->package->custom->privs['custom-browseStoryConcept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('custom-product'), 'recommend' => array());
-$config->group->package->custom->privs['custom-setDefaultConcept']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
-$config->group->package->custom->privs['custom-deleteStoryConcept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
 $config->group->package->custom->privs['custom-kanban']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->custom->privs['custom-setStoryConcept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
 $config->group->package->custom->privs['custom-limitTaskDate']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('custom-execution'), 'recommend' => array());
 
 $config->group->package->charter = new stdclass();
