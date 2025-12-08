@@ -104,12 +104,13 @@ $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
 
-$lang->my->programLink   = 'Program Default Page';
-$lang->my->productLink   = $lang->productCommon . ' Default Page';
-$lang->my->projectLink   = $lang->projectCommon . ' Default Page';
-$lang->my->executionLink = 'Execution Default Page';
-$lang->my->docLink       = 'Document Default Page';
-$lang->my->devopsLink    = 'DevOps Default Page';
+$lang->my->programLink     = 'Program Default Page';
+$lang->my->productLink     = $lang->productCommon . ' Default Page';
+$lang->my->projectLink     = $lang->projectCommon . ' Default Page';
+$lang->my->executionLink   = 'Execution Default Page';
+$lang->my->docLink         = 'Document Default Page';
+$lang->my->devopsspaceLink = 'DevOps Space Default Page';
+$lang->my->devopsLink      = 'DevOps Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
@@ -138,6 +139,10 @@ $lang->my->docLinkList = array();
 $lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed space homepage';
 $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
+
+$lang->my->devopsspaceLinkList = array();
+$lang->my->devopsspaceLinkList['repo-maintain'] = 'Space code library list';
+$lang->my->devopsspaceLinkList['repo-browse']   = 'The most recently visited code library';
 
 $lang->my->devopsLinkList = array();
 $lang->my->devopsLinkList['devopsspace-browse'] = 'Space list';

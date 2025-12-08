@@ -54,6 +54,13 @@ foreach(array('program', 'product', 'project', 'execution') as $objectType)
     }
 }
 
+$devopsspaceLinkList = array();
+foreach($lang->my->devopsspaceLinkList as $key => $value)
+{
+    list($module, $method) = explode('-', $key);
+    if(common::hasPriv($module, $method)) $devopsspaceLinkList[$key] = $value;
+}
+
 $devopsLinkList = array();
 foreach($lang->my->devopsLinkList as $key => $value)
 {
@@ -136,6 +143,17 @@ formPanel
                 'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
             )),
             set::value($docLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsspaceLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsspaceLink'),
+            set::required(true),
+            set::items($devopsspaceLinkList),
+            set::value($devopsspaceLink)
         )
     ),
     formGroup
