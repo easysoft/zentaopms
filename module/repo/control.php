@@ -505,6 +505,14 @@ class repo extends control
 
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
+        /* Set cookie. */
+        if($repo->space)
+        {
+            $spaceRepoMap = $this->cookie->spaceRepoMap ? json_decode($this->cookie->spaceRepoMap, true) : array();
+            $spaceRepoMap = $spaceRepoMap ? arrayUnion($spaceRepoMap, array($repo->space => $repoID)) : array($repo->space => $repoID);
+            helper::setcookie('spaceRepoMap', json_encode($spaceRepoMap));
+        }
+
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
         if($refresh)

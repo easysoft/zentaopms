@@ -1430,7 +1430,7 @@ class my extends control
 
         if($_POST)
         {
-            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink', 'devopsLink');
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink', 'devopsspaceLink', 'devopsLink');
             foreach($_POST as $key => $value)
             {
                 if(!in_array($key, $keyList)) continue;
@@ -1449,12 +1449,13 @@ class my extends control
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = $this->setting->getURSR();
-        $this->view->programLink      = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
-        $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
-        $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
-        $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
-        $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'doc-lastViewedSpace';
-        $this->view->devopsLink       = isset($this->config->devopsLink)    ? $this->config->devopsLink    : 'repo-maintain';
+        $this->view->programLink      = isset($this->config->programLink)      ? $this->config->programLink      : 'program-browse';
+        $this->view->productLink      = isset($this->config->productLink)      ? $this->config->productLink      : 'product-all';
+        $this->view->projectLink      = isset($this->config->projectLink)      ? $this->config->projectLink      : 'project-browse';
+        $this->view->executionLink    = isset($this->config->executionLink)    ? $this->config->executionLink    : 'execution-task';
+        $this->view->docLink          = isset($this->config->docLink)          ? $this->config->docLink          : 'doc-lastViewedSpace';
+        $this->view->devopsspaceLink  = isset($this->config->devopsspaceLink)  ? $this->config->devopsspaceLink  : 'repo-maintain';
+        $this->view->devopsLink       = isset($this->config->devopsLink)       ? $this->config->devopsLink       : 'repo-maintain';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
