@@ -1528,7 +1528,7 @@ class projectModel extends model
             if($unlinkType) $this->unlinkStoryByType($projectID, $unlinkType);
         }
         if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
-        if(in_array($this->config->edition, array('max', 'ipd')) && $oldProject->workflowGroup != $project->workflowGroup) $this->replaceDeliverable($projectID, $project->workflowGroup); // 更新交付物关联信息。
+        if(in_array($this->config->edition, array('max', 'ipd')) && $oldProject->workflowGroup != $project->workflowGroup) $this->modifyWorkflowGroup($projectID, $oldProject->workflowGroup, $project->workflowGroup); // 更新项目流程。
 
         if($oldProject->model != $project->model && !in_array($oldProject->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
