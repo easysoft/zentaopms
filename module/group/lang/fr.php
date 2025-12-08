@@ -495,6 +495,7 @@ $lang->group->package->commonSetting         = 'Common Setting';
 $lang->group->package->stageSetting          = 'Stage Setting';
 $lang->group->package->reviewFlow            = 'Review';
 $lang->group->package->reviewCheck           = 'Review Checklist';
+$lang->group->package->reviewCategory        = 'Review Category';
 $lang->group->package->deliverable           = 'Deliverable Category';
 $lang->group->package->classify              = 'Classify';
 $lang->group->package->auditcl               = 'Auditcl';

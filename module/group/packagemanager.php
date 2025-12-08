@@ -2632,6 +2632,12 @@ $config->group->package->reviewCheck->privs['reviewcl-edit']        = array('edi
 $config->group->package->reviewCheck->privs['reviewcl-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-edit',   'reviewcl-view'));
 $config->group->package->reviewCheck->privs['reviewcl-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-edit',   'reviewcl-delete'));
 
+$config->group->package->reviewCategory = new stdclass();
+$config->group->package->reviewCategory->order  = 55;
+$config->group->package->reviewCategory->subset = 'projectFlow';
+$config->group->package->reviewCategory->privs  = array();
+$config->group->package->reviewCategory->privs['reviewcl-setCategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -3187,7 +3193,6 @@ $config->group->package->reviewcl->privs  = array();
 $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
-$config->group->package->reviewcl->privs['reviewcl-setCategory']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->zoutput = new stdclass();
 $config->group->package->zoutput->order  = 40;
