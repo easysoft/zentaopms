@@ -11241,7 +11241,7 @@ class upgradeModel extends model
     public function addWorkflowGroupOtherActivity()
     {
         $projectModules  = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
-        $groupList       = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
+        $groupList       = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
         foreach($groupList as $group)
         {
             if($this->config->edition != 'open' && $group->projectModel == 'ipd')
@@ -11264,7 +11264,7 @@ class upgradeModel extends model
      */
     public function addDefaultDeliverableModule()
     {
-        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
+        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
         foreach($groupList as $group)
         {
             foreach($this->lang->upgrade->deliverableModule as $code => $name) $this->createDeliverableModule($group->id, $name, $code);
@@ -11419,7 +11419,7 @@ class upgradeModel extends model
 
         $deliverableList = array();
         $nameFilter      = array(); // 过滤重名交付物。
-        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll();
+        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
         $deliverables    = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
         $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
         $otherModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
@@ -11736,7 +11736,7 @@ class upgradeModel extends model
         $deliverableStage->required = '0';
         $deliverableStage->stage    = 'project';
 
-        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll('id');
         foreach($workflows as $workflow)
         {
             $groupID = $workflow->id;
