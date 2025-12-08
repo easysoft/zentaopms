@@ -642,5 +642,6 @@ $lang->group->package->browseReportTemplate  = 'Browse Report Template';
 $lang->group->package->manageReportTemplate  = 'Manage Report Template';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
 $lang->group->package->devopsspace           = 'Manage Space';
+$lang->group->package->devopsspaceSetting    = 'Space Setting';
 
 include (dirname(__FILE__) . '/resource.php');
