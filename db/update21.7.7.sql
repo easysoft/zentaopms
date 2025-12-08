@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
 
 UPDATE `zt_ai_prompt`
 SET `desc` = '优化需求中标题、描述和验收标准等字段，使表述清晰准确。'
@@ -94,4 +94,4 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
   `options` text DEFAULT NULL COMMENT '选项列表，逗号分隔',
   `required` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否必填',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB;
