@@ -494,6 +494,7 @@ $lang->group->package->importCaseLib         = '导入用例库';
 $lang->group->package->commonSetting         = '通用配置';
 $lang->group->package->stageSetting          = '阶段配置';
 $lang->group->package->reviewFlow            = '评审流程';
+$lang->group->package->reviewCheck           = '评审流程检查清单';
 $lang->group->package->deliverable           = '交付物类型';
 $lang->group->package->classify              = '分类项设置';
 $lang->group->package->auditcl               = '质量保证';

@@ -2621,6 +2621,17 @@ $config->group->package->reviewFlow->privs['review-createFlow'] = array('edition
 $config->group->package->reviewFlow->privs['review-editFlow']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('review-admin'), 'recommend' => array('review-createFlow', 'review-deleteFlow'));
 $config->group->package->reviewFlow->privs['review-deleteFlow'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-admin'), 'recommend' => array('review-createFlow', 'review-editFlow'));
 
+$config->group->package->reviewCheck = new stdclass();
+$config->group->package->reviewCheck->order  = 50;
+$config->group->package->reviewCheck->subset = 'projectFlow';
+$config->group->package->reviewCheck->privs  = array();
+$config->group->package->reviewCheck->privs['reviewcl-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),                  'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-edit',   'reviewcl-delete', 'reviewcl-view'));
+$config->group->package->reviewCheck->privs['reviewcl-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-batchCreate', 'reviewcl-edit',        'reviewcl-delete', 'reviewcl-view'));
+$config->group->package->reviewCheck->privs['reviewcl-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-edit',        'reviewcl-delete', 'reviewcl-view'));
+$config->group->package->reviewCheck->privs['reviewcl-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-delete', 'reviewcl-view'));
+$config->group->package->reviewCheck->privs['reviewcl-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-edit',   'reviewcl-view'));
+$config->group->package->reviewCheck->privs['reviewcl-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create',      'reviewcl-batchCreate', 'reviewcl-edit',   'reviewcl-delete'));
+
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
 $config->group->package->workflowField->subset = 'workflow';
@@ -3173,12 +3184,6 @@ $config->group->package->reviewcl = new stdclass();
 $config->group->package->reviewcl->order  = 45;
 $config->group->package->reviewcl->subset = 'featureconfig';
 $config->group->package->reviewcl->privs  = array();
-$config->group->package->reviewcl->privs['reviewcl-browse']                    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->reviewcl->privs['reviewcl-create']                    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-batchCreate', 'reviewcl-delete', 'reviewcl-edit', 'reviewcl-view'));
-$config->group->package->reviewcl->privs['reviewcl-batchCreate']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create'));
-$config->group->package->reviewcl->privs['reviewcl-delete']                    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create', 'reviewcl-edit', 'reviewcl-view'));
-$config->group->package->reviewcl->privs['reviewcl-edit']                      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('reviewcl-browse'), 'recommend' => array('reviewcl-create', 'reviewcl-delete', 'reviewcl-view'));
-$config->group->package->reviewcl->privs['reviewcl-view']                      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('reviewcl-browse'), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
