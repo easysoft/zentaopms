@@ -706,12 +706,12 @@ class zaiModel extends model
      * Extract file content.
      *
      * @access public
-     * @param int $fileID
+     * @param int|object $file
      * @return array
      */
-    public function extractFileContent(int $fileID): array|null
+    public function extractFileContent(int|object $file): array|null
     {
-        $file = $this->loadModel('file')->getByID($fileID);
+        if(!is_object($file)) $file = $this->loadModel('file')->getByID($file);
         if(!is_object($file) || empty($file->realPath)) return null;
 
         $filePath = $file->realPath;
