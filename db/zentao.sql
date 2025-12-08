@@ -2176,7 +2176,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `account` varchar(30) NOT NULL DEFAULT '',
   `role` varchar(30) NOT NULL DEFAULT '',
   `position` varchar(30) NOT NULL DEFAULT '',
-  `limited` char(8) NOT NULL DEFAULT 'no',
+  `limited` varchar(8) NOT NULL DEFAULT 'no',
   `join` date DEFAULT NULL,
   `days` smallint unsigned NOT NULL DEFAULT 0,
   `hours` decimal(3,1) unsigned NOT NULL DEFAULT 0.0,
@@ -3203,8 +3203,6 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
   `addedtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-
-UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'account', 'browse'),
@@ -16222,9 +16220,9 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `appID` int unsigned NOT NULL DEFAULT 0,
   `userID` int unsigned NOT NULL DEFAULT 0,
   `createdDate` datetime DEFAULT NULL,
-  UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE UNIQUE INDEX `uk_appUser` ON `zt_ai_miniprogramstar` (`appID`, `userID`);
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
@@ -16246,18 +16244,18 @@ CREATE TABLE IF NOT EXISTS `zt_ai_assistant` (
 
 -- DROP TABLE IF EXISTS `zt_ai_knowledgelib`;
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '所属界面',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识库类型，目前包括：我的知识库（my）、组织知识库（team）',
   `importType` varchar(20) NOT NULL DEFAULT '' COMMENT '知识库导入类型，目前包括：从文档库导入（doclib）、从资产库导入（assetlib）',
-  `importID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
+  `importID` int unsigned NOT NULL DEFAULT 0 COMMENT '知识库导入类型条目对应的导入对象在禅道中的 ID，对应 zt_doclib.id 或 zt_assetlib.id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库名称',
   `desc` text DEFAULT NULL COMMENT '知识库描述',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建者',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑者',
   `editedDate` datetime DEFAULT NULL COMMENT '编辑时间',
-  `published` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已发布',
+  `published` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已发布',
   `publishedDate` datetime DEFAULT NULL COMMENT '上次发布时间',
   `publishedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次发布者',
   `acl` varchar(10) NOT NULL DEFAULT 'open' COMMENT '权限控制',
@@ -16266,18 +16264,18 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_id，如果没有 ID，表示未在外部服务中创建对应知识库',
   `syncedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '上次成功同步者',
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_ai_knowledgeitem`;
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
-  `lib` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '知识库内容条目在禅道中的 ID',
+  `lib` int unsigned NOT NULL DEFAULT 0 COMMENT '知识库内容条目所属知识库，对应 zt_ai_knowledgelib.id',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '知识内容类型，目前包括：自定义文本（text）、文件（file）、禅道对象（object）',
-  `file` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
+  `file` int unsigned NOT NULL DEFAULT 0 COMMENT '文件类型条目对应的文件在禅道中的 ID，对应 zt_file.id',
   `objectType` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道对象类型条目对应的禅道对象在禅道中的类型，例如 bug',
-  `objectID` mediumint(8) unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
+  `objectID` int unsigned NOT NULL DEFAULT 0 COMMENT '禅道对象类型条目对应的禅道对象在禅道中的 ID',
   `objectData` text DEFAULT NULL COMMENT '禅道对象数据，JSON 格式',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
   `content` text DEFAULT NULL COMMENT '知识库内容条目内容，如果是自定义文本，对应的是文本内容，如果是文件则为空，如果是禅道对象，则为禅道对象转为 Markdown 的内容',
@@ -16289,7 +16287,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   `editedDate` datetime DEFAULT NULL COMMENT '知识库内容条目编辑时间',
   `externalID` varchar(255) NOT NULL DEFAULT '' COMMENT '知识库在外部服务中的 ID，在 ZAI 中对应 memory_content_id，如果没有 ID，表示未在外部服务中创建对应的内容条目',
   `syncedDate` datetime DEFAULT NULL COMMENT '上次成功同步时间，为空表示未同步',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
