@@ -79,3 +79,4 @@ $lang->aiapp->langData->goTesting          = 'Zur Prüfung';
 $lang->aiapp->langData->notSupportPreview  = 'Voraussichtlich nicht unterstützt';
 $lang->aiapp->langData->dataListSizeInfo   = 'Total %s items';
 $lang->aiapp->langData->promptTestDataIntro = 'Hier ist das Beispiel {type} von {name} :';
+$lang->aiapp->langData->searchingKLibs       = 'Suche nach Wissensdatenbanken...';
