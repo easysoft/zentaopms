@@ -3259,13 +3259,6 @@ $config->group->package->meetingroom->privs['meetingroom-view']        = array('
 $config->group->package->meetingroom->privs['meetingroom-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
 $config->group->package->meetingroom->privs['meetingroom-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('meetingroom-browse'), 'recommend' => array('meetingroom-create'));
 
-$config->group->package->designSetting = new stdclass();
-$config->group->package->designSetting->order  = 55;
-$config->group->package->designSetting->subset = 'featureconfig';
-$config->group->package->designSetting->privs  = array();
-$config->group->package->designSetting->privs['design-setType']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array(), 'recommend' => array());
-$config->group->package->designSetting->privs['design-setPlusType'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->kanbanSpace = new stdclass();
 $config->group->package->kanbanSpace->order  = 5;
 $config->group->package->kanbanSpace->subset = 'managespace';
