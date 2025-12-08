@@ -2176,7 +2176,7 @@ CREATE TABLE IF NOT EXISTS `zt_team` (
   `account` varchar(30) NOT NULL DEFAULT '',
   `role` varchar(30) NOT NULL DEFAULT '',
   `position` varchar(30) NOT NULL DEFAULT '',
-  `limited` char(8) NOT NULL DEFAULT 'no',
+  `limited` varchar(8) NOT NULL DEFAULT 'no',
   `join` date DEFAULT NULL,
   `days` smallint unsigned NOT NULL DEFAULT 0,
   `hours` decimal(3,1) unsigned NOT NULL DEFAULT 0.0,
