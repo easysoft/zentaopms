@@ -71,6 +71,7 @@ foreach($lang->my->devopsLinkList as $key => $value)
 formPanel
 (
     set::labelWidth('140px'),
+    setID('preferenceForm'),
     formGroup
     (
         set::label($lang->my->storyConcept),
