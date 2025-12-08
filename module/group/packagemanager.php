@@ -3207,19 +3207,6 @@ $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       =
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->zoutput = new stdclass();
-$config->group->package->zoutput->order  = 40;
-$config->group->package->zoutput->subset = 'featureconfig';
-$config->group->package->zoutput->privs  = array();
-$config->group->package->zoutput->privs['zoutput-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->zoutput->privs['zoutput-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-batchCreate', 'zoutput-delete', 'zoutput-edit', 'zoutput-updateOrder', 'zoutput-view'));
-$config->group->package->zoutput->privs['zoutput-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-batchEdit', 'zoutput-create', 'zoutput-delete', 'zoutput-updateOrder', 'zoutput-view'));
-$config->group->package->zoutput->privs['zoutput-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-create'));
-$config->group->package->zoutput->privs['zoutput-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-edit'));
-$config->group->package->zoutput->privs['zoutput-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-create'));
-$config->group->package->zoutput->privs['zoutput-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('zoutput-browse'), 'recommend' => array());
-$config->group->package->zoutput->privs['zoutput-updateOrder'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-create', 'zoutput-edit'));
-
 $config->group->package->custom = new stdclass();
 $config->group->package->custom->order  = 5;
 $config->group->package->custom->subset = 'featureconfig';
