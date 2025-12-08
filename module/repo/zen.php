@@ -847,7 +847,7 @@ class repoZen extends repo
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('gitlabBranchList', $this->app->getURI(true));
-        if($repo->space)
+        if(!empty($repo->space))
         {
             $spaceRepoMap = $this->session->spaceRepoMap ? json_decode($this->session->spaceRepoMap, true) : array();
             $spaceRepoMap[$repo->space] = $repo->id;
