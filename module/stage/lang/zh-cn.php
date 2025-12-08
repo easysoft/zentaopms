@@ -10,11 +10,12 @@
  * @link        https://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = '阶段列表';
-$lang->stage->create      = '新建';
-$lang->stage->batchCreate = '批量新建';
-$lang->stage->edit        = '编辑';
-$lang->stage->delete      = '删除';
+$lang->stage->browse      = '浏览阶段列表';
+$lang->stage->browseAB    = '阶段列表';
+$lang->stage->create      = '新建阶段';
+$lang->stage->batchCreate = '批量新建阶段';
+$lang->stage->edit        = '编辑阶段';
+$lang->stage->delete      = '删除阶段';
 $lang->stage->view        = '阶段详情';
 $lang->stage->plusBrowse  = '融合瀑布阶段列表';
 $lang->stage->setTRpoint  = 'TR评审点配置';
@@ -25,7 +26,8 @@ $lang->stage->id        = 'ID';
 $lang->stage->name      = '阶段名称';
 $lang->stage->type      = '阶段类型';
 $lang->stage->percent   = '工作量占比';
-$lang->stage->setType   = '阶段类型';
+$lang->stage->setType   = '评审点设置';
+$lang->stage->setTypeAB = '阶段类型';
 $lang->stage->TRpoint   = 'TR评审点';
 $lang->stage->DCPpoint  = 'DCP评审点';
 $lang->stage->TRname    = 'TR评审点名称';

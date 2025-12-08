@@ -10,11 +10,12 @@
  * @link        https://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = 'Waterfall Stage List';
+$lang->stage->browse      = 'Stage List';
+$lang->stage->browseAB    = 'Stage List';
 $lang->stage->create      = 'Create Stage';
-$lang->stage->batchCreate = 'Batch Create';
-$lang->stage->edit        = 'Edit';
-$lang->stage->delete      = 'Delete';
+$lang->stage->batchCreate = 'Batch Create Stage';
+$lang->stage->edit        = 'Edit Stage';
+$lang->stage->delete      = 'Delete Stage';
 $lang->stage->view        = 'Details';
 $lang->stage->plusBrowse  = 'Waterfall Plus Stage List';
 $lang->stage->setTRpoint  = 'Set TR Point';
@@ -25,7 +26,8 @@ $lang->stage->id        = 'ID';
 $lang->stage->name      = 'Name';
 $lang->stage->type      = 'Type';
 $lang->stage->percent   = 'Workload %';
-$lang->stage->setType   = 'Set Type';
+$lang->stage->setType   = 'Set Point';
+$lang->stage->setTypeAB = 'Stage Type';
 $lang->stage->TRpoint   = 'TR Point';
 $lang->stage->DCPpoint  = 'DCP Point';
 $lang->stage->TRname    = 'TR Point Name';

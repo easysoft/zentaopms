@@ -60,7 +60,7 @@ class stage extends control
             }
         }
 
-        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browseAB;
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $groupID);
         $this->view->orderBy = $orderBy;
         $this->view->groupID = $groupID;
@@ -231,7 +231,7 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->setType;
+        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->setTypeAB;
         $this->view->currentLang = $currentLang;
         $this->view->lang2Set    = !empty($lang2Set) ? $lang2Set : $lang;
         $this->view->fieldList   = $fieldList;

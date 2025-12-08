@@ -32,7 +32,7 @@ if($this->config->edition == 'open')
             a
             (
                 set::href(createLink('stage', 'settype')),
-                $lang->stage->setType
+                $lang->stage->setTypeAB
             )
         );
     }
@@ -44,7 +44,7 @@ if($this->config->edition == 'open')
         (
             setClass('active'),
             set::href(createLink('stage', 'browse')),
-            $lang->stage->browse
+            $lang->stage->browseAB
         )
     );
 

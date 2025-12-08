@@ -125,7 +125,7 @@ $menuItems[] = li
     (
         setClass('active'),
         set::href(createLink('stage', 'settype')),
-        $lang->stage->setType
+        $lang->stage->setTypeAB
     )
 );
 
@@ -137,7 +137,7 @@ if($config->edition == 'open' && hasPriv('stage', 'browse'))
         a
         (
             set::href(createLink('stage', 'browse')),
-            $lang->stage->browse
+            $lang->stage->browseAB
         )
     );
 }
@@ -158,7 +158,7 @@ div
         set::headingClass('justify-start'),
         setClass('flex-auto ml-0.5'),
         set::actionsClass('w-1/2'),
-        set::title($lang->stage->setType),
+        set::title($lang->stage->setTypeAB),
         set::actions($formActions),
         $formItems
     )
