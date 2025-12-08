@@ -500,7 +500,6 @@ $filter->svn->diff->get['repoUrl'] = 'reg::base64';
 $filter->repo->default = new stdclass();
 $filter->repo->diff    = new stdclass();
 $filter->repo->view    = new stdclass();
-$filter->repo->browse  = new stdclass();
 
 $filter->repo->default->get['repoPath'] = 'reg::base64';
 $filter->repo->default->get['path']     = 'reg::base64';
@@ -513,7 +512,6 @@ $filter->repo->default->cookie['repoCodePath']      = 'reg::any';
 $filter->repo->diff->cookie['arrange']              = 'reg::word';
 $filter->repo->diff->cookie['repoPairs']            = 'array';
 $filter->repo->view->cookie['repoPairs']            = 'array';
-$filter->repo->browse->cookie['spaceRepoMap']       = 'string';
 $filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';
 
 $filter->webhook->bind->get['selectedDepts']    = 'reg::any';
