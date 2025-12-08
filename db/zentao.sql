@@ -16220,9 +16220,9 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `appID` int unsigned NOT NULL DEFAULT 0,
   `userID` int unsigned NOT NULL DEFAULT 0,
   `createdDate` datetime DEFAULT NULL,
-  UNIQUE (`appID`, `userID`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE UNIQUE INDEX `uk_appUser` ON `zt_ai_miniprogramstar` (`appID`, `userID`);
 
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
