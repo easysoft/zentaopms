@@ -840,13 +840,14 @@ class zaiModel extends model
         if(isset($target->title) && $target->title !== '')   $title = $target->title;
         elseif(isset($target->name) && $target->name !== '') $title = $target->name;
 
-        $id = isset($target->id) ? $target->id : 0;
+        $id          = isset($target->id) ? $target->id : 0;
+        $objectTitle = trim("$typeName #$id $title");
 
         return array(
             'id'      => $id,
-            'title'   => trim("$typeName #$id $title"),
+            'title'   => $objectTitle,
             'content' => json_encode($target, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            'attrs'   => array('objectTitle' => $title)
+            'attrs'   => array('objectTitle' => $objectTitle)
         );
     }
 
@@ -1575,7 +1576,7 @@ class zaiModel extends model
             $content[] = strip_tags($docContent->content) . "\n";
 
             $markdown['content'] = implode("\n", $content);
-            $markdown['attrs'] = array('objectTitle' => $doc->title, 'product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type, 'version' => $doc->version);
+            $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'project' => $doc->project, 'execution' => $doc->execution, 'type' => $doc->type, 'version' => $doc->version);
         }
 
         return $markdown;
@@ -1617,7 +1618,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('objectTitle' => $designSpec->name,'product' => $design->product, 'story' => $design->story, 'project' => $design->project, 'execution' => $design->execution, 'type' => $design->type);
+        $markdown['attrs'] = array('objectTitle' => $markdown['title'],'product' => $design->product, 'story' => $design->story, 'project' => $design->project, 'execution' => $design->execution, 'type' => $design->type);
         return $markdown;
     }
 
@@ -1669,7 +1670,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('objectTitle' => $feedback->title, 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
+        $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
         return $markdown;
     }
 
@@ -1706,7 +1707,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $issue->title,
+            'objectTitle' => $markdown['title'],
             'status'      => $issue->status     ?? '',
             'pri'         => $issue->pri        ?? '',
             'severity'    => $issue->severity   ?? '',
@@ -1754,7 +1755,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $risk->name,
+            'objectTitle' => $markdown['title'],
             'status'      => $risk->status      ?? '',
             'probability' => $risk->probability ?? ($risk->chance ?? ''),
             'impact'      => $risk->impact      ?? '',
@@ -1800,7 +1801,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $opportunity->name,
+            'objectTitle' => $markdown['title'],
             'status'     => $opportunity->status     ?? '',
             'benefit'    => $opportunity->benefit    ?? ($opportunity->impact ?? ''),
             'chance'     => $opportunity->chance     ?? '',
@@ -1846,7 +1847,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $plan->name,
+            'objectTitle' => $markdown['title'],
             'status'      => $plan->status  ?? '',
             'product'     => $plan->product ?? '',
             'project'     => $plan->project ?? '',
@@ -1890,7 +1891,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $release->name,
+            'objectTitle' => $markdown['title'],
             'system'      => $release->system  ?? '',
             'project'     => $release->project ?? '',
             'build'       => $release->build   ?? '',
@@ -1934,7 +1935,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'objectTitle' => $ticket->title,
+            'objectTitle' => $markdown['title'],
             'status'      => $ticket->status     ?? '',
             'type'        => $ticket->type       ?? '',
             'pri'         => $ticket->pri        ?? '',
