@@ -171,6 +171,7 @@ class createBugTester extends tester
         $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
 
         $form->wait(3);
+        $form->dom->bugTitle->scrollToElement();
         $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
         $form->dom->bugAssigned->scrollToElement();
