@@ -1249,7 +1249,7 @@ CREATE INDEX `group` ON `zt_kanbanlane`(`group`);
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `parent` int unsigned NOT NULL DEFAULT 0,
+  `parent` int NOT NULL DEFAULT 0,
   `type` varchar(30) NOT NULL DEFAULT '',
   `region` int unsigned NOT NULL DEFAULT 0,
   `group` int unsigned NOT NULL DEFAULT 0,
