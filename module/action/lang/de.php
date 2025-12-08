@@ -196,6 +196,7 @@ $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = 'Deliverable Category';
 $lang->action->objectTypes['cm']               = 'Baseline';
 $lang->action->objectTypes['baseline']         = 'Baseline';
+$lang->action->objectTypes['projectchange']    = 'Project Change';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
