@@ -836,16 +836,23 @@ class repoZen extends repo
      * 设置session信息。
      * Set session.
      *
+     * @param  object    $repo
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(): void
+    protected function setBrowseSession(?object $repo = null): void
     {
         $this->setBackSession('list', true);
 
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('gitlabBranchList', $this->app->getURI(true));
+        if($repo->space)
+        {
+            $spaceRepoMap = $this->session->spaceRepoMap ? json_decode($this->session->spaceRepoMap, true) : array();
+            $spaceRepoMap[$repo->space] = $repo->id;
+            $this->session->set('spaceRepoMap', json_encode($spaceRepoMap), 'devops');
+        }
         session_write_close();
     }
 

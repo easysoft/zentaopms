@@ -489,11 +489,11 @@ class repo extends control
         }
 
         /* Set menu and session. */
+        $repo = $this->repo->getByID($repoID);
         $this->commonAction($repoID, $objectID);
-        $this->repoZen->setBrowseSession();
+        $this->repoZen->setBrowseSession($repo);
 
         /* Get repo and synchronous commit. */
-        $repo = $this->repo->getByID($repoID);
         if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
         if($this->repoZen->checkRepoInternet($repo)) return $this->sendError($this->lang->repo->error->connect, true);
         if(!$repo->synced) return $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
@@ -504,14 +504,6 @@ class repo extends control
         if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
-
-        /* Set cookie. */
-        if($repo->space)
-        {
-            $spaceRepoMap = $this->cookie->spaceRepoMap ? json_decode($this->cookie->spaceRepoMap, true) : array();
-            $spaceRepoMap = $spaceRepoMap ? arrayUnion($spaceRepoMap, array($repo->space => $repoID)) : array($repo->space => $repoID);
-            helper::setcookie('spaceRepoMap', json_encode($spaceRepoMap));
-        }
 
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
