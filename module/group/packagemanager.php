@@ -2570,7 +2570,6 @@ $config->group->package->process->privs['process-edit']         = array('edition
 $config->group->package->process->privs['process-batchEdit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
 $config->group->package->process->privs['process-delete']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('process-browse'), 'recommend' => array('process-create'));
 $config->group->package->process->privs['process-manageModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('process-browse'), 'recommend' => array());
-$config->group->package->process->privs['process-updateOrder']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('process-browse'), 'recommend' => array('process-create', 'process-edit'));
 
 $config->group->package->workflowField = new stdclass();
 $config->group->package->workflowField->order  = 10;
