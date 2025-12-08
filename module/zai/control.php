@@ -204,7 +204,7 @@ class zai extends control
      * @access public
      * @return void
      */
-    public function ajaxSearchKnowledges(string $type = 'content', int $limit = 10)
+    public function ajaxSearchKnowledges(string $type = 'chunk', int $limit = 10)
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST')
         {
@@ -220,10 +220,17 @@ class zai extends control
         $results    = [];
         foreach($knowledges as $knowledge)
         {
-            $prompts[] = $knowledge['content'];
-            if(count($prompts) >= $limit) break;
+            if($type === 'chunk')
+            {
+                $results[] = ['key' => $knowledge['content_key'], 'similarity' => $knowledge['similarity'], 'id' => $knowledge['chunk_id'], 'content' => $knowledge['chunk_content'], 'attrs' => $knowledge['content_attrs']];
+            }
+            else
+            {
+                $results[] = ['key' => $knowledge['key'], 'similarity' => $knowledge['similarity'], 'id' => $knowledge['id'], 'content' => $knowledge['content'], 'attrs' => $knowledge['attrs']];
+            }
+            if(count($results) >= $limit) break;
         }
 
-        return $this->send(array('result' => 'success', 'data' => array('prompt' => implode("\n\n", $prompts))));
+        return $this->send(array('result' => 'success', 'data' => $results));
     }
 }
