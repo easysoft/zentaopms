@@ -350,24 +350,44 @@ function registerZentaoAIPlugin(lang)
         });
     }
 
-    plugin.defineCallback && plugin.defineCallback('onCreateChat', async function(info)
+    plugin.defineCallback('onCreateChat', async function(info)
     {
         if(info.isLocal || !info.userPrompt) return;
 
         const originMemories = info.options.memories;
         if(!originMemories || !originMemories.length) return;
-        const zentaoMemories = {};
-        const otherMemories  = originMemories.reduce((others, memory) =>
-            {
+        const knowledgeLibs = {};
+        const otherMemories = originMemories.reduce((others, memory) =>
+        {
             const ohterCollections = [];
             for(const collection of memory.collections)
             {
                 if(collection.startsWith('zentao:'))
                 {
-                    const lib       = collection.substr(7);
-                    const oldFilter = zentaoMemories[lib] ? zentaoMemories[lib].content_filter : null;
-                    const newFilter = memory.content_filter;
-                    zentaoMemories[lib] = oldFilter ? $.extend({}, oldFilter, memory, {attrs: $.extend({}, oldFilter.attrs, newFilter.attrs)}) : (newFilter || {});
+                    const lib         = collection.substr(7);
+                    const newFilter   = $.extend(true, {}, memory.content_filter);
+                    if(!Object.keys(newFilter).length)
+                    {
+                        knowledgeLibs[lib] = {};
+                        break;;
+                    }
+
+                    const oldFilter   = knowledgeLibs[lib] ? knowledgeLibs[lib] : null;
+                    const finalFilter = $.extend(true, {}, oldFilter, newFilter);
+                    if(newFilter && newFilter.attrs && oldFilter && oldFilter.attrs)
+                    {
+                        Object.keys(oldFilter.attrs).forEach(attrName =>
+                        {
+                            const oldAttr = oldFilter.attrs[attrName];
+                            const newAttr = newFilter.attrs[attrName];
+                            if(oldAttr === undefined || newAttr === undefined) return;
+                            const finalAttr = typeof oldAttr === 'object' ? oldAttr : {$in: [oldAttr]};
+                            if(typeof newAttr === 'object') finalAttr.$in = [...finalAttr.$in, ...newAttr.$in];
+                            else finalAttr.$in = [...finalAttr.$in, newAttr];
+                            finalFilter.attrs[attrName] = finalAttr;
+                        });
+                    }
+                    knowledgeLibs[lib] = finalFilter;
                     continue;
                 }
                 ohterCollections.push(collection);
@@ -376,22 +396,45 @@ function registerZentaoAIPlugin(lang)
             return others;
         }, []);
 
-        if(!Object.keys(zentaoMemories).length) return;
+        if(!Object.keys(knowledgeLibs).length) return;
 
-        const changes    = {memories: otherMemories};
-        const newPrompts = info.prompt !== undefined ? [info.prompt] : [];
+        return {memories: otherMemories, customData: {ztklibs: knowledgeLibs}};
+    });
+
+    plugin.defineCallback('onPostMessage', async function(info)
+    {
+        if(!info.userMessages || !info.userMessages.length) return;
+        if(!info.chat.custom_data || !info.chat.custom_data.ztklibs) return;
+        const userPrompt = info.userMessages.map(x => x.content).filter(x => x && x.trim().length).join('\n\n');
+        if(!userPrompt.length) return;
+
+        info.updateState(lang.searchingKLibs);
+
+        const ztklibs  = info.chat.custom_data.ztklibs;
+        const ztChunks = info.chat.$local.ztChunks || {};
         const [response] = await $.ajaxSubmit(
         {
             url:  $.createLink('zai', 'ajaxSearchKnowledges'),
-            data: {userPrompt: info.userPrompt, filters: JSON.stringify(zentaoMemories)}
+            data: {userPrompt: userPrompt, filters: JSON.stringify(ztklibs)}
         });
-        if(response && response.result === 'success' && response.data && response.data.prompt)
+        if(response && response.result === 'success' && response.data && Array.isArray(response.data) && response.data.length)
         {
-            newPrompts.push(response.data.prompt);
+            const newPropms = [];
+            const newRefs   = [];
+            const refKeys   = new Set();
+            response.data.forEach(item =>
+            {
+                if(ztChunks[item.id]) return;
+                ztChunks[item.id] = 1;
+                newPropms.push(item.content);
+                if(refKeys.has(item.key)) return;
+                const itemAttrs = item.attrs || {};
+                newRefs.push({key: item.key, name: itemAttrs.objectTitle, type: itemAttrs.objectType, id: itemAttrs.objectID})
+                refKeys.add(item.key);
+            });
+            info.chat.$local.ztChunks = ztChunks;
+            return {systemPrompt: newPropms.filter(Boolean).join('\n\n'), refs: newRefs};
         }
-        if(newPrompts.length) changes.prompt = newPrompts.join('\n\n');
-
-        return changes;
     });
 }
 
