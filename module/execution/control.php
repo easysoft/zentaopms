@@ -1384,10 +1384,16 @@ class execution extends control
         $relatedProjects = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs(); /* 获取执行所属的项目列表。*/
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
+        $frozenStages = '';
         foreach($executions as $key => $execution)
         {
-            if(!empty($execution->frozen)) unset($executions[$key]);
+            if(!empty($execution->frozen))
+            {
+                $frozenStages .= "#{$execution->id},";
+                unset($executions[$key]);
+            }
         }
+        if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, trim($frozenStages, ',')), 'load' => true)));
 
         list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($executions);
 
@@ -1419,6 +1425,7 @@ class execution extends control
         $this->view->rdUsers      = $rdUsers;
         $this->view->from         = $this->app->tab;
         $this->view->parents      = $this->execution->getByIdList($parentIdList);
+        $this->view->frozenStages = $frozenStages;
         $this->display();
     }
 

@@ -46,12 +46,12 @@ class stage extends control
                 {
                     $this->config->stage->actionList['setTRpoint']['icon']        = 'tr-box';
                     $this->config->stage->actionList['setTRpoint']['hint']        = $this->lang->stage->setTRpoint;
-                    $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=TR&stageID={id}');
+                    $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setTRpoint', 'params' => 'stageID={id}');
                     $this->config->stage->actionList['setTRpoint']['data-toggle'] = 'modal';
 
                     $this->config->stage->actionList['setDCPpoint']['icon']        = 'dcp-box';
                     $this->config->stage->actionList['setDCPpoint']['hint']        = $this->lang->stage->setDCPpoint;
-                    $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setPoint', 'params' => 'type=DCP&stageID={id}');
+                    $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setDCPpoint', 'params' => 'stageID={id}');
                     $this->config->stage->actionList['setDCPpoint']['data-toggle'] = 'modal';
 
                     $this->config->stage->dtable->fieldList['actions']['menu'] = array('setTRpoint', 'setDCPpoint', 'edit', 'delete');
@@ -231,7 +231,7 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->setTypeAB;
+        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->setType;
         $this->view->currentLang = $currentLang;
         $this->view->lang2Set    = !empty($lang2Set) ? $lang2Set : $lang;
         $this->view->fieldList   = $fieldList;
@@ -256,31 +256,57 @@ class stage extends control
     }
 
     /**
-     * 设置阶段的评审点。
-     * Set point of stage.
+     * 设置TR评审点。
+     * Set TR point of stage.
      *
-     * @param  string $type TR|DCP
      * @param  int    $stageID
      * @access public
      * @return void
      */
-    public function setPoint(string $type, int $stageID)
+    public function setTRpoint(int $stageID)
     {
         $this->app->loadLang('review');
 
         if(!empty($_POST))
         {
-            $this->lang->stage->title = $type == 'TR' ? $this->lang->stage->TRname : $this->lang->stage->DCPname;
+            $this->lang->stage->title = $this->lang->stage->TRname;
             $points = form::batchData()->get();
-            $this->stage->setPoint($type, $stageID, $points);
+            $this->stage->setPoint('TR', $stageID, $points);
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->type        = $type;
+        $this->view->type        = 'TR';
         $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
-        $this->view->stagePoints = $this->stage->getStagePoints($type, $stageID);
-        $this->display();
+        $this->view->stagePoints = $this->stage->getStagePoints('TR', $stageID);
+        $this->display('stage', 'setPoint');
+    }
+
+    /**
+     * 设置DCP评审点。
+     * Set point of stage.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return void
+     */
+    public function setDCPpoint(int $stageID)
+    {
+        $this->app->loadLang('review');
+
+        if(!empty($_POST))
+        {
+            $this->lang->stage->title = $this->lang->stage->DCPname;
+            $points = form::batchData()->get();
+            $this->stage->setPoint('DCP', $stageID, $points);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+        }
+
+        $this->view->type        = 'DCP';
+        $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
+        $this->view->stagePoints = $this->stage->getStagePoints('DCP', $stageID);
+        $this->display('stage', 'setPoint');
     }
 
     /**

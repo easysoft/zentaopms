@@ -166,6 +166,7 @@ $lang->execution->limitedTip         = "受限用户只能编辑与自己相关�
 $lang->execution->stageFrozenTip     = '阶段打基线后不允许%s';
 $lang->execution->createChildStage   = '创建子阶段';
 $lang->execution->ganttDrag          = '拖拽';
+$lang->execution->frozenTip          = '%s已冻结，将不会被编辑。';
 
 $lang->execution->start    = "开始";
 $lang->execution->activate = "激活";

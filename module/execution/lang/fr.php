@@ -166,6 +166,7 @@ $lang->execution->limitedTip         = "Limited users can only edit tasks that a
 $lang->execution->stageFrozenTip     = 'After the stage are baselined, %s is not allowed.';
 $lang->execution->createChildStage   = 'create child stage';
 $lang->execution->ganttDrag          = 'Drag';
+$lang->execution->frozenTip          = '%s has been frozen and will not be editable.';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';

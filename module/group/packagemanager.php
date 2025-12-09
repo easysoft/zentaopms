@@ -2615,12 +2615,13 @@ $config->group->package->stageSetting = new stdclass();
 $config->group->package->stageSetting->order  = 40;
 $config->group->package->stageSetting->subset = 'projectFlow';
 $config->group->package->stageSetting->privs  = array();
-$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),               'recommend' => array('stage-create',     'stage-batchCreate',  'stage-edit',    'stage-setType', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'), 'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-setType', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-edit',        'stage-setType', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setType', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-setType']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-delete'));
-$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',    'stage-setType'));
+$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),               'recommend' => array('stage-create',     'stage-batchCreate',  'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'), 'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-setTRpoint']  = array('edition' => 'ipd',              'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-setDCPpoint'] = array('edition' => 'ipd',              'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-delete'));
+$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint'));
 
 $config->group->package->reviewFlow = new stdclass();
 $config->group->package->reviewFlow->order  = 45;
@@ -3194,6 +3195,12 @@ $config->group->package->commonSetting->privs['custom-hours']          = array('
 $config->group->package->commonSetting->privs['custom-percent']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 20, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 $config->group->package->commonSetting->privs['subject-browse']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['baseline-templatetype'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->stageType = new stdclass();
+$config->group->package->stageType->order  = 15;
+$config->group->package->stageType->subset = 'featureconfig';
+$config->group->package->stageType->privs  = array();
+$config->group->package->stageType->privs['stage-setType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;
