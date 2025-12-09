@@ -67,19 +67,15 @@ fields:
     loopfix: ""
     format: ""
   - field: assignedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: finishedBy
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    range: "20250101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
+  - field: finishedDate
+    range: "20250101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
   - field: finishedDate
     note: ""
     prefix: ""
@@ -95,12 +91,10 @@ fields:
     loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    range: "20250101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
   - field: deleted
     note: ""
     prefix: ""
