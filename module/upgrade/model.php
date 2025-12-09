@@ -13014,3 +13014,4 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
         }
     }
+}
