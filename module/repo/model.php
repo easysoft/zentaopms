@@ -331,24 +331,6 @@ class repoModel extends model
      */
     public function update(object $data, object $repo, bool $isPipelineServer): bool
     {
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
-        {
-            $repo->gitService = $data->serviceHost;
-            $repo->project    = $data->serviceProject;
-
-            $token = uniqid();
-            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
-            if($res !== true)
-            {
-                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
-                return false;
-            }
-            else
-            {
-                $data->password = $token;
-            }
-        }
-
         if($data->SCM == 'Subversion' && $data->path != $repo->path)
         {
             $data->synced     = 0;
@@ -357,26 +339,26 @@ class repoModel extends model
         }
 
         if($data->encrypt == 'base64') $data->password = base64_encode((string)$data->password);
-        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
+        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken,members')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $repo->id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $repo->id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $repo->id")
             ->autoCheck()
             ->where('id')->eq($repo->id)->exec();
+        $oldMembers = $repo->members;
+        $newMembers = explode(',', $data->members);
+        if(empty($oldMembers) || array_intersect($newMembers, $oldMembers))
+        {
+            $this->dao->delete()->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repo->id)->exec();
+            foreach($newMembers as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repo' => $repo->id, 'account' => $member))->exec();
+            if(dao::isError()) return false;
+        }
 
         $this->rmClientVersionFile();
 
-        if(in_array($data->SCM, $this->config->repo->notSyncSCM))
-        {
-            $this->loadModel($data->SCM)->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
-            $data->path = $this->getByID($repo->id)->path;
-            $this->updateCommitDate($repo->id);
-        }
-
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $repo->SCM == 'Subversion') && $repo->path != $data->path)
+        if($repo->SCM == 'Subversion' && $repo->path != $data->path)
         {
             $this->repoTao->deleteInfoByID($repo->id);
             return false;
@@ -671,6 +653,8 @@ class repoModel extends model
         $repo->serviceHost    = (int)$repo->serviceHost;
         $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
+        $repo->members        = $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->fetchPairs();
+
         return $repo;
     }
 
