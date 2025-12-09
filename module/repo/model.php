@@ -176,21 +176,6 @@ class repoModel extends model
         }
 
         $repo = $this->getByID($repoID);
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
-        {
-            $token = uniqid();
-            $res   = $this->loadModel($repo->SCM)->addPushWebhook($repo, $token);
-            if($res !== true)
-            {
-                $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
-                return false;
-            }
-            else
-            {
-                $this->dao->update(TABLE_REPO)->set('password')->eq($token)->where('id')->eq($repoID)->exec();
-            }
-        }
         $this->rmClientVersionFile();
 
         return $repoID;

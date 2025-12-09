@@ -43,7 +43,8 @@ formPanel
         set::name("space"),
         set::label($lang->repo->space),
         set::required(true),
-        set::items($spaces)
+        set::items($spaces),
+        !empty($spaceID) ? set::value($spaceID) : null
     ),
     formRow
     (

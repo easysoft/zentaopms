@@ -13,19 +13,10 @@ namespace zin;
 jsVar('deleteConfirm', $lang->repo->notice->deleteConfirm);
 jsVar('defaultServer', empty($defaultServer) ? 0 : $defaultServer->id);
 
-if($inSpace)
-{
-    dropmenu
-    (
-        set::module('devopsspace'),
-        set::tab('devopsspace'),
-        set::objectID($space),
-        set::url(createLink('devopsspace', 'ajaxGetDropMenu', "spaceID=$space&module={$app->rawModule}&method={$app->rawMethod}"))
-    );
-}
+$createRepoURL = createLink('repo', 'createRepo', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
 
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
-$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
+$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => $createRepoURL);
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
 
 foreach($repoList as $repo)
@@ -63,8 +54,9 @@ foreach($repoList as $repo)
 }
 
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
+$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}&spaceID={$spaceID}");
 $config->repo->dtable->fieldList['space']['map']                   = $spaces;
+if($inSpace) unset($config->repo->dtable->fieldList['space']);
 
 if(empty($config->repo->maintain->showRepoPath))
 {
@@ -78,7 +70,7 @@ if(empty($config->repo->maintain->showRepoPath))
 if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo.visit';
 
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
-$queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$space}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+$queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$spaceID}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
@@ -100,10 +92,10 @@ foreach($repos as $repo)
 }
 
 $spaceItems = array();
-$spaceItems[] = array('text' => $lang->repo->allSpace, 'url' => createLink('repo', 'maintain', "objectID=$objectID&space=0"));
-foreach($spaces as $spaceID => $spaceName)
+$spaceItems[] = array('text' => $lang->repo->allSpace, 'url' => createLink('repo', 'maintain', "inSpace=0&space=0&objectID={$objectID}"));
+foreach($spaces as $id => $spaceName)
 {
-    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('repo', 'maintain', "objectID=$objectID&space=$spaceID"));
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('repo', 'maintain', "inSpace=0&space={$id}&objectID={$objectID}"));
 }
 
 featureBar
@@ -112,7 +104,7 @@ featureBar
     (
         dropdown
         (
-            to('trigger', btn(zget($spaces, $space, $lang->repo->allSpace), setClass('ghost'))),
+            to('trigger', btn(zget($spaces, $spaceID, $lang->repo->allSpace), setClass('ghost'))),
             set::items($spaceItems)
         )
     ),
@@ -168,7 +160,7 @@ dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::sortLink(createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$space}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'maintain', "inSpace={$inSpace}&space={$spaceID}&objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager()),
     set::actionItemCreator(jsRaw('window.renderActions'))
