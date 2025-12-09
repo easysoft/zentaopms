@@ -962,7 +962,7 @@ class task extends control
             /* Get the information returned after a task is started. */
             $task     = $this->task->fetchByID($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
-            $this->send($response);
+            return $this->send($response);
         }
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy; // Ensure that the completion person is on the user list.
