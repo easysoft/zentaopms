@@ -315,15 +315,29 @@ class repo extends control
     public function edit(int $repoID, int $objectID = 0)
     {
         $this->commonAction($repoID, $objectID);
+        $repo = $this->repo->getByID($repoID);
+
+        $this->scm->setEngine($repo);
+        $branchList    = $this->scm->branch();
+        $defaultBranch = empty($branchList) ? '' : key($branchList);
+        $this->view->defaultBranch = $defaultBranch;
+        $this->view->branchList    = $branchList;
 
         if($_POST)
         {
-            $repo = $this->repo->getByID($repoID);
-
             /* Prepare data. */
-            $formData         = form::data($this->config->repo->form->edit);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $formData = form::data($this->config->repo->form->edit);
+
+            $changedBranch = $this->post->defaultBranch;
+            if(!empty($changedBranch) && $defaultBranch != $changedBranch)
+            {
+                $changedResult = $this->loadModel('gitfox')->setDefaultBranch($repo, $changedBranch);
+                if(!$changedResult) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->setDefaultBranch));
+            }
+
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList);
             $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
+            if($editData->acl == 'private') $this->config->repo->edit->requiredFields .= ',members';
 
             if($editData) $noNeedSync = $this->repo->update($editData, $repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
