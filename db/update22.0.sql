@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `status` varchar(30) NOT NULL DEFAULT '',
   `hasApproval` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否有评审流程',
   `version` varchar(255) NULL,
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
@@ -256,4 +257,3 @@ ALTER TABLE `zt_story`   ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '�
 ALTER TABLE `zt_design`  ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `desc`;
 ALTER TABLE `zt_project` ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `vision`;
 ALTER TABLE `zt_doc`     ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `builtIn`;
-ALTER TABLE `zt_projectdeliverable` ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `version`;
