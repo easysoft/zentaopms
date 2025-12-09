@@ -132,10 +132,6 @@ class repoZen extends repo
 
         if($repo->path != $oldRepo->path) $repo->synced = 0;
 
-        $acl = $this->checkACL();
-        if(!$acl) return false;
-        $repo->acl = json_encode($acl);
-
         if($repo->SCM == 'Subversion')
         {
             $scm = $this->app->loadClass('scm');
@@ -152,21 +148,6 @@ class repoZen extends repo
         elseif($repo->SCM != $oldRepo->SCM and $repo->SCM == 'Git')
         {
             $repo->prefix = '';
-        }
-
-        if($isPipelineServer)
-        {
-            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
-                ->where('`SCM`')->eq($repo->SCM)
-                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
-                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
-                ->andWhere('id')->ne($oldRepo->id)
-                ->fetch();
-            if($serviceProject)
-            {
-                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
-                return false;
-            }
         }
 
         return $repo;
@@ -448,18 +429,8 @@ class repoZen extends repo
         $repo->client = trim($repo->client, '"');
         $this->app->loadLang('action');
 
-        $scm = strtolower($repo->SCM);
-        if(in_array($scm, $this->config->repo->gitServiceList))
-        {
-            $serviceID = isset($repo->gitService) ? $repo->gitService : 0;
-            $projectID = in_array($repo->SCM, $this->config->repo->notSyncSCM) ? (int)$repo->serviceProject : $repo->serviceProject;
-            $project   = $this->loadModel($scm)->apiGetSingleProject($serviceID, $projectID);
-
-            $this->view->project = $project;
-        }
-
         $products           = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $linkedProducts     = $this->loadModel('product')->getByIdList(explode(',', $repo->product));
+        $linkedProducts     = $this->product->getByIdList(explode(',', $repo->product));
         $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
         $products           = $products + $linkedProductPairs;
 
@@ -472,7 +443,7 @@ class repoZen extends repo
         $this->view->products        = $products;
         $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
         $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
-        $this->view->spaces          = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces          = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
     }
 
     /**
