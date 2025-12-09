@@ -15,6 +15,7 @@ class testcaseTester extends tester
     {
         $form = $this->initForm('execution', 'testcase', array('execution' => '2' ), 'appIframe-execution');
         $form->dom->productNav->click();
+        $form->wait(1);
         $form->dom->$product->click();
         $form->wait(1);
 
