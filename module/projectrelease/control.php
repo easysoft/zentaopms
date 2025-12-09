@@ -58,7 +58,11 @@ class projectrelease extends control
         if($from == 'doc' ||$from == 'ai')
         {
             $projects = $this->project->getPairs();
-            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
+            if(empty($projects))
+            {
+                $this->app->loadLang('doc');
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
+            }
 
             if(!$projectID) $projectID = key($projects);
             $this->view->projects = $projects;
