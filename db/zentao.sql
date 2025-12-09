@@ -1497,7 +1497,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `product` int unsigned NOT NULL DEFAULT 0,
   `branch` varchar(255) NOT NULL DEFAULT '0',
-  `parent` int unsigned NOT NULL DEFAULT 0,
+  `parent` int NOT NULL DEFAULT 0,
   `title` varchar(90) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `desc` mediumtext DEFAULT NULL,
