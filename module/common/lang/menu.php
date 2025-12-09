@@ -535,7 +535,7 @@ $lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}
 $lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|devopsspace|view|spaceID=%s", 'subModule' =>'devopsspace', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
 $lang->devops->homeMenu->spaceSetting['subMenu']->overview = array('link' => "{$lang->devops->overview}|devopsspace|view|spaceID=%s");
-$lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|devopsspace|members|spaceID=%s");
+$lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|devopsspace|members|spaceID=%s", 'alias' => 'managemembers');
 $lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|devopsspace|group|spaceID=%s", 'alias' => 'managepriv');
 
 $lang->devops->menu = new stdclass();
