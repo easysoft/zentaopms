@@ -1207,6 +1207,12 @@ eof;
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
+                if($this->app->tab == 'devops')
+                {
+                    $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
+                    if(commonModel::hasPriv($module, $method)) return true;
+                }
+
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -3903,6 +3909,23 @@ EOF;
         }
 
         return $dotStyle;
+    }
+
+    /**
+     * DevOps空间有继承和重新定义两种权限，在此处需要重置权限。
+     * Reset DevOps space priv.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function resetDevOpsPriv(int $spaceID = 0)
+    {
+        if(empty($spaceID) and $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
+        if(empty($spaceID)) return;
+
+        $space = $this->loadModel('devopsspace')->getByID($spaceID);
+        if(empty($space)) return;
     }
 }
 
