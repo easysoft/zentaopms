@@ -45,16 +45,16 @@ UPDATE `zt_activity` SET `assignedDate` = NULL WHERE `assignedDate` LIKE '1970-0
 ALTER TABLE `zt_searchindex` CHANGE `content` `content` longtext NULL;
 
 CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `project` int(8) unsigned NOT NULL,
-  `submitFrom` int(8) unsigned NOT NULL COMMENT '提交来源',
-  `review` int(8) unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `project` int unsigned NOT NULL DEFAULT 0 COMMENT '所属项目',
+  `submitFrom` int unsigned NOT NULL DEFAULT 0 COMMENT '提交来源',
+  `review` int unsigned NOT NULL DEFAULT 0 COMMENT '关联评审',
   `deliverable` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `doc` int(8) unsigned NOT NULL DEFAULT '0',
-  `docVersion` smallint(6) unsigned NOT NULL DEFAULT '0',
+  `doc` int unsigned NOT NULL DEFAULT '0',
+  `docVersion` smallint unsigned NOT NULL DEFAULT '0',
   `status` varchar(30) NOT NULL DEFAULT '',
-  `hasApproval` tinyint NOT NULL DEFAULT 1 COMMENT '是否有评审流程',
+  `hasApproval` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否有评审流程',
   `version` varchar(255) NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
