@@ -71,18 +71,18 @@ fields:
     type: timestamp
     format: "YYYY-MM-DD"
     postfix: "\t"
-  - field: finishedDate
-    range: "20250101 000000:1D"
-    type: timestamp
-    format: "YYYY-MM-DD"
-    postfix: "\t"
-  - field: finishedDate
+  - field: finishedBy
     note: ""
     prefix: ""
     postfix: ""
     loop: 0
     loopfix: ""
     format: ""
+  - field: finishedDate
+    range: "20250101 000000:1D"
+    type: timestamp
+    format: "YYYY-MM-DD"
+    postfix: "\t"
   - field: createdBy
     note: ""
     prefix: ""
