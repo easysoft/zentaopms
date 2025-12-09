@@ -40,9 +40,27 @@ class job extends control
     }
 
     /**
+     * 设置页面公共数据。
+     * Common actions.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function commonAction(int $spaceID = 0)
+    {
+        $this->loadModel('devopsspace')->setMenu($spaceID);
+
+        $this->view->spaceID = $spaceID;
+        $this->view->inSpace = !empty($spaceID);
+    }
+
+
+    /**
      * 流水线列表。
      * Browse job.
      *
+     * @param  int    $space
      * @param  int    $repoID
      * @param  string $type
      * @param  string $queryID
@@ -53,8 +71,9 @@ class job extends control
      * @access public
      * @return void
      */
-    public function browse(int $repoID = 0, string $type = '', string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $space = 0, int $repoID = 0, string $type = '', string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->commonAction($space);
         $this->loadModel('ci');
         $this->app->loadLang('compile');
 
