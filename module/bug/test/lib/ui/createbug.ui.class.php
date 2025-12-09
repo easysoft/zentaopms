@@ -146,6 +146,7 @@ class createBugTester extends tester
         $form->wait(2);
         $form->dom->bugAssigned->scrollToElement();
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        $form->wait(2);
         foreach($bugAssigned as $assigned)
         {
             if($assigned != $assignee) return $this->failed('bug批量指派失败');
@@ -175,6 +176,7 @@ class createBugTester extends tester
         $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
         if($index === false ) return $this->failed('bug未找到' . $bugTitle);
         $form->dom->bugAssigned->scrollToElement();
+        $form->wait(3);
         $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
         $form->wait(3);
         $form->dom->assignedTo->picker($assignee);
@@ -182,7 +184,9 @@ class createBugTester extends tester
         $form->dom->assign->click();
         $form->wait(3);
         $form->dom->bugAssigned->scrollToElement();
+        $form->wait(5);
         $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
+        $form->wait(3);
         if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
         return $this->failed('bug直接修改指派失败');
     }
