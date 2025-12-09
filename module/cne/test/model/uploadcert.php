@@ -7,48 +7,49 @@ title=测试 cneModel::uploadCert();
 timeout=0
 cid=0
 
-- 测试步骤1:上传完整有效的证书对象,使用默认channel属性code @600
-- 测试步骤2:上传完整有效的证书对象,使用自定义channel属性code @600
-- 测试步骤3:上传证书名称为空的证书对象属性code @600
-- 测试步骤4:上传缺少certificate_pem的证书对象属性code @600
-- 测试步骤5:上传缺少private_key_pem的证书对象属性code @600
+- 步骤1:传入完整的证书对象和channel参数属性code @600
+- 步骤2:使用默认channel,cert对象完整属性code @600
+- 步骤3:证书对象name字段为空字符串属性code @600
+- 步骤4:证书对象certificate_pem字段为空字符串属性code @600
+- 步骤5:证书对象private_key_pem字段为空字符串属性code @600
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+su('admin');
 
-// 测试步骤1:上传完整有效的证书对象,使用默认channel
-$cert1 = new stdclass();
+$cneTest = new cneModelTest();
+
+// 创建测试证书对象
+$cert1 = new stdClass();
 $cert1->name = 'test-cert-1';
-$cert1->certificate_pem = '-----BEGIN CERTIFICATE-----\nMIIDXTCCAkWgAwIBAgIJAKL0UG+mRKK6MA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV\n-----END CERTIFICATE-----';
-$cert1->private_key_pem = '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGvH1wjtMN+HcG\n-----END PRIVATE KEY-----';
-r($cneTest->uploadCertTest($cert1)) && p('code') && e('600'); // 测试步骤1:上传完整有效的证书对象,使用默认channel
+$cert1->certificate_pem = '-----BEGIN CERTIFICATE-----test-content-1-----END CERTIFICATE-----';
+$cert1->private_key_pem = '-----BEGIN PRIVATE KEY-----test-key-1-----END PRIVATE KEY-----';
 
-// 测试步骤2:上传完整有效的证书对象,使用自定义channel
-$cert2 = new stdclass();
+$cert2 = new stdClass();
 $cert2->name = 'test-cert-2';
-$cert2->certificate_pem = '-----BEGIN CERTIFICATE-----\nMIIDXTCCAkWgAwIBAgIJAKL0UG+mRKK6MA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV\n-----END CERTIFICATE-----';
-$cert2->private_key_pem = '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDGvH1wjtMN+HcG\n-----END PRIVATE KEY-----';
-r($cneTest->uploadCertTest($cert2, 'stable')) && p('code') && e('600'); // 测试步骤2:上传完整有效的证书对象,使用自定义channel
+$cert2->certificate_pem = '-----BEGIN CERTIFICATE-----test-content-2-----END CERTIFICATE-----';
+$cert2->private_key_pem = '-----BEGIN PRIVATE KEY-----test-key-2-----END PRIVATE KEY-----';
 
-// 测试步骤3:上传证书名称为空的证书对象
-$cert3 = new stdclass();
+$cert3 = new stdClass();
 $cert3->name = '';
-$cert3->certificate_pem = '-----BEGIN CERTIFICATE-----\ntest-cert-pem\n-----END CERTIFICATE-----';
-$cert3->private_key_pem = '-----BEGIN PRIVATE KEY-----\ntest-key-pem\n-----END PRIVATE KEY-----';
-r($cneTest->uploadCertTest($cert3)) && p('code') && e('600'); // 测试步骤3:上传证书名称为空的证书对象
+$cert3->certificate_pem = '-----BEGIN CERTIFICATE-----test-content-3-----END CERTIFICATE-----';
+$cert3->private_key_pem = '-----BEGIN PRIVATE KEY-----test-key-3-----END PRIVATE KEY-----';
 
-// 测试步骤4:上传缺少certificate_pem的证书对象
-$cert4 = new stdclass();
-$cert4->name = 'test-cert-incomplete';
-$cert4->private_key_pem = '-----BEGIN PRIVATE KEY-----\ntest-key-pem\n-----END PRIVATE KEY-----';
-r($cneTest->uploadCertTest($cert4)) && p('code') && e('600'); // 测试步骤4:上传缺少certificate_pem的证书对象
+$cert4 = new stdClass();
+$cert4->name = 'test-cert-4';
+$cert4->certificate_pem = '';
+$cert4->private_key_pem = '-----BEGIN PRIVATE KEY-----test-key-4-----END PRIVATE KEY-----';
 
-// 测试步骤5:上传缺少private_key_pem的证书对象
-$cert5 = new stdclass();
-$cert5->name = 'test-cert-incomplete-2';
-$cert5->certificate_pem = '-----BEGIN CERTIFICATE-----\ntest-cert-pem\n-----END CERTIFICATE-----';
-r($cneTest->uploadCertTest($cert5)) && p('code') && e('600'); // 测试步骤5:上传缺少private_key_pem的证书对象
+$cert5 = new stdClass();
+$cert5->name = 'test-cert-5';
+$cert5->certificate_pem = '-----BEGIN CERTIFICATE-----test-content-5-----END CERTIFICATE-----';
+$cert5->private_key_pem = '';
+
+r($cneTest->uploadCertTest($cert1, 'stable')) && p('code') && e('600'); // 步骤1:传入完整的证书对象和channel参数
+r($cneTest->uploadCertTest($cert2, '')) && p('code') && e('600'); // 步骤2:使用默认channel,cert对象完整
+r($cneTest->uploadCertTest($cert3, 'stable')) && p('code') && e('600'); // 步骤3:证书对象name字段为空字符串
+r($cneTest->uploadCertTest($cert4, 'stable')) && p('code') && e('600'); // 步骤4:证书对象certificate_pem字段为空字符串
+r($cneTest->uploadCertTest($cert5, 'stable')) && p('code') && e('600'); // 步骤5:证书对象private_key_pem字段为空字符串

@@ -14,7 +14,9 @@ class testcaseTester extends tester
     public function switchProduct($product, $expectNum)
     {
         $form = $this->initForm('execution', 'testcase', array('execution' => '2' ), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->productNav->click();
+        $form->wait(1);
         $form->dom->$product->click();
         $form->wait(1);
 

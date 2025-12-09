@@ -617,6 +617,7 @@ $lang->group->package->applyZentaoAgent      = '应用禅道智能体';
 $lang->group->package->manageZentaoAgent     = '管理禅道智能体';
 $lang->group->package->applyGeneralAgent     = '应用通用智能体';
 $lang->group->package->manageGeneralAgent    = '管理通用智能体';
+$lang->group->package->aiKnowledgeLib        = '知识库';
 $lang->group->package->browseAiModels        = '模型列表';
 $lang->group->package->zai                   = 'ZAI配置';
 $lang->group->package->dashboard             = '监控';

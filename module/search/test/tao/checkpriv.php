@@ -46,8 +46,6 @@ $doclib->name->range('Lib 1,Lib 2,Lib 3,Lib 4,Lib 5');
 $doclib->deleted->range('0');
 $doclib->gen(5);
 
-su('admin');
-
 global $app;
 $searchTest = new searchTaoTest();
 

@@ -220,28 +220,6 @@ class pivotZenTest extends baseTest
     }
 
     /**
-     * Test show method.
-     *
-     * @param  int         $groupID
-     * @param  int         $pivotID
-     * @param  string      $mark
-     * @param  string|null $version
-     * @access public
-     * @return mixed
-     */
-    public function showTest(int $groupID = 0, int $pivotID = 0, string $mark = '', ?string $version = null)
-    {
-        // 对于show方法的测试，由于其复杂性和依赖项，直接返回结构化数据以验证方法签名
-        return array(
-            'pivot'       => (object)array('id' => $pivotID, 'name' => 'Test Pivot'),
-            'pivotName'   => 'Test Pivot',
-            'title'       => 'Test Pivot',
-            'data'        => array(),
-            'configs'     => array(),
-        );
-    }
-
-    /**
      * Test workload method.
      *
      * @param  string $begin

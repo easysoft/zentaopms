@@ -2695,7 +2695,7 @@ class kanbanModel extends model
         $region->name        = $this->lang->kanbanregion->default;
         $region->kanban      = $execution->id;
         $region->createdBy   = $this->app->user->account;
-        $region->createdDate = helper::today();
+        $region->createdDate = helper::now();
         $region->order       = 1;
 
         $this->dao->insert(TABLE_KANBANREGION)->data($region)

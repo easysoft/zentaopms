@@ -613,7 +613,7 @@ class pivotModel extends model
                 {
                     $execution = current($tasks);
                     $execution->executionTasks = count($tasks);
-                    $execution->executionHours = array_sum(array_map(function($task){return $task->left;}, $tasks));
+                    $execution->executionHours = array_sum(array_map(function($task){return $task->isParent ? 0 : $task->left;}, $tasks));
                     $execution->totalTasks     = $totalTasks;
                     $execution->totalHours     = $totalHours;
                     $execution->workload       = $userWorkload;
@@ -676,6 +676,7 @@ class pivotModel extends model
                 $totalTasks += count($tasks);
                 foreach($tasks as $task)
                 {
+                    if($task->isParent) continue;
                     if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
 
                     $totalHours = round($totalHours + $task->left, 2);

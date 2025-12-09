@@ -1577,21 +1577,6 @@ class treeModel extends model
     }
 
     /**
-     * 生成仪表盘的链接。
-     * Create dashboard link.
-     *
-     * @param  string $type
-     * @param  object $module
-     * @param  string $extra
-     * @access public
-     * @return string
-     */
-    public function createDashboardLink(string $type, object $module, string $extra = ''): string
-    {
-        return html::a(helper::createLink('dashboard', 'browse', "type=bymodule&param={$module->id}"), $module->name, '', "id='module{$module->id}' title='{$module->name}'");
-    }
-
-    /**
      * 生成报告的链接。
      * Create report link.
      *

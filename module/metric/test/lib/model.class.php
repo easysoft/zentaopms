@@ -12,13 +12,34 @@ class metricModelTest extends baseTest
      * Test getDateByDateType method.
      *
      * @param  string $dateType
+     * @param  bool   $checkResult
      * @access public
-     * @return string
+     * @return string|int
      */
-    public function getDateByDateTypeTest(string $dateType = '')
+    public function getDateByDateTypeTest(string $dateType = '', bool $checkResult = false)
     {
+        /* Suppress error output for invalid dateType to test gracefully. */
+        ob_start();
+        $oldErrorReporting = error_reporting(0);
         $result = $this->invokeArgs('getDateByDateType', [$dateType]);
+        error_reporting($oldErrorReporting);
+        ob_end_clean();
+
         if(dao::isError()) return dao::getError();
+
+        /* If checkResult is true, compare with expected date and return 1 for match, 0 for mismatch. */
+        if($checkResult)
+        {
+            $expected = '';
+            if($dateType == 'day')   $expected = date('Y-m-d', strtotime('-7 days'));
+            if($dateType == 'week')  $expected = date('Y-m-d', strtotime('-1 month'));
+            if($dateType == 'month') $expected = date('Y-m-d', strtotime('-1 year'));
+            if($dateType == 'year')  $expected = date('Y-m-d', strtotime('-3 years'));
+            if($dateType == '' || !in_array($dateType, array('day', 'week', 'month', 'year'))) $expected = '1970-01-01';
+
+            return $result == $expected ? 1 : 0;
+        }
+
         return $result;
     }
 

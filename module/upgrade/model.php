@@ -12798,13 +12798,14 @@ class upgradeModel extends model
     /**
      * 四个项目模型的功能开关合并成一个。
      * Merge four project model feature switches into one.
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
      *
      * @access public
      * @return bool
      */
     public function upgradeClosedFeature()
     {
-        if(!in_array($this->config->edition, array('max', 'ipd'))) return true;
 
         $disabledFeatures = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->fetch('value');
         if(empty($disabledFeatures)) return true;
@@ -12954,4 +12955,62 @@ class upgradeModel extends model
             $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($datasource->id)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
         }
     }
-}
+
+    /**
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
+     *
+     * @access public
+     * @return bool
+     */
+    public function initAIPrompts(): void
+    {
+        $this->app->loadConfig('ai');
+        foreach($this->config->ai->initAIPrompts as $aiPrompt)
+        {
+            if(!$this->checkExistAIPrompt($aiPrompt)) return;
+
+            $index = $aiPrompt->id;
+            unset($aiPrompt->id);
+            $aiPrompt->createdBy   = 'system';
+            $aiPrompt->createdDate = helper::now();
+            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
+
+            $promptID = $this->dao->lastInsertID();
+            if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
+        }
+    }
+
+    /**
+     * 检查AI禅道智能体唯一性。
+     * Check AI zentao agent unique.
+     *
+     * @param  object $aiPrompt
+     * @access public
+     * @return bool
+     */
+    public function checkExistAIPrompt(object $aiPrompt): bool
+    {
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
+            ->where('name')->eq($aiPrompt->name)
+            ->fetch('count');
+        return $count == 0;
+    }
+
+    /**
+     * 内置AI禅道智能体和相关字段。
+     * Initialize the AI prompts and fields.
+     *
+     * @param  array  $aiPromptFields
+     * @param  int    $promptID
+     * @access public
+     * @return bool
+     */
+    public function initAIPromptFields(array $aiPromptFields, int $promptID): void
+    {
+        foreach($aiPromptFields as $field)
+        {
+            $field->appID = $promptID;
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
+        }
+    }

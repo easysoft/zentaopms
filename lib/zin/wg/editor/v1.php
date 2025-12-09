@@ -114,8 +114,17 @@ class editor extends wg
         $customProps = $this->getRestProps();
         if(!isset($customProps['class'])) $customProps['class'] = 'w-full';
 
+        $addCss = '';
+        if($this->prop('maxHeight'))
+        {
+            $height = $this->prop('maxHeight');
+            $addCss = <<<CSS
+            .editor {max-height: $height;}
+            CSS;
+        }
+
         $editor->setProp($customProps);
-        $editor->setProp('css', self::$css); // Inject CSS into editor.
+        $editor->setProp('css', static::$css . $addCss); // Inject CSS into editor.
         $editor->setProp('css-src', $app->getWebRoot() . 'js/zui3/zen-editor/zui-inject-style.css'); // Inject CSS on page, for tippy menus.
 
         /* Set initial content. */
@@ -130,7 +139,7 @@ class editor extends wg
         (
             setClass('editor-container p-px mt-px rounded relative', $this->prop('readonly') ? 'is-readonly' : ''),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
-            h::css(self::$css), // Inject CSS on page, for tippy menus.
+            h::css(static::$css . $addCss), // Inject CSS on page, for tippy menus.
             $templateType ? $this->buildTemplate($this->prop('name'), $templateType) : null,
             $editor,
             textarea

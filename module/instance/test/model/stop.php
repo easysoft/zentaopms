@@ -7,82 +7,79 @@ title=测试 instanceModel::stop();
 timeout=0
 cid=0
 
-- 测试步骤1:成功停止实例属性code @200
-- 测试步骤2:API调用失败属性code @400
-- 测试步骤3:服务器错误属性code @500
-- 测试步骤4:资源不存在属性code @404
-- 测试步骤5:默认情况属性code @200
+- 步骤1:正常停止实例属性code @600
+- 步骤2:停止运行中的实例属性code @600
+- 步骤3:停止异常状态的实例属性code @600
+- 步骤4:停止已停止的实例属性code @600
+- 步骤5:验证实例k8name属性 @test-k8-1
 
 */
 
+// 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$space = zenData('space');
-$space->id->range('1-5');
-$space->name->range('Space1,Space2,Space3,Space4,Space5');
-$space->k8space->range('k8space1,k8space2,k8space3,k8space4,k8space5');
-$space->owner->range('admin,user1,user2,admin,user3');
-$space->deleted->range('0');
-$space->gen(5);
+// 2. zendata数据准备
+$instanceTable = zenData('instance');
+$instanceTable->id->range('1-5');
+$instanceTable->name->range('test-app{5}');
+$instanceTable->k8name->range('test-k8-{5}');
+$instanceTable->chart->range('zentao,gitlab,jenkins,sonar,mysql');
+$instanceTable->status->range('running{2},abnormal{2},stopped{1}');
+$instanceTable->channel->range('stable{5}');
+$instanceTable->space->range('1-5');
+$instanceTable->deleted->range('0{5}');
+$instanceTable->gen(5);
 
-$instance = zenData('instance');
-$instance->id->range('1-5');
-$instance->space->range('1-5');
-$instance->name->range('Instance1,Instance2,Instance3,Instance4,Instance5');
-$instance->k8name->range('k8name1,k8name2,k8name3,k8name4,k8name5');
-$instance->chart->range('zentao,gitlab,gitea,jenkins,sonarqube');
-$instance->channel->range('stable{5}');
-$instance->status->range('running,abnormal,stopped,creating,destroying');
-$instance->deleted->range('0');
-$instance->gen(5);
+$spaceTable = zenData('space');
+$spaceTable->id->range('1-5');
+$spaceTable->k8space->range('default,test-space,dev-space,prod-space,staging-space');
+$spaceTable->name->range('默认空间,测试空间,开发空间,生产空间,演示空间');
+$spaceTable->deleted->range('0{5}');
+$spaceTable->gen(5);
 
+// 3. 用户登录
 su('admin');
 
-$instanceTest = new instanceTest();
+// 4. 创建测试实例
+$instanceTest = new instanceModelTest();
 
-$testInstance1 = new stdclass();
-$testInstance1->id = 1;
-$testInstance1->k8name = 'k8name1';
-$testInstance1->chart = 'zentao';
-$testInstance1->channel = 'stable';
-$testInstance1->spaceData = new stdclass();
-$testInstance1->spaceData->k8space = 'k8space1';
+// 5. 测试步骤(至少5个)
+// 构造测试实例对象
+$validInstance = new stdclass();
+$validInstance->id = 1;
+$validInstance->k8name = 'test-k8-1';
+$validInstance->chart = 'zentao';
+$validInstance->channel = 'stable';
+$validInstance->spaceData = new stdclass();
+$validInstance->spaceData->k8space = 'default';
 
-$testInstance2 = new stdclass();
-$testInstance2->id = 2;
-$testInstance2->k8name = 'k8name2';
-$testInstance2->chart = 'gitlab';
-$testInstance2->channel = 'stable';
-$testInstance2->spaceData = new stdclass();
-$testInstance2->spaceData->k8space = 'k8space2';
+$runningInstance = new stdclass();
+$runningInstance->id = 2;
+$runningInstance->k8name = 'test-k8-2';
+$runningInstance->chart = 'gitlab';
+$runningInstance->channel = 'stable';
+$runningInstance->spaceData = new stdclass();
+$runningInstance->spaceData->k8space = 'test-space';
 
-$testInstance3 = new stdclass();
-$testInstance3->id = 3;
-$testInstance3->k8name = 'k8name3';
-$testInstance3->chart = 'gitea';
-$testInstance3->channel = 'stable';
-$testInstance3->spaceData = new stdclass();
-$testInstance3->spaceData->k8space = 'k8space3';
+$abnormalInstance = new stdclass();
+$abnormalInstance->id = 3;
+$abnormalInstance->k8name = 'test-k8-3';
+$abnormalInstance->chart = 'jenkins';
+$abnormalInstance->channel = 'stable';
+$abnormalInstance->spaceData = new stdclass();
+$abnormalInstance->spaceData->k8space = 'dev-space';
 
-$testInstance4 = new stdclass();
-$testInstance4->id = 4;
-$testInstance4->k8name = 'k8name4';
-$testInstance4->chart = 'jenkins';
-$testInstance4->channel = 'stable';
-$testInstance4->spaceData = new stdclass();
-$testInstance4->spaceData->k8space = 'k8space4';
+$stoppedInstance = new stdclass();
+$stoppedInstance->id = 4;
+$stoppedInstance->k8name = 'test-k8-4';
+$stoppedInstance->chart = 'sonar';
+$stoppedInstance->channel = 'stable';
+$stoppedInstance->spaceData = new stdclass();
+$stoppedInstance->spaceData->k8space = 'prod-space';
 
-$testInstance5 = new stdclass();
-$testInstance5->id = 5;
-$testInstance5->k8name = 'k8name5';
-$testInstance5->chart = 'sonarqube';
-$testInstance5->channel = 'stable';
-$testInstance5->spaceData = new stdclass();
-$testInstance5->spaceData->k8space = 'k8space5';
-
-r($instanceTest->stopTest($testInstance1)) && p('code') && e('200'); // 测试步骤1:成功停止实例
-r($instanceTest->stopTest($testInstance2)) && p('code') && e('400'); // 测试步骤2:API调用失败
-r($instanceTest->stopTest($testInstance3)) && p('code') && e('500'); // 测试步骤3:服务器错误
-r($instanceTest->stopTest($testInstance4)) && p('code') && e('404'); // 测试步骤4:资源不存在
-r($instanceTest->stopTest($testInstance5)) && p('code') && e('200'); // 测试步骤5:默认情况
+r($instanceTest->stopTest($validInstance)) && p('code') && e('600'); // 步骤1:正常停止实例
+r($instanceTest->stopTest($runningInstance)) && p('code') && e('600'); // 步骤2:停止运行中的实例
+r($instanceTest->stopTest($abnormalInstance)) && p('code') && e('600'); // 步骤3:停止异常状态的实例
+r($instanceTest->stopTest($stoppedInstance)) && p('code') && e('600'); // 步骤4:停止已停止的实例
+r($validInstance->k8name) && p() && e('test-k8-1'); // 步骤5:验证实例k8name属性

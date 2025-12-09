@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getAppVolumes();
 timeout=0
-cid=0
+cid=15613
 
 - 步骤1:不指定组件获取数据卷(component=false) @0
 - 步骤2:指定mysql组件(component=true) @0

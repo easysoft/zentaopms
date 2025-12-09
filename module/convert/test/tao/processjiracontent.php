@@ -5,7 +5,7 @@
 
 title=测试 convertTao::processJiraContent();
 timeout=0
-cid=0
+cid=15869
 
 - 执行convertTest模块的processJiraContentTest方法，参数是'', array  @0
 - 执行convertTest模块的processJiraContentTest方法，参数是'This is a test !screenshot.png|thumbnail! image', $fileList1  @This is a test <img src="{1.png}" alt="processjiracontent.php?m=file&f=read&t=png&fileID=1"/> image

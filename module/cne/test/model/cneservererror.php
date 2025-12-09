@@ -5,7 +5,7 @@
 
 title=测试 cneModel::cneServerError();
 timeout=0
-cid=0
+cid=15608
 
 - 步骤1:验证返回对象code属性值为600属性code @600
 - 步骤2:验证返回对象message属性值属性message @CNE服务器出错

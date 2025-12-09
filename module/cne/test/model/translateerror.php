@@ -5,7 +5,7 @@
 
 title=测试 cneModel::translateError();
 timeout=0
-cid=0
+cid=15631
 
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult1 属性code @400
 - 执行cneTest模块的translateErrorTest方法，参数是$apiResult2 属性code @404
@@ -18,7 +18,16 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-su('admin');
+try {
+    include $initPath;
+    include $unitTestPath;
+    su('admin');
+    $useFramework = true;
+} catch (Exception $e) {
+    // 框架初始化失败，使用独立模式
+    include $unitTestPath;
+    $useFramework = false;
+}
 
 $cneTest = new cneModelTest();
 

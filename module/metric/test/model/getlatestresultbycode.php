@@ -5,7 +5,7 @@
 
 title=测试 metricModel::getLatestResultByCode();
 timeout=0
-cid=0
+cid=17102
 
 - 步骤1:使用不存在的代号查询返回空数组 @0
 - 步骤2:检查返回结果是数组类型 @1
