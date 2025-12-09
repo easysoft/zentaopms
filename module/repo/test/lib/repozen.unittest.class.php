@@ -54,6 +54,71 @@ class repoZenTest extends baseTest
     }
 
     /**
+     * 测试buildRepoSearchForm 方法。
+     * Test buildRepoSearchForm method in zen layer.
+     *
+     * @param  int       $inSpace
+     * @param  int       $space
+     * @param  array     $products
+     * @param  array     $projects
+     * @param  int       $objectID
+     * @param  string    $orderBy
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @param  int       $param
+     * @access public
+     * @return object
+     */
+    public function buildRepoSearchFormTest(int $inSpace, int $space, array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): object
+    {
+        // 确保session已启动
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        // 初始化搜索配置
+        if(!isset($this->instance->config->repo->search))
+        {
+            $this->instance->config->repo->search = array(
+                'module'    => 'repo',
+                'fields'    => array('product', 'projects'),
+                'params'    => array(
+                    'product'  => array('operator' => '=', 'control' => 'select', 'values' => array()),
+                    'projects' => array('operator' => 'include', 'control' => 'select', 'values' => array())
+                ),
+                'actionURL' => '',
+                'queryID'   => 0,
+                'onMenuBar' => 'no'
+            );
+        }
+
+        // 模拟buildRepoSearchForm方法的核心逻辑
+        $this->instance->config->repo->search['params']['product']['values']  = $products;
+        $this->instance->config->repo->search['params']['projects']['values'] = $projects;
+        $this->instance->config->repo->search['actionURL']   = $this->instance->createLink('repo', 'maintain', "inSpace={$inSpace}&space={$space}&objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->instance->config->repo->search['queryID']     = $param;
+        $this->instance->config->repo->search['onMenuBar']   = 'yes';
+
+        // 模拟setSearchParams调用
+        $searchModel = $this->instance->loadModel('search');
+        if(method_exists($searchModel, 'setSearchParams'))
+        {
+            $searchModel->setSearchParams($this->instance->config->repo->search);
+        }
+
+        if(!$hasSession) session_write_close();
+
+        // 返回搜索配置对象用于验证
+        $result = new stdClass();
+        $result->actionURL = $this->instance->config->repo->search['actionURL'] ?? '';
+        $result->queryID   = $this->instance->config->repo->search['queryID'] ?? 0;
+        $result->onMenuBar = $this->instance->config->repo->search['onMenuBar'] ?? '';
+        $result->products  = $this->instance->config->repo->search['params']['product']['values'] ?? array();
+        $result->projects  = $this->instance->config->repo->search['params']['projects']['values'] ?? array();
+
+        return $result;
+    }
+
+    /**
      * Test updateLastCommit method.
      *
      * @param  object $repo

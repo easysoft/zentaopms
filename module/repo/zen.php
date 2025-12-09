@@ -831,6 +831,8 @@ class repoZen extends repo
      * 构建版本库搜索框。
      * Build repo search form.
      *
+     * @param  int       $inSpace
+     * @param  int       $space
      * @param  array     $products
      * @param  array     $projects
      * @param  int       $objectID
