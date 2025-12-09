@@ -94,7 +94,6 @@ class repoModel extends model
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
         foreach($repos as $i => $repo)
         {
-            $repo->acl      = json_decode($repo->acl);
             $repo->codePath = $repo->path;
             if(!$this->checkPriv($repo))
             {
@@ -2918,13 +2917,13 @@ class repoModel extends model
      */
     public function getListByCondition(string $repoQuery, string $SCM, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $userSpaces = $this->app->user->admin ? array() : $this->loadModel('devopsspace')->getPairs($this->app->user->account);
+        $userSpaces = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->beginIF($space)->andWhere('space')->eq($space)->fi()
             ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
             ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
-            ->beginIF(!empty($userSpaces))->andWhere('space')->in($userSpaces)->fi()
+            ->beginIF(!empty($userSpaces) && !$space)->andWhere('space')->in(array_keys($userSpaces))->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);

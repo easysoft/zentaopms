@@ -79,7 +79,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID, $spaceID);
         }
 
-        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
+        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'edit', 'setrules', 'createrepo', 'import', 'maintain')))
         {
             $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
             if($this->config->inCompose && $method == 'create') $method = 'createRepo';
