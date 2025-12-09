@@ -831,6 +831,8 @@ class repoZen extends repo
      * 构建版本库搜索框。
      * Build repo search form.
      *
+     * @param  int       $inSpace
+     * @param  int       $space
      * @param  array     $products
      * @param  array     $projects
      * @param  int       $objectID
@@ -841,12 +843,12 @@ class repoZen extends repo
      * @access protected
      * @return void
      */
-    protected function buildRepoSearchForm(array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
+    protected function buildRepoSearchForm(int $inSpace, int $space, array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
     {
         session_start();
         $this->config->repo->search['params']['product']['values']  = $products;
         $this->config->repo->search['params']['projects']['values'] = $projects;
-        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "inSpace={$inSpace}&space={$space}&objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
         $this->config->repo->search['queryID']     = $param;
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
