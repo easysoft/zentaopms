@@ -3926,6 +3926,18 @@ EOF;
 
         $space = $this->loadModel('devopsspace')->getByID($spaceID);
         if(empty($space)) return;
+
+        $spaceRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
+            ->where('t1.project')->eq(0)
+            ->andWhere('t1.devopsSpace')->eq($spaceID)
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->fetchAll();
+
+        /* Group priv by module the same as rights. */
+        $spaceRightGroup = array();
+        foreach($spaceRights as $spaceRight) $spaceRightGroup[strtolower($spaceRight->module)][strtolower($spaceRight->method)] = 1;
     }
 }
 
