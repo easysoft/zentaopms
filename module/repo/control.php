@@ -125,7 +125,7 @@ class repo extends control
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $projects = $this->loadModel('project')->getPairs();
 
-        $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
+        $this->repoZen->buildRepoSearchForm($inSpace, $space, $products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
         $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
         $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitlab');
