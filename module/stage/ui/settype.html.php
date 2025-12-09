@@ -125,7 +125,7 @@ $menuItems[] = li
     (
         setClass('active'),
         set::href(createLink('stage', 'settype')),
-        $lang->stage->setTypeAB
+        $lang->stage->setType
     )
 );
 
@@ -158,7 +158,7 @@ div
         set::headingClass('justify-start'),
         setClass('flex-auto ml-0.5'),
         set::actionsClass('w-1/2'),
-        set::title($lang->stage->setTypeAB),
+        set::title($lang->stage->setType),
         set::actions($formActions),
         $formItems
     )

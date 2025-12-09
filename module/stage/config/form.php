@@ -21,6 +21,10 @@ $config->stage->form->settype['lang']   = array('type' => 'string', 'required' =
 $config->stage->form->settype['keys']   = array('type' => 'array',  'required' => false, 'default' => array());
 $config->stage->form->settype['values'] = array('type' => 'array',  'required' => false, 'default' => array());
 
-$config->stage->form->setpoint['id']    = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->stage->form->setpoint['title'] = array('type' => 'string', 'required' => true,  'default' => '', 'base' => true, 'filter' => 'trim');
-$config->stage->form->setpoint['flow']  = array('type' => 'int',    'required' => true,  'default' => 1);
+$config->stage->form->settrpoint['id']    = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->stage->form->settrpoint['title'] = array('type' => 'string', 'required' => true,  'default' => '', 'base' => true, 'filter' => 'trim');
+$config->stage->form->settrpoint['flow']  = array('type' => 'int',    'required' => true,  'default' => 1);
+
+$config->stage->form->setdcppoint['id']    = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->stage->form->setdcppoint['title'] = array('type' => 'string', 'required' => true,  'default' => '', 'base' => true, 'filter' => 'trim');
+$config->stage->form->setdcppoint['flow']  = array('type' => 'int',    'required' => true,  'default' => 1);

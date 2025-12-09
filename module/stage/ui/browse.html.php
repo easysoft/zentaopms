@@ -32,7 +32,7 @@ if($this->config->edition == 'open')
             a
             (
                 set::href(createLink('stage', 'settype')),
-                $lang->stage->setTypeAB
+                $lang->stage->setType
             )
         );
     }
