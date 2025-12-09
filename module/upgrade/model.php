@@ -11838,6 +11838,7 @@ class upgradeModel extends model
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
                         $newProjectDeliverable->project     = $project->id;
+                        $newProjectDeliverable->submitFrom  = $project->id;
                         $newProjectDeliverable->status      = 'draft';
 
                         /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
@@ -12510,6 +12511,7 @@ class upgradeModel extends model
             $deliverable = new stdclass();
             $deliverable->name        = (!empty($docList[$review->doc]) && $docList[$review->doc] != $review->title) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
             $deliverable->project     = $review->project;
+            $deliverable->submitFrom  = $review->project;
             $deliverable->review      = $review->id;
             $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
             $deliverable->doc         = $review->doc;
