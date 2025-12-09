@@ -95,3 +95,6 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
   `required` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否必填',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+UPDATE `zt_project` SET `budget` = 0 WHERE `budget` = '';
+UPDATE `zt_project` SET `budget` = REPLACE(`budget`, '万', '0000');
