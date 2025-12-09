@@ -11389,6 +11389,18 @@ class upgradeModel extends model
     }
 
     /**
+     * 修改表字段类型。
+     * Alter table fields datatype.
+     *
+     * @access public
+     * @return bool
+     */
+    public function alterTableFields()
+    {
+        return $this->execSQL($this->getUpgradeFile('datatype'));
+    }
+
+    /**
      * 内置AI禅道智能体和相关字段。
      * Initialize the AI prompts and fields.
      *
