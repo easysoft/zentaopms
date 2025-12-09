@@ -47,6 +47,7 @@ ALTER TABLE `zt_searchindex` CHANGE `content` `content` longtext NULL;
 CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` int(8) unsigned NOT NULL,
+  `submitFrom` int(8) unsigned NOT NULL COMMENT '提交来源',
   `review` int(8) unsigned NOT NULL DEFAULT '0',
   `deliverable` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
