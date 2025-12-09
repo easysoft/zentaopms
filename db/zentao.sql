@@ -1744,6 +1744,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `status` varchar(30) NOT NULL DEFAULT '',
   `hasApproval` tinyint unsigned NOT NULL DEFAULT 1 COMMENT '是否有评审流程',
   `version` varchar(255) NULL,
+  `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
    PRIMARY KEY (`id`)
