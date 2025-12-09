@@ -67,12 +67,7 @@ if(is_array($formSession))
                 $defaultData['field' . $index] = $item['field'];
                 if(isset($item['operator'])) $defaultData['operator' . $index] = $item['operator'];
                 if(isset($item['andOr']))    $defaultData['andOr' . $index] = $item['andOr'];
-                if(isset($item['value']))
-                {
-                    if($item['value'] === '0' && in_array($item['field'], $conditionHasZeroValue)) $item['value'] = 'ZERO';
-                    $defaultData['value' . $index] = $item['value'];
-                }
-
+                if(isset($item['value']))    $defaultData['value' . $index] = ($item['value'] === '0' && in_array($item['field'], $conditionHasZeroValue)) ? 'ZERO' : $item['value'];
             }
             $index++;
         }
