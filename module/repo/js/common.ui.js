@@ -340,6 +340,25 @@ window.onScmChange = function()
     }
 }
 
+window.loadMembers = function()
+{
+    const space = $('[name=space]').val();
+    const url   = $.createLink('repo', 'ajaxGetSpaceMembers', "space=" + space);
+
+    toggleLoading('#members', true);
+    const $memberPicker = $('[name^=members]').zui('picker');
+    $memberPicker.$.clear();
+    $.getJSON(url, function(data)
+    {
+        $memberPicker.render({items: data});
+        if(typeof members != 'undefined')
+        {
+            $memberPicker.$.setValue(members);
+        }
+        toggleLoading('#members', false);
+    });
+}
+
 /**
  * On acl change event.
  *
@@ -349,17 +368,27 @@ window.onScmChange = function()
  */
 window.onAclChange = function(event)
 {
-    const acl = $(event.target).val();
+    let acl = '';
+    if(typeof event == 'undefined')
+    {
+        acl = $('[name^=acl]:checked').val();
+    }
+    else
+    {
+        acl = $(event.target).val();
+    }
+
     if(acl == 'private')
     {
         $('#members').removeClass('hidden');
-        loadMembers();
+        setTimeout(function() {loadMembers();}, 50);
     }
     else
     {
         $('#members').addClass('hidden');
     }
 }
+window.waitDom('[name^=acl]', onAclChange);
 
 /**
  * 点击左侧菜单打开详情tab。
@@ -386,20 +415,5 @@ window.searchList = function()
         const dom     = new DOMParser().parseFromString($('#keyword').val(), "text/html");
         const keyword = dom.body.textContent;
         loadPage(searchUrl.replace('%s', encodeURIComponent(Base64.encode(keyword))));
-    });
-}
-
-window.loadMembers = function()
-{
-    const space = $('[name=space]').val();
-    const url   = $.createLink('repo', 'ajaxGetSpaceMembers', "space=" + space);
-
-    toggleLoading('#members', true);
-    const $memberPicker = $('[name^=members]').zui('picker');
-    $memberPicker.$.clear();
-    $.getJSON(url, function(data)
-    {
-        $memberPicker.render({items: data});
-        toggleLoading('#members', false);
     });
 }

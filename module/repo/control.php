@@ -139,7 +139,7 @@ class repo extends control
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
         $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
-        $this->view->space         = $space;
+        $this->view->spaceID       = $space;
         $this->view->spaces        = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->view->inSpace       = $inSpace;
 
@@ -196,7 +196,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function createRepo(int $objectID = 0)
+    public function createRepo(int $objectID = 0, int $spaceID = 0)
     {
         if($_POST)
         {
@@ -208,13 +208,7 @@ class repo extends control
             $repoID = $this->repo->createRepo($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(in_array($formData->SCM, $this->config->repo->notSyncSCM))
-            {
-                /* Add webhook. */
-                $repo = $this->repo->getByID($repoID);
-                $this->loadModel($formData->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
-                $this->repo->updateCommitDate($repoID);
-            }
+            if(in_array($formData->SCM, $this->config->repo->notSyncSCM)) $this->repo->updateCommitDate($repoID);
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
 
@@ -224,6 +218,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateRepoForm($objectID);
+        $this->view->inSpace = !empty($spaceID);
+        $this->view->spaceID = $spaceID;
 
         $this->display();
     }
@@ -312,18 +308,32 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function edit(int $repoID, int $objectID = 0)
+    public function edit(int $repoID, int $objectID = 0, int $spaceID = 0)
     {
         $this->commonAction($repoID, $objectID);
+        $repo = $this->repo->getByID($repoID);
+
+        $this->scm->setEngine($repo);
+        $branchList    = $this->scm->branch();
+        $defaultBranch = empty($branchList) ? '' : key($branchList);
+        $this->view->defaultBranch = $defaultBranch;
+        $this->view->branchList    = $branchList;
 
         if($_POST)
         {
-            $repo = $this->repo->getByID($repoID);
-
             /* Prepare data. */
-            $formData         = form::data($this->config->repo->form->edit);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $formData = form::data($this->config->repo->form->edit);
+
+            $changedBranch = $this->post->defaultBranch;
+            if(!empty($changedBranch) && $defaultBranch != $changedBranch)
+            {
+                $changedResult = $this->loadModel('gitfox')->setDefaultBranch($repo, $changedBranch);
+                if(!$changedResult) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->setDefaultBranch));
+            }
+
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList);
             $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
+            if($editData->acl == 'private') $this->config->repo->edit->requiredFields .= ',members';
 
             if($editData) $noNeedSync = $this->repo->update($editData, $repo, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -342,6 +352,8 @@ class repo extends control
         }
 
         $this->repoZen->buildEditForm($repoID, $objectID);
+        $this->view->inSpace = !empty($spaceID);
+        $this->view->spaceID = $spaceID;
 
         $this->display();
     }

@@ -1401,11 +1401,28 @@ $lang->resource->devopsspace->create = 'create';
 $lang->resource->devopsspace->edit   = 'edit';
 $lang->resource->devopsspace->delete = 'delete';
 
+$lang->resource->devopsspace->members           = 'members';
+$lang->resource->devopsspace->manageMembers     = 'manageMembers';
+$lang->resource->devopsspace->removeMember      = 'removeMember';
+$lang->resource->devopsspace->group             = 'group';
+$lang->resource->devopsspace->createGroup       = 'createGroup';
+$lang->resource->devopsspace->editGroup         = 'editGroup';
+$lang->resource->devopsspace->managePriv        = 'managePriv';
+$lang->resource->devopsspace->manageGroupMember = 'manageGroupMember';
+
 $lang->devopsspace->methodOrder[0]  = 'browse';
 $lang->devopsspace->methodOrder[5]  = 'view';
 $lang->devopsspace->methodOrder[10] = 'create';
 $lang->devopsspace->methodOrder[15] = 'edit';
 $lang->devopsspace->methodOrder[20] = 'delete';
+$lang->devopsspace->methodOrder[25] = 'members';
+$lang->devopsspace->methodOrder[30] = 'manageMembers';
+$lang->devopsspace->methodOrder[35] = 'removeMember';
+$lang->devopsspace->methodOrder[40] = 'group';
+$lang->devopsspace->methodOrder[45] = 'createGroup';
+$lang->devopsspace->methodOrder[50] = 'editGroup';
+$lang->devopsspace->methodOrder[55] = 'managePriv';
+$lang->devopsspace->methodOrder[60] = 'manageGroupMember';
 
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';

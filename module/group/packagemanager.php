@@ -1865,8 +1865,21 @@ $config->group->package->devopsspace->privs  = array();
 $config->group->package->devopsspace->privs['devopsspace-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete', 'devopsspace-view'));
 $config->group->package->devopsspace->privs['devopsspace-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-edit', 'devopsspace-view', 'devopsspace-delete'));
 $config->group->package->devopsspace->privs['devopsspace-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-view', 'devopsspace-delete'));
-$config->group->package->devopsspace->privs['devopsspace-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete'));
 $config->group->package->devopsspace->privs['devopsspace-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-view'));
+
+$config->group->package->devopsspaceSetting = new stdclass();
+$config->group->package->devopsspaceSetting->order  = 2240;
+$config->group->package->devopsspaceSetting->subset = 'devopsspace';
+$config->group->package->devopsspaceSetting->privs  = array();
+$config->group->package->devopsspaceSetting->privs['devopsspace-view']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('devopsspace-browse'),  'recommend' => array('devopsspace-member', 'devopsspace-group'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-members']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-view'),    'recommend' => array('devopsspace-manageMembers', 'devopsspace-removeMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-manageMembers']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-members'), 'recommend' => array('devopsspace-removeMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-removeMember']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('devopsspace-members'), 'recommend' => array('devopsspace-manageMembers'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-group']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-view'),    'recommend' => array('devopsspace-createGroup', 'devopsspace-edidGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-createGroup']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-editGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-editGroup']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-managePriv']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-manageGroupMember'));
+$config->group->package->devopsspaceSetting->privs['devopsspace-manageGroupMember'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-managePriv'));
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;

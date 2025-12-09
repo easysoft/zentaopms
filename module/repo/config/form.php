@@ -24,8 +24,6 @@ $config->repo->form->edit['space']          = array('required' => true,  'type' 
 $config->repo->form->edit['product']        = array('required' => true,  'type' => 'array');
 $config->repo->form->edit['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
 $config->repo->form->edit['SCM']            = array('required' => true,  'type' => 'string','default' => '', 'filter' => 'trim');
-$config->repo->form->edit['serviceHost']    = array('required' => false, 'type' => 'int');
-$config->repo->form->edit['serviceProject'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['name']           = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
 $config->repo->form->edit['path']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
@@ -34,6 +32,8 @@ $config->repo->form->edit['account']        = array('required' => false, 'type' 
 $config->repo->form->edit['password']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['encrypt']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->edit['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->repo->form->edit['members']        = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->repo->form->edit['acl']            = array('required' => true,  'type' => 'string', 'default' => 'open');
 
 $config->repo->form->createRepo = array();
 $config->repo->form->createRepo['space']       = array('required' => true,  'type' => 'int', 'default' => 0);

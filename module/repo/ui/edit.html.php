@@ -17,6 +17,7 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('repoSCM', $repo->SCM);
 jsVar('client', $repo->client);
+jsVar('members', implode(',', zget($repo, 'members', array())));
 
 formPanel
 (
@@ -37,30 +38,6 @@ formPanel
             setClass('tips-git leading-8 ml-2'),
             html($lang->repo->syncTips)
         ) : null
-    ),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->repo->serviceHost),
-            set::value(zget($serviceHosts, $repo->serviceHost, '')),
-            set::control("static")
-        ),
-        formHidden('serviceHost', $repo->serviceHost)
-    ),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->repo->serviceProject),
-            set::control("static"),
-            set::value(!empty($project) ? $project->name_with_namespace : '')
-        ),
-        formHidden('serviceProject', $repo->serviceProject)
     ),
     formGroup
     (
@@ -163,55 +140,35 @@ formPanel
         set::placeholder($lang->repo->descPlaceholder),
         set::value(strip_tags($repo->desc))
     ),
-    formRow
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("defaultBranch"),
+        set::label($lang->repo->defaultBranch),
+        set::required(true),
+        set::items($branchList),
+        set::value($defaultBranch)
+    ),
+    formGroup
     (
         set::id('aclList'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('acl[acl]'),
-            set::label($lang->repo->acl),
-            set::control('radioList'),
-            set::items($lang->repo->aclList),
-            set::value($repo->acl->acl),
-            on::change('onAclChange')
-        )
+        set::width('1/2'),
+        set::name('acl'),
+        set::label($lang->repo->acl),
+        set::control('radioList'),
+        set::items($lang->repo->aclList),
+        set::value($repo->acl),
+        on::change('onAclChange')
     ),
-    formRow
+    formGroup
     (
-        set::id('whitelist'),
-        $repo->acl->acl == 'open' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::label($lang->product->whitelist),
-            inputGroup
-            (
-                $lang->repo->group,
-                width('full'),
-                control(set(array
-                (
-                    'name' => "acl[groups][]",
-                    'id' => "aclgroups",
-                    'value' => empty($repo->acl->groups) ? '' : implode(',', $repo->acl->groups),
-                    'type' => "picker",
-                    'items' => $groups,
-                    'multiple' => true
-                )))
-            ),
-            inputGroup
-            (
-                $lang->repo->user,
-                control(set(array
-                (
-                    'name' => "acl[users][]",
-                    'id' => "aclusers",
-                    'value' => empty($repo->acl->users) ? '' : implode(',', $repo->acl->users),
-                    'type' => "picker",
-                    'items' => $users,
-                    'multiple' => true
-                ))),
-                setClass('mt-2')
-            )
-        )
+        setID('members'),
+        setClass('hidden'),
+        set::width('1/2'),
+        set::name('members'),
+        set::label($lang->repo->members),
+        set::required(true),
+        set::items(array()),
+        set::multiple(true)
     )
 );
