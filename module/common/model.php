@@ -1207,6 +1207,12 @@ eof;
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
+                if($this->app->tab == 'devops')
+                {
+                    $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
+                    if(commonModel::hasPriv($module, $method)) return true;
+                }
+
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -3903,6 +3909,70 @@ EOF;
         }
 
         return $dotStyle;
+    }
+
+    /**
+     * DevOps空间有继承和重新定义两种权限，在此处需要重置权限。
+     * Reset DevOps space priv.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function resetDevOpsPriv(int $spaceID = 0)
+    {
+        if(empty($spaceID) and $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
+        if(empty($spaceID)) return;
+
+        $space = $this->loadModel('devopsspace')->getByID($spaceID);
+        if(empty($space)) return;
+
+        $spaceRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
+            ->where('t1.project')->eq(0)
+            ->andWhere('t1.devopsSpace')->eq($spaceID)
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->fetchAll();
+
+        /* Group priv by module the same as rights. */
+        $spaceRightGroup = array();
+        foreach($spaceRights as $spaceRight) $spaceRightGroup[strtolower($spaceRight->module)][strtolower($spaceRight->method)] = 1;
+
+        /* Reset priv by space privway. */
+        $this->app->user = clone $_SESSION['user'];
+        $rights = $this->app->user->rights['rights'];
+
+        if($space->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($spaceRightGroup, $rights);
+        if($space->auth == 'reset')
+        {
+            $spacePrivs = $this->devopsspace->getPrivs();
+            foreach($spacePrivs as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    if(isset($rights[$module][$method])) unset($rights[$module][$method]);
+                }
+            }
+
+            foreach($spaceRightGroup as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    $rights[$module][$method] = $label;
+                }
+            }
+
+            /* Set base priv for devopsspace. */
+            $devopsSpaceRights = zget($this->app->user->rights['rights'], 'devopsspace', array());
+            if(isset($devopsSpaceRights['browse']) and !isset($rights['devopsspace']['browse'])) $rights['project']['browse'] = 1;
+
+            $this->app->user->rights['rights'] = $rights;
+        }
     }
 }
 
