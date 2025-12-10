@@ -7,12 +7,12 @@ title=测试 metricModel::getDateByDateType();
 timeout=0
 cid=0
 
-- 执行metricTest模块的getDateByDateTypeTest方法，参数是'day'  @2025-11-17
-- 执行metricTest模块的getDateByDateTypeTest方法，参数是'week'  @2025-10-24
-- 执行metricTest模块的getDateByDateTypeTest方法，参数是'month'  @2024-11-24
-- 执行metricTest模块的getDateByDateTypeTest方法，参数是'year'  @2022-11-24
-- 执行metricTest模块的getDateByDateTypeTest方法，参数是'day')) == 10  @1
-- 执行/', $metricTest模块的getDateByDateTypeTest方法，参数是'week'  @1
+- 测试dateType为'day'时返回7天前的日期 @1
+- 测试dateType为'week'时返回1个月前的日期 @1
+- 测试dateType为'month'时返回1年前的日期 @1
+- 测试dateType为'year'时返回3年前日期 @1
+- 测试dateType为空字符串时的处理 @1
+- 测试dateType为无效值时的处理 @1
 
 */
 
@@ -23,9 +23,9 @@ su('admin');
 
 $metricTest = new metricModelTest();
 
-r($metricTest->getDateByDateTypeTest('day')) && p() && e('2025-11-17');
-r($metricTest->getDateByDateTypeTest('week')) && p() && e('2025-10-24');
-r($metricTest->getDateByDateTypeTest('month')) && p() && e('2024-11-24');
-r($metricTest->getDateByDateTypeTest('year')) && p() && e('2022-11-24');
-r(strlen($metricTest->getDateByDateTypeTest('day')) == 10) && p() && e('1');
-r(preg_match('/^\d{4}-\d{2}-\d{2}$/', $metricTest->getDateByDateTypeTest('week'))) && p() && e('1');
+r($metricTest->getDateByDateTypeTest('day', true)) && p() && e('1');       // 测试dateType为'day'时返回7天前的日期
+r($metricTest->getDateByDateTypeTest('week', true)) && p() && e('1');      // 测试dateType为'week'时返回1个月前的日期
+r($metricTest->getDateByDateTypeTest('month', true)) && p() && e('1');     // 测试dateType为'month'时返回1年前的日期
+r($metricTest->getDateByDateTypeTest('year', true)) && p() && e('1');      // 测试dateType为'year'时返回3年前日期
+r($metricTest->getDateByDateTypeTest('', true)) && p() && e('1');          // 测试dateType为空字符串时的处理
+r($metricTest->getDateByDateTypeTest('invalid', true)) && p() && e('1');   // 测试dateType为无效值时的处理

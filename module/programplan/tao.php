@@ -129,6 +129,7 @@ class programplanTao extends programplanModel
      */
     protected function getParentStages(int $executionID, int $planID, int $productID, string $param = ''): array|false
     {
+        dao::$filterTpl = 'skip';
         $parentStage = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->beginIF($productID)
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')

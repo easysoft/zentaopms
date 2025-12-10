@@ -1,11 +1,20 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+
+// zendata数据准备
+zenData('product')->gen(10);
+zenData('branch')->gen(20);
+
+su('admin');
 
 /**
 
 title=测试 branchModel::manage();
 timeout=0
-cid=0
+cid=15334
 
 - 测试添加2个新分支 @2
 - 测试更新现有分支名称不添加新分支 @0

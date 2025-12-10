@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getDiskSettings();
 timeout=0
-cid=0
+cid=15618
 
 - 步骤1:不指定组件获取磁盘配置(component=false) @1
 - 步骤2:指定mysql组件(component=true) @1

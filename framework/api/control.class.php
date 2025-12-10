@@ -167,6 +167,15 @@ class control extends baseControl
 
             return;
         }
+        elseif(!$this->getFormData)
+        {
+            $this->parseJSON($moduleName, $methodName);
+
+            ob_start();
+            echo $this->output;
+
+            return;
+        }
 
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
@@ -275,6 +284,13 @@ class control extends baseControl
         header('Content-Type: application/json');
 
         if($type != 'json') return helper::end();
+
+        /* APIv1 send json in entries, print data for getData method. */
+        if($this->app->apiVersion == 'v1')
+        {
+            $response = helper::removeUTF8Bom(json_encode($data, JSON_UNESCAPED_UNICODE));
+            return print($response);
+        }
 
         $data = (array)$data;
         if(isset($data['result']))

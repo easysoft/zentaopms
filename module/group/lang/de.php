@@ -617,6 +617,7 @@ $lang->group->package->applyZentaoAgent      = 'Apply ZenTao Agent';
 $lang->group->package->manageZentaoAgent     = 'Manage ZenTao Agent';
 $lang->group->package->applyGeneralAgent     = 'Apply General Agent';
 $lang->group->package->manageGeneralAgent    = 'Manage General Agent';
+$lang->group->package->aiKnowledgeLib        = 'Knowledge Library';
 $lang->group->package->browseAiModels        = 'Browse AI Models';
 $lang->group->package->zai                   = 'ZAI Setting';
 $lang->group->package->dashboard             = 'Monitor';

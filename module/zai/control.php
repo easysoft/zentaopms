@@ -138,6 +138,7 @@ class zai extends control
             $info->synced = 0;
         }
 
+        $startSyncTime  = microtime(true) * 1000;
         $info->syncTime = time();
         $result = $this->zai->syncNextTarget($info->key, $info->syncingType, $info->syncingID);
 
@@ -157,7 +158,7 @@ class zai extends control
                 $info->syncFailedCount++;
                 $info->syncDetails->$syncingType->failed++;
                 $this->zai->setVectorizedInfo($info);
-                return $this->send(array('result' => 'failed', 'message' => $result['message'], 'data' => $info, '$result' => $result));
+                return $this->send(array('result' => 'failed', 'message' => $result['message'], 'data' => $info, 'request' => $this->app->config->debug > 5 ? $result : null));
             }
             if($result['result'] == 'success')
             {
@@ -170,6 +171,7 @@ class zai extends control
                 $info->syncDetails->$syncingType->failed++;
             }
             $info->syncingID = (isset($result['id']) ? $result['id'] : $info->syncingID) + 1;
+            $info->lastSync  = ['time' => (microtime(true) * 1000) - $startSyncTime, 'contentLength' => isset($result['syncedData']) ? strlen($result['syncedData']['content']) : 0, 'type' => $info->syncingType, 'id' => $info->syncingID];
         }
         else
         {
@@ -188,6 +190,47 @@ class zai extends control
             }
         }
         $this->zai->setVectorizedInfo($info);
+
+        unset($info->key);
         return $this->send(array('result' => 'success', 'data' => $info));
+    }
+
+    /**
+     * Ajax: 搜索知识库。
+     * Ajax: Search knowledge base.
+     *
+     * @param string $type 'chunk'（块） | 'content'（内容）
+     * @param int    $limit
+     * @access public
+     * @return void
+     */
+    public function ajaxSearchKnowledges(string $type = 'chunk', int $limit = 5)
+    {
+        if($_SERVER['REQUEST_METHOD'] !== 'POST')
+        {
+            return $this->send(array('result' => 'failed', 'message' => $this->lang->zai->onlyPostRequest));
+        }
+
+        $userPrompt = zget($_POST, 'userPrompt', '');
+        $filters    = json_decode(zget($_POST, 'filters', '{}'), true);
+
+        if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'failed', 'message' => $this->lang->fail));
+
+        $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit, 0.7);
+        $results    = [];
+        foreach($knowledges as $knowledge)
+        {
+            if($type === 'chunk')
+            {
+                $results[] = ['key' => $knowledge['content_key'], 'similarity' => $knowledge['similarity'], 'id' => $knowledge['chunk_id'], 'content' => $knowledge['chunk_content'], 'attrs' => $knowledge['content_attrs']];
+            }
+            else
+            {
+                $results[] = ['key' => $knowledge['key'], 'similarity' => $knowledge['similarity'], 'id' => $knowledge['id'], 'content' => $knowledge['content'], 'attrs' => $knowledge['attrs']];
+            }
+            if(count($results) >= $limit) break;
+        }
+
+        return $this->send(array('result' => 'success', 'data' => $results));
     }
 }

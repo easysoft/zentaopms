@@ -5,7 +5,7 @@
 
 title=测试 cneModel::apiGet();
 timeout=0
-cid=0
+cid=15599
 
 - 测试正常GET请求：有效的URL和参数属性code @600
 - 测试空数据参数：验证空数组处理属性code @600

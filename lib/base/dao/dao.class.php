@@ -2829,6 +2829,26 @@ class baseSQL
      */
     public function notin($ids)
     {
+        if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
+        {
+           $pattern = '/\s+(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
+           $replacement = ' 1=1 ';
+           $this->sql = preg_replace($pattern, $replacement, $this->sql);
+
+           return $this;
+        }
+
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+
+        if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))
+        {
+           $pattern = '/\s+(?:(?:[a-zA-Z0-9]+\.)?|)(?:`([^`]+)`|"([^"]+)"|(\w+))\s*$/i';
+           $replacement = ' 1=1 ';
+           $this->sql = preg_replace($pattern, $replacement, $this->sql);
+
+           return $this;
+        }
+
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
         if((is_string($ids) && $ids === '') || (is_array($ids) && empty($ids)))

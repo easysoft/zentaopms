@@ -1697,6 +1697,12 @@ $config->delete['21_7_6'][] = 'module/zanode/css/browse.zh-cn.css';
 $config->delete['21_7_6'][] = 'module/zanode/css/common.css';
 $config->delete['21_7_6'][] = 'module/zanode/js/common.js';
 $config->delete['21_7_6'][] = 'module/zanode/view';
+$config->delete['21_7_6'][] = 'extension/biz/chart/ext/js/create';
+$config->delete['21_7_6'][] = 'extension/max/chart/ext/js/create';
+$config->delete['21_7_6'][] = 'extension/ipd/chart/ext/js/create';
+$config->delete['21_7_7'][] = 'extension/biz/dashboard';
+$config->delete['21_7_7'][] = 'extension/max/dashboard';
+$config->delete['21_7_7'][] = 'extension/ipd/dashboard';
 
 $config->delete['22_0'][] = 'extension/ipd/auditcl/ext/css/browse.css';
 $config->delete['22_0'][] = 'extension/max/auditcl/ext/css/browse.css';

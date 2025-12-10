@@ -1077,7 +1077,9 @@ ztmindmap.Wraper.prototype.paserXmindNode = function(nodeData, level)
     }
     else if(typeof(nodeData.title) == 'string')
     {
-        obj.text = nodeData.title;
+        let varType = typeof(nodeData.title);
+        if(varType == 'string') obj.text = nodeData.title;
+        if(varType == 'object') obj.text = nodeData.title.text;
     }
 
     return obj;

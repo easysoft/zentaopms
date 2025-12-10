@@ -40,8 +40,11 @@ foreach($stories as $story)
 }
 
 $isFromDoc = $from === 'doc';
+$isFromAI  = $from === 'ai';
 
-$hideGrade = (($app->tab == 'product' || $from == 'doc') && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
+$tabCondition   = $app->tab == 'product' || $isFromDoc || $isFromAI;
+$storyCondition = $storyType == 'story' && count($gradeGroup['story']) <= 2;
+$hideGrade      = ($tabCondition && $storyCondition) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -231,7 +234,7 @@ if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $se
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
 if($viewType == 'tiled') $setting['title']['nestedToggle'] = false;
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($setting['actions'])) unset($setting['actions']);
     foreach($setting as $key => $col)
@@ -403,7 +406,7 @@ jsVar('recTotal',   $pager->recTotal);
 jsVar('recPerPage', $pager->recPerPage);
 jsVar('pageID',     $pager->pageID);
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
@@ -482,19 +485,19 @@ featureBar
     set::current($storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#stories_table'),
     li(searchToggle
     (
-        set::simple($isFromDoc),
-        set::open(!$isFromDoc && ($browseType == 'bysearch' || $storyBrowseType == 'bysearch')),
+        set::simple($isFromDoc || $isFromAI),
+        set::open(!$isFromDoc && !$isFromAI && ($browseType == 'bysearch' || $storyBrowseType == 'bysearch')),
         set::module($config->product->search['module']),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     div(setID('docSearchForm'));
 }
@@ -505,7 +508,7 @@ $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "pro
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
 toolbar
 (
-    setClass(array('hidden' => $isFromDoc)),
+    setClass(array('hidden' => $isFromDoc || $isFromAI)),
     item(set(array
     (
         'type'  => 'btnGroup',
@@ -529,9 +532,12 @@ toolbar
     $fnBuildLinkStoryButton()
 );
 
-if(!$isFromDoc) $fnGenerateSideBar();
+if(!$isFromDoc && !$isFromAI) $fnGenerateSideBar();
 
-$footToolbar = $isFromDoc ? array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#stories', '$blockType', $blockID, '$insertListLink')")) : $fnGenerateFootToolbar();
+if($isFromDoc)                $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#stories', '$blockType', $blockID, '$insertListLink')"));
+if($isFromAI)                 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#stories', 'story')"));
+if(!$isFromDoc && !$isFromAI) $footToolbar = $fnGenerateFootToolbar();
+
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory', 'story', "projectID={$projectID}&productID={$productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
@@ -539,11 +545,13 @@ $emptyTip = $lang->story->noStory;
 if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
 if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
 
+$createStoryLink = createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
+$createStoryLink = hasPriv($storyType, 'create') ?  $createStoryLink : '';
 dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
+    set::checkable($isFromDoc || $isFromAI || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::moduleName($storyType),
     set::data($data),
@@ -555,13 +563,13 @@ dtable
     set::emptyTip($emptyTip),
     set::footToolbar($footToolbar),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
-    $isFromDoc ? null : set::sortLink($sortLink),
-    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
-    $isFromDoc ? null : set::createTip($lang->story->create),
-    $isFromDoc ? null : set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
+    ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

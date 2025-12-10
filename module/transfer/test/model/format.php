@@ -5,7 +5,7 @@
 
 title=测试 transferModel::format();
 timeout=0
-cid=0
+cid=19313
 
 - 步骤1：异常输入，空模块参数 @Module is empty
 - 步骤2：异常输入，空模块参数验证 @Module is empty

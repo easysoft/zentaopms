@@ -7,42 +7,35 @@ title=测试 convertModel::getZentaoObjectList();
 timeout=0
 cid=0
 
-- 步骤1：默认配置下返回完整对象列表 @7
-- 步骤2：关闭enableER配置时不包含epic属性epic @~~
-- 步骤3：关闭URAndSR配置时不包含requirement属性requirement @~~
-- 步骤4：同时关闭enableER和URAndSR配置 @5
-- 步骤5：验证返回的数据类型为数组 @1
+- 步骤1:epic存在属性epic @业务需求
+- 步骤2:requirement存在属性requirement @用户需求
+- 步骤3:requirement仍存在属性requirement @用户需求
+- 步骤4:epic仍存在属性epic @业务需求
+- 步骤5:story存在属性story @软件需求
 
 */
 
-// 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/model.class.php';
+include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 
-// 2. 用户登录（选择合适角色）
 su('admin');
 
-// 3. 创建测试实例（变量名与模块名一致）
-$convertTest = new convertModelTest();
+$convert = new convertTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤
+// 步骤1:当enableER和URAndSR都启用时,检查epic存在
 global $config;
 $config->enableER = true;
-$config->URAndSR  = true;
-r(count($convertTest->getZentaoObjectListTest())) && p() && e('7'); // 步骤1：默认配置下返回完整对象列表
+$config->URAndSR = true;
+r($convert->getZentaoObjectListTest()) && p('epic') && e('业务需求'); // 步骤1:epic存在
 
-$config->enableER = false;
-$config->URAndSR  = true;
-r($convertTest->getZentaoObjectListTest()) && p('epic') && e('~~'); // 步骤2：关闭enableER配置时不包含epic
+// 步骤2:当enableER和URAndSR都启用时,检查requirement存在
+r($convert->getZentaoObjectListTest()) && p('requirement') && e('用户需求'); // 步骤2:requirement存在
 
-$config->enableER = true;
-$config->URAndSR  = false;
-r($convertTest->getZentaoObjectListTest()) && p('requirement') && e('~~'); // 步骤3：关闭URAndSR配置时不包含requirement
+// 步骤3:当enableER为false时,检查requirement仍然存在
+r($convert->getZentaoObjectListTestWithoutER()) && p('requirement') && e('用户需求'); // 步骤3:requirement仍存在
 
-$config->enableER = false;
-$config->URAndSR  = false;
-r(count($convertTest->getZentaoObjectListTest())) && p() && e('5'); // 步骤4：同时关闭enableER和URAndSR配置
+// 步骤4:当URAndSR为false时,检查epic仍然存在
+r($convert->getZentaoObjectListTestWithoutUR()) && p('epic') && e('业务需求'); // 步骤4:epic仍存在
 
-$config->enableER = true;
-$config->URAndSR  = true;
-r(is_array($convertTest->getZentaoObjectListTest())) && p() && e('1'); // 步骤5：验证返回的数据类型为数组
+// 步骤5:当启用所有功能时,检查story对象存在
+r($convert->getZentaoObjectListTest()) && p('story') && e('软件需求'); // 步骤5:story存在

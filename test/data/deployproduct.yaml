@@ -24,10 +24,3 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: package
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""

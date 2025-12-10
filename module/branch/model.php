@@ -263,7 +263,7 @@ class branchModel extends model
         $this->app->loadLang('product');
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
-        $branch->closedDate = $branch->status == 'closed' ? helper::today() : null;
+        $branch->closedDate = $branch->status == 'closed' ? helper::now() : null;
         $this->dao->update(TABLE_BRANCH)->data($branch)
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
@@ -303,7 +303,7 @@ class branchModel extends model
             $newBranch->name       = $branch->name;
             $newBranch->desc       = $branch->desc;
             $newBranch->status     = $branch->status;
-            $newBranch->closedDate = $branch->status == 'closed' ? helper::today() : null;
+            $newBranch->closedDate = $branch->status == 'closed' ? helper::now() : null;
 
             $this->dao->update(TABLE_BRANCH)->data($newBranch)
                 ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
@@ -337,7 +337,7 @@ class branchModel extends model
     {
         $this->dao->update(TABLE_BRANCH)
             ->set('status')->eq('closed')
-            ->set('closedDate')->eq(helper::today())
+            ->set('closedDate')->eq(helper::now())
             ->set('`default`')->eq('0')
             ->where('id')->eq($branchID)
             ->exec();

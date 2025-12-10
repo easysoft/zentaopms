@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getBackupStatus();
 timeout=0
-cid=0
+cid=15615
 
 - 执行cneTest模块的getBackupStatusTest方法，参数是$instance1, 'backup-20240101'  @1
 - 执行cneTest模块的getBackupStatusTest方法，参数是$instance2, 'backup-20240102'  @1

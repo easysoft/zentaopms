@@ -5,7 +5,7 @@
 
 title=测试 cneModel::getVolumesMetrics();
 timeout=0
-cid=0
+cid=15624
 
 - 步骤1:使用有效的实例对象获取卷度量
  - 属性limit @0

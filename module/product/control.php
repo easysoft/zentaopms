@@ -130,8 +130,8 @@ class product extends control
     {
         $this->app->loadLang('doc');
         $products  = $this->product->getPairs('nodeleted', 0, '', 0);
-        if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
-        if($from == 'doc' && $productID && !$this->product->checkPriv($productID)) return $this->send(array('result'=> 'fail', 'message' => $this->lang->product->accessDenied, 'closeModal' => true));
+        if(($from == 'doc' || $from == 'ai') && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        if(($from == 'doc' || $from == 'ai') && $productID && !$this->product->checkPriv($productID)) return $this->send(array('result'=> 'fail', 'message' => $this->lang->product->accessDenied, 'closeModal' => true));
 
         $browseType = strtolower($browseType);
 
@@ -148,7 +148,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $productID = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $products) : $productID;
+        $productID = ($this->app->tab != 'project' || $from == 'doc' || $from == 'ai') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);

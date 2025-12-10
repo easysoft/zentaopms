@@ -93,7 +93,7 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
-        if($from == 'doc')
+        if($from == 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
             $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
@@ -102,7 +102,7 @@ class testcase extends control
 
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $this->products) : $productID;
+        $productID  = ($this->app->tab != 'project' || $from == 'doc' || $from == 'ai') ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = $this->testcaseZen->getBrowseBranch($branch);
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
@@ -114,11 +114,11 @@ class testcase extends control
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
 
-        $currentModule  = ($this->app->tab == 'project' && $from != 'doc') ? 'project'  : 'testcase';
-        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc') ? 'testcase' : 'browse';
-        $projectParam   = ($this->app->tab == 'project' && $from != 'doc') ? "projectID={$this->session->project}&" : '';
+        $currentModule  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'project'  : 'testcase';
+        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'testcase' : 'browse';
+        $projectParam   = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
-        if($from == 'doc') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
+        if($from == 'doc' || $from == 'ai') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 

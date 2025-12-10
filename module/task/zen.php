@@ -937,6 +937,7 @@ class taskZen extends task
 
         if(strpos(",{$this->config->task->finish->requiredFields},", ',comment,') !== false && empty($_POST['comment'])) dao::$errors['comment'] = sprintf($this->lang->error->notempty, $this->lang->comment);
         if(!$this->post->currentConsumed && $oldTask->consumed == '0') dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
+        if(!$this->post->finishedDate) dao::$errors['finishedDate'][] = sprintf($this->lang->error->notempty, $this->lang->task->finishedDate);
         if($task->realStarted > $task->finishedDate) dao::$errors['finishedDate'][] = $this->lang->task->error->finishedDateSmall;
 
         $task->consumed = $oldTask->consumed + (float)$this->post->currentConsumed;

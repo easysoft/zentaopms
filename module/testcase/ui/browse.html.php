@@ -11,13 +11,15 @@ declare(strict_types=1);
 namespace zin;
 
 $isFromDoc = $from === 'doc';
-if($isFromDoc) $this->app->loadLang('doc');
+$isFromAI  = $from === 'ai';
+if($isFromDoc || $isFromAI) $this->app->loadLang('doc');
 
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
 jsVar('caseChanged', $lang->testcase->changed);
 jsVar('isFromDoc', $isFromDoc);
+jsVar('isFromAI', $isFromAI);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -102,6 +104,7 @@ if($isFromDoc)
     $insertListLink = createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}");
     $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#testcases', 'productCase', $blockID, '$insertListLink')"));
 }
+if($isFromAI) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#testcases', 'case')"));
 
 $cols = $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -143,7 +146,7 @@ foreach($cases as $case)
     if(!$canModify) unset($case->actions);
 }
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
@@ -159,6 +162,8 @@ if($isFromDoc)
 $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
+$caseCreateLink = $canCreateCase ? $createCaseLink : '';
+
 div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
@@ -168,13 +173,13 @@ div(
         set::sortable(strpos($orderBy, 'sort_asc') !== false),
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
         set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
-        !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-        !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-        !$isFromDoc ? null : set::height(400),
-        $isFromDoc ? null : set::customCols(true),
-        $isFromDoc ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
-        $isFromDoc ? null : set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
-        $isFromDoc ? null : set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
+        ($isFromDoc || $isFromAI) ? set::afterRender(jsCallback()->call('toggleCheckRows', $idList)) : null,
+        ($isFromDoc || $isFromAI) ? set::onCheckChange(jsRaw('window.checkedChange')) : null,
+        ($isFromDoc || $isFromAI) ? set::height(400) : null,
+        ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+        ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
+        ($isFromDoc || $isFromAI) ? null : set::createTip($lang->testcase->create),
+        ($isFromDoc || $isFromAI) ? null : set::createLink($caseCreateLink),
         set::userMap($users),
         set::cols($cols),
         set::nested(true),
@@ -186,7 +191,7 @@ div(
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
+        set::emptyTip($lang->testcase->noCase),
         set::customData(array('modules' => $modulePairs))
     )
 );

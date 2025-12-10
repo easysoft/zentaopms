@@ -5,7 +5,7 @@
 
 title=测试 cneModel::apiPost();
 timeout=0
-cid=0
+cid=15600
 
 - 执行cneTest模块的apiPostTest方法，参数是'/api/test', array  @1
 - 执行cneTest模块的apiPostTest方法，参数是'', array  @1
