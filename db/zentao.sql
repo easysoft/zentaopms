@@ -16137,6 +16137,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_message` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+-- DROP TABLE IF EXISTS `zt_ai_miniprogramfield`;
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT 0,
@@ -16215,6 +16216,7 @@ INSERT INTO `zt_ai_miniprogramfield` (`appID`, `name`, `type`, `placeholder`, `o
 (12, '计划内容', 'checkbox', NULL, '每日学习任务,适用的学习资源,学习方法,进度跟踪方式,激励机制', '0'),
 (12, '补充信息', 'textarea', '请输入更多补充信息', NULL, '0');
 
+-- DROP TABLE IF EXISTS `zt_ai_miniprogramstar`;
 CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramstar` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `appID` int unsigned NOT NULL DEFAULT 0,
