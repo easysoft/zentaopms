@@ -67,9 +67,7 @@ class repoModel extends model
         $this->loadModel('devopsspace')->setMenu($spaceID);
 
         if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
-        if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
-        session_write_close();
     }
 
     /**
@@ -483,9 +481,6 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
-        if(session_id()) session_write_close();
-
-        if(!defined('RUN_MODE') || RUN_MODE != 'test') session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -494,7 +489,6 @@ class repoModel extends model
         if(!isset($repos[$this->session->repoID])) $this->session->set('repoID', key($repos));
 
         $repoID = (int)$this->session->repoID;
-        session_write_close();
 
         return $repoID;
     }
@@ -1335,9 +1329,7 @@ class repoModel extends model
         $clientVersionFile = $this->session->clientVersionFile;
         if($clientVersionFile)
         {
-            if(!session_id()) session_start();
             $this->session->set('clientVersionFile', '');
-            session_write_close();
 
             if(file_exists($clientVersionFile)) @unlink($clientVersionFile);
         }

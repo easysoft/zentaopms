@@ -200,9 +200,7 @@ class repoZen extends repo
         {
             $clientVersionFile = $this->app->getLogRoot() . uniqid('version_') . '.log';
 
-            session_start();
             $this->session->set('clientVersionFile', $clientVersionFile);
-            session_write_close();
         }
 
         if(file_exists($clientVersionFile)) return true;
@@ -815,7 +813,6 @@ class repoZen extends repo
     {
         $this->setBackSession('list', true);
 
-        session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
         $this->session->set('gitlabBranchList', $this->app->getURI(true));
         if(!empty($repo->space))
@@ -824,7 +821,6 @@ class repoZen extends repo
             $spaceRepoMap[$repo->space] = $repo->id;
             $this->session->set('spaceRepoMap', json_encode($spaceRepoMap), 'devops');
         }
-        session_write_close();
     }
 
     /**
@@ -845,14 +841,12 @@ class repoZen extends repo
      */
     protected function buildRepoSearchForm(int $inSpace, int $space, array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
     {
-        session_start();
         $this->config->repo->search['params']['product']['values']  = $products;
         $this->config->repo->search['params']['projects']['values'] = $projects;
         $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "inSpace={$inSpace}&space={$space}&objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
         $this->config->repo->search['queryID']     = $param;
         $this->config->repo->search['onMenuBar']   = 'yes';
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
-        session_write_close();
     }
 
     /**
@@ -968,9 +962,7 @@ class repoZen extends repo
             $this->config->product->search['params']['branch']['values'] = $productBranches;
         }
 
-        session_start();
         $this->loadModel('search')->setSearchParams($this->config->product->search);
-        session_write_close();
     }
 
     /**
@@ -1072,9 +1064,7 @@ class repoZen extends repo
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName['branch']);
             $this->config->bug->search['params']['branch']['values'] = $productBranches;
         }
-        session_start();
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
-        session_write_close();
     }
 
     /**
@@ -1138,9 +1128,7 @@ class repoZen extends repo
         $this->config->execution->search['params']['module']['values']    = $modules;
         $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executionPairs;
 
-        session_start();
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
-        session_write_close();
     }
 
     /**
@@ -1486,7 +1474,6 @@ class repoZen extends repo
      */
     public function setBackSession(string $type = 'list', bool $withOtherModule = false)
     {
-        session_start();
         $uri = $this->app->getURI(true);
         if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
 
@@ -1499,7 +1486,6 @@ class repoZen extends repo
             $this->session->set('bugList', $uri, 'qa');
             $this->session->set('taskList', $uri, 'execution');
         }
-        session_write_close();
     }
 
     /**
@@ -1750,8 +1736,6 @@ class repoZen extends repo
      */
     protected function processRepoID(int $repoID, int $objectID, array $scmList = array()): int
     {
-        $hasSession = session_id() ? true : false;
-        if(!$hasSession) session_start();
         if(!$repoID) $repoID = (int)$this->session->repoID;
 
         $repoPairs = array();
@@ -1772,7 +1756,6 @@ class repoZen extends repo
         $this->view->repoPairs = $repoPairs;
         $repoID = $this->repo->saveState($repoID, $objectID);
 
-        if(!$hasSession) session_write_close();
         return $repoID;
     }
 
@@ -1787,13 +1770,11 @@ class repoZen extends repo
      */
     protected function buildSearchForm(int $queryID, string $actionURL)
     {
-        session_start();
         $this->config->repo->search = $this->config->repo->searchCommits;
         $this->config->repo->search['actionURL'] = $actionURL;
         $this->config->repo->search['queryID']   = $queryID;
 
         $this->loadModel('search')->setSearchParams($this->config->repo->search);
-        session_write_close();
     }
 
     /**
@@ -1807,7 +1788,6 @@ class repoZen extends repo
      */
     protected function getSearchForm(int $queryID = 0, bool $getSql = false): object|string
     {
-        session_start();
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -1834,7 +1814,6 @@ class repoZen extends repo
             $query = $this->getSearchFormQuery();
         }
 
-        session_write_close();
         return $query;
     }
 
