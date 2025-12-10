@@ -48,6 +48,7 @@ class jobModel extends model
      * 获取流水线列表。
      * Get job list.
      *
+     * @param  int    $spaceID
      * @param  int    $repoID
      * @param  string $jobQuery
      * @param  string $orderBy
@@ -57,7 +58,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null, string $engine = '', string $pipeline = ''): array
+    public function getList(int $spaceID = 0, int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null, string $engine = '', string $pipeline = ''): array
     {
         return $this->dao->select('t1.*, t2.space AS space, t2.name AS repoName, t3.name AS jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
@@ -67,6 +68,7 @@ class jobModel extends model
             ->beginIF($engine)->andWhere('t1.engine')->eq($engine)->fi()
             ->beginIF($pipeline)->andWhere('t1.pipeline')->eq($pipeline)->fi()
             ->beginIF(!empty($jobQuery))->andWhere($jobQuery)->fi()
+            ->beginIF($spaceID)->andWhere('t2.space')->eq($spaceID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

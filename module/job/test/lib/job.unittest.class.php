@@ -33,9 +33,9 @@ class jobTest
      * @access public
      * @return object
      */
-    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
+    public function getListTest(int $spaceID = 0, int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
     {
-        $objects = $this->objectModel->getList($repoID, '', $orderBy, $pager, $engine);
+        $objects = $this->objectModel->getList($spaceID, $repoID, '', $orderBy, $pager, $engine);
 
         if(dao::isError()) return dao::getError();
 
@@ -410,9 +410,9 @@ class jobTest
     public function initJobTest($id, $job)
     {
         $result = $this->objectModel->initJob($id, $job);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -430,11 +430,11 @@ class jobTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('checkIframe');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $job, $jobID);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -451,23 +451,23 @@ class jobTest
     {
         // Backup original $_POST
         $originalPost = $_POST;
-        
+
         // Set up $_POST['svnDir'] for testing
         $_POST['svnDir'] = $svnDirPost;
-        
+
         // Use reflection to access protected method
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getSvnDir');
         $method->setAccessible(true);
-        
+
         // Invoke the method with reference parameter
         $method->invokeArgs($this->objectTao, array(&$job, $repo));
-        
+
         // Restore original $_POST
         $_POST = $originalPost;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $job;
     }
 
@@ -484,12 +484,12 @@ class jobTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getCustomParam');
         $method->setAccessible(true);
-        
+
         // Invoke the method with reference parameter
         $result = $method->invokeArgs($this->objectTao, array(&$job));
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 
@@ -532,12 +532,12 @@ class jobTest
     public function getJobListTest(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null)
     {
         global $tester;
-        
+
         // 模拟jobZen::getJobList的业务逻辑
         $tester->loadModel('gitlab');
         $products = $tester->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
         $jobList  = $this->objectModel->getList($repoID, $jobQuery, $orderBy, null);
-        
+
         foreach($jobList as $job)
         {
             if($job->engine == 'jenkins')
@@ -557,7 +557,7 @@ class jobTest
             $job->frame       = zget($tester->lang->job->frameList, $job->frame);
             $job->productName = zget($products, $job->product, '');
         }
-        
+
         if(dao::isError()) return dao::getError();
 
         return $jobList;
@@ -575,18 +575,18 @@ class jobTest
     public function reponseAfterCreateEditTest(int $repoID = 0, string $engine = '', array $errors = array())
     {
         global $tester;
-        
+
         // 模拟$_POST数据
         $_POST['engine'] = $engine;
         $_POST['repo'] = $repoID;
-        
+
         // 直接模拟reponseAfterCreateEdit方法的业务逻辑
         $result = $this->simulateReponseAfterCreateEdit($repoID, $engine, $errors);
-        
+
         // 清理$_POST
         unset($_POST['engine']);
         unset($_POST['repo']);
-        
+
         return $result;
     }
 
@@ -600,13 +600,13 @@ class jobTest
     public function getSubversionDirTest($repo)
     {
         global $tester;
-        
+
         // 模拟getSubversionDir方法的业务逻辑
         if($repo->SCM == 'Subversion')
         {
             $dirs = array();
             $path = empty($repo->prefix) ? '/' : $repo->prefix;
-            
+
             // 模拟获取SVN tags
             $tags = array();
             if($repo->prefix == '/trunk/src') {
@@ -618,23 +618,23 @@ class jobTest
                 $tags['/tags/v1.0'] = 'v1.0';
                 $tags['/tags/v2.0'] = 'v2.0';
             }
-            
+
             if($tags)
             {
                 $dirs['/'] = $path ? $path : '/';
                 foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
-                
+
                 if(dao::isError()) return dao::getError();
-                
+
                 return $dirs;
             }
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return null;
     }
-    
+
     /**
      * Test getCompileData method.
      *
@@ -645,23 +645,23 @@ class jobTest
     public function getCompileDataTest($compile)
     {
         global $tester;
-        
+
         // 模拟getCompileData方法的业务逻辑
         $taskID = $compile->testtask;
-        
+
         // 简化测试，直接返回基本结构用于验证
         if($taskID == 0) {
             return array('groupCases' => array(), 'suites' => array(), 'summary' => array(), 'taskID' => $taskID);
         }
-        
+
         $task = $tester->loadModel('testtask')->getById($taskID);
         if(!$task) {
             return array('groupCases' => array(), 'suites' => array(), 'summary' => array(), 'taskID' => $taskID);
         }
-        
+
         // 获取基本数据
         $suites = $tester->loadModel('testsuite')->getUnitSuites($task->product);
-        
+
         // 模拟一些基本的返回数据
         $groupCases = array(1 => array('case1' => (object)array('id' => 1, 'title' => '测试用例1')));
         $summary = array(1 => '共1个用例，失败0个，耗时1秒');
@@ -688,7 +688,7 @@ class jobTest
     private function simulateReponseAfterCreateEdit(int $repoID, string $engine, array $errors): array
     {
         global $tester;
-        
+
         if(!empty($errors))
         {
             if($engine == 'gitlab' and isset($errors['server']))
@@ -729,7 +729,7 @@ class jobTest
     public function buildSearchFormTest(array $searchConfig = array(), string|int $queryID = 0, string $actionURL = '')
     {
         global $tester;
-        
+
         // 准备默认的搜索配置
         if(empty($searchConfig))
         {
@@ -744,7 +744,7 @@ class jobTest
                 )
             );
         }
-        
+
         // 模拟buildSearchForm方法的业务逻辑
         $searchConfig['queryID'] = (int)$queryID;
         $searchConfig['actionURL'] = $actionURL;
@@ -756,12 +756,12 @@ class jobTest
 
         // 模拟调用search模块的setSearchParams
         $tester->loadModel('search')->setSearchParams($searchConfig);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // 验证session中是否设置了搜索参数
         $searchParams = $_SESSION['jobsearchParams'] ?? array();
-        
+
         return array(
             'searchParams' => $searchParams,
             'searchConfig' => $searchConfig,
@@ -780,11 +780,11 @@ class jobTest
     public function getJobSearchQueryTest(int $queryID = 0): string
     {
         global $tester;
-        
+
         // 清理session避免测试干扰
         $queryName = 'jobQuery';
         $tester->session->set($queryName, false);
-        
+
         // 直接模拟getJobSearchQuery方法的业务逻辑
         if($queryID)
         {
@@ -795,13 +795,13 @@ class jobTest
                 $tester->session->set('jobForm', $query->form);
             }
         }
-        
+
         // 检查session状态并设置默认值
         $sessionValue = $tester->session->$queryName;
         if($sessionValue === false || $sessionValue === null) {
             $tester->session->set($queryName, ' 1 = 1');
         }
-        
+
         $jobQuery = $tester->session->$queryName;
         $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
 

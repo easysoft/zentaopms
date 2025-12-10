@@ -93,16 +93,17 @@ class job extends control
         {
             $this->session->set('repoID', '');
         }
+        if($space) $this->loadModel('devopsspace')->setMenu($space);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID   = $type == 'bySearch' ? $queryID : 0;
-        $actionURL = $this->createLink('job', 'browse', "repoID={$repoID}&type=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+        $actionURL = $this->createLink('job', 'browse', "space={$space}&repoID={$repoID}&type=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
         $this->jobZen->buildSearchForm($this->config->job->search, $queryID, $actionURL);
         $jobQuery = $type == 'bySearch' ? $this->jobZen->getJobSearchQuery((int)$queryID) : '';
 
-        $jobList   = $this->jobZen->getJobList($repoID, $jobQuery, $orderBy, $pager);
+        $jobList   = $this->jobZen->getJobList($space, $repoID, $jobQuery, $orderBy, $pager);
         $pipelines = $this->loadModel('pipeline')->getPairs('jenkins,gitlab');
 
         $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
@@ -150,6 +151,7 @@ class job extends control
         }
 
         $this->loadModel('ci');
+        $spaceID = $this->session->devopsSpace ? $this->session->devopsSpace : 0;
 
         $this->view->title               = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->create;
         $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
@@ -158,6 +160,8 @@ class job extends control
         $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
         $this->view->sonarqubeServerList = array('' => '') + $this->pipeline->getPairs('sonarqube');
+        $this->view->inSpace             = !empty($spaceID);
+        $this->view->spaceID             = $spaceID;
 
         $this->display();
     }
