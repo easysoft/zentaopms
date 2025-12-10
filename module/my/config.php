@@ -20,11 +20,12 @@ $config->mobile->storyBar = array('assignedTo', 'openedBy', 'reviewedBy');
 
 $config->my->notFlowModules = array();
 
-$config->my->openedDateField['product']     = 'createdDate';
-$config->my->openedDateField['productplan'] = 'createdDate';
-$config->my->openedDateField['release']     = 'createdDate';
-$config->my->openedDateField['build']       = 'createdDate';
-$config->my->openedDateField['testtask']    = 'createdDate';
-$config->my->openedDateField['testsuite']   = 'addedDate';
-$config->my->openedDateField['caselib']     = 'addedDate';
-$config->my->openedDateField['baseline']    = 'createdDate';
+$config->my->openedDateField['product']       = 'createdDate';
+$config->my->openedDateField['productplan']   = 'createdDate';
+$config->my->openedDateField['release']       = 'createdDate';
+$config->my->openedDateField['build']         = 'createdDate';
+$config->my->openedDateField['testtask']      = 'createdDate';
+$config->my->openedDateField['testsuite']     = 'addedDate';
+$config->my->openedDateField['caselib']       = 'addedDate';
+$config->my->openedDateField['baseline']      = 'createdDate';
+$config->my->openedDateField['projectchange'] = 'createdDate';
