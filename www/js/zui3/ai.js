@@ -146,8 +146,8 @@ window.executeZentaoPrompt = async function(info, testingMode)
                     oldValue = typeof oldValue === 'string' ? oldValue : JSON.stringify(oldValue);
                     const isSame = oldValue === value;
                     return h`<tr class="whitespace-pre-wrap">
-    <td class=${isSame ? 'text-gray' : 'font-bold'}>${propNames[prop] || prop}</td>
-    <td class=${isSame ? 'text-gray' : ''}>${isSame ? renderValue(value) : (oldValue.length ? h`<div class="htmldiff article whitespace-prewrap" dangerouslySetInnerHTML=${{__html: htmlDiff(oldValue, value)}}></div>` : h`<div class="htmldiff article whitespace-prewrap"><ins data-operation-index="0">${value}</ins></div>`)}</td>
+    <td class='font-bold'>${propNames[prop] || prop}</td>
+    <td>${isSame ? renderValue(value) : (oldValue.length ? h`<div class="htmldiff article whitespace-prewrap" dangerouslySetInnerHTML=${{__html: htmlDiff(oldValue, value)}}></div>` : h`<div class="htmldiff article whitespace-prewrap"><ins data-operation-index="0">${value}</ins></div>`)}</td>
 </tr>`;
                 };
                 diffView = h`<h6>${zui.formatString(langData.changeTitleFormat, {type: propNames.common || info.objectType, id: info.objectID ? `#${info.objectID}` : ''})}</h6>
