@@ -21,7 +21,7 @@ $lang->custom->score                = 'Point';
 $lang->custom->timezone             = 'Timezone';
 $lang->custom->scoreReset           = 'Réinit Points';
 $lang->custom->scoreTitle           = 'Fonctionnalité des Points';
-$lang->custom->productName          = $lang->productCommon;
+$lang->custom->productName          = $lang->productCommon . ' Close Setting';
 $lang->custom->convertFactor        = 'Convert factor';
 $lang->custom->region               = 'Interval';
 $lang->custom->tips                 = 'Tips';
@@ -67,6 +67,7 @@ $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeSetting         = 'Close Setting';
 $lang->custom->gradeRule            = 'Allow cross-level segmentation';
+$lang->custom->setExecutionClose    = 'Execution Close Setting';
 
 $lang->custom->gradeRuleList['cross']    = 'Yes';
 $lang->custom->gradeRuleList['stepwise'] = 'No';
