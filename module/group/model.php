@@ -26,11 +26,12 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
-        if(!isset($group->vision)) $group->vision = $this->config->vision;
+        if(!isset($group->vision))      $group->vision      = $this->config->vision;
+        if(!isset($group->devopsSpace)) $group->devopsSpace = 0;
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}' and devopsSpace='{$group->devopsSpace}'")
             ->exec();
         if(dao::isError()) return false;
 
