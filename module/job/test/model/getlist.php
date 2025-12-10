@@ -23,8 +23,8 @@ zenData('job')->gen(5);
 
 $job  = new jobTest();
 $list        = $job->getListTest();
-$repoList    = $job->getListTest(2);
-$jenkinsList = $job->getListTest(0, 'id_desc', null, 'jenkins');
+$repoList    = $job->getListTest(0, 2);
+$jenkinsList = $job->getListTest(0, 0, 'id_desc', null, 'jenkins');
 
 r(count($list))        && p()         && e('5');             //测试获取列表的个数
 r($list)               && p('1:name') && e('这是一个Job1');  //测试获取列表某个job的名称信息

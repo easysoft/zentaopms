@@ -65,10 +65,10 @@ su('admin');
 $jobTest = new jobZenTest();
 $pager = new pager(0, 20, 1);
 
-r($jobTest->getJobListTest(0, '', 'id_asc', $pager)) && p('1:id') && e('1');
-r($jobTest->getJobListTest(1, '', 'id_desc', $pager)) && p('1:repo') && e('1');
-r($jobTest->getJobListTest(2, '', 'id_desc', $pager)) && p('2:repo') && e('2');
-r($jobTest->getJobListTest(0, '', 'id_desc', $pager)) && p('10:engine') && e('GitLab');
-r($jobTest->getJobListTest(0, '', 'id_desc', $pager)) && p('5:engine') && e('Jenkins');
-r($jobTest->getJobListTest(0, '', 'id_desc', $pager)) && p('10:productName') && e('产品5');
-r($jobTest->getJobListTest(0, '', 'id_desc', $pager)) && p('10:name') && e('SonarQube任务2');
+r($jobTest->getJobListTest(0, 0, '', 'id_asc', $pager)) && p('1:id') && e('1');
+r($jobTest->getJobListTest(0, 1, '', 'id_desc', $pager)) && p('1:repo') && e('1');
+r($jobTest->getJobListTest(0, 2, '', 'id_desc', $pager)) && p('2:repo') && e('2');
+r($jobTest->getJobListTest(0, 0, '', 'id_desc', $pager)) && p('10:engine') && e('GitLab');
+r($jobTest->getJobListTest(0, 0, '', 'id_desc', $pager)) && p('5:engine') && e('Jenkins');
+r($jobTest->getJobListTest(0, 0, '', 'id_desc', $pager)) && p('10:productName') && e('产品5');
+r($jobTest->getJobListTest(0, 0, '', 'id_desc', $pager)) && p('10:name') && e('SonarQube任务2');

@@ -59,10 +59,10 @@ class jobZenTest extends baseTest
      * @access public
      * @return array
      */
-    public function getJobListTest($repoID = 0, $jobQuery = '', $orderBy = 'id_desc', $pager = null)
+    public function getJobListTest($spaceID = 0, $repoID = 0, $jobQuery = '', $orderBy = 'id_desc', $pager = null)
     {
         if($pager === null) $pager = new pager(0, 20, 1);
-        $result = $this->invokeArgs('getJobList', [$repoID, $jobQuery, $orderBy, $pager]);
+        $result = $this->invokeArgs('getJobList', [$spaceID, $repoID, $jobQuery, $orderBy, $pager]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
