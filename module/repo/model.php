@@ -137,7 +137,6 @@ class repoModel extends model
         foreach($repos as $i => $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-            $repo->acl      = json_decode($repo->acl);
             $repo->codePath = $repo->path;
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
             if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
@@ -524,7 +523,6 @@ class repoModel extends model
         $repoPairs = array();
         foreach($repos as $repo)
         {
-            $repo->acl = json_decode($repo->acl);
             $scm = '';
             if($showScm) $scm = $repo->SCM == 'Subversion' ? '[svn] ' : '[' . strtolower($repo->SCM) . '] ';
             if($this->checkPriv($repo))
@@ -588,7 +586,6 @@ class repoModel extends model
         $repoPairs = array();
         foreach($repos as $repo)
         {
-            $repo->acl = is_string($repo->acl) ? json_decode($repo->acl) : $repo->acl;
             if($this->checkPriv($repo))
             {
                 $repoItem = array();
@@ -724,7 +721,6 @@ class repoModel extends model
         foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-            $repo->acl = json_decode($repo->acl);
         }
 
         return $repos;
