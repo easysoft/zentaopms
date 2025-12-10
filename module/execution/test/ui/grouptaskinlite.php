@@ -162,12 +162,12 @@ $nums = array(
         'left'      => '2',
     ),
     'status' => array(
-        'tasks'     => '3',
-        'waiting'   => '3',
+        'tasks'     => '1',
+        'waiting'   => '0',
         'doing'     => '0',
-        'estimates' => '3',
-        'cost'      => '0',
-        'left'      => '3',
+        'estimates' => '1',
+        'cost'      => '6',
+        'left'      => '2',
     ),
     'pri' => array(
         'tasks'     => '3',
