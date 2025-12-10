@@ -167,15 +167,6 @@ class control extends baseControl
 
             return;
         }
-        elseif(!$this->getFormData)
-        {
-            $this->parseJSON($moduleName, $methodName);
-
-            ob_start();
-            echo $this->output;
-
-            return;
-        }
 
         if(empty($moduleName)) $moduleName = $this->moduleName;
         if(empty($methodName)) $methodName = $this->methodName;
