@@ -1916,7 +1916,7 @@ class repo extends control
             if(isset($tag->commit->author->identity->name)) $tag->committer = $tag->commit->author->identity->name;
             $tag->committer = zget($committers, $tag->committer);
 
-            $tag->createdBy = isset($tag->tagger->identity->name) ? zget($committers, $tag->tagger->identity->name) : '';
+            $tag->createdBy = isset($tag->createdBy->identity->name) ? zget($committers, $tag->createdBy->identity->name) : '';
 
             $tag->createdDate = isset($tag->tagger->when) ? date('Y-m-d H:i:s', strtotime($tag->tagger->when)) : '';
             if(isset($tag->created_at)) $tag->createdDate = date('Y-m-d H:i:s', strtotime($tag->created_at));
