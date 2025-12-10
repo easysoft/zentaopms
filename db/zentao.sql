@@ -2058,7 +2058,6 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `retractedBy` varchar(30) NOT NULL DEFAULT '',
   `retractedDate` datetime,
   `verifiedDate` datetime,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
