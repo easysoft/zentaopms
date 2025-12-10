@@ -84,7 +84,7 @@ class dropmenu extends wg
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;
 
-        if($tab == 'devops')
+        if($tab == 'devops' && empty($text))
         {
             if(!data('inSpace')) return array();
 
