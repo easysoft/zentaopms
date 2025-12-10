@@ -369,7 +369,7 @@ class story extends control
         }
 
         $stories = $this->storyZen->getStoriesByChecked();
-        if(!$stories) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->batchEditError, 'load' => true)));
+        if(!$stories) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->story->batchEditError, 'locate' => $this->session->storyList)));
 
         /* Set Custom*/
         foreach(explode(',', $this->config->story->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->story->$field;

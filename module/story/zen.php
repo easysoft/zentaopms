@@ -1004,10 +1004,12 @@ class storyZen extends story
 
         /* Filter twins. */
         $twins = '';
+        $frozenStories = '';
         foreach($stories as $id => $story)
         {
             if(!empty($story->frozen))
             {
+                $frozenStories .= "#$id ";
                 unset($stories[$id]);
                 continue;
             }
@@ -1017,6 +1019,7 @@ class storyZen extends story
             unset($stories[$id]);
         }
         if(!empty($twins)) $this->view->twinsTip = sprintf($this->lang->story->batchEditTip, $twins);
+        if(!empty($frozenStories)) $this->view->frozenTips = sprintf($this->lang->story->frozenTips, $frozenStories, $this->lang->story->edit);
 
         return $stories;
     }

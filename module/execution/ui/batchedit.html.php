@@ -12,7 +12,7 @@ namespace zin;
 
 if(!empty($frozenStages))
 {
-    $frozenTip = sprintf($lang->execution->frozenTip, trim($frozenStages, ','));
+    $frozenTip = sprintf($lang->execution->frozenTip, $frozenStages);
     pageJS("zui.Modal.alert({message: '{$frozenTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 }
 

@@ -1389,11 +1389,11 @@ class execution extends control
         {
             if(!empty($execution->frozen))
             {
-                $frozenStages .= "#{$execution->id},";
+                $frozenStages .= "#{$execution->id} ";
                 unset($executions[$key]);
             }
         }
-        if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, trim($frozenStages, ',')), 'load' => true)));
+        if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, $frozenStages), 'load' => true)));
 
         list($pmUsers, $poUsers, $qdUsers, $rdUsers) = $this->executionZen->setUserMoreLink($executions);
 
