@@ -165,29 +165,21 @@ class createBugTester extends tester
      * @access public
      * @return object
      */
-    public function directAssign($product = array(), $bugTitle = '', $assignee = '')
+    public function directAssign($assignee)
     {
-        if(!$bugTitle) return $this->failed('bug直接修改指派失败，没有指定bug');
-        $assignee = $assignee ?? 'admin';
-        $form     = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
-
-        $form->wait(3);
-        $form->dom->bugTitle->scrollToElement();
-        $index = array_search($bugTitle, $form->dom->getElementListByXpathKey('bugTitle', true));
-        if($index === false ) return $this->failed('bug未找到' . $bugTitle);
-        $form->dom->bugAssigned->scrollToElement();
-        $form->wait(3);
-        $form->dom->getElementListByXpathKey('bugAssigned')[$index]->click();
-        $form->wait(3);
+        $form = $this->initForm('bug', 'browse', array('productID' => '1'), 'appIframe-qa');
+        $form->dom->firstAssignTo->scrollToElement();
+        $form->dom->firstAssignTo->click();
+        $form->wait(2);
         $form->dom->assignedTo->picker($assignee);
-        $form->wait(3);
-        $form->dom->assign->click();
-        $form->wait(3);
-        $form->dom->bugAssigned->scrollToElement();
-        $form->wait(5);
-        $bugAssigned = $form->dom->getElementListByXpathKey('bugAssigned', true);
-        $form->wait(3);
-        if($bugAssigned[$index] == $assignee) return $this->success('bug直接修改指派成功');
+        $form->wait(2);
+        $form->dom->assignBtn->click();
+        $form->wait(2);
+
+        /* 将指派人字段拖动到可见区域 */
+        $form->dom->firstAssignTo->scrollToElement();
+        $assignedToAfter = $form->dom->firstAssignTo->getText();
+        if($assignedToAfter == $assignee) return $this->success('bug直接修改指派成功');
         return $this->failed('bug直接修改指派失败');
     }
 

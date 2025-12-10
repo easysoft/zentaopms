@@ -24,6 +24,7 @@ class taskkanbanTester extends tester
         {
             $form->dom->xpath['kanbanName'] = "(//menu/menu/li)[{$nameId}]";
             $form->dom->namePicker->click();
+            $form->wait(1);
             $form->dom->kanbanName->click();
             $form->wait(1);
         }
