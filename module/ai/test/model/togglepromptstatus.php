@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('状态切换测试1,状态切换测试2,状态切换测试3,状态切换测试4,状态切换测试5,状态切换测试6,状态切换测试7,状态切换测试8,状态切换测试9,状态切换测试10');
 $table->desc->range('测试状态切换功能的提示词描述{10}');

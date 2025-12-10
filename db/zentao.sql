@@ -15286,8 +15286,8 @@ CREATE TABLE IF NOT EXISTS `zt_ai_model` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
--- DROP TABLE IF EXISTS `zt_ai_prompt`;
-CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
+-- DROP TABLE IF EXISTS `zt_ai_agent`;
+CREATE TABLE IF NOT EXISTS `zt_ai_agent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL DEFAULT '',
   `desc` text DEFAULT NULL,
@@ -15309,7 +15309,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_prompt` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `zt_ai_prompt` (`id`, `name`, `desc`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
+INSERT INTO `zt_ai_agent` (`id`, `name`, `desc`, `model`, `module`, `source`, `targetForm`, `purpose`, `elaboration`, `role`, `characterization`, `createdBy`, `createdDate`, `status`) VALUES
 (1, '需求润色', '优化需求中标题、描述和验收标准等字段，使表述清晰准确。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.change', '帮忙优化其中各字段的表述，使表述清晰准确。必要时可以修改需求使其更加合理。', '需求描述格式建议使用：作为一名<某种类型的用户>，我希望<达成某些目的>，这样可以<开发的价值>。验收标准建议列举多条。直接给出你的润色结果，无需建议。', '请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。', 'system', '2023-08-10 13:24:14', 'active'),
 (2, '一键拆用例', '为需求生成一个或多个对应的测试用例。', 0, 'story', ',story.title,story.spec,story.verify,story.product,story.module,story.pri,story.category,story.estimate,', 'story.testcasecreate', '为这个需求生成一个或多个对应的测试用例。', '', '作为一名资深的测试工程师。', '熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。开发工程师应该是专业且严谨的。', 'system', '2023-08-10 13:24:14', 'active'),
 (3, '任务润色', '优化任务中标题、描述等字段的表述，使任务表述更清晰准确。', 0, 'task', ',task.name,task.desc,task.pri,task.status,task.estimate,task.consumed,task.left,task.progress,task.estStarted,task.realStarted,', 'task.edit', '优化其中各字段的表述，使表述清晰准确，明确任务目标。', '必要时指出任务的风险点。', '你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。', 'system', '2023-08-10 13:24:14', 'active'),
@@ -15328,10 +15328,10 @@ INSERT INTO `zt_ai_prompt` (`id`, `name`, `desc`, `model`, `module`, `source`, `
 5. 请生成完整的 HTML5 页面代码，包括开始的 `<!DOCTYPE html>` 和 结束的 `</html>`，使用 markdown html 代码块表示，如果有多个页面请使用多个代码块表示。
 6. 如果页面有 CSS，应该直接在 HTML 页面内使用内联样式`<style>`表示，而不是链接单独的 CSS 文件。', '', '请你扮演一名资深的产品经理。', '负责绘制需求原型图的过程。您将需求转化为可视化的原型图，同时确保其符合需求描述和需求验收标准。', 'system', '2025-11-30 12:00:00', 'active');
 
--- DROP TABLE IF EXISTS `zt_ai_promptfield`;
-CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
+-- DROP TABLE IF EXISTS `zt_ai_agentfield`;
+CREATE TABLE IF NOT EXISTS `zt_ai_agentfield` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_prompt.id',
+  `appID` int unsigned NOT NULL COMMENT '所属 Prompt 的 ID，对应 zt_ai_agent.id',
   `name` varchar(30) NOT NULL DEFAULT '' COMMENT '字段名称',
   `type` varchar(20) NOT NULL DEFAULT 'text' COMMENT '字段类型',
   `placeholder` text DEFAULT NULL COMMENT '输入提示',
@@ -15340,14 +15340,14 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptfield` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `zt_ai_promptfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
+INSERT INTO `zt_ai_agentfield` (`appID`, `name`, `type`, `placeholder`, `options`, `required`) VALUES
 (10, '设计类型', 'radio', '', '系统设计,架构设计,接口设计,数据库设计', 0),
 (10, '后端框架', 'radio', '', 'PHP,Go,Java,Python,Node.js,其他', 0),
 (10, '前端框架', 'radio', '', 'JavaScript,Vue,React,Angular,其他', 0),
 (10, '数据库类型', 'radio', '', 'MySQL,PostgreSQL,Oracle Database,Microsoft SQL Server,非关系型数据库', 0);
 
--- DROP TABLE IF EXISTS `zt_ai_promptrole`;
-CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
+-- DROP TABLE IF EXISTS `zt_ai_agentrole`;
+CREATE TABLE IF NOT EXISTS `zt_ai_agentrole` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL DEFAULT '',
   `desc` text DEFAULT NULL,
@@ -15358,7 +15358,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_promptrole` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-INSERT INTO `zt_ai_promptrole` (`role`, `characterization`) VALUES
+INSERT INTO `zt_ai_agentrole` (`role`, `characterization`) VALUES
 ('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面，需要具备多种技能和能力，以实现产品目标和公司战略。'),
 ('你是一名经验丰富的开发工程师。', '精通多种编程语言和框架、熟悉前后端技术和架构、擅长性能优化和安全防护、熟悉云计算和容器化技术、能够协调多人协作和项目管理。'),
 ('作为一名资深的测试工程师。', '测试工程师应该是专业且严谨的。熟悉测试流程和方法，精通自动化测试和性能测试，能够设计和编写测试用例和测试脚本，擅长问题诊断和分析，熟悉敏捷开发和持续集成，能够协调多部门合作和项目管理。'),

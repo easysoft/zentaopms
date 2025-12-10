@@ -18,7 +18,7 @@ cid=15019
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('需求润色,一键拆用例,任务润色,需求转任务,Bug润色,代码审查,测试用例生成,API文档生成,项目总结,技术调研');
 $table->desc->range('优化需求描述,生成测试用例,优化任务描述,转化需求为任务,优化Bug描述,代码质量审查,自动生成测试,API文档自动化,项目总结报告,技术调研分析');

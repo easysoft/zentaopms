@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$table = zenData('ai_promptrole');
+$table = zenData('ai_agentrole');
 $table->role->range('请你扮演一名资深的产品经理。{3}, 你是一名经验丰富的开发工程师。{3}');
 $table->characterization->range('负责产品战略、设计、开发等。{3}, 精通多种编程语言和框架。{3}');
 $table->deleted->range('0');

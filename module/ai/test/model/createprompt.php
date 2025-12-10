@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$ai_prompt = zenData('ai_prompt');
+$ai_prompt = zenData('ai_agent');
 $ai_prompt->id->range('1');
 $ai_prompt->name->range('existing_prompt');
 $ai_prompt->desc->range('这是一个已存在的提示词');
