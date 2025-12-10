@@ -42,7 +42,6 @@ class browsePage extends page
             'linkedBugs'    => "//*[@id='zin_bug_view_1_tabPane_3']/div/ul/li/ul/li/a/div[2]",
             'firstAssignTo' => "//*[@id='bugs']/div[2]/div[2]/div/div[7]/div/a/span",
             'assignBtn'     => "//*[@class='form-row']/div/button/span"
-
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
