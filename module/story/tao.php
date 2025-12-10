@@ -542,6 +542,7 @@ class storyTao extends storyModel
     protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, ?object $pager = null, ?object $project = null): array
     {
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_', $orderBy);
 
         $unclosedStatus = $this->getUnclosedStatusKeys();
         $assignProduct  = false;
