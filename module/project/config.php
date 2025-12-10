@@ -19,8 +19,8 @@ $config->project->list->customCreateFields = 'budget,acl,auth';
 $config->project->create    = new stdclass();
 $config->project->edit      = new stdclass();
 $config->project->batchedit = new stdclass();
-$config->project->create->requiredFields    = 'name,begin,end';
-$config->project->edit->requiredFields      = 'name,begin,end';
+$config->project->create->requiredFields    = 'name,begin,end,workflowGroup';
+$config->project->edit->requiredFields      = 'name,begin,end,workflowGroup';
 
 $config->project->start   = new stdclass();
 $config->project->start->requiredFields = 'realBegan';
