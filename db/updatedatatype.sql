@@ -1479,6 +1479,7 @@ ALTER TABLE `zt_risk`
   MODIFY COLUMN `version` smallint unsigned NOT NULL DEFAULT 1,
   MODIFY COLUMN `closedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `cancelReason` varchar(30) NOT NULL DEFAULT '',
+  MODIFY COLUMN `assignedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `approvedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_risk`
