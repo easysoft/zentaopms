@@ -34,7 +34,6 @@ class repo extends control
         $this->projectID = $this->session->project ? $this->session->project : 0;
 
         /* Unlock session for wait to get data of repo. */
-        session_write_close();
     }
 
     /**
