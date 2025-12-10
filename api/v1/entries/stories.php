@@ -82,22 +82,20 @@ class storiesEntry extends entry
         $this->setPost('type', $this->param('type', 'story'));
 
         /* 获取评审相关参数 */
-        $reviewer = $this->request('reviewer');
-        $needNotReview = $this->request('needNotReview', 0);
-        $status = $this->request('status', 'active'); // 创建时默认状态为 'active'
-        $this->setPost('reviewer', $reviewer);
-
+        $reviewer    = $this->request('reviewer');
+        $status      = $this->request('status', 'active'); // 创建时默认状态为 'active'
         $forceReview = $this->loadModel('story')->checkForceReview($this->param('type', 'story'));
         if($forceReview)
         {
-            $this->setPost('needNotReview', 0);
             $needNotReview = 0;
         }
         else
         {
-            $this->setPost('needNotReview', empty($reviewer) ? 1 : 0);
             $needNotReview = empty($reviewer) ? 1 : 0;
         }
+
+        $this->setPost('reviewer', $reviewer);
+        $this->setPost('needNotReview', $needNotReview);
 
         /* 设置状态逻辑，与web端保持一致（参考 common.ui.js 中的 clickSubmit 函数） */
         /* 如果状态是 'active' 且有评审人且未勾选不需要评审，则将状态设置为 'reviewing' */

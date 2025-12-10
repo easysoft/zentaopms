@@ -101,9 +101,20 @@ class storyEntry extends entry
         $this->batchSetPost($fields, $oldStory);
 
         /* 设置状态逻辑，与web端保持一致（参考 common.ui.js 中的 clickSubmit 函数） */
-        $reviewer = $this->request('reviewer');
-        $needNotReview = $this->request('needNotReview', 0);
-        $status = $this->request('status', $oldStory->status);
+        $reviewer    = $this->request('reviewer');
+        $status      = $this->request('status', $oldStory->status);
+        $forceReview = $this->loadModel('story')->checkForceReview($oldStory->type);
+        if($forceReview)
+        {
+            $needNotReview = 0;
+        }
+        else
+        {
+            $needNotReview = empty($reviewer) ? 1 : 0;
+        }
+
+        $this->setPost('reviewer', $reviewer);
+        $this->setPost('needNotReview', $needNotReview);
 
         /* 如果设置了评审人且满足以下条件之一，则将状态设置为 'reviewing'：
          * 1. 状态是 'active' 且未勾选不需要评审
