@@ -29,6 +29,7 @@ class jobZen extends job
      * 获取流水线列表。
      * Get job list.
      *
+     * @param  int       $spaceID
      * @param  int       $repoID
      * @param  string    $jobQuery
      * @param  string    $orderBy
@@ -36,12 +37,10 @@ class jobZen extends job
      * @access protected
      * @return array
      */
-    protected function getJobList(int $repoID, string $jobQuery, string $orderBy, object $pager): array
+    protected function getJobList(int $spaceID, int $repoID, string $jobQuery, string $orderBy, object $pager): array
     {
-        $this->loadModel('gitlab');
-
         $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
-        $jobList  = $this->job->getList($repoID, $jobQuery, $orderBy, $pager);
+        $jobList  = $this->job->getList($spaceID, $repoID, $jobQuery, $orderBy, $pager);
         foreach($jobList as $job)
         {
             if($job->engine == 'jenkins')
