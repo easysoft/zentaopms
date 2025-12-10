@@ -40,13 +40,6 @@ $config->project->dtable->fieldList['status']['statusMap'] = $lang->project->sta
 $config->project->dtable->fieldList['status']['group']     = 2;
 $config->project->dtable->fieldList['status']['show']      = true;
 
-$config->project->dtable->fieldList['hasProduct']['title']    = $lang->project->type;
-$config->project->dtable->fieldList['hasProduct']['name']     = 'hasProduct';
-$config->project->dtable->fieldList['hasProduct']['type']     = 'category';
-$config->project->dtable->fieldList['hasProduct']['sortType'] = true;
-$config->project->dtable->fieldList['hasProduct']['map']      = $lang->project->projectTypeList;
-$config->project->dtable->fieldList['hasProduct']['group']    = 2;
-
 $config->project->dtable->fieldList['PM']['title']       = $lang->project->PM;
 $config->project->dtable->fieldList['PM']['name']        = 'PM';
 $config->project->dtable->fieldList['PM']['type']        = 'avatarBtn';
