@@ -761,12 +761,10 @@ ALTER TABLE `zt_issue`
   MODIFY COLUMN `severity` tinyint unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `type` varchar(30) NOT NULL DEFAULT '',
   MODIFY COLUMN `resolution` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `resolvedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `lib` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `from` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `version` smallint unsigned NOT NULL DEFAULT 1,
   MODIFY COLUMN `activateDate` datetime NULL DEFAULT NULL,
-  MODIFY COLUMN `closedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `approvedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_issue`
@@ -1479,12 +1477,8 @@ ALTER TABLE `zt_risk`
   MODIFY COLUMN `lib` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `from` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `version` smallint unsigned NOT NULL DEFAULT 1,
-  MODIFY COLUMN `activateDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `closedDate` datetime NULL DEFAULT NULL,
-  MODIFY COLUMN `cancelDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `cancelReason` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `hangupDate` datetime NULL DEFAULT NULL,
-  MODIFY COLUMN `trackedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `assignedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `approvedDate` datetime NULL DEFAULT NULL,
   MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
