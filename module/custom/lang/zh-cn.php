@@ -67,6 +67,7 @@ $lang->custom->beginAndEndDateRange = '起止日期范围';
 $lang->custom->limitTaskDateAction  = '设置起止日期必填';
 $lang->custom->closeSetting         = '关闭设置';
 $lang->custom->gradeRule            = '是否允许跨层级细分';
+$lang->custom->setExecutionClose    = '执行关闭设置';
 
 $lang->custom->gradeRuleList['cross']    = '是';
 $lang->custom->gradeRuleList['stepwise'] = '否';

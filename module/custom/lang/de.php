@@ -67,6 +67,7 @@ $lang->custom->beginAndEndDateRange = 'The Range Of Begin & End';
 $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeSetting         = 'Close Setting';
 $lang->custom->gradeRule            = 'Allow cross-level segmentation';
+$lang->custom->setExecutionClose    = 'Execution Close Setting';
 
 $lang->custom->gradeRuleList['cross']    = 'Yes';
 $lang->custom->gradeRuleList['stepwise'] = 'No';
