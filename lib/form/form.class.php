@@ -423,7 +423,14 @@ class form extends fixer
         {
             $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
-            $fieldName = isset($app->lang->{$rawModule}->$field) ? $app->lang->{$rawModule}->$field : $field;
+            if(isset($config['label']))
+            {
+                $fieldName = $config['label'];
+            }
+            else
+            {
+                $fieldName = isset($app->lang->{$rawModule}->$field) ? $app->lang->{$rawModule}->$field : $field;
+            }
             if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
             $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
         }
