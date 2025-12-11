@@ -968,11 +968,13 @@ class projectModel extends model
 
         $hasBaseline  = true;
         $hasAuditplan = true;
+        $hasProcess   = true;
         if($this->config->edition != 'open' && $projectID)
         {
             $project      = $this->fetchByID($projectID);
             $hasBaseline  = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
-            $hasAuditplan = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'auditplan');
+            $hasAuditplan = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'auditplan');
+            $hasProcess   = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process');
         }
 
         $this->app->loadLang('group');
@@ -985,6 +987,7 @@ class projectModel extends model
 
             if($module == 'cm' && !$hasBaseline) continue;
             if($module == 'auditplan' && !$hasAuditplan) continue;
+            if($module == 'pssp' && !$hasProcess) continue;
 
             foreach($methods as $method => $label)
             {
