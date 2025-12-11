@@ -971,10 +971,12 @@ class projectModel extends model
         $hasProcess   = true;
         if($this->config->edition != 'open' && $projectID)
         {
-            $project      = $this->fetchByID($projectID);
-            $hasBaseline  = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
-            $hasAuditplan = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'auditplan');
-            $hasProcess   = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process');
+            $project        = $this->fetchByID($projectID);
+            $hasBaseline    = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
+            $hasDeliverable = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'deliverable');
+            $hasChange      = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'change');
+            $hasAuditplan   = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'auditplan');
+            $hasProcess     = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process');
         }
 
         $this->app->loadLang('group');
@@ -988,6 +990,13 @@ class projectModel extends model
             if($module == 'cm' && !$hasBaseline) continue;
             if($module == 'auditplan' && !$hasAuditplan) continue;
             if($module == 'pssp' && !$hasProcess) continue;
+
+            if($module == 'review')
+            {
+                if(!$hasDeliverable) unset($methods->submitDeliverable);
+                if(!$hasChange)      unset($methods->submitProjectchange);
+                if(!$hasBaseline)    unset($methods->submitBaseline);
+            }
 
             foreach($methods as $method => $label)
             {
