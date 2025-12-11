@@ -340,25 +340,6 @@ window.onScmChange = function()
     }
 }
 
-window.loadMembers = function()
-{
-    const space = $('[name=space]').val();
-    const url   = $.createLink('repo', 'ajaxGetSpaceMembers', "space=" + space);
-
-    toggleLoading('#members', true);
-    const $memberPicker = $('[name^=members]').zui('picker');
-    $memberPicker.$.clear();
-    $.getJSON(url, function(data)
-    {
-        $memberPicker.render({items: data});
-        if(typeof members != 'undefined')
-        {
-            $memberPicker.$.setValue(members);
-        }
-        toggleLoading('#members', false);
-    });
-}
-
 /**
  * On acl change event.
  *
@@ -381,7 +362,6 @@ window.onAclChange = function(event)
     if(acl == 'private')
     {
         $('#members').removeClass('hidden');
-        setTimeout(function() {loadMembers();}, 50);
     }
     else
     {

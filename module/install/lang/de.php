@@ -291,7 +291,7 @@ $lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
 
 $lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
 $lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
-$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS USER';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS DEVELOPER';
 
 $lang->install->cronList[''] = 'Cron Anzeigen';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';

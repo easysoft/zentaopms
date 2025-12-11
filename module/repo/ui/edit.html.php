@@ -17,7 +17,7 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('repoSCM', $repo->SCM);
 jsVar('client', $repo->client);
-jsVar('members', implode(',', zget($repo, 'members', array())));
+$members = implode(',', zget($repo, 'members', array()));
 
 formPanel
 (
@@ -168,7 +168,8 @@ formPanel
         set::name('members'),
         set::label($lang->repo->members),
         set::required(true),
-        set::items(array()),
-        set::multiple(true)
+        set::items($users),
+        set::multiple(true),
+        set::value($members)
     )
 );

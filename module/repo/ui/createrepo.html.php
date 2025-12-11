@@ -87,7 +87,7 @@ formPanel
         set::name('members'),
         set::label($lang->repo->members),
         set::required(true),
-        set::items(array()),
+        set::items($users),
         set::multiple(true)
     )
 );

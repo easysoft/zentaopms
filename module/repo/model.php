@@ -165,10 +165,10 @@ class repoModel extends model
 
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
-        if($repoID && !empty($repo->members))
+        if($repoID && !empty($repo->members) && $repo->acl == 'private')
         {
             $members = explode(',', $repo->members);
-            foreach($members as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repo' => $repoID, 'account' => $member))->exec();
+            $this->updateMembers($repoID, $members);
         }
 
         $repo = $this->getByID($repoID);
@@ -328,14 +328,16 @@ class repoModel extends model
             ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $repo->id")
             ->autoCheck()
             ->where('id')->eq($repo->id)->exec();
-        $oldMembers = $repo->members;
-        $newMembers = explode(',', $data->members);
-        if(empty($oldMembers) || array_intersect($newMembers, $oldMembers))
+
+        if($data->acl == 'private')
+        {
+            $this->updateMembers($repo->id, explode(',', $data->members));
+        }
+        else
         {
             $this->dao->delete()->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repo->id)->exec();
-            foreach($newMembers as $member) $this->dao->insert(TABLE_DEVOPSREPOUSER)->data(array('repo' => $repo->id, 'account' => $member))->exec();
-            if(dao::isError()) return false;
         }
+        if(dao::isError()) return false;
 
         $this->rmClientVersionFile();
 
