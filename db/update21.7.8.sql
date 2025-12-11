@@ -13,8 +13,8 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ('project', 'ipd',           'cpdproject', 'IPD定制项目研发',      'cpdproject',           'normal', 'rnd', '1');
 
 ALTER TABLE `zt_doc` ADD `isDeliverable` tinyint unsigned NOT NULL DEFAULT 0 AFTER `acl`;
-ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_deliverable` ADD `activity` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_deliverable` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_deliverable` ADD `activity` int unsigned NOT NULL DEFAULT '0' AFTER `name`;
 ALTER TABLE `zt_deliverable` ADD `trimmable` char(30) NOT NULL DEFAULT '0' AFTER `activity`;
 ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmable`;
 ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
@@ -25,7 +25,7 @@ ALTER TABLE `zt_deliverable` ADD `systemList` tinyint unsigned NOT NULL DEFAULT 
 
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `deliverable` int(8) unsigned NOT NULL DEFAULT 0,
+  `deliverable` int unsigned NOT NULL DEFAULT 0,
   `stage` varchar(30) NOT NULL,
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
