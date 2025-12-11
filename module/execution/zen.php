@@ -369,7 +369,7 @@ class executionZen extends execution
 
         $project = $this->project->getByID($execution->project);
 
-        $this->view->hasFrozenStories = $this->project->hasFrozenObject($execution->project, 'story');
+        $this->view->hasFrozenStories = $this->project->hasFrozenObject($execution->project, 'SRS');
 
         $this->view->title        = $this->lang->execution->kanban;
         $this->view->userList     = $userList;

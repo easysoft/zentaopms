@@ -902,7 +902,7 @@ class project extends control
         $this->view->isStage             = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
         $this->view->avatarList          = $this->user->getAvatarPairs('');
         $this->view->queryID             = $queryID;
-        $this->view->hasFrozenExecutions = $this->project->hasFrozenObject($project->id, 'execution');
+        $this->view->hasFrozenExecutions = $this->project->hasFrozenObject($project->id, 'PP');
 
         $this->display();
     }

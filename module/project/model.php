@@ -2941,29 +2941,19 @@ class projectModel extends model
      * Has frozen object.
      *
      * @param int    $projectID
-     * @param string $objectType
-     * @return void
+     * @param string $category SRS|PP
+     * @return int|string
     */
-    public function hasFrozenObject(int $projectID, string $objectType)
+    public function hasFrozenObject(int $projectID, string $category): int|string
     {
-        if(empty($projectID) || empty($objectType)) return false;
+        if(empty($projectID) || empty($category)) return '';
 
-        if($objectType == 'story')
-        {
-            return $this->dao->select('1')->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-                ->where('t2.project')->eq($projectID)
-                ->andWhere('t1.frozen')->ne('')
-                ->limit(1)
-                ->fetch('1');
-        }
-        else
-        {
-            return $this->dao->select('1')->from($this->config->objectTables[$objectType])
-                ->where('frozen')->ne('')
-                ->andWhere('project')->eq($projectID)
-                ->limit(1)
-                ->fetch('1');
-        }
+        return $this->dao->select('1')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.frozen')->ne('')
+            ->andWhere('t2.category')->eq($category)
+            ->limit(1)
+            ->fetch('1');
     }
 }
