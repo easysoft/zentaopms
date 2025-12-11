@@ -148,17 +148,6 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->my->devopsspaceLink),
-        picker(
-            set('menu', array('class' => 'normal')),
-            set::name('devopsspaceLink'),
-            set::required(true),
-            set::items($devopsspaceLinkList),
-            set::value($devopsspaceLink)
-        )
-    ),
-    formGroup
-    (
         set::label($lang->my->devopsLink),
         picker(
             set('menu', array('class' => 'normal')),
@@ -166,6 +155,17 @@ formPanel
             set::required(true),
             set::items($devopsLinkList),
             set::value($devopsLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsspaceLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsspaceLink'),
+            set::required(true),
+            set::items($devopsspaceLinkList),
+            set::value($devopsspaceLink)
         )
     ),
     set::submitBtnText($lang->save)
