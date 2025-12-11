@@ -21,6 +21,7 @@ if(isset($config->setPercent) && $config->setPercent == 1 && isset($flow->projec
 }
 formBatchPanel
 (
+    set::title($title),
     formBatchItem
     (
         set::name('id'),
@@ -39,7 +40,7 @@ formBatchPanel
         set::name('type'),
         set::label($lang->stage->type),
         set::width('150px'),
-        set::control('select'),
+        set::control('picker'),
         set::items(isset($flow->projectModel) && $flow->projectModel == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList)
     )
 );
