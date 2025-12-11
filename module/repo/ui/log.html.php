@@ -154,6 +154,7 @@ dtable
     set::onCheckChange(jsRaw('window.checkedChange')),
     set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
     set::footToolbar($footToolbar),
+    set::userMap($users),
     set::footer(array('toolbar', 'flex', 'pager')),
     set::footPager(usePager('pager', 'noTotalCount')),
     set::showToolbarOnChecked(false)
