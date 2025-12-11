@@ -13,8 +13,8 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ('project', 'ipd',           'cpdproject', 'IPD定制项目研发',      'cpdproject',           'normal', 'rnd', '1');
 
 ALTER TABLE `zt_doc` ADD `isDeliverable` tinyint unsigned NOT NULL DEFAULT 0 AFTER `acl`;
-ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_deliverable` ADD `activity` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_deliverable` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_deliverable` ADD `activity` int unsigned NOT NULL DEFAULT '0' AFTER `name`;
 ALTER TABLE `zt_deliverable` ADD `trimmable` char(30) NOT NULL DEFAULT '0' AFTER `activity`;
 ALTER TABLE `zt_deliverable` ADD `trimRule` varchar(255) NOT NULL AFTER `trimmable`;
 ALTER TABLE `zt_deliverable` ADD `template` text NOT NULL AFTER `trimRule`;
@@ -24,8 +24,8 @@ ALTER TABLE `zt_deliverable` ADD `builtin` tinyint unsigned NOT NULL DEFAULT 0 A
 ALTER TABLE `zt_deliverable` ADD `systemList` tinyint unsigned NOT NULL DEFAULT 0 AFTER `builtin`;
 
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `deliverable` int(8) unsigned NOT NULL DEFAULT 0,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `deliverable` int unsigned NOT NULL DEFAULT 0,
   `stage` varchar(30) NOT NULL,
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -33,9 +33,9 @@ CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
 CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
 ALTER TABLE `zt_module` ADD `extra` varchar(30) NOT NULL DEFAULT '';
 
-ALTER TABLE `zt_process` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_process` ADD `module` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
-ALTER TABLE `zt_activity` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `process`;
+ALTER TABLE `zt_process` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_process` ADD `module` int unsigned NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_activity` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `process`;
 
 UPDATE `zt_process`  SET `editedDate` = NULL WHERE `editedDate` LIKE '1970-01-01%';
 UPDATE `zt_process`  SET `assignedDate` = NULL WHERE `assignedDate` LIKE '1970-01-01%';
@@ -67,7 +67,7 @@ CREATE UNIQUE INDEX `project_deliverable_doc` ON `zt_projectdeliverable` (`proje
 ALTER TABLE `zt_approvalflowobject` ADD `relatedBy` varchar(30) NOT NULL DEFAULT '' AFTER `objectID`;
 ALTER TABLE `zt_approvalflowobject` ADD `relatedDate`  datetime NULL AFTER `relatedBy`;
 
-ALTER TABLE `zt_reviewcl` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_reviewcl` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
 
 UPDATE `zt_lang` SET `value` = '单元测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'unittest'   AND `value` = '单元测试阶段';
 UPDATE `zt_lang` SET `value` = '功能测试环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'feature'    AND `value` = '功能测试阶段';
@@ -77,7 +77,7 @@ UPDATE `zt_lang` SET `value` = '冒烟测试环节' WHERE `module` = 'testcase' 
 UPDATE `zt_lang` SET `value` = '版本验证环节' WHERE `module` = 'testcase' AND `section` = 'stageList' AND `key` = 'bvt'        AND `value` = '版本验证阶段';
 
 ALTER TABLE `zt_review` ADD `version` varchar(255) NOT NULL DEFAULT '' AFTER `docVersion`;
-ALTER TABLE `zt_review` ADD `deliverable` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `title`;
+ALTER TABLE `zt_review` ADD `deliverable` int unsigned NOT NULL DEFAULT '0' AFTER `title`;
 ALTER TABLE `zt_review` ADD `isBaseline` tinyint(1) DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_review` ADD `type` varchar(30) NOT NULL DEFAULT '' AFTER `version`;
 UPDATE `zt_review` SET `status` = 'reviewing' WHERE `status` = 'wait';
@@ -92,7 +92,7 @@ UPDATE `zt_object` SET `category` = 'intergrate' WHERE `category` = 'ITTC';
 UPDATE `zt_object` SET `category` = 'system' WHERE `category` = 'STTC';
 
 ALTER TABLE `zt_object` ADD `status` varchar(20) NOT NULL DEFAULT '' AFTER `type`;
-ALTER TABLE `zt_object` ADD `approval`  mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_object` ADD `approval`  int unsigned NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_object` ADD `reviewResult` varchar(20) NOT NULL DEFAULT '' AFTER `approval`;
 ALTER TABLE `zt_object` ADD `reviewOpinion` text NULL AFTER `reviewResult`;
 ALTER TABLE `zt_object` ADD `reviewers` text NULL AFTER `reviewResult`;
@@ -126,10 +126,10 @@ INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, 
 ALTER TABLE `zt_approvalnode` CHANGE `result` `result` varchar(20) NOT NULL DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS `zt_decision` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `stage` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` int unsigned NOT NULL DEFAULT '0',
+  `stage` int unsigned NOT NULL DEFAULT '0',
+  `order` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `category` varchar(30) NOT NULL DEFAULT '',
@@ -142,14 +142,14 @@ CREATE TABLE IF NOT EXISTS `zt_decision` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `zt_stage` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
-ALTER TABLE `zt_stage` ADD `order` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `editedDate`;
+ALTER TABLE `zt_stage` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_stage` ADD `order` int unsigned NOT NULL DEFAULT '0' AFTER `editedDate`;
 
-ALTER TABLE `zt_object` ADD `execution` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `project`;
+ALTER TABLE `zt_object` ADD `execution` int unsigned NOT NULL DEFAULT '0' AFTER `project`;
 ALTER TABLE `zt_object` ADD `categoryTitle` varchar(255) NOT NULL DEFAULT '' AFTER `category`;
 ALTER TABLE `zt_object` MODIFY COLUMN `type` enum('reviewed','taged','decision') NOT NULL DEFAULT 'reviewed';
 
-ALTER TABLE `zt_auditcl` ADD `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
+ALTER TABLE `zt_auditcl` ADD `workflowGroup` int unsigned NOT NULL DEFAULT '0' AFTER `id`;
 
 UPDATE zt_activity SET optional = CASE
     WHEN optional = 'yes' THEN 'no'

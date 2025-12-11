@@ -11532,7 +11532,6 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverables))->andWhere('workflowGroup')->eq('0')->exec();
 
         /* 升级完后把没用的字段删掉。 */
-        $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " DROP `method`, DROP `model`, DROP `type`, DROP `files`;");
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
 
         if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
