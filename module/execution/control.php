@@ -523,6 +523,7 @@ class execution extends control
         $this->view->productID          = $productID;
         $this->view->project            = $project;
         $this->view->linkedProductCount = count($products);
+        $this->view->hasFrozenStories   = $this->project->hasFrozenObject($project->id, 'story');
         $this->display();
     }
 

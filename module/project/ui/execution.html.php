@@ -25,12 +25,6 @@ jsVar('confirmCreateStage', $lang->project->confirmCreateStage);
 
 $searchTask = strtolower($status) == 'bysearch';
 
-$frozenExecutions = 0;
-foreach($executionStats as $execution)
-{
-    if(!empty($execution->frozen)) $frozenExecutions ++;
-}
-
 $footToolbar = array();
 $canModify            = common::canModify('project', $project);
 $canBatchEdit         = hasPriv('execution', 'batchEdit');
@@ -38,7 +32,7 @@ $canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
 $canBatchAction       = $canModify && ($canBatchEdit || $canBatchChangeStatus);
 if($canBatchAction)
 {
-    if($canBatchEdit && empty($frozenExecutions))
+    if($canBatchEdit && empty($hasFrozenExecutions))
     {
         $footToolbar['items'][] = array
         (

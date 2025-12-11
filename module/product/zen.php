@@ -1492,6 +1492,7 @@ class productZen extends product
 
         $this->view->roadmaps         = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($productID) : array();
         $this->view->noclosedRoadmaps = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($productID, '', 'noclosed') : array();
+        $this->view->hasFrozenStories = $isProjectStory ? $this->loadModel('project')->hasFrozenObject($projectID, 'story') : false;
 
         $this->display();
     }
