@@ -109,8 +109,8 @@ $lang->my->productLink     = $lang->productCommon . ' Default Page';
 $lang->my->projectLink     = $lang->projectCommon . ' Default Page';
 $lang->my->executionLink   = 'Execution Default Page';
 $lang->my->docLink         = 'Document Default Page';
+$lang->my->devopsLink      = 'DevOps View Default Page';
 $lang->my->devopsspaceLink = 'DevOps Space Default Page';
-$lang->my->devopsLink      = 'DevOps Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
@@ -141,7 +141,7 @@ $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed sp
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
 
 $lang->my->devopsspaceLinkList = array();
-$lang->my->devopsspaceLinkList['repo-maintain'] = 'Space code library list';
+$lang->my->devopsspaceLinkList['repo-maintain'] = 'Code library list in space';
 $lang->my->devopsspaceLinkList['repo-browse']   = 'The most recently visited code library';
 
 $lang->my->devopsLinkList = array();
