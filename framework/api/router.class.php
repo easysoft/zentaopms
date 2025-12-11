@@ -242,14 +242,18 @@ class api extends router
      *
      * @param  array $routes
      * @access private
-     * @return void
+     * @return string
      */
     public function parseRouteV2($routes)
     {
+        $methodName = '';
+
         list($info, $paramValues) = $this->matchRoutes($routes);
 
         if($info)
         {
+            if(isset($info['method'])) $methodName = $info['method'];
+
             if(isset($info['redirect']))
             {
                 foreach($paramValues as $key => $value)
@@ -271,6 +275,7 @@ class api extends router
                 }
 
                 list($info, $paramValues) = $this->matchRoutes($routes);
+                if(isset($info['method'])) $methodName = $info['method'];
             }
 
             if(isset($info['response'])) $this->responseExtractor = $info['response'];
@@ -281,6 +286,8 @@ class api extends router
             if(is_numeric($key)) continue;
             $_GET[$key] = $value;
         }
+
+        return $methodName;
     }
 
     /**
@@ -295,7 +302,8 @@ class api extends router
     {
         $this->action = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
-        if($this->action == 'get') $this->parseRouteV2($routes);
+        $methodName = '';
+        if($this->action == 'get') $methodName = $this->parseRouteV2($routes);
 
         $pathItems  = explode('/', trim($this->path, '/'));
         $moduleName = $this->singular($pathItems[0]);
@@ -307,7 +315,7 @@ class api extends router
             'delete' => 'delete'
         );
 
-        $methodName = $actionToMethod[$this->action];
+        if(!$methodName) $methodName = $actionToMethod[$this->action];
 
         if(isset($pathItems[1]))
         {
@@ -331,10 +339,7 @@ class api extends router
             }
         }
 
-        if(isset($pathItems[2]))
-        {
-            $methodName = $pathItems[2];
-        }
+        if(isset($pathItems[2])) $methodName = $pathItems[2];
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
