@@ -1704,16 +1704,16 @@ class repo extends control
         $this->scm->setEngine($repo);
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
-        $tempDownloadDir = $this->app->getBasePath() . 'tmp/cache/repo/';
-        if(!is_dir($tempDownloadDir))mkdir($tempDownloadDir, 0755, true);
+        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/repo/';
+        if(!is_dir($tempDownloadDir)) mkdir($tempDownloadDir, 0755, true);
 
-        $packageFile = $tempDownloadDir . 'code.zip';
+        $packageFile = $tempDownloadDir . "{$repo->name}_{$branch}.zip";
         file_put_contents($packageFile, file_get_contents($url));
 
         $zipContent = file_get_contents($packageFile);
         unlink($packageFile);
 
-        $this->fetch('file', 'sendDownHeader', array('fileName' => "${branch}.zip", 'zip', $zipContent));
+        $this->fetch('file', 'sendDownHeader', array('fileName' => "{$branch}.zip", 'zip', $zipContent));
         return $this->send(array('result' => 'success'));
     }
 
