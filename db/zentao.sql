@@ -201,9 +201,9 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflow` (
 
 -- DROP TABLE IF EXISTS `zt_approvalflowobject`;
 CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `root` int(8) NOT NULL DEFAULT '0',
-  `flow` int(8) NOT NULL DEFAULT '0',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `root` int NOT NULL DEFAULT '0',
+  `flow` int NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` int unsigned NOT NULL DEFAULT '0',
   `relatedBy` varchar(30) NOT NULL DEFAULT '',
@@ -619,8 +619,8 @@ CREATE TABLE `zt_deliverable` (
 
 -- DROP TABLE IF EXISTS `zt_deliverablestage`;
 CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `deliverable` int(8) unsigned NOT NULL DEFAULT 0,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `deliverable` int unsigned NOT NULL DEFAULT 0,
   `stage` varchar(30) NOT NULL,
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -14132,7 +14132,7 @@ CREATE TABLE IF NOT EXISTS `zt_process` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `workflowGroup` int unsigned NOT NULL DEFAULT 0,
-  `module` int(8) unsigned NOT NULL DEFAULT '0',
+  `module` int unsigned NOT NULL DEFAULT '0',
   `abbr` varchar(30) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
