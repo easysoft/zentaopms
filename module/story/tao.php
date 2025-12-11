@@ -512,6 +512,7 @@ class storyTao extends storyModel
     protected function fetchExecutionStories(dao $storyDAO, int $productID, string $type, string $branch, string $orderBy, ?object $pager = null): array
     {
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_', $orderBy);
 
         $browseType     = $this->session->executionStoryBrowseType;
         $unclosedStatus = $this->getUnclosedStatusKeys();
