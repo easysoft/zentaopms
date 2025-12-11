@@ -169,6 +169,9 @@ class userModel extends model
      */
     public function checkVerifyPassword(string $verifyPassword): bool
     {
+        /* API has no verifyPassword. */
+        if($this->app->apiVersion == 'v2') return true;
+
         if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
         return !dao::isError();
