@@ -62,6 +62,7 @@ dtable
 (
     set::cols($config->repo->dtable->tag->fieldList),
     set::data($tagList),
+    set::userMap($users),
     set::orderBy($orderBy),
     set::sortLink(createLink('repo', 'browsetag', $urlParams)),
     set::footPager(usePager('pager', 'noTotalCount'))
