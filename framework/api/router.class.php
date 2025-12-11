@@ -320,6 +320,9 @@ class api extends router
                 else
                 {
                     $_GET[$moduleName.'ID'] = $pathItems[1];
+
+                    /* Set default params and post data to delete.*/
+                    if($this->action == 'delete') $_GET['confirm'] = 'yes';
                 }
             }
             else
@@ -442,20 +445,25 @@ class api extends router
     public function setFormData()
     {
         $requestBody = file_get_contents("php://input");
-        if(!$requestBody) return;
 
         $_POST = json_decode($requestBody, true);
 
-        /* 更新操作的表单需要拼接原始的值。 Merge original values. */
-        /* Get form data by get request. */
-        $postData = $_POST;
-        $_POST    = array();
+        /* Avoid empty post body. */
+        $_POST['verifyPassword'] = '1';
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
         {
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
+
+        /* 其他方法不需要从GET页面获取post data。Other request directly. */
+        if(!in_array($this->methodName, ['create', 'edit'])) return;
+        
+        /* 更新操作的表单需要拼接原始的值。 Merge original values. */
+        /* Get form data by get request. */
+        $postData = $_POST;
+        $_POST    = array();
 
         $this->control->viewType    = 'html';
         $this->control->getFormData = true;
