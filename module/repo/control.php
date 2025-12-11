@@ -1713,7 +1713,7 @@ class repo extends control
         $zipContent = file_get_contents($packageFile);
         unlink($packageFile);
 
-        $this->fetch('file', 'sendDownHeader', array('fileName' => "{$branch}.zip", 'zip', $zipContent));
+        $this->loadModel('file')->sendDownHeader("{$branch}.zip", 'zip', $zipContent);
     }
 
     /**
