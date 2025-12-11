@@ -966,9 +966,11 @@ class projectModel extends model
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
 
-        $hasBaseline  = true;
-        $hasAuditplan = true;
-        $hasProcess   = true;
+        $hasBaseline    = true;
+        $hasAuditplan   = true;
+        $hasProcess     = true;
+        $hasDeliverable = true;
+        $hasChange      = true;
         if($this->config->edition != 'open' && $projectID)
         {
             $project        = $this->fetchByID($projectID);
