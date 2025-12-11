@@ -35,6 +35,7 @@ $createItem = array('text' => $lang->job->create, 'url' => inLink('create', "rep
 foreach($jobList as $job) $job->space = $job->space ? $job->space : '';
 $cols = $this->loadModel('datatable')->getSetting('job');
 if(isset($cols['space'])) $cols['space']['map'] = $spaces;
+if(!empty($inSpace)) unset($cols['space']);
 $tableData = initTableData($jobList, $cols, $this->job);
 
 toolbar
