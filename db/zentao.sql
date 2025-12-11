@@ -205,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `zt_approvalflowobject` (
   `root` int(8) NOT NULL DEFAULT '0',
   `flow` int(8) NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
-  `objectID` mediumint(9) NOT NULL DEFAULT '0',
+  `objectID` int unsigned NOT NULL DEFAULT '0',
   `relatedBy` varchar(30) NOT NULL DEFAULT '',
   `relatedDate`  datetime NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
@@ -596,14 +596,14 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
 
 -- DROP TABLE IF EXISTS `zt_deliverable`;
 CREATE TABLE `zt_deliverable` (
-  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
-  `workflowGroup` int(8) unsigned NOT NULL DEFAULT 0,
-  `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` int unsigned NOT NULL DEFAULT 0,
+  `module` int unsigned NOT NULL DEFAULT 0,
   `builtin` tinyint unsigned NOT NULL DEFAULT 0,
   `systemList` tinyint unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL,
   `status` varchar(30) NOT NULL DEFAULT 'enabled',
-  `activity` int(8) unsigned NOT NULL DEFAULT 0,
+  `activity` int unsigned NOT NULL DEFAULT 0,
   `trimmable` char(30) NOT NULL DEFAULT '0',
   `trimRule` varchar(255) NOT NULL,
   `template` text NOT NULL,
@@ -629,10 +629,10 @@ CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
 
 -- DROP TABLE IF EXISTS `zt_decision`;
 CREATE TABLE IF NOT EXISTS `zt_decision` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `workflowGroup` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `stage` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` int unsigned NOT NULL DEFAULT '0',
+  `stage` int unsigned NOT NULL DEFAULT '0',
+  `order` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
   `category` varchar(30) NOT NULL DEFAULT '',
