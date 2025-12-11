@@ -1698,13 +1698,22 @@ class repo extends control
             if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true);
             mkdir($savePath, 0777, true);
         }
-
         $repo = $this->repo->getByID($repoID);
+
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
-        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
+        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/repo/';
+        if(!is_dir($tempDownloadDir)) mkdir($tempDownloadDir, 0755, true);
+
+        $packageFile = $tempDownloadDir . "{$repo->name}_{$branch}.zip";
+        file_put_contents($packageFile, file_get_contents($url));
+
+        $zipContent = file_get_contents($packageFile);
+        unlink($packageFile);
+
+        $this->loadModel('file')->sendDownHeader("{$branch}.zip", 'zip', $zipContent);
     }
 
     /**
