@@ -200,7 +200,7 @@ $downloadWg = div
             )
         )
     ) : null,
-    div
+    common::hasPriv('repo', 'downloadCode') ? div
     (
         setStyle(array('margin-top' => '20px')),
         btn
@@ -210,7 +210,7 @@ $downloadWg = div
             set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip)
         )
-    )
+    ) : null
 );
 
 toolbar
