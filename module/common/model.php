@@ -2541,6 +2541,7 @@ eof;
             foreach($actionList as $action)
             {
                 $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
+                $actionData['action'] = $action;
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;

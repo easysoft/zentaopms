@@ -81,7 +81,9 @@ class storyEntry extends entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $story->canBatchCreate = $this->loadModel('story')->isClickable($story, 'batchcreate');
+        $maxGradeGroup        = $this->loadModel('story')->getMaxGradeGroup();
+        $actionBtnList        = $this->loadModel('common')->buildOperateMenu($story, $story->type);
+        $story->actionBtnList = array_column(zget($actionBtnList, 'mainActions', array()), 'action');
 
         return $this->send(200, $this->format($story, 'title:decodeHtml,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }

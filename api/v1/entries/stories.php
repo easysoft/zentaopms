@@ -79,12 +79,13 @@ class storiesEntry extends entry
         $this->setPost('branches', array($this->request('branch')));
         $this->setPost('modules', array($module));
         $this->setPost('product', $productID);
-        $this->setPost('type', $this->param('type', 'story'));
+        $this->setPost('type', $this->request('type', 'story'));
+        $this->setPost('grade', $this->request('grade', ''));
 
         /* 获取评审相关参数 */
         $reviewer    = $this->request('reviewer');
         $status      = $this->request('status', 'active'); // 创建时默认状态为 'active'
-        $forceReview = $this->loadModel('story')->checkForceReview($this->param('type', 'story'));
+        $forceReview = $this->loadModel('story')->checkForceReview($this->request('type', 'story'));
         if($forceReview)
         {
             $needNotReview = 0;
