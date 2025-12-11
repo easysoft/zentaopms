@@ -68,6 +68,7 @@ $routes['/stories/:id/recall']          = 'storyRecall';
 $routes['/stories/:id/review']          = 'storyReview';
 $routes['/stories/:id/submitreview']    = 'storySubmitReview';
 $routes['/storyreviewerrequired/:type'] = 'storyreviewerrequired';
+$routes['/storygrades']                 = 'storygrade';
 
 $routes['/products/:id/bugs']   = 'bugs';
 $routes['/projects/:id/bugs']   = 'projectBugs';
