@@ -1690,7 +1690,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function downloadCode(int $repoID, string $branch = '')
+    public function ajaxDownloadCode(int $repoID, string $branch = '')
     {
         $savePath = $this->app->getDataRoot() . 'repo';
         if(!is_dir($savePath))
@@ -1698,13 +1698,23 @@ class repo extends control
             if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true);
             mkdir($savePath, 0777, true);
         }
-
         $repo = $this->repo->getByID($repoID);
+
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
         $url = $this->scm->getDownloadUrl($branch, $savePath);
 
-        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
+        $tempDownloadDir = $this->app->getBasePath() . 'tmp/cache/repo/';
+        if(!is_dir($tempDownloadDir))mkdir($tempDownloadDir, 0755, true);
+
+        $packageFile = $tempDownloadDir . 'code.zip';
+        file_put_contents($packageFile, file_get_contents($url));
+
+        $zipContent = file_get_contents($packageFile);
+        unlink($packageFile);
+
+        $this->fetch('file', 'sendDownHeader', array('fileName' => "${branch}.zip", 'zip', $zipContent));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
