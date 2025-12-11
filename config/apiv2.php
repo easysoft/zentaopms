@@ -32,7 +32,7 @@ $routes['/projects/testtask']         = array('response' => 'tasks(array)|testta
 $routes['/projects/testreport']       = array('response' => 'reports(array)|testreports,pager');
 $routes['/projects/:projectID']       = array('response' => 'project');
 
-$routes['/executions']                     = array('method' => 'all', 'response' => 'executionStats|executions');
+$routes['/executions']                     = array('method' => 'all', 'response' => 'executionStats|executions,pager');
 $routes['/projects/:projectID/executions'] = array('redirect' => '/projects/execution?projectID=:projectID');
 $routes['/executions/task']                = array('response' => 'tasks(array),pager');
 $routes['/executions/story']               = array('response' => 'stories(array),pager');
