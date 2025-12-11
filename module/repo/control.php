@@ -654,6 +654,7 @@ class repo extends control
         $this->view->pager      = $pager;
         $this->view->repoPairs  = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branches   = $branches;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->tags       = $tags;
         $this->view->source     = $source;
         $this->view->browseType = $browseType;
