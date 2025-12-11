@@ -32,11 +32,12 @@ $routes['/projects/testtask']         = array('response' => 'tasks(array)|testta
 $routes['/projects/testreport']       = array('response' => 'reports(array)|testreports,pager');
 $routes['/projects/:projectID']       = array('response' => 'project');
 
+$routes['/executions']                     = array('method' => 'all', 'response' => 'executionStats|executions');
 $routes['/projects/:projectID/executions'] = array('redirect' => '/projects/execution?projectID=:projectID');
-$routes['/executions/task']                = array('response' => 'tasks,pager', 'response' => 'tasks(array),pager');
-$routes['/executions/story']               = array('response' => 'stories,pager', 'response' => 'stories(array),pager');
+$routes['/executions/task']                = array('response' => 'tasks(array),pager');
+$routes['/executions/story']               = array('response' => 'stories(array),pager');
 $routes['/executions/build']               = array('response' => 'builds,pager');
-$routes['/executions/bug']                 = array('response' => 'bugs,pager', 'response' => 'bugs(array),pager');
+$routes['/executions/bug']                 = array('response' => 'bugs(array),pager');
 $routes['/executions/testcase']            = array('response' => 'cases(array)|testcases,pager');
 $routes['/executions/testtask']            = array('response' => 'tasks(array)|testtasks,pager');
 $routes['/executions/testreport']          = array('response' => 'reports(array)|testreports,pager');
