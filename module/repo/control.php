@@ -1714,7 +1714,6 @@ class repo extends control
         unlink($packageFile);
 
         $this->fetch('file', 'sendDownHeader', array('fileName' => "{$branch}.zip", 'zip', $zipContent));
-        return $this->send(array('result' => 'success'));
     }
 
     /**
