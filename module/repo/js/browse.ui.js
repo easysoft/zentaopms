@@ -105,7 +105,7 @@ window.renderCommentCell = function(result, {col, row})
 /* Open download page when downZip btn click. */
 window.downloadZip = function()
 {
-    var link = $.createLink('repo', 'ajaxDownloadCode', 'repoID=' + repo.id + '&branch=' + branch);
+    var link = $.createLink('repo', 'downloadCode', 'repoID=' + repo.id + '&branch=' + branch);
     $.ajaxSubmit({url: link});
 }
 

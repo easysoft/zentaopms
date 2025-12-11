@@ -1690,7 +1690,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxDownloadCode(int $repoID, string $branch = '')
+    public function downloadCode(int $repoID, string $branch = '')
     {
         $savePath = $this->app->getDataRoot() . 'repo';
         if(!is_dir($savePath))
