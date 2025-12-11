@@ -341,6 +341,8 @@ class formdom
                 $pickerConfig = $picker->getAttribute('zui-create-datepicker');
             }
 
+            if(empty($pickerConfig)) continue;
+
             /* 3. 提取name（关键：用正则匹配name字段）*/
             $name = null;
             if(preg_match('/"name"\s*:\s*"([^"]+)"/i', $pickerConfig, $nameMatches))
