@@ -83,7 +83,7 @@ class storyEntry extends entry
 
         $maxGradeGroup        = $this->loadModel('story')->getMaxGradeGroup();
         $actionBtnList        = $this->loadModel('common')->buildOperateMenu($story, $story->type);
-        $story->actionBtnList = array_column(zget($actionBtnList, 'mainActions', array()), 'action');
+        $story->actionBtnList = array_column(zget($actionBtnList, 'mainActions', array()), 'icon');
 
         return $this->send(200, $this->format($story, 'title:decodeHtml,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }

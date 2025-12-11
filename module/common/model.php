@@ -2569,7 +2569,6 @@ eof;
                     if($actionData !== false) $actions[] = $actionData;
                 }
 
-                $actionData['action'] = $action;
             }
             $actionsMenu[$menu] = $actions;
         }
