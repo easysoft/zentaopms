@@ -117,7 +117,7 @@ REPLACE INTO `zt_grouppriv`(`group`, `module`, `method`) SELECT `group`, `module
 REPLACE INTO `zt_grouppriv`(`group`, `module`, `method`) SELECT `group`, `module`, 'close' as `method` FROM `zt_grouppriv` WHERE `module` = 'reviewissue' AND `method` = 'updateStatus';
 DELETE FROM `zt_grouppriv` WHERE `module` IN ('reviewissue', 'activity', 'process') AND `method` IN ('outputList', 'updateOrder');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'zoutput';
-DELETE FROM `zt_grouppriv` WHERE `module` = 'design' AND `method` IN ('setPlusType', 'setType');
+DELETE FROM `zt_grouppriv` WHERE `module` = 'design' AND `method` = 'setPlusType';
 DELETE FROM `zt_grouppriv` WHERE `module` = 'workflowgroup' AND `method` = 'deliverable';
 
 INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, `alias`, `code`, `unit`, `desc`, `definition`, `when`, `createdBy`, `createdDate`, `builtin`, `deleted`, `dateType`) VALUES
