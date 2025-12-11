@@ -14508,7 +14508,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `resolutionBy` varchar(30) NOT NULL DEFAULT '',
   `resolutionDate` DATE NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` date NULL,
+  `createdDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
