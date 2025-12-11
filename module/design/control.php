@@ -167,7 +167,7 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
-        $frozenType    = $this->dao->select('type')->from(TABLE_DESIGN)->where('project')->eq($projectID)->andWhere('frozen')->ne('')->fetchPairs();
+        $frozenType    = $this->design->getFrozenDesignType($projectID);
         foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
@@ -207,7 +207,7 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
         $project       = $this->loadModel('project')->getByID($projectID);
-        $frozenType    = $this->dao->select('type')->from(TABLE_DESIGN)->where('project')->eq($projectID)->andWhere('frozen')->ne('')->fetchPairs();
+        $frozenType    = $this->design->getFrozenDesignType($projectID);
         foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->batchCreate;
@@ -295,7 +295,7 @@ class design extends control
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
-        $frozenType    = $this->dao->select('type')->from(TABLE_DESIGN)->where('project')->eq($design->project)->andWhere('frozen')->ne('')->fetchPairs();
+        $frozenType    = $this->design->getFrozenDesignType($design->project);
         foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;

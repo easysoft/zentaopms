@@ -2935,4 +2935,25 @@ class projectModel extends model
         }
         return $disabledProducts;
     }
+
+    /**
+     * 查找项目下是否有冻结的对象。
+     * Has frozen object.
+     *
+     * @param int    $projectID
+     * @param string $category SRS|PP
+     * @return int|string
+    */
+    public function hasFrozenObject(int $projectID, string $category): int|string
+    {
+        if(empty($projectID) || empty($category)) return '';
+
+        return $this->dao->select('1')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.frozen')->ne('')
+            ->andWhere('t2.category')->eq($category)
+            ->limit(1)
+            ->fetch('1');
+    }
 }

@@ -79,12 +79,6 @@ if($isFromDoc || $isFromAI)
     );
 }
 
-$frozenStories = 0;
-foreach($stories as $story)
-{
-    if(!empty($story->frozen)) $frozenStories ++;
-}
-
 /* Show feature bar. */
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}&recTotal={$pager->recTotal}&recPerPae={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
@@ -199,8 +193,8 @@ $batchItems  = array();
 if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
 if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
 {
-    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');
-    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->epic->create) : '');
+    if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');
+    if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->epic->create) : '');
     if($canOpreate['batchCreateRequirement']) $batchItems[]  = array('text' => $lang->URCommon, 'url' => $batchCreateRequirementLink);
     if($canOpreate['batchCreateEpic'])        $batchItems[]  = array('text' => $lang->ERCommon, 'url' => $batchCreateEpicLink);
 }
@@ -209,7 +203,7 @@ if(!empty($product->id))
 {
     if(count($batchItems) > 1)
     {
-        $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->story->batchCreate) : '');
+        $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->story->batchCreate) : '');
     }
     else
     {
@@ -229,8 +223,8 @@ if(commonModel::isTutorialMode())
     $canlinkPlanStory = false;
 }
 
-$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab, 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->story->linkStory) : '');
-$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm', 'hint' => $frozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStoryByPlan) : '');
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->story->linkStory) : '');
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm', 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStoryByPlan) : '');
 
 $createBtnGroup = null;
 if(!$isFromDoc && !$isFromAI)
@@ -244,11 +238,11 @@ if(!$isFromDoc && !$isFromAI)
                 setClass('btn secondary'),
                 set::icon('plus'),
                 set::url($createLink),
-                set::disabled(!empty($frozenStories)),
-                $frozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->create)) : null,
+                set::disabled(!empty($hasFrozenStories)),
+                $hasFrozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->create)) : null,
                 $lang->story->create
             ),
-            empty($createItems) || $frozenStories ? null : dropdown
+            empty($createItems) || $hasFrozenStories ? null : dropdown
             (
                 btn(setClass('btn secondary dropdown-toggle'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -259,7 +253,7 @@ if(!$isFromDoc && !$isFromAI)
     }
     elseif(count($createItems) == 1)
     {
-        $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary' . ($frozenStories ? ' disabled' : ''), 'icon' => 'plus')));
+        $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary' . ($hasFrozenStories ? ' disabled' : ''), 'icon' => 'plus')));
     }
 }
 
@@ -308,12 +302,12 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             setClass('btn primary'),
             set::icon('link'),
             set::url($linkStoryUrl),
-            set::disabled(!empty($frozenStories)),
-            $frozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->linkStory)) : null,
+            set::disabled(!empty($hasFrozenStories)),
+            $hasFrozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->linkStory)) : null,
             setData('app', $app->tab),
             $lang->story->linkStory
         ),
-        $frozenStories ? null : dropdown
+        $hasFrozenStories ? null : dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -321,8 +315,8 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn' . ($frozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary' . ($frozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn' . ($hasFrozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary' . ($hasFrozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null
 );
 
 if(!$isFromDoc && !$isFromAI) sidebar
@@ -424,7 +418,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = empty($frozenStories) && ($execution->hasProduct || $app->tab == 'execution') && common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchUnlink      = empty($hasFrozenStories) && ($execution->hasProduct || $app->tab == 'execution') && common::hasPriv('execution', 'batchUnlinkStory');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));

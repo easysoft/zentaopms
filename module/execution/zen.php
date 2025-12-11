@@ -369,11 +369,7 @@ class executionZen extends execution
 
         $project = $this->project->getByID($execution->project);
 
-        $this->view->hasFrozenStories = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-            ->where('t1.frozen')->ne('')
-            ->andWhere('t2.project')->eq($execution->id)
-            ->count();
+        $this->view->hasFrozenStories = $this->project->hasFrozenObject($execution->project, 'SRS');
 
         $this->view->title        = $this->lang->execution->kanban;
         $this->view->userList     = $userList;

@@ -506,6 +506,24 @@ class designModel extends model
     }
 
     /**
+     * 获取项目下冻结的设计类型。
+     * Get design type of frozen.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getFrozenDesignType(int $projectID): array
+    {
+        return $this->dao->select('t1.deliverable')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.frozen')->ne('')
+            ->andWhere('t2.category')->in('HLDS,DDS,DBDS,ADS')
+            ->fetchPairs();
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *

@@ -887,21 +887,22 @@ class project extends control
             $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
-        $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
-        $this->view->productList    = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->productID      = $productID;
-        $this->view->product        = $this->product->getByID($productID);
-        $this->view->projectID      = $projectID;
-        $this->view->project        = $project;
-        $this->view->projects       = $projects;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->status         = $status;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
-        $this->view->avatarList     = $this->user->getAvatarPairs('');
-        $this->view->queryID        = $queryID;
+        $this->view->title               = $this->lang->execution->allExecutions;
+        $this->view->executionStats      = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
+        $this->view->productList         = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productID           = $productID;
+        $this->view->product             = $this->product->getByID($productID);
+        $this->view->projectID           = $projectID;
+        $this->view->project             = $project;
+        $this->view->projects            = $projects;
+        $this->view->pager               = $pager;
+        $this->view->orderBy             = $orderBy;
+        $this->view->status              = $status;
+        $this->view->users               = $this->loadModel('user')->getPairs('noletter');
+        $this->view->isStage             = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
+        $this->view->avatarList          = $this->user->getAvatarPairs('');
+        $this->view->queryID             = $queryID;
+        $this->view->hasFrozenExecutions = $this->project->hasFrozenObject($project->id, 'PP');
 
         $this->display();
     }
