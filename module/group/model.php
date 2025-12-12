@@ -125,7 +125,7 @@ class groupModel extends model
         foreach($users as $user)
         {
             $user->group = $toGroupID;
-            $this->dao->insert(TABLE_USERGROUP)->data($user)->exec();
+            $this->dao->insert(TABLE_USERGROUP)->data($user, 'id')->exec();
         }
     }
 
@@ -468,7 +468,7 @@ class groupModel extends model
         {
             if(!isset($privMap[$priv->group . '-' . $priv->module . '-' . $priv->method]))
             {
-                $this->dao->insert(TABLE_GROUPPRIV)->data($priv)->exec();
+                $this->dao->insert(TABLE_GROUPPRIV)->data($priv, 'id')->exec();
             }
         }
 

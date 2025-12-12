@@ -1219,7 +1219,7 @@ class storyTao extends storyModel
         {
             $branchID = (int)$branchID;
             $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branchID)->set('stage')->eq('planned')->exec();
-            if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
+            if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy)) $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID], 'id')->exec();
         }
         return true;
     }
@@ -1279,7 +1279,7 @@ class storyTao extends storyModel
                 $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq((int)$branchID)->set('stage')->eq($stage)->exec();
                 if(isset($oldStages[$branchID]) && !empty($oldStages[$branchID]->stagedBy))
                 {
-                    $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID])->exec();
+                    $this->dao->replace(TABLE_STORYSTAGE)->data($oldStages[$branchID], 'id')->exec();
                     $stage = $oldStages[$branchID]->stage;
                 }
 

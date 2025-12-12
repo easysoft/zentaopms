@@ -476,7 +476,7 @@ class executionModel extends model
                         ->andWhere('product')->eq($newProductID)
                         ->fetch();
                     $data->project = $execution->project;
-                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data, 'id')->exec();
                 }
             }
         }
@@ -544,7 +544,7 @@ class executionModel extends model
                             ->andWhere('product')->eq($newProductID)
                             ->fetch();
                         $projectProduct->project = $execution->project;
-                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->exec();
+                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct, 'id')->exec();
                     }
                 }
             }
@@ -2785,7 +2785,7 @@ class executionModel extends model
                 if(isset($projectLinkedStories[$linkedStory->story])) continue;
 
                 $linkedStory->project = $newProjectID;
-                $this->dao->insert(TABLE_PROJECTSTORY)->data($linkedStory)->exec();
+                $this->dao->insert(TABLE_PROJECTSTORY)->data($linkedStory, 'id')->exec();
                 $this->action->create('story', $linkedStory->story, 'linked2project', '', $newProjectID);
             }
         }
