@@ -2942,18 +2942,19 @@ class projectModel extends model
      *
      * @param int    $projectID
      * @param string $category SRS|PP
-     * @return int|string
+     * @return bool
     */
-    public function hasFrozenObject(int $projectID, string $category): int|string
+    public function hasFrozenObject(int $projectID, string $category): bool
     {
-        if(empty($projectID) || empty($category)) return '';
+        if(empty($projectID) || empty($category)) return false;
 
-        return $this->dao->select('1')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+        $frozenObject = $this->dao->select('1')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t1.frozen')->ne('')
             ->andWhere('t2.category')->eq($category)
             ->limit(1)
             ->fetch('1');
+        return !empty($frozenObject);
     }
 }
