@@ -122,7 +122,6 @@ REPLACE INTO `zt_grouppriv`(`group`, `module`, `method`) SELECT `group`, `module
 DELETE FROM `zt_grouppriv` WHERE `module` IN ('reviewissue', 'activity', 'process') AND `method` IN ('outputList', 'updateOrder');
 DELETE FROM `zt_grouppriv` WHERE `module` = 'zoutput';
 DELETE FROM `zt_grouppriv` WHERE `module` = 'design' AND `method` IN ('setPlusType', 'setType');
-DELETE FROM `zt_grouppriv` WHERE `module` = 'workflowgroup' AND `method` = 'deliverable';
 
 INSERT INTO `zt_metric` (`purpose`, `scope`, `object`, `stage`, `type`, `name`, `alias`, `code`, `unit`, `desc`, `definition`, `when`, `createdBy`, `createdDate`, `builtin`, `deleted`, `dateType`) VALUES
 ('scale', 'user', 'reviewissue', 'released', 'php', '按人员统计的被指派的评审意见数	', '被指派的评审意见数', 'count_of_assigned_reviewissue_in_user', 'count', '按人员统计的被指派的评审意见数表示每个人被指派的评审意见数量之和，反映了每个人员需要处理的评审意见数量的规模。该数值越大，说明需要投入越多的时间处理评审意见。', '所有评审意见个数求和\r\n指派给为某人\r\n过滤已删除的评审意见\r\n过滤已关闭的评审意见\r\n过滤已删除项目的评审意见', '', 'system', '2024-05-07 08:00:00', '1', '0', 'nodate');

@@ -13056,6 +13056,7 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('enable')->exec();
             $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('disable')->exec();
         }
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('workflowgroup')->andWhere('method')->eq('deliverable')->exec();
 
         return true;
     }
