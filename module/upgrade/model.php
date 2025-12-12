@@ -13047,6 +13047,16 @@ class upgradeModel extends model
             ->fetchPairs();
         foreach($flowReportGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('report')->exec();
 
+        $setDelieverableGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('deliverable')
+            ->fetchPairs();
+        foreach($setDelieverableGroupIdList as $groupID)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('enable')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('disable')->exec();
+        }
+
         return true;
     }
 }
