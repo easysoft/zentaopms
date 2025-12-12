@@ -1888,7 +1888,7 @@
             return;
         }
 
-        if($link.is('a'))
+        if(href && $link.is('a'))
         {
             if(href.startsWith('javascript:')) return;
             if(/^https?:/.test(href) && !$link.data('app'))
