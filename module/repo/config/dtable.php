@@ -157,9 +157,10 @@ $config->repo->logDtable->fieldList['date']['type']     = 'datetime';
 $config->repo->logDtable->fieldList['date']['sortType'] = false;
 $config->repo->logDtable->fieldList['date']['width']    = '160';
 
-$config->repo->logDtable->fieldList['committer']['name']  = 'committer';
-$config->repo->logDtable->fieldList['committer']['type']  = 'user';
-$config->repo->logDtable->fieldList['committer']['width'] = '160';
+$config->repo->logDtable->fieldList['committer']['name']     = 'committer';
+$config->repo->logDtable->fieldList['committer']['type']     = 'user';
+$config->repo->logDtable->fieldList['committer']['width']    = '160';
+$config->repo->logDtable->fieldList['committer']['sortType'] = false;
 
 $config->repo->logDtable->fieldList['relations']['name']  = 'relations';
 $config->repo->logDtable->fieldList['relations']['type']  = 'html';
