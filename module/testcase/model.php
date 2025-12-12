@@ -140,6 +140,10 @@ class testcaseModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_',      't2.id_',      $orderBy);
+        if(strpos($orderBy, 'order_')   !== false) $orderBy = str_replace('order_',   't2.order_',   $orderBy);
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+
         if($browseType == 'needconfirm')
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')

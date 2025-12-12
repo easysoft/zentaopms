@@ -375,6 +375,9 @@ class storyModel extends model
 
         $branchParam  = ($type == 'bybranch' and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('id_', 't2.version_', $orderBy);
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_',      $orderBy);
+
         $stories = $this->dao->select("distinct t1.*, t2.`path`, t2.`plan`, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
