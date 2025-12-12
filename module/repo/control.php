@@ -347,7 +347,8 @@ class repo extends control
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
+            $link = !empty($spaceID) ? inLink('maintain', "inSpace=1&spaceID=$spaceID") : inLink('maintain');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $this->repoZen->buildEditForm($repoID, $objectID);
