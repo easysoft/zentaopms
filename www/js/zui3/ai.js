@@ -195,7 +195,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
         width      : info.content ? 800 : 600,
         postMessage: formConfig ? undefined : {content: [{role: 'system', content: info.dataPrompt}]},
         creatingChat: {
-            tempTitle: info.name,
+            title    : info.name,
             type     : 'agent',
             model    : info.model,
             tools    : tools,
