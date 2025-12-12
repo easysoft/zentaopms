@@ -81,7 +81,6 @@ class storyEntry extends entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $maxGradeGroup        = $this->loadModel('story')->getMaxGradeGroup();
         $actionBtnList        = $this->loadModel('common')->buildOperateMenu($story, $story->type);
         $story->actionBtnList = array_column(zget($actionBtnList, 'mainActions', array()), 'icon');
 
