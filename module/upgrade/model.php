@@ -13025,4 +13025,28 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
         }
     }
+
+    /*
+     * 升级项目流程相关的权限。
+     * Update the priv of workflow group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateWorkflowGroupPriv(): bool
+    {
+        $designFlowGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowfield')
+            ->andWhere('method')->eq('browse')
+            ->fetchPairs();
+        foreach($designFlowGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('designFlow')->exec();
+
+        $flowReportGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('design')
+            ->fetchPairs();
+        foreach($flowReportGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('report')->exec();
+
+        return true;
+    }
 }
