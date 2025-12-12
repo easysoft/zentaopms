@@ -13025,4 +13025,39 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
         }
     }
+
+    /*
+     * 升级项目流程相关的权限。
+     * Update the priv of workflow group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateWorkflowGroupPriv(): bool
+    {
+        $designFlowGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowfield')
+            ->andWhere('method')->eq('browse')
+            ->fetchPairs();
+        foreach($designFlowGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('designFlow')->exec();
+
+        $flowReportGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('design')
+            ->fetchPairs();
+        foreach($flowReportGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('report')->exec();
+
+        $setDelieverableGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('deliverable')
+            ->fetchPairs();
+        foreach($setDelieverableGroupIdList as $groupID)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('enable')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('disable')->exec();
+        }
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('workflowgroup')->andWhere('method')->eq('deliverable')->exec();
+
+        return true;
+    }
 }
