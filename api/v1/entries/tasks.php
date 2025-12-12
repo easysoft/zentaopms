@@ -159,6 +159,9 @@ class tasksEntry extends entry
             $team         = $this->request('team', array());
             $teamEstimate = $this->request('teamEstimate', array());
             $users        = $this->loadModel('user')->getPairs('noletter');
+
+            if(count($team) < 2) return $this->sendError(400, $this->lang->task->error->teamMember);
+
             foreach($teamEstimate as $index => $estimate)
             {
                 if(empty($team[$index])) continue;
