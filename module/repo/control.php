@@ -558,6 +558,7 @@ class repo extends control
         $this->view->cloneUrl       = $this->repo->getCloneUrl($repo);
         $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag    = $branchOrTag;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
