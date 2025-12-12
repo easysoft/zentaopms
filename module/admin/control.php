@@ -485,7 +485,7 @@ class admin extends control
                 'titleClass' => 'hidden',
                 'type'       => 'item',
                 'disabled'   => $menuGroup['disabled'],
-                'url'        => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
+                'url'        => $menuGroup['link'],
                 'active'     => $currentMenuKey == $menuKey,
                 'rootClass'  => 'admin-menu-item',
                 'attrs'      => array('disabled' => $menuGroup['disabled'])

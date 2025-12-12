@@ -88,6 +88,10 @@ UPDATE `zt_review` AS t1
 JOIN `zt_object` AS t2 ON t1.object = t2.id
 SET t1.version = t2.version;
 
+UPDATE `zt_reviewissue` AS t1
+JOIN `zt_review` AS t2 ON t1.review = t2.id
+SET t1.project = t2.project;
+
 UPDATE `zt_object` SET `category` = 'intergrate' WHERE `category` = 'ITTC';
 UPDATE `zt_object` SET `category` = 'system' WHERE `category` = 'STTC';
 
