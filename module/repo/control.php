@@ -540,8 +540,6 @@ class repo extends control
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
 
-        if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
-
         $this->view->title          = $this->lang->repo->common;
         $this->view->repo           = $repo;
         $this->view->revisions      = $revisions;
@@ -560,7 +558,7 @@ class repo extends control
         $this->view->cloneUrl       = $this->repo->getCloneUrl($repo);
         $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag    = $branchOrTag;
-        $this->view->users          = $this->user->getPairs('noletter');
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
