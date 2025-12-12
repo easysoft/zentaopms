@@ -254,6 +254,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
+    set::userMap($users),
     set::footPager(false)
 );
 
@@ -288,6 +289,7 @@ sidebar
         set::id('repo-comments-table'),
         set::cols($config->repo->commentDtable->fieldList),
         set::data($commentsTableData),
+        set::userMap($users),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
         set::canRowCheckable(jsRaw('window.canRowCheckable')),

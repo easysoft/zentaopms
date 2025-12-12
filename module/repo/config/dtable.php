@@ -101,6 +101,7 @@ $config->repo->repoDtable->fieldList['committer']['title']    = $lang->repo->com
 $config->repo->repoDtable->fieldList['committer']['sortType'] = false;
 $config->repo->repoDtable->fieldList['committer']['width']    = '90';
 $config->repo->repoDtable->fieldList['committer']['hint']     = true;
+$config->repo->repoDtable->fieldList['committer']['type']     = 'user';
 
 $config->repo->repoDtable->fieldList['comment']['name']     = 'originalComment';
 $config->repo->repoDtable->fieldList['comment']['title']    = $lang->repo->comment;
