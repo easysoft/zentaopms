@@ -5,7 +5,7 @@ fields:
 - field: id
   range: 31-100
 - field: parent
-  range: '`-1`{3},31{2},32{2},33{2}'
+  range: '0{3},31{2},32{2},33{2}'
 - field: name
   range: 1-100
   prefix: '任务'

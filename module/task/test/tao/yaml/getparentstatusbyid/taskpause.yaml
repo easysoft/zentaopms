@@ -5,7 +5,7 @@ fields:
 - field: id
   range: 11-100
 - field: parent
-  range: '`-1`{6},11{2},12{2},13{2},14{2},15{2},16{2}'
+  range: '0{6},11{2},12{2},13{2},14{2},15{2},16{2}'
 - field: name
   range: 1-100
   prefix: '任务'
