@@ -92,7 +92,7 @@ class cardTester extends tester
         $form->dom->moreBtn->click();
         $form->dom->btn($this->lang->kanban->finishCard)->click();
         $form->wait(2);
-        return ($form->dom->progressNum->getText() == '100%')
+        return ($form->dom->progressNum->getText() == '100.00%')
             ? $this->success('完成卡片成功')
             : $this->failed('完成卡片失败');
     }

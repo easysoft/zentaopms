@@ -158,25 +158,27 @@ foreach($config->ai->targetForm as $forms)
  * It will be used to get object ID and sprintf to format.
  */
 $config->ai->targetFormVars = array();
-$config->ai->targetFormVars['story']['create']         = (object)array('format' => 'product=%d', 'args' => array('product' => 1), 'app' => 'product');
-$config->ai->targetFormVars['story']['batchcreate']    = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
-$config->ai->targetFormVars['story']['subdivide']      = (object)array('format' => 'productID=%d&branch=&moduleID=0&storyID=%d', 'args' => array('product' => 1, 'story' => 0), 'app' => 'product');
-$config->ai->targetFormVars['story']['change']         = (object)array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product');
-$config->ai->targetFormVars['productplan']['create']   = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product' => 1, 'branch' => 0, 'productplan' => 0), 'app' => 'product');
-$config->ai->targetFormVars['productplan']['edit']     = (object)array('format' => 'planID=%d', 'args' => array('productplan' => 1), 'app' => 'product');
-$config->ai->targetFormVars['task']['create']          = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
-$config->ai->targetFormVars['task']['batchcreate']     = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
-$config->ai->targetFormVars['task']['edit']            = (object)array('format' => 'taskID=%d', 'args' => array('task' => 1), 'app' => 'execution');
-$config->ai->targetFormVars['bug']['create']           = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
-$config->ai->targetFormVars['bug']['edit']             = (object)array('format' => 'bugID=%d', 'args' => array('bug' => 1), 'app' => 'qa');
-$config->ai->targetFormVars['testcase']['create']      = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
-$config->ai->targetFormVars['testcase']['edit']        = (object)array('format' => 'caseID=%d', 'args' => array('case' => 1), 'app' => 'qa');
-$config->ai->targetFormVars['testreport']['create']    = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
-$config->ai->targetFormVars['execution']['testreport'] = (object)array('format' => '', 'args' => array(), 'app' => 'execution');
-// $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'), 'app' => 'product');
-$config->ai->targetFormVars['programplan']['create']   = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
-$config->ai->targetFormVars['doc']['create']           = (object)array('format' => 'objectType=%d', 'args' => array('objectType' => 'mine'), 'app' => 'doc');
-$config->ai->targetFormVars['doc']['edit']             = (object)array('format' => 'docID=%d', 'args' => array('doc' => 1), 'app' => 'doc');
+$config->ai->targetFormVars['story']['create']              = (object)array('format' => 'product=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['story']['batchcreate']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['story']['subdivide']           = (object)array('format' => 'productID=%d&branch=&moduleID=0&storyID=%d', 'args' => array('product' => 1, 'story' => 0), 'app' => 'product');
+$config->ai->targetFormVars['story']['change']              = (object)array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product');
+$config->ai->targetFormVars['story']['totask']              = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
+$config->ai->targetFormVars['productplan']['create']        = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product' => 1, 'branch' => 0, 'productplan' => 0), 'app' => 'product');
+$config->ai->targetFormVars['productplan']['edit']          = (object)array('format' => 'planID=%d', 'args' => array('productplan' => 1), 'app' => 'product');
+$config->ai->targetFormVars['task']['create']               = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
+$config->ai->targetFormVars['task']['batchcreate']          = (object)array('format' => 'executionID=%d&storyID=%d&moduleID=%d&taskID=%d', 'args' => array('execution' => 1, 'story' => 0, 'module' => 0, 'task' => 0), 'app' => 'execution');
+$config->ai->targetFormVars['task']['edit']                 = (object)array('format' => 'taskID=%d&moduleID=%d', 'args' => array('task' => 1, 'module' => 0), 'app' => 'execution');
+$config->ai->targetFormVars['bug']['create']                = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['bug']['edit']                  = (object)array('format' => 'bugID=%d', 'args' => array('bug' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testcase']['create']           = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testcase']['edit']             = (object)array('format' => 'caseID=%d', 'args' => array('case' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testreport']['create']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['execution']['testreport']      = (object)array('format' => '', 'args' => array(), 'app' => 'execution');
+$config->ai->targetFormVars['execution']['batchcreatetask'] = (object)array('format' => 'executionID=%d', 'args' => array('execution' => 1), 'app' => 'execution');
+  // $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'), 'app' => 'product');
+$config->ai->targetFormVars['programplan']['create'] = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
+$config->ai->targetFormVars['doc']['create']         = (object)array('format' => 'objectType=%d', 'args' => array('objectType' => 'mine'), 'app' => 'doc');
+$config->ai->targetFormVars['doc']['edit']           = (object)array('format' => 'docID=%d', 'args' => array('doc' => 1), 'app' => 'doc');
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();

@@ -20,8 +20,6 @@ fields:
     range: pie{50}
   - field: group
     range: '1,2,3,4,5'
-  - field: dataset
-    range: '0{30},1{10},2{10}'
   - field: desc
     range: '饼图描述1,饼图描述2,饼图描述3,饼图描述4,饼图描述5'
   - field: acl

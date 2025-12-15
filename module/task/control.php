@@ -987,13 +987,12 @@ class task extends control
      * 删除一个任务。
      * Delete a task.
      *
-     * @param  int    $executionID
      * @param  int    $taskID
      * @param  string $from
      * @access public
      * @return void
      */
-    public function delete(int $executionID, int $taskID, string $from = '')
+    public function delete(int $taskID, string $from = '')
     {
         $task = $this->task->fetchByID($taskID);
 

@@ -126,9 +126,6 @@ class treeZen extends tree
                 $this->app->loadLang('feedback');
                 $this->lang->tree->menu = $this->lang->feedback->menu;
                 break;
-            case 'dashboard':
-                $this->lang->tree->menu = $this->lang->report->menu;
-                break;
             case 'trainskill':
                 $this->lang->tree->menu = $this->lang->trainskill->menu;
                 break;

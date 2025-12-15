@@ -97,8 +97,8 @@ $tester->login();
 $kanbanurl['kanbanID'] = 1;
 r($tester->finishCard($kanbanurl)) && p('message,status') && e('完成卡片成功,SUCCESS');//完成卡片
 
-r($tester->activateCard($kanbanurl, ''))    && p('message,status') && e('激活卡片提示信息正确,SUCCESS');//进度必填校验
-r($tester->activateCard($kanbanurl, '200')) && p('message,status') && e('激活卡片提示信息正确,SUCCESS');//进度数值校验
-r($tester->activateCard($kanbanurl, '50'))  && p('message,status') && e('激活卡片成功,SUCCESS');//激活卡片
+r($tester->activateCard($kanbanurl, ''))       && p('message,status') && e('激活卡片提示信息正确,SUCCESS');//进度必填校验
+r($tester->activateCard($kanbanurl, '200'))    && p('message,status') && e('激活卡片提示信息正确,SUCCESS');//进度数值校验
+r($tester->activateCard($kanbanurl, '55.55'))  && p('message,status') && e('激活卡片成功,SUCCESS');//激活卡片
 
 $tester->closeBrowser();

@@ -23,7 +23,7 @@ class stakeholderModel extends model
         $stakeholder->from        = $data->from;
         $stakeholder->type        = $data->from == 'outside' ? 'outside' : 'inside';
         $stakeholder->createdBy   = $this->app->user->account;
-        $stakeholder->createdDate = helper::today();
+        $stakeholder->createdDate = helper::now();
         $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} AND deleted = '0'")->autoCheck()->exec();
 
         $stakeholderID = $this->dao->lastInsertID();
@@ -149,7 +149,7 @@ class stakeholderModel extends model
             $stakeholder->type        = in_array($account, array_keys($members)) ? 'inside' : 'outside';
             $stakeholder->from        = $stakeholder->type == 'inside' ? 'team' : 'company';
             $stakeholder->createdBy   = $this->app->user->account;
-            $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
+            $stakeholder->createdDate = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::now();
             $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->exec();
 
             $stakeholderID     = $this->dao->lastInsertId();
@@ -220,7 +220,7 @@ class stakeholderModel extends model
         $stakeholder = new stdclass();
         $stakeholder->key        = $data->key;
         $stakeholder->editedBy   = $this->app->user->account;
-        $stakeholder->editedDate = helper::today();
+        $stakeholder->editedDate = helper::now();
 
         $this->dao->update(TABLE_STAKEHOLDER)->data($stakeholder)
             ->autoCheck()

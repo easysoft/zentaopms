@@ -61,13 +61,6 @@ fields:
   postfix: ""
   loop: 0
   format: ""
-- field: dataset
-  note: 数据集
-  range: 0{10}
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
 - field: desc
   note: 描述
   range: 这是一个测试图表{10}

@@ -6,7 +6,8 @@ $operators = array();
 foreach($lang->search->operators as $value => $text) $operators[] = array('value' => $value, 'text' => $text);
 
 /* Build conditions. */
-$conditions = array();
+$conditions            = array();
+$conditionHasZeroValue = array();
 foreach($fieldParams as $name => $param)
 {
     if(!isset($fields[$name])) continue;
@@ -38,6 +39,7 @@ foreach($fieldParams as $name => $param)
         {
             if(empty($text)) continue;
             $condition->items[] = array('value' => $value, 'text' => $text);
+            if($value === 'ZERO') $conditionHasZeroValue[] = $name;
         }
     }
 
@@ -65,7 +67,7 @@ if(is_array($formSession))
                 $defaultData['field' . $index] = $item['field'];
                 if(isset($item['operator'])) $defaultData['operator' . $index] = $item['operator'];
                 if(isset($item['andOr']))    $defaultData['andOr' . $index] = $item['andOr'];
-                if(isset($item['value']))    $defaultData['value' . $index] = $item['value'];
+                if(isset($item['value']))    $defaultData['value' . $index] = ($item['value'] === '0' && in_array($item['field'], $conditionHasZeroValue)) ? 'ZERO' : $item['value'];
             }
             $index++;
         }

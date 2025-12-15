@@ -473,6 +473,15 @@ class user extends control
     {
         if(!empty($_POST))
         {
+            if($this->app->apiVersion == 'v2')
+            {
+                $_POST['password1']        = md5($_POST['password']);
+                $_POST['password2']        = md5($_POST['password']);
+                $_POST['passwordLength']   = strlen($_POST['password']);
+                $_POST['passwordStrength'] = 2;
+                $_POST['verifyPassword']   = 'PASSWORD';
+            }
+
             $user = form::data($this->config->user->form->create)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
@@ -550,6 +559,14 @@ class user extends control
     {
         if(!empty($_POST))
         {
+            if($this->app->apiVersion == 'v2')
+            {
+                $_POST['password1']        = md5($_POST['password']);
+                $_POST['password2']        = md5($_POST['password']);
+                $_POST['passwordLength']   = strlen($_POST['password']);
+                $_POST['passwordStrength'] = 2;
+            }
+
             $user = form::data($this->config->user->form->edit)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->add('id', $userID)
@@ -633,7 +650,7 @@ class user extends control
 
         if($_POST)
         {
-            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
+            if($this->user->checkVerifyPassword($this->post->verifyPassword)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
 
             $this->user->delete(TABLE_USER, $userID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

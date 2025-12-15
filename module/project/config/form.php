@@ -17,7 +17,7 @@ $config->project->form->create['multiple']      = array('type' => 'string', 'req
 $config->project->form->create['hasProduct']    = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['stageBy']       = array('type' => 'string', 'required' => false, 'default' => 'product');
 $config->project->form->create['PM']            = array('type' => 'string', 'required' => false, 'default' => '');
-$config->project->form->create['budget']        = array('type' => 'string', 'required' => false, 'default' => '');
+$config->project->form->create['budget']        = array('type' => 'float',  'required' => false, 'default' => '');
 $config->project->form->create['budgetUnit']    = array('type' => 'string', 'required' => false, 'default' => 'CNY');
 $config->project->form->create['begin']         = array('type' => 'date',   'required' => true);
 $config->project->form->create['end']           = array('type' => 'date',   'required' => false, 'default' => null);
