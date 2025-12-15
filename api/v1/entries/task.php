@@ -88,7 +88,6 @@ class taskEntry extends entry
         $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-
         $operateMenu       = $this->loadModel('common')->buildOperateMenu($task, 'task');
         $task->operateMenu = array_column(zget($operateMenu, 'mainActions', array()), 'name');
 
