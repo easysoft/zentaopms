@@ -67,8 +67,8 @@ class story extends control
             helper::setcookie('lastStoryModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* API will post projectID or executionID. */
-            if($this->post->project)   $objectID = $this->post->project;
-            if($this->post->execution) $objectID = $this->post->execution;
+            if($this->post->project)   $objectID = (int)$this->post->project;
+            if($this->post->execution) $objectID = (int)$this->post->execution;
 
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
