@@ -1850,7 +1850,7 @@ class aiModel extends model
                 foreach(array_keys($obj) as $idx)
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
-                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
+                    if(isset($data[$objectName][$idx][$objectKey])) $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
                 }
             }
             if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);

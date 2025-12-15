@@ -20,8 +20,6 @@ fields:
     range: waterpolo{30}
   - field: group
     range: '1,2,3,4,5'
-  - field: dataset
-    range: '0{20},1{5},2{5}'
   - field: desc
     range: '水球图描述1,水球图描述2,水球图描述3,水球图描述4,水球图描述5'
   - field: acl

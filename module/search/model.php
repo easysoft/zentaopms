@@ -42,7 +42,7 @@ class searchModel extends model
      * @access public
      * @return void
      */
-    public function setSearchParams(array $searchConfig)
+    public function setSearchParams(array &$searchConfig)
     {
         $module = $searchConfig['module'];
 

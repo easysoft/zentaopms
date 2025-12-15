@@ -29,9 +29,6 @@ fields:
 - field: group
   note: 分组
   range: 1{5},2{5}
-- field: dataset
-  note: 数据集
-  range: 0{10}
 - field: desc
   note: 描述
   range: 测试图表描述{10}

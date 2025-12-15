@@ -45,5 +45,5 @@ $user->gen(3);
 $tester = new createBugTester();
 r($tester->batchAssign($product, 'USER1'))          && p('status,message') && e('SUCCESS,bug批量指派成功');     //bug批量指派成功
 r($tester->selectAssign($product, 'BUG1', 'admin')) && p('status,message') && e('SUCCESS,bug选择指派成功');     //bug选择指派成功
-r($tester->directAssign($product, 'BUG2', 'USER2')) && p('status,message') && e('SUCCESS,bug直接修改指派成功'); //bug直接修改指派成功
+r($tester->directAssign('USER2'))                   && p('status,message') && e('SUCCESS,bug直接修改指派成功'); //bug直接修改指派成功
 $tester->closeBrowser();

@@ -260,14 +260,15 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string $buildIdList = '', bool $replace = true, int $system = 0): array
+    public function getBuildPairs(array|int $productIdList, string|int $branch = 'all', string $params = 'noterminate, nodone', int $objectID = 0, string $objectType = 'execution', string|int $buildIdList = '', bool $replace = true, int $system = 0): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuildPairs();
 
         $sysBuilds = array();
         if(strpos($params, 'notrunk') === false) $sysBuilds = array('trunk' => $this->lang->trunk);
 
-        $buildIdList    = str_replace('trunk', '0', $buildIdList);
+        if(is_string($buildIdList)) $buildIdList = str_replace('trunk', '0', $buildIdList);
+
         $shadows        = array();
         if(!empty($productIdList))   $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow'); // Get the buildID under the shadow product.
         if($objectType == 'project') $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where("FIND_IN_SET({$objectID}, project)")->fetchPairs('shadow', 'shadow');
@@ -418,7 +419,7 @@ class buildModel extends model
      * Get releated release.
      *
      * @param  array|int  $productIdList
-     * @param  string     $buildIdList
+     * @param  string|int $buildIdList
      * @param  array|bool $shadows
      * @param  string     $objectType
      * @param  int        $objectID
@@ -426,7 +427,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
+    public function getRelatedReleases(array|int $productIdList, string|int $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
         $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.objectType='build'")

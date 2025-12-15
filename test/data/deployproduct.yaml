@@ -19,3 +19,9 @@ fields:
     format: ""
   - field: release
     range: 0
+    note: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""

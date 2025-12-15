@@ -63,7 +63,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getModuleProjectCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('distinct t1.*, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
+        return $this->dao->select('DISTINCT t1.product, t1.case, t1.version, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story = t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story = t4.id')

@@ -338,7 +338,7 @@ window.buildTaskActions = function(item)
     if(priv.canActivateTask && item.dbPrivs.activate && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCreateTask && !isLimited) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCancelTask && item.dbPrivs.cancel && (item.status == 'wait' || item.status == 'developing' || item.status == 'pause')) actions.push({text: taskLang.cancel, icon: 'cancel', url: $.createLink('task', 'cancel', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canDeleteTask && item.dbPrivs.delete) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'executionID=0&taskID=' + item.id + '&from=taskkanban'), 'data-confirm': item.isParent ? taskLang.confirmDeleteParent : taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
+    if(priv.canDeleteTask && item.dbPrivs.delete) actions.push({text: taskLang.delete, icon: 'trash', url: $.createLink('task', 'delete', 'taskID=' + item.id + '&from=taskkanban'), 'data-confirm': item.isParent ? taskLang.confirmDeleteParent : taskLang.confirmDelete, 'innerClass': 'ajax-submit'});
 
     return actions;
 }

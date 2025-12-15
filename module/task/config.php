@@ -156,7 +156,7 @@ $config->task->actionList['create']['data-app'] = $app->tab;
 $config->task->actionList['delete']['icon']         = 'trash';
 $config->task->actionList['delete']['hint']         = $lang->task->delete;
 $config->task->actionList['delete']['text']         = $lang->task->delete;
-$config->task->actionList['delete']['url']          = array('module' => 'task', 'method' => 'delete', 'params' => 'executionID={execution}&taskID={id}&from=view');
+$config->task->actionList['delete']['url']          = array('module' => 'task', 'method' => 'delete', 'params' => 'taskID={id}&from=view');
 $config->task->actionList['delete']['data-confirm'] = array('message' => $lang->task->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->task->actionList['delete']['class']        = 'ajax-submit';
 

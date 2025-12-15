@@ -11,7 +11,7 @@ $config->branch->form->batchedit['status']   = array('type' => 'string', 'requir
 $config->branch->form->create['name']        = array('type' => 'string', 'required' => true,  'default' => '');
 $config->branch->form->create['desc']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->branch->form->create['status']      = array('type' => 'string', 'required' => false, 'default' => 'active');
-$config->branch->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::today());
+$config->branch->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->branch->form->edit['name']   = array('type' => 'string', 'required' => true,  'default' => '');
 $config->branch->form->edit['desc']   = array('type' => 'string', 'required' => false, 'default' => '');
