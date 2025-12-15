@@ -391,7 +391,7 @@ class model extends baseModel
         if($this->config->edition == 'open') return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
-        return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName(), $objectID);
+        return $this->loadModel('flow')->getExtendFields($this->app->rawModule, $this->app->rawMethod, $objectID);
     }
 
     /**
@@ -405,7 +405,7 @@ class model extends baseModel
         if($this->config->edition == 'open') return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();
 
-        return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
+        return $this->loadModel('workflowfield')->getExportFields($this->app->rawModule);
     }
 
     /**
@@ -420,8 +420,8 @@ class model extends baseModel
         if($this->config->edition == 'open') return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
 
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($moduleName, $objectID);
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName, $groupID);
