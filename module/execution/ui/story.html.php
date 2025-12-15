@@ -615,7 +615,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
+    ($isFromDoc || $isFromAI || $hasFrozenStories) ? null : set::createLink($createStoryLink)
 );
 
 render();
