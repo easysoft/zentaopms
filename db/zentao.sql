@@ -1631,7 +1631,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `colWidth` smallint unsigned NOT NULL DEFAULT 264,
   `minColWidth` smallint unsigned NOT NULL DEFAULT 200,
   `maxColWidth` smallint unsigned NOT NULL DEFAULT 384,
-  `deliverable` text DEFAULT NULL,
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
