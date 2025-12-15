@@ -1579,6 +1579,7 @@ class convertTao extends convertModel
         if(!dao::isError())
         {
             $storyID = $this->dao->dbh($this->dbh)->lastInsertID();
+            $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('root')->eq($storyID)->set('path')->eq(",{$storyID},")->where('id')->eq($storyID)->exec();
 
             $storyDesc = new stdclass();
             $storyDesc->story   = $storyID;
@@ -1665,6 +1666,7 @@ class convertTao extends convertModel
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
         $taskID = $this->dao->dbh($this->dbh)->lastInsertID();
+        $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('path')->eq(",{$taskID},")->where('id')->eq($taskID)->exec();
 
         /* Create opened action from openedDate. */
         $action = new stdclass();
