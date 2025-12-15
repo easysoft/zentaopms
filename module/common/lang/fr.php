@@ -607,10 +607,10 @@ $lang->colorPicker = new stdclass();
 $lang->colorPicker->errorTip = "Ce n'est pas une valeur de couleur valide";
 
 $lang->downNotify     = "Télécharger la notification sur le bureau";
-$lang->clientName     = "Desktop";
+$lang->clientName     = "ZenTao Desktop";
 $lang->downloadClient = "Télécharger ZenTao Desktop";
 $lang->downloadMobile = "Download Mobile Terminal";
-$lang->clientHelp     = "Aide Client";
+$lang->clientHelp     = "ZenTao Desktop Help";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html";
 $lang->website        = "https://www.zentao.pm";
 
