@@ -47,7 +47,6 @@
     let oldPageCofnig = null;
     const zinCallbacks = {
         onSelectLang: null,
-        onSelectTheme: null,
         onSelectVision: null,
         onChangeApp: null
     };
@@ -61,6 +60,11 @@
      */
     function registerZinCallback(name, callback)
     {
+        if(zinCallbacks[name] === undefined)
+        {
+            console.warn('[ZIN] registerZinCallback unknown callback name:', name);
+            return;
+        }
         if(typeof callback === 'function')
         {
             zinCallbacks[name] = callback;
@@ -1732,12 +1736,6 @@
         $.cookie.set('lang', lang, {expires: config.cookieLife, path: config.webRoot});
         ajaxSendScore('selectLang');
         $.apps.changeAppsLang(lang);
-
-        const callback = zinCallbacks.onSelectLang;
-        if(typeof callback === 'function')
-        {
-            try { callback(lang); } catch (e) { console.error('[ZIN] onSelectLang callback error:', e); }
-        }
     }
 
     /**
@@ -1749,12 +1747,6 @@
         $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
         $.ajaxSendScore('selectTheme');
         $.apps.changeAppsTheme(theme);
-
-        const callback = zinCallbacks.onSelectTheme;
-        if(typeof callback === 'function')
-        {
-            try { callback(theme); } catch (e) { console.error('[ZIN] onSelectTheme callback error:', e); }
-        }
     }
 
     /**
@@ -1772,11 +1764,6 @@
             }
             if(response.result == 'success' && response.load)
             {
-                const callback = zinCallbacks.onSelectVision;
-                if(typeof callback === 'function')
-                {
-                    try { callback(getVisions(vision)); } catch (e) { console.error('[ZIN] onSelectVision callback error:', e); }
-                }
                 window.top.location.href = response.load;
             }
         });
@@ -1789,9 +1776,7 @@
      */
     function getVisions(vision)
     {
-        const userVisions  = window.getUserVisions();
-        const activeVision = vision !== undefined ? vision : config.vision;
-        return userVisions.map(key => ({id: key, label: config.visions[key], active: key === activeVision}));
+        return window.userVisions.map(key => ({id: key, label: window.config.visions[key], active: key === window.config.vision}));
     }
 
     function fetchMessage(force, fetchUrl)

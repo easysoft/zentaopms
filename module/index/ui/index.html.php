@@ -101,6 +101,12 @@ else
 $scoreNotice = '';
 if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
 
+if($config->systemMode == 'light') unset($lang->searchObjects['program'], $lang->searchObjects['charter']);
+unset($lang->searchObjects['all']);
+$searchItems = array();
+$searchItems[] = array('key' => 'search', 'text' => $lang->searchAB . ' {0}');
+foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module . ' #{0}');
+
 jsVar('scoreNotice', $scoreNotice);
 jsVar('edition',     $config->edition);
 jsVar('vision',      $config->vision);
@@ -123,6 +129,8 @@ set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
 
 h::jsVar('window.appsItems', $appsItems, setID('appsItemsData'));
+h::jsVar('window.searchItems', $searchItems, setID('searchItemsData'));
+h::jsVar('window.userVisions', explode(',', $app->user->visions), setID('userVisionData'));
 
 /* The menu fixed on left */
 div

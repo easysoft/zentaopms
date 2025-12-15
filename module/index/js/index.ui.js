@@ -99,10 +99,10 @@ function extractLabelText(html)
 function getApps()
 {
     const lastAppCode = getLastAppCode();
-    return Array.from(allAppsItemsMap.values()).map(item => ({
-        id: item.code,
-        label: extractLabelText(item.title),
-        active: lastAppCode === item.code
+    return Array.from(allAppsItemsMap.values()).map(app => ({
+        id: app.code,
+        label: extractLabelText(window.appsItems.find(item => item.code === app.code)?.title),
+        active: lastAppCode === app.code
     }));
 }
 
@@ -128,7 +128,7 @@ function getOpenedApps()
     const lastAppCode = getLastAppCode();
     return Object.values(apps.openedMap).map(app => ({
         id: app.code,
-        label: extractLabelText(app.title),
+        label: extractLabelText(window.appsItems.find(item => item.code === app.code)?.title),
         active: app.code === lastAppCode
     }));
 }
@@ -834,6 +834,17 @@ function initAppsMenu(items)
         if(!app) return;
         $item.find('.text').text(app.text);
     });
+
+    const selectLangCallback = window.zinCallbacks.onSelectLang;
+    if(typeof selectLangCallback === 'function')
+    {
+        try { selectLangCallback(window.config.clientLang); } catch (e) { console.error('[ZIN] onSelectLang callback error:', e); }
+    }
+    const selectVisionCallback = window.zinCallbacks.onSelectVision;
+    if(typeof selectVisionCallback === 'function')
+    {
+        try { selectVisionCallback(window.getVisions()); } catch (e) { console.error('[ZIN] onSelectVision callback error:', e); }
+    }
 }
 
 /** Update apps menu. */
@@ -841,7 +852,7 @@ function updateAppsMenu(includeAppsBar)
 {
     loadCurrentPage(
     {
-        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + '#appsItemsData,#configJS',
+        selector: (includeAppsBar ? '#menuMoreBtn>*,#appsToolbar>*,#visionSwitcher>*,' : '') + '#appsItemsData,#configJS,#searchItemsData,#userVisionData',
         complete: () => initAppsMenu(window.appsItems),
     });
 }
