@@ -66,6 +66,10 @@ class story extends control
             if(isset($_POST['modules'])) $moduleID = reset($_POST['modules']);
             helper::setcookie('lastStoryModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
+            /* API will post projectID or executionID. */
+            if($this->post->project)   $objectID = $this->post->project;
+            if($this->post->execution) $objectID = $this->post->execution;
+
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
