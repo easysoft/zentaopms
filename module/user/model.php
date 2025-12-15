@@ -1272,6 +1272,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
+            ->andWhere('devopsSpace')->eq(0)
             ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');

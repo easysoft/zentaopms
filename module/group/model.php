@@ -198,6 +198,7 @@ class groupModel extends model
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t2.project')->eq(0)
+            ->andWhere('t2.devopsSpace')->eq(0)
             ->beginIF(!$allVision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->fetchAll('id');
     }
