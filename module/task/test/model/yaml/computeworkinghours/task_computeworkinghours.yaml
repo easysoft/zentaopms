@@ -4,7 +4,7 @@ author: auto_computeworkinghours
 version: "1.0"
 fields:
 - field: parent
-  range: 0,`-1`{5},2{3},3{3},4{3},5{3}
+  range: 0{6},2{3},3{3},4{3},5{3}
 - field: status
   range: doing{2},cancel,doing{2},wait,doing,done,wait,doing,done,closed{3},cancel{3}
 - field: consumed

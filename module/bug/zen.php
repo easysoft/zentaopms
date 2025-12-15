@@ -639,6 +639,8 @@ class bugZen extends bug
         $bug = $formData->setIF($this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF($formData->data->assignedTo != '', 'assignedDate', helper::now())
             ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
+            ->setIF($this->post->project, 'project', $this->post->project)
+            ->setIF($this->post->project, 'execution', $this->post->execution)
             ->get();
 
         if($this->post->fromCase && $this->post->fromCase != $formData->data->case)

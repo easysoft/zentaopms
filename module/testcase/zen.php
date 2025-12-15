@@ -1308,6 +1308,8 @@ class testcaseZen extends testcase
             ->setIF($from == 'execution' && $param, 'execution', $param)
             ->setIF($from != 'project' && $this->app->tab == 'project',   'project',   $this->session->project)
             ->setIF($from != 'execution' && $this->app->tab == 'execution', 'execution', $this->session->execution)
+            ->setIF($this->post->project, 'project', $this->post->project)       // API will post project param
+            ->setIF($this->post->execution, 'execution', $this->post->execution) // API will post execution param
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))

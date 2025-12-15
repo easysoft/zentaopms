@@ -6,11 +6,11 @@
 title=测试 convertTao::createStory();
 cid=15845
 
-- 测试步骤1：正常创建story类型需求 >> 期望返回true
-- 测试步骤2：正常创建requirement类型需求 >> 期望返回true
-- 测试步骤3：正常创建epic类型需求 >> 期望返回true
-- 测试步骤4：无效数据输入(null) >> 期望返回false
-- 测试步骤5：无效数据输入(空对象) >> 期望返回false
+- 执行convertTest模块的createStoryTest方法，参数是1, 1, 1, 'story',   @1
+- 执行convertTest模块的createStoryTest方法，参数是2, 2, 2, 'requirement',   @1
+- 执行convertTest模块的createStoryTest方法，参数是3, 3, 3, 'epic',   @1
+- 执行convertTest模块的createStoryTest方法，参数是1, 1, 1, 'story', null, array  @0
+- 执行convertTest模块的createStoryTest方法，参数是1, 1, 1, 'story',   @0
 
 */
 

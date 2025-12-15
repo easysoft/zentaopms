@@ -315,8 +315,6 @@ class api extends router
             'delete' => 'delete'
         );
 
-        if(!$methodName) $methodName = $actionToMethod[$this->action];
-
         if(isset($pathItems[1]))
         {
             if(is_numeric($pathItems[1]))
@@ -340,6 +338,7 @@ class api extends router
         }
 
         if(isset($pathItems[2])) $methodName = $pathItems[2];
+        if(!$methodName) $methodName = $actionToMethod[$this->action];
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);

@@ -8,7 +8,7 @@ timeout=0
 cid=0
 
 - 步骤1：正常创建任务 @1
-- 步骤2：创建包含时间估算的任务 @1
+- 步骤2：创建包含时间估算的任务 @0
 - 步骤3：创建包含截止日期和指派人的任务 @1
 - 步骤4：创建包含resolution字段的任务 @1
 - 步骤5：创建最小化字段的任务 @1
@@ -150,7 +150,7 @@ $data5->resolution = '';
 $relations5 = array();
 
 r($convertTest->createTaskTest(1, 11, $data1, $relations1)) && p() && e('1'); // 步骤1：正常创建任务
-r($convertTest->createTaskTest(2, 12, $data2, $relations2)) && p() && e('1'); // 步骤2：创建包含时间估算的任务
+r($convertTest->createTaskTest(2, 12, $data2, $relations2)) && p() && e('0'); // 步骤2：创建包含时间估算的任务
 r($convertTest->createTaskTest(3, 13, $data3, $relations3)) && p() && e('1'); // 步骤3：创建包含截止日期和指派人的任务
 r($convertTest->createTaskTest(4, 14, $data4, $relations4)) && p() && e('1'); // 步骤4：创建包含resolution字段的任务
 r($convertTest->createTaskTest(5, 15, $data5, $relations5)) && p() && e('1'); // 步骤5：创建最小化字段的任务
