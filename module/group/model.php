@@ -906,6 +906,7 @@ class groupModel extends model
         {
             if(!isset($packageData->privs)) continue;
 
+            $sortPriv = array();
             foreach($packageData->privs as $privCode => $priv)
             {
                 list($moduleName, $methodName) = explode('-', $privCode);
@@ -940,10 +941,22 @@ class groupModel extends model
                     $privName = isset($this->lang->$moduleName) && isset($this->lang->$moduleName->$methodLang) ? $this->lang->$moduleName->$methodLang : $privCode;
                 }
 
-                $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $privName);
+                $privData = (object)array('code' => $privCode, 'subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $privName);
 
-                $privList[$privCode] = $priv;
+                /* 将order作为键方便排序。 */
+                if(!empty($priv['order']) && !isset($sortPriv[$priv['order']]))
+                {
+                    $sortPriv[$priv['order']] = $privData;
+                }
+                else
+                {
+                    $sortPriv[] = $privData;
+                }
             }
+
+            /* 以order排序后再放入privList数组。 */
+            ksort($sortPriv);
+            foreach($sortPriv as $priv) $privList[$priv->code] = $priv;
         }
 
         return $privList;
