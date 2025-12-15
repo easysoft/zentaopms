@@ -563,7 +563,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
+    ($isFromDoc || $isFromAI || ($isProjectStory && $hasFrozenStories)) ? null : set::createLink($createStoryLink)
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

@@ -201,7 +201,7 @@ dtable
     set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
     set::emptyTip(!$searchTask ? $lang->execution->noExecution : $lang->task->noTask),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
-    set::createLink($canCreateExecution && !$searchTask ? $createLink : ''),
+    set::createLink($canCreateExecution && !$searchTask && !$hasFrozenExecutions ? $createLink : ''),
     set::createAttr($isStage ? 'data-app="project"' : 'data-app="execution"')
 );
 
