@@ -3,8 +3,8 @@ $routes = array();
 
 $routes['/programs']                     = array('response' => 'programs(array),pager');
 $routes['/programs/:programID']          = array('redirect' => '/programs/:programID/edit', 'response' => 'program');
-$routes['/programs/:programID/projects'] = array('redirect' => '/programs/project?programID=:programID', 'response' => 'projectStats(array)|projects,pager');
-$routes['/programs/:programID/products'] = array('redirect' => '/programs/product?programID=:programID', 'response' => 'products(array),pager');
+$routes['/programs/:programID/projects'] = array('redirect' => '/programs/:programID/project', 'response' => 'projectStats(array)|projects,pager');
+$routes['/programs/:programID/products'] = array('redirect' => '/programs/:programID/product', 'response' => 'products(array),pager');
 
 $routes['/products']            = array('redirect' => '/products/all');
 $routes['/products/all']        = array('response' => 'productStats|products,pager');
