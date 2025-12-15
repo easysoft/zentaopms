@@ -89,6 +89,9 @@ class taskEntry extends entry
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
 
+        $operateMenu       = $this->loadModel('common')->buildOperateMenu($task, 'task');
+        $task->operateMenu = array_column(zget($operateMenu, 'mainActions', array()), 'name');
+
         return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
