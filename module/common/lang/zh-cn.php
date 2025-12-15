@@ -608,10 +608,10 @@ $lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->downNotify     = "下载桌面提醒";
-$lang->clientName     = "大桌面";
-$lang->downloadClient = "下载大桌面";
+$lang->clientName     = "禅道即时通讯";
+$lang->downloadClient = "下载禅道即时通讯";
 $lang->downloadMobile = "下载移动端";
-$lang->clientHelp     = "大桌面使用说明";
+$lang->clientHelp     = "禅道即时通讯使用说明";
 $lang->clientHelpLink = "https://www.zentao.net/book/zentaopmshelp/302.html?fullScreen=zentao&theme=default#4";
 $lang->website        = "https://www.zentao.net";
 
