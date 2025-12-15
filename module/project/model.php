@@ -2315,7 +2315,7 @@ class projectModel extends model
         $project   = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
 
-        if(!commonModel::isTutorialMode() and $projectID != 0 and !$this->checkPriv($projectID))
+        if(!commonModel::isTutorialMode() && $projectID != 0 && !$this->checkPriv($projectID))
         {
             $this->projectTao->accessDenied();
             return true;
