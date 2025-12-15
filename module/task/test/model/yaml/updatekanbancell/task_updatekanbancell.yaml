@@ -8,7 +8,7 @@ fields:
 - field: story
   range: 0
 - field: parent
-  range: "0{5},`-1`,6"
+  range: "0{6},6"
 - field: status
   range: "wait,doing,done,cancel,closed,doing{2}"
 ...
