@@ -2,6 +2,7 @@
 $routes = array();
 
 $routes['/programs']                     = array('response' => 'programs(array),pager');
+$routes['/programs/:programID']          = array('redirect' => '/programs/:programID/edit', 'response' => 'program');
 $routes['/programs/:programID/projects'] = array('redirect' => '/programs/project?programID=:programID', 'response' => 'projectStats(array)|projects,pager');
 $routes['/programs/:programID/products'] = array('redirect' => '/programs/product?programID=:programID', 'response' => 'products(array),pager');
 
