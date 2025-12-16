@@ -664,6 +664,9 @@ class upgradeModel extends model
      */
     public function deleteFiles(string $script): array
     {
+        $dir = dirname($script);
+        if(!is_writable($dir)) return ["chmod 777 {$dir}"];
+
         $result = array();
         $zfile  = $this->app->loadClass('zfile');
 

@@ -144,27 +144,22 @@ class upgrade extends control
      */
     public function execute(string $fromVersion = '')
     {
-        session_write_close();
-        $this->session->set('step', '');
-
-        $this->view->title       = $this->lang->upgrade->result;
+        $this->view->title       = $this->lang->upgrade->execute;
         $this->view->fromVersion = $fromVersion;
 
         /* 手动删除无法自动删除的文件。*/
         /* Remove files that can not be deleted automatically. */
-        $script = $this->app->getTmpRoot() . 'deleteFiles.sh';
-        $result = $this->upgrade->deleteFiles($script);
-        if($result)
+        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $command = $this->upgrade->deleteFiles($script);
+        if($command)
         {
-            $this->view->result = 'fail';
-            $this->view->errors = $result;
+            $this->view->result  = 'fail';
+            $this->view->command = $command;
 
-            return $this->display();
+            return $this->display('upgrade', 'deletefiles');
         }
-        elseif(is_file($script))
-        {
-            unlink($script);
-        }
+
+        if(is_file($script)) unlink($script);
 
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
