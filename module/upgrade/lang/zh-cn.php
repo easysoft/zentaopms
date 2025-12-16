@@ -12,6 +12,7 @@
 global $config;
 $lang->upgrade->common          = '升级';
 $lang->upgrade->welcome         = '欢迎升级禅道';
+$lang->upgrade->execute         = '版本升级';
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
 $lang->upgrade->fail            = '升级失败';

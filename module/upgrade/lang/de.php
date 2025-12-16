@@ -12,6 +12,7 @@
 global $config;
 $lang->upgrade->common          = 'Upgrade';
 $lang->upgrade->welcome         = 'Willkommen zum Upgrade auf Zen Tao';
+$lang->upgrade->execute         = 'Upgrade';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Ergebnis';
 $lang->upgrade->fail            = 'Fehlgeschlagen';

@@ -11,6 +11,7 @@
  */
 $lang->upgrade->common          = '升級';
 $lang->upgrade->welcome         = '歡迎升級禪道';
+$lang->upgrade->execute         = '版本升級';
 $lang->upgrade->start           = '開始';
 $lang->upgrade->result          = '升級結果';
 $lang->upgrade->fail            = '升級失敗';
