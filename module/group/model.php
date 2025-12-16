@@ -1108,7 +1108,7 @@ class groupModel extends model
                 $method = $this->lang->resource->$moduleName->$methodName;
 
                 if(!isset($this->lang->$moduleName->$method)) $this->app->loadLang($moduleName);
-                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'data-module' => $moduleName, 'data-method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method, 'data-id' => $relatedPriv);
+                $subsetPrivs[$type][$subsetName]['children'][] = array('id' => $relatedPriv, 'data-module' => $moduleName, 'data-method' => $methodName, 'subset' => $subsetName, 'text' => $this->lang->$moduleName->$method, 'data-id' => $relatedPriv, 'title' => $this->lang->$moduleName->$method);
             }
         }
 
