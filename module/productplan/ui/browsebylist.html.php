@@ -223,7 +223,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->productplan->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '')
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createPlanLink)
 );
 
 modal
