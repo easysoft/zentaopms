@@ -453,7 +453,15 @@ class api extends router
         $_POST = json_decode($requestBody, true);
 
         /* Avoid empty post body. */
-        $_POST['verifyPassword'] = '1';
+        if(in_array($this->control->moduleName, ['feedback', 'ticket']))
+        {
+            $_POST['uid'] = '1';
+        }
+        else
+        {
+            $_POST['verifyPassword'] = '1';
+        }
+
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
