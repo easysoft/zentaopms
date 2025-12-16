@@ -107,4 +107,4 @@ $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');
 
 $routes['/users']         = array('redirect' => '/companies/browse', 'response' => 'users,pager');
-$routes['/users/:userID'] = array('redirect' => '/users/profile', 'response' => 'user');
+$routes['/users/:userID'] = array('redirect' => '/users/:userID/profile', 'response' => 'user');
