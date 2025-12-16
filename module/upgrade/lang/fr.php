@@ -11,13 +11,13 @@
  */
 global $config;
 $lang->upgrade->common          = 'Mise à jour';
+$lang->upgrade->welcome         = 'Bienvenue dans la mise à niveau vers Zen Tao';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Résultat';
 $lang->upgrade->fail            = 'Echec';
 $lang->upgrade->successTip      = 'Mise à jour effectuée';
 $lang->upgrade->success         = 'Mise à jour effectuée';
 $lang->upgrade->tohome          = 'Visitez ZenTao';
-$lang->upgrade->license         = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning        = 'Attention!';
 $lang->upgrade->checkExtension  = 'Vérifiez Extensions';
 $lang->upgrade->consistency     = 'Vérifiez Consistence';

@@ -11,13 +11,13 @@
  */
 global $config;
 $lang->upgrade->common          = 'Upgrade';
+$lang->upgrade->welcome         = 'Willkommen zum Upgrade auf Zen Tao';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Ergebnis';
 $lang->upgrade->fail            = 'Fehlgeschlagen';
 $lang->upgrade->successTip      = 'Successed';
 $lang->upgrade->success         = 'Erfolgreich';
 $lang->upgrade->tohome          = 'Home';
-$lang->upgrade->license         = 'Zentao PMS nutzt jetzt Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning        = 'Warnung!';
 $lang->upgrade->checkExtension  = 'Erweiterung prüfen';
 $lang->upgrade->consistency     = 'Check Consistency';

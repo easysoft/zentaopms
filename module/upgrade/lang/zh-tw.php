@@ -10,13 +10,13 @@
  * @link        https://www.zentao.net
  */
 $lang->upgrade->common          = '升級';
+$lang->upgrade->welcome         = '歡迎升級禪道';
 $lang->upgrade->start           = '開始';
 $lang->upgrade->result          = '升級結果';
 $lang->upgrade->fail            = '升級失敗';
 $lang->upgrade->successTip      = '升級成功';
 $lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>恭喜您！</p><p>您的禪道已經成功升級。</p>";
 $lang->upgrade->tohome          = '訪問禪道';
-$lang->upgrade->license         = '禪道項目管理軟件已更換授權協議至 Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->upgrade->warnning        = '警告';
 $lang->upgrade->checkExtension  = '檢查插件';
 $lang->upgrade->consistency     = '一致性檢查';

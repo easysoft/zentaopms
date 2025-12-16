@@ -43,7 +43,7 @@ $lang->collapseMenu   = '收起導航';
 $lang->preference     = '個性化設置';
 $lang->tutorialAB     = '使用教程';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>時間: %s 毫秒, 內存: %s KB, 查詢: %s.  </div></div>";
-$lang->agreement      = "已閲讀並同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授權協議1.2》</a>。<span class='text-danger'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</span>";
+$lang->agreement      = "已閲讀並同意。<strong class='ml-3'>未經許可，不得去除、隱藏或遮掩禪道軟件的任何標誌及連結。</strong>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>艾體驗設計</div></a>";
 
 $lang->reset          = '重填';

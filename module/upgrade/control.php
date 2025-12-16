@@ -41,12 +41,13 @@ class upgrade extends control
      * 授权协议页面。
      * Check agree license.
      *
+     * @param  int    $agree
      * @access public
      * @return void
      */
-    public function license()
+    public function license(int $agree = 0)
     {
-        if($this->get->agree == true) $this->locate(inlink('backup'));
+        if($agree == 1) $this->locate(inlink('backup'));
 
         $this->view->title   = $this->lang->upgrade->common;
         $this->view->license = $this->loadModel('install')->getLicense();

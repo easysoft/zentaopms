@@ -11,13 +11,13 @@
  */
 global $config;
 $lang->upgrade->common          = '升级';
+$lang->upgrade->welcome         = '欢迎升级禅道';
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
 $lang->upgrade->fail            = '升级失败';
 $lang->upgrade->successTip      = '升级成功';
 $lang->upgrade->success         = "<p>恭喜您！您的禅道已经成功升级。</p>";
 $lang->upgrade->tohome          = '访问禅道';
-$lang->upgrade->license         = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->upgrade->warnning        = '警告';
 $lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->consistency     = '一致性检查';
