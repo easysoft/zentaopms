@@ -134,6 +134,7 @@ $config->testcase->dtable->fieldList['stepNumber']['sortType'] = false;
 
 if($config->edition != 'open')
 {
+    $app->loadLang('custom');
     $config->testcase->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
     $config->testcase->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
     $config->testcase->dtable->fieldList['relatedObject']['sortType']    = false;

@@ -299,17 +299,17 @@ class testreportTest
     {
         $builds = $this->build->getByList($buildIdList);
         $childBuilds = $this->objectModel->getChildBuilds($builds);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         if(empty($childBuilds)) return '';
-        
+
         $result = array();
         foreach($childBuilds as $childBuild)
         {
             $result[] = $childBuild->id . ':' . $childBuild->name;
         }
-        
+
         return implode(',', $result);
     }
 }

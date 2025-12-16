@@ -329,6 +329,24 @@ class myTest
     }
 
     /**
+     * 测试构建评审意见搜索表单。
+     * Test build reviewissue search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildReviewissueSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildReviewissueSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        return $tester->config->reviewissue->search;
+    }
+
+    /**
      * 通过搜索获取风险。
      * Get risks by search.
      *
@@ -341,6 +359,25 @@ class myTest
     public function getRisksBySearchTest(int $queryID, string $type, string $orderBy): array
     {
         $objects = $this->objectModel->getRisksBySearch($queryID, $type, $orderBy , null);
+
+        if(dao::isError()) return dao::getError();
+
+        return array_keys($objects);
+    }
+
+    /**
+     * 通过搜索获取评审意见。
+     * Get reviewissues by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewissuesBySearchTest(int $queryID, string $type, string $orderBy): array
+    {
+        $objects = $this->objectModel->getReviewissuesBySearch($queryID, $type, $orderBy , null);
 
         if(dao::isError()) return dao::getError();
 
@@ -662,7 +699,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('getProductRelatedData');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, [$productKeys]);
         if(dao::isError()) return dao::getError();
 
@@ -684,7 +721,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('getTaskAssignedByMe');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, [$pager, $orderBy, $objectIdList]);
         if(dao::isError()) return dao::getError();
 
@@ -705,7 +742,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('buildReviewedList');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectModel, [$objectGroup, $actions, $flows]);
         if(dao::isError()) return dao::getError();
 
@@ -728,7 +765,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getProductRelatedAssignedByMe');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, [$objectIdList, $objectType, $module, $orderBy, $pager]);
         if(dao::isError()) return dao::getError();
 
@@ -781,7 +818,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchStoriesBySearch');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, [$myStoryQuery, $type, $orderBy, $pager, $storiesAssignedByMe]);
         if(dao::isError()) return dao::getError();
 
@@ -804,7 +841,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchEpicsBySearch');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, [$myEpicQuery, $type, $orderBy, $pager, $epicIDList]);
         if(dao::isError()) return dao::getError();
 
@@ -827,7 +864,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('fetchRequirementsBySearch');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, [$myRequirementQuery, $type, $orderBy, $pager, $requirementIDList]);
         if(dao::isError()) return dao::getError();
 
@@ -848,7 +885,7 @@ class myTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('buildReviewingFlows');
         $method->setAccessible(true);
-        
+
         $result = $method->invokeArgs($this->objectTao, [$objectGroup, $flows, $objectNameFields]);
         if(dao::isError()) return dao::getError();
 
@@ -865,7 +902,7 @@ class myTest
     public function buildTaskDataTest(array $tasks)
     {
         if(empty($tasks)) return array();
-        
+
         // 直接模拟buildTaskData方法的核心逻辑，避免复杂的依赖
         foreach($tasks as $task)
         {
@@ -873,17 +910,17 @@ class myTest
             $task->estimateLabel = $task->estimate . '工时';
             $task->consumedLabel = $task->consumed . '工时';
             $task->leftLabel     = $task->left     . '工时';
-            
+
             // 状态检查：如果需求状态为active且版本不一致，则设为changed
             $task->status = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? 'changed' : $task->status;
-            
+
             // 设置其他属性
             $task->canBeChanged = true; // 简化处理
             $task->isChild      = false;
             $task->parentName   = '';
 
             if($task->status == 'changed') $task->rawStatus = 'changed';
-            
+
             // 处理父子关系
             if($task->parent > 0)
             {
@@ -912,22 +949,22 @@ class myTest
     public function buildCaseDataTest(array $cases, string $type)
     {
         if(empty($cases)) return $cases;
-        
+
         global $tester;
-        
+
         // 模拟buildCaseData方法的核心逻辑，避免复杂的类依赖
         $failCount = 0;
         foreach($cases as $case)
         {
             // 模拟story模块的checkNeedConfirm处理
             if(isset($case->needconfirm)) $case->needconfirm = $case->needconfirm;
-            
+
             // 模拟testcase模块的appendData处理
             // 这里简化处理，直接保持原有属性
-            
+
             // 统计失败数量
             if(isset($case->lastRunResult) && $case->lastRunResult && $case->lastRunResult != 'pass') $failCount++;
-            
+
             // 处理需要确认的状态
             if(isset($case->needconfirm) && $case->needconfirm)
             {
@@ -938,17 +975,17 @@ class myTest
             {
                 $case->status = $tester->lang->testcase->changed ?? '用例已变更';
             }
-            
+
             // 处理空的执行结果
-            if(!isset($case->lastRunResult) || !$case->lastRunResult) 
+            if(!isset($case->lastRunResult) || !$case->lastRunResult)
             {
                 $case->lastRunResult = $tester->lang->testcase->unexecuted ?? '未执行';
             }
         }
-        
+
         // 模拟设置视图变量
         if(isset($tester->view)) $tester->view->failCount = $failCount;
-        
+
         if(dao::isError()) return dao::getError();
 
         return $cases;
@@ -964,7 +1001,7 @@ class myTest
     public function assignRelatedDataTest(array $feedbacks): array
     {
         if(empty($feedbacks)) return array();
-        
+
         // 模拟assignRelatedData方法的核心逻辑
         $storyIdList = $bugIdList = $todoIdList = $taskIdList = $ticketIdList = array();
         foreach($feedbacks as $feedback)
@@ -975,7 +1012,7 @@ class myTest
             if($feedback->solution == 'totask')  $taskIdList[]   = $feedback->result;
             if($feedback->solution == 'ticket')  $ticketIdList[] = $feedback->result;
         }
-        
+
         // 模拟获取关联数据（简化实现，只统计ID数量）
         $result = array();
         $result['bugs']    = count($bugIdList);
@@ -983,7 +1020,7 @@ class myTest
         $result['todos']   = count($todoIdList);
         $result['tasks']   = count($taskIdList);
         $result['tickets'] = count($ticketIdList);
-        
+
         return $result;
     }
 
@@ -999,39 +1036,39 @@ class myTest
     public function buildSearchFormForFeedbackTest(int $queryID, string $orderBy, string $rawMethod = 'feedback'): array
     {
         global $tester;
-        
+
         // 保存原始rawMethod并设置新值
         $originalRawMethod = $tester->app->rawMethod ?? '';
         $tester->app->rawMethod = $rawMethod;
-        
+
         // 模拟buildSearchFormForFeedback方法的核心逻辑
         // 由于直接调用zen层方法比较复杂，我们模拟其主要功能
-        
+
         // 初始化feedback搜索配置
         if(!isset($tester->config->feedback)) $tester->config->feedback = new stdclass();
         if(!isset($tester->config->feedback->search)) $tester->config->feedback->search = array();
-        
+
         // 设置搜索模块名
         $tester->config->feedback->search['module'] = $rawMethod . 'Feedback';
-        
+
         // 设置搜索动作URL
         $tester->config->feedback->search['actionURL'] = "inlink({$rawMethod}, 'mode=feedback&browseType=bysearch&param=myQueryID&orderBy={$orderBy}')";
-        
+
         // 设置queryID
         $tester->config->feedback->search['queryID'] = $queryID;
-        
+
         // 设置搜索参数（模拟从其他模块获取数据）
         if(!isset($tester->config->feedback->search['params'])) $tester->config->feedback->search['params'] = array();
-        
+
         // 模拟产品数据
         $tester->config->feedback->search['params']['product']['values'] = array(1 => 'Product 1', 2 => 'Product 2');
-        
-        // 模拟模块数据  
+
+        // 模拟模块数据
         $tester->config->feedback->search['params']['module']['values'] = array(1 => 'Module 1', 2 => 'Module 2');
-        
+
         // 模拟处理人数据
         $tester->config->feedback->search['params']['processedBy']['values'] = array('admin' => 'Admin', 'user1' => 'User1');
-        
+
         // 如果是work方法，需要移除某些字段
         if($rawMethod == 'work')
         {
@@ -1043,12 +1080,12 @@ class myTest
                 unset($tester->config->feedback->search['fields'][$field]);
             }
         }
-        
+
         // 恢复原始rawMethod
         $tester->app->rawMethod = $originalRawMethod;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // 返回搜索配置信息用于验证
         return array(
             'module' => $tester->config->feedback->search['module'] ?? '',
@@ -1072,11 +1109,11 @@ class myTest
     public function showWorkCountTest(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): array
     {
         global $tester;
-        
+
         // 模拟showWorkCount方法的核心功能
         // 初始化计数数组
         $count = array('task' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
-        
+
         // 模拟pager初始化
         if(!class_exists('pager'))
         {
@@ -1091,9 +1128,9 @@ class myTest
                 }
             ');
         }
-        
+
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        
+
         // 模拟获取当前用户分配的任务数量
         $tasks = $tester->dao->select('*')->from(TABLE_TASK)
                  ->where('assignedTo')->eq($tester->app->user->account ?? 'admin')
@@ -1101,7 +1138,7 @@ class myTest
                  ->andWhere('status')->in('wait,doing')
                  ->fetchAll();
         $count['task'] = count($tasks);
-        
+
         // 模拟获取当前用户分配的需求数量
         $stories = $tester->dao->select('*')->from(TABLE_STORY)
                    ->where('assignedTo')->eq($tester->app->user->account ?? 'admin')
@@ -1109,7 +1146,7 @@ class myTest
                    ->andWhere('status')->in('active,reviewing')
                    ->fetchAll();
         $count['story'] = count($stories);
-        
+
         // 模拟获取当前用户分配的bug数量
         $bugs = $tester->dao->select('*')->from(TABLE_BUG)
                 ->where('assignedTo')->eq($tester->app->user->account ?? 'admin')
@@ -1117,7 +1154,7 @@ class myTest
                 ->andWhere('status')->in('active,confirmed')
                 ->fetchAll();
         $count['bug'] = count($bugs);
-        
+
         // 其他工作项默认为0（在测试数据中没有）
         $count['case'] = 0;
         $count['testtask'] = 0;
@@ -1128,14 +1165,14 @@ class myTest
         $count['meeting'] = 0;
         $count['ticket'] = 0;
         $count['feedback'] = 0;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         // 模拟设置视图变量
         if(!isset($tester->view)) $tester->view = new stdclass();
         $tester->view->todoCount = $count;
         $tester->view->isOpenedURAndSR = false;
-        
+
         return $count;
     }
 
@@ -1152,37 +1189,37 @@ class myTest
     public function showWorkCountNotInOpenTest(array $count, object $pager, string $edition = 'open', string $vision = 'rnd'): array
     {
         global $tester;
-        
+
         // 保存原始配置并设置测试配置
         $originalEdition = $tester->config->edition ?? 'open';
         $originalVision = $tester->config->vision ?? 'rnd';
         $tester->config->edition = $edition;
         $tester->config->vision = $vision;
-        
+
         // 创建测试用的pager对象，如果传入的不是有效对象
         if(!is_object($pager) || !property_exists($pager, 'recTotal'))
         {
             $pager = new stdclass();
             $pager->recTotal = 0;
         }
-        
+
         // 确定版本标志
         $isBiz = $edition == 'biz' ? 1 : 0;
         $isMax = $edition == 'max' ? 1 : 0;
         $isIPD = $edition == 'ipd' ? 1 : 0;
-        
+
         // 如果不是开源版，统计反馈和工单
         if($edition != 'open')
         {
             // 模拟反馈和工单数量（避免查询不存在的表）
             $count['feedback'] = 0;  // 测试环境中默认为0
             $count['ticket'] = 0;    // 测试环境中默认为0
-            
+
             // 模拟从session设置ticketBrowseType
             if(!isset($tester->session)) $tester->session = new stdclass();
             $tester->session->ticketBrowseType = 'assignedtome';
         }
-        
+
         // 如果是MAX或IPD版本
         if($isMax || $isIPD)
         {
@@ -1191,15 +1228,15 @@ class myTest
                 // 模拟获取问题、风险、质量检查、会议数量（避免查询不存在的表）
                 $count['issue'] = 0;     // 测试环境中默认为0
                 $count['risk'] = 0;      // 测试环境中默认为0
-                
+
                 // 模拟质量检查数量(NC + 审计计划)
                 $ncCount = 2;            // 模拟数据
                 $auditplanCount = 1;     // 模拟数据
                 $count['qa'] = $ncCount + $auditplanCount;
-                
+
                 $count['meeting'] = 0;   // 测试环境中默认为0
             }
-            
+
             // IPD版本且是OR视野的需求处理
             if($isIPD && $vision == 'or')
             {
@@ -1209,19 +1246,19 @@ class myTest
                 $count['demand'] = $assignedToDemandCount + $reviewByDemandCount;
             }
         }
-        
+
         // 恢复原始配置
         $tester->config->edition = $originalEdition;
         $tester->config->vision = $originalVision;
-        
+
         // 模拟设置视图变量
         if(!isset($tester->view)) $tester->view = new stdclass();
         $tester->view->isBiz = $isBiz;
         $tester->view->isMax = $isMax;
         $tester->view->isIPD = $isIPD;
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $count;
     }
 }

@@ -15,7 +15,6 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 $fields         = $this->config->programplan->form->create;
-$enabledPoints  = isset($enabledPoints)  ? $enabledPoints  : new stdclass();
 $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 $canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
@@ -181,6 +180,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
                 'data-class-name' => 'text-gray border border-gray-300'
             );
         }
+        if($name == 'defaultPoint') $field['hidden'] = true;
 
         if($name == 'name') $field['width'] = '240px';
         if(!isset($field['width'])) $field['width'] = '120px';
@@ -192,7 +192,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
 };
 
 /* Generate default rendering data. */
-$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints, $project)
+$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $project)
 {
     $items = array();
 
@@ -201,17 +201,21 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     {
         foreach($stages as $stage)
         {
-            $points = !empty($enabledPoints->{$stage->type}) ? $enabledPoints->{$stage->type} : array();
+            $TRpoints  = isset($stage->pointList['TR']) ? array_keys($stage->pointList['TR']) : array();
+            $DCPpoints = isset($stage->pointList['DCP']) ? array_keys($stage->pointList['DCP']) : array();
+            $points    = array_merge($TRpoints, $DCPpoints);
 
-            $item            = new stdClass();
-            $item->name      = $stage->name;
-            $item->code      = isset($stage->code) ? $stage->code : '';
-            $item->percent   = $stage->percent;
-            $item->attribute = $stage->type;
-            $item->acl       = 'open';
-            $item->milestone = 0;
-            $item->point     = implode(',', $points);
-            $item->parallel  = 0;
+            $item               = new stdClass();
+            $item->name         = $stage->name;
+            $item->code         = isset($stage->code) ? $stage->code : '';
+            $item->percent      = $stage->percent ?: 0;
+            $item->attribute    = $stage->type;
+            $item->acl          = 'open';
+            $item->milestone    = 0;
+            $item->point        = implode(',', $points);
+            $item->defaultPoint = implode(',', $points);
+            $item->parallel     = 0;
+            $item->stageID      = $stage->id;
 
             $items[] = $item;
         }
@@ -220,7 +224,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
     /* Create stages for exist project. */
     foreach($plans as $plan)
     {
-        $points = !empty($enabledPoints->{$plan->attribute}) ? $enabledPoints->{$plan->attribute} : array();
+        $points = isset($plan->enabledPoints) ? array_keys($plan->enabledPoints) : array();
 
         $item               = new stdClass();
         $item->disabled     = $plan->type != 'stage';
@@ -231,7 +235,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->code         = $plan->code;
         $item->PM           = $plan->PM;
         $item->status       = $plan->status;
-        $item->percent      = $plan->percent;
+        $item->percent      = $plan->percent ?: 0;
         $item->attribute    = $plan->attribute;
         $item->acl          = $plan->acl;
         $item->milestone    = $plan->milestone;
@@ -244,6 +248,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->order        = $plan->order;
         $item->parallel     = $plan->parallel;
         $item->point        = implode(',', $points);
+        $plan->stageID      = $plan->id;
         $plan->disabled     = !isset($plan->setMilestone);
         $plan->setMilestone = isset($plan->setMilestone) ? $plan->setMilestone : false;
         $plan->point        = implode(',', $points);
@@ -273,7 +278,7 @@ jsVar('childEnabledTip',  $lang->programplan->childEnabledTip);
 jsVar('typeList',         $lang->execution->typeList);
 jsVar('confirmCreateTip', $lang->project->confirmCreateStage);
 jsVar('errorLang',        $lang->programplan->error);
-jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
+jsVar('ipdStagePoint',    $project->model == 'ipd' ? $ipdStagePoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
@@ -292,6 +297,24 @@ toolbar
 (
     backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
+
+if($project->model == 'ipd' && empty($stages) && empty($plans) && empty($planID))
+{
+    div
+    (
+        setClass('dtable-empty-tip bg-white'),
+        div
+        (
+            setClass('row gap-4 items-center'),
+            div
+            (
+                setClass('text-gray'),
+                $lang->programplan->emptyStageTip
+            )
+        )
+    );
+    return;
+}
 
 $batchFormOptions = array();
 $batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。

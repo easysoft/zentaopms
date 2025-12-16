@@ -134,7 +134,7 @@ class treeTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('buildTreeArray');
         $method->setAccessible(true);
-        
+
         $method->invokeArgs($this->objectModel, array(&$treeMenu, $modules, $module, $moduleName, $divide));
 
         if(dao::isError()) return dao::getError();
@@ -990,10 +990,10 @@ class treeTest
     public function setModuleLangTest()
     {
         global $lang;
-        
+
         // 清空现有的module语言项
         unset($lang->module);
-        
+
         $this->objectModel->setModuleLang();
 
         if(dao::isError()) return dao::getError();

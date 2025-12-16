@@ -13,7 +13,7 @@ cid=19620
 - 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array 属性admin @admin
 - 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array  @0
 - 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array  @0
-- 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array 
+- 执行userTest模块的getObjectsAuthedUsersTest方法，参数是array
  - 属性admin @admin
  - 属性user4 @user4
 

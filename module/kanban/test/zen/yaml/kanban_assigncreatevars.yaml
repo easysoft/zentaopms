@@ -8,118 +8,118 @@ fields:
 - field: id
   note: 看板ID
   range: 1-5
-  
+
 - field: space
   note: 所属空间ID
   range: 1-3
-  
+
 - field: name
   note: 看板名称
   range: Development Kanban{1}, Testing Kanban{1}, Product Kanban{1}, Sprint Kanban{1}, Project Kanban{1}
-  
+
 - field: owner
   note: 看板拥有者
   range: admin{2}, user1{2}, user2{1}
-  
+
 - field: team
   note: 看板团队成员
   range: user1,user2{2}, user2,user3{1}, admin,user1{1}, []{1}
-  
+
 - field: desc
   note: 看板描述
   range: Development workflow kanban{1}, Testing process board{1}, Product management kanban{1}, Sprint planning board{1}, Project tracking kanban{1}
-  
+
 - field: acl
   note: 访问控制
   range: open{3}, private{1}, cooperation{1}
-  
+
 - field: whitelist
   note: 白名单
   range: user1,user2{1}, admin,user1{2}, []{2}
-  
+
 - field: archived
   note: 归档状态
   range: 0{4}, 1{1}
-  
+
 - field: performable
   note: 可执行性
   range: 0{3}, 1{2}
-  
+
 - field: status
   note: 看板状态
   range: active{4}, closed{1}
-  
+
 - field: order
   note: 排序
   range: 1-5
-  
+
 - field: displayCards
   note: 显示卡片数
   range: 0{2}, 10{1}, 20{1}, 50{1}
-  
+
 - field: showWIP
   note: 显示WIP
   range: 1{4}, 0{1}
-  
+
 - field: fluidBoard
   note: 流式看板
   range: 0{3}, 1{2}
-  
+
 - field: colWidth
   note: 列宽度
   range: 264{3}, 300{1}, 200{1}
-  
+
 - field: minColWidth
   note: 最小列宽度
   range: 200{5}
-  
+
 - field: maxColWidth
   note: 最大列宽度
   range: 384{5}
-  
+
 - field: object
   note: 导入对象类型
   range: []{1}, plans{1}, releases{1}, plans,builds{1}, executions,cards{1}
-  
+
 - field: alignment
   note: 对齐方式
   range: center{4}, left{1}
-  
+
 - field: createdBy
   note: 创建者
   range: admin{3}, user1{1}, user2{1}
-  
+
 - field: createdDate
   note: 创建时间
   range: (-20d)-(-1d):2d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: lastEditedBy
   note: 最后编辑者
   range: admin{2}, user1{2}, user2{1}
-  
+
 - field: lastEditedDate
   note: 最后编辑时间
   range: (-5d)-(0d):1d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: closedBy
   note: 关闭者
   range: []{4}, admin{1}
-  
+
 - field: closedDate
   note: 关闭时间
   range: 0000-00-00 00:00:00{4}, (-1d)-(0d):1d{1}
-  
+
 - field: activatedBy
   note: 激活者
   range: admin{3}, user1{1}, user2{1}
-  
+
 - field: activatedDate
   note: 激活时间
   range: (-3d)-(0d):1d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: deleted
   note: 删除状态
   range: 0{5}

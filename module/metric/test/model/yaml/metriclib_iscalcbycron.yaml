@@ -6,64 +6,64 @@ version: "1.0"
 fields:
 - field: id
   range: 1-6
-  
+
 - field: metricID
   range: 0{6}
-  
+
 - field: metricCode
   range: test_metric_year{2}, test_metric_month{2}, test_metric_day{1}, test_metric_week{1}
-  
+
 - field: system
   range: 0{6}
-  
+
 - field: program
   range: 0{6}
-  
+
 - field: project
   range: 0{6}
-  
+
 - field: product
   range: 0{6}
-  
+
 - field: execution
   range: 0{6}
-  
+
 - field: code
   range: ""{6}
-  
+
 - field: pipeline
   range: ""{6}
-  
+
 - field: repo
   range: ""{6}
-  
+
 - field: user
   range: ""{6}
-  
+
 - field: dept
   range: ""{6}
-  
+
 - field: calcType
   range: cron{6}
-  
+
 - field: calculatedBy
   range: ""{6}
-  
+
 - field: value
   range: 10-60:10
-  
+
 - field: year
   range: 2024{6}
-  
+
 - field: month
   range: 01{2}, 02{2}, 03{2}
-  
+
 - field: day
   range: 01{2}, 15{2}, 20{2}
-  
+
 - field: week
   range: 1{2}, 6{2}, 12{2}
-  
+
 - field: date
   range: "20240101 100000, 20240115 110000, 20240201 100000, 20240215 110000, 20240320 100000, 20240321 110000"
   type: timestamp

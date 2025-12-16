@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 designModel->update();
@@ -15,17 +16,17 @@ cid=15997
  - 第0条的old属性 @设计2
  - 第0条的new属性 @修改后的名字
 - 修改设计的类型
- - 第1条的field属性 @type
- - 第1条的old属性 @DBDS
- - 第1条的new属性 @HLDS
+ - 第0条的field属性 @type
+ - 第0条的old属性 @DBDS
+ - 第0条的new属性 @HLDS
 - 修改设计的所属故事
  - 第0条的field属性 @story
  - 第0条的old属性 @2
  - 第0条的new属性 @1
 - 修改设计的描述
- - 第1条的field属性 @desc
- - 第1条的old属性 @这是设计描述5
- - 第1条的new属性 @修改后的描述
+ - 第0条的field属性 @desc
+ - 第0条的old属性 @这是设计描述5
+ - 第0条的new属性 @修改后的描述
 - 测试ID为空 @0
 - 测试ID不存在 @0
 - 测试名称为空第name条的0属性 @『设计名称』不能为空。
@@ -50,15 +51,16 @@ $changeStory   = array('story' => 1);
 $changeDesc    = array('desc' => '修改后的描述');
 $emptyName     = array('name' => '');
 $emptyType     = array('type' => '');
+$emptyDesc     = array('desc' => '');
 
 $designTester = new designTest();
 
 /* Normal condition. */
 r($designTester->updateTest($idList[0], $changeProduct)) && p('0:field,old,new') && e('product,0,1');                     // 修改设计的所属产品
 r($designTester->updateTest($idList[1], $changeName))    && p('0:field,old,new') && e('name,设计2,修改后的名字');         // 修改设计的名称
-r($designTester->updateTest($idList[2], $changeType))    && p('1:field,old,new') && e('type,DBDS,HLDS');                  // 修改设计的类型
+r($designTester->updateTest($idList[2], $changeType))    && p('0:field,old,new') && e('type,DBDS,HLDS');                  // 修改设计的类型
 r($designTester->updateTest($idList[3], $changeStory))   && p('0:field,old,new') && e('story,2,1');                       // 修改设计的所属故事
-r($designTester->updateTest($idList[4], $changeDesc))    && p('1:field,old,new') && e('desc,这是设计描述5,修改后的描述'); // 修改设计的描述
+r($designTester->updateTest($idList[4], $changeDesc))    && p('0:field,old,new') && e('desc,这是设计描述5,修改后的描述'); // 修改设计的描述
 
 /* Error condition. */
 r($designTester->updateTest($idList[5], $changeProduct)) && p()         && e('0');                      // 测试ID为空

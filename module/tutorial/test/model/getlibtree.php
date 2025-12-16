@@ -8,16 +8,16 @@ timeout=0
 cid=19443
 
 - 执行tutorialTest模块的getLibTreeTest方法  @1
-- 执行tutorialTest模块的getLibTreeTest方法 
+- 执行tutorialTest模块的getLibTreeTest方法
  - 第0条的id属性 @2
  - 第0条的name属性 @Test Doc Lib
-- 执行tutorialTest模块的getLibTreeTest方法 
+- 执行tutorialTest模块的getLibTreeTest方法
  - 第0条的type属性 @docLib
  - 第0条的parent属性 @1
-- 执行tutorialTest模块的getLibTreeTest方法 
+- 执行tutorialTest模块的getLibTreeTest方法
  - 第0条的objectType属性 @custom
  - 第0条的active属性 @1
-- 执行tutorialTest模块的getLibTreeTest方法 
+- 执行tutorialTest模块的getLibTreeTest方法
  - 第0条的order属性 @0
  - 第0条的main属性 @0
 

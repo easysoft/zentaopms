@@ -133,7 +133,6 @@ $lang->featureswitch      = new stdclass();
 $lang->importdata         = new stdclass();
 $lang->systemsetting      = new stdclass();
 $lang->staffmanage        = new stdclass();
-$lang->modelconfig        = new stdclass();
 $lang->featureconfig      = new stdclass();
 $lang->doctemplate        = new stdclass();
 $lang->notifysetting      = new stdclass();

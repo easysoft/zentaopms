@@ -822,7 +822,9 @@ class commonModel extends model
                         {
                             $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
                             $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                            $subAlias   = zget($dropMenuItem, 'alias', '');
                             if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            if(strpos(",$subAlias,", ",$currentModule-$currentMethod,") !== false) $activeMainMenu = true;
                         }
 
                         if($activeMainMenu) $activeMenu = $dropMenuName;
@@ -1902,11 +1904,16 @@ eof;
 
         /* Check the project is closed. */
         $productModuleList = array('story', 'bug', 'testcase', 'case', 'testtask', 'release');
-        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and (empty($config->CRProject) || empty($config->CRExecution)))
         {
             if(!isset($projectsStatus[$object->project]))
             {
                 $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                if($project && $project->status == 'closed')
+                {
+                    /* 有的表项目和执行都存在project里。 */
+                    return $project->type == 'project' ? !empty($config->CRProject) : !empty($config->CRExecution);
+                }
                 $projectsStatus[$object->project] = $project ? $project->status : '';
             }
             if($projectsStatus[$object->project] == 'closed') return false;

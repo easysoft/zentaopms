@@ -37,7 +37,7 @@ div
             set::label('addRow'),
             set::name('values[]')
         ),
-        div 
+        div
         (
             setClass('pl-2 flex self-center'),
             btn
@@ -62,7 +62,7 @@ foreach($fieldList as $key => $value)
 
     $formItems[] = formRow
     (
-        input 
+        input
         (
             set::type('hidden'),
             set::name('keys[]'),
@@ -118,13 +118,45 @@ $formItems[] = formGroup
     set::control('radioListInline')
 );
 
+$menuItems[] = li
+(
+    setClass('menu-item'),
+    a
+    (
+        setClass('active'),
+        set::href(createLink('stage', 'settype')),
+        $lang->stage->setType
+    )
+);
+
+if($config->edition == 'open' && hasPriv('stage', 'browse'))
+{
+    $menuItems[] = li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('stage', 'browse')),
+            $lang->stage->browseAB
+        )
+    );
+}
+
 div
 (
-    setClass('flex'),
+    setClass('row has-sidebar-left'),
+    sidebar
+    (
+        div
+        (
+            setClass('cell p-2.5 bg-white'),
+            menu($menuItems)
+        )
+    ),
     formPanel
     (
         set::headingClass('justify-start'),
-        setClass('flex-auto'),
+        setClass('flex-auto ml-0.5'),
         set::actionsClass('w-1/2'),
         set::title($lang->stage->setType),
         set::actions($formActions),

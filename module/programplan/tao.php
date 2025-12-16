@@ -26,7 +26,7 @@ class programplanTao extends programplanModel
         if(empty($executionID)) return array();
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('model');
 
-        return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+        $stageList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
@@ -45,6 +45,24 @@ class programplanTao extends programplanModel
             ->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id', false);
+
+        if($projectModel == 'ipd')
+        {
+            $stagePointGroup = $this->dao->select('execution,category,categoryTitle')->from(TABLE_OBJECT)
+                ->where('execution')->in(array_keys($stageList))
+                ->andWhere('type')->eq('decision')
+                ->andWhere('enabled')->eq('1')
+                ->fetchGroup('execution', 'category');
+            foreach($stageList as $stage)
+            {
+                $stage->enabledPoints = array();
+                if(isset($stagePointGroup[$stage->id]))
+                {
+                    foreach($stagePointGroup[$stage->id] as $point) $stage->enabledPoints[$point->category] = $point->categoryTitle;
+                }
+            }
+        }
+        return $stageList;
     }
 
     /**
@@ -75,7 +93,7 @@ class programplanTao extends programplanModel
         $this->lang->project->name = $this->lang->programplan->name;
         $this->lang->project->code = $this->lang->execution->code;
 
-        $this->dao->update(TABLE_PROJECT)->data($plan, 'point')->autoCheck()
+        $this->dao->update(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->autoCheck()
             ->checkIF(!empty($plan->name) && $getName, 'name', 'unique', "id in ({$relatedIdList}) and type in ('sprint','stage') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->checkIF(!empty($plan->code) && $setCode, 'code', 'unique', "id != {$planID} and type in ('sprint','stage','kanban') and `project` = {$oldPlan->project} and `deleted` = '0' and `parent` = {$oldPlan->parent}")
             ->where('id')->eq($planID)
@@ -435,11 +453,12 @@ class programplanTao extends programplanModel
     {
         if($point->end and !helper::isZeroDate($point->end)) return $point->end;
 
-        $end     = $reviewDeadline[$planID]['stageEnd'];
-        $begin   = $reviewDeadline[$planID]['stageBegin'];
+        $end   = $reviewDeadline[$planID]['stageEnd'];
+        $begin = $reviewDeadline[$planID]['stageBegin'];
 
-        if(strpos($point->category, "DCP") !== false) $end = $this->getReviewDeadline($end, 2);
-        if(strpos($point->category, "TR") !== false)
+        $pointType = $this->dao->select('type')->from(TABLE_DECISION)->where('id')->eq($point->id)->fetch('type');
+        if($pointType == 'DCP') $end = $this->getReviewDeadline($end, 2);
+        if($pointType == 'TR')
         {
             if(isset($reviewDeadline[$planID]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$planID]['taskEnd'])) return $reviewDeadline[$planID]['taskEnd'];
             $end = $this->getReviewDeadline($end);
@@ -477,13 +496,10 @@ class programplanTao extends programplanModel
 
             foreach($reviewPoints as $point)
             {
-                if(!isset($this->config->review->ipdReviewPoint->{$plan->attribute})) continue;
+                if($point->execution != $plan->id) continue;
                 if(!isset($point->status)) $point->status = '';
 
-                $categories = $this->config->review->ipdReviewPoint->{$plan->attribute};
-                if(!in_array($point->category, $categories)) continue;
-
-                $dataID = "{$plan->id}-{$point->category}-{$point->id}";
+                $dataID = "{$plan->id}-point{$point->category}-{$point->id}";
                 if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$dataID] = $this->buildPointDataForGantt($plan->id, $point, $reviewDeadline);
             }
         }
@@ -550,7 +566,7 @@ class programplanTao extends programplanModel
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;
         if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
-        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point')->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->exec();
 
         if(dao::isError()) return false;
 
@@ -558,7 +574,7 @@ class programplanTao extends programplanModel
         $this->insertProjectSpec($stageID, $plan);
 
         /* Ipd project create default review points. */
-        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $productID, $plan->attribute);
+        if($project && $project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($project->id, $stageID, $plan->defaultPoint);
 
         if($plan->type == 'kanban')
         {
@@ -672,6 +688,7 @@ class programplanTao extends programplanModel
         /* Set default progress from database. */
         $data->progress      = $plan->progress / 100;
         $data->taskProgress  = $plan->progress . '%';
+        $data->frozen        = $plan->frozen;
 
         if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
@@ -698,7 +715,7 @@ class programplanTao extends programplanModel
 
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
-        $data->id            = $planID . '-' . $point->category . '-' . $point->id;
+        $data->id            = $planID . '-point' . $point->category . '-' . $point->id;
         $data->reviewID      = $point->reviewID;
         $data->type          = 'point';
         $data->text          = "<i class='icon-seal'></i> " . $point->title;
@@ -785,7 +802,8 @@ class programplanTao extends programplanModel
         $taskPri  = "<span class='pri-%s align-middle' title='%s'>%s</span> ";
         $pri      = zget($this->lang->task->priList, $task->pri);
         $priIcon  = sprintf($taskPri, $task->pri, $pri, $pri);
-        $progress = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+        $total    = $task->left + $task->consumed;
+        $progress = $total ? round($task->consumed / $total, 3) : 0;
 
         $data = new stdclass();
         $data->id           = $task->id;

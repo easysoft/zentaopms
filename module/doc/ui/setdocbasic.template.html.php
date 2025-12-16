@@ -26,6 +26,7 @@ formPanel
     set::title($title),
     set::submitBtnText($lang->save),
     on::change('[name=lib]')->call('loadScopeTypes', jsRaw("event")),
+    on::change('[name=isDeliverable]', 'window.changeIsDeliverable'),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
     formGroup
     (
@@ -62,6 +63,17 @@ formPanel
         set::label($lang->docTemplate->desc),
         textarea(set::name('templateDesc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
     ) : null,
+    $modalType != 'chapter' && in_array($config->edition, array('max', 'ipd')) ? formGroup
+    (
+        set::label($lang->docTemplate->deliverable),
+        radioList
+        (
+            set::inline(true),
+            set::name('isDeliverable'),
+            set::items($lang->docTemplate->deliverableList),
+            set::value($docID ? $doc->isDeliverable : '0')
+        )
+    ) : null,
     empty($parentID) ? formGroup
     (
         set::label($lang->doclib->control),
@@ -69,8 +81,10 @@ formPanel
         (
             setClass($objectType == 'mine' ? 'pointer-events-none' : ''),
             set::name('acl'),
+            set::disabled($docID && $doc->isDeliverable ? true : false),
             set::items($lang->doc->aclListA),
             set::value(isset($doc) ? $doc->acl : 'open')
-        )
+        ),
+        input(setClass('hidden'), set::name('acl'), set::id('acl'), set::disabled($docID && $doc->isDeliverable ? false : true), set::value('open'))
     ) : null
 );

@@ -104,8 +104,10 @@ $lang->upgrade->unknownDate     = '无明确时间的项目';
 $lang->upgrade->selectProject   = '目标项目';
 $lang->upgrade->programName     = '项目集名称';
 $lang->upgrade->projectName     = '项目名称';
+$lang->upgrade->projectManage   = '项目管理';
 $lang->upgrade->compatibleEXT   = '扩展机制兼容';
 $lang->upgrade->fileName        = '文件名称';
+$lang->upgrade->list            = '的列表';
 $lang->upgrade->next            = '下一步';
 $lang->upgrade->back            = '上一步';
 
@@ -221,3 +223,30 @@ $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = '可�
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = '激活立项审批流';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = '可以为激活立项审批设计审批流程。';
+
+$lang->upgrade->deliverableModule['plan']   = '计划类';
+$lang->upgrade->deliverableModule['story']  = '需求类';
+$lang->upgrade->deliverableModule['design'] = '设计类';
+$lang->upgrade->deliverableModule['test']   = '测试类';
+$lang->upgrade->deliverableModule['other']  = '其他类';
+
+$lang->upgrade->reviewObjectList['PP']         = '项目计划';
+$lang->upgrade->reviewObjectList['QAP']        = '质量保证计划';
+$lang->upgrade->reviewObjectList['CMP']        = '配置管理计划';
+$lang->upgrade->reviewObjectList['ITP']        = '集成测试计划';
+$lang->upgrade->reviewObjectList['ERS']        = '业务需求说明书';
+$lang->upgrade->reviewObjectList['URS']        = '用户需求说明书';
+$lang->upgrade->reviewObjectList['SRS']        = '项目需求规格说明书';
+$lang->upgrade->reviewObjectList['HLDS']       = '概要设计说明书';
+$lang->upgrade->reviewObjectList['DDS']        = '详细设计说明书';
+$lang->upgrade->reviewObjectList['DBDS']       = '数据库设计文档';
+$lang->upgrade->reviewObjectList['ADS']        = '接口设计文档';
+$lang->upgrade->reviewObjectList['Code']       = '程序代码';
+$lang->upgrade->reviewObjectList['intergrate'] = '集成测试用例';
+$lang->upgrade->reviewObjectList['STP']        = '系统测试计划';
+$lang->upgrade->reviewObjectList['system']     = '系统测试用例';
+$lang->upgrade->reviewObjectList['UM']         = '用户手册';
+
+$lang->upgrade->baselineReview = array();
+$lang->upgrade->baselineReview['baseline'] = '基线评审';
+$lang->upgrade->baselineReview['change']   = '项目变更评审';

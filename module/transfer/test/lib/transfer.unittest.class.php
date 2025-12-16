@@ -399,11 +399,11 @@ class transferTest
         // 设置cookie值
         if($maxImport !== null)
         {
-            if($maxImport === '') 
+            if($maxImport === '')
             {
                 unset($_COOKIE['maxImport']);
             }
-            else 
+            else
             {
                 $_COOKIE['maxImport'] = (string)$maxImport;
             }
@@ -412,10 +412,10 @@ class transferTest
         // 由于模型已经被加载，我们需要重新创建一个实例来测试构造函数
         // 这里我们直接模拟构造函数的逻辑
         $result = new stdClass();
-        
+
         // 模拟构造函数中的maxImport逻辑
         $result->maxImport = isset($_COOKIE['maxImport']) ? (int)$_COOKIE['maxImport'] : 0;
-        
+
         // 检查transfer配置是否存在
         $transfer = $tester->loadModel('transfer');
         $result->transferConfig = is_object($transfer->transferConfig) ? 1 : 0;
@@ -466,7 +466,7 @@ class transferTest
      */
     public function getPageDatasTest(array $datas = array(), int $pagerID = 1)
     {
-        try 
+        try
         {
             $result = $this->objectModel->getPageDatas($datas, $pagerID);
             if(dao::isError()) return dao::getError();
@@ -619,7 +619,7 @@ class transferTest
         $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
         $originalMaxImport = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : null;
 
-        try 
+        try
         {
             // 获取临时文件路径
             $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
@@ -708,7 +708,7 @@ class transferTest
             {
                 return '0';
             }
-            
+
             return $result;
         }
         catch(Exception $e)
@@ -739,7 +739,7 @@ class transferTest
             // 清理测试文件
             if(isset($testFile) && file_exists($testFile)) unlink($testFile);
             if(isset($tmpFile) && file_exists($tmpFile)) unlink($tmpFile);
-            
+
             // 清理可能生成的临时文件（基于文件名MD5）
             $patterns = array('test_file.csv', 'default_test.csv', 'nonexistent_file.csv');
             foreach($patterns as $pattern)
@@ -766,7 +766,7 @@ class transferTest
         $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
         $originalSessionExtension = isset($_SESSION['fileImportExtension']) ? $_SESSION['fileImportExtension'] : null;
 
-        try 
+        try
         {
             // 清除之前的错误状态
             dao::$errors = array();
@@ -790,7 +790,7 @@ class transferTest
             {
                 // 测试场景3：处理空文件名
                 $_SESSION['fileImportFileName'] = '';
-                
+
                 // 由于空文件名会导致错误，模拟这种情况
                 dao::$errors['message'] = 'Empty filename';
                 return 'false';
@@ -799,7 +799,7 @@ class transferTest
             {
                 // 测试场景4：处理不存在的文件
                 $_SESSION['fileImportFileName'] = '/nonexistent/path/file.xlsx';
-                
+
                 // 模拟文件不存在的错误
                 dao::$errors['message'] = 'File does not exist';
                 return 'false';
@@ -809,7 +809,7 @@ class transferTest
                 // 测试场景5：验证错误清理机制
                 $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
                 $testFile = $tmpPath . '/cleanup_test.xlsx';
-                
+
                 // 创建测试文件和session
                 if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
                 file_put_contents($testFile, 'test content for cleanup');
@@ -821,7 +821,7 @@ class transferTest
                 unset($_SESSION['fileImportFileName']);
                 unset($_SESSION['fileImportExtension']);
                 dao::$errors['message'] = 'Error for cleanup test';
-                
+
                 return 'false';
             }
 
@@ -857,11 +857,11 @@ class transferTest
             {
                 $testFiles = array(
                     $tmpPath . '/valid_test.csv',
-                    $tmpPath . '/error_test.xlsx', 
+                    $tmpPath . '/error_test.xlsx',
                     $tmpPath . '/cleanup_test.xlsx',
                     $tmpPath . '/nonexistent_file.xlsx'
                 );
-                
+
                 foreach($testFiles as $file)
                 {
                     if(file_exists($file)) unlink($file);
@@ -886,7 +886,7 @@ class transferTest
         $originalSessionFileName = isset($_SESSION['fileImportFileName']) ? $_SESSION['fileImportFileName'] : null;
         $originalSessionExtension = isset($_SESSION['fileImportExtension']) ? $_SESSION['fileImportExtension'] : null;
 
-        try 
+        try
         {
             // 清除之前的错误状态
             dao::$errors = array();
@@ -894,7 +894,7 @@ class transferTest
             // 设置临时文件路径用于可能的清理操作
             $tmpPath = $tester->loadModel('file')->getPathOfImportedFile();
             if(!is_dir($tmpPath)) mkdir($tmpPath, 0755, true);
-            
+
             $testFile = $tmpPath . '/test_processrows.csv';
             file_put_contents($testFile, 'test content');
             $_SESSION['fileImportFileName'] = $testFile;

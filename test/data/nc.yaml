@@ -4,18 +4,11 @@ author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
+    note: "ID"
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
-    format: ""
-  - field: program
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
     format: ""
   - field: auditplan
     note: ""
@@ -67,12 +60,10 @@ fields:
     loopfix: ""
     format: ""
   - field: deadline
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "截至日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: resolvedBy
     note: ""
     prefix: ""
@@ -88,12 +79,10 @@ fields:
     loopfix: ""
     format: ""
   - field: resolvedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "解决日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: closedBy
     note: ""
     prefix: ""
@@ -102,12 +91,10 @@ fields:
     loopfix: ""
     format: ""
   - field: closedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "关闭日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: parent
     note: ""
     prefix: ""
@@ -130,12 +117,10 @@ fields:
     loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: editedBy
     note: ""
     prefix: ""
@@ -144,12 +129,10 @@ fields:
     loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "编辑日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: deleted
     note: ""
     prefix: ""

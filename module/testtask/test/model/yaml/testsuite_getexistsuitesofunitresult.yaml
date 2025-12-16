@@ -12,7 +12,7 @@ fields:
   note: 项目ID
   range: 1-3
 - field: product
-  note: 产品ID  
+  note: 产品ID
   range: 1-3
 - field: name
   note: 测试套件名称

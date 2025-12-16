@@ -1340,7 +1340,7 @@ class userTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('getProgramStakeholder');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $programProduct);
         if(dao::isError()) return dao::getError();
 

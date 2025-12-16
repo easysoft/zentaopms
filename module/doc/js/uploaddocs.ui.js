@@ -8,8 +8,11 @@ function addFileUploadMutationObserver()
         let title  = $('.uploadFileBox .file-selector-list .file-selector-item:nth-child(1) .item-title').text();
         let dotIdx = title.lastIndexOf('.');
         if(dotIdx != '-1') title = title.substring(0, dotIdx);
-        $('.titleBox [name=title]').val(title);
-        $('.uploadFormatBox').toggleClass('hidden', $('.uploadFileBox .file-selector-list .file-selector-item').length <= 1);
+        if(!docID)
+        {
+            $('.titleBox [name=title]').val(title);
+            $('.uploadFormatBox').toggleClass('hidden', $('.uploadFileBox .file-selector-list .file-selector-item').length <= 1);
+        }
     });
 
     observer.observe(fileUpload, {childList: true, subtree: true});
@@ -35,9 +38,13 @@ window.loadExecutions = function(e)
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=project&objectID=' + projectID + '&type=doc');
     $.getJSON(link, function(data)
     {
-        const $picker = $('.moduleBox input[name="module"]').zui('picker');
-        $picker.render({items: data});
-        $picker.$.setValue('');
+        const $libPicker = $("[name='lib']").zui('picker');
+        $libPicker.render({items: data.libs});
+        $libPicker.$.setValue('');
+
+        const $modulePicker = $("[name='parent']").zui('picker');
+        $modulePicker.render({items: data.modules});
+        $modulePicker.$.setValue('');
     });
 }
 

@@ -133,7 +133,7 @@ class action extends control
     public function undelete(int $actionID, string $browseType = 'all', string $confirmChange = 'no')
     {
         $result = $this->actionZen->checkActionExist($actionID);
-        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $this->send($result);
+        if(is_array($result) && $result['result'] == 'fail') return $this->send($result);
 
         $oldAction = $result;
         /* 当对象类型为program、project、execution、product时，需要检查是否有重复的对象。 */

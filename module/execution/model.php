@@ -179,8 +179,11 @@ class executionModel extends model
 
             if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
             {
-                $this->lang->execution->menu->pssp      = $this->lang->execution->menu->other['dropMenu']->pssp;
-                $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+                $this->lang->execution->menu->pssp = $this->lang->execution->menu->other['dropMenu']->pssp;
+                if(isset($this->lang->execution->menu->other['dropMenu']->auditplan))
+                {
+                    $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+                }
 
                 $docOrder = 0;
                 foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
@@ -614,7 +617,7 @@ class executionModel extends model
     public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->filterTpl(false)->orderBy('grade_desc')->fetchAll('id');
+        $executionList = $this->dao->select('id,name,status,grade,type,attribute,project')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->filterTpl(false)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
         $message = array('byChild' => '', 'byDeliverable' => '');
@@ -3005,8 +3008,15 @@ class executionModel extends model
      */
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
+        $storyFrozen = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('frozen');
+        if(!empty($storyFrozen))
+        {
+            $this->app->loadLang('story');
+            dao::$errors[] = sprintf($this->lang->story->frozenTip, $this->lang->story->unlink);
+            return false;
+        }
+
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
         if($execution->type == 'project')
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
@@ -3919,6 +3929,7 @@ class executionModel extends model
      */
     public static function isClickable(object $execution, string $action): bool
     {
+        if(!empty($execution->frozen) && in_array($action, array('edit', 'createChildStage', 'delete', 'putoff'))) return false;
         if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
         if(!commonModel::hasPriv('execution', $action)) return false;
@@ -4954,6 +4965,7 @@ class executionModel extends model
                         if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
+                        if(!empty($execution->frozen) && in_array($actionName, array('edit', 'createChildStage', 'delete', 'putoff'))) $action['hint'] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->$actionName);
                     }
 
                     if(!empty($action))
@@ -4975,14 +4987,13 @@ class executionModel extends model
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
 
-            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->loadModel('project')->countDeliverable($execution, 'execution');
-
             $rows[$execution->id] = $execution;
 
             /* Append tasks and child stages. */
             if(!empty($execution->tasks))  $rows = $this->appendTasks($execution->tasks, $rows, $users, $avatarList, $canModify);
         }
 
+        if(in_array($this->config->edition, array('max', 'ipd'))) $rows = $this->loadModel('project')->countDeliverable($rows, 'execution');
         return $rows;
     }
 
@@ -5450,24 +5461,28 @@ class executionModel extends model
      */
     public function canCloseByDeliverable(object $execution): bool
     {
-        if(empty($execution->deliverable)) return true;
+        $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
+        $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
+        $deliverables = $this->dao->select('t1.template,t1.name,t2.required,t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
+            ->andWhere('t1.status')->eq('enabled')
+            ->andWhere('t2.stage')->eq($stageType)
+            ->fetchAll('id');
 
-        $deliverables = json_decode($execution->deliverable, true);
+        if(empty($deliverables)) return true;
 
-        if(!is_array($deliverables) || empty($deliverables)) return true;
+        $executionDeliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
 
-        foreach($deliverables as $methods)
+        foreach($deliverables as $id => $deliverable)
         {
-            foreach($methods as $itemList)
-            {
-                foreach($itemList as $item)
-                {
-                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
-                }
-            }
+            if(empty($deliverable->required)) continue;
+
+            if(!isset($executionDeliverables[$id])) return false;
+            if(empty($executionDeliverables[$id]['fileID']) && empty($executionDeliverables[$id]['doc'])) return false;
         }
 
         return true;
     }
-
 }

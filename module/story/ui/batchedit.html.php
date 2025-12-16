@@ -21,6 +21,7 @@ jsVar('storyType', $storyType);
 jsVar('urStageOptions', $urStageOptions);
 
 if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+if(!empty($frozenTips)) pageJS("zui.Modal.alert({message: '{$frozenTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
 $items = array();
 $items['storyIdList'] = array('name' => 'storyIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);

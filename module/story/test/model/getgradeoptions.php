@@ -28,7 +28,7 @@ include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
 
 zendata('storygrade')->loadYaml('storygrade_getgradeoptions', false, 2)->gen(9);
 
-$storygradeTable = zendata('storygrade'); 
+$storygradeTable = zendata('storygrade');
 $storygradeTable->type->range('story{4},requirement{3},epic{2}');
 $storygradeTable->grade->range('1,2,3,4,1,2,3,1,2');
 $storygradeTable->name->range('SR1,SR2,SR3,子,UR1,UR2,UR3,BR1,BR2');

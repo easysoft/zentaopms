@@ -771,27 +771,27 @@ class screenTest
     public function __constructTest(): array
     {
         global $tester;
-        
+
         // Create a new instance to test constructor
         $screenModel = $tester->loadModel('screen');
-        
+
         $result = array();
-        
+
         // Check if object type is correct
         $result['objectType'] = get_class($screenModel) === 'screenModel' ? 1 : 0;
-        
+
         // Check parent initialization
         $result['parentInit'] = property_exists($screenModel, 'app') && property_exists($screenModel, 'dao') ? 1 : 0;
-        
+
         // Check if BI DAO is loaded (dao property should exist after loadBIDAO)
         $result['biDAOLoaded'] = property_exists($screenModel, 'dao') ? 1 : 0;
-        
-        // Check if bi model is loaded  
+
+        // Check if bi model is loaded
         $result['biModelLoaded'] = property_exists($screenModel, 'bi') && is_object($screenModel->bi) ? 1 : 0;
-        
+
         // Check if filter object is initialized
         $result['filterExists'] = property_exists($screenModel, 'filter') && is_object($screenModel->filter) ? 1 : 0;
-        
+
         // Check filter properties initialization
         if($result['filterExists'])
         {
@@ -811,7 +811,7 @@ class screenTest
             $result['filterAccount'] = 0;
             $result['filterCharts']  = 0;
         }
-        
+
         return $result;
     }
 
@@ -992,7 +992,7 @@ class screenTest
         $testResult['hasNotFoundText'] = isset($result->option->title->notFoundText) ? 1 : 0;
         $testResult['isDeleted'] = isset($result->option->isDeleted) && $result->option->isDeleted ? 1 : 0;
         $testResult['notFoundText'] = isset($result->option->title->notFoundText) ? $result->option->title->notFoundText : '';
-        
+
         return $testResult;
     }
 
@@ -1023,14 +1023,14 @@ class screenTest
     public function genMetricComponentTest($metricID, $component = null, $filterParams = array())
     {
         global $tester;
-        
+
         // 从数据库获取metric对象
         $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricID)->fetch();
         if(empty($metric))
         {
             return array('hasComponent' => 0, 'isDeleted' => 0, 'isWaiting' => 0);
         }
-        
+
         $result = $this->objectModel->genMetricComponent($metric, $component, $filterParams);
         if(dao::isError()) return dao::getError();
 
@@ -1039,7 +1039,7 @@ class screenTest
         $testResult['hasComponent'] = isset($result) && is_object($result) ? 1 : 0;
         $testResult['isDeleted'] = (isset($result->option->isDeleted) && $result->option->isDeleted) ? 1 : 0;
         $testResult['isWaiting'] = ($metric->stage == 'wait') ? 1 : 0;
-        
+
         return $testResult;
     }
 
@@ -1114,9 +1114,9 @@ class screenTest
     {
         $component = new stdclass();
         $component->chartConfig = new stdclass();
-        
+
         $latestFilters = array('status' => 'enabled', 'filter1' => 'value1');
-        
+
         $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
         if(dao::isError()) return dao::getError();
 
@@ -1124,7 +1124,7 @@ class screenTest
         $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
         $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
         $testResult['status'] = isset($result->chartConfig->filters['status']) ? $result->chartConfig->filters['status'] : 'missing';
-        
+
         return $testResult;
     }
 
@@ -1139,9 +1139,9 @@ class screenTest
         $component = new stdclass();
         $component->chartConfig = new stdclass();
         $component->chartConfig->filters = array('existing' => 'existingFilter', 'preserved' => true);
-        
+
         $latestFilters = array('new' => 'newFilter');
-        
+
         $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
         if(dao::isError()) return dao::getError();
 
@@ -1149,7 +1149,7 @@ class screenTest
         $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
         $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
         $testResult['existing'] = isset($result->chartConfig->filters['existing']) ? $result->chartConfig->filters['existing'] : 'missing';
-        
+
         return $testResult;
     }
 
@@ -1163,16 +1163,16 @@ class screenTest
     {
         $component = new stdclass();
         $component->chartConfig = new stdclass();
-        
+
         $latestFilters = array();
-        
+
         $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
         if(dao::isError()) return dao::getError();
 
         $testResult = array();
         $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
         $testResult['filters'] = isset($result->chartConfig->filters) ? count($result->chartConfig->filters) : -1;
-        
+
         return $testResult;
     }
 
@@ -1186,13 +1186,13 @@ class screenTest
     {
         $component = new stdclass();
         $component->chartConfig = new stdclass();
-        
+
         $latestFilters = array(
             'field1' => 'value1',
             'field2' => 'value2',
             'nested' => array('subfield' => 'subvalue')
         );
-        
+
         $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
         if(dao::isError()) return dao::getError();
 
@@ -1201,7 +1201,7 @@ class screenTest
         $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
         $testResult['field1'] = isset($result->chartConfig->filters['field1']) ? $result->chartConfig->filters['field1'] : 'missing';
         $testResult['field2'] = isset($result->chartConfig->filters['field2']) ? $result->chartConfig->filters['field2'] : 'missing';
-        
+
         return $testResult;
     }
 
@@ -1216,9 +1216,9 @@ class screenTest
         $component = new stdclass();
         $component->chartConfig = new stdclass();
         // chartConfig exists but no filters property
-        
+
         $latestFilters = array('newField' => 'newValue');
-        
+
         $result = $this->objectModel->updateMetricFilters($component, $latestFilters);
         if(dao::isError()) return dao::getError();
 
@@ -1226,7 +1226,7 @@ class screenTest
         $testResult['chartConfig'] = isset($result->chartConfig) ? 'present' : 'missing';
         $testResult['filters'] = isset($result->chartConfig->filters) ? $result->chartConfig->filters : array();
         $testResult['newField'] = isset($result->chartConfig->filters['newField']) ? $result->chartConfig->filters['newField'] : 'missing';
-        
+
         return $testResult;
     }
 
@@ -1376,7 +1376,7 @@ class screenTest
             if(!isset($config->screen->chartOption['WaterPolo'])) {
                 $config->screen->chartOption['WaterPolo'] = '{"type":"nomal","series":[{"type":"liquidFill","radius":"90%"}],"backgroundColor":"rgba(0,0,0,0)"}';
             }
-            
+
             $result = $this->objectModel->getWaterPoloOption($component, $chart, $filters);
             if(dao::isError()) return dao::getError();
 
@@ -1387,7 +1387,7 @@ class screenTest
             $testResult['datasetValue'] = (isset($result->option) && isset($result->option->dataset)) ? $result->option->dataset : 'null';
             $testResult['hasStyles'] = isset($result->styles) ? 1 : 0;
             $testResult['componentType'] = is_object($result) ? 'object' : gettype($result);
-            
+
             return $testResult;
         } catch (Exception $e) {
             return array('error' => $e->getMessage());
@@ -1440,14 +1440,14 @@ class screenTest
     public function getMetricCardOptionTest($metricId, $resultData, $component = null)
     {
         global $tester;
-        
+
         // 从数据库获取metric对象
         $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('id')->eq($metricId)->fetch();
         if(empty($metric))
         {
             return new stdclass();
         }
-        
+
         $result = $this->objectModel->getMetricCardOption($metric, $resultData, $component);
         if(dao::isError()) return dao::getError();
 

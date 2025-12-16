@@ -8,199 +8,199 @@ fields:
 - field: id
   note: Story ID
   range: 1-20
-  
+
 - field: vision
   note: Vision type
   range: rnd{20}
-  
+
 - field: parent
   note: Parent story ID
   range: 0{20}
-  
+
 - field: isParent
   note: Is parent story
   range: 0{18},1{2}
-  
+
 - field: root
   note: Root story ID
   range: 1-20
-  
+
 - field: path
   note: Path
   range: ","
-  
+
 - field: grade
   note: Grade
   range: 0{20}
-  
+
 - field: product
   note: Product ID
   range: 1{5},2{5},3{5},4{5}
-  
+
 - field: branch
   note: Branch ID
   range: 0{20}
-  
+
 - field: module
   note: Module ID
   range: 0{20}
-  
+
 - field: plan
   note: Plan
   range: ""{20}
-  
+
 - field: source
   note: Source
   range: ""{20}
-  
+
 - field: sourceNote
   note: Source note
   range: ""{20}
-  
+
 - field: fromBug
   note: From bug
   range: 0{20}
-  
+
 - field: feedback
   note: Feedback
   range: 0{20}
-  
+
 - field: title
   note: Story title
   range: Story1,Story2,Story3,Story4,Story5,Story6,Story7,Story8,Story9,Story10,Story11,Story12,Story13,Story14,Story15,Story16,Story17,Story18,Story19,Story20
-  
+
 - field: keywords
   note: Keywords
   range: ""{20}
-  
+
 - field: type
   note: Story type
   range: requirement{10},story{5},epic{5}
-  
+
 - field: category
   note: Category
   range: feature{20}
-  
+
 - field: pri
   note: Priority
   range: 3{20}
-  
+
 - field: estimate
   note: Estimate
   range: 0{20}
-  
+
 - field: status
   note: Story status
   range: active{8},closed{4},draft{4},reviewing{2},developing{2}
-  
+
 - field: subStatus
   note: Sub status
   range: ""{20}
-  
+
 - field: color
   note: Color
   range: ""{20}
-  
+
 - field: stage
   note: Stage
   range: wait{8},planned{6},developed{4},released{2}
-  
+
 - field: stagedBy
   note: Staged by
   range: admin{20}
-  
+
 - field: mailto
   note: Mail to
   range: ""{20}
-  
+
 - field: lib
   note: Library
   range: 0{20}
-  
+
 - field: fromStory
   note: From story
   range: 0{20}
-  
+
 - field: fromVersion
   note: From version
   range: 1{20}
-  
+
 - field: openedBy
   note: Opened by
   range: admin{20}
-  
+
 - field: openedDate
   note: Opened date
   range: 2024-01-01 00:00:00{20}
-  
+
 - field: assignedTo
   note: Assigned to
   range: admin{10},user1{5},user2{5}
-  
+
 - field: assignedDate
   note: Assigned date
   range: "0000-00-00 00:00:00"{20}
-  
+
 - field: lastEditedBy
   note: Last edited by
   range: ""{20}
-  
+
 - field: lastEditedDate
   note: Last edited date
   range: "0000-00-00 00:00:00"{20}
-  
+
 - field: reviewedBy
   note: Reviewed by
   range: ""{20}
-  
+
 - field: reviewedDate
   note: Reviewed date
   range: "0000-00-00 00:00:00"{20}
-  
+
 - field: closedBy
   note: Closed by
   range: ""{16},admin{4}
-  
+
 - field: closedDate
   note: Closed date
   range: "0000-00-00 00:00:00"{16},2024-02-01 00:00:00{4}
-  
+
 - field: closedReason
   note: Closed reason
   range: ""{16},done{4}
-  
+
 - field: toBug
   note: To bug
   range: 0{20}
-  
+
 - field: childStories
   note: Child stories
   range: ""{20}
-  
+
 - field: linkStories
   note: Link stories
   range: ""{20}
-  
+
 - field: linkRequirements
-  note: Link requirements  
+  note: Link requirements
   range: ""{20}
-  
+
 - field: duplicateStory
   note: Duplicate story
   range: 0{20}
-  
+
 - field: version
   note: Version
   range: 1{20}
-  
+
 - field: URChanged
   note: UR changed
   range: 0{20}
-  
+
 - field: deleted
   note: Deleted flag
   range: 0{18},1{2}
-  
+
 - field: twins
   note: Twins
   range: ""{20}

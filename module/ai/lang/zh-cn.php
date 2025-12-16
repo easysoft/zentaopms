@@ -1048,7 +1048,7 @@ $lang->ai->formSchema['testcase']['create']->properties->type->type             
 $lang->ai->formSchema['testcase']['create']->properties->type->description                              = '用例的类型';
 $lang->ai->formSchema['testcase']['create']->properties->type->enum                                     = array('feature', 'performance', 'config', 'install', 'security', 'interface', 'unit', 'other');
 $lang->ai->formSchema['testcase']['create']->properties->stage->type                                    = 'string';
-$lang->ai->formSchema['testcase']['create']->properties->stage->description                             = '用例适用阶段';
+$lang->ai->formSchema['testcase']['create']->properties->stage->description                             = '用例适用环节';
 $lang->ai->formSchema['testcase']['create']->properties->stage->enum                                    = array('unittest', 'feature', 'intergrate', 'system', 'smoke', 'bvt');
 $lang->ai->formSchema['testcase']['create']->properties->title->type                                    = 'string';
 $lang->ai->formSchema['testcase']['create']->properties->title->description                             = '用例的标题';

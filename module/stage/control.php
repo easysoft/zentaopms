@@ -16,69 +16,91 @@ class stage extends control
      * 瀑布模型阶段列表页。
      * Waterfall model stage list page.
      *
+     * @param  int    $groupID
      * @param  string $orderBy
-     * @param  string $type    waterfall|waterfallplus
      * @access public
      * @return void
      */
-    public function browse(string $orderBy = "id_asc", string $type = 'waterfall')
+    public function browse(int $groupID = 0, string $orderBy = "order_asc")
     {
-        if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy={$orderBy}&type=waterfallplus"));
+        if($this->config->edition != 'open')
+        {
+            $workflowGroup = $this->loadModel('workflowgroup')->getByID($groupID);
+            if($workflowGroup->projectModel == 'ipd')
+            {
+                $this->config->stage->dtable->fieldList['type']['statusMap'] = $this->lang->stage->ipdTypeList;
 
-        $this->stage->setMenu($type);
+                $this->config->stage->dtable->fieldList['TRpoint']['title'] = $this->lang->stage->TRpoint;
+                $this->config->stage->dtable->fieldList['TRpoint']['type']  = 'desc';
+                $this->config->stage->dtable->fieldList['TRpoint']['width'] = 100;
+                $this->config->stage->dtable->fieldList['TRpoint']['flex']  = false;
+                $this->config->stage->dtable->fieldList['TRpoint']['group'] = 3;
 
-        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
-        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
+                $this->config->stage->dtable->fieldList['DCPpoint']['title'] = $this->lang->stage->DCPpoint;
+                $this->config->stage->dtable->fieldList['DCPpoint']['type']  = 'desc';
+                $this->config->stage->dtable->fieldList['DCPpoint']['width'] = 100;
+                $this->config->stage->dtable->fieldList['DCPpoint']['flex']  = false;
+                $this->config->stage->dtable->fieldList['DCPpoint']['group'] = 4;
+
+                if(common::hasPriv('stage', 'edit'))
+                {
+                    $this->config->stage->actionList['setTRpoint']['icon']        = 'tr-box';
+                    $this->config->stage->actionList['setTRpoint']['hint']        = $this->lang->stage->setTRpoint;
+                    $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setTRpoint', 'params' => 'stageID={id}');
+                    $this->config->stage->actionList['setTRpoint']['data-toggle'] = 'modal';
+
+                    $this->config->stage->actionList['setDCPpoint']['icon']        = 'dcp-box';
+                    $this->config->stage->actionList['setDCPpoint']['hint']        = $this->lang->stage->setDCPpoint;
+                    $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setDCPpoint', 'params' => 'stageID={id}');
+                    $this->config->stage->actionList['setDCPpoint']['data-toggle'] = 'modal';
+
+                    $this->config->stage->dtable->fieldList['actions']['menu'] = array('setTRpoint', 'setDCPpoint', 'edit', 'delete');
+                    $this->config->stage->dtable->fieldList['actions']['list'] = $this->config->stage->actionList;
+                }
+            }
+        }
+
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browseAB;
+        $this->view->stages  = $this->stage->getStages($orderBy, 0, $groupID);
         $this->view->orderBy = $orderBy;
-        $this->view->type    = $type;
+        $this->view->groupID = $groupID;
 
         $this->display();
-    }
-
-    /**
-     * 融合瀑布模型阶段列表页。
-     * Waterfall plus model stage list page.
-     *
-     * @param  string $orderBy
-     * @param  string $type    waterfall|waterfallplus
-     * @access public
-     * @return void
-     */
-    public function plusBrowse($orderBy = "id_asc", $type = 'waterfallplus')
-    {
-        if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy={$orderBy}&type=waterfall"));
-
-        $this->stage->setMenu($type);
-
-        $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
-        $this->view->orderBy = $orderBy;
-        $this->view->type    = $type;
-        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
-
-        $this->display('stage', 'browse');
     }
 
     /**
      * 创建一个阶段。
      * Create a stage.
      *
-     * @param  string $type waterfall|waterfallplus
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function create(string $type = 'waterfall')
+    public function create(int $groupID = 0)
     {
+        $flow = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
         if($_POST)
         {
-            $stageData = form::data()->setDefault('projectType', $type)->get();
-            $stageID   = $this->stage->create($stageData, $type);
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->create->requiredFields = 'name,type';
+
+            $stageData = form::data()
+                ->setDefault('workflowGroup', $groupID)
+                ->setDefault('createdBy', $this->app->user->account)
+                ->setDefault('createdDate', helper::now())
+                ->get();
+
+            $stageID   = $this->stage->create($stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
+
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->create;
+        $this->view->groupID = $groupID;
+        $this->view->flow    = $flow;
 
         $this->display();
     }
@@ -87,23 +109,33 @@ class stage extends control
      * 批量创建阶段。
      * Batch create stages.
      *
-     * @param  string $type waterfall|waterfallplus
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function batchCreate(string $type = 'waterfall')
+    public function batchCreate(int $groupID = 0)
     {
-        $this->stage->setMenu($type);
+        $flow = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($groupID);
         if($_POST)
         {
-            $stages = form::batchData()->setDefault('projectType', $type)->get();
-            $this->stage->batchCreate($type, $stages);
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd')
+            {
+                $this->config->stage->create->requiredFields = 'name,type';
+                if(isset($this->config->setPercent) && $this->config->setPercent == 1) $this->config->stage->form->batchcreate['percent']['required'] = false;
+            }
+
+            $stages = form::batchData()->get();
+            $this->stage->batchCreate($groupID, $stages);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => inlink('browse', "groupID={$groupID}")));
         }
 
-        $this->view->title       = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
+
+        $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->batchCreate;
+        $this->view->groupID = $groupID;
+        $this->view->flow    = $flow;
 
         $this->display();
     }
@@ -119,10 +151,16 @@ class stage extends control
     public function edit(int $stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
-        $this->stage->setMenu($stage->projectType);
+        $flow  = $this->config->edition == 'open' ? new stdClass() : $this->loadModel('workflowgroup')->getByID($stage->workflowGroup);
+
         if($_POST)
         {
-            $stageData = form::data()->get();
+            if(isset($flow->projectModel) && $flow->projectModel == 'ipd') $this->config->stage->edit->requiredFields = 'name,type';
+
+            $stageData = form::data()
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setDefault('editedDate', helper::now())
+                ->get();
             $changes   = $this->stage->update($stageID, $stageData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -132,8 +170,11 @@ class stage extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
+        unset($this->lang->stage->ipdTypeList['lifecycle']);
+
         $this->view->title = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->edit;
         $this->view->stage = $stage;
+        $this->view->flow  = $flow;
 
         $this->display();
     }
@@ -212,5 +253,72 @@ class stage extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+    }
+
+    /**
+     * 设置TR评审点。
+     * Set TR point of stage.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return void
+     */
+    public function setTRpoint(int $stageID)
+    {
+        $this->app->loadLang('review');
+
+        if(!empty($_POST))
+        {
+            $this->lang->stage->title = $this->lang->stage->TRname;
+            $points = form::batchData()->get();
+            $this->stage->setPoint('TR', $stageID, $points);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+        }
+
+        $this->view->type        = 'TR';
+        $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
+        $this->view->stagePoints = $this->stage->getStagePoints('TR', $stageID);
+        $this->display('stage', 'setPoint');
+    }
+
+    /**
+     * 设置DCP评审点。
+     * Set point of stage.
+     *
+     * @param  int    $stageID
+     * @access public
+     * @return void
+     */
+    public function setDCPpoint(int $stageID)
+    {
+        $this->app->loadLang('review');
+
+        if(!empty($_POST))
+        {
+            $this->lang->stage->title = $this->lang->stage->DCPname;
+            $points = form::batchData()->get();
+            $this->stage->setPoint('DCP', $stageID, $points);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+        }
+
+        $this->view->type        = 'DCP';
+        $this->view->approvals   = $this->loadModel('approvalflow')->getPairs('project');
+        $this->view->stagePoints = $this->stage->getStagePoints('DCP', $stageID);
+        $this->display('stage', 'setPoint');
+    }
+
+    /**
+     * 更新排序。
+     * Update order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrder()
+    {
+        $sortedIdList = json_decode($this->post->sortedIdList, true);
+        $this->stage->updateOrder($sortedIdList);
     }
 }

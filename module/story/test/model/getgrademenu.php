@@ -7,17 +7,17 @@ title=测试 storyModel::getGradeMenu();
 timeout=0
 cid=18535
 
-- 执行storyTest模块的getGradeMenuTest方法，参数是'story' 
+- 执行storyTest模块的getGradeMenuTest方法，参数是'story'
  - 第0条的text属性 @查看
  - 第0条的value属性 @story
-- 执行storyTest模块的getGradeMenuTest方法，参数是'epic' 
+- 执行storyTest模块的getGradeMenuTest方法，参数是'epic'
  - 第0条的text属性 @查看
  - 第0条的value属性 @epic
-- 执行storyTest模块的getGradeMenuTest方法，参数是'requirement' 
+- 执行storyTest模块的getGradeMenuTest方法，参数是'requirement'
  - 第0条的text属性 @查看
  - 第0条的value属性 @requirement
 - 执行storyTest模块的getGradeMenuTest方法，参数是'all'  @3
-- 执行storyTest模块的getGradeMenuTest方法，参数是'story',  
+- 执行storyTest模块的getGradeMenuTest方法，参数是'story',
  - 第0条的text属性 @查看
  - 第0条的value属性 @story
 

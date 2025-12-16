@@ -578,19 +578,24 @@ class docZen extends doc
      * 展示上传文件的相关变量。
      * Show the related variables of uploading files.
      *
+     * @param  int       $docID
      * @param  string    $objectType product|project|execution|custom
      * @param  int       $objectID
      * @param  int       $libID
      * @param  int       $moduleID
      * @param  string    $docType    html|word|ppt|excel|attachment
      * @access protected
-     * @return void
+     * @return object
      */
-    protected function assignVarsForUploadDocs(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): void
+    protected function assignVarsForUploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = ''): object
     {
+        $doc = !empty($docID) ? $this->doc->getByID($docID) : null;
+        if(empty($moduleID) && $doc) $moduleID = (int)$doc->module;
+
         $this->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+        $lib            = $libID ? $this->doc->getLibByID($libID) : '';
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
         $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
         $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
@@ -599,6 +604,9 @@ class docZen extends doc
         $this->view->linkType   = $objectType;
         $this->view->spaces     = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
         $this->view->optionMenu = $chapterAndDocs;
+        $this->view->docID      = $docID;
+        $this->view->doc        = $doc;
+        return $this->view;
     }
 
     /**
@@ -651,12 +659,13 @@ class docZen extends doc
      * @param  object    $doc
      * @param  array     $changes
      * @param  array     $files
+     * @param  array     $deletedFiles
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array())
+    protected function responseAfterEdit(object $doc, array $changes = array(), array $files = array(), array $deletedFiles = array()): array
     {
-        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        if($this->post->comment != '' || !empty($changes) || !empty($files) || !empty($deletedFiles))
         {
             $action = 'Commented';
             if(!empty($changes))
@@ -665,11 +674,16 @@ class docZen extends doc
                 if($doc->status == 'draft' && $newType == 'normal')              $action = 'releasedDoc';
                 if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
+            if(!empty($deletedFiles)) $deletedFiles = $this->dao->select('id,title')->from(TABLE_FILE)->where('id')->in($deletedFiles)->fetchPairs();
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($files))        $fileAction .= $this->lang->addFiles . implode(',', $files) . "\n";
+            if(!empty($deletedFiles)) $fileAction .= $this->lang->delFiles . implode(',', $deletedFiles) . "\n";
+            if(!empty($changes))
+            {
+                $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
+                $this->action->logHistory($actionID, $changes);
+            }
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
@@ -692,10 +706,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
     }
 
     /**

@@ -122,10 +122,11 @@ detailBody
                 )
             )
         ),
-        $canEditContent ? section
+        section
         (
             set::required(true),
             set::title($lang->story->reviewers),
+            !$canEditContent ? set::hidden(true) : null,
             inputGroup
             (
                 picker
@@ -152,7 +153,7 @@ detailBody
                 ),
                 formHidden('needNotReview', $forceReview ? 0 : 1)
             )
-        ) : null,
+        ),
         section
         (
             set::title($lang->story->legendSpec),

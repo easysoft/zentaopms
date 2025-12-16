@@ -6,55 +6,55 @@ fields:
 - field: id
   note: 模块ID
   range: 1-10
-  
+
 - field: root
-  note: 根节点ID  
+  note: 根节点ID
   range: 1-3
-  
+
 - field: branch
   note: 分支ID
   range: 0
-  
+
 - field: name
   note: 模块名称
   range: [模块1, 模块2, Bug模块, Case模块, Story模块, Task模块, 文档模块, 产品模块, 项目模块, 测试模块]
-  
+
 - field: parent
   note: 父级模块ID
   range: 0-2
-  
+
 - field: path
   note: 模块路径
   range: [',1,', ',1,2,', ',1,3,', ',2,', ',2,4,']
-  
+
 - field: grade
   note: 模块级别
   range: 1-3
-  
+
 - field: order
   note: 排序
   range: 1-10:1
-  
+
 - field: type
   note: 模块类型
   range: [story, bug, case, task, doc, product, project, test]
-  
+
 - field: from
   note: 来源
   range: 0
-  
+
 - field: owner
   note: 负责人
   range: [admin, user1, user2, '']
-  
+
 - field: collector
   note: 收藏者
   range: ['', 'admin,user1', 'user2']
-  
+
 - field: short
   note: 简称
   range: [M1, M2, BUG, CASE, STORY, TASK, DOC, PROD, PROJ, TEST]
-  
+
 - field: deleted
   note: 删除状态
   range: ['0']

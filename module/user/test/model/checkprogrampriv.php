@@ -43,7 +43,7 @@ $projectModel = $tester->loadModel('project');
 // 获取测试项目集
 $openProgram = $projectModel->getByID(1);    // 开放项目集 (acl: open, PM: admin, openedBy: admin)
 $privateProgram = $projectModel->getByID(4); // 私有项目集 (acl: private, PM: admin, openedBy: user1)
-$pmProgram = $projectModel->getByID(5);      // PM项目集 (acl: private, PM: testpm, openedBy: user2)  
+$pmProgram = $projectModel->getByID(5);      // PM项目集 (acl: private, PM: testpm, openedBy: user2)
 $creatorProgram = $projectModel->getByID(6); // 创建者项目集 (acl: private, PM: testcreator, openedBy: testcreator)
 $childProgram = $projectModel->getByID(9);   // 子级项目集 (parent: 1)
 

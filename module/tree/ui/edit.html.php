@@ -41,6 +41,7 @@ formPanel
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
     set::submitBtnText($lang->save),
+    set::labelWidth('100px'),
     $showProduct ? formRow
     (
         formGroup
@@ -83,7 +84,7 @@ formPanel
         )
     ) : null,
     $type == 'api' ? formHidden('root', $module->root) : null,
-    $module->type != 'line' ? formGroup
+    $module->type != 'line' && $module->type != 'deliverable' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
         set::label(strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent),

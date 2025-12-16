@@ -23,7 +23,7 @@ class designModel extends model
     public function create(object $design): bool|int
     {
         $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
-        $this->dao->insert(TABLE_DESIGN)->data($design, 'docVersions')
+        $this->dao->insert(TABLE_DESIGN)->data($design, 'docVersions,docs')
             ->autoCheck()
             ->batchCheck($this->config->design->create->requiredFields, 'notempty')
             ->exec();
@@ -40,6 +40,7 @@ class designModel extends model
         $spec->name    = $design->name;
         $spec->desc    = $design->desc;
         $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
+        $spec->docs    = isset($design->docs) ? $design->docs : '';
         $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
         return $designID;
@@ -121,7 +122,7 @@ class designModel extends model
         foreach($design->deleteFiles as $fileID) $designFiles = str_replace(",$fileID,", ',', ",$designFiles,");
         $files = $addedFiles . trim($designFiles, ',');
 
-        $designChanged = ($oldDesign->name != $design->name || $oldDesign->desc != $design->desc || !empty($files));
+        $designChanged = ($oldDesign->name != $design->name || $oldDesign->desc != $design->desc || !empty($files) || $oldDesign->docs != $design->docs);
         if($designChanged)
         {
             $version = $oldDesign->version + 1;
@@ -132,6 +133,7 @@ class designModel extends model
             $spec->name    = $design->name;
             $spec->desc    = $design->desc;
             $spec->files   = empty($files) ? '' : $files;
+            $spec->docs    = isset($design->docs) ? $design->docs : '';
             $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
             $this->dao->update(TABLE_DESIGN)->set('version')->eq($version)->where('id')->eq($designID)->exec();
@@ -254,15 +256,24 @@ class designModel extends model
      * @access public
      * @return object|bool
      */
-    public function getByID(int $designID = 0): object|bool
+    public function getByID(int $designID = 0, int $version = 0): object|bool
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesign();
 
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
 
+        if($version == 0) $version = $design->version;
+
         $this->app->loadLang('product');
-        $design->files       = $this->loadModel('file')->getByObject('design', $designID);
+        $this->loadModel('file');
+        $spec = $this->dao->select('name,`desc`,files,docs,docVersions')->from(TABLE_DESIGNSPEC)->where('design')->eq($designID)->andWhere('version')->eq($version)->fetch();
+        $design->name        = !empty($spec->name)   ? $spec->name  : $design->name;
+        $design->desc        = !empty($spec->desc)   ? $spec->desc  : '';
+        $design->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
+        $design->docs        = !empty($spec->docs)   ? $spec->docs  : '';
+        $design->docVersions = !empty($spec->docVersions) ? json_decode($spec->docVersions, true) : array();
+
         $design->productName = $design->product ? $this->dao->findByID($design->product)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
         $design->project     = (int)$design->project;
         $design->product     = (int)$design->product;
@@ -495,6 +506,24 @@ class designModel extends model
     }
 
     /**
+     * 获取项目下冻结的设计类型。
+     * Get design type of frozen.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getFrozenDesignType(int $projectID): array
+    {
+        return $this->dao->select('t1.deliverable')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.frozen')->ne('')
+            ->andWhere('t2.category')->in('HLDS,DDS,DBDS,ADS')
+            ->fetchPairs();
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *
@@ -507,6 +536,7 @@ class designModel extends model
     {
         $action = strtolower($action);
         if($action == 'confirmstorychange') return !empty($object->needConfirm);
+        if(in_array($action, array('edit', 'delete')) && !empty($object->frozen)) return false;
         return true;
     }
 }

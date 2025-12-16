@@ -27,7 +27,9 @@ class stageTest
     {
         $this->objectModel->config->setPercent = 1;
         $this->objectModel->config->stage->create->requiredFields = 'type,name,percent';
-        $stageID = $this->objectModel->create($stage, $type);
+        if($type == 'waterfall') $stage->workflowGroup = 4;
+        if($type == 'waterfallplus') $stage->workflowGroup = 8;
+        $stageID = $this->objectModel->create($stage);
 
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
@@ -38,11 +40,11 @@ class stageTest
      * Batch create stages.
      *
      * @param  array            $data
-     * @param  string           $type waterfall|waterfallplus
+     * @param  int              $groupID
      * @access public
      * @return int|string|array
      */
-    public function batchCreateTest(array $data, string $type = 'waterfall'): int|string|array
+    public function batchCreateTest(array $data, int $groupID = 0): int|string|array
     {
         $this->objectModel->config->setPercent = 1;
         $this->objectModel->config->stage->create->requiredFields = 'type,name,percent';
@@ -58,10 +60,10 @@ class stageTest
             $stages[] = $stage;
         }
 
-        $this->objectModel->batchCreate($type, $stages);
+        $this->objectModel->batchCreate($groupID, $stages);
         if(dao::isError()) return current(dao::getError());
 
-        $objects = $this->objectModel->getStages('id_desc', 0, $type);
+        $objects = $this->objectModel->getStages('id_desc', 0, $groupID);
         return count($objects);
     }
 
@@ -133,13 +135,13 @@ class stageTest
      * 获取给定模型下的阶段总百分比。
      * Get total percent of the type.
      *
-     * @param  string    $projectType waterfall|waterfallplus
+     * @param  int       $groupID
      * @access public
      * @return int|array
      */
-    public function getTotalPercentTest(string $projectType): int|array
+    public function getTotalPercentTest(int $groupID): int|array
     {
-        $totalPercent = $this->objectModel->getTotalPercent($projectType);
+        $totalPercent = $this->objectModel->getTotalPercent($groupID);
 
         if(dao::isError()) return dao::getError();
         return $totalPercent;

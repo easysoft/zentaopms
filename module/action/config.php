@@ -73,6 +73,9 @@ $config->action->objectNameFields['miniprogram']  = 'name';
 $config->action->objectNameFields['holiday']      = 'name';
 $config->action->objectNameFields['system']       = 'name';
 $config->action->objectNameFields['deliverable']  = 'name';
+$config->action->objectNameFields['cm']           = 'title';
+$config->action->objectNameFields['baseline']     = 'title';
+$config->action->objectNameFields['projectchange'] = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -132,4 +135,4 @@ $config->action->multipleObjectFields['testtask']['type'] = 'typeList';
 $config->action->approvalFields['reviewStatus'] = 'reviewStatusList';
 $config->action->approvalFields['reviewResult'] = 'reviewResultList';
 
-$config->action->hiddenTrashObjects = 'object,cm';
+$config->action->hiddenTrashObjects = 'object,cm,stage';

@@ -7,15 +7,15 @@ version: "1.0"
 fields:
 - field: story
   range: 1-10
-  
+
 - field: version
   range: 1{10}
-  
+
 - field: reviewer
   range: admin{4},user1{3},user2{3}
-  
+
 - field: result
   range: ''{8},pass{2}
-  
+
 - field: reviewDate
   range: '0000-00-00 00:00:00'{8},'2024-01-15 10:00:00'{2}

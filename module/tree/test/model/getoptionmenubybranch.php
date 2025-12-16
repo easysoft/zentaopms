@@ -63,7 +63,7 @@ $treeTest = new treeTest();
 
 // 5. 测试步骤
 r($treeTest->getOptionMenuByBranchTest(1, 'story', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤1：正常story类型根节点
-r($treeTest->getOptionMenuByBranchTest(2, 'bug', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤2：bug类型根节点  
+r($treeTest->getOptionMenuByBranchTest(2, 'bug', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤2：bug类型根节点
 r($treeTest->getOptionMenuByBranchTest(3, 'case', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤3：case类型根节点
 r($treeTest->getOptionMenuByBranchTest(3, 'story', 0, '1', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤4：指定branch根节点
 r($treeTest->getOptionMenuByBranchTest(999, 'story', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤5：不存在rootID返回根节点

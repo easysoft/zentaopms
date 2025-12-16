@@ -1,4 +1,4 @@
-title: table zt_approvalflow
+title: table zt_approvalflowspec
 desc: ""
 author: sun guangming
 version: "1.0"
@@ -10,9 +10,8 @@ fields:
   - field: version
     range: 1
   - field: nodes
-    range: `[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","agentType":"pass","reviewers":[{"type":"select"}],"ccs":[]},{"type":"end","ccs":[]}]`
-  - field: code
-    range: 'simple'
+    range: ''
+    prefix: '[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","percent":"50","commentType":"required","agentType":"pass","selfType":"selfReview","deletedType":"setAdmin","reviewers":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all","required":"yes"}],"ccs":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all"}]},{"id":"pxodxd2rq9","type":"approval","title":"审批","reviewType":"manual","multiple":"and","percent":"50","commentType":"noRequired","agentType":"pass","selfType":"selfReview","deletedType":"setAdmin","reviewers":[{"type":"setByPrev"}],"ccs":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all"}]},{"type":"end","ccs":[]}]'
   - field: createdBy
     range: 'admin'
   - field: createdDate

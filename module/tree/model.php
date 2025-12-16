@@ -87,7 +87,7 @@ class treeModel extends model
         }
         if($this->isMergeModule($rootID, $type))
         {
-            return $this->dao->select('id, name, root, branch, grade, path, parent, owner, type')->from(TABLE_MODULE)
+            return $this->dao->select('id, name, root, branch, grade, path, parent, owner, type, extra')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
@@ -1236,6 +1236,53 @@ class treeModel extends model
     }
 
     /**
+     * 生成交付物链接。
+     * Create link of a deliverable.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  string $extra
+     * @access public
+     * @return object
+     */
+    public function createDeliverableLink(string $type, object $module, string $parent, string $extra = ''): object
+    {
+        if(!$extra) $extra = 'all';
+
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('deliverable', 'browse', "groupID={$module->root}&browseType={$extra}&param={$module->id}");
+        $data->extra  = $module->extra;
+
+        return $data;
+    }
+
+    /**
+     * 生成项目交付物链接。
+     * Create link of a project deliverable.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  string $extra
+     * @access public
+     * @return object
+     */
+    public function createProjectDeliverableLink(string $type, object $module, string $parent, string $extra = ''): object
+    {
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('project', 'deliverable', "projectID={$extra}&browseType=bymodule&param={$module->id}");
+
+        return $data;
+    }
+
+    /**
      * 生成文档链接。
      * Create link of a doc.
      *
@@ -1853,7 +1900,7 @@ class treeModel extends model
         $repeatName     = $this->checkUnique($module, $childs);
         if($repeatName)
         {
-            dao::$errors['root'] = sprintf($this->lang->tree->repeatName, $repeatName);
+            dao::$errors['name'] = sprintf($this->lang->tree->repeatName, $repeatName);
             return false;
         }
 
@@ -1982,7 +2029,7 @@ class treeModel extends model
      */
     public function update(int $moduleID, string $type = ''): bool
     {
-        $module  = fixer::input('post')->cleanInt('branch')->get();
+        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->get();
         $self    = $this->getById($moduleID);
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
@@ -2174,9 +2221,10 @@ class treeModel extends model
         $objectType = (!empty($module->type) && strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
-        foreach($childs as $childID)
+
+        if($module->type != 'deliverable')
         {
-            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', actionModel::CAN_UNDELETED);
+            foreach($childs as $childID) $this->loadModel('action')->create($objectType, $childID, 'deleted', '', actionModel::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);

@@ -6,39 +6,39 @@ fields:
 - field: id
   note: 度量项ID
   range: 1-10
-  
+
 - field: purpose
   note: 度量目的
   range: QA{2},scale{2},efficiency{2},value{2},cost{2}
-  
+
 - field: scope
   note: 度量范围
   range: system{3},product{3},project{2},execution{2}
-  
+
 - field: object
   note: 度量对象
   range: user{2},story{2},task{2},bug{2},testcase{2}
-  
+
 - field: stage
   note: 阶段
   range: released{8},wait{2}
-  
+
 - field: type
   note: 类型
   range: php{8},sql{2}
-  
+
 - field: name
   note: 度量项名称
   range: 用户数量{2},需求数量{2},任务数量{2},缺陷数量{2},测试用例数量{2}
-  
+
 - field: code
   note: 度量项代码
   range: user_count{2},story_count{2},task_count{2},bug_count{2},testcase_count{2}
-  
+
 - field: unit
   note: 单位
   range: 个{8},人{2}
-  
+
 - field: dateType
   note: 日期类型
   range: day{4},week{2},month{2},year{2}

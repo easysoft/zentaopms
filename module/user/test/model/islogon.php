@@ -32,6 +32,9 @@ r($userTest->isLogonTest()) && p() && e(1); // 步骤2：正常登录用户user1
 $_SESSION['user'] = (object)array('account' => 'guest');
 r($userTest->isLogonTest()) && p() && e(0); // 步骤3：guest用户的登录状态检查
 
+$_SESSION['user'] = $userTest->getbyIdTest('test999');
+r($userTest->isLogonTest()) && p() && e(0); // session 中用户为 test999 时获取用户的登录状态。
+
 $_SESSION['user'] = false;
 r($userTest->isLogonTest()) && p() && e(0); // 步骤4：session中用户为false时的状态检查
 

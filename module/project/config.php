@@ -12,15 +12,15 @@ $config->project->editor->activate = array('id' => 'comment', 'tools' => 'simple
 $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,name,code,status,hasProduct,PM,storyPoints,storyCount,executionCount,budget,teamCount,invested,begin,end,realBegan,realEnd,estimate,consumed,progress';
+$config->project->list->exportFields = 'id,name,code,status,PM,storyPoints,storyCount,executionCount,budget,teamCount,invested,begin,end,realBegan,realEnd,estimate,consumed,progress';
 if($config->systemMode == 'ALM') $config->project->list->exportFields = substr_replace($config->project->list->exportFields, ',parent', 2, 0);
 $config->project->list->customCreateFields = 'budget,acl,auth';
 
 $config->project->create    = new stdclass();
 $config->project->edit      = new stdclass();
 $config->project->batchedit = new stdclass();
-$config->project->create->requiredFields    = 'name,begin,end';
-$config->project->edit->requiredFields      = 'name,begin,end';
+$config->project->create->requiredFields    = 'name,begin,end,workflowGroup';
+$config->project->edit->requiredFields      = 'name,begin,end,workflowGroup';
 
 $config->project->start   = new stdclass();
 $config->project->start->requiredFields = 'realBegan';
@@ -41,7 +41,7 @@ $config->project->labelClass['kanban']        = 'secondary-outline';
 $config->project->labelClass['agileplus']     = 'secondary-outline';
 $config->project->labelClass['waterfallplus'] = 'secondary-outline';
 
-$config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
+$config->project->multiple['project']   = ',qa,devops,review,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
 $config->project->checkList = new stdclass();
@@ -68,7 +68,6 @@ $config->project->search['fields']['name']           = $lang->project->name;
 $config->project->search['fields']['code']           = $lang->project->code;
 $config->project->search['fields']['id']             = $lang->project->id;
 $config->project->search['fields']['model']          = $lang->project->model;
-$config->project->search['fields']['hasProduct']     = $lang->project->type;
 $config->project->search['fields']['parent']         = $lang->project->parent;
 $config->project->search['fields']['status']         = $lang->project->status;
 $config->project->search['fields']['desc']           = $lang->project->desc;
@@ -87,7 +86,6 @@ $config->project->search['params']['name']           = array('operator' => 'incl
 $config->project->search['params']['code']           = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
-$config->project->search['params']['hasProduct']     = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->projectTypeList);
 $config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');
 $config->project->search['params']['status']         = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->statusList);
 $config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
@@ -311,6 +309,9 @@ $config->project->linkMap->budget['summary'] = array('budget', 'summary', 'proje
 $config->project->linkMap->programplan = array();
 $config->project->linkMap->programplan[''] = array('project', 'execution', 'type=all&projectID=%s', '');
 
+$config->project->linkMap->auditplan = array();
+$config->project->linkMap->auditplan[''] = array('project', 'index', 'projectID=%s', '');
+
 $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
@@ -331,6 +332,7 @@ $config->project->actionList['close']['icon']        = 'off';
 $config->project->actionList['close']['hint']        = $lang->project->close;
 $config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}');
 $config->project->actionList['close']['data-toggle'] = 'modal';
+$config->project->actionList['close']['data-size']   = '60rem';
 
 $config->project->actionList['activate']['icon']        = 'magic';
 $config->project->actionList['activate']['hint']        = $lang->project->activate;
@@ -376,3 +378,9 @@ $config->project->statusLabelList['doing']     = 'doing primary-pale';
 $config->project->statusLabelList['suspended'] = 'suspended gray text-white';
 $config->project->statusLabelList['closed']    = 'closed success-pale';
 $config->project->statusLabelList['delay']     = 'delay danger-pale';
+
+$config->project->categoryStages['waterfall'] = array('request', 'design', 'dev', 'qa', 'release', 'review');
+$config->project->categoryStages['IPD']       = array('concept', 'plan', 'develop', 'qualify', 'launch');
+$config->project->categoryStages['TPD']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CBB']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CPD']       = array('plan', 'develop', 'qualify', 'launch');

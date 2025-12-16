@@ -45,8 +45,8 @@ class custom extends control
     public function set(string $module = 'story', string $field = 'priList', string $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if($module == 'user' && $field == 'priList') $field = 'statusList';
-        if($module == 'block' && $field == 'priList')$field = 'closed';
+        if($module == 'user' && $field == 'priList')  $field = 'statusList';
+        if($module == 'block' && $field == 'priList') $field = 'closed';
         $currentLang = $this->app->getClientLang();
 
         $this->customZen->assignVarsForSet($module, $field, $lang, $currentLang);
@@ -56,6 +56,7 @@ class custom extends control
             $this->customZen->setFieldListForSet($module, $field);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($module == 'baseline' && $field == 'objectList') return $this->sendSuccess(array('load' => true));
+            if($module == 'reviewcl') return $this->sendSuccess(array('load' => true));
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 

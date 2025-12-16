@@ -10,11 +10,11 @@ fields:
 - field: grade
   note: 等级值
   range: 1{6}, 2{6}, 3{6}
-  
+
 - field: name
   note: 等级名称
   range: 低{6}, 中{6}, 高{6}
-  
+
 - field: status
   note: 状态
   range: active{15}, inactive{3}

@@ -11,10 +11,30 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('type', strtolower($design->type));
+
+/* 版本列表。Version list. */
+$versions = array();
+for($i = $design->version; $i >= 1; $i--)
+{
+    $versionItem = setting()
+        ->text("#{$i}")
+        ->url(inlink('view', "designID={$design->id}&version=$i"));
+
+    $versionItem->selected($version == $i);
+    $versions[] = $versionItem;
+}
+
+$versionBtn = count($versions) > 1 ? to::title(dropdown
+(
+    btn(set::type('ghost'), setClass('text-link font-normal text-base'), "#{$version}"),
+    set::items($versions)
+)) : null;
+
 detailHeader
 (
     set::backUrl(createLink('design', 'browse', "projectID={$design->project}")),
     to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name))), $design->deleted ? span(setClass('label danger'), $lang->deleted) : null),
+    $versionBtn
 );
 
 $canModify = common::canModify('project', $project);
@@ -38,7 +58,7 @@ foreach($config->design->view->operateList['main'] as $operate)
 $commonActions = array();
 foreach($config->design->view->operateList['common'] as $operate)
 {
-    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted) continue;
+    if(!$canModify || !common::hasPriv('design', $operate) || $design->deleted || !empty($design->frozen)) continue;
     if($operate == 'delete') $config->design->actionList['delete']['class'] = 'ajax-submit';
     $commonActions[] = $config->design->actionList[$operate];
 }
@@ -75,6 +95,7 @@ if($this->design->isClickable($design, 'confirmStoryChange'))
 
 detailBody
 (
+    $versionBtn,
     sectionList
     (
         section

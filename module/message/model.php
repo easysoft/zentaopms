@@ -274,7 +274,7 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback', 'bug')) && $actionID)
+        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback', 'reviewissue', 'bug')) && $actionID)
         {
             $action      = $this->loadModel('action')->getById($actionID);
             $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object, $action->action);

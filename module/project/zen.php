@@ -338,7 +338,6 @@ class projectZen extends project
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID'])  ? $output['branchID']  : 0;
-        $this->view->category            = isset($output['category'])  ? $output['category']  : '';
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $copyProjects;
@@ -355,8 +354,6 @@ class projectZen extends project
 
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
-
-        $this->display('project', 'create');
     }
 
     /**
@@ -479,7 +476,7 @@ class projectZen extends project
         $this->view->disableParent        = $disableParent;
         $this->view->groups               = $this->loadModel('group')->getPairs();
 
-        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($project))
+        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($projectID))
         {
             $this->view->disableModel = true;
         }
@@ -1395,12 +1392,10 @@ class projectZen extends project
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
 
-            /* 交付物提交进度。 */
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $project->deliverable = $this->project->countDeliverable($project);
-            }
         }
+
+        /* 交付物提交进度。 */
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
 
         return array_values($projectList);
     }

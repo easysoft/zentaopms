@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
+require_once dirname(__DIR__) . DS . 'toolbar' . DS . 'v1.php';
 class section extends wg
 {
     protected static array $defineProps = array(
@@ -27,9 +28,10 @@ class section extends wg
 
     private function title(): node
     {
-        $title       = $this->prop('title');
-        $actionsView = $this->block('actions');
-        $required    = $this->prop('required');
+        $title        = $this->prop('title');
+        $titleActions = $this->prop('titleActions');
+        $actionsView  = $this->block('actions');
+        $required     = $this->prop('required');
 
         if(empty($actionsView))
         {
@@ -40,6 +42,7 @@ class section extends wg
                 (
                     setClass('form-label required mr-1 pb-3'),
                 ) : null,
+                $titleActions ? toolbar::create($titleActions) : null,
                 $title
             );
         }
@@ -54,6 +57,7 @@ class section extends wg
                 (
                     setClass('form-label required mr-1'),
                 ) : null,
+                $titleActions ? toolbar::create($titleActions) : null,
                 $title
             ),
             $actionsView

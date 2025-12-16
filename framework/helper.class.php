@@ -88,14 +88,17 @@ class helper extends baseHelper
     {
         global $config;
 
+        if(in_array($feature, array('waterfall', 'waterfallplus')))
+        {
+            return !str_contains(",$config->disabledFeatures,", ",{$feature},"); // 轻量级模式排除瀑布、融合瀑布模型
+        }
+
         if(str_contains($feature, '_'))
         {
             $code = explode('_', $feature);
             $code = $code[0] . ucfirst($code[1]);
             return !str_contains(",$config->disabledFeatures,", ",{$code},");
         }
-
-        if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return !str_contains(",$config->disabledFeatures,", ",{$feature},");
 
         $hasFeature       = false;
         $canConfigFeature = false;
@@ -106,16 +109,10 @@ class helper extends baseHelper
                 if($feature != $group && $feature != $module) continue;
 
                 $canConfigFeature = true;
-                if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
-                {
-                    $hasFeature |= (helper::hasFeature("{$group}") && helper::hasFeature("{$group}_{$module}"));
-                }
-                else
-                {
-                    $hasFeature |= helper::hasFeature("{$group}_{$module}");
-                }
+                $hasFeature |= helper::hasFeature("{$group}_{$module}");
             }
         }
+
         return !$canConfigFeature || ($hasFeature && !str_contains(",$config->disabledFeatures,", ",{$feature},"));
     }
 

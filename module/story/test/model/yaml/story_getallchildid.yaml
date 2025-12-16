@@ -13,7 +13,7 @@ fields:
   note: 是否为父需求
   range: "'1','1','0','1','0','0','0','0','0','0'"
 - field: root
-  note: 根需求ID  
+  note: 根需求ID
   range: '1,1,1,1,1,6,7,8,9,10'
 - field: path
   note: 路径字段，用于层级查询

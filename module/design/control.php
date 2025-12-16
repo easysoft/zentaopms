@@ -61,7 +61,7 @@ class design extends control
         $this->view->switcherText     = zget($products, $productID);
         $this->view->switcherObjectID = $productID;
 
-        $this->lang->design->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+        $this->lang->design->typeList = in_array($project->model, array('waterfall', 'ipd')) ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
         $this->config->design->dtable->fieldList['type']['statusMap'] = $this->lang->design->typeList;
 
         return $productID;
@@ -167,6 +167,8 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
+        $frozenType    = $this->design->getFrozenDesignType($projectID);
+        foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->create;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
@@ -204,8 +206,9 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
-
-        $project = $this->loadModel('project')->getByID($projectID);
+        $project       = $this->loadModel('project')->getByID($projectID);
+        $frozenType    = $this->design->getFrozenDesignType($projectID);
+        foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->batchCreate;
         $this->view->stories   = $this->story->addGradeLabel($stories);
@@ -222,12 +225,13 @@ class design extends control
      * View a design.
      *
      * @param  int    $designID
+     * @param  int    $version
      * @access public
      * @return void
      */
-    public function view(int $designID = 0)
+    public function view(int $designID = 0, int $version = 0)
     {
-        $design = $this->design->getByID($designID);
+        $design = $this->design->getByID($designID, $version);
         $this->commonAction($design->project, $design->product, $designID, $design->type);
 
         $this->session->set('revisionList', $this->app->getURI(true));
@@ -244,6 +248,7 @@ class design extends control
         $this->view->actions  = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos    = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $this->view->project  = $project;
+        $this->view->version  = $version == 0 ? $design->version : $version;
         $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
@@ -290,6 +295,8 @@ class design extends control
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
+        $frozenType    = $this->design->getFrozenDesignType($design->project);
+        foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;
         $this->view->design   = $design;

@@ -36,6 +36,7 @@ class docModel extends model
         global $app;
         $action = strtolower($action);
 
+        if(!empty($doc->frozen) && in_array($action, array('edit', 'delete'))) return false;
         if($action == 'movedoc') return $doc->addedBy == $app->user->account;
         return true;
     }
@@ -774,8 +775,9 @@ class docModel extends model
      */
     public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
-        $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
+        $docs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
@@ -786,14 +788,15 @@ class docModel extends model
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
 
-        $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('lib')->in($libs)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
-            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
-            ->andWhere('module')->in(array('0', ''))
-            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
+        $rootDocs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
+            ->where('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->andWhere('t1.module')->in(array('0', ''))
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
@@ -810,6 +813,7 @@ class docModel extends model
             $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
             $doc->title       = htmlspecialchars_decode($doc->title);
             if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
+            $doc->hasContent = !empty($doc->content) ? true : false;
             unset($doc->content);
             unset($doc->draft);
         }
@@ -1727,6 +1731,9 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
+        $deletedFiles = !empty($doc->deleteFiles) ? explode(',', $doc->deleteFiles) : array();
+        unset($doc->deleteFiles);
+
         $oldDoc           = $this->getByID($docID);
         $changes          = common::createChanges($oldDoc, $doc);
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
@@ -1734,7 +1741,7 @@ class docModel extends model
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
         $version          = $isDraft ? 0 : ($oldDoc->version + 1);
-        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
+        $changed          = $deletedFiles || $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
@@ -1742,8 +1749,13 @@ class docModel extends model
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
             if($change['field'] == 'content') $onlyRawChanged = false;
         }
+
+        $docFiles = array_diff(array_merge(array_keys($files), array_keys($oldDoc->files)), $deletedFiles);
+        if(empty($docFiles) && !empty($deletedFiles)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
-        if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
+        if(!empty($deletedFiles) || !empty($files)) $changes[] = array('field' => 'files', 'old' => implode(',', array_keys($oldDoc->files)), 'new' => implode(',', $docFiles));
+        if($changed) $this->saveDocContent($docID, $doc, $version, $docFiles);
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
@@ -1765,7 +1777,7 @@ class docModel extends model
         }
 
         unset($doc->files);
-        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion,deleteFiles')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -1773,6 +1785,15 @@ class docModel extends model
 
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+
+        /* 文档标题变了要同步修改交付物名称. */
+        if(in_array($this->config->edition, array('ipd', 'max')) && $oldDoc->title != $doc->title)
+        {
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                 ->set('name')->eq($doc->title)
+                 ->where('doc')->eq($docID)
+                 ->exec();
+        }
 
         /* 如果修改了父模板，子模板也同步更新相关信息。*/
         /* If the parent template is modified, the child template will also update the relevant information synchronously. */
@@ -1791,7 +1812,7 @@ class docModel extends model
             $objectType = !empty($doc->templateType) ? 'doctemplate' : 'doc';
             $this->loadModel('action')->create($objectType, $docID, 'convertToNewDoc');
         }
-        return array('changes' => $changes, 'files' => array_keys($files));
+        return array('changes' => $changes, 'files' => $files, 'deletedFiles' => $deletedFiles);
     }
 
     /**

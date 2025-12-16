@@ -39,6 +39,6 @@ $taskTest = new taskTest();
 r(count($taskTest->addTaskLabelTest(array()))) && p() && e('0'); // 步骤1：空数组情况
 r($taskTest->addTaskLabelTest(array(1 => 1))) && p('0:value') && e('1'); // 步骤2：普通任务
 r($taskTest->addTaskLabelTest(array(4 => 4))) && p('0:value') && e('4'); // 步骤3：父任务情况
-r($taskTest->addTaskLabelTest(array(6 => 6))) && p('0:value') && e('6'); // 步骤4：子任务情况  
+r($taskTest->addTaskLabelTest(array(6 => 6))) && p('0:value') && e('6'); // 步骤4：子任务情况
 r(count($taskTest->addTaskLabelTest(array(1 => 1, 4 => 4, 6 => 6)))) && p() && e('3'); // 步骤5：混合任务情况（返回结果数量）
 r(count($taskTest->addTaskLabelTest(array(999 => 999)))) && p() && e('0'); // 步骤6：不存在任务ID情况

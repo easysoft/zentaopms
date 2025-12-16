@@ -34,6 +34,7 @@ $lang->admin->zentaoUsed       = '';
 $lang->admin->api                  = 'API';
 $lang->admin->log                  = 'Log';
 $lang->admin->setting              = 'Einstellungen';
+$lang->admin->setFlow              = 'Set Flow';
 $lang->admin->pluginRecommendation = 'Recommended plug-ins';
 $lang->admin->zentaoInfo           = 'ZenTao information';
 $lang->admin->officialAccount      = 'WeChat Official Account';
@@ -60,10 +61,12 @@ $lang->admin->info->account = 'Ihr ZenTao Konto ist %s.';
 $lang->admin->info->log     = 'Logs die über die Gültigen Tage hinausgehen werden gelöscht. Aufgabenplanung muss laufen (cron).';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Hinweiß: Sie haben sich nicht bei ZenTao (www.zentao.pm) registriert. %s um die aktuellen Updates und News zu erhalten.";
-$lang->admin->notice->ignore   = "Ignorieren";
-$lang->admin->notice->int      = "『%s』sollte eine positive Zahl sein.";
-$lang->admin->notice->openUR   = "Please enable {$lang->URCommon} first before you can use {$lang->ERCommon}.";
+$lang->admin->notice->register                = "Hinweiß: Sie haben sich nicht bei ZenTao (www.zentao.pm) registriert. %s um die aktuellen Updates und News zu erhalten.";
+$lang->admin->notice->ignore                  = "Ignorieren";
+$lang->admin->notice->int                     = "『%s』sollte eine positive Zahl sein.";
+$lang->admin->notice->confirmDisableStoryType = "‘{type}’ Funktion geschlossen, das System wird alle Geschichten entfernen, die mit dem Projekt und der Ausführung verknüpkt sind, die Operation ist irreversibel";
+$lang->admin->notice->openDependFeature       = 'Using "{source}" function requires enabling "{target}" function synchronously.';
+$lang->admin->notice->closeDependFeature      = 'Closing "{source}" function requires synchronously closing "{target}" function.';
 
 $lang->admin->registerNotice = new stdclass();
 $lang->admin->registerNotice->common     = 'Register Account';
@@ -89,10 +92,7 @@ $lang->admin->setModule->closed         = 'Closed';
 
 $lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = $lang->productCommon;
-$lang->admin->setModule->scrum          = 'Scrum ' . $lang->projectCommon;
-$lang->admin->setModule->waterfall      = 'Waterfall ' . $lang->projectCommon;
-$lang->admin->setModule->agileplus      = 'Agile + ' . $lang->projectCommon;
-$lang->admin->setModule->waterfallplus  = 'Waterfall + ' . $lang->projectCommon;
+$lang->admin->setModule->project        = $lang->projectCommon;
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
@@ -108,6 +108,9 @@ $lang->admin->setModule->roadmap        = 'Roadmap';
 $lang->admin->setModule->track          = 'Track';
 $lang->admin->setModule->ER             = $lang->ERCommon;
 $lang->admin->setModule->UR             = $lang->URCommon;
+$lang->admin->setModule->deliverable    = 'Deliverable';
+$lang->admin->setModule->cm             = 'Baseline';
+$lang->admin->setModule->change         = 'Project Change';
 $lang->admin->setModule->researchplan   = 'Researchplan';
 $lang->admin->setModule->gapanalysis    = 'Gapanalysis';
 $lang->admin->setModule->storylib       = 'Story Lib';

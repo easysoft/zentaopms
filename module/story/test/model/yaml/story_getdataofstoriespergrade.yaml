@@ -12,139 +12,139 @@ fields:
 - field: vision
   note: 视图类型
   range: rnd{20}
-  
+
 - field: parent
   note: 父需求
   range: 0{18}, 1{1}, 2{1}
-  
-- field: isParent  
+
+- field: isParent
   note: 是否父需求
   range: 0{18}, 1{2}
-  
+
 - field: root
   note: 根需求
   range: 1-20
-  
+
 - field: path
   note: 路径
   range: ,1,{5}, ,2,{5}, ,3,{5}, ,4,{5}
-  
+
 - field: grade
   note: 等级
   range: 1{5}, 2{5}, 3{5}, 1{3}, 2{2}
-  
+
 - field: product
-  note: 产品ID  
+  note: 产品ID
   range: 1{10}, 2{5}, 3{5}
-  
+
 - field: branch
   note: 分支
   range: 0{20}
-  
+
 - field: module
   note: 模块
   range: 0{20}
-  
+
 - field: plan
   note: 计划
   range: 1{5}, 2{5}, 3{5}, 0{5}
-  
+
 - field: source
   note: 来源
   range: customer{5}, user{5}, po{5}, market{5}
-  
+
 - field: sourceNote
-  note: 来源说明  
+  note: 来源说明
   range: "{5}, 客户需求{5}, 用户反馈{5}, 市场调研{5}"
-  
+
 - field: fromBug
   note: 来源缺陷
   range: 0{20}
-  
+
 - field: feedback
   note: 反馈
   range: 0{20}
-  
+
 - field: title
   note: 需求标题
   range: 用户登录功能{3}, 数据统计功能{3}, 权限管理{3}, 系统监控{3}, 报表导出{3}, 接口开发{2}, 性能优化{2}, 界面改进{1}
-  
+
 - field: keywords
   note: 关键词
   range: 登录,用户{3}, 统计,数据{3}, 权限,管理{3}, 监控,系统{3}, 报表,导出{3}, 接口,API{2}, 性能,优化{2}, 界面,UI{1}
-  
+
 - field: type
   note: 需求类型
   range: story{8}, requirement{6}, epic{6}
-  
+
 - field: category
   note: 需求类别
   range: feature{10}, interface{5}, performance{3}, security{2}
-  
+
 - field: pri
   note: 优先级
   range: 1{3}, 2{5}, 3{8}, 4{4}
-  
+
 - field: estimate
   note: 预估工时
   range: 1-20:2
-  
+
 - field: status
   note: 状态
   range: active{8}, draft{4}, reviewing{3}, closed{3}, developing{2}
-  
+
 - field: subStatus
   note: 子状态
   range: ""{15}, wait{3}, doing{2}
-  
+
 - field: color
   note: 颜色
   range: ""{15}, #3da8f5{3}, #7ec855{2}
-  
+
 - field: stage
   note: 阶段
   range: wait{5}, planned{5}, designing{3}, developing{3}, testing{2}, verified{2}
-  
+
 - field: stagedBy
   note: 阶段设置人
   range: admin{10}, user{5}, pm{5}
-  
+
 - field: lib
   note: 用例库
   range: 0{20}
-  
+
 - field: fromStory
   note: 来源需求
   range: 0{20}
-  
+
 - field: fromVersion
   note: 来源版本
   range: 1{20}
-  
+
 - field: openedBy
   note: 创建人
   range: admin{5}, user1{5}, user2{5}, pm{5}
-  
+
 - field: openedDate
   note: 创建时间
   range: "2024-01-01 10:00:00"{5}, "2024-01-02 14:30:00"{5}, "2024-01-03 09:15:00"{5}, "2024-01-04 16:45:00"{5}
-  
+
 - field: assignedTo
   note: 指派给
   range: dev1{5}, dev2{5}, dev3{5}, tester{5}
-  
+
 - field: assignedDate
   note: 指派时间
   range: "2024-01-01 11:00:00"{5}, "2024-01-02 15:30:00"{5}, "2024-01-03 10:15:00"{5}, "2024-01-04 17:45:00"{5}
-  
+
 - field: lastEditedBy
   note: 最后编辑人
   range: admin{8}, user1{6}, pm{6}
-  
+
 - field: lastEditedDate
   note: 最后编辑时间
   range: "2024-01-05 10:00:00"{5}, "2024-01-06 14:30:00"{5}, "2024-01-07 09:15:00"{5}, "2024-01-08 16:45:00"{5}
-  
+
 - field: deleted
   note: 是否删除
   range: 0{18}, 1{2}

@@ -7,11 +7,11 @@ title=测试 zanodeModel::setMenu();
 timeout=0
 cid=19845
 
-- 执行zanodeTest模块的setMenuTest方法，参数是true 
+- 执行zanodeTest模块的setMenuTest方法，参数是true
  - 属性beforeCall @1
  - 属性afterCall @1
  - 属性createHost @1
-- 执行zanodeTest模块的setMenuTest方法，参数是false 
+- 执行zanodeTest模块的setMenuTest方法，参数是false
  - 属性beforeCall @1
  - 属性afterCall @0
  - 属性createHost @0

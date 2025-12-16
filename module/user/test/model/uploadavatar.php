@@ -31,6 +31,6 @@ $userTest = new userTest();
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤1：正常情况下无文件上传
 r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤2：模拟上传成功但无文件
-r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤3：模拟获取文件信息失败  
+r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤3：模拟获取文件信息失败
 r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤4：模拟文件扩展名验证逻辑
 r($userTest->uploadAvatarTest()) && p('result') && e('fail'); // 步骤5：测试方法返回数组结构

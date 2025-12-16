@@ -274,7 +274,7 @@ class myModel extends model
 
         if($objectType == 'task') return $this->getTaskAssignedByMe($pager, $orderBy, $objectIdList);
         if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'bug') return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
-        if($objectType == 'risk' || $objectType == 'issue' || $objectType == 'nc')
+        if(in_array($objectType, array('risk', 'issue', 'nc')))
         {
             return $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -292,6 +292,16 @@ class myModel extends model
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
+                ->andWhere('t1.id')->in($objectIdList)
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($objectType == 'reviewissue')
+        {
+            return $this->dao->select('t1.*, t2.type')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.id')->in($objectIdList)
                 ->orderBy('t1.' . $orderBy)
                 ->page($pager)
@@ -588,7 +598,6 @@ class myModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type risk|contribute
      * @access public
      * @return void
      */
@@ -615,6 +624,40 @@ class myModel extends model
         unset($this->config->risk->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->risk->search);
+    }
+
+    /*
+     * 构建评审意见搜索表单。
+     * Build reviewissue search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildReviewissueSearchForm(int $queryID, string $actionURL): void
+    {
+        $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+        $queryName = $this->app->rawMethod . 'Reviewissue';
+
+        $this->app->loadConfig('reviewissue');
+        $this->config->reviewissue->search['module']    = $queryName;
+        $this->config->reviewissue->search['actionURL'] = $actionURL;
+        $this->config->reviewissue->search['queryID']   = $queryID;
+
+        $this->config->reviewissue->search['params']['project']['values'] = array('') + $projects;
+        $this->config->reviewissue->search['params']['type']['values']    = arrayUnion(array('' => ''), $this->lang->reviewissue->issueType);
+
+        if(!isset($this->config->reviewissue->search['fields'])) $this->config->reviewissue->search['fields'] = array();
+        unset($this->config->reviewissue->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->reviewissue->search);
     }
 
     /**
@@ -676,6 +719,70 @@ class myModel extends model
                 ->fetchAll('id');
         }
         return $risks;
+    }
+
+    /**
+     * 通过搜索获取评审问题。
+     * Get review issues by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewissuesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
+    {
+        $queryName = $type == 'contribute' ? 'contributeReviewissueQuery' : 'workReviewissueQuery';
+        if($queryID && $queryID != 'myQueryID')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryName . 'Form', $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $reviewissueQuery = preg_replace('/`([^`]+)`/', 't1.$0', $this->session->{$queryName});
+        if(strpos($reviewissueQuery, 't1.`review`') !== false) $reviewissueQuery = str_replace('t1.`review`', 't2.`object`', $reviewissueQuery);
+        if(strpos($reviewissueQuery, 't1.`type`') !== false)   $reviewissueQuery = str_replace('t1.`type`', 't2.`type`', $reviewissueQuery);
+
+        if($type == 'contribute')
+        {
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, 'id_desc', 'reviewissue');
+            $reviewissues = $this->dao->select('t1.*, t2.type')->from(TABLE_REVIEWISSUE)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where($reviewissueQuery)
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t1.createdBy',1)->eq($this->app->user->account)
+                ->orWhere('t1.id')->in(array_keys($assignedByMe))
+                ->markRight(1)
+                ->orderBy("t1.$orderBy")
+                ->page($pager)
+                ->fetchAll('id', false);
+        }
+        elseif($type == 'work')
+        {
+            $reviewissues = $this->dao->select('t1.*, t2.type')->from(TABLE_REVIEWISSUE)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
+                ->where($reviewissueQuery)
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->orderBy("t1.$orderBy")
+                ->page($pager)
+                ->fetchAll('id', false);
+        }
+        return $reviewissues;
     }
 
     /**
@@ -1209,6 +1316,11 @@ class myModel extends model
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
+            ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
+            ->beginIF(!helper::hasFeature('project_change'))->andWhere('objectType')->ne('projectchange')->fi()
+            ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
+            ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
+            ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
             ->orderBy("t2.{$orderBy}")
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();

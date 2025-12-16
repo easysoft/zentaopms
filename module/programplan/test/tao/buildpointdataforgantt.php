@@ -7,11 +7,11 @@ title=测试 programplanTao::buildPointDataForGantt();
 timeout=0
 cid=17764
 
-- 步骤1：正常评审点数据构建属性id @1-PP-1
+- 步骤1：正常评审点数据构建属性id @1-pointPP-1
 - 步骤2：验证数据类型属性type @point
 - 步骤3：验证评审状态属性rawStatus @pass
-- 步骤4：DCP类别评审点处理属性id @2-DCP-2
-- 步骤5：TR类别评审点处理属性id @3-TR4-3
+- 步骤4：DCP类别评审点处理属性id @2-pointDCP-2
+- 步骤5：TR类别评审点处理属性id @3-pointTR4-3
 
 */
 
@@ -84,8 +84,8 @@ $reviewDeadline = array(
 );
 
 // 6. 执行测试步骤
-r($programplanTest->buildPointDataForGanttTest(1, $normalPoint, $reviewDeadline)) && p('id') && e('1-PP-1'); // 步骤1：正常评审点数据构建
+r($programplanTest->buildPointDataForGanttTest(1, $normalPoint, $reviewDeadline)) && p('id') && e('1-pointPP-1'); // 步骤1：正常评审点数据构建
 r($programplanTest->buildPointDataForGanttTest(1, $normalPoint, $reviewDeadline)) && p('type') && e('point'); // 步骤2：验证数据类型
 r($programplanTest->buildPointDataForGanttTest(1, $normalPoint, $reviewDeadline)) && p('rawStatus') && e('pass'); // 步骤3：验证评审状态
-r($programplanTest->buildPointDataForGanttTest(2, $pointWithoutEnd, $reviewDeadline)) && p('id') && e('2-DCP-2'); // 步骤4：DCP类别评审点处理
-r($programplanTest->buildPointDataForGanttTest(3, $trPoint, $reviewDeadline)) && p('id') && e('3-TR4-3'); // 步骤5：TR类别评审点处理
+r($programplanTest->buildPointDataForGanttTest(2, $pointWithoutEnd, $reviewDeadline)) && p('id') && e('2-pointDCP-2'); // 步骤4：DCP类别评审点处理
+r($programplanTest->buildPointDataForGanttTest(3, $trPoint, $reviewDeadline)) && p('id') && e('3-pointTR4-3'); // 步骤5：TR类别评审点处理

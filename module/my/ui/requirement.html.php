@@ -98,6 +98,14 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->requirement->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->requirement->dtable->fieldList, $this->story);
+foreach($stories as $id => $story)
+{
+    if(!isset($story->actions)) continue;
+    foreach($story->actions as $key => $action)
+    {
+        if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+    }
+}
 
 if($viewType == 'tiled') $config->my->requirement->dtable->fieldList['title']['nestedToggle'] = false;
 $cols = array_values($config->my->requirement->dtable->fieldList);

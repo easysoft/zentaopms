@@ -75,13 +75,13 @@ formPanel
             set::value($plan->PM),
         )
     ),
-    isset($config->setPercent) && $config->setPercent == 1 && $project->model != 'research' ? formGroup
+    isset($config->setPercent) && $config->setPercent == 1 && !in_array($project->model, array('research', 'ipd')) ? formGroup
     (
         set::label($lang->programplan->percent),
         set::width('2/3'),
         inputControl
         (
-            input(set::name('percent'), set::value($plan->percent)),
+            input(set::name('percent'), set::value((string)$plan->percent)),
             to::suffix('%'),
             set::suffixWidth('lg')
         )

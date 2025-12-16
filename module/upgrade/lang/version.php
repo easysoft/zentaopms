@@ -563,4 +563,5 @@ $lang->upgrade->fromVersions['ipd4_3']         = 'Ipd4.3';
 $lang->upgrade->fromVersions['ipd4_3']         = 'Ipd4.3';
 $lang->upgrade->fromVersions['ipd4_4']         = 'Ipd4.4';
 $lang->upgrade->fromVersions['ipd4_5']         = 'Ipd4.5';
-$lang->upgrade->fromVersions['ipd4_6']         = 'Ipd4.6'; // ipd insert position.
+$lang->upgrade->fromVersions['ipd4_6']         = 'Ipd4.6';
+$lang->upgrade->fromVersions['ipd4_7']         = 'Ipd4.7'; // ipd insert position.

@@ -193,7 +193,10 @@ $lang->action->objectTypes['board']            = 'Board';
 $lang->action->objectTypes['boardspace']       = 'Board Space';
 $lang->action->objectTypes['productline']      = 'Product Line';
 $lang->action->objectTypes['system']           = $lang->product->system;
-$lang->action->objectTypes['deliverable']      = 'Deliverable';
+$lang->action->objectTypes['deliverable']      = 'Deliverable Category';
+$lang->action->objectTypes['cm']               = 'Baseline';
+$lang->action->objectTypes['baseline']         = 'Baseline';
+$lang->action->objectTypes['projectchange']    = 'Project Change';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -942,7 +945,6 @@ $lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
-$lang->action->label->stage        = 'Stage|stage|browse|';
 $lang->action->label->module       = 'Module|tree|browse|productid=%s&view=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = 'Ticket|ticket|view|id=%s';
 $lang->action->label->chartgroup   = 'Group';
@@ -953,7 +955,7 @@ $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->prompt       = 'ZenTao Agent|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = 'General Agent|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = 'Holiday|holiday|browse|';
-$lang->action->label->deliverable  = 'Deliverable|deliverable|view|id=%s';
+$lang->action->label->deliverable  = 'Deliverable Category|deliverable|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+zendata('webhook')->gen(0);
+
 /**
 
 title=测试 webhookModel::bind();
