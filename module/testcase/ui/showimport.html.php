@@ -12,7 +12,6 @@ namespace zin;
 jsVar('productID', $productID);
 jsVar('branch', $branch);
 jsVar('modules', $modules);
-jsVar('stories', $stories);
 
 unset($lang->testcase->typeList['unit']);
 if(!empty($suhosinInfo))
@@ -99,7 +98,7 @@ else
         'name'    => 'story',
         'label'   => $lang->testcase->story,
         'control' => 'picker',
-        'items'   => isset($stories[0]) ? $stories[0] : array(),
+        'items'   => array(),
         'width'   => '240px',
         'required' => strpos(",$requiredFields,", ',story,') !== false
     );
