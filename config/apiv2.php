@@ -95,11 +95,11 @@ $routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditpla
 $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution');
 
 $routes['/feedbacks']                     = array('response' => 'feedbacks(array),pager');
-$routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?productID=:productID');
+$routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID');
 $routes['/feedbacks/:feedbackID']         = array('response' => 'feedback,actions(array)');
 
 $routes['/tickets']                     = array('response' => 'tickets(array),pager');
-$routes['/products/:productID/tickets'] = array('redirect' => '/tickets?browseType=byProduct&param=:productID');
+$routes['/products/:productID/tickets'] = array('redirect' => '/tickets?param=:productID');
 $routes['/tickets/:ticketID']           = array('response' => 'ticket,actions(array)');
 
 $routes['/depts']         = array('response' => 'sons|depts');
