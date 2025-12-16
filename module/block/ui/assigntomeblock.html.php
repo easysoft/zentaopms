@@ -75,6 +75,25 @@ if(($longBlock && $count > 5) || (!$longBlock && $count > 1))
     );
 }
 
+$processProjectField = function($review, $projects) use($lang)
+{
+    if($review->project && strpos($review->project, ',') !== false)
+    {
+        $projectIdList   = explode(',', $review->project);
+        $review->project = '';
+        foreach($projectIdList as $projectID)
+        {
+            if(empty($projectID)) continue;
+            $review->project .= zget($projects, $projectID, '') . $lang->comma;
+        }
+        $review->project = trim($review->project, $lang->comma);
+    }
+    else
+    {
+        $review->project = zget($projects, $review->project, '');
+    }
+};
+
 $contents = array();
 foreach($hasViewPriv as $type => $bool)
 {
@@ -128,22 +147,7 @@ foreach($hasViewPriv as $type => $bool)
             $review->type = $typeName;
             if(isset($review->project) && empty($review->project)) $review->project = '';
             if(isset($review->product) && empty($review->product)) $review->product = '';
-
-            if($review->project && strpos($review->project, ',') !== false)
-            {
-                $projectIdList   = explode(',', $review->project);
-                $review->project = '';
-                foreach($projectIdList as $projectID)
-                {
-                    if(empty($projectID)) continue;
-                    $review->project .= zget($projects, $projectID, '') . $lang->comma;
-                }
-                $review->project = trim($review->project, $lang->comma);
-            }
-            else
-            {
-                $review->project = zget($projects, $review->project, '');
-            }
+            $processProjectField($review, $projects);
         }
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
