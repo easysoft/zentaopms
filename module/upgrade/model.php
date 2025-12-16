@@ -178,6 +178,7 @@ class upgradeModel extends model
             $this->importBuildinModules();
             $this->importLiteModules();
             $this->addSubStatus();
+            $this->loadModel('workflowgroup')->initAllWorkflowGroup();
         }
 
         $this->convertCharset();
