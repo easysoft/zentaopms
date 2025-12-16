@@ -46,17 +46,23 @@ $albums5 = array('used' => array($uid1 => array('5' => '5'), $uid2 => array('6' 
 $file = new fileTest();
 
 $result1 = $file->getUploadByUIDTest($uid1, $albums1);
-r($result1[1]) && p() && e('文件标题1'); // 测试单个uid，有文件的情况 - 第1条文件ID
-r($result1[2]) && p() && e('文件标题2'); // 测试单个uid，有文件的情况 - 第2条文件ID
+r($result1) && p('1') && e('1');                // 测试单个uid，有文件的情况 - 第1条文件ID
+r($result1) && p('1:title') && e('文件标题1');  // 测试单个uid，有文件的情况 - 第1条文件标题
+r($result1) && p('2') && e('2');               // 测试单个uid，有文件的情况 - 第2条文件ID
+r($result1) && p('2:title') && e('文件标题2');  // 测试单个uid，有文件的情况 - 第2条文件标题
 
 $result2 = $file->getUploadByUIDTest($uid2, $albums2);
-r($result2[3]) && p() && e('文件标题3'); // 测试多个uid的情况 - 第3条文件ID
-r($result2[4]) && p() && e('文件标题4'); // 测试多个uid的情况 - 第4条文件ID
+r($result2) && p('3') && e('3');                 // 测试多个uid的情况 - 第3条文件ID
+r($result2) && p('3:title') && e('文件标题3');    // 测试多个uid的情况 - 第3条文件标题
+r($result2) && p('4') && e('4');                 // 测试多个uid的情况 - 第4条文件ID
+r($result2) && p('4:title') && e('文件标题4');   // 测试多个uid的情况 - 第4条文件标题
 
-r($file->getUploadByUIDTest('', $albums1))    && p() && e('0'); // 测试uid为空的情况
-r($file->getUploadByUIDTest($uid3, $albums3)) && p() && e('0'); // 测试uid对应的文件不存在的情况
-r($file->getUploadByUIDTest($uid4, $albums4)) && p() && e('0'); // 测试SESSION中没有used标记的情况
+r($file->getUploadByUIDTest('', $albums1))    && p() && e('0');  // 测试uid为空的情况
+r($file->getUploadByUIDTest($uid3, $albums3)) && p() && e('0');  // 测试uid对应的文件不存在的情况
+r($file->getUploadByUIDTest($uid4, $albums4)) && p() && e('0');  // 测试SESSION中没有used标记的情况
 
 $result5 = $file->getUploadByUIDTest(array($uid1, $uid2), $albums5);
-r($result5[5]) && p() && e('文件标题5'); // 测试传入数组uid的情况 - 第5条文件ID
-r($result5[6]) && p() && e('文件标题6'); // 测试传入数组uid的情况 - 第6条文件ID
+r($result5) && p('5') && e('5');                // 测试传入数组uid的情况 - 第5条文件ID
+r($result5) && p('5:title') && e('文件标题5');  // 测试传入数组uid的情况 - 第5条文件标题
+r($result5) && p('6') && e('6');               // 测试传入数组uid的情况 - 第6条文件ID
+r($result5) && p('6:title') && e('文件标题6');  // 测试传入数组uid的情况 - 第6条文件标题
