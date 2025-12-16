@@ -13,9 +13,13 @@ window.renderRowCol = function($result, col, row)
     {
         $result.find('.picker-box').on('inited', function(e, info)
         {
-            const $storyPicker = info[0];
-            $storyPicker.render({items: stories[row.module]});
-            $storyPicker.$.setValue(row.story);
+            const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + row.product + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+            $.getJSON(storyLink, function(stories)
+            {
+                let $story = info[0];
+                $story.render({items: stories});
+                $story.$.setValue(row.story);
+            });
         });
     }
 }
@@ -39,11 +43,15 @@ function changeModule(event)
 {
     const $target      = $(event.target);
     const moduleID     = $target.val();
-    const $storyPicker = $target.closest('tr').find('.form-batch-control[data-name="story"] .picker').zui('picker');
-    const oldStory     = $storyPicker.$.value;
-
-    $storyPicker.render({items: stories[moduleID]});
-    $storyPicker.$.setValue(oldStory);
+    const $currentRow  = $target.closest('tr');
+    const $storyPicker = $currentRow.find('.form-batch-control[data-name="story"] .picker').zui('picker');
+    const oldStory     = $currentRow.find('input[name^=story]').val();
+    const storyLink    = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+    $.getJSON(storyLink, function(stories)
+    {
+        $storyPicker.render({items: stories});
+        $storyPicker.$.setValue(oldStory);
+    });
 }
 
 function changeBranch(event)
