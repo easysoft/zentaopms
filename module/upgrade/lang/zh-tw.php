@@ -17,19 +17,36 @@ $lang->upgrade->fail            = '升級失敗';
 $lang->upgrade->successTip      = '升級成功';
 $lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>恭喜您！</p><p>您的禪道已經成功升級。</p>";
 $lang->upgrade->tohome          = '訪問禪道';
-$lang->upgrade->warnning        = '警告';
+$lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '檢查插件';
 $lang->upgrade->consistency     = '一致性檢查';
-$lang->upgrade->warnningContent = <<<EOT
-<p>升級有危險，請先備份資料庫，以防萬一。</p>
-<pre>
-1. 可以通過phpMyAdmin進行備份。
-2. 使用mysql命令行的工具。
+$lang->upgrade->noticeContent   = <<<EOT
+<p>升級對資料庫權限要求較高，請使用 root 使用者。 </p>
+<p>升級有危險，請先備份資料庫，以防萬一。 </p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+1. 可以透過phpMyAdmin進行備份。
+2. 使用mysql命令列的工具：
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。
-   比如： mysqldump -u root -p zentao >zentao.bak
+   將上面紅色的部分分別替換成真實的使用者名稱和禪道系統的資料庫名稱。
+   <em>如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
+
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->noticeContent = <<<EOT
+<p>升級對資料庫權限要求較高，請使用管理員使用者。</p>
+<p>升級有危險，請先備份資料庫，以防萬一。</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+1. 可以透過圖形化客戶端工具進行備份。
+2. 使用DIsql工具進行備份。
+   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
+   語句執行完後會在預設的備份路徑下產生名為「 filename」 的備份集目錄。
+   預設的備份路徑為 dm.ini 中 BAK_PATH 配置的路徑，若未配置 BAK_PATH，則預設使用 SYSTEM_PATH 下的 bak 目錄。
+   這是最簡單的資料庫備份語句，如果要設定其他的備份選項需了解線上備份資料庫的語法。
+</pre>
+EOT;
+}
 
 $lang->upgrade->createFileWinCMD   = '打開命令行，執行<strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = '在命令行執行: <strong style="color:#ed980f">touch %s</strong>';

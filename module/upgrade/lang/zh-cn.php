@@ -18,30 +18,30 @@ $lang->upgrade->fail            = '升级失败';
 $lang->upgrade->successTip      = '升级成功';
 $lang->upgrade->success         = "<p>恭喜您！您的禅道已经成功升级。</p>";
 $lang->upgrade->tohome          = '访问禅道';
-$lang->upgrade->warnning        = '警告';
+$lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->consistency     = '一致性检查';
-$lang->upgrade->warnningContent = <<<EOT
-<p>升级对数据库权限要求较高，请使用root用户。</p>
-<p>升级有危险，请先备份数据库，以防万一。</p>
-<pre class='bg-white space-y-2 p-3'>
+$lang->upgrade->noticeContent   = <<<EOT
+<div>升级对数据库权限要求较高，请使用 root 用户。</div>
+<div>升级有危险，请先备份数据库，以防万一。</div>
+<pre class='bg-gray-200 leading-6 px-3 py-2'>
 1. 可以通过phpMyAdmin进行备份。
-2. 使用mysql命令行的工具。
+2. 使用mysql命令行的工具：
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。
-   比如： mysqldump -u root -p zentao > zentao.bak
+   将上面红色的部分分别替换成真实的用户名和禅道系统的数据库名。
+   <em>比如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->warnningContent = <<<EOT
-<p>升级对数据库权限要求较高，请使用管理员用户。<br>
-   升级有危险，请先备份数据库，以防万一。</p>
-<pre>
+    $lang->upgrade->noticeContent = <<<EOT
+<p>升级对数据库权限要求较高，请使用管理员用户。</p>
+<p>升级有危险，请先备份数据库，以防万一。</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
 1. 可以通过图形化客户端工具进行备份。
 2. 使用DIsql工具进行备份。
-   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
    语句执行完后会在默认的备份路径下生成名为“filename”的备份集目录。
    默认的备份路径为 dm.ini 中 BAK_PATH 配置的路径，若未配置 BAK_PATH，则默认使用 SYSTEM_PATH 下的 bak 目录。
    这是最简单的数据库备份语句，如果要设置其他的备份选项需了解联机备份数据库的语法。
