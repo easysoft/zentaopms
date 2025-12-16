@@ -1588,10 +1588,11 @@ class story extends control
     {
         $hasParent = $hasParent >= 1 ? true : false;
 
+        $modules = array();
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
-            $moduleID = $this->tree->getAllChildID($moduleID);
+            $modules  = $this->tree->getAllChildID($moduleID);
         }
 
         $storyStatus = $this->story->getStatusList($status);
@@ -1599,17 +1600,17 @@ class story extends control
 
         if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type, 'all', 'story', $hasParent);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'all', 'story', $hasParent);
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         if($storyID && !isset($stories[$storyID]))
         {
-            $story   = $this->story->fetchByID($storyID);
-            $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
+            $story = $this->story->fetchByID($storyID);
+            if(!$moduleID || in_array($story->module, $modules)) $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
         }
 
         if($isHTML == 0)
@@ -1719,10 +1720,8 @@ class story extends control
         $modules = array();
         if($moduleID)
         {
-            $productModules  = $this->loadModel('tree')->getOptionMenu($productID, 'story');
-            $storyModuleID   = array_key_exists($moduleID, $productModules) ? $moduleID : 0;
-            $modules         = $this->tree->getStoryModule($storyModuleID);
-            $modules         = $this->tree->getAllChildID($modules);
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $modules  = $this->tree->getAllChildID($moduleID);
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 0, '', 'story', false);
