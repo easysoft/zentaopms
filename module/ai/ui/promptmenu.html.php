@@ -41,7 +41,6 @@ $promptMenuInject = function()
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
     $btnName     = sprintf($this->lang->ai->promptMenu->dropdownTitle, isset($this->lang->ai->dataSource[$module]['common']) ? $this->lang->ai->dataSource[$module]['common'] : '');
 
-
     if($isDocApp)
     {
         h::globalJS
@@ -50,6 +49,19 @@ $promptMenuInject = function()
             'window.docAIPromptLang = ' . json_encode(array('dropdownTitle' => $btnName, 'statuses' => $this->lang->ai->prompts->statuses)) . ";\n"
         );
         return;
+    }
+
+    if($module === 'productplan' && $method === 'view')
+    {
+        /* 子计划不显示“拆分子计划智能体” */
+        $plan = data('plan');
+        if(is_object($plan) && !empty($plan->parent))
+        {
+            $prompts = array_filter($prompts, function($prompt)
+            {
+                return $prompt->module !== 'productplan' || $prompt->targetForm !== 'productplan.create';
+            });
+        }
     }
 
     if(empty($prompts)) return;
