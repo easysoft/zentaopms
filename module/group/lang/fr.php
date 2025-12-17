@@ -549,7 +549,6 @@ $lang->group->package->browseBuild           = 'Browse Build';
 $lang->group->package->browseExecutionStory  = 'Browse Execution ' . $lang->SRCommon;
 $lang->group->package->manageCard            = 'Manage Card';
 $lang->group->package->browseProjectStory    = 'Browse Project ' . $lang->SRCommon;
-$lang->group->package->chckAuditPlan         = 'Chck Audit Plan';
 $lang->group->package->deliverableChecklist  = 'Deliverable Check';
 $lang->group->package->reviewAssess          = 'Review Assess';
 $lang->group->package->reviewAudit           = 'Review Audit';
