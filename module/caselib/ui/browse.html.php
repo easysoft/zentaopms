@@ -132,7 +132,7 @@ if($canExportTemplate)
 
 toolbar
 (
-    setClass(array('hidden' => $isFromDoc)),
+    setClass(array('hidden' => $isFromDoc || $isFromAI)),
     $canView ? a
     (
         setClass('toolbar-item ghost btn btn-default'),
