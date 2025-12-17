@@ -70,6 +70,9 @@ class story extends control
             if($this->post->project)   $objectID = (int)$this->post->project;
             if($this->post->execution) $objectID = (int)$this->post->execution;
 
+            /* API only has productID. */
+            if(!isset($_POST['product'])) $_POST['product'] = $productID;
+
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
