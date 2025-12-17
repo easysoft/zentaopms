@@ -75,7 +75,7 @@ $lang->repo->batchCreate        = 'Batch import repo';
 $lang->repo->browseTag          = 'Browse Tag';
 $lang->repo->browseBranch       = 'Browse Branch';
 
-$lang->repo->createRepoAction = 'Create origin repository';
+$lang->repo->createRepoAction = 'Create repository';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';

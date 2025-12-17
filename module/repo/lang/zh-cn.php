@@ -75,7 +75,7 @@ $lang->repo->batchCreate        = '批量导入代码库';
 $lang->repo->browseTag          = '浏览标签';
 $lang->repo->browseBranch       = '浏览分支';
 
-$lang->repo->createRepoAction = '创建远程代码库';
+$lang->repo->createRepoAction = '创建代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
