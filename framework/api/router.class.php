@@ -486,6 +486,9 @@ class api extends router
         $method = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $this->params);
 
+        /* Clean the output in get method. */
+        ob_clean();
+
         $this->control->getFormData       = false;
         $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
