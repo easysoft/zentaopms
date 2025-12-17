@@ -16,8 +16,14 @@ $routes['/projects/:projectID/stories']     = array('redirect' => '/projectstori
 $routes['/executions/:executionID/stories'] = array('redirect' => '/executions/story?executionID=:executionID');
 $routes['/stories/:storyID']                = array('response' => 'story,actions(array)');
 
+$routes['/products/:productID/epics']     = array('redirect' => '/products/browse?productID=:productID&storyType=epic', 'response' => 'stories(array)|epics,pager');
+$routes['/epics/:storyID']                = array('response' => 'story|epic,actions(array)');
+
+$routes['/products/:productID/requirements'] = array('redirect' => '/products/browse?productID=:productID&storyType=requirement', 'response' => 'stories(array)|requirements,pager');
+$routes['/requirements/:storyID']            = array('response' => 'story|requirement,actions(array)');
+
 $routes['/products/:productID/productplans'] = array('redirect' => '/productplans?productID=:productID', 'response' => 'plans(array)|productplans,pager');
-$routes['/productplans/:planID']      = array('response' => 'plan|productplan,actions(array)');
+$routes['/productplans/:planID']             = array('response' => 'plan|productplan,actions(array)');
 
 $routes['/products/:productID/releases'] = array('redirect' => '/releases?productID=:productID', 'response' => 'releases,pager');
 $routes['/projects/:projectID/releases'] = array('redirect' => '/projectreleases?projectID=:projectID', 'response' => 'releases,pager');
