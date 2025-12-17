@@ -483,12 +483,14 @@ class api extends router
         $zen = $this->control->moduleName . 'Zen';
         $this->control->$zen->getFormData = true;
 
-        $method = $this->control->methodName;
+        $control = $this->control;  // fetch method will change control.
+        $method  = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $this->params);
 
         /* Clean the output in get method. */
         ob_clean();
-
+        
+        $this->control                    = $control;
         $this->control->getFormData       = false;
         $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
