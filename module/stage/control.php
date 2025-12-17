@@ -42,21 +42,24 @@ class stage extends control
                 $this->config->stage->dtable->fieldList['DCPpoint']['flex']  = false;
                 $this->config->stage->dtable->fieldList['DCPpoint']['group'] = 4;
 
-                if(common::hasPriv('stage', 'edit'))
+                if(common::hasPriv('stage', 'setTRpoint'))
                 {
                     $this->config->stage->actionList['setTRpoint']['icon']        = 'tr-box';
                     $this->config->stage->actionList['setTRpoint']['hint']        = $this->lang->stage->setTRpoint;
                     $this->config->stage->actionList['setTRpoint']['url']         = array('module' => 'stage', 'method' => 'setTRpoint', 'params' => 'stageID={id}');
                     $this->config->stage->actionList['setTRpoint']['data-toggle'] = 'modal';
+                }
 
+                if(common::hasPriv('stage', 'setDCPpoint'))
+                {
                     $this->config->stage->actionList['setDCPpoint']['icon']        = 'dcp-box';
                     $this->config->stage->actionList['setDCPpoint']['hint']        = $this->lang->stage->setDCPpoint;
                     $this->config->stage->actionList['setDCPpoint']['url']         = array('module' => 'stage', 'method' => 'setDCPpoint', 'params' => 'stageID={id}');
                     $this->config->stage->actionList['setDCPpoint']['data-toggle'] = 'modal';
-
-                    $this->config->stage->dtable->fieldList['actions']['menu'] = array('setTRpoint', 'setDCPpoint', 'edit', 'delete');
-                    $this->config->stage->dtable->fieldList['actions']['list'] = $this->config->stage->actionList;
                 }
+
+                $this->config->stage->dtable->fieldList['actions']['menu'] = array('setTRpoint', 'setDCPpoint', 'edit', 'delete');
+                $this->config->stage->dtable->fieldList['actions']['list'] = $this->config->stage->actionList;
             }
         }
 
