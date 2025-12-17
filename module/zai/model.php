@@ -1490,6 +1490,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->params->header as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
@@ -1502,6 +1505,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->params->query as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
@@ -1514,6 +1520,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---|---------|\n";
                 foreach($doc->params->params as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | {$item->paramsType} | $required | $desc |\n";
@@ -1531,6 +1540,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->response as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
