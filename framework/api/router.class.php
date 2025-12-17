@@ -481,7 +481,7 @@ class api extends router
         $this->control->getFormData = true;
 
         $zen = $this->control->moduleName . 'Zen';
-        $this->control->$zen->getFormData = true;
+        if(isset($this->control->$zen)) $this->control->$zen->getFormData = true;
 
         $control = $this->control;  // fetch method will change control.
         $method  = $this->control->methodName;
@@ -490,20 +490,23 @@ class api extends router
         /* Clean the output in get method. */
         ob_clean();
         
-        $this->control                    = $control;
         $this->control->getFormData       = false;
-        $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
-
+        $this->control                    = $control;
+        
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
 
-        foreach($this->control->$zen->formData as $key => $value)
+        if(isset($this->control->$zen))
         {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
+            $this->control->$zen->getFormData = false;
+            foreach($this->control->$zen->formData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
         }
     }
 
