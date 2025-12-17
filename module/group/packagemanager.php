@@ -2528,17 +2528,25 @@ $config->group->package->manageAuditPlan->subset = 'projectauditplan';
 $config->group->package->manageAuditPlan->privs  = array();
 $config->group->package->manageAuditPlan->privs['auditplan-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageAuditPlan->privs['auditplan-view']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('auditplan-browse'), 'recommend' => array());
-$config->group->package->manageAuditPlan->privs['auditplan-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchCreate', 'auditplan-check', 'auditplan-delete', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
+$config->group->package->manageAuditPlan->privs['auditplan-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchCreate', 'auditplan-check', 'auditplan-delete', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
 $config->group->package->manageAuditPlan->privs['auditplan-edit']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchEdit', 'auditplan-check', 'auditplan-create', 'auditplan-delete', 'auditplan-nc', 'auditplan-result'));
-$config->group->package->manageAuditPlan->privs['auditplan-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-create'));
-$config->group->package->manageAuditPlan->privs['auditplan-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-edit'));
-$config->group->package->manageAuditPlan->privs['auditplan-nc']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-check', 'auditplan-create', 'auditplan-edit', 'auditplan-result'));
+$config->group->package->manageAuditPlan->privs['auditplan-batchCreate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-create'));
+$config->group->package->manageAuditPlan->privs['auditplan-batchEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-edit'));
+$config->group->package->manageAuditPlan->privs['auditplan-nc']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-check', 'auditplan-create', 'auditplan-edit', 'auditplan-result'));
 $config->group->package->manageAuditPlan->privs['auditplan-result']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-check', 'auditplan-create', 'auditplan-edit', 'auditplan-nc'));
-$config->group->package->manageAuditPlan->privs['auditplan-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-create', 'auditplan-edit'));
-$config->group->package->manageAuditPlan->privs['auditplan-assignTo']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-check', 'auditplan-create', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
+$config->group->package->manageAuditPlan->privs['auditplan-assignTo']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-check', 'auditplan-create', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
+$config->group->package->manageAuditPlan->privs['auditplan-batchCheck']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-check'));
+$config->group->package->manageAuditPlan->privs['auditplan-check']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchCheck', 'auditplan-create', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
+$config->group->package->manageAuditPlan->privs['auditplan-delete']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-create', 'auditplan-edit'));
+
+$config->group->package->deliverableChecklist = new stdclass();
+$config->group->package->deliverableChecklist->order  = 10;
+$config->group->package->deliverableChecklist->subset = 'projectauditplan';
+$config->group->package->deliverableChecklist->privs  = array();
+$config->group->package->deliverableChecklist->privs['project-deliverableChecklist'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->nc = new stdclass();
-$config->group->package->nc->order  = 10;
+$config->group->package->nc->order  = 15;
 $config->group->package->nc->subset = 'projectauditplan';
 $config->group->package->nc->privs  = array();
 $config->group->package->nc->privs['nc-browse']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
@@ -3579,19 +3587,6 @@ $config->group->package->browseProjectStory->privs  = array();
 $config->group->package->browseProjectStory->privs['projectstory-story']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5,  'depend' => array('project-index'), 'recommend' => array('projectstory-view'));
 $config->group->package->browseProjectStory->privs['projectstory-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 15, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->browseProjectStory->privs['projectstory-report'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('projectstory-story'), 'recommend' => array());
-
-$config->group->package->chckAuditPlan = new stdclass();
-$config->group->package->chckAuditPlan->order  = 15;
-$config->group->package->chckAuditPlan->subset = 'projectauditplan';
-$config->group->package->chckAuditPlan->privs  = array();
-$config->group->package->chckAuditPlan->privs['auditplan-batchCheck'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-check'));
-$config->group->package->chckAuditPlan->privs['auditplan-check']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('auditplan-browse'), 'recommend' => array('auditplan-assignTo', 'auditplan-batchCheck', 'auditplan-create', 'auditplan-edit', 'auditplan-nc', 'auditplan-result'));
-
-$config->group->package->deliverableChecklist = new stdclass();
-$config->group->package->deliverableChecklist->order  = 20;
-$config->group->package->deliverableChecklist->subset = 'projectauditplan';
-$config->group->package->deliverableChecklist->privs  = array();
-$config->group->package->deliverableChecklist->privs['project-deliverableChecklist'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->dimension = new stdclass();
 $config->group->package->dimension->order  = 5;
