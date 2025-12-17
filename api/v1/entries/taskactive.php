@@ -22,58 +22,8 @@ class taskActiveEntry extends entry
     {
         $control = $this->loadController('task', 'activate');
 
-        $assignedTo = $this->request('assignedTo');
-        $comment    = $this->request('comment');
-
-        if(is_array($assignedTo))
-        {
-            $task         = $this->loadModel('task')->getByID($taskID);
-            $teamEstimate = $this->request('teamEstimate', array());
-            $oldTeam      = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('account');
-
-            /* 构建旧团队 */
-            $teamSource  = array();
-            foreach($oldTeam as $member)
-            {
-                $teamSource[]  = $member->account;
-            }
-
-            /* 根据新传入的数据重新设置团队 */
-            $team         = array();
-            $teamConsumed = array();
-            $teamLeft     = array();
-
-            foreach($assignedTo as $index => $account)
-            {
-                $team[]         = $account;
-                $teamConsumed[] = $oldTeam[$account]->consumed ?? 0;
-                $teamLeft[]     = $oldTeam[$account]->left ?? $teamEstimate[$index] ?? 0;
-            }
-
-            /* 根据预计剩余工时计算团队剩余工时 */
-            $left = 0;
-            foreach($teamEstimate as $estimate)
-            {
-                $left += $estimate;
-            }
-
-            $this->setPost('team', $team);
-            $this->setPost('teamConsumed', $teamConsumed);
-            $this->setPost('teamSource', $teamSource);
-            $this->setPost('teamEstimate', $teamEstimate);
-            $this->setPost('teamLeft', $teamLeft);
-            $this->setPost('left', $left);
-            $this->setPost('mode', $task->mode);
-            $this->setPost('multiple', 'on');
-        }
-        else
-        {
-            $left = $this->request('left');
-
-            $this->setPost('assignedTo', $assignedTo);
-            $this->setPost('left', $left);
-        }
-        $this->setPost('comment', $comment);
+        $fields = 'assignedTo,team,teamSource,teamEstimate,teamConsumed,teamLeft,left,mode,multiple,comment';
+        $this->batchSetPost($fields);
 
         $control->activate($taskID);
 
