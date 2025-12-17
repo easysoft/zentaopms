@@ -278,7 +278,7 @@ class api extends router
                 if(isset($info['method'])) $methodName = $info['method'];
             }
 
-            if(isset($info['response'])) $this->responseExtractor = $info['response'];
+            if(isset($info['response']) && $this->responseExtractor == '*') $this->responseExtractor = $info['response'];
         }
 
         foreach($paramValues as $key => $value)
