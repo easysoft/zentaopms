@@ -1622,11 +1622,12 @@ class doc extends control
 
         $params = helper::safe64Decode($params);
         parse_str($params, $params);
-        $this->view->params    = $params;
 
+        $this->view->params     = $params;
         $this->view->objectType = $objectType;
-        $this->view->spaceList = $spaceList;
-        $this->view->typeList  = $typeList;
+        $this->view->spaceList  = $spaceList;
+        $this->view->typeList   = $typeList;
+        $this->view->from       = $from;
 
         $this->display();
     }
