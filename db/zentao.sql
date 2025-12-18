@@ -16979,9 +16979,9 @@ CREATE TABLE IF NOT EXISTS `zt_ops_branch_type` (
   `prefix` varchar(255) NOT NULL DEFAULT '' COMMENT '分支前缀，仓库下唯一',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '描述',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
-  `createdDate` datetime NULL COMMENT '创建时间',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑人',
-  `editedDate` datetime NULL COMMENT '更新时间',
+  `editedDate` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '删除标识，0-未删除，1-已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -17000,9 +17000,9 @@ CREATE TABLE IF NOT EXISTS `zt_ops_branch_ruleset` (
   `sourceBranch` varchar(500) NOT NULL DEFAULT '' COMMENT '允许合并来源类型，为空为全部分支',
   `targetBranch` varchar(500) NOT NULL DEFAULT '' COMMENT '允许合并的目标分支类型，为空为全部分支',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
-  `createdDate` datetime NULL COMMENT '创建时间',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑人',
-  `editedDate` datetime NULL COMMENT '更新时间',
+  `editedDate` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '删除标识，0-未删除，1-已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -17013,14 +17013,14 @@ CREATE TABLE IF NOT EXISTS `zt_ops_review_flow` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `repo` int unsigned NOT NULL DEFAULT 0 COMMENT '仓库ID',
   `branchType` varchar(255) NOT NULL DEFAULT '' COMMENT '分支类型ID，0-全部分支类型，具体用逗号分隔',
-  `name`  varchar(255) NOT NULL DEFAULT '' COMMENT '评审流程名称',
-  `desc`  varchar(500) NOT NULL DEFAULT '' COMMENT '评审流程描述',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '评审流程名称',
+  `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '评审流程描述',
   `definition` TEXT NOT NULL DEFAULT '' COMMENT '评审规则，json定义',
   `status` varchar(20) NOT NULL DEFAULT '' COMMENT 'enable-启用，disable-停用',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
-  `createdDate` datetime NULL COMMENT '创建时间',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '编辑人',
-  `editedDate` datetime NULL COMMENT '更新时间',
+  `editedDate` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '删除标识，0-未删除，1-已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
