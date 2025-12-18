@@ -319,3 +319,12 @@ $lang->repo->createReviewFlow       = 'Create Review Flow';
 $lang->repo->editReviewFlow         = 'Edit Review Flow';
 $lang->repo->changeReviewFlowStatus = 'Enable/Disable Review Flow';
 $lang->repo->deleteReviewFlow       = 'Delete Review Flow';
+
+$lang->repo->flowName   = 'Flow Name';
+$lang->repo->branchType = 'Branch Type';
+$lang->repo->enable     = 'Enable';
+$lang->repo->disable    = 'Disable';
+
+$lang->repo->flowStatusList = array();
+$lang->repo->flowStatusList['enable']  = 'Enable';
+$lang->repo->flowStatusList['disable'] = 'Disable';
