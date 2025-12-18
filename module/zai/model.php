@@ -656,7 +656,8 @@ class zaiModel extends model
         }
         elseif($objectType === 'doc')
         {
-            $doc = $this->loadModel('doc')->getByID($objectID);
+            $api = isset($attrs['docType']) && $attrs['docType'] === 'api';
+            $doc = $this->loadModel($api ? 'api' : 'doc')->getByID($objectID);
             $canView = $this->loadModel('doc')->checkPrivDoc($doc);
         }
 
