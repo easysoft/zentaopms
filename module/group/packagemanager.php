@@ -4016,7 +4016,7 @@ $config->group->package->aiKnowledgeLib->privs['ai-deleteknowledgelib']     = ar
 $config->group->package->aiKnowledgeLib->privs['ai-searchknowledgelib']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
 $config->group->package->aiKnowledgeLib->privs['ai-aichatwithknowledgelib'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array(), 'recommend' => array());
 $config->group->package->aiKnowledgeLib->privs['ai-createknowledge']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array());
-$config->group->package->aiKnowledgeLib->privs['ai-deleteknowledge']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-deleteknowledgeitem']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array(), 'recommend' => array());
 $config->group->package->aiKnowledgeLib->privs['ai-editknowledge']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseAiModels = new stdclass();

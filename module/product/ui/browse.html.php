@@ -525,7 +525,7 @@ toolbar
 if(!$isFromDoc && !$isFromAI) $fnGenerateSideBar();
 
 if($isFromDoc)                $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#stories', '$blockType', $blockID, '$insertListLink')"));
-if($isFromAI)                 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#stories', 'story', '$storyType')"));
+if($isFromAI)                 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#stories', 'story')"));
 if(!$isFromDoc && !$isFromAI) $footToolbar = $fnGenerateFootToolbar();
 
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
