@@ -145,10 +145,7 @@ formPanel
         ),
         formGroup
         (
-            setClass('hidden'),
             set::name('issueType'),
-            set::label(''),
-            set::labelWidth('5px'),
             set::items(array()),
             set::multiple(true)
         )
@@ -162,4 +159,32 @@ formPanel
         set::items($lang->repo->newCommitsAddressOptionList),
         set::value('defaultApproval')
     ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->mergeStrategy),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->mergeOptions),
+        set::name('mergeOptions'),
+        set::items($lang->repo->mergeOptionList),
+        set::multiple(true),
+        set::required(true),
+        set::value('merge,squash,rebase,fast')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('autoArchive'),
+        set::label($lang->repo->autoArchive),
+        set::labelHintIcon('help'),
+        set::labelHint($lang->repo->autoArchiveNotice),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->repo->autoArchiveStatusList),
+        set::value('disable')
+    )
 );
