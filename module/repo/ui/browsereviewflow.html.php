@@ -9,6 +9,23 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$canCreate = hasPriv('repo', 'createReviewFlow');
+featureBar();
+if($canCreate)
+{
+    toolBar
+    (
+        set::items(array(
+            array
+            (
+                'icon'  => 'plus',
+                'class' => 'btn primary',
+                'text'  => $lang->repo->createReviewFlow,
+                'url'   => createLink('repo', 'createReviewFlow', "repoID=$repoID")
+            )
+        ))
+    );
+}
 
 $data = initTableData($flowList, $config->repo->dtable->reviewFlow->fieldList);
 dtable
