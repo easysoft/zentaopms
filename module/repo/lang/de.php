@@ -313,3 +313,18 @@ $lang->repo->apiError[3] = 'Forbidden';
 $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
+
+$lang->repo->browseReviewFlow       = 'Browse Review Flow';
+$lang->repo->createReviewFlow       = 'Create Review Flow';
+$lang->repo->editReviewFlow         = 'Edit Review Flow';
+$lang->repo->changeReviewFlowStatus = 'Enable/Disable Review Flow';
+$lang->repo->deleteReviewFlow       = 'Delete Review Flow';
+
+$lang->repo->flowName   = 'Flow Name';
+$lang->repo->branchType = 'Branch Type';
+$lang->repo->enable     = 'Enable';
+$lang->repo->disable    = 'Disable';
+
+$lang->repo->flowStatusList = array();
+$lang->repo->flowStatusList['enable']  = 'Enable';
+$lang->repo->flowStatusList['disable'] = 'Disable';

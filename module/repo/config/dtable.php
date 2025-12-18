@@ -355,3 +355,53 @@ $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
 $config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
+
+$config->repo->dtable->reviewFlow = new stdclass();
+$config->repo->dtable->reviewFlow->fieldList['id']['name']  = 'id';
+$config->repo->dtable->reviewFlow->fieldList['id']['title'] = $lang->idAB;
+
+$config->repo->dtable->reviewFlow->fieldList['name']['title']    = $lang->repo->flowName;
+$config->repo->dtable->reviewFlow->fieldList['name']['type']     = 'title';
+$config->repo->dtable->reviewFlow->fieldList['name']['name']     = 'name';
+$config->repo->dtable->reviewFlow->fieldList['name']['sortType'] = false;
+
+$config->repo->dtable->reviewFlow->fieldList['status']['title']     = $lang->repo->status;
+$config->repo->dtable->reviewFlow->fieldList['status']['type']      = 'status';
+$config->repo->dtable->reviewFlow->fieldList['status']['statusMap'] = $lang->repo->flowStatusList;
+$config->repo->dtable->reviewFlow->fieldList['status']['sortType']  = false;
+
+$config->repo->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->branchType;
+$config->repo->dtable->reviewFlow->fieldList['branchType']['width']    = 100;
+$config->repo->dtable->reviewFlow->fieldList['branchType']['sortType'] = false;
+
+$config->repo->dtable->reviewFlow->fieldList['desc']['title']      = $lang->repo->desc;
+$config->repo->dtable->reviewFlow->fieldList['desc']['type']       = 'desc';
+$config->repo->dtable->reviewFlow->fieldList['desc']['sortType']   = false;
+
+$config->repo->dtable->reviewFlow->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->reviewFlow->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->reviewFlow->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->reviewFlow->fieldList['actions']['width'] = 100;
+$config->repo->dtable->reviewFlow->fieldList['actions']['menu']  = array('enable|disable', 'edit', 'delete');
+
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editReviewFlow', 'params' => "flowID={id}");
+
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['icon']         = 'active';
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['hint']         = $lang->repo->enable;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=enable");
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['className']    = 'ajax-submit';
+
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['icon']         = 'cancel';
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['hint']         = $lang->repo->disable;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=disable");
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['className']    = 'ajax-submit';
+
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'deleteReviewFlow', 'flowID={id}');

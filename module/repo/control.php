@@ -2061,4 +2061,45 @@ class repo extends control
 
         return print(json_encode($userList));
     }
+
+    /**
+     * 浏览审批流程。
+     * Browse review flow.
+     *
+     * @param  int $repoID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function browseReviewFlow(int $repoID, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->commonAction($repoID, 0);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $flowList = $this->repo->getReviewFlowList($repoID, $pager);
+
+        $this->view->repoID   = $repoID;
+        $this->view->title    = $this->lang->repo->browseReviewFlow;
+        $this->view->flowList = $flowList;
+        $this->view->pager    = $pager;
+        $this->display();
+    }
+
+    /**
+     * 创建审批流程。
+     * Create review flow.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function createReviewFlow(int $repoID)
+    {
+        $this->commonAction($repoID, 0);
+        $this->view->title = $this->lang->repo->createReviewFlow;
+        $this->display();
+    }
 }

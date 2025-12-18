@@ -650,6 +650,9 @@ if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
 
 define('TABLE_DEVOPSSPACEUSER', '`' . $config->db->prefix . 'ops_spaceuser`');
 define('TABLE_DEVOPSREPOUSER', '`' . $config->db->prefix . 'ops_repouser`');
+define('TABLE_BRANCHTYPE', '`' . $config->db->prefix . 'ops_branch_type`');
+define('TABLE_BRANCHRULESET', '`' . $config->db->prefix . 'ops_branch_ruleset`');
+define('TABLE_REVIEWFLOW', '`' . $config->db->prefix . 'ops_review_flow`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
