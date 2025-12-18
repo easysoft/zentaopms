@@ -656,7 +656,8 @@ class zaiModel extends model
         }
         elseif($objectType === 'doc')
         {
-            $doc = $this->loadModel('doc')->getByID($objectID);
+            $api = isset($attrs['docType']) && $attrs['docType'] === 'api';
+            $doc = $this->loadModel($api ? 'api' : 'doc')->getByID($objectID);
             $canView = $this->loadModel('doc')->checkPrivDoc($doc);
         }
 
@@ -1463,7 +1464,7 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
-        if(isset($doc->protocol))
+        if(isset($doc->protocol) || !empty($doc->api))
         {
             $app->loadLang('api');
             $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $doc->title");
@@ -1531,7 +1532,7 @@ class zaiModel extends model
             if(!empty($doc->paramsExample))
             {
                 $content[] = "\n## {$app->lang->api->paramsExample}\n";
-                $content[] = "```json\n{$doc->paramsExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->paramsExample) . "\n```";
             }
             if(!empty($doc->response))
             {
@@ -1551,14 +1552,14 @@ class zaiModel extends model
             if(!empty($doc->responseExample))
             {
                 $content[] = "\n## {$app->lang->api->responseExample}\n";
-                $content[] = "```json\n{$doc->responseExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->responseExample) . "\n```";
             }
 
             $content[] = "\n## {$app->lang->api->desc}\n";
             $content[] = strip_tags($doc->desc) . "\n";
 
             $markdown['content'] = implode("\n", $content);
-            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version);
+            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version, 'docType' => 'api');
         }
         else
         {
