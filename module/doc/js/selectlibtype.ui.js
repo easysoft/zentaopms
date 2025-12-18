@@ -125,9 +125,9 @@ window.reloadApi = function()
  */
 window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
 {
-    if(from === 'ai' && sessionStorage.getItem('aiResult'))
+    if(from === 'ai' && localStorage.getItem('aiResult'))
     {
-        const aiResult = JSON.parse(sessionStorage.getItem('aiResult'));
+        const aiResult = JSON.parse(localStorage.getItem('aiResult'));
         zui.DocApp.storeNextCreatingDoc({
             content: aiResult.content || '',
             contentType: 'markdown',
@@ -135,7 +135,7 @@ window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
             lib: Number(libID),
             module: Number(moduleID),
         });
-        sessionStorage.removeItem('aiResult');
+        localStorage.removeItem('aiResult');
     }
     openUrl(link, 'doc');
 }
