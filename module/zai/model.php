@@ -1463,7 +1463,7 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
-        if(isset($doc->protocol))
+        if(isset($doc->protocol) || !empty($doc->api))
         {
             $app->loadLang('api');
             $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $doc->title");
@@ -1558,7 +1558,7 @@ class zaiModel extends model
             $content[] = strip_tags($doc->desc) . "\n";
 
             $markdown['content'] = implode("\n", $content);
-            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version);
+            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version, 'docType' => 'api');
         }
         else
         {
