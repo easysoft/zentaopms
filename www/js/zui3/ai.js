@@ -52,12 +52,13 @@ function getPromptFormConfig(fields, extraConfig)
     const properties = fields.reduce((properties, field, index) => {
         field.code = `field-${field.id}`;
         properties[field.code] = {
-            type    : 'string',
-            widget  : typeMap[field.type] || field.type,
-            title   : field.name,
-            order   : index,
-            required: field.required && field.required !== '0',
-            props   : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
+            type       : 'string',
+            widget     : typeMap[field.type] || field.type,
+            title      : field.name,
+            placeholder: field.placeholder,
+            order      : index,
+            required   : field.required && field.required !== '0',
+            props      : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
         };
         return properties;
     }, {});
