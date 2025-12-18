@@ -2099,4 +2099,21 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getReviewFlowList method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function getReviewFlowListTest(int $repoID): array
+    {
+        $method = new ReflectionMethod($this->objectModel, 'getReviewFlowList');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
