@@ -13,6 +13,9 @@ global $config;
 $lang->upgrade->common          = 'Upgrade';
 $lang->upgrade->welcome         = 'Welcome to upgrade ZenTao';
 $lang->upgrade->execute         = 'Upgrading';
+$lang->upgrade->versionTips     = 'The upgrade versions';
+$lang->upgrade->changeTips      = '%s change log';
+$lang->upgrade->progress        = 'Progress';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
 $lang->upgrade->fail            = 'Failed';
@@ -222,3 +225,26 @@ $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = 'You 
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Activation Approval Workflow';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'You can design the approval process for activating project approval.';
+
+$lang->upgrade->changeTypes = [];
+$lang->upgrade->changeTypes['create'] = 'Create';
+$lang->upgrade->changeTypes['update'] = 'Update';
+$lang->upgrade->changeTypes['delete'] = 'Delete';
+
+$lang->upgrade->changeActions = [];
+$lang->upgrade->changeActions['createView']  = 'Create database view %VIEW%';
+$lang->upgrade->changeActions['dropView']    = 'Delete database view %VIEW%';
+$lang->upgrade->changeActions['createTable'] = 'Create database table %TABLE%';
+$lang->upgrade->changeActions['dropTable']   = 'Delete database table %TABLE%';
+$lang->upgrade->changeActions['renameTable'] = 'Rename database table %OLD% to %NEW%';
+$lang->upgrade->changeActions['addField']    = 'Add field %FIELD% to database table %TABLE%';
+$lang->upgrade->changeActions['modifyField'] = 'Modify field %FIELD% in database table %TABLE%';
+$lang->upgrade->changeActions['dropField']   = 'Delete field %FIELD% from database table %TABLE%';
+$lang->upgrade->changeActions['renameField'] = 'Rename field %OLD% to %NEW% in database table %TABLE%';
+$lang->upgrade->changeActions['createIndex'] = 'Create index %INDEX% on database table %TABLE%';
+$lang->upgrade->changeActions['dropIndex']   = 'Delete index %INDEX% from database table %TABLE%';
+$lang->upgrade->changeActions['insertValue'] = 'Insert data into database table %TABLE%';
+$lang->upgrade->changeActions['updateValue'] = 'Update data in database table %TABLE%';
+$lang->upgrade->changeActions['deleteValue'] = 'Delete data from database table %TABLE%';
+$lang->upgrade->changeActions['other']       = 'Other';
+

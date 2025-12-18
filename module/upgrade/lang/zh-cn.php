@@ -13,6 +13,9 @@ global $config;
 $lang->upgrade->common          = '升级';
 $lang->upgrade->welcome         = '欢迎升级禅道';
 $lang->upgrade->execute         = '版本升级';
+$lang->upgrade->versionTips     = '本次升级版本';
+$lang->upgrade->changeTips      = '%s 数据改动';
+$lang->upgrade->progress        = '进度';
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
 $lang->upgrade->fail            = '升级失败';
@@ -222,3 +225,26 @@ $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = '可�
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = '激活立项审批流';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = '可以为激活立项审批设计审批流程。';
+
+$lang->upgrade->changeTypes = [];
+$lang->upgrade->changeTypes['create'] = '新增';
+$lang->upgrade->changeTypes['update'] = '更新';
+$lang->upgrade->changeTypes['delete'] = '删除';
+
+$lang->upgrade->changeActions = [];
+$lang->upgrade->changeActions['createView']  = '创建数据库视图 %VIEW%';
+$lang->upgrade->changeActions['dropView']    = '删除数据库视图 %VIEW%';
+$lang->upgrade->changeActions['createTable'] = '创建数据库表 %TABLE%';
+$lang->upgrade->changeActions['dropTable']   = '删除数据库表 %TABLE%';
+$lang->upgrade->changeActions['renameTable'] = '修改数据库表 %OLD% 的名称为 %NEW%';
+$lang->upgrade->changeActions['addField']    = '给数据库表 %TABLE% 添加 %FIELD% 字段';
+$lang->upgrade->changeActions['modifyField'] = '修改数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->upgrade->changeActions['dropField']   = '删除数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->upgrade->changeActions['renameField'] = '修改数据库表 %TABLE% 的 %OLD% 字段的名称为 %NEW%';
+$lang->upgrade->changeActions['addIndex']    = '给数据库表 %TABLE% 添加 %INDEX% 索引';
+$lang->upgrade->changeActions['dropIndex']   = '删除数据库表 %TABLE% 的 %INDEX% 索引';
+$lang->upgrade->changeActions['insertValue'] = '给数据库表 %TABLE% 插入数据';
+$lang->upgrade->changeActions['updateValue'] = '更新数据库表 %TABLE% 的数据';
+$lang->upgrade->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除数据';
+$lang->upgrade->changeActions['other']       = '其他操作';
+

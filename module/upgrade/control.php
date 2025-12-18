@@ -161,6 +161,10 @@ class upgrade extends control
 
         if(is_file($script)) unlink($script);
 
+        $this->view->toVersion       = $this->upgradeZen->getToVersion();
+        $this->view->upgradeVersions = $this->upgradeZen->getUpgradeVersions($fromVersion);
+        $this->view->upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion);
+
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
 

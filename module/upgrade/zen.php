@@ -3,6 +3,326 @@ declare(strict_types=1);
 class upgradeZen extends upgrade
 {
     /**
+     * 获取目标升级版本。
+     * Get to upgrade version.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getToVersion(): string
+    {
+        $upgradeVersions = $this->getUpgradeVersions($this->config->installedVersion);
+        return reset(array_keys($upgradeVersions));
+    }
+
+    /**
+     * 获取可升级的版本列表。
+     * Get upgrade versions.
+     *
+     * @param  string $fromVersion
+     * @access protected
+     * @return string[]
+     */
+    protected function getUpgradeVersions(string $fromVersion): array
+    {
+        $upgradeVersions = [];
+        $currentEdition  = $this->config->edition;
+        $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
+
+        /* 如果当前版本和来源版本不一致，则需要将来源版本转换为当前版本对应的版本号。*/
+        if($currentEdition != $fromEdition)
+        {
+            $openVersion = $this->upgrade->getOpenVersion($fromVersion);
+            $fromVersion = array_search($openVersion, $this->config->upgrade->{$currentEdition . 'Version'});
+            if(empty($fromVersion)) return $upgradeVersions;
+        }
+
+        /* 如果当前版本和来源版本不一致，则需要包含来源版本对应的目标版本。比如旗舰版7.5升级到IPD版4.6，则需要包含IPD4.5。*/
+        $operator = $currentEdition != $fromEdition ? '>' : '>=';
+
+        foreach($this->lang->upgrade->fromVersions as $version => $label)
+        {
+            if(version_compare($fromVersion, $version, $operator)) continue;
+            if($currentEdition == 'open' && !is_numeric($version[0])) continue;
+            if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
+
+            $upgradeVersions[$version] = $label;
+        }
+
+        return $upgradeVersions;
+    }
+
+    /**
+     * 获取升级变更列表。
+     * Get upgrade changes.
+     *
+     * @param  string $version
+     * @access protected
+     * @return array[]
+     */
+    protected function getUpgradeChanges(string $version): array
+    {
+        $changes     = [];
+        $openVersion = $this->upgrade->getOpenVersion($version);
+        $sqlFile     = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
+        if(!file_exists($sqlFile)) return [];
+
+        $sqls = $this->upgrade->parseToSqls($sqlFile);
+        foreach($sqls as $sql)
+        {
+            $items = $this->parseSqlToSemantic($sql);
+            foreach($items as $item)
+            {
+                $action  = $this->lang->upgrade->changeTypes[$item['type']];
+                $search  = ['%TABLE%', '%FIELD%', '%INDEX%', '%VIEW%', '%OLD%', '%NEW%'];
+                $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
+                $subject = $this->lang->upgrade->changeActions[$item['action']] ?? $this->lang->upgrade->changeActions['other'];
+                $text    = str_replace($search, $replace, $subject);
+                $changes[] = ['type' => $item['type'], 'action' => $action, 'text' => $text, 'sql' => $sql];
+            }
+        }
+        return $changes;;
+    }
+
+    /**
+     * 将 SQL 语句解析为语义化描述数组
+     *
+     * @param  string $sql 单条 SQL 语句
+     * @return array[]
+     */
+    function parseSqlToSemantic(string $sql): array
+    {
+        $sql = trim($sql);
+        if($sql === '') return [];
+
+        /* 移除末尾分号 */
+        $sql      = rtrim($sql, " \t\n\r;");
+        $sqlLower = strtolower($sql);
+
+        if(preg_match('/^create\s+(or\s+replace\s+)?view\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))               return [['type' => 'create', 'action' => 'createView',  'view'  => $this->extractTableName($matches[2])]]; // CREATE VIEW / CREATE OR REPLACE VIEW
+        if(preg_match('/^drop\s+view\s+(if\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))                  return [['type' => 'delete', 'action' => 'dropView',    'view'  => $this->extractTableName($matches[2])]]; // DROP VIEW
+        if(preg_match('/^create\s+(unique\s+)?index\s+`?([\w]+)`?\s+on\s+((?:`[^`]*`|\S)+)/i', $sql, $matches)) return [['type' => 'create', 'action' => 'addIndex',    'table' => $this->extractTableName($matches[3]), 'index' => $this->extractTableName($matches[2])]]; // CREATE INDEX idx ON table_name
+        if(preg_match('/^drop\s+index\s+`?([\w]+)`?\s+on\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))               return [['type' => 'delete', 'action' => 'dropIndex',   'table' => $this->extractTableName($matches[2]), 'index' => $this->extractTableName($matches[1])]]; // DROP INDEX idx ON table_name
+        if(preg_match('/^create\s+table\s+(if\s+not\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))         return [['type' => 'create', 'action' => 'createTable', 'table' => $this->extractTableName($matches[2])]]; // CREATE TABLE
+        if(preg_match('/^drop\s+table\s+(if\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))                 return [['type' => 'delete', 'action' => 'dropTable',   'table' => $this->extractTableName($matches[2])]]; // DROP TABLE
+        if(preg_match('/^rename\s+table\s+((?:`[^`]*`|\S)+)\s+to\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))       return [['type' => 'update', 'action' => 'renameTable', 'old'   => $this->extractTableName($matches[1]), 'new' => $this->extractTableName($matches[2])]]; // RENAME TABLE
+        if(preg_match('/^(insert|replace)\s+into\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                       return [['type' => 'create', 'action' => 'insertValue', 'table' => $this->extractTableName($matches[2])]]; // INSERT / REPLACE
+        if(preg_match('/^update\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                                        return [['type' => 'update', 'action' => 'updateValue', 'table' => $this->extractTableName($matches[1])]]; // UPDATE
+        if(preg_match('/^delete\s+from\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                                 return [['type' => 'delete', 'action' => 'deleteValue', 'table' => $this->extractTableName($matches[1])]]; // DELETE
+
+        /* ALTER TABLE */
+        if(preg_match('/^alter\s+table\s+((?:`[^`]*`|\S)+)\s+(.+)/i', $sql, $matches))
+        {
+            $tableName = $this->extractTableName($matches[1]);
+            $alterBody = ltrim($matches[2]);
+
+            /* 先检查是否是整表重命名：ALTER TABLE t RENAME TO new_t */
+            if(preg_match('/^\s*rename\s+to\s+((?:`[^`]*`|\S)+)\s*$/i', $alterBody, $m)) return [['type' => 'update', 'action' => 'renameTable', 'old' => $tableName, 'new' => trim($m[1], '`')]];
+
+            $results = [];
+            $clauses = $this->splitAlterClauses($alterBody);
+            foreach($clauses as $clause)
+            {
+                $clause = trim($clause);
+                if ($clause === '') continue;
+
+                /* 提取关键词（忽略大小写） */
+                $upperClause = preg_replace('/\s+/', ' ', strtoupper($clause));
+                $words       = explode(' ', $upperClause);
+
+                if(empty($words)) continue;
+
+                $first = $words[0];
+
+                /* --- ADD [COLUMN/INDEX/KEY] --- */
+                if($first === 'ADD')
+                {
+                    /* 先尝试匹配 ADD INDEX / ADD KEY / ADD UNIQUE，再尝试匹配 ADD COLUMN 或 ADD field_name（即字段） */
+                    if(preg_match('/^add\s+(unique\s+)?(index|key)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                    {
+                        $results[] = ['type' => 'create', 'action' => 'addIndex', 'table' => $tableName, 'index' => trim($m[3], '`')];
+                    }
+                    else
+                    {
+                        /* 跳过 "COLUMN" */
+                        $pos = 1;
+                        if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+
+                        /* 提取字段名（支持反引号，可能含空格） */
+                        if(isset($words[$pos]) && preg_match('/^add\s+(column\s+)?(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['type' => 'create', 'action' => 'addField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                    }
+                    continue;
+                }
+
+                /* --- DROP [COLUMN/INDEX/KEY] --- */
+                if($first === 'DROP')
+                {
+                    if(isset($words[1]) && in_array($words[1], ['COLUMN', 'INDEX', 'KEY']))
+                    {
+                        /* 字段或索引 */
+                        if(preg_match('/^drop\s+(column|index|key)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                        {
+                            $type = strtolower($m[1]);
+
+                            if($type === 'column')
+                            {
+                                $results[] = ['type' => 'delete', 'action' => 'dropField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                            }
+                            else
+                            {
+                                $results[] = ['type' => 'delete', 'action' => 'dropIndex', 'table' => $tableName, 'index' => trim($m[2], '`')];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        /* 简写 DROP field_name */
+                        if(preg_match('/^drop\s+(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['type' => 'delete', 'action' => 'dropField', 'table' => $tableName, 'field' => trim($m[1], '`')];
+                    }
+                    continue;
+                }
+
+                /* --- MODIFY [COLUMN] --- */
+                if($first === 'MODIFY')
+                {
+                    $pos = 1;
+                    if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+                    if(isset($words[$pos]) && preg_match('/^modify\s+(column\s+)?(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['type' => 'update', 'action' => 'modifyField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                    continue;
+                }
+
+                /* --- CHANGE [COLUMN] --- */
+                if($first === 'CHANGE')
+                {
+                    /* CHANGE [COLUMN] old_name new_name ... */
+                    $pos = 1;
+                    if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+
+                    /* 使用原始子句提取两个标识符 */
+                    if(isset($words[$pos + 1]) && preg_match('/^change\s+(column\s+)?(`[^`]*`|\w+)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                    {
+                        $old = trim($m[2], '`');
+                        $new = trim($m[3], '`');
+                        if($old == $new)
+                        {
+                            $results[] = ['type' => 'update', 'action' => 'modifyField', 'table' => $tableName, 'field' => $old];
+                        }
+                        else
+                        {
+                            $results[] = ['type' => 'update', 'action' => 'renameField', 'table' => $tableName, 'old' => $old, 'new' => $new];
+                        }
+                    }
+                    continue;
+                }
+
+                /* --- RENAME COLUMN old_name TO new_name (MySQL 8.0+) --- */
+                if($first === 'RENAME' && isset($words[1]) && $words[1] === 'COLUMN' && preg_match('/^rename\s+column\s+(`[^`]*`|\w+)\s+to\s+(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['type' => 'update', 'action' => 'renameField', 'table' => $tableName, 'old' => trim($m[1], '`'), 'new' => trim($m[2], '`')];
+            }
+            return $results;
+        }
+
+        return [];
+    }
+
+    /**
+     * 从可能带数据库前缀的标识符中提取表名（如从 `db`.`table` 或 db.table 中提取 table）
+     *
+     * @param  string $full 被反引号或不带反引号的标识符（如 "db.table" 或 "`my db`.`my-table`"）
+     * @access public
+     * @return string 表名（不含反引号）
+     */
+    function extractTableName(string $full): string
+    {
+        $full = trim($full); // 去除首尾空白
+
+        /* 按未被反引号包围的点分割 */
+        $parts      = [];
+        $current    = '';
+        $inBacktick = false;
+        for($i = 0; $i < strlen($full); $i++)
+        {
+            $c = $full[$i];
+            if($c === '`')
+            {
+                $inBacktick = !$inBacktick;
+                continue; // 反引号本身不存入
+            }
+            if($c === '.' && !$inBacktick)
+            {
+                $parts[] = $current;
+                $current = '';
+            }
+            else
+            {
+                $current .= $c;
+            }
+        }
+        $parts[] = $current;
+
+        $tableName = end($parts); // 最后一个 part 就是表名
+        return $tableName !== false ? $tableName : $full;
+    }
+
+    /**
+     * 安全拆分 ALTER TABLE 子句，跳过字符串和括号内的逗号
+     *
+     * @param  string $body
+     * @return string[]
+     */
+    function splitAlterClauses(string $body): array
+    {
+        $clauses    = [];
+        $current    = '';
+        $len        = strlen($body);
+        $inSingle   = false;
+        $inDouble   = false;
+        $parenLevel = 0;
+
+        for($i = 0; $i < $len; $i++)
+        {
+            $c = $body[$i];
+            $next = ($i + 1 < $len) ? $body[$i + 1] : '';
+
+            /* 处理转义（简化：跳过下一个字符） */
+            if($c === '\\' && ($inSingle || $inDouble))
+            {
+                $current .= $c . $next;
+                $i++;
+                continue;
+            }
+
+            if($c === "'" && !$inDouble)
+            {
+                $inSingle = !$inSingle;
+            }
+            elseif($c === '"' && !$inSingle)
+            {
+                $inDouble = !$inDouble;
+            }
+            elseif($c === '(' && !$inSingle && !$inDouble)
+            {
+                $parenLevel++;
+            }
+            elseif($c === ')' && !$inSingle && !$inDouble)
+            {
+                $parenLevel--;
+            }
+            elseif($c === ',' && !$inSingle && !$inDouble && $parenLevel === 0)
+            {
+                $clauses[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $c;
+        }
+
+        if($current !== '') $clauses[] = $current;
+
+        return $clauses;
+    }
+
+    /**
      * 升级 sql 成功执行后的操作。
      * Operations after successful execution.
      *
