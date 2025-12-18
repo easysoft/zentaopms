@@ -1,0 +1,47 @@
+---
+title: 分支规则集测试数据
+desc: 用于分支规则集相关方法的测试数据
+
+fields:
+- field: id
+  note: 规则ID
+  range: 1-100
+- field: repo
+  note: 代码库ID
+  range: 1-10
+- field: branchType
+  note: 分支类型ID
+  range: 1-5
+- field: branchName
+  note: 分支名称
+  range: main,master,develop,release,feature-test
+- field: deleteUser
+  note: 删除分支权限人员
+  range: 'admin{2},admin,user1{1},admin,user1,user2{1},``{1}'
+- field: updateUser
+  note: 更新分支权限人员
+  range: 'admin{2},admin,user1{1},admin,user2{1},``{1}'
+- field: forcePushUser
+  note: 强制推送权限人员
+  range: 'admin{3},``{2}'
+- field: sourceBranch
+  note: 允许合并来源类型
+  range: '1,2,3{2},``{3}'
+- field: targetBranch
+  note: 允许合并目标分支类型
+  range: '1,2{2},``{3}'
+- field: createdBy
+  note: 创建人
+  range: admin,user1,admin{3}
+- field: createdDate
+  note: 创建时间
+  range: '`now()`{5}'
+- field: editedBy
+  note: 编辑人
+  range: 'admin{3},``{2}'
+- field: editedDate
+  note: 更新时间
+  range: '`now()`{3},`NULL`{2}'
+- field: deleted
+  note: 删除标识
+  range: '0{4},1{1}'
