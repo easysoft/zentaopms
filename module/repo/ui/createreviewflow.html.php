@@ -124,5 +124,42 @@ formPanel
         set::name('minReviewers'),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
         set::value(0)
-    )
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->solveIssues),
+        set::labelClass('font-black')
+    ),
+    formRow
+    (
+        set::width('2/3'),
+        formGroup
+        (
+            set::name('addressOption'),
+            set::label($lang->repo->addressOption),
+            set::control(array('type' => 'radioList', 'inline' => true)),
+            set::items($lang->repo->addressOptionList),
+            set::value('noNeedToSolve')
+        ),
+        formGroup
+        (
+            setClass('hidden'),
+            set::name('issueType'),
+            set::label(''),
+            set::labelWidth('5px'),
+            set::items(array()),
+            set::multiple(true)
+        )
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->newCommits),
+        set::name('newCommits'),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->repo->newCommitsAddressOptionList),
+        set::value('defaultApproval')
+    ),
 );
