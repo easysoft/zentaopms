@@ -7,12 +7,11 @@ title=测试 repoModel::createBranchRule();
 timeout=0
 cid=0
 
-- 测试步骤1：创建完整的分支规则 >> 期望创建成功，branchName为feature
-- 测试步骤2：创建最小必填字段的规则 >> 期望创建成功，branchName为hotfix
-- 测试步骤3：创建带权限设置的规则 >> 期望创建成功，branchName为release
-- 测试步骤4：创建带合并限制的规则 >> 期望创建成功，branchName为develop
-- 测试步骤5：创建空字符串权限的规则 >> 期望创建成功，forcePushUser为空
-
+- 步骤1：完整规则创建属性branchName @feature
+- 步骤2：最小字段创建属性branchName @hotfix
+- 步骤3：权限设置属性branchName @release
+- 步骤4：合并限制属性branchName @develop
+- 步骤5：空权限属性forcePushUser
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

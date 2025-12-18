@@ -7,11 +7,11 @@ title=测试 repoModel::updateBranchRule();
 timeout=0
 cid=0
 
-- 测试步骤1：更新分支名称 >> 期望更新成功，branchName为main-updated
-- 测试步骤2：更新权限设置 >> 期望更新成功，repo为2
-- 测试步骤3：更新合并限制 >> 期望更新成功，repo为3
-- 测试步骤4：清空某些权限字段 >> 期望更新成功，forcePushUser为空
-- 测试步骤5：不存在的规则ID >> 期望更新失败，返回false
+- 步骤1：更新分支名称属性branchName @main-updated
+- 步骤2：更新权限属性repo @2
+- 步骤3：更新合并限制属性repo @3
+- 步骤4：清空权限字段属性forcePushUser @~~
+- 步骤5：不存在的规则ID @0
 
 */
 
