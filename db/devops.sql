@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `zt_ops_branch_ruleset` (
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '删除标识，0-未删除，1-已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE INDEX `idx_repo` ON `zt_ops_branch_rule` (`repo`);
+CREATE INDEX `idx_repo` ON `zt_ops_branch_ruleset` (`repo`);
 
 -- DROP TABLE IF EXISTS `zt_ops_review_flow`;
 CREATE TABLE IF NOT EXISTS `zt_ops_review_flow` (
@@ -75,4 +75,4 @@ CREATE TABLE IF NOT EXISTS `zt_ops_review_flow` (
   `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '删除标识，0-未删除，1-已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-CREATE INDEX `idx_repoID` ON `zt_ops_branch_rule` (`repo`);
+CREATE INDEX `idx_repo` ON `zt_ops_review_flow` (`repo`);
