@@ -221,7 +221,7 @@ class blockZen extends block
 
             /* 将没有视图权限的区块过滤。 */
             $module = $block->module;
-            if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
+            if(in_array($module, array('scrumproject', 'waterfallproject', 'waterfallplusproject', 'agileplusproject', 'ipdproject'))) $module = 'project';
             if($module == 'singleproduct') $module = 'product';
             if(!empty($module) && !in_array($module, array('welcome', 'guide', 'assigntome', 'zentaodynamic', 'teamachievement', 'dynamic', 'html')) && !empty($acls['views']) && !isset($acls['views'][$module]))
             {
