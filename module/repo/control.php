@@ -2079,9 +2079,11 @@ class repo extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $flowList = $this->repo->getReviewFlowList($repoID, $pager);
+
         $this->view->repoID   = $repoID;
         $this->view->title    = $this->lang->repo->browseReviewFlow;
-        $this->view->flowList = array();
+        $this->view->flowList = $flowList;
         $this->view->pager    = $pager;
         $this->display();
     }
