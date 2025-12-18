@@ -223,6 +223,9 @@ class actionTao extends actionModel
     public function getGenerateRelated(string $objectType, int $objectID): array
     {
         $product = $project = $execution = 0;
+
+        if(!isset($this->config->objectTables[$objectType])) return array(array($product), $project, $execution);
+
         $result  = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
         {
@@ -275,7 +278,7 @@ class actionTao extends actionModel
             $field    = $result->story != 0 ? 'id' : 'project';
             $value    = $result->story != 0 ? $result->story : $result->execution;
             $products = $this->dao->select('product')->from($table)->where($field)->eq($value)->fetchPairs();
-            if($products) $product = $products;
+            if($products) $product = array_values($products);
 
             $project   = $result->project;
             $execution = $result->execution;
