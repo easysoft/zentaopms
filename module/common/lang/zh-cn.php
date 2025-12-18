@@ -362,6 +362,9 @@ $lang->pipeline->common         = '流水线';
 $lang->devopssetting->common    = '设置';
 $lang->deployment->common       = '主机';
 $lang->devopsspace->common      = '空间';
+$lang->repoSettings->common     = '设置';
+$lang->devops->branchType       = '分支类型';
+$lang->devops->reviewFlow       = '评审流程';
 
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';

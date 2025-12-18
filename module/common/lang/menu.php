@@ -539,12 +539,17 @@ $lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$
 $lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|devopsspace|group|spaceID=%s", 'alias' => 'managepriv');
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
-$lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
-$lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
-$lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
-$lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
-$lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-browsebranchtype,repo-browsereviewflow');
+$lang->devops->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
+$lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
+$lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
+$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repo|browsebranchtype|repoID=%s", 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,browsereviewflow');
+
+$lang->devops->menu->settings['subMenu'] = new stdclass();
+$lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repo|browsebranchtype|repoID=%s");
+$lang->devops->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->devops->reviewFlow}|repo|browsereviewflow|repoID=%s");
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
@@ -560,21 +565,22 @@ if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'st
 $lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
-$lang->devops->menuOrder[5]  = 'space';
-$lang->devops->menuOrder[10] = 'repos';
-$lang->devops->menuOrder[15] = 'code';
-$lang->devops->menuOrder[20] = 'commit';
-$lang->devops->menuOrder[25] = 'branch';
-$lang->devops->menuOrder[35] = 'tag';
-$lang->devops->menuOrder[40] = 'mr';
-$lang->devops->menuOrder[45] = 'compile';
-$lang->devops->menuOrder[55] = 'deploy';
-$lang->devops->menuOrder[70] = 'apps';
-$lang->devops->menuOrder[75] = 'configure';
-$lang->devops->menuOrder[80] = 'spaceSetting';
-$lang->devops->menuOrder[85] = 'overview';
-$lang->devops->menuOrder[90] = 'member';
-$lang->devops->menuOrder[95] = 'group';
+$lang->devops->menuOrder[5]   = 'space';
+$lang->devops->menuOrder[10]  = 'repos';
+$lang->devops->menuOrder[15]  = 'code';
+$lang->devops->menuOrder[20]  = 'commit';
+$lang->devops->menuOrder[25]  = 'branch';
+$lang->devops->menuOrder[35]  = 'tag';
+$lang->devops->menuOrder[40]  = 'mr';
+$lang->devops->menuOrder[45]  = 'compile';
+$lang->devops->menuOrder[55]  = 'deploy';
+$lang->devops->menuOrder[70]  = 'settings';
+$lang->devops->menuOrder[75]  = 'apps';
+$lang->devops->menuOrder[80]  = 'configure';
+$lang->devops->menuOrder[85]  = 'spaceSetting';
+$lang->devops->menuOrder[90]  = 'overview';
+$lang->devops->menuOrder[95]  = 'member';
+$lang->devops->menuOrder[100] = 'group';
 
 $lang->devops->dividerMenu = ',configure,spaceSetting';
 

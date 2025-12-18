@@ -362,6 +362,9 @@ $lang->pipeline->common         = 'Pipeline';
 $lang->devopssetting->common    = 'Setting';
 $lang->deployment->common       = 'Host';
 $lang->devopsspace->common      = 'Space';
+$lang->repoSettings->common     = 'Settings';
+$lang->devops->branchType       = 'Branch Type';
+$lang->devops->reviewFlow       = 'Review Flow';
 
 $lang->dashboard       = 'Dashboard';
 $lang->contribute      = 'Contribute';
