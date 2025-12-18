@@ -93,5 +93,36 @@ formPanel
         set::label($lang->repo->aiReviewScores),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 10)),
         set::value(0)
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->manualReview),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('defaultReviewers'),
+        set::label($lang->repo->defaultReviewers),
+        set::items(array()),
+        set::multiple(true)
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('specifiedReviewers'),
+        set::label($lang->repo->specifiedReviewers),
+        set::items(array()),
+        set::multiple(true)
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->minReviewers),
+        set::name('minReviewers'),
+        set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
+        set::value(0)
     )
 );
