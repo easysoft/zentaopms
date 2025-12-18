@@ -509,8 +509,8 @@ $(() =>
             getErrorContent: (error) =>
             {
                 let html = '';
-                if(error.type === 'unauthorized' && langData.unauthorizedError) html = zui.formatString(langData.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
-                else if(error.type === 'configNotValid' && langData.zaiConfigNotValid) html = zui.formatString(langData.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                if(error.type === 'unauthorized' && zaiLang.unauthorizedError) html = zui.formatString(zaiLang.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                else if(error.type === 'configNotValid' && zaiLang.zaiConfigNotValid) html = zui.formatString(zaiLang.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
 
                 if(html.length) return {html: `<div class="row gap-3"><i class="mt-1 icon icon-exclamation text-warning"></i><div class="text-left pr-8">${html}</div></div>`};
                 return error.message;
