@@ -313,3 +313,12 @@ $lang->repo->apiError[3] = 'Forbidden';
 $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
+
+$lang->repo->flowName   = '流程名称';
+$lang->repo->branchType = '分支类型';
+$lang->repo->enable     = '启用';
+$lang->repo->disable    = '停用';
+
+$lang->repo->flowStatusList = array();
+$lang->repo->flowStatusList['enable']  = '启用';
+$lang->repo->flowStatusList['disable'] = '停用';
