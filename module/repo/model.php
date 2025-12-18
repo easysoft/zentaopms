@@ -3131,4 +3131,23 @@ class repoModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取指定代码库的评审流程。
+     * Get review flow.
+     *
+     * @param  int     $repoID
+     * @param  ?object $pager
+     * @access public
+     * @return array
+     */
+    public function getReviewFlowList(int $repoID, ?object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_REVIEWFLOW)
+            ->where('deleted')->eq(0)
+            ->andWhere('repo')->eq($repoID)
+            ->page($pager)
+            ->orderBy('id_desc')
+            ->fetchAll('id', false);
+    }
 }
