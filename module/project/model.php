@@ -1033,6 +1033,7 @@ class projectModel extends model
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
+        if($this->config->edition != 'open') $this->config->project->search['params']['workflowGroup']['values'] = $this->loadModel('workflowGroup')->getPairs('project', 'all');
 
         if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
         if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
