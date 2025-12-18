@@ -147,7 +147,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_3']['functions']      .= ',processDataset,processChart,processReport,processDashboard';
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
     $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
-    $config->upgrade->execFlow['21_7_8']['functions']    .= ',modifyProjectWorkflowGroup,upgradeAuditcl,upgradeProcessAndActivity,addWorkflowGroupOtherActivity,addDefaultDeliverableModule,upgradeDesignToDeliverable,buildinTestcaseStageDeliverable,upgradeDeliverable,buildinBaselineReview,upgradeReviewclCategory,upgradeBaselineObjects,upgradeReviewToDeliverable,upgradeBaseline,addDeliverablePrivs,upgradeStageAndPoint,upgradeObjectOfDecision,upgradeClosedFeature,parseDocFetcherURL,updateWorkflowGroupPriv';
+    $config->upgrade->execFlow['21_7_8']['functions']    .= ',modifyProjectWorkflowGroup,upgradeAuditcl,upgradeProcessAndActivity,addWorkflowGroupOtherActivity,addDefaultDeliverableModule,upgradeDesignToDeliverable,buildinTestcaseStageDeliverable,upgradeDeliverable,buildinBaselineReview,upgradeReviewclCategory,upgradeBaselineObjects,upgradeReviewToDeliverable,upgradeBaseline,addDeliverablePrivs,upgradeStageAndPoint,upgradeObjectOfDecision,upgradeClosedFeature,parseDocFetcherURL,updateWorkflowGroupPriv,upgradeReportTemplateObjects';
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';

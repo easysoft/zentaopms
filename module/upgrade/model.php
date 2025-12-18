@@ -12012,6 +12012,7 @@ class upgradeModel extends model
 
         $this->loadModel('project');
         $codeWorkflowPairs = array();
+        $oldNewFlowPairs   = array();
         foreach($workflows as $workflow)
         {
             $projects = $projectGroup[$workflow->id];
@@ -12050,8 +12051,30 @@ class upgradeModel extends model
                     $this->project->copyWorkflow($project->workflowGroup, $newWorkflowGroupID, $table);
                 }
 
+                if(!isset($oldNewFlowPairs[$oldWorkflowGroupID])) $oldNewFlowPairs[$oldWorkflowGroupID] = array();
+                $oldNewFlowPairs[$oldWorkflowGroupID][] = $newWorkflowGroupID;
                 $codeWorkflowPairs[$code][$oldWorkflowGroupID] = $newWorkflowGroupID;
                 $index++;
+            }
+        }
+
+        /* 处理报告模板的适用流程。*/
+        $reportTemplateList = $this->dao->select('id,objects')->from(TABLE_DOC)->where('templateType')->eq('reportTemplate')->fetchPairs('id');
+        foreach($reportTemplateList as $templateID => $objects)
+        {
+            $newObjects   = array();
+            $objectIdList = array_filter(explode(',', $objects));
+            foreach($objectIdList as $objectID)
+            {
+                $newObjects[] = $objectID;
+                if(!isset($oldNewFlowPairs[$objectID])) continue;
+                $newObjects = array_merge($newObjects, $oldNewFlowPairs[$objectID]);
+            }
+
+            if(!empty($newObjects))
+            {
+                $newObjectList = implode(',', array_filter(array_unique($newObjects)));
+                $this->dao->update(TABLE_DOC)->set('objects')->eq($newObjectList)->where('id')->eq($templateID)->exec();
             }
         }
     }
@@ -13058,6 +13081,53 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('disable')->exec();
         }
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('workflowgroup')->andWhere('method')->eq('deliverable')->exec();
+
+        return true;
+    }
+
+    /**
+     * 处理报告模板中内置的适用流程。
+     * Upgrade report template objects.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeReportTemplateObjects(): bool
+    {
+        $templateList = $this->dao->select('id,objects')->from(TABLE_DOC)->where('templateType')->eq('reportTemplate')->fetchPairs('id');
+        $workflowList = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchAll('id');
+
+        $flowGroup = array();
+        foreach($workflowList as $flowID => $flow)
+        {
+            if(!isset($flowGroup[$flow->projectModel])) $flowGroup[$flow->projectModel] = array();
+            if(!isset($flowGroup[$flow->projectModel][$flow->projectType])) $flowGroup[$flow->projectModel][$flow->projectType] = array();
+            $flowGroup[$flow->projectModel][$flow->projectType][] = $flowID;
+        }
+
+        foreach($templateList as $templateID => $objects)
+        {
+            $newObjects   = array();
+            $objectIdList = array_filter(explode(',', $objects));
+            foreach($objectIdList as $objectID)
+            {
+                $newObjects[] = $objectID;
+                if(!isset($workflowList[$objectID])) continue;
+
+                $projectModel = $workflowList[$objectID]->projectModel;
+                $projectType  = $workflowList[$objectID]->projectType;
+                if($projectModel == 'scrum' && $projectType == 'product') $newObjects = array_merge($newObjects, $flowGroup['agileplus']['product']);
+                if($projectModel == 'scrum' && $projectType == 'project') $newObjects = array_merge($newObjects, $flowGroup['agileplus']['project']);
+                if($projectModel == 'waterfall' && $projectType == 'product') $newObjects = array_merge($newObjects, $flowGroup['waterfallplus']['product'], $flowGroup['ipd']['ipd'], $flowGroup['ipd']['tpd'], $flowGroup['ipd']['cbb'], $flowGroup['ipd']['cpdproduct']);
+                if($projectModel == 'waterfall' && $projectType == 'project') $newObjects = array_merge($newObjects, $flowGroup['waterfallplus']['project'], $flowGroup['ipd']['cpdproject']);
+            }
+
+            if(!empty($newObjects))
+            {
+                $newObjectList = implode(',', array_filter(array_unique($newObjects)));
+                $this->dao->update(TABLE_DOC)->set('objects')->eq($newObjectList)->where('id')->eq($templateID)->exec();
+            }
+        }
 
         return true;
     }
