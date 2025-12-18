@@ -2087,4 +2087,19 @@ class repo extends control
         $this->view->pager    = $pager;
         $this->display();
     }
+
+    /**
+     * 创建审批流程。
+     * Create review flow.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function createReviewFlow(int $repoID)
+    {
+        $this->commonAction($repoID, 0);
+        $this->view->title = $this->lang->repo->createReviewFlow;
+        $this->display();
+    }
 }
