@@ -11,7 +11,7 @@ cid=0
 - 步骤2：最小字段创建属性branchName @hotfix
 - 步骤3：权限设置属性branchName @release
 - 步骤4：合并限制属性branchName @develop
-- 步骤5：空权限属性forcePushUser
+- 步骤5：空权限属性forcePushUser @~~
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
