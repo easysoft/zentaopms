@@ -1531,7 +1531,7 @@ class zaiModel extends model
             if(!empty($doc->paramsExample))
             {
                 $content[] = "\n## {$app->lang->api->paramsExample}\n";
-                $content[] = "```json\n{$doc->paramsExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->paramsExample) . "\n```";
             }
             if(!empty($doc->response))
             {
@@ -1551,7 +1551,7 @@ class zaiModel extends model
             if(!empty($doc->responseExample))
             {
                 $content[] = "\n## {$app->lang->api->responseExample}\n";
-                $content[] = "```json\n{$doc->responseExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->responseExample) . "\n```";
             }
 
             $content[] = "\n## {$app->lang->api->desc}\n";
