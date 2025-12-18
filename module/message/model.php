@@ -214,6 +214,7 @@ class messageModel extends model
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         if($objectType == 'kanbancard') $moduleName = 'kanban';
         if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
+        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
         $space      = common::checkNotCN() ? ' ' : '';
         $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
