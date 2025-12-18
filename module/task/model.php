@@ -355,7 +355,7 @@ class taskModel extends model
             if($response) return $response;
         }
 
-        if($oldExecution->status != 'doing')
+        if($oldExecution->status == 'wait')
         {
             $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
             if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
