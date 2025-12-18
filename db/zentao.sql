@@ -14443,7 +14443,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `isBaseline` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否基线',
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` date NULL,
+  `createdDate` datetime NULL,
   `begin` date NULL,
   `deadline` date NULL,
   `lastReviewedBy` varchar(255) NOT NULL DEFAULT '',
