@@ -2075,4 +2075,23 @@ class testcase extends control
         $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
         return print(json_encode($caseModuleItmes));
     }
+
+    /**
+     * AJAX: 获取用例对应产品模块的场景。
+     * AJAX: Get scenes items for case.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return json
+     */
+    public function ajaxGetProductScenes(int $productID, int $moduleID, string $branch)
+    {
+        $items    = array();
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
+        foreach($scenes as $sceneID => $sceneName) $items[] = array('text' => $sceneName, 'value' => $sceneID);
+        return print(json_encode($items));
+    }
 }
