@@ -409,3 +409,14 @@ window.disableBranchType = function()
     else $('#branchTypesBox').removeAttr('disabled');
 }
 window.waitDom('[name=isAllBranchTypes]', disableBranchType);
+
+window.loadAiReviewScores = function()
+{
+    const aiReviewDom = $('[name=aiReview]:checked');
+    if(!aiReviewDom) return;
+
+    const aiReview = aiReviewDom.val();
+    if(aiReview == 'enable') $('#aiReviewScores').removeClass('hidden');
+    else $('#aiReviewScores').addClass('hidden');
+}
+window.waitDom('[name=aiReview]', loadAiReviewScores);
