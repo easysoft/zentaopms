@@ -1203,6 +1203,30 @@ class zaiModel extends model
     }
 
     /**
+     * 获取用户字段映射。
+     * Get user fields map for object type.
+     *
+     * @param  string $objectType
+     * @return array
+     */
+    protected static function getUserFieldsMap(string $objectType): array
+    {
+        $map = array(
+            'story'      => array('openedBy', 'assignedTo', 'reviewedBy', 'stagedBy'),
+            'bug'        => array('openedBy', 'assignedTo', 'resolvedBy', 'closedBy', 'feedbackBy'),
+            'task'       => array('openedBy', 'assignedTo', 'finishedBy', 'canceledBy', 'closedBy'),
+            'feedback'   => array('openedBy', 'assignedTo', 'reviewedBy', 'closedBy', 'processedBy', 'feedbackBy'),
+            'ticket'     => array('openedBy', 'assignedTo', 'startedBy', 'closedBy'),
+            'issue'      => array('assetCreatedBy', 'assignedTo'),
+            'risk'       => array('assetCreatedBy', 'assignedTo'),
+            'opportunity'=> array('assetCreatedBy', 'assignedTo'),
+            'plan'       => array('owner'),
+        );
+
+        return $map[$objectType] ?? array();
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
@@ -1213,6 +1237,8 @@ class zaiModel extends model
     public static function convertStoryToMarkdown($story, array $langData = [])
     {
         global $app;
+
+        $story = static::convertUserFieldToRealname('story', $story);
 
         $app->loadLang('story');
         $lang = $app->lang;
@@ -1266,6 +1292,8 @@ class zaiModel extends model
      */
     public static function convertCaseToMarkdown($case, array $langData = []): array
     {
+        $case = static::convertUserFieldToRealname('case', $case);
+
         $id    = $case->id ?? 0;
         $title = trim((string)($case->title ?? $case->name ?? ''));
 
@@ -1322,6 +1350,8 @@ class zaiModel extends model
     {
         global $app;
 
+        $demand = static::convertUserFieldToRealname('demand', $demand);
+
         $app->loadLang('demand');
         $lang = $app->lang;
 
@@ -1377,6 +1407,8 @@ class zaiModel extends model
     {
         global $app;
 
+        $bug = static::convertUserFieldToRealname('bug', $bug);
+
         $app->loadLang('bug');
         $lang = $app->lang;
 
@@ -1431,6 +1463,8 @@ class zaiModel extends model
     public static function convertTaskToMarkdown($task, array $langData = [])
     {
         global $app;
+
+        $task = static::convertUserFieldToRealname('task', $task);
 
         $app->loadLang('task');
         $lang = $app->lang;
@@ -1637,6 +1671,8 @@ class zaiModel extends model
     {
         global $app;
 
+        $design = static::convertUserFieldToRealname('design', $design);
+
         $app->loadLang('design');
         $lang = $app->lang;
 
@@ -1676,6 +1712,8 @@ class zaiModel extends model
     public static function convertFeedbackToMarkdown($feedback, array $langData = [])
     {
         global $app;
+
+        $feedback = static::convertUserFieldToRealname('feedback', $feedback);
 
         $app->loadLang('feedback');
         $lang = $app->lang;
@@ -1728,6 +1766,8 @@ class zaiModel extends model
      */
     public static function convertIssueToMarkdown($issue, array $langData = []): array
     {
+        $issue = static::convertUserFieldToRealname('issue', $issue);
+
         $id    = $issue->id ?? 0;
         $title = trim((string)($issue->title ?? $issue->name ?? ''));
 
@@ -1775,6 +1815,8 @@ class zaiModel extends model
      */
     public static function convertRiskToMarkdown($risk, array $langData = []): array
     {
+        $risk = static::convertUserFieldToRealname('risk', $risk);
+
         $id    = $risk->id ?? 0;
         $title = trim((string)($risk->name ?? ''));
 
@@ -1822,6 +1864,8 @@ class zaiModel extends model
      */
     public static function convertOpportunityToMarkdown($opportunity, array $langData = []): array
     {
+        $opportunity = static::convertUserFieldToRealname('opportunity', $opportunity);
+
         $id    = $opportunity->id ?? 0;
         $title = trim((string)($opportunity->name ?? ''));
 
@@ -1868,6 +1912,8 @@ class zaiModel extends model
      */
     public static function convertPlanToMarkdown($plan, array $langData = []): array
     {
+        $plan = static::convertUserFieldToRealname('plan', $plan);
+
         $id    = $plan->id ?? 0;
         $title = trim((string)($plan->title ?? $plan->name ?? ''));
 
@@ -1913,6 +1959,8 @@ class zaiModel extends model
      */
     public static function convertReleaseToMarkdown($release, array $langData = []): array
     {
+        $release = static::convertUserFieldToRealname('release', $release);
+
         $id    = $release->id ?? 0;
         $title = trim((string)($release->name ?? ''));
 
@@ -1955,6 +2003,8 @@ class zaiModel extends model
      */
     public static function convertTicketToMarkdown($ticket, array $langData = []): array
     {
+        $ticket = static::convertUserFieldToRealname('ticket', $ticket);
+
         $id    = $ticket->id ?? 0;
         $title = trim((string)($ticket->title ?? $ticket->name ?? ''));
 
