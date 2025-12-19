@@ -2988,6 +2988,68 @@ class repoModel extends model
     }
 
     /**
+     * 获取指定的分支规则。
+     * Get Branch Rule.
+     *
+     * @param  int    $typeID
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @access public
+     * @return object|false
+     */
+    public function getBranchRule(int $typeID = 0, int $repoID = 0, string $branchName = ''): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
+            ->where('repo')->eq($repoID)
+            ->andWhere('branchName')->eq($branchName)
+            ->andWhere('branchType')->eq($typeID)
+            ->fetch();
+    }
+
+    /**
+     * 创建分支规则。
+     * Create Branch Rule.
+     *
+     * @param  int    $rule
+     * @access public
+     * @return bool
+     */
+    public function createBranchRule(object $rule): bool
+    {
+        $this->dao->insert(TABLE_BRANCHRULESET)->data($rule)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 更新分支规则。
+     * Update Branch Rule.
+     *
+     * @param  int    $id
+     * @param  object $rule
+     * @access public
+     * @return bool
+     */
+    public function updateBranchRule(int $id, object $rule): bool
+    {
+        $this->dao->update(TABLE_BRANCHRULESET)->data($rule)->where('id')->eq($id)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 删除分支规则。
+     * Delete Branch Rule.
+     *
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function deleteBranchRule(int $id): bool
+    {
+        $this->dao->delete()->from(TABLE_BRANCHRULESET)->where('id')->eq($id)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * 通过产品ID和代码库类型获取代码库列表。
      * Get repo list by product id.
      *
