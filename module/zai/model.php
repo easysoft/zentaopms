@@ -1221,9 +1221,59 @@ class zaiModel extends model
             'risk'       => array('assetCreatedBy', 'assignedTo'),
             'opportunity'=> array('assetCreatedBy', 'assignedTo'),
             'plan'       => array('owner'),
+            'case'       => array('openedBy', 'lastEditedBy', 'lastRunner'),
+            'release'    => array('owner'),
+            'demand'     => array('createdBy', 'assignedTo'),
+            'design'     => array('createdBy', 'assignedTo'),
         );
 
         return $map[$objectType] ?? array();
+    }
+
+    /**
+     * 转换用户字段为真实姓名。
+     * Convert user account fields to realname.
+     *
+     * @param  string $objectType
+     * @param  object $target
+     * @return object
+     */
+    protected static function convertUserFieldToRealname(string $objectType, object $target): object
+    {
+        $userFields = static::getUserFieldsMap($objectType);
+        if(empty($userFields)) return $target;
+
+        global $app;
+        $userModel = $app->loadTarget('user', '', 'model');
+
+        $userAccounts = array();
+        foreach($userFields as $field)
+        {
+            $value = static::extractFieldValue($objectType, $field, $target);
+            if(!empty($value))
+            {
+                $accounts = is_array($value) ? $value : explode(',', trim($value));
+                foreach($accounts as $account)
+                {
+                    $account = trim($account);
+                    if($account && $account !== '') $userAccounts[$account] = $account;
+                }
+            }
+        }
+
+        if(empty($userAccounts)) return $target;
+
+        $userPairs = $userModel->getPairs('realname,noletter', '', 0, array_keys($userAccounts));
+
+        $converted = clone $target;
+
+        foreach($userFields as $field)
+        {
+            $value = static::extractFieldValue($objectType, $field, $target);
+            if(empty($value)) continue;
+        }
+
+        return $converted;
     }
 
     /**
