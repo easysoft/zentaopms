@@ -1156,99 +1156,113 @@ class repoZenTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTest()
+    public function getSearchFormQueryEmptyTest()
     {
-        // 彻底清理所有相关session数据
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        // 模拟getSearchFormQuery方法的核心逻辑
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = '';
-
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with date range (>= operator).
+     * Test getSearchFormQuery method with date begin range.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestDateBegin()
+    public function getSearchFormQueryDateBeginTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '2023-01-01';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(
+            array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01')
+        );
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with date range (<= operator).
+     * Test getSearchFormQuery method with date end range.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestDateEnd()
+    public function getSearchFormQueryDateEndTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '2023-12-31';
-        $result->committer = '';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(
+            array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31')
+        );
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with committer search.
+     * Test getSearchFormQuery method with committer search.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestCommitter()
+    public function getSearchFormQueryCommitterTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = 'admin';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(
+            array('field' => 'committer', 'operator' => 'include', 'value' => 'admin')
+        );
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with commit search.
+     * Test getSearchFormQuery method with commit search.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestCommit()
+    public function getSearchFormQueryCommitTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = 'abc123';
+        $_SESSION['repoCommitsForm'] = array(
+            array('field' => 'commit', 'operator' => 'include', 'value' => 'fix bug')
+        );
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getSearchFormQuery method with commit feat search.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getSearchFormQueryCommitFeatTest()
+    {
+        unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
+
+        $_SESSION['repoCommitsForm'] = array(
+            array('field' => 'commit', 'operator' => 'include', 'value' => 'feat')
+        );
+
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
