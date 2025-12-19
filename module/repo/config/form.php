@@ -62,3 +62,15 @@ $config->repo->form->import['name']           = array('required' => false, 'type
 $config->repo->form->import['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
 $config->repo->form->import['encrypt']        = array('required' => false, 'type' => 'string', 'default' => 'base64');
 $config->repo->form->import['acl']            = array('required' => false, 'type' => 'string', 'default' => '{"acl":"open","groups":[""],"users":[""]}');
+
+$config->repo->form->branchRule = array();
+$config->repo->form->branchRule['radioForAllowDelete']           = array('required' => false, 'type' => 'string', 'default' => 'hasPriv');
+$config->repo->form->branchRule['radioForAllowUpdate']           = array('required' => false, 'type' => 'string', 'default' => 'hasPriv');
+$config->repo->form->branchRule['radioForAllowForcePush']        = array('required' => false, 'type' => 'string', 'default' => 'hasPriv');
+$config->repo->form->branchRule['radioForAllowMergeFrom']        = array('required' => false, 'type' => 'string', 'default' => 'all');
+$config->repo->form->branchRule['radioForAllowMergeTo']          = array('required' => false, 'type' => 'string', 'default' => 'all');
+$config->repo->form->branchRule['userAllowDeleteGroup']          = array('required' => false, 'type' => 'array', 'default' => array());
+$config->repo->form->branchRule['userAllowUpdateGroup']          = array('required' => false, 'type' => 'array', 'default' => array());
+$config->repo->form->branchRule['userAllowForcePushGroup']       = array('required' => false, 'type' => 'array', 'default' => array());
+$config->repo->form->branchRule['branchTypeAllowMergeFromGroup'] = array('required' => false, 'type' => 'array', 'default' => array());
+$config->repo->form->branchRule['branchTypeAllowMergeToGroup']   = array('required' => false, 'type' => 'array', 'default' => array());
