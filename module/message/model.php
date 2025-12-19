@@ -101,9 +101,6 @@ class messageModel extends model
             if($story) $objectType = $story->type;
         }
 
-        /* 如果对象类型是审批，动作是提交审计或者审计，使用瀑布项目审批的发信配置。*/
-        if($objectType == 'review' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'waterfall';
-
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -218,7 +215,7 @@ class messageModel extends model
         $space      = common::checkNotCN() ? ' ' : '';
         $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
+        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}") . "#app={$this->app->tab}";
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
