@@ -2099,7 +2099,15 @@ class repo extends control
     public function createReviewFlow(int $repoID)
     {
         $this->commonAction($repoID, 0);
-        $this->view->title = $this->lang->repo->createReviewFlow;
+        $repo = $this->repo->getByID($repoID);
+
+        $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        $this->app->loadLang('bug');
+        $this->view->title       = $this->lang->repo->createReviewFlow;
+        $this->view->repoID      = $repoID;
+        $this->view->repo        = $repo;
+        $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
     }
 }
