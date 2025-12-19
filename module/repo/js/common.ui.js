@@ -397,3 +397,15 @@ window.searchList = function()
         loadPage(searchUrl.replace('%s', encodeURIComponent(Base64.encode(keyword))));
     });
 }
+
+window.disableBranchType = function()
+{
+    const isAllBranchTypesDom = $('[name=isAllBranchTypes]');
+    if(!isAllBranchTypesDom) return;
+
+    const isAllBranchTypes = isAllBranchTypesDom.is(':checked');
+
+    if(isAllBranchTypes) $('#branchTypesBox').attr('disabled', 'disabled');
+    else $('#branchTypesBox').removeAttr('disabled');
+}
+window.waitDom('[name=isAllBranchTypes]', disableBranchType);
