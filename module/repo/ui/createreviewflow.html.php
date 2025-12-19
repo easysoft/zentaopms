@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+unset($branchTypes[0]);
 formPanel
 (
     set::title($title),
@@ -45,7 +46,7 @@ formPanel
                 picker
                 (
                     set::name('branchType'),
-                    set::items(array()),
+                    set::items($branchTypes),
                     set::multiple(true),
                     set::required(true)
                 )
