@@ -431,3 +431,22 @@ window.loadIssueType = function()
     else $('#issueType').addClass('hidden');
 }
 window.waitDom('[name=addressOption]', loadIssueType);
+
+window.addSpecifiedReviewers = function(values)
+{
+    if(!values || values.length == 0) return;
+    const $specifiedReviewers = $('[name^=specifiedReviewers]');
+    if(!$specifiedReviewers) return;
+    const newSpecifiedReviewers = $specifiedReviewers.val().concat(values);
+    $specifiedReviewers.zui('picker').$.setValue(newSpecifiedReviewers);
+}
+
+window.removeSpecifiedReviewers = function(values)
+{
+    if(!values || values.length == 0) return;
+    const $specifiedReviewers = $('[name^=specifiedReviewers]');
+    if(!$specifiedReviewers) return;
+
+    const newSpecifiedReviewers = $specifiedReviewers.val().filter(v => !values.includes(v));
+    $specifiedReviewers.zui('picker').$.setValue(newSpecifiedReviewers);
+}
