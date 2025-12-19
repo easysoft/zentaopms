@@ -79,7 +79,6 @@ $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard
 $lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
 $lang->upgrade->execCommand   = 'Please execute the above command on the server and refresh the page after execution.';
 $lang->upgrade->afterExec     = 'Please manually modify the database based on the above error message, and then refresh the page.';
-$lang->upgrade->afterDuckdb   = 'Please wait for Duckdb engine to install.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';

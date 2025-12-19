@@ -832,36 +832,6 @@ class upgrade extends control
     }
 
     /**
-     * 安装DuckDB引擎。
-     * AJAX: Install duckdb.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxInstallDuckdb()
-    {
-        $this->loadModel('bi');
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
-        $this->bi->downloadDuckdb();
-        echo 'success';
-    }
-
-    /**
-     * 检查duckdb文件是否下载完成。
-     * AJAX: Check duckdb.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckDuckdb()
-    {
-        $check = $this->loadModel('bi')->checkDuckdbInstall();
-        echo json_encode($check);
-    }
-
-    /**
      * 定时任务：处理内置关联关系。
      * AJAX: Process object relation.
      *
