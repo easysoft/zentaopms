@@ -1638,6 +1638,7 @@ class projectZen extends project
         $canViewProjects = $this->app->user->view->projects;
         $storyGroup      = $this->loadModel('story')->fetchStoriesByProjectIdList(array_keys($projects));
         $executionGroup  = $this->loadModel('execution')->fetchExecutionsByProjectIdList(array_keys($projects));
+        if($this->config->edition != 'open') $workflowGroups = $this->loadModel('workflowGroup')->getPairs('project', 'all');
         foreach($projects as $i => $project)
         {
             if(!$this->app->user->admin && strpos(",{$canViewProjects},", ",{$project->id},") === false)
@@ -1667,6 +1668,7 @@ class projectZen extends project
             $project->invested  = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
             $project->invested .= " {$this->lang->project->manDay}";
             $project->progress  = floor((float)$project->progress) . '%';
+            if($this->config->edition != 'open') $project->workflowGroup = zget($workflowGroups, $project->workflowGroup);
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
