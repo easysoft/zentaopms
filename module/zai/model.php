@@ -1148,6 +1148,10 @@ class zaiModel extends model
                 'closedReason' => array('closedReason'),
                 'project'      => array('project', 'projectName'),
                 'product'      => array('product', 'productName'),
+                'ticketType'   => array('ticketType', 'type'),
+            ),
+            'feedback' => array(
+                'feedbackType' => array('feedbackType', 'type'),
             ),
             'case' => array(
                 'execution'     => array('execution', 'executionName'),
@@ -1650,13 +1654,14 @@ class zaiModel extends model
         $app->loadLang('feedback');
         $lang = $app->lang;
 
-        $markdown = array('id' => $feedback->id, 'title' => "{$lang->feedback->common} #$feedback->id $feedback->title");
-        $content  = array();
+        $markdown     = array('id' => $feedback->id, 'title' => "{$lang->feedback->common} #$feedback->id $feedback->title");
+        $content      = array();
+        $feedbackType = $feedback->feedbackType ?? $feedback->type ?? '';
 
         $content[] = "# {$lang->feedback->common} #$feedback->id $feedback->title\n";
         $content[] = "## {$lang->feedback->labelBasic}\n";
         $content[] = "* {$lang->feedback->feedbackBy}: $feedback->feedbackBy";
-        $content[] = "* {$lang->feedback->type}: " . zget($lang->feedback->typeList, $feedback->type);
+        $content[] = "* {$lang->feedback->type}: " . zget($lang->feedback->typeList, $feedbackType);
         $content[] = "* {$lang->feedback->pri}: " . zget($lang->feedback->priList, $feedback->pri);
         $content[] = "* {$lang->feedback->status}: " . zget($lang->feedback->statusList, $feedback->status);
         $content[] = "* {$lang->feedback->solution}: " . zget($lang->feedback->solutionList, $feedback->solution);
@@ -1683,7 +1688,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
+        $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedbackType, 'status' => $feedback->status, 'pri' => $feedback->pri);
         return $markdown;
     }
 
@@ -1946,11 +1951,13 @@ class zaiModel extends model
         static::appendDetailSection($content, $langData, 'resolution', $ticket->resolution ?? null);
         static::appendDetailSection($content, $langData, 'history', $ticket->history ?? null);
 
+        $ticketType = $ticket->ticketType ?? $ticket->type ?? '';
+
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
             'objectTitle' => $markdown['title'],
             'status'      => $ticket->status     ?? '',
-            'type'        => $ticket->type       ?? '',
+            'type'        => $ticketType,
             'pri'         => $ticket->pri        ?? '',
             'assignedTo'  => $ticket->assignedTo ?? '',
             'product'     => $ticket->product    ?? '',
