@@ -27,3 +27,13 @@ window.onRadioForAllowMergeToChange = function()
     const selectedValue = $('input[name="radioForAllowMergeTo"]:checked').val();
     $('#branchTypeAllowMergeToGroup').toggleClass('hidden', selectedValue !== 'specify');
 }
+
+// Initialize on page load
+$(function()
+{
+    onRadioForAllowDeleteChange();
+    onRadioForAllowUpdateChange();
+    onRadioForAllowForcePushChange();
+    onRadioForAllowMergeFromChange();
+    onRadioForAllowMergeToChange();
+});

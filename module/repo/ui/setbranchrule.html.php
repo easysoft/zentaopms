@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$labelWidth = in_array($currentLang, array('zh-cn', 'zh-tw')) ? '190px' : '340px';
+$groupClass = common::checkNotCN() ? 'group-en-option' : '';
 
 $deleteUserArray    = !empty($originRule->deleteUser) ? explode(',', $originRule->deleteUser) : array();
 $updateUserArray    = !empty($originRule->updateUser) ? explode(',', $originRule->updateUser) : array();
@@ -13,35 +13,30 @@ $targetBranchArray  = !empty($originRule->targetBranch) ? explode(',', $originRu
 
 formPanel
 (
+    setID('setBranchRuleForm'),
     set::title($title),
-    set::actions(array('submit', 'cancel')),
+    set::actions(array('submit', 'cancel', array('text' => $lang->repo->branchRule->delete, 'url' => createLink('repo', 'ajaxDeleteBranchRule', "repoID=$repoID&branchName=$branchName&ruleID=$ruleID")))),
     set::backUrl(inlink('browseBranch', "repoID=$repoID")),
-    on::init()->call('onRadioForAllowDeleteChange'),
-    on::init()->call('onRadioForAllowUpdateChange'),
-    on::init()->call('onRadioForAllowForcePushChange'),
-    on::init()->call('onRadioForAllowMergeFromChange'),
-    on::init()->call('onRadioForAllowMergeToChange'),
-    formRow
+    formGroup
     (
-        formGroup
+        set::label($lang->repo->branchRule->allowDeletedBy),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
         (
-            set::label($lang->repo->branchRule->allowDeletedBy),
-            set::labelWidth($labelWidth),
             radioList
             (
+                set::className("$groupClass branchRuleRadio"),
                 set::value(!empty($originRule->deleteUser) ? 'specify' : 'hasPriv'),
                 set::name('radioForAllowDelete'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowDeleteChange')
-            )
-        ),
-        formGroup
-        (
-            setClass('hidden'),
-            setID('userAllowDeleteGroup'),
+            ),
             picker
             (
+                set::className('hidden branchRulePicker'),
+                setID('userAllowDeleteGroup'),
                 set::name('userAllowDeleteGroup'),
                 set::items($users),
                 set::value($deleteUserArray),
@@ -49,27 +44,26 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
+        set::label($lang->repo->branchRule->allowUpdatedBy),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
         (
-            set::label($lang->repo->branchRule->allowUpdatedBy),
-            set::labelWidth($labelWidth),
             radioList
             (
+                set::className("$groupClass branchRuleRadio"),
                 set::value(!empty($originRule->updateUser) ? 'specify' : 'hasPriv'),
                 set::name('radioForAllowUpdate'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowUpdateChange')
-            )
-        ),
-        formGroup
-        (
-            setClass('hidden'),
-            setID('userAllowUpdateGroup'),
+            ),
             picker
             (
+                set::className('hidden branchRulePicker'),
+                setID('userAllowUpdateGroup'),
                 set::name('userAllowUpdateGroup'),
                 set::items($users),
                 set::value($updateUserArray),
@@ -77,27 +71,26 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
+        set::label($lang->repo->branchRule->allowForcePushedBy),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
         (
-            set::label($lang->repo->branchRule->allowForcePushedBy),
-            set::labelWidth($labelWidth),
             radioList
             (
+                set::className("$groupClass branchRuleRadio"),
                 set::value(!empty($originRule->forcePushUser) ? 'specify' : 'hasPriv'),
                 set::name('radioForAllowForcePush'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowForcePushChange')
-            )
-        ),
-        formGroup
-        (
-            setClass('hidden'),
-            setID('userAllowForcePushGroup'),
+            ),
             picker
             (
+                set::className('hidden branchRulePicker'),
+                setID('userAllowForcePushGroup'),
                 set::name('userAllowForcePushGroup'),
                 set::items($users),
                 set::value($forcePushUserArray),
@@ -105,27 +98,26 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
+        set::label($lang->repo->branchRule->allowMergeFrom),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
         (
-            set::label($lang->repo->branchRule->allowMergeFrom),
-            set::labelWidth($labelWidth),
             radioList
             (
+                set::className("$groupClass branchRuleRadio pl-52px"),
                 set::value(!empty($originRule->sourceBranch) ? 'specify' : 'all'),
                 set::name('radioForAllowMergeFrom'),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowMergeFromChange')
-            )
-        ),
-        formGroup
-        (
-            setClass('hidden'),
-            setID('branchTypeAllowMergeFromGroup'),
+            ),
             picker
             (
+                set::className('hidden branchRulePicker'),
+                setID('branchTypeAllowMergeFromGroup'),
                 set::name('branchTypeAllowMergeFromGroup'),
                 set::items($branchTypes),
                 set::value($sourceBranchArray),
@@ -133,27 +125,26 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
-        formGroup
+        set::label($lang->repo->branchRule->allowMergeTo),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
         (
-            set::label($lang->repo->branchRule->allowMergeTo),
-            set::labelWidth($labelWidth),
             radioList
             (
+                set::className("$groupClass branchRuleRadio pl-52px"),
                 set::value(!empty($originRule->targetBranch) ? 'specify' : 'all'),
                 set::name('radioForAllowMergeTo'),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowMergeToChange')
-            )
-        ),
-        formGroup
-        (
-            setClass('hidden'),
-            setID('branchTypeAllowMergeToGroup'),
+            ),
             picker
             (
+                set::className('hidden branchRulePicker'),
+                setID('branchTypeAllowMergeToGroup'),
                 set::name('branchTypeAllowMergeToGroup'),
                 set::items($branchTypes),
                 set::value($targetBranchArray),
