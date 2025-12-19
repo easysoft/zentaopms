@@ -420,3 +420,14 @@ window.loadAiReviewScores = function()
     else $('#aiReviewScores').addClass('hidden');
 }
 window.waitDom('[name=aiReview]', loadAiReviewScores);
+
+window.loadIssueType = function()
+{
+    const addressOptionDom = $('[name=addressOption]:checked');
+    if(!addressOptionDom) return;
+
+    const addressOption = addressOptionDom.val();
+    if(addressOption == 'specificMustBeSolved') $('#issueType').removeClass('hidden');
+    else $('#issueType').addClass('hidden');
+}
+window.waitDom('[name=addressOption]', loadIssueType);
