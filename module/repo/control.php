@@ -2101,6 +2101,11 @@ class repo extends control
         $this->commonAction($repoID, 0);
         $repo = $this->repo->getByID($repoID);
 
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->createReviewFlow)->get();
+        }
+
         $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
 
         $this->app->loadLang('bug');
