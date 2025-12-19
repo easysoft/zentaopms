@@ -14,6 +14,9 @@ formPanel
 (
     set::title($title),
     set::labelWidth('240px'),
+    on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
+    on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
+    on::change('[name=addressOption]')->call('window.loadIssueType'),
     formGroup
     (
         set::name(''),
@@ -74,19 +77,18 @@ formPanel
     ),
     formGroup
     (
-        set::id('aiReview'),
+        setID('aiReview'),
         set::width('2/3'),
         set::name('aiReview'),
         set::required(true),
         set::label($lang->repo->aiAssistedReview),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->repo->aiReviewList),
-        set::value('disable'),
-        on::change('loadAiReviewScores')
+        set::value('disable')
     ),
     formGroup
     (
-        set::id('aiReviewScores'),
+        setID('aiReviewScores'),
         set::width('2/3'),
         set::required(true),
         set::name('aiReviewScores'),
@@ -106,7 +108,8 @@ formPanel
         set::width('2/3'),
         set::name('defaultReviewers'),
         set::label($lang->repo->defaultReviewers),
-        set::items(array()),
+        set::items($repoMembers),
+        set::control(array('onSelect' => jsRaw('addSpecifiedReviewers'), 'onDeselect' => jsRaw('removeSpecifiedReviewers'))),
         set::multiple(true)
     ),
     formGroup
@@ -114,7 +117,7 @@ formPanel
         set::width('2/3'),
         set::name('specifiedReviewers'),
         set::label($lang->repo->specifiedReviewers),
-        set::items(array()),
+        set::items($repoMembers),
         set::multiple(true)
     ),
     formGroup
@@ -137,6 +140,7 @@ formPanel
         set::width('2/3'),
         formGroup
         (
+            set::width('4/5'),
             set::name('addressOption'),
             set::label($lang->repo->addressOption),
             set::control(array('type' => 'radioList', 'inline' => true)),
@@ -145,9 +149,12 @@ formPanel
         ),
         formGroup
         (
+            set::width('1/5'),
+            setID('issueType'),
             set::name('issueType'),
-            set::items(array()),
-            set::multiple(true)
+            set::items($lang->bug->typeList),
+            set::multiple(true),
+            set::value('codeerror')
         )
     ),
     formGroup
