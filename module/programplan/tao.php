@@ -785,7 +785,8 @@ class programplanTao extends programplanModel
         $taskPri  = "<span class='pri-%s align-middle' title='%s'>%s</span> ";
         $pri      = zget($this->lang->task->priList, $task->pri);
         $priIcon  = sprintf($taskPri, $task->pri, $pri, $pri);
-        $progress = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+        $total    = $task->left + $task->consumed;
+        $progress = $total > 0 ? round($task->consumed / $total, 3) : 0;
 
         $data = new stdclass();
         $data->id           = $task->id;
