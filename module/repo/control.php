@@ -2102,4 +2102,88 @@ class repo extends control
         $this->view->title = $this->lang->repo->createReviewFlow;
         $this->display();
     }
+
+    /**
+     * 配置分支规则。
+     * Set a branch rule.
+     *
+     * @param  int       $repoID
+     * @param  string    $branchName
+     * @access public
+     * @return void
+     */
+    public function setBranchRule(int $repoID = 0, string $branchRawName = '')
+    {
+        $currentLang = $this->app->getClientLang();
+        $repo        = $this->repo->getByID($repoID);
+        $branchName  = helper::safe64Decode($branchRawName);
+        $branchTypes = array('dev'=>'dev', 'release'=>'release'); // 获取分支类型列表
+        $users       = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
+        $members     = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        $originRule = $this->repo->getBranchRule(0, $repoID, $branchName);
+        if(!$originRule)
+        {
+            $originRule = new stdClass();
+            $originRule->id = 0;
+        }
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->branchRule)->get();
+            
+            $rule = $this->repoZen->buildBranchRuleData(0, $repoID, $branchName, $formData);
+            if(dao::isError()) $this->sendError(dao::getError());
+            $rule->editedBy   = $this->app->user->account;
+            $rule->editedDate = helper::now();
+
+            if($originRule->id == 0)
+            {
+                $rule->createdBy   = $this->app->user->account;
+                $rule->createdDate = helper::now();
+                $result = $this->repo->createBranchRule($rule);
+                if(!$result) $this->sendError($this->lang->fail);
+            } 
+            else
+            {
+                $result = $this->repo->updateBranchRule($originRule->id, $rule);
+                if(!$result) $this->sendError($this->lang->fail);
+                $this->loadModel('action')->create('branchRule', $originRule->id, 'edited');
+            }
+
+            $link = $this->repo->createLink('browseBranch', "repoID=$repoID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        }
+
+        $this->view->title       = $branchName;
+        $this->view->repoID      = $repoID;
+        $this->view->branchName  = $branchRawName;
+        $this->view->ruleID      = $originRule->id;
+        $this->view->currentLang = $currentLang;
+        $this->view->originRule  = $originRule;
+        $this->view->users       = !empty($members) ? array_column($members, 'realname', 'account') : array();
+        $this->view->branchTypes = $branchTypes;
+        $this->display();
+    }
+    
+    /**
+     * 删除分支规则。
+     * Ajax delete branch rule.
+     *
+     * @param  int    $ruleID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteBranchRule(int $repoID, string $branchName, int $ruleID)
+    {
+        $link = $this->repo->createLink('setBranchRule', "repoID=$repoID&branchName=$branchName");
+        if($ruleID == 0)
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        }
+
+        $result = $this->repo->deleteBranchRule($ruleID);
+        if(!$result) $this->sendError($this->lang->fail);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+    }
 }
