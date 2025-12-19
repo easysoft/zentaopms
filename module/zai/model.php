@@ -1209,7 +1209,7 @@ class zaiModel extends model
      * @param  string $objectType
      * @return array
      */
-    protected static function getUserFieldsMap(string $objectType): array
+    public static function getUserFieldsMap(string $objectType): array
     {
         $map = array(
             'story'      => array('openedBy', 'assignedTo', 'reviewedBy', 'stagedBy'),
@@ -1238,7 +1238,7 @@ class zaiModel extends model
      * @param  object $target
      * @return object
      */
-    protected static function convertUserFieldToRealname(string $objectType, object $target): object
+    public static function convertUserFieldToRealname(string $objectType, object $target): object
     {
         $userFields = static::getUserFieldsMap($objectType);
         if(empty($userFields)) return $target;
