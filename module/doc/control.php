@@ -2249,6 +2249,7 @@ class doc extends control
         }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
+            if($type == 'product' && $spaceID == 0) $spaceID = (int)$this->cookie->preProductID;
             $this->doc->setMenuByType($type, $spaceID, $libID);
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;
