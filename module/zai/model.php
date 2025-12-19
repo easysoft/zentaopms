@@ -665,10 +665,7 @@ class zaiModel extends model
             $product = isset($attrs['product']) ? $attrs['product'] : 0;
             if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
 
-            if(!$canView)
-            {
-                if($product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
-            }
+            if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
 
             if(!$canView)
             {
