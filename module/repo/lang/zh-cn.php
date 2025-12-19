@@ -341,6 +341,7 @@ $lang->repo->mergeStrategy         = '合并策略';
 $lang->repo->mergeOptions          = '可采用的合并分支策略';
 $lang->repo->autoArchive           = '合并后自动归档来源分支';
 $lang->repo->autoArchiveNotice     = '仅当开启分支归档功能后可用';
+$lang->repo->allBranchTypesNotice  = '已存在全部分支类型审批流程';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = '启用';

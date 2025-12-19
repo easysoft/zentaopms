@@ -341,6 +341,7 @@ $lang->repo->mergeStrategy         = 'Merge Strategy';
 $lang->repo->mergeOptions          = 'Merge Options';
 $lang->repo->autoArchive           = 'Auto Archive';
 $lang->repo->autoArchiveNotice     = 'Only when the branch archive is enabled, it can be merged into the source branch';
+$lang->repo->allBranchTypesNotice  = 'All Branch Type review flow is exists';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = 'Enable';
