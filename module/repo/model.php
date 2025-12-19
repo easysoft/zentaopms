@@ -630,7 +630,7 @@ class repoModel extends model
         $repo->serviceHost    = (int)$repo->serviceHost;
         $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
-        $repo->members        = $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->fetchPairs();
+        $repo->members        = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('devopsspace')->getSpaceMembers($repo->space);
 
         return $repo;
     }
