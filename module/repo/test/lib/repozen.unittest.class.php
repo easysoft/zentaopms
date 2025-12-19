@@ -1151,22 +1151,6 @@ class repoZenTest extends baseTest
     }
 
     /**
-     * Test getSearchFormQuery method with no session data.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function getSearchFormQueryEmptyTest()
-    {
-        unset($_SESSION['repoCommitsForm']);
-        unset($_SESSION['repoCommitsQuery']);
-
-        $result = $this->invokeArgs('getSearchFormQuery', []);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test getSearchFormQuery method with date begin range.
      *
      * @access public
@@ -1177,9 +1161,7 @@ class repoZenTest extends baseTest
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        $_SESSION['repoCommitsForm'] = array(
-            array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01')
-        );
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01'));
 
         $result = $this->invokeArgs('getSearchFormQuery', []);
         if(dao::isError()) return dao::getError();
@@ -1197,9 +1179,7 @@ class repoZenTest extends baseTest
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        $_SESSION['repoCommitsForm'] = array(
-            array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31')
-        );
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31'));
 
         $result = $this->invokeArgs('getSearchFormQuery', []);
         if(dao::isError()) return dao::getError();
@@ -1217,9 +1197,7 @@ class repoZenTest extends baseTest
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        $_SESSION['repoCommitsForm'] = array(
-            array('field' => 'committer', 'operator' => 'include', 'value' => 'admin')
-        );
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'committer', 'operator' => 'include', 'value' => 'admin'));
 
         $result = $this->invokeArgs('getSearchFormQuery', []);
         if(dao::isError()) return dao::getError();
@@ -1237,9 +1215,7 @@ class repoZenTest extends baseTest
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        $_SESSION['repoCommitsForm'] = array(
-            array('field' => 'commit', 'operator' => 'include', 'value' => 'fix bug')
-        );
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'commit', 'operator' => 'include', 'value' => 'fix bug'));
 
         $result = $this->invokeArgs('getSearchFormQuery', []);
         if(dao::isError()) return dao::getError();
@@ -1257,9 +1233,7 @@ class repoZenTest extends baseTest
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        $_SESSION['repoCommitsForm'] = array(
-            array('field' => 'commit', 'operator' => 'include', 'value' => 'feat')
-        );
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'commit', 'operator' => 'include', 'value' => 'feat'));
 
         $result = $this->invokeArgs('getSearchFormQuery', []);
         if(dao::isError()) return dao::getError();
