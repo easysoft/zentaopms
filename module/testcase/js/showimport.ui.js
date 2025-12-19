@@ -22,6 +22,19 @@ window.renderRowCol = function($result, col, row)
             });
         });
     }
+    if(col.name == 'scene')
+    {
+        $result.find('.picker-box').on('inited', function(e, info)
+        {
+            const sceneLink = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + row.product + '&moduleID=' + row.module + '&branch=' + row.branch);
+            $.getJSON(sceneLink, function(scenes)
+            {
+                let $scene = info[0];
+                $scene.render({items: scenes});
+                $scene.$.setValue(row.scene);
+            });
+        });
+    }
 }
 
 function computeImportTimes()
@@ -51,6 +64,15 @@ function changeModule(event)
     {
         $storyPicker.render({items: stories});
         $storyPicker.$.setValue(oldStory);
+    });
+
+    const $scenePicker = $currentRow.find('.form-batch-control[data-name="scene"] .picker').zui('picker');
+    const oldScene     = $currentRow.find('input[name^=scene]').val();
+    const sceneLink    = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + productID + '&moduleID=' + moduleID + '&branch=' + branch);
+    $.getJSON(sceneLink, function(scenes)
+    {
+        $scenePicker.render({items: scenes});
+        $scenePicker.$.setValue(oldScene);
     });
 }
 

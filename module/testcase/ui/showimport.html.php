@@ -93,6 +93,19 @@ else
         'required' => strpos(",$requiredFields,", ',module,') !== false
     );
 
+    if($this->config->edition != 'open')
+    {
+        $items[] = array
+        (
+            'name'     => 'scene',
+            'label'    => $lang->testcase->scene,
+            'control'  => array('control' => 'picker', 'required' => true),
+            'items'    => array(),
+            'width'    => '200px',
+            'required' => strpos(",$requiredFields,", ',scene,') !== false
+        );
+    }
+
     $items[] = array
     (
         'name'    => 'story',
