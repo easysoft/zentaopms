@@ -629,16 +629,15 @@ class zaiModel extends model
             if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
             $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
         }
-        elseif($objectType === 'bug' || $objectType === 'case')
+        elseif($objectType === 'bug')
         {
-            $table   = $objectType === 'bug' ? TABLE_BUG : TABLE_CASE;
             $product = isset($attrs['product']) ? $attrs['product'] : 0;
-            if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
+            if(!$product) $product = $this->dao->select('product')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('product');
             $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
             if(!$canView)
             {
                 $project = isset($attrs['project']) ? $attrs['project'] : 0;
-                if(!$project) $project = $this->dao->select('project')->from($table)->where('id')->eq($objectID)->fetch('project');
+                if(!$project) $project = $this->dao->select('project')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('project');
                 $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
             }
         }
@@ -659,6 +658,31 @@ class zaiModel extends model
             $api = isset($attrs['docType']) && $attrs['docType'] === 'api';
             $doc = $this->loadModel($api ? 'api' : 'doc')->getByID($objectID);
             $canView = $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+        elseif($objectType === 'case')
+        {
+            $project = isset($attrs['project']) ? $attrs['project'] : 0;
+            $product = isset($attrs['product']) ? $attrs['product'] : 0;
+            if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+
+            if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
+
+            if(!$canView)
+            {
+                $libID = isset($attrs['lib']) ? $attrs['lib'] : 0;
+                if(!$libID) $libID = $this->dao->select('lib')->from(TABLE_CASE)->where('id')->eq($objectID)->fetch('lib');
+                if($libID)
+                {
+                    $lib = $this->loadModel('caselib')->getByID($libID);
+                    if($lib)
+                    {
+                        $project = isset($lib->project) ? $lib->project : 0;
+                        $product = isset($lib->product) ? $lib->product : 0;
+                        if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+                        if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
+                    }
+                }
+            }
         }
 
         static::$objectViews[$objectType][$objectID] = $canView;
@@ -1268,13 +1292,19 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'product'   => $case->product   ?? '',
-            'module'    => $case->module    ?? '',
-            'execution' => $case->execution ?? '',
-            'pri'       => $case->pri       ?? '',
-            'type'      => $case->type      ?? '',
-            'status'    => $case->status    ?? '',
-            'stage'     => $case->stage     ?? '',
+            'product'      => $case->product         ?? '',
+            'module'       => $case->module          ?? '',
+            'project'      => $case->project         ?? '',
+            'execution'    => $case->execution       ?? '',
+            'branch'       => $case->branch          ?? '',
+            'path'         => $case->path            ?? '',
+            'story'        => $case->story           ?? '',
+            'storyVersion' => $case->storyVersion    ?? '',
+            'pri'          => $case->pri             ?? '',
+            'type'         => $case->type            ?? '',
+            'status'       => $case->status          ?? '',
+            'stage'        => $case->stage           ?? '',
+            'lib'          => $case->lib             ?? ''
         );
 
         return $markdown;
