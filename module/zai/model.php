@@ -1271,6 +1271,22 @@ class zaiModel extends model
         {
             $value = static::extractFieldValue($objectType, $field, $target);
             if(empty($value)) continue;
+
+            $accounts = is_array($value) ? $value : explode(',', trim($value));
+            $realnames = array();
+            foreach($accounts as $account)
+            {
+                $account = trim($account);
+                if($account && isset($userPairs[$account]))
+                {
+                    $realnames[] = $userPairs[$account];
+                }
+                elseif($account)
+                {
+                    $realnames[] = $account;
+                }
+            }
+            if(!empty($realnames)) $converted->$field = implode(', ', $realnames);
         }
 
         return $converted;
