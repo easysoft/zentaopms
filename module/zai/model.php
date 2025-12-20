@@ -662,27 +662,32 @@ class zaiModel extends model
         elseif($objectType === 'case')
         {
             $case = $this->loadModel('testcase')->getById($objectID);
-            if($case)
+            if(!$case)
             {
-                $project = isset($case->project) ? $case->project : 0;
-                $product = isset($case->product) ? $case->product : 0;
-                if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
-                if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
+                static::$objectViews[$objectType][$objectID] = false;
+                return false;
+            }
+            $project = isset($case->project) ? $case->project : 0;
+            $product = isset($case->product) ? $case->product : 0;
+            if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+            if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
 
-                if(!$canView)
+            if($canView)
+            {
+                static::$objectViews[$objectType][$objectID] = true;
+                return true;
+            }
+
+            $libID = $case->lib;
+            if($libID)
+            {
+                $lib = $this->loadModel('caselib')->getByID($libID);
+                if($lib)
                 {
-                    $libID = $case->lib;
-                    if($libID)
-                    {
-                        $lib = $this->loadModel('caselib')->getByID($libID);
-                        if($lib)
-                        {
-                            $project = isset($lib->project) ? $lib->project : 0;
-                            $product = isset($lib->product) ? $lib->product : 0;
-                            if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
-                            if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
-                        }
-                    }
+                    $project = isset($lib->project) ? $lib->project : 0;
+                    $product = isset($lib->product) ? $lib->product : 0;
+                    if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+                    if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
                 }
             }
         }
