@@ -7,15 +7,15 @@ include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
 
 title=测试 repoModel->create();
 timeout=0
-cid=18035
+cid=0
 
-- 客户端为空创建gitea版本库第client条的0属性 @『客户端』不能为空。
-- 正常创建gitea版本库属性SCM @Gitea
-- 客户端为空创建git版本库第client条的0属性 @『客户端』不能为空。
-- 正常创建git版本库属性SCM @Git
-- 客户端为空创建svn版本库第client条的0属性 @『客户端』不能为空。
-- 正常创建svn版本库属性SCM @Subversion
-
+- 创建评审流程
+ - 属性repo @1
+ - 属性name @test_flow5
+ - 属性branchType @1
+ - 属性desc @desc
+ - 属性status @enable
+- 重复创建第name条的0属性 @『name』已经有『test_flow5』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 */
 zenData('repo')->gen(10);
 
