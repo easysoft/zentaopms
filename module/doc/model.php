@@ -4814,4 +4814,54 @@ class docModel extends model
         /* Record the time of upgrade doc template. */
         $this->setting->setItem("system.doc.upgradeTime", helper::now());
     }
+    public static function forEachDocBlock(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0): mixed
+    {
+        if(array_is_list($rawContent))
+        {
+            foreach($rawContent as $index => $block)
+            {
+                $data = static::forEachDocBlock($block, $callback, $data, $flavours, $types, $props, $level);
+            }
+            return $data;
+        }
+        if(!isset($rawContent['type'])) return $data;
+        $type = $rawContent['type'];
+        $blockMatched = empty($types) || str_contains(',' . $types . ',', ',' . $type . ',');
+        if($blockMatched && !empty($flavours))
+        {
+            $flavour      = empty($rawContent['flavour']) ? '' : $rawContent['flavour'];
+            $blockMatched = !empty($flavour) && str_contains(',' . $flavours . ',', ',' . $flavour . ',');
+        }
+        if($blockMatched && !empty($props))
+        {
+            $blockProps = isset($rawContent['props']) ? $rawContent['props'] : null;
+            if(empty($blockProps))
+            {
+                $blockMatched = false;
+            }
+            else
+            {
+                foreach($props as $prop => $value)
+                {
+                    if($blockProps[$prop] !== $value)
+                    {
+                        $blockMatched = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if($blockMatched)
+        {
+            $data = $callback($rawContent, $data, 0, $level);
+        }
+        if($type === 'page')
+        {
+            return static::forEachDocBlock($rawContent['blocks'], $callback, $data, $flavours, $types, $props, $level + 1);
+        }
+
+        $children = isset($rawContent['children']) ? $rawContent['children'] : null;
+        if(empty($children)) return $data;
+        return static::forEachDocBlock($children, $callback, $data, $flavours, $types, $props, $level + 1);
+    }
 }
