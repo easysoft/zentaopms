@@ -2155,7 +2155,7 @@ class repo extends control
                 $rule->createdDate = helper::now();
                 $result = $this->repo->createBranchRule($rule);
                 if(!$result) $this->sendError($this->lang->fail);
-            } 
+            }
             else
             {
                 $result = $this->repo->updateBranchRule($originRule->id, $rule);
