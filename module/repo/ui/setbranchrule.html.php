@@ -12,6 +12,13 @@ $forcePushUserArray = !empty($originRule->forcePushUser) ? explode(',', $originR
 $sourceBranchArray  = !empty($originRule->sourceBranch) ? explode(',', $originRule->sourceBranch) : array();
 $targetBranchArray  = !empty($originRule->targetBranch) ? explode(',', $originRule->targetBranch) : array();
 
+$createUserOption    = !empty($originRule->createUser) ? 'specify' : 'hasPriv';
+$deleteUserOption    = !empty($originRule->deleteUser) ? 'specify' : 'hasPriv';
+$updateUserOption    = !empty($originRule->updateUser) ? 'specify' : 'hasPriv';
+$forcePushUserOption = !empty($originRule->forcePushUser) ? 'specify' : 'hasPriv';
+$sourceBranchOption  = !empty($originRule->sourceBranch) ? 'specify' : 'all';
+$targetBranchOption  = !empty($originRule->targetBranch) ? 'specify' : 'all';
+
 $langAllowDelete    = empty($branchTypeID) ? $lang->repo->branchRule->allowDeletedBy : $lang->repo->branchTypeRule->allowDeletedBy; 
 $langAllowUpdate    = empty($branchTypeID) ? $lang->repo->branchRule->allowUpdatedBy : $lang->repo->branchTypeRule->allowUpdatedBy; 
 $langAllowForcePush = empty($branchTypeID) ? $lang->repo->branchRule->allowForcePushedBy : $lang->repo->branchTypeRule->allowForcePushedBy; 
@@ -44,7 +51,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio"),
-                set::value(!empty($originRule->createUser) ? 'specify' : 'hasPriv'),
+                set::value($createUserOption),
                 set::name('radioForAllowCreate'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
@@ -71,7 +78,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio"),
-                set::value(!empty($originRule->deleteUser) ? 'specify' : 'hasPriv'),
+                set::value($deleteUserOption),
                 set::name('radioForAllowDelete'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
@@ -98,7 +105,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio"),
-                set::value(!empty($originRule->updateUser) ? 'specify' : 'hasPriv'),
+                set::value($updateUserOption),
                 set::name('radioForAllowUpdate'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
@@ -125,7 +132,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio"),
-                set::value(!empty($originRule->forcePushUser) ? 'specify' : 'hasPriv'),
+                set::value($forcePushUserOption),
                 set::name('radioForAllowForcePush'),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
@@ -152,7 +159,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio pl-52px"),
-                set::value(!empty($originRule->sourceBranch) ? 'specify' : 'all'),
+                set::value($sourceBranchOption),
                 set::name('radioForAllowMergeFrom'),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),
@@ -179,7 +186,7 @@ formPanel
             radioList
             (
                 set::className("$groupClass branchRuleRadio pl-52px"),
-                set::value(!empty($originRule->targetBranch) ? 'specify' : 'all'),
+                set::value($targetBranchOption),
                 set::name('radioForAllowMergeTo'),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),

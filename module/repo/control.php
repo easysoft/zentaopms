@@ -2141,7 +2141,7 @@ class repo extends control
     {
         $currentLang    = $this->app->getClientLang();
         $branchName     = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
-        $branchTypeName = "$branchTypeID"; 
+        $branchTypeName = "$branchTypeID";
         $repo           = $this->repo->getByID($repoID);
         $users          = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
         $members        = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
