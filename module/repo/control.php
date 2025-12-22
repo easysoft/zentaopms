@@ -2264,4 +2264,12 @@ class repo extends control
         $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
     }
+
+    public function changeFlowStatus(int $flowID, string $status)
+    {
+        $this->repo->updateReviewFlowStatus($flowID, $status);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('message' => $this->lang->repo->{$status . 'Success'}, 'load' => true));
+    }
 }
