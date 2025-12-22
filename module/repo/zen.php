@@ -1950,6 +1950,7 @@ class repoZen extends repo
      */
     public function buildBranchRuleData(int $typeID, int $repoID, string $branchName, object $data): object|bool
     {
+        if($data->radioForAllowCreate == 'hasPriv') $data->userAllowCreateGroup         = array();
         if($data->radioForAllowDelete == 'hasPriv') $data->userAllowDeleteGroup         = array();
         if($data->radioForAllowUpdate == 'hasPriv') $data->userAllowUpdateGroup         = array();
         if($data->radioForAllowForcePush == 'hasPriv') $data->userAllowForcePushGroup   = array();
@@ -1959,7 +1960,8 @@ class repoZen extends repo
         $rule                = new stdClass();
         $rule->repo          = $repoID;
         $rule->branchType    = $typeID;
-        $rule->branchName    = $branchName;
+        $rule->branchName    = empty($typeID) ? $branchName : '';
+        $rule->createUser    = !empty($typeID) ? implode(',', $data->userAllowCreateGroup) : '';
         $rule->deleteUser    = implode(',', $data->userAllowDeleteGroup);
         $rule->updateUser    = implode(',', $data->userAllowUpdateGroup);
         $rule->forcePushUser = implode(',', $data->userAllowForcePushGroup);

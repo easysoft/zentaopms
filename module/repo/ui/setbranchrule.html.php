@@ -5,21 +5,65 @@ namespace zin;
 
 $groupClass = common::checkNotCN() ? 'group-en-option' : '';
 
+$createUserArray    = !empty($originRule->createUser) ? explode(',', $originRule->createUser) : array();
 $deleteUserArray    = !empty($originRule->deleteUser) ? explode(',', $originRule->deleteUser) : array();
 $updateUserArray    = !empty($originRule->updateUser) ? explode(',', $originRule->updateUser) : array();
 $forcePushUserArray = !empty($originRule->forcePushUser) ? explode(',', $originRule->forcePushUser) : array();
 $sourceBranchArray  = !empty($originRule->sourceBranch) ? explode(',', $originRule->sourceBranch) : array();
 $targetBranchArray  = !empty($originRule->targetBranch) ? explode(',', $originRule->targetBranch) : array();
 
+$langAllowDelete    = empty($branchTypeID) ? $lang->repo->branchRule->allowDeletedBy : $lang->repo->branchTypeRule->allowDeletedBy; 
+$langAllowUpdate    = empty($branchTypeID) ? $lang->repo->branchRule->allowUpdatedBy : $lang->repo->branchTypeRule->allowUpdatedBy; 
+$langAllowForcePush = empty($branchTypeID) ? $lang->repo->branchRule->allowForcePushedBy : $lang->repo->branchTypeRule->allowForcePushedBy; 
+$langAllowMergeFrom = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeFrom : $lang->repo->branchTypeRule->allowMergeFrom;
+$langAllowMergeTo   = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeTo : $lang->repo->branchTypeRule->allowMergeTo;
+
 formPanel
 (
     setID('setBranchRuleForm'),
     set::title($title),
-    set::actions(array('submit', 'cancel', array('text' => $lang->repo->branchRule->delete, 'url' => createLink('repo', 'ajaxDeleteBranchRule', "repoID=$repoID&branchName=$branchName&ruleID=$ruleID")))),
+    set::actions($branchTypeID != 0
+        ? array('submit', 'cancel')
+        : array(
+            'submit',
+            'cancel',
+            array(
+                'text' => $lang->repo->branchRule->delete,
+                'url'  => createLink('repo', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID")
+            )
+        )
+    ),
     set::backUrl(inlink('browseBranch', "repoID=$repoID")),
+    $branchTypeID != 0 ? formGroup
+    (
+        set::label($lang->repo->branchTypeRule->allowCreatedBy),
+        set::width('full'),
+        set::className($groupClass),
+        inputGroup
+        (
+            radioList
+            (
+                set::className("$groupClass branchRuleRadio"),
+                set::value(!empty($originRule->createUser) ? 'specify' : 'hasPriv'),
+                set::name('radioForAllowCreate'),
+                set::items($lang->repo->branchRule->userOptionList),
+                set::inline(true),
+                on::change()->call('onRadioForAllowCreateChange')
+            ),
+            picker
+            (
+                set::className('hidden branchRulePicker'),
+                setID('userAllowCreateGroup'),
+                set::name('userAllowCreateGroup'),
+                set::items($users),
+                set::value($createUserArray),
+                set::multiple(true)
+            )
+        )
+    ) : null,
     formGroup
     (
-        set::label($lang->repo->branchRule->allowDeletedBy),
+        set::label($langAllowDelete),
         set::width('full'),
         set::className($groupClass),
         inputGroup
@@ -46,7 +90,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->repo->branchRule->allowUpdatedBy),
+        set::label($langAllowUpdate),
         set::width('full'),
         set::className($groupClass),
         inputGroup
@@ -73,7 +117,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->repo->branchRule->allowForcePushedBy),
+        set::label($langAllowForcePush),
         set::width('full'),
         set::className($groupClass),
         inputGroup
@@ -100,7 +144,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->repo->branchRule->allowMergeFrom),
+        set::label($langAllowMergeFrom),
         set::width('full'),
         set::className($groupClass),
         inputGroup
@@ -127,7 +171,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->repo->branchRule->allowMergeTo),
+        set::label($langAllowMergeTo),
         set::width('full'),
         set::className($groupClass),
         inputGroup

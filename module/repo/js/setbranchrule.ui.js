@@ -1,3 +1,9 @@
+window.onRadioForAllowCreateChange = function()
+{
+    const selectedValue = $('input[name="radioForAllowCreate"]:checked').val();
+    $('#userAllowCreateGroup').toggleClass('hidden', selectedValue !== 'specify');
+}
+
 window.onRadioForAllowDeleteChange = function()
 {
     const selectedValue = $('input[name="radioForAllowDelete"]:checked').val();
@@ -31,6 +37,7 @@ window.onRadioForAllowMergeToChange = function()
 // Initialize on page load
 $(function()
 {
+    onRadioForAllowCreateChange();
     onRadioForAllowDeleteChange();
     onRadioForAllowUpdateChange();
     onRadioForAllowForcePushChange();
