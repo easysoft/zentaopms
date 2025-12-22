@@ -2265,6 +2265,15 @@ class repo extends control
         $this->display();
     }
 
+    /**
+     * 修改审批流程状态。
+     * Change review flow status.
+     *
+     * @param  int    $flowID
+     * @param  string $status
+     * @access public
+     * @return void
+     */
     public function changeFlowStatus(int $flowID, string $status)
     {
         $this->repo->updateReviewFlowStatus($flowID, $status);
