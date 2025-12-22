@@ -35,11 +35,13 @@ $repoTest = new repoZenTest();
 
 // 完整权限配置
 $fullData = new stdclass();
+$fullData->radioForAllowCreate = 'specified';
 $fullData->radioForAllowDelete = 'specified';
 $fullData->radioForAllowUpdate = 'specified';
 $fullData->radioForAllowForcePush = 'specified';
 $fullData->radioForAllowMergeFrom = 'specified';
 $fullData->radioForAllowMergeTo = 'specified';
+$fullData->userAllowCreateGroup = array('admin', 'user1');
 $fullData->userAllowDeleteGroup = array('admin');
 $fullData->userAllowUpdateGroup = array('admin', 'user2');
 $fullData->userAllowForcePushGroup = array('admin', 'user3');
@@ -48,11 +50,13 @@ $fullData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // Delete权限限制
 $deletePrivData = new stdclass();
+$deletePrivData->radioForAllowCreate = 'specified';
 $deletePrivData->radioForAllowDelete = 'hasPriv';
 $deletePrivData->radioForAllowUpdate = 'specified';
 $deletePrivData->radioForAllowForcePush = 'specified';
 $deletePrivData->radioForAllowMergeFrom = 'specified';
 $deletePrivData->radioForAllowMergeTo = 'specified';
+$deletePrivData->userAllowCreateGroup = array('admin', 'user1');
 $deletePrivData->userAllowDeleteGroup = array('admin', 'user1');
 $deletePrivData->userAllowUpdateGroup = array('admin', 'user2');
 $deletePrivData->userAllowForcePushGroup = array('admin', 'user3');
@@ -61,11 +65,13 @@ $deletePrivData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // Update权限限制
 $updatePrivData = new stdclass();
+$updatePrivData->radioForAllowCreate = 'specified';
 $updatePrivData->radioForAllowDelete = 'specified';
 $updatePrivData->radioForAllowUpdate = 'hasPriv';
 $updatePrivData->radioForAllowForcePush = 'specified';
 $updatePrivData->radioForAllowMergeFrom = 'specified';
 $updatePrivData->radioForAllowMergeTo = 'specified';
+$updatePrivData->userAllowCreateGroup = array('admin', 'user1');
 $updatePrivData->userAllowDeleteGroup = array('admin', 'user1');
 $updatePrivData->userAllowUpdateGroup = array('admin', 'user2');
 $updatePrivData->userAllowForcePushGroup = array('admin', 'user3');
@@ -74,11 +80,13 @@ $updatePrivData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // 强制推送权限限制
 $forcePushPrivData = new stdclass();
+$forcePushPrivData->radioForAllowCreate = 'specified';
 $forcePushPrivData->radioForAllowDelete = 'specified';
 $forcePushPrivData->radioForAllowUpdate = 'specified';
 $forcePushPrivData->radioForAllowForcePush = 'hasPriv';
 $forcePushPrivData->radioForAllowMergeFrom = 'specified';
 $forcePushPrivData->radioForAllowMergeTo = 'specified';
+$forcePushPrivData->userAllowCreateGroup = array('admin', 'user1');
 $forcePushPrivData->userAllowDeleteGroup = array('admin', 'user1');
 $forcePushPrivData->userAllowUpdateGroup = array('admin', 'user2');
 $forcePushPrivData->userAllowForcePushGroup = array('admin', 'user3');
@@ -87,11 +95,13 @@ $forcePushPrivData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // 合并From设为all
 $mergeFromAllData = new stdclass();
+$mergeFromAllData->radioForAllowCreate = 'specified';
 $mergeFromAllData->radioForAllowDelete = 'specified';
 $mergeFromAllData->radioForAllowUpdate = 'specified';
 $mergeFromAllData->radioForAllowForcePush = 'specified';
 $mergeFromAllData->radioForAllowMergeFrom = 'all';
 $mergeFromAllData->radioForAllowMergeTo = 'specified';
+$mergeFromAllData->userAllowCreateGroup = array('admin', 'user1');
 $mergeFromAllData->userAllowDeleteGroup = array('admin', 'user1');
 $mergeFromAllData->userAllowUpdateGroup = array('admin', 'user2');
 $mergeFromAllData->userAllowForcePushGroup = array('admin', 'user3');
@@ -100,11 +110,13 @@ $mergeFromAllData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // 合并To设为all
 $mergeToAllData = new stdclass();
+$mergeToAllData->radioForAllowCreate = 'specified';
 $mergeToAllData->radioForAllowDelete = 'specified';
 $mergeToAllData->radioForAllowUpdate = 'specified';
 $mergeToAllData->radioForAllowForcePush = 'specified';
 $mergeToAllData->radioForAllowMergeFrom = 'specified';
 $mergeToAllData->radioForAllowMergeTo = 'all';
+$mergeToAllData->userAllowCreateGroup = array('admin', 'user1');
 $mergeToAllData->userAllowDeleteGroup = array('admin', 'user1');
 $mergeToAllData->userAllowUpdateGroup = array('admin', 'user2');
 $mergeToAllData->userAllowForcePushGroup = array('admin', 'user3');
@@ -113,11 +125,13 @@ $mergeToAllData->branchTypeAllowMergeToGroup = array('master', 'develop');
 
 // 混合模式：多个权限同时限制
 $mixedData = new stdclass();
+$mixedData->radioForAllowCreate = 'hasPriv';
 $mixedData->radioForAllowDelete = 'hasPriv';
 $mixedData->radioForAllowUpdate = 'hasPriv';
 $mixedData->radioForAllowForcePush = 'hasPriv';
 $mixedData->radioForAllowMergeFrom = 'all';
 $mixedData->radioForAllowMergeTo = 'all';
+$mixedData->userAllowCreateGroup = array('admin', 'user1');
 $mixedData->userAllowDeleteGroup = array('admin', 'user1');
 $mixedData->userAllowUpdateGroup = array('admin', 'user2');
 $mixedData->userAllowForcePushGroup = array('admin', 'user3');
