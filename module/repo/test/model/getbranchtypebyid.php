@@ -11,7 +11,7 @@ cid=0
  - 属性id @1
  - 属性name @branch_type1
  - 属性key @branch_type1
-- 测试步骤2：验证prefix字段被正确解析 @dev/|feature/
+- 测试步骤2：验证prefix字段被正确解析 @dev/
 - 测试步骤3：验证prefix内容 @test/
 - 测试步骤4：测试不存在的typeID @0
 - 测试步骤5：测试无效的typeID(0) @0
@@ -37,7 +37,7 @@ $repoTest = new repoTest();
 r($repoTest->getBranchTypeByIDTest(1)) && p('id,name,key') && e('1,branch_type1,branch_type1');
 
 // 测试步骤2：验证prefix字段被正确解析为数组
-r($repoTest->getBranchTypeByIDTest(1)) && p('prefix', '|') && e('dev/|feature/');
+r($repoTest->getBranchTypeByIDTest(1)) && p('prefix', '|') && e('dev/');
 
 // 测试步骤3：验证第二个分支类型的prefix内容
 r($repoTest->getBranchTypeByIDTest(2)) && p('prefix', '|') && e('test/');

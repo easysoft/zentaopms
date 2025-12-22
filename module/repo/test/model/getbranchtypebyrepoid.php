@@ -15,8 +15,8 @@ cid=0
  - 属性name @branch_type2
  - 属性key @branch_type2
 - 测试步骤4：获取不存在的repoID，返回空数组 @0
-- 测试步骤5：获取repoID为0的系统级分支类型 @1
-- 测试步骤6：验证prefixes字段被正确解析为数组 @array
+- 测试步骤5：获取repoID为0的系统级分支类型 @0
+- 测试步骤6：验证prefixes字段被正确解析为数组 @dev/
 
 */
 

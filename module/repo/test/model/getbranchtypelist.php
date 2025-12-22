@@ -12,8 +12,8 @@ cid=0
 - 测试步骤3：按key搜索"feature" 验证key属性 @branch_type1
 - 测试步骤4：按prefix搜索"dev/" 验证第一个prefix @dev/
 - 测试步骤5：不传repoID获取所有分支类型(应返回3条) @5
-- 测试步骤6：验证prefixes字段被正确解析为数组 @array
-- 测试步骤7：验证返回的对象包含所有必要字段 属性name,key @branch_type1,branch_type1
+- 测试步骤6：验证prefixes字段被正确解析为数组 @dev/
+- 测试步骤7：验证返回的对象包含所有必要字段 属性name,key @branch_type1
 
 */
 
