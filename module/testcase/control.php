@@ -599,7 +599,7 @@ class testcase extends control
     public function edit(int $caseID, string $comment = 'false', int $executionID = 0, string $from = 'testcase')
     {
         $oldCase = $this->testcase->getByID($caseID);
-        if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true)));
+        if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true), 'message' => $this->lang->testcase->noCase));
 
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
@@ -805,6 +805,9 @@ class testcase extends control
      */
     public function delete(int $caseID)
     {
+        $case = $this->testcase->getByID($caseID);
+        if(!$case) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->noCase));
+
         $this->testcase->delete(TABLE_CASE, $caseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -813,7 +816,6 @@ class testcase extends control
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-        $case = $this->testcase->getByID($caseID);
         $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $locateLink));
     }
