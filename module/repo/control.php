@@ -2166,7 +2166,7 @@ class repo extends control
         if($_POST)
         {
             $formData = form::data($this->config->repo->form->branchRule)->get();
-            
+
             $rule = $this->repoZen->buildBranchRuleData(0, $repoID, $branchName, $formData);
             if(dao::isError()) $this->sendError(dao::getError());
             $rule->editedBy   = $this->app->user->account;
@@ -2200,7 +2200,7 @@ class repo extends control
         $this->view->branchTypes = !empty($branchTypes) ? array_column($branchTypes, 'name', 'id') : array();
         $this->display();
     }
-    
+
     /**
      * 删除分支规则。
      * Ajax delete branch rule.
@@ -2220,5 +2220,47 @@ class repo extends control
         $result = $this->repo->deleteBranchRule($ruleID);
         if(!$result) $this->sendError($this->lang->fail);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+    }
+
+    /**
+     * 编辑审批流程。
+     * Edit review flow.
+     *
+     * @param  int $repoID
+     * @param  int $flowID
+     * @access public
+     * @return void
+     */
+    public function editReviewFlow(int $repoID, int $flowID)
+    {
+        $this->commonAction($repoID, 0);
+        $repo        = $this->repo->getByID($repoID);
+        $reviewFlow  = $this->repo->getReviewFlowByID($flowID);
+        $branchTypes = $this->repoZen->buildReviewFlowBranchTypes($repoID, $reviewFlow->branchType);
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->createReviewFlow)->get();
+            if($formData->isAllBranchTypes && !isset($branchTypes[0]) && !empty($reviewFlow->branchType)) return $this->sendError(array('branchType' => $this->lang->repo->allBranchTypesNotice));
+            if(!$formData->isAllBranchTypes && empty($formData->branchType)) return $this->sendError(array('branchType' => sprintf($this->lang->error->notempty, $this->lang->repo->applicableBranchTypes)));
+
+            $formData->definition = $this->repoZen->buildDefinition($formData);
+
+            $this->repo->updateReviewFlow($reviewFlow, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => inLink('browseReviewFlow', "repoID=$repoID")));
+        }
+
+        $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        $this->app->loadLang('bug');
+        $this->view->title       = $this->lang->repo->editReviewFlow;
+        $this->view->repoID      = $repoID;
+        $this->view->flowID      = $flowID;
+        $this->view->repo        = $repo;
+        $this->view->reviewFlow  = $reviewFlow;
+        $this->view->branchTypes = $branchTypes;
+        $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
+        $this->display();
     }
 }
