@@ -3229,4 +3229,36 @@ class repoModel extends model
             ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
             ->fetchPairs('id', 'name');
     }
+
+    /**
+     * 创建评审流程。
+     * Create review flow.
+     *
+     * @param  int    $repoID
+     * @param  object $data
+     * @access public
+     * @return int|false
+     */
+    public function createReviewFlow(int $repoID, object $data): int|false
+    {
+        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
+
+        $reviewFlow = new stdClass();
+        $reviewFlow->repo        = $repoID;
+        $reviewFlow->name        = $data->name;
+        $reviewFlow->branchType  = $data->branchType;
+        $reviewFlow->desc        = $data->desc;
+        $reviewFlow->definition  = json_encode(zget($data, 'definition', array()));
+        $reviewFlow->status      = 'enable';
+        $reviewFlow->createdBy   = $this->app->user->account;
+        $reviewFlow->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_REVIEWFLOW)->data($reviewFlow)
+            ->check('name', 'unique', "`repo` = $repoID")
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
+    }
 }
