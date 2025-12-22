@@ -16994,6 +16994,7 @@ CREATE TABLE IF NOT EXISTS `zt_ops_branch_ruleset` (
   `repo` int unsigned NOT NULL COMMENT '仓库ID',
   `branchType` int unsigned NOT NULL COMMENT '分支类型ID',
   `branchName` varchar(255) NOT NULL DEFAULT '' COMMENT '分支名',
+  `createUser` varchar(500) NOT NULL COMMENT '创建分支权限人员',
   `deleteUser` varchar(500) NOT NULL COMMENT '删除分支权限人员',
   `updateUser` varchar(500) NOT NULL COMMENT '更新分支权限人员',
   `forcePushUser` varchar(500) NOT NULL COMMENT '强制推送权限人员',

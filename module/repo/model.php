@@ -2999,10 +2999,13 @@ class repoModel extends model
      */
     public function getBranchRule(int $typeID = 0, int $repoID = 0, string $branchName = ''): object|false
     {
+        if($typeID != 0)
+        {
+            return $this->dao->select('*')->from(TABLE_BRANCHRULESET)->where('branchType')->eq($typeID)->fetch();
+        }
         return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
             ->where('repo')->eq($repoID)
             ->andWhere('branchName')->eq($branchName)
-            ->andWhere('branchType')->eq($typeID)
             ->fetch();
     }
 
