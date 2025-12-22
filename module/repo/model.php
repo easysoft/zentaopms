@@ -3262,6 +3262,15 @@ class repoModel extends model
         return $this->dao->lastInsertID();
     }
 
+    /**
+     * 更新评审流程。
+     * Update review flow.
+     *
+     * @param  object $flow
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
     public function updateReviewFlow(object $flow, object $data): bool
     {
         if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
