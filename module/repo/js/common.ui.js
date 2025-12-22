@@ -405,10 +405,18 @@ window.disableBranchType = function()
 
     const isAllBranchTypes = isAllBranchTypesDom.is(':checked');
 
-    if(isAllBranchTypes) $('#branchTypesBox').attr('disabled', 'disabled');
-    else $('#branchTypesBox').removeAttr('disabled');
+    if(isAllBranchTypes)
+    {
+        $('#branchTypesBox').attr('disabled', 'disabled');
+        disableBranchTypeMenu(true);
+        $('[name^=branchType]').zui('picker').$.setValue([0]);
+    }
+    else
+    {
+        disableBranchTypeMenu(false);
+    }
 }
-window.waitDom('[name=isAllBranchTypes]', disableBranchType);
+window.waitDom('[name^=branchType]', disableBranchType);
 
 window.loadAiReviewScores = function()
 {
@@ -449,4 +457,24 @@ window.removeSpecifiedReviewers = function(values)
 
     const newSpecifiedReviewers = $specifiedReviewers.val().filter(v => !values.includes(v));
     $specifiedReviewers.zui('picker').$.setValue(newSpecifiedReviewers);
+}
+
+window.disableBranchTypeMenu = function(isDisable)
+{
+    const $branchType = $('[name^=branchType]');
+    if(typeof $branchType == 'undefined') return;
+
+    $branchType.zui('picker').$.clear();
+    if(isDisable)
+    {
+        $('#branchTypesBox').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('#branchTypesBox').removeAttr('disabled');
+    }
+    const menus = $branchType.zui('picker').options.items;
+    menus.forEach(menu => {
+        menu.disabled = isDisable;
+    })
 }
