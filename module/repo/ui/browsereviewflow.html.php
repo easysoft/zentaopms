@@ -9,7 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('branchTypePairs', array_merge(array(0 => $lang->all), $branchTypePairs));
 $canCreate = hasPriv('repo', 'createReviewFlow');
+
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -39,5 +41,6 @@ dtable
 (
     set::cols($config->repo->dtable->reviewFlow->fieldList),
     set::data($data),
+    set::onRenderCell(jsRaw('window.renderReviewFlowCell')),
     set::footPager(usePager('pager'))
 );
