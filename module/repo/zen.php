@@ -110,10 +110,11 @@ class repoZen extends repo
      * @access protected
      * @return array
      */
-    protected function buildReviewFlowBranchTypes(int $repoID): array
+    protected function buildReviewFlowBranchTypes(int $repoID, string $appendIdList = ''): array
     {
-        $branchTypes = $this->repo->getBranchTypePairs($repoID);
-        $reviewFlows = $this->repo->getReviewFlowList($repoID);
+        $branchTypes  = $this->repo->getBranchTypePairs($repoID);
+        $reviewFlows  = $this->repo->getReviewFlowList($repoID);
+        $appendIdList = explode(',', $appendIdList);
 
         $reviewFlowBranchTypes = array();
         foreach($reviewFlows as $flow)
@@ -127,7 +128,7 @@ class repoZen extends repo
         foreach($branchTypes as $branchTypeID => $branchType)
         {
             if(isset($reviewFlowBranchTypes[0])) unset($branchTypeList[0]);
-            if(isset($reviewFlowBranchTypes[$branchTypeID])) continue;
+            if(isset($reviewFlowBranchTypes[$branchTypeID]) && !in_array($branchTypeID, $appendIdList)) continue;
             $branchTypeList[$branchTypeID] = $branchType;
         }
 
@@ -160,7 +161,6 @@ class repoZen extends repo
         $definition->reviewFlow->issues = new stdClass();
         $definition->reviewFlow->issues->addressOption = zget($formData, 'addressOption', '');
         $definition->reviewFlow->issues->mandatoryType = zget($formData, 'addressOption') == 'specificMustBeSolved' ? explode(',', zget($formData, 'issueType', array())) : array();
-        $definition->reviewFlow->issues->mergeOptions  = zget($formData, 'mergeOptions', '');
 
         $definition->reviewFlow->newCommits = new stdClass();
         $definition->reviewFlow->newCommits->addressOption = zget($formData, 'newCommits', '');
