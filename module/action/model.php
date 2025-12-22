@@ -480,6 +480,7 @@ class actionModel extends model
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
+            if($objectType == 'auditplan') continue;
             if(!isset($this->config->action->objectNameFields[$objectType])) continue;
 
             $table        = $this->config->objectTables[$objectType];
@@ -1412,6 +1413,7 @@ class actionModel extends model
             if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
             if($objectType == 'makeup') $table = TABLE_OVERTIME;
             if($objectType == 'pivot')  $table = TABLE_PIVOTSPEC;
+            if($objectType == 'auditplan') continue;
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
 
