@@ -357,21 +357,25 @@ $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
 $config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
 
 $config->repo->dtable->reviewFlow = new stdclass();
-$config->repo->dtable->reviewFlow->fieldList['id']['name']  = 'id';
-$config->repo->dtable->reviewFlow->fieldList['id']['title'] = $lang->idAB;
+$config->repo->dtable->reviewFlow->fieldList['id']['name']     = 'id';
+$config->repo->dtable->reviewFlow->fieldList['id']['title']    = $lang->idAB;
+$config->repo->dtable->reviewFlow->fieldList['id']['type']     = 'id';
+$config->repo->dtable->reviewFlow->fieldList['id']['sortType'] = false;
 
 $config->repo->dtable->reviewFlow->fieldList['name']['title']    = $lang->repo->flowName;
-$config->repo->dtable->reviewFlow->fieldList['name']['type']     = 'title';
+$config->repo->dtable->reviewFlow->fieldList['name']['type']     = 'shortTitle';
 $config->repo->dtable->reviewFlow->fieldList['name']['name']     = 'name';
 $config->repo->dtable->reviewFlow->fieldList['name']['sortType'] = false;
+$config->repo->dtable->reviewFlow->fieldList['name']['group']    = 1;
 
 $config->repo->dtable->reviewFlow->fieldList['status']['title']     = $lang->repo->status;
 $config->repo->dtable->reviewFlow->fieldList['status']['type']      = 'status';
 $config->repo->dtable->reviewFlow->fieldList['status']['statusMap'] = $lang->repo->flowStatusList;
 $config->repo->dtable->reviewFlow->fieldList['status']['sortType']  = false;
+$config->repo->dtable->reviewFlow->fieldList['status']['group']     = 2;
 
 $config->repo->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->branchType;
-$config->repo->dtable->reviewFlow->fieldList['branchType']['width']    = 100;
+$config->repo->dtable->reviewFlow->fieldList['branchType']['width']    = 500;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['sortType'] = false;
 
 $config->repo->dtable->reviewFlow->fieldList['desc']['title']      = $lang->repo->desc;
