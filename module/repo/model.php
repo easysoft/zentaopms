@@ -3261,4 +3261,24 @@ class repoModel extends model
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * 根据ID获取评审流程。
+     * Get review flow by id.
+     *
+     * @param  int $reviewFlowID
+     * @access public
+     * @return object|false
+     */
+    public function getReviewFlowByID(int $reviewFlowID): object|false
+    {
+        $reviewFlow = $this->dao->select('*')->from(TABLE_REVIEWFLOW)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->eq($reviewFlowID)
+            ->fetch();
+        if(empty($reviewFlow)) return false;
+
+        $reviewFlow->definition = json_decode($reviewFlow->definition);
+        return $reviewFlow;
+    }
 }
