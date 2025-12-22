@@ -881,6 +881,7 @@ class task extends control
         foreach($taskList as $taskID => $task)
         {
             if($task->status == 'closed') continue;
+            if($task->parent > 0 && isset($taskList[$task->parent])) continue; // 同时选中父子，关闭父的时候就关闭子了，不用重复关闭子
 
             $taskData = $this->taskZen->buildTaskForClose($task);
             $this->task->close($task, $taskData);
