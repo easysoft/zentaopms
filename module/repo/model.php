@@ -2279,6 +2279,8 @@ class repoModel extends model
 
         if($action == 'execjob')    return common::hasPriv('sonarqube', $action) && !$repo->exec;
         if($action == 'reportview') return common::hasPriv('sonarqube', $action) && !$repo->report;
+        if($action == 'enable') return !empty($repo->status) && $repo->status == 'disable';
+        if($action == 'disable') return !empty($repo->status) && $repo->status == 'enable';
         if(!commonModel::hasPriv('repo', $action)) return false;
 
         return true;
@@ -3310,5 +3312,20 @@ class repoModel extends model
 
         $reviewFlow->definition = json_decode($reviewFlow->definition);
         return $reviewFlow;
+    }
+
+    /**
+     * 更新评审流程状态。
+     * Update review flow status.
+     *
+     * @param  int    $reviewFlowID
+     * @param  string $status
+     * @access public
+     * @return bool
+     */
+    public function updateReviewFlowStatus(int $reviewFlowID, string $status): bool
+    {
+        $this->dao->update(TABLE_REVIEWFLOW)->set('status')->eq($status)->where('id')->eq($reviewFlowID)->exec();
+        return !dao::isError();
     }
 }
