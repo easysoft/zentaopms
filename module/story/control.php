@@ -243,8 +243,10 @@ class story extends control
      */
     public function commonAction(int $storyID, int $projectID = 0)
     {
-        /* Get datas. */
+        /* Get data. */
         $story = $this->story->getByID($storyID);
+        if(!$story) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStory));
+
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
