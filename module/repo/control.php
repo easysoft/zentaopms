@@ -2099,7 +2099,30 @@ class repo extends control
     public function createReviewFlow(int $repoID)
     {
         $this->commonAction($repoID, 0);
-        $this->view->title = $this->lang->repo->createReviewFlow;
+        $repo        = $this->repo->getByID($repoID);
+        $branchTypes = $this->repoZen->buildReviewFlowBranchTypes($repoID);
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->createReviewFlow)->get();
+            if($formData->isAllBranchTypes && !isset($branchTypes[0])) return $this->sendError(array('branchType' => $this->lang->repo->allBranchTypesNotice));
+            if(!$formData->isAllBranchTypes && empty($formData->branchType)) return $this->sendError(array('branchType' => sprintf($this->lang->error->notempty, $this->lang->repo->applicableBranchTypes)));
+
+            $formData->definition = $this->repoZen->buildDefinition($formData);
+
+            $this->repo->createReviewFlow($repoID, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => inLink('browseReviewFlow', "repoID=$repoID")));
+        }
+
+        $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        $this->app->loadLang('bug');
+        $this->view->title       = $this->lang->repo->createReviewFlow;
+        $this->view->repoID      = $repoID;
+        $this->view->repo        = $repo;
+        $this->view->branchTypes = $branchTypes;
+        $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
     }
 

@@ -54,6 +54,32 @@ class repoZenTest extends baseTest
     }
 
     /**
+     * 测试buildReviewFlowBranchTypes 方法。
+     * Test buildReviewFlowBranchTypes method in zen layer.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function buildReviewFlowBranchTypesTest(int $repoID): array
+    {
+        return $this->invokeArgs('buildReviewFlowBranchTypes', [$repoID]);
+    }
+
+    /**
+     * 测试buildDefinition 方法。
+     * Test buildDefinition method in zen layer.
+     *
+     * @param  object $definition
+     * @access public
+     * @return object
+     */
+    public function buildDefinitionTest(object $definition): object
+    {
+        return $this->invokeArgs('buildDefinition', [$definition]);
+    }
+
+    /**
      * 测试buildRepoSearchForm 方法。
      * Test buildRepoSearchForm method in zen layer.
      *

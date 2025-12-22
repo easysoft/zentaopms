@@ -39,5 +39,7 @@ fields:
   range: 0
 - field: job
   range: 0
+- field: acl
+  range: 'open'
 - field: deleted
   range: 0

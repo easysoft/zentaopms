@@ -103,6 +103,76 @@ class repoZen extends repo
     }
 
     /**
+     * 构建审批流程支持的分支类型。
+     * Build review flow branch types.
+     *
+     * @param  int $repoID
+     * @access protected
+     * @return array
+     */
+    protected function buildReviewFlowBranchTypes(int $repoID): array
+    {
+        $branchTypes = $this->repo->getBranchTypePairs($repoID);
+        $reviewFlows = $this->repo->getReviewFlowList($repoID);
+
+        $reviewFlowBranchTypes = array();
+        foreach($reviewFlows as $flow)
+        {
+            $flowBranchTypes = explode(',', $flow->branchType);
+            if(empty($flowBranchTypes)) continue;
+            foreach($flowBranchTypes as $flowBranchType) $reviewFlowBranchTypes[$flowBranchType] = $flowBranchType;
+        }
+
+        $branchTypeList = array('0' => $this->lang->all);
+        foreach($branchTypes as $branchTypeID => $branchType)
+        {
+            if(isset($reviewFlowBranchTypes[0])) unset($branchTypeList[0]);
+            if(isset($reviewFlowBranchTypes[$branchTypeID])) continue;
+            $branchTypeList[$branchTypeID] = $branchType;
+        }
+
+        return $branchTypeList;
+    }
+
+    /**
+     * 构建审批流程定义。
+     * Build review flow definition.
+     *
+     * @param  object $formData
+     * @access protected
+     * @return object
+     */
+    protected function buildDefinition(object $formData): object
+    {
+        $definition = new stdClass();
+        $definition->ai = new stdClass();
+        $definition->ai->enable    = zget($formData, 'aiReview') == 'enable';
+        $definition->ai->approvals = new stdClass();
+        $definition->ai->approvals->score = zget($formData, 'aiReviewScores', 0);
+
+        $definition->reviewFlow = new stdClass();
+        $definition->reviewFlow->approvals = new stdClass();
+        $definition->reviewFlow->approvals->defaultReviewers   = explode(',', zget($formData, 'defaultReviewers', ''));
+        $definition->reviewFlow->approvals->specifiedReviewers = explode(',', zget($formData, 'specifiedReviewers', ''));
+        $definition->reviewFlow->approvals->minReviewers       = zget($formData, 'minReviewers', 0);
+        $definition->reviewFlow->approvals->approvalID         = zget($formData, 'approvalID', 0);
+
+        $definition->reviewFlow->issues = new stdClass();
+        $definition->reviewFlow->issues->addressOption = zget($formData, 'addressOption', '');
+        $definition->reviewFlow->issues->mandatoryType = zget($formData, 'addressOption') == 'specificMustBeSolved' ? explode(',', zget($formData, 'issueType', array())) : array();
+        $definition->reviewFlow->issues->mergeOptions  = zget($formData, 'mergeOptions', '');
+
+        $definition->reviewFlow->newCommits = new stdClass();
+        $definition->reviewFlow->newCommits->addressOption = zget($formData, 'newCommits', '');
+
+        $definition->reviewFlow->merge = new stdClass();
+        $definition->reviewFlow->merge->options     = explode(',', zget($formData, 'mergeOptions'));
+        $definition->reviewFlow->merge->autoArchive = zget($formData, 'autoArchive') == 'enable';
+
+        return $definition;
+    }
+
+    /**
      * 准备编辑版本库的数据。
      * Prepare edit repo data.
      *

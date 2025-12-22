@@ -1,0 +1,198 @@
+<?php
+declare(strict_types=1);
+/**
+ * The create review flow view file of repo module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Yang Li <liyang@chandao.com>
+ * @package     repo
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+unset($branchTypes[0]);
+formPanel
+(
+    set::title($title),
+    set::labelWidth('240px'),
+    on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
+    on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
+    on::change('[name=addressOption]')->call('window.loadIssueType'),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->basicInfo),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->name),
+        set::name('name'),
+        set::required(true)
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->applicableBranchTypes),
+        set::required(true),
+        inputGroup
+        (
+            div
+            (
+                setClass('w-full'),
+                setID('branchTypesBox'),
+                picker
+                (
+                    set::name('branchType'),
+                    set::items($branchTypes),
+                    set::multiple(true),
+                    set::required(true)
+                )
+            ),
+            div
+            (
+                setClass('input-group-addon flex'),
+                checkbox
+                (
+                    set::name('isAllBranchTypes'),
+                    set::text($lang->repo->allBranchTypes)
+                )
+            )
+        )
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->desc),
+        set::name('desc'),
+        set::control(array('type' => 'textarea', 'rows' => 5)),
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->aiReview),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        setID('aiReview'),
+        set::width('2/3'),
+        set::name('aiReview'),
+        set::required(true),
+        set::label($lang->repo->aiAssistedReview),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->repo->aiReviewList),
+        set::value('disable')
+    ),
+    formGroup
+    (
+        setID('aiReviewScores'),
+        set::width('2/3'),
+        set::required(true),
+        set::name('aiReviewScores'),
+        set::label($lang->repo->aiReviewScores),
+        set::control(array('type' => 'number', 'min' => 0, 'max' => 10)),
+        set::value(0)
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->manualReview),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('defaultReviewers'),
+        set::label($lang->repo->defaultReviewers),
+        set::items($repoMembers),
+        set::control(array('onSelect' => jsRaw('addSpecifiedReviewers'), 'onDeselect' => jsRaw('removeSpecifiedReviewers'))),
+        set::multiple(true)
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('specifiedReviewers'),
+        set::label($lang->repo->specifiedReviewers),
+        set::items($repoMembers),
+        set::multiple(true)
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->minReviewers),
+        set::name('minReviewers'),
+        set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
+        set::value(0)
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->solveIssues),
+        set::labelClass('font-black')
+    ),
+    formRow
+    (
+        set::width('2/3'),
+        formGroup
+        (
+            set::width('4/5'),
+            set::name('addressOption'),
+            set::label($lang->repo->addressOption),
+            set::control(array('type' => 'radioList', 'inline' => true)),
+            set::items($lang->repo->addressOptionList),
+            set::value('noNeedToSolve')
+        ),
+        formGroup
+        (
+            set::width('1/5'),
+            setID('issueType'),
+            set::name('issueType'),
+            set::items($lang->bug->typeList),
+            set::multiple(true),
+            set::value('codeerror')
+        )
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->newCommits),
+        set::name('newCommits'),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->repo->newCommitsAddressOptionList),
+        set::value('defaultApproval')
+    ),
+    formGroup
+    (
+        set::name(''),
+        set::control('static'),
+        set::label($lang->repo->mergeStrategy),
+        set::labelClass('font-black')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->mergeOptions),
+        set::name('mergeOptions'),
+        set::items($lang->repo->mergeOptionList),
+        set::multiple(true),
+        set::required(true),
+        set::value('merge,squash,rebase,fast')
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::name('autoArchive'),
+        set::label($lang->repo->autoArchive),
+        set::labelHintIcon('help'),
+        set::labelHint($lang->repo->autoArchiveNotice),
+        set::control(array('type' => 'radioList', 'inline' => true)),
+        set::items($lang->repo->autoArchiveStatusList),
+        set::value('disable')
+    )
+);

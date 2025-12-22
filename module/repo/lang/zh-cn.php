@@ -320,10 +320,28 @@ $lang->repo->editReviewFlow         = '编辑审批流';
 $lang->repo->changeReviewFlowStatus = '启用/停用审批流';
 $lang->repo->deleteReviewFlow       = '删除审批流';
 
-$lang->repo->flowName   = '流程名称';
-$lang->repo->branchType = '分支类型';
-$lang->repo->enable     = '启用';
-$lang->repo->disable    = '停用';
+$lang->repo->flowName              = '流程名称';
+$lang->repo->branchType            = '分支类型';
+$lang->repo->enable                = '启用';
+$lang->repo->disable               = '停用';
+$lang->repo->basicInfo             = '基本信息';
+$lang->repo->applicableBranchTypes = '适用分支类型';
+$lang->repo->allBranchTypes        = '全部分支类型';
+$lang->repo->aiReview              = 'AI评审';
+$lang->repo->aiAssistedReview      = 'AI辅助评审';
+$lang->repo->aiReviewScores        = '可通过AI评审的最低AI评审代码分数';
+$lang->repo->manualReview          = '人工评审';
+$lang->repo->defaultReviewers      = '默认评审人';
+$lang->repo->specifiedReviewers    = '评审人必须包含指定成员';
+$lang->repo->minReviewers          = '最低评审人数量';
+$lang->repo->solveIssues           = '问题处理';
+$lang->repo->addressOption         = '如何处理评审人发现的问题';
+$lang->repo->newCommits            = '待合并分支有新的提交请求时';
+$lang->repo->mergeStrategy         = '合并策略';
+$lang->repo->mergeOptions          = '可采用的合并分支策略';
+$lang->repo->autoArchive           = '合并后自动归档来源分支';
+$lang->repo->autoArchiveNotice     = '仅当开启分支归档功能后可用';
+$lang->repo->allBranchTypesNotice  = '已存在全部分支类型审批流程';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = '启用';
@@ -360,3 +378,26 @@ $lang->repo->branchRule->userOptionList['specify'] = '仅指定人员';
 $lang->repo->branchRule->branchTypeOptionList = array();
 $lang->repo->branchRule->branchTypeOptionList['all'] = '全部分支';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = '指定分支类型';
+
+$lang->repo->aiReviewList = array();
+$lang->repo->aiReviewList['enable']  = '开启';
+$lang->repo->aiReviewList['disable'] = '关闭';
+
+$lang->repo->addressOptionList = array();
+$lang->repo->addressOptionList['noNeedToSolve']        = '无需解决';
+$lang->repo->addressOptionList['allMustBeSolved']      = '必须全部解决';
+$lang->repo->addressOptionList['specificMustBeSolved'] = '指定类型的必须解决';
+
+$lang->repo->newCommitsAddressOptionList = array();
+$lang->repo->newCommitsAddressOptionList['defaultApproval'] = '默认通过';
+$lang->repo->newCommitsAddressOptionList['requireReReview'] = '需重新评审';
+
+$lang->repo->mergeOptionList = array();
+$lang->repo->mergeOptionList['merge']  = '普通合并';
+$lang->repo->mergeOptionList['squash'] = '压缩并合并';
+$lang->repo->mergeOptionList['rebase'] = '编辑并合并';
+$lang->repo->mergeOptionList['fast']   = '快速合并';
+
+$lang->repo->autoArchiveStatusList = array();
+$lang->repo->autoArchiveStatusList['enable']  = '开启';
+$lang->repo->autoArchiveStatusList['disable'] = '关闭';
