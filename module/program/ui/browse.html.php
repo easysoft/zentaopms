@@ -12,6 +12,8 @@ jsVar('langManDay',          $lang->program->manDay);
 jsVar('privPrograms',        explode(',', $app->user->view->programs));
 jsVar('isAdmin',             $app->user->admin);
 
+if($config->edition != 'open') $config->program->browse->dtable->fieldList['workflowGroup']['map'] = $this->loadModel('workflowGroup')->getPairs('project', 'all');
+
 $this->loadModel('project');
 $cols         = $this->loadModel('datatable')->getSetting('program');
 $data         = array();
@@ -21,7 +23,8 @@ foreach($programs as $program)
 {
     if($program->type == 'project') $showCheckbox = true;
 
-    if(empty($program->parent)) $program->parent = 0;
+    if(empty($program->parent))        $program->parent        = 0;
+    if(empty($program->workflowGroup)) $program->workflowGroup = '';
 
     /* Delay status. */
     if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')

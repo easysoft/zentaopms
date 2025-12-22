@@ -97,6 +97,7 @@ if($canBatchEdit)
     );
 }
 
+if($config->edition != 'open') $config->project->dtable->fieldList['workflowGroup']['map'] = $this->loadModel('workflowGroup')->getPairs('project', 'all');
 $settings = $this->loadModel('datatable')->getSetting('project');
 foreach($settings as $key => $value)
 {

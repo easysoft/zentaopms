@@ -302,6 +302,16 @@ $config->program->browse->dtable->fieldList['progress']['type']     = 'progress'
 $config->program->browse->dtable->fieldList['progress']['show']     = true;
 $config->program->browse->dtable->fieldList['progress']['group']    = 5;
 
+if($config->edition != 'open')
+{
+    $config->program->browse->dtable->fieldList['workflowGroup']['name']  = 'workflowGroup';
+    $config->program->browse->dtable->fieldList['workflowGroup']['title'] = $lang->project->workflowGroup;
+    $config->program->browse->dtable->fieldList['workflowGroup']['width'] = 120;
+    $config->program->browse->dtable->fieldList['workflowGroup']['type']  = 'user';
+    $config->program->browse->dtable->fieldList['workflowGroup']['show']  = false;
+    $config->program->browse->dtable->fieldList['workflowGroup']['group'] = 6;
+}
+
 $config->program->browse->dtable->fieldList['actions']['name']       = 'actions';
 $config->program->browse->dtable->fieldList['actions']['title']      = $lang->actions;
 $config->program->browse->dtable->fieldList['actions']['width']      = 160;

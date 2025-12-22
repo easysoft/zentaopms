@@ -148,6 +148,16 @@ $config->project->dtable->fieldList['progress']['type']  = 'progress';
 $config->project->dtable->fieldList['progress']['group'] = 7;
 $config->project->dtable->fieldList['progress']['show']  = true;
 
+if($config->edition != 'open')
+{
+    $config->project->dtable->fieldList['workflowGroup']['title'] = $lang->project->workflowGroup;
+    $config->project->dtable->fieldList['workflowGroup']['name']  = 'workflowGroup';
+    $config->project->dtable->fieldList['workflowGroup']['type']  = 'category';
+    $config->project->dtable->fieldList['workflowGroup']['width'] = '200';
+    $config->project->dtable->fieldList['workflowGroup']['group'] = 8;
+    $config->project->dtable->fieldList['workflowGroup']['show']  = false;
+}
+
 $config->project->dtable->fieldList['actions']['name']     = 'actions';
 $config->project->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->fieldList['actions']['type']     = 'actions';
