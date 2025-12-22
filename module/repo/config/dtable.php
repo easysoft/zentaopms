@@ -386,7 +386,7 @@ $config->repo->dtable->reviewFlow->fieldList['actions']['menu']  = array('enable
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
-$config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editReviewFlow', 'params' => "flowID={id}");
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editReviewFlow', 'params' => "repoID={repo}&flowID={id}");
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['icon']         = 'active';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['hint']         = $lang->repo->enable;
