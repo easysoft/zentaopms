@@ -112,7 +112,7 @@ class testcase extends control
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
-        list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
+        if($from != 'doc') list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
 
         $currentModule  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'project'  : 'testcase';
         $currentMethod  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'testcase' : 'browse';
