@@ -488,7 +488,6 @@ define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',    '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
-define('TABLE_BRANCH_TYPE',  '`' . $config->db->prefix . 'branch_type`');
 define('TABLE_KANBAN',       '`' . $config->db->prefix . 'kanban`');
 define('TABLE_KANBANSPACE',  '`' . $config->db->prefix . 'kanbanspace`');
 define('TABLE_KANBANREGION', '`' . $config->db->prefix . 'kanbanregion`');

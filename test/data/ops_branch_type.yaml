@@ -6,6 +6,9 @@ fields:
     range: 1-10
   - field: repo
     range: 1-10
+  - field: key
+    range: 1-10
+    prefix: 'branch_type'
   - field: name
     range: 1-10
     prefix: 'branch_type'
