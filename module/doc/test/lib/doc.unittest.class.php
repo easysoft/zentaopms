@@ -5597,4 +5597,9 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    public function forEachDocBlockTest(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0, int $index = 0): mixed
+    {
+        return docModel::forEachDocBlock($rawContent, $callback, $data, $flavours, $types, $props, $level, $index);
+    }
 }
