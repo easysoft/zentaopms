@@ -3262,6 +3262,27 @@ class repoModel extends model
         return $this->dao->lastInsertID();
     }
 
+    public function updateReviewFlow(object $flow, object $data): bool
+    {
+        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
+
+        $reviewFlow = new stdClass();
+        $reviewFlow->name       = $data->name;
+        $reviewFlow->branchType = $data->branchType;
+        $reviewFlow->desc       = $data->desc;
+        $reviewFlow->definition = json_encode(zget($data, 'definition', array()));
+        $reviewFlow->status     = 'enable';
+        $reviewFlow->editedBy   = $this->app->user->account;
+        $reviewFlow->editedDate = helper::now();
+
+        $this->dao->update(TABLE_REVIEWFLOW)->data($reviewFlow)
+            ->where('id')->eq($flow->id)
+            ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id}")
+            ->autoCheck()
+            ->exec();
+        return !dao::isError();
+    }
+
     /**
      * 根据ID获取评审流程。
      * Get review flow by id.
