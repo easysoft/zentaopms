@@ -322,8 +322,8 @@ $lang->repo->deleteReviewFlow       = 'Delete Review Flow';
 
 $lang->repo->flowName              = 'Flow Name';
 $lang->repo->branchType            = 'Branch Type';
-$lang->repo->enable                = 'Enable';
-$lang->repo->disable               = 'Disable';
+$lang->repo->enableFlow            = 'Enable';
+$lang->repo->disableFlow           = 'Disable';
 $lang->repo->basicInfo             = 'Basic Information';
 $lang->repo->applicableBranchTypes = 'Applicable Branch Types';
 $lang->repo->allBranchTypes        = 'All Branch Types';

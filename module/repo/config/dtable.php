@@ -389,13 +389,13 @@ $config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['hint'] 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editReviewFlow', 'params' => "repoID={repo}&flowID={id}");
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['icon']         = 'active';
-$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['hint']         = $lang->repo->enable;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['hint']         = $lang->repo->enableFlow;
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=enable");
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['className']    = 'ajax-submit';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['enable']['notLoadModel'] = true;
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['icon']         = 'cancel';
-$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['hint']         = $lang->repo->disable;
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['hint']         = $lang->repo->disableFlow;
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=disable");
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['className']    = 'ajax-submit';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['notLoadModel'] = true;

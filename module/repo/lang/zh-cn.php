@@ -322,8 +322,8 @@ $lang->repo->deleteReviewFlow       = '删除审批流';
 
 $lang->repo->flowName              = '流程名称';
 $lang->repo->branchType            = '分支类型';
-$lang->repo->enable                = '启用';
-$lang->repo->disable               = '停用';
+$lang->repo->enableFlow            = '启用';
+$lang->repo->disableFlow           = '停用';
 $lang->repo->basicInfo             = '基本信息';
 $lang->repo->applicableBranchTypes = '适用分支类型';
 $lang->repo->allBranchTypes        = '全部分支类型';
