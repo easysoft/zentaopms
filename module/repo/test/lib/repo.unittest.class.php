@@ -2152,6 +2152,7 @@ class repoTest
     }
 
     /**
+<<<<<<< HEAD
      * Test createBranchRule method.
      *
      * @param  object $rule
@@ -2219,5 +2220,24 @@ class repoTest
         }
 
         return '0';
+    }
+
+    /**
+     * Test createReviewFlow method.
+     *
+     * @param  int    $repoID
+     * @param  object $formData
+     * @access public
+     * @return object|array
+     */
+    public function createReviewFlowTest(int $repoID, object $formData): array|object
+    {
+        $formData->definition = '{"ai":{"enable":false,"approvals":{"score":0}},"reviewFlow":{"approvals":{"defaultReviewers":["test112801","xmjl01"],"specifiedReviewers":["xmjl01","test112801"],"minReviewers":2,"approvalID":0},"issues":{"addressOption":"specificMustBeSolved","mandatoryType":["codeerror","config"],"mergeOptions":"merge,squash,rebase,fast"},"newCommits":{"addressOption":"requireReReview"},"merge":{"options":["merge","squash","rebase","fast"],"autoArchive":true}}}';
+        $method = new ReflectionMethod($this->objectModel, 'createReviewFlow');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $repoID, $formData);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($result)->fetch();
     }
 }
