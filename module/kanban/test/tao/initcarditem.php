@@ -20,7 +20,7 @@ cid=16988
  - 属性color @#FFC20E
 - 执行kanbanTest模块的initCardItemTest方法，参数是4, 4, 4, array 
  - 属性parent @0
- - 属性progress @30
+ - 属性progress @30.00
  - 属性status @wait
 - 执行kanbanTest模块的initCardItemTest方法，参数是5, 5, 5, array 
  - 属性group @2
@@ -72,5 +72,5 @@ $kanbanTest = new kanbanTest();
 r($kanbanTest->initCardItemTest(1, 1, 1, array('admin' => 'avatar1.jpg', 'user1' => 'avatar2.jpg'), array('admin' => '管理员', 'user1' => '用户1'))) && p('title,id,assignedTo') && e('测试卡片1,1,admin');
 r($kanbanTest->initCardItemTest(2, 2, 2, array('user1' => 'avatar2.jpg'), array('user1' => '用户1'))) && p('assignedTo,realnames') && e('user1,用户1 ');
 r($kanbanTest->initCardItemTest(3, 3, 3, array('user2' => 'avatar3.jpg'), array('user2' => '用户2'))) && p('cardType,pri,color') && e('common,3,#FFC20E');
-r($kanbanTest->initCardItemTest(4, 4, 4, array(), array())) && p('parent,progress,status') && e('0,30,wait');
+r($kanbanTest->initCardItemTest(4, 4, 4, array(), array())) && p('parent,progress,status') && e('0,30.00,wait');
 r($kanbanTest->initCardItemTest(5, 5, 5, array('user1' => 'avatar2.jpg', 'user2' => 'avatar3.jpg'), array('user1' => '用户1', 'user2' => '用户2'))) && p('group,region,fromType') && e('2,1,task');
