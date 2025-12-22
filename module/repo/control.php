@@ -2114,12 +2114,24 @@ class repo extends control
      */
     public function setBranchRule(int $repoID = 0, string $branchRawName = '')
     {
-        $currentLang = $this->app->getClientLang();
-        $repo        = $this->repo->getByID($repoID);
-        $branchName  = helper::safe64Decode($branchRawName);
-        $branchTypes = array('dev'=>'dev', 'release'=>'release'); // 获取分支类型列表
-        $users       = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
-        $members     = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+        $currentLang  = $this->app->getClientLang();
+        $repo         = $this->repo->getByID($repoID);
+        $branchName   = helper::safe64Decode($branchRawName);
+        $users        = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
+        $members      = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+        $branchTypes  = array();
+        $typeFakeData = array(
+            1 => 'dev',
+            2 => 'feature',
+            3 => 'bugfix'
+        );
+        foreach($typeFakeData as $id => $name)
+        {
+            $type = new stdClass();
+            $type->name    = $name;
+            $type->id      = $id;
+            $branchTypes[] = $type;
+        }
 
         $originRule = $this->repo->getBranchRule(0, $repoID, $branchName);
         if(!$originRule)
@@ -2162,7 +2174,7 @@ class repo extends control
         $this->view->currentLang = $currentLang;
         $this->view->originRule  = $originRule;
         $this->view->users       = !empty($members) ? array_column($members, 'realname', 'account') : array();
-        $this->view->branchTypes = $branchTypes;
+        $this->view->branchTypes = !empty($branchTypes) ? array_column($branchTypes, 'name', 'id') : array();
         $this->display();
     }
     
