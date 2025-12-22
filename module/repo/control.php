@@ -2082,10 +2082,11 @@ class repo extends control
 
         $flowList = $this->repo->getReviewFlowList($repoID, $pager);
 
-        $this->view->repoID   = $repoID;
-        $this->view->title    = $this->lang->repo->browseReviewFlow;
-        $this->view->flowList = $flowList;
-        $this->view->pager    = $pager;
+        $this->view->repoID          = $repoID;
+        $this->view->title           = $this->lang->repo->browseReviewFlow;
+        $this->view->flowList        = $flowList;
+        $this->view->pager           = $pager;
+        $this->view->branchTypePairs = $this->repo->getBranchTypePairs($repoID);
         $this->display();
     }
 
