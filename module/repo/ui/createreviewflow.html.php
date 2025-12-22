@@ -9,6 +9,12 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+dropmenu
+(
+    set::module('repo'),
+    set::tab('repo'),
+    set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 unset($branchTypes[0]);
 formPanel
