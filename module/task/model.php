@@ -2312,7 +2312,7 @@ class taskModel extends model
 
             if($appendParent)
             {
-                $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
+                $parentTasks = $this->dao->select('id,assignedTo,openedBy,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
                 foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;
