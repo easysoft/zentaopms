@@ -15,8 +15,8 @@ fields:
     range: 1-10
     prefix: 'desc'
   - field: definition
-    range: '{"ai":{"enbale": true, "approvals": { "score": 5 } }, "reviewFlow": { "approvals": { "defaultReviewers": [ "admin" ], "specifiedReviewers": [ "admin" ], "minReviewers": 2, "approvalID": 111 }, "issues": { "addressOption": "", "mandatoryType": [ "security" ], }, "newCommits": { "addressOption": "" }, "merge": { "options": [ "merge", "squash" ], "autoArchive": true }}}'
+    range: '{"ai":{"enable": true, "approvals": { "score": 5 } }, "reviewFlow": { "approvals": { "defaultReviewers": [ "admin" ], "specifiedReviewers": [ "admin" ], "minReviewers": 2, "approvalID": 111 }, "issues": { "addressOption": "", "mandatoryType": [ "security" ], }, "newCommits": { "addressOption": "" }, "merge": { "options": [ "merge", "squash" ], "autoArchive": true }}}'
   - field: status
-    range: "enbale,disable"
+    range: "enable,disable"
   - field: deleted
     range: 0

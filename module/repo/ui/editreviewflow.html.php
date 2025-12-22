@@ -17,6 +17,8 @@ dropmenu
 );
 
 unset($branchTypes[0]);
+$definition = zget($reviewFlow, 'definition', array());
+jsVar('editBranchTypes', explode(',', $reviewFlow->branchType));
 formPanel
 (
     set::title($title),
@@ -36,7 +38,8 @@ formPanel
         set::width('2/3'),
         set::label($lang->repo->name),
         set::name('name'),
-        set::required(true)
+        set::required(true),
+        set::value($reviewFlow->name)
     ),
     formGroup
     (
@@ -54,7 +57,8 @@ formPanel
                     set::name('branchType'),
                     set::items($branchTypes),
                     set::multiple(true),
-                    set::required(true)
+                    set::required(true),
+                    set::value(zget($reviewFlow, 'branchType', ''))
                 )
             ),
             div
@@ -63,7 +67,8 @@ formPanel
                 checkbox
                 (
                     set::name('isAllBranchTypes'),
-                    set::text($lang->repo->allBranchTypes)
+                    set::text($lang->repo->allBranchTypes),
+                    set::checked(empty($reviewFlow->branchType))
                 )
             )
         )
@@ -74,6 +79,7 @@ formPanel
         set::label($lang->repo->desc),
         set::name('desc'),
         set::control(array('type' => 'textarea', 'rows' => 5)),
+        set::value($reviewFlow->desc)
     ),
     formGroup
     (
@@ -91,7 +97,7 @@ formPanel
         set::label($lang->repo->aiAssistedReview),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->repo->aiReviewList),
-        set::value('disable')
+        set::value(empty($definition->ai) || empty($definition->ai->enable) ? 'disable' : 'enable')
     ),
     formGroup
     (
@@ -101,7 +107,7 @@ formPanel
         set::name('aiReviewScores'),
         set::label($lang->repo->aiReviewScores),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 10)),
-        set::value(0)
+        set::value(empty($definition->ai) || empty($definition->ai->score) ? 0 : $definition->ai->score)
     ),
     formGroup
     (
@@ -117,7 +123,8 @@ formPanel
         set::label($lang->repo->defaultReviewers),
         set::items($repoMembers),
         set::control(array('onSelect' => jsRaw('addSpecifiedReviewers'), 'onDeselect' => jsRaw('removeSpecifiedReviewers'))),
-        set::multiple(true)
+        set::multiple(true),
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->approvals) ? '' : $definition->reviewFlow->approvals->defaultReviewers)
     ),
     formGroup
     (
@@ -125,7 +132,8 @@ formPanel
         set::name('specifiedReviewers'),
         set::label($lang->repo->specifiedReviewers),
         set::items($repoMembers),
-        set::multiple(true)
+        set::multiple(true),
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->approvals) ? '' : $definition->reviewFlow->approvals->specifiedReviewers)
     ),
     formGroup
     (
@@ -133,7 +141,7 @@ formPanel
         set::label($lang->repo->minReviewers),
         set::name('minReviewers'),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
-        set::value(0)
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->approvals) ? 0 : $definition->reviewFlow->approvals->minReviewers)
     ),
     formGroup
     (
@@ -152,7 +160,7 @@ formPanel
             set::label($lang->repo->addressOption),
             set::control(array('type' => 'radioList', 'inline' => true)),
             set::items($lang->repo->addressOptionList),
-            set::value('noNeedToSolve')
+            set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) ? 'noNeedToSolve' : $definition->reviewFlow->issues->addressOption)
         ),
         formGroup
         (
@@ -161,7 +169,7 @@ formPanel
             set::name('issueType'),
             set::items($lang->bug->typeList),
             set::multiple(true),
-            set::value('codeerror')
+            set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) || empty($definition->reviewFlow->issues->mandatoryType) ? 'codeerror' : $definition->reviewFlow->issues->mandatoryType)
         )
     ),
     formGroup
@@ -171,7 +179,7 @@ formPanel
         set::name('newCommits'),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->repo->newCommitsAddressOptionList),
-        set::value('defaultApproval')
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->newCommits) ? 'defaultApproval' : $definition->reviewFlow->newCommits->addressOption)
     ),
     formGroup
     (
@@ -188,7 +196,7 @@ formPanel
         set::items($lang->repo->mergeOptionList),
         set::multiple(true),
         set::required(true),
-        set::value('merge,squash,rebase,fast')
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->merge) ? 'merge,squash,rebase,fast' : $definition->reviewFlow->merge->options)
     ),
     formGroup
     (
@@ -199,6 +207,6 @@ formPanel
         set::labelHint($lang->repo->autoArchiveNotice),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->repo->autoArchiveStatusList),
-        set::value('disable')
+        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->merge) || empty($definition->reviewFlow->merge->autoArchive) ? 'disable' : 'enable')
     )
 );

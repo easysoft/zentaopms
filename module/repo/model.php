@@ -3261,4 +3261,54 @@ class repoModel extends model
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * 更新评审流程。
+     * Update review flow.
+     *
+     * @param  object $flow
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function updateReviewFlow(object $flow, object $data): bool
+    {
+        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
+
+        $reviewFlow = new stdClass();
+        $reviewFlow->name       = $data->name;
+        $reviewFlow->branchType = $data->branchType;
+        $reviewFlow->desc       = $data->desc;
+        $reviewFlow->definition = json_encode(zget($data, 'definition', array()));
+        $reviewFlow->status     = 'enable';
+        $reviewFlow->editedBy   = $this->app->user->account;
+        $reviewFlow->editedDate = helper::now();
+
+        $this->dao->update(TABLE_REVIEWFLOW)->data($reviewFlow)
+            ->where('id')->eq($flow->id)
+            ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id}")
+            ->autoCheck()
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 根据ID获取评审流程。
+     * Get review flow by id.
+     *
+     * @param  int $reviewFlowID
+     * @access public
+     * @return object|false
+     */
+    public function getReviewFlowByID(int $reviewFlowID): object|false
+    {
+        $reviewFlow = $this->dao->select('*')->from(TABLE_REVIEWFLOW)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->eq($reviewFlowID)
+            ->fetch();
+        if(empty($reviewFlow)) return false;
+
+        $reviewFlow->definition = json_decode($reviewFlow->definition);
+        return $reviewFlow;
+    }
 }

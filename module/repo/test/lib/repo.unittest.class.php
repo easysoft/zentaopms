@@ -2240,4 +2240,42 @@ class repoTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($result)->fetch();
     }
+
+    /**
+     * Test updateReviewFlow method.
+     *
+     * @param  int    $flowID
+     * @param  object $formData
+     * @access public
+     * @return object|array
+     */
+    public function updateReviewFlowTest(int $flowID, object $formData): array|object
+    {
+        $formData->definition = '{"ai":{"enable":false,"approvals":{"score":0}},"reviewFlow":{"approvals":{"defaultReviewers":["test112801","xmjl01"],"specifiedReviewers":["xmjl01","test112801"],"minReviewers":2,"approvalID":0},"issues":{"addressOption":"specificMustBeSolved","mandatoryType":["codeerror","config"],"mergeOptions":"merge,squash,rebase,fast"},"newCommits":{"addressOption":"requireReReview"},"merge":{"options":["merge","squash","rebase","fast"],"autoArchive":true}}}';
+        $flow   = $this->objectModel->getReviewFlowByID($flowID);
+        if(!$flow) return array();
+
+        $method = new ReflectionMethod($this->objectModel, 'updateReviewFlow');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $flow, $formData);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($result)->fetch();
+    }
+
+    /**
+     * Test getReviewFlowByID method.
+     *
+     * @param  int $flowID
+     * @access public
+     * @return object|array
+     */
+    public function getReviewFlowByID(int $flowID): array|object|false
+    {
+        $method = new ReflectionMethod($this->objectModel, 'getReviewFlowByID');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $flowID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

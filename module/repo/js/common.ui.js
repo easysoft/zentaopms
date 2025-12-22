@@ -414,6 +414,7 @@ window.disableBranchType = function()
     else
     {
         disableBranchTypeMenu(false);
+        if(typeof editBranchTypes != 'undefined') $('[name^=branchType]').zui('picker').$.setValue(editBranchTypes);
     }
 }
 window.waitDom('[name^=branchType]', disableBranchType);
@@ -464,7 +465,6 @@ window.disableBranchTypeMenu = function(isDisable)
     const $branchType = $('[name^=branchType]');
     if(typeof $branchType == 'undefined') return;
 
-    $branchType.zui('picker').$.clear();
     if(isDisable)
     {
         $('#branchTypesBox').attr('disabled', 'disabled');

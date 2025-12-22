@@ -10,6 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 $canCreate = hasPriv('repo', 'createReviewFlow');
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 featureBar();
 if($canCreate)
 {
