@@ -1377,4 +1377,19 @@ class actionTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getTaskRelated method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getTaskRelated(string $objectType, int $objectID): array
+    {
+        $result = $this->objectTao->getTaskRelated($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
