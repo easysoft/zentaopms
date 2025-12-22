@@ -4834,23 +4834,24 @@ class docModel extends model
      * ```
      *
      * @param  array        $rawContent    文档的区块内容
-     * @param  callable     $callback      回调函数，用于处理每个区块，参数包括区块内容、传递的数据、区块级别
+     * @param  callable     $callback      回调函数，用于处理每个区块，参数包括区块内容、传递的数据、区块级别、区块索引
      * @param  mixed        $data          用于在遍历过程中需要传递的数据，此参数可选，默认为 null
      * @param  string       $flavours      区块的 flavour，例如 affine:attachment，可以用英文逗号匹配多个 flavour，如果为空则匹配所有 flavour
      * @param  string       $types         区块的 type，包括页面（page）和块（block），默认仅匹配块（block），如果为空则匹配所有类型
      * @param  ?array       $props         区块的 props，例如 array('type' => 'h1')，可以指定多个属性值
      * @param  int          $level         区块的级别，用于递归遍历，如果要指定起始级别，则可以使用此参数指定，默认为 0
+     * @param  int          $index         区块的索引，用于递归遍历，如果要指定起始索引，则可以使用此参数指定，默认为 0
      * @access public
      * @return void
      */
-    public static function forEachDocBlock(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0): mixed
+    public static function forEachDocBlock(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0, int $index = 0): mixed
     {
         /* 如果内容是列表，则遍历列表。 */
         if(array_is_list($rawContent))
         {
-            foreach($rawContent as $index => $block)
+            foreach($rawContent as $idx => $block)
             {
-                $data = static::forEachDocBlock($block, $callback, $data, $flavours, $types, $props, $level);
+                $data = static::forEachDocBlock($block, $callback, $data, $flavours, $types, $props, $level, $idx);
             }
             return $data;
         }
@@ -4893,7 +4894,7 @@ class docModel extends model
         /* 如果内容匹配，则调用回调函数。 */
         if($blockMatched)
         {
-            $data = $callback($rawContent, $data, 0, $level);
+            $data = $callback($rawContent, $data, 0, $level, $index);
         }
 
         /* 如果内容是页面，则遍历页面内容。 */
