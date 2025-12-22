@@ -1,0 +1,38 @@
+#setBranchRuleForm .form-label {
+    justify-content: flex-start;
+    width: 280px;
+}
+
+#setBranchRuleForm .form-group {
+    padding-left: 280px;
+}
+
+#setBranchRuleForm .form-group.form-actions {
+    padding-left: 0;
+}
+
+#setBranchRuleForm .form-group.group-en-option {
+    padding-left: 380px;
+}
+
+#setBranchRuleForm .form-group.group-en-option .form-label {
+    width: 380px;
+}
+
+#setBranchRuleForm .branchRuleRadio {
+    width: 300px;
+    padding-right: 35px;
+}
+
+#setBranchRuleForm .branchRuleRadio.group-en-option {
+    width: 350px;
+    padding-right: 35px;
+}
+
+#setBranchRuleForm .branchRuleRadio.pl-52px .radio-primary:last-child {
+    padding-left: 52px;
+}
+
+#setBranchRuleForm .branchRulePicker {
+    width: 160px;
+}
