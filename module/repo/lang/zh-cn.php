@@ -322,8 +322,8 @@ $lang->repo->deleteReviewFlow       = '删除审批流';
 
 $lang->repo->flowName              = '流程名称';
 $lang->repo->branchType            = '分支类型';
-$lang->repo->enable                = '启用';
-$lang->repo->disable               = '停用';
+$lang->repo->enableFlow            = '启用';
+$lang->repo->disableFlow           = '停用';
 $lang->repo->basicInfo             = '基本信息';
 $lang->repo->applicableBranchTypes = '适用分支类型';
 $lang->repo->allBranchTypes        = '全部分支类型';
@@ -342,6 +342,8 @@ $lang->repo->mergeOptions          = '可采用的合并分支策略';
 $lang->repo->autoArchive           = '合并后自动归档来源分支';
 $lang->repo->autoArchiveNotice     = '仅当开启分支归档功能后可用';
 $lang->repo->allBranchTypesNotice  = '已存在全部分支类型审批流程';
+$lang->repo->enableSuccess         = '评审规则已启用';
+$lang->repo->disableSuccess        = '评审规则已停用';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = '启用';

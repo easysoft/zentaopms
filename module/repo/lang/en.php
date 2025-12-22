@@ -322,8 +322,8 @@ $lang->repo->deleteReviewFlow       = 'Delete Review Flow';
 
 $lang->repo->flowName              = 'Flow Name';
 $lang->repo->branchType            = 'Branch Type';
-$lang->repo->enable                = 'Enable';
-$lang->repo->disable               = 'Disable';
+$lang->repo->enableFlow            = 'Enable';
+$lang->repo->disableFlow           = 'Disable';
 $lang->repo->basicInfo             = 'Basic Information';
 $lang->repo->applicableBranchTypes = 'Applicable Branch Types';
 $lang->repo->allBranchTypes        = 'All Branch Types';
@@ -342,6 +342,8 @@ $lang->repo->mergeOptions          = 'Merge Options';
 $lang->repo->autoArchive           = 'Auto Archive';
 $lang->repo->autoArchiveNotice     = 'Only when the branch archive is enabled, it can be merged into the source branch';
 $lang->repo->allBranchTypesNotice  = 'All Branch Type review flow is exists';
+$lang->repo->enableSuccess         = 'The review flow enable Success';
+$lang->repo->disableSuccess        = 'The review flow disable Success';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = 'Enable';

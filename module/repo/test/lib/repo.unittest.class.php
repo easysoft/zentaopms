@@ -2278,4 +2278,20 @@ class repoTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test updateReviewFlowStatus method.
+     *
+     * @param  int    $flowID
+     * @param  string $status
+     * @access public
+     * @return object|false
+     */
+    public function updateReviewFlowStatusTest($flowID, $status): object|false
+    {
+        $result = $this->objectModel->updateReviewFlowStatus($flowID, $status);
+        if(!$result) return false;
+
+        return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($flowID)->fetch();
+    }
 }

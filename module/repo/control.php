@@ -2082,10 +2082,11 @@ class repo extends control
 
         $flowList = $this->repo->getReviewFlowList($repoID, $pager);
 
-        $this->view->repoID   = $repoID;
-        $this->view->title    = $this->lang->repo->browseReviewFlow;
-        $this->view->flowList = $flowList;
-        $this->view->pager    = $pager;
+        $this->view->repoID          = $repoID;
+        $this->view->title           = $this->lang->repo->browseReviewFlow;
+        $this->view->flowList        = $flowList;
+        $this->view->pager           = $pager;
+        $this->view->branchTypePairs = $this->repo->getBranchTypePairs($repoID);
         $this->display();
     }
 
@@ -2256,5 +2257,22 @@ class repo extends control
         $this->view->branchTypes = $branchTypes;
         $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
+    }
+
+    /**
+     * 修改审批流程状态。
+     * Change review flow status.
+     *
+     * @param  int    $flowID
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function changeFlowStatus(int $flowID, string $status)
+    {
+        $this->repo->updateReviewFlowStatus($flowID, $status);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('message' => $this->lang->repo->{$status . 'Success'}, 'load' => true));
     }
 }
