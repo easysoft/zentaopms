@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 actionModel::getHistory();
@@ -47,8 +46,8 @@ su('admin');
 
 $actionTest = new actionTest();
 
-r($actionTest->getHistoryTest(1)) && p("0:field,old,new") && e('resolution,1,2');                     // 测试步骤1：使用整数actionID查询存在的历史记录
-r($actionTest->getHistoryTest('2')) && p("0:field,old,new") && e('resolvedBuild,2,3');                  // 测试步骤2：使用字符串actionID查询存在的历史记录
-r($actionTest->getHistoryTest(3)) && p("") && e('0');                                               // 测试步骤3：查询没有历史记录的actionID
-r($actionTest->getHistoryTest(10000)) && p("") && e('0');                                             // 测试步骤4：查询不存在的actionID
-r($actionTest->getHistoryTest(0)) && p("") && e('0');                                                 // 测试步骤5：使用无效的actionID
+r($actionTest->getHistoryTest(1)[1])   && p("0:field,old,new") && e('resolution,1,2');    // 测试步骤1：使用整数actionID查询存在的历史记录
+r($actionTest->getHistoryTest('2')[2]) && p("0:field,old,new") && e('resolvedBuild,2,3'); // 测试步骤2：使用字符串actionID查询存在的历史记录
+r($actionTest->getHistoryTest(3))      && p()                  && e('0');                 // 测试步骤3：查询没有历史记录的actionID
+r($actionTest->getHistoryTest(10000))  && p()                  && e('0');                 // 测试步骤4：查询不存在的actionID
+r($actionTest->getHistoryTest(0))      && p()                  && e('0');                 // 测试步骤5：使用无效的actionID
