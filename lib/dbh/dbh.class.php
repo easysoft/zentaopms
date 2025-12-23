@@ -127,8 +127,7 @@ class dbh
         global $config;
         $this->config = $config;
 
-        $driverAlias = array('oceanbase' => 'mysql', 'highgo' => 'pgsql', 'postgres' => 'pgsql');
-        $driver      = isset($driverAlias[$dbConfig->driver]) ? $driverAlias[$dbConfig->driver] : $dbConfig->driver;
+        $driver = in_array($dbConfig->driver, $config->mysqlDriverList) ? 'mysql' : (in_array($dbConfig->driver, $config->pgsqlDriverList) ? 'pgsql' : $dbConfig->driver);
 
         $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
         $this->dbConfig = $dbConfig;
@@ -173,7 +172,7 @@ class dbh
         {
             $dsn .= ";dbname={$dbConfig->name}";
         }
-        elseif($driver == 'pgsql') // pgsql(postgres,highgo) need database to connect
+        elseif($driver == 'pgsql') // pgsql need database to connect
         {
             $dsn .= ";dbname={$dbConfig->driver}"; // default database
         }
@@ -380,23 +379,25 @@ class dbh
      */
     public function dbExists()
     {
-        switch($this->dbConfig->driver)
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'oceanbase':
-            case 'mysql':
-                $sql = "SHOW DATABASES like '{$this->dbConfig->name}'";
-                break;
-            case 'dm':
-                $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->dbConfig->name}'";
-                break;
-            case 'postgres':
-            case 'highgo':
-                $sql = "SELECT * FROM pg_database WHERE datname ='{$this->dbConfig->name}'";
-                break;
-            default:
-                $sql = '';
+            $sql = "SELECT * FROM ALL_OBJECTS WHERE object_type='SCH' AND owner='{$this->dbConfig->name}'";
+            return $this->rawQuery($sql)->fetch();
         }
-        return $this->rawQuery($sql)->fetch();
+
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList))
+        {
+            $sql = "SHOW DATABASES like '{$this->dbConfig->name}'";
+            return $this->rawQuery($sql)->fetch();
+        }
+
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+        {
+            $sql = "SELECT * FROM pg_database WHERE datname ='{$this->dbConfig->name}'";
+            return $this->rawQuery($sql)->fetch();
+        }
+
+        return false;
     }
 
     /**
@@ -415,15 +416,21 @@ class dbh
             $sql = "SELECT * FROM all_tables WHERE owner='{$this->dbConfig->name}' AND table_name='{$tableName}'";
             return $this->rawQuery($sql)->fetch();
         }
-        elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList))
+        {
+            $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
+            return $this->rawQuery($sql)->fetch();
+        }
+
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $this->useDB($this->dbConfig->name);
             $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_name='{$tableName}'";
             return $this->rawQuery($sql)->fetch();
         }
 
-        $sql = "SHOW TABLES FROM {$this->dbConfig->name} like '{$tableName}'";
-        return $this->rawQuery($sql)->fetch();
+        return false;
     }
 
     /**
@@ -474,23 +481,26 @@ class dbh
      */
     public function createDB($version)
     {
-        switch($this->dbConfig->driver)
+        if($this->dbConfig->driver == 'dm')
         {
-            case 'mysql':
-                $result = $this->getServerCharsetAndCollation();
-                $sql    = "CREATE DATABASE `{$this->dbConfig->name}` DEFAULT CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
-                return $this->rawQuery($sql);
-            case 'dm':
-                $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
-                return $this->rawQuery($createSchema);
-            case 'oceanbase':
-            case 'postgres':
-            case 'highgo':
-                $sql = "CREATE DATABASE `{$this->dbConfig->name}`";
-                return $this->rawQuery($sql);
-            default:
-                return false;
+            $createSchema = "CREATE SCHEMA {$this->dbConfig->name} AUTHORIZATION {$this->dbConfig->user}";
+            return $this->rawQuery($createSchema);
         }
+
+        if($this->dbConfig->driver == 'mysql')
+        {
+            $result = $this->getServerCharsetAndCollation();
+            $sql    = "CREATE DATABASE `{$this->dbConfig->name}` DEFAULT CHARACTER SET {$result['charset']} COLLATE {$result['collation']}";
+            return $this->rawQuery($sql);
+        }
+
+        if($this->dbConfig->driver == 'oceanbase' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+        {
+            $sql = "CREATE DATABASE {$this->dbConfig->name}";
+            return $this->rawQuery($sql);
+        }
+
+        return false;
     }
 
     /**
@@ -502,20 +512,17 @@ class dbh
      */
     public function useDB($dbName)
     {
-        switch($this->dbConfig->driver)
+        if($this->dbConfig->driver == 'dm') return $this->exec("SET SCHEMA {$dbName}");
+
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList)) return $this->exec("USE {$dbName}");
+
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            case 'oceanbase':
-            case 'mysql':
-                return $this->exec("USE {$this->dbConfig->name}");
-            case 'dm':
-                return $this->exec("SET SCHEMA {$this->dbConfig->name}");
-            case 'postgres':
-            case 'highgo':
-                $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
-                return $this->exec("SET SCHEMA 'public'");
-            default:
-                return false;
+            $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
+            return $this->exec("SET SCHEMA 'public'");
         }
+
+        return false;
     }
 
     /**
@@ -529,18 +536,11 @@ class dbh
     {
         $this->sql = $sql;
 
-        switch($this->dbConfig->driver)
-        {
-            case 'dm':
-                return $this->formatDmSQL($sql);
+        if($this->dbConfig->driver == 'dm') return $this->formatDmSQL($sql);
 
-            case 'postgres':
-            case 'highgo':
-                return $this->formatPgSQL($sql);
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList)) return $this->formatPgSQL($sql);
 
-            default:
-                return $sql;
-        }
+        return $sql;
     }
 
     /**
@@ -809,17 +809,12 @@ class dbh
      */
     public function formatField($sql)
     {
-        switch($this->dbConfig->driver)
+        if($this->dbConfig->driver == 'dm' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            case 'dm':
-            case 'postgres':
-            case 'highgo':
-                $sql = str_replace('`', '"', $sql);
-                return $sql;
-
-            default:
-                return $sql;
+            $sql = str_replace('`', '"', $sql);
         }
+
+        return $sql;
     }
 
     /**
@@ -831,17 +826,10 @@ class dbh
      */
     public function formatFunction($sql)
     {
-        switch($this->dbConfig->driver)
-        {
-            case 'dm':
-                /* DATE convert to TO_CHAR. */
-                $sql = preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
+        /* DATE convert to TO_CHAR. */
+        if($this->dbConfig->driver == 'dm') return preg_replace("/\bDATE\(([^)]*)\)/",  "TO_CHAR($1, 'yyyy-mm-dd')", $sql, -1);
 
-                return $sql;
-
-            default:
-                return $sql;
-        }
+        return $sql;
     }
 
     /**
@@ -883,7 +871,7 @@ class dbh
      */
     public function formatAttr($sql)
     {
-        if(in_array($this->dbConfig->driver, array('dm', 'postgres', 'highgo')))
+        if($this->dbConfig->driver == 'dm' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $pos = stripos($sql, ' ENGINE');
             if($pos > 0) $sql = substr($sql, 0, $pos);
@@ -906,14 +894,14 @@ class dbh
                 "0000-00-00"                => '1970-01-01',
             );
 
-            if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
+            if($this->dbConfig->driver == 'dm')
             {
-                $sql = preg_replace('/(\s*`[^`]+`)\s+\K.+AUTO_INCREMENT(,)/i', ' serial,', $sql);
-                $sql = str_ireplace(' DATETIME', ' TIMESTAMP', $sql);
+                $sql = str_ireplace(' AUTO_INCREMENT', ' IDENTITY(1, 1)', $sql);
             }
             else
             {
-                $sql = str_ireplace(' AUTO_INCREMENT', ' IDENTITY(1, 1)', $sql);
+                $sql = preg_replace('/(\s*`[^`]+`)\s+\K.+AUTO_INCREMENT(,)/i', ' serial,', $sql);
+                $sql = str_ireplace(' DATETIME', ' TIMESTAMP', $sql);
             }
 
             $sql = preg_replace('/ enum[\_0-9a-z\,\'\"\( ]+\)+/i', ' varchar(255) ', $sql);
@@ -1217,18 +1205,13 @@ class dbh
      */
     public function getVersion(): string
     {
-        switch($this->dbConfig->driver)
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList))
         {
-            case 'oceanbase':
-            case 'mysql':
-                $sql = "SELECT version() AS version";
-                break;
-            case 'dm':
-            default:
-                $sql = '';
+            $sql = "SELECT VERSION() AS version";
+            return $this->rawQuery($sql)->fetch()->version;
         }
 
-        if(empty($sql)) return '';
+        return '';
         return $this->rawQuery($sql)->fetch()->version;
     }
 }
