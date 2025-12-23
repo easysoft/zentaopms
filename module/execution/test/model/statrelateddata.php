@@ -18,7 +18,7 @@ cid=16368
 - 执行executionTest模块的statRelatedDataTest方法，参数是5
  - 属性storyCount @0
  - 属性taskCount @0
- - 属性bugCount @1
+ - 属性bugCount @0
 - 执行executionTest模块的statRelatedDataTest方法，参数是999
  - 属性storyCount @0
  - 属性taskCount @0
@@ -83,8 +83,8 @@ su('admin');
 
 $executionTest = new executionTest();
 
-r($executionTest->statRelatedDataTest(3)) && p('storyCount,taskCount,bugCount') && e('3,3,4');
-r($executionTest->statRelatedDataTest(4)) && p('storyCount,taskCount,bugCount') && e('1,3,1');
-r($executionTest->statRelatedDataTest(5)) && p('storyCount,taskCount,bugCount') && e('0,0,1');
+r($executionTest->statRelatedDataTest(3))   && p('storyCount,taskCount,bugCount') && e('3,3,4');
+r($executionTest->statRelatedDataTest(4))   && p('storyCount,taskCount,bugCount') && e('1,3,1');
+r($executionTest->statRelatedDataTest(5))   && p('storyCount,taskCount,bugCount') && e('0,0,0');
 r($executionTest->statRelatedDataTest(999)) && p('storyCount,taskCount,bugCount') && e('0,0,0');
-r($executionTest->statRelatedDataTest(0)) && p('storyCount,taskCount,bugCount') && e('0,0,0');
+r($executionTest->statRelatedDataTest(0))   && p('storyCount,taskCount,bugCount') && e('0,0,0');
