@@ -57,7 +57,6 @@ foreach($programs as $program)
     $program->budget    = !empty($program->budget) ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;
     $parents[$program->parent][] = $program->id;
 
-    $program->progress = round($program->progress);
     $program->isParent = false;
     if($program->parent > 0 and isset($programs[$program->parent])) $programs[$program->parent]->isParent = true;
     if($program->parent > 0 and !isset($programs[$program->parent]))
