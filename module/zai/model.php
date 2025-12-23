@@ -1387,9 +1387,9 @@ class zaiModel extends model
             'productBranch' => $story->branch,
             'productPlan'   => $planValue,
             'status'        => $story->status,
-            'stage'         => $story->stage,
-            'lib'           => $story->lib
+            'stage'         => $story->stage
         );
+        if(isset($story->lib)) $markdown['attrs']['lib'] = $story->lib;
 
         return $markdown;
     }
