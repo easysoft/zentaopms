@@ -10,7 +10,7 @@ cid=16935
 - 管理员可以看到所有5个看板 @5
 - user3只能看到2个有权限的看板 @2
 - 返回数组格式 @array
-- 验证看板2的名称正确属性2 @通用看板2
+- 验证看板2的名称正确属性2 @看板2
 - user1看板访问权限受限 @0
 
 */
@@ -19,7 +19,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 
 // 数据准备
-zenData('kanban')->gen(5);
+zenData('user')->gen(5);
+zenData('kanbanspace')->loadYaml('kanbanspace')->gen(5);
+zenData('kanban')->loadYaml('kanban')->gen(5);
 
 // 创建测试实例
 $kanbanTest = new kanbanTest();
@@ -38,7 +40,7 @@ r(gettype($kanbanTest->getPairsTest())) && p('') && e('array'); // 返回数组�
 
 // 测试步骤4：验证看板名称获取正确性
 su('user3');
-r($kanbanTest->getPairsTest()) && p('2') && e('通用看板2'); // 验证看板2的名称正确
+r($kanbanTest->getPairsTest()) && p('2') && e('看板2'); // 验证看板2的名称正确
 
 // 测试步骤5：测试权限受限用户的看板访问
 su('user1');
