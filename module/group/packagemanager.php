@@ -2275,7 +2275,7 @@ $config->group->package->manageBaseline->privs['cm-submit']       = array('editi
 $config->group->package->manageBaseline->privs['cm-recall']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('cm-browse'), 'recommend' => array('cm-create', 'cm-edit', 'cm-submit'));
 $config->group->package->manageBaseline->privs['cm-diff']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('cm-browse'), 'recommend' => array());
 $config->group->package->manageBaseline->privs['cm-report']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('cm-browse'), 'recommend' => array('cm-exportReport'));
-$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse'), 'recommend' => array('cm-report'));
+$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse', 'cm-report'), 'recommend' => array());
 
 $config->group->package->deleteBaseline = new stdclass();
 $config->group->package->deleteBaseline->order  = 15;
