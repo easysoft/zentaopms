@@ -2342,4 +2342,20 @@ class repoTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($flowID)->fetch();
     }
+
+    /**
+     * Parse prefix to array test.
+     *
+     * @param  string $prefix
+     * @access public
+     * @return string
+     */
+    public function parsePrefixToArrayTest(string $prefix): string
+    {
+        $result = $this->objectModel->parsePrefixToArray($prefix);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? '0' : implode(',', $result);
+    }
 }
