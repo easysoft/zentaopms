@@ -35,6 +35,7 @@ if($canCreate)
         ))
     );
 }
+jsVar('deleteConfirm', $lang->repo->notice->deleteReviewFlow);
 
 $data = initTableData($flowList, $config->repo->dtable->reviewFlow->fieldList);
 dtable

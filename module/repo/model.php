@@ -3259,7 +3259,7 @@ class repoModel extends model
         $reviewFlow->createdDate = helper::now();
 
         $this->dao->insert(TABLE_REVIEWFLOW)->data($reviewFlow)
-            ->check('name', 'unique', "`repo` = $repoID")
+            ->check('name', 'unique', "`repo` = $repoID and `deleted` = 0")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -3291,7 +3291,7 @@ class repoModel extends model
 
         $this->dao->update(TABLE_REVIEWFLOW)->data($reviewFlow)
             ->where('id')->eq($flow->id)
-            ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id}")
+            ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id} and `deleted` = 0")
             ->autoCheck()
             ->exec();
         return !dao::isError();
