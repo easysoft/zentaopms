@@ -2280,6 +2280,54 @@ class repoTest
     }
 
     /**
+     * Test getBranchTypeList method.
+     *
+     * @param  int    $repoID
+     * @param  string $name
+     * @param  string $key
+     * @param  string $prefix
+     * @access public
+     * @return mixed
+     */
+    public function getBranchTypeListTest(int $repoID = 0, string $name = '', string $key = '', string $prefix = '')
+    {
+        $result = $this->objectModel->getBranchTypeList($repoID, $name, $key, $prefix);
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
+     * Test getBranchTypeByID method.
+     *
+     * @param  int $typeID
+     * @access public
+     * @return mixed
+     */
+    public function getBranchTypeByIDTest(int $typeID)
+    {
+        $result = $this->objectModel->getBranchTypeByID($typeID);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? $result : 0;
+    }
+
+    /**
+     * Test getBranchTypeByRepoID method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getBranchTypeByRepoIDTest(int $repoID)
+    {
+        $result = $this->objectModel->getBranchTypeByRepoID($repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? $result : array();
+    }
+
+    /**
      * Test updateReviewFlowStatus method.
      *
      * @param  int    $flowID

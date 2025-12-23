@@ -3318,6 +3318,109 @@ class repoModel extends model
     }
 
     /**
+     * 获取分支类型列表(支持分页和搜索)。
+     * Get branch type list with pagination and search.
+     *
+     * @param  int    $repoID
+     * @param  string $name      按名称搜索
+     * @param  string $key       按键值搜索
+     * @param  string $prefix    按前缀搜索(会搜索JSON数组中是否包含该前缀)
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBranchTypeList(int $repoID = 0, string $name = '', string $key = '', string $prefix = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    {
+        $branchTypes = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
+            ->where('deleted')->eq(0)
+            ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->beginIF($name)->andWhere('name')->like("%{$name}%")->fi()
+            ->beginIF($key)->andWhere('`key`')->like("%{$key}%")->fi()
+            ->beginIF($prefix)->andWhere('prefix')->like("%{$prefix}%")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id', false);
+            
+        // 解析 prefix 字段(逗号分隔字符串转数组)
+        foreach($branchTypes as $branchType)
+        {
+            if(!empty($branchType->prefix))
+            {
+                $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
+            }
+            else
+            {
+                $branchType->prefixes = array();
+            }
+        }
+
+        return $branchTypes;
+    }
+
+    /**
+     * 根据ID获取分支类型详情。
+     * Get branch type by ID.
+     *
+     * @param  int $typeID
+     * @access public
+     * @return object|null
+     */
+    public function getBranchTypeByID(int $typeID): ?object
+    {
+        $branchType = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
+            ->where('id')->eq($typeID)
+            ->fetch();
+
+        if(!$branchType) return null;
+
+        // 解析 prefix 字段(逗号分隔字符串转数组)
+        if(!empty($branchType->prefix))
+        {
+            $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
+        }
+        else
+        {
+            $branchType->prefixes = array();
+        }
+
+        return $branchType;
+    }
+
+    /**
+     * 根据repoID和key获取分支类型。
+     * Get branch type by repoID and key.
+     *
+     * @param  int    $repoID
+     * @param  string $key
+     * @access public
+     * @return object|null
+     */
+    public function getBranchTypeByRepoID(int $repoID): array
+    {
+        $branchTypes = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
+            ->where('repo')->eq($repoID)
+            ->fetchAll('id',false);
+
+        if(!$branchTypes) return array();
+
+        // 解析 prefix 字段(逗号分隔字符串转数组)
+        foreach($branchTypes as $branchType)
+        {
+            if(!empty($branchType->prefix))
+            {
+                $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
+            }
+            else
+            {
+                $branchType->prefixes = array();
+            }
+        }
+
+        return $branchTypes;
+    }
+
+    /**
      * 更新评审流程状态。
      * Update review flow status.
      *
