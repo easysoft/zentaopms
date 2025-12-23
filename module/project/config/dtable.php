@@ -150,12 +150,13 @@ $config->project->dtable->fieldList['progress']['show']  = true;
 
 if($config->edition != 'open')
 {
-    $config->project->dtable->fieldList['workflowGroup']['title'] = $lang->project->workflowGroup;
-    $config->project->dtable->fieldList['workflowGroup']['name']  = 'workflowGroup';
-    $config->project->dtable->fieldList['workflowGroup']['type']  = 'category';
-    $config->project->dtable->fieldList['workflowGroup']['width'] = '200';
-    $config->project->dtable->fieldList['workflowGroup']['group'] = 8;
-    $config->project->dtable->fieldList['workflowGroup']['show']  = false;
+    $config->project->dtable->fieldList['workflowGroup']['title']    = $lang->project->workflowGroup;
+    $config->project->dtable->fieldList['workflowGroup']['name']     = 'workflowGroup';
+    $config->project->dtable->fieldList['workflowGroup']['type']     = 'category';
+    $config->project->dtable->fieldList['workflowGroup']['width']    = '200';
+    $config->project->dtable->fieldList['workflowGroup']['group']    = 8;
+    $config->project->dtable->fieldList['workflowGroup']['show']     = false;
+    $config->project->dtable->fieldList['workflowGroup']['sortType'] = true;
 }
 
 $config->project->dtable->fieldList['actions']['name']     = 'actions';

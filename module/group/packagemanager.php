@@ -2225,24 +2225,18 @@ $config->group->package->manageReview = new stdclass();
 $config->group->package->manageReview->order  = 10;
 $config->group->package->manageReview->subset = 'projectreview';
 $config->group->package->manageReview->privs  = array();
-$config->group->package->manageReview->privs['review-submitDeliverable']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-submitIpd']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-create']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall'));
+$config->group->package->manageReview->privs['review-submitDeliverable']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-submitIpd']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-create']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
 $config->group->package->manageReview->privs['review-submit']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 27, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-edit']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-recall'));
-$config->group->package->manageReview->privs['review-recall']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-edit'));
+$config->group->package->manageReview->privs['review-edit']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-recall']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-edit', 'review-submit'));
 $config->group->package->manageReview->privs['review-assess']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('review-browse'), 'recommend' => array('review-report'));
 $config->group->package->manageReview->privs['review-report']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('review-browse'), 'recommend' => array('review-exportReport'));
-$config->group->package->manageReview->privs['review-exportReport']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-delete', 'review-edit', 'review-recall'));
+$config->group->package->manageReview->privs['review-exportReport']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('review-browse', 'review-report'), 'recommend' => array());
 
 if(helper::hasFeature('project_cm'))     $config->group->package->manageReview->privs['review-submitBaseline']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
 if(helper::hasFeature('project_change')) $config->group->package->manageReview->privs['review-submitProjectchange'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-
-$config->group->package->deleteReview = new stdclass();
-$config->group->package->deleteReview->order  = 15;
-$config->group->package->deleteReview->subset = 'projectreview';
-$config->group->package->deleteReview->privs  = array();
-$config->group->package->deleteReview->privs['review-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('review-browse'), 'recommend' => array());
 
 $config->group->package->manageReviewIssue = new stdclass();
 $config->group->package->manageReviewIssue->order  = 20;
@@ -2250,12 +2244,12 @@ $config->group->package->manageReviewIssue->subset = 'projectreview';
 $config->group->package->manageReviewIssue->privs  = array();
 $config->group->package->manageReviewIssue->privs['reviewissue-issue']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('reviewissue-view'));
 $config->group->package->manageReviewIssue->privs['reviewissue-view']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('reviewissue-issue'), 'recommend' => array());
-$config->group->package->manageReviewIssue->privs['reviewissue-create']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-edit', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-create']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-edit', 'reviewissue-assignTo', 'reviewissue-close'));
 $config->group->package->manageReviewIssue->privs['reviewissue-edit']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-create'));
 $config->group->package->manageReviewIssue->privs['reviewissue-assignTo'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-resolved'));
-$config->group->package->manageReviewIssue->privs['reviewissue-active']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-close', 'reviewissue-resolved', 'review-assignTo'));
-$config->group->package->manageReviewIssue->privs['reviewissue-resolved'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-close', 'review-activate', 'review-assignTo'));
-$config->group->package->manageReviewIssue->privs['reviewissue-close']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-activate', 'reviewissue-resolved', 'review-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-active']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-resolved', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-resolved'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-activate', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-close']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-activate', 'reviewissue-resolved', 'reviewissue-assignTo'));
 $config->group->package->manageReviewIssue->privs['reviewissue-delete']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('reviewissue-issue'), 'recommend' => array());
 
 $config->group->package->browseBaseline = new stdclass();
@@ -2275,7 +2269,7 @@ $config->group->package->manageBaseline->privs['cm-submit']       = array('editi
 $config->group->package->manageBaseline->privs['cm-recall']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('cm-browse'), 'recommend' => array('cm-create', 'cm-edit', 'cm-submit'));
 $config->group->package->manageBaseline->privs['cm-diff']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('cm-browse'), 'recommend' => array());
 $config->group->package->manageBaseline->privs['cm-report']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('cm-browse'), 'recommend' => array('cm-exportReport'));
-$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse'), 'recommend' => array('cm-report'));
+$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse', 'cm-report'), 'recommend' => array());
 
 $config->group->package->deleteBaseline = new stdclass();
 $config->group->package->deleteBaseline->order  = 15;
