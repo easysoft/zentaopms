@@ -1323,7 +1323,33 @@ class zaiModel extends model
         $spec = $app->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
         if(empty($spec)) $spec = (object)array('title' => $story->title, 'spec' => '', 'verify' => '', 'files' => '', 'docs' => '', 'docVersions' => '');
 
-        $markdown = array('id' => $story->id, 'title' => "$lang->SRCommon #$story->id $spec->title");
+        $planValue = $story->plan;
+        if(!empty($planValue))
+        {
+            $planIDs   = explode(',', trim($planValue));
+            $planNames = array();
+            foreach($planIDs as $planID)
+            {
+                $planID = trim($planID);
+                if(empty($planID) || !is_numeric($planID)) continue;
+
+                $plan = $app->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
+                if($plan && !empty($plan->title))
+                {
+                    $planNames[] = $plan->title;
+                }
+                else
+                {
+                    $planNames[] = $planID;
+                }
+            }
+
+            if(!empty($planNames))
+            {
+                $planValue = implode(', ', $planNames);
+            }
+        }
+
         $content  = array();
         $content[] = "# {$lang->SRCommon} #$story->id $story->title\n";
         $content[] = "## {$lang->story->legendBasicInfo}\n";
@@ -1335,7 +1361,7 @@ class zaiModel extends model
         $content[] = "* {$lang->story->source}: " . zget($lang->story->sourceList, $story->source);
         $content[] = "* {$lang->story->estimate}: $story->estimate";
         $content[] = "* {$lang->story->product}: $story->product";
-        $content[] = "* {$lang->story->plan}: $story->plan";
+        $content[] = "* {$lang->story->plan}: $planValue";
         $content[] = "* {$lang->story->branch}: $story->branch";
         $content[] = "* {$lang->story->parent}: " . (is_array($story->parent) ? implode(',', $story->parent) : $story->parent);
         $content[] = "* {$lang->story->module}: $story->module";
@@ -1352,9 +1378,19 @@ class zaiModel extends model
         $content[] = "## {$lang->story->verify}\n";
         $content[] = strip_tags($spec->verify) . "\n";
 
+        $markdown = array('id' => $story->id, 'title' => "$lang->SRCommon #$story->id $spec->title");
         $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'product'       => $story->product,
+            'parentStory'   => $story->parent,
+            'productModule' => $story->module,
+            'productBranch' => $story->branch,
+            'productPlan'   => $planValue,
+            'status'        => $story->status,
+            'stage'         => $story->stage,
+            'lib'           => $story->lib
+        );
 
-        $markdown['attrs'] = array('product' => $story->product, 'parentStory' => $story->parent, 'productModule' => $story->module, 'productBranch' => $story->branch, 'productPlan' => $story->plan, 'status' => $story->status, 'stage' => $story->stage);
         return $markdown;
     }
 
