@@ -377,10 +377,12 @@ $config->repo->dtable->reviewFlow->fieldList['status']['group']     = 2;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->branchType;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['width']    = 500;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['sortType'] = false;
+$config->repo->dtable->reviewFlow->fieldList['branchType']['group']    = 3;
 
-$config->repo->dtable->reviewFlow->fieldList['desc']['title']      = $lang->repo->desc;
-$config->repo->dtable->reviewFlow->fieldList['desc']['type']       = 'desc';
-$config->repo->dtable->reviewFlow->fieldList['desc']['sortType']   = false;
+$config->repo->dtable->reviewFlow->fieldList['desc']['title']    = $lang->repo->desc;
+$config->repo->dtable->reviewFlow->fieldList['desc']['type']     = 'desc';
+$config->repo->dtable->reviewFlow->fieldList['desc']['sortType'] = false;
+$config->repo->dtable->reviewFlow->fieldList['desc']['group']    = 4;
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->reviewFlow->fieldList['actions']['title'] = $lang->actions;
@@ -406,6 +408,6 @@ $config->repo->dtable->reviewFlow->fieldList['actions']['list']['disable']['notL
 
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
-$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->delete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->deleteReviewFlow, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'deleteReviewFlow', 'flowID={id}');
