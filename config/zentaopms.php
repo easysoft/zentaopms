@@ -748,6 +748,8 @@ $config->objectTables['repocommit']     = TABLE_REPOHISTORY;
 $config->objectTables['system']         = TABLE_SYSTEM;
 $config->objectTables['mark']           = TABLE_MARK;
 
+$config->objectTables['ops_review_flow'] = TABLE_REVIEWFLOW;
+
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
