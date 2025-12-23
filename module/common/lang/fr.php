@@ -460,7 +460,7 @@ $lang->devops->platform     = 'Platform';
 $lang->devops->components   = 'Components';
 $lang->devops->spaceSetting = 'Setting';
 $lang->devops->member       = 'Member';
-$lang->devops->group        = 'Group';
+$lang->devops->group        = 'Privilege';
 $lang->devops->overview     = 'Overview';
 
 $lang->admin->module      = 'Module';
