@@ -2112,7 +2112,9 @@ class repo extends control
 
             $formData->definition = $this->repoZen->buildDefinition($formData);
 
-            $this->repo->createReviewFlow($repoID, $formData);
+            $flowID = $this->repo->createReviewFlow($repoID, $formData);
+            if($flowID) $this->loadModel('action')->create('ops_review_flow', $flowID, 'created');
+
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => inLink('browseReviewFlow', "repoID=$repoID")));
         }
@@ -2241,7 +2243,9 @@ class repo extends control
 
             $formData->definition = $this->repoZen->buildDefinition($formData);
 
-            $this->repo->updateReviewFlow($reviewFlow, $formData);
+            $result = $this->repo->updateReviewFlow($reviewFlow, $formData);
+            if($result) $this->loadModel('action')->create('ops_review_flow', $flowID, 'edited');
+
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => inLink('browseReviewFlow', "repoID=$repoID")));
         }
@@ -2274,5 +2278,21 @@ class repo extends control
         if(dao::isError()) return $this->sendError(dao::getError());
 
         return $this->sendSuccess(array('message' => $this->lang->repo->{$status . 'Success'}, 'load' => true));
+    }
+
+    /**
+     * 删除审批流程。
+     * Delete review flow.
+     *
+     * @param  int $flowID
+     * @access public
+     * @return void
+     */
+    public function deleteReviewFlow(int $flowID)
+    {
+        $this->repo->delete(TABLE_REVIEWFLOW, $flowID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 }
