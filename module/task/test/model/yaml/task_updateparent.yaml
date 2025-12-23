@@ -6,131 +6,131 @@ fields:
 - field: id
   note: 任务ID
   range: 1-10
-  
+
 - field: project
   note: 项目ID
   range: 1{10}
-  
+
 - field: parent
   note: 父任务ID
   range: 0{5},1{2},2{2},3{1}
-  
+
 - field: isParent
   note: 是否为父任务
   range: 0{8},1{2}
-  
+
 - field: path
   note: 任务路径
   range: ",1,{1},2,{1},3,{1},1,2,{1},1,3,{1},2,3,{1},{4}"
-  
+
 - field: execution
   note: 执行ID
   range: 1{10}
-  
+
 - field: module
   note: 模块ID
   range: 0{10}
-  
+
 - field: story
   note: 需求ID
   range: 0{10}
-  
+
 - field: name
   note: 任务名称
   range: 任务{1-10}
-  
+
 - field: type
   note: 任务类型
   range: affair{3},devel{4},test{2},design{1}
-  
+
 - field: pri
   note: 优先级
   range: 1{3},2{4},3{3}
-  
+
 - field: estimate
   note: 预计工时
   range: 0{2},1{3},2{3},3{2}
-  
+
 - field: consumed
   note: 已消耗工时
   range: 0{5},1{3},2{2}
-  
+
 - field: left
   note: 剩余工时
   range: 0{3},1{4},2{3}
-  
+
 - field: status
   note: 任务状态
   range: wait{4},doing{3},done{2},cancel{1}
-  
+
 - field: assignedTo
   note: 指派给
   range: admin{3},user1{3},user2{2},user3{2}
-  
+
 - field: realStarted
   note: 实际开始时间
   range: 2024-01-01{5},2024-01-02{3},0000-00-00{2}
-  
+
 - field: deadline
   note: 截止日期
   range: 2024-12-31{5},2024-06-30{3},0000-00-00{2}
-  
+
 - field: openedBy
   note: 创建者
   range: admin{5},user1{3},user2{2}
-  
+
 - field: openedDate
   note: 创建时间
   range: 2024-01-01 10:00:00{10}
-  
+
 - field: finishedBy
   note: 完成者
   range: []{7},admin{2},user1{1}
-  
+
 - field: finishedDate
   note: 完成时间
   range: 0000-00-00 00:00:00{10}
-  
+
 - field: canceledBy
   note: 取消者
   range: []{10}
-  
+
 - field: canceledDate
   note: 取消时间
   range: 0000-00-00 00:00:00{10}
-  
+
 - field: closedBy
   note: 关闭者
   range: []{10}
-  
+
 - field: closedDate
   note: 关闭时间
   range: 0000-00-00 00:00:00{10}
-  
+
 - field: closedReason
   note: 关闭原因
   range: []{10}
-  
+
 - field: lastEditedBy
   note: 最后编辑者
   range: []{5},admin{3},user1{2}
-  
+
 - field: lastEditedDate
   note: 最后编辑时间
   range: 0000-00-00 00:00:00{10}
-  
+
 - field: deleted
   note: 是否删除
   range: 0{10}
-  
+
 - field: storyVersion
   note: 需求版本
   range: 1{10}
-  
+
 - field: color
   note: 颜色
   range: []{10}
-  
+
 - field: desc
   note: 任务描述
   range: 这是一个测试任务{10}

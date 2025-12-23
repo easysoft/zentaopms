@@ -55,7 +55,23 @@ su('admin');
 
 title=测试executionModel->unlinkStoryTest();
 timeout=0
-cid=16374
+cid=0
+
+- 敏捷执行解除关联需求，移除迭代3中的需求4
+ - 第0条的project属性 @3
+ - 第0条的product属性 @1
+ - 第0条的story属性 @324
+- 瀑布执行解除关联需求，移除迭代4中的需求324
+ - 第0条的project属性 @4
+ - 第0条的product属性 @1
+ - 第0条的story属性 @4
+- 看板执行解除关联需求，移除迭代5中的需求364
+ - 第0条的project属性 @5
+ - 第0条的product属性 @1
+ - 第0条的story属性 @4
+- 敏捷执行关联需求统计 @2
+- 瀑布执行关联需求统计 @2
+- 看板执行关联需求统计 @2
 
 */
 

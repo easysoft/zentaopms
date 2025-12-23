@@ -21,24 +21,24 @@ sidebar
         menu
         (
             setClass('menu'),
-            li
+            hasPriv('custom', 'hours') ? li
             (
                 setClass('menu-item'),
                 a
                 (
-                    set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=hours') : ''),
+                    set::href(createLink('custom', 'hours', 'type=hours')),
                     $lang->custom->setHours
                 )
-            ),
-            li
+            ) : null,
+            hasPriv('custom', 'hours') ? li
             (
                 setClass('menu-item'),
                 a
                 (
-                    set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=weekend') : ''),
+                    set::href(createLink('custom', 'hours', 'type=weekend')),
                     $lang->custom->setWeekend
                 )
-            ),
+            ) : null,
             li
             (
                 setClass('menu-item'),
@@ -111,4 +111,3 @@ panel
 );
 
 render();
-

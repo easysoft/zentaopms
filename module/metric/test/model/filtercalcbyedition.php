@@ -37,47 +37,47 @@ function createTestData($edition)
     global $config;
     $originalEdition = $config->edition;
     $config->edition = $edition;
-    
+
     $calcInstances = array();
-    
+
     // 创建包含不同数据集的测试实例
     $instance1 = new stdClass();
     $instance1->dataset = 'getFeedbacks';
     $calcInstances['test1'] = $instance1;
-    
+
     $instance2 = new stdClass();
     $instance2->dataset = 'getTickets';
     $calcInstances['test2'] = $instance2;
-    
+
     $instance3 = new stdClass();
     $instance3->dataset = 'getUsers';
     $calcInstances['test3'] = $instance3;
-    
+
     $instance4 = new stdClass();
     $instance4->dataset = 'getTasks';
     $calcInstances['test4'] = $instance4;
-    
+
     $instance5 = new stdClass();
     $instance5->dataset = 'getIssues';
     $calcInstances['test5'] = $instance5;
-    
+
     $instance6 = new stdClass();
     $instance6->dataset = 'getRisks';
     $calcInstances['test6'] = $instance6;
-    
+
     return $calcInstances;
 }
 
 function createTestDataNoDataset()
 {
     $calcInstances = array();
-    
+
     // 创建不包含数据集的测试实例
     $instance1 = new stdClass();
     $calcInstances['test1'] = $instance1;
-    
+
     $instance2 = new stdClass();
     $calcInstances['test2'] = $instance2;
-    
+
     return $calcInstances;
 }

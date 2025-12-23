@@ -21,7 +21,7 @@ su('admin');
 
 zenData('todo')->gen(5);
 
-$todoIDList = array('1', '2', '3');
+$todoIDList = range(1,5);
 
 $todo = new todoTest();
 

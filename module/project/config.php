@@ -19,8 +19,8 @@ $config->project->list->customCreateFields = 'budget,acl,auth';
 $config->project->create    = new stdclass();
 $config->project->edit      = new stdclass();
 $config->project->batchedit = new stdclass();
-$config->project->create->requiredFields    = 'name,begin,end';
-$config->project->edit->requiredFields      = 'name,begin,end';
+$config->project->create->requiredFields    = 'name,begin,end,workflowGroup';
+$config->project->edit->requiredFields      = 'name,begin,end,workflowGroup';
 
 $config->project->start   = new stdclass();
 $config->project->start->requiredFields = 'realBegan';
@@ -41,7 +41,7 @@ $config->project->labelClass['kanban']        = 'secondary-outline';
 $config->project->labelClass['agileplus']     = 'secondary-outline';
 $config->project->labelClass['waterfallplus'] = 'secondary-outline';
 
-$config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
+$config->project->multiple['project']   = ',qa,devops,review,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
 
 $config->project->checkList = new stdclass();
@@ -116,18 +116,18 @@ $config->project->noSprintPriv['auditplan']  = array('browse', 'create', 'edit',
 $config->project->includedPriv = $config->project->noSprintPriv;
 $config->project->includedPriv['project'][]   = 'execution';
 $config->project->includedPriv['task']        = array('create');
-$config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib');
+$config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib', 'batchToTask');
 $config->project->includedPriv['requirement'] = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
 $config->project->includedPriv['epic']        = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
-$config->project->includedPriv['bug']         = array('create', 'confirm', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate');
-$config->project->includedPriv['testcase']    = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchChangeType', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit');
-$config->project->includedPriv['testtask']    = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'browseUnits', 'unitCases', 'importUnitResult', 'batchRun', 'runDeployCase', 'deployCaseResults');
-$config->project->includedPriv['doc']         = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'view', 'delete', 'deleteFile', 'collect', 'projectSpace', 'showFiles', 'addCatalog', 'editCatalog', 'deleteCatalog', 'displaySetting', 'diff', 'importToPracticeLib', 'importToComponentLib');
+$config->project->includedPriv['bug']         = array('create', 'confirm', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'batchChangeModule', 'batchChangeBranch', 'batchChangePlan', 'codeBranch', 'unlinkBranch');
+$config->project->includedPriv['testcase']    = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchChangeType', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit', 'zeroCase', 'batchChangeModule', 'batchChangeBranch', 'linkBugs', 'confirmdemandretract', 'confirmdemandunlink', 'export', 'exportXmind', 'exportXmind', 'exportFreeMind', 'importToLib', 'automation', 'showScript', 'createScene', 'editScene', 'deleteScene', 'changeScene', 'batchChangeScene');
+$config->project->includedPriv['testtask']    = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'browseUnits', 'unitCases', 'importUnitResult', 'batchRun', 'runDeployCase', 'deployCaseResults', 'view', 'start', 'activate', 'block', 'close', 'assignCase');
+$config->project->includedPriv['doc']         = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'view', 'delete', 'deleteFile', 'collect', 'projectSpace', 'showFiles', 'addCatalog', 'editCatalog', 'deleteCatalog', 'displaySetting', 'diff', 'importToPracticeLib', 'importToComponentLib', 'moveLib', 'moveDoc', 'sortDoc', 'sortDoclib', 'sortCatalog', 'addChapter', 'editChapter', 'sortChapter', 'deleteChapter', 'project2export', 'exportFiles');
 $config->project->includedPriv['repo']        = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
 $config->project->includedPriv['testreport']  = array('create', 'view', 'delete', 'edit', 'export');
 $config->project->includedPriv['auditplan']   = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
 $config->project->includedPriv['execution']   = array('start', 'edit', 'close', 'delete');
-if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
+if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect', 'userIssue');
 
 $config->project->browseTable = new stdClass();
 $config->project->browseTable->cols = array();
@@ -311,6 +311,9 @@ $config->project->linkMap->budget['summary'] = array('budget', 'summary', 'proje
 $config->project->linkMap->programplan = array();
 $config->project->linkMap->programplan[''] = array('project', 'execution', 'type=all&projectID=%s', '');
 
+$config->project->linkMap->auditplan = array();
+$config->project->linkMap->auditplan[''] = array('project', 'index', 'projectID=%s', '');
+
 $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
@@ -331,6 +334,7 @@ $config->project->actionList['close']['icon']        = 'off';
 $config->project->actionList['close']['hint']        = $lang->project->close;
 $config->project->actionList['close']['url']         = helper::createLink('project', 'close', 'projectID={id}');
 $config->project->actionList['close']['data-toggle'] = 'modal';
+$config->project->actionList['close']['data-size']   = '60rem';
 
 $config->project->actionList['activate']['icon']        = 'magic';
 $config->project->actionList['activate']['hint']        = $lang->project->activate;
@@ -376,3 +380,9 @@ $config->project->statusLabelList['doing']     = 'doing primary-pale';
 $config->project->statusLabelList['suspended'] = 'suspended gray text-white';
 $config->project->statusLabelList['closed']    = 'closed success-pale';
 $config->project->statusLabelList['delay']     = 'delay danger-pale';
+
+$config->project->categoryStages['waterfall'] = array('request', 'design', 'dev', 'qa', 'release', 'review');
+$config->project->categoryStages['IPD']       = array('concept', 'plan', 'develop', 'qualify', 'launch');
+$config->project->categoryStages['TPD']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CBB']       = array('concept', 'plan', 'develop', 'qualify');
+$config->project->categoryStages['CPD']       = array('plan', 'develop', 'qualify', 'launch');

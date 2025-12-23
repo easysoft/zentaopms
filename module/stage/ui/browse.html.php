@@ -10,30 +10,53 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the set::module('release') feature bar on main menu. */
-/* zin: Define the toolbar on main menu. */
+featureBar();
+
 $canCreateStage      = hasPriv('stage', 'create');
 $canbatchCreateStage = hasPriv('stage', 'batchCreate');
-if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "type={$type}"), 'data-toggle' => 'modal');
-if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary mr-4', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "type={$type}"));
-div
+if($canCreateStage) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->create, 'url' => $this->createLink('stage', 'create', "groupID={$groupID}"), 'data-toggle' => 'modal');
+if($canbatchCreateStage) $batchCreateItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->stage->batchCreate, 'url' => $this->createLink('stage', 'batchCreate', "groupID={$groupID}"));
+toolbar
 (
-    setClass('main-col main-content'),
-    div
+    !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
+);
+
+if($this->config->edition == 'open')
+{
+    if(hasPriv('stage', 'settype'))
+    {
+        $menuItems[] = li
+        (
+            setClass('menu-item'),
+            a
+            (
+                set::href(createLink('stage', 'settype')),
+                $lang->stage->setType
+            )
+        );
+    }
+
+    $menuItems[] = li
     (
-        setClass('main-header flex-auto'),
+        setClass('menu-item'),
+        a
+        (
+            setClass('active'),
+            set::href(createLink('stage', 'browse')),
+            $lang->stage->browseAB
+        )
+    );
+
+    sidebar
+    (
         div
         (
-            setClass('flex-auto'),
-            html('<strong>' . $lang->stage->browse . '</strong>')
-        ),
-        toolbar
-        (
-            !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
-            !empty($createItem) ? item(set($createItem)) : null
+            setClass('cell p-2.5 bg-white'),
+            menu($menuItems)
         )
-    )
-);
+    );
+}
 
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
 dtable
@@ -41,8 +64,9 @@ dtable
     set::cols($config->stage->dtable->fieldList),
     set::data($tableData),
     set::orderBy($orderBy),
-    set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}"))
+    set::sortLink(createLink('stage', 'browse', "groupID={$groupID}&orderBy={name}_{sortType}")),
+    set::plugins(array('sortable')),
+    set::sortHandler('.move-stage'),
+    set::onSortEnd(jsRaw('window.onSortEnd')),
+    set::onRenderCell(jsRaw('window.renderCell'))
 );
-
-/* ====== Render page ====== */
-render();

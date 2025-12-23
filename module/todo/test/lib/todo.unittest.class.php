@@ -365,7 +365,7 @@ class todoTest
      * @access public
      * @return int
      */
-    public function getCycleListTest(bool $initCycle = true): int
+    public function getCycleListTest(bool $initCycle = true): array
     {
         $todoList = $this->objectModel->getValidCycleList();
 
@@ -373,7 +373,7 @@ class todoTest
 
         $cycleList = $this->objectModel->getCycleList($todoList);
 
-        return count($cycleList) > 0 ? 1 : 0;
+        return $cycleList;
     }
 
     /**
@@ -581,7 +581,7 @@ class todoTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('dateRange');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $type);
         if(dao::isError()) return dao::getError();
 

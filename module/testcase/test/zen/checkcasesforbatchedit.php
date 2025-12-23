@@ -10,7 +10,7 @@ cid=19084
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$validCases 第0条的title属性 @测试用例1
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithEmptyTitle 属性title[0] @『用例名称』不能为空。
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithEmptyType 属性type[0] @『用例类型』不能为空。
-- 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithMultipleEmpty 
+- 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithMultipleEmpty
  - 属性title[0] @『用例名称』不能为空。
  - 属性type[0] @『用例类型』不能为空。
 - 执行testcaseTest模块的checkCasesForBatchEditTest方法，参数是$casesWithEmptyStage 第0条的title属性 @测试用例1

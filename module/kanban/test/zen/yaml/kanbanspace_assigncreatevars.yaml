@@ -8,78 +8,78 @@ fields:
 - field: id
   note: 看板空间ID
   range: 1-10
-  
+
 - field: name
   note: 看板空间名称
   range: Private Space{1}, Cooperation Space{1}, Public Space{2}, Test Space{6}
-  
+
 - field: type
   note: 看板空间类型
   range: private{1}, cooperation{1}, public{8}
-  
+
 - field: owner
   note: 看板空间拥有者
   range: admin{4}, user1{3}, user2{3}
-  
+
 - field: team
   note: 看板空间团队成员
   range: user1,user2{3}, user2,user3{2}, admin,user1{2}, []{3}
-  
+
 - field: desc
   note: 看板空间描述
   range: Private space for testing{1}, Cooperation workspace{1}, Public shared space{2}, Test workspace for development{6}
-  
+
 - field: acl
   note: 访问控制
   range: open{6}, private{2}, cooperation{2}
-  
+
 - field: whitelist
   note: 白名单用户
   range: user1,user2{2}, admin,user1{3}, []{5}
-  
+
 - field: status
   note: 看板空间状态
   range: active{8}, closed{2}
-  
+
 - field: order
   note: 排序
   range: 1-10
-  
+
 - field: createdBy
   note: 创建者
   range: admin{5}, user1{3}, user2{2}
-  
+
 - field: createdDate
   note: 创建时间
   range: (-30d)-(-1d):1d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: lastEditedBy
   note: 最后编辑者
   range: admin{4}, user1{3}, user2{3}
-  
+
 - field: lastEditedDate
   note: 最后编辑时间
   range: (-7d)-(0d):1d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: closedBy
   note: 关闭者
   range: []{8}, admin{1}, user1{1}
-  
+
 - field: closedDate
   note: 关闭时间
   range: 0000-00-00 00:00:00{8}, (-3d)-(-1d):1d{2}
-  
+
 - field: activatedBy
   note: 激活者
   range: admin{5}, user1{3}, user2{2}
-  
+
 - field: activatedDate
   note: 激活时间
   range: (-5d)-(0d):1d
   format: YYYY-MM-DD hh:mm:ss
-  
+
 - field: deleted
   note: 删除状态
   range: 0{9}, 1{1}

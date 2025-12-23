@@ -6,15 +6,15 @@ fields:
 - field: pivot
   note: 关联的pivot ID
   range: '1{3},2{4},3{3}'
-  
+
 - field: version
   note: 版本号
   range: '1.0,1.1,1.5,2.0{4},2.1{3}'
-  
+
 - field: name
   note: 版本名称
   range: '测试透视表版本{1-10}'
-  
+
 - field: createdDate
   note: 创建时间
   range: 'YYYY-MM-DD hh:mm:ss'

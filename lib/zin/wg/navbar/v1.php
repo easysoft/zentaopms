@@ -153,7 +153,8 @@ class navbar extends wg
         global $app, $lang, $config;
         if($app->tab == 'admin')
         {
-            $app->control->loadModel('admin')->setMenu();
+            $groupID = data('groupID') ? data('groupID') : 0;
+            $app->control->loadModel('admin')->setMenu($groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
             jsVar('adminMenuKey', $adminMenuKey);
         }
@@ -288,7 +289,9 @@ class navbar extends wg
                         else
                         {
                             $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                            $subAlias  = zget($dropMenuItem, 'alias', '');
                             if($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
+                            if(str_contains(",$subAlias,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
                         }
 
                         if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;

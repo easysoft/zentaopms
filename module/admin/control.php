@@ -168,10 +168,6 @@ class admin extends control
                 }
             }
 
-            $enableER = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productER', 0);
-            $URAndSR  = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0);
-            if($enableER && !$URAndSR) $this->send(array('result' => 'fail', 'message' => $this->lang->admin->notice->openUR));
-
             foreach($closedFeatures as $closedFeature)
             {
                 if(in_array($closedFeature, array('productER', 'productUR')))
@@ -179,6 +175,9 @@ class admin extends control
                     $this->project->unlinkStoryByType(0, $closedFeature == 'productER' ? 'epic' : 'requirement');
                 }
             }
+
+            $enableER = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productER', 0);
+            $URAndSR  = $this->config->edition == 'ipd' ? 1 : zget($data->module, 'productUR', 0);
 
             $this->setting->setItem('system.common.closedFeatures', implode(',', $closedFeatures));
             $this->setting->setItem('system.common.global.scoreStatus', zget($data->module, 'myScore', 0));
@@ -477,15 +476,16 @@ class admin extends control
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
             if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
+
             $data[] = array(
                 'id'         => $menuKey,
                 'name'       => $menuKey,
-                'content'    => array('html' => "<div class='flex items-center my-0.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'content'    => array('html' => "<div class='flex items-center my-0.5'>" . (!empty($menuGroup['icon']) ? "<i class='icon icon-{$menuGroup['icon']} svg-icon mr-2 rounded-lg content-center bg-{$menuGroup['bg']} text-white'></i>" : "<img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/>") . " {$menuGroup['name']}</div>"),
                 'text'       => $menuGroup['name'],
                 'titleClass' => 'hidden',
                 'type'       => 'item',
                 'disabled'   => $menuGroup['disabled'],
-                'url'        => $menuGroup['disabled'] || $currentMenuKey == $menuKey ? '' : $menuGroup['link'],
+                'url'        => $menuGroup['link'],
                 'active'     => $currentMenuKey == $menuKey,
                 'rootClass'  => 'admin-menu-item',
                 'attrs'      => array('disabled' => $menuGroup['disabled'])

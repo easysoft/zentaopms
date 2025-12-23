@@ -972,6 +972,25 @@ class dataset
     }
 
     /**
+     * 获取评审意见数据。
+     * Get reviewissues.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getReviewissues($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_REVIEWISSUE)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project');
+
+        return $this->defaultWhere($stmt, 't2');
+    }
+
+    /**
      * 获取问题数据。
      * Get issues.
      *

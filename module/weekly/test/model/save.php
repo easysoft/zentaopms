@@ -7,19 +7,19 @@ title=测试 weeklyModel::save();
 timeout=0
 cid=19739
 
-- 执行weeklyTest模块的saveTest方法，参数是1, '2023-10-15' 
+- 执行weeklyTest模块的saveTest方法，参数是1, '2023-10-15'
  - 属性project @1
  - 属性weekStart @2023-10-09
-- 执行weeklyTest模块的saveTest方法，参数是0, '2023-10-15' 
+- 执行weeklyTest模块的saveTest方法，参数是0, '2023-10-15'
  - 属性project @0
  - 属性weekStart @2023-10-09
-- 执行weeklyTest模块的saveTest方法，参数是2, '2023-10-15' 
+- 执行weeklyTest模块的saveTest方法，参数是2, '2023-10-15'
  - 属性project @2
  - 属性weekStart @2023-10-09
-- 执行weeklyTest模块的saveTest方法，参数是3, '2023-10-15' 
+- 执行weeklyTest模块的saveTest方法，参数是3, '2023-10-15'
  - 属性project @3
  - 属性weekStart @2023-10-09
-- 执行weeklyTest模块的saveTest方法，参数是5, '2023-10-15' 
+- 执行weeklyTest模块的saveTest方法，参数是5, '2023-10-15'
  - 属性project @5
  - 属性weekStart @2023-10-09
 

@@ -57,11 +57,11 @@ $canBatchCreateRisk  = $canModifyExecution && common::hasPriv('risk', 'batchCrea
 $canCreateBug        = ($canModifyExecution && $productID && common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($canModifyExecution && $productID && common::hasPriv('bug', 'batchCreate'));
 $canImportBug        = ($canModifyExecution && $productID && !$isLimited && common::hasPriv('execution', 'importBug'));
-$canCreateStory      = ($canModifyExecution && $productID && common::hasPriv('story', 'create'));
-$canBatchCreateStory = ($canModifyExecution && $productID && common::hasPriv('story', 'batchCreate'));
-$canLinkStory        = ($canModifyExecution && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct));
-$canLinkStoryByPlan  = ($canModifyExecution && $productID && common::hasPriv('execution', 'importplanstories') && !$hiddenPlan && !empty($execution->hasProduct));
-$hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
+$canCreateStory      = (!$hasFrozenStories && $canModifyExecution && $productID && common::hasPriv('story', 'create'));
+$canBatchCreateStory = (!$hasFrozenStories && $canModifyExecution && $productID && common::hasPriv('story', 'batchCreate'));
+$canLinkStory        = (!$hasFrozenStories && $canModifyExecution && $productID && common::hasPriv('execution', 'linkStory') && !empty($execution->hasProduct));
+$canLinkStoryByPlan  = (!$hasFrozenStories && $canModifyExecution && $productID && common::hasPriv('execution', 'importplanstories') && !$hiddenPlan && !empty($execution->hasProduct));
+$hasStoryButton      = !$hasFrozenStories && ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
@@ -254,7 +254,7 @@ row
             btn(setClass('primary'),set::icon('plus'), $lang->create),
             set::items(array
             (
-                $features['story'] && common::hasPriv('story', 'create') ? ($hasStoryButton && $canCreateStory && !empty($productID) ? array('text' => $lang->execution->createStory, 'url' => createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : array('text' => $lang->story->create, 'data-on' => 'click', 'data-do' => "zui.Modal.alert('" . $lang->execution->needLinkProducts . "')")) : null,
+                !$hasFrozenStories && $features['story'] && common::hasPriv('story', 'create') ? ($hasStoryButton && $canCreateStory && !empty($productID) ? array('text' => $lang->execution->createStory, 'url' => createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : array('text' => $lang->story->create, 'data-on' => 'click', 'data-do' => "zui.Modal.alert('" . $lang->execution->needLinkProducts . "')")) : null,
                 ($features['story'] && $hasStoryButton && $canBatchCreateStory) ? array('text' => $lang->execution->batchCreateStory, 'url' => createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] && $hasStoryButton && $canLinkStory) ? array('text' => $lang->execution->linkStory, 'url' => createLink('execution', 'linkStory', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] && $hasStoryButton && $canLinkStoryByPlan) ? array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm') : null,

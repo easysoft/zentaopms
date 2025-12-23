@@ -349,7 +349,9 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
+
         $field          = $this->config->action->objectNameFields[$objectType];
         $host           = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
         $viewLink       = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);

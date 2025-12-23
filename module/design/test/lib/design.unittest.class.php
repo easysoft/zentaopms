@@ -87,8 +87,9 @@ class designTest
         $fields    = array('product', 'name', 'story', 'desc', 'type');
 
         $design = new stdClass();
-        $design->editedBy = $this->objectModel->app->user->account;
+        $design->editedBy   = $this->objectModel->app->user->account;
         $design->editedDate = helper::now();
+        $design->docs       = '';
         if($oldDesign)
         {
             foreach($fields as $field) $design->{$field} = isset($data[$field]) ? $data[$field] : $oldDesign->{$field};

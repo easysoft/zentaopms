@@ -210,6 +210,7 @@ $config->execution->actionList['close']['text']        = $lang->execution->close
 $config->execution->actionList['close']['hint']        = $lang->execution->close;
 $config->execution->actionList['close']['url']         = helper::createLink('execution', 'close', "executionID={rawID}");
 $config->execution->actionList['close']['data-toggle'] = 'modal';
+$config->execution->actionList['close']['data-size']   = '60rem';
 
 $config->execution->actionList['activate']['icon']        = 'magic';
 $config->execution->actionList['activate']['text']        = $lang->execution->activate;

@@ -236,7 +236,6 @@ toolbar
 div
 (
     set::id('kanbanList'),
-    setClass('bg-canvas'),
     zui::kanbanList
     (
         set('$replace', false),

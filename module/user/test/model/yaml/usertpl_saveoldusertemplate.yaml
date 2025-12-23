@@ -13,7 +13,7 @@ fields:
 - field: account
   note: 用户账号
   range: admin{3}, user1{2}, user2{2}, user3{3}
-- field: type  
+- field: type
   note: 模板类型
   range: bug{5}, story{3}, task{2}
 - field: title

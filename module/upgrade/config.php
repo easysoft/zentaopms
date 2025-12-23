@@ -1505,6 +1505,9 @@ $config->delete['21_6_beta'][] = 'extension/biz/project/ext/model/zentaoipd.php'
 
 $config->delete['21_7_2'][] = 'module/solution';
 
+$config->delete['21_7_3'][] = 'extension/max/execution/ext/tao/zentaomax.php';
+$config->delete['21_7_3'][] = 'extension/ipd/execution/ext/tao/zentaomax.php';
+
 $config->delete['21_7_5'][] = 'extension/biz/doc/ext/js/app/zentaobiz.ui.js';
 $config->delete['21_7_5'][] = 'extension/max/doc/ext/js/app/zentaobiz.ui.js';
 $config->delete['21_7_5'][] = 'extension/ipd/doc/ext/js/app/zentaobiz.ui.js';
@@ -1703,6 +1706,17 @@ $config->delete['21_7_6'][] = 'extension/ipd/chart/ext/js/create';
 $config->delete['21_7_7'][] = 'extension/biz/dashboard';
 $config->delete['21_7_7'][] = 'extension/max/dashboard';
 $config->delete['21_7_7'][] = 'extension/ipd/dashboard';
+
+$config->delete['22_0'][] = 'extension/ipd/auditcl/ext/css/browse.css';
+$config->delete['22_0'][] = 'extension/max/auditcl/ext/css/browse.css';
+$config->delete['22_0'][] = 'extension/ipd/auditcl/ext/js/edit.js';
+$config->delete['22_0'][] = 'extension/max/auditcl/ext/js/edit.js';
+$config->delete['22_0'][] = 'extension/ipd/auditcl/view';
+$config->delete['22_0'][] = 'extension/max/auditcl/view';
+$config->delete['22_0'][] = 'extension/ipd/auditplan/view';
+$config->delete['22_0'][] = 'extension/max/auditplan/view';
+$config->delete['22_0'][] = 'extension/ipd/project/ext/tao/class/zentaoipd.class.php';
+$config->delete['22_0'][] = 'extension/ipd/project/ext/tao/zentaoipd.php';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');

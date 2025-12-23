@@ -6,6 +6,8 @@ UPDATE `zt_opportunity` SET `pri` = 1 WHERE `pri` = 'high';
 UPDATE `zt_opportunity` SET `pri` = 2 WHERE `pri` = 'middle';
 UPDATE `zt_opportunity` SET `pri` = 3 WHERE `pri` = 'low';
 
+UPDATE `zt_workflowlayout` SET `width` = '0' WHERE `width` = 'auto';
+
 CREATE TABLE IF NOT EXISTS `zt_ai_knowledgelib` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd' COMMENT '所属界面',

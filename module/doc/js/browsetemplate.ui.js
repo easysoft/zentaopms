@@ -328,19 +328,20 @@ function handleSaveDoc(doc)
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'editTemplate', `docID=${doc.id}`);
     const docData   = {
-        rawContent   : doc.content,
-        status       : doc.status || 'normal',
-        contentType  : doc.contentType,
-        type         : 'text',
-        lib          : libID,
-        module       : moduleID,
-        title        : doc.title,
-        keywords     : doc.keywords,
-        templateDesc : doc.templateDesc,
-        acl          : doc.acl,
-        content      : doc.html,
-        space        : spaceType,
-        uid          : (doc.uid || `doc${doc.id}`),
+        rawContent    : doc.content,
+        status        : doc.status || 'normal',
+        contentType   : doc.contentType,
+        type          : 'text',
+        lib           : libID,
+        module        : moduleID,
+        title         : doc.title,
+        keywords      : doc.keywords,
+        templateDesc  : doc.templateDesc,
+        acl           : doc.acl,
+        content       : doc.html,
+        isDeliverable : doc.isDeliverable || '0',
+        space         : spaceType,
+        uid           : (doc.uid || `doc${doc.id}`),
     };
 
     const docAppData = docApp.doc.data;

@@ -45,13 +45,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: parent
-    note: "父流程ID"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: assignedTo
     note: "指派给"
     from: common.user.v1.yaml
@@ -67,13 +60,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: subStatus
-    note: "子状态"
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: createdBy
     note: "由谁创建"
     from: common.user.v1.yaml
@@ -84,12 +70,9 @@ fields:
     format: ""
   - field: createdDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: editedBy
     note: "由谁编辑"
     from: common.user.v1.yaml
@@ -100,12 +83,9 @@ fields:
     format: ""
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: assignedBy
     note: "由谁指派"
     from: common.user.v1.yaml
@@ -116,12 +96,9 @@ fields:
     format: ""
   - field: assignedDate
     note: "指派日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: deleted
     note: "是否删除"
     range: 0

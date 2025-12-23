@@ -3,5 +3,3 @@ Patches applied to this directory:
 
 Add return type declarations to Iterator methods
 Source: patches/box-spout-php8-compatibility.patch
-
-

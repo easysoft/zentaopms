@@ -513,7 +513,7 @@ class personnelTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('updateParentWhitelist');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectModel, $objectType, $objectID, $accounts, $source, $updateType, $deletedAccounts, $objectTable);
 
         if(dao::isError()) return dao::getError();
@@ -530,7 +530,7 @@ class personnelTest
             {
                 $parentWhitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($product->program)->fetch('whitelist');
                 $return .= "parent_whitelist:{$parentWhitelist};";
-                
+
                 $acls = $tester->dao->select('account,source')->from(TABLE_ACL)
                     ->where('objectID')->eq($product->program)
                     ->andWhere('objectType')->eq('program')
@@ -551,7 +551,7 @@ class personnelTest
             {
                 $parentWhitelist = $tester->dao->select('whitelist')->from(TABLE_PROJECT)->where('id')->eq($sprint->project)->fetch('whitelist');
                 $return .= "parent_whitelist:{$parentWhitelist};";
-                
+
                 $acls = $tester->dao->select('account,source')->from(TABLE_ACL)
                     ->where('objectID')->eq($sprint->project)
                     ->andWhere('objectType')->eq('project')
@@ -581,29 +581,29 @@ class personnelTest
     public function setSelectObjectTipsTest(int $objectID, string $objectType, string $module): array
     {
         global $tester;
-        
+
         $tester->app->loadLang('personnel');
         $tester->app->loadLang('execution');
         $tester->app->loadLang('product');
         $tester->app->loadLang('program');
         $tester->app->loadLang('project');
-        
+
         $tester->lang->personnel->selectObjectTips = '请选择一个%s白名单';
-        
+
         $objectName = $tester->lang->projectCommon . $tester->lang->execution->or . $tester->lang->execution->common;
         if($objectType == 'program') $objectName = $tester->lang->program->common;
         if($objectType == 'product') $objectName = $tester->lang->productCommon;
         if($objectType == 'project') $objectName = $tester->lang->projectCommon;
         $tip = sprintf($tester->lang->personnel->selectObjectTips, $objectName);
-        
+
         if($objectType == 'sprint' && $module == 'execution')
         {
             $execution = $this->objectModel->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch();
             $tip = !empty($execution) && $execution->type == 'kanban' ? str_replace($tester->lang->execution->common, $tester->lang->execution->kanban, $tip) : $tip;
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return array(
             'tips' => $tip,
             'objectName' => $objectName

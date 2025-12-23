@@ -8,47 +8,47 @@ fields:
   range: 1-20
   prefix: ""
   postfix: ""
-  
+
 - field: pathname
   note: 文件路径名
   range: 202309/file1.jpg, 202309/file2.png, 202309/file3.gif, 202309/doc1.pdf, 202309/doc2.txt, 202309/image1.jpeg, 202309/image2.JPG, 202309/image3.PNG, 202309/video1.mp4, 202309/script1.js, 202309/style1.css, 202309/readme.md, []{8}
-  
+
 - field: title
   note: 文件标题
   range: 测试图片1.jpg, 测试图片2.png, 测试图片3.gif, 测试文档1.pdf, 测试文档2.txt, 测试图像1.jpeg, 测试图像2.JPG, 测试图像3.PNG, 测试视频1.mp4, 测试脚本1.js, 测试样式1.css, 说明文档.md, []{8}
-  
+
 - field: extension
   note: 文件扩展名
   range: jpg{2}, png{2}, gif{2}, jpeg{2}, pdf{3}, txt{3}, mp4{3}, js{3}
-  
+
 - field: size
   note: 文件大小
   range: 1024-102400:R
-  
+
 - field: objectType
   note: 对象类型
   range: story{10}, task{5}, bug{3}, doc{2}
-  
+
 - field: objectID
   note: 对象ID
   range: 1-100:R
-  
+
 - field: addedBy
   note: 添加者
   range: admin{10}, user1{5}, user2{3}, test{2}
-  
+
 - field: addedDate
   note: 添加时间
   range: 2023-09-01 09:00:00-2023-09-30 18:00:00:5D
-  
+
 - field: downloads
   note: 下载次数
   range: 0-100:R
-  
+
 - field: extra
   note: 额外信息
   range: "", extra1, extra2, []{17}
-  
+
 - field: deleted
   note: 是否删除
   range: 0{18}, 1{2}

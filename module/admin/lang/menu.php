@@ -14,10 +14,6 @@ $lang->admin->menuList->company['name']  = $lang->admin->menuSetting['user']['na
 $lang->admin->menuList->company['desc']  = $lang->admin->menuSetting['user']['desc'];
 $lang->admin->menuList->company['order'] = 15;
 
-$lang->admin->menuList->model['name']  = $lang->admin->menuSetting['model']['name'];
-$lang->admin->menuList->model['desc']  = $lang->admin->menuSetting['model']['desc'];
-$lang->admin->menuList->model['order'] = 20;
-
 $lang->admin->menuList->feature['name']  = $lang->admin->menuSetting['feature']['name'];
 $lang->admin->menuList->feature['desc']  = $lang->admin->menuSetting['feature']['desc'];
 $lang->admin->menuList->feature['order'] = 25;
@@ -71,44 +67,10 @@ $lang->admin->menuList->company['menuOrder']['5']  = 'dept';
 $lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
 $lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
-$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage,deliverable,baseline', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
-$lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfall']     = array('link' => "{$lang->waterfallModel}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'baseline-templatetype,stage-settype,stage-plusbrowse');
-$lang->admin->menuList->model['subMenu']['agileplus']     = array('link' => "{$lang->agilePlusModel}|auditcl|agileplusbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfallplus'] = array('link' => "{$lang->waterfallPlusModel}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'baseline-templatetype,stage-settype,stage-browse');
-
-$lang->admin->menuList->model['menuOrder']['5']  = 'common';
-$lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
-$lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
-$lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
-$lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
-
-$lang->admin->menuList->model['tabMenu']['common']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'project', 'exclude' => 'custom-required,baseline-templatetype', 'links' => array('custom|set|module=project&field=unitList'));
-if(helper::hasFeature('waterfall') || helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
-if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
-$lang->admin->menuList->model['tabMenu']['common']['build']   = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
-$lang->admin->menuList->model['tabMenu']['common']['flow']    = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
-
-$lang->admin->menuList->model['tabMenu']['common']['percent'] = array('link' => "{$lang->stage->percent}|custom|percent|");
-$lang->admin->menuList->model['tabMenu']['common']['hours']   = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
-if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['waterfall']['stage'] = array('link' => "{$lang->stage->list}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-plusbrowse');
-if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['waterfallplus']['stage'] = array('link' => "{$lang->stage->list}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-browse');
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
-if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'percent';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
-if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
-if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
-if($config->edition == 'max' or $config->edition == 'ipd')
-{
-    $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['15'] = 'deliverable';
-}
-
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
-$lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'exclude' => 'required,set', 'alias' => 'execution,limittaskdate');
+$lang->admin->menuList->feature['subMenu']['project']     = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'alias' => 'flow,percent,hours,estimate,project', 'subModule' => 'subject,holiday,baseline,design,reviewcl', 'exclude' => 'set,required');
+$lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'exclude' => 'required,set', 'alias' => 'execution,limittaskdate', 'subModule' => 'stage');
 $lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "{$lang->qa->common}|custom|required|module=bug", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "{$lang->kanban->common}|custom|kanban|");
 $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$lang->user->common}|custom|required|module=user", 'links' => array('custom|set|module=user&field=roleList'), 'exclude' => 'set,required');
@@ -116,14 +78,21 @@ $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$l
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList", 'exclude' => 'custom-set');
 $lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
 
-$lang->admin->menuList->feature['tabMenu']['product']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
+$lang->admin->menuList->feature['tabMenu']['product']['product'] = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
 if($config->enableER) $lang->admin->menuList->feature['tabMenu']['product']['epic']        = array('link' => "{$lang->epic->common}|custom|required|module=epic", 'links' => array("custom|set|module=epic&field=categoryList"), 'exclude' => 'custom-required,custom-set');
 if($config->URAndSR)  $lang->admin->menuList->feature['tabMenu']['product']['requirement'] = array('link' => "{$lang->URCommon}|custom|required|module=requirement", 'links' => array("custom|set|module=requirement&field=categoryList"), 'exclude' => 'custom-required,custom-set');
 $lang->admin->menuList->feature['tabMenu']['product']['story']       = array('link' => "{$lang->SRCommon}|custom|required|module=story", 'links' => array("custom|set|module=story&field=categoryList"), 'exclude' => 'custom-required,custom-set');
 $lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('link' => "{$lang->productplan->shortCommon}|custom|required|module=productplan", 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->release->common}|custom|required|module=release", 'exclude' => 'custom-required');
 
+$lang->admin->menuList->feature['tabMenu']['project']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'project', 'exclude' => 'custom-required');
+$lang->admin->menuList->feature['tabMenu']['project']['build']   = array('link' => "{$lang->build->common}|custom|required|module=build", 'exclude' => 'custom-required');
+$lang->admin->menuList->feature['tabMenu']['project']['flow']    = array('link' => "{$lang->custom->flow}|custom|flow|");
+$lang->admin->menuList->feature['tabMenu']['project']['percent'] = array('link' => "{$lang->stage->percent}|custom|percent|");
+$lang->admin->menuList->feature['tabMenu']['project']['hours']   = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
+
 $lang->admin->menuList->feature['tabMenu']['execution']['execution'] = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'links' => array("custom|execution|"), 'alias' => 'execution', 'exclude' => 'custom-required');
+$lang->admin->menuList->feature['tabMenu']['execution']['stage']     = array('link' => "{$lang->stage->common}|stage|settype|", 'subModule' => 'stage', 'links' => array('stage|browse|'));
 $lang->admin->menuList->feature['tabMenu']['execution']['task']      = array('link' => "{$lang->task->common}|custom|required|module=task", 'links' => array('custom|set|module=task&field=priList', 'custom|limittaskdate|'), 'alias' => 'limittaskdate','exclude' => 'custom-required');
 
 $lang->admin->menuList->feature['tabMenu']['qa']['bug']        = array('link' => "{$lang->bug->common}|custom|required|module=bug", 'links' => array("custom|set|module=bug&field=priList"), 'exclude' => 'custom-required,custom-set');
@@ -141,8 +110,16 @@ if($config->URAndSR)  $lang->admin->menuList->feature['tabMenu']['menuOrder']['p
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['20']   = 'story';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['25']   = 'productplan';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['30']   = 'release';
+
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5']   = 'project';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10']  = 'build';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['35']  = 'flow';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['40']  = 'percent';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['45']  = 'hours';
+
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['5']  = 'execution';
-$lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['10'] = 'task';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['10'] = 'stage';
+$lang->admin->menuList->feature['tabMenu']['menuOrder']['execution']['15'] = 'task';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['5']         = 'bug';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['10']        = 'testcase';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['15']        = 'testsuite';
@@ -152,10 +129,12 @@ $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['30']        = 'ca
 
 $lang->admin->menuList->feature['menuOrder']['5']  = 'my';
 $lang->admin->menuList->feature['menuOrder']['10'] = 'product';
-$lang->admin->menuList->feature['menuOrder']['15'] = 'execution';
-$lang->admin->menuList->feature['menuOrder']['20'] = 'qa';
-$lang->admin->menuList->feature['menuOrder']['25'] = 'kanban';
-$lang->admin->menuList->feature['menuOrder']['39'] = 'user';
+$lang->admin->menuList->feature['menuOrder']['15'] = 'project';
+$lang->admin->menuList->feature['menuOrder']['20'] = 'execution';
+$lang->admin->menuList->feature['menuOrder']['25'] = 'qa';
+$lang->admin->menuList->feature['menuOrder']['30'] = 'kanban';
+$lang->admin->menuList->feature['menuOrder']['35'] = 'doc';
+$lang->admin->menuList->feature['menuOrder']['40'] = 'user';
 
 $lang->admin->menuList->feature['dividerMenu'] = ',user,';
 
@@ -186,29 +165,6 @@ $lang->admin->menuList->adminregister['desc']  = $lang->admin->menuSetting['admi
 $lang->admin->menuList->adminregister['link']  = 'admin|register';
 $lang->admin->menuList->adminregister['order'] = 61;
 
-if($config->edition != 'max' and $config->edition != 'ipd')
-{
-    unset($lang->admin->menuList->model['subMenu']['scrum']);
-    unset($lang->admin->menuList->model['subMenu']['agileplus']);
-    unset($lang->admin->menuList->model['menuOrder']['10']);
-    unset($lang->admin->menuList->model['menuOrder']['20']);
-}
-if(!helper::hasFeature('waterfall'))
-{
-    unset($lang->admin->menuList->model['subMenu']['waterfall']);
-    unset($lang->admin->menuList->model['menuOrder']['15']);
-}
-if(!helper::hasFeature('waterfallplus'))
-{
-    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
-    unset($lang->admin->menuList->model['menuOrder']['25']);
-}
-if($config->edition == 'max' or $config->edition == 'ipd')
-{
-    if(!helper::hasFeature('scrum_auditplan') and !helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
-    if(!helper::hasFeature('agileplus_auditplan') and !helper::hasFeature('agileplus_process')) unset($lang->admin->menuList->model['subMenu']['agileplus'], $lang->admin->menuList->model['menuOrder']['20']);
-}
-
 if($config->vision == 'lite')
 {
     unset($lang->admin->menuList->system['subMenu']['mode']);
@@ -217,15 +173,6 @@ if($config->vision == 'lite')
     unset($lang->admin->menuList->system['menuOrder']['5']);
     unset($lang->admin->menuList->system['menuOrder']['45']);
     unset($lang->admin->menuList->system['menuOrder']['50']);
-
-    unset($lang->admin->menuList->model['subMenu']['scrum']);
-    unset($lang->admin->menuList->model['subMenu']['waterfall']);
-    unset($lang->admin->menuList->model['subMenu']['agileplus']);
-    unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
-    unset($lang->admin->menuList->model['menuOrder']['10']);
-    unset($lang->admin->menuList->model['menuOrder']['15']);
-    unset($lang->admin->menuList->model['menuOrder']['20']);
-    unset($lang->admin->menuList->model['menuOrder']['25']);
 
     unset($lang->admin->menuList->feature['subMenu']['product']);
     unset($lang->admin->menuList->feature['subMenu']['execution']);

@@ -7,16 +7,16 @@ title=测试 storyTao::getAffectedChildren();
 timeout=0
 cid=18631
 
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array
  - 属性id @1
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$normalStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$normalStory, array
  - 属性id @6
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array
  - 属性id @1
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$emptyChildrenStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$emptyChildrenStory, array
  - 属性id @2
  - 属性type @story
 - 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 属性type @story

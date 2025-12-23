@@ -7,19 +7,19 @@ title=测试 taskZen::assignStoryForCreate();
 timeout=0
 cid=18898
 
-- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是1, 1 
+- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是1, 1
  - 属性executionID @1
  - 属性moduleID @1
-- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是0, 1 
+- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是0, 1
  - 属性executionID @0
  - 属性moduleID @1
-- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是1, 0 
+- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是1, 0
  - 属性executionID @1
  - 属性moduleID @0
-- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是999, 1 
+- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是999, 1
  - 属性executionID @999
  - 属性moduleID @1
-- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是-1, 1 
+- 执行taskZenTest模块的assignStoryForCreateTest方法，参数是-1, 1
  - 属性executionID @-1
  - 属性moduleID @1
 

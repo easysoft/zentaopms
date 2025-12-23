@@ -77,6 +77,10 @@ $config->action->objectNameFields['devopsspace']  = 'name';
 
 $config->action->objectNameFields['ops_review_flow'] = 'name';
 
+$config->action->objectNameFields['cm']           = 'title';
+$config->action->objectNameFields['baseline']     = 'title';
+$config->action->objectNameFields['projectchange'] = 'name';
+
 $config->action->commonImgSize = 870;
 
 $config->action->majorList = array();
@@ -135,4 +139,4 @@ $config->action->multipleObjectFields['testtask']['type'] = 'typeList';
 $config->action->approvalFields['reviewStatus'] = 'reviewStatusList';
 $config->action->approvalFields['reviewResult'] = 'reviewResultList';
 
-$config->action->hiddenTrashObjects = 'object,cm,ops_review_flow';
+$config->action->hiddenTrashObjects = 'object,cm,stage,ops_review_flow';

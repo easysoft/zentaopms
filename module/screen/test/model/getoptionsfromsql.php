@@ -7,14 +7,14 @@ title=测试 screenModel::getOptionsFromSql();
 timeout=0
 cid=18250
 
-- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 3", 'id', 'account' 
+- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 3", 'id', 'account'
  - 属性1 @admin
  - 属性2 @test1
  - 属性3 @test2
 - 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE id > 999", 'id', 'account'  @0
 - 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 2", 'nonexistent', 'account'  @0
 - 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, account FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id LIMIT 2", 'id', 'nonexistent'  @0
-- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, realname FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id", 'id', 'realname' 
+- 执行screenTest模块的getOptionsFromSqlTest方法，参数是"SELECT id, realname FROM " . TABLE_USER . " WHERE deleted='0' ORDER BY id", 'id', 'realname'
  - 属性1 @管理员
  - 属性2 @测试用户1
  - 属性3 @测试用户2

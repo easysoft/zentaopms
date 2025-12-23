@@ -42,7 +42,7 @@ $name3    = array(1 => '批量创建的发布', 2 => '批量创建的总结评�
 $percent3 = array(1 => 5, 2 => 6);
 $type3    = array(1 => 'release', 2 => 'review');
 
-$name4    = array(1 => '批量创建的需求', 2 => '批量创建的其他');
+$name4    = array(1 => '批量创建的验证', 2 => '批量创建的其他');
 $percent4 = array(1 => 1, 2 => 7);
 $type4    = array(1 => 'request', 2 => 'other');
 
@@ -68,6 +68,8 @@ r($stageTester->batchCreateTest($param2)) && p() && e('4'); // 测试批量创�
 r($stageTester->batchCreateTest($param3)) && p() && e('6'); // 测试批量创建瀑布项目的阶段 3
 r($stageTester->batchCreateTest($param4)) && p() && e('8'); // 测试批量创建瀑布项目的阶段 4
 
+zenData('stage')->gen(0);
+
 /* Error condition. */
 r($stageTester->batchCreateTest($param5)) && p('0') && e('『工作量占比』不能为空。');     // 测试批量创建瀑布项目的百分比为空的阶段
 r($stageTester->batchCreateTest($param6)) && p('0') && e('『阶段类型』不能为空。');       // 测试批量创建瀑布项目的类型为空的阶段
@@ -75,13 +77,13 @@ r($stageTester->batchCreateTest($param7)) && p('0') && e('『工作量占比』�
 r($stageTester->batchCreateTest($param8)) && p('0') && e('工作量占比累计不应当超过100%'); // 测试批量创建瀑布项目的百分比超出100的阶段
 
 /* Normal condition. */
-r($stageTester->batchCreateTest($param1, 'waterfallplus')) && p() && e('2'); // 测试批量创建融合瀑布项目的阶段 1
-r($stageTester->batchCreateTest($param2, 'waterfallplus')) && p() && e('4'); // 测试批量创建融合瀑布项目的阶段 2
-r($stageTester->batchCreateTest($param3, 'waterfallplus')) && p() && e('6'); // 测试批量创建融合瀑布项目的阶段 3
-r($stageTester->batchCreateTest($param4, 'waterfallplus')) && p() && e('8'); // 测试批量创建融合瀑布项目的阶段 4
+r($stageTester->batchCreateTest($param1, 8)) && p() && e('2'); // 测试批量创建融合瀑布项目的阶段 1
+r($stageTester->batchCreateTest($param2, 8)) && p() && e('4'); // 测试批量创建融合瀑布项目的阶段 2
+r($stageTester->batchCreateTest($param3, 8)) && p() && e('6'); // 测试批量创建融合瀑布项目的阶段 3
+r($stageTester->batchCreateTest($param4, 8)) && p() && e('8'); // 测试批量创建融合瀑布项目的阶段 4
 
 /* Error condition. */
-r($stageTester->batchCreateTest($param5, 'waterfallplus')) && p('0') && e('『工作量占比』不能为空。');     // 测试批量创建融合瀑布项目的百分比为空的阶段
-r($stageTester->batchCreateTest($param6, 'waterfallplus')) && p('0') && e('『阶段类型』不能为空。');       // 测试批量创建融合瀑布项目的类型为空的阶段
-r($stageTester->batchCreateTest($param7, 'waterfallplus')) && p('0') && e('『工作量占比』不能为空。');     // 测试批量创建融合瀑布项目的百分比非法的阶段
-r($stageTester->batchCreateTest($param8, 'waterfallplus')) && p('0') && e('工作量占比累计不应当超过100%'); // 测试批量创建融合瀑布项目的百分比超出100的阶段
+r($stageTester->batchCreateTest($param5, 9)) && p('0') && e('『工作量占比』不能为空。');     // 测试批量创建融合瀑布项目的百分比为空的阶段
+r($stageTester->batchCreateTest($param6, 9)) && p('0') && e('『阶段类型』不能为空。');       // 测试批量创建融合瀑布项目的类型为空的阶段
+r($stageTester->batchCreateTest($param7, 9)) && p('0') && e('『工作量占比』不能为空。');     // 测试批量创建融合瀑布项目的百分比非法的阶段
+r($stageTester->batchCreateTest($param8, 9)) && p('0') && e('工作量占比累计不应当超过100%'); // 测试批量创建融合瀑布项目的百分比超出100的阶段

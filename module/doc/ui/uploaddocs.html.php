@@ -10,11 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('docID',   $docID);
 jsVar('libType', $objectType);
 formPanel
 (
-    set::title($lang->doc->uploadDoc),
-    set::submitBtnText($lang->save),
+    set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadFile),
+    set::submitBtnText($lang->doc->release),
     $objectType == 'project' ? formRow
     (
         formGroup
@@ -34,6 +35,7 @@ formPanel
             set::label($lang->doc->execution),
             set::name('execution'),
             set::items(isset($executions) ? $executions : null),
+            set::value(!empty($doc->execution) ? $doc->execution : 0),
             set::placeholder($lang->doc->placeholder->execution),
             on::change('loadObjectModules')
         ) : null
@@ -81,15 +83,25 @@ formPanel
         set::label($lang->doc->module),
         set::name('parent'),
         set::items(array('m_0' => '/') + $optionMenu),
-        set::value($moduleID ? "m_$moduleID" : 0),
+        set::value(!empty($doc->parent) ? $doc->parent : ($moduleID ? "m_$moduleID" : 0)),
         set::required(true)
     ),
     formGroup
     (
         setClass('uploadFileBox'),
         set::label($lang->doc->uploadFile),
-        fileSelector(),
+        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null)),
         set::required(true)
+    ),
+    formGroup
+    (
+        setClass('titleBox'),
+        set::hidden(!empty($doc) ? false : true),
+        set::label($lang->doc->title),
+        set::name('title'),
+        set::value(!empty($doc->title) ? $doc->title : ''),
+        set::required(true),
+        on::input('titleChanged')
     ),
     formGroup
     (
@@ -105,15 +117,6 @@ formPanel
             on::change('toggleDocTitle')
         )
     ),
-    formGroup
-    (
-        setClass('titleBox'),
-        set::hidden(true),
-        set::label($lang->doc->title),
-        set::name('title'),
-        set::required(true),
-        on::input('titleChanged')
-    ),
     formRow
     (
         setID('aclBox'),
@@ -124,7 +127,7 @@ formPanel
             (
                 set::name('acl'),
                 set::items($lang->doc->aclList),
-                set::value($objectType == 'mine' ? 'private' : 'open'),
+                set::value(!empty($doc->acl) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
                 on::change("toggleAcl('doc')")
             )
         )

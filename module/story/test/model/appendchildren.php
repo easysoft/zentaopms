@@ -48,7 +48,7 @@ $storyTest = new storyTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($storyTest->appendChildrenTest(1, array((object)array('id' => 1, 'root' => 1)), 'epic')) && p('0:id') && e('1'); // 步骤1：为epic需求追加子需求，验证包含原需求
-r($storyTest->appendChildrenTest(1, array(), 'story')) && p() && e('0'); // 步骤2：空需求数组情况，返回空数组  
+r($storyTest->appendChildrenTest(1, array(), 'story')) && p() && e('0'); // 步骤2：空需求数组情况，返回空数组
 r($storyTest->appendChildrenTest(999, array((object)array('id' => 1, 'root' => 1)), 'story')) && p('0:id') && e('1'); // 步骤3：不存在的产品ID情况，返回原需求数组
 r($storyTest->appendChildrenTest(1, array((object)array('id' => 2, 'root' => 2)), 'requirement')) && p('0:id') && e('2'); // 步骤4：requirement类型需求无子需求时返回原需求
 r($storyTest->appendChildrenTest(2, array((object)array('id' => 11, 'root' => 3)), 'story')) && p('0:id') && e('11'); // 步骤5：不同产品下的需求测试

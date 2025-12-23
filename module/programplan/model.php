@@ -399,8 +399,6 @@ class programplanModel extends model
                 $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
 
-                if(in_array($this->config->edition, array('max', 'ipd'))) $plan = $this->execution->changeExecutionDeliverable($stageID, $plan);
-
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
 
@@ -418,22 +416,6 @@ class programplanModel extends model
             }
             else
             {
-                if(!empty($project->deliverable) && in_array($this->config->edition, array('max', 'ipd')))
-                {
-                    $projectModel = $project->model;
-                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
-                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
-
-                    $projectType = !empty($project->hasProduct) ? 'product' : 'project';
-                    $objectCode  = $plan->attribute ? "{$projectType}_{$projectModel}_{$plan->attribute}" : "{$projectType}_{$projectModel}_{$plan->lifetime}";
-                    if($plan->type == 'kanban') $objectCode = "{$projectType}_{$projectModel}_kanban";
-
-                    $projectDeliverable = $project->deliverable;
-                    $projectDeliverable = !empty($projectDeliverable) ? json_decode($projectDeliverable, true) : array();
-                    $stageDeliverable   = !empty($projectDeliverable[$objectCode]) ? array("{$objectCode}" => $projectDeliverable[$objectCode]) : array();
-                    $plan->deliverable  = $stageDeliverable ? json_encode($stageDeliverable) : '';
-                }
-
                 if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
                 $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;

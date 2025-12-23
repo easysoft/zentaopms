@@ -46,17 +46,17 @@ class storeTest
     public function __constructTest(string $appName = '')
     {
         global $config, $app;
-        
+
         // 创建新的store模型实例进行测试
         $storeModel = new storeModel($appName);
-        
+
         // 返回测试结果对象
         $result = new stdClass();
         $result->appName = $appName;
         $result->hasHeaders = !empty($config->cloud->api->headers);
         $result->authHeaderExists = false;
         $result->channelChanged = false;
-        
+
         // 检查API headers是否正确设置
         if($result->hasHeaders)
         {
@@ -69,15 +69,15 @@ class storeTest
                 }
             }
         }
-        
+
         // 检查channel是否被改变
         if($config->cloud->api->switchChannel && isset($app->session->cloudChannel))
         {
             $result->channelChanged = ($config->cloud->api->channel === $app->session->cloudChannel);
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return $result;
     }
 

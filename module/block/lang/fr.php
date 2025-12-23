@@ -234,6 +234,7 @@ $lang->block->availableBlocks['build']       = 'Builds';
 $lang->block->availableBlocks['testcase']    = 'Testcase';
 $lang->block->availableBlocks['testtask']    = 'Testtask';
 $lang->block->availableBlocks['risk']        = 'Risks';
+$lang->block->availableBlocks['reviewissue'] = 'Review Issue';
 $lang->block->availableBlocks['issue']       = 'Issues';
 $lang->block->availableBlocks['meeting']     = 'Meetings';
 $lang->block->availableBlocks['feedback']    = 'Feedbacks';

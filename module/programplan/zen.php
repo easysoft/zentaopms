@@ -89,7 +89,7 @@ class programplanZen extends programplan
             $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->isTpl      = $project->isTpl;
             if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
-            if(!empty($plan->percent) && $plan->type != 'stage') $plan->percent = 0; // 非阶段类型，工作量占比为0
+            if($plan->type != 'stage' || empty($plan->percent)) $plan->percent = 0; // 非阶段类型，工作量占比为0
 
             if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
             if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
@@ -112,8 +112,10 @@ class programplanZen extends programplan
                 if(!empty($this->config->setCode) && empty($plan->code) && strpos(",{$this->config->execution->create->requiredFields},", ',code,') !== false) dao::$errors["code[{$rowID}]"] = sprintf($this->lang->error->notempty, $plan->type == 'stage' ? $this->lang->execution->code : $this->lang->code);
             }
 
+            if(!is_numeric($plan->percent) || $plan->percent < 0) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentNumber;
+
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && isset($plan->percent))
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && isset($plan->percent) && !dao::isError())
             {
                 if($plan->level == 0)
                 {
@@ -178,7 +180,7 @@ class programplanZen extends programplan
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
-        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('id_asc', 0, $viewData->project->model) : array();
+        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('order_asc', 0, $viewData->project->workflowGroup) : array();
         $this->view->programPlan        = $viewData->programPlan;
         $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;
@@ -194,8 +196,6 @@ class programplanZen extends programplan
         $this->view->defaultFields      = $defaultFields;
         $this->view->colspan            = count($visibleFields) + 3;
         $this->view->enableOptionalAttr = empty($viewData->programPlan) || (!empty($viewData->programPlan) && $viewData->programPlan->attribute == 'mix');
-
-        $this->display();
     }
 
     /**
@@ -220,6 +220,8 @@ class programplanZen extends programplan
 
             if(dao::isError()) return false;
         }
+
+        if(!is_numeric($plan->percent) || $plan->percent < 0) dao::$errors['percent'] = $this->lang->programplan->error->percentNumber;
 
         if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
         if(dao::isError()) return false;

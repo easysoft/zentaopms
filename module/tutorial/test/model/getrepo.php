@@ -7,15 +7,15 @@ title=测试 tutorialModel::getRepo();
 timeout=0
 cid=19461
 
-- 执行tutorialTest模块的getRepoTest方法 
+- 执行tutorialTest模块的getRepoTest方法
  - 属性id @1
  - 属性name @Test repo
-- 执行tutorialTest模块的getRepoTest方法 
+- 执行tutorialTest模块的getRepoTest方法
  - 属性SCM @Git
  - 属性encoding @utf-8
 - 执行tutorialTest模块的getRepoTest方法 属性product @1
 - 执行tutorialTest模块的getRepoTest方法 属性deleted @0
-- 执行tutorialTest模块的getRepoTest方法 
+- 执行tutorialTest模块的getRepoTest方法
  - 属性commits @1
  - 属性synced @0
 

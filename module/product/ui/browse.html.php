@@ -70,7 +70,7 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
 };
 
 /* Build create story button. */
-$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID, $project, $projectProducts)
+$fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $storyType, $productID, $branch, $moduleID, $projectID, $project, $projectProducts, $hasFrozenStories)
 {
     if(!common::canModify('product', $product)) return null;
     if(!empty($project) && !common::canModify('project', $project)) return null;
@@ -142,11 +142,13 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             btn
             (
                 setClass(($app->tab != 'product' ? 'secondary' : 'primary') . ' create-story-btn'),
+                $isProjectStory && $hasFrozenStories ? setClass('disabled') : null,
+                $isProjectStory && $hasFrozenStories ? set::hint(sprintf($lang->story->frozenTip, $createBtnTitle)) : null,
                 set::icon('plus'),
                 set::text($createBtnTitle),
                 set::url($createBtnLink)
             ),
-            empty($items) ? null : dropdown
+            empty($items) || ($isProjectStory && $hasFrozenStories) ? null : dropdown
             (
                 btn(setClass('dropdown-toggle'), setClass($app->tab != 'product' ? 'secondary' : 'primary'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
                 set::placement('bottom-end'),
@@ -165,7 +167,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 };
 
 /* Build link story button. */
-$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project, $storyType)
+$fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProduct, $project, $storyType, $isProjectStory, $hasFrozenStories)
 {
     if(!common::canModify('product', $product)) return null;
     if(!empty($project) && !common::canModify('project', $project)) return null;
@@ -187,20 +189,22 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
     $canLinkStory     = common::hasPriv('projectstory', 'linkStory');
     $canlinkPlanStory = !empty($product) && common::hasPriv('projectstory', 'importPlanStories') && $storyType == 'story' && !$project->charter;
     $linkStoryUrl     = $this->createLink('projectstory', 'linkStory', "project=$project->id&browseType=&param=0&orderBy=id_desc&recPerPage=50&pageID=1&extra=&storyType=$storyType");
-    $linkItem         = array('text' => $lang->execution->linkStory, 'url' => $linkStoryUrl);
-    $linkPlanItem     = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
+    $linkItem         = array('text' => $lang->execution->linkStory, 'url' => $linkStoryUrl, 'hint' => $isProjectStory && $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStory) : '');
+    $linkPlanItem     = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm', 'hint' => $isProjectStory && $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStoryByPlan) : '');
     if($canLinkStory && $canlinkPlanStory)
     {
         return btngroup
         (
             btn(
                 setClass('btn primary'),
+                $isProjectStory && $hasFrozenStories ? setClass('disabled') : null,
+                $isProjectStory && $hasFrozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->execution->linkStory)) : null,
                 set::icon('link'),
                 set::url($linkStoryUrl),
                 setData('app', $app->tab),
                 $lang->execution->linkStory
             ),
-            dropdown
+            $isProjectStory && $hasFrozenStories ? null : dropdown
             (
                 btn(setClass('btn primary dropdown-toggle'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -210,8 +214,8 @@ $fnBuildLinkStoryButton = function() use($lang, $app, $product, $projectHasProdu
         );
 
     }
-    if($canLinkStory && !$canlinkPlanStory) return item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link')));
-    if($canlinkPlanStory && !$canLinkStory) return item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link')));
+    if($canLinkStory && !$canlinkPlanStory) return item(set($linkItem + array('class' => 'btn primary link-story-btn' . ($isProjectStory && $hasFrozenStories ? ' disabled' : ''), 'icon' => 'link')));
+    if($canlinkPlanStory && !$canLinkStory) return item(set($linkPlanItem + array('class' => 'btn primary' . ($isProjectStory && $hasFrozenStories ? ' disabled' : ''), 'icon' => 'link')));
 };
 
 /* DataTable columns. */
@@ -253,7 +257,7 @@ foreach($stories as $story)
 }
 
 /* Generate toolbar of DataTable footer. */
-$fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $gradePairs, $config,$noclosedRoadmaps, $gradeGroup)
+$fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $gradePairs, $config,$noclosedRoadmaps, $gradeGroup, $hasFrozenStories)
 {
     /* Flag variables of permissions. */
     $canBeChanged = common::canModify('product', $product);
@@ -280,7 +284,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $canBatchChangeBranch  = $canBeChanged && hasPriv($storyType, 'batchChangeBranch') && $product && $product->type != 'normal' && $productID;
     $canBatchChangeModule  = $canBeChanged && hasPriv($storyType, 'batchChangeModule') && $productID && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal') && !$isProjectStory;
     $canBatchChangeParent  = $canBeChanged && hasPriv($storyType, 'batchChangeParent') && !($storyType == 'epic' && count($gradeGroup['epic']) < 2) && $app->tab == 'product';
-    $canBatchUnlink        = $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
+    $canBatchUnlink        = empty($hasFrozenStories) && $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
     $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && ($storyType == 'requirement' || $storyType == 'epic');
     $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
@@ -559,7 +563,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI) ? null : set::createLink($createStoryLink)
+    ($isFromDoc || $isFromAI || ($isProjectStory && $hasFrozenStories)) ? null : set::createLink($createStoryLink)
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

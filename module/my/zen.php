@@ -162,16 +162,16 @@ class myZen extends my
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
-     * @return void
+     * @return array
      */
-    public function showWorkCount(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): void
+    public function showWorkCount(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): array
     {
         /* Load pager. */
         $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $count = array('task' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
+        $count = array('task' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'epic' => 0, 'issue' => 0, 'risk' => 0, 'reviewissue' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
 
         /* Get the number of tasks assigned to me. */
         $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager);
@@ -233,6 +233,7 @@ class myZen extends my
 
         $this->view->todoCount       = $count;
         $this->view->isOpenedURAndSR = $isOpenedURAndSR;
+        return $count;
     }
 
     /**
@@ -275,6 +276,11 @@ class myZen extends my
                 $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
                 $count['risk'] = $pager->recTotal;
 
+                /* Get the number of reviewissues assigned to me. */
+                $pager->recTotal = 0;
+                $this->loadModel('reviewissue')->getUserReviewissues('assignedTo', $this->app->user->account, 'id_desc', $pager);
+                $count['reviewissue'] = $pager->recTotal;
+
                 /* Get the number of nc assigned to me. */
                 $pager->recTotal = 0;
                 $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
@@ -282,7 +288,7 @@ class myZen extends my
 
                 /* Get the number of nc assigned to me. */
                 $pager->recTotal = 0;
-                $this->loadModel('auditplan')->getList(0, 'my', 'mychecking', '', 'id_desc', $pager);
+                $this->loadModel('auditplan')->getList(0, 'myChecking', '', 'id_desc', $pager);
                 $auditplanCount = $pager->recTotal;
                 $count['qa']    = $ncCount + $auditplanCount;
 

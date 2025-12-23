@@ -27,6 +27,17 @@ if($type == 'editedbyme') unset($config->my->doc->dtable->fieldList['editedBy'])
 $docs = initTableData($docs, $config->my->doc->dtable->fieldList, $this->doc);
 $cols = array_values($config->my->doc->dtable->fieldList);
 $data = array_values($docs);
+
+foreach($data as $doc)
+{
+    if(!isset($doc->actions)) continue;
+    foreach($doc->actions as &$action)
+    {
+        $actionName = $action['name'];
+        if(!empty($doc->frozen) && in_array($actionName, array('edit', 'delete'))) $action['hint'] = sprintf($this->lang->doc->frozenTips, $this->lang->doc->{$actionName});
+    }
+}
+
 dtable
 (
     set::cols($cols),

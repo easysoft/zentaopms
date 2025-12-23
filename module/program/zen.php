@@ -361,7 +361,7 @@ class programZen extends program
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($moduleName);
-            if($flow && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
+            if($flow && in_array($flow->app, array('scrum', 'waterfall', 'kanbanProject'))) $flow->app = 'project';
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName") . "#app=$flow->app";
         }
         if($moduleName == 'project')

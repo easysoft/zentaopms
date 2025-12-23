@@ -82,7 +82,14 @@ class mainNavbar extends nav
 
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();
-        if($app->tab == 'admin') $app->control->loadModel('admin')->setMenu();
+        if($app->tab == 'admin')
+        {
+            $groupID = data('groupID');
+            $app->control->loadModel('admin')->setMenu((int)$groupID);
+        }
+
+        /* When use workflow then set rawModule to moduleName. */
+        if($currentModule == 'flow') $currentModule = $app->rawModule;
 
         \commonModel::replaceMenuLang();
         \commonModel::setMainMenu();

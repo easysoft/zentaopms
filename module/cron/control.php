@@ -255,7 +255,7 @@ class cron extends control
     {
         $roles = array();
 
-        $settings = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->fetchAll();
+        $settings = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->fetchAll('id', false);
 
         $scheduler = array('execId' => 0, 'lastTime' => '');
         $consumerCount = 0;

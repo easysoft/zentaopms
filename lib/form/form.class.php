@@ -78,7 +78,7 @@ class form extends fixer
      * @param int        $flowGroupID
      * @return form
      */
-    public static function data(?array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
+    public static function data(array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
     {
         global $app, $config;
 
@@ -143,8 +143,6 @@ class form extends fixer
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
 
         if(empty($app->control)) return $configObject;
-        $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
-        if(!$flow) return $configObject;
 
         $app->control->loadModel('workflowgroup');
         if($flowGroupID)
@@ -153,13 +151,16 @@ class form extends fixer
             $groupID = (empty($group) || $group->main) ? 0 : $flowGroupID;
         }
 
-        $groupID = isset($groupID) ? $groupID : $app->control->workflowgroup->getGroupIDByDataID($flow->module, $objectID);
-        $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
+        $groupID = isset($groupID) ? $groupID : $app->control->workflowgroup->getGroupIDByDataID($moduleName, $objectID);
+        $flow = $app->control->loadModel('workflow')->getByModule($moduleName, false, $groupID);
+        if(!$flow) return $configObject;
+
+        $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
         $uiID         = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
-        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
-        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $groupID);
+        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
+        $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $flow->group);
         $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
         {
@@ -179,8 +180,10 @@ class form extends fixer
                 }
                 else
                 {
-                    $type = $field->type == 'int' ? 'int' : 'string';
-                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => '');
+                    $type = 'string';
+                    if($field->type == 'int')     $type = 'int';
+                    if($field->type == 'decimal') $type = 'float';
+                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => $field->type == 'int' || $field->type == 'decimal' ? 0 : '');
                     if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
                 }
             }
@@ -419,7 +422,7 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
-        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && empty($data))
+        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && (is_null($this->rawdata->$field) || $this->rawdata->$field === '' || is_array($this->rawdata->$field)) && empty($data))
         {
             $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;

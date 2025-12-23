@@ -227,7 +227,7 @@ class zahostTest
     {
         $image = $this->objectModel->getImageByID($imageID);
         if(!$image) return false;
-        
+
         $image->address = "https://pkg.qucheng.com/zenagent/image/{$image->name}.qcow2";
 
         $result = $this->objectModel->downloadImage($image);

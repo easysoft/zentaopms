@@ -58,7 +58,7 @@ class formBatchItem extends wg
      */
     protected function build(): array
     {
-        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly, $multiple) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly', 'multiple'));
+        list($name, $label, $labelClass, $labelProps, $required, $tip, $tipClass, $tipProps, $tipIcon, $control, $width, $strong, $value, $disabled, $items, $placeholder, $ditto, $defaultDitto, $hidden, $readonly, $multiple, $checkboxName, $checkboxValue, $checkboxText, $checkboxChecked) = $this->prop(array('name', 'label', 'labelClass', 'labelProps', 'required', 'tip', 'tipClass', 'tipProps', 'tipIcon', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'ditto', 'defaultDitto', 'hidden', 'readonly', 'multiple', 'checkboxName', 'checkboxValue', 'checkboxText', 'checkboxChecked'));
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -110,6 +110,14 @@ class formBatchItem extends wg
                     toggle('tooltip', array('title' => $tip)),
                     set($tipProps),
                     set::icon($tipIcon)
+                ),
+                empty($checkboxName) ? null : new checkbox
+                (
+                    set::rootClass('inline-flex ml-4'),
+                    set::name($checkboxName),
+                    set::value($checkboxValue),
+                    set::text($checkboxText),
+                    set::checked($checkboxChecked)
                 )
             ),
             h::td

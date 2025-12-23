@@ -151,9 +151,9 @@ class picker extends wg
         $name = isset($pickerProps['name']) ? $pickerProps['name'] : '';
         if(isset($config->moreLinks[$name])) $pickerItems = $config->moreLinks[$name];
 
-        $pickerProps['_props']        = $restProps;
-        $pickerProps['items']         = $pickerItems;
-        $pickerProps['defaultValue']  = $defaultValue;
+        $pickerProps['_props']       = $restProps;
+        $pickerProps['items']        = $pickerItems;
+        $pickerProps['defaultValue'] = $defaultValue;
 
         return $pickerProps;
     }

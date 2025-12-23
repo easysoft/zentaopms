@@ -22,7 +22,7 @@ fields:
     format: ""
   - field: object
     note: "检查清单标题"
-    range: PP,QAP,CMP,ITP,URS,SRS,HLDS,DDS,Code,ITTC,STP,STTC,UM
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0

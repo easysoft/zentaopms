@@ -38,6 +38,11 @@ $tester->loadModel('todo');
 su('admin');
 zenData('todo')->loadYaml('createbycycle')->gen(3);
 
+global $tester;
+$todos = $tester->loadModel('todo')->getList();
+
+r(count($todos)) && p() && e('0'); // 测试前，待办数据为0
+
 $todo = new todoTest();
 $todo->createByCycleTest();
 $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('deleted')->eq('0')->fetchAll();

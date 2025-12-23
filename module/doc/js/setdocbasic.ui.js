@@ -28,3 +28,22 @@ window.loadExecutions = function()
         modulePicker.$.setValue('');
     });
 }
+
+window.changeIsDeliverable = function()
+{
+    if($(this).val() == '1')
+    {
+        $('[type=radio][name=acl]').attr('disabled', 'disabled');
+        $('#acl').removeAttr('disabled');
+        $("[type=radio][name='acl'][value='open']").prop('checked', true);
+        $('[type=radio][name=acl]').closest('.radio-primary').addClass('disabled');
+        $('[type=radio][name=acl]').closest('.check-list').addClass('disabled');
+    }
+    else
+    {
+        $('#acl').attr('disabled', 'disabled');
+        $('[type=radio][name=acl]').removeAttr('disabled');
+        $('[type=radio][name=acl]').closest('.radio-primary').removeClass('disabled');
+        $('[type=radio][name=acl]').closest('.check-list').removeClass('disabled');
+    }
+}

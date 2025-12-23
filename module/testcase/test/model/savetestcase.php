@@ -54,7 +54,7 @@ $nodeID2 = $testcase2->tmpPId;
 $scene2 = isset($sceneIdList2[$nodeID2]['id']) ? $sceneIdList2[$nodeID2]['id'] : 0;
 r($scene2) && p() && e('5'); // 步骤2：测试tmpPId在sceneIdList中存在
 
-// 步骤3：测试tmpPId不存在于sceneIdList中的情况  
+// 步骤3：测试tmpPId不存在于sceneIdList中的情况
 $testcase3 = new stdclass();
 $testcase3->tmpPId = 'invalidKey';
 $sceneIdList3 = array('validKey' => array('id' => 20), 'anotherKey' => array('id' => 25));

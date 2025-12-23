@@ -635,28 +635,28 @@ class fileTest
     public function __constructTest(): array
     {
         global $tester;
-        
+
         // 创建新的fileModel实例来测试构造函数
         $fileModel = $tester->loadModel('file');
-        
+
         $result = array();
-        
+
         // 测试now属性是否为整数类型
         $result['nowIsInt'] = is_int($fileModel->now) ? 1 : 0;
-        
+
         // 测试savePath属性是否包含upload路径
         $result['savePathContainsUpload'] = (strpos($fileModel->savePath, 'upload') !== false) ? 1 : 0;
-        
+
         // 测试webPath属性是否包含upload路径
         $result['webPathContainsUpload'] = (strpos($fileModel->webPath, 'upload') !== false) ? 1 : 0;
-        
+
         // 测试now属性是否接近当前时间（允许5秒误差）
         $currentTime = time();
         $result['nowIsRecent'] = (abs($fileModel->now - $currentTime) <= 5) ? 1 : 0;
-        
+
         // 测试是否继承了父类属性（检查dao属性）
         $result['hasParentProperties'] = isset($fileModel->dao) ? 1 : 0;
-        
+
         return $result;
     }
 
@@ -686,7 +686,7 @@ class fileTest
     public function getByGidTest(string $gid): object|false
     {
         $result = $this->objectModel->getByGid($gid);
-        
+
         if(dao::isError()) return dao::getError();
         if(empty($result)) return false;
 
@@ -769,7 +769,7 @@ class fileTest
         // 调试输出
         if($result === false) return 'false';
         if(empty($result)) return 'empty';
-        
+
         return is_array($result) ? count($result) : $result;
     }
 
@@ -787,13 +787,13 @@ class fileTest
     {
         // 模拟saveAFile方法的行为，但跳过实际的文件移动操作
         $now = helper::today();
-        
+
         // 如果是无效路径的测试，直接返回false
         if(isset($file['tmpname']) && strpos($file['tmpname'], '/nonexistent/') !== false)
         {
             return false;
         }
-        
+
         // 模拟文件压缩处理（如果是图片）
         if(isset($file['extension']) && in_array(strtolower($file['extension']), array('jpg', 'jpeg', 'png', 'bmp')))
         {
@@ -807,13 +807,13 @@ class fileTest
         $file['addedBy']    = $this->objectModel->app->user->account;
         $file['addedDate']  = $now;
         $file['extra']      = $extra;
-        
+
         // 移除tmpname，模拟真实的saveAFile方法行为
         if(isset($file['tmpname'])) unset($file['tmpname']);
-        
+
         // 插入数据库
         $this->objectModel->dao->insert(TABLE_FILE)->data($file)->exec();
-        
+
         if(dao::isError()) return dao::getError();
 
         $fileTitle        = new stdclass();
@@ -870,12 +870,12 @@ class fileTest
             return 'gd_not_loaded';
         }
 
-        try 
+        try
         {
             $result = $this->objectModel->cropImage($rawImage, $target, $x, $y, $width, $height, $resizeWidth, $resizeHeight);
-            
+
             if($result === false) return 'gd_not_loaded';
-            
+
             return 'success';
         }
         catch(Exception $e)
@@ -902,22 +902,22 @@ class fileTest
             return 'gd_not_loaded';
         }
 
-        try 
+        try
         {
             // 捕获并清理错误输出缓冲区
             ob_start();
             $result = $this->objectModel->imagecreatefrombmp($filename);
             $output = ob_get_clean();
-            
+
             // 如果有HTML错误输出，返回exception
             if(!empty($output) && (strpos($output, 'alert alert-danger') !== false || strpos($output, 'Failed to open stream') !== false))
             {
                 return 'exception';
             }
-            
+
             if($result === false) return false;
             if(is_resource($result) || (is_object($result) && $result instanceof GdImage)) return 'resource';
-            
+
             return 'unknown';
         }
         catch(Exception $e)
@@ -943,9 +943,9 @@ class fileTest
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('dwordize');
         $method->setAccessible(true);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         try {
             $result = $method->invoke($this->objectModel, $str);
             return $result;
@@ -966,16 +966,16 @@ class fileTest
     {
         global $tester;
         $fileModel = $tester->loadModel('file');
-        
+
         // 通过反射访问protected方法
         $reflection = new ReflectionClass('fileZen');
         $method = $reflection->getMethod('getDownloadMode');
         $method->setAccessible(true);
-        
+
         // 创建fileZen实例
         $fileZen = new fileZen();
         $result = $method->invoke($fileZen, $file, $mouse);
-        
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -991,33 +991,33 @@ class fileTest
     public function unlinkRealFileTest($file)
     {
         global $tester;
-        
+
         // 记录调用前的状态
         $beforeCount = 0;
         if(!empty($file) && isset($file->pathname))
         {
             $beforeCount = $tester->dao->select('COUNT(1) as count')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch('count');
         }
-        
+
         try
         {
             // 加载必要的文件
             $fileModel = $tester->loadModel('file');
-            
+
             // 加载zen文件
             $zenFile = $tester->app->getModuleRoot() . 'file' . DS . 'zen.php';
             if(file_exists($zenFile))
             {
                 include_once $zenFile;
             }
-            
+
             // 通过反射访问protected方法
             if(class_exists('fileZen'))
             {
                 $reflection = new ReflectionClass('fileZen');
                 $method = $reflection->getMethod('unlinkRealFile');
                 $method->setAccessible(true);
-                
+
                 // 创建fileZen实例
                 $fileZen = new fileZen();
                 $result = $method->invoke($fileZen, $file);
@@ -1035,14 +1035,14 @@ class fileTest
                     }
                 }
             }
-            
+
             // 检查调用后的状态
             $afterCount = 0;
             if(!empty($file) && isset($file->pathname))
             {
                 $afterCount = $tester->dao->select('COUNT(1) as count')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch('count');
             }
-            
+
             // 返回状态信息用于断言
             return array(
                 'beforeCount' => $beforeCount,
@@ -1059,9 +1059,9 @@ class fileTest
                 'error' => $e->getMessage()
             );
         }
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         return array('called' => true, 'beforeCount' => $beforeCount, 'afterCount' => 0);
     }
 

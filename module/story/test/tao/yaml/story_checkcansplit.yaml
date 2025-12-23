@@ -8,91 +8,91 @@ fields:
 - field: id
   note: 需求ID
   range: 1-8
-  
+
 - field: vision
   note: 产品版本
   range: 'rnd'
-  
+
 - field: parent
   note: 父需求ID
   range: '0,0,0,0,2,3,4,0'
-  
+
 - field: isParent
   note: 是否父需求
   range: '0'
-  
+
 - field: root
   note: 根需求ID
   range: '0'
-  
+
 - field: product
   note: 所属产品
   range: '1'
-  
+
 - field: branch
   note: 分支
   range: '0'
-  
+
 - field: module
   note: 所属模块
   range: '0'
-  
+
 - field: title
   note: 需求标题
   range: '需求1,需求2,需求3,需求4,子需求1,子需求2,不同类型子需求,删除的子需求'
-  
+
 - field: type
   note: 需求类型
   range: 'story,story,story,story,story,requirement,story,story'
-  
+
 - field: category
   note: 需求分类
   range: 'feature'
-  
+
 - field: pri
   note: 优先级
   range: '3'
-  
+
 - field: estimate
   note: 预估工时
   range: '0'
-  
+
 - field: status
   note: 需求状态
   range: 'active'
-  
+
 - field: stage
   note: 需求阶段
   range: 'wait'
-  
+
 - field: openedBy
   note: 由谁创建
   range: 'admin'
-  
+
 - field: openedDate
   note: 创建时间
   range: '2024-01-01 00:00:00'
-  
+
 - field: assignedTo
   note: 指派给
   range: ''
-  
+
 - field: assignedDate
   note: 指派时间
   range: ''
-  
+
 - field: lastEditedBy
   note: 最后编辑者
   range: 'admin'
-  
+
 - field: lastEditedDate
   note: 最后编辑时间
   range: '2024-01-01 00:00:00'
-  
+
 - field: version
   note: 版本号
   range: '1'
-  
+
 - field: deleted
   note: 是否删除
   range: '0,0,0,0,0,0,0,1'

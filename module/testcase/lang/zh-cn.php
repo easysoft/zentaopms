@@ -50,7 +50,7 @@ $lang->testcase->unlinkCase       = '移除相关用例';
 $lang->testcase->linkBug          = '相关Bug';
 $lang->testcase->linkBugs         = '关联相关Bug';
 $lang->testcase->unlinkBug        = '移除相关Bug';
-$lang->testcase->stage            = '适用阶段';
+$lang->testcase->stage            = '适用环节';
 $lang->testcase->script           = '自动化脚本';
 $lang->testcase->scriptedBy       = '脚本由谁创建';
 $lang->testcase->scriptedDate     = '脚本创建日期';
@@ -190,7 +190,7 @@ $lang->testcase->unexecuted   = '未执行';
 $lang->testcase->lblStory       = "相关{$lang->SRCommon}";
 $lang->testcase->lblLastEdited  = '最后编辑';
 $lang->testcase->lblTypeValue   = '类型可选值列表';
-$lang->testcase->lblStageValue  = '阶段可选值列表';
+$lang->testcase->lblStageValue  = '环节可选值列表';
 $lang->testcase->lblStatusValue = '状态可选值列表';
 
 $lang->testcase->legendBasicInfo   = '基本信息';
@@ -230,12 +230,12 @@ $lang->testcase->typeList['security']    = '安全相关';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';
-$lang->testcase->stageList['unittest']   = '单元测试阶段';
-$lang->testcase->stageList['feature']    = '功能测试阶段';
-$lang->testcase->stageList['intergrate'] = '集成测试阶段';
-$lang->testcase->stageList['system']     = '系统测试阶段';
-$lang->testcase->stageList['smoke']      = '冒烟测试阶段';
-$lang->testcase->stageList['bvt']        = '版本验证阶段';
+$lang->testcase->stageList['unittest']   = '单元测试环节';
+$lang->testcase->stageList['feature']    = '功能测试环节';
+$lang->testcase->stageList['intergrate'] = '集成测试环节';
+$lang->testcase->stageList['system']     = '系统测试环节';
+$lang->testcase->stageList['smoke']      = '冒烟测试环节';
+$lang->testcase->stageList['bvt']        = '版本验证环节';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';

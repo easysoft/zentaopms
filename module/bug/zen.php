@@ -675,6 +675,7 @@ class bugZen extends bug
             ->setDefault('product', $oldBug->product)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('resolvedDate', $oldBug->resolvedDate)
             ->add('lastEditedDate', $now)
             ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)

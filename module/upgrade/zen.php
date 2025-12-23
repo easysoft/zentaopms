@@ -95,8 +95,6 @@ class upgradeZen extends upgrade
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
         $this->setting->setItem('system.custom.URAndSR', '1');
-        $this->setting->setItem('system.common.closedFeatures', '');
-        $this->setting->setItem('system.common.disabledFeatures', '');
         $this->upgrade->addORPriv($openVersion);
     }
 

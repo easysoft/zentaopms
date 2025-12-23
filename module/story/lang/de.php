@@ -550,6 +550,9 @@ $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
 
+$lang->story->frozenTip  = "After the stories are baselined, %s is not allowed.";
+$lang->story->frozenTips = "Story %s has been frozen and will not be %s.";
+
 $lang->story->changeTip = 'Only active can be changed.';
 
 $lang->story->reviewTip = array();

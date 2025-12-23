@@ -303,4 +303,21 @@ class projectZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Send variables to create page.
+     *
+     * @param  string $model
+     * @param  int    $programID
+     * @param  int    $copyProjectID
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function buildCreateFormTest(string $model, int $programID, int $copyProjectID, string $extra)
+    {
+        $this->invokeArgs('buildCreateForm', [$model, $programID, $copyProjectID, $extra]);
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
 }

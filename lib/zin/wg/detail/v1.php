@@ -276,6 +276,7 @@ CSS;
         }
 
         $titleActions = isset($item['titleActions']) ? $item['titleActions'] : null;
+        $className    = isset($item['className']) ? $item['className'] : null;
         if($titleActions) unset($item['titleActions']);
 
         return div
@@ -290,7 +291,7 @@ CSS;
             ) : null,
             div
             (
-                setClass('detail-section-content py-1'),
+                setClass("detail-section-content py-1 {$className}"),
                 $item ? new content(is_array($item) ? set($item) : $item) : null,
             )
         );
@@ -375,16 +376,17 @@ CSS;
 
     protected function buildMain()
     {
+        $mainSections = $this->buildMainSections();
         return div
         (
             setClass('detail-main flex-auto col gap-2 min-w-0'),
-            div
+            $mainSections ? div
             (
                 setClass('detail-sections canvas shadow rounded px-6 py-4'),
                 setKey('main'),
-                $this->buildMainSections(),
+                $mainSections,
                 $this->block('main')
-            ),
+            ) : null,
             $this->block('sections'),
             $this->children(),
             $this->buildHistory(),

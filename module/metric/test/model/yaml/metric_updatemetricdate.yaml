@@ -8,87 +8,87 @@ fields:
 - field: id
   note: 度量项ID
   range: 1-10
-  
+
 - field: purpose
   note: 度量目的
   range: quality,efficiency,cost{2}
-  
+
 - field: scope
   note: 度量范围
   range: system{5},product{3},project{2}
-  
+
 - field: object
   note: 度量对象
   range: bug{3},story{3},task{2},user{2}
-  
+
 - field: stage
   note: 发布阶段
   range: wait{7},released{3}
-  
+
 - field: type
   note: 度量类型
   range: php{6},sql{4}
-  
+
 - field: name
   note: 度量项名称
   range: '[测试度量项_,度量_]{5}'
-  
+
 - field: alias
   note: 度量项别名
   range: '[test_metric_,metric_alias_]{5}'
-  
+
 - field: code
   note: 度量代码
   range: '[test_code_,metric_code_]{5}'
-  
+
 - field: unit
   note: 度量单位
   range: '[个,次,小时,天,百分比]{2}'
-  
+
 - field: dateType
   note: 日期类型
   range: day{4},week{3},month{2},quarter{1}
-  
+
 - field: collector
   note: 采集器配置
   range: '[{"type":"sql","sql":"SELECT COUNT(*) FROM table"},{"type":"php","class":"testClass"}]{5}'
-  
+
 - field: desc
   note: 度量项描述
   range: '[这是一个测试度量项,用于测试的度量项描述]{5}'
-  
+
 - field: definition
   note: 度量定义
   range: '[该度量项用于计算,测试度量项的定义说明]{5}'
-  
+
 - field: when
   note: 计算时机
   range: '[daily,weekly,monthly]{3.3}'
-  
+
 - field: event
   note: 触发事件
   range: '[create,update,delete]{3.3}'
-  
+
 - field: cronCFG
   note: 定时任务配置
   range: '[0 0 * * *,0 9 * * 1,0 0 1 * *]{3.3}'
-  
+
 - field: time
   note: 执行时间
   range: '[morning,afternoon,evening]{3.3}'
-  
+
 - field: createdBy
   note: 创建人
   range: admin{3},user1{2},user2{2},user3{1},testuser{2}
-  
+
 - field: createdDate
   note: 创建日期
   range: '[]{5},2023-01-01 10:00:00{2},2023-02-15 14:30:00{2},2023-03-20 09:15:00{1}'
-  
+
 - field: editedBy
   note: 最后编辑人
   range: admin{4},user1{3},user2{2},testuser{1}
-  
+
 - field: editedDate
   note: 最后编辑时间
   range: '2023-01-15 10:00:00{3},2023-02-20 14:30:00{3},2023-03-25 09:15:00{4}'

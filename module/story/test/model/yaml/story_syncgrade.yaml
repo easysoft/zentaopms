@@ -9,7 +9,7 @@ fields:
   range: rnd{10}
 - field: parent
   range: 0, 1, 1, 2, 2, 0, 0, 0, 0, 0
-- field: product  
+- field: product
   range: 1{10}
 - field: branch
   range: 0{10}

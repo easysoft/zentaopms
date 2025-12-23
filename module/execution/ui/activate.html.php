@@ -26,13 +26,15 @@ formPanel
                 datePicker
                 (
                     set::name('begin'),
-                    set::value($newBegin)
+                    set::value($newBegin),
+                    set::disabled(!empty($execution->frozen))
                 ),
                 $lang->execution->to,
                 datePicker
                 (
                     set::name('end'),
-                    set::value($newEnd)
+                    set::value($newEnd),
+                    set::disabled(!empty($execution->frozen))
                 )
             )
         ),

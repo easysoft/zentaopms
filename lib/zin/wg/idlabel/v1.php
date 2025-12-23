@@ -23,7 +23,7 @@ class idLabel extends wg
         $id = $this->prop('id');
         return span
         (
-            setClass('label label-id gray-300-outline size-sm rounded-full flex-none'),
+            setClass('label label-id gray-300-outline size-sm rounded-full flex-none ml-1'),
             set($this->getRestProps()),
             $id,
             $this->children()

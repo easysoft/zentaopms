@@ -7,27 +7,27 @@ title=测试 screenModel::getMetricPagination();
 timeout=0
 cid=18248
 
-- 执行screenTest模块的getMetricPaginationTest方法，参数是null 
+- 执行screenTest模块的getMetricPaginationTest方法，参数是null
  - 属性index @1
  - 属性size @5
  - 属性total @0
  - 属性pageTotal @1
-- 执行screenTest模块的getMetricPaginationTest方法 
+- 执行screenTest模块的getMetricPaginationTest方法
  - 属性index @1
  - 属性size @5
  - 属性total @0
  - 属性pageTotal @1
-- 执行screenTest模块的getMetricPaginationTest方法 
+- 执行screenTest模块的getMetricPaginationTest方法
  - 属性index @1
  - 属性size @12
  - 属性total @0
  - 属性pageTotal @1
-- 执行screenTest模块的getMetricPaginationTest方法 
+- 执行screenTest模块的getMetricPaginationTest方法
  - 属性index @1
  - 属性size @10
  - 属性total @0
  - 属性pageTotal @1
-- 执行screenTest模块的getMetricPaginationTest方法 
+- 执行screenTest模块的getMetricPaginationTest方法
  - 属性index @1
  - 属性size @12
  - 属性total @0

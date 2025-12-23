@@ -34,7 +34,7 @@ class SimpleMockMetric {
     public function isObjectMetric($header) {
         return true;
     }
-    
+
     public function getGroupTable($header, $data, $dateType, $flag) {
         $groupHeader = 'Test Header';
         $groupData = array(array('Item1', 100), array('Item2', 200));

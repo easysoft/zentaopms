@@ -12,6 +12,53 @@ title=测试 projectModel->getProjectLink();
 timeout=0
 cid=17846
 
+- test project->multiple=0 @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'execution'     , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'test'          , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'bug'           , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'testcase'      , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'testtask'      , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'testreport'    , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'build'         , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'dynamic'       , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'view'          , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'manageproducts', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'team'          , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'managemembers' , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'whitelist'     , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'addwhitelist'  , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'group'         , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'project', 'managePriv'    , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'product', 'showerrornone', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'projectstory', 'story'    , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'projectstory', 'linkstory', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'projectstory', 'track'    , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'bug', 'create', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'bug', 'edit'  , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'story', 'change'  , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'story', 'create'  , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'story', 'zerocase', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'testcase', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'testtask', 'browseunits' , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'testtask', 'browse'      , 12)) > 0   @1
+- 执行projectModel模块的getProjectLink方法，参数是'testreport', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'repo', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'doc', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'api', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'build', 'create', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'build', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'build', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'projectrelease', 'create', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'projectrelease', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'stakeholder', 'create', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'stakeholder', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'issue', 'projectsummary', 11)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'issue', 'browse'        , 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'zahost', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'design', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'reviewissue', 'browse', 12)) > 0  @1
+- 执行projectModel模块的getProjectLink方法，参数是'programplan', 'execution', 12)) > 0  @1
+
 */
 
 global $tester;

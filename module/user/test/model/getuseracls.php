@@ -26,7 +26,7 @@ su('admin');
 $userTest = new userTest();
 
 r(is_array($userTest->getUserAclsTest('guest'))) && p() && e('1'); // 步骤1：测试guest用户权限获取
-r(is_array($userTest->getUserAclsTest('admin'))) && p() && e('1'); // 步骤2：测试admin用户权限获取  
+r(is_array($userTest->getUserAclsTest('admin'))) && p() && e('1'); // 步骤2：测试admin用户权限获取
 r(is_array($userTest->getUserAclsTest('dev1'))) && p() && e('1'); // 步骤3：测试有权限组用户的权限获取
 r(is_array($userTest->getUserAclsTest('nonexistent'))) && p() && e('1'); // 步骤4：测试不存在用户的权限获取
 r(array_key_exists('programs', $userTest->getUserAclsTest('admin'))) && p() && e('1'); // 步骤5：测试返回结构包含programs字段

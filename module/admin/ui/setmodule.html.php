@@ -12,7 +12,17 @@ namespace zin;
 
 global $app;
 $app->loadLang('project');
-jsVar('confirmDisableStoryType', $lang->project->confirmDisableStoryType);
+jsVar('confirmDisableStoryType', $lang->admin->notice->confirmDisableStoryType);
+jsVar('edition', $config->edition);
+jsVar('enableER', $config->enableER);
+jsVar('URAndSR', $config->URAndSR);
+jsVar('ERCommon', $lang->ERCommon);
+jsVar('URCommon', $lang->URCommon);
+jsVar('changeLang', $lang->admin->setModule->change);
+jsVar('deliverableLang', $lang->admin->setModule->deliverable);
+jsVar('cmLang', $lang->admin->setModule->cm);
+jsVar('openDependFeature', $lang->admin->notice->openDependFeature);
+jsVar('closeDependFeature', $lang->admin->notice->closeDependFeature);
 
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
 
@@ -20,6 +30,7 @@ $rows = array();
 foreach($config->featureGroup as $group => $features)
 {
     if(strpos(",$disabledFeatures,", ",$group,") !== false) continue;
+    if($config->systemMode == 'light' && $group == 'project') continue;
 
     $hasData = false;
     foreach($features as $feature)
@@ -84,8 +95,10 @@ foreach($config->featureGroup as $group => $features)
 
 formPanel
 (
+    set::id('setModuleForm'),
     set::title($lang->admin->setModuleIndex),
     set::actions(false),
+    set::ajax(array('beforeSubmit' => jsRaw("submitForm"))),
     h::table
     (
         setClass('border w-full'),

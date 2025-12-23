@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if(!empty($frozenStages))
+{
+    $frozenTip = sprintf($lang->execution->frozenTip, $frozenStages);
+    pageJS("zui.Modal.alert({message: '{$frozenTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
+}
+
 $setCode    = (isset($config->setCode) and $config->setCode == 1);
 $showMethod = $app->tab == 'project' && isset($project) && ($project->model == 'agileplus' || $project->model == 'waterfallplus');
 

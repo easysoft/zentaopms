@@ -117,6 +117,7 @@ $lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
 $lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
 $lang->programplan->noticeChangeAttr  = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”';
 $lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
+$lang->programplan->emptyStageTip     = '请联系管理员，在后台的“项目流程配置”中设置IPD阶段列表。';
 
 $lang->programplan->stageCustom['date'] = '显示日期';
 $lang->programplan->stageCustom['task'] = '显示任务';
@@ -134,7 +135,7 @@ $lang->programplan->ganttCustom['delay']        = '是否延期';
 $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"工作量占比"必须为数字';
+$lang->programplan->error->percentNumber   = '"工作量占比"必须为非负数';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
 $lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';

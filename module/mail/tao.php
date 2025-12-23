@@ -239,7 +239,7 @@ class mailTao extends mailModel
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
 
-        if(in_array($objectType, array('epic', 'requirement', 'story', 'task', 'meeting', 'review', 'deploy'))) return $objectModel->getToAndCcList($object, $action->action);
+        if(in_array($objectType, array('epic', 'requirement', 'story', 'task', 'meeting', 'review', 'deploy', 'reviewissue'))) return $objectModel->getToAndCcList($object, $action->action);
         if(in_array($objectType, array('ticket', 'rule'))) return $objectModel->getToAndCcList($object, $action);
 
         return $objectModel->getToAndCcList($object);
@@ -327,6 +327,8 @@ class mailTao extends mailModel
     protected function getObjectTitle(object $object, string $objectType): string
     {
         $this->loadModel('action');
+        if($objectType == 'auditplan') return $this->lang->auditplan->common . ' #' . $object->id;
+
         $nameFields = zget($this->config->action->objectNameFields, $objectType, array());
         return zget($object, $nameFields, '');
     }

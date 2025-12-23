@@ -46,7 +46,7 @@ if($app->tab == 'execution' && isset($execution)) $canModify = common::canModify
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
 $toolbar = array();
-if(!$isInModal && hasPriv($story->type, 'create') && $canModify)
+if(empty($story->frozen) && !$isInModal && hasPriv($story->type, 'create') && $canModify)
 {
     $otherParam = 'storyID=&projectID=';
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
@@ -199,6 +199,12 @@ if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider
 
 foreach($actions as $key => $action)
 {
+    if(!empty($story->frozen) && isset($action['icon']) && in_array($action['icon'], array('edit', 'change', 'trash', 'split', 'copy')))
+    {
+        unset($actions[$key]);
+        continue;
+    }
+
     if(!$hasDivider && isset($action['type']) && $action['type'] == 'divider')
     {
         unset($actions[$key]);

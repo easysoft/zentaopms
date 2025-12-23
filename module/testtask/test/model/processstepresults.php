@@ -41,7 +41,7 @@ $testtaskTest = new testtaskTest();
 
 // 5. 执行测试步骤
 r($testtaskTest->processStepResultsTest([1, 2], 1, 'pass', [], [])) && p('1:result') && e('pass'); // 步骤1：用例有步骤，结果为pass
-r($testtaskTest->processStepResultsTest([1, 2], 1, 'fail', [1 => 'fail', 2 => 'pass', 3 => 'fail'], [1 => '实际结果1'])) && p('1:result') && e('fail'); // 步骤2：用例有步骤，结果为fail  
+r($testtaskTest->processStepResultsTest([1, 2], 1, 'fail', [1 => 'fail', 2 => 'pass', 3 => 'fail'], [1 => '实际结果1'])) && p('1:result') && e('fail'); // 步骤2：用例有步骤，结果为fail
 r($testtaskTest->processStepResultsTest([1, 2], 4, 'pass', [], [])) && p('0:result') && e('pass'); // 步骤3：用例无步骤，结果为pass
 r($testtaskTest->processStepResultsTest([1, 2], 4, 'fail', [], ['测试失败原因'])) && p('0:result') && e('fail'); // 步骤4：用例无步骤，结果为fail
 r($testtaskTest->processStepResultsTest([], 1, 'pass', [], [])) && p() && e('Array'); // 步骤5：空步骤数组测试

@@ -892,7 +892,14 @@ class pivotModel extends model
                 foreach($filters as $field => $filter)
                 {
                     $fieldSQL = $this->getFilterFieldSQL($filter, $field, $driver);
-                    $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
+                    if($filter['operator'] == 'LIKE' && $filter['value'] == "'%%'")
+                    {
+                        $wheres[] = "1=1"; // if empty filter then ignore this filter.
+                    }
+                    else
+                    {
+                        $wheres[] = "$fieldSQL {$filter['operator']} {$filter['value']}";
+                    }
                 }
 
                 $whereStr    = implode(' and ', $wheres);
@@ -2022,8 +2029,9 @@ class pivotModel extends model
                     }
                     $drillFields[$field] = $drillField;
                 }
-                $optionList  = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
-                $rowAfterFields[$field] = isset($optionList[$value]) ? $optionList[$value] : $value;
+                $optionList = isset($fieldOptions[$field]) ? $fieldOptions[$field] : array();
+                $rowAfterFields[$field] = isset($optionList[(string)$value]) ? $optionList[(string)$value] : $value;
+
             }
             $dataDrills[$key] = array('drillFields' => $drillFields);
 

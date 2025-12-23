@@ -39,14 +39,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: auditedBy
-    note: "由谁审计"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: createdBy
     note: "由谁创建"
     from: common.user.v1.yaml
@@ -87,22 +79,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: lastAuditedBy
-    note: "最后审计者"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: lastAuditedDate
-    note: "最后审计日期"
-    from: common.date.v1.yaml
-    use: dateB
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: lastEditedBy
     note: "最后编辑者"
     from: common.user.v1.yaml
@@ -121,13 +97,6 @@ fields:
     format: ""
   - field: result
     note: "评审结果"
-    range: pass,fail,needfix
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: auditResult
-    note: "审计结果"
     range: pass,fail,needfix
     prefix: ""
     postfix: ""

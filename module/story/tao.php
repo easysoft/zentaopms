@@ -2009,7 +2009,7 @@ class storyTao extends storyModel
         /* Change button. */
         $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change', $taskGroups, $caseGroups) && $this->checkConditions('change', $story);
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
-        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
+        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => empty($story->frozen) ? $title : sprintf($this->lang->story->frozenTip, $this->lang->story->change), 'disabled' => !$canChange, 'class' => 'story-change-btn');
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
@@ -2070,7 +2070,7 @@ class storyTao extends storyModel
 
         /* Edit button. */
         $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit', $taskGroups, $caseGroups) && $this->checkConditions('edit', $story);
-        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit', $taskGroups, $caseGroups) ? $editLink : null, 'disabled' => !$canEdit);
+        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit', $taskGroups, $caseGroups) ? $editLink : null, 'disabled' => !$canEdit, 'hint' => empty($story->frozen) ? $this->lang->story->edit : sprintf($this->lang->story->frozenTip, $this->lang->story->edit));
 
         /* Create test case button. */
         if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1', 'data-toggle' => 'modal', 'data-size' => 'lg');
@@ -2093,15 +2093,15 @@ class storyTao extends storyModel
              */
             if($canBatchCreateStory)
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
+                $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
             {
-                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
+                $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
             elseif(!$canBatchCreateStory && common::hasPriv($story->type, 'batchcreate'))
             {
@@ -2112,6 +2112,7 @@ class storyTao extends storyModel
                 if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
                 if(isset($maxGradeGroup[$story->type]) && $story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                 if($story->status != 'active' && $story->status != 'changing') $title = $this->lang->story->subDivideTip['notActive'];
+                if(!empty($story->frozen)) $title = sprintf($this->lang->story->frozenTip, $this->lang->story->split);
                 $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
             }
         }
@@ -2161,15 +2162,15 @@ class storyTao extends storyModel
                     $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
                     if($canBatchCreateStory)
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
+                        $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split');
                     }
                     elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split');
                     }
                     elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
                     {
-                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
+                        $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => empty($story->frozen) ? $this->lang->story->split : sprintf($this->lang->story->frozenTip, $this->lang->story->split), 'icon' => 'split');
                     }
                     elseif(!$canBatchCreateStory && $story->status != 'closed' && common::hasPriv($story->type, 'batchcreate'))
                     {
@@ -2180,13 +2181,14 @@ class storyTao extends storyModel
                         if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
                         if(isset($maxGradeGroup[$story->type]) && $story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                         if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                        if(!empty($story->frozen)) $title = sprintf($this->lang->story->frozenTip, $this->lang->story->split);
                         $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
                     }
                 }
 
                 if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
                 $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
-                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled, 'hint' => $unlinkHint);
+                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled || !empty($story->frozen), 'hint' => !empty($story->frozen) ? sprintf($this->lang->story->frozenTip, $this->lang->story->unlink) : $unlinkHint);
             }
         }
 

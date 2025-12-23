@@ -1055,7 +1055,6 @@ class projectTao extends projectModel
 
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
 
-            if($projectModel == 'ipd') unset($lang->waterfall->menu->other['dropMenu']->deliverable);
             $lang->execution->typeList['sprint'] = $executionCommonLang;
 
             if($app->rawModule == 'project' && $app->rawMethod == 'executionreport') $lang->waterfall->menu->execution['subModule'] .= ',project';

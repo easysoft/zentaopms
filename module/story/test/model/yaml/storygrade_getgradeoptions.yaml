@@ -12,7 +12,7 @@ fields:
   range: 1,2,1,2,3,1,2,3,4
 
 - field: name
-  note: 分级名称  
+  note: 分级名称
   range: BR1,BR2,UR1,UR2,UR3,SR1,SR2,SR3,子
 
 - field: status

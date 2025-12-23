@@ -8,31 +8,31 @@ fields:
 - field: id
   note: 标记ID
   range: 1-1000
-  
+
 - field: objectType
   note: 对象类型
   range: story{10},task{10},bug{10},product{5},project{5}
-  
+
 - field: objectID
   note: 对象ID
   range: 1-50
-  
+
 - field: version
   note: 版本号
   range: 1.0{10},2.0{10},3.0{5},all{15}
-  
+
 - field: account
   note: 用户账号
   range: admin{20},user1{10},user2{10}
-  
+
 - field: mark
   note: 标记类型
   range: view{30},favorite{10}
-  
+
 - field: extra
   note: 额外信息
   range: []{30},important{5},urgent{5}
-  
+
 - field: date
   note: 标记时间
   range: (-30d)-(0d)

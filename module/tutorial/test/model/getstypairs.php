@@ -30,5 +30,5 @@ $storyPairs = $tutorialTest->getStoryPairsTest();
 r(is_array($storyPairs)) && p() && e('1'); // 步骤1：验证返回结果是数组格式
 r(count($storyPairs)) && p() && e('4'); // 步骤2：验证数组包含正确数量的需求键值对
 r($tutorialTest->getStoryPairsTest()) && p('1') && e('Test epic'); // 步骤3：验证Epic类型需求的键值对映射关系
-r($tutorialTest->getStoryPairsTest()) && p('2') && e('Test requirement'); // 步骤4：验证Requirement类型需求的键值对映射关系  
+r($tutorialTest->getStoryPairsTest()) && p('2') && e('Test requirement'); // 步骤4：验证Requirement类型需求的键值对映射关系
 r($tutorialTest->getStoryPairsTest()) && p('3') && e('Test active story'); // 步骤5：验证Story类型需求的键值对映射关系

@@ -111,7 +111,7 @@ class my extends control
      */
     public function contribute(string $mode = 'task', string $type = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
+        if((in_array($mode, array('issue', 'risk', 'reviewissue'))) && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
@@ -879,6 +879,61 @@ class my extends control
     }
 
     /**
+     * 评审意见列表。
+     * My reviewissues.
+     *
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function reviewissue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->loadModel('reviewissue');
+
+        /* Set the pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $queryID       = $type == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=reviewissue&type=bysearch&param=myQueryID");
+        $this->my->buildReviewissueSearchForm($queryID, $actionURL);
+
+        /* Get reviewissues by type*/
+        if($type == 'assignedBy')
+        {
+            $reviewissues = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'reviewissue');
+        }
+        elseif($type == 'bysearch')
+        {
+            $reviewissues = $this->my->getReviewissuesBySearch($queryID, $currentMethod, $orderBy, $pager);
+        }
+        else
+        {
+            $reviewissues = $this->reviewissue->getUserReviewissues($type, $this->app->user->account, $orderBy, $pager);
+        }
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        $this->view->title        = $this->lang->my->reviewissue;
+        $this->view->reviewissues = $reviewissues;
+        $this->view->users        = $this->user->getPairs('noclosed|noletter');
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->type         = $type;
+        $this->view->param        = $param;
+        $this->view->mode         = 'reviewissue';
+        $this->view->projectList  = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
+        $this->display();
+    }
+
+    /**
      * 评审列表。
      * My audits.
      *
@@ -962,26 +1017,23 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
 
-        $auditplans = $this->loadModel('auditplan')->getList(0, 'my', $browseType, $param, $orderBy, $pager);
+        $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        $this->app->loadLang('process');
-        $this->view->executions      = $this->loadModel('execution')->getPairs();
-        $this->view->projects        = $this->loadModel('project')->getPairs();
-        $this->view->processTypeList = $this->lang->process->classify;
-        $this->view->processes       = $this->loadModel('pssp')->getProcesses();
-        $this->view->activities      = $this->pssp->getActivityPairs();
-        $this->view->outputs         = $this->pssp->getOutputPairs();
-
-        $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->auditplan;
-        $this->view->browseType = $browseType;
-        $this->view->auditplans = $auditplans;
-        $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->pager      = $pager;
-        $this->view->orderBy    = $orderBy;
-        $this->view->param      = $param;
-        $this->view->mode       = 'auditplan';
+        $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->auditplan;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->mode         = 'auditplan';
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->executions   = $this->loadModel('execution')->getPairs();
+        $this->view->processList  = $this->loadModel('pssp')->getProcessPairs();
+        $this->view->activityList = $this->pssp->getActivityPairs();
+        $this->view->outputList   = $this->pssp->getOutputPairs();
+        $this->view->auditplans   = $auditplans;
+        $this->view->projects     = $this->loadModel('project')->getPairs();
         $this->display();
     }
 

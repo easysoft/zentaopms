@@ -59,13 +59,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: range
-    note: "范围"
-    range: all
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
   - field: data
     note: "数据"
     range: 1-10000
@@ -73,18 +66,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: storyEst
-    range: ""
-  - field: taskEst
-    range: ""
-  - field: requestEst
-    range: ""
-  - field: testEst
-    range: ""
-  - field: devEst
-    range: ""
-  - field: designEst
-    range: ""
   - field: end
     range: "(M)-(w)"
     type: timestamp
