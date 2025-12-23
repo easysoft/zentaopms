@@ -2842,14 +2842,14 @@ class projectModel extends model
         $bug = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         if(!empty($bug)) return true;
 
-        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+        $story = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->limit(1)->fetch();
         if(!empty($story)) return true;
 
-        $case = $this->dao->select('id')->from(TABLE_CASE)->alias('t1')
+        $case = $this->dao->select('t1.id')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
