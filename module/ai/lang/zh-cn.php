@@ -21,6 +21,7 @@ $lang->prompt->source           = '对象数据';
 $lang->prompt->targetForm       = '目标表单';
 $lang->prompt->purpose          = '操作';
 $lang->prompt->elaboration      = '补充要求';
+$lang->prompt->knowledgeLib     = '知识库';
 $lang->prompt->role             = '角色';
 $lang->prompt->characterization = '角色描述';
 $lang->prompt->status           = '阶段';

@@ -278,7 +278,7 @@ class api extends router
                 if(isset($info['method'])) $methodName = $info['method'];
             }
 
-            if(isset($info['response'])) $this->responseExtractor = $info['response'];
+            if(isset($info['response']) && $this->responseExtractor == '*') $this->responseExtractor = $info['response'];
         }
 
         foreach($paramValues as $key => $value)
@@ -453,7 +453,15 @@ class api extends router
         $_POST = json_decode($requestBody, true);
 
         /* Avoid empty post body. */
-        $_POST['verifyPassword'] = '1';
+        if(in_array($this->control->moduleName, ['feedback', 'ticket']))
+        {
+            $_POST['uid'] = '1';
+        }
+        else
+        {
+            $_POST['verifyPassword'] = '1';
+        }
+
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
@@ -473,24 +481,32 @@ class api extends router
         $this->control->getFormData = true;
 
         $zen = $this->control->moduleName . 'Zen';
-        $this->control->$zen->getFormData = true;
+        if(isset($this->control->$zen)) $this->control->$zen->getFormData = true;
 
-        $method = $this->control->methodName;
+        $control = $this->control;  // fetch method will change control.
+        $method  = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $this->params);
 
+        /* Clean the output in get method. */
+        ob_clean();
+        
         $this->control->getFormData       = false;
-        $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
-
+        $this->control                    = $control;
+        
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
 
-        foreach($this->control->$zen->formData as $key => $value)
+        if(isset($this->control->$zen))
         {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
+            $this->control->$zen->getFormData = false;
+            foreach($this->control->$zen->formData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
         }
     }
 

@@ -52,12 +52,13 @@ function getPromptFormConfig(fields, extraConfig)
     const properties = fields.reduce((properties, field, index) => {
         field.code = `field-${field.id}`;
         properties[field.code] = {
-            type    : 'string',
-            widget  : typeMap[field.type] || field.type,
-            title   : field.name,
-            order   : index,
-            required: field.required && field.required !== '0',
-            props   : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
+            type       : 'string',
+            widget     : typeMap[field.type] || field.type,
+            title      : field.name,
+            placeholder: field.placeholder,
+            order      : index,
+            required   : field.required && field.required !== '0',
+            props      : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
         };
         return properties;
     }, {});
@@ -170,7 +171,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 };
                 diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
-            sessionStorage.setItem('aiResult', JSON.stringify(result));
+            localStorage.setItem('aiResult', JSON.stringify(result));
 
             return {
                 view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
@@ -509,8 +510,8 @@ $(() =>
             getErrorContent: (error) =>
             {
                 let html = '';
-                if(error.type === 'unauthorized' && langData.unauthorizedError) html = zui.formatString(langData.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
-                else if(error.type === 'configNotValid' && langData.zaiConfigNotValid) html = zui.formatString(langData.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                if(error.type === 'unauthorized' && zaiLang.unauthorizedError) html = zui.formatString(zaiLang.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                else if(error.type === 'configNotValid' && zaiLang.zaiConfigNotValid) html = zui.formatString(zaiLang.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
 
                 if(html.length) return {html: `<div class="row gap-3"><i class="mt-1 icon icon-exclamation text-warning"></i><div class="text-left pr-8">${html}</div></div>`};
                 return error.message;

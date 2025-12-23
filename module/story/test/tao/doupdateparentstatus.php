@@ -26,7 +26,7 @@ $story = zenData('story');
 $story->id->range('1-100');
 $story->title->range('teststory');
 $story->product->range('1');
-$story->parent->range('`-1`,`-1`,0,1,1');
+$story->parent->range('0,1,1');
 $story->version->range('1');
 $story->gen(5);
 

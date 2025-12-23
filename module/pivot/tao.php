@@ -39,7 +39,7 @@ class pivotTao extends pivotModel
         if($isObject) $pivots = array($pivots);
         $pivotIDList = array_column($pivots, 'id');
 
-        $pivotSpecs = $this->dao->select('t2.*')->from(TABLE_PIVOT)->alias('t1')
+        $pivotSpecs = $this->dao->select('t2.pivot,t2.version,t2.driver,t2.mode,t2.name,t2.desc,t2.sql,t2.fields,t2.langs,t2.vars,t2.objects,t2.settings,t2.filters,t2.createdDate')->from(TABLE_PIVOT)->alias('t1')
             ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
             ->where('t1.id')->in($pivotIDList)
             ->fetchAll('pivot', false);

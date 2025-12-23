@@ -870,41 +870,6 @@ $lang->webhook->methodOrder[25] = 'log';
 $lang->webhook->methodOrder[30] = 'bind';
 $lang->webhook->methodOrder[35] = 'chooseDept';
 
-/* AI methods. */
-$lang->resource->ai = new stdclass();
-$lang->resource->ai->models                  = 'modelBrowse';
-$lang->resource->ai->modelView               = 'modelView';
-$lang->resource->ai->modelCreate             = 'modelCreate';
-$lang->resource->ai->modelEdit               = 'modelEdit';
-$lang->resource->ai->modelEnable             = 'modelEnable';
-$lang->resource->ai->modelDisable            = 'modelDisable';
-$lang->resource->ai->modelDelete             = 'modelDelete';
-$lang->resource->ai->modelTestConnection     = 'modelTestConnection';
-$lang->resource->ai->promptPublish           = 'promptPublish';
-$lang->resource->ai->promptUnpublish         = 'promptUnpublish';
-$lang->resource->ai->prompts                 = 'promptBrowse';
-$lang->resource->ai->promptView              = 'promptView';
-$lang->resource->ai->promptExecute           = 'promptExecute';
-$lang->resource->ai->promptExecutionReset    = 'promptExecutionReset';
-$lang->resource->ai->chat                    = 'chat';
-$lang->resource->ai->createMiniProgram       = 'createMiniProgram';
-$lang->resource->ai->editMiniProgram         = 'editMiniProgram';
-$lang->resource->ai->testMiniProgram         = 'testMiniProgram';
-$lang->resource->ai->miniPrograms            = 'miniProgramList';
-$lang->resource->ai->miniProgramView         = 'miniProgramView';
-$lang->resource->ai->publishMiniProgram      = 'publishMiniProgram';
-$lang->resource->ai->unpublishMiniProgram    = 'unpublishMiniProgram';
-$lang->resource->ai->deleteMiniProgram       = 'deleteMiniProgram';
-$lang->resource->ai->exportMiniProgram       = 'exportMiniProgram';
-$lang->resource->ai->importMiniProgram       = 'importMiniProgram';
-$lang->resource->ai->editMiniProgramCategory = 'editMiniProgramCategory';
-
-$lang->resource->aiapp = new stdclass();
-$lang->resource->aiapp->square                  = 'miniProgramSquare';
-$lang->resource->aiapp->view                    = 'view';
-$lang->resource->aiapp->miniProgramChat         = 'miniProgramChat';
-$lang->resource->aiapp->collectMiniProgram      = 'collectMiniProgram';
-
 /* Others. */
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';

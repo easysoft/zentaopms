@@ -139,7 +139,10 @@ class transferTao extends transferModel
 
             /* 将获取到的数据替换到lists中。*/
             /* Replace data to lists. */
-            foreach($fieldDatas as $id => $linkFieldID) $tmpFieldName[$linkFieldID][$id] = $lists[$fieldName][$id];
+            foreach($fieldDatas as $id => $linkFieldID)
+            {
+                $tmpFieldName[0][$id] = $tmpFieldName[$linkFieldID][$id] = $lists[$fieldName][$id];
+            }
             $lists[$fieldName] = $tmpFieldName;
         }
 

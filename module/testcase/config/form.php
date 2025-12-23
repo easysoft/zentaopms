@@ -127,6 +127,7 @@ $config->testcase->form->showImport['keywords']     = array('required' => false,
 $config->testcase->form->showImport['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->showImport['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
+if($config->edition != 'open') $config->testcase->form->showImport['scene'] = array('required' => false, 'type' => 'int', 'default' => 0);
 
 $config->testcase->form->automation = array();
 $config->testcase->form->automation['product']      = array('required' => true,  'type' => 'int',    'default' => 0);

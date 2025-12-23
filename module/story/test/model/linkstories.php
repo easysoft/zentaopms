@@ -7,7 +7,7 @@ su('admin');
 $story = zenData('story');
 $story->product->range(1);
 $story->version->range(1);
-$story->parent->range('0{18},`-1`,19');
+$story->parent->range('0{18},19');
 $story->type->range('requirement{10},story{10}');
 $story->gen(20);
 
@@ -23,7 +23,11 @@ cid=18572
 
 - 查看关联前的关联关系数量 @0
 - 查看关联后的关联关系数量 @4
-- 查看关联后的需求详情 @1|3|5|7
+- 查看关联后的需求详情
+ - 属性1 @1
+ - 属性3 @3
+ - 属性5 @5
+ - 属性7 @7
 
 */
 global $tester;

@@ -2665,7 +2665,7 @@ class upgradeModel extends model
      */
     public function fixTaskAssignedTo()
     {
-        $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch();
+        $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch('parent');
         if(empty($minParent)) return true;
 
         $needUpdateTasks = $this->dao->select('id,parent,closedBy')->from(TABLE_TASK)

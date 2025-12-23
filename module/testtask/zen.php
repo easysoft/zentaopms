@@ -151,6 +151,7 @@ class testtaskZen extends testtask
             $searchConfig['params']['branch']['values'] = $branches;
         }
         if(!$this->config->testcase->needReview) unset($searchConfig['params']['status']['values']['wait']);
+        unset($searchConfig['fields']['product']);
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }

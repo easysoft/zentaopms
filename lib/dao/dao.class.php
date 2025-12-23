@@ -256,6 +256,12 @@ class dao extends baseDAO
             $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
         }
 
+        if($groupID)
+        {
+            $builtIn = $this->dbh->query("SELECT `main` FROM " . TABLE_WORKFLOWGROUP . " WHERE `id` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
+            $groupID = !empty($builtIn->main) ? 0 : $groupID;
+        }
+
         $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}' AND `group` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;
 

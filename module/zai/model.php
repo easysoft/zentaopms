@@ -629,16 +629,15 @@ class zaiModel extends model
             if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
             $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
         }
-        elseif($objectType === 'bug' || $objectType === 'case')
+        elseif($objectType === 'bug')
         {
-            $table   = $objectType === 'bug' ? TABLE_BUG : TABLE_CASE;
             $product = isset($attrs['product']) ? $attrs['product'] : 0;
-            if(!$product) $product = $this->dao->select('product')->from($table)->where('id')->eq($objectID)->fetch('product');
+            if(!$product) $product = $this->dao->select('product')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('product');
             $canView = strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false;
             if(!$canView)
             {
                 $project = isset($attrs['project']) ? $attrs['project'] : 0;
-                if(!$project) $project = $this->dao->select('project')->from($table)->where('id')->eq($objectID)->fetch('project');
+                if(!$project) $project = $this->dao->select('project')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('project');
                 $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
             }
         }
@@ -656,8 +655,41 @@ class zaiModel extends model
         }
         elseif($objectType === 'doc')
         {
-            $doc = $this->loadModel('doc')->getByID($objectID);
+            $api = isset($attrs['docType']) && $attrs['docType'] === 'api';
+            $doc = $this->loadModel($api ? 'api' : 'doc')->getByID($objectID);
             $canView = $this->loadModel('doc')->checkPrivDoc($doc);
+        }
+        elseif($objectType === 'case')
+        {
+            $case = $this->loadModel('testcase')->getById($objectID);
+            if(!$case)
+            {
+                static::$objectViews[$objectType][$objectID] = false;
+                return false;
+            }
+            $project = isset($case->project) ? $case->project : 0;
+            $product = isset($case->product) ? $case->product : 0;
+            if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+            if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
+
+            if($canView)
+            {
+                static::$objectViews[$objectType][$objectID] = true;
+                return true;
+            }
+
+            $libID = $case->lib;
+            if($libID)
+            {
+                $lib = $this->loadModel('caselib')->getByID($libID);
+                if($lib)
+                {
+                    $project = isset($lib->project) ? $lib->project : 0;
+                    $product = isset($lib->product) ? $lib->product : 0;
+                    if($project && strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false) $canView = true;
+                    if(!$canView && $product && strpos(',' . $this->app->user->view->products . ',', ",$product,") !== false) $canView = true;
+                }
+            }
         }
 
         static::$objectViews[$objectType][$objectID] = $canView;
@@ -1147,6 +1179,10 @@ class zaiModel extends model
                 'closedReason' => array('closedReason'),
                 'project'      => array('project', 'projectName'),
                 'product'      => array('product', 'productName'),
+                'ticketType'   => array('ticketType', 'type'),
+            ),
+            'feedback' => array(
+                'feedbackType' => array('feedbackType', 'type'),
             ),
             'case' => array(
                 'execution'     => array('execution', 'executionName'),
@@ -1178,6 +1214,96 @@ class zaiModel extends model
     }
 
     /**
+     * 获取用户字段映射。
+     * Get user fields map for object type.
+     *
+     * @param  string $objectType
+     * @return array
+     */
+    public static function getUserFieldsMap(string $objectType): array
+    {
+        $map = array(
+            'story'      => array('openedBy', 'assignedTo', 'reviewedBy', 'stagedBy'),
+            'bug'        => array('openedBy', 'assignedTo', 'resolvedBy', 'closedBy', 'feedbackBy'),
+            'task'       => array('openedBy', 'assignedTo', 'finishedBy', 'canceledBy', 'closedBy'),
+            'feedback'   => array('openedBy', 'assignedTo', 'reviewedBy', 'closedBy', 'processedBy', 'feedbackBy'),
+            'ticket'     => array('openedBy', 'assignedTo', 'startedBy', 'closedBy'),
+            'issue'      => array('assetCreatedBy', 'assignedTo'),
+            'risk'       => array('assetCreatedBy', 'assignedTo'),
+            'opportunity'=> array('assetCreatedBy', 'assignedTo'),
+            'plan'       => array('owner'),
+            'case'       => array('openedBy', 'lastEditedBy', 'lastRunner'),
+            'release'    => array('owner'),
+            'demand'     => array('createdBy', 'assignedTo'),
+            'design'     => array('createdBy', 'assignedTo'),
+        );
+
+        return $map[$objectType] ?? array();
+    }
+
+    /**
+     * 转换用户字段为真实姓名。
+     * Convert user account fields to realname.
+     *
+     * @param  string $objectType
+     * @param  object $target
+     * @return object
+     */
+    public static function convertUserFieldToRealname(string $objectType, object $target): object
+    {
+        $userFields = static::getUserFieldsMap($objectType);
+        if(empty($userFields)) return $target;
+
+        global $app;
+        $userModel = $app->loadTarget('user', '', 'model');
+
+        $userAccounts = array();
+        foreach($userFields as $field)
+        {
+            $value = static::extractFieldValue($objectType, $field, $target);
+            if(!empty($value))
+            {
+                $accounts = is_array($value) ? $value : explode(',', trim($value));
+                foreach($accounts as $account)
+                {
+                    $account = trim($account);
+                    if($account && $account !== '') $userAccounts[$account] = $account;
+                }
+            }
+        }
+
+        if(empty($userAccounts)) return $target;
+
+        $userPairs = $userModel->getPairs('realname,noletter', '', 0, array_keys($userAccounts));
+
+        $converted = clone $target;
+
+        foreach($userFields as $field)
+        {
+            $value = static::extractFieldValue($objectType, $field, $target);
+            if(empty($value)) continue;
+
+            $accounts = is_array($value) ? $value : explode(',', trim($value));
+            $realnames = array();
+            foreach($accounts as $account)
+            {
+                $account = trim($account);
+                if($account && isset($userPairs[$account]))
+                {
+                    $realnames[] = $userPairs[$account];
+                }
+                elseif($account)
+                {
+                    $realnames[] = $account;
+                }
+            }
+            if(!empty($realnames)) $converted->$field = implode(', ', $realnames);
+        }
+
+        return $converted;
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
@@ -1188,6 +1314,8 @@ class zaiModel extends model
     public static function convertStoryToMarkdown($story, array $langData = [])
     {
         global $app;
+
+        $story = static::convertUserFieldToRealname('story', $story);
 
         $app->loadLang('story');
         $lang = $app->lang;
@@ -1241,6 +1369,8 @@ class zaiModel extends model
      */
     public static function convertCaseToMarkdown($case, array $langData = []): array
     {
+        $case = static::convertUserFieldToRealname('case', $case);
+
         $id    = $case->id ?? 0;
         $title = trim((string)($case->title ?? $case->name ?? ''));
 
@@ -1267,13 +1397,19 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
-            'product'   => $case->product   ?? '',
-            'module'    => $case->module    ?? '',
-            'execution' => $case->execution ?? '',
-            'pri'       => $case->pri       ?? '',
-            'type'      => $case->type      ?? '',
-            'status'    => $case->status    ?? '',
-            'stage'     => $case->stage     ?? '',
+            'product'      => $case->product         ?? '',
+            'module'       => $case->module          ?? '',
+            'project'      => $case->project         ?? '',
+            'execution'    => $case->execution       ?? '',
+            'branch'       => $case->branch          ?? '',
+            'path'         => $case->path            ?? '',
+            'story'        => $case->story           ?? '',
+            'storyVersion' => $case->storyVersion    ?? '',
+            'pri'          => $case->pri             ?? '',
+            'type'         => $case->type            ?? '',
+            'status'       => $case->status          ?? '',
+            'stage'        => $case->stage           ?? '',
+            'lib'          => $case->lib             ?? ''
         );
 
         return $markdown;
@@ -1290,6 +1426,8 @@ class zaiModel extends model
     public static function convertDemandToMarkdown($demand, array $langData = [])
     {
         global $app;
+
+        $demand = static::convertUserFieldToRealname('demand', $demand);
 
         $app->loadLang('demand');
         $lang = $app->lang;
@@ -1346,6 +1484,8 @@ class zaiModel extends model
     {
         global $app;
 
+        $bug = static::convertUserFieldToRealname('bug', $bug);
+
         $app->loadLang('bug');
         $lang = $app->lang;
 
@@ -1400,6 +1540,8 @@ class zaiModel extends model
     public static function convertTaskToMarkdown($task, array $langData = [])
     {
         global $app;
+
+        $task = static::convertUserFieldToRealname('task', $task);
 
         $app->loadLang('task');
         $lang = $app->lang;
@@ -1463,7 +1605,7 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
-        if(isset($doc->protocol))
+        if(isset($doc->protocol) || !empty($doc->api))
         {
             $app->loadLang('api');
             $markdown = array('id' => $doc->id, 'title' => "{$lang->doc->common} #$doc->id $doc->title");
@@ -1490,6 +1632,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->params->header as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
@@ -1502,6 +1647,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->params->query as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
@@ -1514,6 +1662,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---|---------|\n";
                 foreach($doc->params->params as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | {$item->paramsType} | $required | $desc |\n";
@@ -1522,7 +1673,7 @@ class zaiModel extends model
             if(!empty($doc->paramsExample))
             {
                 $content[] = "\n## {$app->lang->api->paramsExample}\n";
-                $content[] = "```json\n{$doc->paramsExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->paramsExample) . "\n```";
             }
             if(!empty($doc->response))
             {
@@ -1531,6 +1682,9 @@ class zaiModel extends model
                 $content[] = "|------|---|---------|\n";
                 foreach($doc->response as $item)
                 {
+                    if(is_array($item))   $item = (object)$item;
+                    if(!is_object($item)) continue;
+
                     $desc      = strip_tags($item->desc);
                     $required  = zget($lang->api->boolList, $item->required);
                     $content[] = "| {$item->field} | $required | $desc |\n";
@@ -1539,14 +1693,14 @@ class zaiModel extends model
             if(!empty($doc->responseExample))
             {
                 $content[] = "\n## {$app->lang->api->responseExample}\n";
-                $content[] = "```json\n{$doc->responseExample}\n```";
+                $content[] = "```json\n" . htmlspecialchars_decode($doc->responseExample) . "\n```";
             }
 
             $content[] = "\n## {$app->lang->api->desc}\n";
             $content[] = strip_tags($doc->desc) . "\n";
 
             $markdown['content'] = implode("\n", $content);
-            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version);
+            $markdown['attrs'] = array('product' => $doc->product, 'lib' => $doc->lib, 'module' => $doc->module, 'version' => $doc->version, 'docType' => 'api');
         }
         else
         {
@@ -1594,6 +1748,8 @@ class zaiModel extends model
     {
         global $app;
 
+        $design = static::convertUserFieldToRealname('design', $design);
+
         $app->loadLang('design');
         $lang = $app->lang;
 
@@ -1634,16 +1790,19 @@ class zaiModel extends model
     {
         global $app;
 
+        $feedback = static::convertUserFieldToRealname('feedback', $feedback);
+
         $app->loadLang('feedback');
         $lang = $app->lang;
 
-        $markdown = array('id' => $feedback->id, 'title' => "{$lang->feedback->common} #$feedback->id $feedback->title");
-        $content  = array();
+        $markdown     = array('id' => $feedback->id, 'title' => "{$lang->feedback->common} #$feedback->id $feedback->title");
+        $content      = array();
+        $feedbackType = $feedback->feedbackType ?? $feedback->type ?? '';
 
         $content[] = "# {$lang->feedback->common} #$feedback->id $feedback->title\n";
         $content[] = "## {$lang->feedback->labelBasic}\n";
         $content[] = "* {$lang->feedback->feedbackBy}: $feedback->feedbackBy";
-        $content[] = "* {$lang->feedback->type}: " . zget($lang->feedback->typeList, $feedback->type);
+        $content[] = "* {$lang->feedback->type}: " . zget($lang->feedback->typeList, $feedbackType);
         $content[] = "* {$lang->feedback->pri}: " . zget($lang->feedback->priList, $feedback->pri);
         $content[] = "* {$lang->feedback->status}: " . zget($lang->feedback->statusList, $feedback->status);
         $content[] = "* {$lang->feedback->solution}: " . zget($lang->feedback->solutionList, $feedback->solution);
@@ -1670,7 +1829,7 @@ class zaiModel extends model
 
         $markdown['content'] = implode("\n", $content);
 
-        $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedback->type, 'status' => $feedback->status, 'pri' => $feedback->pri);
+        $markdown['attrs'] = array('objectTitle' => $markdown['title'], 'product' => $feedback->product, 'module' => $feedback->module, 'type' => $feedbackType, 'status' => $feedback->status, 'pri' => $feedback->pri);
         return $markdown;
     }
 
@@ -1685,6 +1844,8 @@ class zaiModel extends model
      */
     public static function convertIssueToMarkdown($issue, array $langData = []): array
     {
+        $issue = static::convertUserFieldToRealname('issue', $issue);
+
         $id    = $issue->id ?? 0;
         $title = trim((string)($issue->title ?? $issue->name ?? ''));
 
@@ -1732,6 +1893,8 @@ class zaiModel extends model
      */
     public static function convertRiskToMarkdown($risk, array $langData = []): array
     {
+        $risk = static::convertUserFieldToRealname('risk', $risk);
+
         $id    = $risk->id ?? 0;
         $title = trim((string)($risk->name ?? ''));
 
@@ -1779,6 +1942,8 @@ class zaiModel extends model
      */
     public static function convertOpportunityToMarkdown($opportunity, array $langData = []): array
     {
+        $opportunity = static::convertUserFieldToRealname('opportunity', $opportunity);
+
         $id    = $opportunity->id ?? 0;
         $title = trim((string)($opportunity->name ?? ''));
 
@@ -1825,6 +1990,8 @@ class zaiModel extends model
      */
     public static function convertPlanToMarkdown($plan, array $langData = []): array
     {
+        $plan = static::convertUserFieldToRealname('plan', $plan);
+
         $id    = $plan->id ?? 0;
         $title = trim((string)($plan->title ?? $plan->name ?? ''));
 
@@ -1870,6 +2037,8 @@ class zaiModel extends model
      */
     public static function convertReleaseToMarkdown($release, array $langData = []): array
     {
+        $release = static::convertUserFieldToRealname('release', $release);
+
         $id    = $release->id ?? 0;
         $title = trim((string)($release->name ?? ''));
 
@@ -1912,6 +2081,8 @@ class zaiModel extends model
      */
     public static function convertTicketToMarkdown($ticket, array $langData = []): array
     {
+        $ticket = static::convertUserFieldToRealname('ticket', $ticket);
+
         $id    = $ticket->id ?? 0;
         $title = trim((string)($ticket->title ?? $ticket->name ?? ''));
 
@@ -1933,11 +2104,13 @@ class zaiModel extends model
         static::appendDetailSection($content, $langData, 'resolution', $ticket->resolution ?? null);
         static::appendDetailSection($content, $langData, 'history', $ticket->history ?? null);
 
+        $ticketType = $ticket->ticketType ?? $ticket->type ?? '';
+
         $markdown['content'] = implode("\n", $content);
         $markdown['attrs']   = array(
             'objectTitle' => $markdown['title'],
             'status'      => $ticket->status     ?? '',
-            'type'        => $ticket->type       ?? '',
+            'type'        => $ticketType,
             'pri'         => $ticket->pri        ?? '',
             'assignedTo'  => $ticket->assignedTo ?? '',
             'product'     => $ticket->product    ?? '',

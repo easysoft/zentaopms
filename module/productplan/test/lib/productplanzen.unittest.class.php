@@ -1,7 +1,11 @@
 <?php
 declare(strict_types = 1);
-class productplanZenTest
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+class productplanZenTest extends baseTest
 {
+    protected $moduleName = 'productplan';
+    protected $className  = 'zen';
+
     public function __construct()
     {
         global $tester, $app;
@@ -12,7 +16,7 @@ class productplanZenTest
 
         $this->objectModel = $tester->loadModel('productplan');
     }
-    
+
     /**
      * 模拟buildActionsList方法的逻辑
      * Simulate buildActionsList method logic.
@@ -70,7 +74,7 @@ class productplanZenTest
         $result->product = $product;
         $result->branchID = $branchID;
         $result->orderBy = $orderBy;
-        
+
         // 模拟assignKanbanData方法的核心逻辑
         if($product->type == 'normal')
         {
@@ -82,7 +86,7 @@ class productplanZenTest
             $result->type = 'branch';
             $result->branches = array(); // 简化返回
         }
-        
+
         return $result;
     }
 
@@ -169,11 +173,11 @@ class productplanZenTest
     public function setSessionForViewPageTest(int $planID, string $type, string $orderBy, int $pageID, int $recPerPage): array
     {
         global $app;
-        
+
         $result = array();
         $beforeStoryList = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
         $beforeBugList = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
-        
+
         // 模拟setSessionForViewPage的逻辑
         if(in_array($type, array('story', 'bug')) && ($orderBy != 'order_desc' || $pageID != 1 || $recPerPage != 100))
         {
@@ -186,13 +190,13 @@ class productplanZenTest
                 $_SESSION['bugList'] = $app->getURI(true);
             }
         }
-        
+
         $result['beforeStoryList'] = $beforeStoryList;
         $result['beforeBugList'] = $beforeBugList;
         $result['afterStoryList'] = isset($_SESSION['storyList']) ? $_SESSION['storyList'] : null;
         $result['afterBugList'] = isset($_SESSION['bugList']) ? $_SESSION['bugList'] : null;
         $result['sessionChanged'] = ($beforeStoryList != $result['afterStoryList']) || ($beforeBugList != $result['afterBugList']);
-        
+
         return $result;
     }
 
@@ -203,25 +207,12 @@ class productplanZenTest
      * @access public
      * @return array
      */
-    public function assignViewDataTest(object $plan): array
+    public function assignViewDataTest(object $plan)
     {
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('assignViewData');
-        $method->setAccessible(true);
-        $method->invoke($this->objectZen, $plan);
-        
+        $this->invokeArgs('assignViewData', [$plan]);
+        $result = $this->getProperty('view');
         if(dao::isError()) return dao::getError();
-        
-        $result = array();
-        $result['parentPlan'] = isset($this->objectZen->view->parentPlan) ? $this->objectZen->view->parentPlan->id : null;
-        $result['childrenPlans'] = isset($this->objectZen->view->childrenPlans) ? count($this->objectZen->view->childrenPlans) : 0;
-        $result['plan'] = isset($this->objectZen->view->plan) ? $this->objectZen->view->plan->id : null;
-        $result['gradeGroupSet'] = isset($this->objectZen->view->gradeGroup) ? 'set' : 'not_set';
-        $result['actionsSet'] = isset($this->objectZen->view->actions) ? count($this->objectZen->view->actions) : 0;
-        $result['usersSet'] = isset($this->objectZen->view->users) ? 'set' : 'not_set';
-        $result['plansSet'] = isset($this->objectZen->view->plans) ? 'set' : 'not_set';
-        $result['modulesSet'] = isset($this->objectZen->view->modules) ? 'set' : 'not_set';
-        
+
         return $result;
     }
 
@@ -237,18 +228,18 @@ class productplanZenTest
     public function buildBugSearchFormTest(object $plan, int $queryID, string $orderBy): array
     {
         global $config;
-        
+
         $beforeActionURL = isset($config->bug->search['actionURL']) ? $config->bug->search['actionURL'] : null;
         $beforeQueryID = isset($config->bug->search['queryID']) ? $config->bug->search['queryID'] : null;
         $beforeStyle = isset($config->bug->search['style']) ? $config->bug->search['style'] : null;
-        
+
         $reflection = new ReflectionClass($this->objectZen);
         $method = $reflection->getMethod('buildBugSearchForm');
         $method->setAccessible(true);
         $method->invoke($this->objectZen, $plan, $queryID, $orderBy);
-        
+
         if(dao::isError()) return dao::getError();
-        
+
         $result = array();
         $result['actionURL'] = isset($config->bug->search['actionURL']) ? $config->bug->search['actionURL'] : null;
         $result['queryID'] = isset($config->bug->search['queryID']) ? $config->bug->search['queryID'] : null;
@@ -258,7 +249,7 @@ class productplanZenTest
         $result['moduleValues'] = isset($config->bug->search['params']['module']['values']) ? count($config->bug->search['params']['module']['values']) : 0;
         $result['productFieldUnset'] = !isset($config->bug->search['fields']['product']);
         $result['branchHandled'] = true;
-        
+
         return $result;
     }
 

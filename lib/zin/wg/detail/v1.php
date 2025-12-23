@@ -214,6 +214,7 @@ CSS;
             set::object($object),
             set::title($title),
             set::titleClass('text-lg text-clip font-bold'),
+            set::titleProps(array('title' => $title)),
             set::type($objectType),
             set::color($color),
             set::parentTitleClass('text-lg text-clip font-bold'),

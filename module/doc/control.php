@@ -1622,11 +1622,12 @@ class doc extends control
 
         $params = helper::safe64Decode($params);
         parse_str($params, $params);
-        $this->view->params    = $params;
 
+        $this->view->params     = $params;
         $this->view->objectType = $objectType;
-        $this->view->spaceList = $spaceList;
-        $this->view->typeList  = $typeList;
+        $this->view->spaceList  = $spaceList;
+        $this->view->typeList   = $typeList;
+        $this->view->from       = $from;
 
         $this->display();
     }
@@ -2248,6 +2249,7 @@ class doc extends control
         }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
+            if($type == 'product' && $spaceID == 0) $spaceID = (int)$this->cookie->preProductID;
             $this->doc->setMenuByType($type, $spaceID, $libID);
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;

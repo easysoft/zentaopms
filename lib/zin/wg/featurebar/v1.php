@@ -59,8 +59,9 @@ class featureBar extends wg
 
         data('activeFeature', $current);
 
-        if(empty($commonLink))   $commonLink = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
-        if(empty($searchModule)) $searchModule = data("config.{$currentModule}.search.module") ? data("config.{$currentModule}.search.module") : $currentModule;
+        if(empty($commonLink))   $commonLink   = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
+        if(empty($searchModule)) $searchModule = data("config.{$currentModule}.search.module");
+        if(empty($searchModule)) $searchModule = $currentModule;
 
         foreach($rawItems as $rawItem)
         {

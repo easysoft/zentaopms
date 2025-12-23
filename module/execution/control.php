@@ -1720,7 +1720,10 @@ class execution extends control
     public function view(int $executionID)
     {
         /* Check execution permission. */
-        $executionID = $this->execution->checkAccess((int)$executionID, $this->executions);
+        $accessExecutionID = $this->execution->checkAccess((int)$executionID, $this->executions);
+        if($this->app->apiVersion == 'v2' && $accessExecutionID != $executionID) return $this->sendError($this->lang->execution->accessDenied);
+
+        $executionID = $accessExecutionID;
         $execution   = $this->execution->getByID($executionID, true);
         $type        = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if($execution->type == 'stage')

@@ -107,6 +107,20 @@ class fileSelector extends wg
             }
             $this->setProp('defaultFiles', $defaultFiles);
         }
+        if($this->hasProp('accept'))
+        {
+            $accept         = explode(',', $this->prop('accept'));
+            $dangers        = explode(',', $app->config->file->dangers);
+            $filteredAccept = array_filter($accept, function($item) use ($dangers)
+            {
+                $item = strtolower($item);
+                $ext  = ltrim($item, '.');
+                return !in_array($ext, $dangers);
+            });
+
+            $newAccept = implode(',', $filteredAccept);
+            $this->setProp('accept', $newAccept);
+        }
 
         /* Check file type. */
         $acceptFileTypes = $this->prop('accept') ? ',' . str_replace('.', '', $this->prop('accept')) . ',' : '';

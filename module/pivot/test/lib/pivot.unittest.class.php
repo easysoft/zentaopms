@@ -9,6 +9,7 @@ class pivotTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('pivot');
+        $this->objectTao   = $tester->loadTao('pivot');
     }
 
     /**

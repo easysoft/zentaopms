@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('pageFrom', $from);
+
 to::header
 (
     entityLabel

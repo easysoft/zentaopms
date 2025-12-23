@@ -344,6 +344,7 @@ class taskModel extends model
         $this->afterChangeStatus($oldTask, $changes, $action, $output);
 
         /* Send Webhook notifications and synchronize status to execution, project and program. */
+        $oldExecution = $this->loadModel('execution')->fetchByID($oldTask->execution);
         $this->executeHooks($oldTask->id);
         $this->loadModel('common')->syncPPEStatus($oldTask->id);
 
@@ -352,6 +353,12 @@ class taskModel extends model
         {
             $response = $this->taskTao->getRemindBugLink($oldTask, $changes);
             if($response) return $response;
+        }
+
+        if($oldExecution->status == 'wait')
+        {
+            $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
+            if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
         }
 
         return true;
@@ -2305,7 +2312,7 @@ class taskModel extends model
 
             if($appendParent)
             {
-                $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
+                $parentTasks = $this->dao->select('id,assignedTo,openedBy,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
                 foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;

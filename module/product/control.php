@@ -147,6 +147,15 @@ class product extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Get the product can access. */
+        if($this->app->tab != 'project' || $from == 'doc' || $from == 'ai')
+        {
+            $accessProductID = $this->product->checkAccess($productID, $products);
+            if($this->app->apiVersion == 'v2' && $accessProductID != $productID) return $this->sendError($this->lang->product->accessDenied);
+
+            $productID = $accessProductID;
+        }
+
         /* Generate data. */
         $productID = ($this->app->tab != 'project' || $from == 'doc' || $from == 'ai') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);

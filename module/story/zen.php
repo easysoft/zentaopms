@@ -1228,6 +1228,7 @@ class storyZen extends story
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->setIF(!$this->post->estimate, 'estimate', 0)
+            ->setIF($storyType, 'type', $storyType)
             ->get();
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);

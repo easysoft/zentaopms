@@ -4,13 +4,16 @@
 /**
 
 title=测试 storyModel::getDefaultShowGrades();
+timeout=0
 cid=18526
 
-- 测试步骤1：正常单级菜单结构输入 >> 期望正常拼接结果
-- 测试步骤2：多级菜单结构输入 >> 期望所有级别拼接结果
-- 测试步骤3：空数组输入测试 >> 期望空字符串结果
-- 测试步骤4：单级空items测试 >> 期望空字符串结果
-- 测试步骤5：数值类型value测试 >> 期望数值拼接结果
+- 执行storyTest模块的getDefaultShowGradesTest方法，参数是$testData1  @story,requirement,
+
+- 执行storyTest模块的getDefaultShowGradesTest方法，参数是$testData2  @story,requirement,epic,feature,
+
+- 执行storyTest模块的getDefaultShowGradesTest方法，参数是$testData3  @0
+- 执行storyTest模块的getDefaultShowGradesTest方法，参数是$testData4  @0
+- 执行storyTest模块的getDefaultShowGradesTest方法，参数是$testData5  @1,2,3,
 
 */
 
@@ -42,12 +45,12 @@ $testData2 = array(
 r($storyTest->getDefaultShowGradesTest($testData2)) && p() && e('story,requirement,epic,feature,');
 
 $testData3 = array();
-r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e('');
+r($storyTest->getDefaultShowGradesTest($testData3)) && p() && e('0');
 
 $testData4 = array(
     array('items' => array())
 );
-r($storyTest->getDefaultShowGradesTest($testData4)) && p() && e('');
+r($storyTest->getDefaultShowGradesTest($testData4)) && p() && e('0');
 
 $testData5 = array(
     array('items' => array(

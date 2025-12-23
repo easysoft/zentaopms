@@ -4,18 +4,19 @@
 /**
 
 title=测试 storyModel->getStoryRelation();
+timeout=0
 cid=18560
 
 - 获取用户需求1关联的软件需求数量 @1
 - 获取软件需求11关联的用户需求数量 @1
 - 获取用户需求1关联的软件需求详情
- - 属性title @用户需求11
- - 属性type @story
- - 属性status @closed
+ - 第11条的title属性 @用户需求11
+ - 第11条的type属性 @story
+ - 第11条的status属性 @closed
 - 获取软件需求11关联的用户需求详情
- - 属性title @用户需求1
- - 属性type @requirement
- - 属性status @draft
+ - 第1条的title属性 @用户需求1
+ - 第1条的type属性 @requirement
+ - 第1条的status属性 @draft
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -24,7 +25,7 @@ su('admin');
 zenData('storyspec')->gen(60);
 $story = zenData('story');
 $story->product->range(1);
-$story->parent->range('0{18},`-1`,19');
+$story->parent->range('0{18},19');
 $story->type->range('requirement{10},story{10}');
 $story->gen(20);
 
