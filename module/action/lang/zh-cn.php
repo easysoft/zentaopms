@@ -195,6 +195,7 @@ $lang->action->objectTypes['productline']      = '产品线';
 $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = '交付物';
 $lang->action->objectTypes['devopsspace']      = '空间';
+$lang->action->objectTypes['ops_review_flow']  = '评审流程';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

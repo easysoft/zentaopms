@@ -195,6 +195,7 @@ $lang->action->objectTypes['productline']      = 'Product Line';
 $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = 'Deliverable';
 $lang->action->objectTypes['devopsspace']      = 'Space';
+$lang->action->objectTypes['ops_review_flow']  = 'Review Flow';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
