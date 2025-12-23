@@ -3341,18 +3341,11 @@ class repoModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
-            
+
         // 解析 prefix 字段(逗号分隔字符串转数组)
         foreach($branchTypes as $branchType)
         {
-            if(!empty($branchType->prefix))
-            {
-                $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
-            }
-            else
-            {
-                $branchType->prefixes = array();
-            }
+            $branchType->prefixes = $this->parsePrefixToArray($branchType->prefix);
         }
 
         return $branchTypes;
@@ -3375,14 +3368,7 @@ class repoModel extends model
         if(!$branchType) return null;
 
         // 解析 prefix 字段(逗号分隔字符串转数组)
-        if(!empty($branchType->prefix))
-        {
-            $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
-        }
-        else
-        {
-            $branchType->prefixes = array();
-        }
+        $branchType->prefixes = $this->parsePrefixToArray($branchType->prefix);
 
         return $branchType;
     }
@@ -3407,14 +3393,7 @@ class repoModel extends model
         // 解析 prefix 字段(逗号分隔字符串转数组)
         foreach($branchTypes as $branchType)
         {
-            if(!empty($branchType->prefix))
-            {
-                $branchType->prefixes = array_filter(array_map('trim', explode(',', $branchType->prefix)));
-            }
-            else
-            {
-                $branchType->prefixes = array();
-            }
+            $branchType->prefixes = $this->parsePrefixToArray($branchType->prefix);
         }
 
         return $branchTypes;
@@ -3433,5 +3412,20 @@ class repoModel extends model
     {
         $this->dao->update(TABLE_REVIEWFLOW)->set('status')->eq($status)->where('id')->eq($reviewFlowID)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 解析prefix字段为数组。
+     * Parse prefix field to array.
+     *
+     * @param  string $prefix
+     * @access protected
+     * @return array
+     */
+    protected function parsePrefixToArray(string $prefix): array
+    {
+        if(empty($prefix)) return array();
+
+        return array_filter(array_map('trim', explode(',', $prefix)));
     }
 }
