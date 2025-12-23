@@ -374,7 +374,7 @@ $config->repo->dtable->reviewFlow->fieldList['status']['statusMap'] = $lang->rep
 $config->repo->dtable->reviewFlow->fieldList['status']['sortType']  = false;
 $config->repo->dtable->reviewFlow->fieldList['status']['group']     = 2;
 
-$config->repo->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->branchType;
+$config->repo->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->applicableBranchTypes;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['width']    = 500;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['sortType'] = false;
 $config->repo->dtable->reviewFlow->fieldList['branchType']['group']    = 3;
