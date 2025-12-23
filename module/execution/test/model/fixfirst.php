@@ -7,8 +7,8 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 title=测试executionModel->fixFirstTest();
 cid=16295
 
-- 不传入withLeft第0条的estimate属性 @56.3
-- 敏捷执行更新首日剩余工时第0条的left属性 @68.5
+- 不传入withLeft第0条的estimate属性 @56.30
+- 敏捷执行更新首日剩余工时第0条的left属性 @68.50
 - 瀑布执行更新首日剩余工时第0条的estimate属性 @无数据
 - 瀑布执行更新首日剩余工时第0条的estimate属性 @无数据
 - 瀑布执行更新首日剩余工时第0条的estimate属性 @无数据
@@ -56,8 +56,8 @@ $waterfallEstimate = array('date' => '2022-01-12', 'estimate' => '17', 'withLeft
 $date              = '2022-01-12';
 
 $executionTester = new executionTest();
-r($executionTester->fixFirstTest($executionIDList[0], $scrumEstimate, $date))     && p('0:estimate') && e('56.3');   // 不传入withLeft
-r($executionTester->fixFirstTest($executionIDList[0], $withLeft, $date))          && p('0:left')     && e('68.5');   // 敏捷执行更新首日剩余工时
+r($executionTester->fixFirstTest($executionIDList[0], $scrumEstimate, $date))     && p('0:estimate') && e('56.30');  // 不传入withLeft
+r($executionTester->fixFirstTest($executionIDList[0], $withLeft, $date))          && p('0:left')     && e('68.50');  // 敏捷执行更新首日剩余工时
 r($executionTester->fixFirstTest($executionIDList[1], $waterfallEstimate, $date)) && p('0:estimate') && e('无数据'); // 瀑布执行更新首日剩余工时
 r($executionTester->fixFirstTest($executionIDList[1], $scrumEstimate, $date))     && p('0:estimate') && e('无数据'); // 瀑布执行更新首日剩余工时
 r($executionTester->fixFirstTest($executionIDList[1], $withLeft, $date))          && p('0:estimate') && e('无数据'); // 瀑布执行更新首日剩余工时
