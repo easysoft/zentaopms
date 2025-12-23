@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 class projectTest
 {
-    private $mockUser = 'guest';
-    private $objectModel = null;
-    private $objectTao = null;
+    public $mockUser    = 'guest';
+    public $objectModel = null;
+    public $objectTao   = null;
 
     public function __construct()
     {
