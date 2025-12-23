@@ -2238,12 +2238,6 @@ $config->group->package->manageReview->privs['review-exportReport']        = arr
 if(helper::hasFeature('project_cm'))     $config->group->package->manageReview->privs['review-submitBaseline']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
 if(helper::hasFeature('project_change')) $config->group->package->manageReview->privs['review-submitProjectchange'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
 
-$config->group->package->deleteReview = new stdclass();
-$config->group->package->deleteReview->order  = 15;
-$config->group->package->deleteReview->subset = 'projectreview';
-$config->group->package->deleteReview->privs  = array();
-$config->group->package->deleteReview->privs['review-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('review-browse'), 'recommend' => array());
-
 $config->group->package->manageReviewIssue = new stdclass();
 $config->group->package->manageReviewIssue->order  = 20;
 $config->group->package->manageReviewIssue->subset = 'projectreview';
