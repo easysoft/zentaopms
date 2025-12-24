@@ -1236,6 +1236,7 @@ class zaiModel extends model
             'release'    => array('owner'),
             'demand'     => array('createdBy', 'assignedTo'),
             'design'     => array('createdBy', 'assignedTo'),
+            'doc'        => array('owner', 'addedBy', 'editedBy'),
         );
 
         return $map[$objectType] ?? array();
@@ -1637,6 +1638,8 @@ class zaiModel extends model
     public static function convertDocToMarkdown($doc, array $langData = [])
     {
         global $app;
+
+        $doc = static::convertUserFieldToRealname('doc', $doc);
 
         $app->loadLang('doc');
         $lang = $app->lang;
