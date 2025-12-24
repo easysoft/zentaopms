@@ -315,11 +315,11 @@ $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
 
-$lang->repo->browseReviewFlow       = '浏览审批流';
-$lang->repo->createReviewFlow       = '创建审批流';
-$lang->repo->editReviewFlow         = '编辑审批流';
-$lang->repo->changeReviewFlowStatus = '启用/停用审批流';
-$lang->repo->deleteReviewFlow       = '删除审批流';
+$lang->repo->browseReviewFlow       = '浏览评审流程';
+$lang->repo->createReviewFlow       = '创建评审流程';
+$lang->repo->editReviewFlow         = '编辑评审流程';
+$lang->repo->changeReviewFlowStatus = '启用/停用评审流程';
+$lang->repo->deleteReviewFlow       = '删除评审流程';
 
 $lang->repo->flowName              = '流程名称';
 $lang->repo->branchType            = '分支类型';
