@@ -1483,13 +1483,14 @@ class myModel extends model
         $condition = "(`action` = 'reviewed' or `action` = 'approvalreview')";
         if($browseType == 'createdbyme')
         {
-            $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
+            $condition  = "objectType != 'projectchange' AND (";
+            $condition .= "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
             $condition .= "(objectType = 'review' and action = 'opened') OR ";
             $condition .= "(objectType = 'deploy' and action = 'created') OR ";
             $condition .= "(objectType = 'deploy' and action = 'submit') OR ";
             $condition .= "(objectType = 'attend' and action = 'commited') OR ";
             $condition .= "(`action` = 'approvalsubmit') OR ";
-            $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
+            $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created'))";
             $condition  = "($condition)";
         }
         $actionIdList = $this->dao->select('MAX(`id`) as `id`')->from(TABLE_ACTION)
