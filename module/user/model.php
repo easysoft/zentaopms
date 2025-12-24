@@ -689,6 +689,7 @@ class userModel extends model
         }
 
         if(dao::isError()) return $this->rollBack();
+        if(!empty($user->password) && $user->password != $oldUser->password) $this->userTao->deleteImUserDevice($user->id);
 
         $this->dao->commit();
 
@@ -837,6 +838,7 @@ class userModel extends model
         $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('id')->eq($this->app->user->id)->exec();
         if(dao::isError()) return false;
 
+        $this->userTao->deleteImUserDevice($this->app->user->id);
         $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($user->password1));
 
         $this->app->user->password             = $user->password;
