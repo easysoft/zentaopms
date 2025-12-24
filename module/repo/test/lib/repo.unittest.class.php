@@ -2152,7 +2152,6 @@ class repoTest
     }
 
     /**
-<<<<<<< HEAD
      * Test createBranchRule method.
      *
      * @param  object $rule
@@ -2370,9 +2369,7 @@ class repoTest
      */
     public function checkPrivToCreateBranchTest(int $repoID, string $branchName, string $operator): bool
     {
-        ob_start();
         $result = $this->objectModel->checkPrivToCreateBranch($repoID, $branchName, $operator);
-        ob_end_clean();
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2389,9 +2386,7 @@ class repoTest
      */
     public function checkPrivToDeleteBranchTest(int $repoID, string $branchName, string $operator): bool
     {
-        ob_start();
         $result = $this->objectModel->checkPrivToDeleteBranch($repoID, $branchName, $operator);
-        ob_end_clean();
         if(dao::isError()) return dao::getError();
 
         return $result;

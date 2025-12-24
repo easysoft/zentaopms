@@ -2991,7 +2991,7 @@ class repoModel extends model
 
     /**
      * 检查分支创建的权限。
-     * Check Priv About Branch Create.
+     * Check priv about branch create.
      *
      * @param  int    $repoID
      * @param  string $branchName
@@ -3001,16 +3001,17 @@ class repoModel extends model
      */
     public function checkPrivToCreateBranch(int $repoID, string $branchName, string $operator): bool
     {
-        $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-
-        $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
-        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'branchType', 'createUser');
-        foreach($branchTypes as $branchType)
+        // 根据仓库 ID 和分支前缀匹配分支类型
+        $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
+        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        if(!empty($branchTypes))
         {
-            if(!empty($branchTypeRulePairs[$branchType->id]))
+            // 根据匹配的分支类型 ID 获取规则进行权限校验
+            $branchType = reset($branchTypes);
+            $rule       = $this->getBranchRule($branchType->id);
+            if($rule && !empty($rule->createUser))
             {
-                $createUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
-                return in_array($operator, $createUsers);
+                return strpos(',' . $rule->createUser . ',', ',' . $operator . ',') !== false;
             }
         }
 
@@ -3019,7 +3020,7 @@ class repoModel extends model
 
     /**
      * 检查分支删除的权限。
-     * Check Priv About Branch Delete.
+     * Check priv about branch delete.
      *
      * @param  int    $repoID
      * @param  string $branchName
@@ -3029,23 +3030,23 @@ class repoModel extends model
      */
     public function checkPrivToDeleteBranch(int $repoID, string $branchName, string $operator): bool
     {
-        $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-
+        // 根据仓库 ID 和分支名称查询分支级别的规则进行权限校验
         $rule = $this->getBranchRule(0, $repoID, $branchName);
         if($rule && !empty($rule->deleteUser))
         {
-            $deleteUsers = explode(',', $rule->deleteUser);
-            return in_array($operator, $deleteUsers);
+            return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;
         }
 
-        $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
-        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'branchType', 'deleteUser');
-        foreach($branchTypes as $branchType)
+        // 根据仓库 ID 和分支前缀查询分支类型级别的规则进行权限校验
+        $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
+        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        if(!empty($branchTypes))
         {
-            if(!empty($branchTypeRulePairs[$branchType->id]))
+            $branchType = reset($branchTypes);
+            $rule       = $this->getBranchRule($branchType->id);
+            if($rule && !empty($rule->deleteUser))
             {
-                $deleteUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
-                return in_array($operator, $deleteUsers);
+                return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;
             }
         }
 
@@ -3054,25 +3055,25 @@ class repoModel extends model
 
     /**
      * 查询仓库下指定规则类型的键值对。
-     * Get Pairs About Branch Rule.
+     * Get pairs about branch rule.
      *
      * @param  int    $repoID
      * @param  string $key
      * @param  string $operate
      * @access public
-     * @return bool
+     * @return array
      */
     public function getBranchRulePairs(int $repoID, string $key, string $operate): array
     {
-        return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
-                    ->where('repo')->eq($repoID)
-                    ->andWhere('deleted')->eq('0')
-                    ->fetchPairs($key, $operate);
+        return $this->dao->select("$key,$operate")->from(TABLE_BRANCHRULESET)
+            ->where('repo')->eq($repoID)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs($key, $operate);
     }
 
     /**
      * 获取指定的分支规则。
-     * Get Branch Rule.
+     * Get branch rule.
      *
      * @param  int    $typeID
      * @param  int    $repoID
@@ -3094,7 +3095,7 @@ class repoModel extends model
 
     /**
      * 创建分支规则。
-     * Create Branch Rule.
+     * Create branch rule.
      *
      * @param  int    $rule
      * @access public
@@ -3108,7 +3109,7 @@ class repoModel extends model
 
     /**
      * 更新分支规则。
-     * Update Branch Rule.
+     * Update branch rule.
      *
      * @param  int    $id
      * @param  object $rule
@@ -3123,7 +3124,7 @@ class repoModel extends model
 
     /**
      * 删除分支规则。
-     * Delete Branch Rule.
+     * Delete branch rule.
      *
      * @param  int    $id
      * @access public
