@@ -3295,8 +3295,8 @@ class repoModel extends model
         return $this->dao->select('*')->from(TABLE_REVIEWFLOW)
             ->where('deleted')->eq(0)
             ->andWhere('repo')->eq($repoID)
-            ->page($pager)
             ->orderBy('id_desc')
+            ->page($pager)
             ->fetchAll('id', false);
     }
 
@@ -3425,7 +3425,7 @@ class repoModel extends model
             ->fetchAll('id', false);
 
         if(empty($branchTypes)) return array();
-        
+
         // 解析 prefix 字段(逗号分隔字符串转数组)
         foreach($branchTypes as $branchType)
         {
