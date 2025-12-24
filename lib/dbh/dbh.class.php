@@ -146,7 +146,15 @@ class dbh
 
             if($setSchema)
             {
-                $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+                if($dbConfig->driver == 'dm')
+                {
+                    $queries[] = "SET SCHEMA {$dbConfig->name}";
+                }
+                elseif(in_array($dbConfig->driver, $config->pgsqlDriverList))
+                {
+                    $schema = $dbConfig->schema ?? 'public';
+                    $queries[] = "SET SCHEMA '{$schema}'";
+                }
             }
         }
         if(!empty($queries))
@@ -534,7 +542,8 @@ class dbh
         if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
-            return $this->exec("SET SCHEMA 'public'");
+            $schema = $this->dbConfig->schema ?? 'public';
+            return $this->exec("SET SCHEMA '{$schema}'");
         }
 
         return false;
