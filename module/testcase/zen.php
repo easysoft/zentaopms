@@ -1668,7 +1668,7 @@ class testcaseZen extends testcase
             foreach($fromSteps[$caseID] as $step)
             {
                 $stepID        = $step->id;
-                $step->version = zget($libCase, 'version', '0');
+                $step->version = zget($libCase, 'version', $step->version);
                 unset($step->id);
                 $steps[$caseID][$stepID] = $step;
             }
