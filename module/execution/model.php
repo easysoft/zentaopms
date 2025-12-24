@@ -427,6 +427,7 @@ class executionModel extends model
         {
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
             if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
+            if($field == 'QD' && in_array($execution->attribute, array('request', 'design', 'review')) && empty($execution->QD)) $this->config->execution->edit->requiredFields = str_replace(',QD', '', $this->config->execution->edit->requiredFields);
         }
 
         /* Update data. */
