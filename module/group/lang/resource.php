@@ -1407,6 +1407,7 @@ $lang->resource->devopsspace->createGroup       = 'createGroup';
 $lang->resource->devopsspace->editGroup         = 'editGroup';
 $lang->resource->devopsspace->managePriv        = 'managePriv';
 $lang->resource->devopsspace->manageGroupMember = 'manageGroupMember';
+$lang->resource->devopsspace->importGroup       = 'importGroup';
 
 $lang->devopsspace->methodOrder[0]  = 'browse';
 $lang->devopsspace->methodOrder[5]  = 'view';
