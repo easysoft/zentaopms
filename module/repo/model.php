@@ -3003,20 +3003,13 @@ class repoModel extends model
     {
         $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
 
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 9999, 1);
-        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc', $pager);
+        $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'createUser');
         foreach($branchTypes as $branchType)
         {
-            $typeRule = $this->dao->select('*')->from(TABLE_BRANCHRULESET)
-                ->where('repo')->eq($repoID)
-                ->andWhere('branchType')->eq($branchType->id)
-                ->andWhere('deleted')->eq(0)
-                ->fetch();
-
-            if($typeRule && !empty($typeRule->createUser))
+            if(isset($branchTypeRulePairs[$branchType->id]) && !empty($branchTypeRulePairs[$branchType->id]))
             {
-                $createUsers = explode(',', $typeRule->createUser);
+                $createUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
                 return in_array($operator, $createUsers);
             }
         }
@@ -3045,25 +3038,35 @@ class repoModel extends model
             return in_array($operator, $deleteUsers);
         }
 
-        $this->app->loadClass('pager', true);
-        $pager = new pager(0, 9999, 1);
-        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc', $pager);
+        $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'deleteUser');
         foreach($branchTypes as $branchType)
         {
-            $typeRule = $this->dao->select('*')->from(TABLE_BRANCHRULESET)
-                ->where('repo')->eq($repoID)
-                ->andWhere('branchType')->eq($branchType->id)
-                ->andWhere('deleted')->eq(0)
-                ->fetch();
-
-            if($typeRule && !empty($typeRule->deleteUser))
+            if(isset($branchTypeRulePairs[$branchType->id]) && !empty($branchTypeRulePairs[$branchType->id]))
             {
-                $deleteUsers = explode(',', $typeRule->deleteUser);
+                $deleteUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
                 return in_array($operator, $deleteUsers);
             }
         }
 
         return true;
+    }
+
+    /**
+     * 查询仓库下指定规则类型的键值对。
+     * Get Pairs About Branch Rule.
+     *
+     * @param  int    $repoID
+     * @param  string $operate
+     * @access public
+     * @return bool
+     */
+    public function getBranchRulePairs(int $repoID, string $operate): array
+    {
+        return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
+                    ->where('repo')->eq($repoID)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetchPairs('branchType', $operate);
     }
 
     /**

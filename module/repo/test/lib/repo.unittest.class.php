@@ -2396,4 +2396,20 @@ class repoTest
 
         return $result;
     }
+
+    /**
+     * Test getBranchRulePairs method.
+     *
+     * @param  int    $repoID
+     * @param  string $operate
+     * @access public
+     * @return string
+     */
+    public function getBranchRulePairsTest(int $repoID, string $operate): string
+    {
+        $result = $this->objectModel->getBranchRulePairs($repoID, $operate);
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? '0' : implode(',', $result);
+    }
 }
