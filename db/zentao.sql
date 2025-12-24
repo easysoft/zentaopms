@@ -16265,6 +16265,14 @@ CREATE TABLE IF NOT EXISTS `zt_ops_branch_type` (
 CREATE UNIQUE INDEX `uk_repo_branch_key` ON `zt_ops_branch_type` (`repo`, `key`);
 CREATE UNIQUE INDEX `uk_repo_branch_prefix` ON `zt_ops_branch_type` (`repo`, `prefix`);
 
+INSERT INTO `zt_ops_branch_type` (`id`, `repo`, `name`, `key`, `prefix`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES
+(1, 0, '主干分支', 'main', 'main/,master/', '存放随时可以发布/部署的稳定代码。', 'system', NOW(), '', NULL, 0),
+(2, 0, '开发分支', 'develop', 'develop/,dev/,story/', '日常开发的集成分支，完成的功能会合并到这里做集成测试。', 'system', NOW(), '', NULL, 0),
+(3, 0, '特性分支', 'feature', 'feature/', '为实现某个新功能或任务而创建的短期分支。', 'system', NOW(), '', NULL, 0),
+(4, 0, '预发布分支', 'release', 'release/', '用于准备一次正式发布的分支。', 'system', NOW(), '', NULL, 0),
+(5, 0, '缺陷修复分支', 'bugfix', 'bugfix/,bug/', '用于修复非紧急的缺陷。', 'system', NOW(), '', NULL, 0),
+(6, 0, '热修复分支', 'hotfix', 'hotfix/', '用于线上紧急修复。', 'system', NOW(), '', NULL, 0);
+
 -- DROP TABLE IF EXISTS `zt_ops_branch_ruleset`;
 CREATE TABLE IF NOT EXISTS `zt_ops_branch_ruleset` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',

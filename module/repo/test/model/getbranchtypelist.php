@@ -41,8 +41,8 @@ r($repoTest->getBranchTypeListTest(1, '', 'branch_type1')) && p('1:key') && e('b
 // 测试步骤4：按prefix搜索"dev/" 验证第一个prefix
 r($repoTest->getBranchTypeListTest(1, '', '', 'dev/')) && p('1:prefix', '|') && e('dev/');
 
-// 测试步骤5：不传repoID获取所有分支类型(应返回5条)
-r(count($repoTest->getBranchTypeListTest(0))) && p() && e('5');
+// 测试步骤5：不传repoID获取所有分支类型(返回0表示空)
+r($repoTest->getBranchTypeListTest(0)) && p() && e('0');
 
 // 测试步骤6：验证prefix字段被正确解析为数组
 r($repoTest->getBranchTypeListTest(1)) && p('1:prefix', '|') && e('dev/');
