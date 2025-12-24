@@ -156,6 +156,21 @@ class dbh
     }
 
     /**
+     * 获取PDO驱动名称。
+     * Get pdo driver name.
+     *
+     * @access private
+     * @return string
+     */
+    private function getPdoDriver()
+    {
+        if($this->dbConfig->driver == 'kingbase') return 'kdb';
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList)) return 'mysql';
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList)) return 'pgsql';
+        return $this->dbConfig->driver;
+    }
+
+    /**
      * 初始化PDO对象。
      * Init pdo.
      *
