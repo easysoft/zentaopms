@@ -2142,8 +2142,8 @@ class repo extends control
      */
     public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '')
     {
-        $branchName  = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
-        $branchType  = $this->repo->getBranchTypeByID($branchTypeID);
+        $branchName = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
+        $branchType = $this->repo->getBranchTypeByID($branchTypeID);
         if(!$branchType)
         {
             $branchType = new stdClass();
