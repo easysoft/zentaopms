@@ -1271,7 +1271,12 @@ class myModel extends model
     {
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
-        $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
+        $projectchangePendingList = $this->loadModel('approval')->getPendingReviews('projectchange');
+        $projectchangeReviewingList = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('projectchange')->andWhere('object')->in($projectchangePendingList)->fetchPairs();
+
+        $pendingList = $this->loadModel('approval')->getPendingReviews('review');
+        $pendingList = arrayUnion($pendingList, $projectchangeReviewingList);
+
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         if($checkExists) return !empty($projectReviews);
@@ -1287,7 +1292,7 @@ class myModel extends model
             $data = new stdclass();
             $data->id      = $review->id;
             $data->title   = $review->title;
-            $data->type    = 'projectreview';
+            $data->type    = $review->type == 'projectchange' ? 'projectchange' : 'projectreview';
             $data->time    = date('Y-m-d H:i:s', strtotime($review->createdDate));
             $data->status  = $review->status;
             $data->product = $review->product;
@@ -1312,12 +1317,12 @@ class myModel extends model
         $dataList = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
+            ->andWhere('objectType')->ne('projectchange')
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
             ->beginIF(!helper::hasFeature('project_cm'))->andWhere('objectType')->ne('baseline')->fi()
-            ->beginIF(!helper::hasFeature('project_change'))->andWhere('objectType')->ne('projectchange')->fi()
             ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
             ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
             ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
