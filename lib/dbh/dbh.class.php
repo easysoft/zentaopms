@@ -401,13 +401,13 @@ class dbh
     }
 
     /**
-     * Check table exits or not.
+     * Check table exist or not.
      *
      * @param  string    $tableName
      * @access public
      * @return void
      */
-    public function tableExits($tableName)
+    public function tableExist($tableName)
     {
         $tableName = str_replace(array("'", '`'), "", $tableName);
 
