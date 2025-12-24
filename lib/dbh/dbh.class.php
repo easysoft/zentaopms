@@ -1212,6 +1212,5 @@ class dbh
         }
 
         return '';
-        return $this->rawQuery($sql)->fetch()->version;
     }
 }
