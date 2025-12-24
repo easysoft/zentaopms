@@ -673,6 +673,7 @@ class taskZen extends task
         }
         if(dao::isError()) return false;
 
+        if($execution && $this->task->isNoStoryExecution($execution)) unset($this->config->task->form->batchcreate['story']);
         $tasks = form::batchData()->get();
         foreach($tasks as $task)
         {
@@ -682,7 +683,7 @@ class taskZen extends task
             $task->parent       = $taskID;
             $task->lane         = !empty($task->lane)   ? $task->lane   : zget($output, 'laneID',   0);
             $task->column       = !empty($task->column) ? $task->column : zget($output, 'columnID', 0);
-            $task->storyVersion = $task->story ? $this->story->getVersion($task->story) : 1;
+            $task->storyVersion = !empty($task->story)  ? $this->story->getVersion($task->story) : 1;
 
             if($task->assignedTo) $task->assignedDate = helper::now();
         }
@@ -714,8 +715,10 @@ class taskZen extends task
         }
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-        $team      = $this->post->team ? array_filter($this->post->team) : array();
-        $task      = form::data($formConfig)->setDefault('execution', $executionID)
+        if($execution && $this->task->isNoStoryExecution($execution)) unset($formConfig['story']);
+
+        $team = $this->post->team ? array_filter($this->post->team) : array();
+        $task = form::data($formConfig)->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
             ->setDefault('left', 0)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
