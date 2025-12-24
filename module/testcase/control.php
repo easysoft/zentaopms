@@ -2007,7 +2007,7 @@ class testcase extends control
 
             $cases  = $this->testcaseZen->buildCasesByXmind($productID, $branch, $testcaseList, $isInsert);
             $result = $this->testcase->saveXmindImport($sceneList, $cases);
-            if($result['result'] == 'success') $result['load'] = $this->createLink('testcase', 'browse');
+            if($result['result'] == 'success') $result['load'] = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
             return $this->send($result);
         }
 
@@ -2028,7 +2028,7 @@ class testcase extends control
         if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
 
         /* Set menu. */
-        $this->testcaseZen->setMenu(0, 0, $productID, $branch);
+        $this->testcaseZen->setMenu($this->session->project, 0, $productID, $branch);
 
         $product  = $this->product->getByID($productID);
         $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
