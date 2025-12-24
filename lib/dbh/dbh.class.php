@@ -125,19 +125,16 @@ class dbh
     public function __construct($dbConfig, $setSchema = true, $flag = 'MASTER')
     {
         global $config;
-        $this->config = $config;
 
-        $driver = in_array($dbConfig->driver, $config->mysqlDriverList) ? 'mysql' : (in_array($dbConfig->driver, $config->pgsqlDriverList) ? 'pgsql' : $dbConfig->driver);
-
-        $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->config   = $config;
         $this->dbConfig = $dbConfig;
         $this->flag     = $flag;
+        $this->pdo      = $this->pdoInit($setSchema);
 
         $queries = [];
-        /* Mysql driver include mysql and oceanbase. */
-        if($driver == 'mysql')
+        if(in_array($dbConfig->driver, $config->mysqlDriverList))
         {
-            $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
+            if($dbConfig->driver == 'mysql') $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else
@@ -182,26 +179,26 @@ class dbh
      * 初始化PDO对象。
      * Init pdo.
      *
-     * @param  string $driver
-     * @param  object $dbConfig
      * @param  bool   $setSchema
      * @access private
      * @return object
      */
-    private function pdoInit($driver, $dbConfig, $setSchema)
+    private function pdoInit($setSchema)
     {
-        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        $driver = $this->getPdoDriver();
+        $dsn    = "{$driver}:host={$this->dbConfig->host};port={$this->dbConfig->port}";
+
         if($setSchema)
         {
-            $dsn .= ";dbname={$dbConfig->name}";
+            $dsn .= ";dbname={$this->dbConfig->name}";
         }
-        elseif($driver == 'pgsql') // pgsql need database to connect
+        elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $dsn .= ";dbname={$dbConfig->driver}"; // default database
+            $dsn .= ";dbname={$this->dbConfig->driver}"; // default database
         }
 
-        $password = helper::decryptPassword($dbConfig->password);
-        $pdo = new PDO($dsn, $dbConfig->user, $password);
+        $password = helper::decryptPassword($this->dbConfig->password);
+        $pdo      = new PDO($dsn, $this->dbConfig->user, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -541,7 +538,7 @@ class dbh
 
         if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
+            $this->pdo = $this->pdoInit(true);
             $schema = $this->dbConfig->schema ?? 'public';
             return $this->exec("SET SCHEMA '{$schema}'");
         }
