@@ -3342,6 +3342,8 @@ class repoModel extends model
             ->page($pager)
             ->fetchAll('id', false);
 
+        if(empty($branchTypes)) return array();
+        
         // 解析 prefix 字段(逗号分隔字符串转数组)
         foreach($branchTypes as $branchType)
         {
