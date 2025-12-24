@@ -2152,7 +2152,6 @@ class repoTest
     }
 
     /**
-<<<<<<< HEAD
      * Test createBranchRule method.
      *
      * @param  object $rule
@@ -2354,6 +2353,57 @@ class repoTest
     {
         $result = $this->objectModel->parsePrefixToArray($prefix);
 
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? '0' : implode(',', $result);
+    }
+
+    /**
+     * Test checkPrivToCreateBranch method.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToCreateBranchTest(int $repoID, string $branchName, string $operator): bool
+    {
+        $result = $this->objectModel->checkPrivToCreateBranch($repoID, $branchName, $operator);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkPrivToDeleteBranch method.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToDeleteBranchTest(int $repoID, string $branchName, string $operator): bool
+    {
+        $result = $this->objectModel->checkPrivToDeleteBranch($repoID, $branchName, $operator);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getBranchRulePairs method.
+     *
+     * @param  int    $repoID
+     * @param  string $key
+     * @param  string $operate
+     * @access public
+     * @return string
+     */
+    public function getBranchRulePairsTest(int $repoID, string $key, string $operate): string
+    {
+        $result = $this->objectModel->getBranchRulePairs($repoID, $key, $operate);
         if(dao::isError()) return dao::getError();
 
         return empty($result) ? '0' : implode(',', $result);
