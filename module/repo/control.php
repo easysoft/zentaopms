@@ -2148,7 +2148,7 @@ class repo extends control
         if(!$branchType)
         {
             $branchType = new stdClass();
-            $branchType->key = '';   
+            $branchType->key = '';
         }
         $repo        = $this->repo->getByID($repoID);
         $users       = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
