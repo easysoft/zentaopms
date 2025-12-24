@@ -337,7 +337,16 @@ class taskZen extends task
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'active', 'story', false);
+
+        $storyPairs = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'all', 'story', false);
+        $storyList  = $this->story->getByList(array_keys($storyPairs));
+        $stories    = array();
+
+        foreach($storyList as $story)
+        {
+            if($story->status != 'active' && $task->story != $story->id) continue;
+            $stories[$story->id] = $story->title;
+        }
 
         $syncChildren   = array();
         $childDateLimit = array('estStarted' => '', 'deadline' => '');
