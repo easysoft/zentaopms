@@ -2358,4 +2358,42 @@ class repoTest
 
         return empty($result) ? '0' : implode(',', $result);
     }
+
+    /**
+     * Test checkPrivToCreateBranch method.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToCreateBranchTest(int $repoID, string $branchName, string $operator): bool
+    {
+        ob_start();
+        $result = $this->objectModel->checkPrivToCreateBranch($repoID, $branchName, $operator);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test checkPrivToDeleteBranch method.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToDeleteBranchTest(int $repoID, string $branchName, string $operator): bool
+    {
+        ob_start();
+        $result = $this->objectModel->checkPrivToDeleteBranch($repoID, $branchName, $operator);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

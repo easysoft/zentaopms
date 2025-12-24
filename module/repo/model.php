@@ -2990,6 +2990,83 @@ class repoModel extends model
     }
 
     /**
+     * 检查分支创建的权限。
+     * Check Priv About Branch Create.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToCreateBranch(int $repoID, string $branchName, string $operator): bool
+    {
+        $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 9999, 1);
+        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc', $pager);
+        foreach($branchTypes as $branchType)
+        {
+            $typeRule = $this->dao->select('*')->from(TABLE_BRANCHRULESET)
+                ->where('repo')->eq($repoID)
+                ->andWhere('branchType')->eq($branchType->id)
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+
+            if($typeRule && !empty($typeRule->createUser))
+            {
+                $createUsers = explode(',', $typeRule->createUser);
+                return in_array($operator, $createUsers);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 检查分支删除的权限。
+     * Check Priv About Branch Delete.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @param  string $operator
+     * @access public
+     * @return bool
+     */
+    public function checkPrivToDeleteBranch(int $repoID, string $branchName, string $operator): bool
+    {
+        $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
+
+        $rule = $this->getBranchRule(0, $repoID, $branchName);
+        if($rule && !empty($rule->deleteUser))
+        {
+            $deleteUsers = explode(',', $rule->deleteUser);
+            return in_array($operator, $deleteUsers);
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 9999, 1);
+        $branchTypes = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc', $pager);
+        foreach($branchTypes as $branchType)
+        {
+            $typeRule = $this->dao->select('*')->from(TABLE_BRANCHRULESET)
+                ->where('repo')->eq($repoID)
+                ->andWhere('branchType')->eq($branchType->id)
+                ->andWhere('deleted')->eq(0)
+                ->fetch();
+
+            if($typeRule && !empty($typeRule->deleteUser))
+            {
+                $deleteUsers = explode(',', $typeRule->deleteUser);
+                return in_array($operator, $deleteUsers);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 获取指定的分支规则。
      * Get Branch Rule.
      *

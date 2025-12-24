@@ -25,15 +25,17 @@ $langAllowForcePush = empty($branchTypeID) ? $lang->repo->branchRule->allowForce
 $langAllowMergeFrom = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeFrom : $lang->repo->branchTypeRule->allowMergeFrom;
 $langAllowMergeTo   = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeTo : $lang->repo->branchTypeRule->allowMergeTo;
 
+$backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repo', 'browsebranchtype', "repoID=$repoID");
+
 formPanel
 (
     setID('setBranchRuleForm'),
     set::title($title),
     set::actions($branchTypeID != 0
-        ? array('submit', 'cancel')
+        ? array('submit', array('text' => $lang->cancel, 'url' => $backURL))
         : array(
             'submit',
-            'cancel',
+            array('text' => $lang->cancel, 'url' => $backURL),
             array(
                 'text' => $lang->repo->branchRule->delete,
                 'url'  => createLink('repo', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID")

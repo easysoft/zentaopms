@@ -2142,14 +2142,19 @@ class repo extends control
      */
     public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '')
     {
-        $currentLang    = $this->app->getClientLang();
-        $branchName     = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
-        $branchTypeName = "$branchTypeID";
-        $repo           = $this->repo->getByID($repoID);
-        $users          = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
-        $members        = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
-        $branchTypes    = $this->repo->getBranchTypePairs($repoID);
-        $originRule     = $this->repo->getBranchRule($branchTypeID, $repoID, $branchName);
+        $currentLang = $this->app->getClientLang();
+        $branchName  = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
+        $branchType  = $this->repo->getBranchTypeByID($branchTypeID);
+        if(!$branchType)
+        {
+            $branchType = new stdClass();
+            $branchType->key = '';   
+        }
+        $repo        = $this->repo->getByID($repoID);
+        $users       = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
+        $members     = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+        $branchTypes = $this->repo->getBranchTypePairs($repoID);
+        $originRule  = $this->repo->getBranchRule($branchTypeID, $repoID, $branchName);
         if(!$originRule)
         {
             $originRule = new stdClass();
@@ -2179,11 +2184,11 @@ class repo extends control
                 $this->loadModel('action')->create('branchRule', $originRule->id, 'edited');
             }
 
-            $link = $this->repo->createLink('browseBranch', "repoID=$repoID");
+            $link = ($branchTypeID == 0) ? $this->repo->createLink('browseBranch', "repoID=$repoID") : $this->repo->createLink('browsebranchtype', "repoID=$repoID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $this->view->title        = empty($branchTypeID) ? $branchName : $branchTypeName;
+        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->key;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
         $this->view->branchTypeID = $branchTypeID;
