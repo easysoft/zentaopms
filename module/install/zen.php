@@ -290,7 +290,7 @@ class installZen extends install
                 return $return;
             }
         }
-        elseif($this->install->dbh->tableExist(TABLE_CONFIG) && empty($data->clearDB))
+        elseif($this->install->dbh->tableExist(TABLE_ACL) && empty($data->clearDB))
         {
             /* 如果已经存在config表，并且用户没有勾选清空旧数据库选项的话，则提示错误信息。 */
             $return->result = 'fail';
