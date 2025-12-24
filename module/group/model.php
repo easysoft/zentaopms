@@ -31,7 +31,8 @@ class groupModel extends model
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}' and devopsSpace='{$group->devopsSpace}'")
+            ->check('name', 'unique', "`vision` = '{$this->config->vision}' and `project`='{$group->project}' and `devopsSpace`='{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
@@ -57,9 +58,12 @@ class groupModel extends model
      */
     public function update(int $groupID, object $group): bool
     {
+        $oldGroup = $this->getByID($groupID);
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
             ->where('id')->eq($groupID)
+            ->check('name', 'unique', " `id` != '{$groupID}' and `vision` = '{$this->config->vision}' and `project` = '{$oldGroup->project}' and `devopsSpace` = '{$oldGroup->devopsSpace}'")
+            ->autoCheck()
             ->exec();
 
         return !dao::isError();
