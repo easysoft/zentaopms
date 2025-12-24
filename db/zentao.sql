@@ -2382,7 +2382,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `visits` int unsigned NOT NULL DEFAULT 0,
   `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
   `ip` varchar(255) NOT NULL DEFAULT '',
-  `last` int unsigned NOT NULL DEFAULT 0,
+  `last` datetime DEFAULT NULL,
   `fails` tinyint unsigned NOT NULL DEFAULT 0,
   `locked` datetime DEFAULT NULL,
   `feedback` tinyint unsigned NOT NULL DEFAULT 0,

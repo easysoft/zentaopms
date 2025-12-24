@@ -70,7 +70,7 @@ if($project)
         else
         {
             $fields->field('attribute')
-                ->disabled()
+                ->readonly(true)
                 ->value(zget($lang->stage->typeList, data('execution.attribute')));
         }
     }

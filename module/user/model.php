@@ -452,7 +452,6 @@ class userModel extends model
         $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
 
-        $user->last = date(DT_DATETIME1, $user->last);
         return $user;
     }
 
@@ -892,12 +891,11 @@ class userModel extends model
         if(!$user) return false;
 
         $ip   = helper::getRemoteIp();
-        $last = $this->server->request_time;
+        $last = helper::now();
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
-        $user->lastTime = $user->last;
-        $user->last     = date(DT_DATETIME1, $last);
-        $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $user->last  = $last;
+        $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
 
         if($this->app->isServing())
         {
@@ -941,7 +939,8 @@ class userModel extends model
 
         if($passwordLength == 40)
         {
-            $hash = sha1($user->account . $user->password . $user->last);
+            $lastTimestamp = is_numeric($user->last) ? $user->last : strtotime($user->last);
+            $hash = sha1($user->account . $user->password . $lastTimestamp);
             if($password == $hash) return $user;
         }
 
