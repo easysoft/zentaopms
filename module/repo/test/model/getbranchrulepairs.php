@@ -45,8 +45,8 @@ su('admin');
 
 $repoTest = new repoTest();
 
-r($repoTest->getBranchRulePairsTest(1, 'createUser')) && p() && e('admin,admin'); // 步骤1：查询repoID=1的createUser字段
-r($repoTest->getBranchRulePairsTest(1, 'deleteUser')) && p() && e('user1,user2'); // 步骤2：查询repoID=1的deleteUser字段
-r($repoTest->getBranchRulePairsTest(2, 'createUser')) && p() && e('admin,user1'); // 步骤3：查询repoID=2的createUser字段
-r($repoTest->getBranchRulePairsTest(999, 'createUser')) && p() && e('0'); // 步骤4：查询不存在的repoID
-r($repoTest->getBranchRulePairsTest(1, 'updateUser')) && p() && e('admin,admin'); // 步骤5：查询repoID=1的updateUser字段
+r($repoTest->getBranchRulePairsTest(1, 'branchType', 'createUser')) && p() && e('admin,admin'); // 步骤1：查询repoID=1的createUser字段
+r($repoTest->getBranchRulePairsTest(1, 'branchType', 'deleteUser')) && p() && e('user1,user2'); // 步骤2：查询repoID=1的deleteUser字段
+r($repoTest->getBranchRulePairsTest(2, 'branchType', 'createUser')) && p() && e('admin,user1'); // 步骤3：查询repoID=2的createUser字段
+r($repoTest->getBranchRulePairsTest(999, 'branchType', 'createUser')) && p() && e('0'); // 步骤4：查询不存在的repoID
+r($repoTest->getBranchRulePairsTest(1, 'branchType', 'updateUser')) && p() && e('admin,admin'); // 步骤5：查询repoID=1的updateUser字段

@@ -2142,7 +2142,6 @@ class repo extends control
      */
     public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '')
     {
-        $currentLang = $this->app->getClientLang();
         $branchName  = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
         $branchType  = $this->repo->getBranchTypeByID($branchTypeID);
         if(!$branchType)
@@ -2193,7 +2192,6 @@ class repo extends control
         $this->view->branchName   = $branchRawName;
         $this->view->branchTypeID = $branchTypeID;
         $this->view->ruleID       = $originRule->id;
-        $this->view->currentLang  = $currentLang;
         $this->view->originRule   = $originRule;
         $this->view->users        = !empty($members) ? array_column($members, 'realname', 'account') : array();
         $this->view->branchTypes  = $branchTypes;

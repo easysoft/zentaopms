@@ -3004,10 +3004,10 @@ class repoModel extends model
         $prefix = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
 
         $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
-        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'createUser');
+        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'branchType', 'createUser');
         foreach($branchTypes as $branchType)
         {
-            if(isset($branchTypeRulePairs[$branchType->id]) && !empty($branchTypeRulePairs[$branchType->id]))
+            if(!empty($branchTypeRulePairs[$branchType->id]))
             {
                 $createUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
                 return in_array($operator, $createUsers);
@@ -3039,10 +3039,10 @@ class repoModel extends model
         }
 
         $branchTypes         = $this->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
-        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'deleteUser');
+        $branchTypeRulePairs = $this->getBranchRulePairs($repoID, 'branchType', 'deleteUser');
         foreach($branchTypes as $branchType)
         {
-            if(isset($branchTypeRulePairs[$branchType->id]) && !empty($branchTypeRulePairs[$branchType->id]))
+            if(!empty($branchTypeRulePairs[$branchType->id]))
             {
                 $deleteUsers = explode(',', $branchTypeRulePairs[$branchType->id]);
                 return in_array($operator, $deleteUsers);
@@ -3057,16 +3057,17 @@ class repoModel extends model
      * Get Pairs About Branch Rule.
      *
      * @param  int    $repoID
+     * @param  string $key
      * @param  string $operate
      * @access public
      * @return bool
      */
-    public function getBranchRulePairs(int $repoID, string $operate): array
+    public function getBranchRulePairs(int $repoID, string $key, string $operate): array
     {
         return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
                     ->where('repo')->eq($repoID)
                     ->andWhere('deleted')->eq('0')
-                    ->fetchPairs('branchType', $operate);
+                    ->fetchPairs($key, $operate);
     }
 
     /**
