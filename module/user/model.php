@@ -892,11 +892,11 @@ class userModel extends model
         if(!$user) return false;
 
         $ip   = helper::getRemoteIp();
-        $last = $this->server->request_time;
+        $last = helper::now();
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
         $user->lastTime = $user->last;
-        $user->last     = date(DT_DATETIME1, $last);
+        $user->last     = $last;
         $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
 
         if($this->app->isServing())
