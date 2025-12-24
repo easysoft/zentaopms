@@ -156,7 +156,7 @@ class repoZen extends repo
         $definition->reviewFlow->approvals->defaultReviewers   = explode(',', zget($formData, 'defaultReviewers', ''));
         $definition->reviewFlow->approvals->specifiedReviewers = explode(',', zget($formData, 'specifiedReviewers', ''));
         $definition->reviewFlow->approvals->minReviewers       = zget($formData, 'minReviewers', 0);
-        $definition->reviewFlow->approvals->approvalID         = zget($formData, 'approvalID', 0);
+        $definition->reviewFlow->approvals->approvalID         = zget($formData, 'flow', 0);
 
         $definition->reviewFlow->issues = new stdClass();
         $definition->reviewFlow->issues->addressOption = zget($formData, 'addressOption', '');

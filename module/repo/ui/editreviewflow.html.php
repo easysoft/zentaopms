@@ -22,7 +22,7 @@ jsVar('editBranchTypes', explode(',', $reviewFlow->branchType));
 formPanel
 (
     set::title($title),
-    set::labelWidth('240px'),
+    set::labelWidth(common::checkNotCN() ? '320px' : '240px'),
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
     on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
     on::change('[name=addressOption]')->call('window.loadIssueType'),
@@ -103,11 +103,10 @@ formPanel
     (
         setID('aiReviewScores'),
         set::width('2/3'),
-        set::required(true),
         set::name('aiReviewScores'),
         set::label($lang->repo->aiReviewScores),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 10)),
-        set::value(empty($definition->ai) || empty($definition->ai->score) ? 0 : $definition->ai->score)
+        set::value(empty($definition->ai) || empty($definition->ai->approvals) ? 0 : $definition->ai->approvals->score)
     ),
     formGroup
     (
@@ -118,6 +117,7 @@ formPanel
     ),
     formGroup
     (
+        setID('defaultReviewers'),
         set::width('2/3'),
         set::name('defaultReviewers'),
         set::label($lang->repo->defaultReviewers),
@@ -128,6 +128,7 @@ formPanel
     ),
     formGroup
     (
+        setID('specifiedReviewers'),
         set::width('2/3'),
         set::name('specifiedReviewers'),
         set::label($lang->repo->specifiedReviewers),
@@ -137,6 +138,7 @@ formPanel
     ),
     formGroup
     (
+        setID('minReviewers'),
         set::width('2/3'),
         set::label($lang->repo->minReviewers),
         set::name('minReviewers'),

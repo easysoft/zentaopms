@@ -395,11 +395,11 @@ $lang->repo->newCommitsAddressOptionList = array();
 $lang->repo->newCommitsAddressOptionList['defaultApproval'] = 'Default Approval';
 $lang->repo->newCommitsAddressOptionList['requireReReview'] = 'Require Re-Review';
 
-$lang->repo->mergeStrategyList = array();
-$lang->repo->mergeStrategyList['merge']  = 'Merge';
-$lang->repo->mergeStrategyList['squash'] = 'Squash';
-$lang->repo->mergeStrategyList['rebase'] = 'Rebase';
-$lang->repo->mergeStrategyList['fast']   = 'Fast-Forward';
+$lang->repo->mergeOptionList = array();
+$lang->repo->mergeOptionList['merge']  = 'Merge';
+$lang->repo->mergeOptionList['squash'] = 'Squash';
+$lang->repo->mergeOptionList['rebase'] = 'Rebase';
+$lang->repo->mergeOptionList['fast']   = 'Fast-Forward';
 
 $lang->repo->autoArchiveStatusList = array();
 $lang->repo->autoArchiveStatusList['enable']  = 'Enable';
