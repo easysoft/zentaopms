@@ -43,7 +43,9 @@ r($userTest->getByIDTest('admin', 'account')) && p('account') && e('admin'); // 
 r($userTest->getByIDTest('user1', 'account')) && p('account') && e(0);       // $userID 参数为 user1 ，通过 account 字段获取，用户不存在。
 
 $user = $userTest->getByIDTest('admin', 'account');
-r(substr($user->last, 0, 19) == date(DT_DATETIME1, $now)) && p() && e(1); // $userID 参数为 admin ，通过 account 字段获取，用户存在。
+// last字段现在是datetime类型，直接比较datetime字符串
+$expectedLast = date(DT_DATETIME1, $now);
+r(substr($user->last, 0, 19) == substr($expectedLast, 0, 19)) && p() && e(1); // $userID 参数为 admin ，通过 account 字段获取，用户存在。
 
 global $app;
 $app->user = new stdclass();

@@ -61,7 +61,8 @@ class profileTester extends tester
                         $expected = $this->lang->user->roleList->{$user->role} ?? '';
                         break;
                     case 'last':
-                        $expected = date('Y-m-d H:i:s', $user->last);
+                        // last字段现在是datetime类型，直接使用或格式化
+                        $expected = is_numeric($user->last) ? date('Y-m-d H:i:s', $user->last) : substr($user->last, 0, 19);
                         break;
                     default:
                         $expected = $user->{$item};
