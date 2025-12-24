@@ -138,4 +138,20 @@ class userTao extends userModel
             ->groupBy('execution')
             ->fetchPairs();
     }
+
+    /**
+     * 删除 im_userdevice 表该用户的数据，以防止禅道修改密码后，禅道大桌面记住密码还能登录
+     * Delete the im_userdevice table data of the user to prevent the user from logging in after the password is modified
+     *
+     * @param  int    $userID
+     * @access public
+     * @return void
+     */
+    public function deleteImUserDevice(int $userID): void
+    {
+        try
+        {
+            $this->dao->delete()->from(TABLE_IM_USERDEVICE)->where('user')->eq($userID)->exec();
+        } catch (Exception $e) {}
+    }
 }
