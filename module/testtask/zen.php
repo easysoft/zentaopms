@@ -341,6 +341,7 @@ class testtaskZen extends testtask
             $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_column($runList, 'case'), 'testcase', 'byRelation', true);
             foreach($runList as $run)
             {
+                if(!empty($run->isScene)) continue;
                 $run->caseID        = $run->case;
                 $run->relatedObject = zget($caseRelatedObjectList, $run->case, 0);
             }
