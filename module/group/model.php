@@ -83,7 +83,8 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project = '{$group->project}'")
+            ->check('name', 'unique', "vision = '{$this->config->vision}' and project = '{$group->project}' and devopsSpace = '{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
