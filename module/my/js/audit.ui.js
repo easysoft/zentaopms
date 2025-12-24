@@ -5,7 +5,7 @@ window.onRenderCell = function(result, {row, col})
         if(row.data.module == 'review')
         {
             result[0].props.items[0]['disabled']    = projectPriv ? false: true;
-            result[0].props.items[0]['url']         = 'javascript:checkReview("' + row.data.id + '")';
+            result[0].props.items[0]['url']         = 'javascript:checkReview("' + row.data.typeKey + '", "' + row.data.id + '")';
             delete result[0].props.items[0]['data-toggle'];
         }
         else if(reviewPrivs[row.data.module])
@@ -56,9 +56,9 @@ window.onRenderCell = function(result, {row, col})
     return result;
 }
 
-window.checkReview = function(id)
+window.checkReview = function(objectType, id)
 {
-    $.get($.createLink('review', 'ajaxCheckReviewInfo', 'reviewID=' + id), function(data)
+    $.get($.createLink('review', 'ajaxCheckReviewInfo', 'objectType=' + objectType + 'reviewID=' + id), function(data)
     {
         if(!data)
         {
