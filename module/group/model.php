@@ -31,7 +31,9 @@ class groupModel extends model
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}' and devopsSpace='{$group->devopsSpace}'")
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique', "`vision` = '{$this->config->vision}' AND `project`='{$group->project}' AND `devopsSpace`='{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
@@ -57,9 +59,13 @@ class groupModel extends model
      */
     public function update(int $groupID, object $group): bool
     {
+        $oldGroup = $this->getByID($groupID);
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
             ->where('id')->eq($groupID)
+            ->batchCheck($this->config->group->edit->requiredFields, 'notempty')
+            ->check('name', 'unique', " `id` != '{$groupID}' AND `vision` = '{$this->config->vision}' AND `project` = '{$oldGroup->project}' AND `devopsSpace` = '{$oldGroup->devopsSpace}'")
+            ->autoCheck()
             ->exec();
 
         return !dao::isError();
@@ -79,7 +85,9 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project = '{$group->project}'")
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique', "`vision` = '{$this->config->vision}' AND `project` = '{$group->project}' AND `devopsSpace` = '{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 

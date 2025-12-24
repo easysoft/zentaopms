@@ -410,4 +410,4 @@ $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['icon'
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->deleteReviewFlow, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
-$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'deleteReviewFlow', 'flowID={id}');
+$config->repo->dtable->reviewFlow->fieldList['actions']['list']['delete']['url']          = array('module' => 'repo', 'method' => 'deleteReviewFlow', 'params' => "flowID={id}");

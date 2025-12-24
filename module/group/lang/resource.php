@@ -1407,6 +1407,7 @@ $lang->resource->devopsspace->createGroup       = 'createGroup';
 $lang->resource->devopsspace->editGroup         = 'editGroup';
 $lang->resource->devopsspace->managePriv        = 'managePriv';
 $lang->resource->devopsspace->manageGroupMember = 'manageGroupMember';
+$lang->resource->devopsspace->importGroup       = 'importGroup';
 
 $lang->devopsspace->methodOrder[0]  = 'browse';
 $lang->devopsspace->methodOrder[5]  = 'view';
@@ -1447,11 +1448,11 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->browseReviewFlow       = 'browseReviewFlow';
-$lang->resource->repo->createReviewFlow       = 'createReviewFlow';
-$lang->resource->repo->editReviewFlow         = 'editReviewFlow';
-$lang->resource->repo->changeReviewFlowStatus = 'changeReviewFlowStatus';
-$lang->resource->repo->deleteReviewFlow       = 'deleteReviewFlow';
+$lang->resource->repo->browseReviewFlow = 'browseReviewFlow';
+$lang->resource->repo->createReviewFlow = 'createReviewFlow';
+$lang->resource->repo->editReviewFlow   = 'editReviewFlow';
+$lang->resource->repo->changeFlowStatus = 'changeFlowStatus';
+$lang->resource->repo->deleteReviewFlow = 'deleteReviewFlow';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
