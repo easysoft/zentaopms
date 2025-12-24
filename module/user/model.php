@@ -894,9 +894,8 @@ class userModel extends model
         $last = helper::now();
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
-        $user->lastTime = $user->last;
-        $user->last     = $last;
-        $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $user->last  = $last;
+        $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
 
         if($this->app->isServing())
         {
