@@ -1448,11 +1448,11 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->browseReviewFlow       = 'browseReviewFlow';
-$lang->resource->repo->createReviewFlow       = 'createReviewFlow';
-$lang->resource->repo->editReviewFlow         = 'editReviewFlow';
-$lang->resource->repo->changeReviewFlowStatus = 'changeReviewFlowStatus';
-$lang->resource->repo->deleteReviewFlow       = 'deleteReviewFlow';
+$lang->resource->repo->browseReviewFlow = 'browseReviewFlow';
+$lang->resource->repo->createReviewFlow = 'createReviewFlow';
+$lang->resource->repo->editReviewFlow   = 'editReviewFlow';
+$lang->resource->repo->changeFlowStatus = 'changeFlowStatus';
+$lang->resource->repo->deleteReviewFlow = 'deleteReviewFlow';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
