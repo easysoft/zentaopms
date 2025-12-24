@@ -125,19 +125,16 @@ class dbh
     public function __construct($dbConfig, $setSchema = true, $flag = 'MASTER')
     {
         global $config;
-        $this->config = $config;
 
-        $driver = in_array($dbConfig->driver, $config->mysqlDriverList) ? 'mysql' : (in_array($dbConfig->driver, $config->pgsqlDriverList) ? 'pgsql' : $dbConfig->driver);
-
-        $this->pdo      = $this->pdoInit($driver, $dbConfig, $setSchema);
+        $this->config   = $config;
         $this->dbConfig = $dbConfig;
         $this->flag     = $flag;
+        $this->pdo      = $this->pdoInit($setSchema);
 
         $queries = [];
-        /* Mysql driver include mysql and oceanbase. */
-        if($driver == 'mysql')
+        if(in_array($dbConfig->driver, $config->mysqlDriverList))
         {
-            $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
+            if($dbConfig->driver == 'mysql') $queries[] = "SET NAMES {$dbConfig->encoding}" . ($dbConfig->collation ? " COLLATE '{$dbConfig->collation}'" : '');
             if(isset($dbConfig->strictMode) && empty($dbConfig->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else
@@ -146,7 +143,15 @@ class dbh
 
             if($setSchema)
             {
-                $queries[] = $driver == 'pgsql' ? "SET SCHEMA 'public'" : "SET SCHEMA {$dbConfig->name}";
+                if($dbConfig->driver == 'dm')
+                {
+                    $queries[] = "SET SCHEMA {$dbConfig->name}";
+                }
+                elseif(in_array($dbConfig->driver, $config->pgsqlDriverList))
+                {
+                    $schema = $dbConfig->schema ?? 'public';
+                    $queries[] = "SET SCHEMA '{$schema}'";
+                }
             }
         }
         if(!empty($queries))
@@ -156,29 +161,44 @@ class dbh
     }
 
     /**
+     * 获取PDO驱动名称。
+     * Get pdo driver name.
+     *
+     * @access private
+     * @return string
+     */
+    private function getPdoDriver()
+    {
+        if($this->dbConfig->driver == 'kingbase') return 'kdb';
+        if(in_array($this->dbConfig->driver, $this->config->mysqlDriverList)) return 'mysql';
+        if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList)) return 'pgsql';
+        return $this->dbConfig->driver;
+    }
+
+    /**
      * 初始化PDO对象。
      * Init pdo.
      *
-     * @param  string $driver
-     * @param  object $dbConfig
      * @param  bool   $setSchema
      * @access private
      * @return object
      */
-    private function pdoInit($driver, $dbConfig, $setSchema)
+    private function pdoInit($setSchema)
     {
-        $dsn = "{$driver}:host={$dbConfig->host};port={$dbConfig->port}";
+        $driver = $this->getPdoDriver();
+        $dsn    = "{$driver}:host={$this->dbConfig->host};port={$this->dbConfig->port}";
+
         if($setSchema)
         {
-            $dsn .= ";dbname={$dbConfig->name}";
+            $dsn .= ";dbname={$this->dbConfig->name}";
         }
-        elseif($driver == 'pgsql') // pgsql need database to connect
+        elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $dsn .= ";dbname={$dbConfig->driver}"; // default database
+            $dsn .= ";dbname={$this->dbConfig->driver}"; // default database
         }
 
-        $password = helper::decryptPassword($dbConfig->password);
-        $pdo = new PDO($dsn, $dbConfig->user, $password);
+        $password = helper::decryptPassword($this->dbConfig->password);
+        $pdo      = new PDO($dsn, $this->dbConfig->user, $password);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -401,13 +421,13 @@ class dbh
     }
 
     /**
-     * Check table exits or not.
+     * Check table exist or not.
      *
      * @param  string    $tableName
      * @access public
      * @return void
      */
-    public function tableExits($tableName)
+    public function tableExist($tableName)
     {
         $tableName = str_replace(array("'", '`'), "", $tableName);
 
@@ -518,8 +538,9 @@ class dbh
 
         if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $this->pdo = $this->pdoInit('pgsql', $this->dbConfig, true);
-            return $this->exec("SET SCHEMA 'public'");
+            $this->pdo = $this->pdoInit(true);
+            $schema = $this->dbConfig->schema ?? 'public';
+            return $this->exec("SET SCHEMA '{$schema}'");
         }
 
         return false;
@@ -1212,6 +1233,5 @@ class dbh
         }
 
         return '';
-        return $this->rawQuery($sql)->fetch()->version;
     }
 }
