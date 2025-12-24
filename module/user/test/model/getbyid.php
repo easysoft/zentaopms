@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel::getById();
+timeout=0
 cid=19604
 
 - $userID 参数为 0 ，通过默认字段获取，用户不存在。属性account @0
@@ -22,10 +23,8 @@ cid=19604
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 
-$now = time();
-
 $table = zenData('user');
-$table->last->range($now);
+$table->last->prefix('2025-01-01 10:00:00');
 $table->gen(1);
 
 su('admin');
@@ -44,7 +43,7 @@ r($userTest->getByIDTest('user1', 'account')) && p('account') && e(0);       // 
 
 $user = $userTest->getByIDTest('admin', 'account');
 // last字段现在是datetime类型，直接比较datetime字符串
-$expectedLast = date(DT_DATETIME1, $now);
+$expectedLast = '2025-01-01 10:00:00';
 r(substr($user->last, 0, 19) == substr($expectedLast, 0, 19)) && p() && e(1); // $userID 参数为 admin ，通过 account 字段获取，用户存在。
 
 global $app;

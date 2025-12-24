@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->identify();
+timeout=0
 cid=19640
 
 - 用户名不为空，密码为空，返回 false。 @0
@@ -39,6 +40,7 @@ include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 $table = zenData('user');
 $table->password->range(md5(123456));
 $table->avatar->range('/www/data/upload/1/202311/29144321062056c4');
+$table->last->prefix('2025-01-01 10:00:00');
 $table->gen(2);
 
 su('admin');
