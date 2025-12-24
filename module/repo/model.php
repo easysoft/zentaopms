@@ -3334,7 +3334,7 @@ class repoModel extends model
     {
         $branchTypes = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
             ->where('deleted')->eq(0)
-            ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->andWhere('repo')->eq($repoID)
             ->beginIF($name)->andWhere('name')->like("%{$name}%")->fi()
             ->beginIF($key)->andWhere('`key`')->like("%{$key}%")->fi()
             ->beginIF($prefix)->andWhere('prefix')->like("%{$prefix}%")->fi()
