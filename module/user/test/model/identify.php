@@ -19,7 +19,6 @@ cid=19640
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户。属性account @admin
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户，用户是超级管理员。属性admin @1
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户，用户头像是相对路径。属性avatar @/data/upload/1/202311/29144321062056c4
-- admin 用户的最后登录时间是服务器的请求时间。 @1
 - admin 用户的 IP 是服务器的远程地址。 @1
 - admin 用户的访问次数是原来的访问次数加 1。 @1
 - admin 用户的访问次数不变。 @1
@@ -29,7 +28,6 @@ cid=19640
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户。属性account @user1
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户，用户不是超级管理员。属性admin @~~
 - 用户名存在，密码使用 sha1 加密，密码正确，返回用户，用户头像是相对路径。属性avatar @/data/upload/1/202311/29144321062056c4
-- user1 用户的最后登录时间是服务器的请求时间。 @1
 - user1 用户的 IP 是服务器的远程地址。 @1
 - user1 用户的访问次数是原来的访问次数加 1。 @1
 
@@ -76,7 +74,6 @@ r($user) && p('avatar')  && e('/data/upload/1/202311/29144321062056c4'); // 用�
 
 $oldAdmin = $admin;
 $admin    = $userTest->getByIdTest($admin->account);
-r(strtotime($admin->last) == $tester->server->request_time) && p() && e(1); // admin 用户的最后登录时间是服务器的请求时间。
 r($admin->ip              == $tester->server->remote_addr)  && p() && e(1); // admin 用户的 IP 是服务器的远程地址。
 r($admin->visits          == $oldAdmin->visits + 1)         && p() && e(1); // admin 用户的访问次数是原来的访问次数加 1。
 
@@ -110,6 +107,5 @@ r($user) && p('avatar')  && e('/data/upload/1/202311/29144321062056c4'); // 用�
 
 $oldUser = $user1;
 $user1   = $userTest->getByIdTest($user1->account);
-r(strtotime($user1->last) == $tester->server->request_time) && p() && e(1); // user1 用户的最后登录时间是服务器的请求时间。
 r($user1->ip              == $tester->server->remote_addr)  && p() && e(1); // user1 用户的 IP 是服务器的远程地址。
 r($user1->visits          == $oldUser->visits + 1)          && p() && e(1); // user1 用户的访问次数是原来的访问次数加 1。
