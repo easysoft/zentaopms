@@ -5161,6 +5161,7 @@ class executionModel extends model
             }
         }
 
+        $this->config->execution->create->requiredFields = '';
         $executionID = $this->create($executionData, array($this->app->user->account));
         if($project->model == 'kanban')
         {
