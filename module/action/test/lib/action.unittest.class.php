@@ -888,7 +888,7 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $output;
+        return str_replace("\n", '', $output);
     }
 
     /**
