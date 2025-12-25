@@ -992,6 +992,9 @@ class projectModel extends model
             if($module == 'cm' && !$hasBaseline) continue;
             if($module == 'auditplan' && !$hasAuditplan) continue;
             if($module == 'pssp' && !$hasProcess) continue;
+            if($module == 'projectchange' && !$hasChange) continue;
+            if($module == 'review' && !$hasDeliverable) continue;
+            if($module == 'reviewissue' && !$hasDeliverable) continue;
 
             if($module == 'review')
             {
@@ -999,6 +1002,8 @@ class projectModel extends model
                 if(!$hasChange)      unset($methods->submitProjectchange);
                 if(!$hasBaseline)    unset($methods->submitBaseline);
             }
+
+            if($module == 'project' && !$hasDeliverable) unset($methods->deliverable);
 
             foreach($methods as $method => $label)
             {
