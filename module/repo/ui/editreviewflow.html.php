@@ -105,7 +105,7 @@ formPanel
         set::width('2/3'),
         set::name('aiReviewScores'),
         set::label($lang->repo->aiReviewScores),
-        set::control(array('type' => 'number', 'min' => 0, 'max' => 10)),
+        set::control(array('type' => 'number', 'min' => 0, 'max' => 100, 'placeholder' => $lang->repo->aiScoreTips)),
         set::value(empty($definition->ai) || empty($definition->ai->approvals) ? 0 : $definition->ai->approvals->score)
     ),
     formGroup
