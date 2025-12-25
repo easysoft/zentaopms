@@ -1205,18 +1205,16 @@ class executionZen extends execution
     {
         $members = form::batchData()->get();
 
+        $oldMemberDays = $this->dao->select('`account`, `days`')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetchPairs('account', 'days');
         foreach($members as $rowIndex => $member)
         {
             $member->root = $execution->id;
-            if(!empty($execution->days) and $member->days > $execution->days)
+
+            if($member->hours > 24) dao::$errors["hours[$rowIndex]"] = $this->lang->execution->errorHours;
+            if(!empty($execution->days))
             {
-                dao::$errors["days[$rowIndex]"] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
-                return false;
-            }
-            if($member->hours > 24)
-            {
-                dao::$errors["hours[$rowIndex]"] = $this->lang->execution->errorHours;
-                return false;
+                if(isset($oldMemberDays[$member->account]) && $member->days == $oldMemberDays[$member->account]) continue;
+                if($member->days > $execution->days) dao::$errors["days[$rowIndex]"] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
             }
         }
         return $members;
