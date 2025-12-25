@@ -659,7 +659,7 @@ $lang->group->package->manageReportTemplate  = 'Manage Report Template';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
 $lang->group->package->devopsspace           = 'Manage Space';
 $lang->group->package->devopsspaceSetting    = 'Space Setting';
-$lang->group->package->reviewFlow            = 'Review Flow';
+$lang->group->package->repoReviewFlow        = 'Review Flow';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
 
