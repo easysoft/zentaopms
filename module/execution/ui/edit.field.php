@@ -70,8 +70,9 @@ if($project)
         else
         {
             $fields->field('attribute')
-                ->readonly(true)
-                ->value(zget($lang->stage->typeList, data('execution.attribute')));
+                ->control(array('control' => 'picker', 'disabled' => true))
+                ->items($lang->stage->typeList)
+                ->value(data('execution.attribute'));
         }
     }
     elseif($execution->type != 'kanban' && $project->model != 'ipd')
