@@ -221,13 +221,13 @@ class zaiModel extends model
         {
             curl_setopt($curl, CURLOPT_HTTPGET, true);
         }
-        else
+        elseif($method === 'POST')
         {
             curl_setopt($curl, CURLOPT_POST, true);
-            if($method !== 'POST')
-            {
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-            }
+        }
+        else
+        {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         }
 
         $hasFile = false;
