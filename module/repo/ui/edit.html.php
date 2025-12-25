@@ -17,7 +17,7 @@ jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
 jsVar('repoSCM', $repo->SCM);
 jsVar('client', $repo->client);
-$members = implode(',', zget($repo, 'members', array()));
+$members = $repo->acl == 'private' ? array_keys(zget($repo, 'members', array())) : array();
 
 formPanel
 (
