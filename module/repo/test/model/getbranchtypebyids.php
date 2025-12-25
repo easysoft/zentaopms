@@ -31,7 +31,7 @@ su('admin');
 $repoTest = new repoTest();
 
 // 测试步骤1：批量获取存在的分支类型对象(ID 1和2)
-r($repoTest->getBranchTypeByIDsTest(array(1, 2))) && p('1.id,2.id') && e('1,2');
+r($repoTest->getBranchTypeByIDsTest(array(1, 2))) && p('1:id;2:id') && e('1,2');
 
 // 测试步骤2：验证返回结果数量为2
 r(count($repoTest->getBranchTypeByIDsTest(array(1, 2)))) && p() && e('2');
