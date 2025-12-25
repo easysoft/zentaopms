@@ -3458,6 +3458,33 @@ class repoModel extends model
     }
 
     /**
+     * 批量获取分支类型。
+     * Get branch types by IDs.
+     *
+     * @param  array $typeIDs
+     * @access public
+     * @return array
+     */
+    public function getBranchTypeByIDs(array $typeIDs): array
+    {
+        if(empty($typeIDs)) return array();
+
+        $branchTypes = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
+            ->where('id')->in($typeIDs)
+            ->fetchAll('id');
+
+        if(empty($branchTypes)) return array();
+
+        // 解析每个分支类型的 prefix 字段
+        foreach($branchTypes as &$branchType)
+        {
+            $branchType->prefixes = $this->parsePrefixToArray($branchType->prefix);
+        }
+
+        return $branchTypes;
+    }
+
+    /**
      * 根据repoID和key获取分支类型。
      * Get branch type by repoID and key.
      *

@@ -2312,6 +2312,21 @@ class repoTest
     }
 
     /**
+     * Test getBranchTypeByIDs method.
+     *
+     * @param  array $typeIDs
+     * @access public
+     * @return mixed
+     */
+    public function getBranchTypeByIDsTest(array $typeIDs)
+    {
+        $result = $this->objectModel->getBranchTypeByIDs($typeIDs);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? $result : array();
+    }
+
+    /**
      * Test getBranchTypeByRepoID method.
      *
      * @param  int $repoID
