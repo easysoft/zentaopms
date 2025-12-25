@@ -345,6 +345,7 @@ $lang->repo->autoArchiveNotice     = 'Only when the branch archive is enabled, i
 $lang->repo->allBranchTypesNotice  = 'All Branch Type review flow is exists';
 $lang->repo->enableSuccess         = 'The review flow enable Success';
 $lang->repo->disableSuccess        = 'The review flow disable Success';
+$lang->repo->aiScoreTips           = 'Code with an AI score above this threshold passes the AI review.';
 
 $lang->repo->flowStatusList = array();
 $lang->repo->flowStatusList['enable']  = 'Enable';
