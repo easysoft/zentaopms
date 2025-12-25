@@ -1454,6 +1454,8 @@ $lang->resource->repo->editReviewFlow   = 'editReviewFlow';
 $lang->resource->repo->changeFlowStatus = 'changeFlowStatus';
 $lang->resource->repo->deleteReviewFlow = 'deleteReviewFlow';
 
+$lang->resource->repo->setBranchRule = 'setBranchRule';
+
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
 $lang->repo->methodOrder[15]  = 'delete';

@@ -4452,12 +4452,18 @@ $config->group->package->manageThinkRun->privs['thinkrun-answer']     = array('e
 $config->group->package->manageThinkRun->privs['thinkrun-conclusion'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
 $config->group->package->manageThinkRun->privs['thinkrun-export']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
 
-$config->group->package->repoReviewFlow = new stdclass();
-$config->group->package->repoReviewFlow->order  = 2875;
-$config->group->package->repoReviewFlow->subset = 'repoSettings';
-$config->group->package->repoReviewFlow->privs = array();
-$config->group->package->repoReviewFlow->privs['repo-browseReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->repoReviewFlow->privs['repo-createReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->repoReviewFlow->privs['repo-editReviewFlow']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->repoReviewFlow->privs['repo-changeFlowStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-deleteReviewFlow'));
-$config->group->package->repoReviewFlow->privs['repo-deleteReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus'));
+$config->group->package->reviewFlow = new stdclass();
+$config->group->package->reviewFlow->order  = 2875;
+$config->group->package->reviewFlow->subset = 'repoSettings';
+$config->group->package->reviewFlow->privs = array();
+$config->group->package->reviewFlow->privs['repo-browseReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
+$config->group->package->reviewFlow->privs['repo-createReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
+$config->group->package->reviewFlow->privs['repo-editReviewFlow']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
+$config->group->package->reviewFlow->privs['repo-changeFlowStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-deleteReviewFlow'));
+$config->group->package->reviewFlow->privs['repo-deleteReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus'));
+
+$config->group->package->branchRule = new stdclass();
+$config->group->package->branchRule->order  = 2880;
+$config->group->package->branchRule->subset = 'repoSettings';
+$config->group->package->branchRule->privs = array();
+$config->group->package->branchRule->privs['repo-setBranchRule'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType', 'repo-browseBranch'), 'recommend' => array());
