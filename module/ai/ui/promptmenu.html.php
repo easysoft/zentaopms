@@ -55,7 +55,7 @@ $promptMenuInject = function()
     {
         /* 子计划不显示“拆分子计划智能体” */
         $plan = data('plan');
-        if(is_object($plan) && !empty($plan->parent))
+        if(is_object($plan) && $plan->parent > 0)
         {
             $prompts = array_filter($prompts, function($prompt)
             {
