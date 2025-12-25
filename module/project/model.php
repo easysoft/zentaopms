@@ -1939,25 +1939,24 @@ class projectModel extends model
      */
     public function manageMembers(int $projectID, array $members): bool
     {
-        $project = $this->projectTao->fetchProjectInfo($projectID);
-        $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchPairs();
+        $project    = $this->projectTao->fetchProjectInfo($projectID);
+        $oldMembers = $this->dao->select('`account`, `join`, `days`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchAll();
+        $oldJoin    = array_column($oldMembers, 'join', 'account');
+        $oldDays    = array_column($oldMembers, 'days', 'account');
 
         /* Check fields. */
         foreach($members as $key => $member)
         {
             if(empty($member->account)) continue;
 
-            if(!empty($project->days) and (int)$member->days > $project->days)
+            if((float)$member->hours > 24) dao::$errors = $this->lang->project->errorHours;
+            if(!empty($project->days))
             {
-                dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
-                return false;
-            }
-            if((float)$member->hours > 24)
-            {
-                dao::$errors = $this->lang->project->errorHours;
-                return false;
+                if(isset($oldDays[$member->account]) && $oldDays[$member->account] == $member->days) continue;
+                if((int)$member->days > $project->days) dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
             }
         }
+        if(dao::isError()) return false;
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->exec();
 
