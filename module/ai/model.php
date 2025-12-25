@@ -2126,12 +2126,13 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        $wholePrompt = static::assemblePrompt($prompt, '');
-        $schema      = $this->getFunctionCallSchema($prompt->targetForm);
+        $role   = static::tryPunctuate($prompt->role);
+        $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
+        $schema = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
     }
 
     /**
