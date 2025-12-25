@@ -1203,7 +1203,18 @@ class storyZen extends story
     protected function buildStoryForCreate(int $executionID, int $bugID, string $storyType = 'story'): object|false
     {
         $fields = $this->config->story->form->create;
-        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field)
+        {
+            if($field == 'files')
+            {
+                if(empty($_FILES['files']['name'][0]))
+                {
+                    dao::$errors['files'][] = sprintf($this->lang->error->notempty, $this->lang->files);
+                }
+                continue;
+            }
+            $fields[$field]['required'] = true;
+        }
         if(!isset($_POST['plan'])) $this->config->{$storyType}->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
