@@ -662,5 +662,6 @@ $lang->group->package->devopsspaceSetting    = 'Space Setting';
 $lang->group->package->repoReviewFlow        = 'Review Flow';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
+$lang->group->package->branchRule            = 'Branch Rule';
 
 include (dirname(__FILE__) . '/resource.php');

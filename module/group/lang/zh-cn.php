@@ -661,5 +661,6 @@ $lang->group->package->devopsspaceSetting    = '空间设置';
 $lang->group->package->repoReviewFlow        = '审批流程';
 $lang->group->package->productSetting        = '产品配置';
 $lang->group->package->executionSetting      = '执行配置';
+$lang->group->package->branchRule            = '分支规则';
 
 include (dirname(__FILE__) . '/resource.php');
