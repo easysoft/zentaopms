@@ -1991,7 +1991,7 @@ class doc extends control
         $this->view->spaceType  = $spaceType;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getAllSubSpaces();
+        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
         $this->view->libPairs   = $libPairs;
         $this->view->optionMenu = $chapterAndDocs;
         $this->view->groups     = $this->loadModel('group')->getPairs();
