@@ -621,6 +621,7 @@ class ai extends control
 
         $response['objectID']     = $objectId;
         $response['objectType']   = $prompt->module;
+        $response['knowledgeLib'] = $prompt->knowledgeLib;
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['model']        = $prompt->model;
