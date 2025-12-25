@@ -195,7 +195,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
         id         : 'zentao-prompt-popoup',
         viewType   : 'chat',
         width      : info.content ? 800 : 600,
-        postMessage: {content: [{role: 'system', content: [info.dataPrompt, info.purpose].join('\n\n')}]},
+        postMessage: {content: [{role: 'system', content: info.dataPrompt}, {role: 'user', content: info.purpose, custom_data: {invisible: true}}]},
         creatingChat: {
             title    : info.name,
             type     : 'agent',
@@ -403,8 +403,17 @@ function registerZentaoAIPlugin(lang)
     {
         if(!info.postingMessages || !info.postingMessages.length) return;
         if(!info.chat.custom_data || !info.chat.custom_data.ztklibs) return;
-        const userPrompt = info.postingMessages.map(x => x.content).filter(x => x && x.trim().length).join('\n');
-        if(!userPrompt.length) return;
+
+        const userPrompts   = [];
+        const systemPrompts = [];
+        info.postingMessages.forEach(x =>
+        {
+            if(x.role === 'user')        userPrompts.push(x.content);
+            else if(x.role === 'system') systemPrompts.push(x.content);
+        });
+        let searchPrompt = userPrompts.filter(Boolean).join('\n').trim();
+        if(!searchPrompt.length) searchPrompt = systemPrompts.filter(Boolean).join('\n').trim();
+        if(!searchPrompt.length) return;
 
         info.updateState(lang.searchingKLibs);
 
@@ -413,7 +422,7 @@ function registerZentaoAIPlugin(lang)
         const [response] = await $.ajaxSubmit(
         {
             url:  $.createLink('zai', 'ajaxSearchKnowledges'),
-            data: {userPrompt: userPrompt, filters: JSON.stringify(ztklibs)}
+            data: {userPrompt: searchPrompt, filters: JSON.stringify(ztklibs)}
         });
         if(response && response.result === 'success' && response.data && Array.isArray(response.data) && response.data.length)
         {
