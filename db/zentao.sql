@@ -741,8 +741,6 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `path` varchar(255) NOT NULL DEFAULT '',
   `grade` tinyint unsigned NOT NULL DEFAULT 0,
   `order` int unsigned NOT NULL DEFAULT 0,
-  `position` varchar(30) NOT NULL DEFAULT '',
-  `function` varchar(255) NOT NULL DEFAULT '',
   `manager` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
