@@ -7,20 +7,21 @@ title=测试 blockZen::printTesttaskBlock();
 timeout=0
 cid=15300
 
-- 执行blockTest模块的printTesttaskBlockTest方法，参数type=all 属性hasValidation @1
-- 执行blockTest模块的printTesttaskBlockTest方法，参数type=wait 属性type @wait
-- 执行blockTest模块的printTesttaskBlockTest方法，参数type=doing 属性type @doing
-- 执行blockTest模块的printTesttaskBlockTest方法，参数type=done 属性type @done
-- 执行blockTest模块的printTesttaskBlockTest方法，参数count=3 属性count @3
+- 测试type=all属性type @all
+- 测试type=wait属性type @wait
+- 测试type=doing属性type @doing
+- 测试type=done属性type @done
+- 测试count限制属性count @3
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$blockTest = new blockTest();
+global $tester, $app;
+$blockTest = new blockZenTest();
 
 // 测试参数 type=all
 $block1 = new stdClass();
@@ -57,8 +58,11 @@ $block5->params->type = 'all';
 $block5->params->orderBy = 'id_desc';
 $block5->params->count = 3;
 
-r($blockTest->printTesttaskBlockTest($block1)) && p('hasValidation') && e('1'); // 测试type=all, 验证参数有效性
-r($blockTest->printTesttaskBlockTest($block2)) && p('type') && e('wait');       // 测试type=wait
-r($blockTest->printTesttaskBlockTest($block3)) && p('type') && e('doing');      // 测试type=doing
-r($blockTest->printTesttaskBlockTest($block4)) && p('type') && e('done');       // 测试type=done
-r($blockTest->printTesttaskBlockTest($block5)) && p('count') && e('3');         // 测试count限制
+$app->rawModule = 'block';
+$app->rawMethod = 'dashboard';
+
+r($blockTest->printTesttaskBlockTest($block1)) && p('type') && e('all');   // 测试type=all
+r($blockTest->printTesttaskBlockTest($block2)) && p('type') && e('wait');  // 测试type=wait
+r($blockTest->printTesttaskBlockTest($block3)) && p('type') && e('doing'); // 测试type=doing
+r($blockTest->printTesttaskBlockTest($block4)) && p('type') && e('done');  // 测试type=done
+r($blockTest->printTesttaskBlockTest($block5)) && p('count') && e('3');    // 测试count限制
