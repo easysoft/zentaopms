@@ -16,7 +16,7 @@ fields:
   - field: cycle
     range: 1
   - field: begin
-    range: 0800-1100
+    range: 800-1100
   - field: end
     range: 1800-2000
   - field: assignedTo
