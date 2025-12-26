@@ -63,3 +63,6 @@ span.menu-toggle.nested-toggle-icon.is-empty {width: 0.1rem;}
 #repoDropmenu .icon-angle-right {display: none;}
 
 .is-sidebar-resizing .repo-iframe {pointer-events: none;}
+
+#createReviewFlow .form-label {justify-content: flex-start !important;}
+#editReviewFlow .form-label {justify-content: flex-start !important;}

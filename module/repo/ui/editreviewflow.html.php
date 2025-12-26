@@ -21,18 +21,13 @@ $definition = zget($reviewFlow, 'definition', array());
 jsVar('editBranchTypes', explode(',', $reviewFlow->branchType));
 formPanel
 (
+    setID('editReviewFlow'),
     set::title($title),
-    set::labelWidth(common::checkNotCN() ? '320px' : '240px'),
+    set::labelWidth(common::checkNotCN() ? '280px' : '200px'),
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
     on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
     on::change('[name=addressOption]')->call('window.loadIssueType'),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->basicInfo),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->basicInfo)),
     formGroup
     (
         set::width('2/3'),
@@ -81,13 +76,7 @@ formPanel
         set::control(array('type' => 'textarea', 'rows' => 5)),
         set::value($reviewFlow->desc)
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->aiReview),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->aiReview)),
     formGroup
     (
         setID('aiReview'),
@@ -145,13 +134,7 @@ formPanel
         set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
         set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->approvals) ? 0 : $definition->reviewFlow->approvals->minReviewers)
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->solveIssues),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->solveIssues)),
     formRow
     (
         set::width('2/3'),
@@ -183,13 +166,7 @@ formPanel
         set::items($lang->repo->newCommitsAddressOptionList),
         set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->newCommits) ? 'defaultApproval' : $definition->reviewFlow->newCommits->addressOption)
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->mergeStrategy),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->mergeStrategy)),
     formGroup
     (
         set::width('2/3'),

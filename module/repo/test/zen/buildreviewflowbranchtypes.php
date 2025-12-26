@@ -10,7 +10,7 @@ cid=0
 - 执行repoTest模块的buildReviewFlowBranchTypesTest方法，参数是2 属性2 @branch_type2
 - 执行repoTest模块的buildReviewFlowBranchTypesTest方法，参数是3 属性3 @branch_type3
 - 执行repoTest模块的buildReviewFlowBranchTypesTest方法，参数是4 属性4 @branch_type4
-- 执行repoTest模块的buildReviewFlowBranchTypesTest方法  @全部
+- 执行repoTest模块的buildReviewFlowBranchTypesTest方法  @~~
 */
 
 // 1. 导入依赖（路径固定，不可修改）
@@ -29,4 +29,4 @@ r($repoTest->buildReviewFlowBranchTypesTest(1)) && p('1') && e('branch_type1');
 r($repoTest->buildReviewFlowBranchTypesTest(2)) && p('2') && e('branch_type2');
 r($repoTest->buildReviewFlowBranchTypesTest(3)) && p('3') && e('branch_type3');
 r($repoTest->buildReviewFlowBranchTypesTest(4)) && p('4') && e('branch_type4');
-r($repoTest->buildReviewFlowBranchTypesTest(0)) && p('0') && e('全部');
+r($repoTest->buildReviewFlowBranchTypesTest(0)) && p('0') && e('~~');

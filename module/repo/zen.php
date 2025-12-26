@@ -124,10 +124,9 @@ class repoZen extends repo
             foreach($flowBranchTypes as $flowBranchType) $reviewFlowBranchTypes[$flowBranchType] = $flowBranchType;
         }
 
-        $branchTypeList = array('0' => $this->lang->all);
+        $branchTypeList = array();
         foreach($branchTypes as $branchTypeID => $branchType)
         {
-            if(isset($reviewFlowBranchTypes[0])) unset($branchTypeList[0]);
             if(isset($reviewFlowBranchTypes[$branchTypeID]) && !in_array($branchTypeID, $appendIdList)) continue;
             $branchTypeList[$branchTypeID] = $branchType;
         }
