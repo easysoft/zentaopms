@@ -173,4 +173,3 @@ $fields->field('keywords')->foldable()->required($createFields['keywords']['requ
 
 $fields->field('type')->control('hidden')->value($type);
 $fields->field('status')->control('hidden')->value('active');
-$fields->field('project')->control('hidden')->value(data('projectID'));
