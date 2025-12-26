@@ -49,7 +49,8 @@ function getPromptFormConfig(fields, extraConfig)
     if(!Array.isArray(fields) || !fields.length) return;
     const typeMap    = {radio: 'picker', checkbox: 'multiPicker', text: 'input'};
     const required   = [];
-    const properties = fields.reduce((properties, field, index) => {
+    const properties = fields.reduce((properties, field, index) =>
+    {
         field.code = `field-${field.id}`;
         properties[field.code] = {
             type       : 'string',
@@ -139,6 +140,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
+                    if(propNames[prop] === undefined) return null;
                     let oldValue = originObject[prop];
                     if(oldValue === undefined || oldValue === null) oldValue = '';
                     if(value === undefined || value === null)       value    = '';
@@ -146,8 +148,8 @@ window.executeZentaoPrompt = async function(info, testingMode)
                     value = typeof value === 'string' ? value : JSON.stringify(value);
                     oldValue = typeof oldValue === 'string' ? oldValue : JSON.stringify(oldValue);
                     const isSame = oldValue === value;
-                    return h`<tr class="whitespace-pre-wrap">
-    <td class='font-bold'>${propNames[prop] || prop}</td>
+                    return h`<tr class="whitespace-pre-wrap" key=${prop}>
+    <td class='font-bold'>${propNames[prop]}</td>
     <td>${isSame ? renderValue(value) : (oldValue.length ? h`<div class="htmldiff article whitespace-prewrap" dangerouslySetInnerHTML=${{__html: htmlDiff(oldValue, value)}}></div>` : h`<div class="htmldiff article whitespace-prewrap"><ins data-operation-index="0">${value}</ins></div>`)}</td>
 </tr>`;
                 };
