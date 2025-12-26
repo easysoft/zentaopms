@@ -663,5 +663,6 @@ $lang->group->package->repoReviewFlow        = 'Review Flow';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
 $lang->group->package->branchRule            = 'Branch Rule';
+$lang->group->package->branchType            = 'Branch Type';
 
 include (dirname(__FILE__) . '/resource.php');
