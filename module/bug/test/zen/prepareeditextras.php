@@ -17,10 +17,10 @@ cid=15467
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData1, $oldBug1] 属性id @1
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData2, $oldBug2]  @0
 - 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData3, $oldBug3] 属性assignedTo @user1
-- 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData4, $oldBug4] 
+- 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData4, $oldBug4]
  - 属性status @resolved
  - 属性confirmed @1
-- 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData5, $oldBug5] 
+- 执行invokeArgs($zen模块的newInstance方法，参数是, [$formData5, $oldBug5]
  - 属性status @closed
  - 属性assignedTo @closed
 
@@ -33,7 +33,7 @@ $app->rawMethod = 'edit';
 // 创建测试用的form对象
 function createFormMock($assignedTo, $resolution = '', $resolvedBy = '', $closedBy = '', $closedDate = '') {
     global $tester;
-    
+
     // 设置POST数据模拟表单提交
     $_POST['assignedTo'] = $assignedTo;
     $_POST['resolution'] = $resolution;
@@ -49,21 +49,22 @@ function createFormMock($assignedTo, $resolution = '', $resolvedBy = '', $closed
     $_POST['pri'] = 3;
     $_POST['severity'] = 3;
     $_POST['steps'] = 'Test steps';
-    
+
     // 使用真实的form类创建对象
     $formData = form::data($tester->config->bug->form->edit);
-    
+
     return $formData;
 }
 
 // 准备基础Bug数据
 $baseBug = (object)array(
-    'id' => 1,
-    'product' => 1,
-    'assignedTo' => 'admin',
-    'status' => 'active',
+    'id'             => 1,
+    'product'        => 1,
+    'assignedTo'     => 'admin',
+    'status'         => 'active',
     'lastEditedDate' => '2023-05-04 14:00:00',
-    'openedBy' => 'admin'
+    'openedBy'       => 'admin',
+    'resolvedBy'     => ''
 );
 
 $zen = initReference('bug');
