@@ -25,7 +25,7 @@ cid=18787
  - 第1条的new属性 @done
 - 测试完成 任务状态为已完成的任务
  - 第0条的field属性 @left
- - 第0条的old属性 @2
+ - 第0条的old属性 @2.00
  - 第0条的new属性 @0
 - 测试完成 任务状态为已取消的任务
  - 第1条的field属性 @status
@@ -65,9 +65,9 @@ $taskTester = new taskTest();
 
 r($taskTester->finishTest($taskIDList[0], $waitTask))   && p('0:field,old,new') && e('status,wait,done');   // 测试完成 任务状态为未开始的任务
 r($taskTester->finishTest($taskIDList[1], $doingTask))  && p('1:field,old,new') && e('status,doing,done');  // 测试完成 任务状态为进行中的任务
-r($taskTester->finishTest($taskIDList[2], $doneTask))   && p('0:field,old,new') && e('left,2,0');           // 测试完成 任务状态为已完成的任务
+r($taskTester->finishTest($taskIDList[2], $doneTask))   && p('0:field,old,new') && e('left,2.00,0');        // 测试完成 任务状态为已完成的任务
 r($taskTester->finishTest($taskIDList[3], $cancelTask)) && p('1:field,old,new') && e('status,cancel,done'); // 测试完成 任务状态为已取消的任务
-r($taskTester->finishTest($taskIDList[4], $closedTask)) && p('1:field,old,new') && e('status,closed,done');  // 测试完成 任务状态为已取消的任务
+r($taskTester->finishTest($taskIDList[4], $closedTask)) && p('1:field,old,new') && e('status,closed,done'); // 测试完成 任务状态为已取消的任务
 r($taskTester->finishTest($taskIDList[6], $childTask))  && p('1:field,old,new') && e('status,wait,done');   // 测试完成 任务状态为未开始的子任务
 r($taskTester->finishTest($taskIDList[7], $linearTask)) && p('1:field,old,new') && e('status,wait,done');   // 测试完成 任务状态为未开始的串行任务
 r($taskTester->finishTest($taskIDList[8], $multiTask))  && p('1:field,old,new') && e('status,doing,done');  // 测试完成 任务状态为未开始的并行任务
