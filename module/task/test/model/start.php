@@ -20,7 +20,7 @@ cid=18844
  - 第0条的new属性 @doing
 - 测试开始任务状态为进行中的任务
  - 第2条的field属性 @consumed
- - 第2条的old属性 @4
+ - 第2条的old属性 @4.00
  - 第2条的new属性 @10
 - 测试开始任务状态为已完成的任务
  - 第0条的field属性 @status
@@ -28,7 +28,7 @@ cid=18844
  - 第0条的new属性 @doing
 - 测试开始任务状态为已取消的任务
  - 第3条的field属性 @consumed
- - 第3条的old属性 @6
+ - 第3条的old属性 @6.00
  - 第3条的new属性 @0
 - 测试开始任务状态为已取消的任务
  - 第0条的field属性 @status
@@ -63,9 +63,9 @@ $multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 $taskTester = new taskTest();
 
 r($taskTester->startTest($taskIDList[0], $waitTask))   && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的任务
-r($taskTester->startTest($taskIDList[1], $doingTask))  && p('2:field,old,new') && e('consumed,4,10');       // 测试开始任务状态为进行中的任务
+r($taskTester->startTest($taskIDList[1], $doingTask))  && p('2:field,old,new') && e('consumed,4.00,10');    // 测试开始任务状态为进行中的任务
 r($taskTester->startTest($taskIDList[2], $doneTask))   && p('0:field,old,new') && e('status,done,doing');   // 测试开始任务状态为已完成的任务
-r($taskTester->startTest($taskIDList[3], $cancelTask)) && p('3:field,old,new') && e('consumed,6,0');        // 测试开始任务状态为已取消的任务
+r($taskTester->startTest($taskIDList[3], $cancelTask)) && p('3:field,old,new') && e('consumed,6.00,0');     // 测试开始任务状态为已取消的任务
 r($taskTester->startTest($taskIDList[4], $closedTask)) && p('0:field,old,new') && e('status,closed,doing'); // 测试开始任务状态为已取消的任务
 r($taskTester->startTest($taskIDList[6], $childTask))  && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的子任务
 r($taskTester->startTest($taskIDList[7], $linearTask)) && p('0:field,old,new') && e('status,wait,doing');   // 测试开始任务状态为未开始的串行任务
