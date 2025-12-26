@@ -21,17 +21,11 @@ formPanel
 (
     setID('createReviewFlow'),
     set::title($title),
-    set::labelWidth(common::checkNotCN() ? '320px' : '240px'),
+    set::labelWidth(common::checkNotCN() ? '280px' : '200px'),
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
     on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
     on::change('[name=addressOption]')->call('window.loadIssueType'),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->basicInfo),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->basicInfo)),
     formGroup
     (
         set::width('2/3'),
@@ -74,15 +68,9 @@ formPanel
         set::width('2/3'),
         set::label($lang->repo->desc),
         set::name('desc'),
-        set::control(array('type' => 'textarea', 'rows' => 5)),
+        set::control(array('type' => 'textarea', 'rows' => 1)),
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->aiReview),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->aiReview)),
     formGroup
     (
         setID('aiReview'),
@@ -103,13 +91,7 @@ formPanel
         set::control(array('type' => 'number', 'min' => 0, 'max' => 100, 'placeholder' => $lang->repo->aiScoreTips)),
         set::value(0)
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->manualReview),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->manualReview)),
     formGroup
     (
         setID('defaultReviewers'),
@@ -138,13 +120,7 @@ formPanel
         set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
         set::value(0)
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->solveIssues),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->solveIssues)),
     formRow
     (
         set::width('2/3'),
@@ -176,13 +152,7 @@ formPanel
         set::items($lang->repo->newCommitsAddressOptionList),
         set::value('defaultApproval')
     ),
-    formGroup
-    (
-        set::name(''),
-        set::control('static'),
-        set::label($lang->repo->mergeStrategy),
-        set::labelClass('font-black')
-    ),
+    formRowGroup(set::title($lang->repo->mergeStrategy)),
     formGroup
     (
         set::width('2/3'),
