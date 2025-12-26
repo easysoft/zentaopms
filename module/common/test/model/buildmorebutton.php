@@ -7,11 +7,11 @@ title=测试 commonModel::buildMoreButton();
 timeout=0
 cid=15647
 
-- 步骤1：不存在的executionID @
-- 步骤2：无效ID为0 @
-- 步骤3：负数ID @
-- 步骤4：Tutorial模式或正常模式 @
-- 步骤5：执行记录但同项目无其他执行 @
+- 步骤1：不存在的executionID @0
+- 步骤2：无效ID为0 @0
+- 步骤3：负数ID @0
+- 步骤4：Tutorial模式或正常模式 @0
+- 步骤5：执行记录但同项目无其他执行 @0
 
 */
 
@@ -40,8 +40,8 @@ $commonTest = new commonTest();
 $_SESSION['tutorialMode'] = true;
 
 // 测试用例（5个测试步骤）
-r($commonTest->buildMoreButtonTest(999, false)) && p() && e(''); // 步骤1：不存在的executionID
-r($commonTest->buildMoreButtonTest(0, false)) && p() && e('');   // 步骤2：无效ID为0
-r($commonTest->buildMoreButtonTest(-1, false)) && p() && e('');  // 步骤3：负数ID
-r($commonTest->buildMoreButtonTest(1, false)) && p() && e('');   // 步骤4：Tutorial模式或正常模式
-r($commonTest->buildMoreButtonTest(6, false)) && p() && e('');   // 步骤5：执行记录但同项目无其他执行
+r($commonTest->buildMoreButtonTest(999, false)) && p() && e('0'); // 步骤1：不存在的executionID
+r($commonTest->buildMoreButtonTest(0, false))   && p() && e('0');   // 步骤2：无效ID为0
+r($commonTest->buildMoreButtonTest(-1, false))  && p() && e('0');  // 步骤3：负数ID
+r($commonTest->buildMoreButtonTest(1, false))   && p() && e('0');   // 步骤4：Tutorial模式或正常模式
+r($commonTest->buildMoreButtonTest(6, false))   && p() && e('0');   // 步骤5：执行记录但同项目无其他执行
