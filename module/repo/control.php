@@ -2140,8 +2140,23 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '')
+    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings')
     {
+        // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
+        if($from == 'branch')
+        {
+            $this->lang->devops->menu->branch['alias'] = 'setbranchrule';
+            $this->lang->devops->menu->settings['alias'] = str_replace(',setbranchrule', '', $this->lang->devops->menu->settings['alias']);
+            unset($this->lang->devops->menu->settings['subMenu']->branchType['alias']);
+        }
+        else
+        {
+            unset($this->lang->devops->menu->branch['alias']);
+            $this->lang->devops->menu->settings['alias'] .= ',setbranchrule';
+            $this->lang->devops->menu->settings['subMenu']->branchType['alias'] = 'setbranchrule';
+        }
+        $this->commonAction($repoID);
+
         $branchName = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
         $branchType = $this->repo->getBranchTypeByID($branchTypeID);
         if(!$branchType)
