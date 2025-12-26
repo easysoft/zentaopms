@@ -13,8 +13,8 @@ cid=18343
 - 测试替换 $thisMonth @1
 - 测试替换 $yesterday @1
 - 测试替换 $today @1
-- 测试替换 $@me @account = 'admin'
-- 测试不包含$变量的查询 @queryList[7]
+- 测试替换me @`account = 'admin'`
+- 测试不包含$变量的查询 @title like 'normal query'
 
 */
 
@@ -38,11 +38,11 @@ $queryList[] = "title like 'normal query'";
 $search = new searchTest();
 
 // 执行测试步骤
-r($search->replaceDynamicTest($queryList[0])) && p() && e('1'); // 测试替换 $lastWeek
-r($search->replaceDynamicTest($queryList[1])) && p() && e('1'); // 测试替换 $thisWeek
-r($search->replaceDynamicTest($queryList[2])) && p() && e('1'); // 测试替换 $lastMonth
-r($search->replaceDynamicTest($queryList[3])) && p() && e('1'); // 测试替换 $thisMonth
-r($search->replaceDynamicTest($queryList[4])) && p() && e('1'); // 测试替换 $yesterday
-r($search->replaceDynamicTest($queryList[5])) && p() && e('1'); // 测试替换 $today
-r($search->replaceDynamicTest($queryList[6])) && p() && e("account = 'admin'"); // 测试替换 $@me
-r($search->replaceDynamicTest($queryList[7])) && p() && e($queryList[7]); // 测试不包含$变量的查询
+r($search->replaceDynamicTest($queryList[0])) && p() && e('1');                         // 测试替换 $lastWeek
+r($search->replaceDynamicTest($queryList[1])) && p() && e('1');                         // 测试替换 $thisWeek
+r($search->replaceDynamicTest($queryList[2])) && p() && e('1');                         // 测试替换 $lastMonth
+r($search->replaceDynamicTest($queryList[3])) && p() && e('1');                         // 测试替换 $thisMonth
+r($search->replaceDynamicTest($queryList[4])) && p() && e('1');                         // 测试替换 $yesterday
+r($search->replaceDynamicTest($queryList[5])) && p() && e('1');                         // 测试替换 $today
+r($search->replaceDynamicTest($queryList[6])) && p() && e("`account = 'admin'`");       // 测试替换me
+r($search->replaceDynamicTest($queryList[7])) && p() && e("title like 'normal query'"); // 测试不包含$变量的查询
