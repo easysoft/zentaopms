@@ -18,7 +18,7 @@ cid=18780
  - 属性name @开发任务一
  - 属性execution @2
  - 属性type @devel
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @`^$`
  - 属性deadline @`^$`
@@ -26,7 +26,7 @@ cid=18780
  - 属性name @设计任务一
  - 属性execution @2
  - 属性type @design
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2023-04-01
  - 属性deadline @`^$`
@@ -34,7 +34,7 @@ cid=18780
  - 属性name @需求任务一
  - 属性execution @2
  - 属性type @request
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @`^$`
  - 属性deadline @2024-01-01
@@ -42,7 +42,7 @@ cid=18780
  - 属性name @测试任务一
  - 属性execution @2
  - 属性type @test
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @`^$`
  - 属性deadline @`^$`
@@ -50,7 +50,7 @@ cid=18780
  - 属性name @研究任务一
  - 属性execution @2
  - 属性type @study
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2023-04-01
  - 属性deadline @2024-01-01
@@ -58,7 +58,7 @@ cid=18780
  - 属性name @讨论任务一
  - 属性execution @2
  - 属性type @discuss
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2021-01-10
  - 属性deadline @2021-03-19
@@ -66,7 +66,7 @@ cid=18780
  - 属性name @界面任务一
  - 属性execution @2
  - 属性type @ui
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2021-01-10
  - 属性deadline @2021-03-19
@@ -74,7 +74,7 @@ cid=18780
  - 属性name @事务任务一
  - 属性execution @2
  - 属性type @affair
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2021-01-10
  - 属性deadline @2021-03-19
@@ -82,7 +82,7 @@ cid=18780
  - 属性name @其他任务一
  - 属性execution @2
  - 属性type @misc
- - 属性estimate @1
+ - 属性estimate @1.00
  - 属性version @1
  - 属性estStarted @2021-01-10
  - 属性deadline @2021-03-19
@@ -106,15 +106,15 @@ $notype        = array('execution' => 2, 'name' => '特殊任务二', 'type' => 
 
 $task = new taskTest();
 
-r($task->createObject($devel))       && p('name,execution,type,estimate,version,estStarted,deadline') && e('开发任务一,2,devel,1,1,`^$`,`^$`');               // 测试正常的创建开发任务
-r($task->createObject($design))      && p('name,execution,type,estimate,version,estStarted,deadline') && e('设计任务一,2,design,1,1,2023-04-01,`^$`');        // 测试正常的创建设计任务
-r($task->createObject($request))     && p('name,execution,type,estimate,version,estStarted,deadline') && e('需求任务一,2,request,1,1,`^$`,2024-01-01');       // 测试正常的创建需求任务
-r($task->createObject($test))        && p('name,execution,type,estimate,version,estStarted,deadline') && e('测试任务一,2,test,1,1,`^$`,`^$`');                // 测试正常的创建测试任务
-r($task->createObject($study))       && p('name,execution,type,estimate,version,estStarted,deadline') && e('研究任务一,2,study,1,1,2023-04-01,2024-01-01');   // 测试正常的创建研究任务
-r($task->createObject($discuss))     && p('name,execution,type,estimate,version,estStarted,deadline') && e('讨论任务一,2,discuss,1,1,2021-01-10,2021-03-19'); // 测试正常的创建讨论任务
-r($task->createObject($ui))          && p('name,execution,type,estimate,version,estStarted,deadline') && e('界面任务一,2,ui,1,1,2021-01-10,2021-03-19');      // 测试正常的创建界面任务
-r($task->createObject($affair))      && p('name,execution,type,estimate,version,estStarted,deadline') && e('事务任务一,2,affair,1,1,2021-01-10,2021-03-19');  // 测试正常的创建事务任务
-r($task->createObject($misc))        && p('name,execution,type,estimate,version,estStarted,deadline') && e('其他任务一,2,misc,1,1,2021-01-10,2021-03-19');    // 测试正常的创建其他任务
-r($task->createObject($noexecution)) && p('execution:0')                                              && e('『所属执行』不能为空。');                         // 测试不输入执行创建任务
-r($task->createObject($noname))      && p('name:0')                                                   && e('『任务名称』不能为空。');                         // 测试不输入名称创建任务
-r($task->createObject($notype))      && p('type:0')                                                   && e('『任务类型』不能为空。');                         // 测试不输入类型创建任务
+r($task->createObject($devel))       && p('name,execution,type,estimate,version,estStarted,deadline') && e('开发任务一,2,devel,1.00,1,`^$`,`^$`');               // 测试正常的创建开发任务
+r($task->createObject($design))      && p('name,execution,type,estimate,version,estStarted,deadline') && e('设计任务一,2,design,1.00,1,2023-04-01,`^$`');        // 测试正常的创建设计任务
+r($task->createObject($request))     && p('name,execution,type,estimate,version,estStarted,deadline') && e('需求任务一,2,request,1.00,1,`^$`,2024-01-01');       // 测试正常的创建需求任务
+r($task->createObject($test))        && p('name,execution,type,estimate,version,estStarted,deadline') && e('测试任务一,2,test,1.00,1,`^$`,`^$`');                // 测试正常的创建测试任务
+r($task->createObject($study))       && p('name,execution,type,estimate,version,estStarted,deadline') && e('研究任务一,2,study,1.00,1,2023-04-01,2024-01-01');   // 测试正常的创建研究任务
+r($task->createObject($discuss))     && p('name,execution,type,estimate,version,estStarted,deadline') && e('讨论任务一,2,discuss,1.00,1,2021-01-10,2021-03-19'); // 测试正常的创建讨论任务
+r($task->createObject($ui))          && p('name,execution,type,estimate,version,estStarted,deadline') && e('界面任务一,2,ui,1.00,1,2021-01-10,2021-03-19');      // 测试正常的创建界面任务
+r($task->createObject($affair))      && p('name,execution,type,estimate,version,estStarted,deadline') && e('事务任务一,2,affair,1.00,1,2021-01-10,2021-03-19');  // 测试正常的创建事务任务
+r($task->createObject($misc))        && p('name,execution,type,estimate,version,estStarted,deadline') && e('其他任务一,2,misc,1.00,1,2021-01-10,2021-03-19');    // 测试正常的创建其他任务
+r($task->createObject($noexecution)) && p('execution:0')                                              && e('『所属执行』不能为空。');                            // 测试不输入执行创建任务
+r($task->createObject($noname))      && p('name:0')                                                   && e('『任务名称』不能为空。');                            // 测试不输入名称创建任务
+r($task->createObject($notype))      && p('type:0')                                                   && e('『任务类型』不能为空。');                            // 测试不输入类型创建任务
