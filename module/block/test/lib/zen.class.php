@@ -652,9 +652,7 @@ class blockZenTest extends baseTest
      */
     public function printScrumTestBlockTest(object $block)
     {
-        ob_start();
         $this->invokeArgs('printScrumTestBlock', array($block));
-        ob_end_clean();
         if(dao::isError()) return dao::getError();
 
         $view = $this->instance->view;
