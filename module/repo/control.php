@@ -2145,7 +2145,7 @@ class repo extends control
         // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
         if($from == 'branch')
         {
-            $this->lang->devops->menu->branch['alias'] = 'setbranchrule';
+            $this->lang->devops->menu->branch['alias']   = 'setbranchrule';
             $this->lang->devops->menu->settings['alias'] = str_replace(',setbranchrule', '', $this->lang->devops->menu->settings['alias']);
             unset($this->lang->devops->menu->settings['subMenu']->branchType['alias']);
         }
