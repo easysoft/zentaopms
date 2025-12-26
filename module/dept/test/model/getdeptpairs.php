@@ -29,8 +29,6 @@ $table->parent->range('0{5},1{5}');
 $table->path->range(',1,,1,2,,1,3,,1,4,,1,5,,6,,7,,8,,9,,10,');
 $table->grade->range('1{5},2{5}');
 $table->order->range('1-10:1');
-$table->position->range('总经理,人事经理,财务经理,研发经理,测试经理,销售经理,市场经理,客服经理,运维经理,产品经理');
-$table->function->range('公司管理,人员管理,财务管理,产品研发,质量保证,销售业务,市场推广,客户服务,系统运维,产品规划');
 $table->manager->range('admin,manager1,manager2,manager3,manager4,manager5,manager6,manager7,manager8,manager9');
 $table->gen(10);
 
