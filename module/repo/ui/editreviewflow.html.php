@@ -21,6 +21,7 @@ $definition = zget($reviewFlow, 'definition', array());
 jsVar('editBranchTypes', explode(',', $reviewFlow->branchType));
 formPanel
 (
+    setID('editReviewFlow'),
     set::title($title),
     set::labelWidth(common::checkNotCN() ? '320px' : '240px'),
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),

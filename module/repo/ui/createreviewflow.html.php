@@ -19,6 +19,7 @@ dropmenu
 unset($branchTypes[0]);
 formPanel
 (
+    setID('createReviewFlow'),
     set::title($title),
     set::labelWidth(common::checkNotCN() ? '320px' : '240px'),
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
