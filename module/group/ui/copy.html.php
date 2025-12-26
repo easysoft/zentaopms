@@ -37,7 +37,7 @@ formPanel
     ),
     formGroup
     (
-        set::label($lang->group->desc),
+        set::label($lang->group->option),
         checkList
         (
             set::name('options[]'),
