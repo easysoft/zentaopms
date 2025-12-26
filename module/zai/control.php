@@ -216,7 +216,7 @@ class zai extends control
 
         if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'failed', 'message' => $this->lang->fail));
 
-        $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit, 0.7);
+        $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit, 0.5);
         $results    = [];
         foreach($knowledges as $knowledge)
         {
