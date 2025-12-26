@@ -55,6 +55,11 @@ else
     );
     $items[] = array
     (
+        'name'    => 'product',
+        'control' => 'hidden'
+    );
+    $items[] = array
+    (
         'name'    => 'id',
         'label'   => $lang->idAB,
         'control' => 'index',
