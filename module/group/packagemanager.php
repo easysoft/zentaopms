@@ -4467,3 +4467,13 @@ $config->group->package->branchRule->order  = 2880;
 $config->group->package->branchRule->subset = 'repoSettings';
 $config->group->package->branchRule->privs = array();
 $config->group->package->branchRule->privs['repo-setBranchRule'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType', 'repo-browseBranch'), 'recommend' => array());
+
+$config->group->package->branchType = new stdclass();
+$config->group->package->branchType->order  = 2885;
+$config->group->package->branchType->subset = 'repoSettings';
+$config->group->package->branchType->privs = array();
+$config->group->package->branchType->privs['repo-browseBranchType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browser'), 'recommend' => array('repo-createBranchType', 'repo-editBranchType', 'repo-deleteBranchType', 'repo-importBranchType'));
+$config->group->package->branchType->privs['repo-createBranchType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-editBranchType', 'repo-deleteBranchType', 'repo-importBranchType'));
+$config->group->package->branchType->privs['repo-editBranchType']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createBranchType', 'repo-deleteBranchType', 'repo-importBranchType'));
+$config->group->package->branchType->privs['repo-deleteBranchType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createBranchType', 'repo-editBranchType', 'repo-importBranchType'));
+$config->group->package->branchType->privs['repo-importBranchType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createBranchType', 'repo-editBranchType', 'repo-deleteBranchType'));

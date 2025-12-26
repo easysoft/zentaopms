@@ -1456,6 +1456,12 @@ $lang->resource->repo->deleteReviewFlow = 'deleteReviewFlow';
 
 $lang->resource->repo->setBranchRule = 'setBranchRule';
 
+$lang->resource->repo->browseBranchType = 'browseBranchType';
+$lang->resource->repo->createBranchType = 'createBranchType';
+$lang->resource->repo->editBranchType   = 'editBranchType';
+$lang->resource->repo->deleteBranchType = 'deleteBranchType';
+$lang->resource->repo->importBranchType = 'importBranchType';
+
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
 $lang->repo->methodOrder[15]  = 'delete';
