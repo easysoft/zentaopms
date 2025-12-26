@@ -21,15 +21,17 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('workflowfield')->gen(0);
+
 su('admin');
 
 $convertTest = new convertModelTest();
 
-r(count($convertTest->getZentaoFieldsTest('epic')))        && p() && e('6');
-r(count($convertTest->getZentaoFieldsTest('story')))       && p() && e('6');
-r(count($convertTest->getZentaoFieldsTest('bug')))         && p() && e('13');
-r(count($convertTest->getZentaoFieldsTest('task')))        && p() && e('5');
-r(count($convertTest->getZentaoFieldsTest('testcase')))    && p() && e('9');
-r(count($convertTest->getZentaoFieldsTest('requirement'))) && p() && e('6');
-r(count($convertTest->getZentaoFieldsTest('notexist')))    && p() && e('0');
-r(count($convertTest->getZentaoFieldsTest('')))            && p() && e('0');
+r(count($convertTest->getZentaoFieldsTest('epic')))        && p() && e('7');
+r(count($convertTest->getZentaoFieldsTest('story')))       && p() && e('7');
+r(count($convertTest->getZentaoFieldsTest('bug')))         && p() && e('14');
+r(count($convertTest->getZentaoFieldsTest('task')))        && p() && e('6');
+r(count($convertTest->getZentaoFieldsTest('testcase')))    && p() && e('10');
+r(count($convertTest->getZentaoFieldsTest('requirement'))) && p() && e('7');
+r(count($convertTest->getZentaoFieldsTest('notexist')))    && p() && e('1');
+r(count($convertTest->getZentaoFieldsTest('')))            && p() && e('1');
