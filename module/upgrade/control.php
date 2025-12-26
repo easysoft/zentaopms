@@ -11,10 +11,6 @@
  */
 class upgrade extends control
 {
-    public function ajaxUpgradeDocSpace()
-    {
-        $this->upgrade->upgradeMyDocSpace();
-    }
     /**
      * The index page.
      *
@@ -30,11 +26,6 @@ class upgrade extends control
 
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
-    }
-
-    public function importBIData()
-    {
-        $this->loadModel('install')->importBIData();
     }
 
     /**
