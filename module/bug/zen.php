@@ -699,6 +699,8 @@ class bugZen extends bug
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
+        if($oldBug->resolvedBy == $bug->resolvedBy && !$this->post->resolvedDate) unset($bug->resolvedDate);
+
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $bug->uid);
 
         return $bug;
