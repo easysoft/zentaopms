@@ -1254,7 +1254,7 @@ class user extends control
     public function refreshRandom()
     {
         $rand = updateSessionRandom();
-        ob_end_clean();
+        if(!empty(ob_get_status(true))) ob_end_clean();
         echo (string)$rand;
     }
 

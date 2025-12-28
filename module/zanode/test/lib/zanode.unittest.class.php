@@ -192,7 +192,7 @@ class zanodeTest
      * @access public
      * @return string
      */
-    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', object $pager = null): string
+    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', ?object $pager = null): string
     {
         $snapshotList = $this->getSnapshotList($nodeID, $orderBy, $pager);
 

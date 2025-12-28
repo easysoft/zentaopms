@@ -352,7 +352,7 @@ class context extends \zin\utils\dataset
     {
         $rawContent = ob_get_contents();
         if(!is_string($rawContent)) $rawContent = '';
-        ob_end_clean();
+        if(!empty(ob_get_status(true))) ob_end_clean();
         return $rawContent;
     }
 

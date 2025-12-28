@@ -773,7 +773,7 @@ class gitlabTest
         return array();
     }
 
-    public function getCommitsTest(int $repoID, string $entry = '', object $pager = null, string $begin = '', string $end = '')
+    public function getCommitsTest(int $repoID, string $entry = '', ?object $pager = null, string $begin = '', string $end = '')
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
         if(!$repo) return array(); // 如果repo不存在，返回空数组
