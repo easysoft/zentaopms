@@ -606,28 +606,7 @@ class dbh
 
                 if(stripos($sql, 'CREATE OR REPLACE VIEW ') === 0)
                 {
-                    // Modify if function.
-                    $fieldsBegin = stripos($sql, 'select');
-                    $fieldsEnd   = stripos($sql, 'from');
-                    $fields      = substr($sql, $fieldsBegin+6, $fieldsEnd-$fieldsBegin-6);
-                    $fieldList   = preg_split("/,(?![^(]+\))/", $fields);
-                    foreach($fieldList as $key => $field)
-                    {
-                        $aliasPos = stripos($field, ' AS ');
-                        $subField = substr($field, 0, $aliasPos);
-                        if(stripos($field, 'SUM(') === 0) $subField = substr($subField, 4, -1);
-
-                        $fieldParts = preg_split("/\+(?![^(]+\))/", $subField);
-                        foreach($fieldParts as $pkey => $fieldPart)
-                        {
-                            $originField = trim($fieldPart);
-                            if(stripos($originField, 'if(') === false) continue;
-                            $fieldParts[$pkey] = $this->formatDmIfFunction($originField);
-                        }
-                        $fieldList[$key] = str_replace($subField, implode(' + ', $fieldParts), $field);
-                    }
-                    $fields = implode(',', $fieldList);
-                    $sql = substr($sql, 0, $fieldsBegin+6) . $fields . substr($sql, $fieldsEnd);
+                    $sql = $this->formatField($sql);
                     return str_replace('CREATE OR REPLACE VIEW ', 'CREATE VIEW ', $sql);
                 }
                 elseif(stripos($sql, 'CREATE UNIQUE INDEX') === 0 || stripos($sql, 'CREATE INDEX') === 0)
@@ -833,6 +812,7 @@ class dbh
         if($this->dbConfig->driver == 'dm' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $sql = str_replace('`', '"', $sql);
+            $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
         }
 
         return $sql;
