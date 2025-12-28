@@ -806,7 +806,7 @@ class baseRouter
             if(isset($_SERVER['REQUEST_SCHEME']) and strtolower((string) $_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
 
             $httpHost = zget($_SERVER, 'HTTP_HOST', '');
-            $apiMode  = (defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar]);
+            $apiMode  = $this->apiVersion || isset($_GET[$this->config->sessionVar]);
             if(!$apiMode && (empty($httpHost) or !str_starts_with((string) $this->server->http_referer, "$httpType://$httpHost"))) $_FILES = $_POST = array();
         }
 
@@ -3766,7 +3766,7 @@ class EndResponseException extends \Exception
         $exception = new self($content);
 
         $exception->content = $content;
-        
+
         return $exception;
     }
 

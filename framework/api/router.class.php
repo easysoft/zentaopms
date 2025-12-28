@@ -78,11 +78,6 @@ class api extends router
      */
     public function __construct(string $appName = 'api', string $appRoot = '')
     {
-        parent::__construct($appName, $appRoot);
-
-        $this->viewType    = 'json';
-        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
-
         $this->path = trim(substr((string) $_SERVER['REQUEST_URI'], strpos((string) $_SERVER['REQUEST_URI'], 'api.php') + 7), '/');
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
@@ -90,6 +85,10 @@ class api extends router
 
         $this->apiVersion = $subPos !== false ? substr($this->path, 0, $subPos) : '';
         $this->path       = $subPos !== false ? substr($this->path, $subPos) : '';
+        parent::__construct($appName, $appRoot);
+
+        $this->viewType    = 'json';
+        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
         $this->loadApiLang();
     }
@@ -471,7 +470,7 @@ class api extends router
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
         if(!in_array($this->methodName, ['create', 'edit'])) return;
-        
+
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
         /* Get form data by get request. */
         $postData = $_POST;
@@ -489,11 +488,11 @@ class api extends router
 
         /* Clean the output in get method. */
         ob_clean();
-        
+
         $this->control->getFormData       = false;
         $this->control->viewType          = 'json';
         $this->control                    = $control;
-        
+
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
         {
