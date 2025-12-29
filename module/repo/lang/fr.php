@@ -234,7 +234,6 @@ $lang->repo->notice->noChanges        = 'No Changes';
 $lang->repo->notice->storyNotActive   = 'Story is not active, cannot create branch.';
 $lang->repo->notice->taskNotActive    = 'Task is not waiting or doing, cannot create branch.';
 $lang->repo->notice->bugNotActive     = 'Bug is not active, cannot create branch.';
-$lang->repo->notice->deleteReviewFlow = "Do you want to delete '%s' review flow?";
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Exemple";
@@ -315,42 +314,6 @@ $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
 
-$lang->repo->browseReviewFlow = 'Browse Review Flow';
-$lang->repo->createReviewFlow = 'Create Review Flow';
-$lang->repo->editReviewFlow   = 'Edit Review Flow';
-$lang->repo->changeFlowStatus = 'Enable/Disable Review Flow';
-$lang->repo->deleteReviewFlow = 'Delete Review Flow';
-
-$lang->repo->flowName              = 'Flow Name';
-$lang->repo->branchType            = 'Branch Type';
-$lang->repo->enableFlow            = 'Enable';
-$lang->repo->disableFlow           = 'Disable';
-$lang->repo->basicInfo             = 'Basic Information';
-$lang->repo->applicableBranchTypes = 'Applicable Branch Types';
-$lang->repo->allBranchTypes        = 'All Branch Types';
-$lang->repo->aiReview              = 'AI Review';
-$lang->repo->aiAssistedReview      = 'AI Assisted Review';
-$lang->repo->aiReviewScores        = 'Can Pass AI Review with Minimum Score';
-$lang->repo->manualReview          = 'Manual Review';
-$lang->repo->defaultReviewers      = 'Default Reviewers';
-$lang->repo->specifiedReviewers    = 'Reviewers Must Contain Specified Members';
-$lang->repo->minReviewers          = 'Minimum Reviewers';
-$lang->repo->solveIssues           = 'Solve Issues';
-$lang->repo->addressOption         = 'How to address issues';
-$lang->repo->newCommits            = 'How to address new commits';
-$lang->repo->mergeStrategy         = 'Merge Strategy';
-$lang->repo->mergeOptions          = 'Merge Options';
-$lang->repo->autoArchive           = 'Auto Archive';
-$lang->repo->autoArchiveNotice     = 'Only when the branch archive is enabled, it can be merged into the source branch';
-$lang->repo->allBranchTypesNotice  = 'All Branch Type review flow is exists';
-$lang->repo->enableSuccess         = 'The review flow enable Success';
-$lang->repo->disableSuccess        = 'The review flow disable Success';
-$lang->repo->aiScoreTips           = 'Code with an AI score above this threshold passes the AI review.';
-
-$lang->repo->flowStatusList = array();
-$lang->repo->flowStatusList['enable']  = 'Enable';
-$lang->repo->flowStatusList['disable'] = 'Disable';
-
 $lang->repo->branchTypeRule = new stdClass();
 $lang->repo->branchTypeRule->allowCreatedBy     = 'Which users are allowed to create this branch type';
 $lang->repo->branchTypeRule->allowDeletedBy     = 'Which users are allowed to delete this branch type';
@@ -382,26 +345,3 @@ $lang->repo->branchRule->userOptionList['specify'] = 'Specified users only';
 $lang->repo->branchRule->branchTypeOptionList = array();
 $lang->repo->branchRule->branchTypeOptionList['all'] = 'All branches';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = 'Specified branch types';
-
-$lang->repo->aiReviewList = array();
-$lang->repo->aiReviewList['enable']  = 'Enable';
-$lang->repo->aiReviewList['disable'] = 'Disable';
-
-$lang->repo->addressOptionList = array();
-$lang->repo->addressOptionList['noNeedToSolve']        = 'No Need To Solve';
-$lang->repo->addressOptionList['allMustBeSolved']      = 'All Must Be Solved';
-$lang->repo->addressOptionList['specificMustBeSolved'] = 'Specific Type Must Be Solved';
-
-$lang->repo->newCommitsAddressOptionList = array();
-$lang->repo->newCommitsAddressOptionList['defaultApproval'] = 'Default Approval';
-$lang->repo->newCommitsAddressOptionList['requireReReview'] = 'Require Re-Review';
-
-$lang->repo->mergeOptionList = array();
-$lang->repo->mergeOptionList['merge']  = 'Merge';
-$lang->repo->mergeOptionList['squash'] = 'Squash';
-$lang->repo->mergeOptionList['rebase'] = 'Rebase';
-$lang->repo->mergeOptionList['fast']   = 'Fast-Forward';
-
-$lang->repo->autoArchiveStatusList = array();
-$lang->repo->autoArchiveStatusList['enable']  = 'Enable';
-$lang->repo->autoArchiveStatusList['disable'] = 'Disable';

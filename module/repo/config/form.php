@@ -76,19 +76,3 @@ $config->repo->form->branchRule['userAllowUpdateGroup']          = array('requir
 $config->repo->form->branchRule['userAllowForcePushGroup']       = array('required' => false, 'type' => 'array', 'default' => array());
 $config->repo->form->branchRule['branchTypeAllowMergeFromGroup'] = array('required' => false, 'type' => 'array', 'default' => array());
 $config->repo->form->branchRule['branchTypeAllowMergeToGroup']   = array('required' => false, 'type' => 'array', 'default' => array());
-
-$config->repo->form->createReviewFlow = array();
-$config->repo->form->createReviewFlow['name']               = array('required' => true,  'type' => 'string', 'default' => '',        'filter' => 'trim');
-$config->repo->form->createReviewFlow['branchType']         = array('required' => false, 'type' => 'array',  'default' => array(),   'filter' => 'join');
-$config->repo->form->createReviewFlow['isAllBranchTypes']   = array('required' => false, 'type' => 'bool', 'default' => false);
-$config->repo->form->createReviewFlow['desc']               = array('required' => false, 'type' => 'string', 'default' => '',        'filter' => 'trim');
-$config->repo->form->createReviewFlow['aiReview']           = array('required' => true,  'type' => 'string', 'default' => 'disable', 'filter' => 'trim');
-$config->repo->form->createReviewFlow['aiReviewScores']     = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->repo->form->createReviewFlow['defaultReviewers']   = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
-$config->repo->form->createReviewFlow['specifiedReviewers'] = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
-$config->repo->form->createReviewFlow['minReviewers']       = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->repo->form->createReviewFlow['addressOption']      = array('required' => true,  'type' => 'string', 'default' => 'noNeedToSolve',   'filter' => 'trim');
-$config->repo->form->createReviewFlow['issueType']          = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
-$config->repo->form->createReviewFlow['newCommits']         = array('required' => true,  'type' => 'string', 'default' => 'defaultApproval', 'filter' => 'trim');
-$config->repo->form->createReviewFlow['mergeOptions']       = array('required' => true,  'type' => 'array', 'default' => array('merge', 'squash', 'rebase', 'fast'), 'filter' => 'join');
-$config->repo->form->createReviewFlow['autoArchive']        = array('required' => true,  'type' => 'string', 'default' => 'disable', 'filter' => 'trim');

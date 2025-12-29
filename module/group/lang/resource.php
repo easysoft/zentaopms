@@ -1448,12 +1448,6 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->browseReviewFlow = 'browseReviewFlow';
-$lang->resource->repo->createReviewFlow = 'createReviewFlow';
-$lang->resource->repo->editReviewFlow   = 'editReviewFlow';
-$lang->resource->repo->changeFlowStatus = 'changeFlowStatus';
-$lang->resource->repo->deleteReviewFlow = 'deleteReviewFlow';
-
 $lang->resource->repo->setBranchRule = 'setBranchRule';
 
 $lang->resource->repo->browseBranchType = 'browseBranchType';
@@ -1489,6 +1483,19 @@ $lang->repo->methodOrder[125] = 'createReviewFlow';
 $lang->repo->methodOrder[130] = 'editReviewFlow';
 $lang->repo->methodOrder[135] = 'changeReviewFlowStatus';
 $lang->repo->methodOrder[140] = 'deleteReviewFlow';
+
+$lang->resource->reporeviewflow = new stdclass();
+$lang->resource->reporeviewflow->browse       = 'browse';
+$lang->resource->reporeviewflow->create       = 'create';
+$lang->resource->reporeviewflow->edit         = 'edit';
+$lang->resource->reporeviewflow->delete       = 'delete';
+$lang->resource->reporeviewflow->changeStatus = 'changeStatus';
+
+$lang->reporeviewflow->methodOrder[5]  = 'browse';
+$lang->reporeviewflow->methodOrder[10] = 'create';
+$lang->reporeviewflow->methodOrder[15] = 'edit';
+$lang->reporeviewflow->methodOrder[20] = 'delete';
+$lang->reporeviewflow->methodOrder[25] = 'changeStatus';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';

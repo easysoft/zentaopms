@@ -164,8 +164,9 @@ $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
 $lang->projectstory   = new stdclass();
 
-$lang->devopsspace  = new stdclass();
-$lang->repoSettings = new stdclass();
+$lang->devopsspace    = new stdclass();
+$lang->repoSettings   = new stdclass();
+$lang->reporeviewflow = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';
