@@ -1362,4 +1362,21 @@ class actionTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 根据类型和ID获取操作记录列表。
+     * Get action list by type and ID.
+     *
+     * @param  string    $objectType
+     * @param  int|array $objectID
+     * @param  array     $modules
+     * @access public
+     * @return array
+     */
+    public function getActionListByTypeAndIDTest(string $objectType, int|array $objectID, array $modules): array
+    {
+        $result = $this->objectTao->getActionListByTypeAndID($objectType, $objectID, $modules);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
