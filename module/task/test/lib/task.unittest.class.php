@@ -112,7 +112,7 @@ class taskTest
      * @access public
      * @return bool
      */
-    public function afterBatchCreateObject(array $taskIdList, object $parent = null): bool
+    public function afterBatchCreateObject(array $taskIdList, ?object $parent = null): bool
     {
         return $this->objectModel->afterBatchCreate($taskIdList, $parent);
     }
@@ -304,7 +304,7 @@ class taskTest
      * @access public
      * @return object|bool
      */
-    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): object|bool
+    public function activateTest(int $taskID, string $comment = '', ?object $teamData = null, array $drag = array()): object|bool
     {
         $task = new stdclass();
         $activateFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
@@ -686,7 +686,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, object $task = null, string $lastDate): array
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, ?object $task = null, string $lastDate): array
     {
         $task        = $this->objectModel->getByID($taskID);
         $currentTeam = $this->objectModel->getTeamByAccount($task->team);
@@ -1082,7 +1082,7 @@ class taskTest
      * @access public
      * @return int
      */
-    public function canOperateEffort(object $task, object $effort = null): int
+    public function canOperateEffort(object $task, ?object $effort = null): int
     {
         $result = $this->objectModel->canOperateEffort($task, $effort);
         return $result ? 1 : 0;
@@ -2551,7 +2551,7 @@ class taskTest
      * @access public
      * @return object|null
      */
-    public function formatDatetimeTest(object $task = null): object|null
+    public function formatDatetimeTest(?object $task = null): object|null
     {
         if($task === null)
         {

@@ -1406,7 +1406,7 @@ class repoTest
         return $result;
     }
 
-    public function getFileTreeTest(int $repoID, string $branch = '', array $diffs = null)
+    public function getFileTreeTest(int $repoID, string $branch = '', ?array $diffs = null)
     {
         $repo   = $this->objectModel->getByID($repoID);
         $result = $this->objectModel->getFileTree($repo, $branch, $diffs);

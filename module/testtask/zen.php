@@ -14,7 +14,7 @@ class testtaskZen extends testtask
      * @access public
      * @return void
      */
-    public function setMenu(int $productID, int|string $branch, int $projectID, int $executionID, object $testtask = null)
+    public function setMenu(int $productID, int|string $branch, int $projectID, int $executionID, ?object $testtask = null)
     {
         if($this->app->tab == 'project')
         {

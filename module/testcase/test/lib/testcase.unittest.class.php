@@ -3720,7 +3720,7 @@ class testcaseTest
      * @access public
      * @return object
      */
-    public function getCaseWithSteps(int $caseID, array $customSteps = null): object
+    public function getCaseWithSteps(int $caseID, ?array $customSteps = null): object
     {
         global $tester;
 

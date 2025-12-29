@@ -97,7 +97,7 @@ class cneTest
      * @access public
      * @return array
      */
-    public function __constructTest(string $appName = '', bool $switchChannel = null): array
+    public function __constructTest(string $appName = '', ?bool $switchChannel = null): array
     {
         global $config, $app;
 
@@ -378,7 +378,7 @@ class cneTest
      * @access public
      * @return object|null
      */
-    public function startAppTest(object $apiParams = null): object|null
+    public function startAppTest(?object $apiParams = null): object|null
     {
         if($apiParams === null)
         {
@@ -527,7 +527,7 @@ class cneTest
      * @access public
      * @return object|null
      */
-    public function stopAppTest(object $apiParams = null): object|null
+    public function stopAppTest(?object $apiParams = null): object|null
     {
         if($apiParams === null)
         {
@@ -1364,7 +1364,7 @@ class cneTest
      * @access public
      * @return object
      */
-    public function uploadCertTest(object $cert = null, string $channel = ''): object
+    public function uploadCertTest(?object $cert = null, string $channel = ''): object
     {
         // 模拟uploadCert方法的行为，避免实际API调用
         if($cert === null)
@@ -1871,7 +1871,7 @@ class cneTest
      * @access public
      * @return object|null
      */
-    public function installAppTest(object $apiParams = null): object|null
+    public function installAppTest(?object $apiParams = null): object|null
     {
         // 模拟测试，避免实际API调用
         if($apiParams === null)
