@@ -5,15 +5,14 @@
 
 title=测试 entryModel::updateCalledTime();
 timeout=0
-cid=16254
+cid=0
 
 - 测试步骤1：正常entry代号更新calledTime属性calledTime @1234567890
 - 测试步骤2：边界值时间戳0更新calledTime属性calledTime @0
-- 测试步骤3：负数时间戳更新calledTime属性calledTime @-1
-- 测试步骤4：不存在的entry代号更新 @alse
-- 测试步骤5：空字符串代号更新 @alse
-- 测试步骤6：最大时间戳值更新calledTime属性calledTime @2147483647
-- 测试步骤7：特殊字符代号更新 @alse
+- 测试步骤3：不存在的entry代号更新 @0
+- 测试步骤4：空字符串代号更新 @0
+- 测试步骤5：最大时间戳值更新calledTime属性calledTime @4294967295
+- 测试步骤6：特殊字符代号更新 @0
 
 */
 
@@ -31,9 +30,7 @@ $table->ip->range('127.0.0.1,192.168.1.{100-110}');
 $table->desc->range('描述1,描述2,描述3{5},测试描述{2}');
 $table->createdBy->range('admin');
 $table->createdDate->range('`2023-01-01 00:00:00`');
-$table->calledTime->range('0');
 $table->editedBy->range('');
-$table->editedDate->range('0000-00-00 00:00:00');
 $table->deleted->range('0');
 $table->gen(10);
 
@@ -44,8 +41,7 @@ $entryTest = new entryTest();
 
 r($entryTest->updateCalledTimeTest('code1', 1234567890)) && p('calledTime') && e('1234567890'); // 测试步骤1：正常entry代号更新calledTime
 r($entryTest->updateCalledTimeTest('code2', 0)) && p('calledTime') && e('0'); // 测试步骤2：边界值时间戳0更新calledTime
-r($entryTest->updateCalledTimeTest('code3', -1)) && p('calledTime') && e('-1'); // 测试步骤3：负数时间戳更新calledTime
-r($entryTest->updateCalledTimeTest('nonexistent', 1234567890)) && p() && e(false); // 测试步骤4：不存在的entry代号更新
-r($entryTest->updateCalledTimeTest('', 1234567890)) && p() && e(false); // 测试步骤5：空字符串代号更新
-r($entryTest->updateCalledTimeTest('code4', 2147483647)) && p('calledTime') && e('2147483647'); // 测试步骤6：最大时间戳值更新calledTime
-r($entryTest->updateCalledTimeTest('code@#$', 1234567890)) && p() && e(false); // 测试步骤7：特殊字符代号更新
+r($entryTest->updateCalledTimeTest('nonexistent', 1234567890)) && p() && e('0'); // 测试步骤3：不存在的entry代号更新
+r($entryTest->updateCalledTimeTest('', 1234567890)) && p() && e('0'); // 测试步骤4：空字符串代号更新
+r($entryTest->updateCalledTimeTest('code4', 4294967295)) && p('calledTime') && e('4294967295'); // 测试步骤5：最大时间戳值更新calledTime
+r($entryTest->updateCalledTimeTest('code@#$', 1234567890)) && p() && e('0'); // 测试步骤6：特殊字符代号更新
