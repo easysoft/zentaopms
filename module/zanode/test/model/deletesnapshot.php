@@ -5,13 +5,13 @@
 
 title=测试 zanodeModel::deleteSnapshot();
 timeout=0
-cid=19824
+cid=0
 
-- 测试步骤1：删除存在的快照ID=1 >> 期望返回API调用失败错误
-- 测试步骤2：删除不存在的快照ID=999 >> 期望返回空值（快照不存在）
-- 测试步骤3：删除存在的快照ID=2 >> 期望返回API调用失败错误
-- 测试步骤4：删除存在的快照ID=3 >> 期望返回API调用失败错误
-- 测试步骤5：删除无效的快照ID=0 >> 期望返回空值（参数无效）
+- 删除存在的快照ID=1 @执行失败，请检查宿主机和执行节点状态
+- 删除不存在的快照ID=999 @empty
+- 删除存在的快照ID=2 @执行失败，请检查宿主机和执行节点状态
+- 删除存在的快照ID=3 @执行失败，请检查宿主机和执行节点状态
+- 删除无效的快照ID=0 @empty
 
 */
 
@@ -39,8 +39,8 @@ su('admin');
 
 $zanodeTest = new zanodeTest();
 
-r($zanodeTest->deleteSnapshotTest(1)) && p() && e('fail');
-r($zanodeTest->deleteSnapshotTest(999)) && p() && e('~~');
-r($zanodeTest->deleteSnapshotTest(2)) && p() && e('fail');
-r($zanodeTest->deleteSnapshotTest(3)) && p() && e('fail');
-r($zanodeTest->deleteSnapshotTest(0)) && p() && e('~~');
+r($zanodeTest->deleteSnapshotTest(1)) && p() && e('执行失败，请检查宿主机和执行节点状态'); //删除存在的快照ID=1
+r($zanodeTest->deleteSnapshotTest(999)) && p() && e('empty'); //删除不存在的快照ID=999
+r($zanodeTest->deleteSnapshotTest(2)) && p() && e('执行失败，请检查宿主机和执行节点状态'); //删除存在的快照ID=2
+r($zanodeTest->deleteSnapshotTest(3)) && p() && e('执行失败，请检查宿主机和执行节点状态'); //删除存在的快照ID=3
+r($zanodeTest->deleteSnapshotTest(0)) && p() && e('empty'); //删除无效的快照ID=0
