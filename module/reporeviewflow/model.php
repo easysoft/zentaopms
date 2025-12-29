@@ -54,13 +54,16 @@ class reporeviewflowModel extends model
         $reviewFlow->createdBy   = $this->app->user->account;
         $reviewFlow->createdDate = helper::now();
 
+        $reviewFlow = $this->loadModel('file')->processImgURL($reviewFlow, $this->config->reporeviewflow->editor->create['id'], (string)$this->post->uid);
         $this->dao->insert(TABLE_REVIEWFLOW)->data($reviewFlow)
             ->check('name', 'unique', "`repo` = $repoID and `deleted` = 0")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
+        $flowID = $this->dao->lastInsertID();
+        $this->file->updateObjectID($this->post->uid, $flowID, 'reporeviewflow');
 
-        return $this->dao->lastInsertID();
+        return $flowID;
     }
 
     /**
@@ -85,11 +88,13 @@ class reporeviewflowModel extends model
         $reviewFlow->editedBy   = $this->app->user->account;
         $reviewFlow->editedDate = helper::now();
 
+        $reviewFlow = $this->loadModel('file')->processImgURL($reviewFlow, $this->config->reporeviewflow->editor->edit['id'], (string)$this->post->uid);
         $this->dao->update(TABLE_REVIEWFLOW)->data($reviewFlow)
             ->where('id')->eq($flow->id)
             ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id} and `deleted` = 0")
             ->autoCheck()
             ->exec();
+        $this->file->updateObjectID($this->post->uid, $flow->id, 'reporeviewflow');
         return !dao::isError();
     }
 
@@ -108,6 +113,8 @@ class reporeviewflowModel extends model
             ->andWhere('id')->eq($reviewFlowID)
             ->fetch();
         if(empty($reviewFlow)) return false;
+
+        $reviewFlow = $this->loadModel('file')->replaceImgURL($reviewFlow, 'desc');
 
         $reviewFlow->definition = json_decode($reviewFlow->definition);
         return $reviewFlow;

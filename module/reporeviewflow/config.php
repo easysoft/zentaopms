@@ -1,5 +1,9 @@
 <?php
 global $lang;
+$config->reporeviewflow->editor = new stdclass();
+$config->reporeviewflow->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->reporeviewflow->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+
 $config->reporeviewflow->actionList = array();
 
 $config->reporeviewflow->actionList['edit']['icon'] = 'edit';

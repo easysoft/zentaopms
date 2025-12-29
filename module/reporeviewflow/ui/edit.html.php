@@ -73,7 +73,8 @@ formPanel
         set::width('2/3'),
         set::label($lang->reporeviewflow->desc),
         set::name('desc'),
-        set::control(array('type' => 'textarea', 'rows' => 5)),
+        set::control('editor'),
+        set::rows(5),
         set::value($reviewFlow->desc)
     ),
     formRowGroup(set::title($lang->reporeviewflow->aiReview)),

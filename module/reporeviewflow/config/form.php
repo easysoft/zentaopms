@@ -5,6 +5,7 @@ $config->reporeviewflow->form->createReviewFlow['name']               = array('r
 $config->reporeviewflow->form->createReviewFlow['branchType']         = array('required' => false, 'type' => 'array',  'default' => array(),   'filter' => 'join');
 $config->reporeviewflow->form->createReviewFlow['isAllBranchTypes']   = array('required' => false, 'type' => 'bool', 'default' => false);
 $config->reporeviewflow->form->createReviewFlow['desc']               = array('required' => false, 'type' => 'string', 'default' => '',        'filter' => 'trim');
+$config->reporeviewflow->form->createReviewFlow['desc']               = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->reporeviewflow->form->createReviewFlow['aiReview']           = array('required' => true,  'type' => 'string', 'default' => 'disable', 'filter' => 'trim');
 $config->reporeviewflow->form->createReviewFlow['aiReviewScores']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->reporeviewflow->form->createReviewFlow['defaultReviewers']   = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
