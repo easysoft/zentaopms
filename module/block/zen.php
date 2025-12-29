@@ -2154,7 +2154,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'demand')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
-                ->fetchAll();
+                ->fetchAll('id', false);
 
             if($objectType == 'todo')
             {
