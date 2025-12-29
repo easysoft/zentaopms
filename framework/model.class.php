@@ -239,6 +239,7 @@ class model extends baseModel
         if($type == 'view' && !empty($this->config->openedApproval) && commonModel::hasPriv('approval', 'progress'))
         {
             $flow = $this->loadModel('workflow', 'flow')->getByModule($moduleName);
+            if(!$flow) return '';
             if($flow->approval == 'enabled' && !empty($data->approval))
             {
                 $extraClass = str_contains(',testsuite,build,release,productplan,', ",{$moduleName},") ? 'btn-link' : '';
