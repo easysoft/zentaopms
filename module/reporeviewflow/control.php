@@ -29,6 +29,7 @@ class reporeviewflow extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $flowList = $this->reporeviewflow->getList($repoID, $pager);
+        foreach($flowList as $flow) $flow->desc = strip_tags($flow->desc);
 
         $this->view->repoID          = $repoID;
         $this->view->title           = $this->lang->reporeviewflow->browse;

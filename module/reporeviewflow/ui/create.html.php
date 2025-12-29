@@ -68,7 +68,8 @@ formPanel
         set::width('2/3'),
         set::label($lang->reporeviewflow->desc),
         set::name('desc'),
-        set::control(array('type' => 'textarea', 'rows' => 1)),
+        set::control('editor'),
+        set::rows(5)
     ),
     formRowGroup(set::title($lang->reporeviewflow->aiReview)),
     formGroup
@@ -121,26 +122,29 @@ formPanel
         set::value(0)
     ),
     formRowGroup(set::title($lang->reporeviewflow->solveIssues)),
-    formRow
+    formGroup
     (
         set::width('2/3'),
-        formGroup
+        set::label($lang->reporeviewflow->addressOption),
+        inputGroup
         (
-            set::width('4/5'),
-            set::name('addressOption'),
-            set::label($lang->reporeviewflow->addressOption),
-            set::control(array('type' => 'radioList', 'inline' => true)),
-            set::items($lang->reporeviewflow->addressOptionList),
-            set::value('noNeedToSolve')
-        ),
-        formGroup
-        (
-            set::width('1/5'),
-            setID('issueType'),
-            set::name('issueType'),
-            set::items($lang->bug->typeList),
-            set::multiple(true),
-            set::value('codeerror')
+            radioList
+            (
+                setClass('mr-2'),
+                set::name('addressOption'),
+                set::items($lang->reporeviewflow->addressOptionList),
+                set::inline(true),
+                set::value('noNeedToSolve'),
+            ),
+            picker
+            (
+                setID('issueType'),
+                set::width(common::checkNotCN() ? '220px' : '150px'),
+                set::name('issueType'),
+                set::items($lang->bug->typeList),
+                set::multiple(true),
+                set::value('codeerror')
+            )
         )
     ),
     formGroup
