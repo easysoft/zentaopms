@@ -387,6 +387,62 @@ class api extends router
     }
 
     /**
+     * 检查传入的对象是否存在
+     *
+     * Check object exists.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkObjectExists()
+    {
+        $objectMap = [
+            'program'       => TABLE_PROJECT,
+            'programID'     => TABLE_PROJECT,
+            'product'       => TABLE_PRODUCT,
+            'productID'     => TABLE_PRODUCT,
+            'project'       => TABLE_PROJECT,
+            'projectID'     => TABLE_PROJECT,
+            'productplan'   => TABLE_PRODUCTPLAN,
+            'productplanID' => TABLE_PRODUCTPLAN,
+            'plan'          => TABLE_PRODUCTPLAN,
+            'planID'        => TABLE_PRODUCTPLAN,
+            'execution'     => TABLE_PROJECT,
+            'executionID'   => TABLE_PROJECT,
+            'story'         => TABLE_STORY,
+            'storyID'       => TABLE_STORY,
+            'epic'          => TABLE_STORY,
+            'epicID'        => TABLE_STORY,
+            'requirement'   => TABLE_STORY,
+            'requirementID' => TABLE_STORY,
+            'task'          => TABLE_TASK,
+            'taskID'        => TABLE_TASK,
+            'bug'           => TABLE_BUG,
+            'bugID'         => TABLE_BUG,
+            'feedback'      => TABLE_FEEDBACK,
+            'feedbackID'    => TABLE_FEEDBACK,
+            'build'         => TABLE_BUILD,
+            'buildID'       => TABLE_BUILD,
+            'case'          => TABLE_CASE,
+            'caseID'        => TABLE_CASE,
+            'testcase'      => TABLE_CASE,
+            'testcaseID'    => TABLE_CASE,
+            'user'          => TABLE_USER,
+            'userID'        => TABLE_USER,
+        ];
+
+        $params = array_merge($this->params, $_POST);
+        foreach($params as $key => $value)
+        {
+            if(isset($objectMap[$key]) && $value != 0)
+            {
+                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->fetch('id');
+                if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+            }
+        }
+    }
+
+    /**
      * 执行对应模块
      *
      * Load the running module.
@@ -406,6 +462,9 @@ class api extends router
                 {
                     $this->setFormData();
                 }
+
+                $this->checkObjectExists();
+
                 return parent::loadModule();
             }
             elseif(!$this->apiVersion)
