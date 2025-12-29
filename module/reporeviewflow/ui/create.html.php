@@ -25,18 +25,18 @@ formPanel
     on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
     on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
     on::change('[name=addressOption]')->call('window.loadIssueType'),
-    formRowGroup(set::title($lang->repo->basicInfo)),
+    formRowGroup(set::title($lang->reporeviewflow->basicInfo)),
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->repo->name),
+        set::label($lang->reporeviewflow->name),
         set::name('name'),
         set::required(true)
     ),
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->repo->applicableBranchTypes),
+        set::label($lang->reporeviewflow->applicableBranchTypes),
         set::required(true),
         inputGroup
         (
@@ -58,7 +58,7 @@ formPanel
                 checkbox
                 (
                     set::name('isAllBranchTypes'),
-                    set::text($lang->repo->allBranchTypes)
+                    set::text($lang->reporeviewflow->allBranchTypes)
                 )
             )
         )
@@ -66,20 +66,20 @@ formPanel
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->repo->desc),
+        set::label($lang->reporeviewflow->desc),
         set::name('desc'),
         set::control(array('type' => 'textarea', 'rows' => 1)),
     ),
-    formRowGroup(set::title($lang->repo->aiReview)),
+    formRowGroup(set::title($lang->reporeviewflow->aiReview)),
     formGroup
     (
         setID('aiReview'),
         set::width('2/3'),
         set::name('aiReview'),
         set::required(true),
-        set::label($lang->repo->aiAssistedReview),
+        set::label($lang->reporeviewflow->aiAssistedReview),
         set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->repo->aiReviewList),
+        set::items($lang->reporeviewflow->aiReviewList),
         set::value('disable')
     ),
     formGroup
@@ -87,17 +87,17 @@ formPanel
         setID('aiReviewScores'),
         set::width('2/3'),
         set::name('aiReviewScores'),
-        set::label($lang->repo->aiReviewScores),
-        set::control(array('type' => 'number', 'min' => 0, 'max' => 100, 'placeholder' => $lang->repo->aiScoreTips)),
+        set::label($lang->reporeviewflow->aiReviewScores),
+        set::control(array('type' => 'number', 'min' => 0, 'max' => 100, 'placeholder' => $lang->reporeviewflow->aiScoreTips)),
         set::value(0)
     ),
-    formRowGroup(set::title($lang->repo->manualReview)),
+    formRowGroup(set::title($lang->reporeviewflow->manualReview)),
     formGroup
     (
         setID('defaultReviewers'),
         set::width('2/3'),
         set::name('defaultReviewers'),
-        set::label($lang->repo->defaultReviewers),
+        set::label($lang->reporeviewflow->defaultReviewers),
         set::items($repoMembers),
         set::control(array('onSelect' => jsRaw('addSpecifiedReviewers'), 'onDeselect' => jsRaw('removeSpecifiedReviewers'))),
         set::multiple(true)
@@ -107,7 +107,7 @@ formPanel
         setID('specifiedReviewers'),
         set::width('2/3'),
         set::name('specifiedReviewers'),
-        set::label($lang->repo->specifiedReviewers),
+        set::label($lang->reporeviewflow->specifiedReviewers),
         set::items($repoMembers),
         set::multiple(true)
     ),
@@ -115,12 +115,12 @@ formPanel
     (
         setID('minReviewers'),
         set::width('2/3'),
-        set::label($lang->repo->minReviewers),
+        set::label($lang->reporeviewflow->minReviewers),
         set::name('minReviewers'),
         set::control(array('type' => 'number', 'min' => 0, 'max' => 9)),
         set::value(0)
     ),
-    formRowGroup(set::title($lang->repo->solveIssues)),
+    formRowGroup(set::title($lang->reporeviewflow->solveIssues)),
     formRow
     (
         set::width('2/3'),
@@ -128,9 +128,9 @@ formPanel
         (
             set::width('4/5'),
             set::name('addressOption'),
-            set::label($lang->repo->addressOption),
+            set::label($lang->reporeviewflow->addressOption),
             set::control(array('type' => 'radioList', 'inline' => true)),
-            set::items($lang->repo->addressOptionList),
+            set::items($lang->reporeviewflow->addressOptionList),
             set::value('noNeedToSolve')
         ),
         formGroup
@@ -146,19 +146,19 @@ formPanel
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->repo->newCommits),
+        set::label($lang->reporeviewflow->newCommits),
         set::name('newCommits'),
         set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->repo->newCommitsAddressOptionList),
+        set::items($lang->reporeviewflow->newCommitsAddressOptionList),
         set::value('defaultApproval')
     ),
-    formRowGroup(set::title($lang->repo->mergeStrategy)),
+    formRowGroup(set::title($lang->reporeviewflow->mergeStrategy)),
     formGroup
     (
         set::width('2/3'),
-        set::label($lang->repo->mergeOptions),
+        set::label($lang->reporeviewflow->mergeOptions),
         set::name('mergeOptions'),
-        set::items($lang->repo->mergeOptionList),
+        set::items($lang->reporeviewflow->mergeOptionList),
         set::multiple(true),
         set::required(true),
         set::value('merge,squash,rebase,fast')
@@ -167,11 +167,11 @@ formPanel
     (
         set::width('2/3'),
         set::name('autoArchive'),
-        set::label($lang->repo->autoArchive),
+        set::label($lang->reporeviewflow->autoArchive),
         set::labelHintIcon('help'),
-        set::labelHint($lang->repo->autoArchiveNotice),
+        set::labelHint($lang->reporeviewflow->autoArchiveNotice),
         set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->repo->autoArchiveStatusList),
+        set::items($lang->reporeviewflow->autoArchiveStatusList),
         set::value('disable')
     )
 );

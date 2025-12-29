@@ -4456,11 +4456,11 @@ $config->group->package->reviewFlow = new stdclass();
 $config->group->package->reviewFlow->order  = 2875;
 $config->group->package->reviewFlow->subset = 'repoSettings';
 $config->group->package->reviewFlow->privs = array();
-$config->group->package->reviewFlow->privs['repo-browseReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->reviewFlow->privs['repo-createReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-editReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->reviewFlow->privs['repo-editReviewFlow']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-changeReviewFlowStatus', 'repo-deleteReviewFlow'));
-$config->group->package->reviewFlow->privs['repo-changeFlowStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-deleteReviewFlow'));
-$config->group->package->reviewFlow->privs['repo-deleteReviewFlow'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseReviewFlow'), 'recommend' => array('repo-createReviewFlow', 'repo-editReviewFlow', 'repo-changeReviewFlowStatus'));
+$config->group->package->reviewFlow->privs['reporeviewflow-browse']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
+$config->group->package->reviewFlow->privs['reporeviewflow-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-edit', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
+$config->group->package->reviewFlow->privs['reporeviewflow-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
+$config->group->package->reviewFlow->privs['reporeviewflow-changeStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-delete'));
+$config->group->package->reviewFlow->privs['reporeviewflow-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-changeStatus'));
 
 $config->group->package->branchRule = new stdclass();
 $config->group->package->branchRule->order  = 2880;

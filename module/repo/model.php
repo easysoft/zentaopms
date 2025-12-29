@@ -2279,8 +2279,6 @@ class repoModel extends model
 
         if($action == 'execjob')    return common::hasPriv('sonarqube', $action) && !$repo->exec;
         if($action == 'reportview') return common::hasPriv('sonarqube', $action) && !$repo->report;
-        if($action == 'enable') return !empty($repo->status) && $repo->status == 'disable';
-        if($action == 'disable') return !empty($repo->status) && $repo->status == 'enable';
         if(!commonModel::hasPriv('repo', $action)) return false;
 
         return true;
@@ -3282,25 +3280,6 @@ class repoModel extends model
     }
 
     /**
-     * 获取指定代码库的评审流程。
-     * Get review flow.
-     *
-     * @param  int     $repoID
-     * @param  ?object $pager
-     * @access public
-     * @return array
-     */
-    public function getReviewFlowList(int $repoID, ?object $pager = null): array
-    {
-        return $this->dao->select('*')->from(TABLE_REVIEWFLOW)
-            ->where('deleted')->eq(0)
-            ->andWhere('repo')->eq($repoID)
-            ->orderBy('id_desc')
-            ->page($pager)
-            ->fetchAll('id', false);
-    }
-
-    /**
      * 获取指定代码库的分支类型键值对。
      * Get branch type pairs.
      *
@@ -3315,88 +3294,6 @@ class repoModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
             ->fetchPairs('id', 'name');
-    }
-
-    /**
-     * 创建评审流程。
-     * Create review flow.
-     *
-     * @param  int    $repoID
-     * @param  object $data
-     * @access public
-     * @return int|false
-     */
-    public function createReviewFlow(int $repoID, object $data): int|false
-    {
-        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
-
-        $reviewFlow = new stdClass();
-        $reviewFlow->repo        = $repoID;
-        $reviewFlow->name        = $data->name;
-        $reviewFlow->branchType  = $data->branchType;
-        $reviewFlow->desc        = $data->desc;
-        $reviewFlow->definition  = json_encode(zget($data, 'definition', array()));
-        $reviewFlow->status      = 'enable';
-        $reviewFlow->createdBy   = $this->app->user->account;
-        $reviewFlow->createdDate = helper::now();
-
-        $this->dao->insert(TABLE_REVIEWFLOW)->data($reviewFlow)
-            ->check('name', 'unique', "`repo` = $repoID and `deleted` = 0")
-            ->autoCheck()
-            ->exec();
-        if(dao::isError()) return false;
-
-        return $this->dao->lastInsertID();
-    }
-
-    /**
-     * 更新评审流程。
-     * Update review flow.
-     *
-     * @param  object $flow
-     * @param  object $data
-     * @access public
-     * @return bool
-     */
-    public function updateReviewFlow(object $flow, object $data): bool
-    {
-        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
-
-        $reviewFlow = new stdClass();
-        $reviewFlow->name       = $data->name;
-        $reviewFlow->branchType = $data->branchType;
-        $reviewFlow->desc       = $data->desc;
-        $reviewFlow->definition = json_encode(zget($data, 'definition', array()));
-        $reviewFlow->status     = 'enable';
-        $reviewFlow->editedBy   = $this->app->user->account;
-        $reviewFlow->editedDate = helper::now();
-
-        $this->dao->update(TABLE_REVIEWFLOW)->data($reviewFlow)
-            ->where('id')->eq($flow->id)
-            ->check('name', 'unique', "`repo` = {$flow->repo} and id != {$flow->id} and `deleted` = 0")
-            ->autoCheck()
-            ->exec();
-        return !dao::isError();
-    }
-
-    /**
-     * 根据ID获取评审流程。
-     * Get review flow by id.
-     *
-     * @param  int $reviewFlowID
-     * @access public
-     * @return object|false
-     */
-    public function getReviewFlowByID(int $reviewFlowID): object|false
-    {
-        $reviewFlow = $this->dao->select('*')->from(TABLE_REVIEWFLOW)
-            ->where('deleted')->eq(0)
-            ->andWhere('id')->eq($reviewFlowID)
-            ->fetch();
-        if(empty($reviewFlow)) return false;
-
-        $reviewFlow->definition = json_decode($reviewFlow->definition);
-        return $reviewFlow;
     }
 
     /**
@@ -3508,21 +3405,6 @@ class repoModel extends model
         }
 
         return $branchTypes;
-    }
-
-    /**
-     * 更新评审流程状态。
-     * Update review flow status.
-     *
-     * @param  int    $reviewFlowID
-     * @param  string $status
-     * @access public
-     * @return bool
-     */
-    public function updateReviewFlowStatus(int $reviewFlowID, string $status): bool
-    {
-        $this->dao->update(TABLE_REVIEWFLOW)->set('status')->eq($status)->where('id')->eq($reviewFlowID)->exec();
-        return !dao::isError();
     }
 
     /**

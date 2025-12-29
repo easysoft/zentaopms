@@ -1,0 +1,60 @@
+<?php
+global $lang;
+$config->reporeviewflow->dtable = new stdclass();
+
+$config->reporeviewflow->dtable->reviewFlow = new stdclass();
+$config->reporeviewflow->dtable->reviewFlow->fieldList['id']['name']     = 'id';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['id']['title']    = $lang->idAB;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['id']['type']     = 'id';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['id']['sortType'] = false;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['name']['title']    = $lang->repo->flowName;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['name']['type']     = 'shortTitle';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['name']['name']     = 'name';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['name']['sortType'] = false;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['name']['group']    = 1;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['status']['title']     = $lang->repo->status;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['status']['type']      = 'status';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['status']['statusMap'] = $lang->repo->flowStatusList;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['status']['sortType']  = false;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['status']['group']     = 2;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['branchType']['title']    = $lang->repo->applicableBranchTypes;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['branchType']['width']    = 500;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['branchType']['sortType'] = false;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['branchType']['group']    = 3;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['desc']['title']    = $lang->repo->desc;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['desc']['type']     = 'desc';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['desc']['sortType'] = false;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['desc']['group']    = 4;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['name']  = 'actions';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['title'] = $lang->actions;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['type']  = 'actions';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['width'] = 100;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['menu']  = array('enable|disable', 'edit', 'delete');
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']  = $config->reporeviewflow->actionList;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editReviewFlow', 'params' => "repoID={repo}&flowID={id}");
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['enable']['icon']         = 'active';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['enable']['hint']         = $lang->repo->enableFlow;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['enable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=enable");
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['enable']['className']    = 'ajax-submit';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['enable']['notLoadModel'] = true;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['disable']['icon']         = 'cancel';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['disable']['hint']         = $lang->repo->disableFlow;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['disable']['url']          = array('module' => 'repo', 'method' => 'changeFlowStatus', 'params' => "flowID={id}&status=disable");
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['disable']['className']    = 'ajax-submit';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['disable']['notLoadModel'] = true;
+
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->notice->deleteReviewFlow, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+$config->reporeviewflow->dtable->reviewFlow->fieldList['actions']['list']['delete']['url']          = array('module' => 'repo', 'method' => 'deleteReviewFlow', 'params' => "flowID={id}");

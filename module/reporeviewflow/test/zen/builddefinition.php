@@ -15,26 +15,26 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('user')->gen(5);
 
 su('admin');
 
-$repoTest = new repoZenTest();
+$flowTest = new reporeviewflowZenTest();
 
 $definition = new stdClass();
 $definition->aiReviewScores = 2;
-r($repoTest->buildDefinitionTest($definition)->ai) && p('approvals:score') && e('2'); // 测试审批流程ai评审分数
+r($flowTest->buildDefinitionTest($definition)->ai) && p('approvals:score') && e('2'); // 测试审批流程ai评审分数
 
 $definition->aiReview = 'enable';
-r($repoTest->buildDefinitionTest($definition)) && p('ai:enable') && e('1'); // 测试审批流程ai
+r($flowTest->buildDefinitionTest($definition)) && p('ai:enable') && e('1'); // 测试审批流程ai
 
 $definition->minReviewers = 2;
-r($repoTest->buildDefinitionTest($definition)->reviewFlow) && p('approvals:minReviewers') && e('2'); // 测试审批流程最小审批人数
+r($flowTest->buildDefinitionTest($definition)->reviewFlow) && p('approvals:minReviewers') && e('2'); // 测试审批流程最小审批人数
 
 $definition->addressOption = 'testOption';
-r($repoTest->buildDefinitionTest($definition)->reviewFlow) && p('issues:addressOption') && e('testOption'); // 测试审批流程问题处理方式
+r($flowTest->buildDefinitionTest($definition)->reviewFlow) && p('issues:addressOption') && e('testOption'); // 测试审批流程问题处理方式
 
 $definition->autoArchive = 'enable';
-r($repoTest->buildDefinitionTest($definition)->reviewFlow) && p('merge:autoArchive') && e('1'); // 测试审批流程自动归档
+r($flowTest->buildDefinitionTest($definition)->reviewFlow) && p('merge:autoArchive') && e('1'); // 测试审批流程自动归档
