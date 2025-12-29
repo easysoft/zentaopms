@@ -2165,6 +2165,7 @@ class repo extends control
         }
 
         $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
+        $this->view->from         = $from;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
         $this->view->isDefault    = $isDefault;
@@ -2187,9 +2188,9 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID)
+    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID, string $from, bool $isDefault)
     {
-        $link = $this->repo->createLink('setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName");
+        $link = $this->repo->createLink('setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&isDefault=$isDefault");
         if($ruleID == 0)
         {
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
