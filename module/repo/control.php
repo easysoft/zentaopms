@@ -1986,9 +1986,10 @@ class repo extends control
         $pager->recPerPage = $recPerPage;
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
-        $committers = $this->loadModel('user')->getCommiters('account');
-        $types      = $this->repo->getBranchTypeList($repoID);
-        $rules      = $this->repo->getBranchRulePairs($repoID, 'branchName', 'repo');
+        $committers  = $this->loadModel('user')->getCommiters('account');
+        $types       = $this->repo->getBranchTypeList($repoID);
+        $rules       = $this->repo->getBranchRulePairs($repoID, 'branchName', 'repo');
+        $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
@@ -2016,9 +2017,10 @@ class repo extends control
                     break;
                 }
             }
-            $branch->rule   = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
-            $branch->ahead  = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
-            $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
+            $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
+            $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $branch->deletable = !($branch->isDefault || !$this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
         }
 
         /* Check delete permission for each branch. */
@@ -2045,7 +2047,6 @@ class repo extends control
         $this->view->users             = $this->user->getPairs('noletter');
         $this->view->label             = $label;
         $this->view->showArchived      = $showArchived;
-        $this->view->deletableBranches = $deletableBranches;
         $this->display();
     }
 

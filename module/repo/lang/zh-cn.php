@@ -335,7 +335,7 @@ $lang->repo->branchTypeRule->userOptionList['hasPriv'] = '有权限的用户均�
 $lang->repo->branchTypeRule->userOptionList['specify'] = '仅指定人员';
 
 $lang->repo->branchTypeRule->branchTypeOptionList = array();
-$lang->repo->branchTypeRule->branchTypeOptionList['all'] = '全部分支';
+$lang->repo->branchTypeRule->branchTypeOptionList['all']     = '全部分支';
 $lang->repo->branchTypeRule->branchTypeOptionList['specify'] = '指定分支类型';
 
 $lang->repo->branchRule = new stdClass();
@@ -352,5 +352,5 @@ $lang->repo->branchRule->userOptionList['hasPriv'] = '有权限的用户均可';
 $lang->repo->branchRule->userOptionList['specify'] = '仅指定人员';
 
 $lang->repo->branchRule->branchTypeOptionList = array();
-$lang->repo->branchRule->branchTypeOptionList['all'] = '全部分支';
+$lang->repo->branchRule->branchTypeOptionList['all']     = '全部分支';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = '指定分支类型';
