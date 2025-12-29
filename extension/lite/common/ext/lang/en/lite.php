@@ -24,11 +24,9 @@ if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
-    $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' Feedback|feedback|browse|browseType=unclosed';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . ' OA|attend|personal|';
-    $lang->mainNav->workflow = $lang->navIcons['workflow'] . ' Workflow|workflow|browseFlow|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
@@ -46,7 +44,6 @@ if($config->edition != 'open')
 {
     $lang->mainNav->menuOrder[21] = 'oa';
     $lang->mainNav->menuOrder[25] = 'feedback';
-    $lang->mainNav->menuOrder[60] = 'workflow';
     $lang->dividerMenu = ',oa,admin,';
 
     if($config->visions == ',lite,') unset($lang->mainNav->menuOrder[25]);
