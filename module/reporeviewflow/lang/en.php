@@ -1,9 +1,9 @@
 <?php
-$lang->reporeviewflow->browseReviewFlow = 'Browse Review Flow';
-$lang->reporeviewflow->createReviewFlow = 'Create Review Flow';
-$lang->reporeviewflow->editReviewFlow   = 'Edit Review Flow';
-$lang->reporeviewflow->changeFlowStatus = 'Enable/Disable Review Flow';
-$lang->reporeviewflow->deleteReviewFlow = 'Delete Review Flow';
+$lang->reporeviewflow->browse       = 'Browse Review Flow';
+$lang->reporeviewflow->create       = 'Create Review Flow';
+$lang->reporeviewflow->edit         = 'Edit Review Flow';
+$lang->reporeviewflow->changeStatus = 'Enable/Disable Review Flow';
+$lang->reporeviewflow->delete       = 'Delete Review Flow';
 
 $lang->reporeviewflow->name                  = 'Name';
 $lang->reporeviewflow->desc                  = 'Description';

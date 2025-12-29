@@ -84,7 +84,7 @@ class reporeviewflowModel extends model
         $reviewFlow->branchType = $data->branchType;
         $reviewFlow->desc       = $data->desc;
         $reviewFlow->definition = json_encode(zget($data, 'definition', array()));
-        $reviewFlow->status     = 'enable';
+        $reviewFlow->status     = $flow->status;
         $reviewFlow->editedBy   = $this->app->user->account;
         $reviewFlow->editedDate = helper::now();
 
