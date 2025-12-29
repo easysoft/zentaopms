@@ -545,10 +545,10 @@ $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|brow
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
-$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repo|browsebranchtype|repoID=%s", 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,browsereviewflow,createreviewflow,editreviewflow');
+$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repo|browsebranchtype|repoID=%s", 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,browsereviewflow,createreviewflow,editreviewflow,createbranchtype,editbranchtype,deletebranchtype,importbranchtype');
 
 $lang->devops->menu->settings['subMenu'] = new stdclass();
-$lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repo|browsebranchtype|repoID=%s");
+$lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repo|browsebranchtype|repoID=%s", 'alias' => 'createbranchtype,editbranchtype,deletebranchtype,importbranchtype');
 $lang->devops->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->devops->reviewFlow}|repo|browsereviewflow|repoID=%s", 'alias' => 'createreviewflow,editreviewflow');
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
