@@ -467,7 +467,7 @@ class pivotTest
      * @access public
      * @return array
      */
-    public function setUniqueSlicesTest(array $records = null, array $setting = null): array
+    public function setUniqueSlicesTest(?array $records = null, ?array $setting = null): array
     {
         if($records === null) {
             // 构造测试数据

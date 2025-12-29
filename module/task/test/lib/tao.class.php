@@ -15,7 +15,7 @@ class taskTaoTest extends baseTest
      * @access public
      * @return object
      */
-    public function formatDatetimeTest(object $task = null)
+    public function formatDatetimeTest(?object $task = null)
     {
         $result = $this->invokeArgs('formatDatetime', [$task]);
         if(dao::isError()) return dao::getError();

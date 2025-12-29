@@ -113,7 +113,7 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function bugAssert(string $bugTitle = '', object $list = null)
+    public function bugAssert(string $bugTitle = '', ?object $list = null)
     {
         if(empty($bugTitle) || !is_object($list)) return $this->failed('获取bug标题失败');
 

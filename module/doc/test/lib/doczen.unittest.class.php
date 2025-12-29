@@ -219,7 +219,7 @@ class docZenTest
      * @access public
      * @return object
      */
-    public function assignVarsForViewTest(int $docID = 0, int $version = 0, string $type = 'product', int $objectID = 0, int $libID = 0, object $doc = null, object $object = null, string $objectType = 'product', array $libs = array(), array $objectDropdown = array()): object
+    public function assignVarsForViewTest(int $docID = 0, int $version = 0, string $type = 'product', int $objectID = 0, int $libID = 0, ?object $doc = null, ?object $object = null, string $objectType = 'product', array $libs = array(), array $objectDropdown = array()): object
     {
         if(is_null($doc))
         {

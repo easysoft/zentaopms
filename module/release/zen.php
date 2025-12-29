@@ -182,7 +182,7 @@ class releaseZen extends release
      * @access protected
      * @return void
      */
-    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, object $storyPager = null, object $bugPager = null, object $leftBugPager = null): void
+    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, ?object $storyPager = null, ?object $bugPager = null, ?object $leftBugPager = null): void
     {
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
