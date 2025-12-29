@@ -39,17 +39,17 @@ $task->gen(10);
 
 title=测试executionModel->getBurnDataFlotTest();
 timeout=0
-cid=16301
+cid=0
 
-- 按剩余工时查看敏捷执行查询统计属性value @95.3
-- 按剩余工时查看瀑布执行查询统计属性value @3
-- 按剩余工时查看看板执行查询统计属性value @36
-- 按计划工时查看敏捷执行查询统计属性value @94.3
-- 按计划工时查看瀑布执行查询统计属性value @94.3
-- 按计划工时查看看板执行查询统计属性value @94.3
-- 按故事点查看敏捷执行查询统计属性value @0
-- 按故事点查看瀑布执行查询统计属性value @0
-- 按故事点查看看板执行查询统计属性value @0
+- 按剩余工时查看敏捷执行查询统计属性value @95.30
+- 按剩余工时查看瀑布执行查询统计属性value @3.00
+- 按剩余工时查看看板执行查询统计属性value @36.00
+- 按计划工时查看敏捷执行查询统计属性value @94.30
+- 按计划工时查看瀑布执行查询统计属性value @94.30
+- 按计划工时查看看板执行查询统计属性value @94.30
+- 按故事点查看敏捷执行查询统计属性value @0.00
+- 按故事点查看瀑布执行查询统计属性value @0.00
+- 按故事点查看看板执行查询统计属性value @0.00
 - 不展示延期按剩余工时查看敏捷执行查询统计属性value @null
 - 不展示延期按剩余工时查看瀑布执行查询统计属性value @null
 - 不展示延期按剩余工时查看看板执行查询统计属性value @null
@@ -59,15 +59,15 @@ cid=16301
 - 不展示延期按故事点查看敏捷执行查询统计属性value @null
 - 不展示延期按故事点查看瀑布执行查询统计属性value @null
 - 不展示延期按故事点查看看板执行查询统计属性value @null
-- 按剩余工时查看敏捷执行查询统计属性value @95.3
-- 按剩余工时查看瀑布执行查询统计属性value @3
-- 按剩余工时查看看板执行查询统计属性value @36
-- 按计划工时查看敏捷执行查询统计属性value @94.3
-- 按计划工时查看瀑布执行查询统计属性value @94.3
-- 按计划工时查看看板执行查询统计属性value @94.3
-- 按故事点查看敏捷执行查询统计属性value @0
-- 按故事点查看瀑布执行查询统计属性value @0
-- 按故事点查看看板执行查询统计属性value @0
+- 按剩余工时查看敏捷执行查询统计属性value @95.30
+- 按剩余工时查看瀑布执行查询统计属性value @3.00
+- 按剩余工时查看看板执行查询统计属性value @36.00
+- 按计划工时查看敏捷执行查询统计属性value @94.30
+- 按计划工时查看瀑布执行查询统计属性value @94.30
+- 按计划工时查看看板执行查询统计属性value @94.30
+- 按故事点查看敏捷执行查询统计属性value @0.00
+- 按故事点查看瀑布执行查询统计属性value @0.00
+- 按故事点查看看板执行查询统计属性value @0.00
 
 */
 
@@ -76,30 +76,30 @@ $burnByList      = array('left', 'estimate', 'storyPoint');
 $showDelay       = array(false, true);
 
 $execution = new executionTest();
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[0])))                             && p('value') && e('95.3'); // 按剩余工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[0])))                             && p('value') && e('3');    // 按剩余工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[0])))                             && p('value') && e('36');   // 按剩余工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.3'); // 按计划工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.3'); // 按计划工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.3'); // 按计划工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[0])))                             && p('value') && e('0');    // 按故事点查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[0])))                             && p('value') && e('0');    // 按故事点查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[0])))                             && p('value') && e('0');    // 按故事点查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按剩余工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按剩余工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按剩余工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按计划工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按计划工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按计划工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按故事点查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按故事点查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[1])))                             && p('value') && e('null'); // 不展示延期按故事点查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('95.3'); // 按剩余工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('3');    // 按剩余工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('36');   // 按剩余工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.3'); // 按计划工时查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.3'); // 按计划工时查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.3'); // 按计划工时查看看板执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0');    // 按故事点查看敏捷执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0');    // 按故事点查看瀑布执行查询统计
-r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0');    // 按故事点查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[0])))                             && p('value') && e('95.30'); // 按剩余工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[0])))                             && p('value') && e('3.00');  // 按剩余工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[0])))                             && p('value') && e('36.00'); // 按剩余工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.30'); // 按计划工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.30'); // 按计划工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[0])))                             && p('value') && e('94.30'); // 按计划工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[0])))                             && p('value') && e('0.00');  // 按故事点查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[0])))                             && p('value') && e('0.00');  // 按故事点查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[0])))                             && p('value') && e('0.00');  // 按故事点查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按剩余工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按剩余工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按剩余工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按计划工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按计划工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按计划工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按故事点查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按故事点查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[1])))                             && p('value') && e('null');  // 不展示延期按故事点查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('95.30'); // 按剩余工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('3.00');  // 按剩余工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('36.00'); // 按剩余工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.30'); // 按计划工时查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.30'); // 按计划工时查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[1], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('94.30'); // 按计划工时查看看板执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0.00');  // 按故事点查看敏捷执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0.00');  // 按故事点查看瀑布执行查询统计
+r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[2], $showDelay[0], '2022-01-07', '2022-01-17'))) && p('value') && e('0.00');  // 按故事点查看看板执行查询统计
