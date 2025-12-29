@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('deletableBranches', $deletableBranches);
 jsVar('searchUrl', createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&label={$label}&showArchived={$showArchived}&keyword=%s"));
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu

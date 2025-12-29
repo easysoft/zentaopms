@@ -2021,17 +2021,31 @@ class repo extends control
             $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
         }
 
-        $this->view->title        = $this->lang->repo->browseBranch;
-        $this->view->repoID       = $repoID;
-        $this->view->objectID     = $objectID;
-        $this->view->repo         = $repo;
-        $this->view->pager        = $pager;
-        $this->view->orderBy      = $orderBy;
-        $this->view->branchList   = $branchList;
-        $this->view->keyword      = base64_encode($keyword);
-        $this->view->users        = $this->user->getPairs('noletter');
-        $this->view->label        = $label;
-        $this->view->showArchived = $showArchived;
+        /* Check delete permission for each branch. */
+        $deletableBranches = array();
+        $currentUser       = $this->app->user->account;
+        foreach($branchList as $branch)
+        {
+            /* Default branch cannot be deleted. */
+            if(!empty($branch->isDefault)) continue;
+            if($this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser))
+            {
+                $deletableBranches[] = $branch->name;
+            }
+        }
+
+        $this->view->title             = $this->lang->repo->browseBranch;
+        $this->view->repoID            = $repoID;
+        $this->view->objectID          = $objectID;
+        $this->view->repo              = $repo;
+        $this->view->pager             = $pager;
+        $this->view->orderBy           = $orderBy;
+        $this->view->branchList        = $branchList;
+        $this->view->keyword           = base64_encode($keyword);
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->label             = $label;
+        $this->view->showArchived      = $showArchived;
+        $this->view->deletableBranches = $deletableBranches;
         $this->display();
     }
 
@@ -2087,7 +2101,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings')
+    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings', bool $isDefault = false)
     {
         // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
         if($from == 'branch')
@@ -2152,6 +2166,7 @@ class repo extends control
         $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
+        $this->view->isDefault    = $isDefault;
         $this->view->branchTypeID = $branchTypeID;
         $this->view->ruleID       = $originRule->id;
         $this->view->originRule   = $originRule;

@@ -323,12 +323,12 @@ $lang->repo->branchRuleMode['inheritance'] = 'Inheritance';
 $lang->repo->branchRuleMode['redefinition'] = 'Redefinition';
 
 $lang->repo->branchTypeRule = new stdClass();
-$lang->repo->branchTypeRule->allowCreatedBy     = 'Which users are allowed to create this branch type';
-$lang->repo->branchTypeRule->allowDeletedBy     = 'Which users are allowed to delete this branch type';
-$lang->repo->branchTypeRule->allowUpdatedBy     = 'Which users are allowed to update this branch type';
-$lang->repo->branchTypeRule->allowForcePushedBy = 'Which users are allowed to force push';
-$lang->repo->branchTypeRule->allowMergeFrom     = 'Which branch types are allowed to merge to this branch type';
-$lang->repo->branchTypeRule->allowMergeTo       = 'Which branch types are allowed to merge to';
+$lang->repo->branchTypeRule->allowCreatedBy     = 'Allowed create users';
+$lang->repo->branchTypeRule->allowDeletedBy     = 'Allowed delete users';
+$lang->repo->branchTypeRule->allowUpdatedBy     = 'Allowed update users';
+$lang->repo->branchTypeRule->allowForcePushedBy = 'Allowed force push users';
+$lang->repo->branchTypeRule->allowMergeFrom     = 'Allowed merge sources';
+$lang->repo->branchTypeRule->allowMergeTo       = 'Allowed merge targets';
 
 $lang->repo->branchTypeRule->userOptionList = array();
 $lang->repo->branchTypeRule->userOptionList['hasPriv'] = 'Users with permission';
@@ -339,11 +339,11 @@ $lang->repo->branchTypeRule->branchTypeOptionList['all'] = 'All branches';
 $lang->repo->branchTypeRule->branchTypeOptionList['specify'] = 'Specified branch types';
 
 $lang->repo->branchRule = new stdClass();
-$lang->repo->branchRule->allowDeletedBy     = 'Which users are allowed to delete this branch';
-$lang->repo->branchRule->allowUpdatedBy     = 'Which users are allowed to update this branch';
-$lang->repo->branchRule->allowForcePushedBy = 'Which users are allowed to force push';
-$lang->repo->branchRule->allowMergeFrom     = 'Which branch types are allowed to merge to this branch';
-$lang->repo->branchRule->allowMergeTo       = 'Which branch types are allowed to merge to';
+$lang->repo->branchRule->allowDeletedBy     = 'Allowed delete users';
+$lang->repo->branchRule->allowUpdatedBy     = 'Allowed update users';
+$lang->repo->branchRule->allowForcePushedBy = 'Allowed force push users';
+$lang->repo->branchRule->allowMergeFrom     = 'Allowed merge sources';
+$lang->repo->branchRule->allowMergeTo       = 'Allowed merge targets';
 $lang->repo->branchRule->delete             = 'Delete branch rule';
 $lang->repo->branchRule->mode               = 'Rule control';
 

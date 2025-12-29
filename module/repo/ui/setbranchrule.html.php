@@ -70,7 +70,7 @@ formPanel
             )
         )
     ) : null,
-    formGroup
+    $branchTypeID != 0 || !$isDefault ? formGroup
     (
         set::label($langAllowDelete),
         set::width('full'),
@@ -96,7 +96,7 @@ formPanel
                 set::multiple(true)
             )
         )
-    ),
+    ) : null,
     formGroup
     (
         set::label($langAllowUpdate),
