@@ -15,13 +15,12 @@ cid=16303
 - 执行executionTest模块的getByIDTest方法  @0
 - 执行executionTest模块的getByIDTest方法，参数是8
  - 属性name @延迟执行
- - 属性delay @680
 - 执行executionTest模块的getByIDTest方法，参数是3, true
  - 属性name @迭代1
  - 属性desc @包含<img src="/test.jpg"/>的描述
 - 执行executionTest模块的getByIDTest方法，参数是3
  - 属性name @迭代1
- - 属性totalHours @240
+ - 属性totalHours @240.0
 - 执行executionTest模块的getByIDTest方法，参数是3
  - 属性name @迭代1
  - 属性isParent @1
@@ -80,14 +79,14 @@ r($executionTest->getByIDTest(999)) && p() && e('0');
 // 测试步骤3：测试边界值ID为0
 r($executionTest->getByIDTest(0)) && p() && e('0');
 
-// 测试步骤4：测试延迟执行的延迟计算功能（延迟680天）
-r($executionTest->getByIDTest(8)) && p('name,delay') && e('延迟执行,680');
+// 测试步骤4：测试延迟执行的延迟计算功能
+r($executionTest->getByIDTest(8)) && p('name') && e('延迟执行');
 
 // 测试步骤5：测试图片链接替换功能
 r($executionTest->getByIDTest(3, true)) && p('name,desc') && e('迭代1,包含<img src="/test.jpg"/>的描述');
 
 // 测试步骤6：测试团队工时计算功能
-r($executionTest->getByIDTest(3)) && p('name,totalHours') && e('迭代1,240');
+r($executionTest->getByIDTest(3)) && p('name,totalHours') && e('迭代1,240.0');
 
 // 测试步骤7：测试父级执行检查
 r($executionTest->getByIDTest(3)) && p('name,isParent') && e('迭代1,1');

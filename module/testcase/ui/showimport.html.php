@@ -12,7 +12,6 @@ namespace zin;
 jsVar('productID', $productID);
 jsVar('branch', $branch);
 jsVar('modules', $modules);
-jsVar('stories', $stories);
 
 unset($lang->testcase->typeList['unit']);
 if(!empty($suhosinInfo))
@@ -94,12 +93,25 @@ else
         'required' => strpos(",$requiredFields,", ',module,') !== false
     );
 
+    if($this->config->edition != 'open')
+    {
+        $items[] = array
+        (
+            'name'     => 'scene',
+            'label'    => $lang->testcase->scene,
+            'control'  => array('control' => 'picker', 'required' => true),
+            'items'    => array(),
+            'width'    => '200px',
+            'required' => strpos(",$requiredFields,", ',scene,') !== false
+        );
+    }
+
     $items[] = array
     (
         'name'    => 'story',
         'label'   => $lang->testcase->story,
         'control' => 'picker',
-        'items'   => isset($stories[0]) ? $stories[0] : array(),
+        'items'   => array(),
         'width'   => '240px',
         'required' => strpos(",$requiredFields,", ',story,') !== false
     );

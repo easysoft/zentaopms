@@ -1,0 +1,9 @@
+title: table zt_kanbanspace
+desc: 看板空间
+author: Tian Shujie
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: type
+      range: public,private

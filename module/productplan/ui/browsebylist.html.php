@@ -216,14 +216,14 @@ dtable
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}&from=$from&blockID=$blockID"))),
     ),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400),
-    !$isFromDoc ? null : set::noNestedCheck(),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink($sortLink),
-    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
-    $isFromDoc ? null : set::createTip($lang->productplan->create),
-    $isFromDoc ? null : set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '')
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    (!$isFromDoc && !$isFromAI) ? null : set::noNestedCheck(),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
+    ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->productplan->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createPlanLink)
 );
 
 modal

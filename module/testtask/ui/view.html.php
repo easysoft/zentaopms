@@ -88,7 +88,7 @@ detailBody
                             setID('executionText'),
                             $isInModal ? $task->executionName : a
                             (
-                                set('href', createLink('execution', 'story', "executionID=$task->execution")),
+                                set('href', createLink('execution', $execution->type == 'kanban' ? 'kanban' : 'story', "executionID=$task->execution")),
                                 set('title', $task->executionName),
                                 $task->executionName
                             )

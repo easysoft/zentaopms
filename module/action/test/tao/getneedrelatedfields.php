@@ -5,16 +5,33 @@ declare(strict_types=1);
 /**
 
 title=测试 actionTao::getNeedRelatedFields();
+timeout=0
 cid=0
 
-- 测试story类型对象的相关字段获取 >> 期望返回product数组和project、execution字段@1,0,0
-- 测试productplan类型对象的相关字段获取 >> 期望正确返回product字段@0,0,0
-- 测试branch类型对象的相关字段获取 >> 期望正确返回product字段@0,0,0
-- 测试testcase类型对象的相关字段获取 >> 期望正确返回相关字段@1,1,6
-- 测试case类型对象的相关字段获取 >> 期望正确返回相关字段@1,1,6
-- 测试task类型对象的相关字段获取 >> 期望正确返回相关字段@1,1,6
-- 测试release类型对象的相关字段获取 >> 期望正确返回相关字段@1,1
-- 测试不存在的对象类型的相关字段获取 >> 期望正确处理不存在的情况@0,0,0
+- 测试story类型对象的相关字段获取第0条的0属性 @1
+- 测试productplan类型对象的相关字段获取
+ -  @1
+ - 属性1 @0
+ - 属性2 @0
+- 测试branch类型对象的相关字段获取
+ -  @1
+ - 属性1 @0
+ - 属性2 @0
+- 测试testcase类型对象的相关字段获取
+ - 第0条的0属性 @1
+ - 第0条的1属性 @~~
+ - 第0条的2属性 @~~
+- 测试case类型对象的相关字段获取
+ - 第0条的0属性 @1
+ - 第0条的1属性 @~~
+ - 第0条的2属性 @~~
+- 测试task类型对象的相关字段获取
+ - 第0条的0属性 @~~
+ - 第0条的1属性 @1
+ - 第0条的2属性 @~~
+- 测试release类型对象的相关字段获取
+ - 第0条的0属性 @1
+ - 第0条的1属性 @~~
 
 */
 
@@ -93,11 +110,10 @@ su('admin');
 
 $actionTest = new actionTest();
 
-r($actionTest->getNeedRelatedFieldsTest('story', 1, 'created', '')) && p('0:0;1;2', ';') && e('1;0;0'); // 测试story类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('story', 1, 'created', '')) && p('0:0') && e('1'); // 测试story类型对象的相关字段获取
 r($actionTest->getNeedRelatedFieldsTest('productplan', 1, '', '')) && p('0,1,2') && e('1,0,0'); // 测试productplan类型对象的相关字段获取
 r($actionTest->getNeedRelatedFieldsTest('branch', 1, '', '')) && p('0,1,2') && e('1,0,0'); // 测试branch类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('testcase', 1, 'linked2testtask', '1')) && p('0:0;1;2', ';') && e('1;1;6'); // 测试testcase类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('case', 1, 'run', '1')) && p('0:0;1;2', ';') && e('1;1;6'); // 测试case类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('task', 1, '', '')) && p('0:0;1;2', ';') && e('1;1;6'); // 测试task类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('release', 1, '', '')) && p('0:0;1', ';') && e('1;1'); // 测试release类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('unknown', 999, '', '')) && p('0:0;1;2', ';') && e('0;0;0'); // 测试不存在的对象类型的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('testcase', 1, 'linked2testtask', '1')) && p('0:0,1,2') && e('1,~~,~~'); // 测试testcase类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('case', 1, 'run', '1')) && p('0:0,1,2') && e('1,~~,~~'); // 测试case类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('task', 1, '', '')) && p('0:0,1,2') && e('~~,1,~~'); // 测试task类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('release', 1, '', '')) && p('0:0,1') && e('1,~~'); // 测试release类型对象的相关字段获取

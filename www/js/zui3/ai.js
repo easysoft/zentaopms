@@ -49,15 +49,17 @@ function getPromptFormConfig(fields, extraConfig)
     if(!Array.isArray(fields) || !fields.length) return;
     const typeMap    = {radio: 'picker', checkbox: 'multiPicker', text: 'input'};
     const required   = [];
-    const properties = fields.reduce((properties, field, index) => {
+    const properties = fields.reduce((properties, field, index) =>
+    {
         field.code = `field-${field.id}`;
         properties[field.code] = {
-            type    : 'string',
-            widget  : typeMap[field.type] || field.type,
-            title   : field.name,
-            order   : index,
-            required: field.required && field.required !== '0',
-            props   : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
+            type       : 'string',
+            widget     : typeMap[field.type] || field.type,
+            title      : field.name,
+            placeholder: field.placeholder,
+            order      : index,
+            required   : field.required && field.required !== '0',
+            props      : zui.isNotEmptyString(field.options) ? {items: field.options.split(',').map(x => ({text: x, value: x}))}: undefined
         };
         return properties;
     }, {});
@@ -138,6 +140,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             if(isChange && originObject)
             {
                 const renderProp = (prop, value) => {
+                    if(propNames[prop] === undefined) return null;
                     let oldValue = originObject[prop];
                     if(oldValue === undefined || oldValue === null) oldValue = '';
                     if(value === undefined || value === null)       value    = '';
@@ -145,8 +148,8 @@ window.executeZentaoPrompt = async function(info, testingMode)
                     value = typeof value === 'string' ? value : JSON.stringify(value);
                     oldValue = typeof oldValue === 'string' ? oldValue : JSON.stringify(oldValue);
                     const isSame = oldValue === value;
-                    return h`<tr class="whitespace-pre-wrap">
-    <td class='font-bold'>${propNames[prop] || prop}</td>
+                    return h`<tr class="whitespace-pre-wrap" key=${prop}>
+    <td class='font-bold'>${propNames[prop]}</td>
     <td>${isSame ? renderValue(value) : (oldValue.length ? h`<div class="htmldiff article whitespace-prewrap" dangerouslySetInnerHTML=${{__html: htmlDiff(oldValue, value)}}></div>` : h`<div class="htmldiff article whitespace-prewrap"><ins data-operation-index="0">${value}</ins></div>`)}</td>
 </tr>`;
                 };
@@ -170,7 +173,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 };
                 diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
-            sessionStorage.setItem('aiResult', JSON.stringify(result));
+            localStorage.setItem('aiResult', JSON.stringify(result));
 
             return {
                 view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
@@ -188,21 +191,24 @@ window.executeZentaoPrompt = async function(info, testingMode)
             };
         },
     }];
+    const klibs = (info.knowledgeLib ? info.knowledgeLib.split(',') : []).filter(Boolean).map(x => `zentao:${x}`);
     const formConfig  = getPromptFormConfig(info.fields, info.formConfig);
-    zaiPanel.openPopup({
+    const popupOptions = {
         id         : 'zentao-prompt-popoup',
         viewType   : 'chat',
         width      : info.content ? 800 : 600,
-        postMessage: formConfig ? undefined : {content: [{role: 'system', content: info.dataPrompt}]},
+        postMessage: {content: [{role: 'system', content: info.dataPrompt}, {role: 'user', content: info.purpose, custom_data: {invisible: true}}]},
         creatingChat: {
             title    : info.name,
             type     : 'agent',
             model    : info.model,
             tools    : tools,
-            prompt   : [info.prompt, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n'),
+            prompt   : [info.role, zui.formatString(langData.promptExtraLimit, {toolName: toolName})].join('\n\n'),
             form     : formConfig,
+            memories : klibs.length ? [{collections: klibs}] : undefined,
         },
-    });
+    }
+    zaiPanel.openPopup(popupOptions);
 };
 
 function registerZentaoAIPlugin(lang)
@@ -350,14 +356,14 @@ function registerZentaoAIPlugin(lang)
         });
     }
 
-    plugin.defineCallback('onCreateChat', async function(info)
+    plugin.defineCallback('onCreateChat', function(info)
     {
-        if(info.isLocal || !info.userPrompt) return;
+        if(info.isLocal) return;
 
         const originMemories = info.options.memories;
         if(!originMemories || !originMemories.length) return;
-        const knowledgeLibs = {};
-        const otherMemories = originMemories.reduce((others, memory) =>
+        const knowledgeLibs  = {};
+        const otherMemories  = originMemories.reduce((others, memory) =>
         {
             const ohterCollections = [];
             for(const collection of memory.collections)
@@ -366,12 +372,6 @@ function registerZentaoAIPlugin(lang)
                 {
                     const lib         = collection.substr(7);
                     const newFilter   = $.extend(true, {}, memory.content_filter);
-                    if(!Object.keys(newFilter).length)
-                    {
-                        knowledgeLibs[lib] = {};
-                        break;;
-                    }
-
                     const oldFilter   = knowledgeLibs[lib] ? knowledgeLibs[lib] : null;
                     const finalFilter = $.extend(true, {}, oldFilter, newFilter);
                     if(newFilter && newFilter.attrs && oldFilter && oldFilter.attrs)
@@ -403,10 +403,19 @@ function registerZentaoAIPlugin(lang)
 
     plugin.defineCallback('onPostMessage', async function(info)
     {
-        if(!info.userMessages || !info.userMessages.length) return;
+        if(!info.postingMessages || !info.postingMessages.length) return;
         if(!info.chat.custom_data || !info.chat.custom_data.ztklibs) return;
-        const userPrompt = info.userMessages.map(x => x.content).filter(x => x && x.trim().length).join('\n\n');
-        if(!userPrompt.length) return;
+
+        const userPrompts   = [];
+        const systemPrompts = [];
+        info.postingMessages.forEach(x =>
+        {
+            if(x.role === 'user')        userPrompts.push(x.content);
+            else if(x.role === 'system') systemPrompts.push(x.content);
+        });
+        let searchPrompt = userPrompts.filter(Boolean).join('\n').trim();
+        if(!searchPrompt.length) searchPrompt = systemPrompts.filter(Boolean).join('\n').trim();
+        if(!searchPrompt.length) return;
 
         info.updateState(lang.searchingKLibs);
 
@@ -415,7 +424,7 @@ function registerZentaoAIPlugin(lang)
         const [response] = await $.ajaxSubmit(
         {
             url:  $.createLink('zai', 'ajaxSearchKnowledges'),
-            data: {userPrompt: userPrompt, filters: JSON.stringify(ztklibs)}
+            data: {userPrompt: searchPrompt, filters: JSON.stringify(ztklibs)}
         });
         if(response && response.result === 'success' && response.data && Array.isArray(response.data) && response.data.length)
         {
@@ -509,8 +518,8 @@ $(() =>
             getErrorContent: (error) =>
             {
                 let html = '';
-                if(error.type === 'unauthorized' && langData.unauthorizedError) html = zui.formatString(langData.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
-                else if(error.type === 'configNotValid' && langData.zaiConfigNotValid) html = zui.formatString(langData.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                if(error.type === 'unauthorized' && zaiLang.unauthorizedError) html = zui.formatString(zaiLang.unauthorizedError, {zaiConfigUrl: $.createLink('zai', 'setting')})
+                else if(error.type === 'configNotValid' && zaiLang.zaiConfigNotValid) html = zui.formatString(zaiLang.zaiConfigNotValid, {zaiConfigUrl: $.createLink('zai', 'setting')})
 
                 if(html.length) return {html: `<div class="row gap-3"><i class="mt-1 icon icon-exclamation text-warning"></i><div class="text-left pr-8">${html}</div></div>`};
                 return error.message;

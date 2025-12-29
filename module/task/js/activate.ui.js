@@ -251,6 +251,8 @@ window.renderRowData = function($row, index, row)
             const $team = info[0];
             $team.render({disabled: true});
         })
+
+        $row.find('[data-name=ACTIONS]').find('[data-type=delete]').remove();
     }
     if(row && row.hourDisabled)
     {

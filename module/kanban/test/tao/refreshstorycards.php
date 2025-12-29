@@ -7,8 +7,7 @@ title=测试 kanbanTao::refreshStoryCards();
 timeout=0
 cid=0
 
-- 步骤1:测试需求卡片刷新,验证wait和projected阶段需求在backlog列
- - 属性backlog @
+- 步骤1:测试需求卡片刷新,验证wait和projected阶段需求在backlog列属性backlog @,2,
 - 步骤2:测试需求卡片刷新,验证designing阶段需求在designing列属性designing @~~
 - 步骤3:测试需求卡片刷新,验证designed阶段需求在designed列属性designed @~~
 - 步骤4:测试需求卡片刷新,验证developing阶段需求在developing列属性developing @~~
@@ -44,7 +43,7 @@ $kanbanTest = new kanbanTaoTest();
 
 // 5. 强制要求:必须包含至少5个测试步骤
 $cardPairs = array('backlog' => '', 'ready' => '', 'design' => '', 'designing' => '', 'designed' => '', 'develop' => '', 'developing' => '', 'developed' => '', 'test' => '', 'testing' => '', 'tested' => '', 'verified' => '', 'rejected' => '', 'pending' => '', 'released' => '', 'closed' => '');
-r($kanbanTest->refreshStoryCardsTest($cardPairs, 1, '')) && p('backlog') && e(',2,'); // 步骤1:测试需求卡片刷新,验证wait和projected阶段需求在backlog列
+r($kanbanTest->refreshStoryCardsTest($cardPairs, 1, '')) && p('backlog', '|') && e(',2,'); // 步骤1:测试需求卡片刷新,验证wait和projected阶段需求在backlog列
 r($kanbanTest->refreshStoryCardsTest($cardPairs, 1, '')) && p('designing') && e('~~'); // 步骤2:测试需求卡片刷新,验证designing阶段需求在designing列
 r($kanbanTest->refreshStoryCardsTest($cardPairs, 1, '')) && p('designed') && e('~~'); // 步骤3:测试需求卡片刷新,验证designed阶段需求在designed列
 r($kanbanTest->refreshStoryCardsTest($cardPairs, 1, '')) && p('developing') && e('~~'); // 步骤4:测试需求卡片刷新,验证developing阶段需求在developing列

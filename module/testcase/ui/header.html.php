@@ -157,7 +157,8 @@ if($isFromDoc || $isFromAI)
     );
 }
 
-$linkParams = $rawMethod == 'groupcase' ? "productID=$productID&branch=$branch&groupBy=$groupBy&objectID=0&caseType=$caseType&browseType={key}" : $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
+$linkParams = $rawMethod == 'groupcase' ? "productID=$productID&branch=$branch&groupBy=$groupBy&objectID=0&caseType=$caseType&browseType={key}" : "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
+if($app->tab == 'project') $linkParams = "projectID={$projectID}&$linkParams";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
@@ -168,6 +169,7 @@ $objectID = 0;
 if($app->tab == 'project')   $objectID = $projectID;
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $objectID = $executionID;
 
+$pager       = isset($pager) ? $pager : '';
 $zeroCaseTab = (function() use ($isFromDoc, $isFromAI, $canBrowseZeroCase, $rawMethod, $productID, $branch, $objectID, $app, $lang, $pager)
 {
     $showZeroCaseTab = !$isFromDoc && !$isFromAI && $canBrowseZeroCase && $rawMethod != 'groupcase';
@@ -183,7 +185,7 @@ $zeroCaseTab = (function() use ($isFromDoc, $isFromAI, $canBrowseZeroCase, $rawM
             set('data-id', 'zerocaseTab'),
             set('class', $rawMethod == 'zerocase' ? 'active' : ''),
             $lang->testcase->zeroCase,
-            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
+            ($rawMethod == 'zerocase' && !empty($pager->recTotal)) ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
         )
     );
 })();

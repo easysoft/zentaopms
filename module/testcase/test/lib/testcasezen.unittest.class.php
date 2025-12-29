@@ -1117,7 +1117,7 @@ class testcaseZenTest
      * @access public
      * @return object
      */
-    public function getCaseWithSteps(int $caseID, array $customSteps = null): object
+    public function getCaseWithSteps(int $caseID, ?array $customSteps = null): object
     {
         $case = new stdClass();
         $case->id = $caseID;
@@ -1486,7 +1486,7 @@ class testcaseZenTest
      * @access public
      * @return int
      */
-    public function getExportFieldsTest(string $productType, array $postFields = null): int
+    public function getExportFieldsTest(string $productType, ?array $postFields = null): int
     {
         global $tester;
 
@@ -2961,14 +2961,13 @@ class testcaseZenTest
 
         // 返回视图数据用于断言
         $result = array();
-        $result['hasModules'] = isset($view->modules) ? (count($view->modules) > 0 ? '1' : '0') : '0';
-        $result['hasStories'] = isset($view->stories) ? (count($view->stories) > 0 ? '1' : '0') : '0';
-        $result['caseDataCount'] = isset($view->caseData) ? count($view->caseData) : 0;
-        $result['hasBranches'] = isset($view->branches) ? (count($view->branches) > 0 ? '1' : '0') : '0';
-        $result['allCount'] = $view->allCount ?? 0;
-        $result['allPager'] = $view->allPager ?? 1;
-        $result['isEndPage'] = isset($view->isEndPage) ? ($view->isEndPage ? '1' : '0') : '0';
-        $result['pagerID'] = $view->pagerID ?? 1;
+        $result['hasModules']     = isset($view->modules) ? (count($view->modules) > 0 ? '1' : '0') : '0';
+        $result['caseDataCount']  = isset($view->caseData) ? count($view->caseData) : 0;
+        $result['hasBranches']    = isset($view->branches) ? (count($view->branches) > 0 ? '1' : '0') : '0';
+        $result['allCount']       = $view->allCount ?? 0;
+        $result['allPager']       = $view->allPager ?? 1;
+        $result['isEndPage']      = isset($view->isEndPage) ? ($view->isEndPage ? '1' : '0') : '0';
+        $result['pagerID']        = $view->pagerID ?? 1;
         $result['hasSuhosinInfo'] = isset($view->suhosinInfo) ? '1' : '0';
 
         return $result;

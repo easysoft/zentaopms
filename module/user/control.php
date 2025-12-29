@@ -650,7 +650,7 @@ class user extends control
 
         if($_POST)
         {
-            if($this->user->checkVerifyPassword($this->post->verifyPassword)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
+            if(!$this->user->checkVerifyPassword($this->post->verifyPassword)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
 
             $this->user->delete(TABLE_USER, $userID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1254,7 +1254,7 @@ class user extends control
     public function refreshRandom()
     {
         $rand = updateSessionRandom();
-        ob_end_clean();
+        if(!empty(ob_get_status(true))) ob_end_clean();
         echo (string)$rand;
     }
 

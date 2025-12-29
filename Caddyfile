@@ -1,0 +1,18 @@
+:80 {
+	root www/
+	file_server
+	php_server {
+		env PATH_INFO {http.matchers.file.remainder}
+		env SCRIPT_NAME {path}
+
+		try_files {path} index.php{path}
+		worker {
+			file www/index.php
+		}
+	}
+
+	log {
+		output file www/tmp/caddy.log
+		level INFO
+	}
+}

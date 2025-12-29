@@ -78,11 +78,6 @@ class api extends router
      */
     public function __construct(string $appName = 'api', string $appRoot = '')
     {
-        parent::__construct($appName, $appRoot);
-
-        $this->viewType    = 'json';
-        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
-
         $this->path = trim(substr((string) $_SERVER['REQUEST_URI'], strpos((string) $_SERVER['REQUEST_URI'], 'api.php') + 7), '/');
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
@@ -90,6 +85,10 @@ class api extends router
 
         $this->apiVersion = $subPos !== false ? substr($this->path, 0, $subPos) : '';
         $this->path       = $subPos !== false ? substr($this->path, $subPos) : '';
+        parent::__construct($appName, $appRoot);
+
+        $this->viewType    = 'json';
+        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
         $this->loadApiLang();
     }
@@ -278,7 +277,7 @@ class api extends router
                 if(isset($info['method'])) $methodName = $info['method'];
             }
 
-            if(isset($info['response'])) $this->responseExtractor = $info['response'];
+            if(isset($info['response']) && $this->responseExtractor == '*') $this->responseExtractor = $info['response'];
         }
 
         foreach($paramValues as $key => $value)
@@ -388,6 +387,64 @@ class api extends router
     }
 
     /**
+     * 检查传入的对象是否存在
+     *
+     * Check object exists.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkObjectExists()
+    {
+        $objectMap = [
+            'program'       => TABLE_PROJECT,
+            'programID'     => TABLE_PROJECT,
+            'product'       => TABLE_PRODUCT,
+            'productID'     => TABLE_PRODUCT,
+            'project'       => TABLE_PROJECT,
+            'projectID'     => TABLE_PROJECT,
+            'productplan'   => TABLE_PRODUCTPLAN,
+            'productplanID' => TABLE_PRODUCTPLAN,
+            'plan'          => TABLE_PRODUCTPLAN,
+            'planID'        => TABLE_PRODUCTPLAN,
+            'execution'     => TABLE_PROJECT,
+            'executionID'   => TABLE_PROJECT,
+            'story'         => TABLE_STORY,
+            'storyID'       => TABLE_STORY,
+            'epic'          => TABLE_STORY,
+            'epicID'        => TABLE_STORY,
+            'requirement'   => TABLE_STORY,
+            'requirementID' => TABLE_STORY,
+            'task'          => TABLE_TASK,
+            'taskID'        => TABLE_TASK,
+            'bug'           => TABLE_BUG,
+            'bugID'         => TABLE_BUG,
+            'feedback'      => TABLE_FEEDBACK,
+            'feedbackID'    => TABLE_FEEDBACK,
+            'build'         => TABLE_BUILD,
+            'buildID'       => TABLE_BUILD,
+            'case'          => TABLE_CASE,
+            'caseID'        => TABLE_CASE,
+            'testcase'      => TABLE_CASE,
+            'testcaseID'    => TABLE_CASE,
+            'user'          => TABLE_USER,
+            'userID'        => TABLE_USER,
+            'ticket'        => TABLE_TICKET,
+            'ticketID'      => TABLE_TICKET,
+        ];
+
+        $params = array_merge($this->params, $_POST);
+        foreach($params as $key => $value)
+        {
+            if(isset($objectMap[$key]) && $value != 0)
+            {
+                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch('id');
+                if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+            }
+        }
+    }
+
+    /**
      * 执行对应模块
      *
      * Load the running module.
@@ -407,6 +464,9 @@ class api extends router
                 {
                     $this->setFormData();
                 }
+
+                $this->checkObjectExists();
+
                 return parent::loadModule();
             }
             elseif(!$this->apiVersion)
@@ -453,7 +513,15 @@ class api extends router
         $_POST = json_decode($requestBody, true);
 
         /* Avoid empty post body. */
-        $_POST['verifyPassword'] = '1';
+        if(in_array($this->control->moduleName, ['feedback', 'ticket']))
+        {
+            $_POST['uid'] = '1';
+        }
+        else
+        {
+            $_POST['verifyPassword'] = '1';
+        }
+
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
@@ -463,7 +531,7 @@ class api extends router
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
         if(!in_array($this->methodName, ['create', 'edit'])) return;
-        
+
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
         /* Get form data by get request. */
         $postData = $_POST;
@@ -473,14 +541,18 @@ class api extends router
         $this->control->getFormData = true;
 
         $zen = $this->control->moduleName . 'Zen';
-        $this->control->$zen->getFormData = true;
+        if(isset($this->control->$zen)) $this->control->$zen->getFormData = true;
 
-        $method = $this->control->methodName;
+        $control = $this->control;  // fetch method will change control.
+        $method  = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $this->params);
 
+        /* Clean the output in get method. */
+        ob_clean();
+
         $this->control->getFormData       = false;
-        $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
+        $this->control                    = $control;
 
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
@@ -488,9 +560,13 @@ class api extends router
             if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
 
-        foreach($this->control->$zen->formData as $key => $value)
+        if(isset($this->control->$zen))
         {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
+            $this->control->$zen->getFormData = false;
+            foreach($this->control->$zen->formData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
         }
     }
 

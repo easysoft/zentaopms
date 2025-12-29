@@ -430,10 +430,8 @@ class executionModel extends model
         {
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
             if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
+            if($field == 'QD' && in_array($execution->attribute, array('request', 'design', 'review')) && empty($execution->QD)) $this->config->execution->edit->requiredFields = str_replace(',QD', '', $this->config->execution->edit->requiredFields);
         }
-
-        $relatedExecutionsID = $this->getRelatedExecutions($executionID);
-        $relatedExecutionsID = !empty($relatedExecutionsID) ? implode(',', array_keys($relatedExecutionsID)) : '0';
 
         /* Update data. */
         $this->lang->error->unique = $this->lang->error->repeat;
@@ -444,7 +442,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF(!empty($execution->name), 'name', 'unique', "id in ($relatedExecutionsID) and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
+            ->checkIF(!empty($execution->name), 'name', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = '$executionProject' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
@@ -5174,6 +5172,7 @@ class executionModel extends model
             }
         }
 
+        $this->config->execution->create->requiredFields = '';
         $executionID = $this->create($executionData, array($this->app->user->account));
         if($project->model == 'kanban')
         {

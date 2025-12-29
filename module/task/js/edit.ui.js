@@ -280,6 +280,12 @@ window.renderRowData = function($row, index, row)
     {
         $row.find('[data-type=add]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许添加成员
         $row.find('[data-type=delete]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许删除成员
+        $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+        {
+            info[0].render({disabled: true});
+        })
+        $row.find('#teamEstimate').attr('readonly', 'readonly');
+        $row.find('#teamLeft').attr('readonly', 'readonly');
     }
 
     /* 复制上一行的人员下拉。*/

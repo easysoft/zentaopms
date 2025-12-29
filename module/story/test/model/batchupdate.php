@@ -13,14 +13,14 @@ cid=18477
  - 第14条的type属性 @story
  - 第14条的pri属性 @3
  - 第14条的sourceNote属性 @测试软件需求来源备注2
- - 第14条的estimate属性 @3
+ - 第14条的estimate属性 @3.00
  - 第14条的module属性 @2223
 - 更新两条用户需求，判断返回的title、type等信息
  - 第15条的title属性 @测试用户需求2
  - 第15条的type属性 @requirement
  - 第15条的pri属性 @3
  - 第15条的sourceNote属性 @测试用户需求来源备注2
- - 第15条的estimate属性 @3
+ - 第15条的estimate属性 @3.00
  - 第15条的module属性 @2223
 
 */
@@ -107,5 +107,5 @@ $result2 = $story->batchUpdateTest($requirements);
 
 r(count($result1)) && p() && e('2'); // 更新两条软件需求，判断返回的需求总量
 r(count($result2)) && p() && e('2'); // 更新两条用户需求，判断返回的需求总量
-r($result1) && p('14:title,type,pri,sourceNote,estimate,module') && e('测试软件需求2,story,3,测试软件需求来源备注2,3,2223');       // 更新两条软件需求，判断返回的title、type等信息
-r($result2) && p('15:title,type,pri,sourceNote,estimate,module') && e('测试用户需求2,requirement,3,测试用户需求来源备注2,3,2223'); // 更新两条用户需求，判断返回的title、type等信息
+r($result1) && p('14:title,type,pri,sourceNote,estimate,module') && e('测试软件需求2,story,3,测试软件需求来源备注2,3.00,2223');       // 更新两条软件需求，判断返回的title、type等信息
+r($result2) && p('15:title,type,pri,sourceNote,estimate,module') && e('测试用户需求2,requirement,3,测试用户需求来源备注2,3.00,2223'); // 更新两条用户需求，判断返回的title、type等信息

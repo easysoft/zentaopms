@@ -3451,13 +3451,13 @@ class convertTest
             public function getJiraAccount(string $userKey): string
             {
                 if(empty($userKey)) return '';
-                
+
                 // 模拟用户映射
                 $userMap = array(
                     'jira_user_key' => 'jira_user',
                     'reporter_key' => 'reporter_user'
                 );
-                
+
                 return isset($userMap[$userKey]) ? $userMap[$userKey] : $userKey;
             }
         };
@@ -3552,7 +3552,7 @@ class convertTest
         try {
             // Start output buffering to capture any output
             ob_start();
-            
+
             // Set up necessary session data for jira conversion
             $originalJiraMethod = isset($this->objectTao->app->session->jiraMethod) ? $this->objectTao->app->session->jiraMethod : null;
             $this->objectTao->app->session->jiraMethod = 'jira';
@@ -3560,26 +3560,26 @@ class convertTest
             $reflection = new ReflectionClass($this->objectTao);
             $method = $reflection->getMethod('createTask');
             $method->setAccessible(true);
-            
+
             $result = $method->invoke($this->objectTao, $projectID, $executionID, $data, $relations);
-            
+
             // Clean output buffer
             ob_end_clean();
-            
+
             // Restore original session data
             if($originalJiraMethod !== null) {
                 $this->objectTao->app->session->jiraMethod = $originalJiraMethod;
             } else {
                 unset($this->objectTao->app->session->jiraMethod);
             }
-            
+
             if(dao::isError()) return dao::getError();
 
             return $result;
         } catch (Exception | Error $e) {
             // Clean output buffer even on exception
             if(ob_get_level()) ob_end_clean();
-            
+
             // Restore session data even on exception
             if(isset($originalJiraMethod)) {
                 if($originalJiraMethod !== null) {
@@ -3762,25 +3762,25 @@ class convertTest
         try {
             // Mock the createRelease functionality instead of calling the real method
             // This avoids dependency issues in testing environment
-            
+
             // Validate input parameters
             if($build === null || $data === null) {
                 return 0;
             }
-            
+
             // Basic validation mimicking the actual method logic
             if(empty($build->id) || empty($build->product) || empty($build->project)) {
                 return 0;
             }
-            
+
             // Mock the creation process
             $status = 'normal';
             if(empty($data->released)) $status = 'wait';
             if(!empty($data->archived)) $status = 'terminate';
-            
+
             // Simulate successful creation
             return 1;
-            
+
         } catch (Exception $e) {
             return 0;
         } catch (Error $e) {
@@ -3801,12 +3801,12 @@ class convertTest
     public function createBuildinFieldTest($module, $resolutions, $priList, $buildin = false)
     {
         global $tester;
-        
+
         if(!isset($this->objectTao->workflowfield))
         {
             $this->objectTao->workflowfield = $this->createMockWorkflowField();
         }
-        
+
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('createBuildinField');
         $method->setAccessible(true);
@@ -3814,7 +3814,7 @@ class convertTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
-    
+
     private function createMockWorkflowField()
     {
         return new MockWorkflowField();
@@ -4099,10 +4099,10 @@ class convertTest
         // 简化测试：由于createGroup方法依赖复杂的环境，我们直接验证参数处理逻辑
         if(empty($name)) $name = '默认组名';
         if(strlen($name) > 80) $name = substr($name, 0, 80);
-        
+
         $validTypes = array('project', 'product');
         if(!in_array($type, $validTypes)) return 'invalid type';
-        
+
         // 验证参数类型
         if(!is_array($objectList)) return 'invalid objectList';
         if(!is_int($jiraProjectID)) return 'invalid jiraProjectID';
@@ -4110,7 +4110,7 @@ class convertTest
         if(!is_array($productRelations)) return 'invalid productRelations';
         if(!is_array($projectFieldList)) return 'invalid projectFieldList';
         if(!is_array($archivedProject)) return 'invalid archivedProject';
-        
+
         // 模拟成功创建
         return 'true';
     }
@@ -4129,18 +4129,18 @@ class convertTest
     public function createWorkflowGroupTest($relations = array(), $projectRelations = array(), $productRelations = array(), $edition = 'open', $existingGroups = array())
     {
         global $config;
-        
+
         // 模拟版本配置
         $originalEdition = isset($config->edition) ? $config->edition : 'open';
         $config->edition = $edition;
-        
+
         // 如果是开源版，直接返回原始relations
         if($edition == 'open')
         {
             $config->edition = $originalEdition;
             return serialize($relations);
         }
-        
+
         // 模拟企业版逻辑
         // 如果没有项目关系，返回原始relations
         if(empty($projectRelations))
@@ -4148,20 +4148,20 @@ class convertTest
             $config->edition = $originalEdition;
             return serialize($relations);
         }
-        
+
         // 模拟处理项目关系的逻辑
         foreach($projectRelations as $jiraProjectID => $zentaoProjectID)
         {
             // 如果已存在工作流组关系则跳过
             if(!empty($existingGroups[$jiraProjectID])) continue;
-            
+
             // 模拟创建工作流组的过程
             // 实际方法会调用createGroup来创建project和product类型的工作流组
         }
-        
+
         // 恢复原始配置
         $config->edition = $originalEdition;
-        
+
         return serialize($relations);
     }
 
@@ -4179,19 +4179,19 @@ class convertTest
         {
             return 0;
         }
-        
+
         // 其他测试情况返回mock数组表示测试通过
         if($testType == 'bug_resolution' || $testType == 'story_reason' || $testType == 'ticket_closed_reason')
         {
             // 模拟方法成功执行的情况
             return 'array';
         }
-        
+
         if($testType == 'invalid_key' || $testType == 'no_resolution')
         {
             return 0;
         }
-        
+
         return 0;
     }
 
@@ -4208,7 +4208,7 @@ class convertTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('updateSubStory');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $storyLink, $issueList);
         if(dao::isError()) return dao::getError();
 
@@ -4228,7 +4228,7 @@ class convertTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('updateSubTask');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $taskLink, $issueList);
         if(dao::isError()) return dao::getError();
 
@@ -4248,7 +4248,7 @@ class convertTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('updateDuplicateStoryAndBug');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $duplicateLink, $issueList);
         if(dao::isError()) return dao::getError();
 
@@ -4268,7 +4268,7 @@ class convertTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('updateRelatesObject');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $relatesLink, $issueList);
         if(dao::isError()) return dao::getError();
 

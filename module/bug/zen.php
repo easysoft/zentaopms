@@ -640,7 +640,7 @@ class bugZen extends bug
             ->setIF($formData->data->assignedTo != '', 'assignedDate', helper::now())
             ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->setIF($this->post->project, 'project', $this->post->project)
-            ->setIF($this->post->project, 'execution', $this->post->execution)
+            ->setIF($this->post->execution, 'execution', $this->post->execution)
             ->get();
 
         if($this->post->fromCase && $this->post->fromCase != $formData->data->case)
@@ -699,6 +699,8 @@ class bugZen extends bug
             ->setIF($formData->data->story && $formData->data->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->get();
+
+        if($oldBug->resolvedBy == $bug->resolvedBy && !$this->post->resolvedDate) unset($bug->resolvedDate);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->edit['id'], $bug->uid);
 
@@ -1967,7 +1969,7 @@ class bugZen extends bug
             $this->loadModel('kanban');
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', (string)$bugID);
-            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane($executionID, 'bug');
+            if(empty($laneID) or empty($columnID))    $this->kanban->updateLane((int)$executionID, 'bug');
         }
 
         /* Callback the callable method to process the related data for object that is transfered to bug. */

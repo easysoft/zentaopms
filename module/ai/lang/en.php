@@ -21,6 +21,7 @@ $lang->prompt->source           = 'Data Source';
 $lang->prompt->targetForm       = 'Target Form';
 $lang->prompt->purpose          = 'Purpose';
 $lang->prompt->elaboration      = 'Elaboration';
+$lang->prompt->knowledgeLib     = 'Knowledge Library';
 $lang->prompt->role             = 'Role';
 $lang->prompt->characterization = 'Characterization';
 $lang->prompt->status           = 'Status';

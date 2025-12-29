@@ -7,11 +7,11 @@ title=测试 webhookModel::buildData();
 timeout=0
 cid=19686
 
-- 步骤1：正常参数测试 @rue
-- 步骤2：空objectType参数 @rue
-- 步骤3：不存在的actionType（有数据） @rue
-- 步骤4：不存在的actionID @rue
-- 步骤5：无匹配数据 @rue
+- 步骤1：正常参数测试 @1
+- 步骤2：空objectType参数 @1
+- 步骤3：不存在的actionType（有数据） @1
+- 步骤4：不存在的actionID @1
+- 步骤5：无匹配数据 @1
 
 */
 

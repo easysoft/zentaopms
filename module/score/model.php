@@ -129,9 +129,9 @@ class scoreModel extends model
             $rule['score'] = $rule['score'] + $extended['pri'][$task->pri];
         }
 
-        if(!empty($task->estimate))
+        if($task->estimate > 0)
         {
-            $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10.0 * $task->estimate / $task->consumed));
+            $rule['score'] = $rule['score'] + ($task->consumed > 0 ? round($task->consumed / 10.0 * $task->estimate / $task->consumed) : 0);
         }
 
         return array($desc, $rule);

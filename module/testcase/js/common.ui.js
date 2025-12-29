@@ -83,8 +83,9 @@ window.onBranchChangedForBatch = function(event)
     const $currentRow = $target.closest('tr');
     const branchID    = $target.val();
     const moduleID    = $currentRow.find('.form-batch-control[data-name="module"] .pick-value').val();
+    const product     = productID == 0 ? $currentRow.find('.form-batch-control[data-name="product"] input').val() : productID;
 
-    $.getJSON($.createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&number=0&currentModuleID=' + moduleID), function(data)
+    $.getJSON($.createLink('tree', 'ajaxGetModules', 'productID=' + product + '&viewType=case&branch=' + branchID + '&number=0&currentModuleID=' + moduleID), function(data)
     {
         if(!data || !data.modules) return;
 
@@ -100,8 +101,8 @@ window.onBranchChangedForBatch = function(event)
         }
     });
 
-    loadScenesForBatch(productID, moduleID, $currentRow);
-    loadStoriesForBatch(productID, moduleID, 0, $currentRow);
+    loadScenesForBatch(product, moduleID, $currentRow);
+    loadStoriesForBatch(product, moduleID, 0, $currentRow);
 }
 
 window.onModuleChangedForBatch = function(event)

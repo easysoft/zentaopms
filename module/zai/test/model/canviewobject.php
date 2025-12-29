@@ -43,6 +43,7 @@ $zai = new zaiTest();
 $app->user->view = new stdClass();
 $app->user->view->products = '1,2,3';
 $app->user->view->projects = '1,2,3';
+$app->user->admin = false;
 
 /* 测试用户可以查看story对象（产品在权限范围内） */
 $result1 = $zai->canViewObjectTest('story', 1, array('product' => 1));

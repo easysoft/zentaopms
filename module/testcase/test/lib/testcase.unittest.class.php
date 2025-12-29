@@ -196,7 +196,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getModuleProjectCasesTest(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getModuleProjectCasesTest(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $_SESSION['project'] = 1;
 
@@ -239,7 +239,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getBySuiteTest(int $productID, int|string $branch = 0, int $suiteID = 0, int|array $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySuiteTest(int $productID, int|string $branch = 0, int $suiteID = 0, int|array $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $_SESSION['project'] = 1;
 
@@ -318,7 +318,7 @@ class testcaseTest
      * @access public
      * @return string|bool
      */
-    public function getByAssignedToTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): string|bool
+    public function getByAssignedToTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): string|bool
     {
         $objects = $this->objectModel->getByAssignedTo($account, $auto, $orderBy, $pager);
 
@@ -338,7 +338,7 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function getByOpenedByTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByOpenedByTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $objects = $this->objectModel->getByOpenedBy($account, $auto, $orderBy, $pager);
 
@@ -362,7 +362,7 @@ class testcaseTest
      * @access public
      * @return int|bool
      */
-    public function getByStatusTest(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): int|bool
+    public function getByStatusTest(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): int|bool
     {
         $objects = $this->objectModel->getByStatus($productID, $branch, $type, $status, $moduleID, $auto, $orderBy, $pager);
 
@@ -384,7 +384,7 @@ class testcaseTest
      * @access public
      * @return array|string
      */
-    public function getBySearchTest(string $tab = 'qa', int $projectID = 0, int $productID = 0, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array|string
+    public function getBySearchTest(string $tab = 'qa', int $projectID = 0, int $productID = 0, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array|string
     {
         global $tester;
         $tester->app->tab = $tab;
@@ -3720,7 +3720,7 @@ class testcaseTest
      * @access public
      * @return object
      */
-    public function getCaseWithSteps(int $caseID, array $customSteps = null): object
+    public function getCaseWithSteps(int $caseID, ?array $customSteps = null): object
     {
         global $tester;
 

@@ -535,6 +535,31 @@ class zaiTest
     }
 
     /**
+     * Test getUserFieldsMap static method.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getUserFieldsMapTest(string $objectType): array
+    {
+        return zaiModel::getUserFieldsMap($objectType);
+    }
+
+    /**
+     * Test convertUserFieldToRealname static method.
+     *
+     * @param  string $objectType
+     * @param  object $target
+     * @access public
+     * @return object
+     */
+    public function convertUserFieldToRealnameTest(string $objectType, object $target): object
+    {
+        return zaiModel::convertUserFieldToRealname($objectType, $target);
+    }
+
+    /**
      * Test convertCaseToMarkdown static method.
      *
      * @param  object     $case

@@ -19,7 +19,7 @@ function deepGet(object|array &$data, string $namePath, mixed $defaultValue = nu
     return $data === null ? $defaultValue : $data;
 }
 
-function deepSet(array &$data, string $namePath, mixed $value)
+function deepSet(array|object &$data, string $namePath, mixed $value)
 {
     $names = explode('.', $namePath);
     $lastName = array_pop($names);
@@ -27,12 +27,14 @@ function deepSet(array &$data, string $namePath, mixed $value)
     {
         foreach($names as $name)
         {
-            if(!is_array($data)) return;
+            if(!is_array($data) && !is_object($data)) return;
 
-            if(!isset($data[$name])) $data[$name] = array();
+            if(is_array($data) && !isset($data[$name]))  $data[$name] = array();
+            if(is_object($data) && !isset($data->$name)) $data->$name = new \stdClass();
             $data = &$data[$name];
         }
     }
 
-    $data[$lastName] = $value;
+    if(is_array($data))      $data[$lastName] = $value;
+    elseif(is_object($data)) $data->$lastName = $value;
 }

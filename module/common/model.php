@@ -1772,7 +1772,7 @@ eof;
         if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
-        $user->last   = time();
+        $user->last   = helper::now();
         $user->rights = $this->user->authorize($user->account);
         $user->groups = $this->user->getGroups($user->account);
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);

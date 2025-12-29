@@ -97,7 +97,7 @@ class testreportTest
      * @access public
      * @return array|string
      */
-    public function getListTest(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', object $pager = null): array|string
+    public function getListTest(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', ?object $pager = null): array|string
     {
         $objects = $this->objectModel->getList($objectID, $objectType, $extra, $orderBy, $pager);
 
@@ -117,7 +117,7 @@ class testreportTest
      * @access public
      * @return array
      */
-    public function getTaskCasesTest(int $taskID, int $reportID, string $idList = '', object $pager = null): array
+    public function getTaskCasesTest(int $taskID, int $reportID, string $idList = '', ?object $pager = null): array
     {
         $tasks  = $taskID ? $this->testtask->getByList((array)$taskID) : array();
         $report = $this->objectModel->getByID($reportID);

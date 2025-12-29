@@ -632,7 +632,8 @@ class actionTao extends actionModel
                 $table  = $this->config->objectTables[$module];
                 $field  = $this->config->action->objectNameFields[$module];
                 $name   = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
-                if($name) $action->appendLink = html::a(helper::createLink($module, 'view', "id={$id}"), "#{$id} " . $name);
+                $method = $module == 'story' ? 'storyView' : 'view';
+                if($name) $action->appendLink = html::a(helper::createLink($module, $method, "id={$id}"), "#{$id} " . $name);
             }
             $action->extra = $extra;
         }
