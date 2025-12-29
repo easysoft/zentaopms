@@ -123,6 +123,12 @@ class NullableTypesFixer
                         continue; // 已经有 ? 了
                     }
 
+                    // 检查是否是 mixed 类型
+                    if($type == 'mixed')
+                    {
+                        continue;
+                    }
+
                     // 检查是否是联合类型且已包含 null
                     if(stripos($type, '|null') !== false || stripos($type, 'null|') !== false)
                     {
