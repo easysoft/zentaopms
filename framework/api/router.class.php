@@ -429,6 +429,8 @@ class api extends router
             'testcaseID'    => TABLE_CASE,
             'user'          => TABLE_USER,
             'userID'        => TABLE_USER,
+            'ticket'        => TABLE_TICKET,
+            'ticketID'      => TABLE_TICKET,
         ];
 
         $params = array_merge($this->params, $_POST);
@@ -436,7 +438,7 @@ class api extends router
         {
             if(isset($objectMap[$key]) && $value != 0)
             {
-                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->fetch('id');
+                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch('id');
                 if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
             }
         }
