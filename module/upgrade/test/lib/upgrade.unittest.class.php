@@ -554,7 +554,7 @@ class upgradeTest
      * @access public
      * @return string|array
      */
-    public function createProjectTest(int $programID = 0, object $data = null): string|array
+    public function createProjectTest(int $programID = 0, ?object $data = null): string|array
     {
         $projectID = $this->objectModel->createProject($programID, $data);
         if(dao::isError()) return dao::getError();

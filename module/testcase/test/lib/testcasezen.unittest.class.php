@@ -1117,7 +1117,7 @@ class testcaseZenTest
      * @access public
      * @return object
      */
-    public function getCaseWithSteps(int $caseID, array $customSteps = null): object
+    public function getCaseWithSteps(int $caseID, ?array $customSteps = null): object
     {
         $case = new stdClass();
         $case->id = $caseID;
@@ -1486,7 +1486,7 @@ class testcaseZenTest
      * @access public
      * @return int
      */
-    public function getExportFieldsTest(string $productType, array $postFields = null): int
+    public function getExportFieldsTest(string $productType, ?array $postFields = null): int
     {
         global $tester;
 
