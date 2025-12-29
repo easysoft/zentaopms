@@ -331,6 +331,16 @@ $config->repo->dtable->branch->fieldList['name']['title']    = $lang->repo->bran
 $config->repo->dtable->branch->fieldList['name']['type']     = 'title';
 $config->repo->dtable->branch->fieldList['name']['name']     = 'name';
 $config->repo->dtable->branch->fieldList['name']['sortType'] = false;
+$config->repo->dtable->branch->fieldList['name']['width']    = 200;
+
+$config->repo->dtable->branch->fieldList['type']['title'] = $lang->repo->branchType;
+$config->repo->dtable->branch->fieldList['type']['type']  = 'text';
+$config->repo->dtable->branch->fieldList['type']['order'] = 10;
+
+$config->repo->dtable->branch->fieldList['rule']['title'] = $lang->repo->branchRule->mode;
+$config->repo->dtable->branch->fieldList['rule']['type']  = 'text';
+$config->repo->dtable->branch->fieldList['rule']['order'] = 20;
+$config->repo->dtable->branch->fieldList['rule']['width'] = 50;
 
 $config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
 $config->repo->dtable->branch->fieldList['commitID']['type']     = 'desc';

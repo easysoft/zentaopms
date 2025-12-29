@@ -314,6 +314,14 @@ $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
 
+$lang->repo->branchType            = '分支类型';
+$lang->repo->applicableBranchTypes = '适用分支类型';
+$lang->repo->allBranchTypes        = '全部分支类型';
+
+$lang->repo->branchRuleMode = array();
+$lang->repo->branchRuleMode['inheritance'] = '继承';
+$lang->repo->branchRuleMode['redefinition'] = '重定义';
+
 $lang->repo->branchTypeRule = new stdClass();
 $lang->repo->branchTypeRule->allowCreatedBy     = '允许哪些用户可以创建该类型分支';
 $lang->repo->branchTypeRule->allowDeletedBy     = '允许哪些用户可以删除该类型分支';
@@ -337,6 +345,7 @@ $lang->repo->branchRule->allowForcePushedBy = '允许哪些用户可以强制进
 $lang->repo->branchRule->allowMergeFrom     = '允许哪些分支类型合并到该分支';
 $lang->repo->branchRule->allowMergeTo       = '允许合并到哪些分支类型';
 $lang->repo->branchRule->delete             = '删除分支规则';
+$lang->repo->branchRule->mode               = '规则控制';
 
 $lang->repo->branchRule->userOptionList = array();
 $lang->repo->branchRule->userOptionList['hasPriv'] = '有权限的用户均可';

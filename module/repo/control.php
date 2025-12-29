@@ -1987,6 +1987,8 @@ class repo extends control
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers = $this->loadModel('user')->getCommiters('account');
+        $types      = $this->repo->getBranchTypeList($repoID);
+        $rules      = $this->repo->getBranchRulePairs($repoID, 'branchName', 'repo');
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
@@ -2004,6 +2006,17 @@ class repo extends control
             $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
 
+            $prefix       = (strpos($branch->name, '/') !== false) ? substr($branch->name, 0, strpos($branch->name, '/') + 1) : $branch->name;
+            $branch->type = '';
+            foreach($types as $type)
+            {
+                if(in_array($prefix, $type->prefixes))
+                {
+                    $branch->type = $type->name;
+                    break;
+                }
+            }
+            $branch->rule   = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
             $branch->ahead  = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
             $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
         }
@@ -2070,6 +2083,7 @@ class repo extends control
      * @param  int       $branchTypeID
      * @param  int       $repoID
      * @param  string    $branchName
+     * @param  string    $from
      * @access public
      * @return void
      */
@@ -2135,7 +2149,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->key;
+        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
         $this->view->branchTypeID = $branchTypeID;

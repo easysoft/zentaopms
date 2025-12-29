@@ -314,6 +314,14 @@ $lang->repo->apiError[4] = 'cannot have ASCII control characters';
 $lang->repo->apiError[5] = 'Created fail';
 $lang->repo->apiError[6] = 'Project Not Found';
 
+$lang->repo->branchType            = 'Branch Type';
+$lang->repo->applicableBranchTypes = 'Applicable Branch Types';
+$lang->repo->allBranchTypes        = 'All Branch Types';
+
+$lang->repo->branchRuleMode = array();
+$lang->repo->branchRuleMode['inheritance'] = 'Inheritance';
+$lang->repo->branchRuleMode['redefinition'] = 'Redefinition';
+
 $lang->repo->branchTypeRule = new stdClass();
 $lang->repo->branchTypeRule->allowCreatedBy     = 'Which users are allowed to create this branch type';
 $lang->repo->branchTypeRule->allowDeletedBy     = 'Which users are allowed to delete this branch type';
@@ -337,6 +345,7 @@ $lang->repo->branchRule->allowForcePushedBy = 'Which users are allowed to force 
 $lang->repo->branchRule->allowMergeFrom     = 'Which branch types are allowed to merge to this branch';
 $lang->repo->branchRule->allowMergeTo       = 'Which branch types are allowed to merge to';
 $lang->repo->branchRule->delete             = 'Delete branch rule';
+$lang->repo->branchRule->mode               = 'Rule control';
 
 $lang->repo->branchRule->userOptionList = array();
 $lang->repo->branchRule->userOptionList['hasPriv'] = 'Users with permission';
