@@ -3926,8 +3926,8 @@ class ztSessionHandler implements SessionHandlerInterface
     public function gc($maxlifeTime): int|false
     {
         /* API session never expires. */
-        if(!isset($this->config->sessionVar)) return 0;
-        if((defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$this->config->sessionVar])) return 0;
+        global $config;
+        if((defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$config->sessionVar])) return 0;
 
         $time  = time();
         $count = 0;

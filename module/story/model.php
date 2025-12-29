@@ -3892,6 +3892,9 @@ class storyModel extends model
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->isParent == '0' && $story->type == 'story';
 
+        /* Check isClickable when feedback convert to story. */
+        if($action == 'create' && $app->rawModule == 'feedback') return ($config->global->flow == 'full' && strpos('closed|clarify|noreview', $story->status) === false);
+
         if($action == 'createtask')
         {
             if($app->tab == 'project' && !empty($_SESSION['project']))
