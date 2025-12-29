@@ -32,21 +32,9 @@ fields:
 - field: assignedTo
   note: 指派给
   range: ['admin','user1','user2','','']
-- field: assignedDate
-  note: 指派日期
-  range: '0000-00-00 00:00:00{3},2024-01-01 00:00:00~2024-12-31 23:59:59{7}'
-- field: realStarted
-  note: 实际开始时间
-  range: '0000-00-00 00:00:00{5},2024-01-01 08:00:00~2024-12-31 18:00:00{5}'
 - field: startedBy
   note: 开始者
   range: '""{3},admin{3},user1{2},user2{2}'
-- field: startedDate
-  note: 开始日期
-  range: '0000-00-00 00:00:00{5},2024-01-01 08:00:00~2024-12-31 18:00:00{5}'
-- field: deadline
-  note: 截止日期
-  range: '0000-00-00{3},2024-03-01~2024-12-31{7}'
 - field: pri
   note: 优先级
   range: 1{2},2{3},3{3},4{2}
@@ -62,6 +50,3 @@ fields:
 - field: openedBy
   note: 创建者
   range: ['admin','user1','user2','tester','pm']
-- field: openedDate
-  note: 创建日期
-  range: '2024-01-01 00:00:00~2024-12-31 23:59:59'
