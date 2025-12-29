@@ -12,7 +12,7 @@ window.getSpaceType = function()
 window.changeSpace = function()
 {
     const objectType = getSpaceType();
-    if(objectType) loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}`));
+    if(objectType) loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=&from=${pageFrom}`));
 }
 
 /**
@@ -28,7 +28,7 @@ window.reloadMineAndCustom = function()
     const libID      = $('.modal-body input[name=lib]').val();
     const params     = window.btoa('objectID=' + objectID + '&libID=' + libID);
 
-    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}&from=${pageFrom}`));
 }
 
 /**
@@ -45,7 +45,7 @@ window.reloadProduct = function()
     const libID      = $('.modal-body input[name=lib]').val();
     const params     = window.btoa('docType=' + docType + '&objectID=' + objectID + '&libID=' + libID);
 
-    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}&from=${pageFrom}`));
 }
 
 /**
@@ -63,7 +63,7 @@ window.reloadProject = function()
     const libID       = $('.modal-body input[name=lib]').val();
     const params      = window.btoa('docType=' + docType + '&objectID=' + objectID + '&executionID=' + executionID + '&libID=' + libID);
 
-    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}&from=${pageFrom}`));
 }
 
 /**
@@ -77,7 +77,7 @@ window.reloadApiByApiType = function()
     const objectType  = getSpaceType();
     const apiType     = $('.modal-body input[name=apiType]').val();
     const params      = window.btoa('apiType=' + apiType);
-    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}&from=${pageFrom}`));
 }
 
 /**
@@ -109,7 +109,7 @@ window.reloadApi = function()
         params = window.btoa('apiType=' + apiType + '&libID=' + libID);
     }
 
-    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}`));
+    loadModal($.createLink('doc', 'selectLibType', `objectType=${objectType}&params=${params}&from=${pageFrom}`));
 }
 
 /**
@@ -125,9 +125,9 @@ window.reloadApi = function()
  */
 window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
 {
-    if(from === 'ai' && sessionStorage.getItem('aiResult'))
+    if(from === 'ai' && localStorage.getItem('aiResult'))
     {
-        const aiResult = JSON.parse(sessionStorage.getItem('aiResult'));
+        const aiResult = JSON.parse(localStorage.getItem('aiResult'));
         zui.DocApp.storeNextCreatingDoc({
             content: aiResult.content || '',
             contentType: 'markdown',
@@ -135,7 +135,7 @@ window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
             lib: Number(libID),
             module: Number(moduleID),
         });
-        sessionStorage.removeItem('aiResult');
+        localStorage.removeItem('aiResult');
     }
     openUrl(link, 'doc');
 }

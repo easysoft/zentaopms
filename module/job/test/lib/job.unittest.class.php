@@ -33,7 +33,7 @@ class jobTest
      * @access public
      * @return object
      */
-    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
+    public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', ?object $pager = null, string $engine = '')
     {
         $objects = $this->objectModel->getList($repoID, '', $orderBy, $pager, $engine);
 
@@ -529,7 +529,7 @@ class jobTest
      * @access public
      * @return mixed
      */
-    public function getJobListTest(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null)
+    public function getJobListTest(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', ?object $pager = null)
     {
         global $tester;
         

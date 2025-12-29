@@ -134,3 +134,6 @@ ALTER TABLE `zt_taskspec` ADD COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT P
 ALTER TABLE `zt_trainrecords` ADD COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE `zt_usergroup` ADD COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE `zt_workflowlinkdata` ADD COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+ALTER TABLE `zt_dept` DROP COLUMN `position`;
+ALTER TABLE `zt_dept` DROP COLUMN `function`;

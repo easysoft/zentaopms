@@ -58,7 +58,7 @@ class datalist extends wg
             ),
             div
             (
-                setClass('datalist-item-content', $contentClass),
+                setClass('datalist-item-content whitespace-pre-wrap', $contentClass),
                 $content,
                 $children
             )

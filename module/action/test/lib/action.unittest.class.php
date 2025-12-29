@@ -171,7 +171,7 @@ class actionTest
      * @access public
      * @return array
      */
-    public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
+    public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, ?object $pager = null): array
     {
         $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
@@ -888,7 +888,7 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $output;
+        return str_replace("\n", '', $output);
     }
 
     /**

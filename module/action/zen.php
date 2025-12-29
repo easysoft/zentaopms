@@ -93,7 +93,7 @@ class actionZen extends action
         else
         {
             $module     = $trash->objectType == 'case'         ? 'testcase'                     : $trash->objectType;
-            $module     = $trash->objectType == 'doctemplate'  ? 'doc'                          : $trash->objectType;
+            $module     = $trash->objectType == 'doctemplate'  ? 'doc'                          : $module;
             $params     = $trash->objectType == 'user'         ? "account={$trash->objectName}" : "id={$trash->objectID}";
             $methodName = 'view';
             if($module == 'basicmeas')

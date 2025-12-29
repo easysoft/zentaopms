@@ -13,6 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
+ini_set('zlib.output_compression', 'Off');
 
 /* Start output buffer. */
 ob_start();

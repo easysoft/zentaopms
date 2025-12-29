@@ -2416,7 +2416,7 @@ class bugTest
      * @access public
      * @return mixed
      */
-    public function assignBatchCreateVarsTest(int $executionID = 0, object $product = null, string $branch = '', array $output = array(), array $bugImagesFile = array())
+    public function assignBatchCreateVarsTest(int $executionID = 0, ?object $product = null, string $branch = '', array $output = array(), array $bugImagesFile = array())
     {
         global $tester;
 

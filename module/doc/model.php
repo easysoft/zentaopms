@@ -1396,23 +1396,28 @@ class docModel extends model
      * 获取所有子空间。
      * Get all sub spaces.
      *
+     * @param  string $spaceType
      * @access public
      * @return array
      */
-    public function getAllSubSpaces()
+    public function getAllSubSpaces(string $spaceType = 'all')
     {
-        $productList = $this->config->vision == 'rnd' ? $this->loadModel('product')->getPairs('nocode') : array();
-        $projectList = ($this->config->vision == 'rnd' || $this->config->vision == 'lite') ? $this->loadModel('project')->getPairsByProgram() : array();
+        $productList = $this->config->vision == 'rnd' && in_array($spaceType, array('all', 'product')) ? $this->loadModel('product')->getPairs('nocode') : array();
+        $projectList = ($this->config->vision == 'rnd' || $this->config->vision == 'lite') && in_array($spaceType, array('all', 'project', 'execution')) ? $this->loadModel('project')->getPairsByProgram() : array();
 
-        $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type', true)->eq('custom')
-            ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
-            ->markRight(2)
-            ->orderBy('type_desc')
-            ->fetchAll('', false);
+        $spaceList = array();
+        if($spaceType == 'all')
+        {
+            $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere('parent')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
+                ->andWhere('type', true)->eq('custom')
+                ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
+                ->markRight(2)
+                ->orderBy('type_desc')
+                ->fetchAll('', false);
+        }
 
         $productPairs = $projectPairs = $spacePairs = array();
         foreach($productList as $productID => $productName) $productPairs["product.{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
@@ -2586,11 +2591,9 @@ class docModel extends model
     {
         $project     = $this->loadModel('project')->getByID($projectID);
         $storyIdList = $issueIdList = $meetingIdList = $reviewIdList = $designIdList = $executionIdList = $taskIdList = $buildIdList = 0;
-        if($project && !$project->hasProduct)
-        {
-            $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
-            $storyIdList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
-        }
+
+        $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
+        $storyIdList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
 
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -4834,5 +4837,100 @@ class docModel extends model
         /* 记录文档模板的更新时间。*/
         /* Record the time of upgrade doc template. */
         $this->setting->setItem("system.doc.upgradeTime", helper::now());
+    }
+
+    /**
+     * 遍历文档的区块。
+     * For each doc block.
+     *
+     * 下面为一个遍历文档中所有附件，并获取所有附件 sourceId 例子：
+     *
+     * ```php
+     * // 定义遍历回调函数：
+     * $callback = function($block, $data, $level)
+     * {
+     *     if(!empty($block['props']['sourceId'])) $data[] = $block['props']['sourceId'];
+     *     return $data;
+     * };
+     *
+     * // 遍历文档，并获取最终的 sourceId 列表：
+     * $sourceIdList = static::forEachDocBlock($rawContent, $callback, array(), 'affine:attachment');
+     * ```
+     *
+     * @param  array        $rawContent    文档的区块内容
+     * @param  callable     $callback      回调函数，用于处理每个区块，参数包括区块内容、传递的数据、区块级别、区块索引
+     * @param  mixed        $data          用于在遍历过程中需要传递的数据，此参数可选，默认为 null
+     * @param  string       $flavours      区块的 flavour，例如 affine:attachment，可以用英文逗号匹配多个 flavour，如果为空则匹配所有 flavour
+     * @param  string       $types         区块的 type，包括页面（page）和块（block），默认仅匹配块（block），如果为空则匹配所有类型
+     * @param  ?array       $props         区块的 props，例如 array('type' => 'h1')，可以指定多个属性值
+     * @param  int          $level         区块的级别，用于递归遍历，如果要指定起始级别，则可以使用此参数指定，默认为 0
+     * @param  int          $index         区块的索引，用于递归遍历，如果要指定起始索引，则可以使用此参数指定，默认为 0
+     * @access public
+     * @return void
+     */
+    public static function forEachDocBlock(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0, int $index = 0): mixed
+    {
+        /* 如果内容是列表，则遍历列表。 */
+        if(array_is_list($rawContent))
+        {
+            foreach($rawContent as $idx => $block)
+            {
+                $data = static::forEachDocBlock($block, $callback, $data, $flavours, $types, $props, $level, $idx);
+            }
+            return $data;
+        }
+
+        /* 获取内容类型。 */
+        if(!isset($rawContent['type'])) return $data;
+        $type = $rawContent['type'];
+
+        /* 判断内容是否匹配类型。 */
+        $blockMatched = empty($types) || str_contains(',' . $types . ',', ',' . $type . ',');
+
+        /* 判断内容是否匹配 flavour。 */
+        if($blockMatched && !empty($flavours))
+        {
+            $flavour      = empty($rawContent['flavour']) ? '' : $rawContent['flavour'];
+            $blockMatched = !empty($flavour) && str_contains(',' . $flavours . ',', ',' . $flavour . ',');
+        }
+
+        /* 判断内容是否匹配 props。 */
+        if($blockMatched && !empty($props))
+        {
+            $blockProps = isset($rawContent['props']) ? $rawContent['props'] : null;
+            if(empty($blockProps))
+            {
+                $blockMatched = false;
+            }
+            else
+            {
+                foreach($props as $prop => $value)
+                {
+                    if($blockProps[$prop] !== $value)
+                    {
+                        $blockMatched = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        /* 如果内容匹配，则调用回调函数。 */
+        if($blockMatched)
+        {
+            $data = $callback($rawContent, $data, 0, $level, $index);
+        }
+
+        /* 如果内容是页面，则遍历页面内容。 */
+        if($type === 'page')
+        {
+            return static::forEachDocBlock($rawContent['blocks'], $callback, $data, $flavours, $types, $props, $level + 1);
+        }
+
+        /* 如果内容包含 children，则遍历 children。 */
+        $children = isset($rawContent['children']) ? $rawContent['children'] : null;
+        if(empty($children)) return $data;
+
+        return static::forEachDocBlock($children, $callback, $data, $flavours, $types, $props, $level + 1);
     }
 }

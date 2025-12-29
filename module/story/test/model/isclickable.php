@@ -20,6 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 zenData('story')->gen(5);
+zenData('case')->gen(0);
 
 global $tester;
 $storyModel = $tester->loadModel('story');

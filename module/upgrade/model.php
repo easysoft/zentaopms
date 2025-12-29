@@ -2666,7 +2666,7 @@ class upgradeModel extends model
      */
     public function fixTaskAssignedTo()
     {
-        $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch();
+        $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch('parent');
         if(empty($minParent)) return true;
 
         $needUpdateTasks = $this->dao->select('id,parent,closedBy')->from(TABLE_TASK)
@@ -13029,6 +13029,22 @@ class upgradeModel extends model
      */
     public function alterTableFields()
     {
+        $users = $this->dao->select('id, last')->from(TABLE_USER)->where('last')->ne(0)->fetchPairs();
+        $sql   = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
+
+        $this->dao->exec($sql);
+
+        foreach($users as $id => $last)
+        {
+            $last = date('Y-m-d H:i:s', $last);
+            $this->dao->update(TABLE_USER)->set('last_tmp')->eq($last)->where('id')->eq($id)->exec();
+        }
+
+        $sql = 'ALTER TABLE ' . TABLE_USER . ' DROP `last`';
+        $this->dao->exec($sql);
+        $sql = 'ALTER TABLE ' . TABLE_USER . ' CHANGE COLUMN `last_tmp` `last` datetime DEFAULT NULL';
+        $this->dao->exec($sql);
+
         return $this->execSQL($this->getUpgradeFile('datatype'));
     }
 

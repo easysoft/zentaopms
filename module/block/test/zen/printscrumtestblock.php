@@ -7,23 +7,34 @@ title=测试 blockZen::printScrumTestBlock();
 timeout=0
 cid=15301
 
-- 执行blockTest模块的printScrumTestBlockTest方法，参数type=all 属性blockType @all
-- 执行blockTest模块的printScrumTestBlockTest方法，参数type=wait 属性testtaskCount @3
-- 执行blockTest模块的printScrumTestBlockTest方法，参数type=doing 属性testtaskCount @5
-- 执行blockTest模块的printScrumTestBlockTest方法，参数type=done 属性testtaskCount @7
-- 执行blockTest模块的printScrumTestBlockTest方法，参数count=10 属性blockCount @10
+- 测试type=all属性count @0
+- 测试type=wait属性count @1
+- 测试type=doing属性count @0
+- 测试type=done属性count @0
+- 测试count限制属性count @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
+$testtask = zenData('testtask');
+$testtask->id->range('1-5');
+$testtask->name->range('测试单`1-5`');
+$testtask->status->range('wait{3},doing{2}');
+$testtask->deleted->range('0');
+$testtask->gen(5);
+
+zenData('product')->loadYaml('product')->gen(3);
+zenData('project')->loadYaml('project')->gen(5);
+zenData('user')->loadYaml('user')->gen(5);
 
 su('admin');
 
-global $tester;
-$tester->session->set('project', 1);
+global $tester, $app;
+$tester->session->set('project', 11);
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 测试参数 type=all
 $block1 = new stdClass();
@@ -60,8 +71,11 @@ $block5->params->type = 'all';
 $block5->params->orderBy = 'id_desc';
 $block5->params->count = 10;
 
-r($blockTest->printScrumTestBlockTest($block1)) && p('blockType') && e('all');           // 测试type=all
-r($blockTest->printScrumTestBlockTest($block2)) && p('testtaskCount') && e('3');         // 测试type=wait
-r($blockTest->printScrumTestBlockTest($block3)) && p('testtaskCount') && e('5');         // 测试type=doing
-r($blockTest->printScrumTestBlockTest($block4)) && p('testtaskCount') && e('7');         // 测试type=done
-r($blockTest->printScrumTestBlockTest($block5)) && p('blockCount') && e('10');           // 测试count限制
+$app->rawModule = 'block';
+$app->rawMethod = 'dashboard';
+
+r($blockTest->printScrumTestBlockTest($block1)) && p('count') && e('0');   // 测试type=all
+r($blockTest->printScrumTestBlockTest($block2)) && p('count') && e('1');   // 测试type=wait
+r($blockTest->printScrumTestBlockTest($block3)) && p('count') && e('0');   // 测试type=doing
+r($blockTest->printScrumTestBlockTest($block4)) && p('count') && e('0');   // 测试type=done
+r($blockTest->printScrumTestBlockTest($block5)) && p('count') && e('0');   // 测试count限制

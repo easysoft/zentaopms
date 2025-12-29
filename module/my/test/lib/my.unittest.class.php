@@ -674,7 +674,7 @@ class myTest
      * @access public
      * @return string|array
      */
-    public function getReviewingListTest(string $account, string $browseType, string $orderBy, object $pager = null): string|array
+    public function getReviewingListTest(string $account, string $browseType, string $orderBy, ?object $pager = null): string|array
     {
         su($account);
 

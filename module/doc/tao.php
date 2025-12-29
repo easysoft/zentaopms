@@ -140,7 +140,7 @@ class docTao extends docModel
      * @access protected
      * @return array
      */
-    protected function getOpenedDocs(array $hasPrivDocIdList, string $sort, object $pager = null): array
+    protected function getOpenedDocs(array $hasPrivDocIdList, string $sort, ?object $pager = null): array
     {
         return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
@@ -165,7 +165,7 @@ class docTao extends docModel
      * @access protected
      * @return array
      */
-    protected function getEditedDocs(string $sort, object $pager = null): array
+    protected function getEditedDocs(string $sort, ?object $pager = null): array
     {
         $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('objectType')->eq('doc')
@@ -196,7 +196,7 @@ class docTao extends docModel
      * @access protected
      * @return array
      */
-    protected function getOrderedDocsByEditedDate(array $hasPrivDocIdList, array $allLibIDList, object $pager = null): array
+    protected function getOrderedDocsByEditedDate(array $hasPrivDocIdList, array $allLibIDList, ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
@@ -220,7 +220,7 @@ class docTao extends docModel
      * @access protected
      * @return array
      */
-    protected function getCollectedDocs(array $hasPrivDocIdList, string $sort, object $pager = null): array
+    protected function getCollectedDocs(array $hasPrivDocIdList, string $sort, ?object $pager = null): array
     {
         return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc AND t2.action='collect'")

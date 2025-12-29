@@ -55,7 +55,7 @@ class buildTest
      * @access public
      * @return array|int
      */
-    public function getProjectBuildsTest(int $count, int $projectID, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array|int
+    public function getProjectBuildsTest(int $count, int $projectID, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array|int
     {
         $objects = $this->objectModel->getProjectBuilds($projectID, $type, $param, $orderBy, $pager);
 
@@ -96,7 +96,7 @@ class buildTest
      * @access public
      * @return array|int
      */
-    public function getExecutionBuildsTest(int $count, int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array|int
+    public function getExecutionBuildsTest(int $count, int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array|int
     {
         $objects = $this->objectModel->getExecutionBuilds($executionID, $type, $param, $orderBy, $pager);
 

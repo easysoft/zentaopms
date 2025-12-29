@@ -229,31 +229,31 @@ r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用�
 $cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id > 19');
 r(count($cases)) && p() && e(0); // 产品 1 测试单 2 套件 1 查询 id > 19 后可关联的用例数为 0。
 
-$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id < 19');
+$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 't1.id < 19');
 r(count($cases)) && p() && e(11); // 产品 1 测试单 2 套件 1 查询 id < 19 后可关联的用例数为 11。
 r($cases) && p('18:id,title,pri,type,auto,status') && e('18,这个是测试用例18,2,install,no,normal');          // 查看可关联的用例 18 的详细信息。
 r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用例16,4,performance,no,investigate'); // 查看可关联的用例 16 的详细信息。
 r($cases) && p('14:id,title,pri,type,auto,status') && e('14,这个是测试用例14,2,other,no,normal');            // 查看可关联的用例 14 的详细信息。
 
-$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id < 19', array(2));
+$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 't1.id < 19', array(2));
 r(count($cases)) && p() && e(10); // 产品 1 测试单 2 套件 1 查询 id < 19 并排除用例 2 后可关联的用例数为 10。
 r($cases) && p('18:id,title,pri,type,auto,status') && e('18,这个是测试用例18,2,install,no,normal');          // 查看可关联的用例 18 的详细信息。
 r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用例16,4,performance,no,investigate'); // 查看可关联的用例 16 的详细信息。
 r($cases) && p('14:id,title,pri,type,auto,status') && e('14,这个是测试用例14,2,other,no,normal');            // 查看可关联的用例 14 的详细信息。
 
-$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id < 19', array(), $pager);
+$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 't1.id < 19', array(), $pager);
 r(count($cases)) && p() && e(5); // 产品 1 测试单 2 套件 1 查询 id < 19 并限制每页查询 5 条后可关联的用例数为 5。
 r($cases) && p('18:id,title,pri,type,auto,status') && e('18,这个是测试用例18,2,install,no,normal');          // 查看可关联的用例 18 的详细信息。
 r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用例16,4,performance,no,investigate'); // 查看可关联的用例 16 的详细信息。
 r($cases) && p('14:id,title,pri,type,auto,status') && e('14,这个是测试用例14,2,other,no,normal');            // 查看可关联的用例 14 的详细信息。
 
-$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id < 19', array(2), $pager);
+$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 't1.id < 19', array(2), $pager);
 r(count($cases)) && p() && e(5); // 产品 1 测试单 2 套件 1 查询 id < 19、排除用例 2 并限制每页查询 5 条后可关联的用例数为 5。
 r($cases) && p('18:id,title,pri,type,auto,status') && e('18,这个是测试用例18,2,install,no,normal');          // 查看可关联的用例 18 的详细信息。
 r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用例16,4,performance,no,investigate'); // 查看可关联的用例 16 的详细信息。
 r($cases) && p('14:id,title,pri,type,auto,status') && e('14,这个是测试用例14,2,other,no,normal');            // 查看可关联的用例 14 的详细信息。
 
-$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 'id < 19', array(2,3,4,5,6,7,8,9,10,11,12), $pager);
+$cases = $testtask->getLinkableCasesBySuite(1, $task2, 1, 't1.id < 19', array(2,3,4,5,6,7,8,9,10,11,12), $pager);
 r(count($cases)) && p() && e(3); // 产品 1 测试单 2 套件 1 查询 id < 19、排除用例 2-12 并限制每页查询 5 条后可关联的用例数为 3。
 r($cases) && p('18:id,title,pri,type,auto,status') && e('18,这个是测试用例18,2,install,no,normal');          // 查看可关联的用例 18 的详细信息。
 r($cases) && p('16:id,title,pri,type,auto,status') && e('16,这个是测试用例16,4,performance,no,investigate'); // 查看可关联的用例 16 的详细信息。

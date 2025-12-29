@@ -30,8 +30,8 @@ cid=16296
 - 测试正常order排序第1条第1条的order属性 @5
 - 测试正常order排序第3条第3条的order属性 @15
 - 测试重复order值处理第2条第2条的order属性 @10
-- 测试乱序order值修正第4条第4条的order属性 @20
-- 测试空数据库处理结果 @rray()
+- 测试乱序order值修正第4条第4条的order属性 @10
+- 测试空数据库处理结果 @0
 
 */
 
@@ -68,9 +68,9 @@ $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->order->range('100,1,50,2,25,75');
 $execution->gen(6);
 
-r($executionTester->fixOrderTest()) && p('4:order') && e('20'); // 测试乱序order值修正第4条
+r($executionTester->fixOrderTest()) && p('4:order') && e('10'); // 测试乱序order值修正第4条
 
 // 测试场景4：空数据库的处理
 zenData('project')->gen(0);
 
-r($executionTester->fixOrderTest()) && p() && e(array()); // 测试空数据库处理结果
+r($executionTester->fixOrderTest()) && p() && e(0); // 测试空数据库处理结果

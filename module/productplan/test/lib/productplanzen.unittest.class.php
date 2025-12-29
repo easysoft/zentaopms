@@ -1,7 +1,11 @@
 <?php
 declare(strict_types = 1);
-class productplanZenTest
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+class productplanZenTest extends baseTest
 {
+    protected $moduleName = 'productplan';
+    protected $className  = 'zen';
+
     public function __construct()
     {
         global $tester, $app;
@@ -203,24 +207,11 @@ class productplanZenTest
      * @access public
      * @return array
      */
-    public function assignViewDataTest(object $plan): array
+    public function assignViewDataTest(object $plan)
     {
-        $reflection = new ReflectionClass($this->objectZen);
-        $method = $reflection->getMethod('assignViewData');
-        $method->setAccessible(true);
-        $method->invoke($this->objectZen, $plan);
-
+        $this->invokeArgs('assignViewData', [$plan]);
+        $result = $this->getProperty('view');
         if(dao::isError()) return dao::getError();
-
-        $result = array();
-        $result['parentPlan'] = isset($this->objectZen->view->parentPlan) ? $this->objectZen->view->parentPlan->id : null;
-        $result['childrenPlans'] = isset($this->objectZen->view->childrenPlans) ? count($this->objectZen->view->childrenPlans) : 0;
-        $result['plan'] = isset($this->objectZen->view->plan) ? $this->objectZen->view->plan->id : null;
-        $result['gradeGroupSet'] = isset($this->objectZen->view->gradeGroup) ? 'set' : 'not_set';
-        $result['actionsSet'] = isset($this->objectZen->view->actions) ? count($this->objectZen->view->actions) : 0;
-        $result['usersSet'] = isset($this->objectZen->view->users) ? 'set' : 'not_set';
-        $result['plansSet'] = isset($this->objectZen->view->plans) ? 'set' : 'not_set';
-        $result['modulesSet'] = isset($this->objectZen->view->modules) ? 'set' : 'not_set';
 
         return $result;
     }

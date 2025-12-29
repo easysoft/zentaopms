@@ -264,7 +264,7 @@ detailBody
                         set::className('linkStory-btn'),
                         bind::click('window.showLink', array('params' => array('story')))
                     ) : null
-                ) : null,
+                ) : toolbar(setClass('tab-actions absolute right-0 gap-2'), setStyle('top', '-8px')),
                 dtable
                 (
                     setID('storyDTable'),

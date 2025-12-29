@@ -129,8 +129,23 @@ foreach($reviewList as $review)
         $review->result = zget($reviewResultList, $review->result);
     }
 
+    if($review->project && strpos($review->project, ',') !== false)
+    {
+        $projectIdList   = explode(',', $review->project);
+        $review->project = '';
+        foreach($projectIdList as $projectID)
+        {
+            if(empty($projectID)) continue;
+            $review->project .= zget($projects, $projectID, '') . $lang->comma;
+        }
+        $review->project = trim($review->project, $lang->comma);
+    }
+    else
+    {
+        $review->project = zget($projects, $review->project, '');
+    }
+
     $review->module  = isset($review->storyType) ? $review->storyType : $review->module;
-    $review->project = zget($projects, $review->project, '');
     $review->product = zget($products, $review->product, '');
 }
 

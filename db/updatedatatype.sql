@@ -527,8 +527,6 @@ ALTER TABLE `zt_dept`
   MODIFY COLUMN `parent` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `path` varchar(255) NOT NULL DEFAULT '',
   MODIFY COLUMN `order` int unsigned NOT NULL DEFAULT 0,
-  MODIFY COLUMN `position` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `function` varchar(255) NOT NULL DEFAULT '',
   MODIFY COLUMN `manager` varchar(30) NOT NULL DEFAULT '';
 ALTER TABLE `zt_design`
   MODIFY COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -973,20 +971,6 @@ ALTER TABLE `zt_metric`
   MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_metric`
   MODIFY COLUMN `builtin` tinyint unsigned NOT NULL DEFAULT 0,
-  MODIFY COLUMN `deleted` tinyint unsigned NOT NULL DEFAULT 0;
-ALTER TABLE `zt_metriclib`
-  MODIFY COLUMN `code` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `pipeline` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `repo` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `dept` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `year` char(4) NOT NULL DEFAULT '',
-  MODIFY COLUMN `month` char(2) NOT NULL DEFAULT '',
-  MODIFY COLUMN `week` char(2) NOT NULL DEFAULT '',
-  MODIFY COLUMN `day` char(2) NOT NULL DEFAULT '',
-  MODIFY COLUMN `value` varchar(100) NOT NULL DEFAULT '',
-  MODIFY COLUMN `calcType` varchar(10) NOT NULL DEFAULT 'cron',
-  MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
-ALTER TABLE `zt_metriclib`
   MODIFY COLUMN `deleted` tinyint unsigned NOT NULL DEFAULT 0;
 ALTER TABLE `zt_module`
   MODIFY COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT,

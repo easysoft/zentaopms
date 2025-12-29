@@ -45,3 +45,25 @@ BEGIN
         -- 返回res
         RETURN res;
 END FIND_IN_SET;
+/
+
+CREATE OR REPLACE FUNCTION "IF"(
+    p_condition  BOOLEAN,        -- 判断条件
+    p_true_val   ANYTYPE,        -- true分支返回值（任意类型）
+    p_false_val  ANYTYPE         -- false分支返回值（任意类型）
+) RETURNS ANYTYPE
+AS
+BEGIN
+    -- 仅校验条件非空，不校验类型
+    IF p_condition IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, '判断条件不能为NULL');
+    END IF;
+
+    -- 核心逻辑：直接返回不同类型值
+    IF p_condition THEN
+        RETURN p_true_val;       -- 如：字符串
+    ELSE
+        RETURN p_false_val;      -- 如：数值
+    END IF;
+END;
+/
