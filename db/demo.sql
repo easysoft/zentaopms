@@ -674,16 +674,16 @@ REPLACE INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastR
 (4, 1, 4, 1, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal');
 REPLACE INTO `zt_testtask` (`id`, `project`, `product`, `name`, `execution`, `build`, `type`, `owner`, `pri`, `begin`, `end`, `realBegan`, `realFinishedDate`, `mailto`, `desc`, `report`, `status`, `testreport`, `auto`, `subStatus`, `createdBy`, `createdDate`, `deleted`, `members`) VALUES
 (1, 2, 1, '企业网站第一期测试任务', 3, '1', 'integrate', 'admin', 1, '2024-04-02', '2024-04-05', NULL, NULL, '', '', NULL, 'wait', 0, 'no', '', 'admin', '2024-04-02 16:26:35', '0', '');
-REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
-(0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 1338866083, 0, null, '', 0, 0, '0'),
-(0, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 4, '10.0.2.2', 1619580798, 0, null, '', 0, 0, '0'),
-(0, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '10.0.2.2', 1619586993, 0, null, '', 0, 0, '1'),
-(0, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 1619587173, 0, null, '', 0, 0, '1'),
-(0, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 1619587220, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 1338865739, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '192.168.0.8', 1338865450, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 1, '192.168.0.8', 1338865125, 0, null, '', 0, 0, '1'),
-(0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 6, '192.168.0.8', 1338865842, 0, null, '', 0, 0, '1');
+REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
+(0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 0, null, '', 0, 0, '0'),
+(0, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 4, '10.0.2.2', 0, null, '', 0, 0, '0'),
+(0, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 1, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 6, '192.168.0.8', 0, null, '', 0, 0, '1');
 REPLACE INTO `zt_usergroup` (`account`, `group`, `project`) VALUES
 ('productManager', 5, ''),
 ('projectManager', 4, ''),
