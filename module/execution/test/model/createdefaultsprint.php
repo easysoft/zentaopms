@@ -35,6 +35,11 @@ $project->parent->range('0{5}');
 $project->gen(5);
 
 zenData('team')->gen(0);
+zenData('projectproduct')->gen(0);
+zenData('projectstory')->gen(0);
+zenData('projectcase')->gen(0);
+zenData('case')->gen(0);
+zenData('story')->gen(0);
 
 // 3. 用户登录
 su('admin');
