@@ -319,7 +319,7 @@ $lang->repo->applicableBranchTypes = 'Applicable Branch Types';
 $lang->repo->allBranchTypes        = 'All Branch Types';
 
 $lang->repo->branchRuleMode = array();
-$lang->repo->branchRuleMode['inheritance'] = 'Inheritance';
+$lang->repo->branchRuleMode['inheritance']  = 'Inheritance';
 $lang->repo->branchRuleMode['redefinition'] = 'Redefinition';
 
 $lang->repo->branchTypeRule = new stdClass();
@@ -335,7 +335,7 @@ $lang->repo->branchTypeRule->userOptionList['hasPriv'] = 'Users with permission'
 $lang->repo->branchTypeRule->userOptionList['specify'] = 'Specified users only';
 
 $lang->repo->branchTypeRule->branchTypeOptionList = array();
-$lang->repo->branchTypeRule->branchTypeOptionList['all'] = 'All branches';
+$lang->repo->branchTypeRule->branchTypeOptionList['all']     = 'All branches';
 $lang->repo->branchTypeRule->branchTypeOptionList['specify'] = 'Specified branch types';
 
 $lang->repo->branchRule = new stdClass();
@@ -352,5 +352,5 @@ $lang->repo->branchRule->userOptionList['hasPriv'] = 'Users with permission';
 $lang->repo->branchRule->userOptionList['specify'] = 'Specified users only';
 
 $lang->repo->branchRule->branchTypeOptionList = array();
-$lang->repo->branchRule->branchTypeOptionList['all'] = 'All branches';
+$lang->repo->branchRule->branchTypeOptionList['all']     = 'All branches';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = 'Specified branch types';

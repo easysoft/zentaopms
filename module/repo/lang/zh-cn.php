@@ -319,7 +319,7 @@ $lang->repo->applicableBranchTypes = '适用分支类型';
 $lang->repo->allBranchTypes        = '全部分支类型';
 
 $lang->repo->branchRuleMode = array();
-$lang->repo->branchRuleMode['inheritance'] = '继承';
+$lang->repo->branchRuleMode['inheritance']  = '继承';
 $lang->repo->branchRuleMode['redefinition'] = '重定义';
 
 $lang->repo->branchTypeRule = new stdClass();
