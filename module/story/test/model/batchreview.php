@@ -35,7 +35,7 @@ $story->duplicateStory->range('0,4,0{100}');
 $story->linkStories->range('0,6,0{100}');
 $story->linkRequirements->range('3,0{100}');
 $story->toBug->range('0{9},1,0{100}');
-$story->parent->range('0{17},`-1`,0,18,0{100}');
+$story->parent->range('0{19},18,0{100}');
 $story->twins->range('``{27},30,``,28');
 $story->status->range('reviewing');
 $story->version->range('1');
