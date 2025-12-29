@@ -11,6 +11,7 @@ cid=15289
 - 步骤2:验证项目对象存在属性hasProject @1
 - 步骤3:验证故事点统计默认值属性storyPoints @0
 - 步骤4:验证任务数统计默认值属性tasks @0
+- 步骤5:切换到不同项目ID属性projectID @12
 
 */
 
@@ -88,4 +89,5 @@ r($blockTest->printScrumOverviewBlockTest()) && p('projectID') && e('11'); // �
 r($blockTest->printScrumOverviewBlockTest()) && p('hasProject') && e('1'); // 步骤2:验证项目对象存在
 r($blockTest->printScrumOverviewBlockTest()) && p('storyPoints') && e('0'); // 步骤3:验证故事点统计默认值
 r($blockTest->printScrumOverviewBlockTest()) && p('tasks') && e('0'); // 步骤4:验证任务数统计默认值
-$app->session->set('project', 12); r($blockTest->printScrumOverviewBlockTest()) && p('projectID') && e('12'); // 步骤5:切换到不同项目ID
+$app->session->set('project', 12);
+r($blockTest->printScrumOverviewBlockTest()) && p('projectID') && e('12'); // 步骤5:切换到不同项目ID
