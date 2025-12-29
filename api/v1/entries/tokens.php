@@ -31,7 +31,7 @@ class tokensEntry extends baseEntry
         }
         else
         {
-            $user = $this->loadModel('user')->identifyWithToken($account, $authKey);
+            $user = $this->loadModel('im')->userIdentifyWithToken($account, $authKey);
             if(is_object($user))
             {
                 $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
@@ -47,22 +47,20 @@ class tokensEntry extends baseEntry
             $this->user->login($user, $addAction);
             return $this->send(201, array('token' => session_id()));
         }
-        else
-        {
-            $fails = $this->user->failPlus($account);
-            $remainTimes = $this->config->user->failTimes - $fails;
-            if($remainTimes <= 0)
-            {
-                return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
-            }
-            else if($remainTimes <= 3)
-            {
-                return $this->sendError(400, sprintf($this->lang->user->lockWarning, $remainTimes));
-            }
 
-            return $this->sendError(400, $this->lang->user->loginFailed);
+        $fails = $this->user->failPlus($account);
+        $remainTimes = $this->config->user->failTimes - $fails;
+
+        if($remainTimes <= 0)
+        {
+            return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
         }
 
-        $this->sendError(400, $this->app->lang->user->loginFailed);
+        if($remainTimes <= 3)
+        {
+            return $this->sendError(400, sprintf($this->lang->user->lockWarning, $remainTimes));
+        }
+
+        return $this->sendError(400, $this->lang->user->loginFailed);
     }
 }
