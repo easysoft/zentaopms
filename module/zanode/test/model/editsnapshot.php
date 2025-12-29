@@ -12,7 +12,7 @@ cid=19826
  - 属性localName @updatedSnap
  - 属性desc @updated description
 - 测试步骤2
- - 属性localName @
+ - 属性localName @~~
  - 属性desc @empty name test
 - 测试步骤3
  - 属性localName @longDescSnap
@@ -43,7 +43,7 @@ r($zanode->editSnapshotTest(1, $data1)) && p('localName,desc') && e('updatedSnap
 $data2 = new stdClass();
 $data2->name = '';
 $data2->desc = 'empty name test';
-r($zanode->editSnapshotTest(2, $data2)) && p('localName,desc') && e(',empty name test'); //测试步骤2
+r($zanode->editSnapshotTest(2, $data2)) && p('localName,desc') && e('~~,empty name test'); //测试步骤2
 
 // 测试步骤3：编辑快照时使用长描述文本
 $data3 = new stdClass();
