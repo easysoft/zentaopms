@@ -130,26 +130,29 @@ formPanel
         set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->approvals) ? 0 : $definition->reviewFlow->approvals->minReviewers)
     ),
     formRowGroup(set::title($lang->reporeviewflow->solveIssues)),
-    formRow
+    formGroup
     (
         set::width('2/3'),
-        formGroup
+        set::label($lang->reporeviewflow->addressOption),
+        inputGroup
         (
-            set::width('4/5'),
-            set::name('addressOption'),
-            set::label($lang->reporeviewflow->addressOption),
-            set::control(array('type' => 'radioList', 'inline' => true)),
-            set::items($lang->reporeviewflow->addressOptionList),
-            set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) ? 'noNeedToSolve' : $definition->reviewFlow->issues->addressOption)
-        ),
-        formGroup
-        (
-            set::width('1/5'),
-            setID('issueType'),
-            set::name('issueType'),
-            set::items($lang->bug->typeList),
-            set::multiple(true),
-            set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) || empty($definition->reviewFlow->issues->mandatoryType) ? 'codeerror' : $definition->reviewFlow->issues->mandatoryType)
+            radioList
+            (
+                setClass('mr-2'),
+                set::name('addressOption'),
+                set::items($lang->reporeviewflow->addressOptionList),
+                set::inline(true),
+                set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) ? 'noNeedToSolve' : $definition->reviewFlow->issues->addressOption)
+            ),
+            picker
+            (
+                setID('issueType'),
+                set::width(common::checkNotCN() ? '220px' : '150px'),
+                set::name('issueType'),
+                set::items($lang->bug->typeList),
+                set::multiple(true),
+                set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->issues) || empty($definition->reviewFlow->issues->mandatoryType) ? 'codeerror' : $definition->reviewFlow->issues->mandatoryType)
+            )
         )
     ),
     formGroup
