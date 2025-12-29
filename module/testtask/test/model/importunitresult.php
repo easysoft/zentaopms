@@ -18,9 +18,9 @@ cid=19202
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 
-zendata('product')->loadYaml('product_importunitresult', false, 2)->gen(10);
-zendata('execution')->loadYaml('execution_importunitresult', false, 2)->gen(10);
-zendata('build')->loadYaml('build_importunitresult', false, 2)->gen(5);
+zendata('product')->gen(10);
+zendata('project')->gen(10);
+zendata('build')->gen(5);
 
 zendata('testtask')->gen(0);
 zendata('testcase')->gen(0);
@@ -44,8 +44,8 @@ $emptyXML = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
 
 $now = date('Y-m-d H:i:s');
 
-r($testtaskTest->parseXMLResultTest($validXML, 1, 'junit')) && p('cases') && e('2');
-r($testtaskTest->parseXMLResultTest($emptyXML, 1, 'junit')) && p('cases') && e('0');
+r(count($testtaskTest->parseXMLResultTest($validXML, 1, 'junit')['cases'][0])) && p() && e('2');
+r(count($testtaskTest->parseXMLResultTest($emptyXML, 1, 'junit')['cases'])) && p() && e('0');
 r($testtaskTest->initSuiteTest(1, 'TestSuite', $now)) && p('name') && e('TestSuite');
 r($testtaskTest->initCaseTest(1, 'TestCase', $now, 'unit', 'junit')) && p('title') && e('TestCase');
 r($testtaskTest->importDataOfUnitResultTest(1, 1, array(), array(), array(), array(), array())) && p() && e('1');
