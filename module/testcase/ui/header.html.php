@@ -158,6 +158,7 @@ if($isFromDoc || $isFromAI)
 }
 
 $linkParams = $rawMethod == 'groupcase' ? "productID=$productID&branch=$branch&groupBy=$groupBy&objectID=0&caseType=$caseType&browseType={key}" : "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
+if($app->tab == 'project') $linkParams = "projectID={$projectID}&$linkParams";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
