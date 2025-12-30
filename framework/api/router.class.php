@@ -413,7 +413,7 @@ class api extends router
             case TABLE_PRODUCT:
                 return (!$object->id || strpos(",{$this->user->view->products},", ",$object->id,") !== false);
             case TABLE_PROJECT:
-                return (!$object->id || strpos(",{$this->user->view->projects},", ",$object->id,") !== false);
+                return (!$object->id || strpos(",{$this->user->view->projects},{$this->user->view->programs},", ",$object->id,") !== false);
             case TABLE_EXECUTION:
                 return (!$object->project || strpos(",{$this->user->view->projects},", ",$object->project,") !== false);
             case TABLE_BUILD:
