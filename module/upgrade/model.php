@@ -10617,7 +10617,7 @@ class upgradeModel extends model
     public function initTaskRelation(): bool
     {
         $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
-        if(empty($childTasks)) return;
+        if(empty($childTasks)) return true;
 
         $this->dao->begin();
 
