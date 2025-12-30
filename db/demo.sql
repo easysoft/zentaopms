@@ -215,15 +215,15 @@ REPLACE INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `
 (5, 4, 2, 1, 'step', '点击新闻中心', '进入新闻中心'),
 (6, 0, 3, 1, 'step', '进入新闻中心', '正常显示'),
 (7, 0, 4, 1, 'step', '进入成果展示', '正常显示');
-REPLACE INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES
-(1, '经理', 0, ',1,', 1, 0, '', '', ''),
-(2, '开发', 0, ',2,', 1, 0, '', '', ''),
-(3, '测试', 0, ',3,', 1, 0, '', '', ''),
-(4, '市场', 0, ',4,', 1, 0, '', '', ''),
-(5, '产品', 1, ',1,5,', 2, 0, '', '', ''),
-(6, '项目', 1, ',1,6,', 2, 0, '', '', ''),
-(7, '编程', 2, ',2,7,', 2, 0, '', '', ''),
-(8, '美工', 2, ',2,8,', 2, 0, '', '', '');
+REPLACE INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `function`, `manager`) VALUES
+(1, '经理', 0, ',1,', 1, 0, '', ''),
+(2, '开发', 0, ',2,', 1, 0, '', ''),
+(3, '测试', 0, ',3,', 1, 0, '', ''),
+(4, '市场', 0, ',4,', 1, 0, '', ''),
+(5, '产品', 1, ',1,5,', 2, 0, '', ''),
+(6, '项目', 1, ',1,6,', 2, 0, '', ''),
+(7, '编程', 2, ',2,7,', 2, 0, '', ''),
+(8, '美工', 2, ',2,8,', 2, 0, '', '');
 REPLACE INTO `zt_doclib` (`id`, `type`, `vision`, `product`, `project`, `execution`, `name`, `baseUrl`, `acl`, `groups`, `users`, `main`, `collector`, `desc`, `order`, `addedBy`, `addedDate`, `deleted`) VALUES
 (2, 'product', 'rnd', 1, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:13', '0'),
 (3, 'product', 'rnd', 2, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:55', '0'),
