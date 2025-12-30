@@ -386,6 +386,46 @@ class api extends router
         }
     }
 
+
+    /**
+     * 检查传入的对象是否有权限访问
+     *
+     * Check object priv.
+     *
+     * @param  object $object
+     * @param  string $table
+     * @access public
+     * @return bool
+     */
+    public function checkObjectPriv(object $object, string $table): bool
+    {
+        if($this->user->admin) true;
+
+        switch($table)
+        {
+            case TABLE_STORY:
+            case TABLE_BUG:
+            case TABLE_CASE:
+            case TABLE_TICKET:
+            case TABLE_FEEDBACK:
+            case TABLE_PRODUCTPLAN:
+                return (!$object->product || strpos(",{$this->user->view->products},", ",$object->product,") !== false);
+            case TABLE_PRODUCT:
+                return (!$object->id || strpos(",{$this->user->view->products},", ",$object->id,") !== false);
+            case TABLE_PROJECT:
+                return (!$object->id || strpos(",{$this->user->view->projects},", ",$object->id,") !== false);
+            case TABLE_EXECUTION:
+                return (!$object->project || strpos(",{$this->user->view->projects},", ",$object->project,") !== false);
+            case TABLE_BUILD:
+            case TABLE_TASK:
+                return (!$object->execution || strpos(",{$this->user->view->sprints},", ",$object->execution,") !== false);
+            default:
+                return true;
+        }
+
+        return false;
+    }
+
     /**
      * 检查传入的对象是否存在
      *
@@ -438,8 +478,11 @@ class api extends router
         {
             if(isset($objectMap[$key]) && $value)
             {
-                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch('id');
-                if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+                $table  = $objectMap[$key];
+                $object = $this->dao->select('*')->from($table)->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch();
+                if(!$object) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+
+                if(!$this->checkObjectPriv($object, $table)) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' is not allowed.');
             }
         }
     }
