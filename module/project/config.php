@@ -111,7 +111,7 @@ $config->project->noSprintPriv['testtask']   = array('create', 'cases', 'groupCa
 $config->project->noSprintPriv['doc']        = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'view', 'delete', 'deleteFile', 'collect', 'projectSpace', 'showFiles', 'addCatalog', 'editCatalog', 'deleteCatalog', 'displaySetting', 'diff', 'importToPracticeLib', 'importToComponentLib', 'moveLib', 'moveDoc', 'batchMoveDoc', 'sortDoclib', 'sortCatalog', 'sortDoc', 'addChapter', 'editChapter', 'sortChapter', 'deleteChapter', 'project2export', 'exportFiles');
 $config->project->noSprintPriv['repo']       = array('create', 'showSyncCommit', 'browse', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'editBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
 $config->project->noSprintPriv['testreport'] = array('create', 'view', 'delete', 'edit', 'export');
-$config->project->noSprintPriv['auditplan']  = array('browse', 'create', 'edit', 'view', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo', 'delete');
+$config->project->noSprintPriv['auditplan']  = array('browse', 'create', 'edit', 'view', 'batchCreate', 'batchEdit', 'batchCheck', 'check', 'nc', 'result', 'assignTo', 'delete');
 $config->project->noSprintPriv['nc']         = array('browse', 'create', 'edit', 'view', 'close', 'assignTo', 'resolve', 'activate', 'export', 'delete');
 
 $config->project->includedPriv = $config->project->noSprintPriv;
