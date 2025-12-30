@@ -226,37 +226,38 @@ class sso extends control
      */
     public function feishuAuthen()
     {
-        $httpType    = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-        $redirectURI = $httpType . $_SERVER['HTTP_HOST'] . $this->createLink('sso', 'feishuLogin');
-        $redirectURI = urlencode($redirectURI);
+        $params = $_SERVER["QUERY_STRING"];
+        parse_str($params, $params);
+        $webhookID = isset($params['id']) ? (int)$params['id'] : 0;
 
-        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser');
+        $httpType     = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $redirectURI  = $httpType . $_SERVER['HTTP_HOST'] . $this->createLink('sso', 'feishuLogin');
+        if($webhookID) $redirectURI .= (strpos($redirectURI, '?') === false ? '?' : '&') . "id={$webhookID}";
+
+        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser', $webhookID);
         if(empty($feishuConfig)) $this->showError($this->lang->sso->feishuConfigEmpty);
 
         $appConfig = json_decode($feishuConfig->secret);
         $appID     = $appConfig->appId;
 
-        $url = sprintf($this->config->sso->feishuAuthAPI, $redirectURI, $appID);
+        $url = sprintf($this->config->sso->feishuAuthAPI, urlencode($redirectURI), $appID);
         $this->locate($url);
     }
 
     /**
      * Get the identity of the logged-in user.
      *
-     * @param  string  $code
      * @access public
      * @return void
      */
-    public function feishuLogin(string $code = '')
+    public function feishuLogin()
     {
-        if($this->config->requestType == 'PATH_INFO')
-        {
-            $params = $_SERVER["QUERY_STRING"];
-            parse_str($params, $params);
-            if(isset($params['code'])) $code = $params['code'];
-        }
+        $params = $_SERVER["QUERY_STRING"];
+        parse_str($params, $params);
+        $webhookID = isset($params['id']) ? (int)$params['id'] : 0;
+        $code      = isset($params['code']) ? $params['code'] : '';
 
-        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser');
+        $feishuConfig = $this->loadModel('webhook')->getByType('feishuuser', $webhookID);
         if(empty($feishuConfig)) $this->showError($this->lang->sso->feishuConfigEmpty);
         $appConfig = json_decode($feishuConfig->secret);
 
