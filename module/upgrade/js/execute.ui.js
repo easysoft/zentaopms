@@ -1,132 +1,76 @@
-window.submitConfirm = function(event)
+$(function()
 {
-    $(event.target).addClass('disabled');
-    zui.Modal.open({id: 'progress'});
+    let executedCount = 0; // 已执行的变更数量。
+    let interval;          // 定时器句柄。
 
-    updateProgressInterval();
-    updateProgress();
-}
+    /* 自动滚动版本列表。*/
+    $('#versionsBox .version-item.executed').last().scrollIntoView();
 
-window.copyCommand = function()
-{
-    const command = $('#command').text();
-
-    // 首先尝试使用现代的 Clipboard API (仅在 HTTPS 下可用)
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(command).then(function() {
-            zui.Messager.show({type: 'success', message: copySuccess, timeout: 1000});
-        }).catch(function(err) {
-            console.warn('Clipboard API 失败:', err);
-            fallbackCopyTextToClipboard(command);
-        });
-    } else {
-        // HTTP 协议或不支持 Clipboard API，直接使用回退方法
-        fallbackCopyTextToClipboard(command);
-    }
-
-    function fallbackCopyTextToClipboard(text) {
-        const $textArea = $('<textarea>', {
-            css: {
-                position: 'fixed',
-                top: '0',
-                left: '0',
-                width: '2em',
-                height: '2em',
-                padding: '0',
-                border: 'none',
-                outline: 'none',
-                boxShadow: 'none',
-                background: 'transparent'
-            }
-        });
-
-        $('body').append($textArea);
-
-        $textArea.val(text);
-        $textArea[0].focus();
-        $textArea[0].select();
-
-        try {
-            const successful = document.execCommand('copy');
-            if(successful) {
-                zui.Messager.show({type: 'success', message: copySuccess, timeout: 1000});
-            } else {
-                zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
-            }
-        } catch (err) {
-            zui.Messager.show({type: 'danger', message: copyFail, timeout: 1000});
-        }
-        $textArea.remove();
-    }
-}
-
-$(document).ready(function()
-{
-    if(typeof result != 'undefined' && result == 'duckdbFail')
+    /**
+     * 定时获取已执行的升级步骤数量。
+     * Periodically fetch the number of executed upgrade steps.
+     */
+    interval = setInterval(function()
     {
-        $('#duckdbInfo').append($('#installDuckdb'));
-        initStatus();
-        ajaxInstallDuckdb();
-        setTimeout(() => {ajaxCheckDuckdb()}, 1000);
-    }
+        $.getJSON($.createLink('upgrade', 'ajaxGetExecutedChanges'), function(response)
+        {
+            const executedSqls    = response.executedSqls;
+            const executedMethods = response.executedMethods;
+
+            /**
+             * 后端的一条 sql 语句可能生成多行变更记录，所以这里需要逐条对比。比如：ALTER TABLE table1 ADD COLUMN field1 ..., ADD COLUMN field2 ...
+             * A single SQL statement from the backend may generate multiple change records, so we need to compare them one by one here. For example: ALTER TABLE table1 ADD COLUMN field1 ..., ADD COLUMN field2 ...
+             */
+            $('#changesBox .change-item').not('.executed').each(function()
+            {
+                const change = $(this).data('change');
+                if(change.type == 'sql' && executedSqls.includes(change.sql))
+                {
+                    $(this).addClass('executed');
+                    executedCount++;
+                }
+                if(change.type == 'method' && executedMethods.includes(change.method))
+                {
+                    $(this).addClass('executed');
+                    executedCount++;
+                }
+            });
+
+            $('#executedCount').text(executedCount);
+
+            /* 自动滚动变更列表。*/
+            $('#changesBox .change-item.executed').last().scrollIntoView();
+
+            if(executedCount == upgradeChanges.length)
+            {
+                clearInterval(interval);
+            }
+        });
+    }, 1000);
+
+    /**
+     * 发起请求执行升级操作。
+     * Sends a request to initiate the upgrade operation.
+     */
+    $.getJSON($.createLink('upgrade', 'ajaxExecute', 'fromVersion=' + fromVersion + '&toVersion=' + toVersion), function(response)
+    {
+        clearInterval(interval);
+
+        if(response.result == 'success')
+        {
+            loadPage(response.load);
+        }
+        else if(response.result == 'fail')
+        {
+            const url = $.createLink('upgrade', 'execute', 'fromVersion=' + fromVersion);
+            const data = new FormData();
+            data.append('errors', response.message);
+            postAndLoadPage(url, data);
+        }
+    });
 });
 
-/**
- * 初始化状态。
- * Init status.
- *
- * @access public
- * @return void
- */
-function initStatus()
+window.showSQL = function(key)
 {
-    $('#refreshBtn').addClass('hidden');
-    $('#installDuckdb p').addClass('hidden');
-    $('#installDuckdb p.duckdb-' + duckdb).removeClass('hidden');
-    $('#installDuckdb p.ext_dm-' + ext_dm).removeClass('hidden');
-    $('#installDuckdb p.ext_mysql-' + ext_mysql).removeClass('hidden');
-}
-
-/**
- * 安装duckdb。
- * Ajax install duckdb.
- *
- * @access public
- * @return void
- */
-function ajaxInstallDuckdb()
-{
-    let url = $.createLink('upgrade', 'ajaxInstallDuckdb');
-    $.get(url);
-}
-
-/**
- * 检查duckdb。
- * Ajax check duckdb.
- *
- * @access public
- * @return void
- */
-function ajaxCheckDuckdb()
-{
-    let url = $.createLink('upgrade', 'ajaxCheckDuckdb');
-    $.get(url, function(resp)
-    {
-        resp = JSON.parse(resp);
-        const {loading, ok, fail, duckdb, ext_dm, ext_mysql} = resp;
-        if(loading) setTimeout(() => {ajaxCheckDuckdb()}, 500);
-
-        if(!loading)
-        {
-            $('#refreshBtn').removeClass('hidden');
-            $('.after-duckdb').addClass('hidden');
-        }
-
-        $('#installDuckdb p').addClass('hidden');
-        $('#installDuckdb p.duckdb-' + duckdb).removeClass('hidden');
-        $('#installDuckdb p.ext_dm-' + ext_dm).removeClass('hidden');
-        $('#installDuckdb p.ext_mysql-' + ext_mysql).removeClass('hidden');
-
-        if(fail) $('#installDuckdb .help').removeClass('hidden');
-    });
+    zui.Modal.alert({size: 'lg', title: 'SQL', content: {html: upgradeChanges[key].sql, className: 'leading-6'}});
 }

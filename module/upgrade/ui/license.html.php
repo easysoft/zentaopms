@@ -12,51 +12,40 @@ namespace zin;
 
 set::zui(true);
 
-jsVar('confirmLink', inlink('license', 'agree=true'));
-
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        setClass('px-1 mt-2 mx-auto'),
-        width('1200px'),
-        panel
+        setClass('container rounded-md bg-white h-full gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        div
         (
-            setClass('py-8 px-2'),
-            set::title($lang->upgrade->license),
-            set::titleClass('text-xl'),
-            set::actions(array()),
-            h::textarea
+            setClass('text-xl font-medium'),
+            $lang->upgrade->welcome
+        ),
+        div
+        (
+            setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-auto px-8 py-6'),
+            setStyle(['max-height' => 'calc(100% - 5rem)']),
+            $license
+        ),
+        checkbox
+        (
+            on::change('agreeChange'),
+            set::primary(false),
+            set::checked(true),
+            html($lang->agreement)
+        ),
+        div
+        (
+            setClass('center'),
+            a
             (
-                setClass('form-control'),
-                setStyle(array('background-color' => 'unset')),
-                set::rows('10'),
-                set::readonly('readonly'),
-                $license
-            ),
-            div
-            (
-                setClass('mt-2 mb-2'),
-                checkbox
-                (
-                    on::change('agreeChange'),
-                    set::primary(false),
-                    set::checked(true),
-                    html($lang->agreement)
-                )
-            ),
-            div
-            (
-                setClass('text-center mt-6'),
-                btn
-                (
-                    setClass('px-8 btn-install'),
-                    set::url(inlink('license', 'agree=true')),
-                    set::type('primary'),
-                    $lang->confirm
-                )
+                setID('confirm'),
+                setClass('btn primary w-24'),
+                set::href(inlink('license', 'agree=1')),
+                $lang->confirm
             )
         )
     )

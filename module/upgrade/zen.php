@@ -3,23 +3,463 @@ declare(strict_types=1);
 class upgradeZen extends upgrade
 {
     /**
+     * 获取目标升级版本。
+     * Get to upgrade version.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getToVersion(): string
+    {
+        $upgradeVersions = $this->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
+        $upgradeVersions = array_keys($upgradeVersions);
+        return reset($upgradeVersions);
+    }
+
+    /**
+     * 获取可升级的版本列表。
+     * Get upgrade versions.
+     *
+     * @param  string $fromVersion
+     * @access protected
+     * @return string[]
+     */
+    protected function getUpgradeVersions(string $fromVersion): array
+    {
+        $upgradeVersions = [];
+        $currentEdition  = $this->config->edition;
+        $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
+
+        /* 如果当前版本和来源版本不一致，则需要将来源版本转换为当前版本对应的版本号。*/
+        if($currentEdition != $fromEdition)
+        {
+            $openVersion = $this->upgrade->getOpenVersion($fromVersion);
+            $fromVersion = array_search($openVersion, $this->config->upgrade->{$currentEdition . 'Version'});
+            if(empty($fromVersion)) return $upgradeVersions;
+        }
+
+        /* 如果当前版本和来源版本不一致，则需要包含来源版本对应的目标版本。比如旗舰版7.5升级到IPD版4.6，则需要包含IPD4.5。*/
+        $operator = $currentEdition != $fromEdition ? '>' : '>=';
+
+        foreach($this->lang->upgrade->fromVersions as $version => $label)
+        {
+            if(version_compare($fromVersion, $version, $operator)) continue;
+            if($currentEdition == 'open' && !is_numeric($version[0])) continue;
+            if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
+
+            $upgradeVersions[$version] = $label;
+        }
+
+        $currentVersion = str_replace('.', '_', $this->config->version);
+        $currentLabel   = ucfirst($this->config->version);
+        $upgradeVersions[$currentVersion] = $currentLabel;
+
+        return $upgradeVersions;
+    }
+
+    /**
+     * 获取升级变更内容列表。
+     * Get upgrade changes.
+     *
+     * @param  string $fromVersion
+     * @param  string $toVersion
+     * @access protected
+     * @return array[]
+     */
+    protected function getUpgradeChanges(string $fromVersion, string $toVersion): array
+    {
+        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+
+        $changes = [];
+        $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
+        $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
+        $changes = array_merge($changes, $this->getChangesByConfig($openVersion));
+
+        $upgraradeVersions = $this->upgrade->getVersionsToUpdate($openVersion, $this->config->edition);
+        if(isset($upgraradeVersions[$openVersion]))
+        {
+            /* Execute charge edition. */
+            foreach($upgraradeVersions[$openVersion] as $edition => $chargedVersions)
+            {
+                foreach($chargedVersions as $chargedVersion)
+                {
+                    if($edition == 'max') $chargedVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
+                    $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $chargedVersion));
+                    $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
+                    $changes = array_merge($changes, $this->getChangesByConfig($chargedVersion));
+                }
+            }
+        }
+
+        /* 如果此次升级到最终版本，则执行额外的数据处理流程。*/
+        if(version_compare($toVersion, $this->config->version, '='))
+        {
+            $edition = $this->upgrade->getEditionByVersion($fromVersion);
+            $methods = $this->upgrade->getOtherMethods($edition);
+            foreach(array_keys($methods) as $method)
+            {
+                $changes[] = $this->getChangesByMethod($method);
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
+     * 获取配置文件中的变更内容列表。
+     * Get changes by config.
+     *
+     * @param  string $version
+     * @access protected
+     * @return array[]
+     */
+    protected function getChangesByConfig(string $version): array
+    {
+        $changes     = [];
+        $functions   = $this->config->upgrade->execFlow[$version]['functions']   ?? '';
+        $xxsqls      = $this->config->upgrade->execFlow[$version]['xxsqls']      ?? '';
+        $xxfunctions = $this->config->upgrade->execFlow[$version]['xxfunctions'] ?? '';
+
+        foreach(array_filter(explode(',', $functions)) as $function)
+        {
+            $changes[] = $this->getChangesByMethod($function);
+        }
+
+        if($version == 'pro1_1_1')
+        {
+            $sqlFile    = $this->ugprade->getUpgradeFile('pro1.1');
+            $sqlChanges = $this->getChangesBySql($sqlFile);
+            $changes    = array_merge($changes, $sqlChanges);
+        }
+        if($version == 'pro8_3')
+        {
+            $sqlFile    = $this->ugprade->getUpgradeFile('pro8.2');
+            $sqlChanges = $this->getChangesBySql($sqlFile);
+            $changes    = array_merge($changes, $sqlChanges);
+        }
+        if(!empty($xxsqls))
+        {
+            foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)
+            {
+                $sqlChanges = $this->getChangesBySql($sqlFile);
+                $changes    = array_merge($changes, $sqlChanges);
+            }
+        }
+        if(!empty($xxfunctions))
+        {
+            foreach(array_filter(explode(',', $xxfunctions)) as $function)
+            {
+                $changes[] = $this->getChangesByMethod($function);
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
+     * 获取 SQL 文件中的变更内容列表。
+     * Get changes by sql file.
+     *
+     * @param  string $sqlFile
+     * @access protected
+     * @return array[]
+     */
+    protected function getChangesBySql(string $sqlFile): array
+    {
+        if(!is_file($sqlFile)) return [];
+
+        $changes = [];
+        $sqls    = $this->upgrade->parseToSqls($sqlFile);
+        foreach($sqls as $sql)
+        {
+            $items = $this->parseSqlToSemantic($sql);
+            foreach($items as $item)
+            {
+                $search  = ['%TABLE%', '%FIELD%', '%INDEX%', '%VIEW%', '%OLD%', '%NEW%'];
+                $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
+                $subject = $this->lang->upgrade->changeActions[$item['action']] ?? $this->lang->upgrade->changeActions['other'];
+                $content = str_replace($search, $replace, $subject);
+                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql];
+            }
+        }
+        return $changes;
+    }
+
+    /**
+     * 获取方法变更内容。
+     * Get changes by method.
+     *
+     * @param  string $rawMethod
+     * @access protected
+     * @return array
+     */
+    protected function getChangesByMethod(string $rawMethod): array
+    {
+        $module = 'upgrade';
+        $method = $rawMethod;
+        if(strpos($rawMethod, '-') !== false)
+        {
+            list($module, $method) = explode('-', $rawMethod);
+        }
+        return ['type' => 'method', 'mode' => 'update', 'content' => str_replace(['%MODULE%', '%METHOD%'], [$module, $method], $this->lang->upgrade->changeActions['method']), 'method' => $rawMethod];
+    }
+
+    /**
+     * 将 SQL 语句解析为语义化描述数组
+     *
+     * @param  string $sql 单条 SQL 语句
+     * @access protected
+     * @return array[]
+     */
+    protected function parseSqlToSemantic(string $sql): array
+    {
+        $sql = trim($sql);
+        if($sql === '') return [];
+
+        /* 移除末尾分号 */
+        $sql      = rtrim($sql, " \t\n\r;");
+        $sqlLower = strtolower($sql);
+
+        if(preg_match('/^create\s+(or\s+replace\s+)?view\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))               return [['mode' => 'create', 'action' => 'createView',  'view'  => $this->extractTableName($matches[2])]]; // CREATE VIEW / CREATE OR REPLACE VIEW
+        if(preg_match('/^drop\s+view\s+(if\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))                  return [['mode' => 'delete', 'action' => 'dropView',    'view'  => $this->extractTableName($matches[2])]]; // DROP VIEW
+        if(preg_match('/^create\s+(unique\s+)?index\s+`?([\w]+)`?\s+on\s+((?:`[^`]*`|\S)+)/i', $sql, $matches)) return [['mode' => 'create', 'action' => 'addIndex',    'table' => $this->extractTableName($matches[3]), 'index' => $this->extractTableName($matches[2])]]; // CREATE INDEX idx ON table_name
+        if(preg_match('/^drop\s+index\s+`?([\w]+)`?\s+on\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))               return [['mode' => 'delete', 'action' => 'dropIndex',   'table' => $this->extractTableName($matches[2]), 'index' => $this->extractTableName($matches[1])]]; // DROP INDEX idx ON table_name
+        if(preg_match('/^create\s+table\s+(if\s+not\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))         return [['mode' => 'create', 'action' => 'createTable', 'table' => $this->extractTableName($matches[2])]]; // CREATE TABLE
+        if(preg_match('/^drop\s+table\s+(if\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))                 return [['mode' => 'delete', 'action' => 'dropTable',   'table' => $this->extractTableName($matches[2])]]; // DROP TABLE
+        if(preg_match('/^rename\s+table\s+((?:`[^`]*`|\S)+)\s+to\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))       return [['mode' => 'update', 'action' => 'renameTable', 'old'   => $this->extractTableName($matches[1]), 'new' => $this->extractTableName($matches[2])]]; // RENAME TABLE
+        if(preg_match('/^(insert|replace)\s+into\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                       return [['mode' => 'create', 'action' => 'insertValue', 'table' => $this->extractTableName($matches[2])]]; // INSERT / REPLACE
+        if(preg_match('/^update\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                                        return [['mode' => 'update', 'action' => 'updateValue', 'table' => $this->extractTableName($matches[1])]]; // UPDATE
+        if(preg_match('/^delete\s+from\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                                 return [['mode' => 'delete', 'action' => 'deleteValue', 'table' => $this->extractTableName($matches[1])]]; // DELETE
+
+        /* ALTER TABLE */
+        $sql = str_replace("\n", ' ', $sql); // 将换行替换为空格，方便后续处理
+        if(preg_match('/^alter\s+table\s+((?:`[^`]*`|\S)+)\s+(.+)/i', $sql, $matches))
+        {
+            $tableName = $this->extractTableName($matches[1]);
+            $alterBody = ltrim($matches[2]);
+
+            /* 先检查是否是整表重命名：ALTER TABLE t RENAME TO new_t */
+            if(preg_match('/^\s*rename\s+to\s+((?:`[^`]*`|\S)+)\s*$/i', $alterBody, $m)) return [['mode' => 'update', 'action' => 'renameTable', 'old' => $tableName, 'new' => trim($m[1], '`')]];
+
+            $results = [];
+            $clauses = $this->splitAlterClauses($alterBody);
+            foreach($clauses as $clause)
+            {
+                $clause = trim($clause);
+                if ($clause === '') continue;
+
+                /* 提取关键词（忽略大小写） */
+                $upperClause = preg_replace('/\s+/', ' ', strtoupper($clause));
+                $words       = explode(' ', $upperClause);
+
+                if(empty($words)) continue;
+
+                $first = $words[0];
+
+                /* --- ADD [COLUMN/INDEX/KEY] --- */
+                if($first === 'ADD')
+                {
+                    /* 先尝试匹配 ADD INDEX / ADD KEY / ADD UNIQUE，再尝试匹配 ADD COLUMN 或 ADD field_name（即字段） */
+                    if(preg_match('/^add\s+(unique\s+)?(index|key)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                    {
+                        $results[] = ['mode' => 'create', 'action' => 'addIndex', 'table' => $tableName, 'index' => trim($m[3], '`')];
+                    }
+                    else
+                    {
+                        /* 跳过 "COLUMN" */
+                        $pos = 1;
+                        if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+
+                        /* 提取字段名（支持反引号，可能含空格） */
+                        if(isset($words[$pos]) && preg_match('/^add\s+(column\s+)?(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['mode' => 'create', 'action' => 'addField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                    }
+                    continue;
+                }
+
+                /* --- DROP [COLUMN/INDEX/KEY] --- */
+                if($first === 'DROP')
+                {
+                    if(isset($words[1]) && in_array($words[1], ['COLUMN', 'INDEX', 'KEY']))
+                    {
+                        /* 字段或索引 */
+                        if(preg_match('/^drop\s+(column|index|key)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                        {
+                            $type = strtolower($m[1]);
+
+                            if($type === 'column')
+                            {
+                                $results[] = ['mode' => 'delete', 'action' => 'dropField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                            }
+                            else
+                            {
+                                $results[] = ['mode' => 'delete', 'action' => 'dropIndex', 'table' => $tableName, 'index' => trim($m[2], '`')];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        /* 简写 DROP field_name */
+                        if(preg_match('/^drop\s+(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['mode' => 'delete', 'action' => 'dropField', 'table' => $tableName, 'field' => trim($m[1], '`')];
+                    }
+                    continue;
+                }
+
+                /* --- MODIFY [COLUMN] --- */
+                if($first === 'MODIFY')
+                {
+                    $pos = 1;
+                    if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+                    if(isset($words[$pos]) && preg_match('/^modify\s+(column\s+)?(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['mode' => 'update', 'action' => 'modifyField', 'table' => $tableName, 'field' => trim($m[2], '`')];
+                    continue;
+                }
+
+                /* --- CHANGE [COLUMN] --- */
+                if($first === 'CHANGE')
+                {
+                    /* CHANGE [COLUMN] old_name new_name ... */
+                    $pos = 1;
+                    if(isset($words[1]) && $words[1] === 'COLUMN') $pos = 2;
+
+                    /* 使用原始子句提取两个标识符 */
+                    if(isset($words[$pos + 1]) && preg_match('/^change\s+(column\s+)?(`[^`]*`|\w+)\s+(`[^`]*`|\w+)/i', $clause, $m))
+                    {
+                        $old = trim($m[2], '`');
+                        $new = trim($m[3], '`');
+                        if($old == $new)
+                        {
+                            $results[] = ['mode' => 'update', 'action' => 'modifyField', 'table' => $tableName, 'field' => $old];
+                        }
+                        else
+                        {
+                            $results[] = ['mode' => 'update', 'action' => 'renameField', 'table' => $tableName, 'old' => $old, 'new' => $new];
+                        }
+                    }
+                    continue;
+                }
+
+                /* --- RENAME COLUMN old_name TO new_name (MySQL 8.0+) --- */
+                if($first === 'RENAME' && isset($words[1]) && $words[1] === 'COLUMN' && preg_match('/^rename\s+column\s+(`[^`]*`|\w+)\s+to\s+(`[^`]*`|\w+)/i', $clause, $m)) $results[] = ['mode' => 'update', 'action' => 'renameField', 'table' => $tableName, 'old' => trim($m[1], '`'), 'new' => trim($m[2], '`')];
+            }
+            return $results;
+        }
+
+        return [];
+    }
+
+    /**
+     * 从可能带数据库前缀的标识符中提取表名（如从 `db`.`table` 或 db.table 中提取 table）
+     *
+     * @param  string $full 被反引号或不带反引号的标识符（如 "db.table" 或 "`my db`.`my-table`"）
+     * @access public
+     * @return string 表名（不含反引号）
+     */
+    protected function extractTableName(string $full): string
+    {
+        $full = trim($full); // 去除首尾空白
+
+        /* 按未被反引号包围的点分割 */
+        $parts      = [];
+        $current    = '';
+        $inBacktick = false;
+        for($i = 0; $i < strlen($full); $i++)
+        {
+            $c = $full[$i];
+            if($c === '`')
+            {
+                $inBacktick = !$inBacktick;
+                continue; // 反引号本身不存入
+            }
+            if($c === '.' && !$inBacktick)
+            {
+                $parts[] = $current;
+                $current = '';
+            }
+            else
+            {
+                $current .= $c;
+            }
+        }
+        $parts[] = $current;
+
+        $tableName = end($parts); // 最后一个 part 就是表名
+        return $tableName !== false ? $tableName : $full;
+    }
+
+    /**
+     * 安全拆分 ALTER TABLE 子句，跳过字符串和括号内的逗号
+     *
+     * @param  string $body
+     * @access protected
+     * @return string[]
+     */
+    protected function splitAlterClauses(string $body): array
+    {
+        $clauses    = [];
+        $current    = '';
+        $len        = strlen($body);
+        $inSingle   = false;
+        $inDouble   = false;
+        $parenLevel = 0;
+
+        for($i = 0; $i < $len; $i++)
+        {
+            $c = $body[$i];
+            $next = ($i + 1 < $len) ? $body[$i + 1] : '';
+
+            /* 处理转义（简化：跳过下一个字符） */
+            if($c === '\\' && ($inSingle || $inDouble))
+            {
+                $current .= $c . $next;
+                $i++;
+                continue;
+            }
+
+            if($c === "'" && !$inDouble)
+            {
+                $inSingle = !$inSingle;
+            }
+            elseif($c === '"' && !$inSingle)
+            {
+                $inDouble = !$inDouble;
+            }
+            elseif($c === '(' && !$inSingle && !$inDouble)
+            {
+                $parenLevel++;
+            }
+            elseif($c === ')' && !$inSingle && !$inDouble)
+            {
+                $parenLevel--;
+            }
+            elseif($c === ',' && !$inSingle && !$inDouble && $parenLevel === 0)
+            {
+                $clauses[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $c;
+        }
+
+        if($current !== '') $clauses[] = $current;
+
+        return $clauses;
+    }
+
+    /**
      * 升级 sql 成功执行后的操作。
      * Operations after successful execution.
      *
      * @param  string    $fromVersion
-     * @param  string    $rawFromVersion
      * @access protected
-     * @return void
+     * @return string
      */
-    protected function afterExecuteSql(string $fromVersion, string $rawFromVersion): void
+    protected function getRedirectUrlAfterExecute(string $fromVersion): string
     {
-        $this->loadModel('setting')->updateVersion($this->config->version);
-
         /* Delete all patch actions if upgrade success. */
         $this->loadModel('action')->deleteByType('patch');
 
         $selectMode = true;
-        $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
+        $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
         /* 如果经典管理模式。*/
         /* If the system mode is classic. */
         if($systemMode == 'classic')
@@ -30,7 +470,9 @@ class upgradeZen extends upgrade
 
         /* 从15 版本以后升级。*/
         /* when upgrade from the vesion is more than 15. */
-        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $rawFromVersion));
+        $rawFromVersion = $fromVersion;
+        if(strpos($rawFromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        $openVersion = $this->upgrade->getOpenVersion($rawFromVersion);
         if(version_compare($openVersion, '15_0_rc1', '>=') && $systemMode == 'new')
         {
             $this->setting->setItem('system.common.global.mode', 'ALM');
@@ -46,11 +488,11 @@ class upgradeZen extends upgrade
 
         if($selectMode)
         {
-            if($this->config->edition == 'ipd') $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}&mode=ALM"));
-            $this->locate(inlink('to18Guide', "fromVersion={$fromVersion}"));
+            if($this->config->edition == 'ipd') return inlink('to18Guide', "fromVersion={$fromVersion}&mode=ALM");
+            return inlink('to18Guide', "fromVersion={$fromVersion}");
         }
 
-        $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
+        return inlink('afterExec', "fromVersion={$fromVersion}");
     }
 
     /**
@@ -565,20 +1007,20 @@ class upgradeZen extends upgrade
     }
 
     /**
-     * 显示需要移除的文件。
-     * Display execute Error.
+     * 显示需要执行的命令。
+     * Display command.
      *
      * @param  string    $command
      * @access protected
      * @return void
      */
-    protected function displayExecuteError(array $commands): void
+    protected function displayCommand(string $command): void
     {
-        $this->view->title  = $this->lang->upgrade->common;
-        $this->view->errors = $commands;
-        $this->view->result = 'fail';
+        $this->view->title   = $this->lang->upgrade->common;
+        $this->view->result  = 'fail';
+        $this->view->command = $command;
 
-        $this->display('upgrade', 'execute');
+        $this->display('upgrade', 'command');
     }
 
     /**
@@ -617,6 +1059,7 @@ class upgradeZen extends upgrade
      */
     protected function processAfterExecSuccessfully(): void
     {
+        $this->upgrade->recordExecutedChanges(true);
         $this->loadModel('setting')->updateVersion($this->config->version);
 
         $zfile = $this->app->loadClass('zfile');

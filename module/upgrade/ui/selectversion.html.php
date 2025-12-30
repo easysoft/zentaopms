@@ -12,23 +12,34 @@ namespace zin;
 
 set::zui(true);
 
+$clientLang   = $app->getClientLang();
+$labelWidth   = $clientLang === 'en' ? '4rem' : '6rem';
+$versionWidth = $clientLang === 'en' ? 'w-1/2' : 'w-3/5';
+
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        formPanel
+        setClass('rounded-md bg-white gap-5 m-auto'),
+        setStyle(['padding' => '1.5rem 2rem', 'width' => '50rem']),
+        div
         (
-            zui::width('800px'),
+            setClass('text-xl font-medium'),
+            $lang->upgrade->selectVersion
+        ),
+        form
+        (
             set::target('_self'),
-            set::title($lang->upgrade->selectVersion),
             formRow
             (
+                setClass('gap-4'),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass($versionWidth),
                     set::label($lang->upgrade->fromVersion),
+                    set::labelWidth($labelWidth),
+                    set::labelProps(['style' => ['justify-content' => 'flex-start']]),
                     picker
                     (
                         set::maxItemsCount(0),
@@ -40,22 +51,23 @@ div
                 ),
                 formGroup
                 (
-                    setClass('ml-3'),
+                    setStyle(['align-items' => 'center']),
                     div
                     (
-                        setClass('h-8 flex text-danger items-center'),
+                        setClass('text-warning'),
                         $lang->upgrade->noteVersion
                     )
                 )
             ),
             formGroup
             (
+                setClass($versionWidth),
                 set::label($lang->upgrade->toVersion),
-                div
-                (
-                    setClass('h-8 flex items-center'),
-                    ucfirst($config->version)
-                )
+                set::labelWidth($labelWidth),
+                set::labelProps(['style' => ['justify-content' => 'flex-start']]),
+                set::name('toVersion'),
+                set::value(ucfirst($config->version)),
+                set::readonly(true)
             ),
             set::actions(array('submit')),
             set::submitBtnText($lang->upgrade->common)

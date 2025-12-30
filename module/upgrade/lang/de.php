@@ -11,37 +11,38 @@
  */
 global $config;
 $lang->upgrade->common          = 'Upgrade';
+$lang->upgrade->welcome         = 'Willkommen zum Upgrade auf Zen Tao';
+$lang->upgrade->execute         = 'Upgrade';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Ergebnis';
 $lang->upgrade->fail            = 'Fehlgeschlagen';
 $lang->upgrade->successTip      = 'Successed';
 $lang->upgrade->success         = 'Erfolgreich';
 $lang->upgrade->tohome          = 'Home';
-$lang->upgrade->license         = 'Zentao PMS nutzt jetzt Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning        = 'Warnung!';
+$lang->upgrade->notice          = 'Hinweis';
 $lang->upgrade->checkExtension  = 'Erweiterung prüfen';
 $lang->upgrade->consistency     = 'Check Consistency';
-$lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.</p>
-<p>Please backup your database before updating ZenTao!</p>
-<pre class='bg-white space-y-2 p-3'>
-1. Use phpMyAdmin to backup.
-2. Use mysqlCommand to backup.
+$lang->upgrade->noticeContent   = <<<EOT
+<p>Database upgrade requires high privileges. Please use the root user.</p>
+<p>Upgrade carries risks. Please back up your database first, just in case.</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+1. You can back up using phpMyAdmin..
+2. Use the mysql command-line tool:
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   Change the red text into corresponding Username and Database name.
-   e.g. mysqldump -u root -p zentao > zentao.bak
+   Replace the red parts above with your actual username and database name.
+   <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.<br>
-   Please backup your database before updating ZenTao!</p>
-<pre>
+    $lang->upgrade->noticeContent = <<<EOT
+<p>The upgrade requires high database privileges, please use the root user.</p>
+<p>Please backup your database before updating ZenTao!</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
-   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
    After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
    The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
    This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
@@ -70,9 +71,8 @@ $lang->upgrade->forbiddenExt  = 'Die Erweiterung ist nicht kompatibel mit der Up
 $lang->upgrade->updateFile    = 'Updateinformation wurden hinzugefügt.';
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
 $lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'Please modify the database manually according to the above error information, and refresh after the modification!';
+$lang->upgrade->execCommand   = 'Bitte führen Sie den obigen Befehl auf dem Server aus und aktualisieren Sie die Seite nach der Ausführung.';
 $lang->upgrade->afterExec     = 'Please manually modify the database according to the above error information, and refresh after modifiy!';
-$lang->upgrade->afterDuckdb   = 'Please wait for Duckdb engine to install.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';

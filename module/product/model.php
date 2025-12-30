@@ -2083,13 +2083,12 @@ class productModel extends model
      *
      * @param  bool   $refreshAll
      * @access public
-     * @return void
+     * @return bool
      */
-    public function refreshStats(bool $refreshAll = false): void
+    public function refreshStats(bool $refreshAll = false): bool
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
-        $now        = helper::now();
-        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return;
+        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return true;
 
         /*
          * If productStatsTime is before two weeks ago, refresh all products directly.
@@ -2107,13 +2106,15 @@ class productModel extends model
                 ->where('date')->ge($updateTime)
                 ->andWhere('product')->notin(array(',0,', ',,'))
                 ->fetchPairs('product');
-            if(empty($productActions)) return;
+            if(empty($productActions)) return true;
 
             foreach($productActions as $productAction)
             {
                 foreach(explode(',', trim($productAction, ',')) as $product) $products[$product] = $product;
             }
         }
+
+        $now = helper::now();
 
         /* 1. Get summary of products to be refreshed. */
         $stats = $this->productTao->getProductStats($products);
@@ -2130,6 +2131,8 @@ class productModel extends model
 
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
+
+        return !dao::isError();
     }
 
     /*

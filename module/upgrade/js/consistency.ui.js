@@ -23,7 +23,7 @@ function updateProgressInterval()
             if(result.finished)
             {
                 clearInterval(interval);
-                loadCurrentPage();
+                window.location.reload();
             }
         })
     }, 500);

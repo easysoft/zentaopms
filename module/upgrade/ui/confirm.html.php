@@ -11,56 +11,35 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
-jsVar('writable', $writable);
 
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        formPanel
-        (
-            setClass('upgrade-confirm'),
-            on::click('button[type=submit]', "submitConfirm"),
-            set::width('800px'),
-            set::target('_self'),
-            set::title($lang->upgrade->confirm),
-            div
-            (
-                setClass('border p-4 mb-4'),
-                set::style(array('background-color' => 'var(--color-gray-100)', 'max-height' => '430px', 'overflow' => 'hidden', 'overflow-y' => 'auto')),
-                div(html(nl2br($confirm)))
-            ),
-            input
-            (
-                set::type('hidden'),
-                set::name('fromVersion'),
-                set::value($fromVersion)
-            ),
-            set::actions(array('submit', 'upgradingTips' => array('text' => $lang->upgrade->upgradingTips, 'class' => 'text-danger ghost hidden', 'id' => 'upgradingTips'))),
-            set::submitBtnText($lang->upgrade->sureExecute)
-        )
-    )
-);
-
-modal
-(
-    setID('progress'),
-    set::title('1%'),
-    div
-    (
-        setClass('progress'),
+        setClass('container rounded-md bg-white h-full gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
         div
         (
-            setClass('progress-bar'),
-            set('role', 'progressbar'),
-            set('style', '"width: 1%')
+            setClass('text-xl font-medium'),
+            $lang->upgrade->confirm
+        ),
+        div
+        (
+            setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-auto px-8 py-6'),
+            setStyle(['max-height' => 'calc(100% - 5rem)']),
+            $confirm
+        ),
+        div
+        (
+            setClass('center'),
+            a
+            (
+                setClass('btn primary w-24'),
+                set::href(inlink('execute', "fromVersion=$fromVersion")),
+                $lang->upgrade->sureExecute
+            )
         )
-    ),
-    div
-    (
-        setID('logBox')
     )
 );
 
