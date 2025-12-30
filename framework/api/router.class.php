@@ -502,7 +502,7 @@ class api extends router
             if($this->apiVersion == 'v2')
             {
                 $this->setParams();
-                if(in_array($this->action, array('post', 'put')))
+                if(in_array($this->action, array('post', 'put', 'delete')))
                 {
                     $this->setFormData();
                 }
