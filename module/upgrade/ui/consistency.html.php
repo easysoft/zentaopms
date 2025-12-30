@@ -35,7 +35,7 @@ div
         div
         (
             setID('logBox'),
-            setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-scroll px-8 py-6'),
+            setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-auto px-8 py-6'),
             setStyle(['max-height' => 'calc(100% - 5rem)']),
             $hasError ? html($alterSQL . ';') : null
         ),

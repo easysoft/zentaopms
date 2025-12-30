@@ -115,7 +115,7 @@ div
                 col
                 (
                     setID('versionsBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-scroll h-full'),
+                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
                     $buildVersions
                 ),
                 col
@@ -161,7 +161,7 @@ div
                 col
                 (
                     setID('changesBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-scroll h-full'),
+                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
                     $buildChanges
                 )
             )
