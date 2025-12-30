@@ -34,7 +34,7 @@ $buildVersions = function() use ($toVersion, $upgradeVersions, $editionName, $co
         (
             row
             (
-                setClass('items-center gap-2'),
+                setClass('version-item items-center gap-2' . ($done ? ' executed' : '')),
                 icon
                 (
                     setClass("text-xl {$class}"),
@@ -59,7 +59,8 @@ $buildChanges = function() use ($lang, $upgradeChanges)
     {
         $changes[] = row
         (
-            setClass('items-center gap-3'),
+            setClass('change-item items-center gap-3'),
+            setData(['change' => $change]),
             span
             (
                 setClass("label {$bgColors[$change['mode']]} {$textColors[$change['mode']]} px-2.5 py-1"),
@@ -113,6 +114,7 @@ div
                 ),
                 col
                 (
+                    setID('versionsBox'),
                     setClass('gap-4 overflow-x-hidden overflow-y-scroll h-full'),
                     $buildVersions
                 ),
@@ -158,6 +160,7 @@ div
                 ),
                 col
                 (
+                    setID('changesBox'),
                     setClass('gap-4 overflow-x-hidden overflow-y-scroll h-full'),
                     $buildChanges
                 )
