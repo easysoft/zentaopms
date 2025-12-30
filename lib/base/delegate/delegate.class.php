@@ -171,4 +171,16 @@ class baseDelegate
 
         throw new BadMethodCallException("The method {$name} does not exist in the class {$calledClass}.");
     }
+
+    /**
+     * 获取第三方类库的实例
+     * Get the instance of the third-party library
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getInstance()
+    {
+        return $this->instance;
+    }
 }
