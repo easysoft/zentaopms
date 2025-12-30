@@ -260,15 +260,17 @@ foreach($stories as $story)
 $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $project, $storyType, $browseType, $isProjectStory, $projectHasProduct, $storyProductID, $projectID, $branch, $users, $branchTagOption, $modules, $plans, $branchID, $gradePairs, $config,$noclosedRoadmaps, $gradeGroup, $hasFrozenStories)
 {
     /* Flag variables of permissions. */
+    $storyModule  = $storyType;
     $canBeChanged = common::canModify('product', $product);
     if(!empty($project)) $canBeChanged = $canBeChanged && common::canModify('project', $project);
     if($isProjectStory && $config->vision == 'rnd')
     {
-        $canBatchClose      = $canBeChanged && hasPriv('projectstory', 'batchClose') && strtolower($browseType) != 'closedbyme';
-        $canBatchEdit       = $canBeChanged && hasPriv('projectstory', 'batchEdit');
-        $canBatchReview     = $canBeChanged && hasPriv('projectstory', 'batchReview');
-        $canBatchAssignTo   = $canBeChanged && hasPriv('projectstory', 'batchAssignTo');
-        $canBatchChangePlan = $canBeChanged && hasPriv('projectstory', 'batchChangePlan') && $productID && $product;
+        $storyModule        = 'projectstory';
+        $canBatchClose      = $canBeChanged && hasPriv($storyModule, 'batchClose') && strtolower($browseType) != 'closedbyme';
+        $canBatchEdit       = $canBeChanged && hasPriv($storyModule, 'batchEdit');
+        $canBatchReview     = $canBeChanged && hasPriv($storyModule, 'batchReview');
+        $canBatchAssignTo   = $canBeChanged && hasPriv($storyModule, 'batchAssignTo');
+        $canBatchChangePlan = $canBeChanged && hasPriv($storyModule, 'batchChangePlan') && $productID && $product;
     }
     else
     {
@@ -300,12 +302,12 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $planItems    = $planItems ?? array();
     $gradeItems   = array();
     $roadmapItems = array();
-    foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=$key"));
-    foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeGrade', "result=$key&type=$storyType"));
-    foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=reject&reason=$key"));
-    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"), 'attrs' => array('title' => $branchName));
-    foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
-    foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
+    foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchReview', "result=$key"));
+    foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchChangeGrade', "result=$key&type=$storyType"));
+    foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchReview', "result=reject&reason=$key"));
+    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchChangeBranch', "branchID=$branchID"), 'attrs' => array('title' => $branchName));
+    foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchChangeModule', "moduleID=$moduleID"));
+    foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchChangePlan', "planID=$planID"));
     foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchChangeRoadmap', "roadmapID=$roadmapID"));
 
     foreach($lang->story->stageList as $key => $stageName)
@@ -316,14 +318,14 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     foreach($users as $account => $realname)
     {
         if($account == 'closed') continue;
-        $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
+        $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
     }
 
     if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
     $reviewResultItems = array_values($reviewResultItems);
 
     $navActionItems = array();
-    if($canBatchClose)        $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink($storyType, 'batchClose', "productID={$productID}&executionID=0"));
+    if($canBatchClose)        $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink($storyModule, 'batchClose', "productID={$productID}&executionID=0"));
     if($canBatchChangeGrade)  $navActionItems[] = array('class' => 'not-hide-menu batchGradeBtn', 'text' => $lang->story->grade, 'items' => $gradeItems);
     if($canBatchReview)       $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu batchChangeStageBtn', 'text' => $lang->story->stageAB, 'items' => $stageItems);
@@ -341,7 +343,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
                 'className' => 'secondary batch-btn' . (empty($navActionItems) && !$canBatchEdit ? ' hidden' : ''),
                 'disabled'  => ($canBatchEdit ? '': 'disabled'),
                 'data-page' => 'batch',
-                'data-formaction' => $this->createLink($storyType, 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&type=$storyType")
+                'data-formaction' => $this->createLink($storyModule, 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&type=$storyType")
             ),
             /* Popup menu trigger icon. */
             array('caret' => 'up', 'className' => 'size-sm secondary' . (empty($navActionItems) ? ' hidden' : ''), 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')

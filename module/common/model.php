@@ -1484,15 +1484,6 @@ eof;
             if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
             if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
-            if(isset($projectPrivs->story))
-            {
-                foreach($projectPrivs->story as $method => $label)
-                {
-                    $method = strtolower($method);
-                    $rights['story'][$method] = 1;
-                }
-            }
-
             $this->app->user->rights['rights'] = $rights;
         }
     }
