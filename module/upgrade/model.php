@@ -11568,7 +11568,7 @@ class upgradeModel extends model
         $sql = 'ALTER TABLE ' . TABLE_USER . ' CHANGE COLUMN `last_tmp` `last` datetime DEFAULT NULL';
         $this->dao->exec($sql);
 
-        return $this->execSQL($this->getUpgradeFile('datatype'));
+        return !dao::isError();
     }
 
     /**
