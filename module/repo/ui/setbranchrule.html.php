@@ -38,7 +38,7 @@ formPanel
             array('text' => $lang->cancel, 'url' => $backURL),
             array(
                 'text' => $lang->repo->branchRule->delete,
-                'url'  => createLink('repo', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID")
+                'url'  => createLink('repo', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID&from=$from&isDefault=$isDefault")
             )
         )
     ),
@@ -70,7 +70,7 @@ formPanel
             )
         )
     ) : null,
-    formGroup
+    $branchTypeID != 0 || !$isDefault ? formGroup
     (
         set::label($langAllowDelete),
         set::width('full'),
@@ -96,7 +96,7 @@ formPanel
                 set::multiple(true)
             )
         )
-    ),
+    ) : null,
     formGroup
     (
         set::label($langAllowUpdate),

@@ -1986,7 +1986,10 @@ class repo extends control
         $pager->recPerPage = $recPerPage;
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
-        $committers = $this->loadModel('user')->getCommiters('account');
+        $committers  = $this->loadModel('user')->getCommiters('account');
+        $types       = $this->repo->getBranchTypeList($repoID);
+        $rules       = $this->repo->getBranchRulePairs($repoID, 'branchName', 'repo');
+        $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
@@ -2004,21 +2007,46 @@ class repo extends control
             $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
 
-            $branch->ahead  = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
-            $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $prefix       = (strpos($branch->name, '/') !== false) ? substr($branch->name, 0, strpos($branch->name, '/') + 1) : $branch->name;
+            $branch->type = '';
+            foreach($types as $type)
+            {
+                if(in_array($prefix, $type->prefixes))
+                {
+                    $branch->type = $type->name;
+                    break;
+                }
+            }
+            $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
+            $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
+            $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $branch->deletable = !($branch->isDefault || !$this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
         }
 
-        $this->view->title        = $this->lang->repo->browseBranch;
-        $this->view->repoID       = $repoID;
-        $this->view->objectID     = $objectID;
-        $this->view->repo         = $repo;
-        $this->view->pager        = $pager;
-        $this->view->orderBy      = $orderBy;
-        $this->view->branchList   = $branchList;
-        $this->view->keyword      = base64_encode($keyword);
-        $this->view->users        = $this->user->getPairs('noletter');
-        $this->view->label        = $label;
-        $this->view->showArchived = $showArchived;
+        /* Check delete permission for each branch. */
+        $deletableBranches = array();
+        $currentUser       = $this->app->user->account;
+        foreach($branchList as $branch)
+        {
+            /* Default branch cannot be deleted. */
+            if(!empty($branch->isDefault)) continue;
+            if($this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser))
+            {
+                $deletableBranches[] = $branch->name;
+            }
+        }
+
+        $this->view->title             = $this->lang->repo->browseBranch;
+        $this->view->repoID            = $repoID;
+        $this->view->objectID          = $objectID;
+        $this->view->repo              = $repo;
+        $this->view->pager             = $pager;
+        $this->view->orderBy           = $orderBy;
+        $this->view->branchList        = $branchList;
+        $this->view->keyword           = base64_encode($keyword);
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->label             = $label;
+        $this->view->showArchived      = $showArchived;
         $this->display();
     }
 
@@ -2070,10 +2098,11 @@ class repo extends control
      * @param  int       $branchTypeID
      * @param  int       $repoID
      * @param  string    $branchName
+     * @param  string    $from
      * @access public
      * @return void
      */
-    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings')
+    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings', bool $isDefault = false)
     {
         // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
         if($from == 'branch')
@@ -2135,9 +2164,11 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->key;
+        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
+        $this->view->from         = $from;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
+        $this->view->isDefault    = $isDefault;
         $this->view->branchTypeID = $branchTypeID;
         $this->view->ruleID       = $originRule->id;
         $this->view->originRule   = $originRule;
@@ -2157,9 +2188,9 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID)
+    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID, string $from, bool $isDefault)
     {
-        $link = $this->repo->createLink('setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName");
+        $link = $this->repo->createLink('setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&isDefault=$isDefault");
         if($ruleID == 0)
         {
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));

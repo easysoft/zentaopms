@@ -12,11 +12,11 @@
 }
 
 #setBranchRuleForm .form-group.group-en-option {
-    padding-left: 380px;
+    padding-left: 250px;
 }
 
 #setBranchRuleForm .form-group.group-en-option .form-label {
-    width: 380px;
+    width: 250px;
 }
 
 #setBranchRuleForm .branchRuleRadio {
@@ -25,12 +25,16 @@
 }
 
 #setBranchRuleForm .branchRuleRadio.group-en-option {
-    width: 350px;
+    width: 355px;
     padding-right: 35px;
 }
 
 #setBranchRuleForm .branchRuleRadio.pl-52px .radio-primary:last-child {
     padding-left: 52px;
+}
+
+#setBranchRuleForm .branchRuleRadio.pl-52px.group-en-option .radio-primary:last-child {
+    padding-left: 56px;
 }
 
 #setBranchRuleForm .branchRulePicker {
