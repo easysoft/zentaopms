@@ -129,7 +129,7 @@ foreach($reviewList as $review)
         $review->result = zget($reviewResultList, $review->result);
     }
 
-    if($review->project && strpos($review->project, ',') !== false)
+    if($review->project && strpos((string)$review->project, ',') !== false)
     {
         $projectIdList   = explode(',', $review->project);
         $review->project = '';
