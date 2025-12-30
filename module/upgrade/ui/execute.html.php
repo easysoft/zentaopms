@@ -102,7 +102,7 @@ div
         row
         (
             setClass('bg-gray-100 gap-2 p-2'),
-            setStyle(['height' => 'calc(100% - 4rem)']),
+            setStyle(['max-height' => 'calc(100% - 4rem)']),
             col
             (
                 setClass('bg-white rounded-md justify-between gap-4 p-4 w-64 h-full'),
