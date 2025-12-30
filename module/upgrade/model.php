@@ -11544,19 +11544,21 @@ class upgradeModel extends model
     }
 
     /**
-     * 修改表字段类型。
-     * Alter table fields datatype.
+     * 修改用户表的last字段类型。
+     * Alter user table field last type.
      *
      * @access public
      * @return bool
      */
-    public function alterTableFields()
+    public function alterUserTableFields(): bool
     {
-        $users = $this->dao->select('id, last')->from(TABLE_USER)->where('last')->ne(0)->fetchPairs();
-        $sql   = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
+        $tableDesc = $this->dao->descTable(TABLE_USER);
+        if(isset($tableDesc['last']) && stripos($tableDesc['last']->Type, 'datetime') !== false) return true;
 
+        $sql = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
         $this->dao->exec($sql);
 
+        $users = $this->dao->select('id, last')->from(TABLE_USER)->where('last')->ne(0)->fetchPairs();
         foreach($users as $id => $last)
         {
             $last = date('Y-m-d H:i:s', $last);
