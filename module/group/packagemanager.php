@@ -4466,7 +4466,7 @@ $config->group->package->branchRule = new stdclass();
 $config->group->package->branchRule->order  = 2880;
 $config->group->package->branchRule->subset = 'repoSettings';
 $config->group->package->branchRule->privs = array();
-$config->group->package->branchRule->privs['repo-setBranchRule'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType', 'repo-browseBranch'), 'recommend' => array());
+$config->group->package->branchRule->privs['repobranchrule-setBranchRule'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browseBranchType', 'repo-browseBranch'), 'recommend' => array());
 
 $config->group->package->branchType = new stdclass();
 $config->group->package->branchType->order  = 2885;
