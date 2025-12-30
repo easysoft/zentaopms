@@ -436,7 +436,7 @@ class api extends router
         $params = array_merge($this->params, $_POST);
         foreach($params as $key => $value)
         {
-            if(isset($objectMap[$key]) && $value != 0)
+            if(isset($objectMap[$key]) && $value)
             {
                 $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch('id');
                 if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
