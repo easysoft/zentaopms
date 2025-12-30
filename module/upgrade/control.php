@@ -515,7 +515,7 @@ class upgrade extends control
         $finished = ($log && end($log) == 'Finished') ? true : false;
         if($finished) $progress = 100;
 
-        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'progress' => $progress, 'offset' => count($lines))));
+        return print(json_encode(array('log' => '<p>' . implode('</p><p>', $log) . '</p>', 'finished' => $finished, 'progress' => $progress, 'offset' => count($lines))));
     }
 
     /**
