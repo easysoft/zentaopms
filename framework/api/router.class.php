@@ -386,7 +386,6 @@ class api extends router
         }
     }
 
-
     /**
      * 检查传入的对象是否有权限访问
      *
@@ -401,6 +400,7 @@ class api extends router
     {
         if($this->user->admin) true;
 
+        $userView = $this->user->view;
         switch($table)
         {
             case TABLE_STORY:
@@ -409,16 +409,15 @@ class api extends router
             case TABLE_TICKET:
             case TABLE_FEEDBACK:
             case TABLE_PRODUCTPLAN:
-                return (!$object->product || strpos(",{$this->user->view->products},", ",$object->product,") !== false);
+                return (!$object->product || strpos(",{$userView->products},", ",$object->product,") !== false);
             case TABLE_PRODUCT:
-                return (!$object->id || strpos(",{$this->user->view->products},", ",$object->id,") !== false);
-            case TABLE_PROJECT:
-                return (!$object->id || strpos(",{$this->user->view->projects},{$this->user->view->programs},", ",$object->id,") !== false);
-            case TABLE_EXECUTION:
-                return (!$object->project || strpos(",{$this->user->view->projects},", ",$object->project,") !== false);
+                return (!$object->id || strpos(",{$userView->products},", ",$object->id,") !== false);
+            case TABLE_PROJECT: // project,execution,program
+                $projects = ",{$userView->sprints},{$userView->projects},{$userView->programs},";
+                return (!$object->id || strpos($projects, ",$object->id,") !== false);
             case TABLE_BUILD:
             case TABLE_TASK:
-                return (!$object->execution || strpos(",{$this->user->view->sprints},", ",$object->execution,") !== false);
+                return (!$object->execution || strpos(",{$userView->sprints},", ",$object->execution,") !== false);
             default:
                 return true;
         }
