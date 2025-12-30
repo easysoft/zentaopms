@@ -1001,6 +1001,7 @@ class projectModel extends model
                 if(!$hasDeliverable) unset($methods->submitDeliverable);
                 if(!$hasChange)      unset($methods->submitProjectchange);
                 if(!$hasBaseline)    unset($methods->submitBaseline);
+                if(!empty($project) && $project->model == 'scrum') unset($methods->submitIpd, $methods->submitProjectchange, $methods->submitBaseline);
             }
 
             if($module == 'project' && !$hasDeliverable) unset($methods->deliverable);
