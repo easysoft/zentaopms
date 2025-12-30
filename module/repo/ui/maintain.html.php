@@ -104,7 +104,7 @@ featureBar
     (
         dropdown
         (
-            to('trigger', btn(zget($spaces, $spaceID, $lang->repo->allSpace), setClass('ghost'))),
+            to('trigger', btn(zget($spaces, $spaceID, $lang->repo->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
             set::items($spaceItems)
         )
     ),
