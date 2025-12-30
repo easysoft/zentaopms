@@ -11553,7 +11553,7 @@ class upgradeModel extends model
     public function alterUserTableFields(): bool
     {
         $tableDesc = $this->dao->descTable(TABLE_USER);
-        if(isset($tableDesc['last']) && stripos($tableDesc['last']->Type, 'datetime') !== false) return true;
+        if(isset($tableDesc['last']) && stripos($tableDesc['last']->type, 'datetime') !== false) return true;
 
         $sql = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
         $this->dao->exec($sql);
