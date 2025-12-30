@@ -68,7 +68,7 @@ class upgradeZen extends upgrade
      */
     protected function getUpgradeChanges(string $fromVersion, string $toVersion): array
     {
-        $openVersion = $this->upgrade->getOpenVersion($fromVersion);
+        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
 
         $changes = [];
         $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
