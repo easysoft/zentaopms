@@ -29,12 +29,16 @@ class webhookModel extends model
      * Get a webhook by type.
      *
      * @param  string $type
+     * @param  int    $id
      * @access public
      * @return object
      */
-    public function getByType(string $type)
+    public function getByType(string $type, int $id = 0)
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)
+           ->andWhere('deleted')->eq('0')
+           ->beginIF($id)->andWhere('id')->eq($id)->fi()
+           ->fetch();
     }
 
     /**
