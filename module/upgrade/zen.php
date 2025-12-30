@@ -232,6 +232,7 @@ class upgradeZen extends upgrade
         if(preg_match('/^delete\s+from\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))                                 return [['mode' => 'delete', 'action' => 'deleteValue', 'table' => $this->extractTableName($matches[1])]]; // DELETE
 
         /* ALTER TABLE */
+        $sql = str_replace("\n", ' ', $sql); // 将换行替换为空格，方便后续处理
         if(preg_match('/^alter\s+table\s+((?:`[^`]*`|\S)+)\s+(.+)/i', $sql, $matches))
         {
             $tableName = $this->extractTableName($matches[1]);
