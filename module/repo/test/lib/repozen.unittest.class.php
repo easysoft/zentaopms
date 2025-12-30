@@ -1938,21 +1938,4 @@ class repoZenTest extends baseTest
 
         return $result;
     }
-
-    /**
-     * Test buildBranchRuleData method.
-     *
-     * @param  int    $typeID
-     * @param  int    $repoID
-     * @param  string $branchName
-     * @param  object $data
-     * @access public
-     * @return object|false
-     */
-    public function buildBranchRuleDataTest(int $typeID, int $repoID, string $branchName, object $data): object|bool
-    {
-        $result = $this->invokeArgs('buildBranchRuleData', [$typeID, $repoID, $branchName, $data]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
 }

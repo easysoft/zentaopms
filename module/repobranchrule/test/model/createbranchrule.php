@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 repoModel::createBranchRule();
+title=测试 repobranchruleModel::createBranchRule();
 timeout=0
 cid=0
 
@@ -15,7 +15,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repobranchrule.unittest.class.php';
 
 $repo = zenData('repo');
 $repo->id->range('1-10');
@@ -26,7 +26,7 @@ $repo->gen(10);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repobranchruleTest();
 
 $rule1 = new stdclass();
 $rule1->repo = 1;

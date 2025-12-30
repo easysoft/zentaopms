@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 repoModel::checkPrivToDeleteBranch();
+title=测试 repobranchruleModel::checkPrivToDeleteBranch();
 timeout=0
 cid=0
 
@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/repobranchrule.unittest.class.php';
 
 $repo = zenData('repo');
 $repo->id->range('1-5');
@@ -52,7 +52,7 @@ $branchRuleSetTable->gen(6);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repobranchruleTest();
 
 r($repoTest->checkPrivToDeleteBranchTest(1, 'main', 'admin')) && p() && e('1'); // 步骤1：具体分支规则，operator在deleteUser列表中
 r($repoTest->checkPrivToDeleteBranchTest(1, 'main', 'user2')) && p() && e('0'); // 步骤2：具体分支规则，operator不在deleteUser列表中

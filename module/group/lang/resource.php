@@ -1448,13 +1448,14 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->setBranchRule = 'setBranchRule';
-
 $lang->resource->repo->browseBranchType = 'browseBranchType';
 $lang->resource->repo->createBranchType = 'createBranchType';
 $lang->resource->repo->editBranchType   = 'editBranchType';
 $lang->resource->repo->deleteBranchType = 'deleteBranchType';
 $lang->resource->repo->importBranchType = 'importBranchType';
+
+$lang->resource->repobranchrule = new stdclass();
+$lang->resource->repobranchrule->setBranchRule = 'setBranchRule';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';

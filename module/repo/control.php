@@ -1988,7 +1988,7 @@ class repo extends control
 
         $committers  = $this->loadModel('user')->getCommiters('account');
         $types       = $this->repo->getBranchTypeList($repoID);
-        $rules       = $this->repo->getBranchRulePairs($repoID, 'branchName', 'repo');
+        $rules       = $this->loadModel('repobranchrule')->getBranchRulePairs($repoID, 'branchName', 'repo');
         $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)
         {
@@ -2020,20 +2020,7 @@ class repo extends control
             $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
             $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
             $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
-            $branch->deletable = !($branch->isDefault || !$this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
-        }
-
-        /* Check delete permission for each branch. */
-        $deletableBranches = array();
-        $currentUser       = $this->app->user->account;
-        foreach($branchList as $branch)
-        {
-            /* Default branch cannot be deleted. */
-            if(!empty($branch->isDefault)) continue;
-            if($this->repo->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser))
-            {
-                $deletableBranches[] = $branch->name;
-            }
+            $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
         }
 
         $this->view->title             = $this->lang->repo->browseBranch;
@@ -2089,115 +2076,5 @@ class repo extends control
         foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
 
         return print(json_encode($userList));
-    }
-
-    /**
-     * 配置分支规则。
-     * Set a branch rule.
-     *
-     * @param  int       $branchTypeID
-     * @param  int       $repoID
-     * @param  string    $branchName
-     * @param  string    $from
-     * @access public
-     * @return void
-     */
-    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings', bool $isDefault = false)
-    {
-        // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
-        if($from == 'branch')
-        {
-            $this->lang->devops->menu->branch['alias']   = 'setbranchrule';
-            $this->lang->devops->menu->settings['alias'] = str_replace(',setbranchrule', '', $this->lang->devops->menu->settings['alias']);
-            unset($this->lang->devops->menu->settings['subMenu']->branchType['alias']);
-        }
-        else
-        {
-            unset($this->lang->devops->menu->branch['alias']);
-            $this->lang->devops->menu->settings['alias'] .= ',setbranchrule';
-            $this->lang->devops->menu->settings['subMenu']->branchType['alias'] = 'setbranchrule';
-        }
-        $this->commonAction($repoID);
-
-        $branchName = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
-        $branchType = $this->repo->getBranchTypeByID($branchTypeID);
-        if(!$branchType)
-        {
-            $branchType = new stdClass();
-            $branchType->key = '';
-        }
-        $repo        = $this->repo->getByID($repoID);
-        $users       = $repo->acl == 'open' ? $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true) : $this->repo->getRepoUsers($repoID);
-        $members     = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
-        $branchTypes = $this->repo->getBranchTypePairs($repoID);
-        $originRule  = $this->repo->getBranchRule($branchTypeID, $repoID, $branchName);
-        if(!$originRule)
-        {
-            $originRule = new stdClass();
-            $originRule->id = 0;
-        }
-
-        if($_POST)
-        {
-            $formData = form::data($this->config->repo->form->branchRule)->get();
-
-            $rule = $this->repoZen->buildBranchRuleData($branchTypeID, $repoID, $branchName, $formData);
-            if(dao::isError()) $this->sendError(dao::getError());
-            $rule->editedBy   = $this->app->user->account;
-            $rule->editedDate = helper::now();
-
-            if($originRule->id == 0)
-            {
-                $rule->createdBy   = $this->app->user->account;
-                $rule->createdDate = helper::now();
-                $result = $this->repo->createBranchRule($rule);
-                if(!$result) $this->sendError($this->lang->fail);
-            }
-            else
-            {
-                $result = $this->repo->updateBranchRule($originRule->id, $rule);
-                if(!$result) $this->sendError($this->lang->fail);
-                $this->loadModel('action')->create('branchRule', $originRule->id, 'edited');
-            }
-
-            $link = ($branchTypeID == 0) ? $this->repo->createLink('browseBranch', "repoID=$repoID") : $this->repo->createLink('browsebranchtype', "repoID=$repoID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
-        }
-
-        $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
-        $this->view->from         = $from;
-        $this->view->repoID       = $repoID;
-        $this->view->branchName   = $branchRawName;
-        $this->view->isDefault    = $isDefault;
-        $this->view->branchTypeID = $branchTypeID;
-        $this->view->ruleID       = $originRule->id;
-        $this->view->originRule   = $originRule;
-        $this->view->users        = !empty($members) ? array_column($members, 'realname', 'account') : array();
-        $this->view->branchTypes  = $branchTypes;
-        $this->display();
-    }
-
-    /**
-     * 删除分支规则。
-     * Ajax delete branch rule.
-     *
-     * @param  int    $branchTypeID
-     * @param  int    $repoID
-     * @param  string $branchName
-     * @param  int    $ruleID
-     * @access public
-     * @return void
-     */
-    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID, string $from, bool $isDefault)
-    {
-        $link = $this->repo->createLink('setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&isDefault=$isDefault");
-        if($ruleID == 0)
-        {
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
-        }
-
-        $result = $this->repo->deleteBranchRule($ruleID);
-        if(!$result) $this->sendError($this->lang->fail);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
     }
 }
