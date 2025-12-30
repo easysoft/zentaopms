@@ -12,8 +12,9 @@ namespace zin;
 
 set::zui(true);
 
+jsVar('fromVersion', $fromVersion);
+jsVar('toVersion', $toVersion);
 jsVar('upgradeChanges', $upgradeChanges);
-jsVar('result', $result);
 
 $totalVersions  = count($upgradeVersions);
 $completedCount = array_search($toVersion, array_keys($upgradeVersions));
@@ -49,7 +50,7 @@ $buildVersions = function() use ($toVersion, $upgradeVersions, $editionName, $co
     return $versions;
 };
 
-$buildChanges = function() use ($upgradeChanges)
+$buildChanges = function() use ($lang, $upgradeChanges)
 {
     $changes    = [];
     $bgColors   = ['create' => 'success-pale', 'update' => 'primary-pale', 'delete' => 'danger-pale'];
@@ -61,14 +62,14 @@ $buildChanges = function() use ($upgradeChanges)
             setClass('items-center gap-3'),
             span
             (
-                setClass("label {$bgColors[$change['type']]} {$textCorlors[$change['type']]} px-2.5 py-1"),
-                $change['action']
+                setClass("label {$bgColors[$change['mode']]} {$textColors[$change['mode']]} px-2.5 py-1"),
+                $lang->upgrade->changeModes[$change['mode']]
             ),
             span
             (
-                $change['text']
+                $change['content']
             ),
-            a
+            $change['type'] == 'sql' ? a
             (
                 set::href("javascript:showSQL({$key})"),
                 icon
@@ -76,7 +77,7 @@ $buildChanges = function() use ($upgradeChanges)
                     setClass('text-gray-400 text-lg'),
                     'fields'
                 ),
-            )
+            ) : null
         );
     }
     return $changes;
@@ -152,7 +153,7 @@ div
                     ),
                     span
                     (
-                        '已执行：234 / 23568 条'
+                        html(sprintf($lang->upgrade->executedChanges, count($upgradeChanges)))
                     )
                 ),
                 col

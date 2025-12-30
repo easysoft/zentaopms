@@ -38,7 +38,7 @@ div
         div
         (
             setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-scroll px-8 py-6'),
-            implode("\n", $errors)
+            $errors
         ),
         div
         (

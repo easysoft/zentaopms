@@ -16,6 +16,7 @@ $lang->upgrade->execute         = '版本升级';
 $lang->upgrade->versionTips     = '本次升级版本';
 $lang->upgrade->changeTips      = '%s 数据改动';
 $lang->upgrade->progress        = '进度';
+$lang->upgrade->executedChanges = "已执行：<span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
 $lang->upgrade->fail            = '升级失败';
@@ -225,10 +226,10 @@ $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdcla
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = '激活立项审批流';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = '可以为激活立项审批设计审批流程。';
 
-$lang->upgrade->changeTypes = [];
-$lang->upgrade->changeTypes['create'] = '新增';
-$lang->upgrade->changeTypes['update'] = '更新';
-$lang->upgrade->changeTypes['delete'] = '删除';
+$lang->upgrade->changeModes = [];
+$lang->upgrade->changeModes['create'] = '新增';
+$lang->upgrade->changeModes['update'] = '更新';
+$lang->upgrade->changeModes['delete'] = '删除';
 
 $lang->upgrade->changeActions = [];
 $lang->upgrade->changeActions['createView']  = '创建数据库视图 %VIEW%';
@@ -245,5 +246,6 @@ $lang->upgrade->changeActions['dropIndex']   = '删除数据库表 %TABLE% 的 %
 $lang->upgrade->changeActions['insertValue'] = '给数据库表 %TABLE% 插入数据';
 $lang->upgrade->changeActions['updateValue'] = '更新数据库表 %TABLE% 的数据';
 $lang->upgrade->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除数据';
+$lang->upgrade->changeActions['method']      = '执行 %MODULE% 模块的 %METHOD% 方法';
 $lang->upgrade->changeActions['other']       = '其他操作';
 

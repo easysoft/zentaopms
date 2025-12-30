@@ -87,7 +87,13 @@ class upgrade extends control
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
-        if($_POST) $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
+        if($_POST)
+        {
+            /* 把选择的版本写入数据库便于后续通过 $config->installedVersion 调用。*/
+            $this->loadModel('setting')->updateVersion(str_replace('_', '.', $this->post->fromVersion));
+
+            $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
+        }
 
         $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;
         $this->view->version = $version;
@@ -135,42 +141,80 @@ class upgrade extends control
      */
     public function execute(string $fromVersion = '')
     {
+        if(version_compare($this->config->version, $this->config->installedVersion, '='))
+        {
+            $url = $this->upgradeZen->getRedirectUrlAfterExecute($fromVersion);
+            return $this->locate($url);
+        }
+
         $this->view->title       = $this->lang->upgrade->execute;
         $this->view->fromVersion = $fromVersion;
 
-        /* 手动删除无法自动删除的文件。*/
-        /* Remove files that can not be deleted automatically. */
-        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
-        $command = $this->upgrade->deleteFiles($script);
-        if($command)
+        /* 显示升级失败的信息。*/
+        if(!empty($_POST['errors']))
         {
-            $this->view->result  = 'fail';
-            $this->view->command = $command;
+            $this->view->errors = $_POST['errors'];
 
-            return $this->display('upgrade', 'deletefiles');
-        }
-
-        if(is_file($script)) unlink($script);
-
-        $this->view->toVersion       = $this->upgradeZen->getToVersion();
-        $this->view->upgradeVersions = $this->upgradeZen->getUpgradeVersions($fromVersion);
-        $this->view->upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion);
-
-        $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
-        if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
-
-        $installedVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-
-        if($this->config->version != $installedVersion) $this->upgrade->execute($rawFromVersion);
-
-        if($this->upgrade->isError())
-        {
-            $this->view->result = 'sqlFail';
-            $this->view->errors = $this->upgrade->getError();
             return $this->display('upgrade', 'sqlfail');
         }
 
-        $this->upgradeZen->afterExecuteSql($fromVersion, $rawFromVersion);
+        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $command = $this->upgrade->deleteFiles($script);
+        if($command) return $this->displayCommand($command);
+
+        $toVersion = $this->upgradeZen->getToVersion();
+
+        $this->view->toVersion       = $toVersion;
+        $this->view->upgradeVersions = $this->upgradeZen->getUpgradeVersions($fromVersion);
+        $this->view->upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
+        $this->display();
+    }
+
+    /**
+     * 通过 ajax 请求执行升级程序。
+     * Ajax execute upgrade.
+     *
+     * @param  string $fromVersion
+     * @param  string $toVersion
+     * @access public
+     * @return void
+     */
+    public function ajaxExecute(string $fromVersion, string $toVersion)
+    {
+        session_write_close();
+
+        if(version_compare($this->config->version, $this->config->installedVersion, '=')) return $this->sendSuccess();
+
+        $this->upgrade->execute($fromVersion, $toVersion);
+        if($this->upgrade->isError()) return $this->sendError(implode("\n", $this->upgrade->getError()));
+
+        if(version_compare($this->config->version, $toVersion, '='))
+        {
+            $load = $this->upgradeZen->getRedirectUrlAfterExecute($fromVersion);
+            return $this->sendSuccess(['load' => $load]);
+        }
+
+        return $this->sendSuccess();
+    }
+
+    /**
+     * 获取已执行的变更。
+     * Ajax get executed changes.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutedChanges()
+    {
+        $changedSqls     = [];
+        $executedChanges = json_decode($this->config->upgrade->executedChanges, true);
+        $executedSqls    = $executedChanges['sqls']    ?? [];
+        $executedMethods = $executedChanges['methods'] ?? [];
+        foreach($executedSqls as $sqls)
+        {
+            foreach(array_keys($sqls) as $sql) $changedSqls[] = $sql;
+        }
+        echo json_encode(['executedSqls' => $changedSqls, 'executedMethods' => array_keys($executedMethods)]);
     }
 
     /**
@@ -552,8 +596,10 @@ class upgrade extends control
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
-        $response = $this->upgrade->removeEncryptedDir();
-        if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
+        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $command = $this->upgrade->removeEncryptedDir($script);
+        if($command) return $this->displayCommand($command);
+        if(is_file($script)) unlink($script);
 
         /* 如果有需要升级的文档，显示升级文档界面。*/
         /* If there are documents that need to be upgraded, display upgrade docs ui. */
@@ -612,11 +658,11 @@ class upgrade extends control
      * 数据库一致性检查。
      * Check database consistency.
      *
-     * @param  bool   $netConnect
+     * @param  int    $netConnect
      * @access public
      * @return void
      */
-    public function consistency(bool $netConnect = true)
+    public function consistency(int $netConnect = 1)
     {
         $logFile  = $this->upgrade->getConsistencyLogFile();
         $hasError = $this->upgrade->hasConsistencyError();
@@ -627,8 +673,8 @@ class upgrade extends control
         {
             /* 能访问禅道官网插件接口跳转到检查插件页面，否则跳转到选择版本页面。*/
             /* If you can access the ZenTao official website extension interface, locate to the check extension page, otherwise locate to the version selection page. */
-            if(!$netConnect) $this->locate(inlink('selectVersion'));
-            $this->locate(inlink('checkExtension'));
+            if($netConnect) $this->locate(inlink('checkExtension'));
+            $this->locate(inlink('selectVersion'));
         }
 
         $this->view->title    = $this->lang->upgrade->consistency;

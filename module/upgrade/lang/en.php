@@ -16,6 +16,7 @@ $lang->upgrade->execute         = 'Upgrading';
 $lang->upgrade->versionTips     = 'The upgrade versions';
 $lang->upgrade->changeTips      = '%s change log';
 $lang->upgrade->progress        = 'Progress';
+$lang->upgrade->executedChanges = "Executed: <span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
 $lang->upgrade->fail            = 'Failed';
@@ -225,10 +226,10 @@ $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdcla
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Activation Approval Workflow';
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'You can design the approval process for activating project approval.';
 
-$lang->upgrade->changeTypes = [];
-$lang->upgrade->changeTypes['create'] = 'Create';
-$lang->upgrade->changeTypes['update'] = 'Update';
-$lang->upgrade->changeTypes['delete'] = 'Delete';
+$lang->upgrade->changeModes = [];
+$lang->upgrade->changeModes['create'] = 'Create';
+$lang->upgrade->changeModes['update'] = 'Update';
+$lang->upgrade->changeModes['delete'] = 'Delete';
 
 $lang->upgrade->changeActions = [];
 $lang->upgrade->changeActions['createView']  = 'Create database view %VIEW%';
@@ -245,5 +246,6 @@ $lang->upgrade->changeActions['dropIndex']   = 'Delete index %INDEX% from databa
 $lang->upgrade->changeActions['insertValue'] = 'Insert data into database table %TABLE%';
 $lang->upgrade->changeActions['updateValue'] = 'Update data in database table %TABLE%';
 $lang->upgrade->changeActions['deleteValue'] = 'Delete data from database table %TABLE%';
+$lang->upgrade->changeActions['method']      = 'Execute the %METHOD% method of the %MODULE% module';
 $lang->upgrade->changeActions['other']       = 'Other';
 
