@@ -57,7 +57,7 @@ class upgradeZen extends upgrade
         }
 
         $currentVersion = str_replace('.', '_', $this->config->version);
-        if(empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);;
+        if(empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
 
         return $upgradeVersions;
     }
@@ -222,8 +222,7 @@ class upgradeZen extends upgrade
         if($sql === '') return [];
 
         /* 移除末尾分号 */
-        $sql      = rtrim($sql, " \t\n\r;");
-        $sqlLower = strtolower($sql);
+        $sql = rtrim($sql, " \t\n\r;");
 
         if(preg_match('/^create\s+(or\s+replace\s+)?view\s+((?:`[^`]*`|\S)+)/i', $sql, $matches))               return [['mode' => 'create', 'action' => 'createView',  'view'  => $this->extractTableName($matches[2])]]; // CREATE VIEW / CREATE OR REPLACE VIEW
         if(preg_match('/^drop\s+view\s+(if\s+exists\s+)?((?:`[^`]*`|\S)+)/i', $sql, $matches))                  return [['mode' => 'delete', 'action' => 'dropView',    'view'  => $this->extractTableName($matches[2])]]; // DROP VIEW
