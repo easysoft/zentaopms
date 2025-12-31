@@ -163,11 +163,11 @@ class baseEntry
      * Send error response
      *
      * @param  int    $code
-     * @param  string|object $msg
+     * @param  string|object|array $msg
      * @access public
      * @return string
      */
-    public function sendError(int $code, string|object $msg)
+    public function sendError(int $code, string|object|array $msg)
     {
         $response = new stdclass();
         $response->error = $msg;

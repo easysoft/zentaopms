@@ -2543,6 +2543,7 @@ eof;
                 $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
+                $actionData['name'] = $action;
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
                 if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
                 {

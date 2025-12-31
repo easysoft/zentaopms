@@ -362,8 +362,9 @@ class task extends control
 
         $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
 
-        $execution = $this->view->execution ?? $this->execution->getById($task->execution);
-        if(!helper::isAjaxRequest('modal') && $execution->type == 'kanban')
+        $execution    = $this->view->execution ?? $this->execution->getById($task->execution);
+        $isModalOrApi = helper::isAjaxRequest('modal') || (defined('RUN_MODE') && RUN_MODE == 'api');
+        if(!$isModalOrApi && $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', (string)$taskID);
             return $this->send(array('load' => $this->createLink('execution', 'kanban', "executionID=$execution->id")));
@@ -961,7 +962,7 @@ class task extends control
             /* Get the information returned after a task is started. */
             $task     = $this->task->fetchByID($taskID);
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);
-            $this->send($response);
+            return $this->send($response);
         }
 
         if(!isset($this->view->members[$this->view->task->finishedBy])) $this->view->members[$this->view->task->finishedBy] = $this->view->task->finishedBy; // Ensure that the completion person is on the user list.

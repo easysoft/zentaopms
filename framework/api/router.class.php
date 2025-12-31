@@ -757,4 +757,18 @@ class api extends router
 
         $this->config->vision = $vision ? $vision : $defaultVision;
     }
+
+    /**
+     * 设置超级变量。
+     * Set the super vars.
+     *
+     * @access public
+     * @return void
+     */
+    public function setSuperVars()
+    {
+        $this->config->framework->filterCSRF = false;
+
+        parent::setSuperVars();
+    }
 }
