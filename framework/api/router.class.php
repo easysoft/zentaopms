@@ -402,7 +402,7 @@ class api extends router
      */
     public function checkObjectPriv(object $object, string $table): bool
     {
-        if($this->user->admin) true;
+        if($this->user->admin) return true;
 
         $userView = $this->user->view;
         switch($table)
