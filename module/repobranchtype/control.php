@@ -86,7 +86,7 @@ class repobranchtype extends control
             }
 
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-             $this->loadModel('action')->create('repo', $repoID, 'createbranchtype');
+            $this->loadModel('action')->create('repo', $repoID, 'createbranchtype');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->createSuccess, 'load' => $link));
         }
 

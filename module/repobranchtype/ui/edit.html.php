@@ -13,6 +13,12 @@ namespace zin;
 jsVar('maxPrefixesTip', $lang->repobranchtype->tips->maxPrefixes);
 jsVar('minPrefixesTip', $lang->repobranchtype->tips->minPrefixes);
 
+/* 第一行只有添加按钮。 */
+$firstRowBtns = array(
+    array('class' => 'btn btn-link', 'icon' => 'plus', 'onclick' => 'addPrefixItem(this)')
+);
+
+/* 其他行有添加和删除按钮。 */
 $prefixBtns = array(
     array('class' => 'btn btn-link', 'icon' => 'plus', 'onclick' => 'addPrefixItem(this)'),
     array('class' => 'btn btn-link', 'icon' => 'trash', 'onclick' => 'deletePrefixItem(this)')
@@ -37,7 +43,7 @@ foreach($prefixes as $index => $prefix)
         ),
         formGroup
         (
-            btnGroup(set::items($prefixBtns))
+            btnGroup(set::items($index == 0 ? $firstRowBtns : $prefixBtns))
         )
     );
 }
