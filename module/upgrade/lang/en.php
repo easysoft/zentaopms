@@ -19,7 +19,7 @@ $lang->upgrade->progress        = 'Progress';
 $lang->upgrade->executedChanges = "Executed: <span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
-$lang->upgrade->fail            = 'Failed';
+$lang->upgrade->fail            = 'Upgrade failed. The current version of ZenTao is ';
 $lang->upgrade->successTip      = 'Successed';
 $lang->upgrade->success         = "<p>Congratulations! Your ZenTao is updated.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';

@@ -14,6 +14,13 @@ namespace zin;
 
 set::zui(true);
 
+$editionName = $lang->pmsName . $config->installedVersion;
+if(!is_numeric($config->installedVersion[0]))
+{
+    $edition     = substr($config->installedVersion, 0, 3);
+    $editionName = $lang->{$edition . 'Name'} . str_ireplace($edition, '', $config->installedVersion);
+}
+
 div
 (
     setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
@@ -32,7 +39,7 @@ div
             div
             (
                 setClass('text-xl font-medium'),
-                $lang->upgrade->fail
+                $lang->upgrade->fail . $editionName
             )
         ),
         div

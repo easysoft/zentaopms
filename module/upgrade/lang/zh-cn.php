@@ -19,7 +19,7 @@ $lang->upgrade->progress        = '进度';
 $lang->upgrade->executedChanges = "已执行：<span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
-$lang->upgrade->fail            = '升级失败';
+$lang->upgrade->fail            = '升级失败。当前的禅道版本为';
 $lang->upgrade->successTip      = '升级成功';
 $lang->upgrade->success         = "<p>恭喜您！您的禅道已经成功升级。</p>";
 $lang->upgrade->tohome          = '访问禅道';
