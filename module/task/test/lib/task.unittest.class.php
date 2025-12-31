@@ -541,7 +541,7 @@ class taskTest
      * @access public
      * @return object[]
      */
-    public function getUserTasksTest(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
+    public function getUserTasksTest(string $account, string $type = 'assignedTo', int $limit = 0, ?object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
         $object = $this->objectModel->getUserTasks($account, $type, $limit, $pager, $orderBy, $projectID);
 
@@ -2337,7 +2337,7 @@ class taskTest
      * @access public
      * @return object[]
      */
-    public function fetchUserTasksByTypeTest(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $projectID = 0, int $limit = 0, object $pager = null): array
+    public function fetchUserTasksByTypeTest(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $projectID = 0, int $limit = 0, ?object $pager = null): array
     {
         $object = $this->objectModel->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
 

@@ -24,7 +24,7 @@ class systemModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $productID, string $status = 'active', string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int $productID, string $status = 'active', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getSystemList();
 
