@@ -149,6 +149,7 @@ class upgrade extends control
 
         $this->view->title       = $this->lang->upgrade->execute;
         $this->view->fromVersion = $fromVersion;
+        $this->view->fromEdition = $this->upgrade->getEditionByVersion($fromVersion);
 
         /* 显示升级失败的信息。*/
         if(!empty($_POST['errors']))

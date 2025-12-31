@@ -17,7 +17,7 @@ class upgradeZen extends upgrade
     }
 
     /**
-     * 获取可升级的版本列表。
+     * 获取要升级到的版本列表。
      * Get upgrade versions.
      *
      * @param  string $fromVersion
@@ -30,29 +30,61 @@ class upgradeZen extends upgrade
         $currentEdition  = $this->config->edition;
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
 
-        /* 如果当前版本和来源版本不一致，则需要将来源版本转换为当前版本对应的版本号。*/
-        if($currentEdition != $fromEdition)
+        if($currentEdition == $fromEdition)
         {
-            $openVersion = $this->upgrade->getOpenVersion($fromVersion);
-            $fromVersion = array_search($openVersion, $this->config->upgrade->{$currentEdition . 'Version'});
-            if(empty($fromVersion)) return $upgradeVersions;
+            /**
+             * 版本一致，从来源版本开始升级。比如：
+             * 开源版21.7.5升级到开源版21.7.8，升级版本列表为开源版21.7.6、开源版21.7.7和开源版21.7.8。
+             * IPD版4.4升级到IPD版4.7，升级版本列表为IPD版4.5、IPD版4.6和IPD版4.7。
+             */
+            foreach($this->lang->upgrade->fromVersions as $version => $label)
+            {
+                if($currentEdition == 'open' && !is_numeric($version[0])) continue;
+                if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
+                if(version_compare($fromVersion, $version, '>=')) continue;
+
+                $upgradeVersions[$version] = $label;
+            }
         }
-
-        /* 如果当前版本和来源版本不一致，则需要包含来源版本对应的目标版本。比如旗舰版7.5升级到IPD版4.6，则需要包含IPD4.5。*/
-        $operator = $currentEdition != $fromEdition ? '>' : '>=';
-
-        foreach($this->lang->upgrade->fromVersions as $version => $label)
+        else
         {
-            if(version_compare($fromVersion, $version, $operator)) continue;
-            if($currentEdition == 'open' && !is_numeric($version[0])) continue;
-            if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
+            $openVersion   = $this->upgrade->getOpenVersion($fromVersion);
+            $versionsMap   = $this->config->upgrade->{$currentEdition . 'Version'};
+            $mappedVersion = array_search($openVersion, $versionsMap);
+            if($mappedVersion)
+            {
+                /**
+                 * 匹配到对应版本，从对应版本开始升级。
+                 */
+                foreach($this->lang->upgrade->fromVersions as $version => $label)
+                {
+                    if($currentEdition == 'open' && !is_numeric($version[0])) continue;
+                    if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
+                    if(version_compare($mappedVersion, $version, '>')) continue;
 
-            $upgradeVersions[$version] = $label;
+                    $upgradeVersions[$version] = $label;
+                }
+            }
+            else
+            {
+                $toVersion = reset($versionsMap);
+                if($fromEdition != 'open') $toVersion = array_search($toVersion, $this->config->upgrade->{$fromEdition . 'Version'});
+                foreach($this->lang->upgrade->fromVersions as $version => $label)
+                {
+                    if($fromEdition == 'open' && !is_numeric($version[0])) continue;
+                    if($fromEdition != 'open' && strpos($version, $fromEdition) === false) continue;
+                    if(version_compare($fromVersion, $version, '>=')) continue;
+                    if(version_compare($toVersion, $version, '<=')) break;
+
+                    $upgradeVersions[$version] = $label;
+                }
+
+                foreach(array_keys($versionsMap) as $version) $upgradeVersions[$version] = $this->lang->upgrade->fromVersions[$version];
+            }
         }
 
         $currentVersion = str_replace('.', '_', $this->config->version);
-        $currentLabel   = ucfirst($this->config->version);
-        $upgradeVersions[$currentVersion] = $currentLabel;
+        if(empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);;
 
         return $upgradeVersions;
     }

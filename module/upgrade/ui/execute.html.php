@@ -21,20 +21,28 @@ $completedCount = array_search($toVersion, array_keys($upgradeVersions));
 $progress       = $totalVersions ? (int)($completedCount / $totalVersions * 100) : 0;
 $progressLabel  = $completedCount . '/' . $totalVersions;
 
-$editionName    = $config->edition == 'open' ? $lang->pmsName : $lang->{$config->edition . 'Name'};
-$buildVersions = function() use ($toVersion, $upgradeVersions, $editionName, $config)
+$buildVersions = function() use ($lang, $toVersion, $upgradeVersions)
 {
+    $editionNames = [];
+    foreach(['open', 'biz', 'max', 'ipd'] as $edition)
+    {
+        $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
+    }
+
+    $versionIndex   = 0;
+    $toVersionIndex = array_search($toVersion, array_keys($upgradeVersions)) ?: 0;
+
     $versions = [];
     foreach($upgradeVersions as $key => $version)
     {
-        $done  = version_compare($key, $toVersion, '<');
-        $class = $done ? 'text-success' : 'text-gray-400';
-        $icon  = $done ? 'check-circle' : ($key == $toVersion ? 'spinner-indicator' : 'clock');
+        $class   = $versionIndex < $toVersionIndex ? 'text-success' : 'text-gray-400';
+        $icon    = $versionIndex < $toVersionIndex ? 'check-circle' : ($versionIndex == $toVersionIndex ? 'spinner-indicator' : 'clock');
+        $edition = is_numeric($key[0]) ? 'open' : substr($key, 0, 3);
         $versions[] = div
         (
             row
             (
-                setClass('version-item items-center gap-2' . ($done ? ' executed' : '')),
+                setClass('version-item items-center gap-2' . ($versionIndex < $toVersionIndex ? ' executed' : '')),
                 icon
                 (
                     setClass("text-xl {$class}"),
@@ -42,10 +50,12 @@ $buildVersions = function() use ($toVersion, $upgradeVersions, $editionName, $co
                 ),
                 span
                 (
-                    $editionName . str_ireplace($config->edition, '', $version)
+                    $editionNames[$edition] . str_ireplace($edition, '', $version)
                 )
             )
         );
+
+        $versionIndex++;
     }
     return $versions;
 };
