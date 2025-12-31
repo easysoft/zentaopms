@@ -21,14 +21,17 @@ $completedCount = array_search($toVersion, array_keys($upgradeVersions));
 $progress       = $totalVersions ? (int)($completedCount / $totalVersions * 100) : 0;
 $progressLabel  = $completedCount . '/' . $totalVersions;
 
-$buildVersions = function() use ($lang, $toVersion, $upgradeVersions)
+$editionNames = [];
+foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 {
-    $editionNames = [];
-    foreach(['open', 'biz', 'max', 'ipd'] as $edition)
-    {
-        $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
-    }
+    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
+}
 
+$toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
+$toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
+
+$buildVersions = function() use ($toVersion, $upgradeVersions, $editionNames)
+{
     $versionIndex   = 0;
     $toVersionIndex = array_search($toVersion, array_keys($upgradeVersions)) ?: 0;
 
@@ -161,7 +164,7 @@ div
                     span
                     (
                         setClass('text-lg font-medium'),
-                        sprintf($lang->upgrade->changeTips, $editionName . str_ireplace($config->edition, '', $upgradeVersions[$toVersion]))
+                        sprintf($lang->upgrade->changeTips, $toVersionName)
                     ),
                     span
                     (
