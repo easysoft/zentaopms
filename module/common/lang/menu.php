@@ -458,7 +458,6 @@ $lang->project->noMultiple->scrum->menu->devops     = $lang->scrum->menu->devops
 $lang->project->noMultiple->scrum->menu->doc        = $lang->scrum->menu->doc;
 $lang->project->noMultiple->scrum->menu->build      = $lang->scrum->menu->build;
 $lang->project->noMultiple->scrum->menu->release    = $lang->scrum->menu->release;
-$lang->project->noMultiple->scrum->menu->dynamic    = $lang->scrum->menu->dynamic;
 $lang->project->noMultiple->scrum->menu->settings   = $lang->scrum->menu->settings;
 
 $lang->project->noMultiple->kanban                 = new stdclass();

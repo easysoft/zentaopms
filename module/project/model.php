@@ -2421,6 +2421,15 @@ class projectModel extends model
         $lang->project->dividerMenu = $lang->$navGroup->dividerMenu;
         $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
 
+        /* 无迭代项目不开启过程删除导航。 */
+        if($this->config->edition != 'open')
+        {
+            if(!$this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'process'))
+            {
+                unset($lang->project->menu->other['dropMenu']->pssp);
+            }
+        }
+
         /* If projectID is set, cannot use homeMenu. */
         unset($lang->project->homeMenu);
         if(empty($project->hasProduct))
