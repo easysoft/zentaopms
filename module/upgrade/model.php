@@ -11432,7 +11432,12 @@ class upgradeModel extends model
         /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
         foreach($deliverables as $oldDeliverable)
         {
-            foreach(explode(',', $oldDeliverable->model) as $model)
+            $models = explode(',', $oldDeliverable->model);
+            if(array_search('product_waterfall', $models) !== false) $models[] = 'product_waterfallplus';
+            if(array_search('project_waterfall', $models) !== false) $models[] = 'project_waterfallplus';
+            if(array_search('product_scrum', $models) !== false)     $models[] = 'product_agileplus';
+            if(array_search('project_scrum', $models) !== false)     $models[] = 'project_agileplus';
+            foreach($models as $model)
             {
                 foreach($workflowGroups as $workflowGroup)
                 {
@@ -11999,7 +12004,7 @@ class upgradeModel extends model
         if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有项目流程
 
         $projectGroup = $this->dao->select('id,workflowGroup,model,category,hasProduct')->from(TABLE_PROJECT)->where('model')->in('ipd,waterfallplus,agileplus')->andWhere('deleted')->eq('0')->fetchGroup('workflowGroup', 'id');
-        $workflows    = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->in(array_keys($projectGroup))->fetchAll('id');
+        $workflows    = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->in(array_keys($projectGroup))->fetchAll('id', false);
 
         $tableList = array(
             TABLE_WORKFLOW,
