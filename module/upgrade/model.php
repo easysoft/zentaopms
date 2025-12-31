@@ -217,7 +217,7 @@ class upgradeModel extends model
         if(isset($upgraradeVersions[$installedOpenVersion]))
         {
             /* Execute charge edition. */
-            foreach($upgraradeVersions[$installedOpenVersion] as $edition => $chargedVersion)
+            foreach($upgraradeVersions[$installedOpenVersion] as $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
@@ -390,11 +390,10 @@ class upgradeModel extends model
             }
 
             /* Get charge contents. */
-            foreach($chargedVersions as $edition => $chargedVersion)
+            foreach($chargedVersions as $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
-                    if($edition == 'max') $version = array_search($openVersion, $this->config->upgrade->maxVersion);
                     $sqlFile = $this->getUpgradeFile(str_replace('_', '.', $version));
                     if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
 
