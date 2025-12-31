@@ -19,6 +19,13 @@ window.addPrefixItem = function()
 
     newLine.find('.form-group').attr('data-name', 'prefixes[' + index + ']').find('input').attr('name', 'prefixes[' + index + ']').attr('id', 'prefixes[' + index + ']').val('');
 
+    /* 新添加的行需要显示删除按钮。 */
+    const btnGroup = newLine.find('.btn-group');
+    if(btnGroup.find('.icon-trash').length == 0)
+    {
+        btnGroup.append('<button type="button" class="btn btn-link" onclick="deletePrefixItem(this)"><i class="icon icon-trash"></i></button>');
+    }
+
     $obj.closest('.form-row').after(newLine);
 };
 
@@ -28,14 +35,23 @@ window.addPrefixItem = function()
  */
 window.deletePrefixItem = function()
 {
-    const obj   = $(event.target);
+    const obj     = $(event.target);
+    const formRow = obj.closest('.form-row');
+
+    /* 第一行（带有标签的行）不允许删除。 */
+    if(formRow.find('.form-label').length > 0)
+    {
+        zui.Messager.show(minPrefixesTip, {type: 'warning', time: 3000});
+        return false;
+    }
+
     const index = $('.prefixes').length;
 
-    // 检查是否只剩1个（不允许删除到少于1个）
+    /* 检查是否只剩1个（不允许删除到少于1个）。 */
     if(index <= 1)
     {
         zui.Messager.show(minPrefixesTip, {type: 'warning', time: 3000});
         return false;
     }
-    obj.closest('.form-row').remove();
+    formRow.remove();
 };

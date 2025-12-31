@@ -4472,7 +4472,7 @@ $config->group->package->branchType = new stdclass();
 $config->group->package->branchType->order  = 2885;
 $config->group->package->branchType->subset = 'repoSettings';
 $config->group->package->branchType->privs = array();
-$config->group->package->branchType->privs['repobranchtype-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browser'), 'recommend' => array('repobranchtype-create', 'repobranchtype-edit', 'repobranchtype-delete', 'repobranchtype-import'));
+$config->group->package->branchType->privs['repobranchtype-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('repobranchtype-create', 'repobranchtype-edit', 'repobranchtype-delete', 'repobranchtype-import'));
 $config->group->package->branchType->privs['repobranchtype-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repobranchtype-browse'), 'recommend' => array('repobranchtype-edit', 'repobranchtype-delete', 'repobranchtype-import'));
 $config->group->package->branchType->privs['repobranchtype-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repobranchtype-browse'), 'recommend' => array('repobranchtype-create', 'repobranchtype-delete', 'repobranchtype-import'));
 $config->group->package->branchType->privs['repobranchtype-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repobranchtype-browse'), 'recommend' => array('repobranchtype-create', 'repobranchtype-edit', 'repobranchtype-import'));

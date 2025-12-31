@@ -29,6 +29,7 @@ class repobranchtype extends control
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
+        if($repo === false) $repo = null;
         $gitfoxID = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
 
         /* 创建分页对象。 */
@@ -65,6 +66,7 @@ class repobranchtype extends control
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
+        if($repo === false) $repo = null;
 
         if($_POST)
         {
@@ -75,7 +77,7 @@ class repobranchtype extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             /* 调用 model 方法创建分支类型。 */
-            $gitfoxID = zget($repo, 'gitfoxID', 0);
+            $gitfoxID = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
             $result   = $this->repobranchtype->apiCreateBranchType($gitfoxID, $formData);
             if(!$result)
             {
@@ -84,7 +86,7 @@ class repobranchtype extends control
             }
 
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-            $this->loadModel('action')->create('ops_branch_type', $result, 'created');
+            $this->loadModel('action')->create('repo', $repoID, 'createbranchtype');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->createSuccess, 'load' => $link));
         }
 
@@ -110,6 +112,7 @@ class repobranchtype extends control
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
+        if($repo === false) $repo = null;
 
         /* 获取分支类型详情。 */
         $branchType = $this->repobranchtype->getBranchTypeByID($typeID);
@@ -167,6 +170,7 @@ class repobranchtype extends control
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
+        if($repo === false) $repo = null;
 
         /* 获取分支类型信息。 */
         $branchType = $this->repobranchtype->getBranchTypeByID($typeID);
@@ -204,6 +208,7 @@ class repobranchtype extends control
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
+        if($repo === false) $repo = null;
 
         if(!empty($_POST))
         {
@@ -219,8 +224,9 @@ class repobranchtype extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* 获取 repo = 0 的分支类型列表（全局模板）。 */
+        $gitfoxID           = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
         $tempBranchTypeList = $this->repobranchtype->getBranchTypeList(0, '', '', '', $orderBy, $pager);
-        $branchTypeList     = $this->repobranchtype->getBranchTypeList((int)$repo->gitfoxID, '', '', '', $orderBy, $pager);
+        $branchTypeList     = $this->repobranchtype->getBranchTypeList($gitfoxID, '', '', '', $orderBy, $pager);
 
         /* 从模板列表中移除已存在于当前 repo 的分支类型（按 key 字段匹配）。 */
         $existingKeys       = helper::arrayColumn($branchTypeList, 'key');

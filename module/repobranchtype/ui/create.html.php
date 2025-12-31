@@ -13,9 +13,9 @@ namespace zin;
 jsVar('maxPrefixesTip', $lang->repobranchtype->tips->maxPrefixes);
 jsVar('minPrefixesTip', $lang->repobranchtype->tips->minPrefixes);
 
-$prefixBtns = array(
-    array('class' => 'btn btn-link', 'icon' => 'plus', 'onclick' => 'addPrefixItem(this)'),
-    array('class' => 'btn btn-link', 'icon' => 'trash', 'onclick' => 'deletePrefixItem(this)')
+/* 第一行只有添加按钮。 */
+$firstRowBtns = array(
+    array('class' => 'btn btn-link', 'icon' => 'plus', 'onclick' => 'addPrefixItem(this)')
 );
 
 $backUrl = $repoID != 0 ? createLink('repobranchtype', 'browse', "repoID=$repoID") : createLink('repobranchtype', 'browse');
@@ -65,7 +65,7 @@ formPanel
         ),
         formGroup
         (
-            btnGroup(set::items($prefixBtns))
+            btnGroup(set::items($firstRowBtns))
         )
     ),
     formGroup
