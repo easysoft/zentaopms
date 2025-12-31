@@ -202,22 +202,22 @@ class upgradeModel extends model
         $this->executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
 
         /* Execute. */
-        $currentVersion     = $this->config->installedVersion;
-        $currentOpenVersion = $this->getOpenVersion(str_replace('.', '_', $currentVersion));
-        $upgraradeVersions  = $this->getVersionsToUpdate($currentOpenVersion, $this->config->edition);
+        $installedVersion     = $this->config->installedVersion;
+        $installedOpenVersion = $this->getOpenVersion(str_replace('.', '_', $installedVersion));
+        $upgraradeVersions    = $this->getVersionsToUpdate($installedOpenVersion, $this->fromEdition);
 
         /* Execute open edition. */
-        $this->saveLogs("Execute $currentOpenVersion");
-        $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $currentOpenVersion)));
+        $this->saveLogs("Execute $installedOpenVersion");
+        $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $installedOpenVersion)));
         if(!$result) return $this->recordExecutedChanges();
 
-        $result = $this->executeByConfig($currentOpenVersion);
+        $result = $this->executeByConfig($installedOpenVersion);
         if(!$result) return $this->recordExecutedChanges();
 
-        if(isset($upgraradeVersions[$currentOpenVersion]))
+        if(isset($upgraradeVersions[$installedOpenVersion]))
         {
             /* Execute charge edition. */
-            foreach($upgraradeVersions[$currentOpenVersion] as $edition => $chargedVersion)
+            foreach($upgraradeVersions[$installedOpenVersion] as $edition => $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
@@ -237,13 +237,12 @@ class upgradeModel extends model
             $result = $this->executeOthers($this->fromEdition);
             if(!$result) return $this->recordExecutedChanges();
         }
-
-        /**
-         * 升级到最终版本之前，每升级完一个版本，更新一次版本号，防止中途失败重复升级。
-         * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再更新版本号。
-         */
-        if(version_compare($toVersion, $this->config->version, '<'))
+        else
         {
+            /**
+             * 升级到最终版本之前，每升级完一个版本，更新一次版本号，防止中途失败重复升级。
+             * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再更新版本号。
+             */
             $this->loadModel('setting')->updateVersion($toVersion);
             $this->recordExecutedChanges(true);
         }

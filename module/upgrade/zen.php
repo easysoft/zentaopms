@@ -29,57 +29,30 @@ class upgradeZen extends upgrade
         $upgradeVersions = [];
         $currentEdition  = $this->config->edition;
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
+        $fromOpenVersion = $this->upgrade->getOpenVersion($fromVersion);
+        $versions        = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
-        if($currentEdition == $fromEdition)
+        $mapped = false; // 标记是否匹配到付费版本
+        foreach($versions as $openVersion => $chargedVersions)
         {
-            /**
-             * 版本一致，从来源版本开始升级。比如：
-             * 开源版21.7.5升级到开源版21.7.8，升级版本列表为开源版21.7.6、开源版21.7.7和开源版21.7.8。
-             * IPD版4.4升级到IPD版4.7，升级版本列表为IPD版4.5、IPD版4.6和IPD版4.7。
-             */
-            foreach($this->lang->upgrade->fromVersions as $version => $label)
-            {
-                if($currentEdition == 'open' && !is_numeric($version[0])) continue;
-                if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
-                if(version_compare($fromVersion, $version, '>=')) continue;
+            if(version_compare($fromVersion, $openVersion, '>=')) continue;
 
-                $upgradeVersions[$version] = $label;
-            }
-        }
-        else
-        {
-            $openVersion   = $this->upgrade->getOpenVersion($fromVersion);
-            $versionsMap   = $this->config->upgrade->{$currentEdition . 'Version'};
-            $mappedVersion = array_search($openVersion, $versionsMap);
-            if($mappedVersion)
+            if($currentEdition == 'open')
             {
-                /**
-                 * 匹配到对应版本，从对应版本开始升级。
-                 */
-                foreach($this->lang->upgrade->fromVersions as $version => $label)
-                {
-                    if($currentEdition == 'open' && !is_numeric($version[0])) continue;
-                    if($currentEdition != 'open' && strpos($version, $currentEdition) === false) continue;
-                    if(version_compare($mappedVersion, $version, '>')) continue;
-
-                    $upgradeVersions[$version] = $label;
-                }
+                $upgradeVersions[$openVersion] = $this->lang->upgrade->fromVersions[$openVersion];
             }
             else
             {
-                $toVersion = reset($versionsMap);
-                if($fromEdition != 'open') $toVersion = array_search($toVersion, $this->config->upgrade->{$fromEdition . 'Version'});
-                foreach($this->lang->upgrade->fromVersions as $version => $label)
+                $mappedVersion = array_search($openVersion, $this->config->upgrade->{$currentEdition . 'Version'});
+                if($mappedVersion)
                 {
-                    if($fromEdition == 'open' && !is_numeric($version[0])) continue;
-                    if($fromEdition != 'open' && strpos($version, $fromEdition) === false) continue;
-                    if(version_compare($fromVersion, $version, '>=')) continue;
-                    if(version_compare($toVersion, $version, '<=')) break;
-
-                    $upgradeVersions[$version] = $label;
+                    $mapped = true;
+                    $upgradeVersions[$mappedVersion] = $this->lang->upgrade->fromVersions[$mappedVersion];
                 }
-
-                foreach(array_keys($versionsMap) as $version) $upgradeVersions[$version] = $this->lang->upgrade->fromVersions[$version];
+                elseif(!$mapped)
+                {
+                    $upgradeVersions[$openVersion] = $this->lang->upgrade->fromVersions[$openVersion];
+                }
             }
         }
 

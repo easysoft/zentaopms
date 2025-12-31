@@ -58,7 +58,7 @@ $(function()
 
         if(response.result == 'success')
         {
-            loadPage(response.load);
+            response.load ? loadPage(response.load) : loadCurrentPage();
         }
         else if(response.result == 'fail')
         {
