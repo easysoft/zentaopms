@@ -1723,7 +1723,6 @@ $config->delete['21_7_7'][] = 'module/upgrade/css/afterexec.vi.css';
 $config->delete['21_7_7'][] = 'module/upgrade/css/common.css';
 $config->delete['21_7_7'][] = 'module/upgrade/css/common.ui.css';
 $config->delete['21_7_7'][] = 'module/upgrade/css/confirm.ui.css';
-$config->delete['21_7_7'][] = 'module/upgrade/css/execute.ui.css';
 $config->delete['21_7_7'][] = 'module/upgrade/js/common.js';
 $config->delete['21_7_7'][] = 'module/upgrade/js/confirm.ui.js';
 
