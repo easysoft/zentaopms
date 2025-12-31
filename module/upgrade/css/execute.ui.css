@@ -1,0 +1,4 @@
+.icon-spinner-indicator {
+  animation: -spin 1s linear infinite;
+  opacity: .5
+}
