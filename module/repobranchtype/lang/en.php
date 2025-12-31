@@ -1,11 +1,11 @@
 <?php
 $lang->repobranchtype = new stdclass();
 
-$lang->repobranchtype->common = 'Branch Type';
-$lang->repobranchtype->browse = 'Browse Branch Type';
-$lang->repobranchtype->create = 'Create Branch Type';
-$lang->repobranchtype->edit   = 'Edit Branch Type';
-$lang->repobranchtype->delete = 'Delete Branch Type';
+$lang->repobranchtype->common        = 'Branch Type';
+$lang->repobranchtype->browse        = 'Browse Branch Type';
+$lang->repobranchtype->create        = 'Create Branch Type';
+$lang->repobranchtype->edit          = 'Edit Branch Type';
+$lang->repobranchtype->delete        = 'Delete Branch Type';
 $lang->repobranchtype->import        = 'Import Branch Type';
 $lang->repobranchtype->setBranchRule = 'Set Branch Rule';
 
@@ -14,7 +14,7 @@ $lang->repobranchtype->key      = 'Key';
 $lang->repobranchtype->prefixes = 'Prefixes';
 $lang->repobranchtype->desc     = 'Description';
 
-$lang->repobranchtype->placeholder = new stdclass();
+$lang->repobranchtype->placeholder      = new stdclass();
 $lang->repobranchtype->placeholder->key = 'Unique identifier for branch rules, must start with a letter';
 
 $lang->repobranchtype->tips = new stdclass();
