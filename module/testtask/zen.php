@@ -14,7 +14,7 @@ class testtaskZen extends testtask
      * @access public
      * @return void
      */
-    public function setMenu(int $productID, int|string $branch, int $projectID, int $executionID, object $testtask = null)
+    public function setMenu(int $productID, int|string $branch, int $projectID, int $executionID, ?object $testtask = null)
     {
         if($this->app->tab == 'project')
         {
@@ -341,6 +341,7 @@ class testtaskZen extends testtask
             $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_column($runList, 'case'), 'testcase', 'byRelation', true);
             foreach($runList as $run)
             {
+                if(!empty($run->isScene)) continue;
                 $run->caseID        = $run->case;
                 $run->relatedObject = zget($caseRelatedObjectList, $run->case, 0);
             }

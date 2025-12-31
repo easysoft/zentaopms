@@ -13,7 +13,7 @@ window.renderRowCol = function($result, col, row)
     {
         $result.find('.picker-box').on('inited', function(e, info)
         {
-            const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + row.product + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
+            const storyLink = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + row.branch + '&moduleID=' + row.module + '&storyID=' + row.story + '&onlyOption=false&status=active&limit=0&type=&hasParent=0');
             $.getJSON(storyLink, function(stories)
             {
                 let $story = info[0];
@@ -26,7 +26,7 @@ window.renderRowCol = function($result, col, row)
     {
         $result.find('.picker-box').on('inited', function(e, info)
         {
-            const sceneLink = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + row.product + '&moduleID=' + row.module + '&branch=' + row.branch);
+            const sceneLink = $.createLink('testcase', 'ajaxGetProductScenes', 'productID=' + productID + '&moduleID=' + row.module + '&branch=' + (row.branch ? row.branch : 'all'));
             $.getJSON(sceneLink, function(scenes)
             {
                 let $scene = info[0];

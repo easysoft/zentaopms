@@ -40,13 +40,13 @@ cid=18769
  - 第8[0]条的old属性 @3
  - 第8[0]条的new属性 @1
 - 检查修改任务预计工时
- - 第9[0]条的old属性 @3
+ - 第9[0]条的old属性 @3.00
  - 第9[0]条的new属性 @1
 - 检查修改任务消耗工时
- - 第10[0]条的old属性 @0
+ - 第10[0]条的old属性 @0.00
  - 第10[0]条的new属性 @1
 - 检查修改任务剩余工时
- - 第11[1]条的old属性 @3
+ - 第11[1]条的old属性 @3.00
  - 第11[1]条的new属性 @1
 - 检查修改任务完成者
  - 第12[1]条的old属性 @`^$`
@@ -99,9 +99,9 @@ r($taskTester->batchUpdateObject($taskIdList, $changeStatus))     && p('5[0]:old
 r($taskTester->batchUpdateObject($taskIdList, $changeEstStarted)) && p('6[0]:old,new')  && e('2023-01-02,2023-05-25'); // 检查修改任务开始日期
 r($taskTester->batchUpdateObject($taskIdList, $changeDeadline))   && p('7[0]:old,new')  && e('2023-01-10,2023-05-25'); // 检查修改任务截止日期
 r($taskTester->batchUpdateObject($taskIdList, $changePri))        && p('8[0]:old,new')  && e('3,1');                   // 检查修改任务优先级
-r($taskTester->batchUpdateObject($taskIdList, $changeEstimate))   && p('9[0]:old,new')  && e('3,1');                   // 检查修改任务预计工时
-r($taskTester->batchUpdateObject($taskIdList, $changeConsumed))   && p('10[0]:old,new') && e('0,1');                   // 检查修改任务消耗工时
-r($taskTester->batchUpdateObject($taskIdList, $changeLeft))       && p('11[1]:old,new') && e('3,1');                   // 检查修改任务剩余工时
+r($taskTester->batchUpdateObject($taskIdList, $changeEstimate))   && p('9[0]:old,new')  && e('3.00,1');                // 检查修改任务预计工时
+r($taskTester->batchUpdateObject($taskIdList, $changeConsumed))   && p('10[0]:old,new') && e('0.00,1');                // 检查修改任务消耗工时
+r($taskTester->batchUpdateObject($taskIdList, $changeLeft))       && p('11[1]:old,new') && e('3.00,1');                // 检查修改任务剩余工时
 r($taskTester->batchUpdateObject($taskIdList, $changeFinishedBy)) && p('12[1]:old,new') && e('`^$`,admin');            // 检查修改任务完成者
 r($taskTester->batchUpdateObject($taskIdList, $changeClosedBy))   && p('13[1]:old,new') && e('`^$`,admin');            // 检查修改任务关闭者
 

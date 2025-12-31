@@ -47,19 +47,6 @@ fields:
   postfix: ""
   loop: 0
   format: ""
-- field: position
-  note: 职位
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
-- field: function
-  note: 部门职能
-  range: '软件开发,产品规划,质量保证,系统运维,市场推广,人力资源,财务管理,行政管理,销售业务,客户服务'
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
 - field: manager
   note: 部门经理
   range: 'admin,user1,user2,user3,user4,user5,user6,user7,user8,user9'

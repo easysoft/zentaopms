@@ -53,6 +53,7 @@ $config->execution->editor->view     = array('id' => 'comment,lastComment', 'too
 
 $config->execution->search['module']                   = 'task';
 $config->execution->search['fields']['name']           = $lang->task->name;
+$config->execution->search['fields']['keywords']       = $lang->task->keywords;
 $config->execution->search['fields']['id']             = $lang->task->id;
 $config->execution->search['fields']['status']         = $lang->task->status;
 $config->execution->search['fields']['desc']           = $lang->task->desc;
@@ -90,6 +91,7 @@ $config->execution->search['fields']['lastEditedDate'] = $lang->task->lastEdited
 $config->execution->search['fields']['activatedDate']  = $lang->task->activatedDate;
 
 $config->execution->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->execution->search['params']['keywords']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
 $config->execution->search['params']['desc']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');

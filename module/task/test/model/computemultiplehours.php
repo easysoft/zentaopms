@@ -73,44 +73,44 @@ cid=18777
  - 属性id @1
  - 属性assignedTo @admin
  - 属性status @doing
- - 属性estimate @5
- - 属性left @4
+ - 属性estimate @5.00
+ - 属性left @4.00
 - taskID 2 只有老task计算多人工时
  - 属性id @2
  - 属性assignedTo @user1
  - 属性status @done
- - 属性estimate @13
- - 属性left @0
+ - 属性estimate @13.00
+ - 属性left @0.00
 - taskID 4 只有老task计算多人工时
  - 属性id @3
  - 属性assignedTo @admin
  - 属性status @done
- - 属性estimate @15
- - 属性left @4
+ - 属性estimate @15.00
+ - 属性left @4.00
 - taskID 4 只有老task计算多人工时
  - 属性id @4
  - 属性assignedTo @user1
  - 属性status @pause
- - 属性estimate @17
- - 属性left @2
+ - 属性estimate @17.00
+ - 属性left @2.00
 - taskID 5 只有老task计算多人工时
  - 属性id @5
  - 属性assignedTo @admin
  - 属性status @cancel
- - 属性estimate @0
- - 属性left @0
+ - 属性estimate @0.00
+ - 属性left @0.00
 - taskID 1 有传入task计算多人工时
  - 属性id @1
  - 属性assignedTo @admin
  - 属性status @doing
- - 属性estimate @5
- - 属性left @4
+ - 属性estimate @5.00
+ - 属性left @4.00
 - taskID 2 有传入task计算多人工时
  - 属性id @2
  - 属性assignedTo @user1
  - 属性status @done
- - 属性estimate @13
- - 属性left @0
+ - 属性estimate @13.00
+  - 属性left @0.00
 - taskID 1 有传入task 传入members计算多人工时
  - 属性id @1
  - 属性assignedTo @~~
@@ -120,7 +120,7 @@ cid=18777
 - taskID 2 有传入task 传入members计算多人工时
  - 属性id @2
  - 属性assignedTo @user1
- - 属性status @done
+ - 属性status @doing
  - 属性estimate @3
  - 属性left @3
 - taskID 1 有传入task 传入members 不自动更新状态计算多人工时
@@ -139,14 +139,14 @@ cid=18777
 */
 
 $task = new taskTest();
-r($task->computeMultipleHoursTest($oldTasks[0]))                                && p('id,assignedTo,status,estimate,left') && e('1,admin,doing,5,4');  // taskID 1 只有老task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[1]))                                && p('id,assignedTo,status,estimate,left') && e('2,user1,done,13,0');  // taskID 2 只有老task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[2]))                                && p('id,assignedTo,status,estimate,left') && e('3,admin,done,15,4');  // taskID 4 只有老task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[3]))                                && p('id,assignedTo,status,estimate,left') && e('4,user1,pause,17,2'); // taskID 4 只有老task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[4]))                                && p('id,assignedTo,status,estimate,left') && e('5,admin,cancel,0,0'); // taskID 5 只有老task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0]))                     && p('id,assignedTo,status,estimate,left') && e('1,admin,doing,5,4');  // taskID 1 有传入task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1]))                     && p('id,assignedTo,status,estimate,left') && e('2,user1,done,13,0');  // taskID 2 有传入task计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0], $members[0]))        && p('id,assignedTo,status,estimate,left') && e('1,~~,doing,3,3');     // taskID 1 有传入task 传入members计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1], $members[1]))        && p('id,assignedTo,status,estimate,left') && e('2,user1,done,3,3');   // taskID 2 有传入task 传入members计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0], $members[0], false)) && p('id,assignedTo,status,estimate,left') && e('1,~~,doing,3,3');     // taskID 1 有传入task 传入members 不自动更新状态计算多人工时
-r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1], $members[1], false)) && p('id,assignedTo,status,estimate,left') && e('2,user1,done,3,3');   // taskID 2 有传入task 传入members 不自动更新状态计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[0]))                                && p('id,assignedTo,status,estimate,left') && e('1,admin,doing,5.00,4.00');  // taskID 1 只有老task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[1]))                                && p('id,assignedTo,status,estimate,left') && e('2,user1,done,13.00,0.00');  // taskID 2 只有老task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[2]))                                && p('id,assignedTo,status,estimate,left') && e('3,admin,done,15.00,4.00');  // taskID 4 只有老task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[3]))                                && p('id,assignedTo,status,estimate,left') && e('4,user1,pause,17.00,2.00'); // taskID 4 只有老task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[4]))                                && p('id,assignedTo,status,estimate,left') && e('5,admin,cancel,0.00,0.00'); // taskID 5 只有老task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0]))                     && p('id,assignedTo,status,estimate,left') && e('1,admin,doing,5.00,4.00');  // taskID 1 有传入task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1]))                     && p('id,assignedTo,status,estimate,left') && e('2,user1,done,13.00,0.00');  // taskID 2 有传入task计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0], $members[0]))        && p('id,assignedTo,status,estimate,left') && e('1,~~,doing,3,3');           // taskID 1 有传入task 传入members计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1], $members[1]))        && p('id,assignedTo,status,estimate,left') && e('2,user1,doing,3,3');        // taskID 2 有传入task 传入members计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[0], $tasks[0], $members[0], false)) && p('id,assignedTo,status,estimate,left') && e('1,~~,doing,3,3');           // taskID 1 有传入task 传入members 不自动更新状态计算多人工时
+r($task->computeMultipleHoursTest($oldTasks[1], $tasks[1], $members[1], false)) && p('id,assignedTo,status,estimate,left') && e('2,user1,done,3,3');         // taskID 2 有传入task 传入members 不自动更新状态计算多人工时

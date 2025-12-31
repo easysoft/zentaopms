@@ -256,7 +256,7 @@ END;
 $$ LANGUAGE plpgsql;
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val BOOLEAN,
     false_val BOOLEAN
@@ -272,7 +272,7 @@ $$ LANGUAGE plpgsql;
 
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val DOUBLE PRECISION,
     false_val INTEGER
@@ -288,7 +288,55 @@ $$ LANGUAGE plpgsql;
 
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
+    condition BOOLEAN,
+    true_val DOUBLE PRECISION,
+    false_val DOUBLE PRECISION
+) RETURNS DOUBLE PRECISION AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION "IF"(
+    condition BOOLEAN,
+    true_val TEXT,
+    false_val TEXT
+) RETURNS TEXT AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION "IF"(
+    condition BOOLEAN,
+    true_val INTEGER,
+    false_val INTEGER
+) RETURNS INTEGER AS $$
+BEGIN
+    IF condition THEN
+        RETURN true_val;
+    ELSE
+        RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val TEXT,
     false_val DATE
@@ -304,7 +352,7 @@ $$ LANGUAGE plpgsql;
 
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val DATE,
     false_val DATE
@@ -320,7 +368,7 @@ $$ LANGUAGE plpgsql;
 
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val  timestamp without time zone,
     false_val DATE
@@ -336,7 +384,7 @@ $$ LANGUAGE plpgsql;
 
 --
 
-CREATE OR REPLACE FUNCTION IF(
+CREATE OR REPLACE FUNCTION "IF"(
     condition BOOLEAN,
     true_val  timestamp without time zone,
     false_val timestamp without time zone

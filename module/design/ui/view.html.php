@@ -66,7 +66,7 @@ foreach($config->design->view->operateList['common'] as $operate)
 $moduleName = empty($project->hasProduct) ? 'projectstory' : (isset($design->storyInfo) ? $design->storyInfo->type : 'story');
 $storyName  = zget($stories, $design->story, '');
 $storyItem  = array();
-if($common::hasPriv($moduleName, 'view'))
+if(common::hasPriv($moduleName, 'view'))
 {
     $storyItem[] = a(
         set::href(helper::createLink($moduleName, 'view', "id={$design->story}")),

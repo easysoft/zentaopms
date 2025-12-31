@@ -221,13 +221,13 @@ class zaiModel extends model
         {
             curl_setopt($curl, CURLOPT_HTTPGET, true);
         }
-        else
+        elseif($method === 'POST')
         {
             curl_setopt($curl, CURLOPT_POST, true);
-            if($method !== 'POST')
-            {
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-            }
+        }
+        else
+        {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         }
 
         $hasFile = false;
@@ -616,6 +616,8 @@ class zaiModel extends model
      */
     public function canViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
     {
+        if($this->app->user->admin) return true;
+
         if(isset(static::$objectViews[$objectType][$objectID])) return static::$objectViews[$objectType][$objectID];
 
         if(!isset(static::$objectViews[$objectType])) static::$objectViews[$objectType] = array();
@@ -1236,6 +1238,7 @@ class zaiModel extends model
             'release'    => array('owner'),
             'demand'     => array('createdBy', 'assignedTo'),
             'design'     => array('createdBy', 'assignedTo'),
+            'doc'        => array('owner', 'addedBy', 'editedBy'),
         );
 
         return $map[$objectType] ?? array();
@@ -1323,7 +1326,33 @@ class zaiModel extends model
         $spec = $app->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
         if(empty($spec)) $spec = (object)array('title' => $story->title, 'spec' => '', 'verify' => '', 'files' => '', 'docs' => '', 'docVersions' => '');
 
-        $markdown = array('id' => $story->id, 'title' => "$lang->SRCommon #$story->id $spec->title");
+        $planValue = $story->plan;
+        if(!empty($planValue))
+        {
+            $planIDs   = explode(',', trim($planValue));
+            $planNames = array();
+            foreach($planIDs as $planID)
+            {
+                $planID = trim($planID);
+                if(empty($planID) || !is_numeric($planID)) continue;
+
+                $plan = $app->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($planID)->fetch();
+                if($plan && !empty($plan->title))
+                {
+                    $planNames[] = $plan->title;
+                }
+                else
+                {
+                    $planNames[] = $planID;
+                }
+            }
+
+            if(!empty($planNames))
+            {
+                $planValue = implode(', ', $planNames);
+            }
+        }
+
         $content  = array();
         $content[] = "# {$lang->SRCommon} #$story->id $story->title\n";
         $content[] = "## {$lang->story->legendBasicInfo}\n";
@@ -1335,7 +1364,7 @@ class zaiModel extends model
         $content[] = "* {$lang->story->source}: " . zget($lang->story->sourceList, $story->source);
         $content[] = "* {$lang->story->estimate}: $story->estimate";
         $content[] = "* {$lang->story->product}: $story->product";
-        $content[] = "* {$lang->story->plan}: $story->plan";
+        $content[] = "* {$lang->story->plan}: $planValue";
         $content[] = "* {$lang->story->branch}: $story->branch";
         $content[] = "* {$lang->story->parent}: " . (is_array($story->parent) ? implode(',', $story->parent) : $story->parent);
         $content[] = "* {$lang->story->module}: $story->module";
@@ -1352,9 +1381,19 @@ class zaiModel extends model
         $content[] = "## {$lang->story->verify}\n";
         $content[] = strip_tags($spec->verify) . "\n";
 
+        $markdown = array('id' => $story->id, 'title' => "$lang->SRCommon #$story->id $spec->title");
         $markdown['content'] = implode("\n", $content);
+        $markdown['attrs']   = array(
+            'product'       => $story->product,
+            'parentStory'   => $story->parent,
+            'productModule' => $story->module,
+            'productBranch' => $story->branch,
+            'productPlan'   => $planValue,
+            'status'        => $story->status,
+            'stage'         => $story->stage
+        );
+        if(isset($story->lib)) $markdown['attrs']['lib'] = $story->lib;
 
-        $markdown['attrs'] = array('product' => $story->product, 'parentStory' => $story->parent, 'productModule' => $story->module, 'productBranch' => $story->branch, 'productPlan' => $story->plan, 'status' => $story->status, 'stage' => $story->stage);
         return $markdown;
     }
 
@@ -1601,6 +1640,8 @@ class zaiModel extends model
     public static function convertDocToMarkdown($doc, array $langData = [])
     {
         global $app;
+
+        $doc = static::convertUserFieldToRealname('doc', $doc);
 
         $app->loadLang('doc');
         $lang = $app->lang;

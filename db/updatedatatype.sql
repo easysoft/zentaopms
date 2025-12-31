@@ -527,8 +527,6 @@ ALTER TABLE `zt_dept`
   MODIFY COLUMN `parent` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `path` varchar(255) NOT NULL DEFAULT '',
   MODIFY COLUMN `order` int unsigned NOT NULL DEFAULT 0,
-  MODIFY COLUMN `position` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `function` varchar(255) NOT NULL DEFAULT '',
   MODIFY COLUMN `manager` varchar(30) NOT NULL DEFAULT '';
 ALTER TABLE `zt_design`
   MODIFY COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT,

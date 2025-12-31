@@ -32,14 +32,6 @@ fields:
   note: 显示顺序
   range: 10-150:10
   format: ""
-- field: position
-  note: 岗位
-  range: 部长{5},主管{6},专员{4}
-  format: ""
-- field: function
-  note: 部门职能
-  range: 技术开发,产品规划,运营管理,人力资源管理,财务管理,市场推广,客户服务,行政管理,研发创新,软件测试,UI设计,销售管理,法律事务,采购管理,质量管理
-  format: ""
 - field: manager
   note: 部门负责人
   range: admin,user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12,user13,user14

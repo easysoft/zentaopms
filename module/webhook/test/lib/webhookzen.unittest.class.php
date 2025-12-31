@@ -22,7 +22,7 @@ class webhookTest
      * @access public
      * @return mixed
      */
-    public function getResponseTest(object $webhook = null)
+    public function getResponseTest(?object $webhook = null)
     {
         $method = $this->webhookZenTest->getMethod('getResponse');
         $method->setAccessible(true);
@@ -43,7 +43,7 @@ class webhookTest
      * @access public
      * @return mixed
      */
-    public function getBoundUseridPairsTest(object $webhook = null, array $users = array(), array $boundUsers = array(), array $oauthUsers = array())
+    public function getBoundUseridPairsTest(?object $webhook = null, array $users = array(), array $boundUsers = array(), array $oauthUsers = array())
     {
         $method = $this->webhookZenTest->getMethod('getBoundUseridPairs');
         $method->setAccessible(true);

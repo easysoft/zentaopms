@@ -29,14 +29,6 @@ fields:
   note: 排序
   range: 10,20,30,15,25
 
-- field: position
-  note: 职位
-  range: 'manager{5}'
-
-- field: function
-  note: 部门职能
-  range: '研发,测试,产品,运营,市场'
-
 - field: manager
   note: 部门经理
   range: 'admin,user1,user2,user3,user4'

@@ -66,11 +66,12 @@ if($rawMethod != 'contribute' || $browseType != 'reviewedbyme') unset($config->m
 
 foreach($reviewList as $review)
 {
-    $type       = $review->type == 'projectreview' ? 'review' : $review->type;
+    $type       = $review->type == 'projectreview' || $review->type == 'projectchange' ? 'review' : $review->type;
     $isOAObject =  strpos(",{$config->my->oaObjectType},", ",$type,") !== false ? true : false;
     $this->app->loadLang($type);
 
-    $review->module = $type;
+    $review->module  = $type;
+    $review->typeKey = $review->type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
     if($review->type == 'projectreview')      $typeName = $lang->project->common;
@@ -128,7 +129,7 @@ foreach($reviewList as $review)
         $review->result = zget($reviewResultList, $review->result);
     }
 
-    if($review->project && strpos($review->project, ',') !== false)
+    if($review->project && strpos((string)$review->project, ',') !== false)
     {
         $projectIdList   = explode(',', $review->project);
         $review->project = '';

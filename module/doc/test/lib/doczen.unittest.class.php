@@ -142,7 +142,7 @@ class docZenTest
      * @access public
      * @return object
      */
-    public function assignVarsForMySpaceTest(string $type = 'mine', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', array $docs = array(), object $pager = null, array $libs = array(), string $objectTitle = ''): object
+    public function assignVarsForMySpaceTest(string $type = 'mine', int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', array $docs = array(), ?object $pager = null, array $libs = array(), string $objectTitle = ''): object
     {
         if(is_null($pager))
         {
@@ -219,7 +219,7 @@ class docZenTest
      * @access public
      * @return object
      */
-    public function assignVarsForViewTest(int $docID = 0, int $version = 0, string $type = 'product', int $objectID = 0, int $libID = 0, object $doc = null, object $object = null, string $objectType = 'product', array $libs = array(), array $objectDropdown = array()): object
+    public function assignVarsForViewTest(int $docID = 0, int $version = 0, string $type = 'product', int $objectID = 0, int $libID = 0, ?object $doc = null, ?object $object = null, string $objectType = 'product', array $libs = array(), array $objectDropdown = array()): object
     {
         if(is_null($doc))
         {

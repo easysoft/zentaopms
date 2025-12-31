@@ -192,7 +192,7 @@ class zanodeTest
      * @access public
      * @return string
      */
-    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', object $pager = null): string
+    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', ?object $pager = null): string
     {
         $snapshotList = $this->getSnapshotList($nodeID, $orderBy, $pager);
 
@@ -349,10 +349,10 @@ class zanodeTest
      */
     public function deleteSnapshotTest(int $snapshotID)
     {
-        if($snapshotID <= 0) return '~~';
+        if($snapshotID <= 0) return 'empty';
 
         $snapshot = $this->getImageByID($snapshotID);
-        if(!$snapshot) return '~~';
+        if(!$snapshot) return 'empty';
 
         $result = $this->deleteSnapshot($snapshotID);
         if(dao::isError()) return dao::getError();

@@ -158,7 +158,7 @@ class transferZenTest
      * @access public
      * @return mixed
      */
-    public function printRowTest(string $module = '', int $row = 0, array $fields = array(), object $object = null, string $trClass = '', int $addID = 1)
+    public function printRowTest(string $module = '', int $row = 0, array $fields = array(), ?object $object = null, string $trClass = '', int $addID = 1)
     {
         global $tester;
 

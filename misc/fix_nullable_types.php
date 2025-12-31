@@ -1,6 +1,6 @@
 <?php
 /**
- * PHP 隐式可空类型修复脚本 - 最终版本
+ * PHP 隐式可空类型修复脚本
  * 用于修复 RFC: Deprecate implicitly nullable types 问题
  * https://wiki.php.net/rfc/deprecate-implicitly-nullable-types
  *
@@ -9,6 +9,7 @@
  * - 支持命名空间类型（\Namespace\ClassName）
  * - 支持跨行函数参数
  * - 自动跳过已有?的参数
+ * - 自动跳过 mixed 类型的参数
  * - 自动跳过联合类型中已包含null的参数
  * - 完整日志记录
  */
@@ -121,6 +122,12 @@ class NullableTypesFixer
                     if(preg_match('/\?\s*$/', $beforeType))
                     {
                         continue; // 已经有 ? 了
+                    }
+
+                    // 检查是否是 mixed 类型
+                    if($type == 'mixed')
+                    {
+                        continue;
                     }
 
                     // 检查是否是联合类型且已包含 null
@@ -247,13 +254,13 @@ class NullableTypesFixer
 // 使用示例
 if($argc < 2)
 {
-    echo "用法: php fix_nullable_types_final.php <目录路径> [--dry-run]\n";
+    echo "用法: php fix_nullable_types.php <目录路径> [--dry-run]\n";
     echo "参数说明:\n";
     echo "  <目录路径>  要扫描的PHP文件目录\n";
     echo "  --dry-run   预览模式，不实际修改文件\n";
     echo "\n示例:\n";
-    echo "  php fix_nullable_types_final.php /path/to/project\n";
-    echo "  php fix_nullable_types_final.php /path/to/project --dry-run\n";
+    echo "  php fix_nullable_types.php /path/to/project\n";
+    echo "  php fix_nullable_types.php /path/to/project --dry-run\n";
     exit(1);
 }
 

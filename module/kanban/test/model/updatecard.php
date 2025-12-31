@@ -14,8 +14,8 @@ cid=16962
 
 - 正常编辑卡片
  - 属性name @修改名字
- - 属性estimate @3
- - 属性progress @20
+ - 属性estimate @3.00
+ - 属性progress @20.00
  - 属性pri @1
 - 卡片的预计不能是负数属性estimate @预计不能为负数!
 - 测试进度小于0的情况属性progress @请输入正确的进度
@@ -48,7 +48,7 @@ $card5->end   = '2022-03-01';
 
 $kanban = new kanbanTest();
 
-r($kanban->updateCardTest(1, $card1)) && p('name,estimate,progress,pri') && e('修改名字,3,20,1');               // 正常编辑卡片
+r($kanban->updateCardTest(1, $card1)) && p('name,estimate,progress,pri') && e('修改名字,3.00,20.00,1');         // 正常编辑卡片
 r($kanban->updateCardTest(1, $card2)) && p('estimate')                   && e('预计不能为负数!');               // 卡片的预计不能是负数
 r($kanban->updateCardTest(1, $card3)) && p('progress')                   && e('请输入正确的进度');              // 测试进度小于0的情况
 r($kanban->updateCardTest(1, $card4)) && p('progress')                   && e('请输入正确的进度');              // 测试进度大于100的情况

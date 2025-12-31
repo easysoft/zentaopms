@@ -767,13 +767,13 @@ $config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 $config->mysqlDriverList  = array('mysql', 'oceanbase');
-$config->pgsqlDriverList  = array('postgres', 'highgo');
+$config->pgsqlDriverList  = array('postgres', 'highgo', 'kingbase');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'meeting', 'pssp', 'auditplan');
-$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity');
-$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'projectchange', 'milestone', 'design', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testtask', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'meeting', 'pssp', 'auditplan', 'nc', 'review', 'reviewissue', 'weekly');
+$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity', 'weekly');
+$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'cm', 'projectchange', 'milestone', 'design', 'measrecord', 'auditplan', 'nc', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;
 $config->programPriv->ipd           = $config->programPriv->waterfall;

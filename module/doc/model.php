@@ -1396,23 +1396,28 @@ class docModel extends model
      * 获取所有子空间。
      * Get all sub spaces.
      *
+     * @param  string $spaceType
      * @access public
      * @return array
      */
-    public function getAllSubSpaces()
+    public function getAllSubSpaces(string $spaceType = 'all')
     {
-        $productList = $this->config->vision == 'rnd' ? $this->loadModel('product')->getPairs('nocode') : array();
-        $projectList = ($this->config->vision == 'rnd' || $this->config->vision == 'lite') ? $this->loadModel('project')->getPairsByProgram() : array();
+        $productList = $this->config->vision == 'rnd' && in_array($spaceType, array('all', 'product')) ? $this->loadModel('product')->getPairs('nocode') : array();
+        $projectList = ($this->config->vision == 'rnd' || $this->config->vision == 'lite') && in_array($spaceType, array('all', 'project', 'execution')) ? $this->loadModel('project')->getPairsByProgram() : array();
 
-        $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
-            ->where('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('type', true)->eq('custom')
-            ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
-            ->markRight(2)
-            ->orderBy('type_desc')
-            ->fetchAll('', false);
+        $spaceList = array();
+        if($spaceType == 'all')
+        {
+            $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->andWhere('parent')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
+                ->andWhere('type', true)->eq('custom')
+                ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
+                ->markRight(2)
+                ->orderBy('type_desc')
+                ->fetchAll('', false);
+        }
 
         $productPairs = $projectPairs = $spacePairs = array();
         foreach($productList as $productID => $productName) $productPairs["product.{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
@@ -2586,11 +2591,9 @@ class docModel extends model
     {
         $project     = $this->loadModel('project')->getByID($projectID);
         $storyIdList = $issueIdList = $meetingIdList = $reviewIdList = $designIdList = $executionIdList = $taskIdList = $buildIdList = 0;
-        if($project && !$project->hasProduct)
-        {
-            $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
-            $storyIdList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
-        }
+
+        $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->orWhere('project')->eq($projectID)->fetchPairs('id', 'id');
+        $storyIdList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
 
         if(in_array($this->config->edition, array('max', 'ipd')))
         {

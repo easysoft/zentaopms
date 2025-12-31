@@ -263,3 +263,69 @@ ALTER TABLE `zt_story`   ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '�
 ALTER TABLE `zt_design`  ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `desc`;
 ALTER TABLE `zt_project` ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `vision`;
 ALTER TABLE `zt_doc`     ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `builtIn`;
+
+UPDATE `zt_chart` SET `sql`='SELECT
+  t1.id,
+  t1.name AS execution,
+  IFNULL(t2.name, \'/\') AS project,
+  IFNULL(t3.story, 0) AS story,
+  IFNULL(t3.estimate, 0) AS estimate,
+  IFNULL(t4.task, 0) AS task,
+  IFNULL(t4.workhour, 0) AS workhour
+FROM zt_project AS t1
+LEFT JOIN zt_project AS t2 ON t1.project = t2.id AND t2.type = \'project\'
+LEFT JOIN (
+  SELECT t1.id AS execution, COUNT(t3.id) AS story, ROUND(SUM(t3.estimate), 1) AS estimate
+  FROM zt_project AS t1
+  LEFT JOIN zt_projectstory AS t2 ON t1.id = t2.project
+  LEFT JOIN zt_story AS t3 ON t2.story = t3.id AND t3.deleted = \'0\' AND t3.stage NOT IN (\'verified\', \'released\', \'closed\')
+  WHERE t1.deleted = \'0\' AND t1.type IN (\'sprint\', \'stage\', \'kanban\') AND t1.status = \'doing\' AND t1.multiple = \'1\'
+  GROUP BY execution
+) AS t3 ON t1.id = t3.execution
+LEFT JOIN (
+  SELECT t1.id AS execution, SUM(IF(t2.status IN (\'wait\', \'doing\'), 1, 0)) AS task, ROUND(SUM(IF(t2.status IN (\'wait\', \'doing\', \'pause\'), t2.left, 0)), 1) AS workhour
+  FROM zt_project AS t1
+  LEFT JOIN zt_task AS t2 ON t1.id = t2.execution AND t2.deleted = \'0\' AND t2.parent < 1
+  WHERE t1.deleted = \'0\' AND t1.type IN (\'sprint\', \'stage\', \'kanban\') AND t1.status = \'doing\' AND t1.multiple = \'1\'
+  GROUP BY execution
+) AS t4 ON t1.id = t4.execution
+WHERE t1.deleted = \'0\' AND t1.type IN (\'sprint\', \'stage\', \'kanban\') AND t1.status = \'doing\' AND t1.multiple = \'1\'
+ORDER BY t2.id ASC, t1.id ASC' WHERE `id`=10119;
+
+UPDATE `zt_chart` SET `sql`='SELECT t1.id, t1.name, IFNULL(t3.name, \'/\') AS program,t1.`begin`, IF(YEAR(t1.`end`) = \'2059\', \'长期\', CAST(t1.`end` AS CHAR)) AS `end`,
+    IF(YEAR(t1.`end`) = \'2059\', \'长期\', CAST((DATEDIFF(t1.`end`, t1.`begin`) + 1) AS CHAR)) AS planDuration,
+    IF(LEFT(t1.realBegan, 4) = \'0000\', \'/\', CAST(t1.realBegan AS CHAR)) AS realBegan,
+    IF(
+        YEAR(t1.`end`) = \'2059\',
+        \'长期\',
+        IF(
+            DATEDIFF(t1.`end`, NOW()) >= 0,
+            CAST((DATEDIFF(t1.`end`, NOW()) + 1) AS CHAR),
+            \'0\'
+        )
+    ) AS realDuration,
+    IF(
+        DATEDIFF(t1.`end`, NOW()) < 0,
+        \'延期\',
+        (IF(
+            (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != \'2059\')
+            OR LEFT(t1.`end`, 4) = \'2059\' ,
+            \'顺利\',
+            \'滞后\'
+        ))) AS `status`,
+CONCAT(IFNULL(prograss, 0), \'%\') AS prograss
+FROM zt_project AS t1
+LEFT JOIN (
+    SELECT t22.project,
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' AND t22.status != \'cancel\', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != \'closed\' AND t22.status != \'cancel\', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    FROM zt_project AS t21
+    LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
+    WHERE t21.deleted = \'0\' AND t21.type IN (\'sprint\', \'kanban\', \'stage\')
+    AND t22.deleted = \'0\' AND t22.parent < 1
+    GROUP BY t22.project
+) AS t2 ON t1.id = t2.project
+LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(\',\' IN SUBSTR(t1.path, 2)) -1) = CAST(t3.id AS CHAR) AND t3.type = \'program\' AND t3.deleted = \'0\'
+WHERE t1.deleted = \'0\'
+AND t1.status = \'doing\'
+AND t1.type = \'project\'
+AND FIND_IN_SET(\'rnd\', t1.vision)' WHERE `id`=10116;

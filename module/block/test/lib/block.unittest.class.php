@@ -3250,7 +3250,7 @@ class blockTest
      * @access public
      * @return object
      */
-    public function printProjectDynamicBlockTest(object $block = null)
+    public function printProjectDynamicBlockTest(?object $block = null)
     {
         global $tester;
         
@@ -5647,7 +5647,7 @@ class blockTest
      * @access public
      * @return object
      */
-    public function organizaExternalDataTest(object $block = null)
+    public function organizaExternalDataTest(?object $block = null)
     {
         global $tester;
         global $app;

@@ -10,10 +10,8 @@ cid=15901
 - 测试步骤1：空配置对象 @0
 - 测试步骤2：单个方法配置属性create @name
 - 测试步骤3：需求配置方法属性edit @title
-- 测试步骤4：执行配置方法
- - 属性batchedit @name
-- 测试步骤5：空格处理
- - 属性create @name
+- 测试步骤4：执行配置方法属性batchedit @name,code,begin,end
+- 测试步骤5：空格处理属性create @name,type,status
 
 */
 
@@ -67,8 +65,8 @@ $complexConfig->batchcreate = new stdclass();
 $complexConfig->batchcreate->requiredFields = 'name,type,pri,estimate,assignedTo,deadline';
 
 $customTester = new customTest();
-r($customTester->getRequiredFieldsTest($emptyConfig)) && p() && e('0'); // 测试步骤1：空配置对象
-r($customTester->getRequiredFieldsTest($taskConfig)) && p('create') && e('name'); // 测试步骤2：单个方法配置
-r($customTester->getRequiredFieldsTest($storyConfig)) && p('edit') && e('title'); // 测试步骤3：需求配置方法
-r($customTester->getRequiredFieldsTest($executionConfig)) && p('batchedit') && e('name,code,begin,end'); // 测试步骤4：执行配置方法
-r($customTester->getRequiredFieldsTest($spaceConfig)) && p('create') && e('name,type,status'); // 测试步骤5：空格处理
+r($customTester->getRequiredFieldsTest($emptyConfig))     && p()                 && e('0');                   // 测试步骤1：空配置对象
+r($customTester->getRequiredFieldsTest($taskConfig))      && p('create', ';')    && e('name');                // 测试步骤2：单个方法配置
+r($customTester->getRequiredFieldsTest($storyConfig))     && p('edit', ';')      && e('title');               // 测试步骤3：需求配置方法
+r($customTester->getRequiredFieldsTest($executionConfig)) && p('batchedit', ';') && e('name,code,begin,end'); // 测试步骤4：执行配置方法
+r($customTester->getRequiredFieldsTest($spaceConfig))     && p('create', ';')    && e('name,type,status');    // 测试步骤5：空格处理

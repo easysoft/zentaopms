@@ -286,7 +286,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getTestCases(int|array $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
+    public function getTestCases(int|array $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null, string $from = 'testcase'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -321,7 +321,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $queryID = (int)$queryID;
         if($queryID)

@@ -992,13 +992,19 @@ class projectModel extends model
             if($module == 'cm' && !$hasBaseline) continue;
             if($module == 'auditplan' && !$hasAuditplan) continue;
             if($module == 'pssp' && !$hasProcess) continue;
+            if($module == 'projectchange' && !$hasChange) continue;
+            if($module == 'review' && !$hasDeliverable) continue;
+            if($module == 'reviewissue' && !$hasDeliverable) continue;
 
             if($module == 'review')
             {
                 if(!$hasDeliverable) unset($methods->submitDeliverable);
                 if(!$hasChange)      unset($methods->submitProjectchange);
                 if(!$hasBaseline)    unset($methods->submitBaseline);
+                if(!empty($project) && $project->model == 'scrum') unset($methods->submitIpd, $methods->submitProjectchange, $methods->submitBaseline);
             }
+
+            if($module == 'project' && !$hasDeliverable) unset($methods->deliverable);
 
             foreach($methods as $method => $label)
             {
@@ -1934,25 +1940,24 @@ class projectModel extends model
      */
     public function manageMembers(int $projectID, array $members): bool
     {
-        $project = $this->projectTao->fetchProjectInfo($projectID);
-        $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchPairs();
+        $project    = $this->projectTao->fetchProjectInfo($projectID);
+        $oldMembers = $this->dao->select('`account`, `join`, `days`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchAll();
+        $oldJoin    = array_column($oldMembers, 'join', 'account');
+        $oldDays    = array_column($oldMembers, 'days', 'account');
 
         /* Check fields. */
         foreach($members as $key => $member)
         {
             if(empty($member->account)) continue;
 
-            if(!empty($project->days) and (int)$member->days > $project->days)
+            if((float)$member->hours > 24) dao::$errors = $this->lang->project->errorHours;
+            if(!empty($project->days))
             {
-                dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
-                return false;
-            }
-            if((float)$member->hours > 24)
-            {
-                dao::$errors = $this->lang->project->errorHours;
-                return false;
+                if(isset($oldDays[$member->account]) && $oldDays[$member->account] == $member->days) continue;
+                if((int)$member->days > $project->days) dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
             }
         }
+        if(dao::isError()) return false;
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->exec();
 
@@ -2838,14 +2843,14 @@ class projectModel extends model
         $bug = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         if(!empty($bug)) return true;
 
-        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+        $story = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->limit(1)->fetch();
         if(!empty($story)) return true;
 
-        $case = $this->dao->select('id')->from(TABLE_CASE)->alias('t1')
+        $case = $this->dao->select('t1.id')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)

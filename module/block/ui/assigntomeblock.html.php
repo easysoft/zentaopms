@@ -77,7 +77,7 @@ if(($longBlock && $count > 5) || (!$longBlock && $count > 1))
 
 $processProjectField = function($review, $projects) use($lang)
 {
-    if($review->project && strpos($review->project, ',') !== false)
+    if($review->project && strpos((string)$review->project, ',') !== false)
     {
         $projectIdList   = explode(',', $review->project);
         $review->project = '';

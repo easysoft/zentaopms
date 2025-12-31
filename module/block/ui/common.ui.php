@@ -11,7 +11,7 @@ namespace zin;
  * @param  string $code
  * @return array
  */
-function buildParamsRows(object $block = null, ?array $params = null, string $module = '', string $code = ''): array
+function buildParamsRows(?object $block = null, ?array $params = null, string $module = '', string $code = ''): array
 {
     global $lang;
 

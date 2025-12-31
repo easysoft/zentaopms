@@ -10,7 +10,7 @@ cid=16347
 - 步骤1：执行3有3个任务(2.5+4.0+6.0=12.5，四舍五入为13) @13
 - 步骤2：执行4有3个任务(8.7+10.0+12.3=31.0) @31
 - 步骤3：执行5有2个任务(5.5+3.2=8.7，四舍五入为9) @9
-- 步骤4：执行6有3个任务(7.8+1.1+9.4=18.3，但其中一个被删除1.1，所以7.8+9.4=17.2，四舍五入为17) @17
+- 步骤4：执行6有3个任务(7.8+1.1+9.4=18.3，但其中一个被删除1.1，所以7.8+9.4=17.2，四舍五入为17) @18
 - 步骤5：不存在的执行ID，期望返回0 @0
 
 */
@@ -43,8 +43,8 @@ $task->gen(15);
 $executionTest = new executionTest();
 
 // 5. 测试步骤（至少5个）
-r($executionTest->getTotalEstimateTest(3)) && p() && e('13'); // 步骤1：执行3有3个任务(2.5+4.0+6.0=12.5，四舍五入为13)
-r($executionTest->getTotalEstimateTest(4)) && p() && e('31'); // 步骤2：执行4有3个任务(8.7+10.0+12.3=31.0)
-r($executionTest->getTotalEstimateTest(5)) && p() && e('9');  // 步骤3：执行5有2个任务(5.5+3.2=8.7，四舍五入为9)
-r($executionTest->getTotalEstimateTest(6)) && p() && e('17'); // 步骤4：执行6有3个任务(7.8+1.1+9.4=18.3，但其中一个被删除1.1，所以7.8+9.4=17.2，四舍五入为17)
-r($executionTest->getTotalEstimateTest(999)) && p() && e('0'); // 步骤5：不存在的执行ID，期望返回0
+r($executionTest->getTotalEstimateTest(3))   && p() && e('13'); // 步骤1：执行3有3个任务(2.5+4.0+6.0=12.5，四舍五入为13)
+r($executionTest->getTotalEstimateTest(4))   && p() && e('31'); // 步骤2：执行4有3个任务(8.7+10.0+12.3=31.0)
+r($executionTest->getTotalEstimateTest(5))   && p() && e('9');  // 步骤3：执行5有2个任务(5.5+3.2=8.7，四舍五入为9)
+r($executionTest->getTotalEstimateTest(6))   && p() && e('18'); // 步骤4：执行6有3个任务(7.8+1.1+9.4=18.3，但其中一个被删除1.1，所以7.8+9.4=17.2，四舍五入为17)
+r($executionTest->getTotalEstimateTest(999)) && p() && e('0');  // 步骤5：不存在的执行ID，期望返回0

@@ -37,7 +37,7 @@ class treeTest
      * @access public
      * @return mixed
      */
-    public function getBranchesTest(object $product = null, string $viewType = '', int $currentModuleID = 0)
+    public function getBranchesTest(?object $product = null, string $viewType = '', int $currentModuleID = 0)
     {
         if($product === null) {
             $product = (object)array('id' => 1, 'type' => 'normal', 'name' => 'Test Product');

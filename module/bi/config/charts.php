@@ -6434,19 +6434,6 @@ LEFT JOIN (
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban', 'stage')
     AND t22.deleted = '0' AND t22.parent < 1
     GROUP BY t22.project
-    UNION
-    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
-    FROM (
-        SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
-        FROM zt_project AS t21
-        LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
-        WHERE t21.deleted = '0' AND t21.type = 'stage'
-        AND t22.deleted = '0' AND t22.parent < 1
-        AND t22.id IS NOT NULL
-        GROUP BY t21.id, t21.percent, t22.project
-    ) t
-    GROUP BY t.project
 ) AS t2 ON t1.id = t2.project
 LEFT JOIN zt_project AS t3 ON SUBSTR(t1.path, 2, POSITION(',' IN SUBSTR(t1.path, 2)) -1) = CAST(t3.id AS CHAR) AND t3.type = 'program' AND t3.deleted = '0'
 WHERE t1.deleted = '0'
@@ -6584,7 +6571,7 @@ SELECT
 FROM zt_project AS t1
 LEFT JOIN zt_project AS t2 ON t1.project = t2.id AND t2.type = 'project'
 LEFT JOIN (
-  SELECT t1.id AS execution, COUNT(1) AS story, ROUND(SUM(t3.estimate), 1) AS estimate
+  SELECT t1.id AS execution, COUNT(t3.id) AS story, ROUND(SUM(t3.estimate), 1) AS estimate
   FROM zt_project AS t1
   LEFT JOIN zt_projectstory AS t2 ON t1.id = t2.project
   LEFT JOIN zt_story AS t3 ON t2.story = t3.id AND t3.deleted = '0' AND t3.stage NOT IN ('verified', 'released', 'closed')
