@@ -4,7 +4,8 @@ $(function()
     let interval;          // 定时器句柄。
 
     /* 自动滚动版本列表。*/
-    $('#versionsBox .version-item.executed').last().scrollIntoView();
+    const lastVersion = $('#versionsBox .version-item.executed').last();
+    if(lastVersion.length > 0) lastVersion[0].scrollIntoView();
 
     /**
      * 定时获取已执行的升级步骤数量。
@@ -39,7 +40,8 @@ $(function()
             $('#executedCount').text(executedCount);
 
             /* 自动滚动变更列表。*/
-            $('#changesBox .change-item.executed').last().scrollIntoView();
+            const lastChange = $('#changesBox .change-item.executed').last();
+            if(lastChange.length > 0) lastChange[0].scrollIntoView();
 
             if(executedCount == upgradeChanges.length)
             {
