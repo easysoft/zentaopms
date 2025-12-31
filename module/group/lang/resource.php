@@ -1448,6 +1448,8 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
+$lang->resource->repo->setBranchRule = 'setBranchRule';
+
 $lang->resource->repo->browseBranchType = 'browseBranchType';
 $lang->resource->repo->createBranchType = 'createBranchType';
 $lang->resource->repo->editBranchType   = 'editBranchType';
@@ -1497,6 +1499,20 @@ $lang->reporeviewflow->methodOrder[10] = 'create';
 $lang->reporeviewflow->methodOrder[15] = 'edit';
 $lang->reporeviewflow->methodOrder[20] = 'delete';
 $lang->reporeviewflow->methodOrder[25] = 'changeStatus';
+
+$lang->resource->repobranchtype = new stdclass();
+$lang->resource->repobranchtype->browse = 'browse';
+$lang->resource->repobranchtype->create = 'create';
+$lang->resource->repobranchtype->edit   = 'edit';
+$lang->resource->repobranchtype->delete = 'delete';
+$lang->resource->repobranchtype->import = 'import';
+
+if(!isset($lang->repobranchtype)) $lang->repobranchtype = new stdclass();
+$lang->repobranchtype->methodOrder[5]  = 'browse';
+$lang->repobranchtype->methodOrder[10] = 'create';
+$lang->repobranchtype->methodOrder[15] = 'edit';
+$lang->repobranchtype->methodOrder[20] = 'delete';
+$lang->repobranchtype->methodOrder[25] = 'import';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
