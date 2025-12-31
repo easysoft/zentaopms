@@ -29,7 +29,7 @@ class repobranchtypeZen extends repobranchtype
             return false;
         }
 
-        $filteredPrefixes = array_filter($branchType->prefixes, function($v) 
+        $filteredPrefixes = array_filter($branchType->prefixes, function($v)
         {
             return !empty(trim($v));
         });
