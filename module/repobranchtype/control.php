@@ -26,11 +26,10 @@ class repobranchtype extends control
     public function browse(int $repoID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 设置菜单。 */
-        if($repoID > 0) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
-        /* 获取repo对象（repoID 为 0 时为 null）。 */
-        $repo     = $repoID > 0 ? $this->loadModel('repo')->getByID($repoID) : null;
-        $gitfoxID = $repo ? (int)$repo->gitfoxID : 0;
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        $gitfoxID = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
 
         /* 创建分页对象。 */
         $this->app->loadClass('pager', true);
@@ -63,9 +62,9 @@ class repobranchtype extends control
     public function create(int $repoID = 0)
     {
         /* 设置菜单。 */
-        if($repoID > 0) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
-        $repo = $repoID > 0 ? $this->loadModel('repo')->getByID($repoID) : null;
+        $repo = $this->loadModel('repo')->getByID($repoID);
 
         if($_POST)
         {
@@ -76,7 +75,7 @@ class repobranchtype extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             /* 调用 model 方法创建分支类型。 */
-            $gitfoxID = !empty($repo->gitfoxID) ? (int)$repo->gitfoxID : 0;
+            $gitfoxID = zget($repo, 'gitfoxID', 0);
             $result   = $this->repobranchtype->apiCreateBranchType($gitfoxID, $formData);
             if(!$result)
             {
@@ -85,7 +84,7 @@ class repobranchtype extends control
             }
 
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-            $this->loadModel('action')->create('repo', $repoID, 'createbranchtype');
+            $this->loadModel('action')->create('ops_branch_type', $result, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->createSuccess, 'load' => $link));
         }
 
@@ -108,10 +107,9 @@ class repobranchtype extends control
     public function edit(int $repoID = 0, int $typeID = 0)
     {
         /* 设置菜单。 */
-        if($repoID > 0) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
-        /* 获取repo对象（repoID 为 0 时为 null）。 */
-        $repo = $repoID > 0 ? $this->loadModel('repo')->getByID($repoID) : null;
+        $repo = $this->loadModel('repo')->getByID($repoID);
 
         /* 获取分支类型详情。 */
         $branchType = $this->repobranchtype->getBranchTypeByID($typeID);
@@ -166,9 +164,9 @@ class repobranchtype extends control
     public function delete(int $repoID = 0, int $typeID = 0)
     {
         /* 设置菜单。 */
-        if($repoID > 0) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
-        $repo = $repoID > 0 ? $this->loadModel('repo')->getByID($repoID) : null;
+        $repo = $this->loadModel('repo')->getByID($repoID);
 
         /* 获取分支类型信息。 */
         $branchType = $this->repobranchtype->getBranchTypeByID($typeID);
@@ -203,7 +201,7 @@ class repobranchtype extends control
     public function import(int $repoID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         /* 设置菜单。 */
-        $this->loadModel('ci')->setMenu($repoID);
+        if($repoID) $this->loadModel('ci')->setMenu($repoID);
 
         $repo = $this->loadModel('repo')->getByID($repoID);
 
