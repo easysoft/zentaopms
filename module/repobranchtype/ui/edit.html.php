@@ -20,38 +20,23 @@ $prefixBtns = array(
 
 $backUrl = $repoID != 0 ? createLink('repobranchtype', 'browse', "repoID=$repoID") : createLink('repobranchtype', 'browse');
 
-// 构建前缀表单项
-$prefixItems = array();
+// 构建前缀表单行
+$prefixRows = array();
 foreach($prefixes as $index => $prefix)
 {
-    $prefixItems[] = div
+    $prefixRows[] = formRow
     (
-        setClass('prefix-item'),
-        inputGroup
+        formGroup
         (
-            input
-            (
-                set::name("prefixes[{$index}]"),
-                set::value($prefix)
-            ),
-            btnGroup(set::items($prefixBtns))
-        )
-    );
-}
-
-// 如果前缀少于3个，补充空的输入框
-$currentCount = count($prefixes);
-for($i = $currentCount; $i < 3; $i++)
-{
-    $prefixItems[] = div
-    (
-        setClass('prefix-item'),
-        inputGroup
+            setClass('prefixes'),
+            set::width('1/2'),
+            set::label($index == 0 ? $lang->repobranchtype->prefixes : ''),
+            set::name("prefixes[{$index}]"),
+            set::value($prefix),
+            set::required($index == 0)
+        ),
+        formGroup
         (
-            input
-            (
-                set::name("prefixes[{$i}]")
-            ),
             btnGroup(set::items($prefixBtns))
         )
     );
@@ -64,7 +49,7 @@ formPanel
     formGroup
     (
         setID('name'),
-        set::width('2/3'),
+        set::width('1/2'),
         set::label($lang->repobranchtype->name),
         set::name('name'),
         set::value($branchType->name),
@@ -73,7 +58,7 @@ formPanel
     formGroup
     (
         setID('key'),
-        set::width('2/3'),
+        set::width('1/2'),
         set::label($lang->repobranchtype->key),
         set::name('key'),
         set::value($branchType->key),
@@ -81,18 +66,7 @@ formPanel
         set::disabled(true),
         set::required(true)
     ),
-    formGroup
-    (
-        set::label($lang->repobranchtype->prefixes),
-        set::required(true),
-        set::width('2/3'),
-        div
-        (
-            setID('branchTypePrefixList'),
-            setClass('prefix-list'),
-            $prefixItems
-        )
-    ),
+    $prefixRows,
     formGroup
     (
         setID('desc'),
