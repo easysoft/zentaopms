@@ -35,7 +35,7 @@ class upgradeZen extends upgrade
         $mapped = false; // 标记是否匹配到付费版本
         foreach($versions as $openVersion => $chargedVersions)
         {
-            if(version_compare($fromVersion, $openVersion, '>=')) continue;
+            if(version_compare($fromOpenVersion, $openVersion, '>=')) continue;
 
             if($currentEdition == 'open')
             {
