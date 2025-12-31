@@ -28,7 +28,8 @@ class repobranchtypeModel extends model
         if(!is_array($prefixes)) $prefixes = array();
 
         /* 过滤空前缀并重新索引数组。 */
-        $filteredPrefixes = array_values(array_filter($prefixes, function($v) {
+        $filteredPrefixes = array_values(array_filter($prefixes, function($v) 
+        {
             return !empty(trim($v));
         }));
 
@@ -93,7 +94,8 @@ class repobranchtypeModel extends model
         if(!is_array($prefixes)) $prefixes = array();
 
         /* 过滤空前缀并重新索引数组。 */
-        $filteredPrefixes = array_values(array_filter($prefixes, function($v) {
+        $filteredPrefixes = array_values(array_filter($prefixes, function($v) 
+        {
             return !empty(trim($v));
         }));
 

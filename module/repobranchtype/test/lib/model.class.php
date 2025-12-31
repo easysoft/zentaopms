@@ -71,22 +71,6 @@ class repobranchtypeTest
     }
 
     /**
-     * Test importBranchTypes method.
-     *
-     * @param  object $repo
-     * @param  array  $branchTypeIDs
-     * @access public
-     * @return bool
-     */
-    public function importBranchTypesTest(object $repo, array $branchTypeIDs): bool
-    {
-        $result = $this->objectModel->importBranchTypes($repo, $branchTypeIDs);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test parsePrefixToArray method.
      *
      * @param  string $prefix
@@ -102,54 +86,5 @@ class repobranchtypeTest
         if(dao::isError()) return dao::getError();
 
         return empty($result) ? '0' : implode(',', $result);
-    }
-
-    /**
-     * Test apiCreateBranchType method.
-     *
-     * @param  int    $gitfoxID
-     * @param  object $formData
-     * @access public
-     * @return bool
-     */
-    public function apiCreateBranchTypeTest(int $gitfoxID, object $formData): bool
-    {
-        $result = $this->objectModel->apiCreateBranchType($gitfoxID, $formData);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test apiDeleteBranchType method.
-     *
-     * @param  object|null $repo
-     * @param  int         $typeID
-     * @access public
-     * @return bool
-     */
-    public function apiDeleteBranchTypeTest(?object $repo, int $typeID): bool
-    {
-        $result = $this->objectModel->apiDeleteBranchType($repo, $typeID);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * Test apiUpdateBranchType method.
-     *
-     * @param  object|null $repo
-     * @param  int         $typeID
-     * @param  object      $formData
-     * @access public
-     * @return bool
-     */
-    public function apiUpdateBranchTypeTest(?object $repo, int $typeID, object $formData): bool
-    {
-        $result = $this->objectModel->apiUpdateBranchType($repo, $typeID, $formData);
-        if(dao::isError()) return dao::getError();
-
-        return $result;
     }
 }

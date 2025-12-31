@@ -29,14 +29,15 @@ class repobranchtypeZen extends repobranchtype
             return false;
         }
 
-        $filteredPrefixes = array_filter($branchType->prefixes, function($v) {
+        $filteredPrefixes = array_filter($branchType->prefixes, function($v) 
+        {
             return !empty(trim($v));
         });
 
         /* 验证每个 prefix 的格式：只能包含字母、数字和 /-_. 且斜杠最多只能有一个。 */
         $prefixPattern  = '/^[a-zA-Z0-9\-_.]*\/?[a-zA-Z0-9\-_.]*$/';
         $uniquePrefixes = array();
-        foreach($filteredPrefixes as $index => $prefix)
+        foreach($filteredPrefixes as $prefix)
         {
             if(!preg_match($prefixPattern, $prefix))
             {
