@@ -92,7 +92,11 @@ class upgrade extends control
             /* 把选择的版本写入数据库便于后续通过 $config->installedVersion 调用。*/
             $this->loadModel('setting')->updateVersion(str_replace('_', '.', $this->post->fromVersion));
 
-            $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
+            /* 假如升级过程中断，重新升级时需要知道升级前是哪个版本，因此需要把第一次升级前的版本存入配置，便于后续使用。*/
+            if(empty($this->config->upgrade->fromVersion)) $this->setting->setItem('system.upgrade.fromVersion', $this->post->fromVersion);
+
+            $fromVersion = $this->config->upgrade->fromVersion ?? $this->post->fromVersion;
+            $this->locate(inlink('confirm', "fromVersion={$fromVersion}"));
         }
 
         $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;

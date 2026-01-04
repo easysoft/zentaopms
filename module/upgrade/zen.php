@@ -1063,8 +1063,11 @@ class upgradeZen extends upgrade
      */
     protected function processAfterExecSuccessfully(): void
     {
-        $this->upgrade->recordExecutedChanges(true);
         $this->loadModel('setting')->updateVersion($this->config->version);
+
+        /* 最终升级完成后清除升级前的版本记录和升级过程中已执行的SQL和方法，以防影响下一次升级。*/
+        $this->setting->deleteItem('owner=system&module=upgrade&key=fromVersion');
+        $this->setting->deleteItem('owner=system&module=upgrade&key=executedChanges');
 
         $zfile = $this->app->loadClass('zfile');
         $zfile->removeDir($this->app->getTmpRoot() . 'model/');
