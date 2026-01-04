@@ -516,7 +516,7 @@ class api extends router
             if($this->apiVersion == 'v2')
             {
                 $this->setParams();
-                
+
                 if(in_array($this->action, array('post', 'put', 'delete')))
                 {
                     $this->setFormData();
@@ -669,7 +669,8 @@ class api extends router
             }
             else
             {
-                $this->params[$key] = $defaultItem['default'];
+                /* Browse all items in api mode defaultly. */
+                $this->params[$key] = in_array($key, ['browseType', 'status']) ? 'all' : $defaultItem['default'];
             }
         }
 
