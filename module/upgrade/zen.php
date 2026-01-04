@@ -184,7 +184,7 @@ class upgradeZen extends upgrade
                 $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
                 $subject = $this->lang->upgrade->changeActions[$item['action']] ?? $this->lang->upgrade->changeActions['other'];
                 $content = str_replace($search, $replace, $subject);
-                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql];
+                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql, 'sqlMd5' => md5($sql)];
             }
         }
         return $changes;

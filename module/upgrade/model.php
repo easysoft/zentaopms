@@ -1243,14 +1243,16 @@ class upgradeModel extends model
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
-            if(isset($this->executedChanges['sqls'][$sqlFile][$sql])) continue;   // Skip the sql that has been executed.
+
+            $sqlMd5 = md5($sql);
+            if(isset($this->executedChanges['sqls'][$sqlFile][$sqlMd5])) continue;   // Skip the sql that has been executed.
 
             try
             {
                 $this->saveLogs($sql);
                 $this->dbh->exec($sql);
 
-                $this->executedChanges['sqls'][$sqlFile][$sql] = true; // Mark the sql has been executed.
+                $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
                 $this->recordExecutedChanges();
             }
             catch(PDOException $e)
@@ -1259,7 +1261,7 @@ class upgradeModel extends model
                 $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
                 if(strpos($ignoreCode, "|$errorCode|") !== false)
                 {
-                    $this->executedChanges['sqls'][$sqlFile][$sql] = true; // Mark the sql has been executed.
+                    $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
                     $this->recordExecutedChanges();
                 }
                 else
