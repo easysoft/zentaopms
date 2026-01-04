@@ -142,15 +142,11 @@ class upgradeModel extends model
      * 记录已升级的 SQL 和方法。
      * Record executed SQLs and methods.
      *
-     * @param  bool   $reset
      * @access public
      * @return bool
      */
-    public function recordExecutedChanges(bool $reset = false): bool
+    public function recordExecutedChanges(): bool
     {
-        /* 重置已升级的 SQL 和方法。Reset upgraded SQLs and methods. */
-        if($reset) $this->executedChanges = [];
-
         $this->loadModel('setting')->setItem('system.upgrade.executedChanges', json_encode($this->executedChanges));
         return !dao::isError();
     }
