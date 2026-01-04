@@ -89,7 +89,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off')
     ),
-    formBatchItem
+    $executionID && $execution->lifetime == 'ops' ? null : formBatchItem
     (
         set::name('story'),
         set::label($lang->task->story),
