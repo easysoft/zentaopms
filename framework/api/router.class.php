@@ -518,10 +518,9 @@ class api extends router
                 $this->setParams();
                 if(in_array($this->action, array('post', 'put', 'delete')))
                 {
+                    $this->checkObjectExists();
                     $this->setFormData();
                 }
-
-                $this->checkObjectExists();
 
                 return parent::loadModule();
             }
