@@ -27,6 +27,14 @@ $langAllowMergeTo   = empty($branchTypeID) ? $lang->repo->branchRule->allowMerge
 
 $backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repo', 'browsebranchtype', "repoID=$repoID");
 
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
+);
+
 formPanel
 (
     setID('setBranchRuleForm'),

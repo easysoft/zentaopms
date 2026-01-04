@@ -25,7 +25,7 @@ class repobranchruleModel extends model
     {
         // 根据仓库 ID 和分支前缀匹配分支类型
         $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-        $branchTypes = $this->loadModel('repo')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
         if(!empty($branchTypes))
         {
             // 根据匹配的分支类型 ID 获取规则进行权限校验
@@ -61,7 +61,7 @@ class repobranchruleModel extends model
 
         // 根据仓库 ID 和分支前缀查询分支类型级别的规则进行权限校验
         $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-        $branchTypes = $this->loadModel('repo')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
         if(!empty($branchTypes))
         {
             $branchType = reset($branchTypes);

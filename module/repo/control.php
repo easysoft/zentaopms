@@ -2017,7 +2017,7 @@ class repo extends control
                     break;
                 }
             }
-            $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
+            $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : ($branch->type ? $this->lang->repo->branchRuleMode['inheritance'] : '');
             $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
             $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
             $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
