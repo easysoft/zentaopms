@@ -3798,7 +3798,7 @@ class upgradeModel extends model
 
         /* 新增项目集或者更新项目集状态。*/
         /* Create program or update program status. */
-        if(isset($data->newProgram))
+        if(isset($data->newProgram) && $this->config->systemMode != 'light')
         {
             $result = $this->createNewProgram($data, $projectIdList);
             if(dao::isError()) return false;
