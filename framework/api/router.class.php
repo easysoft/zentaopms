@@ -474,6 +474,15 @@ class api extends router
             'deptID'        => TABLE_DEPT,
         ];
 
+        /* Check assignedTo. */
+        if(isset($_POST['assignedTo']) && $_POST['assignedTo'])
+        {
+            $user = $this->dao->select('*')->from(TABLE_USER)
+                ->where('account')->eq($_POST['assignedTo'])
+                ->fetch();
+            if(!$user) return $this->control->sendError('User does not exist.');
+        }
+
         $params = array_merge($this->params, $_POST);
         foreach($params as $key => $value)
         {
