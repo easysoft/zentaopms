@@ -25,7 +25,7 @@ $(function()
             $('#changesBox .change-item').not('.executed').each(function()
             {
                 const change = $(this).data('change');
-                if(change.type == 'sql' && executedSqls.includes(change.sql))
+                if(change.type == 'sql' && executedSqls.includes(change.sqlMd5))
                 {
                     $(this).addClass('executed');
                     executedCount++;
