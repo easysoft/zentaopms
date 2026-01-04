@@ -2976,7 +2976,7 @@ $config->group->package->file->privs['file-edit']         = array('edition' => '
 $config->group->package->file->privs['file-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array(), 'recommend' => array('file-edit'));
 $config->group->package->file->privs['file-uploadImages'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->file->privs['file-setPublic']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array('file-download'), 'recommend' => array());
+$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->commonEffort = new stdclass();
 $config->group->package->commonEffort->order  = 5;
