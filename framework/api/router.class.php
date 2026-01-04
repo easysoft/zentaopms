@@ -516,10 +516,14 @@ class api extends router
             if($this->apiVersion == 'v2')
             {
                 $this->setParams();
+                
                 if(in_array($this->action, array('post', 'put', 'delete')))
                 {
-                    $this->checkObjectExists();
                     $this->setFormData();
+                }
+                else
+                {
+                    $this->checkObjectExists();
                 }
 
                 return parent::loadModule();
@@ -583,6 +587,8 @@ class api extends router
         {
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
+
+        $this->checkObjectExists();
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
         if(!in_array($this->methodName, ['create', 'edit'])) return;
