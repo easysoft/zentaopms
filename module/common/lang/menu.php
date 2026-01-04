@@ -828,11 +828,8 @@ $lang->navGroup->misc    = 'misc';
 $lang->navGroup->upgrade = 'upgrade';
 
 $lang->navGroup->reporeviewflow  = 'devops';
-<<<<<<< HEAD
 $lang->navGroup->repobranchtype  = 'devops';
-=======
 $lang->navGroup->repobranchrule  = 'devops';
->>>>>>> bb5a21b385a (fix branch rule bug.)
 
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->enableER) unset($lang->product->menu->epic, $lang->product->menuOrder[10]);
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->URAndSR)  unset($lang->product->menu->requirement, $lang->product->menuOrder[15]);
