@@ -470,6 +470,8 @@ class api extends router
             'userID'        => TABLE_USER,
             'ticket'        => TABLE_TICKET,
             'ticketID'      => TABLE_TICKET,
+            'dept'          => TABLE_DEPT,
+            'deptID'        => TABLE_DEPT,
         ];
 
         $params = array_merge($this->params, $_POST);
@@ -478,7 +480,10 @@ class api extends router
             if(isset($objectMap[$key]) && $value)
             {
                 $table  = $objectMap[$key];
-                $object = $this->dao->select('*')->from($table)->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch();
+                $object = $this->dao->select('*')->from($table)
+                    ->where('id')->eq($value)
+                    ->beginIF(!in_array($key, ['dept', 'deptID']))->andWhere('deleted')->eq('0')->fi()
+                    ->fetch();
                 if(!$object) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
 
                 if(!$this->checkObjectPriv($object, $table)) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' is not allowed.');
