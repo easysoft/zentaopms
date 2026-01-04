@@ -1246,8 +1246,6 @@ class fileModel extends model
      */
     public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
-        if(!common::hasPriv('file', 'download') && !common::hasPriv('file', 'preview')) return '';
-
         $html = '';
 
         $sessionString = session_name() . '=' . session_id();
@@ -1324,10 +1322,10 @@ class fileModel extends model
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview)
+        if($canPreview && common::hasPriv('file', 'preview'))
         {
             $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
-            $html      .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+            $html      .= html::a(helper::createLink('file', 'preview', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
         }
         if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
