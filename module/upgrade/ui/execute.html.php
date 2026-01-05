@@ -13,13 +13,7 @@ namespace zin;
 set::zui(true);
 
 jsVar('fromVersion', $fromVersion);
-jsVar('toVersion', $toVersion);
-jsVar('upgradeChanges', $upgradeChanges);
-
-$totalVersions  = count($upgradeVersions);
-$completedCount = array_search($toVersion, array_keys($upgradeVersions));
-$progress       = $totalVersions ? (int)($completedCount / $totalVersions * 100) : 0;
-$progressLabel  = $completedCount . '/' . $totalVersions;
+jsVar('upgradeVersions', array_keys($upgradeVersions));
 
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
@@ -30,35 +24,29 @@ foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
 $toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
 
-$buildVersions = function() use ($toVersion, $upgradeVersions, $editionNames)
+$buildVersions = function() use ($upgradeVersions, $editionNames)
 {
-    $versionIndex   = 0;
-    $toVersionIndex = array_search($toVersion, array_keys($upgradeVersions)) ?: 0;
-
     $versions = [];
-    foreach($upgradeVersions as $key => $version)
+    foreach($upgradeVersions as $version => $label)
     {
-        $class   = $versionIndex < $toVersionIndex ? 'text-success' : 'text-gray-400';
-        $icon    = $versionIndex < $toVersionIndex ? 'check-circle' : ($versionIndex == $toVersionIndex ? 'spinner-indicator' : 'clock');
-        $edition = is_numeric($key[0]) ? 'open' : substr($key, 0, 3);
+        $edition = is_numeric($version[0]) ? 'open' : substr($version, 0, 3);
         $versions[] = div
         (
             row
             (
-                setClass('version-item items-center gap-2' . ($versionIndex < $toVersionIndex ? ' executed' : '')),
+                setClass('version-item items-center gap-2'),
+                setData(['version' => $version]),
                 icon
                 (
-                    setClass("text-xl {$class}"),
-                    $icon
+                    setClass('text-xl text-gray-400'),
+                    'clock'
                 ),
                 span
                 (
-                    $editionNames[$edition] . str_ireplace($edition, '', $version)
+                    $editionNames[$edition] . str_ireplace($edition, '', $label)
                 )
             )
         );
-
-        $versionIndex++;
     }
     return $versions;
 };
@@ -70,10 +58,11 @@ $buildChanges = function() use ($lang, $upgradeChanges)
     $textColors = ['create' => 'text-success', 'update' => 'text-primary', 'delete' => 'text-danger'];
     foreach($upgradeChanges as $key => $change)
     {
+        $sql = json_encode($change['sql'] ?? []);
         $changes[] = row
         (
             setClass('change-item items-center gap-3'),
-            setData(['change' => $change]),
+            setData(['key' => $key, 'change' => $change]),
             span
             (
                 setClass("label {$bgColors[$change['mode']]} {$textColors[$change['mode']]} px-2.5 py-1"),
@@ -85,7 +74,7 @@ $buildChanges = function() use ($lang, $upgradeChanges)
             ),
             $change['type'] == 'sql' ? a
             (
-                set::href("javascript:showSQL({$key})"),
+                set::href("javascript:showSQL({$sql})"),
                 icon
                 (
                     setClass('text-gray-400 text-lg'),
@@ -119,6 +108,7 @@ div
             setStyle(['max-height' => 'calc(100% - 4rem)']),
             col
             (
+                setID('versionsBlock'),
                 setClass('bg-white rounded-md justify-between gap-4 p-4 w-64 h-full'),
                 span
                 (
@@ -143,20 +133,27 @@ div
                         setClass('items-center gap-2'),
                         progressbar
                         (
+                            setID('versionsProgressBar'),
                             setClass('rounded-full'),
-                            setStyle(['height' => '.75rem', 'width' => 'calc(100% - 2rem)']),
+                            setStyle(['height' => '.75rem', 'width' => 'calc(100% - 3rem)']),
                             set::color('rgba(var(--color-success-500-rgb), var(--tw-bg-opacity));'),
-                            set::percent($progress)
+                            set::percent(0)
                         ),
                         span
                         (
-                            $progressLabel
+                            span
+                            (
+                                setID('versionsProgressText'),
+                                '0'
+                            ),
+                            ' / ' . count($upgradeVersions)
                         )
                     )
                 )
             ),
             col
             (
+                setID('changesBlock'),
                 setClass('rounded-md gap-4 bg-white px-6 py-4 w-full h-full'),
                 row
                 (

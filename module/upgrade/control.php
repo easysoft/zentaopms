@@ -153,7 +153,6 @@ class upgrade extends control
 
         $this->view->title       = $this->lang->upgrade->execute;
         $this->view->fromVersion = $fromVersion;
-        $this->view->fromEdition = $this->upgrade->getEditionByVersion($fromVersion);
 
         /* 显示升级失败的信息。*/
         if(!empty($_POST['errors']))
@@ -167,11 +166,23 @@ class upgrade extends control
         $command = $this->upgrade->deleteFiles($script);
         if($command) return $this->displayCommand($command);
 
-        $toVersion = $this->upgradeZen->getToVersion();
+        $upgradeVersions = $this->upgradeZen->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
+        $versionsKey     = array_keys($upgradeVersions);
+        $toVersion       = reset($versionsKey);
+        $upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
+
+        /* 把需要执行的变更记录到数据库，便于后续调用。*/
+        $sessionChanges = [];
+        foreach($upgradeChanges as $change)
+        {
+            if($change['type'] == 'sql')    $sessionChanges[] = ['executed' => false, 'type' => 'sql',    'sqlFile' => $change['sqlFile'], 'sqlMd5' => md5($change['sql'])];
+            if($change['type'] == 'method') $sessionChanges[] = ['executed' => false, 'type' => 'method', 'method'  => $change['method']];
+        }
+        $this->loadModel('setting')->setItem('system.upgrade.upgradeChanges', json_encode($sessionChanges));
 
         $this->view->toVersion       = $toVersion;
-        $this->view->upgradeVersions = $this->upgradeZen->getUpgradeVersions($fromVersion);
-        $this->view->upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
+        $this->view->upgradeVersions = $upgradeVersions;
+        $this->view->upgradeChanges  = $upgradeChanges;
         $this->display();
     }
 
@@ -211,15 +222,38 @@ class upgrade extends control
      */
     public function ajaxGetExecutedChanges()
     {
-        $changedSqls     = [];
-        $executedChanges = json_decode($this->config->upgrade->executedChanges, true);
-        $executedSqls    = $executedChanges['sqls']    ?? [];
-        $executedMethods = $executedChanges['methods'] ?? [];
-        foreach($executedSqls as $sqls)
+        /* 如果没有需要执行的变更，直接返回全部执行完成。*/
+        $upgradeChanges = empty($this->config->upgrade->upgradeChanges)  ? [] : json_decode($this->config->upgrade->upgradeChanges, true);
+        if(empty($upgradeChanges)) return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => [], 'allChangesExecuted' => true]));
+
+        /* 如果没有已执行的变更，直接返回未全部执行完成。*/
+        $executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
+        if(empty($executedChanges)) return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => [], 'allChangesExecuted' => false]));
+
+        foreach($upgradeChanges as $key => $change)
         {
-            foreach(array_keys($sqls) as $sql) $changedSqls[] = $sql;
+            if($change['type'] == 'sql'    && isset($executedChanges['sqls'][$change['sqlFile']][$change['sqlMd5']])) $upgradeChanges[$key]['executed'] = true;
+            if($change['type'] == 'method' && isset($executedChanges['methods'][$change['method']]))                  $upgradeChanges[$key]['executed'] = true;
         }
-        echo json_encode(['executedSqls' => $changedSqls, 'executedMethods' => array_keys($executedMethods)]);
+
+        $executedKeys = array_keys(array_filter($upgradeChanges, function($change)
+        {
+            return isset($change['executed']) && $change['executed'];
+        }));
+
+        $allChangesExecuted = count($executedKeys) == count($upgradeChanges);
+
+        /**
+         * 升级到最终版本之前，每升级完一个版本就清除掉需要执行的和已执行的变更。
+         * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再清除需要执行的和已执行的变更。
+         */
+        if($allChangesExecuted && version_compare($this->config->version, $this->config->installedVersion, '<'))
+        {
+            $this->loadModel('setting')->deleteItems('owner=system&module=upgrade&key=upgradeChanges');
+            $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
+        }
+
+        return print(json_encode(['executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
     }
 
     /**
@@ -650,6 +684,15 @@ class upgrade extends control
         }
 
         unset($_SESSION['user']);
+
+        /**
+         * 升级到最终版本并执行完所有后续的数据处理流程后，更新版本号、清除升级前的版本记录、需要执行的和已执行的变更。
+         * After upgrading to the final version and completing all subsequent data processing, update the version number, clear the pre-upgrade version records, the changes to be executed and the executed changes.
+         */
+        $this->loadModel('setting')->updateVersion($this->config->version);
+        $this->setting->deleteItems('owner=system&module=upgrade&key=fromVersion');
+        $this->setting->deleteItems('owner=system&module=upgrade&key=upgradeChanges');
+        $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
 
         /* 检查是否还有需要处理的。*/
         /* Check if there is anything else that needs to be processed. */
