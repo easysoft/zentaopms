@@ -3,20 +3,6 @@ declare(strict_types=1);
 class upgradeZen extends upgrade
 {
     /**
-     * 获取目标升级版本。
-     * Get to upgrade version.
-     *
-     * @access protected
-     * @return string
-     */
-    protected function getToVersion(): string
-    {
-        $upgradeVersions = $this->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
-        $upgradeVersions = array_keys($upgradeVersions);
-        return reset($upgradeVersions);
-    }
-
-    /**
      * 获取要升级到的版本列表。
      * Get upgrade versions.
      *
@@ -29,35 +15,134 @@ class upgradeZen extends upgrade
         $upgradeVersions = [];
         $currentEdition  = $this->config->edition;
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
-        $fromOpenVersion = $this->upgrade->getOpenVersion($fromVersion);
-        $versions        = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
+        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
 
-        $mapped = false; // 标记是否匹配到付费版本
-        foreach($versions as $openVersion => $chargedVersions)
+        if($currentEdition == 'open')
         {
-            if(version_compare($fromOpenVersion, $openVersion, '>=')) continue;
-
-            if($currentEdition == 'open')
+            /**
+             * 如果当前版本是开源版，则列出所有大于 fromVersion 的开源版版本。
+             * 比如 fromVersion 为 21_7_6，当前版本为 21_7_8，则列出 21_7_7 和 21_7_8。
+             * If the current edition is open, list all versions greater than fromVersion.
+             * For example, if fromVersion is 21_7_6 and the current version is 21_7_8, list 21_7_7 and 21_7_8.
+             */
+            foreach($this->lang->upgrade->fromVersions as $version => $label)
             {
-                $upgradeVersions[$openVersion] = $this->lang->upgrade->fromVersions[$openVersion];
+                if(!is_numeric($version[0])) continue;
+                if(version_compare($version, $fromOpenVersion, '<=')) continue;
+
+                $upgradeVersions[$version] = $label;
+            }
+            return $upgradeVersions;
+        }
+
+        if($currentEdition == $fromEdition)
+        {
+            /**
+             * 如果当前版本和 fromVersion 版本属于同一付费版，则列出所有大于 fromVersion 的该付费版版本。
+             * 比如 fromVersion 为 biz12_6，当前版本为 biz12_8，则列出 biz12_7 和 biz12_8。
+             * If the current edition is the same as fromEdition, list all versions greater than fromVersion of the same edition.
+             * For example, if fromVersion is biz12_6 and the current version is biz12_8, list biz12_7 and biz12_8.
+             */
+            foreach($this->lang->upgrade->fromVersions as $version => $label)
+            {
+                if(strpos($version, $currentEdition) !== 0) continue;
+                if(version_compare($version, $fromVersion, '<=')) continue;
+
+                $upgradeVersions[$version] = $label;
+            }
+        }
+        else
+        {
+            $currentMapVersions = $this->config->upgrade->{$currentEdition . 'Version'};
+            if(array_search($fromOpenVersion, $currentMapVersions))
+            {
+                /**
+                 * 如果当前版本和 fromVersion 版本属于不同付费版，但 fromVersion 可以映射到当前付费版，则列出所有大于等于 fromVersion 映射版本的该付费版版本。
+                 * 比如 fromVersion 为 biz12_6，当前版本为 max12_8，则列出 max12_6、max12_7 和 max12_8。
+                 * If the current edition is different from fromEdition, but fromVersion can be mapped to the current edition, list all versions greater than or equal to the mapped version of the current edition.
+                 */
+                foreach($currentMapVersions as $version => $openVersion)
+                {
+                    if(version_compare($openVersion, $fromOpenVersion, '<')) continue;
+
+                    $upgradeVersions[$version] = $this->lang->upgrade->fromVersions[$version] ?? '';
+                }
             }
             else
             {
-                $mappedVersion = array_search($openVersion, $this->config->upgrade->{$currentEdition . 'Version'});
-                if($mappedVersion)
+                /**
+                 * 查找距离 fromVersion 最近的当前付费版版本和开源版版本。
+                 * 比如 fromVersion 为 18_1，当前版本为 ipd4_7，则 currentMappedVersion 为 ipd1_0_beta1, currentMappedOpenVersion 为 18_4_alpha1
+                 * Find the nearest current edition version and open version from fromVersion.
+                 * For example, if fromVersion is 18_1 and the current version is ipd4_7, then currentMappedVersion is ipd1_0_beta1 and currentMappedOpenVersion is 18_4_alpha1.
+                 */
+                $currentMappedVersion     = '';
+                $currentMappedOpenVersion = '';
+                foreach($currentMapVersions as $version => $openVersion)
                 {
-                    $mapped = true;
-                    $upgradeVersions[$mappedVersion] = $this->lang->upgrade->fromVersions[$mappedVersion];
+                    if(version_compare($openVersion, $fromOpenVersion, '>'))
+                    {
+                        $currentMappedVersion     = $version;
+                        $currentMappedOpenVersion = $openVersion;
+                        break;
+                    }
                 }
-                elseif(!$mapped)
+
+                if($fromEdition == 'open')
                 {
-                    $upgradeVersions[$openVersion] = $this->lang->upgrade->fromVersions[$openVersion];
+                    /**
+                     * 如果 fromVersion 是开源版，则列出所有大于 fromVersion 且小于距离 fromVersion 最近的当前付费版映射的开源版版本。
+                     * 比如 fromVersion 为 18_1，当 前版本为 ipd4_7，则列出大于 18_1 且小于 18_4_alpha1 的所有开源版版本，即 18_2 和 18_3。
+                     * If fromEdition is open, list all versions greater than fromVersion and less than the open version mapped by the current edition nearest to fromVersion.
+                     * For example, if fromVersion is 18_1 and the current version is ipd4_7, list all open versions greater than 18_1 and less than 18_4_alpha1, i.e., 18_2 and 18_3.
+                     */
+                    foreach($this->lang->upgrade->fromVersions as $version => $label)
+                    {
+                        if(!is_numeric($version[0])) continue;
+                        if(version_compare($version, $fromOpenVersion, '<=')) continue;
+                        if(!empty($currentMappedOpenVersion) && version_compare($version, $currentMappedOpenVersion, '>=')) break;
+
+                        $upgradeVersions[$version] = $label;
+                    }
+                }
+                else
+                {
+                    /**
+                     * 如果 fromVersion 是付费版，则列出所有大于 fromVersion 映射的开源版版本且小于距离 fromVersion 最近的当前付费版映射的开源版版本对应的付费版版本。
+                     * 比如 fromVersion 为 biz8_1，当前版本为 ipd4_7，则列出大于 18_1 且小于 18_4_alpha1 的所有开源版版本对应的付费版版本，即 biz8_2 和 biz8_3。
+                     * If fromEdition is charged, list all open versions greater than the open version mapped by fromVersion and less than the open version mapped by the current edition nearest to fromVersion.
+                     * For example, if fromVersion is biz8_1 and the current version is ipd4_7, list all open versions greater than 18_1 and less than 18_4_alpha1, i.e., 18_2 and 18_3.
+                     */
+                    $fromMapVersions = $this->config->upgrade->{$fromEdition . 'Version'};
+                    foreach($fromMapVersions as $version => $openVersion)
+                    {
+                        if(version_compare($openVersion, $fromOpenVersion, '<=')) continue;
+                        if(!empty($currentMappedOpenVersion) && version_compare($openVersion, $currentMappedOpenVersion, '>=')) break;
+
+                        $upgradeVersions[$version] = $this->lang->upgrade->fromVersions[$version] ?? '';
+                    }
+                }
+
+                /**
+                 * 列出所有大于等于距离 fromVersion 最近的当前付费版版本。
+                 * 比如 fromVersion 为 biz8_1，当前版本为 ipd4_7，则列出 ipd1_0_beta1 及之后的所有版本。
+                 * List all versions greater than or equal to the current edition version nearest to fromVersion.
+                 * For example, if fromVersion is biz8_1 and the current version is ipd4_7, list ipd1_0_beta1 and all subsequent versions.
+                 */
+                foreach(array_keys($currentMapVersions) as $version)
+                {
+                    if(!empty($currentMappedVersion) && version_compare($version, $currentMappedVersion, '<')) continue;
+
+                    $upgradeVersions[$version] = $this->lang->upgrade->fromVersions[$version] ?? '';
                 }
             }
         }
 
-        $currentVersion = str_replace('.', '_', $this->config->version);
-        if(empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
+        if($currentEdition == 'ipd')
+        {
+            $currentVersion = str_replace('.', '_', $this->config->version);
+            $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
+        }
 
         return $upgradeVersions;
     }
@@ -73,25 +158,28 @@ class upgradeZen extends upgrade
      */
     protected function getUpgradeChanges(string $fromVersion, string $toVersion): array
     {
-        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
+        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
+        $upgradeVersions = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
         $changes = [];
-        $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
-        $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
-        $changes = array_merge($changes, $this->getChangesByConfig($openVersion));
-
-        $upgraradeVersions = $this->upgrade->getVersionsToUpdate($openVersion, $this->config->edition);
-        if(isset($upgraradeVersions[$openVersion]))
+        foreach($upgradeVersions as $openVersion => $chargedVersions)
         {
-            /* Execute charge edition. */
-            foreach($upgraradeVersions[$openVersion] as $edition => $chargedVersions)
+            if(version_compare($openVersion, $fromOpenVersion, '<')) continue;
+            if(version_compare($openVersion, $toOpenVersion, '>='))  continue;
+
+            $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
+            $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
+            $changes = array_merge($changes, $this->getChangesByConfig($openVersion));
+
+            foreach($chargedVersions as $chargedVersion)
             {
-                foreach($chargedVersions as $chargedVersion)
+                foreach($chargedVersion as $version)
                 {
-                    if($edition == 'max') $chargedVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
-                    $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $chargedVersion));
+                    $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $version));
                     $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
-                    $changes = array_merge($changes, $this->getChangesByConfig($chargedVersion));
+                    $changes = array_merge($changes, $this->getChangesByConfig($version));
                 }
             }
         }
@@ -184,7 +272,7 @@ class upgradeZen extends upgrade
                 $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
                 $subject = $this->lang->upgrade->changeActions[$item['action']] ?? $this->lang->upgrade->changeActions['other'];
                 $content = str_replace($search, $replace, $subject);
-                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql, 'sqlMd5' => md5($sql)];
+                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql, 'sqlFile' => $sqlFile];
             }
         }
         return $changes;
@@ -1063,12 +1151,6 @@ class upgradeZen extends upgrade
      */
     protected function processAfterExecSuccessfully(): void
     {
-        $this->loadModel('setting')->updateVersion($this->config->version);
-
-        /* 最终升级完成后清除升级前的版本记录和升级过程中已执行的SQL和方法，以防影响下一次升级。*/
-        $this->setting->deleteItem('owner=system&module=upgrade&key=fromVersion');
-        $this->setting->deleteItem('owner=system&module=upgrade&key=executedChanges');
-
         $zfile = $this->app->loadClass('zfile');
         $zfile->removeDir($this->app->getTmpRoot() . 'model/');
 

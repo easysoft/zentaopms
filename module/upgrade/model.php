@@ -198,22 +198,25 @@ class upgradeModel extends model
         $this->executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
 
         /* Execute. */
-        $installedVersion     = $this->config->installedVersion;
-        $installedOpenVersion = $this->getOpenVersion(str_replace('.', '_', $installedVersion));
-        $upgraradeVersions    = $this->getVersionsToUpdate($installedOpenVersion, $this->fromEdition);
+        $fromOpenVersion = $this->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $toOpenVersion   = $this->getOpenVersion($toVersion);
+        $upgradeVersions = $this->getVersionsToUpdate($fromOpenVersion, $this->fromEdition);
 
-        /* Execute open edition. */
-        $this->saveLogs("Execute $installedOpenVersion");
-        $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $installedOpenVersion)));
-        if(!$result) return $this->recordExecutedChanges();
-
-        $result = $this->executeByConfig($installedOpenVersion);
-        if(!$result) return $this->recordExecutedChanges();
-
-        if(isset($upgraradeVersions[$installedOpenVersion]))
+        /* Execute charge edition. */
+        foreach($upgradeVersions as $openVersion => $chargedVersions)
         {
-            /* Execute charge edition. */
-            foreach($upgraradeVersions[$installedOpenVersion] as $chargedVersion)
+            if(version_compare($openVersion, $fromOpenVersion, '<')) continue;
+            if(version_compare($openVersion, $toOpenVersion, '>='))  continue;
+
+            /* Execute open edition. */
+            $this->saveLogs("Execute $openVersion");
+            $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
+            if(!$result) return $this->recordExecutedChanges();
+
+            $result = $this->executeByConfig($openVersion);
+            if(!$result) return $this->recordExecutedChanges();
+
+            foreach($chargedVersions as $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
@@ -240,7 +243,6 @@ class upgradeModel extends model
              * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再更新版本号。
              */
             $this->loadModel('setting')->updateVersion($toVersion);
-            $this->recordExecutedChanges(true);
         }
 
         return !$this->isError() && !dao::isError();
@@ -7894,15 +7896,15 @@ class upgradeModel extends model
             if($vars)
             {
                 $filters = array();
-                foreach($vars->varName as $index => $varName)
+                foreach($vars['varName'] as $index => $varName)
                 {
                     $filter = new stdclass();
                     $filter->from       = 'query';
                     $filter->field      = $varName;
-                    $filter->name       = $vars->showName[$index];
-                    $filter->type       = $vars->requestType[$index];
-                    $filter->typeOption = $filter->type == 'select' ? zget($vars->selectList, $index, '') : '';
-                    $filter->default    = isset($vars->default) ? zget($vars->default, $index, '') : '';
+                    $filter->name       = $vars['showName'][$index];
+                    $filter->type       = $vars['requestType'][$index];
+                    $filter->typeOption = $filter->type == 'select' ? zget($vars['selectList'], $index, '') : '';
+                    $filter->default    = isset($vars['default']) ? zget($vars['default'], $index, '') : '';
 
                     $filters[] = $filter;
                 }
