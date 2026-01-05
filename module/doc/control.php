@@ -2437,7 +2437,7 @@ class doc extends control
             $doc->content = $doc->rawContent;
             unset($doc->rawContent);
 
-            if($doc->contentType == 'doc' && preg_match('/ src="{([0-9]+)(\.(\w+))?}" /', $doc->html))
+            if(empty($doc->templateType) && $doc->contentType == 'doc' && preg_match('/ src="{([0-9]+)(\.(\w+))?}" /', $doc->html))
             {
                 $doc->contentType = 'html';
                 $doc->content     = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $doc->html);
