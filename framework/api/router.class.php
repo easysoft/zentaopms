@@ -426,19 +426,20 @@ class api extends router
     }
 
     /**
-     * 检查传入的对象是否存在
+     * 检查传入的对象是否可以访问
      *
-     * Check object exists.
+     * Check access.
      *
      * @access public
      * @return void
      */
-    public function checkObjectExists()
+    public function checkAccess()
     {
         $objectMap = [
             'program'       => TABLE_PROJECT,
             'programID'     => TABLE_PROJECT,
             'product'       => TABLE_PRODUCT,
+            'products'      => TABLE_PRODUCT,
             'productID'     => TABLE_PRODUCT,
             'project'       => TABLE_PROJECT,
             'projectID'     => TABLE_PROJECT,
@@ -486,19 +487,50 @@ class api extends router
         $params = array_merge($this->params, $_POST);
         foreach($params as $key => $value)
         {
-            if(isset($objectMap[$key]) && $value)
-            {
-                $table  = $objectMap[$key];
-                $object = $this->dao->select('*')->from($table)
-                    ->where('id')->eq($value)
-                    ->beginIF(!in_array($key, ['dept', 'deptID']))->andWhere('deleted')->eq('0')->fi()
-                    ->fetch();
-                if(!$object) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+            if(!isset($objectMap[$key]) || !$value) continue;
 
+            $table  = $objectMap[$key];
+            $result = $this->checkObjectExists($table, $value);
+
+            if($result === false) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+
+            foreach($result as $object)
+            {
                 if(!$this->checkObjectPriv($object, $table)) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' is not allowed.');
             }
         }
     }
+
+    /**
+     * 检查对象是否存在
+     *
+     * Check object exists.
+     *
+     * @param  string $table
+     * @param  int    $objectID
+     * @access public
+     * @return array|false
+     */
+    public function checkObjectExists($table, $objectIDList)
+    {
+        if(!is_array($objectIDList)) $objectIDList = [$objectIDList];
+
+        $objects = [];
+
+        foreach($objectIDList as $objectID)
+        {
+            $object = $this->dao->select('*')->from(TABLE_PRODUCT)
+                ->where('id')->eq($objectID)
+                ->beginIF(!in_array($table, [TABLE_DEPT]))->andWhere('deleted')->eq('0')->fi()
+                ->fetch();
+            if(!$object) return false;
+
+            $objects[] = $object;
+        }
+
+        return $objects;
+    }
+
 
     /**
      * 执行对应模块
@@ -523,7 +555,7 @@ class api extends router
                 }
                 else
                 {
-                    $this->checkObjectExists();
+                    $this->checkAccess();
                 }
 
                 return parent::loadModule();
@@ -588,7 +620,7 @@ class api extends router
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
 
-        $this->checkObjectExists();
+        $this->checkAccess();
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
         if(!in_array($this->methodName, ['create', 'edit'])) return;
