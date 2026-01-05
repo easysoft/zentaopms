@@ -221,7 +221,7 @@ class form extends fixer
         if(!empty($this->errors))
         {
             $response = array('result' => 'fail', 'message' => $this->errors);
-            helper::end(json_encode($response));
+            helper::end(json_encode($response, JSON_UNESCAPED_UNICODE));
         }
 
         return $this;
