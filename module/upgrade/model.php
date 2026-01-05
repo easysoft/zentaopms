@@ -11433,10 +11433,15 @@ class upgradeModel extends model
         foreach($deliverables as $oldDeliverable)
         {
             $models = explode(',', $oldDeliverable->model);
-            if(array_search('product_waterfall', $models) !== false) $models[] = 'product_waterfallplus';
-            if(array_search('project_waterfall', $models) !== false) $models[] = 'project_waterfallplus';
-            if(array_search('product_scrum', $models) !== false)     $models[] = 'product_agileplus';
-            if(array_search('project_scrum', $models) !== false)     $models[] = 'project_agileplus';
+            /* 原瀑布、敏捷追加融合模式。 */
+            foreach($models as $model)
+            {
+                if(strpos($model, 'product_waterfall') !== false) $models[] = str_replace('product_waterfall', 'product_waterfallplus', $model);
+                if(strpos($model, 'project_waterfall') !== false) $models[] = str_replace('project_waterfall', 'project_waterfallplus', $model);
+                if(strpos($model, 'product_scrum') !== false)     $models[] = str_replace('product_scrum', 'product_agileplus', $model);
+                if(strpos($model, 'project_scrum') !== false)     $models[] = str_replace('project_scrum', 'project_agileplus', $model);
+            }
+
             foreach($models as $model)
             {
                 foreach($workflowGroups as $workflowGroup)
@@ -11494,8 +11499,12 @@ class upgradeModel extends model
                     {
                         if(empty($deliverableList[$workflowGroup->id][$config['deliverable']])) continue;
 
+                        $projectModel = $workflowGroup->projectModel;
+                        if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+                        if($projectModel == 'agileplus')     $projectModel = 'scrum';
+
                         $deliverableID                 = $deliverableList[$workflowGroup->id][$config['deliverable']];
-                        $workflowGroupModel            = "{$workflowGroup->projectType}_{$workflowGroup->projectModel}";
+                        $workflowGroupModel            = "{$workflowGroup->projectType}_{$projectModel}";
                         $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
                         $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
                         $deliverableStage->deliverable = $deliverableID;
@@ -11842,7 +11851,7 @@ class upgradeModel extends model
 
                         $newProjectDeliverable = new stdclass();
                         $newProjectDeliverable->deliverable = $deliverableID;
-                        $newProjectDeliverable->project     = $project->id;
+                        $newProjectDeliverable->project     = $project->type == 'project' ? $project->id : $project->project;
                         $newProjectDeliverable->submitFrom  = $project->id;
                         $newProjectDeliverable->status      = 'draft';
 
