@@ -60,29 +60,31 @@ class repobranchrule extends control
         if($_POST)
         {
             $formData = form::data($this->config->repobranchrule->form->setBranchRule)->get();
+            $link = $branchTypeID ? $this->createLink('repobranchtype', 'browsebranchtype', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
 
             /* 如果 $formData 里的字段全部为默认值，则返回保存成功，不保存数据。 */
             $allDefault = true;
-            foreach($formData as $field => $value)
+            foreach($formData as $ruleDetail)
             {
-                if(in_array($field, array('userAllowCreateGroup', 'userAllowDeleteGroup', 'userAllowUpdateGroup', 'userAllowForcePushGroup', 'branchTypeAllowMergeFromGroup', 'branchTypeAllowMergeToGroup')))
+                if(empty($ruleDetail)) continue;
+                $option = $ruleDetail['option'];
+                $value  = $ruleDetail['value'];
+
+                /* 当选择 specify 时，校验 value 不能为空。 */
+                if($option == 'specify')
                 {
-                    if(!empty($value)) { $allDefault = false; break; }
-                }
-                elseif(in_array($field, array('radioForAllowCreate', 'radioForAllowDelete', 'radioForAllowUpdate', 'radioForAllowForcePush')))
-                {
-                    if($value !== 'hasPriv') { $allDefault = false; break; }
-                }
-                elseif(in_array($field, array('radioForAllowMergeFrom', 'radioForAllowMergeTo')))
-                {
-                    if($value !== 'all') { $allDefault = false; break; }
+                    $value = array_filter($value, function($v) { return $v !== ''; });
+                    if(empty($value))
+                    {
+                        $this->sendError($this->lang->repobranchrule->specifyValueEmptyError);
+                    }
+                    else
+                    {
+                        $allDefault = false;
+                    }
                 }
             }
-            if($allDefault)
-            {
-                $link = ($branchTypeID == 0) ? $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID") : $this->loadModel('repo')->createLink('browsebranchtype', "repoID=$repoID");
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
-            }
+            if($allDefault) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
 
             $rule = $this->repobranchruleZen->buildBranchRuleData($branchTypeID, $repoID, $branchName, $formData);
             if(dao::isError()) $this->sendError(dao::getError());
@@ -104,7 +106,6 @@ class repobranchrule extends control
                 $this->loadModel('action')->create('branchRule', $originRule->id, 'edited');
             }
 
-            $link = ($branchTypeID == 0) ? $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID") : $this->loadModel('repobranchtype')->createLink('browsebranchtype', "repoID=$repoID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 

@@ -1987,7 +1987,7 @@ class repo extends control
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers  = $this->loadModel('user')->getCommiters('account');
-        $types       = $this->repo->getBranchTypeList($repoID);
+        $types       = $this->loadModel('repobranchtype')->getBranchTypeList($repoID);
         $rules       = $this->loadModel('repobranchrule')->getBranchRulePairs($repoID, 'branchName', 'repo');
         $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)

@@ -1,6 +1,7 @@
 <?php
-$lang->repobranchrule->common        = 'Branch Rule';
-$lang->repobranchrule->setBranchRule = 'Set Branch Rule';
+$lang->repobranchrule->common                 = 'Branch Rule';
+$lang->repobranchrule->setBranchRule          = 'Set Branch Rule';
+$lang->repobranchrule->specifyValueEmptyError = 'Specify Value Not Allowed Empty';
 
 $lang->repo->branchType            = 'Branch Type';
 $lang->repo->applicableBranchTypes = 'Applicable Branch Types';

@@ -24,23 +24,23 @@ class repobranchruleZen extends repobranchrule
      */
     public function buildBranchRuleData(int $typeID, int $repoID, string $branchName, object $data): object|bool
     {
-        if($data->radioForAllowCreate == 'hasPriv') $data->userAllowCreateGroup         = array();
-        if($data->radioForAllowDelete == 'hasPriv') $data->userAllowDeleteGroup         = array();
-        if($data->radioForAllowUpdate == 'hasPriv') $data->userAllowUpdateGroup         = array();
-        if($data->radioForAllowForcePush == 'hasPriv') $data->userAllowForcePushGroup   = array();
-        if($data->radioForAllowMergeFrom == 'all') $data->branchTypeAllowMergeFromGroup = array();
-        if($data->radioForAllowMergeTo == 'all') $data->branchTypeAllowMergeToGroup     = array();
+        if(empty($data->allowCreate) || $data->allowCreate['option'] == 'hasPriv') $data->allowCreate['value']          = array();
+        if(empty($data->allowDelete) || $data->allowDelete['option'] == 'hasPriv') $data->allowDelete['value']          = array();
+        if(empty($data->allowUpdate) || $data->allowUpdate['option'] == 'hasPriv') $data->allowUpdate['value']          = array();
+        if(empty($data->allowForcePush) || $data->allowForcePush['option'] == 'hasPriv') $data->allowForcePush['value'] = array();
+        if(empty($data->allowMergeFrom) || $data->allowMergeFrom['option'] == 'all') $data->allowMergeFrom['value']     = array();
+        if(empty($data->allowMergeTo) || $data->allowMergeTo['option'] == 'all') $data->allowMergeTo['value']           = array();
 
         $rule                = new stdClass();
         $rule->repo          = $repoID;
         $rule->branchType    = $typeID;
         $rule->branchName    = empty($typeID) ? $branchName : '';
-        $rule->createUser    = !empty($typeID) ? implode(',', $data->userAllowCreateGroup) : '';
-        $rule->deleteUser    = implode(',', $data->userAllowDeleteGroup);
-        $rule->updateUser    = implode(',', $data->userAllowUpdateGroup);
-        $rule->forcePushUser = implode(',', $data->userAllowForcePushGroup);
-        $rule->sourceBranch  = implode(',', $data->branchTypeAllowMergeFromGroup);
-        $rule->targetBranch  = implode(',', $data->branchTypeAllowMergeToGroup);
+        $rule->createUser    = !empty($typeID) ? implode(',', $data->allowCreate['value']) : '';
+        $rule->deleteUser    = implode(',', $data->allowDelete['value']);
+        $rule->updateUser    = implode(',', $data->allowUpdate['value']);
+        $rule->forcePushUser = implode(',', $data->allowForcePush['value']);
+        $rule->sourceBranch  = implode(',', $data->allowMergeFrom['value']);
+        $rule->targetBranch  = implode(',', $data->allowMergeTo['value']);
 
         return $rule;
     }

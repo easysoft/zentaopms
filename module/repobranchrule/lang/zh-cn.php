@@ -1,6 +1,7 @@
 <?php
-$lang->repobranchrule->common        = '分支规则';
-$lang->repobranchrule->setBranchRule = '设置分支规则';
+$lang->repobranchrule->common                 = '分支规则';
+$lang->repobranchrule->setBranchRule          = '设置分支规则';
+$lang->repobranchrule->specifyValueEmptyError = '指定值不能为空';
 
 $lang->repo->branchType            = '分支类型';
 $lang->repo->applicableBranchTypes = '适用分支类型';
