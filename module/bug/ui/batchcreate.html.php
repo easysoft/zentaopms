@@ -87,6 +87,8 @@ $items[] = array('name' => 'steps', 'control' => 'textarea', 'label' => $lang->b
 /* Field of type. */
 $items[] = array('name' => 'type', 'label' => $lang->typeAB, 'control' => 'picker', 'items' => $lang->bug->typeList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['type']), 'ditto' => true);
 
+$items[] = array('name' => 'assignedTo', 'label' => $lang->bug->assignedTo, 'control' => 'picker', 'items' => $users, 'width' => '200px');
+
 /* Field of pri. */
 $items[] = array('name' => 'pri', 'label' => $lang->bug->pri, 'control' => array('control' => 'priPicker', 'required' => true), 'items' => $lang->bug->priList, 'value' => 3, 'width' => '100px', 'required' => isset($requiredFields['pri']), 'ditto' => true);
 
@@ -101,8 +103,6 @@ $items[] = array('name' => 'browser', 'label' => $lang->bug->browser, 'control' 
 
 /* Field of keywords. */
 $items[] = array('name' => 'keywords', 'label' => $lang->bug->keywords, 'width' => '200px', 'required' => isset($requiredFields['keywords']));
-
-$items[] = array('name' => 'assignedTo', 'label' => $lang->bug->assignedTo, 'control' => 'picker', 'items' => $users, 'width' => '200px');
 
 formBatchPanel
 (

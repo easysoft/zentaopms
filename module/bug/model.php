@@ -1958,7 +1958,7 @@ class bugModel extends model
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
         /* 判断反馈转bug操作按钮的权限。 */
         /* check feedback toStory priv. */
-        if($module == 'bug' && $action == 'create' && $app->rawModule == 'feedback') return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
+        if($module == 'bug' && $action == 'create' && isset($object->solution)) return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
         /* 判断确认撤销操作按钮的权限。 */
         /* Check confirmdemandretract priv. */
         if($module == 'bug' && $action == 'confirmdemandretract') return !empty($object->confirmeActionType) && $object->confirmeActionType == 'confirmedretract';
