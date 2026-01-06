@@ -24,7 +24,8 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
-        if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
+        $openVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        if(version_compare($openVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
     }
 
