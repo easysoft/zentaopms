@@ -56,10 +56,10 @@ su('admin');
 // 创建测试实例
 $actionTest = new actionTest();
 
-r($actionTest->processProjectActionsTest(array())) && p('count') && e('0');                               // 测试步骤1：空数组输入
-r($actionTest->processProjectActionsTest('1,2,3,4,5')) && p('count') && e('5');                               // 测试步骤2：包含project类型action的过滤
-r($actionTest->processProjectActionsTest('6,7,8')) && p('count') && e('3');                                   // 测试步骤3：testtask类型action的映射转换
-r($actionTest->processProjectActionsTest('9,10')) && p('count') && e('2');                                    // 测试步骤4：build类型action的映射转换
-r($actionTest->processProjectActionsTest('11,12,13,14,15')) && p('count') && e('0');                          // 测试步骤5：非项目相关类型的过滤
-r($actionTest->processProjectActionsTest('1,6,9,11,14')) && p('count') && e('3');                             // 测试步骤6：混合类型action的综合处理
-r($actionTest->processProjectActionsTest('13,14,15')) && p('count') && e('0');                                // 测试步骤7：不在映射表中的其他类型过滤
+r(count($actionTest->processProjectActionsTest(array())))          && p('count') && e('0');    // 测试步骤1：空数组输入
+r(count($actionTest->processProjectActionsTest('1,2,3,4,5')))      && p('count') && e('5');    // 测试步骤2：包含project类型action的过滤
+r(count($actionTest->processProjectActionsTest('6,7,8')))          && p('count') && e('3');    // 测试步骤3：testtask类型action的映射转换
+r(count($actionTest->processProjectActionsTest('9,10')))           && p('count') && e('2');    // 测试步骤4：build类型action的映射转换
+r(count($actionTest->processProjectActionsTest('11,12,13,14,15'))) && p('count') && e('0');    // 测试步骤5：非项目相关类型的过滤
+r(count($actionTest->processProjectActionsTest('1,6,9,11,14')))    && p('count') && e('3');    // 测试步骤6：混合类型action的综合处理
+r(count($actionTest->processProjectActionsTest('13,14,15')))       && p('count') && e('0');    // 测试步骤7：不在映射表中的其他类型过滤
