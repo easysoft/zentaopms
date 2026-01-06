@@ -180,14 +180,6 @@ class ai extends control
 
         $content = file_get_contents($fileName);
         unlink($fileName);
-        if(!empty($content) && strpos($content, '<?php') === 0)
-        {
-            $content = str_replace(['<?php', "\r", "\n"], '', $content);
-            $pos = strpos($content, "\$ztApp = '");
-            if($pos != 0) return $this->send($failResponse);
-
-            $content = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
-        }
         if(empty($content)) return $this->send($failResponse);
 
         $ztApp  = json_decode($content);

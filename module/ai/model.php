@@ -1468,11 +1468,24 @@ class aiModel extends model
         return $appID;
     }
 
+    /**
+     * Extract ZT app zip file, only extract ztapp.json file.
+     *
+     * @param string $file
+     * @access public
+     * @return bool
+     */
     public function extractZtAppZip($file)
     {
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($file);
-        return $zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'tmp/');
+
+        $zip      = new pclzip($file);
+        $filePath = $this->app->getAppRoot() . 'tmp/';
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array('ztapp.json');
+        return $zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, '');
     }
 
     /**
