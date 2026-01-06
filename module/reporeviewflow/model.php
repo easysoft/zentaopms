@@ -153,4 +153,47 @@ class reporeviewflowModel extends model
 
         return true;
     }
+
+    /**
+     * 根据代码库和分支名获取评审流程。
+     * Get review flow by repo and branch name.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     *
+     * @access public
+     * @return array|object
+     */
+    public function getByBranchName(int $repoID, string $branchName): array|object
+    {
+        $flows = $this->getList($repoID);
+        if(empty($flows)) return array();
+
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repoID);
+        if(empty($branchTypes)) return array();
+
+        foreach($flows as $flow)
+        {
+            if($flow->status == 'disable') continue;
+            if($flow->branchType == '0')
+            {
+                $allBranchFlow = $flow;
+                continue;
+            }
+
+            $flowBranchTypes = explode(',', $flow->branchType);
+            foreach($flowBranchTypes as $flowBranchType)
+            {
+                if(!isset($branchTypes[$flowBranchType])) continue;
+                $branchType = $branchTypes[$flowBranchType];
+                $prefixes   = $branchType->prefixes;
+                foreach($prefixes as $prefix)
+                {
+                    if(strpos($branchName, $prefix) === 0) return $flow;
+                }
+            }
+        }
+
+        return isset($allBranchFlow) ? $allBranchFlow : array();
+    }
 }
