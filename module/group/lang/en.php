@@ -659,5 +659,6 @@ $lang->group->package->manageReportTemplate  = 'Manage Report Template';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
+$lang->group->package->featureSwitch         = 'Feature Switch';
 
 include (dirname(__FILE__) . '/resource.php');
