@@ -168,9 +168,9 @@ class repoModel extends model
 
         if($repoID)
         {
-            $members = array_filter(explode(',', $repo->members ?? ''));
             if($repo->acl == 'private')
             {
+                $members = array_filter(explode(',', $repo->members ?? ''));
                 if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
                 $this->updateMembers($repoID, $members);
             }
