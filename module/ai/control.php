@@ -82,7 +82,7 @@ class ai extends control
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $program->createdBy === 'system' ? $this->lang->admin->system : $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $categoryList[$program->category];
-            $program->publishedLabel = $program->published === '1'
+            $program->publishedLabel = $program->published == '1'
                 ? $this->lang->ai->miniPrograms->statuses['active']
                 : $this->lang->ai->miniPrograms->statuses['draft'];
         }
