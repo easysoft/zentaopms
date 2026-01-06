@@ -25,7 +25,7 @@ $lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->noticeContent   = <<<EOT
 <p>Database upgrade requires high privileges. Please use the root user.</p>
 <p>Upgrade carries risks. Please back up your database first, just in case.</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. You can back up using phpMyAdmin..
 2. Use the mysql command-line tool:
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
@@ -39,7 +39,7 @@ if($config->db->driver == 'dm')
     $lang->upgrade->noticeContent = <<<EOT
 <p>The upgrade requires high database privileges, please use the root user.</p>
 <p>Please backup your database before updating ZenTao!</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
    $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;

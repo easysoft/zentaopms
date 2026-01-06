@@ -35,7 +35,7 @@ div
         ),
         col
         (
-            setClass('rounded-md gap-2.5 bg-gray-100 bg-opacity-70 p-4'),
+            setClass('rounded-md gap-2.5 bg-gray-100 p-4'),
             html($lang->upgrade->noticeContent)
         ),
         div
