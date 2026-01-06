@@ -87,4 +87,21 @@ class repobranchtypeTest
 
         return empty($result) ? '0' : implode(',', $result);
     }
+
+        /**
+     * Test getBranchTypePairs method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getBranchTypePairsTest(int $repoID): array
+    {
+        $method = new ReflectionMethod($this->objectModel, 'getBranchTypePairs');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->objectModel, $repoID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

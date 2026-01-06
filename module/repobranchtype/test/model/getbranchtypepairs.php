@@ -19,7 +19,7 @@ cid=0
 zenData('repo')->gen(10);
 zenData('ops_branch_type')->gen(10);
 
-$repo = new repoTest();
+$repo = new repobranchtypeTest();
 r($repo->getBranchTypePairsTest(1))        && p('1') && e('branch_type1'); // 获取代码库1的分支类型键值对
 r(count($repo->getBranchTypePairsTest(1))) && p()    && e('1');            // 获取代码库1的分支类型数量
 r($repo->getBranchTypePairsTest(2))        && p('2') && e('branch_type2'); // 获取代码库2的分支类型键值对

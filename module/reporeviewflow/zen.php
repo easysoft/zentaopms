@@ -21,7 +21,7 @@ class reporeviewflowZen extends reporeviewflow
      */
     protected function buildBranchTypes(int $repoID, string $appendIdList = ''): array
     {
-        $branchTypes  = $this->loadModel('repo')->getBranchTypePairs($repoID);
+        $branchTypes  = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
         $reviewFlows  = $this->reporeviewflow->getList($repoID);
         $appendIdList = explode(',', $appendIdList);
 
