@@ -1987,7 +1987,7 @@ class repo extends control
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers  = $this->loadModel('user')->getCommiters('account');
-        $types       = $this->repo->getBranchTypeList($repoID);
+        $types       = $this->loadModel('repobranchtype')->getBranchTypeList($repoID);
         $rules       = $this->loadModel('repobranchrule')->getBranchRulePairs($repoID, 'branchName', 'repo');
         $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)
@@ -2017,7 +2017,19 @@ class repo extends control
                     break;
                 }
             }
-            $branch->rule      = isset($rules[$branch->name]) ? $this->lang->repo->branchRuleMode['redefinition'] : $this->lang->repo->branchRuleMode['inheritance'];
+
+            if(isset($rules[$branch->name]))
+            {
+                $branch->rule = $this->lang->repo->branchRuleMode['redefinition'];
+            }
+            elseif($branch->type)
+            {
+                $branch->rule = $this->lang->repo->branchRuleMode['inheritance'];
+            }
+            else
+            {
+                $branch->rule = '';
+            }
             $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
             $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
             $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));

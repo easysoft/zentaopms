@@ -27,6 +27,14 @@ $langAllowMergeTo   = empty($branchTypeID) ? $lang->repo->branchRule->allowMerge
 
 $backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repo', 'browsebranchtype', "repoID=$repoID");
 
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
+);
+
 formPanel
 (
     setID('setBranchRuleForm'),
@@ -54,7 +62,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio"),
                 set::value($createUserOption),
-                set::name('radioForAllowCreate'),
+                set::name("allowCreate[option]"),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowCreateChange')
@@ -63,7 +71,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('userAllowCreateGroup'),
-                set::name('userAllowCreateGroup'),
+                set::name("allowCreate[value]"),
                 set::items($users),
                 set::value($createUserArray),
                 set::multiple(true)
@@ -81,7 +89,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio"),
                 set::value($deleteUserOption),
-                set::name('radioForAllowDelete'),
+                set::name("allowDelete[option]"),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowDeleteChange')
@@ -90,7 +98,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('userAllowDeleteGroup'),
-                set::name('userAllowDeleteGroup'),
+                set::name("allowDelete[value]"),
                 set::items($users),
                 set::value($deleteUserArray),
                 set::multiple(true)
@@ -108,7 +116,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio"),
                 set::value($updateUserOption),
-                set::name('radioForAllowUpdate'),
+                set::name("allowUpdate[option]"),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowUpdateChange')
@@ -117,7 +125,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('userAllowUpdateGroup'),
-                set::name('userAllowUpdateGroup'),
+                set::name("allowUpdate[value]"),
                 set::items($users),
                 set::value($updateUserArray),
                 set::multiple(true)
@@ -135,7 +143,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio"),
                 set::value($forcePushUserOption),
-                set::name('radioForAllowForcePush'),
+                set::name("allowForcePush[option]"),
                 set::items($lang->repo->branchRule->userOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowForcePushChange')
@@ -144,7 +152,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('userAllowForcePushGroup'),
-                set::name('userAllowForcePushGroup'),
+                set::name("allowForcePush[value]"),
                 set::items($users),
                 set::value($forcePushUserArray),
                 set::multiple(true)
@@ -162,7 +170,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio pl-52px"),
                 set::value($sourceBranchOption),
-                set::name('radioForAllowMergeFrom'),
+                set::name("allowMergeFrom[option]"),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowMergeFromChange')
@@ -171,7 +179,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('branchTypeAllowMergeFromGroup'),
-                set::name('branchTypeAllowMergeFromGroup'),
+                set::name("allowMergeFrom[value]"),
                 set::items($branchTypes),
                 set::value($sourceBranchArray),
                 set::multiple(true)
@@ -189,7 +197,7 @@ formPanel
             (
                 set::className("$groupClass branchRuleRadio pl-52px"),
                 set::value($targetBranchOption),
-                set::name('radioForAllowMergeTo'),
+                set::name("allowMergeTo[option]"),
                 set::items($lang->repo->branchRule->branchTypeOptionList),
                 set::inline(true),
                 on::change()->call('onRadioForAllowMergeToChange')
@@ -198,7 +206,7 @@ formPanel
             (
                 set::className('hidden branchRulePicker'),
                 setID('branchTypeAllowMergeToGroup'),
-                set::name('branchTypeAllowMergeToGroup'),
+                set::name("allowMergeTo[value]"),
                 set::items($branchTypes),
                 set::value($targetBranchArray),
                 set::multiple(true)
