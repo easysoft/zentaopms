@@ -243,7 +243,7 @@ class actionTao extends actionModel
      */
     public function getReleaseRelated(string $objectType, int $objectID): array
     {
-        $product = array(0);
+        $product = 0;
         $project = 0;
         $result  = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
