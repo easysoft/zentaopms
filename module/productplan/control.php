@@ -421,6 +421,7 @@ class productplan extends control
         $this->view->link         = $link;
         $this->view->param        = $param;
         $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
+        $this->view->tabUrl       = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         if($this->viewType != 'json')
         {
