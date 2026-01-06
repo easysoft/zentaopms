@@ -519,7 +519,7 @@ class api extends router
 
         foreach($objectIDList as $objectID)
         {
-            $object = $this->dao->select('*')->from(TABLE_PRODUCT)
+            $object = $this->dao->select('*')->from($table)
                 ->where('id')->eq($objectID)
                 ->beginIF(!in_array($table, [TABLE_DEPT]))->andWhere('deleted')->eq('0')->fi()
                 ->fetch();
