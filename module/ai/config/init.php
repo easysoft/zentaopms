@@ -6,8 +6,8 @@ $config->ai->initAIPrompts[] = (object)['id' => 2, 'name' => '绘制需求原型
 2. 整体结构框架（如导航栏、侧边栏、主要内容区）
 3. 各功能模块的简要设计（如按钮、表单、图表等）
 4. 交互设计提示（如如何进行用户操作）
-5. 请生成完整的 HTML5 页面代码，包括开始的 `<!DOCTYPE html>` 和 结束的 `</html>`，使用 markdown html 代码块表示，如果有多个页面请使用多个代码块表示。
-6. 如果页面有 CSS，应该直接在 HTML 页面内使用内联样式`<style>`表示，而不是链接单独的 CSS 文件。',
+5. 请生成完整的 HTML5 页面代码，包括开始的 `&lt;!DOCTYPE html&gt;` 和 结束的 `&lt;/html&gt;`，使用 markdown html 代码块表示，如果有多个页面请使用多个代码块表示。
+6. 如果页面有 CSS，应该直接在 HTML 页面内使用内联样式`&lt;style&gt;`表示，而不是链接单独的 CSS 文件。',
 'elaboration' => '', 'role' => '请你扮演一名资深的产品经理。', 'characterization' => '负责绘制需求原型图的过程。您将需求转化为可视化的原型图，同时确保其符合需求描述和需求验收标准。', 'status' => 'active', 'createdBy' => 'system'];
 
 $config->ai->initAIPromptFields = array();
