@@ -20,7 +20,7 @@ class repobranchtypeModel extends model
      * @access public
      * @return bool
      */
-    public function apiCreateBranchType(int $gitfoxID, object $formData): bool
+    public function apiCreateBranchType(int $repoID, object $formData): bool
     {
         /* 确保 prefixes 是数组。 */
         $prefixes = $formData->prefixes;
@@ -45,7 +45,7 @@ class repobranchtypeModel extends model
         $requestData = array($branchType);
 
         /* 调用 GitFox API 创建分支类型。 */
-        $result = $this->loadModel('gitfox')->apiCreateBranchType($gitfoxID, $requestData);
+        $result = $this->loadModel('gitfox')->apiCreateBranchType($repoID, $requestData);
 
         return (bool)$result;
     }
@@ -61,17 +61,7 @@ class repobranchtypeModel extends model
      */
     public function apiDeleteBranchType(?object $repo, int $typeID): bool
     {
-        /* 如果 repo 为空，从分支类型获取 repo 信息。 */
-        if(empty($repo))
-        {
-            $existingType = $this->getBranchTypeByID($typeID);
-            if(!empty($existingType) && $existingType->repo != 0)
-            {
-                $repo = $this->loadModel('repo')->getByID($existingType->repo);
-            }
-        }
-
-        $repoID = $repo ? (int)$repo->serviceProject : 0;
+        $repoID = $repo ? (int)$repo->id : 0;
         $result = $this->loadModel('gitfox')->apiDeleteBranchType($repoID, $typeID);
         return (bool)$result;
     }
@@ -117,7 +107,7 @@ class repobranchtypeModel extends model
         }
 
         /* 调用 GitFox API 更新分支类型。 */
-        $repoID = $repo ? (int)$repo->serviceProject : 0;
+        $repoID = $repo ? (int)$repo->id : 0;
         $result = $this->loadModel('gitfox')->apiUpdateBranchType($repoID, $typeID, $branchType);
 
         return (bool)$result;
@@ -159,11 +149,31 @@ class repobranchtypeModel extends model
         if(empty($branchTypes)) return false;
 
         /* 调用 GitFox API 批量创建分支类型。 */
-        $result = $this->loadModel('gitfox')->apiCreateBranchType((int)$repo->serviceProject, $branchTypes);
+        $repoID = $repo ? (int)$repo->id : 0;
+        if($repoID == 0) return false;
+
+        $result = $this->loadModel('gitfox')->apiCreateBranchType($repoID, $branchTypes);
 
         return (bool)$result;
     }
 
+    /**
+     * 获取指定代码库的分支类型键值对。
+     * Get branch type pairs.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getBranchTypePairs(int $repoID = 0): array
+    {
+        return $this->dao->select('id, name')
+            ->from(TABLE_BRANCHTYPE)
+            ->where('deleted')->eq(0)
+            ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->fetchPairs('id', 'name');
+    }
+    
     /**
      * 获取分支类型列表(支持分页和搜索)。
      * Get branch type list with pagination and search.

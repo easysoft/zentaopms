@@ -35,7 +35,7 @@ class reporeviewflow extends control
         $this->view->title           = $this->lang->reporeviewflow->browse;
         $this->view->flowList        = $flowList;
         $this->view->pager           = $pager;
-        $this->view->branchTypePairs = $this->loadModel('repo')->getBranchTypePairs($repoID);
+        $this->view->branchTypePairs = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
         $this->display();
     }
 
