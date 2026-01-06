@@ -3107,6 +3107,23 @@ class repoModel extends model
     }
 
     /**
+     * 获取指定代码库的所有成员.
+     * Get all members.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array
+     */
+    public function getRepoMembers(object $repo): array
+    {
+        if(empty($repo->members)) return array();
+
+        $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        return !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
+    }
+
+    /**
      * 更新用户。
      * Update users.
      *
