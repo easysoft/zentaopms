@@ -123,9 +123,10 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
         {
-            $methods['importBuildinModules'] = [];
-            $methods['importLiteModules']    = [];
-            $methods['addSubStatus']         = [];
+            $methods['importBuildinModules']               = [];
+            $methods['importLiteModules']                  = [];
+            $methods['addSubStatus']                       = [];
+            $methods['workflowgroup-initAllWorkflowGroup'] = [];
         }
         $methods['convertCharset']             = [];
         $methods['program-refreshStats']       = [true];
@@ -260,7 +261,6 @@ class upgradeModel extends model
     {
         $methods = $this->getOtherMethods($fromEdition);
 
-        if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro')) $this->loadModel('workflowgroup')->initAllWorkflowGroup();
         foreach($methods as $method => $params)
         {
             $result = $this->executeUpgradeMethod($method, $params);
