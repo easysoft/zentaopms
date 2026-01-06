@@ -1331,4 +1331,42 @@ class mrModel extends model
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * 根据分支获取提交记录。
+     * Get commit list by branch.
+     *
+     * @param  object $repo
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @param  ?object $pager
+     * @access public
+     * @return array
+     */
+    public function getCommitListByBranch(object $repo, string $sourceBranch, string $targetBranch, ?object $pager = null): array
+    {
+       $params = array();
+       $params['after']        = $targetBranch;
+       $params['gitRef']       = $sourceBranch;
+       $params['page']         = is_null($pager) ? 1 : $pager->pageID;
+       $params['pageSize']     = is_null($pager) ? 20 : $pager->recPerPage;
+       $params['includeStats'] = true;
+
+       $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->serviceProject, $params);
+       if(!empty($commits->data))
+       {
+           $pager->recTotal   = $commits->pager->total;
+           $pager->recPerPage = $commits->pager->pageSize;
+           $pager->pageID     = $commits->pager->page;
+       }
+       $commits = empty($commits->data) ? array() : zget($commits->data, 'commits', array());
+       foreach($commits as $commit)
+       {
+           $commit->id            = $commit->sha;
+           $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
+           $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
+       }
+
+       return $commits;
+    }
 }

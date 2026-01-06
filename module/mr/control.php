@@ -191,15 +191,18 @@ class mr extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID
+     * @param  string $type
      * @access public
      * @return void
      */
     public function create(int $repoID = 0, int $objectID = 0)
     {
+        $repoID = $this->loadModel('repo')->saveState($repoID);
+        $repo   = $this->repo->getByID($repoID);
+
         if($_POST)
         {
             $MR = form::data($this->config->mr->form->create)
-                ->setIF($this->post->needCI == 0, 'jobID', 0)
                 ->add('createdBy', $this->app->user->account)
                 ->skipSpecial('title,description')
                 ->get();
@@ -207,41 +210,17 @@ class mr extends control
             return $this->send($result);
         }
 
-        $repoID = $this->loadModel('repo')->saveState($repoID);
-        $repo   = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
-        {
-            $repoList = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
-            $repoID   = key($repoList);
-            $repoID   = $this->loadModel('repo')->saveState($repoID);
-            $repo     = $repoList[$repoID];
-        }
-
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) $repo->serviceProject = (int)$repo->serviceProject;
-        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
-
-        $jobPairs = array();
-        $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
-        foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
-
-        $repoPairs = array();
-        if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
-        {
-            $repoList = $this->loadModel('repo')->getList($objectID);
-            foreach($repoList as $repoInfo)
-            {
-                if(in_array($repoInfo->SCM, $this->config->repo->gitServiceTypeList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
-            }
-        }
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $branches = $scm->branch();
 
         $this->view->title       = $this->lang->mr->create;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users       = $this->repo->getRepoMembers($repo);
         $this->view->repo        = $repo;
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->project     = $project;
+        $this->view->repoID      = $repoID;
         $this->view->executionID = $objectID;
         $this->view->objectID    = $objectID;
-        $this->view->jobPairs    = $jobPairs;
+        $this->view->branches    = $branches;
         $this->display();
     }
 
@@ -996,5 +975,53 @@ class mr extends control
    {
        $this->loadModel('ci')->checkCompileStatus($compileID);
        return $this->sendSuccess(array('message' => $this->lang->mr->refreshSuccess, 'load' => true));
+   }
+
+   /**
+    * 获取合并请求的审批流程。
+    * AJAX get MR approval flow.
+    *
+    * @param  int $repoID
+    * @param  string $targetBranch
+    * @access public
+    * @return void
+    */
+   public function ajaxGetReviewFlow(int $repoID, string $targetBranch)
+   {
+       $flow = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
+       if(!$flow) return $this->send(array());
+
+       $flow->definition = json_decode($flow->definition);
+       return $this->send($flow);
+   }
+
+   /**
+    * 获取创建合并请求的检查列表。
+    * AJAX get create MR check list.
+    *
+    * @param  int $repoID
+    * @param  string $sourceBranch
+    * @param  string $targetBranch
+    * @param  int $recTotal
+    * @param  int $recPerPage
+    * @param  int $pageID
+    * @access public
+    * @return void
+    */
+   public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+   {
+       $repo = $this->loadModel('repo')->getByID($repoID);
+       $this->app->loadClass('pager', true);
+       $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+       $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $pager);
+       $objects = $this->mr->getRelationByCommits($repoID, array_column($commits, 'id'), '', $pager);
+
+       $this->view->commits      = $commits;
+       $this->view->pager        = $pager;
+       $this->view->repoID       = $repoID;
+       $this->view->sourceBranch = $sourceBranch;
+       $this->view->targetBranch = $targetBranch;
+       $this->display();
    }
 }

@@ -124,3 +124,29 @@ $config->mr->commitLogs->dtable->fieldList['title']['title']    = $lang->repo->c
 $config->mr->commitLogs->dtable->fieldList['title']['type']     = 'text';
 $config->mr->commitLogs->dtable->fieldList['title']['minWidth'] = 342;
 $config->mr->commitLogs->dtable->fieldList['title']['hint']     = '{message}';
+
+$config->mr->createCheck = new stdclass();
+$config->mr->createCheck->commit = new stdclass();
+$config->mr->createCheck->commit->dtable = new stdclass();
+$config->mr->createCheck->commit->dtable->fieldList['id']['name']     = 'id';
+$config->mr->createCheck->commit->dtable->fieldList['id']['title']    = $lang->repo->revisions;
+$config->mr->createCheck->commit->dtable->fieldList['id']['type']     = 'text';
+$config->mr->createCheck->commit->dtable->fieldList['id']['data-app'] = $app->tab;
+$config->mr->createCheck->commit->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={id}");
+$config->mr->createCheck->commit->dtable->fieldList['id']['minWidth'] = 40;
+
+$config->mr->createCheck->commit->dtable->fieldList['authorName']['name']  = 'authorName';
+$config->mr->createCheck->commit->dtable->fieldList['authorName']['title'] = $lang->repo->committer;
+$config->mr->createCheck->commit->dtable->fieldList['authorName']['type']  = 'text';
+$config->mr->createCheck->commit->dtable->fieldList['authorName']['hint']  = true;
+
+$config->mr->createCheck->commit->dtable->fieldList['title']['name']     = 'title';
+$config->mr->createCheck->commit->dtable->fieldList['title']['title']    = $lang->repo->comment;
+$config->mr->createCheck->commit->dtable->fieldList['title']['type']     = 'text';
+$config->mr->createCheck->commit->dtable->fieldList['title']['minWidth'] = 342;
+$config->mr->createCheck->commit->dtable->fieldList['title']['hint']     = '{message}';
+
+$config->mr->createCheck->commit->dtable->fieldList['committedDate']['name']     = 'committedDate';
+$config->mr->createCheck->commit->dtable->fieldList['committedDate']['title']    = $lang->repo->time;
+$config->mr->createCheck->commit->dtable->fieldList['committedDate']['type']     = 'datetime';
+$config->mr->createCheck->commit->dtable->fieldList['committedDate']['sortType'] = false;
