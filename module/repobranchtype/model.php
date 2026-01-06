@@ -165,6 +165,23 @@ class repobranchtypeModel extends model
     }
 
     /**
+     * 获取指定代码库的分支类型键值对。
+     * Get branch type pairs.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getBranchTypePairs(int $repoID = 0): array
+    {
+        return $this->dao->select('id, name')
+            ->from(TABLE_BRANCHTYPE)
+            ->where('deleted')->eq(0)
+            ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->fetchPairs('id', 'name');
+    }
+    
+    /**
      * 获取分支类型列表(支持分页和搜索)。
      * Get branch type list with pagination and search.
      *
