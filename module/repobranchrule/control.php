@@ -73,15 +73,10 @@ class repobranchrule extends control
                 /* 当选择 specify 时，校验 value 不能为空。 */
                 if($option == 'specify')
                 {
-                    $value = array_filter($value, function($v) { return $v !== ''; });
-                    if(empty($value))
-                    {
-                        $this->sendError($this->lang->repobranchrule->specifyValueEmptyError);
-                    }
-                    else
-                    {
-                        $allDefault = false;
-                    }
+                    $value = array_filter($value);
+                    if(empty($value)) return $this->sendError($this->lang->repobranchrule->specifyValueEmptyError);
+
+                    $allDefault = false;
                 }
             }
             if($allDefault) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
