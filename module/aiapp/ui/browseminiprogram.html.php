@@ -13,7 +13,7 @@ jsVar('prompt', $miniProgram->prompt);
 jsVar('knowledgeLibs', $miniProgram->knowledgeLib);
 jsVar('postLink', createLink('aiapp', 'miniProgramChat', "id={$miniProgram->id}"));
 jsVar('messages', $messages);
-jsVar('isAppDisabled', $miniProgram->published === '0');
+jsVar('isAppDisabled', $miniProgram->published == '0');
 jsVar('pathname', $miniProgram->name);
 
 $app->loadLang('ai');

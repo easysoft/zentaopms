@@ -11,37 +11,42 @@
  */
 global $config;
 $lang->upgrade->common          = '升级';
+$lang->upgrade->welcome         = '欢迎升级禅道';
+$lang->upgrade->execute         = '版本升级';
+$lang->upgrade->versionTips     = '本次升级版本';
+$lang->upgrade->changeTips      = '%s 数据改动';
+$lang->upgrade->progress        = '进度';
+$lang->upgrade->executedChanges = "已执行：<span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
-$lang->upgrade->fail            = '升级失败';
+$lang->upgrade->fail            = '升级失败。当前的禅道版本为';
 $lang->upgrade->successTip      = '升级成功';
 $lang->upgrade->success         = "<p>恭喜您！您的禅道已经成功升级。</p>";
 $lang->upgrade->tohome          = '访问禅道';
-$lang->upgrade->license         = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.2';
-$lang->upgrade->warnning        = '警告';
+$lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->consistency     = '一致性检查';
-$lang->upgrade->warnningContent = <<<EOT
-<p>升级对数据库权限要求较高，请使用root用户。</p>
-<p>升级有危险，请先备份数据库，以防万一。</p>
-<pre class='bg-white space-y-2 p-3'>
+$lang->upgrade->noticeContent   = <<<EOT
+<div>升级对数据库权限要求较高，请使用 root 用户。</div>
+<div>升级有危险，请先备份数据库，以防万一。</div>
+<pre class='bg-gray-200 leading-6 px-3 py-2'>
 1. 可以通过phpMyAdmin进行备份。
-2. 使用mysql命令行的工具。
+2. 使用mysql命令行的工具：
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   要将上面红色的部分分别替换成对应的用户名和禅道系统的数据库名。
-   比如： mysqldump -u root -p zentao > zentao.bak
+   将上面红色的部分分别替换成真实的用户名和禅道系统的数据库名。
+   <em>比如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->warnningContent = <<<EOT
-<p>升级对数据库权限要求较高，请使用管理员用户。<br>
-   升级有危险，请先备份数据库，以防万一。</p>
-<pre>
+    $lang->upgrade->noticeContent = <<<EOT
+<p>升级对数据库权限要求较高，请使用管理员用户。</p>
+<p>升级有危险，请先备份数据库，以防万一。</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
 1. 可以通过图形化客户端工具进行备份。
 2. 使用DIsql工具进行备份。
-   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
    语句执行完后会在默认的备份路径下生成名为“filename”的备份集目录。
    默认的备份路径为 dm.ini 中 BAK_PATH 配置的路径，若未配置 BAK_PATH，则默认使用 SYSTEM_PATH 下的 bak 目录。
    这是最简单的数据库备份语句，如果要设置其他的备份选项需了解联机备份数据库的语法。
@@ -73,9 +78,8 @@ $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自�
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->showSQLLog    = '检查到你的数据库跟标准不一致，正在尝试修复。以下是修复SQL语句。';
 $lang->upgrade->noticeErrSQL  = '检查到你的数据库跟标准不一致，尝试修复失败。请手动执行以下SQL语句，再刷新页面检查。';
-$lang->upgrade->afterDeleted  = '请在服务器上执行上面命令删除文件，删除后刷新页面。';
+$lang->upgrade->execCommand   = '请在服务器上执行上述命令，执行后刷新页面。';
 $lang->upgrade->afterExec     = '请根据以上报错信息手动修改数据库，修改后刷新页面。';
-$lang->upgrade->afterDuckdb   = '请等待安装Duckdb引擎。';
 $lang->upgrade->mergeProgram  = '数据迁移';
 $lang->upgrade->mergeTips     = '数据迁移提示';
 $lang->upgrade->toPMS15Guide  = '禅道开源版15版本升级';
@@ -250,3 +254,26 @@ $lang->upgrade->reviewObjectList['UM']         = '用户手册';
 $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = '基线评审';
 $lang->upgrade->baselineReview['change']   = '项目变更评审';
+
+$lang->upgrade->changeModes = [];
+$lang->upgrade->changeModes['create'] = '新增';
+$lang->upgrade->changeModes['update'] = '更新';
+$lang->upgrade->changeModes['delete'] = '删除';
+
+$lang->upgrade->changeActions = [];
+$lang->upgrade->changeActions['createView']  = '创建数据库视图 %VIEW%';
+$lang->upgrade->changeActions['dropView']    = '删除数据库视图 %VIEW%';
+$lang->upgrade->changeActions['createTable'] = '创建数据库表 %TABLE%';
+$lang->upgrade->changeActions['dropTable']   = '删除数据库表 %TABLE%';
+$lang->upgrade->changeActions['renameTable'] = '修改数据库表 %OLD% 的名称为 %NEW%';
+$lang->upgrade->changeActions['addField']    = '给数据库表 %TABLE% 添加 %FIELD% 字段';
+$lang->upgrade->changeActions['modifyField'] = '修改数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->upgrade->changeActions['dropField']   = '删除数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->upgrade->changeActions['renameField'] = '修改数据库表 %TABLE% 的 %OLD% 字段的名称为 %NEW%';
+$lang->upgrade->changeActions['addIndex']    = '给数据库表 %TABLE% 添加 %INDEX% 索引';
+$lang->upgrade->changeActions['dropIndex']   = '删除数据库表 %TABLE% 的 %INDEX% 索引';
+$lang->upgrade->changeActions['insertValue'] = '给数据库表 %TABLE% 插入数据';
+$lang->upgrade->changeActions['updateValue'] = '更新数据库表 %TABLE% 的数据';
+$lang->upgrade->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除数据';
+$lang->upgrade->changeActions['method']      = '执行 %MODULE% 模块的 %METHOD% 方法';
+$lang->upgrade->changeActions['other']       = '其他操作';

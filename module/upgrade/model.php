@@ -16,9 +16,32 @@ class upgradeModel extends model
 {
     static $errors = array();
 
+    /**
+     * 升级前的版本号。
+     * The version before upgrade.
+     *
+     * @var string
+     * access public
+     */
     public $fromVersion = '';
 
+    /**
+     * 升级前的版本类型。
+     * The edition before upgrade.
+     *
+     * @var string
+     * access public
+     */
     public $fromEdition = '';
+
+    /**
+     * 已执行的升级内容。
+     * Executed Changes.
+     *
+     * @var array
+     * access private
+     */
+    private $executedChanges = [];
 
     /**
      * 构造函数。
@@ -87,30 +110,68 @@ class upgradeModel extends model
     }
 
     /**
+     * 获取额外执行的方法。
+     * Get other methods to execute.
+     *
+     * @param  string $fromEdition
+     * @access public
+     * @return array
+     */
+    public function getOtherMethods(string $fromEdition): array
+    {
+        $methods = [];
+        /* Means open source/pro upgrade to biz or max. */
+        if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
+        {
+            $methods['importBuildinModules'] = [];
+            $methods['importLiteModules']    = [];
+            $methods['addSubStatus']         = [];
+        }
+        $methods['convertCharset']             = [];
+        $methods['program-refreshStats']       = [true];
+        $methods['product-refreshStats']       = [true];
+        $methods['deletePatch']                = [];
+        $methods['processDataset']             = [];
+        $methods['upgradeScreenAndMetricData'] = [];
+        $methods['upgradeBIData']              = [];
+
+        return $methods;
+    }
+
+    /**
+     * 记录已升级的 SQL 和方法。
+     * Record executed SQLs and methods.
+     *
+     * @access public
+     * @return bool
+     */
+    public function recordExecutedChanges(): bool
+    {
+        $this->loadModel('setting')->setItem('system.upgrade.executedChanges', json_encode($this->executedChanges));
+        return !dao::isError();
+    }
+
+    /**
      * 执行升级 sql 文件。
      * The execute method. According to the $fromVersion call related methods.
      *
      * @param  string $fromVersion
+     * @param  string $toVersion
      * @access public
-     * @return void
+     * @return bool
      */
-    public function execute(string $fromVersion): void
+    public function execute(string $fromVersion, string $toVersion): bool
     {
         set_time_limit(0);
 
         if(!isset($this->app->user)) $this->loadModel('user')->su();
         $this->dao->exec("SET @@sql_mode=''");
 
-        /* Get total sqls and write in tmp file. */
+        /* Set real time log file. */
         dao::$realTimeFile = $this->getLogFile();
         if(file_exists(dao::$realTimeFile)) unlink(dao::$realTimeFile);
-        if(is_writable($this->app->getTmpRoot()))
-        {
-            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
-            $confirm        = $this->getConfirm($fromVersion);
-            $updateTotalSql = count(explode(';', $confirm));
-            file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $updateTotalSql . '-0');
-        }
+
+        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
 
         if(empty($this->config->global->hideUpgradeGuide))
         {
@@ -132,34 +193,59 @@ class upgradeModel extends model
             }
         }
 
-        $fromEdition = $this->getEditionByVersion($fromVersion);
-        $this->fromVersion = $fromVersion;
-        $this->fromEdition = $fromEdition;
+        $this->fromVersion     = $fromVersion;
+        $this->fromEdition     = $this->getEditionByVersion($fromVersion);
+        $this->executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
 
         /* Execute. */
-        $fromOpenVersion = $this->getOpenVersion($fromVersion);
-        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
-        foreach($versions as $openVersion => $chargedVersions)
+        $fromOpenVersion = $this->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $toOpenVersion   = $this->getOpenVersion($toVersion);
+        $upgradeVersions = $this->getVersionsToUpdate($fromOpenVersion, $this->fromEdition);
+
+        /* Execute charge edition. */
+        foreach($upgradeVersions as $openVersion => $chargedVersions)
         {
+            if(version_compare($openVersion, $fromOpenVersion, '<')) continue;
+            if(version_compare($openVersion, $toOpenVersion, '>='))  continue;
+
             /* Execute open edition. */
             $this->saveLogs("Execute $openVersion");
-            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeByConfig($openVersion);
+            $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
+            if(!$result) return $this->recordExecutedChanges();
 
-            /* Execute charge edition. */
-            foreach($chargedVersions as $edition => $chargedVersion)
+            $result = $this->executeByConfig($openVersion);
+            if(!$result) return $this->recordExecutedChanges();
+
+            foreach($chargedVersions as $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
-                    if($edition == 'max') $version = array_search($openVersion, $this->config->upgrade->maxVersion);
                     $this->saveLogs("Execute $version");
-                    $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)));
-                    $this->executeByConfig($version);
+                    $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)));
+                    if(!$result) return $this->recordExecutedChanges();
+
+                    $result = $this->executeByConfig($version);
+                    if(!$result) return $this->recordExecutedChanges();
                 }
             }
         }
 
-        $this->executeOthers($fromEdition, $fromVersion);
+        /* 如果此次升级到最终版本，则执行额外的数据处理流程。*/
+        if(version_compare($toVersion, $this->config->version, '='))
+        {
+            $result = $this->executeOthers($this->fromEdition);
+            if(!$result) return $this->recordExecutedChanges();
+        }
+        else
+        {
+            /**
+             * 升级到最终版本之前，每升级完一个版本，更新一次版本号，防止中途失败重复升级。
+             * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再更新版本号。
+             */
+            $this->loadModel('setting')->updateVersion($toVersion);
+        }
+
+        return !$this->isError() && !dao::isError();
     }
 
     /**
@@ -168,26 +254,19 @@ class upgradeModel extends model
      *
      * @param  string $fromEdition
      * @access public
-     * @return void
+     * @return bool
      */
-    public function executeOthers(string $fromEdition, string $fromVersion): void
+    public function executeOthers(string $fromEdition): bool
     {
-        /* Means open source/pro upgrade to biz or max. */
-        if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
-        {
-            $this->importBuildinModules();
-            $this->importLiteModules();
-            $this->addSubStatus();
-            $this->loadModel('workflowgroup')->initAllWorkflowGroup();
-        }
+        $methods = $this->getOtherMethods($fromEdition);
 
-        $this->convertCharset();
-        $this->loadModel('program')->refreshStats(true);
-        $this->loadModel('product')->refreshStats(true);
-        $this->deletePatch();
-        $this->processDataset();
-        $this->upgradeScreenAndMetricData();
-        $this->upgradeBIData();
+        if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro')) $this->loadModel('workflowgroup')->initAllWorkflowGroup();
+        foreach($methods as $method => $params)
+        {
+            $result = $this->executeUpgradeMethod($method, $params);
+            if(!$result) return false;
+        }
+        return true;
     }
 
     /**
@@ -196,9 +275,9 @@ class upgradeModel extends model
      *
      * @param  string  $version
      * @access public
-     * @return void
+     * @return bool
      */
-    public function executeByConfig(string $version): void
+    public function executeByConfig(string $version): bool
     {
         $execConfig  = zget($this->config->upgrade->execFlow, $version, array());
         $functions   = zget($execConfig, 'functions', '');
@@ -206,38 +285,78 @@ class upgradeModel extends model
         $xxsqls      = zget($execConfig, 'xxsqls', '');
         $xxfunctions = zget($execConfig, 'xxfunctions', '');
 
-        foreach(array_filter(explode(',', $functions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
-
-        if($version == 'pro1_1_1') $this->execSQL($this->getUpgradeFile('pro1.1'));
-        if($version == 'pro8_3')   $this->execSQL($this->getUpgradeFile('pro8.2'));
-
-        if(!empty($xxsqls))      foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)       $this->execSQL($sqlFile);
-        if(!empty($xxfunctions)) foreach(array_filter(explode(',', $xxfunctions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
+        foreach(array_filter(explode(',', $functions)) as $function)
+        {
+            $result = $this->executeUpgradeMethod($function, zget($params, $function, array()));
+            if(!$result) return false;
+        }
+        if($version == 'pro1_1_1')
+        {
+            $result = $this->execSQL($this->getUpgradeFile('pro1.1'));
+            if(!$result) return false;
+        }
+        if($version == 'pro8_3')
+        {
+            $result = $this->execSQL($this->getUpgradeFile('pro8.2'));
+            if(!$result) return false;
+        }
+        if(!empty($xxsqls))
+        {
+            foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)
+            {
+                $result = $this->execSQL($sqlFile);
+                if(!$result) return false;
+            }
+        }
+        if(!empty($xxfunctions))
+        {
+            foreach(array_filter(explode(',', $xxfunctions)) as $function)
+            {
+                $result = $this->executeUpgradeMethod($function, zget($params, $function, array()));
+                if(!$result) return false;
+            }
+        }
+        return true;
     }
 
     /**
      * 执行单个升级方法。
      * Execute single upgrade method.
      *
-     * @param  string $method
+     * @param  string $rawMethod
      * @param  array  $params
      * @access public
-     * @return void
+     * @return bool
      */
-    public function executeUpgradeMethod(string $method, array $params): void
+    public function executeUpgradeMethod(string $rawMethod, array $params = []): bool
     {
-        $this->saveLogs("Run Method {$method}");
+        if(isset($this->executedChanges['methods'][$rawMethod])) return true;
 
-        $class = $this;
-        if(str_contains($method, '-'))
+        $this->saveLogs("Run Method {$rawMethod}");
+
+        $model  = $this;
+        $method = $rawMethod;
+        if(str_contains($rawMethod, '-'))
         {
-            list($className, $method) = explode('-', $method);
-            $class = $this->loadModel($className);
+            list($module, $method) = explode('-', $rawMethod);
+            $model = $this->loadModel($module);
         }
 
         dao::$realTimeLog = true;
-        call_user_func_array(array($class, $method), $params);
+        call_user_func_array(array($model, $method), $params);
         dao::$realTimeLog = false;
+
+        if($this->isError()) return false;
+
+        if(dao::isError())
+        {
+            static::$errors = array_merge(static::$errors, dao::getError());
+            return false;
+        }
+
+        $this->executedChanges['methods'][$rawMethod] = true;
+        $this->recordExecutedChanges();
+        return true;
     }
 
     /**
@@ -270,11 +389,10 @@ class upgradeModel extends model
             }
 
             /* Get charge contents. */
-            foreach($chargedVersions as $edition => $chargedVersion)
+            foreach($chargedVersions as $chargedVersion)
             {
                 foreach($chargedVersion as $version)
                 {
-                    if($edition == 'max') $version = array_search($openVersion, $this->config->upgrade->maxVersion);
                     $sqlFile = $this->getUpgradeFile(str_replace('_', '.', $version));
                     if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
 
@@ -661,12 +779,15 @@ class upgradeModel extends model
      *
      * @param  string $script
      * @access public
-     * @return array
+     * @return string
      */
-    public function deleteFiles(string $script): array
+    public function deleteFiles(string $script): string
     {
-        $result = array();
-        $zfile  = $this->app->loadClass('zfile');
+        $dir = dirname($script);
+        if(!is_writable($dir)) return "chmod 777 {$dir}";
+
+        $command = array();
+        $zfile   = $this->app->loadClass('zfile');
 
         foreach($this->config->delete as $deleteFiles)
         {
@@ -684,7 +805,7 @@ class upgradeModel extends model
                     if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
                        (!$isDir && !$zfile->removeFile($fullPath)))
                     {
-                        $result[] = 'rm -fr ' . $fullPath;
+                        $command[] = 'rm -fr ' . $fullPath;
                     }
                 }
             }
@@ -699,19 +820,18 @@ class upgradeModel extends model
             if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
                 (!$isDir && !$zfile->removeDir($patchPath)))
             {
-                $result[] = 'rm -fr ' . $patchPath;
+                $command[] = 'rm -fr ' . $patchPath;
             }
         }
 
-        if(empty($result)) return $result;
+        if(!$command) return '';
 
-        asort($result);
+        asort($command);
 
-        $content = "#!/bin/bash\n";
-        foreach($result as $cmd) $content .= "$cmd\n";
+        $content = "#!/bin/bash\n" . implode("\n", $command);
         file_put_contents($script, $content);
 
-        return ["/bin/bash $script"];
+        return "/bin/bash $script";
     }
 
     /**
@@ -1070,12 +1190,13 @@ class upgradeModel extends model
      * Delete the patch record.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deletePatch(): void
+    public function deletePatch(): bool
     {
         $this->dao->delete()->from(TABLE_EXTENSION)->where('type')->eq('patch')->exec();
         $this->dao->delete()->from(TABLE_EXTENSION)->where('code')->in('zentaopatch,patch')->exec();
+        return !dao::isError();
     }
 
     /**
@@ -1114,8 +1235,6 @@ class upgradeModel extends model
      */
     public function execSQL(string $sqlFile): bool
     {
-        if(!file_exists($sqlFile)) return false;
-
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
         $ignoreCode = '|1050|1054|1060|1091|1061|';
@@ -1124,27 +1243,31 @@ class upgradeModel extends model
         {
             if(empty($sql)) continue;
 
+            $sqlMd5 = md5($sql);
+            if(isset($this->executedChanges['sqls'][$sqlFile][$sqlMd5])) continue;   // Skip the sql that has been executed.
+
             try
             {
                 $this->saveLogs($sql);
-
-                /* Calculate the number of sql runs completed. */
-                if(is_writable($this->app->getTmpRoot()) && is_file($this->app->getTmpRoot() . 'upgradeSqlLines'))
-                {
-                    $sqlLines    = file_get_contents($this->app->getTmpRoot() . 'upgradeSqlLines');
-                    $sqlLines    = explode('-', $sqlLines);
-                    $executeLine = $sqlLines[1];
-                    $executeLine ++;
-                    file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', $sqlLines[0] . '-' . $executeLine);
-                }
-
                 $this->dbh->exec($sql);
+
+                $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
+                $this->recordExecutedChanges();
             }
             catch(PDOException $e)
             {
                 $errorInfo = $e->errorInfo;
                 $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
-                if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage();
+                if(strpos($ignoreCode, "|$errorCode|") !== false)
+                {
+                    $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
+                    $this->recordExecutedChanges();
+                }
+                else
+                {
+                    static::$errors[] = $e->getMessage();
+                    return false;
+                }
             }
         }
         return true;
@@ -1160,6 +1283,8 @@ class upgradeModel extends model
      */
     public function parseToSqls(string $sqlFile): array
     {
+        if(!file_exists($sqlFile)) return [];
+
         /* Read the sql file to lines, remove the comment lines, then join theme by ';'. */
         $sqls  = array();
         $lines = explode("\n", file_get_contents($sqlFile));
@@ -3676,7 +3801,7 @@ class upgradeModel extends model
 
         /* 新增项目集或者更新项目集状态。*/
         /* Create program or update program status. */
-        if(isset($data->newProgram))
+        if(isset($data->newProgram) && $this->config->systemMode != 'light')
         {
             $result = $this->createNewProgram($data, $projectIdList);
             if(dao::isError()) return false;
@@ -5219,19 +5344,17 @@ class upgradeModel extends model
      * 移除收费版本的目录。
      * Remove encrypted directories.
      *
+     * @param  string $script
      * @access public
      * @return array
      */
-    public function removeEncryptedDir(): array
+    public function removeEncryptedDir(string $script): string
     {
-        /* Init response and command. */
-        $response = array('result' => 'success');
-        $command  = array();
+        $dir = dirname($script);
+        if(!is_writable($dir)) return "chmod 777 {$dir}";
 
-        /* Load zfile. */
-        $zfile = $this->app->loadClass('zfile');
-
-        /* Get all modules, skip modules, custom modules. */
+        $command       = [];
+        $zfile         = $this->app->loadClass('zfile');
         $allModules    = glob($this->app->moduleRoot . '*');
         $skipModules   = $this->getEncryptedModules($allModules);
         $customModules = $this->getCustomModules($allModules);
@@ -5244,13 +5367,14 @@ class upgradeModel extends model
             if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath; // If the directory can't be removed, append the command for deleting a directory.
         }
 
-        if(!empty($command))
-        {
-            $response['result']  = 'fail';
-            $response['command'] = $command;
-         }
+        if(!$command) return '';
 
-        return $response;
+        asort($command);
+
+        $content = "#!/bin/bash\n" . implode("\n", $command);
+        file_put_contents($script, $content);
+
+        return "/bin/bash $script";
     }
 
     /**
@@ -6831,7 +6955,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function processDataset()
+    public function processDataset(): bool
     {
         $dataviewData = $this->dao->select('id')->from(TABLE_DATAVIEW)->fetch();
         if(!empty($dataviewData)) return true;
@@ -6839,14 +6963,26 @@ class upgradeModel extends model
         $this->loadModel('dataset');
         $this->loadModel('dataview');
 
+        $this->dao->begin();
+
         $this->upgradeTao->convertBuiltInDataSet();
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
 
         $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id', false);
-        if(empty($customDataset)) return true;
+        if(empty($customDataset)) return $this->dao->commit();
 
         $this->upgradeTao->convertCustomDataSet($customDataset);
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
 
-        return true;
+        return $this->dao->commit();
     }
 
     /**
@@ -7761,15 +7897,15 @@ class upgradeModel extends model
             if($vars)
             {
                 $filters = array();
-                foreach($vars->varName as $index => $varName)
+                foreach($vars['varName'] as $index => $varName)
                 {
                     $filter = new stdclass();
                     $filter->from       = 'query';
                     $filter->field      = $varName;
-                    $filter->name       = $vars->showName[$index];
-                    $filter->type       = $vars->requestType[$index];
-                    $filter->typeOption = $filter->type == 'select' ? zget($vars->selectList, $index, '') : '';
-                    $filter->default    = isset($vars->default) ? zget($vars->default, $index, '') : '';
+                    $filter->name       = $vars['showName'][$index];
+                    $filter->type       = $vars['requestType'][$index];
+                    $filter->typeOption = $filter->type == 'select' ? zget($vars['selectList'], $index, '') : '';
+                    $filter->default    = isset($vars['default']) ? zget($vars['default'], $index, '') : '';
 
                     $filters[] = $filter;
                 }
@@ -9115,15 +9251,16 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function upgradeScreenAndMetricData()
+    public function upgradeScreenAndMetricData(): bool
     {
-        $this->loadModel('bi');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
-        $metricSQLs  = $this->bi->prepareBuiltinMetricSQL('update');
+        $metricSQLs  = $this->loadModel('bi')->prepareBuiltinMetricSQL('update');
         $screenSQLs  = $this->bi->prepareBuiltinScreenSQL('update');
         $upgradeSqls = array_merge($metricSQLs, $screenSQLs);
+
+        $this->dbh->beginTransaction();
 
         try
         {
@@ -9134,18 +9271,20 @@ class upgradeModel extends model
 
                 $this->saveLogs($sql);
 
-                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
-                if(dao::isError()) return false;
             }
         }
         catch(Error $e)
         {
-            a($e->getMessage());
-            exit;
+            static::$errors[] = $e->getMessage();
+            $this->dbh->rollBack();
+            return false;
         }
 
-        return true;
+        return $this->dbh->commit();
     }
 
     /**
@@ -9153,20 +9292,20 @@ class upgradeModel extends model
      * Import BI data.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function upgradeBIData()
+    public function upgradeBIData(): bool
     {
         $this->loadModel('bi');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
-        if($this->config->db->driver == 'dm') return true;
-
         /* Prepare built-in sqls of bi. */
         $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
         $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
         $upgradeSqls = array_merge($chartSQLs, $pivotSQLs);
+
+        $this->dbh->beginTransaction();
 
         try
         {
@@ -9177,18 +9316,20 @@ class upgradeModel extends model
 
                 $this->saveLogs($sql);
 
-                $sql = str_replace('zt_', $this->config->db->prefix, $sql);
-                $this->dbh->query($sql);
-                if(dao::isError()) return false;
+                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
+                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+                $this->dbh->exec($sql);
             }
         }
         catch(Error $e)
         {
-            a($e->getMessage());
-            die;
+            static::$errors[] = $e->getMessage();
+            $this->dbh->rollBack();
+            return false;
         }
 
-        return true;
+        return $this->dbh->commit();
     }
 
     /**
@@ -10470,12 +10611,12 @@ class upgradeModel extends model
      * Init task relation.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function initTaskRelation()
+    public function initTaskRelation(): bool
     {
         $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
-        if(empty($childTasks)) return;
+        if(empty($childTasks)) return true;
 
         $this->dao->begin();
 
@@ -10505,8 +10646,13 @@ class upgradeModel extends model
             ->andWhere('status')->eq('normal')
             ->exec();
 
-        if(dao::isError()) $this->dao->rollBack();
-        $this->dao->commit();
+        if(dao::isError())
+        {
+            $this->dao->rollBack();
+            return false;
+        }
+
+        return $this->dao->commit();
     }
 
     /**
@@ -10781,9 +10927,9 @@ class upgradeModel extends model
      * Init release related data.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function initReleaseRelated()
+    public function initReleaseRelated(): bool
     {
         $releaseID = $this->config->lastReleaseID ?? 0;
         $releases  = $this->dao->select('id, project, build, branch, releases, stories, bugs, leftBugs')->from(TABLE_RELEASE)->where('id')->gt($releaseID)->orderBy('id')->limit(100)->fetchAll('id');
@@ -10796,7 +10942,7 @@ class upgradeModel extends model
                 ->exec();
             $this->loadModel('setting')->deleteItem('owner=system&module=common&key=lastReleaseID');
 
-            return;
+            return !dao::isError();
         }
 
         $this->dao->begin();
@@ -10830,8 +10976,13 @@ class upgradeModel extends model
 
         $this->loadModel('setting')->setItem('system.common.lastReleaseID', $releaseID);
 
-        if(dao::isError()) $this->dao->rollBack();
-        $this->dao->commit();
+        if(dao::isError())
+        {
+            $this->dao->rollBack();
+            return false;
+        }
+
+        return $this->dao->commit();
     }
 
     /**
@@ -10841,7 +10992,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function convertCharset()
+    public function convertCharset(): bool
     {
         if($this->config->db->driver != 'mysql') return true;
 
@@ -10876,10 +11027,12 @@ class upgradeModel extends model
         {
             if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
             if($tableCollation == $serverCollation) continue;
+
+            $tableName = '`' . $tableName . '`';
             if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
 
             /* 转换表的字符集和排序规则。Convert table charset and collation. */
-            $this->dbh->exec("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            $this->dbh->exec("ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
         }
 
         $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
@@ -13035,19 +13188,21 @@ class upgradeModel extends model
     }
 
     /**
-     * 修改表字段类型。
-     * Alter table fields datatype.
+     * 修改用户表的last字段类型。
+     * Alter user table field last type.
      *
      * @access public
      * @return bool
      */
-    public function alterTableFields()
+    public function alterUserTableFields(): bool
     {
-        $users = $this->dao->select('id, last')->from(TABLE_USER)->where('last')->ne(0)->fetchPairs();
-        $sql   = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
+        $tableDesc = $this->dao->descTable(TABLE_USER);
+        if(isset($tableDesc['last']) && stripos($tableDesc['last']->type, 'datetime') !== false) return true;
 
+        $sql = 'ALTER TABLE ' . TABLE_USER . ' ADD `last_tmp` datetime DEFAULT NULL AFTER `last`';
         $this->dao->exec($sql);
 
+        $users = $this->dao->select('id, last')->from(TABLE_USER)->where('last')->ne(0)->fetchPairs();
         foreach($users as $id => $last)
         {
             $last = date('Y-m-d H:i:s', $last);
@@ -13059,7 +13214,7 @@ class upgradeModel extends model
         $sql = 'ALTER TABLE ' . TABLE_USER . ' CHANGE COLUMN `last_tmp` `last` datetime DEFAULT NULL';
         $this->dao->exec($sql);
 
-        return $this->execSQL($this->getUpgradeFile('datatype'));
+        return !dao::isError();
     }
 
     /**

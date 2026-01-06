@@ -1031,6 +1031,7 @@ class bugModel extends model
 
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
+        if(strpos($orderBy, 'status') !== false)    $orderBy = str_replace('status', 'statusOrder', $orderBy);
 
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -1051,7 +1052,7 @@ class bugModel extends model
                 $condition = "($condition)";
             }
 
-            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
+            $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder, INSTR('active,resolved,closed,', t1.status) as statusOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
                 ->where('t1.deleted')->eq('0')
                 ->beginIF(!empty($productID) && $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
@@ -1958,7 +1959,7 @@ class bugModel extends model
         if($module == 'bug' && $action == 'tostory')  return $object->status == 'active';
         /* 判断反馈转bug操作按钮的权限。 */
         /* check feedback toStory priv. */
-        if($module == 'bug' && $action == 'create' && $app->rawModule == 'feedback') return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
+        if($module == 'bug' && $action == 'create' && isset($object->solution)) return ($config->global->flow == 'full' || $config->global->flow == 'onlyTest') && strpos('closed|clarify|noreview', $object->status) === false;
         /* 判断确认撤销操作按钮的权限。 */
         /* Check confirmdemandretract priv. */
         if($module == 'bug' && $action == 'confirmdemandretract') return !empty($object->confirmeActionType) && $object->confirmeActionType == 'confirmedretract';

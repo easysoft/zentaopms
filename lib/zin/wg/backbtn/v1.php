@@ -50,7 +50,7 @@ class backBtn extends btn
             'testsuite'      => 'testsuite-browse,testsuite-view,testtask-cases,my-index,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view',
             'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,project-testcase,project-testtask,execution-testtask',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
-            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,ticket-browse,testcase-browse,caselib-browse,dataview-browse,deliverable-browse',
+            'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,ticket-browse,testcase-browse,caselib-browse,dataview-browse,deliverable-browse,workflowdatasource-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
             'design'         => 'design-browse,projectstory-track,my-effort,company-effort,company-calendar,my-index',
             'release'        => 'release-browse,release-view,product-roadmap,kanban-view,projectrelease-browse,story-view,my-index,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,project-view',

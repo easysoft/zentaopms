@@ -19,7 +19,9 @@ class usersEntry extends entry
      */
     public function get()
     {
-        if(!common::hasPriv('company', 'browse')) return $this->sendError(400, 'error: no company-browse priv.');
+        $full = (int)$this->param('full', 0);
+
+        if($full == 1 && !common::hasPriv('company', 'browse')) return $this->sendError(400, 'error: no company-browse priv.');
 
         $appendFields = $this->param('fileds', '');
         $type         = $this->param('type', 'bydept');
@@ -36,8 +38,15 @@ class usersEntry extends entry
         $result = array();
         foreach($users as $user)
         {
-            $user = $this->filterFields($user, 'id,dept,account,realname,role,pinyin,email,' . $appendFields);
-            $result[] = $this->format($user, 'locked:time');
+            if($full == 1)
+            {
+                $user = $this->filterFields($user, 'id,dept,account,realname,role,pinyin,email,' . $appendFields);
+                $result[] = $this->format($user, 'locked:time');
+            }
+            else
+            {
+                $result[] = array('account' => $user->account, 'realname' => $user->realname);
+            }
         }
 
         $pageID = $pager ? $pager->pageID     : 1;

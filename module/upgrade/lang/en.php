@@ -10,38 +10,43 @@
  * @link        https://www.zentao.net
  */
 global $config;
-$lang->upgrade->common          = 'Update';
+$lang->upgrade->common          = 'Upgrade';
+$lang->upgrade->welcome         = 'Welcome to upgrade ZenTao';
+$lang->upgrade->execute         = 'Upgrading';
+$lang->upgrade->versionTips     = 'The upgrade versions';
+$lang->upgrade->changeTips      = '%s change log';
+$lang->upgrade->progress        = 'Progress';
+$lang->upgrade->executedChanges = "Executed: <span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
-$lang->upgrade->fail            = 'Failed';
+$lang->upgrade->fail            = 'Upgrade failed. The current version of ZenTao is ';
 $lang->upgrade->successTip      = 'Successed';
 $lang->upgrade->success         = "<p>Congratulations! Your ZenTao is updated.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';
-$lang->upgrade->license         = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning        = 'Warning!';
+$lang->upgrade->notice          = 'Notice';
 $lang->upgrade->checkExtension  = 'Check Extensions';
 $lang->upgrade->consistency     = 'Check Consistency';
-$lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.</p>
-<p>Please backup your database before updating ZenTao!</p>
-<pre class='bg-white space-y-2 p-3'>
-1. Use phpMyAdmin to backup.
-2. Use mysqlCommand to backup.
+$lang->upgrade->noticeContent   = <<<EOT
+<p>Database upgrade requires high privileges. Please use the root user.</p>
+<p>Upgrade carries risks. Please back up your database first, just in case.</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+1. You can back up using phpMyAdmin..
+2. Use the mysql command-line tool:
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   Change the red text into corresponding Username and Database name.
-   e.g. mysqldump -u root -p zentao > zentao.bak
+   Replace the red parts above with your actual username and database name.
+   <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.<br>
-   Please backup your database before updating ZenTao!</p>
-<pre>
+    $lang->upgrade->noticeContent = <<<EOT
+<p>The upgrade requires high database privileges, please use the root user.</p>
+<p>Please backup your database before updating ZenTao!</p>
+<pre class='bg-gray-200 leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
-   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
    After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
    The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
    This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
@@ -73,9 +78,8 @@ $lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version.
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
 $lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'Please execute the above command on the server to delete the file, and then refresh the page.';
+$lang->upgrade->execCommand   = 'Please execute the above command on the server and refresh the page after execution.';
 $lang->upgrade->afterExec     = 'Please manually modify the database based on the above error message, and then refresh the page.';
-$lang->upgrade->afterDuckdb   = 'Please wait for Duckdb engine to install.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
@@ -250,3 +254,26 @@ $lang->upgrade->reviewObjectList['UM']         = 'User Manual';
 $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = 'Baseline Review';
 $lang->upgrade->baselineReview['change']   = 'Project Change Review';
+
+$lang->upgrade->changeModes = [];
+$lang->upgrade->changeModes['create'] = 'Create';
+$lang->upgrade->changeModes['update'] = 'Update';
+$lang->upgrade->changeModes['delete'] = 'Delete';
+
+$lang->upgrade->changeActions = [];
+$lang->upgrade->changeActions['createView']  = 'Create database view %VIEW%';
+$lang->upgrade->changeActions['dropView']    = 'Delete database view %VIEW%';
+$lang->upgrade->changeActions['createTable'] = 'Create database table %TABLE%';
+$lang->upgrade->changeActions['dropTable']   = 'Delete database table %TABLE%';
+$lang->upgrade->changeActions['renameTable'] = 'Rename database table %OLD% to %NEW%';
+$lang->upgrade->changeActions['addField']    = 'Add field %FIELD% to database table %TABLE%';
+$lang->upgrade->changeActions['modifyField'] = 'Modify field %FIELD% in database table %TABLE%';
+$lang->upgrade->changeActions['dropField']   = 'Delete field %FIELD% from database table %TABLE%';
+$lang->upgrade->changeActions['renameField'] = 'Rename field %OLD% to %NEW% in database table %TABLE%';
+$lang->upgrade->changeActions['createIndex'] = 'Create index %INDEX% on database table %TABLE%';
+$lang->upgrade->changeActions['dropIndex']   = 'Delete index %INDEX% from database table %TABLE%';
+$lang->upgrade->changeActions['insertValue'] = 'Insert data into database table %TABLE%';
+$lang->upgrade->changeActions['updateValue'] = 'Update data in database table %TABLE%';
+$lang->upgrade->changeActions['deleteValue'] = 'Delete data from database table %TABLE%';
+$lang->upgrade->changeActions['method']      = 'Execute the %METHOD% method of the %MODULE% module';
+$lang->upgrade->changeActions['other']       = 'Other';

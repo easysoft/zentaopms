@@ -72,7 +72,7 @@ $routes['/projects/:projectID/testtasks']     = array('redirect' => '/projects/t
 $routes['/executions/:executionID/testtasks'] = array('redirect' => '/executions/testtask?executionID=:executionID');
 $routes['/testtasks/:testtaskID']             = array('response' => 'task|testtask,actions(array)');
 
-$routes['/products/:productID/testreports']     = array('redirect' => '/testreports?productID=:productID', 'response' => 'reports(array)|testreports,pager');
+$routes['/products/:productID/testreports']     = array('redirect' => '/testreports?objectID=:productID', 'response' => 'reports(array)|testreports,pager');
 $routes['/projects/:projectID/testreports']     = array('redirect' => '/projects/testreport?projectID=:projectID');
 $routes['/executions/:executionID/testreports'] = array('redirect' => '/executions/testreport?executionID=:executionID');
 $routes['/testreports/:reportID']               = array('response' => 'report|testreport,actions(array)');
@@ -100,7 +100,7 @@ $routes['/auditplans']                          = array('response' => 'auditplan
 $routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID');
 $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution');
 
-$routes['/feedbacks']                     = array('response' => 'feedbacks(array),pager');
+$routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager');
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID');
 $routes['/feedbacks/:feedbackID']         = array('response' => 'feedback,actions(array)');
 

@@ -450,6 +450,7 @@ class user extends control
         $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) $users[$userID] = $user->realname;
+        unset($user->password);
 
         $this->view->title     = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->groups    = $this->loadModel('group')->getByAccount($user->account);
@@ -561,9 +562,9 @@ class user extends control
         {
             if($this->app->apiVersion == 'v2')
             {
-                $_POST['password1']        = md5($_POST['password']);
-                $_POST['password2']        = md5($_POST['password']);
-                $_POST['passwordLength']   = strlen($_POST['password']);
+                $_POST['password1']        = isset($_POST['password']) ? md5($_POST['password']) : '';
+                $_POST['password2']        = isset($_POST['password']) ? md5($_POST['password']) : '';
+                $_POST['passwordLength']   = isset($_POST['password']) ? strlen($_POST['password']) : 0;
                 $_POST['passwordStrength'] = 2;
             }
 

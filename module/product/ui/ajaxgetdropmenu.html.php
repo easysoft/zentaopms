@@ -33,6 +33,14 @@ $getProductGroup = function($product): string
     return 'other';
 };
 
+$productNames = array();
+foreach($products as $programID => $programProducts)
+{
+    $productNames = array_merge($productNames, array_column($programProducts, 'name'));
+}
+
+$productPinyinNames = common::convert2Pinyin($productNames);
+
 if($extra === 'selectmode')
 {
     $data = array();
@@ -61,7 +69,7 @@ if($extra === 'selectmode')
             $item = array();
             $item['id']    = $product->id;
             $item['text']  = $product->name;
-            $item['keys']  = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+            $item['keys']  = zget($productPinyinNames, $product->name, '');
             $item['value'] = $product->id;
 
             $data[$programID]['items'][] = $item;
@@ -104,7 +112,7 @@ else
             $item['id']       = $product->id;
             $item['text']     = $product->name;
             $item['active']   = $productID == $product->id;
-            $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+            $item['keys']     = zget($productPinyinNames, $product->name, '');
             $item['data-app'] = $app->tab;
             $item['isPO']     = $product->PO == $this->app->user->account;
 

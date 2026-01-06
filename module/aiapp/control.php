@@ -71,7 +71,7 @@ class aiapp extends control
 
         $miniProgram  = $this->ai->getMiniProgramByID($id);
         if(empty($miniProgram)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->aiapp->noMiniProgram, 'locate' => $this->createLink('aiapp', 'square'))));
-        if($miniProgram->published === '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->unpublishedTip, 'reason' => 'unpublished'));
+        if($miniProgram->published == '0' && $this->post->test !== '1') return $this->send(array('result' => 'fail', 'message' => $this->lang->aiapp->unpublishedTip, 'reason' => 'unpublished'));
 
         $history = $this->post->history;
         $message = $this->post->message;

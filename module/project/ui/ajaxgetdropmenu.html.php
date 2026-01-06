@@ -30,6 +30,14 @@ $getProjectGroup = function($project) use($involvedProjects): string
     return 'other';
 };
 
+$projectNames = array();
+foreach($projects as $programID => $programProjects)
+{
+    $projectNames = array_merge($projectNames, array_column($programProjects, 'name'));
+}
+
+$projectPinyinNames = common::convert2Pinyin($projectNames);
+
 if($extra == 'selectmode')
 {
     /**
@@ -64,7 +72,7 @@ if($extra == 'selectmode')
             $item['id']       = $project->id;
             $item['text']     = $project->name;
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
-            $item['keys']     = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+            $item['keys']     = zget($projectPinyinNames, $project->name, '');
             $item['value']    = $project->id;
 
             $data[$programID]['items'][] = $item;
@@ -85,7 +93,7 @@ elseif(!empty($project->isTpl))
             $item['id']       = $project->id;
             $item['text']     = $project->name;
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
-            $item['keys']     = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+            $item['keys']     = zget($projectPinyinNames, $project->name, '');
             $item['involved'] = isset($involvedProjects[$project->id]);
             $item['url']      = helper::createLink('project', 'execution', "status=undone&projectID={$project->id}");
 
@@ -135,7 +143,7 @@ else
             $item['id']       = $project->id;
             $item['text']     = $project->name;
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
-            $item['keys']     = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+            $item['keys']     = zget($projectPinyinNames, $project->name, '');
             $item['involved'] = isset($involvedProjects[$project->id]);
 
             if($useLink == 1)

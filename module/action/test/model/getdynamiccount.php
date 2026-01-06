@@ -4,7 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
-zenData('action')->loadYaml('action')->gen(6);
+$action = zenData('action');
+$action->date->range('(-1h)-(+1w):1D')->type('timestamp')->format('YY/MM/DD hh:mm:ss');
+$action->gen(6);
+
 zenData('actionrecent')->gen(5);
 zenData('actionproduct')->gen(0);
 
@@ -41,7 +44,7 @@ r($actionModel->getDynamicCount('all')) && p() && e('2');  // 测试传入条件
 $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") === false) && p() && e('1');  // 检查SQL。
 
-$_SESSION['actionQueryCondition'] = "actor='admin' AND t2.product='1';";
+$_SESSION['actionQueryCondition'] = "actor='admin' AND t2.product='1'";
 r($actionModel->getDynamicCount('all')) && p() && e('0');  // 测试传入条件 actor='admin' AND t2.product='1'。
 
 $sql = $actionModel->dao->get();

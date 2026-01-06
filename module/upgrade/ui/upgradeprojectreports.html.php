@@ -9,40 +9,39 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
 set::zui(true);
 
 div
 (
-    setID('main'),
-    setClass('flex'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        setClass('mx-auto'),
-        panel
+        setClass('container rounded-md bg-white gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        div
         (
-            setStyle('width', '600px'),
-            set::title(sprintf($lang->upgrade->upgradeProjectReportsTip, count($upgradeReports))),
-            set::size('lg'),
-            progressBar
+            setClass('text-xl font-medium'),
+            sprintf($lang->upgrade->upgradeProjectReportsTip, count($upgradeReports))
+        ),
+        progressBar
+        (
+            setID('upgradeReportsProgress'),
+            set::striped(),
+            set::percent(0)
+        ),
+        div
+        (
+            setClass('mt-3 py-3 row items-center gap-4 justify-center'),
+            btn
             (
-                setID('upgradeReportsProgress'),
-                set::striped(),
-                set::percent(0)
-            ),
-            div
-            (
-                setClass('mt-3 py-3 row items-center gap-4 justify-center'),
-                btn
-                (
-                    setID('upgradeReportsBtn'),
-                    set::type('primary'),
-                    set::url('upgrade', 'upgradeprojectreports', "fromVersion={$fromVersion}&processed=yes"),
-                    on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingProjectReports, $lang->upgrade->next),
-                    span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingProjectReports),
-                    span(setClass('hidden as-finish-text'), $lang->upgrade->next),
-                    $lang->upgrade->upgradeProjectReports
-                )
+                setID('upgradeReportsBtn'),
+                set::type('primary'),
+                set::url('upgrade', 'upgradeprojectreports', "fromVersion={$fromVersion}&processed=yes"),
+                on::click()->call('startUpgradeReports', jsRaw('event'), $upgradeReports, $lang->upgrade->upgradingProjectReports, $lang->upgrade->next),
+                span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingProjectReports),
+                span(setClass('hidden as-finish-text'), $lang->upgrade->next),
+                $lang->upgrade->upgradeProjectReports
             )
         )
     )

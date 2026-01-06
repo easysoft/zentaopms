@@ -814,7 +814,7 @@ class actionModel extends model
             {
                 if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
-                if(!is_array($value)) $desc = str_replace('$' . $key, (string)$value, $desc);
+                if(!is_array($value) && !is_object($value)) $desc = str_replace('$' . $key, (string)$value, $desc);
             }
         }
 

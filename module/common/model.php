@@ -488,6 +488,13 @@ class commonModel extends model
             if(commonModel::hasPriv($module, $method)) return true;
         }
 
+        if($this->app->apiVersion)
+        {
+            header('HTTP/1.1 403 Forbidden', true, 403);
+            header('Content-Type: application/json');
+            helper::end(json_encode(['status' => 'error', 'message' => 'Not allowed']));
+        }
+
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
         {
@@ -2534,6 +2541,7 @@ eof;
                 $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
+                $actionData['name'] = $action;
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
                 if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
                 {

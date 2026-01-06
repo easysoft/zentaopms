@@ -72,8 +72,8 @@ class aiModel extends model
 
         if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
         {
-            $isPublished = $object->published === '1';
-            $isBuiltIn   = $object->builtIn === '1';
+            $isPublished = $object->published == '1';
+            $isBuiltIn   = $object->builtIn == '1';
 
             if($action == 'editminiprogram')      return common::hasPriv('ai', 'editMiniProgram') && !$isPublished && !$isBuiltIn;
             if($action == 'testminiprogram')      return common::hasPriv('ai', 'testMiniProgram') && !$isPublished && !$isBuiltIn;
@@ -1322,7 +1322,7 @@ class aiModel extends model
     {
         $data = new stdClass();
         $data->published = $published;
-        if($published === '1')
+        if($published == '1')
         {
             $data->publishedDate = helper::now();
             $miniProgram = $this->getMiniProgramByID($appID);
@@ -1337,7 +1337,7 @@ class aiModel extends model
             ->where('id')->eq($appID)
             ->exec();
 
-        $this->loadModel('action')->create('miniProgram', $appID, $published === '1' ? 'published' : 'unpublished');
+        $this->loadModel('action')->create('miniProgram', $appID, $published == '1' ? 'published' : 'unpublished');
 
         if($published !== '1') $this->collectMiniProgram(null, $appID, 'true');
         return !dao::isError();
@@ -1412,7 +1412,7 @@ class aiModel extends model
         if(!isset($data->createdBy))   $data->createdBy   = $this->app->user->account;
         if(!isset($data->createdDate)) $data->createdDate = helper::now();
         if(!isset($data->prompt))      $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
-        if($data->published === '1')   $data->publishedDate = helper::now();
+        if($data->published == '1')   $data->publishedDate = helper::now();
         $data->builtIn = '0';
 
         if(!empty($data->iconName) && !empty($data->iconTheme))
@@ -1468,11 +1468,24 @@ class aiModel extends model
         return $appID;
     }
 
+    /**
+     * Extract ZT app zip file, only extract ztapp.json file.
+     *
+     * @param string $file
+     * @access public
+     * @return bool
+     */
     public function extractZtAppZip($file)
     {
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($file);
-        return $zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'tmp/');
+
+        $zip      = new pclzip($file);
+        $filePath = $this->app->getAppRoot() . 'tmp/';
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array('ztapp.json');
+        return $zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, '');
     }
 
     /**

@@ -221,6 +221,7 @@ $lang->story->field            = '同步的字段';
 $lang->story->completeRate     = '完成率';
 $lang->story->reviewed         = '已评审';
 $lang->story->toBeReviewed     = '待评审';
+$lang->story->isReviewed       = '是否评审';
 $lang->story->linkMR           = '相关合并请求';
 $lang->story->linkPR           = '相关推送请求';
 $lang->story->linkCommit       = '相关代码版本';

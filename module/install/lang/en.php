@@ -118,16 +118,6 @@ $lang->install->mkdirWin      = '<p>%s directory has to be created.<br /> Run <c
 $lang->install->chmodWin      = ' "%s" privilege has to be changed.';
 $lang->install->mkdirLinux    = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
 $lang->install->chmodLinux    = ' "%s" permison has to be changed.<br /> Run <code>chmod 777 -R %s</code> to change it.';
-$lang->install->duckdb        = 'DuckDB Engine';
-$lang->install->duckdbLoading = 'Installing, please wait...';
-$lang->install->duckdbFail    = 'The duckdb engine failed to install. Please refer to the manual for manual installation.';
-
-$lang->install->installDuckdb       = 'Installing DuckDB';
-$lang->install->installingDuckdb    = 'Installing duckdb engine...';
-$lang->install->installedDuckdb     = 'Duckdb engine installed successfully!';
-$lang->install->installingExtension = 'Installing the duckdb Engine extension [%s]...';
-$lang->install->installedExtension  = 'Duckdb Engine extension [%s] installed!';
-$lang->install->installedFail       = '[%s] Installation failed';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';

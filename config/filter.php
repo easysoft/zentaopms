@@ -481,7 +481,7 @@ $filter->sso->login->get['sessionid']   = 'reg::base64';
 $filter->sso->logout->get['status']     = 'code';
 $filter->sso->logout->get['token']      = 'reg::md5';
 
-$filter->upgrade->license->get['agree'] = 'equal::true';
+$filter->upgrade->license->get['agree'] = 'equal::1';
 
 $filter->user->export->cookie['checkedItem'] = 'reg::checked';
 $filter->user->login->cookie['keepLogin']    = 'equal::on';

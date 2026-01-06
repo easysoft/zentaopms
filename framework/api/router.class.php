@@ -387,19 +387,59 @@ class api extends router
     }
 
     /**
-     * 检查传入的对象是否存在
+     * 检查传入的对象是否有权限访问
      *
-     * Check object exists.
+     * Check object priv.
+     *
+     * @param  object $object
+     * @param  string $table
+     * @access public
+     * @return bool
+     */
+    public function checkObjectPriv(object $object, string $table): bool
+    {
+        if($this->user->admin) true;
+
+        $userView = $this->user->view;
+        switch($table)
+        {
+            case TABLE_STORY:
+            case TABLE_BUG:
+            case TABLE_CASE:
+            case TABLE_TICKET:
+            case TABLE_FEEDBACK:
+            case TABLE_PRODUCTPLAN:
+                return (!$object->product || strpos(",{$userView->products},", ",$object->product,") !== false);
+            case TABLE_PRODUCT:
+                return (!$object->id || strpos(",{$userView->products},", ",$object->id,") !== false);
+            case TABLE_PROJECT: // project,execution,program
+                $projects = ",{$userView->sprints},{$userView->projects},{$userView->programs},";
+                return (!$object->id || strpos($projects, ",$object->id,") !== false);
+            case TABLE_BUILD:
+            case TABLE_TASK:
+                return (!$object->execution || strpos(",{$userView->sprints},", ",$object->execution,") !== false);
+            default:
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 检查传入的对象是否可以访问
+     *
+     * Check access.
      *
      * @access public
      * @return void
      */
-    public function checkObjectExists()
+    public function checkAccess()
     {
         $objectMap = [
             'program'       => TABLE_PROJECT,
             'programID'     => TABLE_PROJECT,
             'product'       => TABLE_PRODUCT,
+            'products'      => TABLE_PRODUCT,
             'productID'     => TABLE_PRODUCT,
             'project'       => TABLE_PROJECT,
             'projectID'     => TABLE_PROJECT,
@@ -431,18 +471,66 @@ class api extends router
             'userID'        => TABLE_USER,
             'ticket'        => TABLE_TICKET,
             'ticketID'      => TABLE_TICKET,
+            'dept'          => TABLE_DEPT,
+            'deptID'        => TABLE_DEPT,
         ];
+
+        /* Check assignedTo. */
+        if(isset($_POST['assignedTo']) && $_POST['assignedTo'])
+        {
+            $user = $this->dao->select('*')->from(TABLE_USER)
+                ->where('account')->eq($_POST['assignedTo'])
+                ->fetch();
+            if(!$user) return $this->control->sendError('User does not exist.');
+        }
 
         $params = array_merge($this->params, $_POST);
         foreach($params as $key => $value)
         {
-            if(isset($objectMap[$key]) && $value != 0)
+            if(!isset($objectMap[$key]) || !$value) continue;
+
+            $table  = $objectMap[$key];
+            $result = $this->checkObjectExists($table, $value);
+
+            if($result === false) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+
+            foreach($result as $object)
             {
-                $id = $this->dao->select('id')->from($objectMap[$key])->where('id')->eq($value)->andWhere('deleted')->eq('0')->fetch('id');
-                if(!$id) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+                if(!$this->checkObjectPriv($object, $table)) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' is not allowed.');
             }
         }
     }
+
+    /**
+     * 检查对象是否存在
+     *
+     * Check object exists.
+     *
+     * @param  string $table
+     * @param  int    $objectID
+     * @access public
+     * @return array|false
+     */
+    public function checkObjectExists($table, $objectIDList)
+    {
+        if(!is_array($objectIDList)) $objectIDList = [$objectIDList];
+
+        $objects = [];
+
+        foreach($objectIDList as $objectID)
+        {
+            $object = $this->dao->select('*')->from($table)
+                ->where('id')->eq($objectID)
+                ->beginIF(!in_array($table, [TABLE_DEPT]))->andWhere('deleted')->eq('0')->fi()
+                ->fetch();
+            if(!$object) return false;
+
+            $objects[] = $object;
+        }
+
+        return $objects;
+    }
+
 
     /**
      * 执行对应模块
@@ -460,12 +548,15 @@ class api extends router
             if($this->apiVersion == 'v2')
             {
                 $this->setParams();
-                if(in_array($this->action, array('post', 'put')))
+
+                if(in_array($this->action, array('post', 'put', 'delete')))
                 {
                     $this->setFormData();
                 }
-
-                $this->checkObjectExists();
+                else
+                {
+                    $this->checkAccess();
+                }
 
                 return parent::loadModule();
             }
@@ -528,6 +619,8 @@ class api extends router
         {
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
+
+        $this->checkAccess();
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
         if(!in_array($this->methodName, ['create', 'edit'])) return;
@@ -608,7 +701,8 @@ class api extends router
             }
             else
             {
-                $this->params[$key] = $defaultItem['default'];
+                /* Browse all items in api mode defaultly. */
+                $this->params[$key] = in_array($key, ['browseType', 'status']) ? 'all' : $defaultItem['default'];
             }
         }
 
@@ -714,5 +808,19 @@ class api extends router
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $this->config->vision = $vision ? $vision : $defaultVision;
+    }
+
+    /**
+     * 设置超级变量。
+     * Set the super vars.
+     *
+     * @access public
+     * @return void
+     */
+    public function setSuperVars()
+    {
+        $this->config->framework->filterCSRF = false;
+
+        parent::setSuperVars();
     }
 }

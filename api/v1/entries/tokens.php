@@ -24,9 +24,11 @@ class tokensEntry extends baseEntry
         $authKey   = $this->request('authKey', '');
         $addAction = $this->request('addAction', false);
 
+        $this->loadModel('user');
+
         if($password)
         {
-            if($this->loadModel('user')->checkLocked($account)) return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
+            if($this->user->checkLocked($account)) return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
             $user = $this->user->identify($account, $password);
         }
         else

@@ -11,38 +11,37 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
+
 div
 (
-    setID('main'),
-    setClass('flex'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        setClass('mx-auto'),
-        panel
+        setClass('container rounded-md bg-white gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        div
         (
-            setStyle('width', '800px'),
-            set::title($lang->upgrade->upgradeDocTemplatesTip),
-            set::size('lg'),
-            progressBar
+            setClass('text-xl font-medium'),
+            $lang->upgrade->upgradeDocTemplatesTip
+        ),
+        progressBar
+        (
+            setID('upgradeDocTemplatesProgress'),
+            set::striped(),
+            set::percent(0)
+        ),
+        div
+        (
+            setClass('mt-3 py-3 row items-center gap-4 justify-center'),
+            btn
             (
-                setID('upgradeDocTemplatesProgress'),
-                set::striped(),
-                set::percent(0)
-            ),
-            div
-            (
-                setClass('mt-3 py-3 row items-center gap-4 justify-center'),
-                btn
-                (
-                    setID('upgradeDocTemplatesBtn'),
-                    set::type('primary'),
-                    set::url('upgrade', 'upgradeDocTemplates', "fromVersion={$fromVersion}&processed=yes"),
-                    on::click()->call('startUpgradeDocTemplates', jsRaw('event'), $upgradeDocTemplates, $lang->upgrade->upgradingDocTemplates, $lang->upgrade->next),
-                    span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingDocTemplates),
-                    span(setClass('hidden as-finish-text'), $lang->upgrade->next),
-                    $lang->upgrade->upgradeDocTemplates
-                )
+                setID('upgradeDocTemplatesBtn'),
+                set::type('primary'),
+                set::url('upgrade', 'upgradeDocTemplates', "fromVersion={$fromVersion}&processed=yes"),
+                on::click()->call('startUpgradeDocTemplates', jsRaw('event'), $upgradeDocTemplates, $lang->upgrade->upgradingDocTemplates, $lang->upgrade->next),
+                span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingDocTemplates),
+                span(setClass('hidden as-finish-text'), $lang->upgrade->next),
+                $lang->upgrade->upgradeDocTemplates
             )
         )
     )

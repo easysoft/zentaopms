@@ -118,16 +118,6 @@ $lang->install->mkdirWin      = '<p>需要创建目录%s。命令为：<br /> mk
 $lang->install->chmodWin      = '需要修改目录 "%s" 的权限。';
 $lang->install->mkdirLinux    = '<p>需要创建目录%s。<br /> 命令为：<br /> mkdir -p %s</p>';
 $lang->install->chmodLinux    = '需要修改目录 "%s" 的权限。<br />命令为：<br />chmod 777 -R %s';
-$lang->install->duckdb        = 'DuckDB引擎';
-$lang->install->duckdbLoading = '正在安装中，请稍后...';
-$lang->install->duckdbFail    = '安装duckdb引擎失败，请参考手册进行手动安装。';
-
-$lang->install->installDuckdb       = '安装DuckDB';
-$lang->install->installingDuckdb    = '正在安装duckdb引擎...';
-$lang->install->installedDuckdb     = '安装duckdb引擎成功！';
-$lang->install->installingExtension = '正在安装duckdb引擎扩展[%s]...';
-$lang->install->installedExtension  = '安装duckdb引擎扩展[%s]成功！';
-$lang->install->installedFail       = '[%s]安装失败';
 
 $lang->install->timezone       = '时区设置';
 $lang->install->defaultLang    = '默认语言';

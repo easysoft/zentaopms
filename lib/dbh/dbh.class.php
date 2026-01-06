@@ -1059,7 +1059,7 @@ class dbh
      */
     public function beginTransaction()
     {
-        return $this->pdo->beginTransaction();
+        return $this->pdo->inTransaction() ? false : $this->pdo->beginTransaction();
     }
 
     /**
@@ -1081,7 +1081,7 @@ class dbh
      */
     public function rollBack()
     {
-        return $this->pdo->rollBack();
+        return $this->pdo->inTransaction() ? $this->pdo->rollBack() : false;
     }
 
     /**
@@ -1092,7 +1092,7 @@ class dbh
      */
     public function commit()
     {
-        return $this->pdo->commit();
+        return $this->pdo->inTransaction() ? $this->pdo->commit() : false;
     }
 
     /**
