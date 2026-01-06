@@ -100,7 +100,7 @@ $routes['/auditplans']                          = array('response' => 'auditplan
 $routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID');
 $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution');
 
-$routes['/feedbacks']                     = array('response' => 'feedbacks(array),pager');
+$routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager');
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID');
 $routes['/feedbacks/:feedbackID']         = array('response' => 'feedback,actions(array)');
 
