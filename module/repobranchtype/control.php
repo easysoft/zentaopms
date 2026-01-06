@@ -30,7 +30,7 @@ class repobranchtype extends control
 
         $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo === false) $repo = null;
-        $gitfoxID = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
+        $gitfoxID = $repo ? (int)zget($repo, 'id', 0) : 0;
 
         /* 创建分页对象。 */
         $this->app->loadClass('pager', true);
@@ -77,8 +77,8 @@ class repobranchtype extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             /* 调用 model 方法创建分支类型。 */
-            $gitfoxID = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
-            $result   = $this->repobranchtype->apiCreateBranchType($gitfoxID, $formData);
+            $repoID = $repo ? (int)zget($repo, 'id', 0) : 0;
+            $result   = $this->repobranchtype->apiCreateBranchType($repoID, $formData);
             if(!$result)
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
@@ -224,9 +224,9 @@ class repobranchtype extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* 获取 repo = 0 的分支类型列表（全局模板）。 */
-        $gitfoxID           = $repo ? (int)zget($repo, 'gitfoxID', 0) : 0;
+        $repoID           = $repo ? (int)zget($repo, 'id', 0) : 0;
         $tempBranchTypeList = $this->repobranchtype->getBranchTypeList(0, '', '', '', $orderBy, $pager);
-        $branchTypeList     = $this->repobranchtype->getBranchTypeList($gitfoxID, '', '', '', $orderBy, $pager);
+        $branchTypeList     = $this->repobranchtype->getBranchTypeList($repoID, '', '', '', $orderBy, $pager);
 
         /* 从模板列表中移除已存在于当前 repo 的分支类型（按 key 字段匹配）。 */
         $existingKeys       = helper::arrayColumn($branchTypeList, 'key');
