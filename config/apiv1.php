@@ -184,3 +184,5 @@ $routes['/z/files/:id/content'] = 'zfileContent';
 $routes['/gitlab/webhook'] = 'gitlabWebhook';
 
 $routes['/ciresults'] = 'ciresults';
+
+$routes['/branchrules'] = 'branchrules';

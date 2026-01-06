@@ -25,7 +25,7 @@ $langAllowForcePush = empty($branchTypeID) ? $lang->repo->branchRule->allowForce
 $langAllowMergeFrom = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeFrom : $lang->repo->branchTypeRule->allowMergeFrom;
 $langAllowMergeTo   = empty($branchTypeID) ? $lang->repo->branchRule->allowMergeTo : $lang->repo->branchTypeRule->allowMergeTo;
 
-$backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repo', 'browsebranchtype', "repoID=$repoID");
+$backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repobranchtype', 'browse', "repoID=$repoID");
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu

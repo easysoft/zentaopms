@@ -60,7 +60,7 @@ class repobranchrule extends control
         if($_POST)
         {
             $formData = form::data($this->config->repobranchrule->form->setBranchRule)->get();
-            $link = $branchTypeID ? $this->createLink('repobranchtype', 'browsebranchtype', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
+            $link = $branchTypeID ? $this->createLink('repobranchtype', 'browse', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
 
             /* 如果 $formData 里的字段全部为默认值，则返回保存成功，不保存数据。 */
             $allDefault = true;
