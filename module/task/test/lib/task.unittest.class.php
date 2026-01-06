@@ -686,7 +686,7 @@ class taskTest
      * @access public
      * @return array
      */
-    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, ?object $task = null, string $lastDate): array
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, mix $task = null, string $lastDate): array
     {
         $task        = $this->objectModel->getByID($taskID);
         $currentTeam = $this->objectModel->getTeamByAccount($task->team);
