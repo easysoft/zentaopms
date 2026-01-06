@@ -166,14 +166,11 @@ class repoModel extends model
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
 
-        if($repoID)
+        if($repoID && $repo->acl == 'private')
         {
-            if($repo->acl == 'private')
-            {
-                $members = array_filter(explode(',', $repo->members ?? ''));
-                if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
-                $this->updateMembers($repoID, $members);
-            }
+            $members = array_filter(explode(',', $repo->members ?? ''));
+            if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
+            $this->updateMembers($repoID, $members);
         }
 
         $repo = $this->getByID($repoID);
