@@ -212,7 +212,8 @@ class mr extends control
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        $branches = $scm->branch();
+        $branches        = $scm->branch('', 'date_desc');
+        $defaultBranches = array_values(array_slice($branches, 0, 2));
 
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->repo->getRepoMembers($repo);
@@ -221,6 +222,9 @@ class mr extends control
         $this->view->executionID = $objectID;
         $this->view->objectID    = $objectID;
         $this->view->branches    = $branches;
+
+        $this->view->defaultBranch = zget($defaultBranches, 0, '');
+        $this->view->activeBranch  = zget($defaultBranches, 1, '');
         $this->display();
     }
 
@@ -1018,10 +1022,12 @@ class mr extends control
        $objects = $this->mr->getRelationByCommits($repoID, array_column($commits, 'id'), '', $pager);
 
        $this->view->commits      = $commits;
+       $this->view->objects      = $objects;
        $this->view->pager        = $pager;
        $this->view->repoID       = $repoID;
        $this->view->sourceBranch = $sourceBranch;
        $this->view->targetBranch = $targetBranch;
+       $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
        $this->display();
    }
 }

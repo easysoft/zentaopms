@@ -25,6 +25,7 @@ formPanel
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     on::change('[name=targetBranch]')->call('loadReviewers'),
+    on::change('[name=sourceBranch]')->call('loadReviewers'),
     formGroup
     (
         set::width('535px'),
@@ -40,7 +41,8 @@ formPanel
             set::required(true),
             set::label($lang->mr->sourceBranch),
             set::name('sourceBranch'),
-            set::items($branches)
+            set::items($branches),
+            set::value($activeBranch)
         ),
         span
         (
@@ -53,7 +55,8 @@ formPanel
             set::required(true),
             set::label($lang->mr->targetBranch),
             set::name('targetBranch'),
-            set::items($branches)
+            set::items($branches),
+            set::value($defaultBranch)
         )
     ),
     formGroup

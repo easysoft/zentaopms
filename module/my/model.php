@@ -1249,11 +1249,9 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select("`id`, `title`, IF(`isFlow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, `approvalStatus` AS status, 0 AS product, 0 AS project")->from(TABLE_MR)
-            ->where('deleted')->eq('0')
-            ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
-            ->andWhere('status')->ne('closed')
-            ->andWhere('assignee')->eq($this->app->user->account)
+        return $this->dao->select("`id`, `title`, IF(`flow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, 0 AS product, 0 AS project")->from(TABLE_MR)
+            ->where('status')->ne('closed')
+            ->andWhere('createdBy')->eq($this->app->user->account)
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
