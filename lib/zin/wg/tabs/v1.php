@@ -67,6 +67,7 @@ class tabs extends wg
         $isVertical  = $this->prop('direction') === 'v';
         $collapse    = $this->prop('collapse');
         $headerClass = $this->prop('headerClass');
+        $headerBtn   = $this->prop('headerBtn');
 
         return div
         (
@@ -77,6 +78,14 @@ class tabs extends wg
                 $isVertical ? setClass('nav-stacked') : null,
                 $titleViews
             ),
+            !empty($headerBtn['title']) ? btn
+            (
+                setStyle(array('position' => 'absolute', 'top' => 0, 'right' => 0)),
+                setClass(!empty($headerBtn['class']) ? $headerBtn['class'] : ''),
+                !empty($headerBtn['icon']) ? icon($headerBtn['icon']) : null,
+                setData(array('toggle' => 'modal', 'url' => !empty($headerBtn['url']) ? $headerBtn['url'] : '')),
+                span($headerBtn['title'])
+            ) : null,
             $this->buildCollapseBtn()
         );
     }
