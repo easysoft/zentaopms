@@ -1118,33 +1118,6 @@ class commonModel extends model
     }
 
     /**
-     * 检查升级验证文件是否创建，给出升级的提示。
-     * Check upgrade's status file is ok or not.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkUpgradeStatus()
-    {
-        $statusFile = $this->checkSafeFile();
-        if($statusFile)
-        {
-            $this->app->loadLang('upgrade');
-            $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
-            $cmd = sprintf($cmd, $statusFile);
-
-            echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
-            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
-            printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            echo '</td></tr></table></body></html>';
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * 检查系统是否处于维护状态，如果处于维护状态则给非管理员用户输出提示。
      * Check whether system in maintenance status and show message for non-admin user.
      *
