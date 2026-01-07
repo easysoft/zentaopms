@@ -15823,7 +15823,7 @@ CREATE TABLE IF NOT EXISTS `zt_demand` (
   `pool` int unsigned NOT NULL DEFAULT 0,
   `module` int unsigned NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
-  `parent` int unsigned NOT NULL DEFAULT 0,
+  `parent` int NOT NULL DEFAULT 0,
   `pri` tinyint unsigned NOT NULL DEFAULT 3,
   `category` varchar(30) NOT NULL DEFAULT '',
   `source` varchar(30) NOT NULL DEFAULT '',
