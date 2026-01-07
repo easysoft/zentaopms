@@ -23,18 +23,29 @@ class repobranchruleModel extends model
      */
     public function checkPrivToCreateBranch(int $repoID, string $branchName, string $operator): bool
     {
-        // 根据仓库 ID 和分支前缀匹配分支类型
-        $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID);
+        $branchTypeID  = 0;
         if(!empty($branchTypes))
         {
-            // 根据匹配的分支类型 ID 获取规则进行权限校验
-            $branchType = reset($branchTypes);
-            $rule       = $this->getBranchRule($branchType->id);
-            if($rule && !empty($rule->createUser))
+            foreach($branchTypes as $branchType)
             {
-                return strpos(',' . $rule->createUser . ',', ',' . $operator . ',') !== false;
+                if(empty($branchType->prefixes)) continue;
+
+                foreach($branchType->prefixes as $prefix)
+                {
+                    if(strpos($branchName, $prefix) === 0)
+                    {
+                        $branchTypeID = $branchType->id;
+                        break 2;
+                    }
+                }
             }
+        }
+
+        $rule = $this->getBranchRule($branchTypeID);
+        if($rule && !empty($rule->createUser))
+        {
+            return strpos(',' . $rule->createUser . ',', ',' . $operator . ',') !== false;
         }
 
         return true;
@@ -59,17 +70,30 @@ class repobranchruleModel extends model
             return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;
         }
 
-        // 根据仓库 ID 和分支前缀查询分支类型级别的规则进行权限校验
-        $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+        // 分支类型级别的规则进行权限校验
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeList($repoID);
+        $branchTypeID  = 0;
         if(!empty($branchTypes))
         {
-            $branchType = reset($branchTypes);
-            $rule       = $this->getBranchRule($branchType->id);
-            if($rule && !empty($rule->deleteUser))
+            foreach($branchTypes as $branchType)
             {
-                return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;
+                if(empty($branchType->prefixes)) continue;
+
+                foreach($branchType->prefixes as $prefix)
+                {
+                    if(strpos($branchName, $prefix) === 0)
+                    {
+                        $branchTypeID = $branchType->id;
+                        break 2;
+                    }
+                }
             }
+        }
+
+        $rule = $this->getBranchRule($branchTypeID);
+        if($rule && !empty($rule->deleteUser))
+        {
+            return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;
         }
 
         return true;
