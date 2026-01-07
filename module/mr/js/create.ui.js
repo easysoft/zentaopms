@@ -22,3 +22,4 @@ window.loadReviewers = function()
 
     loadTarget($.createLink('mr', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
 }
+waitDom('[name=targetBranch]', loadReviewers);
