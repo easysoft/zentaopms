@@ -4045,6 +4045,7 @@ class upgradeModel extends model
         $project->lastEditedBy   = $account;
         $project->lastEditedDate = $now;
         $project->acl            = isset($data->projectAcl) ? $data->projectAcl : 'open';
+        $project->storyType      = 'story,requirement';
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
             ->check('name', 'unique', "type='project' AND parent='{$programID}' AND deleted='0'")

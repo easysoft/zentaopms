@@ -37,8 +37,9 @@ class commonTao extends commonModel
         $select  = '';
         if($this->session->$typeOnlyCondition)
         {
-            if($orderBy and str_contains($orderBy, 'priOrder'))      $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
-            if($orderBy and str_contains($orderBy, 'severityOrder')) $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
+            if($orderBy and str_contains($orderBy, 'priOrder'))          $select .= ", IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder";
+            if($orderBy and str_contains($orderBy, 'severityOrder'))     $select .= ", IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder";
+            if($type == 'task' && str_contains($orderBy, 'statusOrder')) $select .= ", INSTR('wait,doing,done,pause,cancel,closed,', status) as statusOrder";
             $queryCondition = str_replace('t4.status', 'status', $queryCondition);
 
             $sql = $this->dao->select("*$select")->from($table)
