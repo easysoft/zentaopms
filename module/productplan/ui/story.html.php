@@ -104,7 +104,7 @@ formPanel
     )
 );
 
-foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
+foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
 dtable
 (
     setID('planStories'),

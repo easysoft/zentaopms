@@ -154,7 +154,7 @@ if($canBatchActionBug)
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
+foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
