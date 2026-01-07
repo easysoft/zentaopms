@@ -1,30 +1,51 @@
 <?php
 $lang->mr = new stdclass;
-$lang->mr->common       = 'Merge Requests';
-$lang->mr->server       = "Server";
-$lang->mr->hostID       = "Server";
-$lang->mr->view         = "Survey";
-$lang->mr->viewAction   = "{$lang->mr->common} Details";
-$lang->mr->create       = "Submit {$lang->mr->common}";
-$lang->mr->apiCreate    = "Interface: Create";
-$lang->mr->browse       = "Browse";
-$lang->mr->browseAction = "{$lang->mr->common} List";
-$lang->mr->list         = "List";
-$lang->mr->edit         = "Edit";
-$lang->mr->delete       = "Delete";
-$lang->mr->accept       = "Accept";
-$lang->mr->source       = 'source';
-$lang->mr->target       = 'target';
-$lang->mr->viewDiff     = 'View diff';
-$lang->mr->diff         = 'View diff';
-$lang->mr->viewInGit    = 'View in APP';
-$lang->mr->link         = 'Link of stories,Bugs,tasks';
-$lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
-$lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>.';
-$lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>.';
-$lang->mr->submitType   = 'Submit type';
-$lang->mr->linkedObject = 'Linked items';
-$lang->mr->object       = 'Object';
+
+$lang->mr->common            = 'Merge Requests';
+$lang->mr->server            = "Server";
+$lang->mr->hostID            = "Server";
+$lang->mr->view              = "Survey";
+$lang->mr->viewAction        = "{$lang->mr->common} Details";
+$lang->mr->create            = "Submit {$lang->mr->common}";
+$lang->mr->apiCreate         = "Interface: Create";
+$lang->mr->browse            = "Browse";
+$lang->mr->browseAction      = "{$lang->mr->common} List";
+$lang->mr->list              = "List";
+$lang->mr->edit              = "Edit";
+$lang->mr->delete            = "Delete";
+$lang->mr->accept            = "Accept";
+$lang->mr->source            = 'source';
+$lang->mr->target            = 'target';
+$lang->mr->viewDiff          = 'View diff';
+$lang->mr->diff              = 'View diff';
+$lang->mr->viewInGit         = 'View in APP';
+$lang->mr->link              = 'Link of stories,Bugs,tasks';
+$lang->mr->createAction      = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
+$lang->mr->editAction        = '%s, <strong>%s</strong> edited <a href="%s">Merge Request</a>。';
+$lang->mr->removeAction      = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>。';
+$lang->mr->submitType        = 'Submit type';
+$lang->mr->linkedObject      = 'Linked items';
+$lang->mr->object            = 'Object';
+$lang->mr->mergeInfo         = 'Merge View';
+$lang->mr->locateView        = 'View';
+$lang->mr->codeConflict      = 'Conflict';
+$lang->mr->hasConflict       = 'Check Conflict';
+$lang->mr->request           = 'Request';
+$lang->mr->AIReview          = 'AI Review';
+$lang->mr->AICodeScore       = 'Score';
+$lang->mr->AISevereIssue     = 'Severe Issue';
+$lang->mr->AIOrdinaryIssue   = 'Ordinary Issue';
+$lang->mr->review            = 'Review';
+$lang->mr->approvalReviewer  = 'Number Of Approvers';
+$lang->mr->doneReviewer      = 'Number Of Approved';
+$lang->mr->codeScan          = 'Code Scan';
+$lang->mr->scanSevereIssue   = 'Severe Issue';
+$lang->mr->scanOrdinaryIssue = 'Ordinary Issue';
+$lang->mr->scanPassRate      = 'Access Pass Rate';
+$lang->mr->runResult         = 'Result';
+$lang->mr->basicInfo         = 'Basic Info';
+$lang->mr->sourceBranch      = 'Source Branch';
+$lang->mr->targetBranch      = 'Target Branch';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
@@ -34,7 +55,7 @@ $lang->mr->linkList   = 'Link List of stories,Bugs,tasks';
 $lang->mr->linkStory  = 'Link Stories';
 $lang->mr->linkBug    = 'Link Bugs';
 $lang->mr->linkTask   = 'Link Tasks';
-$lang->mr->unlinkTask = 'Remove Tasks';
+$lang->mr->unlinkTask = 'Unlink Tasks';
 $lang->mr->unlink     = 'UnLink of stories,Bugs,tasks';
 $lang->mr->addReview  = 'Add Review';
 
@@ -125,7 +146,7 @@ $lang->mr->compileID         = 'Compile ID';
 $lang->mr->compileStatus     = 'Compile Status';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
-$lang->mr->toCreatedMessage  = "The merge request you submitted: <a href='%s'>%s</a>, the pipeline task succeeded.";
+$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the pipeline task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
 $lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
@@ -143,29 +164,29 @@ $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
 $lang->mr->unsupportedFeature  = "Unsupported feature.";
 
-$lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
-$lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
-$lang->mr->apiErrorMap[3] = "401 Unauthorized";
-$lang->mr->apiErrorMap[4] = "403 Forbidden";
-$lang->mr->apiErrorMap[5] = "/(pull request already exists for these targets).*/";
-$lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between the head and the base";
-$lang->mr->apiErrorMap[7] = "/(user doesn't have access to repo).*/";
-$lang->mr->apiErrorMap[8] = "/(git apply).*/";
+$lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
+$lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";
+$lang->mr->apiErrorMap[3]  = "401 Unauthorized";
+$lang->mr->apiErrorMap[4]  = "403 Forbidden";
+$lang->mr->apiErrorMap[5]  = "/(pull request already exists for these targets).*/";
+$lang->mr->apiErrorMap[6]  = "Invalid PullRequest: There are no changes between the head and the base";
+$lang->mr->apiErrorMap[7]  = "/(user doesn't have access to repo).*/";
+$lang->mr->apiErrorMap[8]  = "/(git apply).*/";
+$lang->mr->apiErrorMap[9]  = "a pull request for this target and source branch already exists";
+$lang->mr->apiErrorMap[10] = 'Internal error occurred';
+$lang->mr->apiErrorMap[11] = "The source branch doesn't contain any new commits";
 
-
-
-
-$lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
-$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
-$lang->mr->errorLang[3] = "Unauthorized";
-$lang->mr->errorLang[4] = 'Permission denied';
-$lang->mr->errorLang[5] = 'Another open merge request already exists for this source branch';
-$lang->mr->errorLang[6] = 'The source project branch cannot be the same as the target project branch';
-$lang->mr->errorLang[7] = "user doesn't have access to repo";
-$lang->mr->errorLang[8] = 'The source branch and target branch cannot be merged';
-
-
-
+$lang->mr->errorLang[1]  = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[2]  = 'Another open merge request already exists for this source branch: ID%u';
+$lang->mr->errorLang[3]  = "Unauthorized";
+$lang->mr->errorLang[4]  = 'Permission denied';
+$lang->mr->errorLang[5]  = 'Another open merge request already exists for this source branch';
+$lang->mr->errorLang[6]  = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[7]  = "user doesn't have access to repo";
+$lang->mr->errorLang[8]  = 'The source branch and target branch cannot be merged';
+$lang->mr->errorLang[9]  = 'A duplicate merge request already exists';
+$lang->mr->errorLang[10] = 'Server error';
+$lang->mr->errorLang[11] = 'The source branch does not contain any new commits';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
@@ -242,6 +263,17 @@ $lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";
 $lang->mr->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";
 $lang->mr->addForApp         = "There are no projects under this server, do you want to go to add?";
+$lang->mr->checkSuccess      = 'The inspection has been passed, and this branch is allowed to be merged';
+$lang->mr->checkFailed       = 'The check failed, and this branch cannot be merged';
+$lang->mr->MRHistory         = "This merge was created by <strong>%s</strong> on <strong>%s</strong>，merging <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> <strong>%s</strong> commits，Merge into <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 。";
+
+$lang->mr->checkStatusList = array();
+$lang->mr->checkStatusList['fail']    = 'Not passed';
+$lang->mr->checkStatusList['success'] = 'Passed';
+$lang->mr->checkStatusList['wait']    = 'To be confirmed';
+
+$lang->mr->hasConflictList['yes'] = 'Yes';
+$lang->mr->hasConflictList['no']  = 'No';
 
 $lang->mr->featureBar['browse']['all']      = $lang->mr->statusList['all'];
 $lang->mr->featureBar['browse']['opened']   = $lang->mr->statusList['opened'];

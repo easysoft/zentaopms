@@ -289,36 +289,9 @@ class mr extends control
      */
     public function view(int $MRID)
     {
-        $oldMR = $this->mr->fetchByID($MRID);
-        if(!$oldMR) return $this->locate($this->createLink($this->app->rawModule, 'browse'));
-
-        if(isset($oldMR->hostID)) $rawMR = $this->mr->apiGetSingleMR($oldMR->repoID, $oldMR->mriid);
-        if($oldMR->synced && (!isset($rawMR->id) || empty($rawMR))) $this->sendError($this->lang->mr->apiError->emptyResponse, true);
-
-        /* Sync MR from GitLab to ZenTaoPMS. */
-        $MR   = $this->mr->apiSyncMR($oldMR);
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        if(in_array($host->type, $this->config->pipeline->formatTypeService))
-        {
-            $MR->sourceProject = (int)$MR->sourceProject;
-            $MR->targetProject = (int)$MR->targetProject;
-        }
-
-        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject, false);
-        $compile       = $this->loadModel('compile')->getByID($MR->compileID);
-
-        $this->view->title         = $this->lang->mr->view;
-        $this->view->MR            = $MR;
-        $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
-        $this->view->repo          = $this->loadModel('repo')->getByID($MR->repoID);
-        $this->view->reviewer      = $this->loadModel('user')->getById($MR->assignee);
-        $this->view->actions       = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
-        $this->view->compile       = $compile;
-        $this->view->hasNewCommit  = $compile ? $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate) : false;
-        $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject, false);
-        $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
-        $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, $MR->targetProject, $MR->targetBranch);
+        $this->view->title = $this->lang->mr->view;
+        $this->view->mr    = $this->mr->fetchByID($MRID);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
