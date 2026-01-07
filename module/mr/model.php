@@ -55,14 +55,14 @@ class mrModel extends model
         }
 
         return $this->dao->select('*')->from(TABLE_MR)
-            ->where('deleted')->eq('0')
+            ->where('1=1')
             ->beginIF($mode == 'status' && $param != 'all')->andWhere('status')->eq($param)->fi()
             ->beginIF($mode == 'assignee' && $param != 'all')->andWhere('assignee')->eq($param)->fi()
             ->beginIF($mode == 'creator' && $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF($this->moduleName == 'mr')->andWhere('isFlow')->eq('0')->fi()
-            ->beginIF($this->moduleName == 'pullreq')->andWhere('isFlow')->eq('1')->fi()
+            ->beginIF($this->moduleName == 'mr')->andWhere('flow')->eq('0')->fi()
+            ->beginIF($this->moduleName == 'pullreq')->andWhere('flow')->eq('1')->fi()
             ->beginIF($objectID && $this->moduleName == 'mr')->andWhere('executionID')->in($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -80,8 +80,7 @@ class mrModel extends model
     {
         return $this->dao->select('id,title')
             ->from(TABLE_MR)
-            ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
+            ->where('repoID')->eq($repoID)
             ->orderBy('id')
             ->fetchPairs('id', 'title');
     }
@@ -1368,5 +1367,32 @@ class mrModel extends model
        }
 
        return $commits;
+    }
+
+    /**
+     * 根据提交记录获取关联的需求、Bug、任务对象.
+     * Get linked objects by commits.
+     *
+     * @param  int $repoID
+     * @param  array $commits
+     * @param  string $type
+     * @param  ?object $pager
+     * @access public
+     * @return void
+     */
+    public function getRelationByCommits(int $repoID, array $commits, string $type= '', ?object $pager = null)
+    {
+        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t2.revision')->in($commits)
+            ->andWhere('t2.repo')->eq($repoID)
+            ->andWhere('t1.AType')->eq('revision')
+            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
+            ->page($pager)
+            ->fetchGroup('type', 'id');
+
+        $objectList = array();
+
+        return $objectList;
     }
 }
