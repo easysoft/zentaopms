@@ -54,20 +54,17 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
-$lang->upgrade->createFileWinCMD   = '打开命令行，执行<strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong style="color:#ed980f">touch %s</strong>';
-$lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操作：</h4>
-                                      <ul style="line-height:1.5;font-size:13px;">
-                                      <li>%s</li>
-                                      <li>或者删掉"<strong style="color:#ed980f">%s</strong>" 这个文件 ，重新创建一个<strong style="color:#ed980f">ok.txt</strong>文件，不需要内容。</li>
-                                      </ul>
-                                      <p><strong style="color:red">我已经仔细阅读上面提示且完成上述工作，<a href="#" onclick="location.reload()">继续更新</a></strong></p>';
+$lang->upgrade->setStatusFileTitle = '升级之前请先完成下面的操作';
+$lang->upgrade->createWinFile      = '打开命令行，执行 <span class="font-bold text-danger">echo > %s</span>';
+$lang->upgrade->createLinuxFile    = '在命令行执行 <span class="font-bold text-danger">touch %s</span>';
+$lang->upgrade->deleteStatusFile   = '或者删除 <span class="font-bold text-danger">%s</span> 这个文件，重新创建一个 <span class="font-bold text-danger">ok.txt</span> 文件，不需要内容。';
+$lang->upgrade->confirmStatusFile  = '我已经仔细阅读上面提示且完成上述工作';
 
 $lang->upgrade->selectVersion = '选择版本';
 $lang->upgrade->copyCommand   = '复制命令';
 $lang->upgrade->copySuccess   = '复制成功';
 $lang->upgrade->copyFail      = '浏览器不支持复制功能，请手动复制';
-$lang->upgrade->continue      = '继续';
+$lang->upgrade->continue      = '继续升级';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
 $lang->upgrade->fromVersion   = '原来的版本';
 $lang->upgrade->toVersion     = '升级到';

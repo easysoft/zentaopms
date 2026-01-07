@@ -11,6 +11,19 @@
  */
 class upgrade extends control
 {
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+
+        $statusFile = $this->loadModel('common')->checkSafeFile();
+        if($statusFile)
+        {
+            $this->view->title      = $this->lang->upgrade->common;
+            $this->view->statusFile = $statusFile;
+            $this->display('upgrade', 'setStatusFile');
+        }
+    }
+
     /**
      * The index page.
      *

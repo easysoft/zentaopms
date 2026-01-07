@@ -54,14 +54,11 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
-$lang->upgrade->createFileWinCMD   = 'Open command line and execute <strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
-$lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
-                                      <ul style="line-height:1.5;font-size:13px;">
-                                      <li>%s</li>
-                                      <li>Or delete "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
-                                      </ul>
-                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
+$lang->upgrade->setStatusFileTitle = 'Please complete the following actions';
+$lang->upgrade->createWinFile      = 'Open command line and execute <span class="font-bold text-danger">echo > %s</span>';
+$lang->upgrade->createLinuxFile    = 'Execute <span class="font-bold text-danger">touch %s</span> in the command line';
+$lang->upgrade->deleteStatusFile   = 'Or delete <span class="font-bold text-danger">%s</span> and create <span class="font-bold text-danger">ok.txt</span> and leave it blank.';
+$lang->upgrade->confirmStatusFile  = 'I have read and done as instructed above.';
 
 $lang->upgrade->selectVersion = 'Version';
 $lang->upgrade->copyCommand   = 'Copy';
