@@ -2,39 +2,89 @@
 declare(strict_types=1);
 namespace zin;
 global $app;
+$entry        = count($diffs) ? $diffs[0]->fileName : '';
+$fileInfo     = $entry ? pathinfo($entry) : array();
+$currentEntry = $this->repo->encodePath($entry);
+$tree         = $this->repo->getFileTree($repo, '', $diffs);
 jsVar('repoID', $repoID);
-
-$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['map'] = $users;
-$config->mr->createCheck->linkObject->dtable->fieldList['type']['map']      = array('story' => $lang->story->common, 'task' => $lang->task->common, 'bug' => $lang->bug->common);
+jsVar('diffs', $diffs);
+jsVar('tree', $tree);
+jsVar('currentFile', $currentEntry);
+jsVar('file', $currentEntry);
+jsVar('entry', $entry);
+jsVar('urlParams', "repoID=$repoID&objectID=0&entry=%s&oldRevision=$sourceBranch&newRevision=$targetBranch&showBug=0");
+h:css("#monacoTree .text-clip {overflow: visible;}");
 
 tabs
 (
     tabPane
     (
         set::key('commit'),
-        set::title($lang->mr->commitLogs),
+        set::title($lang->mr->commitLogs . ' (' . $commitPager->recTotal . ')'),
         set::active(true),
         dtable
         (
             set::cols($config->mr->createCheck->commit->dtable->fieldList),
             set::data($commits),
-            set::footPager(usePager())
+            set::userMap($users),
+            set::loadPartial(true),
+            set::footPager(usePager('commitPager', '', array(
+                'recPerPage'  => $commitPager->recPerPage,
+                'recTotal'    => $commitPager->recTotal,
+                'linkCreator' => helper::createLink('mr', 'ajaxgetcreatechecklist', "repoID={$repoID}&sourceBranch={$sourceBranch}&targetBranch={$targetBranch}&type=commit&recPerPage={$commitPager->recPerPage}&pageID={$commitPager->pageID}")
+            )))
         )
     ),
     tabPane
     (
         set::key('diff'),
-        set::title($lang->mr->viewDiff),
+        set::title($lang->mr->viewDiff . ' (' . count($diffs) . ')'),
+        empty($diffs) ? p(setClass('detail-content'), $lang->mr->noChanges) : div
+        (
+            setID('diff-sidebar-left'),
+            div
+            (
+                set::id('fileTabs'),
+                tabs
+                (
+                    set::id('monacoTabs'),
+                    set::className('relative'),
+                    div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
+                    tabPane
+                    (
+                        set::title($fileInfo['basename']),
+                        set::active(true),
+                        set::key('tab-' . str_replace('=', '-', $currentEntry)),
+                        to::suffix
+                        (
+                            icon
+                            (
+                                'close',
+                                set::className('monaco-close')
+                            )
+                        ),
+                        div(set::id('tab-' . $currentEntry))
+                    ),
+                    div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
+                    div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
+                )
+            ),
+            on::click('.inline-appose')->call('inlineAppose'),
+            on::click('#monacoTabs .monaco-close')->call('closeTab', jsRaw('this')),
+            on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
+        )
     ),
     tabPane
     (
         set::key('object'),
-        set::title($lang->mr->linkedObject),
+        set::title($lang->mr->linkedObject . ' (' . $objectPager->recTotal . ')'),
         dtable
         (
             set::cols($config->mr->createCheck->linkObject->dtable->fieldList),
             set::data($objects),
-            set::footPager(usePager())
+            set::userMap($users),
+            set::loadPartial(true),
+            set::footPager(usePager('objectPager'))
         )
     ),
 );
