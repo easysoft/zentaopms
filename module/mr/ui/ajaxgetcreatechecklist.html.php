@@ -1,7 +1,11 @@
 <?php
 declare(strict_types=1);
 namespace zin;
+global $app;
 jsVar('repoID', $repoID);
+
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['map'] = $users;
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['map']      = array('story' => $lang->story->common, 'task' => $lang->task->common, 'bug' => $lang->bug->common);
 
 tabs
 (
@@ -26,5 +30,11 @@ tabs
     (
         set::key('object'),
         set::title($lang->mr->linkedObject),
+        dtable
+        (
+            set::cols($config->mr->createCheck->linkObject->dtable->fieldList),
+            set::data($objects),
+            set::footPager(usePager())
+        )
     ),
 );
