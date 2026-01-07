@@ -21,13 +21,13 @@ $lang->upgrade->tohome          = '訪問禪道';
 $lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '檢查插件';
 $lang->upgrade->consistency     = '一致性檢查';
-$lang->upgrade->noticeContent   = <<<EOT
+$lang->upgrade->backupNotice    = <<<EOT
 <p>升級對資料庫權限要求較高，請使用 root 使用者。 </p>
 <p>升級有危險，請先備份資料庫，以防萬一。 </p>
 <pre class='leading-6 mt-1 p-3'>
 1. 可以透過phpMyAdmin進行備份。
 2. 使用mysql命令列的工具：
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
    將上面紅色的部分分別替換成真實的使用者名稱和禪道系統的資料庫名稱。
    <em>如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
@@ -35,13 +35,13 @@ EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->noticeContent = <<<EOT
+    $lang->upgrade->backupNotice = <<<EOT
 <p>升級對資料庫權限要求較高，請使用管理員使用者。</p>
 <p>升級有危險，請先備份資料庫，以防萬一。</p>
 <pre class='leading-6 mt-1 p-3'>
 1. 可以透過圖形化客戶端工具進行備份。
 2. 使用DIsql工具進行備份。
-   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
    語句執行完後會在預設的備份路徑下產生名為「 filename」 的備份集目錄。
    預設的備份路徑為 dm.ini 中 BAK_PATH 配置的路徑，若未配置 BAK_PATH，則預設使用 SYSTEM_PATH 下的 bak 目錄。
    這是最簡單的資料庫備份語句，如果要設定其他的備份選項需了解線上備份資料庫的語法。
@@ -49,6 +49,7 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
+$lang->upgrade->confirmBackup      = '我已經備份了資料庫';
 $lang->upgrade->createFileWinCMD   = '打開命令行，執行<strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = '在命令行執行: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操作：</h4>
@@ -59,7 +60,7 @@ $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操�
                                       <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="#" onclick="location.reload()">繼續更新</a></strong></p>';
 
 $lang->upgrade->selectVersion  = '選擇版本';
-$lang->upgrade->continue       = '繼續';
+$lang->upgrade->continue       = '繼續升級';
 $lang->upgrade->noteVersion    = "務必選擇正確的版本，否則會造成數據丟失。";
 $lang->upgrade->fromVersion    = '原來的版本';
 $lang->upgrade->toVersion      = '升級到';

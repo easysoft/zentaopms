@@ -26,13 +26,13 @@ $lang->upgrade->tohome          = '访问禅道';
 $lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->consistency     = '一致性检查';
-$lang->upgrade->noticeContent   = <<<EOT
+$lang->upgrade->backupNotice    = <<<EOT
 <div>升级对数据库权限要求较高，请使用 root 用户。</div>
 <div>升级有危险，请先备份数据库，以防万一。</div>
 <pre class='leading-6 px-3 py-2'>
 1. 可以通过phpMyAdmin进行备份。
 2. 使用mysql命令行的工具：
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
    将上面红色的部分分别替换成真实的用户名和禅道系统的数据库名。
    <em>比如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
@@ -40,13 +40,13 @@ EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->noticeContent = <<<EOT
+    $lang->upgrade->backupNotice = <<<EOT
 <p>升级对数据库权限要求较高，请使用管理员用户。</p>
 <p>升级有危险，请先备份数据库，以防万一。</p>
 <pre class='leading-6 mt-1 p-3'>
 1. 可以通过图形化客户端工具进行备份。
 2. 使用DIsql工具进行备份。
-   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
    语句执行完后会在默认的备份路径下生成名为“filename”的备份集目录。
    默认的备份路径为 dm.ini 中 BAK_PATH 配置的路径，若未配置 BAK_PATH，则默认使用 SYSTEM_PATH 下的 bak 目录。
    这是最简单的数据库备份语句，如果要设置其他的备份选项需了解联机备份数据库的语法。
@@ -54,6 +54,7 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
+$lang->upgrade->confirmBackup      = '我已经备份了数据库';
 $lang->upgrade->setStatusFileTitle = '升级之前请先完成下面的操作';
 $lang->upgrade->createWinFile      = '打开命令行，执行 <span class="font-bold text-danger">echo > %s</span>';
 $lang->upgrade->createLinuxFile    = '在命令行执行 <span class="font-bold text-danger">touch %s</span>';

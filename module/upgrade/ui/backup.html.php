@@ -14,7 +14,7 @@ set::zui(true);
 
 div
 (
-    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh']),
     col
     (
         setClass('rounded-md bg-white gap-5 m-auto'),
@@ -36,7 +36,12 @@ div
         col
         (
             setClass('rounded-md gap-2.5 bg-gray-100 p-4'),
-            html($lang->upgrade->noticeContent)
+            html($lang->upgrade->backupNotice)
+        ),
+        checkbox
+        (
+            on::change('confirmBackup'),
+            $lang->upgrade->confirmBackup
         ),
         div
         (
@@ -45,8 +50,7 @@ div
             (
                 setID('upgrade'),
                 setClass('btn primary disabled w-24'),
-                set::href(inlink('consistency')),
-                $lang->upgrade->common
+                $lang->upgrade->continue
             )
         )
     )

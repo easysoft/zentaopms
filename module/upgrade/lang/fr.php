@@ -22,13 +22,13 @@ $lang->upgrade->tohome          = 'Visitez ZenTao';
 $lang->upgrade->notice          = 'Avis';
 $lang->upgrade->checkExtension  = 'Vérifiez Extensions';
 $lang->upgrade->consistency     = 'Vérifiez Consistence';
-$lang->upgrade->noticeContent   = <<<EOT
+$lang->upgrade->backupNotice    = <<<EOT
 <p>Database upgrade requires high privileges. Please use the root user.</p>
 <p>Upgrade carries risks. Please back up your database first, just in case.</p>
 <pre class='leading-6 mt-1 p-3'>
 1. You can back up using phpMyAdmin..
 2. Use the mysql command-line tool:
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
    Replace the red parts above with your actual username and database name.
    <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
 </pre>
@@ -36,13 +36,13 @@ EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->noticeContent = <<<EOT
+    $lang->upgrade->backupNotice = <<<EOT
 <p>The upgrade requires high database privileges, please use the root user.</p>
 <p>Please backup your database before updating ZenTao!</p>
 <pre class='leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
-   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
    After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
    The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
    This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
@@ -50,6 +50,7 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
+$lang->upgrade->confirmBackup      = "J'ai sauvegardé la base de données";
 $lang->upgrade->createFileWinCMD   = 'Ouvrez la fenêtre Ligne de commandes de windows et exécutez <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Executez la ligne de commande suivante: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
