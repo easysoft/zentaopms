@@ -602,7 +602,6 @@ ALTER TABLE `zt_demand`
   MODIFY COLUMN `id` int unsigned NOT NULL AUTO_INCREMENT,
   MODIFY COLUMN `pool` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `module` int unsigned NOT NULL DEFAULT 0,
-  MODIFY COLUMN `parent` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `pri` tinyint unsigned NOT NULL DEFAULT 3,
   MODIFY COLUMN `category` varchar(30) NOT NULL DEFAULT '',
   MODIFY COLUMN `source` varchar(30) NOT NULL DEFAULT '',
