@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $percentItem = '';
-if(isset($config->setPercent) && $config->setPercent == 1 && isset($flow->projectModel) && $flow->projectModel != 'ipd' || $config->edition == 'open')
+if(isset($config->setPercent) && $config->setPercent == 1 && (isset($flow->projectModel) && $flow->projectModel != 'ipd' || $config->edition == 'open'))
 {
     $percentItem = formBatchItem(
         set::name('percent'),

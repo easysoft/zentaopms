@@ -2304,24 +2304,17 @@ $config->group->package->manageReview = new stdclass();
 $config->group->package->manageReview->order  = 10;
 $config->group->package->manageReview->subset = 'projectreview';
 $config->group->package->manageReview->privs  = array();
-$config->group->package->manageReview->privs['review-submitDeliverable']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-submitIpd']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-create']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall'));
+$config->group->package->manageReview->privs['review-submitDeliverable']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-submitBaseline']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
+$config->group->package->manageReview->privs['review-submitIpd']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-submitProjectchange'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
+$config->group->package->manageReview->privs['review-create']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall', 'review-submit'));
 $config->group->package->manageReview->privs['review-submit']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 27, 'depend' => array('review-browse'), 'recommend' => array('review-edit', 'review-recall'));
-$config->group->package->manageReview->privs['review-edit']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-recall'));
-$config->group->package->manageReview->privs['review-recall']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-edit'));
+$config->group->package->manageReview->privs['review-edit']                = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-recall', 'review-submit'));
+$config->group->package->manageReview->privs['review-recall']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-edit', 'review-submit'));
 $config->group->package->manageReview->privs['review-assess']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('review-browse'), 'recommend' => array('review-report'));
 $config->group->package->manageReview->privs['review-report']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('review-browse'), 'recommend' => array('review-exportReport'));
-$config->group->package->manageReview->privs['review-exportReport']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('review-browse'), 'recommend' => array('review-create', 'review-delete', 'review-edit', 'review-recall'));
-
-if(helper::hasFeature('project_cm'))     $config->group->package->manageReview->privs['review-submitBaseline']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-if(helper::hasFeature('project_change')) $config->group->package->manageReview->privs['review-submitProjectchange'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('review-browse', 'review-create'), 'recommend' => array('review-edit', 'review-recall'));
-
-$config->group->package->deleteReview = new stdclass();
-$config->group->package->deleteReview->order  = 15;
-$config->group->package->deleteReview->subset = 'projectreview';
-$config->group->package->deleteReview->privs  = array();
-$config->group->package->deleteReview->privs['review-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('review-browse'), 'recommend' => array());
+$config->group->package->manageReview->privs['review-exportReport']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('review-browse', 'review-report'), 'recommend' => array());
 
 $config->group->package->manageReviewIssue = new stdclass();
 $config->group->package->manageReviewIssue->order  = 20;
@@ -2329,12 +2322,12 @@ $config->group->package->manageReviewIssue->subset = 'projectreview';
 $config->group->package->manageReviewIssue->privs  = array();
 $config->group->package->manageReviewIssue->privs['reviewissue-issue']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('reviewissue-view'));
 $config->group->package->manageReviewIssue->privs['reviewissue-view']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('reviewissue-issue'), 'recommend' => array());
-$config->group->package->manageReviewIssue->privs['reviewissue-create']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-edit', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-create']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-edit', 'reviewissue-assignTo', 'reviewissue-close'));
 $config->group->package->manageReviewIssue->privs['reviewissue-edit']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-create'));
 $config->group->package->manageReviewIssue->privs['reviewissue-assignTo'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-resolved'));
-$config->group->package->manageReviewIssue->privs['reviewissue-active']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-close', 'reviewissue-resolved', 'review-assignTo'));
-$config->group->package->manageReviewIssue->privs['reviewissue-resolved'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-close', 'review-activate', 'review-assignTo'));
-$config->group->package->manageReviewIssue->privs['reviewissue-close']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('reviewissue-issue'), 'recommend' => array('review-activate', 'reviewissue-resolved', 'review-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-active']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-resolved', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-resolved'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-close', 'reviewissue-active', 'reviewissue-assignTo'));
+$config->group->package->manageReviewIssue->privs['reviewissue-close']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('reviewissue-issue'), 'recommend' => array('reviewissue-active', 'reviewissue-resolved', 'reviewissue-assignTo'));
 $config->group->package->manageReviewIssue->privs['reviewissue-delete']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('reviewissue-issue'), 'recommend' => array());
 
 $config->group->package->browseBaseline = new stdclass();
@@ -2354,7 +2347,7 @@ $config->group->package->manageBaseline->privs['cm-submit']       = array('editi
 $config->group->package->manageBaseline->privs['cm-recall']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('cm-browse'), 'recommend' => array('cm-create', 'cm-edit', 'cm-submit'));
 $config->group->package->manageBaseline->privs['cm-diff']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('cm-browse'), 'recommend' => array());
 $config->group->package->manageBaseline->privs['cm-report']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('cm-browse'), 'recommend' => array('cm-exportReport'));
-$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse'), 'recommend' => array('cm-report'));
+$config->group->package->manageBaseline->privs['cm-exportReport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('cm-browse', 'cm-report'), 'recommend' => array());
 
 $config->group->package->deleteBaseline = new stdclass();
 $config->group->package->deleteBaseline->order  = 15;
@@ -2686,21 +2679,26 @@ $config->group->package->projectFlow = new stdclass();
 $config->group->package->projectFlow->order  = 10;
 $config->group->package->projectFlow->subset = 'projectFlow';
 $config->group->package->projectFlow->privs  = array();
-$config->group->package->projectFlow->privs['workflowgroup-project']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),                        'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-copy',   'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-create']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-view',   'workflowgroup-edit', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-edit', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-edit']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-release']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-deactivate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-copy',       'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-copy']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 38, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-delete', 'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-delete']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-copy',   'workflowgroup-setModule'));
-$config->group->package->projectFlow->privs['workflowgroup-setModule']  = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 45, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-copy',   'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-project']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(),                        'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-copy',   'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-create']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-view',   'workflowgroup-edit', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-edit', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-edit']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-release', 'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-release']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-deactivate', 'workflowgroup-copy',       'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-deactivate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-copy',       'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-copy']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 38, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-delete'));
+$config->group->package->projectFlow->privs['workflowgroup-delete']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('workflowgroup-project'), 'recommend' => array('workflowgroup-create', 'workflowgroup-view', 'workflowgroup-edit',    'workflowgroup-release',    'workflowgroup-deactivate', 'workflowgroup-copy'));
 
 $config->group->package->flowReport = new stdclass();
 $config->group->package->flowReport->order  = 15;
 $config->group->package->flowReport->subset = 'projectFlow';
 $config->group->package->flowReport->privs  = array();
 $config->group->package->flowReport->privs['workflowgroup-report'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('workflowgroup-project'), 'recommend' => array());
+
+$config->group->package->featureSwitch = new stdclass();
+$config->group->package->featureSwitch->order  = 16;
+$config->group->package->featureSwitch->subset = 'projectFlow';
+$config->group->package->featureSwitch->privs  = array();
+$config->group->package->featureSwitch->privs['workflowgroup-setModule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('workflowgroup-report'), 'recommend' => array());
 
 $config->group->package->process = new stdclass();
 $config->group->package->process->order  = 20;
@@ -2753,13 +2751,13 @@ $config->group->package->stageSetting = new stdclass();
 $config->group->package->stageSetting->order  = 40;
 $config->group->package->stageSetting->subset = 'projectFlow';
 $config->group->package->stageSetting->privs  = array();
-$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('workflowgroup-report'), 'recommend' => array('stage-create',     'stage-batchCreate',  'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'),         'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-setTRpoint']  = array('edition' => 'ipd',              'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setDCPpoint', 'stage-delete'));
-$config->group->package->stageSetting->privs['stage-setDCPpoint'] = array('edition' => 'ipd',              'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-delete'));
-$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint'));
+$config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('workflowgroup-report'), 'recommend' => array('stage-create',     'stage-batchCreate',  'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'),         'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-batchCreate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-edit',        'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-setTRpoint', 'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-setTRpoint']  = array('edition' => 'ipd',         'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setDCPpoint', 'stage-delete'));
+$config->group->package->stageSetting->privs['stage-setDCPpoint'] = array('edition' => 'ipd',         'vision' => 'rnd', 'order' => 35, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-delete'));
+$config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('stage-browse'),         'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit',       'stage-setTRpoint',  'stage-setDCPpoint'));
 
 $config->group->package->reviewFlow = new stdclass();
 $config->group->package->reviewFlow->order  = 45;
@@ -3243,7 +3241,7 @@ $config->group->package->file->privs['file-edit']         = array('edition' => '
 $config->group->package->file->privs['file-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array(), 'recommend' => array('file-edit'));
 $config->group->package->file->privs['file-uploadImages'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->file->privs['file-setPublic']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array('file-download'), 'recommend' => array());
+$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->commonEffort = new stdclass();
 $config->group->package->commonEffort->order  = 5;
@@ -3329,7 +3327,12 @@ $config->group->package->stageType = new stdclass();
 $config->group->package->stageType->order  = 15;
 $config->group->package->stageType->subset = 'featureconfig';
 $config->group->package->stageType->privs  = array();
-$config->group->package->stageType->privs['stage-setType'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+$config->group->package->stageType->privs['stage-setType']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(),               'recommend' => array());
+$config->group->package->stageType->privs['stage-browse']      = array('edition' => 'open',             'vision' => 'rnd', 'order' => 10, 'depend' => array(),               'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit', 'stage-delete'));
+$config->group->package->stageType->privs['stage-create']      = array('edition' => 'open',             'vision' => 'rnd', 'order' => 15, 'depend' => array('stage-browse'), 'recommend' => array('stage-batchCreate', 'stage-edit',        'stage-delete'));
+$config->group->package->stageType->privs['stage-batchCreate'] = array('edition' => 'open',             'vision' => 'rnd', 'order' => 20, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-edit',        'stage-delete'));
+$config->group->package->stageType->privs['stage-edit']        = array('edition' => 'open',             'vision' => 'rnd', 'order' => 25, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-delete'));
+$config->group->package->stageType->privs['stage-delete']      = array('edition' => 'open',             'vision' => 'rnd', 'order' => 30, 'depend' => array('stage-browse'), 'recommend' => array('stage-create',      'stage-batchCreate', 'stage-edit'));
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;

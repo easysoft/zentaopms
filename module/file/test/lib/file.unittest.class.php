@@ -1266,4 +1266,25 @@ class fileTest
 
         return $result;
     }
+
+    /**
+     * Test get upload by uid.
+     *
+     * @param  array|string|bool $uid
+     * @param  array             $albums
+     * @access public
+     * @return array
+     */
+    public function getUploadByUIDTest($uid, $albums)
+    {
+        $_SESSION['album'] = $albums;
+
+        $result = $this->objectModel->getUploadByUID($uid);
+
+        unset($_SESSION['album']);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

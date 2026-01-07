@@ -77,55 +77,49 @@ if(!empty($needProcess['updateFile']))
 
 div
 (
-    setID('main'),
-    setClass('flex'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        setClass('canvas px-1 mx-auto pb-8 self-center'),
-        width('800px'),
-        col
+        setClass('container rounded-md bg-white gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        cell
         (
-            setClass('message flex-wrap justify-center' . ($hideHome ? ' hidden' : '')),
-            cell
+            setClass('flex justify-center items-end h-28 mb-4'),
+            icon
             (
-                setClass('flex justify-center items-end h-36 mb-4'),
-                icon
-                (
-                    setClass('text-success'),
-                    set::size('100'),
-                    'check-circle'
-                )
-            ),
-            cell
-            (
-                setClass('flex justify-center items-start font-bold text-lg h-12'),
-                html($lang->upgrade->success)
-            ),
-            $showPrivTips ? cell
-            (
-                setClass('flex justify-center priv-tips'),
-                $lang->upgrade->addTraincoursePrivTips
-            ) : null,
-            cell
-            (
-                setClass('flex justify-center'),
-                btn
-                (
-                    setClass('px-8'),
-                    setID('tohome'),
-                    set::target('_self'),
-                    set::url('index.php'),
-                    set::type('primary'),
-                    $lang->upgrade->tohome
-                )
+                setClass('text-primary'),
+                set::size('100'),
+                'checked'
             )
         ),
-        row
+        cell
         (
-            setClass('flex-wrap pt-6 text-gray gap-y-1'),
-            $tips
+            setClass('flex justify-center items-start font-bold text-lg h-12'),
+            html($lang->upgrade->success)
+        ),
+        $showPrivTips ? cell
+        (
+            setClass('flex justify-center priv-tips'),
+            $lang->upgrade->addTraincoursePrivTips
+        ) : null,
+        cell
+        (
+            setClass('flex justify-center'),
+            btn
+            (
+                setClass('px-8'),
+                setID('tohome'),
+                set::target('_self'),
+                set::url('index.php'),
+                set::type('primary'),
+                $lang->upgrade->tohome
+            )
         )
+    ),
+    row
+    (
+        setClass('flex-wrap pt-6 text-gray gap-y-1'),
+        $tips
     )
 );
 

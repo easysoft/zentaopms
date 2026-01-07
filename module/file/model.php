@@ -963,6 +963,36 @@ class fileModel extends model
     }
 
     /**
+     * Get upload by uid.
+     *
+     * @param  array|string|bool $uid
+     * @param  string            $filesName
+     * @param  string            $labelsName
+     * @access public
+     * @return array
+     */
+    public function getUploadByUID(array|string|bool $uid, string $filesName = 'files', string $labelsName = 'labels'): array
+    {
+        if(empty($uid)) return array();
+
+        if(is_string($uid)) $uid = array($uid);
+        if(!is_array($uid)) return array();
+
+        $files = array();
+        foreach($uid as $value)
+        {
+            if(empty($_SESSION['album']['used'][$value])) continue;
+
+            $uidFiles = $this->dao->select('id, title')->from(TABLE_FILE)->where('id')->in($_SESSION['album']['used'][$value])->fetchPairs();
+            foreach($uidFiles as $fileID => $fileName)
+            {
+                $files[$fileID] = $fileName;
+            }
+        }
+        return $files;
+    }
+
+    /**
      * Revert real src.
      *
      * @param  object    $data
@@ -1216,8 +1246,6 @@ class fileModel extends model
      */
     public function printFile(object $file, string $method, bool $showDelete, bool $showEdit, object|null $object): string
     {
-        if(!common::hasPriv('file', 'download') && !common::hasPriv('file', 'preview')) return '';
-
         $html = '';
 
         $sessionString = session_name() . '=' . session_id();
@@ -1294,10 +1322,10 @@ class fileModel extends model
         if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false) $canPreview = true;
         if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1 && $isOfficeFile) $canPreview = true;
 
-        if($canPreview)
+        if($canPreview && common::hasPriv('file', 'preview'))
         {
             $dataToggle = $isOfficeFile ? '' : " data-toggle='modal' data-size='lg'";
-            $html      .= html::a(helper::createLink('file', 'download', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
+            $html      .= html::a(helper::createLink('file', 'preview', "fileID=$file->id&mouse=left"), "<i class='icon icon-eye'></i>", $isOfficeFile ? '_blank' : '', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->preview}' {$dataToggle}");
         }
         if(common::hasPriv('file', 'download')) $html .= html::a($downloadLink, "<i class='icon icon-download'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$this->lang->file->downloadFile}'");
         if(common::hasPriv($objectType, 'edit', $object))
@@ -1470,6 +1498,13 @@ class fileModel extends model
         }
 
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
+
+        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        {
+            $uidFiles = $this->getUploadByUID($this->post->uid, $filesName, $labelsName);
+
+            $addedFiles = $addedFiles + $uidFiles;
+        }
 
         if(!isset($oldObject->{$filesName})) $oldObject->{$filesName} = array();
         $files = array_diff(array_keys($oldObject->{$filesName}), array_keys($deleteFiles));

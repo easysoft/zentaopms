@@ -95,7 +95,7 @@ class bugEntry extends entry
         $oldBug = $this->loadModel('bug')->getByID($bugID);
 
         /* Set $_POST variables. */
-        $fields = 'uid,title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,resolvedBuild,resolvedDate,closedBy,resolution,product,plan,task,module,steps,mailto,keywords,deadline';
+        $fields = 'uid,title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,resolvedBuild,resolvedDate,closedBy,resolution,product,plan,task,module,steps,mailto,keywords,deadline,os,browser,feedbackBy';
         $this->batchSetPost($fields, $oldBug);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 

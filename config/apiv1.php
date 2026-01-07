@@ -31,6 +31,8 @@ $routes['/options/:type'] = 'options';
 $routes['/configurations']       = 'configs';
 $routes['/configurations/:name'] = 'config';
 
+$routes['/requiredFields'] = 'requiredfields';
+
 $routes['/programs/:id/products'] = 'products';
 $routes['/products']              = 'products';
 $routes['/products/:id']          = 'product';
@@ -52,18 +54,21 @@ $routes['/products/:id/releases'] = 'releases';
 $routes['/projects/:id/releases'] = 'projectReleases';
 $routes['/releases/:id']          = 'release';
 
-$routes['/stories']                = 'stories';
-$routes['/products/:id/stories']   = 'stories';
-$routes['/projects/:id/stories']   = 'projectStories';
-$routes['/executions/:id/stories'] = 'executionStories';
-$routes['/stories/:id']            = 'story';
-$routes['/stories/:id/change']     = 'storyChange';
-$routes['/stories/:id/close']      = 'storyClose';
-$routes['/stories/:id/active']     = 'storyActive';
-$routes['/stories/:id/assign']     = 'storyAssignto';
-$routes['/stories/:id/estimate']   = 'storyRecordEstimate';
-$routes['/stories/:id/recall']     = 'storyRecall';
-$routes['/stories/:id/review']     = 'storyReview';
+$routes['/stories']                     = 'stories';
+$routes['/products/:id/stories']        = 'stories';
+$routes['/projects/:id/stories']        = 'projectStories';
+$routes['/executions/:id/stories']      = 'executionStories';
+$routes['/stories/:id']                 = 'story';
+$routes['/stories/:id/change']          = 'storyChange';
+$routes['/stories/:id/close']           = 'storyClose';
+$routes['/stories/:id/active']          = 'storyActive';
+$routes['/stories/:id/assign']          = 'storyAssignto';
+$routes['/stories/:id/estimate']        = 'storyRecordEstimate';
+$routes['/stories/:id/recall']          = 'storyRecall';
+$routes['/stories/:id/review']          = 'storyReview';
+$routes['/stories/:id/submitreview']    = 'storySubmitReview';
+$routes['/storyreviewerrequired/:type'] = 'storyreviewerrequired';
+$routes['/storygrades']                 = 'storygrade';
 
 $routes['/products/:id/bugs']   = 'bugs';
 $routes['/projects/:id/bugs']   = 'projectBugs';

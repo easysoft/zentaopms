@@ -11,17 +11,17 @@ cid=14953
 - 步骤1：正常情况
  - 第0条的0属性 @1
  - 属性1 @11
-- 步骤2：不存在ID
+- 步骤2：正常情况
+ - 第0条的0属性 @2
+ - 属性1 @18
+- 步骤3：不存在ID
  - 第0条的0属性 @0
  - 属性1 @0
-- 步骤3：边界值0
+- 步骤4：边界值0
  - 第0条的0属性 @0
  - 属性1 @0
-- 步骤4：负数ID
+- 步骤5：负数ID
  - 第0条的0属性 @0
- - 属性1 @0
-- 步骤5：发布版本存在但构建不存在
- - 第0条的0属性 @8
  - 属性1 @0
 
 */
@@ -36,8 +36,8 @@ su('admin');
 
 $actionTest = new actionTest();
 
-r($actionTest->getReleaseRelated('release', 1)) && p('0:0;1') && e('1,11');  // 步骤1：正常情况
-r($actionTest->getReleaseRelated('release', 999)) && p('0:0;1') && e('0,0'); // 步骤2：不存在ID
-r($actionTest->getReleaseRelated('release', 0)) && p('0:0;1') && e('0,0');   // 步骤3：边界值0
-r($actionTest->getReleaseRelated('release', -1)) && p('0:0;1') && e('0,0');  // 步骤4：负数ID
-r($actionTest->getReleaseRelated('release', 8)) && p('0:0;1') && e('8,0');   // 步骤5：发布版本存在但构建不存在
+r($actionTest->getReleaseRelated('release', 1))   && p('0:0;1') && e('1,11');  // 步骤1：正常情况
+r($actionTest->getReleaseRelated('release', 8))   && p('0:0;1') && e('2,18');  // 步骤2：正常情况
+r($actionTest->getReleaseRelated('release', 999)) && p('0:0;1') && e('0,0');   // 步骤3：不存在ID
+r($actionTest->getReleaseRelated('release', 0))   && p('0:0;1') && e('0,0');   // 步骤4：边界值0
+r($actionTest->getReleaseRelated('release', -1))  && p('0:0;1') && e('0,0');   // 步骤5：负数ID

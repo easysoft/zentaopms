@@ -945,7 +945,14 @@ class taskZen extends task
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->get();
 
-        $task->realStarted = date('Y-m-d H:i', strtotime($task->realStarted));
+        if(!$this->post->realStarted)
+        {
+            dao::$errors['realStarted'][] = sprintf($this->lang->error->notempty, $this->lang->task->realStarted);
+        }
+        else
+        {
+            $task->realStarted = date('Y-m-d H:i', strtotime($task->realStarted));
+        }
 
         if(strpos(",{$this->config->task->finish->requiredFields},", ',comment,') !== false && empty($_POST['comment'])) dao::$errors['comment'] = sprintf($this->lang->error->notempty, $this->lang->comment);
         if(!$this->post->currentConsumed && $oldTask->consumed == '0') dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;

@@ -559,6 +559,12 @@ class storyModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
         $files = $this->file->saveUpload($story->type, $storyID, 1);
 
+        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        {
+            $uidFiles = $this->file->getUploadByUID($this->post->uid);
+            $files = $files ? ($files + $uidFiles) : $uidFiles;
+        }
+
         /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files ?: '');
 
@@ -582,7 +588,7 @@ class storyModel extends model
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
-            foreach(explode(',', $story->plan) as $planID)
+            foreach(explode(',', (string)$story->plan) as $planID)
             {
                 if(!$planID) continue;
                 $this->action->create('productplan', (int)$planID, 'linkstory', '', $storyID);
@@ -3894,7 +3900,7 @@ class storyModel extends model
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->isParent == '0' && $story->type == 'story';
 
         /* Check isClickable when feedback convert to story. */
-        if($action == 'create' && $app->rawModule == 'feedback') return ($config->global->flow == 'full' && strpos('closed|clarify|noreview', $story->status) === false);
+        if($action == 'create' && isset($story->solution)) return ($config->global->flow == 'full' && strpos('closed|clarify|noreview', $story->status) === false);
 
         if($action == 'createtask')
         {

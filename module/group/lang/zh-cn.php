@@ -663,5 +663,6 @@ $lang->group->package->productSetting        = '产品配置';
 $lang->group->package->executionSetting      = '执行配置';
 $lang->group->package->branchRule            = '分支规则';
 $lang->group->package->branchType            = '分支类型';
+$lang->group->package->featureSwitch         = '功能开关';
 
 include (dirname(__FILE__) . '/resource.php');

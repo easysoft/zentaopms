@@ -81,6 +81,9 @@ class storyEntry extends entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
+        $actionBtnList        = $this->loadModel('common')->buildOperateMenu($story, $story->type);
+        $story->actionBtnList = array_column(zget($actionBtnList, 'mainActions', array()), 'icon');
+
         return $this->send(200, $this->format($story, 'title:decodeHtml,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
@@ -99,6 +102,35 @@ class storyEntry extends entry
         /* Set $_POST variables. */
         $fields = 'title,product,parent,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid,stage,notifyEmail,status,needNotReview';
         $this->batchSetPost($fields, $oldStory);
+
+        /* 设置状态逻辑，与web端保持一致（参考 common.ui.js 中的 clickSubmit 函数） */
+        $reviewer    = $this->request('reviewer');
+        $status      = $this->request('status', $oldStory->status);
+        $forceReview = $this->loadModel('story')->checkForceReview($oldStory->type);
+        if($forceReview)
+        {
+            $needNotReview = 0;
+        }
+        else
+        {
+            $needNotReview = empty($reviewer) ? 1 : 0;
+        }
+
+        $this->setPost('reviewer', $reviewer);
+        $this->setPost('needNotReview', $needNotReview);
+
+        /* 如果设置了评审人且满足以下条件之一，则将状态设置为 'reviewing'：
+         * 1. 状态是 'active' 且未勾选不需要评审
+         * 2. 原状态是 'draft' 或 'changing' 且未在请求中指定状态
+         */
+        $hasReviewer                  = !empty($reviewer);
+        $isActiveNeedReview           = $status == 'active' && !$needNotReview;
+        $isDraftChangingWithoutStatus = strpos('draft,changing', $oldStory->status) !== false && !isset($this->requestBody->status);
+
+        if($hasReviewer && ($isActiveNeedReview || $isDraftChangingWithoutStatus))
+        {
+            $this->setPost('status', 'reviewing');
+        }
 
         $control->edit($storyID);
 

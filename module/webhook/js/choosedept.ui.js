@@ -23,13 +23,15 @@ window.appendItems = function(treeItems, treeItem, pid)
         hasChild = typeof(treeItems[i].items) != 'undefined';
         if(treeItems[i].key == pid)
         {
-            if(!hasChild) treeItems[i].items = [];
+            parentItem = treeItems[i];
+            if(!hasChild) parentItem.items = [];
             hasCurrentItem = false;
-            for(j in treeItems[i].items)
+            for(j in parentItem.items)
             {
-                if(treeItems[i].items[j].key == treeItem.key) hasCurrentItem = true;
+                if(parentItem.items[j].key == treeItem.key) hasCurrentItem = true;
             }
-            if(!hasCurrentItem) treeItems[i].items.push(treeItem);
+            if(parentItem.checked != undefined) treeItem.checked = parentItem.checked;
+            if(!hasCurrentItem) parentItem.items.push(treeItem);
         }
         else if(hasChild)
         {
@@ -39,7 +41,7 @@ window.appendItems = function(treeItems, treeItem, pid)
     return treeItems;
 };
 
-window.submitSelectedDepts = function()
+window.getSelectedDepts = function()
 {
     var selectedDepts = [];
     $('#deptList').find('.item-checkbox.checked').each(function()
@@ -47,13 +49,59 @@ window.submitSelectedDepts = function()
         id = $(this).closest('.tree-item').attr('z-key');
         selectedDepts.push(id);
     });
+    return selectedDepts;
+};
+
+window.submitSelectedDepts = function()
+{
+    const selectedDepts = getSelectedDepts();
     if(selectedDepts.length == 0) return zui.Modal.alert(noDeptError);
 
-    var link = $.createLink('webhook', 'bind', "id=" + webhookID);
+    let link = $.createLink('webhook', 'bind', "id=" + webhookID);
     link    += link.indexOf('?') >= 0 ? '&' : '?';
     link    += "selectedDepts=" + selectedDepts.join(',');
     $('.actions .save').attr('disabled', 'disabled');
     loadPage(link);
+};
+
+window.setItemChecked = function(clickDept)
+{
+    const $startItem   = $('#deptList li[z-key="' + clickDept + '"]');
+    const $checkbox    = $($startItem.children('[key="item"]'));
+    const itemChecked  = $checkbox.hasClass('checked') && $checkbox.find('.item-checkbox').hasClass('checked');
+    const noAllChecked = $checkbox.hasClass('checked') && !$checkbox.find('.item-checkbox').hasClass('checked');
+
+    $startItem.find('[key="item"]').toggleClass('checked', !itemChecked && !noAllChecked);
+    $startItem.find('.item-checkbox').toggleClass('checked', !itemChecked && !noAllChecked);
+    $startItem.find('.item-checkbox').find('input[type=checkbox]').prop('checked', !itemChecked && !noAllChecked);
+};
+
+const childrenLoaded = [];
+window.loadChildrenTree = function(e)
+{
+    if(webhookType != 'feishuuser') return;
+
+    const $deptList = $('#deptList');
+    const $this     = $(e.target);
+    const $li       = $this.closest('li');
+    const deptID    = $li.attr('z-key');
+
+    let $checkbox = null;
+    if($this.hasClass('item-checkbox')) $checkbox = $this;
+    if($this.parent().hasClass('item-checkbox')) $checkbox = $this.parent();
+    if($checkbox) return setItemChecked(deptID);
+
+    if(childrenLoaded.includes(deptID) || deptID == 1) return;
+    childrenLoaded.push(deptID);
+
+    $deptList.addClass('loading');
+    $.post(feishuUrl, {departmentID: deptID}, function(deptTree)
+    {
+        const tree = $deptList.zui('tree');
+        deptTree   = JSON.parse(deptTree);
+        if(deptTree.length) tree.render(buildTreeItems(deptTree, tree.options.items));
+        $deptList.removeClass('loading');
+    });
 };
 
 window.loadDeptTree = function()
@@ -63,7 +111,7 @@ window.loadDeptTree = function()
         $.getJSON(feishuUrl, function(deptTree)
         {
             $('#loadPrompt').remove();
-            tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, items: buildTreeItems(deptTree)});
+            tree = new zui.Tree('#deptList', {checkbox: true, checkOnClick: true, defaultNestedShow: true, onClickItem: loadChildrenTree, items: buildTreeItems(deptTree)});
         });
     }
     else

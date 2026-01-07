@@ -11,10 +11,6 @@
  */
 class upgrade extends control
 {
-    public function ajaxUpgradeDocSpace()
-    {
-        $this->upgrade->upgradeMyDocSpace();
-    }
     /**
      * The index page.
      *
@@ -32,21 +28,17 @@ class upgrade extends control
         $this->locate(inlink('backup'));
     }
 
-    public function importBIData()
-    {
-        $this->loadModel('install')->importBIData();
-    }
-
     /**
      * 授权协议页面。
      * Check agree license.
      *
+     * @param  int    $agree
      * @access public
      * @return void
      */
-    public function license()
+    public function license(int $agree = 0)
     {
-        if($this->get->agree == true) $this->locate(inlink('backup'));
+        if($agree == 1) $this->locate(inlink('backup'));
 
         $this->view->title   = $this->lang->upgrade->common;
         $this->view->license = $this->loadModel('install')->getLicense();
@@ -95,7 +87,17 @@ class upgrade extends control
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
-        if($_POST) $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
+        if($_POST)
+        {
+            /* 把选择的版本写入数据库便于后续通过 $config->installedVersion 调用。*/
+            $this->loadModel('setting')->updateVersion(str_replace('_', '.', $this->post->fromVersion));
+
+            /* 假如升级过程中断，重新升级时需要知道升级前是哪个版本，因此需要把第一次升级前的版本存入配置，便于后续使用。*/
+            if(empty($this->config->upgrade->fromVersion)) $this->setting->setItem('system.upgrade.fromVersion', $this->post->fromVersion);
+
+            $fromVersion = $this->config->upgrade->fromVersion ?? $this->post->fromVersion;
+            $this->locate(inlink('confirm', "fromVersion={$fromVersion}"));
+        }
 
         $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;
         $this->view->version = $version;
@@ -143,43 +145,115 @@ class upgrade extends control
      */
     public function execute(string $fromVersion = '')
     {
-        session_write_close();
-        $this->session->set('step', '');
+        if(version_compare($this->config->version, $this->config->installedVersion, '='))
+        {
+            $url = $this->upgradeZen->getRedirectUrlAfterExecute($fromVersion);
+            return $this->locate($url);
+        }
 
-        $this->view->title       = $this->lang->upgrade->result;
+        $this->view->title       = $this->lang->upgrade->execute;
         $this->view->fromVersion = $fromVersion;
 
-        /* 手动删除无法自动删除的文件。*/
-        /* Remove files that can not be deleted automatically. */
-        $script = $this->app->getTmpRoot() . 'deleteFiles.sh';
-        $result = $this->upgrade->deleteFiles($script);
-        if($result)
+        /* 显示升级失败的信息。*/
+        if(!empty($_POST['errors']))
         {
-            $this->view->result = 'fail';
-            $this->view->errors = $result;
+            $this->view->errors = $_POST['errors'];
 
-            return $this->display();
-        }
-        elseif(is_file($script))
-        {
-            unlink($script);
+            return $this->display('upgrade', 'sqlfail');
         }
 
-        $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
-        if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $command = $this->upgrade->deleteFiles($script);
+        if($command) return $this->displayCommand($command);
 
-        $installedVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+        $upgradeVersions = $this->upgradeZen->getUpgradeVersions(str_replace('.', '_', $this->config->installedVersion));
+        $versionsKey     = array_keys($upgradeVersions);
+        $toVersion       = reset($versionsKey);
+        $upgradeChanges  = $this->upgradeZen->getUpgradeChanges($fromVersion, $toVersion);
 
-        if($this->config->version != $installedVersion) $this->upgrade->execute($rawFromVersion);
-
-        if($this->upgrade->isError())
+        /* 把需要执行的变更记录到数据库，便于后续调用。*/
+        $sessionChanges = [];
+        foreach($upgradeChanges as $change)
         {
-            $this->view->result = 'sqlFail';
-            $this->view->errors = $this->upgrade->getError();
-            return $this->display();
+            if($change['type'] == 'sql')    $sessionChanges[] = ['executed' => false, 'type' => 'sql',    'sqlFile' => $change['sqlFile'], 'sqlMd5' => md5($change['sql'])];
+            if($change['type'] == 'method') $sessionChanges[] = ['executed' => false, 'type' => 'method', 'method'  => $change['method']];
+        }
+        $this->loadModel('setting')->setItem('system.upgrade.upgradeChanges', json_encode($sessionChanges));
+
+        $this->view->toVersion       = $toVersion;
+        $this->view->upgradeVersions = $upgradeVersions;
+        $this->view->upgradeChanges  = $upgradeChanges;
+        $this->display();
+    }
+
+    /**
+     * 通过 ajax 请求执行升级程序。
+     * Ajax execute upgrade.
+     *
+     * @param  string $fromVersion
+     * @param  string $toVersion
+     * @access public
+     * @return void
+     */
+    public function ajaxExecute(string $fromVersion, string $toVersion)
+    {
+        session_write_close();
+
+        if(version_compare($this->config->version, $this->config->installedVersion, '=')) return $this->sendSuccess();
+
+        $this->upgrade->execute($fromVersion, $toVersion);
+        if($this->upgrade->isError()) return $this->sendError(implode("\n", $this->upgrade->getError()));
+
+        if(version_compare($this->config->version, $toVersion, '='))
+        {
+            $load = $this->upgradeZen->getRedirectUrlAfterExecute($fromVersion);
+            return $this->sendSuccess(['load' => $load]);
         }
 
-        $this->upgradeZen->afterExecuteSql($fromVersion, $rawFromVersion);
+        return $this->sendSuccess();
+    }
+
+    /**
+     * 获取已执行的变更。
+     * Ajax get executed changes.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutedChanges()
+    {
+        /* 如果没有需要执行的变更，直接返回全部执行完成。*/
+        $upgradeChanges = empty($this->config->upgrade->upgradeChanges)  ? [] : json_decode($this->config->upgrade->upgradeChanges, true);
+        if(empty($upgradeChanges)) return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => [], 'allChangesExecuted' => true]));
+
+        /* 如果没有已执行的变更，直接返回未全部执行完成。*/
+        $executedChanges = empty($this->config->upgrade->executedChanges) ? [] : json_decode($this->config->upgrade->executedChanges, true);
+        if(empty($executedChanges)) return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => [], 'allChangesExecuted' => false]));
+
+        foreach($upgradeChanges as $key => $change)
+        {
+            if($change['type'] == 'sql'    && isset($executedChanges['sqls'][$change['sqlFile']][$change['sqlMd5']])) $upgradeChanges[$key]['executed'] = true;
+            if($change['type'] == 'method' && isset($executedChanges['methods'][$change['method']]))                  $upgradeChanges[$key]['executed'] = true;
+        }
+
+        $executedKeys = array_keys(array_filter($upgradeChanges, function($change)
+        {
+            return isset($change['executed']) && $change['executed'];
+        }));
+
+        $allChangesExecuted = count($executedKeys) == count($upgradeChanges);
+
+        /**
+         * 升级到最终版本之前，每升级完一个版本就清除掉需要执行的和已执行的变更。
+         * 升级到最终版本之后，则在执行完所有后续的数据处理流程后再清除需要执行的和已执行的变更。
+         */
+        if($allChangesExecuted && version_compare($this->config->version, $this->config->installedVersion, '<'))
+        {
+            $this->loadModel('setting')->deleteItems('owner=system&module=upgrade&key=upgradeChanges');
+            $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
+        }
+
+        return print(json_encode(['executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
     }
 
     /**
@@ -480,7 +554,7 @@ class upgrade extends control
         $finished = ($log && end($log) == 'Finished') ? true : false;
         if($finished) $progress = 100;
 
-        return print(json_encode(array('log' => implode("<br />", $log) . (empty($log) ? '' : '<br />'), 'finished' => $finished, 'progress' => $progress, 'offset' => count($lines))));
+        return print(json_encode(array('log' => '<p>' . implode('</p><p>', $log) . '</p>', 'finished' => $finished, 'progress' => $progress, 'offset' => count($lines))));
     }
 
     /**
@@ -561,8 +635,10 @@ class upgrade extends control
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
-        $response = $this->upgrade->removeEncryptedDir();
-        if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
+        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $command = $this->upgrade->removeEncryptedDir($script);
+        if($command) return $this->displayCommand($command);
+        if(is_file($script)) unlink($script);
 
         /* 如果有需要升级的文档，显示升级文档界面。*/
         /* If there are documents that need to be upgraded, display upgrade docs ui. */
@@ -609,6 +685,15 @@ class upgrade extends control
 
         unset($_SESSION['user']);
 
+        /**
+         * 升级到最终版本并执行完所有后续的数据处理流程后，更新版本号、清除升级前的版本记录、需要执行的和已执行的变更。
+         * After upgrading to the final version and completing all subsequent data processing, update the version number, clear the pre-upgrade version records, the changes to be executed and the executed changes.
+         */
+        $this->loadModel('setting')->updateVersion($this->config->version);
+        $this->setting->deleteItems('owner=system&module=upgrade&key=fromVersion');
+        $this->setting->deleteItems('owner=system&module=upgrade&key=upgradeChanges');
+        $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
+
         /* 检查是否还有需要处理的。*/
         /* Check if there is anything else that needs to be processed. */
         $needProcess = $this->upgrade->checkProcess();
@@ -621,11 +706,11 @@ class upgrade extends control
      * 数据库一致性检查。
      * Check database consistency.
      *
-     * @param  bool   $netConnect
+     * @param  int    $netConnect
      * @access public
      * @return void
      */
-    public function consistency(bool $netConnect = true)
+    public function consistency(int $netConnect = 1)
     {
         $logFile  = $this->upgrade->getConsistencyLogFile();
         $hasError = $this->upgrade->hasConsistencyError();
@@ -636,8 +721,8 @@ class upgrade extends control
         {
             /* 能访问禅道官网插件接口跳转到检查插件页面，否则跳转到选择版本页面。*/
             /* If you can access the ZenTao official website extension interface, locate to the check extension page, otherwise locate to the version selection page. */
-            if(!$netConnect) $this->locate(inlink('selectVersion'));
-            $this->locate(inlink('checkExtension'));
+            if($netConnect) $this->locate(inlink('checkExtension'));
+            $this->locate(inlink('selectVersion'));
         }
 
         $this->view->title    = $this->lang->upgrade->consistency;
@@ -829,36 +914,6 @@ class upgrade extends control
     {
         $this->upgrade->upgradeScreenAndMetricData();
         echo 'ok';
-    }
-
-    /**
-     * 安装DuckDB引擎。
-     * AJAX: Install duckdb.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxInstallDuckdb()
-    {
-        $this->loadModel('bi');
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
-        $this->bi->downloadDuckdb();
-        echo 'success';
-    }
-
-    /**
-     * 检查duckdb文件是否下载完成。
-     * AJAX: Check duckdb.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxCheckDuckdb()
-    {
-        $check = $this->loadModel('bi')->checkDuckdbInstall();
-        echo json_encode($check);
     }
 
     /**

@@ -56,11 +56,9 @@ fields:
   format: ""
 - field: openedDate
   note: 创建时间
-  range: '2024-01-01 00:00:00{10},2024-02-01 00:00:00{10},2024-03-01 00:00:00{10}'
-  prefix: ""
-  postfix: ""
-  loop: 0
-  format: ""
+  range: '20240101 000000:0'
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
 - field: deleted
   note: 删除状态
   range: '0{28},1{2}'

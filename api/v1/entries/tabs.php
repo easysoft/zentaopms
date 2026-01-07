@@ -43,7 +43,7 @@ class tabsEntry extends baseEntry
         elseif($moduleName == 'product')
         {
             $this->app->loadLang('product');
-            $tabs = array('story', 'plan', 'project', 'release', 'requirement', 'doc', 'view');
+            $tabs = array('story', 'plan', 'project', 'release', 'epic', 'requirement', 'doc', 'view');
 
             foreach($tabs as $menuKey)
             {
@@ -67,6 +67,7 @@ class tabsEntry extends baseEntry
                 if($menuKey == 'project')     $label = $this->lang->project->common;
                 if($menuKey == 'story')       $label = $this->lang->createObjects['story'];
                 if($menuKey == 'requirement') $label = $this->lang->URCommon;
+                if($menuKey == 'epic')        $label = $this->lang->ERCommon;
 
                 $menu = new stdclass();
                 $menu->code = $menuKey;

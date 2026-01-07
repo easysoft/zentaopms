@@ -21,14 +21,21 @@ class configsEntry extends baseEntry
     {
         $configs = array();
 
-        $configs[] = array('key' => 'language',    'value' => $this->config->default->lang);
-        $configs[] = array('key' => 'version',     'value' => $this->config->version);
-        $configs[] = array('key' => 'charset',     'value' => $this->config->charset);
-        $configs[] = array('key' => 'timezone',    'value' => $this->config->timezone);
-        $configs[] = array('key' => 'systemMode',  'value' => $this->config->systemMode);
-        $configs[] = array('key' => 'hourUnit',    'value' => $this->config->hourUnit);
-        $configs[] = array('key' => 'CRProduct',   'value' => $this->config->CRProduct);
-        $configs[] = array('key' => 'CRExecution', 'value' => $this->config->CRExecution);
+        $this->app->loadConfig('story');
+
+        /* System basic configs. */
+        $configs[] = array('key' => 'language',        'value' => $this->config->default->lang);
+        $configs[] = array('key' => 'version',         'value' => $this->config->version);
+        $configs[] = array('key' => 'charset',         'value' => $this->config->charset);
+        $configs[] = array('key' => 'timezone',        'value' => $this->config->timezone);
+        $configs[] = array('key' => 'systemMode',      'value' => $this->config->systemMode);
+        $configs[] = array('key' => 'hourUnit',        'value' => $this->config->hourUnit);
+        $configs[] = array('key' => 'CRProduct',       'value' => $this->config->CRProduct);
+        $configs[] = array('key' => 'CRExecution',     'value' => $this->config->CRExecution);
+        $configs[] = array('key' => 'CRTask',          'value' => $this->config->CRTask);
+        $configs[] = array('key' => 'edition',         'value' => $this->config->edition);
+        $configs[] = array('key' => 'vision',          'value' => $this->config->vision);
+        $configs[] = array('key' => 'storyNeedReview', 'value' => !!$this->config->story->needReview);
 
         return $this->send(200, $configs);
     }

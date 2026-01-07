@@ -22,7 +22,7 @@ class taskActiveEntry extends entry
     {
         $control = $this->loadController('task', 'activate');
 
-        $fields = 'assignedTo,left,comment';
+        $fields = 'assignedTo,team,teamSource,teamEstimate,teamConsumed,teamLeft,left,mode,multiple,comment';
         $this->batchSetPost($fields);
 
         $control->activate($taskID);

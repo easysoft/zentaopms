@@ -11,6 +11,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$executionNames = array();
+foreach($projectExecutions as $projectID => $executions)
+{
+    $executionNames = array_merge($executionNames, array_column($executions, 'name'));
+}
+
+$executionPinyinNames = common::convert2Pinyin($executionNames);
+
 if(!empty($execution->isTpl))
 {
     /* 处理分组数据。Process grouped data. */
@@ -27,7 +35,7 @@ if(!empty($execution->isTpl))
             $item = array();
             $item['id']   = $execution->id;
             $item['text'] = $execution->name;
-            $item['keys'] = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
+            $item['keys'] = zget($executionPinyinNames, $execution->name, '');
             $item['url']  = sprintf($link, $execution->id);
 
             if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
@@ -94,7 +102,7 @@ else
             $item = array();
             $item['id']   = $execution->id;
             $item['text'] = $execution->name;
-            $item['keys'] = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
+            $item['keys'] = zget($executionPinyinNames, $execution->name, '');
             $item['url']  = sprintf($link, $execution->id);
 
             if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");

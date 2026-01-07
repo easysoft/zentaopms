@@ -24,7 +24,7 @@ class editor extends wg
         'locale?: string',                      // 语言，可选值 'zh', 'en'，默认跟随浏览器，也可以是自定义的语言项 JSON，详见 ZenEditor 文档
         'markdown?: bool=false',                // 是否启用 Markdown 模式，若启用，为了兼容性将会隐藏一些功能
         'neglectDefaultTextStyle?: bool=false', // 是否不赋予默认的文本样式
-        'preferHardBreak?: bool=false',         // 是否优先使用硬回车而不是新段落
+        'preferHardBreak?: bool=true',          // 是否优先使用硬回车而不是新段落
         'value?: string',                       // 初始内容
         'templateType?: string',                // 模板类型
         'uid?: string'                          // 图片上传 uid

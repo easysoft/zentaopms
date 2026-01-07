@@ -20,8 +20,9 @@ class executionsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        $appendFields = $this->param('fields', '');
-        $withProject  = $this->param('withProject', '');
+        $appendFields  = $this->param('fields', '');
+        $withProject   = $this->param('withProject', '');
+        $mergeChildren = $this->param('mergeChildren', 0);
         if(strpos(strtolower(",{$appendFields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if($projectID)
@@ -53,10 +54,42 @@ class executionsEntry extends entry
         }
 
         $result = array();
+        $executionsMap = array();
         foreach($data->data->executionStats as $execution)
         {
-            $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,children,' . $appendFields);
-            $result[]  = $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
+            $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,children,isParent,' . $appendFields);
+            $execution = $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
+
+            if($mergeChildren)
+            {
+                $executionsMap[$execution->id] = $execution;
+            }
+            else
+            {
+                $result[] = $execution;
+            }
+        }
+
+        if($mergeChildren)
+        {
+            foreach($executionsMap as $execution)
+            {
+                if(empty($execution->parent))
+                {
+                    $result[$execution->id] = $execution;
+                }
+                elseif((!empty($execution->parent) and $execution->parent != 0 and $execution->parent != '0') and isset($executionsMap[$execution->parent]))
+                {
+                    $parentExecution = $executionsMap[$execution->parent];
+                    if(!isset($parentExecution->children)) $parentExecution->children = array();
+                    $parentExecution->children[] = $execution;
+                }
+                else
+                {
+                    $result[$execution->id] = $execution;
+                }
+            }
+            $result = array_values($result);
         }
 
         $data = array();

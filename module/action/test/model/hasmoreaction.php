@@ -40,7 +40,7 @@ r($actionModel->hasMoreAction($lastAction)) && p() && e('0');  // 测试传入�
 $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") === false) && p() && e('1');  // 检查SQL。
 
-$_SESSION['actionQueryCondition'] = "actor='admin' AND t2.product='1';";
+$_SESSION['actionQueryCondition'] = "actor='admin' AND t2.product='1'";
 r($actionModel->hasMoreAction($lastAction)) && p() && e('0');  // 测试传入条件 actor='admin' AND t2.product='1'。
 
 $sql = $actionModel->dao->get();

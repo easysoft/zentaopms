@@ -329,3 +329,6 @@ WHERE t1.deleted = \'0\'
 AND t1.status = \'doing\'
 AND t1.type = \'project\'
 AND FIND_IN_SET(\'rnd\', t1.vision)' WHERE `id`=10116;
+
+DELETE FROM `zt_action` WHERE `objectType` = 'zoutput';
+DELETE FROM `zt_actionrecent` WHERE `objectType` = 'zoutput';

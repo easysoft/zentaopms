@@ -488,6 +488,13 @@ class commonModel extends model
             if(commonModel::hasPriv($module, $method)) return true;
         }
 
+        if($this->app->apiVersion)
+        {
+            header('HTTP/1.1 403 Forbidden', true, 403);
+            header('Content-Type: application/json');
+            helper::end(json_encode(['status' => 'error', 'message' => 'Not allowed']));
+        }
+
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
         {
@@ -2540,6 +2547,7 @@ eof;
                 $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
+                $actionData['name'] = $action;
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
                 if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
                 {
@@ -2617,7 +2625,7 @@ eof;
 
         if(!empty($actionData['notLoadModel']) && $moduleName != $rawModule) $moduleName = $rawModule;
         if(!isset($this->$moduleName)) $this->loadModel($moduleName);
-        if(isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
+        if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 
         if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';

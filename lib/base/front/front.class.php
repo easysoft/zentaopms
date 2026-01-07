@@ -1041,7 +1041,14 @@ EOT;
 
         if($app->apiVersion == 'v2')
         {
-            helper::send(array("status" => "fail", "message" => "Not allowed"), 401);
+            if(strpos($url, 'login') === false)
+            {
+                helper::send(array("status" => "success"));
+            }
+            else
+            {
+                helper::send(array("status" => "fail", "message" => "Not allowed"), 401);
+            }
         }
         elseif($app->viewType == 'json')
         {

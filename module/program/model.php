@@ -1319,13 +1319,12 @@ class programModel extends model
      *
      * @param  bool $refreshAll
      * @access public
-     * @return void
+     * @return bool
      */
-    public function refreshStats($refreshAll = false): void
+    public function refreshStats($refreshAll = false): bool
     {
         $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
-        $now        = helper::now();
-        if($updateTime && time() - strtotime($updateTime) < $this->config->program->refreshInterval && !$refreshAll) return;
+        if($updateTime && time() - strtotime($updateTime) < $this->config->program->refreshInterval && !$refreshAll) return true;
 
         /*
          * If projectStatsTime is before two weeks ago, refresh all executions directly.
@@ -1344,7 +1343,9 @@ class programModel extends model
                 ->andWhere('t1.project')->ne(0)
                 ->fetchAll('project');
         }
-        if(empty($projects)) return;
+        if(empty($projects)) return true;
+
+        $now = helper::now();
 
         /* 1. Refresh stats to db. */
         $this->programTao->updateStats(array_keys($projects));
@@ -1358,8 +1359,9 @@ class programModel extends model
 
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
-    }
 
+        return !dao::isError();
+    }
 
     /**
      * 刷新项目的统计数据。

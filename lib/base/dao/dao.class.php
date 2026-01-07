@@ -492,11 +492,11 @@ class baseDAO
      * Begin Transaction
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function begin()
+    public function begin(): bool
     {
-        if(!$this->dbh->inTransaction()) $this->dbh->beginTransaction();
+        return $this->dbh->beginTransaction();
     }
 
     /**
@@ -506,7 +506,7 @@ class baseDAO
      * @access public
      * @return bool
      */
-    public function inTransaction()
+    public function inTransaction(): bool
     {
         return $this->dbh->inTransaction();
     }
@@ -516,11 +516,11 @@ class baseDAO
      * Roll back
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function rollBack()
+    public function rollBack(): bool
     {
-        if($this->dbh->inTransaction()) $this->dbh->rollBack();
+        return $this->dbh->rollBack();
     }
 
     /**
@@ -528,11 +528,11 @@ class baseDAO
      * Commits a transaction.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function commit()
+    public function commit(): bool
     {
-        if($this->dbh->inTransaction()) $this->dbh->commit();
+        return $this->dbh->commit();
     }
 
     /**

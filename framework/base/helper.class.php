@@ -107,17 +107,17 @@ class baseHelper
         }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
-        if($app->apiVersion == 'v2')
-        {
-            $link = $config->webRoot . '/api.php/v2/';
-        }
-        elseif($config->requestType == 'PATH_INFO2')
+        if($config->requestType == 'PATH_INFO2')
         {
             $link = '/';
         }
         elseif($config->requestType == 'PATH_INFO')
         {
             $link = $config->webRoot . $appName;
+        }
+        elseif($app->apiVersion)
+        {
+            $link = $config->webRoot . 'index.php';
         }
         else
         {

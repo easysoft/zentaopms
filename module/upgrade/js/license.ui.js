@@ -9,12 +9,10 @@ function agreeChange(event)
 {
     if($(event.target).prop('checked'))
     {
-        $('.btn-install').attr('href', confirmLink);
-        $('.btn-install').removeClass('disabled');
+        $('#confirm').removeClass('disabled').attr('href', $.createLink('upgrade', 'license', 'agree=1'));
     }
     else
     {
-        $('.btn-install').removeAttr('href');
-        $('.btn-install').addClass('disabled');
+        $('#confirm').addClass('disabled').removeAttr('href');
     }
 }

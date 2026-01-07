@@ -17,36 +17,34 @@ $upgradeTip = sprintf($lang->upgrade->upgradeDocsTip, $totalCount);
 
 div
 (
-    setID('main'),
-    setClass('flex'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        setClass('mx-auto'),
-        panel
+        setClass('container rounded-md bg-white gap-5'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        div
         (
-            setStyle('width', '600px'),
-            set::title($upgradeTip),
-            set::size('lg'),
-            progressBar
+            setClass('text-xl font-medium'),
+            $upgradeTip
+        ),
+        progressBar
+        (
+            setID('upgradeDocsProgress'),
+             set::striped(),
+            set::percent(0)
+        ),
+        div
+        (
+            setClass('mt-3 py-3 row items-center gap-4 justify-center'),
+            btn
             (
-                setID('upgradeDocsProgress'),
-                set::striped(),
-                set::percent(0)
-            ),
-            div
-            (
-                setClass('mt-3 py-3 row items-center gap-4 justify-center'),
-                btn
-                (
-                    setID('upgradeDocsBtn'),
-                    set::type('primary'),
-                    set::url('upgrade', 'upgradeDocs', "fromVersion={$fromVersion}&processed=yes"),
-                    on::click()->call('startUpgradeDocs', jsRaw('event'), $upgradeDocs, $lang->upgrade->upgradingDocs, $lang->upgrade->next),
-                    span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingDocs),
-                    span(setClass('hidden as-finish-text'), $lang->upgrade->next),
-                    $lang->upgrade->upgradeDocs
-                )
+                setID('upgradeDocsBtn'),
+                set::type('primary'),
+                set::url('upgrade', 'upgradeDocs', "fromVersion={$fromVersion}&processed=yes"),
+                on::click()->call('startUpgradeDocs', jsRaw('event'), $upgradeDocs, $lang->upgrade->upgradingDocs, $lang->upgrade->next),
+                span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingDocs),
+                span(setClass('hidden as-finish-text'), $lang->upgrade->next),
+                $lang->upgrade->upgradeDocs
             )
         )
     )

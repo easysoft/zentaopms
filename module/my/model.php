@@ -305,7 +305,7 @@ class myModel extends model
                 ->andWhere('t1.id')->in($objectIdList)
                 ->orderBy('t1.' . $orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
         return $this->dao->select('*')->from($this->config->objectTables[$module])
             ->where('deleted')->eq(0)

@@ -12,6 +12,25 @@
 class feedbackAssignToEntry extends entry
 {
     /**
+     * GET method.
+     *
+     * @param  int    $feedbackID
+     * @access public
+     * @return string
+     */
+    public function get($feedbackID)
+    {
+        $control = $this->loadController('feedback', 'assignTo');
+        $control->assignTo($feedbackID);
+
+        $data = $this->getData();
+        if(!$data) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+        return $this->send(200, $data);
+    }
+
+    /**
      * POST method.
      *
      * @param  int    $feedbackID

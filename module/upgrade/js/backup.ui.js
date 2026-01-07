@@ -4,11 +4,10 @@ $.ajax(
     timeout: 1000,
     success: function(data)
     {
-        if(data == 'fail') $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"");
-        $('.btn.primary.disabled').removeClass('disabled');
+        $('#upgrade').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=' + +(data == 'success'))).removeClass('disabled');
     },
     error: function(XMLHttpRequest, textStatus)
     {
-        $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"").removeClass('disabled');
+        $('#upgrade').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=0')).removeClass('disabled');
     }
 });

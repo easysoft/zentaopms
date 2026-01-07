@@ -65,7 +65,7 @@ $config->testcase->dtable->fieldList['story']['hint']       = '{storyTitle}';
 $config->testcase->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
 $config->testcase->dtable->fieldList['story']['group']      = 3;
 $config->testcase->dtable->fieldList['story']['control']    = 'select';
-$config->testcase->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => ['productIdList' => (int)'$productID', 'branch' => '$branch', 'type' => 'story']);
+$config->testcase->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => ['productIdList' => (int)'$productID', 'branch' => '$branch', 'moduleIdList' => '', 'status' => 'all', 'order' => 'id_desc', 'limit' => 0, 'type' => 'story']);
 
 $config->testcase->dtable->fieldList['keywords']['title']    = $lang->testcase->keywords;
 $config->testcase->dtable->fieldList['keywords']['type']     = 'text';

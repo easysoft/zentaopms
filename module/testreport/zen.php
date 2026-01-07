@@ -25,8 +25,12 @@ class testreportZen extends testreport
         if($objectType == 'product')
         {
             $productID = $this->product->checkAccess($objectID, $this->products);
+
+            if($this->app->apiVersion && $objectID != $productID) return $this->sendError('Cannot access this product.');
+
             $this->loadModel('qa')->setMenu($productID);
             $this->view->productID = $productID;
+
             return $productID;
         }
 
@@ -34,6 +38,9 @@ class testreportZen extends testreport
         {
             $executions  = $this->execution->getPairs();
             $executionID = $this->execution->checkAccess($objectID, $executions);
+
+            if($this->app->apiVersion && $objectID != $executionID) return $this->sendError('Cannot access this execution.');
+
             $this->execution->setMenu($executionID);
             $this->view->executionID = $executionID;
             return $executionID;
@@ -43,6 +50,9 @@ class testreportZen extends testreport
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($objectID, $projects);
+
+            if($this->app->apiVersion && $objectID != $projectID) return $this->sendError('Cannot access this project.');
+
             $this->project->setMenu($projectID);
             $this->view->projectID = $projectID;
             return $projectID;

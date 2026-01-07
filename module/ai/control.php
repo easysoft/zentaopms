@@ -82,7 +82,7 @@ class ai extends control
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $program->createdBy === 'system' ? $this->lang->admin->system : $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $categoryList[$program->category];
-            $program->publishedLabel = $program->published === '1'
+            $program->publishedLabel = $program->published == '1'
                 ? $this->lang->ai->miniPrograms->statuses['active']
                 : $this->lang->ai->miniPrograms->statuses['draft'];
         }
@@ -180,14 +180,6 @@ class ai extends control
 
         $content = file_get_contents($fileName);
         unlink($fileName);
-        if(!empty($content) && strpos($content, '<?php') === 0)
-        {
-            $content = str_replace(['<?php', "\r", "\n"], '', $content);
-            $pos = strpos($content, "\$ztApp = '");
-            if($pos != 0) return $this->send($failResponse);
-
-            $content = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
-        }
         if(empty($content)) return $this->send($failResponse);
 
         $ztApp  = json_decode($content);

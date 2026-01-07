@@ -88,6 +88,8 @@ class taskEntry extends entry
         $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
+        $operateMenu       = $this->loadModel('common')->buildOperateMenu($task, 'task');
+        $task->operateMenu = array_column(zget($operateMenu, 'mainActions', array()), 'name');
 
         return $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
@@ -105,7 +107,7 @@ class taskEntry extends entry
         $oldTask = $this->loadModel('task')->getByID($taskID);
 
         /* Set $_POST variables. */
-        $fields = 'name,type,desc,assignedTo,pri,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline,team,teamEstimate,teamConsumed,teamLeft,multiple,mailto,uid';
+        $fields = 'name,type,mode,desc,assignedTo,pri,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline,team,teamEstimate,teamConsumed,teamLeft,multiple,mailto,uid,teamSource,team,teamEstimate,teamConsumed,teamLeft';
         $this->batchSetPost($fields, $oldTask);
 
         if($_POST['status'] == 'done')

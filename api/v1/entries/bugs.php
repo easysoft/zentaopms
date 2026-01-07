@@ -66,8 +66,9 @@ class bugsEntry extends entry
 
         $control = $this->loadController('bug', 'create');
 
-        $fields = 'title,project,execution,openedBuild,browser,os,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid,deadline';
+        $fields = 'title,project,execution,browser,branch,os,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid,deadline,plan,feedbackBy';
         $this->batchSetPost($fields);
+        $this->setPost('openedBuild', $this->request('openedBuild', ["trunk"]));
 
         $caseID = $this->request('case', 0);
         if($caseID)

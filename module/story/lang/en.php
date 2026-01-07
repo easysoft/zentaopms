@@ -221,6 +221,7 @@ $lang->story->field            = 'Sync Field';
 $lang->story->completeRate     = 'Completion Rate';
 $lang->story->reviewed         = 'Reviewed';
 $lang->story->toBeReviewed     = 'To Be Reviewed';
+$lang->story->isReviewed       = 'Is Reviewed';
 $lang->story->linkMR           = 'Related MRs';
 $lang->story->linkPR           = 'Related PRs';
 $lang->story->linkCommit       = 'Related Commits';

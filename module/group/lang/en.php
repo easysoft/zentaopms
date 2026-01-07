@@ -664,5 +664,6 @@ $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
 $lang->group->package->branchRule            = 'Branch Rule';
 $lang->group->package->branchType            = 'Branch Type';
+$lang->group->package->featureSwitch         = 'Feature Switch';
 
 include (dirname(__FILE__) . '/resource.php');

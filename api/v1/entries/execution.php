@@ -95,7 +95,7 @@ class executionEntry extends entry
                     $execution->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->execution);
                     break;
                 case "dynamics":
-                    $dynamics = $data->data->dynamics;
+                    $dynamics = $data->data->dynamics ?? array();
                     $execution->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);
                     break;
                 case 'chartdata':

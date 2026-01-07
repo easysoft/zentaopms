@@ -48,7 +48,6 @@ function getPromptFormConfig(fields, extraConfig)
 {
     if(!Array.isArray(fields) || !fields.length) return;
     const typeMap    = {radio: 'picker', checkbox: 'multiPicker', text: 'input'};
-    const required   = [];
     const properties = fields.reduce((properties, field, index) =>
     {
         field.code = `field-${field.id}`;
@@ -65,7 +64,7 @@ function getPromptFormConfig(fields, extraConfig)
     }, {});
     return $.extend(
     {
-        schema: {type: 'object', properties: properties, required: required},
+        schema: {type: 'object', properties: properties},
         prompt: (data) => fields.map(x => `* ${x.name}: ${data[x.code] || ''}`).join('\n')
     }, extraConfig);
 }

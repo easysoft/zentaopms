@@ -510,7 +510,7 @@ row
     cell
     (
         setClass('side ml-4'),
-        panel
+        $project->isTpl ? null : panel
         (
             setID('dynamicBlock'),
             to::heading

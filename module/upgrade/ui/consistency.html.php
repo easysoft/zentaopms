@@ -17,44 +17,39 @@ jsVar('execFixSQL', !empty($alterSQL) && !$hasError);
 
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        panel
+        setClass('container rounded-md bg-white gap-5 h-full'),
+        setStyle(['padding' => '1.5rem 2rem']),
+        div
         (
-            set::style(array('margin' => '0 auto')),
-            zui::width('800px'),
-            set::title($lang->upgrade->consistency),
-            div
+            setClass('text-xl font-medium'),
+            $lang->upgrade->consistency,
+        ),
+        div
+        (
+            $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog,
+            $hasError ? null : span(setID('progressBox'))
+        ),
+        div
+        (
+            setID('logBox'),
+            setClass('pre rounded-md bg-gray-100 overflow-x-hidden overflow-y-auto px-8 py-6'),
+            setStyle(['max-height' => 'calc(100% - 5rem)']),
+            $hasError ? html($alterSQL . ';') : null
+        ),
+        $hasError ? div
+        (
+            setClass('text-center'),
+            btn
             (
-                setClass('border p-4 mb-4'),
-                set::style(array('background-color' => 'var(--color-gray-100)')),
-                div
-                (
-                    setClass('font-bold mb-2'),
-                    $hasError ? $lang->upgrade->noticeErrSQL : $lang->upgrade->showSQLLog,
-                    $hasError ? null : span(setID('progressBox'))
-                ),
-                div
-                (
-                    set::style(array('height' => '200px', 'width' => '100%', 'overflow' => 'auto')),
-                    set::id('logBox'),
-                    $hasError ? html($alterSQL . ';') : null
-                )
-            ),
-            $hasError ? div
-            (
-                setClass('text-center'),
-                btn
-                (
-                    on::click('loadCurrentPage()'),
-                    set::type('primary'),
-                    setClass('px-10'),
-                    $lang->refresh
-                )
-            ) : null
-        )
+                setClass('px-10'),
+                set::type('primary'),
+                on::click('loadCurrentPage()'),
+                $lang->refresh
+            )
+        ) : null
     )
 );
 

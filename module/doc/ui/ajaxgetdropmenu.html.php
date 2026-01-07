@@ -16,6 +16,9 @@ namespace zin;
  */
 $data = array('normal' => array(), 'closed' => array());
 
+$normalObjectNames = array_values($normalObjects);
+$normalObjectPinyinNames = common::convert2Pinyin($normalObjectNames);
+
 /* 处理分组数据。Process grouped data. */
 foreach($normalObjects as $normalObjectID => $normalObjectName)
 {
@@ -23,10 +26,13 @@ foreach($normalObjects as $normalObjectID => $normalObjectName)
     $item['id']     = $normalObjectID;
     $item['text']   = $normalObjectName;
     $item['active'] = $normalObjectID == $objectID;
-    $item['keys']   = zget(common::convert2Pinyin(array($normalObjectName)), $normalObjectName, '');
+    $item['keys']   = zget($normalObjectPinyinNames, $normalObjectName, '');
 
     $data['normal'][] = $item;
 }
+
+$closedObjectNames = array_values($closedObjects);
+$closedObjectPinyinNames = common::convert2Pinyin($closedObjectNames);
 
 foreach($closedObjects as $closedObjectID => $closedObjectName)
 {
@@ -34,7 +40,7 @@ foreach($closedObjects as $closedObjectID => $closedObjectName)
     $item['id']     = $closedObjectID;
     $item['text']   = $closedObjectName;
     $item['active'] = $closedObjectID == $objectID;
-    $item['keys']   = zget(common::convert2Pinyin(array($closedObjectName)), $closedObjectName, '');
+    $item['keys']   = zget($closedObjectPinyinNames, $closedObjectName, '');
 
     $data['closed'][] = $item;
 }
