@@ -1419,6 +1419,21 @@ class mrModel extends model
 
             $objectList[] = $object;
         }
+
+        $tasks = empty($relationList['task']) ? array() : $this->loadModel('task')->getByIdList(array_keys($relationList['task']), 'id_desc');
+        foreach($tasks as $task)
+        {
+            $object = new stdClass();
+            $object->type        = 'task';
+            $object->id          = $task->id;
+            $object->title       = $task->name;
+            $object->status      = $this->lang->task->statusList[$task->status];
+            $object->createdBy   = $task->openedBy;
+            $object->createdDate = $task->openedDate;
+
+            $objectList[] = $object;
+        }
+
         return $objectList;
     }
 }
