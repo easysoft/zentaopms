@@ -2147,7 +2147,7 @@ class bugModel extends model
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder, INSTR('active,resolved,closed,', status) as statusOrder")->from(TABLE_BUG)
             ->where($bugQuery)
             ->andWhere('deleted')->eq('0')
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
