@@ -97,11 +97,49 @@ $config->mr->taskDtable->fieldList['status']['statusMap'] = $lang->task->statusL
 $config->mr->taskDtable->fieldList['status']['sortType']  = true;
 $config->mr->taskDtable->fieldList['status']['show']      = true;
 
-$config->mr->commitLogs = new stdclass();
-$config->mr->commitLogs->dtable = new stdclass();
+$config->mr->bug = new stdclass();
+$config->mr->bug->dtable = new stdclass();
+$config->mr->bug->dtable->fieldList = array();
+$config->mr->bug->dtable->fieldList['id']['name']  = 'id';
+$config->mr->bug->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->mr->bug->dtable->fieldList['id']['type']  = 'id';
+
+$config->mr->bug->dtable->fieldList['title']['name']     = 'title';
+$config->mr->bug->dtable->fieldList['title']['title']    = $lang->mr->bug->title;
+$config->mr->bug->dtable->fieldList['title']['type']     = 'shorttitle';
+$config->mr->bug->dtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+$config->mr->bug->dtable->fieldList['title']['data-app'] = 'devops';
+$config->mr->bug->dtable->fieldList['title']['fixed']    = false;
+$config->mr->bug->dtable->fieldList['title']['group']    = 1;
+
+$config->mr->bug->dtable->fieldList['source']['name']  = 'source';
+$config->mr->bug->dtable->fieldList['source']['title'] = $lang->mr->bug->source;
+$config->mr->bug->dtable->fieldList['source']['type']  = 'categroy';
+$config->mr->bug->dtable->fieldList['source']['group'] = 2;
+
+$config->mr->bug->dtable->fieldList['type']['name']  = 'type';
+$config->mr->bug->dtable->fieldList['type']['title'] = $lang->mr->bug->type;
+$config->mr->bug->dtable->fieldList['type']['type']  = 'categroy';
+$config->mr->bug->dtable->fieldList['type']['group'] = 3;
+
+$config->mr->bug->dtable->fieldList['file']['name']  = 'file';
+$config->mr->bug->dtable->fieldList['file']['title'] = $lang->mr->bug->file;
+$config->mr->bug->dtable->fieldList['file']['type']  = 'desc';
+$config->mr->bug->dtable->fieldList['file']['group'] = 4;
+
+$config->mr->bug->dtable->fieldList['severity']['name']  = 'severity';
+$config->mr->bug->dtable->fieldList['severity']['title'] = $lang->mr->bug->severity;
+$config->mr->bug->dtable->fieldList['severity']['type']  = 'severity';
+$config->mr->bug->dtable->fieldList['severity']['group'] = 5;
+
+$config->mr->bug->dtable->fieldList['status']['name']  = 'status';
+$config->mr->bug->dtable->fieldList['status']['title'] = $lang->mr->bug->status;
+$config->mr->bug->dtable->fieldList['status']['type']  = 'status';
+$config->mr->bug->dtable->fieldList['status']['group'] = 6;
 
 $app->loadLang('repo');
-
+$config->mr->commitLogs = new stdclass();
+$config->mr->commitLogs->dtable = new stdclass();
 $config->mr->commitLogs->dtable->fieldList['id']['name']     = 'id';
 $config->mr->commitLogs->dtable->fieldList['id']['title']    = $lang->repo->revisions;
 $config->mr->commitLogs->dtable->fieldList['id']['type']     = 'text';

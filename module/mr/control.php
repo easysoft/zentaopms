@@ -284,14 +284,30 @@ class mr extends control
      * View a MR.
      *
      * @param  int    $MRID
+     * @param  string $type
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function view(int $MRID)
+    public function view(int $MRID, string $type = 'basic', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
     {
-        $this->view->title = $this->lang->mr->view;
-        $this->view->mr    = $this->mr->fetchByID($MRID);
-        $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        $mr   = $this->mr->fetchByID($MRID);
+        $repo = $this->loadModel('repo')->getByID($mr->repoID);
+
+        $this->app->loadClass('pager', true);
+        $commitPager = new pager($type == 'commit' ? $recTotal : 0, $recPerPage, $type == 'commit' ? $pageID : 1);
+        $bugPager    = new pager($type == 'bug'    ? $recTotal : 0, $recPerPage, $type == 'bug'    ? $pageID : 1);
+
+        $this->view->title       = $this->lang->mr->view;
+        $this->view->mr          = $this->mr->fetchByID($MRID);
+        $this->view->commitLogs  = $this->mr->getCommitListByBranch($repo, $mr->sourceBranch, $mr->targetBranch, $commitPager);
+        $this->view->bugs        = $this->mr->getRelationByCommits($repo->id, array(1), 'bug', $bugPager);
+        $this->view->commitPager = $commitPager;
+        $this->view->bugPager    = $bugPager;
+        $this->view->type        = $type;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
