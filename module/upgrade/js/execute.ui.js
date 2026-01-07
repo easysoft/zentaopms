@@ -47,10 +47,10 @@ $(function()
 
                         const executedKeys  = response.executedKeys;
                         const executedCount = executedKeys.length;
-                        $('#changeBox .change-item').removeClass('executed');
+                        $('#changesBox .change-item').removeClass('executed');
                         executedKeys.forEach(function(key)
                         {
-                            $('#changeBox .change-item[data-key="' + key + '"]').addClass('executed');
+                            $('#changesBox .change-item[data-key="' + key + '"]').addClass('executed');
                         });
                         $('#executedCount').text(executedCount);
 
@@ -111,7 +111,7 @@ $(function()
 
             /* 更新版本列表状态为正在升级 */
             const $versionItem = $('#versionsBox .version-item[data-version="' + currentVersion + '"]');
-            $versionItem.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            $versionItem[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
             $versionItem.find('.icon').replaceWith('<i class="icon icon-spinner-indicator text-xl text-gray-400"></i>');
 
             /* 启动轮询获取升级进度 */

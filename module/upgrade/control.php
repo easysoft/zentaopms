@@ -22,6 +22,10 @@ class upgrade extends control
             $this->view->statusFile = $statusFile;
             $this->display('upgrade', 'setStatusFile');
         }
+        else
+        {
+            $this->session->set('upgrading', true);
+        }
     }
 
     /**
@@ -68,8 +72,6 @@ class upgrade extends control
      */
     public function backup()
     {
-        $this->session->set('upgrading', true);
-
         $this->view->title = $this->lang->upgrade->common;
         $this->display();
     }
