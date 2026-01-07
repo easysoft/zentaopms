@@ -1799,6 +1799,26 @@ class actionModel extends model
             }
         }
 
+        if($action->objectType == 'projectchange')
+        {
+            $reviewID = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('projectchange')->andWhere('object')->eq($action->objectID)->andWhere('deleted')->eq('1')->fetch('id');
+            if($reviewID)
+            {
+                $reviewActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('review')->andWhere('objectID')->eq($reviewID)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                if($reviewActionID) $this->undelete($reviewActionID);
+            }
+        }
+
+        if($action->objectType == 'review')
+        {
+            $review = $this->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($action->objectID)->fetch();
+            if($review->type == 'projectchange')
+            {
+                $projectchangeActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('objectType')->eq('projectchange')->andWhere('objectID')->eq($review->object)->andWhere('extra')->eq(self::CAN_UNDELETED)->fetch('id');
+                if($projectchangeActionID) $this->undelete($projectchangeActionID);
+            }
+        }
+
         if($action->objectType == 'deliverable')
         {
             $this->dao->update(TABLE_DELIVERABLE)->set('status')->eq('disabled')->where('id')->eq($action->objectID)->exec();
