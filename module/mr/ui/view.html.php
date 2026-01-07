@@ -4,7 +4,7 @@ declare(strict_types=1);
  * The view file of mr module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Yuting Wang<wangyuting@easycorp.ltd>
+ * @author      Yuting Wang<wangyuting@chandao.com>
  * @package     mr
  * @link        https://www.zentao.net
  */
@@ -143,7 +143,7 @@ div
                                 (
                                     set::key('basic'),
                                     set::title($lang->mr->mergeInfo),
-                                    set::active(true),
+                                    set::active($type == 'basic'),
                                     div
                                     (
                                         $hasConflict == 'no' && $checkAI && $checkApproval && $checkScan && $checkPipeline ? section
@@ -298,26 +298,45 @@ div
                                 ),
                                 tabPane
                                 (
-                                    set::key('issue'),
-                                    set::title('问题清单 (5)'),
-                                    sectionList
+                                    set::key('bug'),
+                                    set::title("问题清单 ({$bugPager->recTotal})"),
+                                    set::active($type == 'bug'),
+                                    dtable
                                     (
-                                        section('asd')
+                                        set::id('bugs'),
+                                        set::cols($config->mr->bug->dtable->fieldList),
+                                        set::data(array_values($bugs)),
+                                        set::footPager(usePager('bugPager', '', array
+                                        (
+                                            'recPerPage'  => $bugPager->recPerPage,
+                                            'recTotal'    => $bugPager->recTotal,
+                                            'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=bug&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                                        )))
                                     )
                                 ),
                                 tabPane
                                 (
                                     set::key('commit'),
-                                    set::title('提交记录 (1)'),
-                                    sectionList
+                                    set::title("提交记录 ({$commitPager->recTotal})"),
+                                    set::active($type == 'commit'),
+                                    dtable
                                     (
-                                        section('asd')
+                                        set::id('commitLogs'),
+                                        set::cols($config->mr->commitLogs->dtable->fieldList),
+                                        set::data(array_values($commitLogs)),
+                                        set::footPager(usePager('commitPager', '', array
+                                        (
+                                            'recPerPage'  => $commitPager->recPerPage,
+                                            'recTotal'    => $commitPager->recTotal,
+                                            'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=commit&recTotal={$commitPager->recTotal}&recPerPage={recPerPage}&page={page}")
+                                        )))
                                     )
                                 ),
                                 tabPane
                                 (
                                     set::key('files'),
-                                    set::title('提交的文件 (2)'),
+                                    set::title('变更的文件 (2)'),
+                                    set::active($type == 'files'),
                                     sectionList
                                     (
                                         section('asd')
@@ -327,6 +346,7 @@ div
                                 (
                                     set::key('pipeline'),
                                     set::title('流水线'),
+                                    set::active($type == 'pipeline'),
                                     sectionList
                                     (
                                         section('asd')

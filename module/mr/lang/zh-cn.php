@@ -23,8 +23,8 @@ $lang->mr->createAction      = '%s, 由 <strong>%s</strong> 提交了 <a href="%
 $lang->mr->editAction        = '%s, 由 <strong>%s</strong> 编辑了 <a href="%s">合并请求</a>。';
 $lang->mr->removeAction      = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">合并请求</a>。';
 $lang->mr->submitType        = '提交方式';
-$lang->mr->linkedObject = '关联项';
-$lang->mr->object       = '对象';
+$lang->mr->linkedObject      = '关联项';
+$lang->mr->object            = '对象';
 $lang->mr->mergeInfo         = '合并概览';
 $lang->mr->locateView        = '查看详情';
 $lang->mr->codeConflict      = '代码冲突检查';
@@ -280,3 +280,11 @@ $lang->mr->featureBar['browse']['merged']   = $lang->mr->statusList['merged'];
 $lang->mr->featureBar['browse']['closed']   = $lang->mr->statusList['closed'];
 $lang->mr->featureBar['browse']['assignee'] = $lang->mr->assignedToMe;
 $lang->mr->featureBar['browse']['creator']  = $lang->mr->createdByMe;
+
+$lang->mr->bug = new stdclass();
+$lang->mr->bug->title    = '名称';
+$lang->mr->bug->source   = '来源';
+$lang->mr->bug->type     = '类型';
+$lang->mr->bug->file     = '所属文件';
+$lang->mr->bug->severity = '严重程度';
+$lang->mr->bug->status   = '状态';

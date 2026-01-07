@@ -281,3 +281,11 @@ $lang->mr->featureBar['browse']['merged']   = $lang->mr->statusList['merged'];
 $lang->mr->featureBar['browse']['closed']   = $lang->mr->statusList['closed'];
 $lang->mr->featureBar['browse']['assignee'] = $lang->mr->assignedToMe;
 $lang->mr->featureBar['browse']['creator']  = $lang->mr->createdByMe;
+
+$lang->mr->bug = new stdclass();
+$lang->mr->bug->title    = 'Title';
+$lang->mr->bug->source   = 'Source';
+$lang->mr->bug->type     = 'Type';
+$lang->mr->bug->file     = 'File';
+$lang->mr->bug->severity = 'Severity';
+$lang->mr->bug->status   = 'Type';
