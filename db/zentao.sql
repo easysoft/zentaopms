@@ -1664,6 +1664,7 @@ CREATE TABLE IF NOT EXISTS `zt_projectchange` (
   `urgency` varchar(30) NOT NULL DEFAULT '' COMMENT '变更等级',
   `type` varchar(30) NOT NULL DEFAULT '' COMMENT '变更类型',
   `deliverable` varchar(255) NOT NULL DEFAULT '' COMMENT '变更对象',
+  `deliverableVersion` varchar(255) NOT NULL DEFAULT '' COMMENT '对象版本',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '变更状态',
   `approval`  int unsigned NOT NULL DEFAULT 0 COMMENT '审批流程',
   `reviewResult` varchar(20) NOT NULL DEFAULT '' COMMENT '审批结果',
