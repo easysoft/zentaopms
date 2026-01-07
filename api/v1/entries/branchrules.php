@@ -25,7 +25,7 @@ class branchRulesEntry extends baseEntry
 
         if(empty($token) || empty($entry->key) || $token != $entry->key)
         {
-            return $this->sendError(401, 'Unauthorized'); 
+            return $this->sendError(401, 'Unauthorized');
         }
 
         $branchName = $this->param('branchName');
