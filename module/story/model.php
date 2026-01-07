@@ -2884,7 +2884,7 @@ class storyModel extends model
             ->fetchPairs();
 
         $review = $this->storyTao->getRevertStoryIdList((int)$productID);
-        $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        $sql    = str_replace(array('`product`', '`version`', '`branch`', '`id`'), array('t1.`product`', 't1.`version`', 't1.`branch`', 't1.`id`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
             if(strpos($sql, 'revert') !== false)
