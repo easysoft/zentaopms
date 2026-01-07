@@ -137,7 +137,7 @@ $config->mr->createCheck->commit->dtable->fieldList['id']['minWidth'] = 40;
 
 $config->mr->createCheck->commit->dtable->fieldList['authorName']['name']  = 'authorName';
 $config->mr->createCheck->commit->dtable->fieldList['authorName']['title'] = $lang->repo->committer;
-$config->mr->createCheck->commit->dtable->fieldList['authorName']['type']  = 'text';
+$config->mr->createCheck->commit->dtable->fieldList['authorName']['type']  = 'user';
 $config->mr->createCheck->commit->dtable->fieldList['authorName']['hint']  = true;
 
 $config->mr->createCheck->commit->dtable->fieldList['title']['name']     = 'title';

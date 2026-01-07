@@ -1370,25 +1370,38 @@ class mrModel extends model
     }
 
     /**
-     * 根据提交记录获取关联的需求、Bug、任务对象.
+     * 根据分支获取关联的需求、Bug、任务对象.
      * Get linked objects by commits.
      *
-     * @param  int $repoID
-     * @param  array $commits
+     * @param  object $repo
+     * @param  array  $commits
      * @param  string $type
      * @param  ?object $pager
      * @access public
      * @return void
      */
-    public function getRelationByCommits(int $repoID, array $commits, string $type= '', ?object $pager = null)
+    public function getRelationByBranch(object $repo, string $sourceBranch, string $targetBranch, string $type= '', ?object $pager = null)
     {
+        $params = array();
+        $params['after']        = $targetBranch;
+        $params['gitRef']       = $sourceBranch;
+        $params['pageSize']     = 100;
+        $commitList = array();
+        for($i = 0; true; $i++)
+        {
+            $params['page'] = $i + 1;
+            $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->serviceProject, $params);
+            if(empty($commits) || empty($commits->data) || empty($commits->data->commits)) break;
+            $commitList = array_merge($commitList, $commits->data->commits);
+            if(!empty($commits->pager) && $commits->pager->pageSize < 100) break;
+        }
+
         $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
-            ->where('t2.revision')->in($commits)
-            ->andWhere('t2.repo')->eq($repoID)
+            ->where('t2.revision')->in(array_column($commitList, 'sha'))
+            ->andWhere('t2.repo')->eq(zget($repo, 'id', 0))
             ->andWhere('t1.AType')->eq('revision')
             ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
-            ->page($pager)
             ->fetchGroup('type', 'id');
 
         $objectList = array();
@@ -1432,6 +1445,12 @@ class mrModel extends model
             $object->createdDate = $task->openedDate;
 
             $objectList[] = $object;
+        }
+
+        if($pager)
+        {
+            $pager->recTotal = count($objectList);
+            $objectList      = array_slice($objectList, ($pager->pageID - 1) * $pager->recPerPage, $pager->recPerPage);
         }
 
         return $objectList;
