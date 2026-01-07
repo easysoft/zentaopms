@@ -150,3 +150,39 @@ $config->mr->createCheck->commit->dtable->fieldList['committedDate']['name']    
 $config->mr->createCheck->commit->dtable->fieldList['committedDate']['title']    = $lang->repo->time;
 $config->mr->createCheck->commit->dtable->fieldList['committedDate']['type']     = 'datetime';
 $config->mr->createCheck->commit->dtable->fieldList['committedDate']['sortType'] = false;
+
+$config->mr->createCheck->linkObject = new stdclass();
+$config->mr->createCheck->linkObject->dtable = new stdclass();
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['name']     = 'type';
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['title']    = $lang->mr->object;
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['data-app'] = $app->tab;
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['width']    = 100;
+$config->mr->createCheck->linkObject->dtable->fieldList['type']['map']      = array('story' => $lang->story->common, 'task' => $lang->task->common, 'bug' => $lang->bug->common);
+
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['name']     = 'id';
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['title']    = $lang->repo->id;
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['data-app'] = $app->tab;
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['width']    = 60;
+
+$config->mr->createCheck->linkObject->dtable->fieldList['title']['name']  = 'title';
+$config->mr->createCheck->linkObject->dtable->fieldList['title']['title'] = $lang->repo->title;
+$config->mr->createCheck->linkObject->dtable->fieldList['title']['type']  = 'text';
+$config->mr->createCheck->linkObject->dtable->fieldList['title']['hint']  = true;
+
+$config->mr->createCheck->linkObject->dtable->fieldList['status']['name']     = 'status';
+$config->mr->createCheck->linkObject->dtable->fieldList['status']['title']    = $lang->repo->status;
+$config->mr->createCheck->linkObject->dtable->fieldList['status']['type']     = 'status';
+$config->mr->createCheck->linkObject->dtable->fieldList['status']['sortType'] = false;
+$config->mr->createCheck->linkObject->dtable->fieldList['status']['width']    = 60;
+
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['name']     = 'createdBy';
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['title']    = $lang->repo->createdBy;
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['type']     = 'user';
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['sortType'] = false;
+$config->mr->createCheck->linkObject->dtable->fieldList['createdBy']['width']    = 100;
+
+$config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['name']     = 'createdDate';
+$config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['title']    = $lang->repo->time;
+$config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['type']     = 'datetime';
+$config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['sortType'] = false;
+$config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['width']    = 120;
