@@ -37,13 +37,25 @@ class branchRulesEntry extends baseEntry
         $rule = $this->repobranchrule->getBranchRule(0, $repoID, $branchName);
         if(!$rule)
         {
-            $prefix      = (strpos($branchName, '/') !== false) ? substr($branchName, 0, strpos($branchName, '/') + 1) : $branchName;
-            $branchTypes = $this->repobranchtype->getBranchTypeList($repoID, '', '', $prefix, 'id_asc');
+            $branchTypes   = $this->repobranchtype->getBranchTypeList($repoID);
+            $branchTypeID  = 0;
             if(!empty($branchTypes))
             {
-                $branchType = reset($branchTypes);
-                $rule       = $this->repobranchrule->getBranchRule($branchType->id);
+                foreach($branchTypes as $branchType)
+                {
+                    if(empty($branchType->prefixes)) continue;
+
+                    foreach($branchType->prefixes as $prefix)
+                    {
+                        if(strpos($branchName, $prefix) === 0)
+                        {
+                            $branchTypeID = $branchType->id;
+                            break 2;
+                        }
+                    }
+                }
             }
+            $rule = $this->repobranchrule->getBranchRule($branchTypeID);
         }
 
         if(!$rule)
