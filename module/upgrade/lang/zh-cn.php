@@ -29,7 +29,7 @@ $lang->upgrade->consistency     = '一致性检查';
 $lang->upgrade->noticeContent   = <<<EOT
 <div>升级对数据库权限要求较高，请使用 root 用户。</div>
 <div>升级有危险，请先备份数据库，以防万一。</div>
-<pre class='bg-gray-200 leading-6 px-3 py-2'>
+<pre class='leading-6 px-3 py-2'>
 1. 可以通过phpMyAdmin进行备份。
 2. 使用mysql命令行的工具：
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
@@ -43,7 +43,7 @@ if($config->db->driver == 'dm')
     $lang->upgrade->noticeContent = <<<EOT
 <p>升级对数据库权限要求较高，请使用管理员用户。</p>
 <p>升级有危险，请先备份数据库，以防万一。</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. 可以通过图形化客户端工具进行备份。
 2. 使用DIsql工具进行备份。
    $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;

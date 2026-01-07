@@ -24,7 +24,7 @@ $lang->upgrade->consistency     = '一致性檢查';
 $lang->upgrade->noticeContent   = <<<EOT
 <p>升級對資料庫權限要求較高，請使用 root 使用者。 </p>
 <p>升級有危險，請先備份資料庫，以防萬一。 </p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. 可以透過phpMyAdmin進行備份。
 2. 使用mysql命令列的工具：
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
@@ -38,7 +38,7 @@ if($config->db->driver == 'dm')
     $lang->upgrade->noticeContent = <<<EOT
 <p>升級對資料庫權限要求較高，請使用管理員使用者。</p>
 <p>升級有危險，請先備份資料庫，以防萬一。</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. 可以透過圖形化客戶端工具進行備份。
 2. 使用DIsql工具進行備份。
    $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
