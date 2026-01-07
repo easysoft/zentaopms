@@ -57,6 +57,9 @@ class detail extends wg
         /* 标题，如果不指定则尝试使用当前页面上的 `${$objectType}->title` 或 `${$objectType}->name` 的值，例如 `$story->title`、`$task->name` 。 */
         'title'      => '?string',
 
+        /* 标题提示，如果不指定则使用title属性。 */
+        'titleProps' => '?string',
+
         /* 底部固定操作按钮的定义，不包括返回按钮，可以通过 `-` 来指定分割线，如果没有指定 actions 属性，则从 actionList 和 operateList 生成。 */
         'actions'    => '?array',
 
@@ -203,7 +206,7 @@ CSS;
 
     protected function buildTitle()
     {
-        list($object, $objectID, $title, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType, $parentTitleProps) = $this->prop(array('object', 'objectID', 'title', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType', 'parentTitleProps'));
+        list($object, $objectID, $title, $titleProps, $color, $objectType, $parent, $parentID, $parentUrl, $parentTitle, $parentType, $parentTitleProps) = $this->prop(array('object', 'objectID', 'title', 'titleProps', 'color', 'objectType', 'parent', 'parentID', 'parentUrl', 'parentTitle', 'parentType', 'parentTitleProps'));
         $titleBlock   = $this->block('title');
         $titleLeading = $this->block('titleLeading');
 
@@ -215,7 +218,7 @@ CSS;
             set::object($object),
             set::title($title),
             set::titleClass('text-lg text-clip font-bold'),
-            set::titleProps(array('title' => $title)),
+            set::titleProps(array('title' => empty($titleProps) ? $title : $titleProps)),
             set::type($objectType),
             set::color($color),
             set::parentTitleClass('text-lg text-clip font-bold'),
