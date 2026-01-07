@@ -24,6 +24,7 @@ $lang->mr->editAction   = '%s, 由 <strong>%s</strong> 编辑了 <a href="%s">�
 $lang->mr->removeAction = '%s, 由 <strong>%s</strong> 删除了 <a href="%s">合并请求</a>。';
 $lang->mr->submitType   = '提交方式';
 $lang->mr->linkedObject = '关联项';
+$lang->mr->object       = '对象';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';

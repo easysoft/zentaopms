@@ -24,6 +24,7 @@ $lang->mr->editAction   = '%s, <strong>%s</strong> edited <a href="%s">Merge Req
 $lang->mr->removeAction = '%s, <strong>%s</strong> deleted <a href="%s">Merge Request</a>.';
 $lang->mr->submitType   = 'Submit type';
 $lang->mr->linkedObject = 'Linked items';
+$lang->mr->object       = 'Object';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
