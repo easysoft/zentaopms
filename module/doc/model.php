@@ -935,7 +935,7 @@ class docModel extends model
         {
             if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu((int)$doc->lib, 'doc', 0, 'all', 'nodeleted', 'all', ' > ');
             $doc->moduleName = zget($modules[$doc->lib], $doc->module);
-            $doc->moduleName = ltrim($doc->moduleName, '/');
+            $doc->moduleName = ltrim((string)$doc->moduleName, '/');
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
