@@ -1392,6 +1392,19 @@ class mrModel extends model
             ->fetchGroup('type', 'id');
 
         $objectList = array();
+        $stories    = empty($relationList['story']) ? array() : $this->loadModel('story')->getByList(array_keys($relationList['story']), '', 'id_desc');
+        foreach($stories as $story)
+        {
+            $object = new stdClass();
+            $object->type        = 'story';
+            $object->id          = $story->id;
+            $object->title       = $story->title;
+            $object->status      = $this->lang->story->statusList[$story->status];
+            $object->createdBy   = $story->openedBy;
+            $object->createdDate = $story->openedDate;
+
+            $objectList[] = $object;
+        }
 
         return $objectList;
     }
