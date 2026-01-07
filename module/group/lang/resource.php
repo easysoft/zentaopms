@@ -1405,6 +1405,7 @@ $lang->resource->devopsspace->removeMember      = 'removeMember';
 $lang->resource->devopsspace->group             = 'group';
 $lang->resource->devopsspace->createGroup       = 'createGroup';
 $lang->resource->devopsspace->editGroup         = 'editGroup';
+$lang->resource->devopsspace->deleteGroup       = 'deleteGroup';
 $lang->resource->devopsspace->managePriv        = 'managePriv';
 $lang->resource->devopsspace->manageGroupMember = 'manageGroupMember';
 $lang->resource->devopsspace->importGroup       = 'importGroup';
@@ -1420,6 +1421,7 @@ $lang->devopsspace->methodOrder[35] = 'removeMember';
 $lang->devopsspace->methodOrder[40] = 'group';
 $lang->devopsspace->methodOrder[45] = 'createGroup';
 $lang->devopsspace->methodOrder[50] = 'editGroup';
+$lang->devopsspace->methodOrder[52] = 'deleteGroup';
 $lang->devopsspace->methodOrder[55] = 'managePriv';
 $lang->devopsspace->methodOrder[60] = 'manageGroupMember';
 
