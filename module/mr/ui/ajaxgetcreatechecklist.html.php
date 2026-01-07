@@ -69,6 +69,21 @@ tabs
                     div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
                 )
             ),
+            sidebar
+            (
+                set::maxWidth(800),
+                treeEditor
+                (
+                    set::id('monacoTree'),
+                    set::items($tree),
+                    set::canSplit(false),
+                    set::collapsedIcon('folder text-warning'),
+                    set::expandedIcon('folder-open text-warning'),
+                    set::normalIcon('file-text-alt'),
+                    set::selected($currentEntry),
+                    set::onClickItem(jsRaw('window.treeClick'))
+                )
+            ),
             on::click('.inline-appose')->call('inlineAppose'),
             on::click('#monacoTabs .monaco-close')->call('closeTab', jsRaw('this')),
             on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
