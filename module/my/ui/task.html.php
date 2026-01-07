@@ -113,6 +113,7 @@ dtable
     set::data($data),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
+    set::noNestedCheck(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::checkable(true),
     set::defaultSummary(array('html' => $summary)),
