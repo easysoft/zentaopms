@@ -979,25 +979,32 @@ class mr extends control
     * @param  int $repoID
     * @param  string $sourceBranch
     * @param  string $targetBranch
-    * @param  int $recTotal
     * @param  int $recPerPage
     * @param  int $pageID
     * @access public
     * @return void
     */
-   public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+   public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recPerPage = 20, int $pageID = 1)
    {
        $repo = $this->loadModel('repo')->getByID($repoID);
-       $this->app->loadClass('pager', true);
-       $pager = pager::init($recTotal, $recPerPage, $pageID);
+       $scm  = $this->app->loadClass('scm');
+       $scm->setEngine($repo);
 
-       $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $pager);
-       $objects = $this->mr->getRelationByCommits($repoID, array_column($commits, 'id'), '', $pager);
+       $this->app->loadClass('pager', true);
+       $commitPager = new pager(0, $recPerPage, $pageID);
+       $objectPager = new pager(0, $recPerPage, $pageID);
+
+       $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $commitPager);
+       $diffs   = $scm->diff('', $sourceBranch, $targetBranch, 'yes', 'isBranchOrTag');
+       $objects = $this->mr->getRelationByBranch($repo, $sourceBranch, $targetBranch, '', $objectPager);
 
        $this->view->commits      = $commits;
        $this->view->objects      = $objects;
-       $this->view->pager        = $pager;
+       $this->view->diffs        = $diffs;
+       $this->view->commitPager  = $commitPager;
+       $this->view->objectPager  = $objectPager;
        $this->view->repoID       = $repoID;
+       $this->view->repo         = $repo;
        $this->view->sourceBranch = $sourceBranch;
        $this->view->targetBranch = $targetBranch;
        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
