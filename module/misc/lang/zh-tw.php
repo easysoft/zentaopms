@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手機訪問";
 $lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.chandao.com' target='_blank'>青島易軟天創網絡科技有限公司</a> 電話：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可能因為斷電原因損壞，需要檢查修復！！";
