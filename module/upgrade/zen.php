@@ -449,6 +449,28 @@ class upgradeZen extends upgrade
     {
         $full = trim($full); // 去除首尾空白
 
+        // 截断第一个未被反引号包围的左括号之前的内容
+        $trimmed = '';
+        $inBacktick = false;
+        for($i = 0; $i < strlen($full); $i++)
+        {
+            $c = $full[$i];
+            if($c === '`')
+            {
+                $inBacktick = !$inBacktick;
+                $trimmed .= $c;
+            }
+            elseif($c === '(' && !$inBacktick)
+            {
+                break; // 遇到未在反引号内的 '('，截断
+            }
+            else
+            {
+                $trimmed .= $c;
+            }
+        }
+        $full = trim($trimmed);
+
         /* 按未被反引号包围的点分割 */
         $parts      = [];
         $current    = '';
