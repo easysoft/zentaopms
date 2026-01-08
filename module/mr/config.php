@@ -6,15 +6,17 @@ if($module != 'mr' && $module != 'pullreq') $module = 'mr';
 $config->mr = new stdclass();
 
 $config->mr->create = new stdclass();
-$config->mr->create->skippedFields  = 'projectID,compile';
-$config->mr->create->requiredFields = 'hostID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
+$config->mr->create->skippedFields  = 'reviewer';
+$config->mr->create->requiredFields = 'sourceBranch,targetBranch,title,repoID';
 
 $config->mr->edit = new stdclass;
 $config->mr->edit->skippedFields  = 'projectID,compile';
 $config->mr->edit->requiredFields = 'hostID,sourceProject,sourceBranch,targetProject,targetBranch,title,repoID';
 
 $config->mr->editor = new stdclass();
-$config->mr->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->mr->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->mr->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->mr->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 
 $config->mr->apicreate = new stdclass();
 $config->mr->apicreate->requiredFields = 'repoID,sourceBranch,targetBranch,mergeStatus,jobID';
