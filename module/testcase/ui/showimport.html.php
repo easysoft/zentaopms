@@ -190,7 +190,7 @@ else
     {
         $case->type = $case->type ? $case->type : 'feature';
         if(empty($case->pri)) $case->pri = 3;
-        if(empty($case->id) || !isset($cases[$case->id]))
+        if(empty($case->id))
         {
             $case->new   = true;
             $case->id    = $key + 1;
