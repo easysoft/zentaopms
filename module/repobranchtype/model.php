@@ -173,7 +173,7 @@ class repobranchtypeModel extends model
             ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
             ->fetchPairs('id', 'name');
     }
-    
+
     /**
      * 获取分支类型列表(支持分页和搜索)。
      * Get branch type list with pagination and search.
@@ -297,5 +297,39 @@ class repobranchtypeModel extends model
         if(empty($prefix)) return array();
 
         return array_filter(array_map('trim', explode(',', $prefix)));
+    }
+
+    /**
+     * 根据分支列表获取对应的分支类型。
+     * Get branch type by branch list.
+     *
+     * @param  int   $repoID
+     * @param  array $branchList
+     * @access public
+     * @return array
+     */
+    public function getByBranches($repoID, array $branchList): array
+    {
+        $branchTypes = $this->getBranchTypeByRepoID($repoID);
+        if(empty($branchTypes)) return array();
+
+        $branchRuleList = array();
+        foreach($branchTypes as $branchType)
+        {
+            $prefixes = $branchType->prefixes;
+            foreach($prefixes as $prefix)
+            {
+                foreach($branchList as $branch)
+                {
+                    if(strpos($branch, $prefix) === 0)
+                    {
+                        $branchRuleList[$branch] = $branchType;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $branchRuleList;
     }
 }
