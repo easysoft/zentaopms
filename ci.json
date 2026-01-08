@@ -6,13 +6,13 @@
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "release/13.0.alpha1"
+      "gitVersion": "release/13.0.beta"
     },
     "zentaomax": {
-      "gitVersion": "release/8.0.alpha1"
+      "gitVersion": "release/8.0.beta"
     },
     "zentaoipd": {
-      "gitVersion": "release/5.0.alpha1"
+      "gitVersion": "release/5.0.beta"
     },
     "devops": {
       "gitRepo": "zentao/devops"
