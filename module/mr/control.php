@@ -204,6 +204,9 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->create)
                 ->add('createdBy', $this->app->user->account)
+                ->add('repoID', $repoID)
+                ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
+                ->add('targetRepoID', zget($repo, 'gitfoxID', 0))
                 ->skipSpecial('title,description')
                 ->get();
             $result = $this->mr->create($MR);
@@ -1025,5 +1028,19 @@ class mr extends control
        $this->view->targetBranch = $targetBranch;
        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
        $this->display();
+   }
+
+   /**
+    * 获取合并请求的检查信息。
+    * AJAX get MR check message.
+    *
+    * @param  int $repoID
+    * @param  string $sourceBranch
+    * @param  string $targetBranch
+    * @access public
+    * @return void
+    */
+   public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
+   {
    }
 }
