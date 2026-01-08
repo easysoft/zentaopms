@@ -63,14 +63,14 @@ formPanel
     (
         set::width('535px'),
         set::required(true),
-        set::name('reviewers'),
+        set::name('reviewer'),
         set::label($lang->mr->reviewer),
         set::items($users),
         set::multiple(true)
     ),
     formGroup
     (
-        set::name('description'),
+        set::name('desc'),
         set::label($lang->mr->description),
         set::control(array('control' => 'editor', 'upload-url' => 'disabled'))
     ),
@@ -80,15 +80,19 @@ formPanel
         set::name('reviewFlowID'),
         set::value(0)
     ),
-    set::actions(array(
-        'submit',
-        array(
-            'text'     => $lang->goback,
-            'class'    => 'btn',
-            'data-app' => $app->tab,
-            'url'      => createLink($app->rawModule, 'browse', "repoID=" . ($executionID ? 0 : $repo->id) . "&mode=status&param=opened&objectID={$executionID}")
+    formGroup
+    (
+        setID('failMessage'),
+        setClass('hidden'),
+        set::label(''),
+        div
+        (
+            set::name('failMessage'),
+            setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
+            icon(setClass('text-danger'), 'alert'),
+            span(setClass('ml-2'), 'test')
         )
-    ))
+    ),
 );
 
-div(setID('createCheckList'), setClass('panel-form size-lg'));
+div(setID('createCheckList'), setClass('panel-form size-lg hidden'));
