@@ -24,7 +24,7 @@ $execution->type              = '';
 $items = array();
 foreach($executions as $executionItem)
 {
-    $params  = helper::safe64Encode("module={$block->module}&projectID={$currentProjectID}&active={$executionItem->id}");
+    $params  = helper::safe64Encode("module={$block->module}&project={$currentProjectID}&active={$executionItem->id}");
     $items[] = array
     (
         'id'        => $executionItem->id,
