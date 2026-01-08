@@ -480,7 +480,6 @@ class upgradeModel extends model
 
         $lines      = explode("\n", $sql);
         $createHead = array_shift($lines);
-        $createFoot = array_pop($lines);
 
         preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
@@ -494,8 +493,6 @@ class upgradeModel extends model
         {
             $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
             $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
-            $dbSQLHead   = array_shift($dbSQLLines);
-            $dbSQLFoot   = array_pop($dbSQLLines);
 
             foreach($dbSQLLines as $dbSQLLine)
             {
@@ -662,14 +659,11 @@ class upgradeModel extends model
         if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
         if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
 
-        $stdIsInt     = stripos($stdType, 'int') !== false;
         $stdIsVarchar = stripos($stdType, 'varchar') !== false;
         $stdIsText    = stripos($stdType, 'text') !== false;
         $stdIsFloat   = preg_match('/float|decimal|double/i', $stdType);
         $dbIsInt      = stripos($dbType, 'int') !== false;
         $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
-        $dbIsText     = stripos($dbType, 'text') !== false;
-        $dbIsFloat    = preg_match('/int|float|decimal|double/i', $dbType);
 
         if($dbIsInt)
         {
@@ -1054,53 +1048,45 @@ class upgradeModel extends model
      */
     public function updateEstimatePriv()
     {
+        $methods   = ['recordWorkhour', 'editEffort', 'deleteWorkhour'];
         $privTable = $this->config->db->prefix . 'groupPriv';
-        $groups = $this->dao->select('*')->from($privTable)
+        $groups    = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('task')
             ->andWhere('method')->eq('edit')
             ->fetchAll();
+
+        $this->dao->begin();
+
         foreach($groups as $group)
         {
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('recordWorkhour')
+                ->andWhere('method')->in($methods)
                 ->exec();
+            if(dao::isError())
+            {
+                $this->dao->rollback();
+                return false;
+            }
 
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('recordWorkhour')
-                ->exec();
-
-            $this->dao->delete()->from($privTable)
-                ->where('`group`')->eq($group->group)
-                ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('editEffort')
-                ->exec();
-
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('editEffort')
-                ->exec();
-
-            $this->dao->delete()->from($privTable)
-                ->where('`group`')->eq($group->group)
-                ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('deleteWorkhour')
-                ->exec();
-
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('deleteWorkhour')
-                ->exec();
+            foreach($methods as $method)
+            {
+                $this->dao->insert($privTable)
+                    ->set('company')->eq($group->company)
+                    ->set('`group`')->eq($group->group)
+                    ->set('module')->eq('task')
+                    ->set('method')->eq($method)
+                    ->exec();
+                if(dao::isError())
+                {
+                    $this->dao->rollback();
+                    return false;
+                }
+            }
         }
-        return true;
+
+        return $this->dao->commit();
     }
 
     /**
@@ -1125,7 +1111,7 @@ class upgradeModel extends model
         /* Process project actions. */
         foreach($projects as $projectID)
         {
-            $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
+            $productList = isset($projectProducts[$projectID]) ? implode(',', array_keys($projectProducts[$projectID])) : '';
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->exec();
         }
 
@@ -1139,7 +1125,7 @@ class upgradeModel extends model
             }
             else
             {
-                $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
+                $productList = isset($projectProducts[$projectID]) ? implode(',', array_keys($projectProducts[$projectID])) : '';
             }
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
         }
@@ -1386,66 +1372,42 @@ class upgradeModel extends model
      */
     public function addPriv8_1()
     {
+        $methods = [
+            'bug' => ['linkBugs', 'unlinkBug'],
+            'story' => ['linkStory', 'unlinkStory'],
+            'testcase' => ['linkCases', 'unlinkCase']
+        ];
+
         $privTable = $this->config->db->prefix . 'grouppriv';
-
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('bug')
+        $oldPrivs  = $this->dao->select('*')->from($privTable)
+            ->where('module')->in(array_keys($methods))
             ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('bug')
-                ->set('method')->eq('linkBugs')
-                ->set('`group`')->eq($item->group)
-                ->exec();
+            ->fetchGroup('module');
 
-            $this->dao->replace($privTable)
-                ->set('module')->eq('bug')
-                ->set('method')->eq('unlinkBug')
-                ->set('`group`')->eq($item->group)
-                ->exec();
+        $this->dao->begin();
+
+        foreach($oldPrivs as $module => $privs)
+        {
+            foreach($privs as $item)
+            {
+                foreach($methods[$module] as $method)
+                {
+                    $this->dao->replace($privTable)
+                        ->set('module')->eq($module)
+                        ->set('method')->eq($method)
+                        ->set('`group`')->eq($item->group)
+                        ->exec();
+
+                    if(dao::isError())
+                    {
+                        $this->dao->rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('story')
-            ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('story')
-                ->set('method')->eq('linkStory')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-
-            $this->dao->replace($privTable)
-                ->set('module')->eq('story')
-                ->set('method')->eq('unlinkStory')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-        }
-
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('testcase')
-            ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('testcase')
-                ->set('method')->eq('linkCases')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-
-            $this->dao->replace($privTable)
-                ->set('module')->eq('testcase')
-                ->set('method')->eq('unlinkCase')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-        }
-
-        return true;
+        return $this->dao->commit();
     }
 
     /**
@@ -1907,7 +1869,7 @@ class upgradeModel extends model
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
 
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($relation[$module->parent])->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
             }
@@ -1928,7 +1890,7 @@ class upgradeModel extends model
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
 
             $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
-            $lib->users = join(',', $teams);
+            $lib->users = implode(',', $teams);
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             $libID = $this->dao->lastInsertID();
@@ -1942,7 +1904,7 @@ class upgradeModel extends model
             {
                 $docUsers = $teams + explode(',', $lib->users);
                 $docUsers = array_unique($docUsers);
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(implode(',', $docUsers))->where('id')->eq($lib->id)->exec();
             }
 
             $relation = array();
@@ -1961,7 +1923,7 @@ class upgradeModel extends model
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
 
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $newPaths = ",$newPaths,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->exec();
@@ -2053,7 +2015,7 @@ class upgradeModel extends model
             $docContent->content .= empty($url) ? '' : $url;
             $docContent->version  = 1;
             $docContent->type     = 'html';
-            if(isset($fileGroups[$doc->id])) $docContent->files = join(',', array_keys($fileGroups[$doc->id]));
+            if(isset($fileGroups[$doc->id])) $docContent->files = implode(',', array_keys($fileGroups[$doc->id]));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
@@ -3763,7 +3725,7 @@ class upgradeModel extends model
                 }
             }
 
-            $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq(join(',', $executions))->set('projects')->eq(join(',', $projects))->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq(implode(',', $executions))->set('projects')->eq(implode(',', $projects))->where('account')->eq($account)->exec();
         }
 
         return true;
@@ -5883,7 +5845,7 @@ class upgradeModel extends model
             $queryData = array();
             foreach($idIndices as $id => $index) $queryData[] = "WHEN $id THEN $index";
 
-            $query = "UPDATE `$table` SET `index` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $ids) . ");";
+            $query = "UPDATE `$table` SET `index` = (CASE `id` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(',', $ids) . ");";
             $this->dao->query($query);
 
             $messageIndex = max(array_values($idIndices));
@@ -5913,7 +5875,7 @@ class upgradeModel extends model
         $queryData = array();
         foreach($messages as $message) $queryData[] = "WHEN {$message->id} THEN {$message->index}";
 
-        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $lastReadMessages) . ");";
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(',', $lastReadMessages) . ");";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -5941,7 +5903,7 @@ class upgradeModel extends model
         $queryData = array();
         foreach($lastMessages as $cgid => $lastMessage) $queryData[] = "WHEN '{$cgid}' THEN {$lastMessage->$maxIndex}";
 
-        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . join(' ', $queryData) . " END) WHERE `cgid` IN('" . join("','", array_keys($lastMessages)) . "');";
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . implode(' ', $queryData) . " END) WHERE `cgid` IN('" . implode("','", array_keys($lastMessages)) . "');";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -6549,7 +6511,7 @@ class upgradeModel extends model
 
         if(empty($queryData)) return true;
 
-        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
+        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(",", array_values($chats)) . ");";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -6603,12 +6565,12 @@ class upgradeModel extends model
         {
             $queryData = array();
             foreach($tableRange->start as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
-            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . join(' ', $queryData) . " END) WHERE `start` IN(" . join(',', $tableRange->start) . ");";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . implode(' ', $queryData) . " END) WHERE `start` IN(" . implode(',', $tableRange->start) . ");";
             $this->dao->query($query);
 
             $queryData = array();
             foreach($tableRange->end as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
-            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . implode(' ', $queryData) . " END) WHERE `end` IN(" . implode(',', $tableRange->end) . ");";
             $this->dao->query($query);
         }
     }
@@ -6879,7 +6841,7 @@ class upgradeModel extends model
                 {
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $parent   = !empty($module->parent) ? $relation[$module->parent] : 0;
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
             }
@@ -8582,19 +8544,6 @@ class upgradeModel extends model
     public function getNoMergedSprintCount(): int
     {
         return (int)$this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq('0')->fetch('count');
-    }
-
-    /**
-     * 删除指标。
-     * Delete Metrics.
-     *
-     * @access public
-     * @return bool
-     */
-    public function deleteMetrics(): bool
-    {
-        $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
-        return !dao::isError();
     }
 
     /**

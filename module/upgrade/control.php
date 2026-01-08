@@ -112,7 +112,8 @@ class upgrade extends control
             if(empty($this->config->upgrade->fromVersion)) $this->setting->setItem('system.upgrade.fromVersion', $this->post->fromVersion);
 
             $fromVersion = $this->config->upgrade->fromVersion ?? $this->post->fromVersion;
-            $this->locate(inlink('confirm', "fromVersion={$fromVersion}"));
+            if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+            $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
         }
 
         $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;
@@ -130,8 +131,6 @@ class upgrade extends control
      */
     public function confirm(string $fromVersion = '')
     {
-        if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
-
         $this->view->fromVersion = $fromVersion;
 
         if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
@@ -143,11 +142,8 @@ class upgrade extends control
         /* When sql is empty then skip it. */
         if(empty($confirmSql)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
-        $this->session->set('step', '');
         $this->view->title    = $this->lang->upgrade->confirm;
         $this->view->confirm  = $confirmSql;
-        $this->view->writable = is_writable($this->app->getTmpRoot()) ? true : false;
-
         $this->display();
     }
 
@@ -496,59 +492,6 @@ class upgrade extends control
     }
 
     /**
-     * 获取执行sql的进度。
-     * Ajax get progress.
-     *
-     * @param  int    $offset
-     * @access public
-     * @return 1
-     */
-    public function ajaxGetProgress(int $offset = 0)
-    {
-        $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
-        $upgradeLogFile  = $this->upgrade->getLogFile();
-
-        /* 计算执行的进度。*/
-        /* Compute progress for executiong sql. */
-        $progress = 1;
-        if(file_exists($tmpProgressFile) && $offset != 0)
-        {
-            $sqlLines = file_get_contents($tmpProgressFile);
-            if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
-            if($sqlLines == 'completed') $progress = 100;
-
-            if(strpos($sqlLines, '-') !== false)
-            {
-                $sqlLines = explode('-', $sqlLines);
-                $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
-            }
-            if($progress > 95) $progress = 100;
-
-            /* Fix progress 1 to 99. */
-            $progress = empty($progress) ? 1 : $progress;
-            if($progress >= 100) $progress = 99;
-
-            $this->session->set('upgradeProgress', $progress);
-        }
-
-        /* 显示执行 sql 的日志。*/
-        /* Display the log of execution sql. */
-        $log  = !file_exists($upgradeLogFile) ? '' : file_get_contents($upgradeLogFile, false, null, $offset);
-        $size = 10 * 1024;
-        if(!empty($log) && mb_strlen($log) > $size)
-        {
-            $left     = mb_substr($log, $size);
-            $log      = mb_substr($log, 0, $size);
-            $position = strpos($left, "\n");
-            if($position !== false) $log .= substr($left, 0, $position + 1);
-        }
-
-        $offset += strlen($log);
-        $log     = trim($log);
-        return print(json_encode(array('log' => str_replace("\n", "<br />", htmlspecialchars($log)) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset)));
-    }
-
-    /**
      * 获取修复冲突的记录。
      * Ajax get fix consistency logs.
      *
@@ -866,70 +809,6 @@ class upgrade extends control
         $this->view->upgradeDocs = $this->session->upgradeDocs;
 
         $this->display();
-    }
-
-    /**
-     * 处理历史指标。
-     * Process old metrics in order to easy of test.
-     *
-     * @param  bool   $isDelete
-     * @access public
-     * @return void
-     */
-    public function processOldMetrics(bool $isDelete = false)
-    {
-        if($isDelete)
-        {
-            $this->upgrade->deleteMetrics();
-        }
-        else
-        {
-            $this->upgrade->processOldMetrics();
-        }
-
-        if(dao::isError()) echo 'fail';
-
-        echo 'ok';
-    }
-
-    /**
-     * 处理历史指标数据。
-     * Process history metric data.
-     *
-     * @access public
-     * @return void
-     */
-    public function processHistoryDataForMetric()
-    {
-        $this->upgrade->processHistoryDataForMetric();
-        if(dao::isError()) echo 'fail';
-        echo 'ok';
-    }
-
-    /**
-     * 升级BI内置数据。
-     * Upgrade BI built-in data.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxUpgradeBIData()
-    {
-        $this->upgrade->upgradeBIData();
-        echo 'ok';
-    }
-
-    /**
-     * 升级大屏和度量项内置数据。
-     * Upgrade screen and metric built-in data.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxUpgradeScreenAndMetricData()
-    {
-        $this->upgrade->upgradeScreenAndMetricData();
-        echo 'ok';
     }
 
     /**
