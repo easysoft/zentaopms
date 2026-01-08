@@ -90,7 +90,7 @@ formPanel
             set::name('failMessage'),
             setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
             icon(setClass('text-danger'), 'alert'),
-            span(setClass('ml-2'), 'test')
+            span(setClass('ml-2'), '')
         )
     ),
 );
