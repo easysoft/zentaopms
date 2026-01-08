@@ -18,7 +18,8 @@ jsVar('upgradeVersions', array_keys($upgradeVersions));
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 {
-    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
+    $editionName = $lang->{$edition . 'Name'} ?? $edition;
+    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $editionName;
 }
 
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
