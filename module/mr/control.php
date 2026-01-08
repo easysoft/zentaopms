@@ -1066,5 +1066,21 @@ class mr extends control
        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
        if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
        if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
+
+       $result = new stdclass();
+       $result->checkSourceBranch = $checkSourceBranch;
+       $result->checkTargetBranch = $checkTargetBranch;
+
+       $repo = $this->loadModel('repo')->fetchByID($repoID);
+       $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+       if($mergeCheckMessage)
+       {
+           $result->canMerge      = !empty($mergeCheckMessage->mergeable) || $checkSourceBranch || $checkTargetBranch;
+           $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+           $result->message       = zget($mergeCheckMessage, 'message', '');
+           if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
+           if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
+       }
+       return $this->send($result);
    }
 }
