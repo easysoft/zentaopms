@@ -112,7 +112,8 @@ class upgrade extends control
             if(empty($this->config->upgrade->fromVersion)) $this->setting->setItem('system.upgrade.fromVersion', $this->post->fromVersion);
 
             $fromVersion = $this->config->upgrade->fromVersion ?? $this->post->fromVersion;
-            $this->locate(inlink('confirm', "fromVersion={$fromVersion}"));
+            if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
+            $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
         }
 
         $this->view->title   = $this->lang->upgrade->common . $this->lang->hyphen . $this->lang->upgrade->selectVersion;
