@@ -1119,7 +1119,7 @@ class upgradeModel extends model
         /* Process project actions. */
         foreach($projects as $projectID)
         {
-            $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
+            $productList = isset($projectProducts[$projectID]) ? implode(',', array_keys($projectProducts[$projectID])) : '';
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->exec();
         }
 
@@ -1133,7 +1133,7 @@ class upgradeModel extends model
             }
             else
             {
-                $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
+                $productList = isset($projectProducts[$projectID]) ? implode(',', array_keys($projectProducts[$projectID])) : '';
             }
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
         }
@@ -1901,7 +1901,7 @@ class upgradeModel extends model
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
 
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($relation[$module->parent])->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
             }
@@ -1922,7 +1922,7 @@ class upgradeModel extends model
             $lib->acl     = $project->acl == 'open' ? 'open' : 'custom';
 
             $teams = $this->dao->select('project, account')->from(TABLE_TEAM)->where('project')->eq($projectID)->fetchPairs('account', 'account');
-            $lib->users = join(',', $teams);
+            $lib->users = implode(',', $teams);
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
             $libID = $this->dao->lastInsertID();
@@ -1936,7 +1936,7 @@ class upgradeModel extends model
             {
                 $docUsers = $teams + explode(',', $lib->users);
                 $docUsers = array_unique($docUsers);
-                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('users')->eq(implode(',', $docUsers))->where('id')->eq($lib->id)->exec();
             }
 
             $relation = array();
@@ -1955,7 +1955,7 @@ class upgradeModel extends model
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
 
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $newPaths = ",$newPaths,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->exec();
@@ -2047,7 +2047,7 @@ class upgradeModel extends model
             $docContent->content .= empty($url) ? '' : $url;
             $docContent->version  = 1;
             $docContent->type     = 'html';
-            if(isset($fileGroups[$doc->id])) $docContent->files = join(',', array_keys($fileGroups[$doc->id]));
+            if(isset($fileGroups[$doc->id])) $docContent->files = implode(',', array_keys($fileGroups[$doc->id]));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
         }
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
@@ -3757,7 +3757,7 @@ class upgradeModel extends model
                 }
             }
 
-            $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq(join(',', $executions))->set('projects')->eq(join(',', $projects))->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq(implode(',', $executions))->set('projects')->eq(implode(',', $projects))->where('account')->eq($account)->exec();
         }
 
         return true;
@@ -5877,7 +5877,7 @@ class upgradeModel extends model
             $queryData = array();
             foreach($idIndices as $id => $index) $queryData[] = "WHEN $id THEN $index";
 
-            $query = "UPDATE `$table` SET `index` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $ids) . ");";
+            $query = "UPDATE `$table` SET `index` = (CASE `id` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(',', $ids) . ");";
             $this->dao->query($query);
 
             $messageIndex = max(array_values($idIndices));
@@ -5907,7 +5907,7 @@ class upgradeModel extends model
         $queryData = array();
         foreach($messages as $message) $queryData[] = "WHEN {$message->id} THEN {$message->index}";
 
-        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $lastReadMessages) . ");";
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(',', $lastReadMessages) . ");";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -5935,7 +5935,7 @@ class upgradeModel extends model
         $queryData = array();
         foreach($lastMessages as $cgid => $lastMessage) $queryData[] = "WHEN '{$cgid}' THEN {$lastMessage->$maxIndex}";
 
-        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . join(' ', $queryData) . " END) WHERE `cgid` IN('" . join("','", array_keys($lastMessages)) . "');";
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . implode(' ', $queryData) . " END) WHERE `cgid` IN('" . implode("','", array_keys($lastMessages)) . "');";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -6543,7 +6543,7 @@ class upgradeModel extends model
 
         if(empty($queryData)) return true;
 
-        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(",", array_values($chats)) . ");";
+        $query = "UPDATE " . TABLE_IM_CHAT . " SET `createdDate` = (CASE `id` " . implode(' ', $queryData) . " END) WHERE `id` IN(" . implode(",", array_values($chats)) . ");";
         $this->dao->query($query);
 
         return !dao::isError();
@@ -6597,12 +6597,12 @@ class upgradeModel extends model
         {
             $queryData = array();
             foreach($tableRange->start as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
-            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . join(' ', $queryData) . " END) WHERE `start` IN(" . join(',', $tableRange->start) . ");";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `startIndex` = (CASE `start` " . implode(' ', $queryData) . " END) WHERE `start` IN(" . implode(',', $tableRange->start) . ");";
             $this->dao->query($query);
 
             $queryData = array();
             foreach($tableRange->end as $id) $queryData[] = "WHEN $id THEN {$tableRange->indexPairs[$id]}";
-            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . join(' ', $queryData) . " END) WHERE `end` IN(" . join(',', $tableRange->end) . ");";
+            $query = "UPDATE " . TABLE_IM_CHAT_MESSAGE_INDEX . " SET `endIndex` = (CASE `end` " . implode(' ', $queryData) . " END) WHERE `end` IN(" . implode(',', $tableRange->end) . ");";
             $this->dao->query($query);
         }
     }
@@ -6873,7 +6873,7 @@ class upgradeModel extends model
                 {
                     if(isset($relation[$path])) $newPaths[] = $relation[$path];
                 }
-                $newPaths = join(',', $newPaths);
+                $newPaths = implode(',', $newPaths);
                 $parent   = !empty($module->parent) ? $relation[$module->parent] : 0;
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($parent)->where('id')->eq($newModuleID)->exec();
             }
