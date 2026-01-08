@@ -159,7 +159,7 @@ class treeZen extends tree
         if(count($params) == 2)
         {
             $manageChild = 'manage' . ucfirst($viewType) . 'Child';
-            if($viewType == 'datasource')
+            if(strpos($viewType, 'datasource') !== false)
             {
                 $datasourceID = $params[1];
                 $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
@@ -167,11 +167,15 @@ class treeZen extends tree
                 {
                     $this->lang->tree->$manageChild = $datasource->name;
                     $this->lang->tree->manage       = $datasource->name;
+                    $this->lang->tree->common       = $this->lang->workflowdatasource->category;
+                    $this->lang->tree->name         = $this->lang->tree->cate;
                 }
             }
             else
             {
+                $this->lang->tree->common       = $this->lang->workflowdatasource->category;
                 $this->lang->tree->$manageChild = $this->lang->tree->common;
+                $this->lang->tree->name         = $this->lang->tree->cate;
             }
         }
     }
@@ -213,7 +217,7 @@ class treeZen extends tree
                 if(strpos($viewType, '_') !== false)
                 {
                     $params = explode('_', $viewType);
-                    if(count($params) == 2) $this->app->rawModule = $params[0];
+                    if(count($params) == 2) $this->app->rawModule = $params[0] == 'datasource' ? 'workflowdatasource' : $params[0];
                 }
         }
     }
