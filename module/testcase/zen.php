@@ -3022,6 +3022,8 @@ class testcaseZen extends testcase
 
                 if(empty($rows))
                 {
+                    unset($this->lang->testcase->typeList['unit']);
+
                     $row->typeValue  = join("\n", $this->lang->testcase->typeList);
                     $row->stageValue = join("\n", $this->lang->testcase->stageList);
                     if($product->type != 'normal') $row->branchValue = join("\n", $branches);
