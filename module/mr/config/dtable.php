@@ -197,10 +197,10 @@ $config->mr->createCheck->linkObject->dtable->fieldList['type']['data-app'] = $a
 $config->mr->createCheck->linkObject->dtable->fieldList['type']['width']    = 100;
 $config->mr->createCheck->linkObject->dtable->fieldList['type']['map']      = array('story' => $lang->story->common, 'task' => $lang->task->common, 'bug' => $lang->bug->common);
 
-$config->mr->createCheck->linkObject->dtable->fieldList['id']['name']     = 'id';
-$config->mr->createCheck->linkObject->dtable->fieldList['id']['title']    = $lang->repo->id;
-$config->mr->createCheck->linkObject->dtable->fieldList['id']['data-app'] = $app->tab;
-$config->mr->createCheck->linkObject->dtable->fieldList['id']['width']    = 60;
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['name']   = 'id';
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['title']  = $lang->repo->id;
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['width']  = 60;
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['link']   = array('module' => '{type}', 'method' => 'view', 'params' => 'id={id}', 'target' => '_blank');
 
 $config->mr->createCheck->linkObject->dtable->fieldList['title']['name']  = 'title';
 $config->mr->createCheck->linkObject->dtable->fieldList['title']['title'] = $lang->repo->title;
