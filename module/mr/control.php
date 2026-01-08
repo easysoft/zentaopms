@@ -1042,5 +1042,16 @@ class mr extends control
     */
    public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
    {
+       $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
+       $canMergeSourceBranchType = array();
+       $canMergeTargetBranchType = array();
+       $branchTypeRules          = array();
+       foreach($branchRuleList as $branchRule)
+       {
+           if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
+           if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
+           if(empty($branchRule->branchType)) continue;
+           $branchTypeRules[$branchRule->branchType] = $branchRule;
+       }
    }
 }
