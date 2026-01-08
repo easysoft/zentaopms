@@ -45,6 +45,8 @@ $lang->mr->runResult         = 'Result';
 $lang->mr->basicInfo         = 'Basic Info';
 $lang->mr->sourceBranch      = 'Source Branch';
 $lang->mr->targetBranch      = 'Target Branch';
+$lang->mr->filePath          = 'File Path';
+$lang->mr->conflictFiles     = 'Conflict Files';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
@@ -164,6 +166,7 @@ $lang->mr->closeSuccess        = "Merge request closed.";
 $lang->mr->unsupportedFeature  = "Unsupported feature.";
 $lang->mr->checkSourceBranch   = 'The source branch does not comply with the review flow.';
 $lang->mr->checkTargetBranch   = 'The target branch does not comply with the review flow.';
+$lang->mr->checkConflicts      = 'Code conflicts have been detected. Please resolve the conflicts locally before submitting the merge request.';
 
 $lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";
