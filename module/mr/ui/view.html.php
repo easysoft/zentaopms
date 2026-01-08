@@ -106,279 +106,274 @@ foreach($reviewers as $reviewer)
     );
 }
 
+$actions = $this->loadModel('common')->buildOperateMenu($mr);
+
 div
 (
-    setClass('detail-body row gap-2 items-start'),
+    setClass('detail-body rounded flex gap-1'),
     div
     (
-        setClass('flex-auto overflow-y-auto'),
-        div
+        setClass('col gap-1 grow min-w-0'),
+        sectionList
         (
-            setClass('flex'),
-            setStyle('min-height', '100%'),
             div
             (
-                setClass('col grow min-w-0'),
-                sectionList
+                div
                 (
-                    div
+                    setClass('py-1'),
+                    span(setClass('text-lg text-clip font-bold'), "#{$mr->id} dev(branch):{$mr->title}"),
+                    label(setClass('primary ml-4'), '开启中')
+                ),
+                div
+                (
+                    setClass('my-2'),
+                    span(html(sprintf($lang->mr->MRHistory, zget($users, $mr->createdBy), $mr->createdDate, $mr->sourceBranch, '3', $mr->targetBranch)))
+                ),
+                div
+                (
+                    tabs
                     (
-                        div
+                        set::headerClass('border-b'),
+                        tabPane
                         (
-                            setClass('py-1'),
-                            span(setClass('text-lg text-clip font-bold'), "#{$mr->id} dev(branch):{$mr->title}"),
-                            label(setClass('primary ml-4'), '开启中')
-                        ),
-                        div
-                        (
-                            setClass('my-2'),
-                            span(html(sprintf($lang->mr->MRHistory, zget($users, $mr->createdBy), $mr->createdDate, $mr->sourceBranch, '3', $mr->targetBranch)))
-                        ),
-                        div
-                        (
-                            tabs
+                            set::key('basic'),
+                            set::title($lang->mr->mergeInfo),
+                            set::active($type == 'basic'),
+                            div
                             (
-                                set::headerClass('border-b'),
-                                tabPane
+                                $hasConflict == 'no' && $checkAI && $checkApproval && $checkScan && $checkPipeline ? section
                                 (
-                                    set::key('basic'),
-                                    set::title($lang->mr->mergeInfo),
-                                    set::active($type == 'basic'),
+                                    setClass('flex w-full'),
+                                    div(setClass('py-6 border-l-4 border-r-4 border-success')),
                                     div
                                     (
-                                        $hasConflict == 'no' && $checkAI && $checkApproval && $checkScan && $checkPipeline ? section
-                                        (
-                                            setClass('flex w-full'),
-                                            div(setClass('py-6 border-l-4 border-r-4 border-success')),
-                                            div
-                                            (
-                                                setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center'),
-                                                span(setClass('text-success font-bold'), $lang->mr->checkSuccess)
-                                            )
-                                        ) : section
-                                        (
-                                            setClass('flex w-full mt-2'),
-                                            div(setClass('py-6 border-l-4 border-r-4 border-danger')),
-                                            div
-                                            (
-                                                setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                                                span(setClass('text-danger font-bold'), $lang->mr->checkFailed)
-                                            )
-                                        ),
-                                        section
-                                        (
-                                            div
-                                            (
-                                                setClass('border px-4 h-12 flex items-center'),
-                                                span(setClass('font-bold'), $lang->mr->codeConflict),
-                                                $hasConflict == 'yes' ? label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->mr->checkStatusList['success']),
-                                                div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
-                                            ),
-                                            div
-                                            (
-                                                setClass('border px-4 py-4'),
-                                                setStyle(array('margin-top' => '-1px')),
-                                                div
-                                                (
-                                                    setClass('flex items-center'),
-                                                    $hasConflict == 'yes' ? icon(setClass('text-danger font-bold mr-1'), 'close') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                                    span("{$lang->mr->hasConflict}: ", $lang->mr->hasConflictList[$hasConflict]),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->hasConflictList['no']})"))
-                                                )
-                                            )
-                                        ),
-                                        section
-                                        (
-                                            div
-                                            (
-                                                setClass('border px-4 h-12 flex items-center'),
-                                                span(setClass('font-bold'), $lang->mr->AIReview),
-                                                $checkAI ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('warning ml-4'), $lang->mr->checkStatusList['wait'])
-                                            ),
-                                            div
-                                            (
-                                                setClass('border px-4 py-4'),
-                                                setStyle(array('margin-top' => '-1px')),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $AICodeScore < $config->mr->AICodeScore ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                                    span("{$lang->mr->AICodeScore}: ", $AICodeScore),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->AICodeScore})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $AISevereIssue > $config->mr->AISevereIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                                    span("{$lang->mr->AISevereIssue}: ", $AISevereIssue),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->AISevereIssue})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $AIOrdinaryIssue > $config->mr->AIOrdinaryIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                                    span("{$lang->mr->AIOrdinaryIssue}: ", "$AIOrdinaryIssue"),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->AIOrdinaryIssue})"))
-                                                )
-                                            )
-                                        ),
-                                        section
-                                        (
-                                            div
-                                            (
-                                                setClass('border px-4 h-12 flex items-center'),
-                                                span(setClass('font-bold'), $lang->mr->review),
-                                                $checkApproval ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']),
-                                                div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
-                                            ),
-                                            div
-                                            (
-                                                setClass('border px-4 py-4'),
-                                                setStyle(array('margin-top' => '-1px')),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $approvalStatus == 'approved' ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                                    span("{$lang->mr->approvalStatus}: ", $lang->mr->approvalStatusList[$approvalStatus]),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->approvalStatusList['approved']})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $approvalReviewer >= $config->mr->approvalReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                                    span("{$lang->mr->approvalReviewer}: ", $approvalReviewer),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->approvalReviewer})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $doneReviewer >= $config->mr->doneReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                                    span("{$lang->mr->doneReviewer}: ", $doneReviewer),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->doneReviewer})"))
-                                                )
-                                            )
-                                        ),
-                                        section
-                                        (
-                                            div
-                                            (
-                                                setClass('border px-4 h-12 flex items-center'),
-                                                span(setClass('font-bold'), $lang->mr->codeScan),
-                                                $checkScan ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('success ml-4'), $lang->mr->checkStatusList['fail'])
-                                            ),
-                                            div
-                                            (
-                                                setClass('border px-4 py-4'),
-                                                setStyle(array('margin-top' => '-1px')),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $scanSevereIssue <= $config->mr->scanSevereIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                                    span("{$lang->mr->scanSevereIssue}: ", $scanSevereIssue),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->scanSevereIssue})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $scanOrdinaryIssue <= $config->mr->scanOrdinaryIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-warning font-bold mr-1'), 'about'),
-                                                    span("{$lang->mr->scanOrdinaryIssue}: ", $scanOrdinaryIssue),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->scanOrdinaryIssue})"))
-                                                ),
-                                                div
-                                                (
-                                                    setClass('flex items-center py-1'),
-                                                    $scanPassRate >= $config->mr->scanPassRate ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                                    span("{$lang->mr->scanPassRate}: ", "{$scanPassRate} %"),
-                                                    div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$config->mr->scanPassRate}%)"))
-                                                )
-                                            )
-                                        ),
-                                        $pipelineBox
+                                        setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center'),
+                                        span(setClass('text-success font-bold'), $lang->mr->checkSuccess)
+                                    )
+                                ) : section
+                                (
+                                    setClass('flex w-full mt-2'),
+                                    div(setClass('py-6 border-l-4 border-r-4 border-danger')),
+                                    div
+                                    (
+                                        setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
+                                        span(setClass('text-danger font-bold'), $lang->mr->checkFailed)
                                     )
                                 ),
-                                tabPane
+                                section
                                 (
-                                    set::key('bug'),
-                                    set::title("问题清单 ({$bugPager->recTotal})"),
-                                    set::active($type == 'bug'),
-                                    dtable
+                                    div
                                     (
-                                        set::id('bugs'),
-                                        set::cols($config->mr->bug->dtable->fieldList),
-                                        set::data(array_values($bugs)),
-                                        set::footPager(usePager('bugPager', '', array
+                                        setClass('border px-4 h-12 flex items-center'),
+                                        span(setClass('font-bold'), $lang->mr->codeConflict),
+                                        $hasConflict == 'yes' ? label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->mr->checkStatusList['success']),
+                                        div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
+                                    ),
+                                    div
+                                    (
+                                        setClass('border px-4 py-4'),
+                                        setStyle(array('margin-top' => '-1px')),
+                                        div
                                         (
-                                            'recPerPage'  => $bugPager->recPerPage,
-                                            'recTotal'    => $bugPager->recTotal,
-                                            'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=bug&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                                        )))
+                                            setClass('flex items-center'),
+                                            $hasConflict == 'yes' ? icon(setClass('text-danger font-bold mr-1'), 'close') : icon(setClass('text-success font-bold mr-1'), 'check'),
+                                            span("{$lang->mr->hasConflict}: ", $lang->mr->hasConflictList[$hasConflict]),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->hasConflictList['no']})"))
+                                        )
                                     )
                                 ),
-                                tabPane
+                                section
                                 (
-                                    set::key('commit'),
-                                    set::title("提交记录 ({$commitPager->recTotal})"),
-                                    set::active($type == 'commit'),
-                                    dtable
+                                    div
                                     (
-                                        set::id('commitLogs'),
-                                        set::cols($config->mr->commitLogs->dtable->fieldList),
-                                        set::data(array_values($commitLogs)),
-                                        set::footPager(usePager('commitPager', '', array
+                                        setClass('border px-4 h-12 flex items-center'),
+                                        span(setClass('font-bold'), $lang->mr->AIReview),
+                                        $checkAI ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('warning ml-4'), $lang->mr->checkStatusList['wait'])
+                                    ),
+                                    div
+                                    (
+                                        setClass('border px-4 py-4'),
+                                        setStyle(array('margin-top' => '-1px')),
+                                        div
                                         (
-                                            'recPerPage'  => $commitPager->recPerPage,
-                                            'recTotal'    => $commitPager->recTotal,
-                                            'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=commit&recTotal={$commitPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                                        )))
+                                            setClass('flex items-center py-1'),
+                                            $AICodeScore < $config->mr->AICodeScore ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+                                            span("{$lang->mr->AICodeScore}: ", $AICodeScore),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->AICodeScore})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $AISevereIssue > $config->mr->AISevereIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+                                            span("{$lang->mr->AISevereIssue}: ", $AISevereIssue),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->AISevereIssue})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $AIOrdinaryIssue > $config->mr->AIOrdinaryIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+                                            span("{$lang->mr->AIOrdinaryIssue}: ", "$AIOrdinaryIssue"),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->AIOrdinaryIssue})"))
+                                        )
                                     )
                                 ),
-                                tabPane
+                                section
                                 (
-                                    set::key('files'),
-                                    set::title('变更的文件 (2)'),
-                                    set::active($type == 'files'),
-                                    sectionList
+                                    div
                                     (
-                                        section('asd')
+                                        setClass('border px-4 h-12 flex items-center'),
+                                        span(setClass('font-bold'), $lang->mr->review),
+                                        $checkApproval ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']),
+                                        div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
+                                    ),
+                                    div
+                                    (
+                                        setClass('border px-4 py-4'),
+                                        setStyle(array('margin-top' => '-1px')),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $approvalStatus == 'approved' ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
+                                            span("{$lang->mr->approvalStatus}: ", $lang->mr->approvalStatusList[$approvalStatus]),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->approvalStatusList['approved']})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $approvalReviewer >= $config->mr->approvalReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
+                                            span("{$lang->mr->approvalReviewer}: ", $approvalReviewer),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->approvalReviewer})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $doneReviewer >= $config->mr->doneReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
+                                            span("{$lang->mr->doneReviewer}: ", $doneReviewer),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->doneReviewer})"))
+                                        )
                                     )
                                 ),
-                                tabPane
+                                section
                                 (
-                                    set::key('pipeline'),
-                                    set::title('流水线'),
-                                    set::active($type == 'pipeline'),
-                                    sectionList
+                                    div
                                     (
-                                        section('asd')
+                                        setClass('border px-4 h-12 flex items-center'),
+                                        span(setClass('font-bold'), $lang->mr->codeScan),
+                                        $checkScan ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('success ml-4'), $lang->mr->checkStatusList['fail'])
+                                    ),
+                                    div
+                                    (
+                                        setClass('border px-4 py-4'),
+                                        setStyle(array('margin-top' => '-1px')),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $scanSevereIssue <= $config->mr->scanSevereIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
+                                            span("{$lang->mr->scanSevereIssue}: ", $scanSevereIssue),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->scanSevereIssue})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $scanOrdinaryIssue <= $config->mr->scanOrdinaryIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-warning font-bold mr-1'), 'about'),
+                                            span("{$lang->mr->scanOrdinaryIssue}: ", $scanOrdinaryIssue),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≤{$config->mr->scanOrdinaryIssue})"))
+                                        ),
+                                        div
+                                        (
+                                            setClass('flex items-center py-1'),
+                                            $scanPassRate >= $config->mr->scanPassRate ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
+                                            span("{$lang->mr->scanPassRate}: ", "{$scanPassRate} %"),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$config->mr->scanPassRate}%)"))
+                                        )
                                     )
                                 ),
-                                tabPane
-                                (
-                                    set::key('related'),
-                                    set::title('关联项'),
-                                    sectionList
-                                    (
-                                        section('asd')
-                                    )
-                                )
+                                $pipelineBox
+                            )
+                        ),
+                        tabPane
+                        (
+                            set::key('bug'),
+                            set::title("问题清单 ({$bugPager->recTotal})"),
+                            set::active($type == 'bug'),
+                            dtable
+                            (
+                                set::id('bugs'),
+                                set::cols($config->mr->bug->dtable->fieldList),
+                                set::data(array_values($bugs)),
+                                set::loadPartial(true),
+                                set::footPager(usePager('bugPager'))
+                            )
+                        ),
+                        tabPane
+                        (
+                            set::key('commit'),
+                            set::title("提交记录 ({$commitPager->recTotal})"),
+                            set::active($type == 'commit'),
+                            dtable
+                            (
+                                set::id('commitLogs'),
+                                set::cols($config->mr->commitLogs->dtable->fieldList),
+                                set::data(array_values($commitLogs)),
+                                set::loadPartial(true),
+                                set::footPager(usePager('commitPager'))
+                            )
+                        ),
+                        tabPane
+                        (
+                            set::key('files'),
+                            set::title('变更的文件 (2)'),
+                            set::active($type == 'files'),
+                            sectionList
+                            (
+                                section('asd')
+                            )
+                        ),
+                        tabPane
+                        (
+                            set::key('pipeline'),
+                            set::title('流水线'),
+                            set::active($type == 'pipeline'),
+                            sectionList
+                            (
+                                section('asd')
+                            )
+                        ),
+                        tabPane
+                        (
+                            set::key('related'),
+                            set::title('关联项'),
+                            sectionList
+                            (
+                                section('asd')
                             )
                         )
                     )
                 )
-            ),
-            div
-            (
-                setClass('w-2'),
-                setStyle('background', 'var(--zt-page-bg)')
-            ),
-            div
-            (
-                setStyle(array('width' => '370px')),
-                setClass('detail-side flex-none relative'),
-                tabs(setID('basic'),    setClass('canvas rounded shadow py-2 px-4'),      tabPane(set::title($lang->mr->basicInfo), tableData($basicItems))),
-                tabs(setID('reviewer'), set::headerBtn(array('title' => '添加', 'icon' => 'plus', 'class' => 'ghost text-primary', 'url' => createLink('repo', 'createBranch', 'objectID=0&repoID=1'))), setClass('canvas rounded shadow py-2 px-4 mt-2'), tabPane(set::title($lang->mr->reviewer),  tableData($reviewItems))),
-                history(setClass('mt-2 border-0 canvas shadow-sm'), setStyle(array('box-shadow' => 'var(--shadow-none)')))
             )
-        )
+        ),
+        center
+        (
+            setClass('pt-6 sticky bottom-0'),
+            floatToolbar
+            (
+                set::prefix(array(array('icon' => 'back', 'text' => $lang->goback, 'hint' => $lang->goback, 'data-back' => 'mr-browse', 'class' => 'open-url'))),
+                set::main($actions['mainActions']),
+                set::object($mr)
+            )
+        ),
+    ),
+    div
+    (
+        setClass('w-2'),
+        setStyle('background', 'var(--zt-page-bg)')
+    ),
+    div
+    (
+        setStyle(array('width' => '370px')),
+        setClass('detail-side flex-none relative'),
+        tabs(setID('basic'),    setClass('canvas rounded shadow py-2 px-4'),      tabPane(set::title($lang->mr->basicInfo), tableData($basicItems))),
+        tabs(setID('reviewer'), set::headerBtn(array('title' => '添加', 'icon' => 'plus', 'class' => 'ghost text-primary', 'url' => createLink('repo', 'createBranch', 'objectID=0&repoID=1'))), setClass('canvas rounded shadow py-2 px-4 mt-2'), tabPane(set::title($lang->mr->reviewer),  tableData($reviewItems))),
+        history(setClass('mt-2 border-0 canvas shadow-sm'), setStyle(array('box-shadow' => 'var(--shadow-none)')))
     )
 );

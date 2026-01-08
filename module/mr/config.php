@@ -132,3 +132,7 @@ $config->mr->groupPrivs = array();
 $config->mr->groupPrivs['commitlogs'] = 'view';
 $config->mr->groupPrivs['diff']       = 'view';
 $config->mr->groupPrivs['link']       = 'view';
+
+$config->mr->actions = new stdclass();
+$config->mr->actions->view = array();
+$config->mr->actions->view['mainActions'] = array('edit', 'close');

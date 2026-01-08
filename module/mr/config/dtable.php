@@ -147,15 +147,15 @@ $config->mr->commitLogs->dtable->fieldList['id']['data-app'] = $app->tab;
 $config->mr->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={id}");
 $config->mr->commitLogs->dtable->fieldList['id']['minWidth'] = 40;
 
-$config->mr->commitLogs->dtable->fieldList['committed_date']['name']     = 'committed_date';
-$config->mr->commitLogs->dtable->fieldList['committed_date']['title']    = $lang->repo->time;
-$config->mr->commitLogs->dtable->fieldList['committed_date']['type']     = 'datetime';
-$config->mr->commitLogs->dtable->fieldList['committed_date']['sortType'] = false;
+$config->mr->commitLogs->dtable->fieldList['committedDate']['name']     = 'committedDate';
+$config->mr->commitLogs->dtable->fieldList['committedDate']['title']    = $lang->repo->time;
+$config->mr->commitLogs->dtable->fieldList['committedDate']['type']     = 'datetime';
+$config->mr->commitLogs->dtable->fieldList['committedDate']['sortType'] = false;
 
-$config->mr->commitLogs->dtable->fieldList['committer_name']['name']  = 'committer_name';
-$config->mr->commitLogs->dtable->fieldList['committer_name']['title'] = $lang->repo->committer;
-$config->mr->commitLogs->dtable->fieldList['committer_name']['type']  = 'text';
-$config->mr->commitLogs->dtable->fieldList['committer_name']['hint']  = '{committer_email}';
+$config->mr->commitLogs->dtable->fieldList['authorName']['name']     = 'authorName';
+$config->mr->commitLogs->dtable->fieldList['authorName']['title']    = $lang->repo->committer;
+$config->mr->commitLogs->dtable->fieldList['authorName']['type']     = 'user';
+$config->mr->commitLogs->dtable->fieldList['authorName']['sortType'] = false;
 
 $config->mr->commitLogs->dtable->fieldList['title']['name']     = 'title';
 $config->mr->commitLogs->dtable->fieldList['title']['title']    = $lang->repo->comment;
