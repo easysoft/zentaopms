@@ -4007,7 +4007,7 @@ class upgradeModel extends model
         $project->lastEditedBy   = $account;
         $project->lastEditedDate = $now;
         $project->acl            = isset($data->projectAcl) ? $data->projectAcl : 'open';
-        $project->storyType      = 'story,requirement';
+        $project->storyType      = 'story';
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
             ->check('name', 'unique', "type='project' AND parent='{$programID}' AND deleted='0'")
@@ -6710,6 +6710,7 @@ class upgradeModel extends model
             $project->lastEditedDate = $now;
             $project->grade          = 2;
             $project->acl            = 'open';
+            $project->storyType      = 'story';
 
             $projectStatus = 'closed';
             foreach($sprints as $sprint)
