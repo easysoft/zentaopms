@@ -65,7 +65,8 @@ class kanban extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            $url = inlink('space', "browseType={$space->type}");
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => array('name' => '$.apps.open', 'params' => array($url)), 'message' => $this->lang->saveSuccess));
         }
 
         $this->view->title = $this->lang->kanban->createSpace;
@@ -213,10 +214,11 @@ class kanban extends control
             $kanban = form::data($this->config->kanban->form->create)
                 ->setDefault('createdBy', $this->app->user->account)
                 ->get();
-            $this->kanban->create($kanban);
+            $kanbanID = $this->kanban->create($kanban);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            $url = inlink('view', "kanbanID={$kanbanID}");
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => array('name' => '$.apps.open', 'params' => array($url)), 'message' => $this->lang->saveSuccess));
         }
 
         $this->kanbanZen->assignCreateVars($spaceID, $type, $copyKanbanID, $extra);
