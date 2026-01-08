@@ -1347,6 +1347,7 @@ class mrModel extends model
        foreach($commits as $commit)
        {
            $commit->id            = $commit->sha;
+           $commit->repoID        = $repo->id;
            $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
            $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
        }
