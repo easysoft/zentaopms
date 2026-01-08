@@ -301,12 +301,8 @@ div
                                 set::id('bugs'),
                                 set::cols($config->mr->bug->dtable->fieldList),
                                 set::data(array_values($bugs)),
-                                set::footPager(usePager('bugPager', '', array
-                                (
-                                    'recPerPage'  => $bugPager->recPerPage,
-                                    'recTotal'    => $bugPager->recTotal,
-                                    'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=bug&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                                )))
+                                set::loadPartial(true),
+                                set::footPager(usePager('bugPager'))
                             )
                         ),
                         tabPane
@@ -319,12 +315,8 @@ div
                                 set::id('commitLogs'),
                                 set::cols($config->mr->commitLogs->dtable->fieldList),
                                 set::data(array_values($commitLogs)),
-                                set::footPager(usePager('commitPager', '', array
-                                (
-                                    'recPerPage'  => $commitPager->recPerPage,
-                                    'recTotal'    => $commitPager->recTotal,
-                                    'linkCreator' => createLink('mr', 'view', "MRID={$mr->id}&type=commit&recTotal={$commitPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                                )))
+                                set::loadPartial(true),
+                                set::footPager(usePager('commitPager'))
                             )
                         ),
                         tabPane
