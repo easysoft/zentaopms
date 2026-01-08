@@ -60,6 +60,7 @@ $lang->upgrade->createWinFile      = '打开命令行，执行 <span id="command
 $lang->upgrade->createLinuxFile    = '在命令行执行 <span id="command" class="font-bold text-danger">touch %s</span>';
 $lang->upgrade->deleteStatusFile   = '或者删除 <span class="font-bold text-danger">%s</span> 这个文件，重新创建一个 <span class="font-bold text-danger">ok.txt</span> 文件，不需要内容。';
 $lang->upgrade->confirmStatusFile  = '我已经仔细阅读上面提示且完成上述工作';
+$lang->upgrade->safeDeleteFile     = '为了系统安全，需要删除文件。';
 
 $lang->upgrade->selectVersion = '选择版本';
 $lang->upgrade->copyCommand   = '复制命令';

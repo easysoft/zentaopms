@@ -812,6 +812,32 @@ class upgrade extends control
     }
 
     /**
+     * 删除安装和升级文件。
+     * Safe delete install and upgrade files.
+     *
+     * @access public
+     * @return void
+     */
+    public function safeDelete()
+    {
+        $files   = [];
+        $wwwRoot = $this->app->getWwwRoot();
+        foreach(['install', 'upgrade'] as $file)
+        {
+            if(is_file($wwwRoot . $file . '.php')) $files[] = $wwwRoot . $file . '.php';
+        }
+
+        if($files)
+        {
+            $command = 'rm -f ' . implode(' ', $files);
+            $tips    = $this->lang->upgrade->safeDeleteFile . ' ' . $this->lang->upgrade->execCommand;
+            return $this->displayCommand($command, $tips);
+        }
+
+        $this->locate($this->config->webRoot);
+    }
+
+    /**
      * 定时任务：处理内置关联关系。
      * AJAX: Process object relation.
      *
