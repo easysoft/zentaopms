@@ -480,7 +480,6 @@ class upgradeModel extends model
 
         $lines      = explode("\n", $sql);
         $createHead = array_shift($lines);
-        $createFoot = array_pop($lines);
 
         preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
@@ -494,8 +493,6 @@ class upgradeModel extends model
         {
             $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `$table`")->fetch(PDO::FETCH_ASSOC);
             $dbSQLLines  = explode("\n", $dbCreateSQL['Create Table']);
-            $dbSQLHead   = array_shift($dbSQLLines);
-            $dbSQLFoot   = array_pop($dbSQLLines);
 
             foreach($dbSQLLines as $dbSQLLine)
             {
@@ -662,14 +659,11 @@ class upgradeModel extends model
         if(!empty($dbOutput[1][0])) $dbType   = $dbOutput[1][0];
         if(!empty($dbOutput[3][0])) $dbLength = $dbOutput[3][0];
 
-        $stdIsInt     = stripos($stdType, 'int') !== false;
         $stdIsVarchar = stripos($stdType, 'varchar') !== false;
         $stdIsText    = stripos($stdType, 'text') !== false;
         $stdIsFloat   = preg_match('/float|decimal|double/i', $stdType);
         $dbIsInt      = stripos($dbType, 'int') !== false;
         $dbIsVarchar  = stripos($dbType, 'varchar') !== false;
-        $dbIsText     = stripos($dbType, 'text') !== false;
-        $dbIsFloat    = preg_match('/int|float|decimal|double/i', $dbType);
 
         if($dbIsInt)
         {
