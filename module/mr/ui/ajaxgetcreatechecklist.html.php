@@ -7,6 +7,9 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $currentEntry = $this->repo->encodePath($entry);
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
 jsVar('repoID', $repoID);
+jsVar('hasStoryView', hasPriv('story', 'view'));
+jsVar('hasTaskView', hasPriv('task', 'view'));
+jsVar('hasBugView', hasPriv('bug', 'view'));
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);
 jsVar('currentFile', $currentEntry);
@@ -99,6 +102,7 @@ tabs
             set::data($objects),
             set::userMap($users),
             set::loadPartial(true),
+            set::onRenderCell(jsRaw('window.renderObjectCell')),
             set::footPager(usePager('objectPager'))
         )
     ),
