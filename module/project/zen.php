@@ -140,13 +140,6 @@ class projectZen extends project
      */
     private function checkProductAndBranch(object $project, object $rawdata): bool
     {
-        $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
-        if($project->hasProduct && !empty($project->parent) && empty($linkedProductsCount) && empty($rawdata->addProduct))
-        {
-            dao::$errors['products[0]'] = $this->lang->project->errorNoProducts;
-            return false;
-        }
-
         if(!empty($rawdata->products))
         {
             $topProgramID     = (int)$this->loadModel('program')->getTopByID((int)$project->parent);
