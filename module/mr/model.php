@@ -1415,6 +1415,7 @@ class mrModel extends model
             $object->status      = $this->lang->story->statusList[$story->status];
             $object->createdBy   = $story->openedBy;
             $object->createdDate = $story->openedDate;
+            $object->hasViewPriv = common::hasPriv('story', 'view');
 
             $objectList[] = $object;
         }
@@ -1429,6 +1430,7 @@ class mrModel extends model
             $object->status      = $this->lang->bug->statusList[$bug->status];
             $object->createdBy   = $bug->openedBy;
             $object->createdDate = $bug->openedDate;
+            $object->hasViewPriv = common::hasPriv('bug', 'view');
 
             $objectList[] = $object;
         }
@@ -1443,6 +1445,7 @@ class mrModel extends model
             $object->status      = $this->lang->task->statusList[$task->status];
             $object->createdBy   = $task->openedBy;
             $object->createdDate = $task->openedDate;
+            $object->hasViewPriv = common::hasPriv('task', 'view');
 
             $objectList[] = $object;
         }
