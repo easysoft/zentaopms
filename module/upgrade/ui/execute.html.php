@@ -53,11 +53,9 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
     return $versions;
 };
 
-$buildChanges = function() use ($lang, $upgradeChanges)
+$buildChanges = function() use ($upgradeChanges)
 {
-    $changes    = [];
-    $bgColors   = ['create' => 'success-pale', 'update' => 'primary-pale', 'delete' => 'danger-pale'];
-    $textColors = ['create' => 'text-success', 'update' => 'text-primary', 'delete' => 'text-danger'];
+    $changes = [];
     foreach($upgradeChanges as $key => $change)
     {
         $sql = json_encode($change['sql'] ?? []);
@@ -65,10 +63,10 @@ $buildChanges = function() use ($lang, $upgradeChanges)
         (
             setClass('change-item items-center gap-3'),
             setData(['key' => $key, 'change' => $change]),
-            span
+            icon
             (
-                setClass("label {$bgColors[$change['mode']]} {$textColors[$change['mode']]} px-2.5 py-1"),
-                $lang->upgrade->changeModes[$change['mode']]
+                setClass('text-xl text-gray-400'),
+                'more-circle'
             ),
             span
             (
@@ -79,7 +77,7 @@ $buildChanges = function() use ($lang, $upgradeChanges)
                 set::href("javascript:showSQL({$sql})"),
                 icon
                 (
-                    setClass('text-gray-400 text-lg'),
+                    setClass('text-lg text-gray-400'),
                     'fields'
                 ),
             ) : null
@@ -107,7 +105,7 @@ div
         row
         (
             setClass('bg-gray-100 gap-2 p-2'),
-            setStyle(['max-height' => 'calc(100% - 4rem)']),
+            setStyle(['max-height' => 'calc(100% - 6rem)']),
             col
             (
                 setID('versionsBlock'),
@@ -178,6 +176,16 @@ div
                     setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
                     $buildChanges
                 )
+            )
+        ),
+        div
+        (
+            setClass('center'),
+            a
+            (
+                setID('continueBtn'),
+                setClass('btn primary w-24 disabled'),
+                $lang->upgrade->continue
             )
         )
     )

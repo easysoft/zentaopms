@@ -50,7 +50,7 @@ $(function()
                         $('#changesBox .change-item').removeClass('executed');
                         executedKeys.forEach(function(key)
                         {
-                            $('#changesBox .change-item[data-key="' + key + '"]').addClass('executed');
+                            $('#changesBox .change-item[data-key="' + key + '"]').addClass('executed').find('.icon-more-circle').replaceWith('<i class="icon icon-check-circle text-xl text-success"></i>');
                         });
                         $('#executedCount').text(executedCount);
 
@@ -112,7 +112,7 @@ $(function()
             /* 更新版本列表状态为正在升级 */
             const $versionItem = $('#versionsBox .version-item[data-version="' + currentVersion + '"]');
             $versionItem[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
-            $versionItem.find('.icon').replaceWith('<i class="icon icon-spinner-indicator text-xl text-gray-400"></i>');
+            $versionItem.find('.icon-clock').replaceWith('<i class="icon icon-spinner-indicator text-xl text-gray-400"></i>');
 
             /* 启动轮询获取升级进度 */
             const pollPromise = fetchProgress(currentVersion);
@@ -146,7 +146,7 @@ $(function()
             await pollPromise;
 
             /* 更新版本列表状态为升级完成 */
-            $versionItem.find('.icon').replaceWith('<i class="icon icon-check-circle text-xl text-success"></i>');
+            $versionItem.find('.icon-spinner-indicator').replaceWith('<i class="icon icon-check-circle text-xl text-success"></i>');
 
             /* 更新版本升级进度条 */
             const executedVersions = versionIndex + 1;
@@ -158,7 +158,7 @@ $(function()
             if(isLastVersion && upgradeResult.load)
             {
                 abortUpgrade();
-                window.location.href = upgradeResult.load;
+                $('#continueBtn').removeClass('disabled').attr('href', upgradeResult.load);
                 return;
             }
 
