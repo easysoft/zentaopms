@@ -129,12 +129,9 @@ class repobranchruleModel extends model
      */
     public function getBranchRule(int $typeID = 0, int $repoID = 0, string $branchName = ''): object|false
     {
-        if($typeID != 0)
-        {
-            return $this->dao->select('*')->from(TABLE_BRANCHRULESET)->where('branchType')->eq($typeID)->fetch();
-        }
         return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
             ->where('repo')->eq($repoID)
+            ->andWhere('branchType')->eq($typeID)
             ->andWhere('branchName')->eq($branchName)
             ->fetch();
     }
@@ -180,5 +177,24 @@ class repobranchruleModel extends model
     {
         $this->dao->delete()->from(TABLE_BRANCHRULESET)->where('id')->eq($id)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * 获取指定仓库的所有分支规则。
+     * Get all branch rules.
+     *
+     * @param  int $repoID
+     * @param  array $branchTypes
+     * @param  array $branchNames
+     * @access public
+     * @return array
+     */
+    public function getList(int $repoID, array $branchTypes = [], array $branchNames = []): array
+    {
+        return $this->dao->select('*')->from(TABLE_BRANCHRULESET)
+            ->where('repo')->eq($repoID)
+            ->beginIF(!empty($branchTypes))->andWhere('branchType')->in($branchTypes)->fi()
+            ->beginIF(!empty($branchNames))->andWhere('branchName')->in($branchNames)->fi()
+            ->fetchAll('id');
     }
 }
