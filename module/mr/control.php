@@ -1053,5 +1053,18 @@ class mr extends control
            if(empty($branchRule->branchType)) continue;
            $branchTypeRules[$branchRule->branchType] = $branchRule;
        }
+
+       $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
+       $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
+       $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
+
+       $checkSourceBranch = $checkTargetBranch = true;
+       $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
+       $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
+
+       if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
+       if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
+       if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
+       if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
    }
 }
