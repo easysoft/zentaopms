@@ -2511,7 +2511,7 @@ class taskModel extends model
         if($action == 'restart')            return $task->status == 'pause';
         if($action == 'pause')              return $task->status == 'doing';
         if($action == 'assignto')           return !in_array($task->status, array('closed', 'cancel'));
-        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel' || ($task->isParent && $task->status != 'closed');
         if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
         if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
