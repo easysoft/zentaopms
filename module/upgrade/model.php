@@ -123,17 +123,17 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
         {
-            $methods['importBuildinModules'] = [];
-            $methods['importLiteModules']    = [];
-            $methods['addSubStatus']         = [];
+            $methods['importBuildinModules']        = [];
+            $methods['importLiteModules']           = [];
+            $methods['addSubStatus']                = [];
+            $methods['processDataset']             = [];
+            $methods['upgradeScreenAndMetricData'] = [];
+            $methods['upgradeBIData']              = [];
         }
         $methods['convertCharset']             = [];
         $methods['program-refreshStats']       = [true];
         $methods['product-refreshStats']       = [true];
         $methods['deletePatch']                = [];
-        $methods['processDataset']             = [];
-        $methods['upgradeScreenAndMetricData'] = [];
-        $methods['upgradeBIData']              = [];
 
         return $methods;
     }

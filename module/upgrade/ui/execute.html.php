@@ -18,11 +18,13 @@ jsVar('upgradeVersions', array_keys($upgradeVersions));
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 {
-    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
+    $editionName = $lang->{$edition . 'Name'} ?? $edition;
+    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $editionName;
 }
 
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
 $toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
+$versionCount     = count($upgradeVersions);
 
 $buildVersions = function() use ($upgradeVersions, $editionNames)
 {
@@ -130,23 +132,25 @@ div
                     ),
                     row
                     (
-                        setClass('items-center gap-2'),
+                        setClass('justify-between items-center gap-2'),
                         progressbar
                         (
                             setID('versionsProgressBar'),
                             setClass('rounded-full'),
-                            setStyle(['height' => '.75rem', 'width' => 'calc(100% - 3rem)']),
+                            setStyle(['height' => '.75rem', 'width' => '100%']),
                             set::color('rgba(var(--color-success-500-rgb), var(--tw-bg-opacity));'),
                             set::percent(0)
                         ),
                         span
                         (
+                            setClass('text-right'),
+                            setStyle(['min-width' => (strlen((string)$versionCount) + 1) . 'rem']),
                             span
                             (
                                 setID('versionsProgressText'),
-                                '0'
+                                0
                             ),
-                            ' / ' . count($upgradeVersions)
+                            ' / ' . $versionCount
                         )
                     )
                 )
