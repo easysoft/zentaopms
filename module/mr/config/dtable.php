@@ -224,3 +224,9 @@ $config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['title'] 
 $config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['type']     = 'datetime';
 $config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['sortType'] = false;
 $config->mr->createCheck->linkObject->dtable->fieldList['createdDate']['width']    = 120;
+
+$config->mr->createCheck->conflictFile = new stdclass();
+$config->mr->createCheck->conflictFile->dtable = new stdclass();
+$config->mr->createCheck->conflictFile->dtable->fieldList['file']['name']  = 'file';
+$config->mr->createCheck->conflictFile->dtable->fieldList['file']['title'] = $lang->mr->filePath;
+$config->mr->createCheck->conflictFile->dtable->fieldList['file']['hint']  = true;
