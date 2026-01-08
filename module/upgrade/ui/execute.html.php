@@ -53,11 +53,9 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
     return $versions;
 };
 
-$buildChanges = function() use ($lang, $upgradeChanges)
+$buildChanges = function() use ($upgradeChanges)
 {
-    $changes    = [];
-    $bgColors   = ['create' => 'success-pale', 'update' => 'primary-pale', 'delete' => 'danger-pale'];
-    $textColors = ['create' => 'text-success', 'update' => 'text-primary', 'delete' => 'text-danger'];
+    $changes = [];
     foreach($upgradeChanges as $key => $change)
     {
         $sql = json_encode($change['sql'] ?? []);
