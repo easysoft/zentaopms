@@ -1048,53 +1048,45 @@ class upgradeModel extends model
      */
     public function updateEstimatePriv()
     {
+        $methods   = ['recordWorkhour', 'editEffort', 'deleteWorkhour'];
         $privTable = $this->config->db->prefix . 'groupPriv';
-        $groups = $this->dao->select('*')->from($privTable)
+        $groups    = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('task')
             ->andWhere('method')->eq('edit')
             ->fetchAll();
+
+        $this->dao->begin();
+
         foreach($groups as $group)
         {
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('recordWorkhour')
+                ->andWhere('method')->in($methods)
                 ->exec();
+            if(dao::isError())
+            {
+                $this->dao->rollback();
+                return false;
+            }
 
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('recordWorkhour')
-                ->exec();
-
-            $this->dao->delete()->from($privTable)
-                ->where('`group`')->eq($group->group)
-                ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('editEffort')
-                ->exec();
-
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('editEffort')
-                ->exec();
-
-            $this->dao->delete()->from($privTable)
-                ->where('`group`')->eq($group->group)
-                ->andWhere('module')->eq('task')
-                ->andWhere('method')->eq('deleteWorkhour')
-                ->exec();
-
-            $this->dao->insert($privTable)
-                ->set('company')->eq($group->company)
-                ->set('`group`')->eq($group->group)
-                ->set('module')->eq('task')
-                ->set('method')->eq('deleteWorkhour')
-                ->exec();
+            foreach($methods as $method)
+            {
+                $this->dao->insert($privTable)
+                    ->set('company')->eq($group->company)
+                    ->set('`group`')->eq($group->group)
+                    ->set('module')->eq('task')
+                    ->set('method')->eq($method)
+                    ->exec();
+                if(dao::isError())
+                {
+                    $this->dao->rollback();
+                    return false;
+                }
+            }
         }
-        return true;
+
+        return $this->dao->commit();
     }
 
     /**
@@ -1380,66 +1372,42 @@ class upgradeModel extends model
      */
     public function addPriv8_1()
     {
+        $methods = [
+            'bug' => ['linkBugs', 'unlinkBug'],
+            'story' => ['linkStory', 'unlinkStory'],
+            'testcase' => ['linkCases', 'unlinkCase']
+        ];
+
         $privTable = $this->config->db->prefix . 'grouppriv';
-
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('bug')
+        $oldPrivs  = $this->dao->select('*')->from($privTable)
+            ->where('module')->in(array_keys($methods))
             ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('bug')
-                ->set('method')->eq('linkBugs')
-                ->set('`group`')->eq($item->group)
-                ->exec();
+            ->fetchGroup('module');
 
-            $this->dao->replace($privTable)
-                ->set('module')->eq('bug')
-                ->set('method')->eq('unlinkBug')
-                ->set('`group`')->eq($item->group)
-                ->exec();
+        $this->dao->begin();
+
+        foreach($oldPrivs as $module => $privs)
+        {
+            foreach($privs as $item)
+            {
+                foreach($methods[$module] as $method)
+                {
+                    $this->dao->replace($privTable)
+                        ->set('module')->eq($module)
+                        ->set('method')->eq($method)
+                        ->set('`group`')->eq($item->group)
+                        ->exec();
+
+                    if(dao::isError())
+                    {
+                        $this->dao->rollback();
+                        return false;
+                    }
+                }
+            }
         }
 
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('story')
-            ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('story')
-                ->set('method')->eq('linkStory')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-
-            $this->dao->replace($privTable)
-                ->set('module')->eq('story')
-                ->set('method')->eq('unlinkStory')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-        }
-
-        $oldPriv = $this->dao->select('*')->from($privTable)
-            ->where('module')->eq('testcase')
-            ->andWhere('method')->eq('edit')
-            ->fetchAll();
-        foreach($oldPriv as $item)
-        {
-            $this->dao->replace($privTable)
-                ->set('module')->eq('testcase')
-                ->set('method')->eq('linkCases')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-
-            $this->dao->replace($privTable)
-                ->set('module')->eq('testcase')
-                ->set('method')->eq('unlinkCase')
-                ->set('`group`')->eq($item->group)
-                ->exec();
-        }
-
-        return true;
+        return $this->dao->commit();
     }
 
     /**
