@@ -8585,19 +8585,6 @@ class upgradeModel extends model
     }
 
     /**
-     * 删除指标。
-     * Delete Metrics.
-     *
-     * @access public
-     * @return bool
-     */
-    public function deleteMetrics(): bool
-    {
-        $this->dao->delete()->from(TABLE_METRIC)->where('fromID')->ne(0)->exec();
-        return !dao::isError();
-    }
-
-    /**
      * Add default traincourse priv to each group.
      *
      * @access public
