@@ -1,21 +1,13 @@
 <?php
 $config->mr->form = new stdclass();
 $config->mr->form->create = array();
-$config->mr->form->create['hostID']             = array('type' => 'int',    'required' => true);
-$config->mr->form->create['sourceProject']      = array('type' => 'string', 'required' => true);
-$config->mr->form->create['targetProject']      = array('type' => 'string', 'required' => true);
-$config->mr->form->create['sourceBranch']       = array('type' => 'string', 'required' => true);
-$config->mr->form->create['targetBranch']       = array('type' => 'string', 'required' => true);
-$config->mr->form->create['title']              = array('type' => 'string', 'required' => true);
-$config->mr->form->create['assignee']           = array('type' => 'string', 'required' => true);
-$config->mr->form->create['repoID']             = array('type' => 'int',    'required' => true);
-$config->mr->form->create['executionID']        = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->mr->form->create['needCI']             = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->mr->form->create['removeSourceBranch'] = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->mr->form->create['squash']             = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->mr->form->create['jobID']              = array('type' => 'int',    'required' => false, 'default' => 0);
-$config->mr->form->create['description']        = array('type' => 'string', 'required' => false, 'default' => '');
-$config->mr->form->create['createdDate']        = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->mr->form->create['sourceBranch'] = array('type' => 'string', 'required' => true);
+$config->mr->form->create['targetBranch'] = array('type' => 'string', 'required' => true);
+$config->mr->form->create['title']        = array('type' => 'string', 'required' => true);
+$config->mr->form->create['reviewer']     = array('type' => 'array', 'required' => true, 'default' => array(), 'filter' => 'join');
+$config->mr->form->create['desc']         = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->mr->form->create['createdDate']  = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->mr->form->create['reviewFlowID'] = array('type' => 'int', 'required' => false, 'default' => 0);
 
 $config->mr->form->edit = array();
 $config->mr->form->edit['title']              = array('type' => 'string', 'required' => true);

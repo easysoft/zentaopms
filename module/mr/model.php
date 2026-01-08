@@ -176,54 +176,48 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function create(object $MR): array
+    public function create(object $mr): array
     {
-        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($mr->repoID, $mr->sourceRepoID, $mr->sourceBranch, $mr->targetRepoID, $mr->targetBranch);
         if($result['result'] == 'fail') return $result;
 
-        $MRID = $this->insertMr($MR);
+        $diffStats = $this->loadModel('gitfox')->apiGetDiffStats((int)$mr->sourceRepoID, $mr->sourceBranch, $mr->targetBranch);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-        $this->loadModel('action')->create($this->moduleName, $MRID, 'opened');
-        if($MR->needCI && $MR->jobID) $this->execJob($MRID, (int)$MR->jobID);
-
-        $rawMR = $this->apiCreateMR($MR->hostID, $MR);
-
-        /**
-         * Another open merge request already exists for this source branch.
-         * The type of variable `$rawMR->message` is array.
-         */
-        if(isset($rawMR->message) and !isset($rawMR->iid))
+        if(!empty($diffStats))
         {
-            $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+            $mr->additions   = zget($diffStats, 'additions', 0);
+            $mr->deletions   = zget($diffStats, 'deletions', 0);
+            $mr->commitCount = zget($diffStats, 'commits', 0);
+            $mr->fileCount   = zget($diffStats, 'filesChanged', 0);
+        }
+        $mr = $this->loadModel('file')->processImgURL($mr, $this->config->mr->editor->create['id'], (string)$this->post->uid);
 
-            $errorMessage = $this->convertApiError($rawMR->message);
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
+        $mrID = $this->insertMr($mr);
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        $this->file->updateObjectID($this->post->uid, $mrID, 'mr');
+
+        $reviewers = explode(',', $mr->reviewer);
+        foreach($reviewers as $reviewer)
+        {
+            $reviewData = new stdClass();
+            $reviewData->requestID      = $mrID;
+            $reviewData->repoID         = $mr->repoID;
+            $reviewData->account        = $reviewer;
+            $reviewData->decision       = 'pending';
+            $reviewData->latestReviewID = $mrID;
+            $reviewData->createdBy      = $this->app->user->account;
+            $reviewData->createdDate    = helper::now();
+            $this->dao->insert(TABLE_MRREVIEWERS)->data($reviewData)->exec();
+            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         }
 
-        /* Create MR failed. */
-        if(!isset($rawMR->iid))
-        {
-            $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
-            return array('result' => 'fail', 'message' => $this->lang->mr->createFailedFromAPI);
-        }
+        $this->loadModel('action')->create($this->moduleName, $mrID, 'opened');
 
-        /* Create a todo item for this MR. */
-        if(empty($MR->jobID)) $this->apiCreateMRTodo($MR->hostID, $MR->targetProject, $rawMR->iid);
-
-        $newMR = new stdclass();
-        $newMR->mriid       = $rawMR->iid;
-        $newMR->status      = $rawMR->state == 'open' ? 'opened' : $rawMR->state;
-        $newMR->mergeStatus = $rawMR->merge_status;
-        $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
-
-        /* Link stories,bugs and tasks. */
-        $MR->id    = $MRID;
-        $MR->mriid = $newMR->mriid;
-        $this->linkObjects($MR);
+        /* TODO: Link objects. */
+        //$this->linkObjects($MR);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
+        $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$mr->executionID}" : "repoID={$mr->repoID}";
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', $linkParams));
     }
 
@@ -1180,7 +1174,7 @@ class mrModel extends model
      * 检查是否有相同的未关闭合并请求。
      * Check same opened mr for source branch.
      *
-     * @param  int    $hostID
+     * @param  int    $repoID
      * @param  string $sourceProject
      * @param  string $sourceBranch
      * @param  string $targetProject
@@ -1188,22 +1182,18 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function checkSameOpened(int $hostID, string $sourceProject, string $sourceBranch, string $targetProject, string $targetBranch): array
+    public function checkSameOpened(int $repoID, string $sourceRepoID, string $sourceBranch, string $targetRepoID, string $targetBranch): array
     {
-        if($sourceProject == $targetProject && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
+        if($sourceRepoID == $targetRepoID && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_MR)
-            ->where('hostID')->eq($hostID)
-            ->andWhere('sourceProject')->eq($sourceProject)
+            ->where('repoID')->eq($repoID)
+            ->andWhere('sourceRepoID')->eq($sourceRepoID)
             ->andWhere('sourceBranch')->eq($sourceBranch)
-            ->andWhere('targetProject')->eq($targetProject)
+            ->andWhere('targetRepoID')->eq($targetRepoID)
             ->andWhere('targetBranch')->eq($targetBranch)
-            ->andWhere('status')->eq('opened')
-            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('open')
             ->fetch('id');
         if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->hasSameOpenedMR, $dbOpenedID));
-
-        $MR = $this->apiGetSameOpened($hostID, (string)$sourceProject, $sourceBranch, (string)$targetProject, $targetBranch);
-        if($MR) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->errorLang[2], $MR->iid));
         return array('result' => 'success');
     }
 

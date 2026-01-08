@@ -162,6 +162,8 @@ $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
 $lang->mr->unsupportedFeature  = "暂不支持该功能。";
+$lang->mr->checkSourceBranch   = '源分支不符合评审流程';
+$lang->mr->checkTargetBranch   = '目标分支不符合评审流程';
 
 $lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";

@@ -16310,3 +16310,18 @@ CREATE TABLE IF NOT EXISTS `zt_ops_review_flow` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE INDEX `idx_repo` ON `zt_ops_review_flow` (`repo`);
+
+-- DROP TABLE IF EXISTS `zt_ops_request_reviewers`;
+CREATE TABLE `zt_ops_request_reviewers` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `requestID` int unsigned  NOT NULL DEFAULT 0 COMMENT '关联合并请求ID',
+  `repoID` int unsigned NOT NULL DEFAULT 0 COMMENT '关联仓库ID',
+  `decision` varchar(255) NOT NULL DEFAULT '' COMMENT '最新审核决策（如：approve-批准、reject-拒绝、pending-待审核等）',
+  `sha` varchar(40) NOT NULL DEFAULT '' COMMENT '审核对应的代码提交SHA校验值',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '评审人',
+  `latestReviewID` int unsigned  NOT NULL DEFAULT 0 COMMENT '最新审核记录ID，关联pullreq_reviews表的id，无则为NULL',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime NULL COMMENT '创建时间',
+  `editedDate` datetime NULL COMMENT '更新时间',
+  PRIMARY KEY (`requestID`, `account`)
+) ENGINE=InnoDB;

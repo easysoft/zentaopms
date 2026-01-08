@@ -204,6 +204,9 @@ class mr extends control
         {
             $MR = form::data($this->config->mr->form->create)
                 ->add('createdBy', $this->app->user->account)
+                ->add('repoID', $repoID)
+                ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
+                ->add('targetRepoID', zget($repo, 'gitfoxID', 0))
                 ->skipSpecial('title,description')
                 ->get();
             $result = $this->mr->create($MR);
@@ -1025,5 +1028,59 @@ class mr extends control
        $this->view->targetBranch = $targetBranch;
        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
        $this->display();
+   }
+
+   /**
+    * 获取合并请求的检查信息。
+    * AJAX get MR check message.
+    *
+    * @param  int $repoID
+    * @param  string $sourceBranch
+    * @param  string $targetBranch
+    * @access public
+    * @return void
+    */
+   public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
+   {
+       $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
+       $canMergeSourceBranchType = array();
+       $canMergeTargetBranchType = array();
+       $branchTypeRules          = array();
+       foreach($branchRuleList as $branchRule)
+       {
+           if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
+           if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
+           if(empty($branchRule->branchType)) continue;
+           $branchTypeRules[$branchRule->branchType] = $branchRule;
+       }
+
+       $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
+       $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
+       $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
+
+       $checkSourceBranch = $checkTargetBranch = true;
+       $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
+       $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
+
+       if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
+       if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
+       if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
+       if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
+
+       $result = new stdclass();
+       $result->checkSourceBranch = $checkSourceBranch;
+       $result->checkTargetBranch = $checkTargetBranch;
+
+       $repo = $this->loadModel('repo')->fetchByID($repoID);
+       $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+       if($mergeCheckMessage)
+       {
+           $result->canMerge      = !empty($mergeCheckMessage->mergeable) || $checkSourceBranch || $checkTargetBranch;
+           $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+           $result->message       = zget($mergeCheckMessage, 'message', '');
+           if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
+           if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
+       }
+       return $this->send($result);
    }
 }
