@@ -31,7 +31,7 @@ div
         ),
         div
         (
-            setClass('pre rounded-md bg-gray-100 px-8 py-6'),
+            setClass('pre-wrap break-all break-words rounded-md bg-gray-100 px-8 py-6'),
             ul
             (
                 li(html(sprintf($cmd, $statusFile))),
