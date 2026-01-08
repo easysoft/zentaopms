@@ -1113,6 +1113,8 @@ class commonModel extends model
 
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
+        if($this->app->getModuleName() == 'upgrade' && $this->app->getMethodName() == 'safedelete') return false;
+
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
         return (!is_file($statusFile) or (time() - filemtime($statusFile)) > $this->config->safeFileTimeout) ? $statusFile : false;
     }

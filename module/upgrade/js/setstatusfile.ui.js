@@ -2,10 +2,10 @@ function confirmStatusFile(event)
 {
     if($(event.target).prop('checked'))
     {
-        $('#confirm').removeClass('disabled').attr('href', $.createLink('upgrade', 'index'));
+        $('#confirm').removeClass('disabled').attr('onclick', 'loadCurrentPage()');
     }
     else
     {
-        $('#confirm').addClass('disabled').removeAttr('href');
+        $('#confirm').addClass('disabled').removeAttr('onclick');
     }
 }

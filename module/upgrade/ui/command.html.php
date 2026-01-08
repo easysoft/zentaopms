@@ -48,7 +48,7 @@ div
         div
         (
             setClass('text-warning'),
-            $lang->upgrade->execCommand
+            $tips
         ),
         row
         (
