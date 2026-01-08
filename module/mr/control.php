@@ -303,7 +303,7 @@ class mr extends control
         $this->view->title       = $this->lang->mr->view;
         $this->view->mr          = $this->mr->fetchByID($MRID);
         $this->view->commitLogs  = $this->mr->getCommitListByBranch($repo, $mr->sourceBranch, $mr->targetBranch, $commitPager);
-        $this->view->bugs        = $this->mr->getRelationByCommits($repo->id, array(1), 'bug', $bugPager);
+        $this->view->bugs        = $this->mr->getRelationByBranch($repo, $mr->sourceBranch, $mr->targetBranch, 'bug', $bugPager);
         $this->view->commitPager = $commitPager;
         $this->view->bugPager    = $bugPager;
         $this->view->type        = $type;
