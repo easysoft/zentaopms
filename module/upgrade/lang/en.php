@@ -56,8 +56,8 @@ EOT;
 
 $lang->upgrade->confirmBackup      = 'I have backed up the database';
 $lang->upgrade->setStatusFileTitle = 'Please complete the following actions';
-$lang->upgrade->createWinFile      = 'Open command line and execute <span class="font-bold text-danger">echo > %s</span>';
-$lang->upgrade->createLinuxFile    = 'Execute <span class="font-bold text-danger">touch %s</span> in the command line';
+$lang->upgrade->createWinFile      = 'Open command line and execute <span id="command" class="font-bold text-danger">echo > %s</span>';
+$lang->upgrade->createLinuxFile    = 'Execute <span id="command" class="font-bold text-danger">touch %s</span> in the command line';
 $lang->upgrade->deleteStatusFile   = 'Or delete <span class="font-bold text-danger">%s</span> and create <span class="font-bold text-danger">ok.txt</span> and leave it blank.';
 $lang->upgrade->confirmStatusFile  = 'I have read and done as instructed above.';
 

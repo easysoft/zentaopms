@@ -12,6 +12,9 @@ namespace zin;
 
 set::zui(true);
 
+jsVar('copySuccess', $lang->upgrade->copySuccess);
+jsVar('copyFail', $lang->upgrade->copyFail);
+
 $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->upgrade->createWinFile : $lang->upgrade->createLinuxFile;
 
 div
@@ -40,9 +43,15 @@ div
             on::change('confirmStatusFile'),
             $lang->upgrade->confirmStatusFile
         ),
-        div
+        row
         (
-            setClass('center'),
+            setClass('justify-center gap-4'),
+            a
+            (
+                setClass('btn success w-24'),
+                set::href('javascript:copyCommand("#command");'),
+                $lang->upgrade->copyCommand
+            ),
             a
             (
                 setID('confirm'),
