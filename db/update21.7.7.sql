@@ -1382,7 +1382,7 @@ ALTER TABLE `zt_project`
   MODIFY COLUMN `percent` decimal(5,2) unsigned NOT NULL DEFAULT 0.00,
   MODIFY COLUMN `milestone` char(1) NOT NULL DEFAULT '0',
   MODIFY COLUMN `auth` varchar(30) NOT NULL DEFAULT '',
-  MODIFY COLUMN `storyType` varchar(30) NOT NULL DEFAULT '',
+  MODIFY COLUMN `storyType` varchar(30) NOT NULL DEFAULT 'story',
   MODIFY COLUMN `parent` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `workflowGroup` int unsigned NOT NULL DEFAULT 0,
   MODIFY COLUMN `pri` char(1) NOT NULL DEFAULT '1',
