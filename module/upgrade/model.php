@@ -397,12 +397,11 @@ class upgradeModel extends model
                     if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
 
                     /* Get xuanxuan contents. */
-                    if(isset($this->config->upgrade->execFlow[$version]['xxsqls']))
+                    if(!isset($this->config->upgrade->execFlow[$version]['xxsqls'])) continue;
+
+                    foreach(array_filter(explode(',', $this->config->upgrade->execFlow[$version]['xxsqls'])) as $sqlFile)
                     {
-                        foreach(array_filter(explode(',', $this->config->upgrade->execFlow[$version]['xxsqls'])) as $sqlFile)
-                        {
-                            if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
-                        }
+                        if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
                     }
                 }
             }
