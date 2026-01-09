@@ -82,5 +82,6 @@ dtable
     set::data($data),
     set::orderBy($orderBy),
     set::sortLink(createLink('repobranchtype', 'browse', $urlParams)),
+    set::onRenderCell(jsRaw('window.renderBranchTypeCell')),
     set::footPager(usePager())
 );

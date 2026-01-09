@@ -50,6 +50,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('repobranchtype', 'import', $urlParams)),
     set::checkable(true),
+    set::onRenderCell(jsRaw('window.renderBranchTypeCell')),
     set::footToolbar(array('items' => array(array
     (
         'text'         => $lang->repobranchtype->import,
