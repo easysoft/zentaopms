@@ -5,7 +5,7 @@ window.loadReviewers = function()
     const $reviewers   = $('[name^="reviewer"]');
     $.getJSON($.createLink('mr', 'ajaxGetReviewFlow', 'repoID=' + repoID + '&targetBranch=' + targetBranch), function(data)
     {
-        if(data)
+        if(data && typeof data.id != 'undefined')
         {
             const flowID             = data.id;
             const defaultReviewers   = data.definition.reviewFlow.approvals.defaultReviewers;
@@ -16,7 +16,12 @@ window.loadReviewers = function()
                 return combined.indexOf(item) === index;
             });
             $reviewers.zui('picker').$.setValue(reviewers.join(','));
-            $('reviewFlowID').val(flowID);
+            $('#reviewFlowID').val(flowID);
+        }
+        else
+        {
+            $reviewers.zui('picker').$.setValue('');
+            $('#reviewFlowID').val(0);
         }
     });
 
@@ -30,6 +35,7 @@ window.loadReviewers = function()
                 $('button[type=submit]').addClass('disabled');
                 $('button[type=submit]').attr('disabled', 'disabled');
                 $('[name=failMessage] span').text(data.message);
+                $('#sourceSHA').val('');
                 if(typeof data.conflictFiles != 'undefined' && data.conflictFiles.length > 0)
                 {
                     $('#createCheckList').removeClass('hidden');
@@ -47,6 +53,7 @@ window.loadReviewers = function()
                 $('button[type=submit]').removeAttr('disabled');
                 $('#createCheckList').removeClass('hidden');
                 loadTarget($.createLink('mr', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
+                $('#sourceSHA').val(data.sourceSHA);
             }
         }
     });

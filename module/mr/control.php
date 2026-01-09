@@ -207,6 +207,7 @@ class mr extends control
                 ->add('repoID', $repoID)
                 ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
                 ->add('targetRepoID', zget($repo, 'gitfoxID', 0))
+                ->add('status', 'opened')
                 ->skipSpecial('title,description')
                 ->get();
             $result = $this->mr->create($MR);
@@ -1014,7 +1015,7 @@ class mr extends control
        $objectPager = new pager(0, $recPerPage, $pageID);
 
        $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $commitPager);
-       $diffs   = $scm->diff('', $sourceBranch, $targetBranch, 'yes', 'isBranchOrTag');
+       $diffs   = $scm->diff('', $targetBranch, $sourceBranch, 'yes', 'isBranchOrTag');
        $objects = $this->mr->getRelationByBranch($repo, $sourceBranch, $targetBranch, '', $objectPager);
 
        $this->view->commits      = $commits;
@@ -1078,6 +1079,8 @@ class mr extends control
            $result->canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
            $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
            $result->message       = zget($mergeCheckMessage, 'message', '');
+           $result->sourceSHA     = zget($mergeCheckMessage, 'sourceSHA', '');
+           $result->targetSHA     = zget($mergeCheckMessage, 'targetSHA', '');
            if(!empty($result->conflictFiles)) $result->message .= $this->lang->mr->checkConflicts;
            if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
            if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
