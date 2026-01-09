@@ -31,7 +31,7 @@ r($dev->getFieldsTest('zt_product')) && p('name:type') && e('varchar'); // 步�
 r($dev->getFieldsTest('zt_todo')) && p('begin:name') && e('开始'); // 步骤3：字段名国际化处理测试
 r($dev->getFieldsTest('zt_user')) && p('account:null') && e('NO'); // 步骤4：字段null属性检查测试
 r($dev->getFieldsTest('zt_user')) && p('id:type') && e('int'); // 步骤5：int类型字段解析测试
-r($dev->getFieldsTest('zt_user')) && p('account:type') && e('char'); // 步骤6：char类型字段解析测试
+r($dev->getFieldsTest('zt_user')) && p('account:type') && e('varchar'); // 步骤6：char类型字段解析测试
 r($dev->getFieldsTest('zt_product')) && p('name:name') && e('产品名称'); // 步骤7：产品表字段名称解析测试
 r($dev->getFieldsTest('zt_nonexistent_table')) && p() && e('0'); // 步骤8：不存在表的异常处理测试
 r($dev->getFieldsTest('')) && p() && e('0'); // 步骤9：空表名边界值测试
