@@ -299,19 +299,22 @@ class mr extends control
     {
         $mr   = $this->mr->fetchByID($MRID);
         $repo = $this->loadModel('repo')->getByID($mr->repoID);
+        $flow = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
 
         $this->app->loadClass('pager', true);
         $commitPager = new pager($type == 'commit' ? $recTotal : 0, $recPerPage, $type == 'commit' ? $pageID : 1);
         $bugPager    = new pager($type == 'bug'    ? $recTotal : 0, $recPerPage, $type == 'bug'    ? $pageID : 1);
 
-        $this->view->title       = $this->lang->mr->view;
-        $this->view->mr          = $this->mr->fetchByID($MRID);
-        $this->view->commitLogs  = $this->mr->getCommitListByBranch($repo, $mr->sourceBranch, $mr->targetBranch, $commitPager);
-        $this->view->bugs        = $this->mr->getRelationByBranch($repo, $mr->sourceBranch, $mr->targetBranch, 'bug', $bugPager);
-        $this->view->commitPager = $commitPager;
-        $this->view->bugPager    = $bugPager;
-        $this->view->type        = $type;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title             = $this->lang->mr->view;
+        $this->view->mr                = $mr;
+        $this->view->flow              = $flow;
+        $this->view->commitLogs        = $this->mr->apiGetMRCommits($mr->targetRepoID, $mr->id, $commitPager);
+        $this->view->bugs              = $this->mr->getRelationByBranch($repo, $mr->sourceBranch, $mr->targetBranch, 'bug', $bugPager);
+        $this->view->commitPager       = $commitPager;
+        $this->view->bugPager          = $bugPager;
+        $this->view->type              = $type;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
+        $this->view->mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $mr->sourceBranch, $mr->targetBranch);
         $this->display();
     }
 

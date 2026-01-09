@@ -560,6 +560,7 @@ class mrModel extends model
     public function apiGetMRCommits(int $targetRepoID, int $mrID, ?object $pager = null): array|null
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $mr      = $this->fetchByID($mrID);
         if(empty($apiRoot)) return array();
 
         $url = sprintf($apiRoot->url, "/repos/{$targetRepoID}/pullreq/{$mrID}/commits");
@@ -586,7 +587,20 @@ class mrModel extends model
         {
             $url .= '?' . http_build_query($this->gitfox->getPage($pager));
             $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
-            return $this->gitfox->getResponse($response);
+            $response = $this->gitfox->getResponse($response);
+            if(empty($response) || empty($response->data)) return array();
+            $pager->recTotal   = $response->pager->total;
+            $pager->recPerPage = $response->pager->pageSize;
+            $pager->pageID     = $response->pager->page;
+            $response = zget($response, 'data', array());
+            foreach($response as $commit)
+            {
+                $commit->id            = $commit->sha;
+                $commit->repoID        = $mr->repoID;
+                $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
+                $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
+            }
+            return $response;
         }
     }
 

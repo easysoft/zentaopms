@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$hasConflict = 'yes'; // 是否有代码冲突
+$hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
+$conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
 
 $AICodeScore     = 3;     // AI评审代码分数
 $AISevereIssue   = 0;     // AI评审高危问题
@@ -81,7 +82,7 @@ $basicItems[] = item(set::name($lang->mr->author),       zget($users, $mr->creat
 $basicItems[] = item(set::name($lang->mr->createdDate),  $mr->createdDate);
 $basicItems[] = item(set::name($lang->mr->targetBranch), $mr->targetBranch);
 $basicItems[] = item(set::name($lang->mr->sourceBranch), $mr->sourceBranch);
-$basicItems[] = item(set::name($lang->mr->description),  !empty($mr->description) ? $mr->description : $lang->noData);
+$basicItems[] = item(set::name($lang->mr->description),  !empty($mr->desc) ? strip_tags($mr->desc) : $lang->noData);
 
 $reviewers = array('admin', 'admin', 'admin');
 $reviewItems = array();
@@ -127,7 +128,7 @@ div
                 div
                 (
                     setClass('my-2'),
-                    span(html(sprintf($lang->mr->MRHistory, zget($users, $mr->createdBy), $mr->createdDate, $mr->sourceBranch, '3', $mr->targetBranch)))
+                    span(html(sprintf($lang->mr->MRHistory, zget($users, $mr->createdBy), $mr->createdDate, $mr->sourceBranch, $commitPager->recTotal, $mr->targetBranch)))
                 ),
                 div
                 (
