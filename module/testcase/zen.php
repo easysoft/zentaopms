@@ -1626,6 +1626,7 @@ class testcaseZen extends testcase
                 $cases[$caseID] = $case;
                 $steps[$caseID] = zget($fromSteps, $caseID, array());
                 $files[$caseID] = zget($fromFiles, $caseID, array());
+                foreach($files[$caseID] as $file) $file->oldpathname = $file->pathname;
             }
         }
 
