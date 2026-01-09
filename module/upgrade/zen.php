@@ -3,6 +3,15 @@ declare(strict_types=1);
 class upgradeZen extends upgrade
 {
     /**
+     * 升级变更内容缓存。
+     * Upgrade changes cache.
+     *
+     * @var array
+     * @access private
+     */
+    private $upgradeChanges = [];
+
+    /**
      * 获取要升级到的版本列表。
      * Get upgrade versions.
      *
@@ -158,6 +167,8 @@ class upgradeZen extends upgrade
      */
     protected function getUpgradeChanges(string $fromVersion, string $toVersion): array
     {
+        $this->upgradeChanges = [];
+
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
         $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
         $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
@@ -265,6 +276,11 @@ class upgradeZen extends upgrade
         $sqls    = $this->upgrade->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
+            $sqlMd5 = md5($sql);
+            if(isset($this->upgradeChanges['sqls'][$sqlFile][$sqlMd5])) continue;
+
+            $this->upgradeChanges['sqls'][$sqlFile][$sqlMd5] = true;
+
             $items = $this->parseSqlToSemantic($sql);
             foreach($items as $item)
             {
@@ -288,6 +304,10 @@ class upgradeZen extends upgrade
      */
     protected function getChangesByMethod(string $rawMethod): array
     {
+        if(isset($this->upgradeChanges['methods'][$rawMethod])) return [];
+
+        $this->upgradeChanges['methods'][$rawMethod] = true;
+
         $module = 'upgrade';
         $method = $rawMethod;
         if(strpos($rawMethod, '-') !== false)
