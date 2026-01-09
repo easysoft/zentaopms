@@ -265,7 +265,7 @@ class upgrade extends control
             $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
         }
 
-        return print(json_encode(['executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
+        return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
     }
 
     /**
