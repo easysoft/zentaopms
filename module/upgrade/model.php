@@ -210,7 +210,7 @@ class upgradeModel extends model
 
             /* Execute open edition. */
             $this->saveLogs("Execute $openVersion");
-            $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
+            $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)), $openVersion);
             if(!$result) return $this->recordExecutedChanges();
 
             $result = $this->executeByConfig($openVersion);
@@ -221,7 +221,7 @@ class upgradeModel extends model
                 foreach($chargedVersion as $version)
                 {
                     $this->saveLogs("Execute $version");
-                    $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)));
+                    $result = $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $version)),$version);
                     if(!$result) return $this->recordExecutedChanges();
 
                     $result = $this->executeByConfig($version);
@@ -258,11 +258,11 @@ class upgradeModel extends model
      */
     public function executeOthers(string $fromEdition): bool
     {
+        $version = str_replace('.', '_', $this->config->installedVersion);
         $methods = $this->getOtherMethods($fromEdition);
-
         foreach($methods as $method => $params)
         {
-            $result = $this->executeUpgradeMethod($method, $params);
+            $result = $this->executeUpgradeMethod($version, $method, $params);
             if(!$result) return false;
         }
         return true;
@@ -286,24 +286,24 @@ class upgradeModel extends model
 
         foreach(array_filter(explode(',', $functions)) as $function)
         {
-            $result = $this->executeUpgradeMethod($function, zget($params, $function, array()));
+            $result = $this->executeUpgradeMethod($version, $function, zget($params, $function, array()));
             if(!$result) return false;
         }
         if($version == 'pro1_1_1')
         {
-            $result = $this->execSQL($this->getUpgradeFile('pro1.1'));
+            $result = $this->execSQL($this->getUpgradeFile('pro1.1'), $version);
             if(!$result) return false;
         }
         if($version == 'pro8_3')
         {
-            $result = $this->execSQL($this->getUpgradeFile('pro8.2'));
+            $result = $this->execSQL($this->getUpgradeFile('pro8.2'), $version);
             if(!$result) return false;
         }
         if(!empty($xxsqls))
         {
             foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)
             {
-                $result = $this->execSQL($sqlFile);
+                $result = $this->execSQL($sqlFile, $version);
                 if(!$result) return false;
             }
         }
@@ -311,7 +311,7 @@ class upgradeModel extends model
         {
             foreach(array_filter(explode(',', $xxfunctions)) as $function)
             {
-                $result = $this->executeUpgradeMethod($function, zget($params, $function, array()));
+                $result = $this->executeUpgradeMethod($version, $function, zget($params, $function, array()));
                 if(!$result) return false;
             }
         }
@@ -322,14 +322,15 @@ class upgradeModel extends model
      * 执行单个升级方法。
      * Execute single upgrade method.
      *
+     * @param  string $version
      * @param  string $rawMethod
      * @param  array  $params
      * @access public
      * @return bool
      */
-    public function executeUpgradeMethod(string $rawMethod, array $params = []): bool
+    public function executeUpgradeMethod(string $version, string $rawMethod, array $params = []): bool
     {
-        if(isset($this->executedChanges['methods'][$rawMethod])) return true;
+        if(isset($this->executedChanges[$version]['methods'][$rawMethod])) return true;
 
         $this->saveLogs("Run Method {$rawMethod}");
 
@@ -353,7 +354,7 @@ class upgradeModel extends model
             return false;
         }
 
-        $this->executedChanges['methods'][$rawMethod] = true;
+        $this->executedChanges[$version]['methods'][$rawMethod] = true;
         $this->recordExecutedChanges();
         return true;
     }
@@ -396,12 +397,11 @@ class upgradeModel extends model
                     if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
 
                     /* Get xuanxuan contents. */
-                    if(isset($this->config->upgrade->execFlow[$version]['xxsqls']))
+                    if(!isset($this->config->upgrade->execFlow[$version]['xxsqls'])) continue;
+
+                    foreach(array_filter(explode(',', $this->config->upgrade->execFlow[$version]['xxsqls'])) as $sqlFile)
                     {
-                        foreach(array_filter(explode(',', $this->config->upgrade->execFlow[$version]['xxsqls'])) as $sqlFile)
-                        {
-                            if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
-                        }
+                        if(file_exists($sqlFile)) $confirmContent .= file_get_contents($sqlFile);
                     }
                 }
             }
@@ -1215,10 +1215,11 @@ class upgradeModel extends model
      * Execute a sql.
      *
      * @param  string $sqlFile
+     * @param  string $version
      * @access public
      * @return bool
      */
-    public function execSQL(string $sqlFile): bool
+    public function execSQL(string $sqlFile, string $version = ''): bool
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
@@ -1228,15 +1229,16 @@ class upgradeModel extends model
         {
             if(empty($sql)) continue;
 
-            $sqlMd5 = md5($sql);
-            if(isset($this->executedChanges['sqls'][$sqlFile][$sqlMd5])) continue;   // Skip the sql that has been executed.
+            $sqlMd5  = md5($sql);
+            $fileMd5 = md5($sqlFile);
+            if(isset($this->executedChanges[$version]['sqls'][$fileMd5][$sqlMd5])) continue;   // Skip the sql that has been executed.
 
             try
             {
                 $this->saveLogs($sql);
                 $this->dbh->exec($sql);
 
-                $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
+                $this->executedChanges[$version]['sqls'][$fileMd5][$sqlMd5] = true; // Mark the sql has been executed.
                 $this->recordExecutedChanges();
             }
             catch(PDOException $e)
@@ -1245,7 +1247,7 @@ class upgradeModel extends model
                 $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
                 if(strpos($ignoreCode, "|$errorCode|") !== false)
                 {
-                    $this->executedChanges['sqls'][$sqlFile][$sqlMd5] = true; // Mark the sql has been executed.
+                    $this->executedChanges[$version]['sqls'][$fileMd5][$sqlMd5] = true; // Mark the sql has been executed.
                     $this->recordExecutedChanges();
                 }
                 else

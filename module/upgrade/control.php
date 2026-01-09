@@ -187,8 +187,8 @@ class upgrade extends control
         $sessionChanges = [];
         foreach($upgradeChanges as $change)
         {
-            if($change['type'] == 'sql')    $sessionChanges[] = ['executed' => false, 'type' => 'sql',    'sqlFile' => $change['sqlFile'], 'sqlMd5' => md5($change['sql'])];
-            if($change['type'] == 'method') $sessionChanges[] = ['executed' => false, 'type' => 'method', 'method'  => $change['method']];
+            if($change['type'] == 'sql')    $sessionChanges[] = ['version' => $change['version'], 'executed' => false, 'type' => 'sql',    'fileMd5' => $change['fileMd5'], 'sqlMd5' => $change['sqlMd5']];
+            if($change['type'] == 'method') $sessionChanges[] = ['version' => $change['version'], 'executed' => false, 'type' => 'method', 'method'  => $change['method']];
         }
         $this->loadModel('setting')->setItem('system.upgrade.upgradeChanges', json_encode($sessionChanges));
 
@@ -244,8 +244,8 @@ class upgrade extends control
 
         foreach($upgradeChanges as $key => $change)
         {
-            if($change['type'] == 'sql'    && isset($executedChanges['sqls'][$change['sqlFile']][$change['sqlMd5']])) $upgradeChanges[$key]['executed'] = true;
-            if($change['type'] == 'method' && isset($executedChanges['methods'][$change['method']]))                  $upgradeChanges[$key]['executed'] = true;
+            if($change['type'] == 'sql'    && isset($executedChanges[$change['version']]['sqls'][$change['fileMd5']][$change['sqlMd5']])) $upgradeChanges[$key]['executed'] = true;
+            if($change['type'] == 'method' && isset($executedChanges[$change['version']]['methods'][$change['method']]))                  $upgradeChanges[$key]['executed'] = true;
         }
 
         $executedKeys = array_keys(array_filter($upgradeChanges, function($change)
@@ -265,7 +265,7 @@ class upgrade extends control
             $this->setting->deleteItems('owner=system&module=upgrade&key=executedChanges');
         }
 
-        return print(json_encode(['executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
+        return print(json_encode(['version' => $this->config->installedVersion, 'executedKeys' => $executedKeys, 'allChangesExecuted' => $allChangesExecuted]));
     }
 
     /**

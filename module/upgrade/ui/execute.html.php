@@ -32,41 +32,40 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
     foreach($upgradeVersions as $version => $label)
     {
         $edition = is_numeric($version[0]) ? 'open' : substr($version, 0, 3);
-        $versions[] = div
+        $versions[] = row
         (
-            row
+            setClass('version-item items-center gap-2'),
+            setData(['version' => $version]),
+            icon
             (
-                setClass('version-item items-center gap-2'),
-                setData(['version' => $version]),
-                icon
-                (
-                    setClass('text-xl text-gray-400'),
-                    'clock'
-                ),
-                span
-                (
-                    $editionNames[$edition] . str_ireplace($edition, '', $label)
-                )
+                setClass('text-gray-400 w-4 h-4'),
+                'clock'
+            ),
+            span
+            (
+                $editionNames[$edition] . str_ireplace($edition, '', $label)
             )
         );
     }
     return $versions;
 };
 
-$buildChanges = function() use ($upgradeChanges)
+$buildChanges = function() use ($app, $lang, $upgradeChanges)
 {
     $changes = [];
+    $width   = $app->getClientLang() == 'en' ? 'w-14' : 'w-11';
     foreach($upgradeChanges as $key => $change)
     {
         $sql = json_encode($change['sql'] ?? []);
         $changes[] = row
         (
             setClass('change-item items-center gap-3'),
-            setData(['key' => $key, 'change' => $change]),
-            icon
+            setData(['key' => $key]),
+            span
             (
-                setClass('text-xl text-gray-400'),
-                'more-circle'
+                setClass("label gray-pale text-gray-400 px-2.5 py-1 {$width}"),
+                setData(['text' => $lang->upgrade->changeModes[$change['mode']]]),
+                icon('spinner-indicator')
             ),
             span
             (
@@ -118,7 +117,7 @@ div
                 col
                 (
                     setID('versionsBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
                     $buildVersions
                 ),
                 col
@@ -173,7 +172,7 @@ div
                 col
                 (
                     setID('changesBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
                     $buildChanges
                 )
             )

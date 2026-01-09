@@ -3,6 +3,15 @@ declare(strict_types=1);
 class upgradeZen extends upgrade
 {
     /**
+     * 升级变更内容缓存。
+     * Upgrade changes cache.
+     *
+     * @var array
+     * @access private
+     */
+    private $upgradeChanges = [];
+
+    /**
      * 获取要升级到的版本列表。
      * Get upgrade versions.
      *
@@ -158,8 +167,11 @@ class upgradeZen extends upgrade
      */
     protected function getUpgradeChanges(string $fromVersion, string $toVersion): array
     {
+        $this->upgradeChanges = [];
+
+        $currentVersion  = $this->config->installedVersion;
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
-        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $this->config->installedVersion));
+        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $currentVersion));
         $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
         $upgradeVersions = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
@@ -170,7 +182,7 @@ class upgradeZen extends upgrade
             if(version_compare($openVersion, $toOpenVersion, '>='))  continue;
 
             $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $openVersion));
-            $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
+            $changes = array_merge($changes, $this->getChangesBySql($openVersion, $sqlFile));
             $changes = array_merge($changes, $this->getChangesByConfig($openVersion));
 
             foreach($chargedVersions as $chargedVersion)
@@ -178,7 +190,7 @@ class upgradeZen extends upgrade
                 foreach($chargedVersion as $version)
                 {
                     $sqlFile = $this->upgrade->getUpgradeFile(str_replace('_', '.', $version));
-                    $changes = array_merge($changes, $this->getChangesBySql($sqlFile));
+                    $changes = array_merge($changes, $this->getChangesBySql($version, $sqlFile));
                     $changes = array_merge($changes, $this->getChangesByConfig($version));
                 }
             }
@@ -191,7 +203,7 @@ class upgradeZen extends upgrade
             $methods = $this->upgrade->getOtherMethods($edition);
             foreach(array_keys($methods) as $method)
             {
-                $changes[] = $this->getChangesByMethod($method);
+                $changes[] = $this->getChangesByMethod($currentVersion, $method);
             }
         }
 
@@ -215,26 +227,26 @@ class upgradeZen extends upgrade
 
         foreach(array_filter(explode(',', $functions)) as $function)
         {
-            $changes[] = $this->getChangesByMethod($function);
+            $changes[] = $this->getChangesByMethod($version, $function);
         }
 
         if($version == 'pro1_1_1')
         {
             $sqlFile    = $this->ugprade->getUpgradeFile('pro1.1');
-            $sqlChanges = $this->getChangesBySql($sqlFile);
+            $sqlChanges = $this->getChangesBySql($version, $sqlFile);
             $changes    = array_merge($changes, $sqlChanges);
         }
         if($version == 'pro8_3')
         {
             $sqlFile    = $this->ugprade->getUpgradeFile('pro8.2');
-            $sqlChanges = $this->getChangesBySql($sqlFile);
+            $sqlChanges = $this->getChangesBySql($version, $sqlFile);
             $changes    = array_merge($changes, $sqlChanges);
         }
         if(!empty($xxsqls))
         {
             foreach(array_filter(explode(',', $xxsqls)) as $sqlFile)
             {
-                $sqlChanges = $this->getChangesBySql($sqlFile);
+                $sqlChanges = $this->getChangesBySql($version, $sqlFile);
                 $changes    = array_merge($changes, $sqlChanges);
             }
         }
@@ -242,7 +254,7 @@ class upgradeZen extends upgrade
         {
             foreach(array_filter(explode(',', $xxfunctions)) as $function)
             {
-                $changes[] = $this->getChangesByMethod($function);
+                $changes[] = $this->getChangesByMethod($version, $function);
             }
         }
 
@@ -253,11 +265,12 @@ class upgradeZen extends upgrade
      * 获取 SQL 文件中的变更内容列表。
      * Get changes by sql file.
      *
+     * @param  string $version
      * @param  string $sqlFile
      * @access protected
      * @return array[]
      */
-    protected function getChangesBySql(string $sqlFile): array
+    protected function getChangesBySql(string $version, string $sqlFile): array
     {
         if(!is_file($sqlFile)) return [];
 
@@ -265,6 +278,12 @@ class upgradeZen extends upgrade
         $sqls    = $this->upgrade->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
+            $sqlMd5  = md5($sql);
+            $fileMd5 = md5($sqlFile);
+            if(isset($this->upgradeChanges[$version]['sqls'][$fileMd5][$sqlMd5])) continue;
+
+            $this->upgradeChanges[$version]['sqls'][$fileMd5][$sqlMd5] = true;
+
             $items = $this->parseSqlToSemantic($sql);
             foreach($items as $item)
             {
@@ -272,7 +291,7 @@ class upgradeZen extends upgrade
                 $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
                 $subject = $this->lang->upgrade->changeActions[$item['action']] ?? $this->lang->upgrade->changeActions['other'];
                 $content = str_replace($search, $replace, $subject);
-                $changes[] = ['type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql, 'sqlFile' => $sqlFile];
+                $changes[] = ['version' => $version, 'type' => 'sql', 'mode' => $item['mode'], 'content' => $content, 'sql' => $sql, 'fileMd5' => $fileMd5, 'sqlMd5' => $sqlMd5];
             }
         }
         return $changes;
@@ -282,19 +301,25 @@ class upgradeZen extends upgrade
      * 获取方法变更内容。
      * Get changes by method.
      *
+     * @param  string $version
      * @param  string $rawMethod
      * @access protected
      * @return array
      */
-    protected function getChangesByMethod(string $rawMethod): array
+    protected function getChangesByMethod(string $version, string $rawMethod): array
     {
+        if(isset($this->upgradeChanges[$version]['methods'][$rawMethod])) return [];
+
+        $this->upgradeChanges[$version]['methods'][$rawMethod] = true;
+
         $module = 'upgrade';
         $method = $rawMethod;
         if(strpos($rawMethod, '-') !== false)
         {
             list($module, $method) = explode('-', $rawMethod);
         }
-        return ['type' => 'method', 'mode' => 'update', 'content' => str_replace(['%MODULE%', '%METHOD%'], [$module, $method], $this->lang->upgrade->changeActions['method']), 'method' => $rawMethod];
+        $content = str_replace(['%MODULE%', '%METHOD%'], [$module, $method], $this->lang->upgrade->changeActions['method']);
+        return ['version' => $version, 'type' => 'method', 'mode' => 'update', 'content' => $content, 'method' => $rawMethod];
     }
 
     /**
