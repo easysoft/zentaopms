@@ -82,6 +82,11 @@ formPanel
     ),
     formGroup
     (
+        setClass('hidden'),
+        set::name('sourceSHA')
+    ),
+    formGroup
+    (
         setID('failMessage'),
         setClass('hidden'),
         set::label(''),

@@ -8,6 +8,7 @@ $config->mr->form->create['reviewer']     = array('type' => 'array', 'required' 
 $config->mr->form->create['desc']         = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->mr->form->create['createdDate']  = array('type' => 'string', 'required' => false, 'default' => helper::now());
 $config->mr->form->create['reviewFlowID'] = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->mr->form->create['sourceSHA']    = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
 
 $config->mr->form->edit = array();
 $config->mr->form->edit['title']              = array('type' => 'string', 'required' => true);

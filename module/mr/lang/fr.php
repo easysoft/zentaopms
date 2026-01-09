@@ -167,6 +167,7 @@ $lang->mr->unsupportedFeature  = "Unsupported feature.";
 $lang->mr->checkSourceBranch   = 'The source branch does not comply with the review flow.';
 $lang->mr->checkTargetBranch   = 'The target branch does not comply with the review flow.';
 $lang->mr->checkConflicts      = 'Code conflicts have been detected. Please resolve the conflicts locally before submitting the merge request.';
+$lang->mr->checkReviewers      = 'The reviewers must contain %s';
 
 $lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";

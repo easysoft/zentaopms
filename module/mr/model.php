@@ -180,6 +180,22 @@ class mrModel extends model
     {
         $result = $this->checkSameOpened($mr->repoID, $mr->sourceRepoID, $mr->sourceBranch, $mr->targetRepoID, $mr->targetBranch);
         if($result['result'] == 'fail') return $result;
+        $reviewers = explode(',', $mr->reviewer);
+        if(!empty($mr->reviewFlowID))
+        {
+            $flow = $this->loadModel('reporeviewflow')->getByID($mr->reviewFlowID);
+            if(empty($flow)) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[10]);
+
+            $specifiedReviewers = $flow->definition->reviewFlow->approvals->specifiedReviewers;
+            $noHasReviewers     = array_diff($specifiedReviewers, $reviewers);
+
+            if(!empty(array_filter($noHasReviewers)))
+            {
+                $noHasReviewers = $this->loadModel('user')->getListByAccounts($noHasReviewers);
+                $noHasReviewers = array_column($noHasReviewers, 'realname');
+                return array('result' => 'fail', 'message' => array('reviewer' => sprintf($this->lang->mr->checkReviewers, implode(',', $noHasReviewers))));
+            }
+        }
 
         $diffStats = $this->loadModel('gitfox')->apiGetDiffStats((int)$mr->sourceRepoID, $mr->sourceBranch, $mr->targetBranch);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -196,7 +212,6 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $this->file->updateObjectID($this->post->uid, $mrID, 'mr');
 
-        $reviewers = explode(',', $mr->reviewer);
         foreach($reviewers as $reviewer)
         {
             $reviewData = new stdClass();
@@ -212,9 +227,10 @@ class mrModel extends model
         }
 
         $this->loadModel('action')->create($this->moduleName, $mrID, 'opened');
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        /* TODO: Link objects. */
-        //$this->linkObjects($MR);
+        $mr->id = $mrID;
+        $this->linkObjects($mr);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$mr->executionID}" : "repoID={$mr->repoID}";
@@ -535,24 +551,42 @@ class mrModel extends model
      *
      * @param  int    $hostID
      * @param  string $projectID  targetProject
-     * @param  int    $MRID
+     * @param  int    $mrID
+     * @param  object $pager
      * @access public
      * @return array|null
      */
-    public function apiGetMRCommits(int $hostID, string $projectID, int $MRID): array|null
+    public function apiGetMRCommits(int $targetRepoID, int $mrID, ?object $pager = null): array|null
     {
-        $host    = $this->loadModel('pipeline')->getByID($hostID);
-        $apiRoot = $this->loadModel($host->type)->getApiRoot($hostID);
-        if($host->type == 'gitlab')
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(empty($apiRoot)) return array();
+
+        $url = sprintf($apiRoot->url, "/repos/{$targetRepoID}/pullreq/{$mrID}/commits");
+        if(is_null($pager))
         {
-            $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/commits");
+            $params = array();
+            $params['pageSize'] = 100;
+
+            $commitList = array();
+            for($i = 0; true; $i++)
+            {
+                $params['page'] = $i + 1;
+                $apiURL = $url . '?' . http_build_query($params);
+                $response = json_decode(commonModel::http($apiURL, null, array(), $apiRoot->header));
+                if(empty($response) || empty($response->data)) break;
+                $commitList = array_merge($commitList, $response->data);
+                if(!empty($response->listArgs) && $response->listArgs->pageSize < 100) break;
+            }
+
+            return $commitList;
+
         }
         else
         {
-            $url = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/commits");
+            $url .= '?' . http_build_query($this->gitfox->getPage($pager));
+            $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+            return $this->gitfox->getResponse($response);
         }
-
-        return (array)json_decode(commonModel::http($url, null, array(), is_object($apiRoot) ? $apiRoot->header : array()));
     }
 
     /**
@@ -1052,7 +1086,7 @@ class mrModel extends model
     public function linkObjects(object $MR): bool
     {
         /* Get commits by MR. */
-        $commits = $this->apiGetMRCommits($MR->hostID, (string)$MR->targetProject, $MR->mriid);
+        $commits = $this->apiGetMRCommits((int)$MR->targetRepoID, $MR->id);
         if(empty($commits)) return true;
 
         /* Init objects. */
@@ -1330,8 +1364,8 @@ class mrModel extends model
     public function getCommitListByBranch(object $repo, string $sourceBranch, string $targetBranch, ?object $pager = null): array
     {
        $params = array();
-       $params['after']        = $targetBranch;
        $params['gitRef']       = $sourceBranch;
+       $params['after']        = $targetBranch;
        $params['page']         = is_null($pager) ? 1 : $pager->pageID;
        $params['pageSize']     = is_null($pager) ? 20 : $pager->recPerPage;
        $params['includeStats'] = true;
@@ -1369,9 +1403,9 @@ class mrModel extends model
     public function getRelationByBranch(object $repo, string $sourceBranch, string $targetBranch, string $type= '', ?object $pager = null)
     {
         $params = array();
-        $params['after']        = $targetBranch;
-        $params['gitRef']       = $sourceBranch;
-        $params['pageSize']     = 100;
+        $params['gitRef']   = $sourceBranch;
+        $params['after']    = $targetBranch;
+        $params['pageSize'] = 100;
         $commitList = array();
         for($i = 0; true; $i++)
         {
