@@ -483,7 +483,7 @@ define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 define('TABLE_PIPELINE',      '`' . $config->db->prefix . 'pipeline`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
-define('TABLE_MR',            '`ops_pullrequests`');
+define('TABLE_MR',            '`ops_ppmrequests`');
 define('TABLE_MRREVIEWERS',   '`' . $config->db->prefix . 'ops_request_reviewers`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 define('TABLE_MARK',          '`' . $config->db->prefix . 'mark`');
