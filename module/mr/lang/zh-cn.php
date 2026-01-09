@@ -167,6 +167,7 @@ $lang->mr->unsupportedFeature  = "暂不支持该功能。";
 $lang->mr->checkSourceBranch   = '源分支不符合评审流程';
 $lang->mr->checkTargetBranch   = '目标分支不符合评审流程';
 $lang->mr->checkConflicts      = '检测到代码冲突，请先在本地解决冲突后再创建合并请求。';
+$lang->mr->checkReviewers      = '评审人必须包含%s';
 
 $lang->mr->apiErrorMap[1]  = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2]  = "/Another open merge request already exists for this source branch: !([0-9]+)/";
