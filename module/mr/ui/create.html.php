@@ -87,6 +87,11 @@ formPanel
     ),
     formGroup
     (
+        setClass('hidden'),
+        set::name('mergeTargetSHA')
+    ),
+    formGroup
+    (
         setID('failMessage'),
         setClass('hidden'),
         set::label(''),

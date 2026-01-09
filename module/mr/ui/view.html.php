@@ -121,8 +121,8 @@ div
                 div
                 (
                     setClass('py-1'),
-                    span(setClass('text-lg text-clip font-bold'), "#{$mr->id} dev(branch):{$mr->title}"),
-                    label(setClass('primary ml-4'), '开启中')
+                    span(setClass('text-lg text-clip font-bold'), "#{$mr->id} {$mr->title}"),
+                    label(setClass('primary ml-4'), zget($lang->mr->statusList, $mr->status))
                 ),
                 div
                 (

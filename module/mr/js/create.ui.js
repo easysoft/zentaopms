@@ -36,6 +36,7 @@ window.loadReviewers = function()
                 $('button[type=submit]').attr('disabled', 'disabled');
                 $('[name=failMessage] span').text(data.message);
                 $('#sourceSHA').val('');
+                $('#mergeTargetSHA').val('');
                 if(typeof data.conflictFiles != 'undefined' && data.conflictFiles.length > 0)
                 {
                     $('#createCheckList').removeClass('hidden');
@@ -54,6 +55,7 @@ window.loadReviewers = function()
                 $('#createCheckList').removeClass('hidden');
                 loadTarget($.createLink('mr', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
                 $('#sourceSHA').val(data.sourceSHA);
+                $('#mergeTargetSHA').val(data.targetSHA);
             }
         }
     });

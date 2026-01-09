@@ -208,6 +208,7 @@ class mrModel extends model
         }
         $mr = $this->loadModel('file')->processImgURL($mr, $this->config->mr->editor->create['id'], (string)$this->post->uid);
 
+        $mr->mergeBaseSHA = $mr->mergeTargetSHA;
         $mrID = $this->insertMr($mr);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $this->file->updateObjectID($this->post->uid, $mrID, 'mr');
