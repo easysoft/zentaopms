@@ -22,7 +22,7 @@ window.loadReviewers = function()
 
     $.getJSON($.createLink('mr', 'ajaxGetMergeCheckMessage', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), function(data)
     {
-        if(data && typeof data.canMerge != 'undefind')
+        if(data && typeof data.canMerge != 'undefined')
         {
             if(!data.canMerge)
             {
@@ -30,7 +30,15 @@ window.loadReviewers = function()
                 $('button[type=submit]').addClass('disabled');
                 $('button[type=submit]').attr('disabled', 'disabled');
                 $('[name=failMessage] span').text(data.message);
-                $('#createCheckList').addClass('hidden');
+                if(typeof data.conflictFiles != 'undefined' && data.conflictFiles.length > 0)
+                {
+                    $('#createCheckList').removeClass('hidden');
+                    loadTarget($.createLink('mr', 'ajaxGetConflictFiles', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
+                }
+                else
+                {
+                    $('#createCheckList').addClass('hidden');
+                }
             }
             else
             {
@@ -38,9 +46,10 @@ window.loadReviewers = function()
                 $('button[type=submit]').removeClass('disabled');
                 $('button[type=submit]').removeAttr('disabled');
                 $('#createCheckList').removeClass('hidden');
+                loadTarget($.createLink('mr', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
             }
         }
-        loadTarget($.createLink('mr', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
     });
 }
 waitDom('[name=targetBranch]', loadReviewers);
+

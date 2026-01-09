@@ -1075,12 +1075,41 @@ class mr extends control
        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
        if($mergeCheckMessage)
        {
-           $result->canMerge      = !empty($mergeCheckMessage->mergeable) || $checkSourceBranch || $checkTargetBranch;
+           $result->canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
            $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
            $result->message       = zget($mergeCheckMessage, 'message', '');
+           if(!empty($result->conflictFiles)) $result->message .= $this->lang->mr->checkConflicts;
            if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
            if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
        }
        return $this->send($result);
+   }
+
+   /**
+    * 获取冲突文件列表。
+    * AJAX get conflict files.
+    *
+    * @param  int $repoID
+    * @param  string $sourceBranch
+    * @param  string $targetBranch
+    * @access public
+    * @return void
+    */
+   function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
+   {
+       $repo = $this->loadModel('repo')->fetchByID($repoID);
+       $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+       $conflictFiles     = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
+
+       $conflictFileList = array();
+       foreach($conflictFiles as $conflictFile)
+       {
+           $file = new stdclass();
+           $file->file = $conflictFile;
+           $conflictFileList[] = $file;
+       }
+
+       $this->view->conflictFiles = $conflictFileList;
+       $this->display();
    }
 }
