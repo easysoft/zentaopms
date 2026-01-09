@@ -47,6 +47,7 @@ $lang->mr->sourceBranch      = 'Source Branch';
 $lang->mr->targetBranch      = 'Target Branch';
 $lang->mr->filePath          = 'File Path';
 $lang->mr->conflictFiles     = 'Conflict Files';
+$lang->mr->changeFiles       = 'Change Files';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';

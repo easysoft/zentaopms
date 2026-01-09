@@ -47,6 +47,7 @@ $lang->mr->sourceBranch      = '源分支';
 $lang->mr->targetBranch      = '目标分支';
 $lang->mr->filePath          = '文件路径';
 $lang->mr->conflictFiles     = '冲突文件';
+$lang->mr->changeFiles       = '变更的文件';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';

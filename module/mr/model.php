@@ -1225,7 +1225,7 @@ class mrModel extends model
             ->andWhere('sourceBranch')->eq($sourceBranch)
             ->andWhere('targetRepoID')->eq($targetRepoID)
             ->andWhere('targetBranch')->eq($targetBranch)
-            ->andWhere('status')->eq('open')
+            ->andWhere('status')->eq('opened')
             ->fetch('id');
         if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->hasSameOpenedMR, $dbOpenedID));
         return array('result' => 'success');
