@@ -38,8 +38,8 @@ $fields->field('twinsStory')
         'defaultBranch' => $createFields['branch']['default'] ?? 0,
         'moduleItems'   => $createFields['module']['options'],
         'defaultModule' => $createFields['module']['default'],
-        'planItems'     => $createFields['plan']['options'],
-        'defaultPlan'   => $createFields['plan']['default'],
+        'planItems'     => isset($createFields['plan']['options']) ? $createFields['plan']['options'] : array(),
+        'defaultPlan'   => isset($createFields['plan']['default']) ? $createFields['plan']['default'] : 0,
     ));
 
 $fields->field('parent')
