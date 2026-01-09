@@ -8,6 +8,8 @@ $moduleID  = data('currentModuleID');
 $branch    = data('branch');
 $storyID   = data('case.story') ? data('case.story') : '';
 
+unset($lang->testcase->typeList['unit']);
+
 $fields->field('product')
     ->hidden(data('product.shadow'))
     ->control('inputGroup')
