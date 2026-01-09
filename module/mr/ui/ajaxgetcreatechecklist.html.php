@@ -38,7 +38,7 @@ tabs
     tabPane
     (
         set::key('diff'),
-        set::title($lang->mr->viewDiff . ' (' . count($diffs) . ')'),
+        set::title($lang->mr->changeFiles . ' (' . count($diffs) . ')'),
         empty($diffs) ? p(setClass('detail-content'), $lang->mr->noChanges) : div
         (
             setID('diff-sidebar-left'),
