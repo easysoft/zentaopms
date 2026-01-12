@@ -9,7 +9,39 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
+$entry        = count($diffs) ? $diffs[0]->fileName : '';
+$currentEntry = $this->repo->encodePath($entry);
+$fileInfo     = $entry ? pathinfo($entry) : array();
+$showBug      = isset($showBug) ? $showBug : 0;
+$objectID     = isset($objectID) ? $objectID : 0;
+$tree         = $this->repo->getFileTree($repo, '', $diffs);
+$oldRevision  = helper::safe64Encode($oldRevision);
+$newRevision  = helper::safe64Encode($newRevision);
+$diffLink     = $this->repo->createLink('diff', "repoID={$mr->repoID}&objectID={$objectID}&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
+jsVar('diffs', $diffs);
+jsVar('tree', $tree);
+jsVar('file', $currentEntry);
+jsVar('entry', $entry);
+jsVar('diffLink', $diffLink);
+jsVar('urlParams', "repoID={$mr->repoID}&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
+
+h:css("#monacoTree .text-clip {overflow: visible;}");
+
+$dropMenus = array();
+if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID={$mr->repoID}&path=$currentEntry&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'target' => '_self');
+
+$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
+$dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
+
+$encoding = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
 $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
 
@@ -295,7 +327,7 @@ div
                         tabPane
                         (
                             set::key('bug'),
-                            set::title("问题清单 ({$bugPager->recTotal})"),
+                            set::title($lang->mr->issueList . " ({$bugPager->recTotal})"),
                             set::active($type == 'bug'),
                             dtable
                             (
@@ -309,7 +341,7 @@ div
                         tabPane
                         (
                             set::key('commit'),
-                            set::title("提交记录 ({$commitPager->recTotal})"),
+                            set::title($lang->mr->commitLogs . " ({$commitPager->recTotal})"),
                             set::active($type == 'commit'),
                             dtable
                             (
@@ -323,30 +355,91 @@ div
                         tabPane
                         (
                             set::key('files'),
-                            set::title('变更的文件 (2)'),
+                            set::title($lang->mr->changeFiles . ' (' . count($diffs) . ')'),
                             set::active($type == 'files'),
-                            sectionList
-                            (
-                                section('asd')
+                            empty($diffs) ? p(setClass('detail-content'), $lang->mr->noChanges) : div(
+                                setID('diff-sidebar-left'),
+                                div
+                                (
+                                    set::id('fileTabs'),
+                                    tabs
+                                    (
+                                        set::id('monacoTabs'),
+                                        set::className('relative'),
+                                        div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
+                                        tabPane
+                                        (
+                                            set::title($fileInfo['basename']),
+                                            set::active(true),
+                                            set::key('tab-' . str_replace('=', '-', $currentEntry)),
+                                            to::suffix
+                                            (
+                                                icon
+                                                (
+                                                    'close',
+                                                    set::className('monaco-close')
+                                                )
+                                            ),
+                                            div(set::id('tab-' . $currentEntry))
+                                        ),
+                                        dropdown
+                                        (
+                                            set::arrow(false),
+                                            set::staticMenu(true),
+                                            btn
+                                            (
+                                                setClass('ghost text-black pull-right absolute top-0 right-0 z-10 monaco-dropmenu'),
+                                                set::icon('ellipsis-v rotate-90')
+                                            ),
+                                            set::items
+                                            (
+                                                $dropMenus
+                                            )
+                                        ),
+                                        div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
+                                        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
+                                    )
+                                ),
+                                sidebar
+                                (
+                                    set::maxWidth(800),
+                                    treeEditor
+                                    (
+                                        set::id('monacoTree'),
+                                        set::items($tree),
+                                        set::canSplit(false),
+                                        set::collapsedIcon('folder'),
+                                        set::expandedIcon('folder-open'),
+                                        set::normalIcon('file-text-alt'),
+                                        set::selected($currentEntry),
+                                        set::onClickItem(jsRaw('window.treeClick'))
+                                    )
+                                ),
+                                on::click('.inline-appose')->call('inlineAppose'),
+                                on::click('#monacoTabs .monaco-close')->call('closeTab', jsRaw('this')),
+                                on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
+                                a(set::className('iframe'), setData('size', '1200px'), setData('toggle', 'modal'), set::id('linkObject'))
                             )
                         ),
                         tabPane
                         (
                             set::key('pipeline'),
-                            set::title('流水线'),
+                            set::title($lang->pipeline->common),
                             set::active($type == 'pipeline'),
-                            sectionList
-                            (
-                                section('asd')
-                            )
+                            sectionList()
                         ),
                         tabPane
                         (
                             set::key('related'),
-                            set::title('关联项'),
-                            sectionList
+                            set::title($lang->mr->linkedObject . " ({$objectPager->recTotal})"),
+                            set::active($type == 'object'),
+                            dtable
                             (
-                                section('asd')
+                                set::id('linkObjects'),
+                                set::cols($config->mr->createCheck->linkObject->dtable->fieldList),
+                                set::data(array_values($linkObjects)),
+                                set::loadPartial(true),
+                                set::footPager(usePager('objectPager'))
                             )
                         )
                     )
