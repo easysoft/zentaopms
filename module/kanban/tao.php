@@ -621,13 +621,14 @@ class kanbanTao extends kanbanModel
         $avatarPairs = $this->loadModel('user')->getAvatarPairs();
         $users       = $this->loadModel('user')->getPairs('noletter');
         $module      = $browseType == 'parentStory' ? 'story' : $browseType;
+        $regionID    = $this->session->execution ? $this->dao->select('id')->from(TABLE_KANBANREGION)->where('deleted')->eq('0')->andWhere('kanban')->eq($this->session->execution)->orderBy('id_asc')->limit(1)->fetch('id') : 0;
         foreach($lanes as $laneID => $lane)
         {
             $laneData = array();
             $laneData['id']     = $groupBy . $laneID;
             $laneData['type']   = $browseType;
             $laneData['name']   = $laneData['id'];
-            $laneData['region'] = $lane->execution;
+            $laneData['region'] = $regionID ? $regionID : $lane->execution;
             $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$module->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']  = $lane->color;
             $laneData['order']  = $lane->order;
