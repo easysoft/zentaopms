@@ -32,8 +32,6 @@ $(function()
         {
             currentPollVersion = currentVersion;
 
-            let executedCount = 0;
-
             const poll = () =>
             {
                 if(shouldAbortAll) return;
@@ -45,19 +43,37 @@ $(function()
                         if(shouldAbortAll) return;
                         if(currentPollVersion !== currentVersion) return;
 
-                        const executedKeys  = response.executedKeys;
-                        const executedCount = executedKeys.length;
-                        $('#changeBox .change-item').removeClass('executed');
-                        executedKeys.forEach(function(key)
+                        const executedKeys = response.executedKeys;
+                        $('#changesBox .change-item').not('.executed').each(function()
                         {
-                            $('#changeBox .change-item[data-key="' + key + '"]').addClass('executed');
+                            const $item = $(this);
+                            const key   = $item.data('key');
+                            if(executedKeys.includes(key))
+                            {
+                                $item.addClass('executed');
+                                const $label = $item.find('.label');
+                                $label.text($label.data('text'));
+                                $label.removeClass('gray-pale text-gray-400').addClass('primary-pale text-primary');
+                            }
                         });
-                        $('#executedCount').text(executedCount);
 
-                        const lastExecuted = $('#changesBox .change-item.executed').last();
-                        if(lastExecuted.length)
+                        const $executedItems = $('#changesBox .change-item.executed');
+                        const $lastExecuted  = $executedItems.last();
+                        if($lastExecuted.length)
                         {
-                            lastExecuted[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                            const $nextItem  = $lastExecuted.next('.change-item');
+                            const scrollItem = $nextItem.length ? $nextItem[0] : $lastExecuted[0];
+                            scrollItem.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                        }
+                        $('#executedCount').text($executedItems.length);
+
+                        const keyLength = executedKeys.length;
+                        if(keyLength && executedKeys[keyLength - 1] != keyLength - 1)
+                        {
+                            console.log(response);
+                            console.warn('Detected missing executed change keys. Aborting upgrade to prevent inconsistencies.');
+                            abortUpgrade();
+                            return;
                         }
 
                         if(response.allChangesExecuted)
@@ -76,6 +92,7 @@ $(function()
                     })
                     .fail(function()
                     {
+                        console.warn('Failed to fetch upgrade progress. Retrying...');
                         stopTimer();
                         if(currentPollVersion === currentVersion) timer = setTimeout(poll, 500);
                     });
@@ -111,8 +128,8 @@ $(function()
 
             /* 更新版本列表状态为正在升级 */
             const $versionItem = $('#versionsBox .version-item[data-version="' + currentVersion + '"]');
-            $versionItem.scrollIntoView({behavior: 'smooth', block: 'nearest'});
-            $versionItem.find('.icon').replaceWith('<i class="icon icon-spinner-indicator text-xl text-gray-400"></i>');
+            $versionItem[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+            $versionItem.find('.icon-clock').replaceWith('<i class="icon icon-spinner-indicator text-gray-400 w-4 h-4"></i>');
 
             /* 启动轮询获取升级进度 */
             const pollPromise = fetchProgress(currentVersion);
@@ -146,7 +163,7 @@ $(function()
             await pollPromise;
 
             /* 更新版本列表状态为升级完成 */
-            $versionItem.find('.icon').replaceWith('<i class="icon icon-check-circle text-xl text-success"></i>');
+            $versionItem.find('.icon-spinner-indicator').replaceWith('<span class="bg-success rounded-full w-4 h-4"></span>');
 
             /* 更新版本升级进度条 */
             const executedVersions = versionIndex + 1;
@@ -158,7 +175,7 @@ $(function()
             if(isLastVersion && upgradeResult.load)
             {
                 abortUpgrade();
-                window.location.href = upgradeResult.load;
+                $('#continueBtn').removeClass('disabled').attr('href', upgradeResult.load);
                 return;
             }
 
@@ -171,7 +188,15 @@ $(function()
                     loadCurrentPage(
                     {
                         selector: '#changesBlock',
-                        complete: () => resolve()
+                        complete: () =>
+                        {
+                            const firstChange = $('#changesBox .change-item').first();
+                            if(firstChange.length)
+                            {
+                                firstChange[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                            }
+                            resolve();
+                        }
                     });
                 });
             }

@@ -26,13 +26,13 @@ $lang->upgrade->tohome          = 'Visit ZenTao';
 $lang->upgrade->notice          = 'Notice';
 $lang->upgrade->checkExtension  = 'Check Extensions';
 $lang->upgrade->consistency     = 'Check Consistency';
-$lang->upgrade->noticeContent   = <<<EOT
+$lang->upgrade->backupNotice    = <<<EOT
 <p>Database upgrade requires high privileges. Please use the root user.</p>
 <p>Upgrade carries risks. Please back up your database first, just in case.</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. You can back up using phpMyAdmin..
 2. Use the mysql command-line tool:
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
    Replace the red parts above with your actual username and database name.
    <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
 </pre>
@@ -40,13 +40,13 @@ EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->noticeContent = <<<EOT
+    $lang->upgrade->backupNotice = <<<EOT
 <p>The upgrade requires high database privileges, please use the root user.</p>
 <p>Please backup your database before updating ZenTao!</p>
-<pre class='bg-gray-200 leading-6 mt-1 p-3'>
+<pre class='leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
-   $> BACKUP DATABASE BACKUPSET <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
    After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
    The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
    This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
@@ -54,14 +54,13 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
-$lang->upgrade->createFileWinCMD   = 'Open command line and execute <strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
-$lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
-                                      <ul style="line-height:1.5;font-size:13px;">
-                                      <li>%s</li>
-                                      <li>Or delete "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
-                                      </ul>
-                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
+$lang->upgrade->confirmBackup      = 'I have backed up the database';
+$lang->upgrade->setStatusFileTitle = 'Please complete the following actions';
+$lang->upgrade->createWinFile      = 'Open command line and execute <span id="command" class="font-bold text-danger">echo > %s</span>';
+$lang->upgrade->createLinuxFile    = 'Execute <span id="command" class="font-bold text-danger">touch %s</span> in the command line';
+$lang->upgrade->deleteStatusFile   = 'Or delete <span class="font-bold text-danger">%s</span> and create <span class="font-bold text-danger">ok.txt</span> and leave it blank.';
+$lang->upgrade->confirmStatusFile  = 'I have read and done as instructed above.';
+$lang->upgrade->safeDeleteFile     = 'For system security, the files need to be deleted.';
 
 $lang->upgrade->selectVersion = 'Version';
 $lang->upgrade->copyCommand   = 'Copy';

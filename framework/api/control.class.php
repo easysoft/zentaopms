@@ -130,6 +130,8 @@ class control extends baseControl
      */
     public function display($moduleName = '', $methodName = '')
     {
+        if($this->viewType == 'html') return parent::display($moduleName, $methodName);
+
         $this->render($moduleName, $methodName);
     }
 
@@ -144,6 +146,8 @@ class control extends baseControl
      */
     public function render($moduleName = '', $methodName = '')
     {
+        if($this->viewType == 'html') return parent::render($moduleName, $methodName);
+
         if($this->app->apiVersion != 'v2')
         {
             $this->parseJSON($moduleName, $methodName);
@@ -663,7 +667,17 @@ class control extends baseControl
     {
         if($moduleName != $this->moduleName) $this->app->fetchModule = $moduleName;
 
-        return parent::fetch($moduleName, $methodName, $params, $appName);
+        $content = parent::fetch($moduleName, $methodName, $params, $appName);
+
+        if($this->getFormData)
+        {
+            $this->app->loadClass('formdom');
+            $parser = new formdom(array('include_disabled' => true));
+
+            $this->formData = $parser->parse($content);
+        }
+
+        return $content;
     }
 
     /**

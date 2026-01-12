@@ -20,8 +20,8 @@ div
     setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
     col
     (
-        setClass('container rounded-md bg-white gap-5 h-full'),
-        setStyle(['padding' => '1.5rem 2rem']),
+        setClass('container rounded-md bg-white gap-5'),
+        setStyle(['padding' => '1.5rem 2rem', 'max-height' => '100%']),
         div
         (
             setClass('text-xl font-medium'),
@@ -39,17 +39,17 @@ div
             setStyle(['max-height' => 'calc(100% - 5rem)']),
             $hasError ? html($alterSQL . ';') : null
         ),
-        $hasError ? div
+        div
         (
             setClass('text-center'),
             btn
             (
+                setID('continueBtn'),
                 setClass('px-10'),
-                set::type('primary'),
-                on::click('loadCurrentPage()'),
-                $lang->refresh
+                set::type('primary disabled'),
+                $hasError ? $lang->refresh : $lang->upgrade->continue
             )
-        ) : null
+        )
     )
 );
 

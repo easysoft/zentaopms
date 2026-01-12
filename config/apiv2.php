@@ -108,6 +108,10 @@ $routes['/tickets']                     = array('response' => 'tickets(array),pa
 $routes['/products/:productID/tickets'] = array('redirect' => '/tickets?param=:productID');
 $routes['/tickets/:ticketID']           = array('response' => 'ticket,actions(array)');
 
+$routes['/systems']                     = array('response' => 'appList(array)|systems,pager');
+$routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
+$routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
+
 $routes['/depts']         = array('response' => 'sons|depts');
 $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');
