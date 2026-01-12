@@ -776,39 +776,14 @@ class mrModel extends model
         $repo = $this->loadModel('repo')->getByID($MR->repoID);
         if(!$repo) return array();
 
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
         $lines = array();
-        if($host->type == 'gitlab')
-        {
-            $diffVersions = array();
-            if($MR->synced) $diffVersions = $this->apiGetDiffVersions($MR->hostID, $MR->targetProject, $MR->mriid);
+        $lines = $this->apiGetDiffs($MR->targetRepoID, $MR->id);
+        a($lines);
 
-            foreach($diffVersions as $diffVersion)
-            {
-                $singleDiff = $this->apiGetSingleDiffVersion($MR->hostID, $MR->targetProject, $MR->mriid, $diffVersion->id);
-                if($singleDiff->state == 'empty') continue;
-
-                $diffs = $singleDiff->diffs;
-                foreach($diffs as $diff)
-                {
-                    $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
-                    $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
-                    $lines[] = sprintf("--a/%s", $diff->old_path);
-                    $lines[] = sprintf("--b/%s", $diff->new_path);
-                    $diffLines = explode("\n", $diff->diff);
-                    foreach($diffLines as $diffLine) $lines[] = $diffLine;
-                }
-            }
-        }
-        else
-        {
-            $lines = $this->apiGetDiffs($MR->hostID, $MR->targetProject, $MR->mriid);
-        }
-
-        if(empty($MR->synced)) $lines = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
+        $lines = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
 
         if(is_string($lines)) $lines = explode("\n", $lines);
         return $scm->engine->parseDiff($lines);
@@ -867,19 +842,18 @@ class mrModel extends model
      * 通过Gitea API获取合并请求的对比信息。
      * Get diff of MR from Gitea API.
      *
-     * @param  int    $hostID
-     * @param  string $projectID
-     * @param  int    $MRID
+     * @param  int $targetRepoID
+     * @param  int $mrID
      * @access public
      * @return string
      */
-    public function apiGetDiffs(int $hostID, string $projectID, int $MRID): string
+    public function apiGetDiffs(int $targetRepoID, int $mrID): string
     {
-        $host = $this->loadModel('pipeline')->getByID($hostID);
-        if(!$host || $host->type == 'gitlab') return '';
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/repos/{$targetRepoID}/pullreq/{$mrID}/diff?includePatch=true");
 
-        $url = sprintf($this->loadModel($host->type)->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID.diff");
-        return commonModel::http($url);
+        $response = commonModel::http($url, null, array(), $apiRoot->header);
+        return $this->gitfox->getResponse($response);
     }
 
     /**
