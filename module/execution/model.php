@@ -4710,7 +4710,7 @@ class executionModel extends model
                     $normalPlans[$plan->id] = $plan;
                 }
             }
-            $plans = array_merge($normalPlans, $pendPlans);
+            $plans = arrayUnion($normalPlans, $pendPlans);
         }
 
         $plans        = $this->loadModel('productplan')->reorder4Children($plans);
