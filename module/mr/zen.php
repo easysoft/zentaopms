@@ -26,65 +26,6 @@ class mrZen extends mr
     }
 
     /**
-     * 向编辑合并请求页面添加数据。
-     * Add data to the edit merge request page.
-     *
-     * @param  object    $MR
-     * @param  string    $scm
-     * @access protected
-     * @return void
-     */
-    protected function assignEditData(object $MR, string $scm): void
-    {
-        $this->app->loadConfig('pipeline');
-
-        $MR->canDeleteBranch = true;
-        if(in_array($scm, $this->config->pipeline->formatTypeService)) $MR->sourceProject = (int)$MR->sourceProject;
-        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-        foreach($branchPrivs as $priv)
-        {
-            if($MR->canDeleteBranch && $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
-        }
-
-        $sourceProject = $targetProject = $MR->sourceProject;
-        if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
-        if(in_array($scm, $this->config->pipeline->formatTypeService))
-        {
-            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject, false);
-            $targetProject = $sourceProject = zget($project, 'name_with_namespace', '');
-            if($MR->sourceProject != $MR->targetProject)
-            {
-                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject, false);
-                $targetProject = zget($project, 'name_with_namespace', '');
-            }
-
-        }
-
-        $branches = array();
-        $jobList  = array();
-        if($MR->repoID)
-        {
-            $rawJobList = $this->loadModel('job')->getListByRepoID($MR->repoID);
-            foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
-
-            $repo = $this->loadModel('repo')->getByID($MR->repoID);
-            $scm  = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $branches = $scm->branch();
-            $this->view->repo = $repo;
-        }
-
-        $this->view->title         = $this->lang->mr->edit;
-        $this->view->MR            = $MR;
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->jobList       = $jobList;
-        $this->view->branches      = $branches;
-        $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $targetProject;
-        $this->display();
-    }
-
-    /**
      * 构造关联需求的搜索表单。
      * Build the search form of the associated story.
      *
