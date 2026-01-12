@@ -219,18 +219,23 @@ class repobranchtype extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->importSuccess, 'load' => $this->createLink('repobranchtype', 'browse', "repoID=$repoID")));
         }
 
-        /* 创建分页对象。 */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        /* 获取当前 repo 已有的分支类型（用于排除）。 */
+        $repoID         = $repo ? (int)zget($repo, 'id', 0) : 0;
+        $branchTypeList = $this->repobranchtype->getBranchTypeList($repoID, '', '', '', $orderBy);
+        $existingKeys   = helper::arrayColumn($branchTypeList, 'key');
 
-        /* 获取 repo = 0 的分支类型列表（全局模板）。 */
-        $repoID           = $repo ? (int)zget($repo, 'id', 0) : 0;
-        $tempBranchTypeList = $this->repobranchtype->getBranchTypeList(0, '', '', '', $orderBy, $pager);
-        $branchTypeList     = $this->repobranchtype->getBranchTypeList($repoID, '', '', '', $orderBy, $pager);
-
-        /* 从模板列表中移除已存在于当前 repo 的分支类型（按 key 字段匹配）。 */
-        $existingKeys       = helper::arrayColumn($branchTypeList, 'key');
+        /* 获取全局模板列表（repoID=0），并排除已存在的分支类型。 */
+        $tempBranchTypeList = $this->repobranchtype->getBranchTypeList(0, '', '', '', $orderBy);
         $tempBranchTypeList = array_filter($tempBranchTypeList, function($branchType) use ($existingKeys) { return !in_array($branchType->key, $existingKeys); });
+
+        /* 创建分页对象，基于过滤后的数据进行分页。 */
+        $this->app->loadClass('pager', true);
+        $filteredTotal = count($tempBranchTypeList);
+        $pager         = new pager($filteredTotal, $recPerPage, $pageID);
+
+        /* 对过滤后的数据进行手动分页。 */
+        $offset             = ($pager->pageID - 1) * $pager->recPerPage;
+        $tempBranchTypeList = array_slice($tempBranchTypeList, $offset, $pager->recPerPage);
 
         /* 处理前缀显示。 */
         $tempBranchTypeList = $this->repobranchtypeZen->buildPrefixesDisplay($tempBranchTypeList);

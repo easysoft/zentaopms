@@ -1,3 +1,29 @@
+/**
+ * 渲染分支类型列表单元格。
+ * Render branch type list cell.
+ */
+window.renderBranchTypeCell = function(result, {col, row})
+{
+    if(col.name == 'prefixesDisplay')
+    {
+        const prefixes = row.data.prefixes;
+        if(!prefixes || !prefixes.length)
+        {
+            result[0] = {html: ''};
+            return result;
+        }
+
+        let html = '';
+        prefixes.forEach(prefix => {
+            html += '<span class="label label-outline label-primary mr-1">' + prefix + '</span>';
+        });
+
+        result[0] = {html: html, className: 'overflow-x-auto scrollbar-thin scrollbar-hover', style: {whiteSpace: 'nowrap'}};
+        return result;
+    }
+
+    return result;
+};
 
 /**
  * 添加前缀输入框

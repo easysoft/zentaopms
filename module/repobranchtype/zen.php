@@ -77,19 +77,7 @@ class repobranchtypeZen extends repobranchtype
     {
         foreach($branchTypeList as &$branchType)
         {
-            if(!empty($branchType->prefixes) && is_array($branchType->prefixes))
-            {
-                $tags = array();
-                foreach($branchType->prefixes as $prefix)
-                {
-                    $tags[] = "<span class='label label-outline label-primary'>" . htmlspecialchars($prefix) . "</span>";
-                }
-                $branchType->prefixesDisplay = implode(' ', $tags);
-            }
-            else
-            {
-                $branchType->prefixesDisplay = '';
-            }
+            $branchType->prefixesDisplay = '';
         }
         return $branchTypeList;
     }
