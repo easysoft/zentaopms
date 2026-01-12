@@ -236,34 +236,32 @@ class mr extends control
      * 编辑合并请求。
      * Edit MR function.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function edit(int $MRID)
+    public function edit(int $id)
     {
         if($_POST)
         {
-            $MR = form::data($this->config->mr->form->edit)
-                ->setIF($this->post->needCI == 0, 'jobID', 0)
+            $mr = form::data($this->config->mr->form->edit)
                 ->add('editedBy', $this->app->user->account)
-                ->skipSpecial('title,description')
+                ->skipSpecial('title')
                 ->get();
-            $result = $this->mr->update($MRID, $MR);
+            $result = $this->mr->update($id, $mr);
             return $this->send($result);
         }
 
-        $MR = $this->mr->fetchByID($MRID);
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
-        $this->view->title = $this->lang->mr->edit;
-        $this->view->MR    = $MR;
-        $this->view->rawMR = isset($rawMR) ? $rawMR : false;
-        if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
+        $mr       = $this->mr->fetchByID($id);
+        $flow     = $this->loadModel('reporeviewflow')->getById($mr->reviewFlowID);
+        $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
 
-        /* Fetch user list both in Zentao and current GitLab project. */
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $this->view->host = $host;
-        $this->mrZen->assignEditData($MR, $host->type);
+        $this->view->title     = $this->lang->mr->edit;
+        $this->view->MR        = $mr;
+        $this->view->repo      = $this->loadModel('repo')->getByID($mr->repoID);
+        $this->view->reviewers = !empty($reviewID) ? array() : array_keys($this->mr->getReviewers($id));
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->display();
     }
 
     /**

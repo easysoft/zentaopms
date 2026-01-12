@@ -301,65 +301,37 @@ class mrModel extends model
      * 更新合并请求。
      * Edit MR function.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @param  object $MR
      * @access public
      * @return array
      */
-    public function update(int $MRID, object $MR): array
+    public function update(int $id, object $MR): array
     {
-        $oldMR = $this->fetchByID($MRID);
-        $diff  = array_diff_assoc((array)$oldMR, (array)$MR);
-
+        $oldMR = $this->fetchByID($id);
         if(!$oldMR) return array('result' => 'fail', 'message' => $this->lang->mr->notFound);
-
-        /* The source and target branches cannot be the same. */
-        if($oldMR->sourceBranch == $MR->targetBranch ) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
-
-        $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-        /* Exec Job */
-        $needExecJob = isset($diff['targetBranch']) || isset($diff['jobID']) ? true : false;
-        if($needExecJob && isset($MR->jobID) && $MR->jobID)
-        {
-            $this->execJob($MRID, (int)$MR->jobID);
-            if(dao::isError()) return array('result' => 'fail', 'message' => implode("\n", dao::getError()));
-        }
-
-        /* Known issue: `reviewer_ids` takes no effect. */
-        $rawMR = $this->apiUpdateMR($oldMR, $MR);
-        if(!isset($rawMR->id) and isset($rawMR->message))
-        {
-            $errorMessage = $this->convertApiError($rawMR->message);
-            return array('result' => 'fail', 'message' => $errorMessage);
-        }
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
-            ->where('id')->eq($MRID)
+            ->where('id')->eq($id)
             ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $MR = $this->fetchByID($MRID);
+        $MR = $this->fetchByID($id);
         $this->linkObjects($MR);
 
-        $actionID = $this->loadModel('action')->create($this->moduleName, $MRID, 'edited');
+        $actionID = $this->loadModel('action')->create($this->moduleName, $id, 'edited');
         $changes  = common::createChanges($oldMR, $MR);
-        if(!empty($changes))
-        {
-            foreach($changes as &$change) if($change['field'] == 'assignee') $change['field'] = 'reviewer';
-            $this->action->logHistory($actionID, $changes);
-        }
-        $this->createMRLinkedAction($MRID, 'edit' . $this->moduleName, $MR->editedDate);
+        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        $this->createMRLinkedAction($id, 'edit' . $this->moduleName, $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         if($this->session->{$this->app->tab}) $MR->executionID = $this->session->{$this->app->tab};
         $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$MR->executionID}" : "repoID={$MR->repoID}";
-        return array('result' => 'success', 'message' => $needExecJob ? $this->lang->mr->triggeredCI : $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', $linkParams));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', $linkParams));
     }
 
     /**
@@ -1492,5 +1464,18 @@ class mrModel extends model
         }
 
         return $objectList;
+    }
+
+    /**
+     * 获取MR的审阅者。
+     * Get MR reviewers.
+     *
+     * @param  int $mrID
+     * @access public
+     * @return array
+     */
+    public function getReviewers(int $mrID): array
+    {
+        return $this->dao->select('*')->from(TABLE_MRREVIEWERS)->where('requestID')->eq($mrID)->fetchAll('account', false);
     }
 }
