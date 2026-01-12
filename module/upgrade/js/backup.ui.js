@@ -1,13 +1,26 @@
+let netConnct = 0;
 $.ajax(
 {
     url: $.createLink('misc', 'checkNetConnect'),
     timeout: 1000,
     success: function(data)
     {
-        $('#upgrade').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=' + +(data == 'success'))).removeClass('disabled');
+        netConnect = +(data == 'success');
     },
     error: function(XMLHttpRequest, textStatus)
     {
-        $('#upgrade').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=0')).removeClass('disabled');
+        netConnect = 0;
     }
 });
+
+function confirmBackup(event)
+{
+    if($(event.target).prop('checked'))
+    {
+        $('#upgrade').removeClass('disabled').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=' + netConnect));
+    }
+    else
+    {
+        $('#upgrade').addClass('disabled').removeAttr('href');
+    }
+}

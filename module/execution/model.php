@@ -1511,6 +1511,7 @@ class executionModel extends model
      */
     public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', ?object $pager = null): array
     {
+        if(strpos($orderBy, 'nameCol') !== false) $orderBy = str_replace('nameCol', 'name', $orderBy);
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');

@@ -325,9 +325,6 @@ class api extends router
                 else
                 {
                     $_GET[$moduleName.'ID'] = $pathItems[1];
-
-                    /* Set default params and post data to delete.*/
-                    if($this->action == 'delete') $_GET['confirm'] = 'yes';
                 }
             }
             else
@@ -342,6 +339,13 @@ class api extends router
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+
+        /* Set default params and post data to delete.*/
+        if($this->action == 'delete')
+        {
+            $defaultParams = $this->getDefaultParams();
+            if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
+        }
     }
 
     /**
@@ -398,7 +402,7 @@ class api extends router
      */
     public function checkObjectPriv(object $object, string $table): bool
     {
-        if($this->user->admin) true;
+        if($this->user->admin) return true;
 
         $userView = $this->user->view;
         switch($table)

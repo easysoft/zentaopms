@@ -24,7 +24,7 @@ $cols['assignedTo']['type']    = 'user';
 $cols['module']['type']        = 'text';
 $cols['module']['map']         = $modules;
 
-foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
+foreach($allStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
 
 $config->product->search['fields']['title'] = $lang->productplan->storyTitle;
 searchForm

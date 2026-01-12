@@ -220,6 +220,7 @@ $config->openMethods[] = 'sso.gettodolist';
 $config->openMethods[] = 'sso.login';
 $config->openMethods[] = 'sso.logout';
 $config->openMethods[] = 'upgrade.ajaxupdatefile';
+$config->openMethods[] = 'upgrade.safedelete';
 $config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.refreshrandom';
