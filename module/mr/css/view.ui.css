@@ -12,3 +12,22 @@ pre {display: block; padding: 9.5px; margin: 0 0 10px; font-size: 12px; line-hei
 code {padding: 2px 4px; font-size: 90%; color: #37474f; background-color: #f3f5f7; border-radius: 4px;}
 
 .mr-view-cell {border: none; padding: 0;}
+
+#fileTabs .nav-tabs {overflow: hidden;position: absolute; height: 40px;background: #efefef;}
+#fileTabs .nav-tabs > li.nav-item > a {z-index: 1; background: none; padding: 1.7rem; cursor: pointer !important; margin-left: -25px; margin-top: 12px;}
+#fileTabs .nav-tabs > li > a::after {content: ''; position: absolute; top: 2px; left: 10px; width: 85%; right: 6px; bottom: 0; background: #f8f8f8; border: none; border-radius: 10px 10px 0 0; transform: perspective(0.5rem) rotateX(2deg); z-index: -1;}
+#fileTabs .nav-tabs > li > a.active span {font-weight: 700; color: #2b80ff!important;}
+#fileTabs .nav-tabs > li > a.active::after {background: #fff;}
+#fileTabs > .nav-tabs {overflow: hidden; padding-bottom: 10px; position: relative; height: 40px; background: #efefef;}
+#fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
+#fileTabs .monaco-close{margin-right: 18px;}
+#fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
+#log .action-btn {margin-top: -7px;}
+.repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
+.btn-left, .btn-right {display: none;}
+#linkObject{display: none;}
+#related .btn-right, #related .btn-left {padding-top: 6px;}
+.tree-item, .listitem, .item-content {cursor: pointer;}
+.directory {background-image:url('theme/default/images/repo/dir.png');}
+.file {background-image:url('theme/default/images/repo/txt.png');}
+.mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom; margin-right: 5px;}
