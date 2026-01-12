@@ -16319,9 +16319,11 @@ CREATE TABLE `zt_ops_request_reviewers` (
   `decision` varchar(255) NOT NULL DEFAULT '' COMMENT '最新审核决策（如：approve-批准、reject-拒绝、pending-待审核等）',
   `sha` varchar(40) NOT NULL DEFAULT '' COMMENT '审核对应的代码提交SHA校验值',
   `account` varchar(30) NOT NULL DEFAULT '' COMMENT '评审人',
-  `latestReviewID` int unsigned  NOT NULL DEFAULT 0 COMMENT '最新审核记录ID，关联pullreq_reviews表的id，无则为NULL',
+  `opinion` mediumtext DEFAULT NULL COMMENT '评审意见',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
   `createdDate` datetime NULL COMMENT '创建时间',
   `editedDate` datetime NULL COMMENT '更新时间',
-  PRIMARY KEY (`requestID`, `account`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE INDEX `idx_requestID` ON `zt_ops_request_reviewers` (`requestID`);
+CREATE INDEX `idx_account` ON `zt_ops_request_reviewers` (`account`);
