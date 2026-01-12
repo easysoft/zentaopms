@@ -285,7 +285,7 @@ class mr extends control
      * 合并请求详情。
      * View a MR.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @param  string $type
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -293,26 +293,55 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function view(int $MRID, string $type = 'basic', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
+    public function view(int $id, string $type = 'basic', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
     {
-        $mr   = $this->mr->fetchByID($MRID);
+        $mr   = $this->mr->fetchByID($id);
         $repo = $this->loadModel('repo')->getByID($mr->repoID);
         $flow = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
 
         $this->app->loadClass('pager', true);
         $commitPager = new pager($type == 'commit' ? $recTotal : 0, $recPerPage, $type == 'commit' ? $pageID : 1);
         $bugPager    = new pager($type == 'bug'    ? $recTotal : 0, $recPerPage, $type == 'bug'    ? $pageID : 1);
+        $objectPager = new pager($type == 'object' ? $recTotal : 0, $recPerPage, $type == 'object' ? $pageID : 1);
+
+        $encoding = 'utf-8';
+        if($type == 'files')
+        {
+            $encoding = empty($param) ? 'utf-8' : $param;
+            $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
+        }
+        $diffs   = $scm->diff('', $mr->mergeBaseSHA, $mr->sourceSHA, 'yes');
+        $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
+        if($this->server->request_method == 'POST')
+        {
+            if($this->post->arrange)
+            {
+                $arrange = $this->post->arrange;
+                helper::setcookie('arrange', $arrange);
+            }
+            if($this->post->encoding) $encoding = $this->post->encoding;
+        }
 
         $this->view->title             = $this->lang->mr->view;
         $this->view->mr                = $mr;
+        $this->view->repo              = $repo;
+        $this->view->repoID            = $repo->id;
         $this->view->flow              = $flow;
         $this->view->commitLogs        = $this->mr->apiGetMRCommits($mr->targetRepoID, $mr->id, $commitPager);
-        $this->view->bugs              = $this->mr->getRelationByBranch($repo, $mr->sourceBranch, $mr->targetBranch, 'bug', $bugPager);
+        $this->view->bugs              = $this->mr->getRelationByBranch($repo, $mr->sourceSHA, $mr->mergeBaseSHA, 'bug', $bugPager);
+        $this->view->linkObjects       = $this->mr->getRelationByBranch($repo, $mr->sourceSHA, $mr->mergeBaseSHA, $param, $objectPager);
         $this->view->commitPager       = $commitPager;
         $this->view->bugPager          = $bugPager;
+        $this->view->objectPager       = $objectPager;
         $this->view->type              = $type;
+        $this->view->encoding          = $encoding;
+        $this->view->diffs             = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');
         $this->view->mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $mr->sourceBranch, $mr->targetBranch);
+        $this->view->oldRevision       = $mr->targetBranch;
+        $this->view->newRevision       = $mr->sourceBranch;
         $this->display();
     }
 
@@ -401,15 +430,12 @@ class mr extends control
         $MR = $this->mr->fetchByID($MRID);
         $this->view->title   = $this->lang->mr->viewDiff;
         $this->view->MR      = $MR;
-        $this->view->compile = $this->loadModel('compile')->getById($MR->compileID);
-        if($MR->synced)
-        {
-            $rawMR = $this->mr->apiGetSingleMR($MR->repoID, $MR->mriid);
-            $this->view->rawMR = $rawMR;
-            if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
-        }
 
-        $diffs   = $this->mr->getDiffs($MR, $encoding);
+        $repo = $this->loadModel('repo')->getByID($MR->repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $diffs   = $scm->diff('', $MR->mergeBaseSHA, $MR->sourceSHA, 'yes');
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST')
         {
@@ -818,38 +844,38 @@ class mr extends control
         $options = "<option value=''></option>";
         foreach($jobList as $job) $options .= "<option value='{$job->id}' data-name='{$job->name}'>[{$job->id}] {$job->name}</option>";
         $this->send($options);
-   }
+    }
 
-   /**
-    * 检查是否有相同的合并请求。
-    * Ajax check same opened mr for source branch.
-    *
-    * @param  int    $hostID
-    * @access public
-    * @return void
-    */
-   public function ajaxCheckSameOpened(int $hostID)
-   {
-       $sourceProject = $this->post->sourceProject;
-       $sourceBranch  = $this->post->sourceBranch;
-       $targetProject = $this->post->targetProject;
-       $targetBranch  = $this->post->targetBranch;
+    /**
+     * 检查是否有相同的合并请求。
+     * Ajax check same opened mr for source branch.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckSameOpened(int $hostID)
+    {
+        $sourceProject = $this->post->sourceProject;
+        $sourceBranch  = $this->post->sourceBranch;
+        $targetProject = $this->post->targetProject;
+        $targetBranch  = $this->post->targetBranch;
 
-       $result = $this->mr->checkSameOpened($hostID, (string)$sourceProject, $sourceBranch, (string)$targetProject, $targetBranch);
-       echo json_encode($result);
-   }
+        $result = $this->mr->checkSameOpened($hostID, (string)$sourceProject, $sourceBranch, (string)$targetProject, $targetBranch);
+        echo json_encode($result);
+    }
 
-   /**
-    * 获取分支权限。
-    * Ajax get branch privileges.
-    *
-    * @param  int    $hostID
-    * @param  string $project
-    * @access public
-    * @return void
-    */
-   public function ajaxGetBranchPrivs(int $hostID, string $project)
-   {
+    /**
+     * 获取分支权限。
+     * Ajax get branch privileges.
+     *
+     * @param  int    $hostID
+     * @param  string $project
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBranchPrivs(int $hostID, string $project)
+    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if(in_array($host->type, array('gitea', 'gogs')))
         {
@@ -864,17 +890,17 @@ class mr extends control
         $branches    = $this->loadModel($host->type)->apiGetBranchPrivs($hostID, $project);
         foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
         echo json_encode($branchPrivs);
-   }
+    }
 
-   /**
-    * 从代码托管服务器同步合并请求到禅道。
-    * AJAX: sync Merge Requests from API server.
-    *
-    * @param  int  $repoID
-    * @return void
-    */
-   public function ajaxSyncMRs(int $repoID)
-   {
+    /**
+     * 从代码托管服务器同步合并请求到禅道。
+     * AJAX: sync Merge Requests from API server.
+     *
+     * @param  int  $repoID
+     * @return void
+     */
+    public function ajaxSyncMRs(int $repoID)
+    {
         if(!$repoID) $this->sendSuccess();
 
         $repo = $this->loadModel('repo')->getByID($repoID);
@@ -898,8 +924,8 @@ class mr extends control
             foreach($MRs as $MR)
             {
                 if($MR->mriid == $rawMR->iid
-                && $MR->sourceProject == $rawMR->source_project_id && $MR->sourceBranch  == $rawMR->source_branch
-                && $MR->targetProject == $rawMR->target_project_id && $MR->targetBranch  == $rawMR->target_branch)
+                    && $MR->sourceProject == $rawMR->source_project_id && $MR->sourceBranch  == $rawMR->source_branch
+                    && $MR->targetProject == $rawMR->target_project_id && $MR->targetBranch  == $rawMR->target_branch)
                 {
                     $existedMRs[$MR->id] = $needSyncMRs[$index];
                     unset($needSyncMRs[$index]);
@@ -927,193 +953,193 @@ class mr extends control
         }
 
         $this->sendSuccess();
-   }
+    }
 
-   /**
-    * 执行合并请求的构建。
-    * AJAX exec MR job.
-    *
-    * @param  int    $MRID
-    * @param  int    $jobID
-    * @access public
-    * @return void
-    */
-   public function ajaxExecJob(int $MRID, int $jobID)
-   {
-       $this->mr->execJob($MRID, $jobID);
+    /**
+     * 执行合并请求的构建。
+     * AJAX exec MR job.
+     *
+     * @param  int    $MRID
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function ajaxExecJob(int $MRID, int $jobID)
+    {
+        $this->mr->execJob($MRID, $jobID);
 
-       return $this->sendSuccess(array('load' => true));
-   }
+        return $this->sendSuccess(array('load' => true));
+    }
 
-   /**
-    * 获取合并请求关联的对象。
-    * AJAX get MR linked objects.
-    *
-    * @param  int $MRID
-    * @access public
-    * @return void
-    */
-   public function ajaxLinkObjects(int $MRID)
-   {
-       $mr = $this->mr->fetchByID($MRID);
-       if(!$mr) return false;
+    /**
+     * 获取合并请求关联的对象。
+     * AJAX get MR linked objects.
+     *
+     * @param  int $MRID
+     * @access public
+     * @return void
+     */
+    public function ajaxLinkObjects(int $MRID)
+    {
+        $mr = $this->mr->fetchByID($MRID);
+        if(!$mr) return false;
 
-       return $this->mr->linkObjects($mr);
-   }
+        return $this->mr->linkObjects($mr);
+    }
 
-   /**
-    * 同步流水线的构建状态。
-    * AJAX sync compile status.
-    *
-    * @param  int    $compileID
-    * @access public
-    * @return void
-    */
-   public function ajaxSyncCompile(int $compileID)
-   {
-       $this->loadModel('ci')->checkCompileStatus($compileID);
-       return $this->sendSuccess(array('message' => $this->lang->mr->refreshSuccess, 'load' => true));
-   }
+    /**
+     * 同步流水线的构建状态。
+     * AJAX sync compile status.
+     *
+     * @param  int    $compileID
+     * @access public
+     * @return void
+     */
+    public function ajaxSyncCompile(int $compileID)
+    {
+        $this->loadModel('ci')->checkCompileStatus($compileID);
+        return $this->sendSuccess(array('message' => $this->lang->mr->refreshSuccess, 'load' => true));
+    }
 
-   /**
-    * 获取合并请求的审批流程。
-    * AJAX get MR approval flow.
-    *
-    * @param  int $repoID
-    * @param  string $targetBranch
-    * @access public
-    * @return void
-    */
-   public function ajaxGetReviewFlow(int $repoID, string $targetBranch)
-   {
-       $flow = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
-       if(!$flow) return $this->send(array());
+    /**
+     * 获取合并请求的审批流程。
+     * AJAX get MR approval flow.
+     *
+     * @param  int $repoID
+     * @param  string $targetBranch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetReviewFlow(int $repoID, string $targetBranch)
+    {
+        $flow = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
+        if(!$flow) return $this->send(array());
 
-       $flow->definition = json_decode($flow->definition);
-       return $this->send($flow);
-   }
+        $flow->definition = json_decode($flow->definition);
+        return $this->send($flow);
+    }
 
-   /**
-    * 获取创建合并请求的检查列表。
-    * AJAX get create MR check list.
-    *
-    * @param  int $repoID
-    * @param  string $sourceBranch
-    * @param  string $targetBranch
-    * @param  int $recPerPage
-    * @param  int $pageID
-    * @access public
-    * @return void
-    */
-   public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recPerPage = 20, int $pageID = 1)
-   {
-       $repo = $this->loadModel('repo')->getByID($repoID);
-       $scm  = $this->app->loadClass('scm');
-       $scm->setEngine($repo);
+    /**
+     * 获取创建合并请求的检查列表。
+     * AJAX get create MR check list.
+     *
+     * @param  int $repoID
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recPerPage = 20, int $pageID = 1)
+    {
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
 
-       $this->app->loadClass('pager', true);
-       $commitPager = new pager(0, $recPerPage, $pageID);
-       $objectPager = new pager(0, $recPerPage, $pageID);
+        $this->app->loadClass('pager', true);
+        $commitPager = new pager(0, $recPerPage, $pageID);
+        $objectPager = new pager(0, $recPerPage, $pageID);
 
-       $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $commitPager);
-       $diffs   = $scm->diff('', $targetBranch, $sourceBranch, 'yes', 'isBranchOrTag');
-       $objects = $this->mr->getRelationByBranch($repo, $sourceBranch, $targetBranch, '', $objectPager);
+        $commits = $this->mr->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $commitPager);
+        $diffs   = $scm->diff('', $targetBranch, $sourceBranch, 'yes', 'isBranchOrTag');
+        $objects = $this->mr->getRelationByBranch($repo, $sourceBranch, $targetBranch, '', $objectPager);
 
-       $this->view->commits      = $commits;
-       $this->view->objects      = $objects;
-       $this->view->diffs        = $diffs;
-       $this->view->commitPager  = $commitPager;
-       $this->view->objectPager  = $objectPager;
-       $this->view->repoID       = $repoID;
-       $this->view->repo         = $repo;
-       $this->view->sourceBranch = $sourceBranch;
-       $this->view->targetBranch = $targetBranch;
-       $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-       $this->display();
-   }
+        $this->view->commits      = $commits;
+        $this->view->objects      = $objects;
+        $this->view->diffs        = $diffs;
+        $this->view->commitPager  = $commitPager;
+        $this->view->objectPager  = $objectPager;
+        $this->view->repoID       = $repoID;
+        $this->view->repo         = $repo;
+        $this->view->sourceBranch = $sourceBranch;
+        $this->view->targetBranch = $targetBranch;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
+        $this->display();
+    }
 
-   /**
-    * 获取合并请求的检查信息。
-    * AJAX get MR check message.
-    *
-    * @param  int $repoID
-    * @param  string $sourceBranch
-    * @param  string $targetBranch
-    * @access public
-    * @return void
-    */
-   public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
-   {
-       $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
-       $canMergeSourceBranchType = array();
-       $canMergeTargetBranchType = array();
-       $branchTypeRules          = array();
-       foreach($branchRuleList as $branchRule)
-       {
-           if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
-           if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
-           if(empty($branchRule->branchType)) continue;
-           $branchTypeRules[$branchRule->branchType] = $branchRule;
-       }
+    /**
+     * 获取合并请求的检查信息。
+     * AJAX get MR check message.
+     *
+     * @param  int $repoID
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
+    {
+        $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
+        $canMergeSourceBranchType = array();
+        $canMergeTargetBranchType = array();
+        $branchTypeRules          = array();
+        foreach($branchRuleList as $branchRule)
+        {
+            if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
+            if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
+            if(empty($branchRule->branchType)) continue;
+            $branchTypeRules[$branchRule->branchType] = $branchRule;
+        }
 
-       $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
-       $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
-       $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
+        $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
+        $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
+        $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
 
-       $checkSourceBranch = $checkTargetBranch = true;
-       $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
-       $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
+        $checkSourceBranch = $checkTargetBranch = true;
+        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
+        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
 
-       if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
-       if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
-       if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
-       if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
+        if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
+        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
+        if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
+        if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
 
-       $result = new stdclass();
-       $result->checkSourceBranch = $checkSourceBranch;
-       $result->checkTargetBranch = $checkTargetBranch;
+        $result = new stdclass();
+        $result->checkSourceBranch = $checkSourceBranch;
+        $result->checkTargetBranch = $checkTargetBranch;
 
-       $repo = $this->loadModel('repo')->fetchByID($repoID);
-       $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
-       if($mergeCheckMessage)
-       {
-           $result->canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
-           $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
-           $result->message       = zget($mergeCheckMessage, 'message', '');
-           $result->sourceSHA     = zget($mergeCheckMessage, 'sourceSHA', '');
-           $result->targetSHA     = zget($mergeCheckMessage, 'targetSHA', '');
-           if(!empty($result->conflictFiles)) $result->message .= $this->lang->mr->checkConflicts;
-           if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
-           if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
-       }
-       return $this->send($result);
-   }
+        $repo = $this->loadModel('repo')->fetchByID($repoID);
+        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+        if($mergeCheckMessage)
+        {
+            $result->canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
+            $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+            $result->message       = zget($mergeCheckMessage, 'message', '');
+            $result->sourceSHA     = zget($mergeCheckMessage, 'sourceSHA', '');
+            $result->targetSHA     = zget($mergeCheckMessage, 'targetSHA', '');
+            if(!empty($result->conflictFiles)) $result->message .= $this->lang->mr->checkConflicts;
+            if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
+            if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
+        }
+        return $this->send($result);
+    }
 
-   /**
-    * 获取冲突文件列表。
-    * AJAX get conflict files.
-    *
-    * @param  int $repoID
-    * @param  string $sourceBranch
-    * @param  string $targetBranch
-    * @access public
-    * @return void
-    */
-   function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
-   {
-       $repo = $this->loadModel('repo')->fetchByID($repoID);
-       $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
-       $conflictFiles     = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
+    /**
+     * 获取冲突文件列表。
+     * AJAX get conflict files.
+     *
+     * @param  int $repoID
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return void
+     */
+    function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
+    {
+        $repo = $this->loadModel('repo')->fetchByID($repoID);
+        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+        $conflictFiles     = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 
-       $conflictFileList = array();
-       foreach($conflictFiles as $conflictFile)
-       {
-           $file = new stdclass();
-           $file->file = $conflictFile;
-           $conflictFileList[] = $file;
-       }
+        $conflictFileList = array();
+        foreach($conflictFiles as $conflictFile)
+        {
+            $file = new stdclass();
+            $file->file = $conflictFile;
+            $conflictFileList[] = $file;
+        }
 
-       $this->view->conflictFiles = $conflictFileList;
-       $this->display();
-   }
+        $this->view->conflictFiles = $conflictFileList;
+        $this->display();
+    }
 }
