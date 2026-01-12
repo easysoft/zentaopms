@@ -2307,12 +2307,6 @@ class projectModel extends model
      */
     public function setMenu(int $projectID): int|false
     {
-        if(!commonModel::isTutorialMode() and $projectID != 0 and !$this->checkPriv($projectID))
-        {
-            $this->projectTao->accessDenied();
-            return true;
-        }
-
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
         if(!$this->loadModel('common')->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
@@ -2320,6 +2314,12 @@ class projectModel extends model
         $projectID = (int)$this->checkAccess($projectID, $this->getPairsByProgram());
         $project   = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->projectTao->fetchProjectInfo($projectID);
         if(!$project) return false;
+
+        if(!commonModel::isTutorialMode() && $projectID != 0 && !$this->checkPriv($projectID))
+        {
+            $this->projectTao->accessDenied();
+            return true;
+        }
 
         /* Reset project priv. */
         $this->common->resetProjectPriv($projectID);
@@ -2809,14 +2809,14 @@ class projectModel extends model
         $bug = $this->dao->select('id')->from(TABLE_BUG)->where('execution')->eq($executionID)->andWhere('deleted')->eq(0)->limit(1)->fetch();
         if(!empty($bug)) return true;
 
-        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+        $story = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->limit(1)->fetch();
         if(!empty($story)) return true;
 
-        $case = $this->dao->select('id')->from(TABLE_CASE)->alias('t1')
+        $case = $this->dao->select('t1.id')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.project')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)

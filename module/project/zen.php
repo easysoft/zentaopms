@@ -564,7 +564,7 @@ class projectZen extends project
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('suspendedDate', helper::today())
+            ->setDefault('suspendedDate', helper::now())
             ->stripTags($editorIdList, $this->config->allowedTags)
             ->get();
     }

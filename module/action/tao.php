@@ -243,7 +243,7 @@ class actionTao extends actionModel
      */
     public function getReleaseRelated(string $objectType, int $objectID): array
     {
-        $product = array(0);
+        $product = 0;
         $project = 0;
         $result  = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if($result)
@@ -628,7 +628,8 @@ class actionTao extends actionModel
                 $table  = $this->config->objectTables[$module];
                 $field  = $this->config->action->objectNameFields[$module];
                 $name   = $this->dao->select($field)->from($table)->where('id')->eq($id)->fetch($field);
-                if($name) $action->appendLink = html::a(helper::createLink($module, 'view', "id={$id}"), "#{$id} " . $name);
+                $method = $module == 'story' ? 'storyView' : 'view';
+                if($name) $action->appendLink = html::a(helper::createLink($module, $method, "id={$id}"), "#{$id} " . $name);
             }
             $action->extra = $extra;
         }

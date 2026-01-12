@@ -1203,7 +1203,18 @@ class storyZen extends story
     protected function buildStoryForCreate(int $executionID, int $bugID, string $storyType = 'story'): object|false
     {
         $fields = $this->config->story->form->create;
-        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field)
+        {
+            if($field == 'files')
+            {
+                if(empty($_FILES['files']['name'][0]))
+                {
+                    dao::$errors['files'][] = sprintf($this->lang->error->notempty, $this->lang->files);
+                }
+                continue;
+            }
+            $fields[$field]['required'] = true;
+        }
         if(!isset($_POST['plan'])) $this->config->{$storyType}->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
@@ -1228,6 +1239,7 @@ class storyZen extends story
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->setIF(!$this->post->estimate, 'estimate', 0)
+            ->setIF($storyType, 'type', $storyType)
             ->get();
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);

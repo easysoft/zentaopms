@@ -375,6 +375,9 @@ class storyModel extends model
 
         $branchParam  = ($type == 'bybranch' and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('id_', 't2.version_', $orderBy);
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_', 't2.id_',      $orderBy);
+
         $stories = $this->dao->select("distinct t1.*, t2.`path`, t2.`plan`, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
@@ -556,6 +559,12 @@ class storyModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
         $files = $this->file->saveUpload($story->type, $storyID, 1);
 
+        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        {
+            $uidFiles = $this->file->getUploadByUID($this->post->uid);
+            $files = $files ? ($files + $uidFiles) : $uidFiles;
+        }
+
         /* Add story spec verify. */
         $this->storyTao->doCreateSpec($storyID, $story, $files ?: '');
 
@@ -579,7 +588,7 @@ class storyModel extends model
         if(!empty($story->plan))
         {
             $this->updateStoryOrderOfPlan($storyID, (string)$story->plan); // Set story order in this plan.
-            foreach(explode(',', $story->plan) as $planID)
+            foreach(explode(',', (string)$story->plan) as $planID)
             {
                 if(!$planID) continue;
                 $this->action->create('productplan', (int)$planID, 'linkstory', '', $storyID);
@@ -2875,7 +2884,7 @@ class storyModel extends model
             ->fetchPairs();
 
         $review = $this->storyTao->getRevertStoryIdList((int)$productID);
-        $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        $sql    = str_replace(array('`product`', '`version`', '`branch`', '`id`'), array('t1.`product`', 't1.`version`', 't1.`branch`', 't1.`id`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
             if(strpos($sql, 'revert') !== false)
@@ -3888,6 +3897,9 @@ class storyModel extends model
         if($action == 'processstorychange') return !empty($story->parentChanged);
         if($action == 'submitreview' && strpos('draft,changing', $story->status) === false)          return false;
         if($action == 'createtestcase' || $action == 'batchcreatetestcase') return $config->vision != 'lite' && $story->isParent == '0' && $story->type == 'story';
+
+        /* Check isClickable when feedback convert to story. */
+        if($action == 'create' && isset($story->solution)) return ($config->global->flow == 'full' && strpos('closed|clarify|noreview', $story->status) === false);
 
         if($action == 'createtask')
         {

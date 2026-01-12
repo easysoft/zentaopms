@@ -207,7 +207,7 @@ class helper extends baseHelper
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = $config->webRoot . (string) substr($link, 2);
+            $link = $config->webRoot . (string) substr($link, 1);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {

@@ -53,15 +53,15 @@ class buildTao extends buildModel
      * 获取项目、执行关联的版本信息。
      * Get the builds that the project,execution has been linked.
      *
-     * @param  string    $buildIdList
-     * @param  array|int $productIdList
-     * @param  string    $params        hasdeleted
-     * @param  int       $objectID
-     * @param  string    $objectType
+     * @param  string|int $buildIdList
+     * @param  array|int  $productIdList
+     * @param  string     $params        hasdeleted
+     * @param  int        $objectID
+     * @param  string     $objectType
      * @access protected
      * @return array
      */
-    protected function selectedBuildPairs(string $buildIdList, array|int $productIdList, string $params, int $objectID, string $objectType): array
+    protected function selectedBuildPairs(string|int $buildIdList, array|int $productIdList, string $params, int $objectID, string $objectType): array
     {
         $selectedBuilds = array();
         if($buildIdList)

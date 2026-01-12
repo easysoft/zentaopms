@@ -10,7 +10,6 @@ cid=0
 - 步骤1:正常用例数据导入
  - 属性caseDataCount @2
  - 属性hasModules @1
- - 属性hasStories @1
 - 步骤2:空用例数据处理 @noData
 - 步骤3:小数据量不触发分页
  - 属性caseDataCount @3
@@ -80,10 +79,10 @@ su('admin');
 $testcaseTest = new testcaseZenTest();
 
 // 5. 强制要求:必须包含至少5个测试步骤
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1, 'title' => '测试用例1'), array('id' => 2, 'title' => '测试用例2')), 10, 1, 0)) && p('caseDataCount,hasModules,hasStories') && e('2,1,1'); // 步骤1:正常用例数据导入
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(), 0, 1, 0)) && p() && e('noData'); // 步骤2:空用例数据处理
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 1, 2)) && p('caseDataCount,pagerID,isEndPage,allCount') && e('3,1,1,3'); // 步骤3:小数据量不触发分页
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 2, 2)) && p('caseDataCount,pagerID') && e('3,2'); // 步骤4:验证pagerID参数传递
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 500, 1, 0)) && p('hasSuhosinInfo') && e('0'); // 步骤5:检查suhosin限制提示
-r($testcaseTest->assignShowImportVarsTest(4, '1', array(array('id' => 1), array('id' => 2)), 0, 1, 0)) && p('caseDataCount,hasBranches') && e('2,1'); // 步骤6:多分支产品导入
-r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 0, 1, 1)) && p('caseDataCount,allCount,isEndPage') && e('2,2,1'); // 步骤7:验证allCount和isEndPage
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1, 'title' => '测试用例1'), array('id' => 2, 'title' => '测试用例2')), 10, 1, 0)) && p('caseDataCount,hasModules')                 && e('2,1');     // 步骤1:正常用例数据导入
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(), 0, 1, 0))                                                                                    && p()                                           && e('noData');  // 步骤2:空用例数据处理
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 1, 2))                                && p('caseDataCount,pagerID,isEndPage,allCount') && e('3,1,1,3'); // 步骤3:小数据量不触发分页
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2), array('id' => 3)), 0, 2, 2))                                && p('caseDataCount,pagerID')                    && e('3,2');     // 步骤4:验证pagerID参数传递
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 500, 1, 0))                                                && p('hasSuhosinInfo')                           && e('0');       // 步骤5:检查suhosin限制提示
+r($testcaseTest->assignShowImportVarsTest(4, '1', array(array('id' => 1), array('id' => 2)), 0, 1, 0))                                                  && p('caseDataCount,hasBranches')                && e('2,1');     // 步骤6:多分支产品导入
+r($testcaseTest->assignShowImportVarsTest(1, '0', array(array('id' => 1), array('id' => 2)), 0, 1, 1))                                                  && p('caseDataCount,allCount,isEndPage')         && e('2,2,1');   // 步骤7:验证allCount和isEndPage

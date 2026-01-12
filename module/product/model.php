@@ -671,12 +671,13 @@ class productModel extends model
         if($browseType == 'assignedbyme')   return $this->story->getByAssignedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
 
         if($browseType == 'unplan')         return $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
-        if($browseType == 'allstory')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bymodule')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', '', $pager);
         if($browseType == 'willclose')      return $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
-
         if($browseType == 'fromfeedback')   return $this->story->getFeedbackStories($productID, $branch, $modules, $type, $sort, $pager);
+
+        /* all or allstory. */
+        if(strpos($browseType, 'all') !== false) return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
 
         if($browseType == 'unclosed')
         {
@@ -2083,13 +2084,12 @@ class productModel extends model
      *
      * @param  bool   $refreshAll
      * @access public
-     * @return void
+     * @return bool
      */
-    public function refreshStats(bool $refreshAll = false): void
+    public function refreshStats(bool $refreshAll = false): bool
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
-        $now        = helper::now();
-        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return;
+        if($updateTime && time() - strtotime($updateTime) < $this->config->product->refreshInterval && !$refreshAll) return true;
 
         /*
          * If productStatsTime is before two weeks ago, refresh all products directly.
@@ -2107,13 +2107,15 @@ class productModel extends model
                 ->where('date')->ge($updateTime)
                 ->andWhere('product')->notin(array(',0,', ',,'))
                 ->fetchPairs('product');
-            if(empty($productActions)) return;
+            if(empty($productActions)) return true;
 
             foreach($productActions as $productAction)
             {
                 foreach(explode(',', trim($productAction, ',')) as $product) $products[$product] = $product;
             }
         }
+
+        $now = helper::now();
 
         /* 1. Get summary of products to be refreshed. */
         $stats = $this->productTao->getProductStats($products);
@@ -2130,6 +2132,8 @@ class productModel extends model
 
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
+
+        return !dao::isError();
     }
 
     /*

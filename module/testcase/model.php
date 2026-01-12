@@ -140,6 +140,10 @@ class testcaseModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
+        if(strpos($orderBy, 'id_')      !== false) $orderBy = str_replace('id_',      't2.id_',      $orderBy);
+        if(strpos($orderBy, 'order_')   !== false) $orderBy = str_replace('order_',   't2.order_',   $orderBy);
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+
         if($browseType == 'needconfirm')
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
@@ -282,7 +286,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getTestCases(int|array $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
+    public function getTestCases(int|array $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null, string $from = 'testcase'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -317,7 +321,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearch(int $productID, int|string $branch = 0, int $queryID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $queryID = (int)$queryID;
         if($queryID)
@@ -356,7 +360,7 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('DISTINCT t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
         $sql->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
         return $sql->where($caseQuery)
@@ -367,7 +371,7 @@ class testcaseModel extends model
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id', false);
     }
 

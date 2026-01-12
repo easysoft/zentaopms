@@ -2,8 +2,9 @@
 $routes = array();
 
 $routes['/programs']                     = array('response' => 'programs(array),pager');
-$routes['/programs/:programID/projects'] = array('redirect' => '/programs/project?programID=:programID', 'response' => 'projectStats(array)|projects,pager');
-$routes['/programs/:programID/products'] = array('redirect' => '/programs/product?programID=:programID', 'response' => 'products(array),pager');
+$routes['/programs/:programID']          = array('redirect' => '/programs/:programID/edit', 'response' => 'program');
+$routes['/programs/:programID/projects'] = array('redirect' => '/programs/:programID/project', 'response' => 'projectStats(array)|projects,pager');
+$routes['/programs/:programID/products'] = array('redirect' => '/programs/:programID/product', 'response' => 'products(array),pager');
 
 $routes['/products']            = array('redirect' => '/products/all');
 $routes['/products/all']        = array('response' => 'productStats|products,pager');
@@ -15,8 +16,14 @@ $routes['/projects/:projectID/stories']     = array('redirect' => '/projectstori
 $routes['/executions/:executionID/stories'] = array('redirect' => '/executions/story?executionID=:executionID');
 $routes['/stories/:storyID']                = array('response' => 'story,actions(array)');
 
+$routes['/products/:productID/epics']     = array('redirect' => '/products/browse?productID=:productID&storyType=epic', 'response' => 'stories(array)|epics,pager');
+$routes['/epics/:storyID']                = array('response' => 'story|epic,actions(array)');
+
+$routes['/products/:productID/requirements'] = array('redirect' => '/products/browse?productID=:productID&storyType=requirement', 'response' => 'stories(array)|requirements,pager');
+$routes['/requirements/:storyID']            = array('response' => 'story|requirement,actions(array)');
+
 $routes['/products/:productID/productplans'] = array('redirect' => '/productplans?productID=:productID', 'response' => 'plans(array)|productplans,pager');
-$routes['/productplans/:planID']      = array('response' => 'plan|productplan,actions(array)');
+$routes['/productplans/:planID']             = array('response' => 'plan|productplan,actions(array)');
 
 $routes['/products/:productID/releases'] = array('redirect' => '/releases?productID=:productID', 'response' => 'releases,pager');
 $routes['/projects/:projectID/releases'] = array('redirect' => '/projectreleases?projectID=:projectID', 'response' => 'releases,pager');
@@ -32,11 +39,12 @@ $routes['/projects/testtask']         = array('response' => 'tasks(array)|testta
 $routes['/projects/testreport']       = array('response' => 'reports(array)|testreports,pager');
 $routes['/projects/:projectID']       = array('response' => 'project');
 
+$routes['/executions']                     = array('method' => 'all', 'response' => 'executionStats|executions,pager');
 $routes['/projects/:projectID/executions'] = array('redirect' => '/projects/execution?projectID=:projectID');
-$routes['/executions/task']                = array('response' => 'tasks,pager', 'response' => 'tasks(array),pager');
-$routes['/executions/story']               = array('response' => 'stories,pager', 'response' => 'stories(array),pager');
+$routes['/executions/task']                = array('response' => 'tasks(array),pager');
+$routes['/executions/story']               = array('response' => 'stories(array),pager');
 $routes['/executions/build']               = array('response' => 'builds,pager');
-$routes['/executions/bug']                 = array('response' => 'bugs,pager', 'response' => 'bugs(array),pager');
+$routes['/executions/bug']                 = array('response' => 'bugs(array),pager');
 $routes['/executions/testcase']            = array('response' => 'cases(array)|testcases,pager');
 $routes['/executions/testtask']            = array('response' => 'tasks(array)|testtasks,pager');
 $routes['/executions/testreport']          = array('response' => 'reports(array)|testreports,pager');
@@ -64,7 +72,7 @@ $routes['/projects/:projectID/testtasks']     = array('redirect' => '/projects/t
 $routes['/executions/:executionID/testtasks'] = array('redirect' => '/executions/testtask?executionID=:executionID');
 $routes['/testtasks/:testtaskID']             = array('response' => 'task|testtask,actions(array)');
 
-$routes['/products/:productID/testreports']     = array('redirect' => '/testreports?productID=:productID', 'response' => 'reports(array)|testreports,pager');
+$routes['/products/:productID/testreports']     = array('redirect' => '/testreports?objectID=:productID', 'response' => 'reports(array)|testreports,pager');
 $routes['/projects/:projectID/testreports']     = array('redirect' => '/projects/testreport?projectID=:projectID');
 $routes['/executions/:executionID/testreports'] = array('redirect' => '/executions/testreport?executionID=:executionID');
 $routes['/testreports/:reportID']               = array('response' => 'report|testreport,actions(array)');
@@ -92,17 +100,21 @@ $routes['/auditplans']                          = array('response' => 'auditplan
 $routes['/projects/:projectID/auditplans']      = array('redirect' => '/auditplans?projectID=:projectID');
 $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditplans?executionID=:executionID&from=execution');
 
-$routes['/feedbacks']                     = array('response' => 'feedbacks(array),pager');
-$routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?productID=:productID');
+$routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager');
+$routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID');
 $routes['/feedbacks/:feedbackID']         = array('response' => 'feedback,actions(array)');
 
 $routes['/tickets']                     = array('response' => 'tickets(array),pager');
-$routes['/products/:productID/tickets'] = array('redirect' => '/tickets?browseType=byProduct&param=:productID');
+$routes['/products/:productID/tickets'] = array('redirect' => '/tickets?param=:productID');
 $routes['/tickets/:ticketID']           = array('response' => 'ticket,actions(array)');
+
+$routes['/systems']                     = array('response' => 'appList(array)|systems,pager');
+$routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
+$routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
 $routes['/depts']         = array('response' => 'sons|depts');
 $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');
 
 $routes['/users']         = array('redirect' => '/companies/browse', 'response' => 'users,pager');
-$routes['/users/:userID'] = array('redirect' => '/users/profile', 'response' => 'user');
+$routes['/users/:userID'] = array('redirect' => '/users/:userID/profile', 'response' => 'user');

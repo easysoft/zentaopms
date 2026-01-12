@@ -2921,13 +2921,6 @@ CHANGE `reviewedDate` `reviewedDate` datetime NULL,
 CHANGE `level` `level` tinyint(3) NOT NULL DEFAULT '0',
 CHANGE `assignedTo` `assignedTo` varchar(30) NOT NULL DEFAULT '';
 
-ALTER TABLE `zt_holiday`
-CHANGE `name` `name` varchar(30) NOT NULL DEFAULT '',
-CHANGE `type` `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
-CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
-CHANGE `begin` `begin` date NULL,
-CHANGE `end` `end` date NULL;
-
 ALTER TABLE `zt_leave`
 CHANGE `year` `year` char(4) NOT NULL DEFAULT '',
 CHANGE `begin` `begin` date NULL,

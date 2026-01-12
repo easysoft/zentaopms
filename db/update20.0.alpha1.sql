@@ -12,6 +12,7 @@ DROP INDEX account_vision_module_type_order ON `zt_block`;
 UPDATE `zt_block` SET `dashboard` = CONCAT(`module`, `type`);
 UPDATE `zt_block` SET `module` = IF(`source` != '', `source`, `code`);
 UPDATE `zt_block` SET `width` = IF(`grid` > 4, '2', '1');
+UPDATE `zt_block` SET `left` = '2' WHERE `width` = '1';
 UPDATE `zt_block` SET `params` = '{"count":"20"}' WHERE `module` = 'assigntome' AND `code` = 'assigntome';
 
 ALTER TABLE `zt_block` DROP COLUMN `source`;

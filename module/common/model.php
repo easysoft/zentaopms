@@ -488,6 +488,13 @@ class commonModel extends model
             if(commonModel::hasPriv($module, $method)) return true;
         }
 
+        if($this->app->apiVersion)
+        {
+            header('HTTP/1.1 403 Forbidden', true, 403);
+            header('Content-Type: application/json');
+            helper::end(json_encode(['status' => 'error', 'message' => 'Not allowed']));
+        }
+
         $vars = "module=$module&method=$method";
         if(isset($this->server->http_referer))
         {
@@ -1106,35 +1113,10 @@ class commonModel extends model
 
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
+        if($this->app->getModuleName() == 'upgrade' && $this->app->getMethodName() == 'safedelete') return false;
+
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
         return (!is_file($statusFile) or (time() - filemtime($statusFile)) > $this->config->safeFileTimeout) ? $statusFile : false;
-    }
-
-    /**
-     * 检查升级验证文件是否创建，给出升级的提示。
-     * Check upgrade's status file is ok or not.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkUpgradeStatus()
-    {
-        $statusFile = $this->checkSafeFile();
-        if($statusFile)
-        {
-            $this->app->loadLang('upgrade');
-            $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
-            $cmd = sprintf($cmd, $statusFile);
-
-            echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
-            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
-            printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            echo '</td></tr></table></body></html>';
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -1770,7 +1752,7 @@ eof;
         if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
-        $user->last   = time();
+        $user->last   = helper::now();
         $user->rights = $this->user->authorize($user->account);
         $user->groups = $this->user->getGroups($user->account);
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
@@ -2536,6 +2518,7 @@ eof;
                 $actionData = !empty($config->{$moduleName}->actionList[$action]) ? $config->{$moduleName}->actionList[$action] : array();
                 if($isInModal && !empty($actionData['notInModal'])) continue;
 
+                $actionData['name'] = $action;
                 if(isset($actionData['data-app']) && $actionData['data-app'] == 'my') $actionData['data-app'] = $this->app->tab;
                 if($isInModal && !isset($actionData['data-target']) && isset($actionData['data-toggle']) && $actionData['data-toggle'] == 'modal')
                 {

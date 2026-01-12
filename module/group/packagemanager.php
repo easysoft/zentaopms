@@ -2976,7 +2976,7 @@ $config->group->package->file->privs['file-edit']         = array('edition' => '
 $config->group->package->file->privs['file-delete']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array(), 'recommend' => array('file-edit'));
 $config->group->package->file->privs['file-uploadImages'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array());
 $config->group->package->file->privs['file-setPublic']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array('file-download'), 'recommend' => array());
+$config->group->package->file->privs['file-preview']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 26, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->commonEffort = new stdclass();
 $config->group->package->commonEffort->order  = 5;
@@ -3948,13 +3948,6 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
-/* Temporarily hide */
-// $config->group->package->aiChatting = new stdclass();
-// $config->group->package->aiChatting->order  = 2020;
-// $config->group->package->aiChatting->subset = 'aiapp';
-// $config->group->package->aiChatting->privs  = array();
-// $config->group->package->aiChatting->privs['ai-chat'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->aiConversation = new stdclass();
 $config->group->package->aiConversation->order  = 2030;
 $config->group->package->aiConversation->subset = 'aiapp';
@@ -4006,6 +3999,25 @@ $config->group->package->manageGeneralAgent->privs['ai-editMiniProgram']        
 $config->group->package->manageGeneralAgent->privs['ai-testMiniProgram']         = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 50, 'depend' => array('ai-miniPrograms', 'ai-miniProgramView', 'aiapp-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
 $config->group->package->manageGeneralAgent->privs['ai-deleteMiniProgram']       = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 55, 'depend' => array('ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram', 'ai-testMiniProgram', 'ai-editMiniProgram'));
 $config->group->package->manageGeneralAgent->privs['ai-exportMiniProgram']       = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 60, 'depend' => array('ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-importMiniProgram'));
+
+$config->group->package->aiKnowledgeLib = new stdclass();
+$config->group->package->aiKnowledgeLib->order  = 2075;
+$config->group->package->aiKnowledgeLib->subset = 'aiapp';
+$config->group->package->aiKnowledgeLib->privs  = array();
+$config->group->package->aiKnowledgeLib->privs['ai-myknowledgelib']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-teamknowledgelib']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-createknowledgelib']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-importfromdoc']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ai-createknowledgelib'), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-importfromasset']        = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 25, 'depend' => array('ai-createknowledgelib'), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-editknowledgelib']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-publishknowledgelib']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-unpublishknowledgelib']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-deleteknowledgelib']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-searchknowledgelib']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-aichatwithknowledgelib'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-createknowledge']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-deleteknowledgeitem']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array(), 'recommend' => array());
+$config->group->package->aiKnowledgeLib->privs['ai-editknowledge']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseAiModels = new stdclass();
 $config->group->package->browseAiModels->order  = 2080;

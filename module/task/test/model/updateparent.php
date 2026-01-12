@@ -5,7 +5,7 @@
 
 title=测试 taskModel::updateParent();
 timeout=0
-cid=0
+cid=18857
 
 - 执行taskTest模块的updateParentTest方法，参数是$task1, false
  - 属性id @4

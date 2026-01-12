@@ -163,6 +163,7 @@ $lang->story->field          = '同步的欄位';
 $lang->story->completeRate   = '完成率';
 $lang->story->reviewed       = '已評審';
 $lang->story->toBeReviewed   = '待評審';
+$lang->story->isReviewed     = '是否評審';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "該{$lang->SRCommon}與上一{$lang->SRCommon}不屬於同一產品！";

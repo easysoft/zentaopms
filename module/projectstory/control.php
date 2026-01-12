@@ -39,7 +39,7 @@ class projectStory extends control
      */
     public function story(int $projectID = 0, int $productID = 0, string $branch = '0', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'project', int $blockID = 0)
     {
-        if($from == 'doc')
+        if($from == 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
             $projects = $this->loadModel('project')->getPairsByProgram();
@@ -76,9 +76,9 @@ class projectStory extends control
             $this->lang->projectstory->unlinkStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->unlinkStory);
         }
 
-        if($from != 'doc' && empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
+        if($from != 'doc' && $from != 'ai' && empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
 
-        if($from === 'doc')
+        if($from === 'doc' || $from == 'ai')
         {
             $this->loadModel('epic');
             $this->loadModel('requirement');
@@ -185,6 +185,7 @@ class projectStory extends control
             $this->view->gradeGroup    = $gradeGroup;
             $this->view->pager         = $pager;
             $this->view->orderBy       = $orderBy;
+            $this->view->from          = $from;
 
             return $this->display();
         }

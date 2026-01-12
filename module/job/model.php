@@ -57,7 +57,7 @@ class jobModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', object $pager = null, string $engine = '', string $pipeline = ''): array
+    public function getList(int $repoID = 0, string $jobQuery = '', string $orderBy = 'id_desc', ?object $pager = null, string $engine = '', string $pipeline = ''): array
     {
         return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')

@@ -82,7 +82,7 @@ class ai extends control
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $program->createdBy === 'system' ? $this->lang->admin->system : $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $categoryList[$program->category];
-            $program->publishedLabel = $program->published === '1'
+            $program->publishedLabel = $program->published == '1'
                 ? $this->lang->ai->miniPrograms->statuses['active']
                 : $this->lang->ai->miniPrograms->statuses['draft'];
         }
@@ -180,14 +180,6 @@ class ai extends control
 
         $content = file_get_contents($fileName);
         unlink($fileName);
-        if(!empty($content) && strpos($content, '<?php') === 0)
-        {
-            $content = str_replace(['<?php', "\r", "\n"], '', $content);
-            $pos = strpos($content, "\$ztApp = '");
-            if($pos != 0) return $this->send($failResponse);
-
-            $content = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
-        }
         if(empty($content)) return $this->send($failResponse);
 
         $ztApp  = json_decode($content);
@@ -211,7 +203,8 @@ class ai extends control
     public function prompts($module = '', $status = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('user');
-        $users = $this->user->getPairs('noletter');
+        $users     = $this->user->getPairs('noletter');
+        $userList  = $this->user->getList('nodeleted');
 
         /* Set pager and order. */
         $this->app->loadClass('pager', $static = true);
@@ -225,6 +218,7 @@ class ai extends control
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->aiapp->zentaoAgent;
         $this->view->users      = $users;
+        $this->view->userList   = $userList;
 
         if($this->config->edition == 'open')
         {
@@ -253,6 +247,7 @@ class ai extends control
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} $prompt->name";
+        $this->view->fieldConfig = $this->ai->getPromptFields($id);
 
         $this->display();
     }
@@ -418,14 +413,37 @@ class ai extends control
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            $data = fixer::input('post')->get();
+            if(!empty($_POST))
+            {
+                $data = fixer::input('post')->get();
+            }
+            else
+            {
+                $input = file_get_contents('php://input');
+                $data  = json_decode($input);
+
+                if(json_last_error() !== JSON_ERROR_NONE)
+                {
+                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
+                }
+            }
+
+            if(!is_object($data)) $data = new stdClass();
 
             $originalPrompt = clone $prompt;
 
-            $prompt->purpose     = $data->purpose;
-            $prompt->elaboration = $data->elaboration;
+            $prompt->purpose      = isset($data->purpose) ? $data->purpose : '';
+            $prompt->elaboration  = '';
+            $prompt->knowledgeLib = $data->knowledgeLib ?? '';
+
+            if(isset($data->fields))
+            {
+                $fields = is_array($data->fields) ? $data->fields : array();
+                $this->ai->savePromptFields($promptID, $fields);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -435,9 +453,20 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
         }
 
+        $knowledgeLibIds = [];
+        if(!empty($prompt->knowledgeLib)) $knowledgeLibIds = explode(',', $prompt->knowledgeLib);
+
+        $knowledgeLibs = (empty($knowledgeLibIds)) ? [] : $this->ai->getKnowledgeLibsByIDs($knowledgeLibIds);
+
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
         $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
+        $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->currentPrompt  = $currentPrompt;
+        $this->view->knowledgeLibs  = $knowledgeLibs;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
@@ -529,11 +558,11 @@ class ai extends control
      *
      * @param  int    $promptId
      * @param  int    $objectId
-     * @param  bool   $auto  Auto open target form and apply changes.
+     * @param  string $mode  Execution mode, 'testing' or 'normal'.
      * @access public
      * @return void
      */
-    public function promptExecute($promptId, $objectId, $auto = true)
+    public function promptExecute(int $promptId, int $objectId, string $mode = 'testing')
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
@@ -544,8 +573,7 @@ class ai extends control
         list($objectData, $rawObject) = $object;
 
         list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
-        if(!empty($stop))    return header("location: $location", true, 302);
+        if(!empty($stop)) return header("location: $location", true, 302);
 
         /* Execute prompt and catch exceptions. */
         try
@@ -574,14 +602,23 @@ class ai extends control
             $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
         }
 
+        $fields = array_values($this->ai->getPromptFields($promptId));
+        if($fields)
+        {
+            $response['fields']     = $fields;
+            $response['formConfig'] = [];
+            $response['formConfig']['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $response['formConfig']['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
+        }
+
         $response['objectID']     = $objectId;
         $response['objectType']   = $prompt->module;
+        $response['knowledgeLib'] = $prompt->knowledgeLib;
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
-        $response['promptConfig'] = $prompt;
-        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
+        $response['model']        = $prompt->model;
 
-        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $auto))));
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
 
     /**
@@ -610,7 +647,7 @@ class ai extends control
      * @access public
      * @return void|int
      */
-    public function promptAudit($promptId, $objectId, $exit = false)
+    public function promptAudit(int $promptId, int $objectId, bool $exit = false)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
 
@@ -631,7 +668,7 @@ class ai extends control
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
             $prompt->purpose          = $data->purpose;
-            $prompt->elaboration      = $data->elaboration;
+            $prompt->elaboration      = '';
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -643,7 +680,7 @@ class ai extends control
             }
             else
             {
-                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'promptexecute', "promptId=$promptId&objectId=$objectId"));
+                $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => array('name' => 'getTestingLocation', 'params' => array($promptId)));
             }
 
             $this->sendSuccess($response);
@@ -654,9 +691,13 @@ class ai extends control
 
         list($objectData, $object) = $objectForPrompt;
 
-        $this->view->prompt     = $prompt;
-        $this->view->object     = $object;
-        $this->view->dataPrompt = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
+        $this->view->prompt        = $prompt;
+        $this->view->currentPrompt = $currentPrompt;
+        $this->view->object        = $object;
+        $this->view->dataPrompt    = $this->ai->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
 
         $this->display();
     }
@@ -707,17 +748,49 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function ajaxGetTestingLocation($promptID, $module, $targetForm)
+    public function ajaxTestPrompt($promptID)
     {
-        $prompt = new stdclass();
-        $prompt->id         = $promptID;
-        $prompt->module     = $module;
-        $prompt->targetForm = $targetForm;
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
-        $location = $this->ai->getTestingLocation($prompt);
-        if($location === false) return $this->send(array('error' => $this->lang->ai->prompts->goingTestingFail));
+        $object = $this->ai->getTestPromptData($prompt);
+        list($objectData, $showText) = $object;
 
-        return $this->send(array('data' => $location));
+        /* Execute prompt and catch exceptions. */
+        try
+        {
+            $response = $this->ai->executePrompt($prompt, $object);
+        }
+        catch (AIResponseException $e)
+        {
+            $output = array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $e->getMessage()));
+
+            /* Audition shall quit on such exception. */
+            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60)
+            {
+                $output['locate'] = $this->inlink('promptAudit', "promptID=$promptID&objectId=0&exit=true");
+            }
+            return $this->send($output);
+        }
+
+        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
+        if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
+
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty')
+        {
+            $targetFormPaths            = explode('.', $prompt->targetForm);
+            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+        }
+
+        $response['objectType']   = $prompt->module;
+        $response['object']       = $objectData;
+        $response['formLocation'] = '';
+        $response['model']        = $prompt->model;
+        $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
+        $response['content']      = $showText;
+
+        return $this->send(array('result' => 'success', 'data' => $response));
     }
 
     /**

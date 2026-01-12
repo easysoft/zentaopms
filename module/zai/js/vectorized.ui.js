@@ -18,6 +18,7 @@ class VectorizedPanel extends zui.Component
         this.syncingTimer     = 0;
         this.progressBarWidth = 700;
         this.waitTime         = 0;
+        this.syncCouter       = 0;
 
         let store = null;
         if(window !== window.parent)
@@ -162,7 +163,12 @@ class VectorizedPanel extends zui.Component
 
     async syncNext(data)
     {
+        this.syncCouter++;
         const result = await this.post(['zai', 'ajaxSyncVectorization'], data);
+        let waitTime = result.data.lastSync ? (result.data.lastSync.time * 3) : 100;
+        if(this.syncCouter % 200 === 0)  waitTime += 2000;
+        if(this.syncCouter % 1000 === 0) waitTime += 2000;
+        await zui.delay(waitTime);
         return result;
     }
 

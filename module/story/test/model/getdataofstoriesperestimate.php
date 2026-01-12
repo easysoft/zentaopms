@@ -9,7 +9,7 @@ cid=18515
 
 - 测试默认story类型的预计工时统计 @6
 - 测试返回的工时分组数据结构
- - 第0条的name属性 @2
+ - 第0条的name属性 @2.00
  - 第0条的value属性 @3
 - 测试requirement类型的预计工时统计 @6
 - 测试空数据集的预计工时统计 @0
@@ -39,7 +39,7 @@ r(count($storyTest->getDataOfStoriesPerEstimateTest('story'))) && p() && e('6');
 
 // 测试步骤2：测试返回的工时分组数据结构
 $result = $storyTest->getDataOfStoriesPerEstimateTest('story');
-r($result) && p('0:name,value') && e('2,3'); // 测试返回的工时分组数据结构
+r($result) && p('0:name,value') && e('2.00,3'); // 测试返回的工时分组数据结构
 
 // 测试步骤3：测试requirement类型的预计工时统计
 r(count($storyTest->getDataOfStoriesPerEstimateTest('requirement'))) && p() && e('6'); // 测试requirement类型的预计工时统计

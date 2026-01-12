@@ -50,7 +50,7 @@ $lang->collapseMenu   = '收起导航';
 $lang->preference     = '个性化设置';
 $lang->tutorialAB     = '使用教程';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
-$lang->agreement      = "已阅读并同意。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
+$lang->agreement      = "已阅读并同意。<strong class='ml-3'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</strong>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>艾体验设计</div></a>";
 $lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
 $lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">更多精彩，尽在企业版！</a>';
@@ -608,10 +608,10 @@ $lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->downNotify     = "下载桌面提醒";
-$lang->clientName     = "大桌面";
-$lang->downloadClient = "下载大桌面";
+$lang->clientName     = "禅道即时通讯";
+$lang->downloadClient = "下载禅道即时通讯";
 $lang->downloadMobile = "下载移动端";
-$lang->clientHelp     = "大桌面使用说明";
+$lang->clientHelp     = "禅道即时通讯使用说明";
 $lang->clientHelpLink = "https://www.zentao.net/book/zentaopmshelp/302.html?fullScreen=zentao&theme=default#4";
 $lang->website        = "https://www.zentao.net";
 

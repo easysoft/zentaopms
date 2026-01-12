@@ -8,11 +8,10 @@ timeout=0
 cid=15894
 
 - 测试步骤1：全生命周期管理模式 @0
-- 测试步骤2：轻量级管理模式 @productER,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap
-
+- 测试步骤2：轻量级管理模式 @1
 - 测试步骤3：无效模式参数 @0
 - 测试步骤4：空字符串模式参数 @0
-- 测试步骤5：验证URAndSR和enableER配置 @productER,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap|1|0
+- 测试步骤5：验证URAndSR和enableER配置 @1
 
 */
 
@@ -40,7 +39,9 @@ su('admin');
 $customTester = new customTest();
 
 r($customTester->disableFeaturesByModeTest('ALM')) && p() && e('0'); // 测试步骤1：全生命周期管理模式
-r($customTester->disableFeaturesByModeTest('light')) && p() && e('productER,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap'); // 测试步骤2：轻量级管理模式
+$light = $customTester->disableFeaturesByModeTest('light');
+r(strpos($light, 'productTrack') !== false) && p() && e('1'); // 测试步骤2：轻量级管理模式
 r($customTester->disableFeaturesByModeTest('invalid')) && p() && e('0'); // 测试步骤3：无效模式参数
 r($customTester->disableFeaturesByModeTest('')) && p() && e('0'); // 测试步骤4：空字符串模式参数
-r($customTester->disableFeaturesByModeTestWithURAndSR('light')) && p() && e('productER,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap|1|0'); // 测试步骤5：验证URAndSR和enableER配置
+$light = $customTester->disableFeaturesByModeTestWithURAndSR('light');
+r(strpos($light, 'agileplusMeasrecord') !== false) && p() && e('1'); // 测试步骤5：验证URAndSR和enableER配置

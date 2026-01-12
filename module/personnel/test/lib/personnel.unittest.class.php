@@ -260,7 +260,7 @@ class personnelTest
      * @access public
      * @return string|array
      */
-    public function getWhitelistTest(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', object $pager = null): string|array
+    public function getWhitelistTest(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', ?object $pager = null): string|array
     {
         $objects = $this->objectModel->getWhitelist($objectID, $objectType, $orderBy, $pager);
 

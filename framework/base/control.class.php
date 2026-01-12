@@ -1026,7 +1026,7 @@ class baseControl
         $context->data    = (array)$this->view;
         $context->data['zinDebug'] = array();
 
-        if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
+        if($this->config->debug && $this->config->debug >= 2 && $this->config->installed && $this->config->db->driver == 'mysql')
         {
             $context->data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
         }

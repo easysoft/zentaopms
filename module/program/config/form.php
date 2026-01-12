@@ -6,8 +6,8 @@ $config->program->form = new stdclass();
 
 $config->program->form->create['parent']     = array('type' => 'int',      'control' => 'picker',     'required' => false, 'default' => 0);
 $config->program->form->create['name']       = array('type' => 'string',   'control' => 'text',       'required' => true,  'default' => '', 'filter' => 'trim');
-$config->program->form->create['PM']         = array('type' => 'string',   'control' => 'picker',     'required' => false, 'default' => 0);
-$config->program->form->create['budget']     = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => '');
+$config->program->form->create['PM']         = array('type' => 'string',   'control' => 'picker',     'required' => false, 'default' => '');
+$config->program->form->create['budget']     = array('type' => 'float',    'control' => 'text',       'required' => false, 'default' => '');
 $config->program->form->create['budgetUnit'] = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => 'CNY');
 $config->program->form->create['begin']      = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
 $config->program->form->create['end']        = array('type' => 'date',     'control' => 'datepicker', 'required' => false, 'default' => '');
@@ -18,8 +18,8 @@ $config->program->form->create['whitelist']  = array('type' => 'array',    'cont
 
 $config->program->form->edit['parent']     = array('type' => 'int',      'control' => 'picker',     'required' => false, 'default' => 0);
 $config->program->form->edit['name']       = array('type' => 'string',   'control' => 'text',       'required' => true,  'default' => '', 'filter' => 'trim');
-$config->program->form->edit['PM']         = array('type' => 'string',   'control' => 'picker',     'required' => false, 'default' => 0);
-$config->program->form->edit['budget']     = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => '');
+$config->program->form->edit['PM']         = array('type' => 'string',   'control' => 'picker',     'required' => false, 'default' => '');
+$config->program->form->edit['budget']     = array('type' => 'float',    'control' => 'text',       'required' => false, 'default' => '');
 $config->program->form->edit['budgetUnit'] = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => 'CNY');
 $config->program->form->edit['begin']      = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
 $config->program->form->edit['end']        = array('type' => 'date',     'control' => 'datepicker', 'required' => false, 'default' => '');

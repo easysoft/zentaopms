@@ -21,6 +21,7 @@ $lang->prompt->source           = '对象数据';
 $lang->prompt->targetForm       = '目标表单';
 $lang->prompt->purpose          = '操作';
 $lang->prompt->elaboration      = '补充要求';
+$lang->prompt->knowledgeLib     = '知识库';
 $lang->prompt->role             = '角色';
 $lang->prompt->characterization = '角色描述';
 $lang->prompt->status           = '阶段';
@@ -102,6 +103,9 @@ $lang->ai->maintenanceGroup = '维护分组';
 
 $lang->ai->maintenanceGroupDuplicated = '分组名不能重复';
 
+$lang->ai->requiredList['0'] = '非必填';
+$lang->ai->requiredList['1'] = '必填';
+
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s不能为空。';
 $lang->ai->validate->dirtyForm     = '%s的参数配置已变动，是否保存并返回？';
@@ -128,6 +132,10 @@ $lang->ai->prompts->publishedBy  = '由谁发布';
 $lang->ai->prompts->draftedBy    = '由谁下架';
 $lang->ai->prompts->lastEditor   = '最后编辑';
 $lang->ai->prompts->modelNeutral = '通用';
+
+$lang->ai->prompts->viewTypeList            = array();
+$lang->ai->prompts->viewTypeList['list']    = '列表视图';
+$lang->ai->prompts->viewTypeList['card']    = '卡片视图';
 
 $lang->ai->prompts->summary = '本页共 %s 个禅道智能体。';
 $lang->ai->prompts->fieldSeparator = '、';
@@ -198,6 +206,182 @@ $lang->ai->prompts->selectTargetForm    = '选择表单';
 $lang->ai->prompts->selectTargetFormTip = '选择后，可以将大语言模型返回的结果直接录入到禅道对应的表单中。';
 $lang->ai->prompts->goingTesting        = '即将跳转至调试页面';
 $lang->ai->prompts->goingTestingFail    = '暂无可调试的对象';
+
+/* Prompt form settings. */
+$lang->ai->prompts->formDefaultTitle  = '请补充下列表单内容：';
+$lang->ai->prompts->formSubmitBtnText = '生成';
+
+$lang->ai->prompts->testData['product']['product']['name'] = '企业网站建设平台';
+$lang->ai->prompts->testData['product']['product']['desc'] = '企业网站建设平台是一个专为现代企业设计的官网管理平台，旨在帮助公司以专业、创新的方式展示自我。该平台整合了最新的企业动态、项目成果、联系方式以及工商信息，让访客能够一目了然地了解公司的核心价值和服务。通过清晰简洁的界面和直观的导航，企业在线视窗提升了用户体验，帮助企业与客户和合作伙伴之间建立更紧密的联系。无论是信息更新还是内容管理，企业在线视窗都为企业提供了高效、灵活的解决方案，助力品牌建设与业务发展。';
+
+$lang->ai->prompts->testData['project']['project']['name']     = '企业网站开发项目';
+$lang->ai->prompts->testData['project']['project']['type']     = '产品型';
+$lang->ai->prompts->testData['project']['project']['desc']     = '企业网站开发项目旨在通过结合瀑布与敏捷的开发模式，快速、高效地构建一个功能齐全、用户友好且具备高可扩展性的企业官网。该项目将通过详细的需求分析、设计、开发和测试阶段确保最终交付的产品能够满足用户需求并具备良好的用户体验。';
+$lang->ai->prompts->testData['project']['project']['begin']    = '2025-01-01';
+$lang->ai->prompts->testData['project']['project']['end']      = '2025-06-01';
+$lang->ai->prompts->testData['project']['project']['estimate'] = '800h';
+
+$lang->ai->prompts->testData['project']['programplans']['name']      = array('需求分析与规划', '系统设计', '开发与测试', '上线准备与发布');
+$lang->ai->prompts->testData['project']['programplans']['desc']      = array('在这一阶段，将与各个利益相关者进行沟通，收集、分析并确认网站的功能需求和用户故事。', '基于确认的需求，进行系统架构设计与页面原型设计，为后续的开发打下基础。', '在这一阶段，将根据系统设计进行详细开发，并进行单元测试以确保功能的正确性。', '进行最终的系统测试、用户验收测试以及上线准备，确保官网能够顺利交付。');
+$lang->ai->prompts->testData['project']['programplans']['status']    = array('已关闭', '已关闭', '进行中', '未开始');
+$lang->ai->prompts->testData['project']['programplans']['begin']     = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
+$lang->ai->prompts->testData['project']['programplans']['end']       = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
+$lang->ai->prompts->testData['project']['programplans']['realBegan'] = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
+$lang->ai->prompts->testData['project']['programplans']['realEnd']   = array('2025-01-31', '2025-02-28', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['progress']  = array('100%', '100%', '41%', '0%');
+$lang->ai->prompts->testData['project']['programplans']['estimate']  = array('190', '190', '290', '120');
+$lang->ai->prompts->testData['project']['programplans']['consumed']  = array('200', '190', '120', '0');
+$lang->ai->prompts->testData['project']['programplans']['left']      = array('0', '0', '170', '120');
+
+$lang->ai->prompts->testData['project']['executions']['name']      = array('企业网站1.0', '企业网站2.0', '企业网站3.0');
+$lang->ai->prompts->testData['project']['executions']['desc']      = array('开发智能企业官网的核心功能模块，包括首页、新闻中心和关于我们，完成单元测试。', '实现企业网站2.0版本，包括成果展示和售后服务页面，修复y1.0版本Bug，完成单元测试', '开发附加功能模块，如联系方式、工商信息等，同时进行集成测试，确保各模块协同工作。');
+$lang->ai->prompts->testData['project']['executions']['status']    = array('进行中', '未开始', '未开始');
+$lang->ai->prompts->testData['project']['executions']['begin']     = array('2025-04-01', '2025-04-14', '2025-04-21');
+$lang->ai->prompts->testData['project']['executions']['end']       = array('2025-04-11', '2025-04-18', '2025-05-14');
+$lang->ai->prompts->testData['project']['executions']['realBegan'] = array('2025-04-01', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['realEnd']   = array('-', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['estimate']  = array('120', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['consumed']  = array('77', '0', '0');
+$lang->ai->prompts->testData['project']['executions']['left']      = array('50', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['progress']  = array('64%', '0%', '0%');
+
+$lang->ai->prompts->testData['story']['story']['title']    = '实现企业网站首页';
+$lang->ai->prompts->testData['story']['story']['spec']     = "作为本公司的用户，我希望在首页能够方便地获取网站的基本信息，以便我能够快速了解公司的最新动态、部分成果展示、联系方式及工商信息等。\n - 公司最新动态模块。\n - 公司成果展示模块。\n - 公司联系方式和工商信息展示。";
+$lang->ai->prompts->testData['story']['story']['verify']   = "1. 首页应包含最新动态版块，展示最近的新闻和活动信息。\n2. 应有一个部分成果展示区，突出公司过去的重要项目和成就。\n 3. 明确展示联系方式，包括电话、电子邮件和地址，确保访客能轻松找到。\n 4. 工商信息应详细列出，包括公司注册信息和相关资质，确保用户能够核实公司的合法性和可靠性。\n 5. 所有信息应在首页清晰可见，布局美观，易于导航。";
+$lang->ai->prompts->testData['story']['story']['product']  = '企业网站建设平台';
+$lang->ai->prompts->testData['story']['story']['module']   = '首页';
+$lang->ai->prompts->testData['story']['story']['pri']      = '1';
+$lang->ai->prompts->testData['story']['story']['category'] = '研发需求';
+$lang->ai->prompts->testData['story']['story']['estimate'] = '3sp';
+
+$lang->ai->prompts->testData['productplan']['productplan']['title']  = '2.0版本';
+$lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- 实现企业网站2.0版本，包括成果展示和售后服务页面 \n - 修复1.0版本遗留的Bug";
+$lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
+$lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
+
+$lang->ai->prompts->testData['productplan']['stories']['title']    = array('实现成果展示页面', '实现售后服务页面');
+$lang->ai->prompts->testData['productplan']['stories']['module']   = array('成果展示', '售后服务');
+$lang->ai->prompts->testData['productplan']['stories']['pri']      = array('1', '1');
+$lang->ai->prompts->testData['productplan']['stories']['estimate'] = array('1sp', '2sp');
+$lang->ai->prompts->testData['productplan']['stories']['status']   = array('激活', '激活');
+$lang->ai->prompts->testData['productplan']['stories']['stage']    = array('测试中', '研发中');
+
+$lang->ai->prompts->testData['productplan']['bugs']['title']  = array('首页最新动态模块报错', '成果展示图标与标题重叠');
+$lang->ai->prompts->testData['productplan']['bugs']['pri']    = array('1', '2');
+$lang->ai->prompts->testData['productplan']['bugs']['status'] = array('已解决', '激活');
+
+$lang->ai->prompts->testData['release']['release']['product'] = '企业网站建设平台';
+$lang->ai->prompts->testData['release']['release']['name']    = '企业官网1.0版本';
+$lang->ai->prompts->testData['release']['release']['desc']    = "- 实现企业网站首页 \n - 实现新闻中心页面 \n - 实现关于我们页面";
+$lang->ai->prompts->testData['release']['release']['date']    = '2025-04-11';
+
+$lang->ai->prompts->testData['release']['stories']['title']    = array('实现企业网站首页', '实现新闻中心页面', '实现关于我们页面');
+$lang->ai->prompts->testData['release']['stories']['estimate'] = array('3sp', '2sp', '1sp');
+
+$lang->ai->prompts->testData['release']['bugs']['title']  = '无';
+
+$lang->ai->prompts->testData['execution']['execution']['name']     = '企业网站1.0';
+$lang->ai->prompts->testData['execution']['execution']['desc']     = '开发智能企业官网的核心功能模块，包括首页、新闻中心和关于我们，完成单元测试。';
+$lang->ai->prompts->testData['execution']['execution']['estimate'] = '120';
+
+$lang->ai->prompts->testData['execution']['tasks']['name']         = array('迭代计划会', '首页开发设计', '首页开发', '首页测试', '新闻中心开发设计', '新闻中心页面开发', '新闻中心页面测试', '关于我们开发设计', '关于我们页面开发', '关于我们页面测试', '迭代回顾会');
+$lang->ai->prompts->testData['execution']['tasks']['pri']          = array('1', '1', '2', '3', '1', '2', '3', '1', '2', '3', '4');
+$lang->ai->prompts->testData['execution']['tasks']['status']       = array('已关闭', '已完成', '已完成', '进行中', '已完成', '进行中', '未开始', '进行中', '未开始', '未开始', '未开始');
+$lang->ai->prompts->testData['execution']['tasks']['estimate']     = array('40h', '12h', '10h', '2h', '6h', '8h', '4h', '4h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['consumed']     = array('40h', '12h', '10h', '1h', '6h', '6h', '0h', '2h', '0h', '0h', '0h');
+$lang->ai->prompts->testData['execution']['tasks']['left']         = array('0h', '0h', '0h', '1h', '0h', '2h', '4h', '2h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['progress']     = array('100%', '100%', '100%', '50%', '100%', '75%', '0%', '50%', '0%', '0%', '0%');
+$lang->ai->prompts->testData['execution']['tasks']['estStarted']   = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '2025-04-07', '2025-04-03', '2025-04-03', '2025-04-08', '2025-04-11');
+$lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '-', '2025-04-03', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('已完成', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+
+$lang->ai->prompts->testData['task']['task']['name']        = '迭代计划会';
+$lang->ai->prompts->testData['task']['task']['desc']        = "迭代计划会旨在确保团队在下一个开发周期内的工作具有清晰的方向和目标，促进团队成员之间的沟通与协作，并帮助团队合理分配资源。<br> 本次计划会任务目标是：产品经理跟研发和测试人员澄清企业官网的核心功能模块（包括首页、新闻中心和关于我们）的需求，保证研发测试能在迭代周期内按期完成计划需求。";
+$lang->ai->prompts->testData['task']['task']['pri']         = '1';
+$lang->ai->prompts->testData['task']['task']['status']      = '已关闭';
+$lang->ai->prompts->testData['task']['task']['estimate']    = '40h';
+$lang->ai->prompts->testData['task']['task']['consumed']    = '40h';
+$lang->ai->prompts->testData['task']['task']['left']        = '0h';
+$lang->ai->prompts->testData['task']['task']['progress']    = '100%';
+$lang->ai->prompts->testData['task']['task']['story']       = 0;
+$lang->ai->prompts->testData['task']['task']['estStarted']  = '2025-04-01';
+$lang->ai->prompts->testData['task']['task']['realStarted'] = '2025-04-01';
+
+$lang->ai->prompts->testData['case']['case']['title']         = '实现企业网站首页';
+$lang->ai->prompts->testData['case']['case']['precondition']  = '1. 企业网站的基础框架已建成，并部署在服务器上。2. 用户已能访问企业网站。';
+$lang->ai->prompts->testData['case']['case']['scene']         = '用户访问企业网站首页';
+$lang->ai->prompts->testData['case']['case']['product']       = '企业网站建设平台';
+$lang->ai->prompts->testData['case']['case']['module']        = '首页';
+$lang->ai->prompts->testData['case']['case']['pri']           = '1';
+$lang->ai->prompts->testData['case']['case']['type']          = '功能测试';
+$lang->ai->prompts->testData['case']['case']['lastRunResult'] = '通过';
+$lang->ai->prompts->testData['case']['case']['status']        = '正常';
+
+$lang->ai->prompts->testData['case']['steps']['desc']   = array('1.用户访问企业网站首页。', '2.用户查看最新动态模块，检查是否包含最近的新闻和活动信息。', '3.用户查看成果展示模块，检查是否突出展示公司的重要项目和成就。', '4.用户查看联系方式模块，确认包含有效的电话、电子邮件和公司地址。', '5.用户查看工商信息模块，确认公司注册信息和相关资质是否详细且准确。', '6.检查所有信息的显示位置是否清晰可见。', '7.用户使用导航功能查看其他页面，确保导航易于使用。');
+$lang->ai->prompts->testData['case']['steps']['expect'] = array('用户成功访问企业网站首页，首页加载正常。', '最新动态模块：显示最近的新闻和活动信息', '成果展示模块：突出展示公司过去的重要项目和成就。', '联系方式模块：清晰展示电话、电子邮件和地址，用户能够轻松找到。', '工商信息模块：详细列出公司注册信息和相关资质。', '用户能够一眼看到所有信息，且信息的位置合理，版面美观。', '用户能够顺利使用导航功能找到其他相关页面，导航过程流畅无障碍。');
+
+$lang->ai->prompts->testData['bug']['bug']['title']     = '首页最新动态模块报错';
+$lang->ai->prompts->testData['bug']['bug']['steps']     = "步骤：<br> 1. 打开应用首页<br> 2. 滚动到最新动态模块 <br>结果：<br> 观察到模块出现错误提示。<br>期望：<br> 正常显示最新动态，没有报错。";
+$lang->ai->prompts->testData['bug']['bug']['severity']  = '1';
+$lang->ai->prompts->testData['bug']['bug']['pri']       = '1';
+$lang->ai->prompts->testData['bug']['bug']['status']    = '已解决';
+$lang->ai->prompts->testData['bug']['bug']['confirmed'] = '已确认';
+$lang->ai->prompts->testData['bug']['bug']['type']      = '代码错误';
+
+$lang->ai->prompts->testData['doc']['doc']['title']      = '为何精心打造的产品遭遇市场冷遇？';
+$lang->ai->prompts->testData['doc']['doc']['addedBy']    = '-';
+$lang->ai->prompts->testData['doc']['doc']['addedDate']  = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedBy']   = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedDate'] = '-';
+$lang->ai->prompts->testData['doc']['doc']['content']    = '每一位产品人都曾经历过这样的困惑：<br>
+我们投入了无数心血开发的产品，性能远超竞品，价格也有竞争力，团队对它充满信心...然而市场反馈却冷若冰霜。销售数据惨淡，用户增长停滞，投资回报遥遥无期。<br>
+更令人沮丧的是，当你召集团队分析原因时，每个部门都有自己的解释：<br>
+"是营销预算不够！"<br>"是渠道策略有问题！"<br>"是市场还没教育好！"<br>"是销售团队执行不到位！"<br>
+众说纷纭中，真相却越来越模糊。你开始怀疑：我们到底忽略了什么？为什么看似完美的产品就是赢不了市场？<br>
+事实上，产品成功从来不是单一因素决定的。就像一把精密的锁，需要所有齿轮都对准才能顺利打开。而在竞争激烈的市场中，产品不是输在你最擅长的地方，而是倒在你未曾注意的短板上。<br>
+产品成功的八维度全景图<br>
+$APPEALS模型正是帮助我们找出这块"短板"的系统工具。它将产品竞争力分解为八个关键维度：<br>
+$（Price，产品价格）：不仅是数字高低，更关乎价值感知<br>
+A（Availability，可获得性）：产品多容易被目标用户获取到<br>
+P（Packaging，包装）：从视觉到触感的整体体验<br>
+P（Performance，性能）：核心功能的实际表现<br>
+E（Easy to use，易用性）：用户上手和使用的便捷程度<br>
+A（Assurances，保证程度）：品质保障和售后服务<br>
+L（Life cycle of cost，生命周期成本）：长期使用的总体成本<br>
+S（Social acceptance，社会接受程度）：品牌形象与社会认同<br>
+这八个维度共同构成了产品市场竞争力的全景图。就像医生需要全面体检才能找出病因，产品团队也需要通过$APPEALS模型的全面诊断，才能发现真正的问题所在。<br>
+从主观判断到数据驱动决策<br>
+有人会提出疑问："但是，这些维度我们平时也会考虑啊，有什么不同吗？"<br>
+确实，有经验的产品经理往往凭直觉就能考虑到多个因素。然而，直觉分析存在三大陷阱：<br>
+维度遗漏：我们往往关注自己熟悉的领域，而忽视其他维度<br>
+主观偏见：对自家产品的"情感投入"容易导致评估偏差<br>
+权重混乱：不同市场、不同产品类型，各维度的重要性大不相同<br>
+$APPEALS模型通过结构化分析，将模糊的直觉转化为清晰的数据，让产品决策更加科学、客观。<br>
+让强大模型触手可及<br>
+然而，知道$APPEALS模型只是第一步，如何有效应用它才是关键。这就是我们开发"禅道决策分析解决方案"的初衷——让强大的理论模型变得简单易用。<br>
+"禅道决策分析解决方案"是一款专为产品和市场决策者打造的智能分析工具，强大的模型设计器将$APPEALS模型数字化、流程化，帮助团队快速找出产品的竞争优势和致命短板。<br>
+智能分析如何解锁产品潜力??<br>
+维度权重智能配置<br>
+不同行业、不同产品类型，八大维度的重要性各不相同。禅道决策分析解决方案可根据产品特性智能推荐$APPEALS各维度权重配置，也支持团队根据行业经验进行自定义调整。<br>
+结构化问题引导<br>
+每个维度下，"思引师"设计了一系列关键问题，引导团队全面思考。例如在"社会接受度"维度下，系统会引导你思考："产品是否符合当前社会价值观？""是否有知名KOL认可？""用户使用产品是否会获得社交认同？"<br>
+竞品对比分析<br>
+同时评估多个竞品，通过雷达图直观展示各产品在八维度上的表现差异，一目了然地发现自身产品的优势与劣势。<br>
+智能改进建议<br>
+基于分析结果，提供表格视图，支持按问题查看和按分析对象查看两种方式，多视角总览分析结果。并提供内置图形结果建议，让资源投入更加精准高效。<br>
+从问题到解决方案的四步路径??<br>
+配置对象：定义要分析的主体产品、所处细分市场和竞对产品。<br>维度配置：调整八大维度定义及权重，突出关键因素。<br>问题评估：团队共同回答系统引导的结构化问题，并进行对比打分。<br>改进规划：多角度总览分析结果和系统建议，制定优化方案。<br>
+整个过程通常只需1-2小时，却能避免数月的市场试错成本。正如一位用户所说："$APPEALS模型就像产品的全息扫描仪，它以结构化的方式揭示了我们长期忽视的系统性问题，让产品决策从主观猜测转向了数据驱动的精准分析。"<br>
+禅道决策分析解决方案的价值不仅在于分析，更在于它改变了团队的思考方式：<br>
+打破部门壁垒：八维度分析需要研发、市场、销售等多部门共同参与，促进了跨部门协作。<br>
+克服认知偏见：结构化问题和数据可视化帮助团队跳出主观判断。<br>
+形成共识基础：基于同一模型的分析结果，让团队更容易达成战略共识。<br>
+让数据为你的产品决策保驾护航<br>
+产品为什么卖不动？答案往往不在你已知的强项上，而隐藏在那些被忽视的维度中。$APPEALS八维度分析框架就像一张精准的市场地图，为你导航出产品成功的最佳路径。<br>
+当市场反馈不如预期，当竞争对手似乎总能抢占先机，不要再凭直觉做决策。系统性的分析才能带来真正的突破。<br>
+如果你的产品正面临市场困境，如果你渴望在激烈的竞争中找到真正的差异化优势，$APPEALS分析将是你最有力的决策工具。<br>
+即日起，我们提供为期30天的免费试用，扫描下方二维码，立即开启你的产品诊断之旅。让数据驱动决策，让模型指引方向，让你的产品找到真正的竞争力！';
 
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
@@ -275,19 +459,18 @@ $lang->ai->dataSource['project']['project']['begin']    = '计划开始';
 $lang->ai->dataSource['project']['project']['end']      = '计划结束';
 $lang->ai->dataSource['project']['project']['estimate'] = '预计工时';
 
-$lang->ai->dataSource['project']['programplans']['common']       = '阶段列表';
-$lang->ai->dataSource['project']['programplans']['name']         = '阶段名称';
-$lang->ai->dataSource['project']['programplans']['desc']         = '阶段描述';
-$lang->ai->dataSource['project']['programplans']['status']       = '阶段状态';
-$lang->ai->dataSource['project']['programplans']['begin']        = '计划开始';
-$lang->ai->dataSource['project']['programplans']['end']          = '计划完成';
-$lang->ai->dataSource['project']['programplans']['realBegan']    = '实际开始';
-$lang->ai->dataSource['project']['programplans']['realEnd']      = '实际完成';
-$lang->ai->dataSource['project']['programplans']['planDuration'] = '工期';
-$lang->ai->dataSource['project']['programplans']['progress']     = '任务进度';
-$lang->ai->dataSource['project']['programplans']['estimate']     = '预计工时';
-$lang->ai->dataSource['project']['programplans']['consumed']     = '消耗工时';
-$lang->ai->dataSource['project']['programplans']['left']         = '剩余工时';
+$lang->ai->dataSource['project']['programplans']['common']    = '阶段列表';
+$lang->ai->dataSource['project']['programplans']['name']      = '阶段名称';
+$lang->ai->dataSource['project']['programplans']['desc']      = '阶段描述';
+$lang->ai->dataSource['project']['programplans']['status']    = '阶段状态';
+$lang->ai->dataSource['project']['programplans']['begin']     = '计划开始';
+$lang->ai->dataSource['project']['programplans']['end']       = '计划完成';
+$lang->ai->dataSource['project']['programplans']['realBegan'] = '实际开始';
+$lang->ai->dataSource['project']['programplans']['realEnd']   = '实际完成';
+$lang->ai->dataSource['project']['programplans']['progress']  = '任务进度';
+$lang->ai->dataSource['project']['programplans']['estimate']  = '预计工时';
+$lang->ai->dataSource['project']['programplans']['consumed']  = '消耗工时';
+$lang->ai->dataSource['project']['programplans']['left']      = '剩余工时';
 
 $lang->ai->dataSource['project']['executions']['common']    = '迭代列表';
 $lang->ai->dataSource['project']['executions']['name']      = '执行名称';
@@ -341,6 +524,7 @@ $lang->ai->dataSource['task']['task']['left']        = '剩余';
 $lang->ai->dataSource['task']['task']['progress']    = '进度';
 $lang->ai->dataSource['task']['task']['estStarted']  = '预计开始';
 $lang->ai->dataSource['task']['task']['realStarted'] = '实际开始';
+$lang->ai->dataSource['task']['task']['story']       = '相关需求';
 
 $lang->ai->dataSource['case']['case']['common']        = '用例';
 $lang->ai->dataSource['case']['case']['title']         = '标题';
@@ -386,6 +570,7 @@ $lang->ai->targetForm['task']['common']           = '任务';
 $lang->ai->targetForm['testcase']['common']       = '用例';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = '文档';
+$lang->ai->targetForm['empty']['common']          = '';
 
 $lang->ai->targetForm['product']['tree/managechild'] = '维护模块';
 $lang->ai->targetForm['product']['doc/create']       = '创建文档';
@@ -425,6 +610,8 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 
 $lang->ai->targetForm['doc']['create'] = '创建文档';
 $lang->ai->targetForm['doc']['edit']   = '编辑文档';
+
+$lang->ai->targetForm['empty']['empty'] = '空';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = '全部';
@@ -504,9 +691,13 @@ $lang->ai->miniPrograms->field->requiredOptions     = array('否', '是');
 $lang->ai->miniPrograms->field->add                 = '新增字段';
 $lang->ai->miniPrograms->field->addTip              = '请点击此处以添加字段信息';
 $lang->ai->miniPrograms->field->edit                = '编辑字段';
-$lang->ai->miniPrograms->field->configuration       = '字段配置区';
+$lang->ai->miniPrograms->field->configuration       = '配置区';
 $lang->ai->miniPrograms->field->debug               = '调试区';
 $lang->ai->miniPrograms->field->preview             = '预览区';
+$lang->ai->miniPrograms->field->fields              = '表单配置';
+$lang->ai->miniPrograms->field->prompt              = '提词';
+$lang->ai->miniPrograms->field->fieldConfig         = '字段配置';
+$lang->ai->miniPrograms->field->knowledgeLibs       = '知识库挂载';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';
@@ -907,6 +1098,8 @@ $lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string
 $lang->ai->formSchema['doc']['edit']->properties->content->description = '文档的正文';
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
+$lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
+
 $lang->ai->formSchema['tree']['browse'] = new stdclass();
 $lang->ai->formSchema['tree']['browse']->title = '模块';
 $lang->ai->formSchema['tree']['browse']->type  = 'object';
@@ -948,8 +1141,15 @@ $lang->ai->formSchema['programplan']['create']->properties->stages->items->prope
 $lang->ai->formSchema['programplan']['create']->properties->stages->items->properties->end->description        = '阶段结束时间';
 $lang->ai->formSchema['programplan']['create']->required = array('stages');
 
+/* Forms as JSON Schemas. */
+$lang->ai->formSchema['empty']['empty'] = new stdclass();
+$lang->ai->formSchema['empty']['empty']->title = '自定义';
+$lang->ai->formSchema['empty']['empty']->type  = 'object';
+$lang->ai->formSchema['empty']['empty']->properties = new stdclass();
+$lang->ai->formSchema['empty']['empty']->properties->title = new stdclass();
+
 $lang->ai->promptMenu = new stdclass();
-$lang->ai->promptMenu->dropdownTitle = 'AI';
+$lang->ai->promptMenu->dropdownTitle = '%s智能助手';
 
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = '已将禅道智能体执行结果填写到表单中';

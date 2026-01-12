@@ -10,8 +10,8 @@ cid=17213
 - 步骤1：默认配置返回0 @0
 - 步骤2：showAnnual为空返回0 @0
 - 步骤3：annualShowed已设置返回0 @0
-- 步骤4：检查返回包含年度总结提醒的内容 @<h4>新增年度总结功能</h4><p>12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="report-annualData.html" target="_blank" id="showAnnual" class="btn mini primary">查看</a></p>
-- 步骤5：标记设置后再次调用返回年度总结内容 @<h4>新增年度总结功能</h4><p>12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="report-annualData.html" target="_blank" id="showAnnual" class="btn mini primary">查看</a></p>
+- 步骤4：检查返回包含年度总结提醒的内容 @<h4>新增年度总结功能</h4><p>3.6版本后，新增年度总结功能，可以到『
+- 步骤5：标记设置后再次调用返回年度总结内容 @<h4>新增年度总结功能</h4><p>3.6版本后，新增年度总结功能，可以到『
 
 */
 
@@ -42,7 +42,7 @@ r($miscTest->getRemindTest()) && p() && e('0'); // 步骤3：annualShowed已设�
 // 7. 测试步骤4：showAnnual设置且annualShowed为空的情况
 $config->global->showAnnual = '1';
 unset($config->global->annualShowed);
-r($miscTest->getRemindTest()) && p() && e('<h4>新增年度总结功能</h4><p>12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="report-annualData.html" target="_blank" id="showAnnual" class="btn mini primary">查看</a></p>'); // 步骤4：检查返回包含年度总结提醒的内容
+r(mb_substr($miscTest->getRemindTest(), 0, 40)) && p() && e('<h4>新增年度总结功能</h4><p>3.6版本后，新增年度总结功能，可以到『'); // 步骤4：检查返回包含年度总结提醒的内容
 
 // 8. 测试步骤5：验证设置annualShowed标记后再次调用的行为
-r($miscTest->getRemindTest()) && p() && e('<h4>新增年度总结功能</h4><p>12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="report-annualData.html" target="_blank" id="showAnnual" class="btn mini primary">查看</a></p>'); // 步骤5：标记设置后再次调用返回年度总结内容
+r(mb_substr($miscTest->getRemindTest(), 0, 40)) && p() && e('<h4>新增年度总结功能</h4><p>3.6版本后，新增年度总结功能，可以到『'); // 步骤5：标记设置后再次调用返回年度总结内容

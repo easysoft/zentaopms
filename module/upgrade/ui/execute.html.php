@@ -12,101 +12,181 @@ namespace zin;
 
 set::zui(true);
 
-jsVar('result', $result);
-jsVar('copySuccess', $lang->upgrade->copySuccess);
-jsVar('copyFail', $lang->upgrade->copyFail);
+jsVar('fromVersion', $fromVersion);
+jsVar('upgradeVersions', array_keys($upgradeVersions));
+
+$editionNames = [];
+foreach(['open', 'biz', 'max', 'ipd'] as $edition)
+{
+    $editionName = $lang->{$edition . 'Name'} ?? $edition;
+    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $editionName;
+}
+
+$toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
+$toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
+$versionCount     = count($upgradeVersions);
+
+$buildVersions = function() use ($upgradeVersions, $editionNames)
+{
+    $versions = [];
+    foreach($upgradeVersions as $version => $label)
+    {
+        $edition = is_numeric($version[0]) ? 'open' : substr($version, 0, 3);
+        $versions[] = row
+        (
+            setClass('version-item items-center gap-2'),
+            setData(['version' => $version]),
+            icon
+            (
+                setClass('text-gray-400 w-4 h-4'),
+                'clock'
+            ),
+            span
+            (
+                $editionNames[$edition] . str_ireplace($edition, '', $label)
+            )
+        );
+    }
+    return $versions;
+};
+
+$buildChanges = function() use ($app, $lang, $upgradeChanges)
+{
+    $changes = [];
+    $width   = $app->getClientLang() == 'en' ? 'w-14' : 'w-11';
+    foreach($upgradeChanges as $key => $change)
+    {
+        $sql = json_encode($change['sql'] ?? []);
+        $changes[] = row
+        (
+            setClass('change-item items-center gap-3'),
+            setData(['key' => $key]),
+            span
+            (
+                setClass("label gray-pale text-gray-400 px-2.5 py-1 {$width}"),
+                setData(['text' => $lang->upgrade->changeModes[$change['mode']]]),
+                icon('spinner-indicator')
+            ),
+            span
+            (
+                $change['content']
+            ),
+            $change['type'] == 'sql' ? a
+            (
+                set::href("javascript:showSQL({$sql})"),
+                icon
+                (
+                    setClass('text-lg text-gray-400'),
+                    'fields'
+                ),
+            ) : null
+        );
+    }
+    return $changes;
+};
 
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    col
     (
-        setID('mainContent'),
-        panel
+        setClass('container rounded-md bg-white gap-2 px-8 py-6 h-full'),
+        div
         (
-            set::style(array('margin' => '0 auto')),
-            zui::width('800px'),
-            div
+            setClass('text-xl font-medium'),
+            $lang->upgrade->execute,
+        ),
+        div
+        (
+            setClass('text-warning'),
+            $lang->upgrade->upgradingTips
+        ),
+        row
+        (
+            setClass('bg-gray-100 gap-2 p-2'),
+            setStyle(['max-height' => 'calc(100% - 6rem)']),
+            col
             (
-                setID('resultTitle'),
-                setClass('text-lg font-bold mb-4'),
-                icon
+                setID('versionsBlock'),
+                setClass('bg-white rounded-md justify-between gap-4 p-4 w-64 h-full'),
+                span
                 (
-                    'close',
-                    setStyle('font-size', '16px'),
-                    setClass('danger circle p-1.5 mr-2')
+                    setClass('text-lg font-medium'),
+                    $lang->upgrade->versionTips
                 ),
-                in_array($result, array('fail', 'sqlFail')) ?  $lang->upgrade->fail : $lang->upgrade->result
-            ),
-            in_array($result, array('fail', 'sqlFail')) ? div
-            (
-                h::textarea
+                col
                 (
-                    setClass('form-control w-full'),
-                    set::id('command'),
-                    set::name('errors'),
-                    set::rows(10),
-                    set::readonly('readonly'),
-                    implode("\n", $errors)
-                )
-            ) : null,
-            form
-            (
-                on::click('button[type=submit]', "submitConfirm"),
-                on::click('button[type=button]', "loadCurrentPage"),
-                on::click('#copyBtn', "copyCommand"),
-                set::target('_self'),
-                set::actions(false),
-                formHidden('fromVersion', $fromVersion),
-                div
+                    setID('versionsBox'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
+                    $buildVersions
+                ),
+                col
                 (
-                    setClass('mt-4'),
-                    div
+                    setClass('gap-2'),
+                    span
                     (
-                        setClass('text-important'),
-                        $result == 'sqlFail' ? $lang->upgrade->afterExec : null,
-                        $result == 'fail' ? $lang->upgrade->afterDeleted : null,
+                        $lang->upgrade->progress
                     ),
-                    div
+                    row
                     (
-                        setClass('text-center'),
-                        $result == 'fail' ? a
+                        setClass('justify-between items-center gap-2'),
+                        progressbar
                         (
-                            setID('copyBtn'),
-                            setClass('btn wide important mr-2'),
-                            $lang->upgrade->copyCommand
-                        ) : null,
-                        btn
+                            setID('versionsProgressBar'),
+                            setClass('rounded-full'),
+                            setStyle(['height' => '.75rem', 'width' => '100%']),
+                            set::color('rgba(var(--color-success-500-rgb), var(--tw-bg-opacity));'),
+                            set::percent(0)
+                        ),
+                        span
                         (
-                            setID('refreshBtn'),
-                            setClass('btn-wide primary'),
-                            set::btnType($this->app->rawMethod == 'execute' ? 'submit' : 'button'),
-                            $lang->refresh
+                            setClass('text-right'),
+                            setStyle(['min-width' => (strlen((string)$versionCount) + 1) . 'rem']),
+                            span
+                            (
+                                setID('versionsProgressText'),
+                                0
+                            ),
+                            ' / ' . $versionCount
                         )
                     )
                 )
+            ),
+            col
+            (
+                setID('changesBlock'),
+                setClass('rounded-md gap-4 bg-white px-6 py-4 w-full h-full'),
+                row
+                (
+                    setClass('items-center justify-between'),
+                    span
+                    (
+                        setClass('text-lg font-medium'),
+                        sprintf($lang->upgrade->changeTips, $toVersionName)
+                    ),
+                    span
+                    (
+                        html(sprintf($lang->upgrade->executedChanges, count($upgradeChanges)))
+                    )
+                ),
+                col
+                (
+                    setID('changesBox'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
+                    $buildChanges
+                )
             )
-        )
-    )
-);
-
-modal
-(
-    setID('progress'),
-    set::title('1%'),
-    div
-    (
-        setClass('progress'),
+        ),
         div
         (
-            setClass('progress-bar'),
-            set('role', 'progressbar'),
-            set('style', '"width: 1%')
+            setClass('center'),
+            a
+            (
+                setID('continueBtn'),
+                setClass('btn primary w-24 disabled'),
+                $lang->upgrade->continue
+            )
         )
-    ),
-    div
-    (
-        setID('logBox')
     )
 );
 

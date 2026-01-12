@@ -375,7 +375,7 @@ class stakeholder extends control
             $expectData = form::data()
                 ->add('userID', $stakeholderID)
                 ->add('createdBy', $this->app->user->account)
-                ->add('createdDate', date('Y-m-d'))
+                ->add('createdDate', helper::now())
                 ->add('project', $this->session->project)
                 ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

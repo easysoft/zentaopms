@@ -192,7 +192,7 @@ class zanodeTest
      * @access public
      * @return string
      */
-    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', object $pager = null): string
+    public function getSnapshotListTest(int $nodeID, string $orderBy = 'id', ?object $pager = null): string
     {
         $snapshotList = $this->getSnapshotList($nodeID, $orderBy, $pager);
 
@@ -349,10 +349,10 @@ class zanodeTest
      */
     public function deleteSnapshotTest(int $snapshotID)
     {
-        if($snapshotID <= 0) return '~~';
+        if($snapshotID <= 0) return 'empty';
 
         $snapshot = $this->getImageByID($snapshotID);
-        if(!$snapshot) return '~~';
+        if(!$snapshot) return 'empty';
 
         $result = $this->deleteSnapshot($snapshotID);
         if(dao::isError()) return dao::getError();
@@ -442,7 +442,7 @@ class zanodeTest
         if(!$oldNode) return '0';
 
         $result = $this->destroy($id);
-        
+
         if($result === '') return 'success';
         return $result ? $result : '0';
     }
@@ -463,14 +463,14 @@ class zanodeTest
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')
             ->where('t1.id')->eq($nodeID)
             ->fetch();
-        
+
         if(empty($node)) return false;
-        
+
         // 调用protected方法processNodeStatus
         $reflection = new ReflectionClass($this->objectModel);
         $method = $reflection->getMethod('processNodeStatus');
         $method->setAccessible(true);
-        
+
         return $method->invoke($this->objectModel, $node);
     }
 
@@ -540,15 +540,15 @@ class zanodeTest
         // 检查必要参数是否存在
         if(!isset($data->image) || !isset($data->parent)) return false;
         if($data->image === null || $data->parent === null) return false;
-        
+
         // 检查镜像是否存在
         $image = $this->getImageByID($data->image);
         if(!$image) return false;
-        
+
         // 检查宿主机是否存在
         $host = $this->getHostByID($data->parent);
         if(!$host) return false;
-        
+
         $result = $this->linkAgentService($data);
         if(dao::isError()) return dao::getError();
 
@@ -638,7 +638,7 @@ class zanodeTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getSubZahostListByID');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $hostID, $orderBy);
         if(dao::isError()) return dao::getError();
 
@@ -674,7 +674,7 @@ class zanodeTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getZaNodeListByQuery');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $query, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
 
@@ -716,7 +716,7 @@ class zanodeTest
         $reflection = new ReflectionClass($this->objectTao);
         $method = $reflection->getMethod('getHostsByIDList');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke($this->objectTao, $hostIDList);
         if(dao::isError()) return dao::getError();
 

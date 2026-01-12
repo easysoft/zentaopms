@@ -8,21 +8,29 @@ timeout=0
 cid=18003
 
 - 测试有创建者和邮件通知人员的发布
- - 属性1 @user1
+ -  @admin
+ - 属性1 @user1,user2,po1,dev1
 - 测试创建者为空但有邮件通知人员的发布
- - 属性1 @user2
+ -  @user1
+ - 属性1 @user2,po1,
 - 测试产品PO为空的发布
- - 属性1 @user2
+ -  @user1
+ - 属性1 @user2,user3,po2,dev2
 - 测试只有单个邮件通知人员且创建者为空的发布
- - 属性1 @po3
+ -  @user4
+ - 属性1 @po3,dev3
 - 测试创建者和邮件通知人员都为空的发布
- - 属性1 @po1
+ -  @~~
+ - 属性1 @po1,dev1
 - 测试有创建者但无邮件通知人员的发布
- - 属性1 @
+ -  @test
+ - 属性1 @,po3,dev3
 - 测试关联产品不存在的发布
- - 属性1 @
+ -  @test
+ - 属性1 @~~
 - 测试邮件通知人员格式化处理
- - 属性1 @user2
+ -  @user1
+ - 属性1 @user2,po1,dev1
 
 */
 
@@ -84,11 +92,11 @@ $release8->product = 1;
 $release8->createdBy = '';
 $release8->mailto = ' user1 , user2 '; // 测试邮件格式化
 
-r($releaseTester->getToAndCcListTest($release1)) && p('0;1') && e('admin;user1,user2,po1,dev1'); // 测试有创建者和邮件通知人员的发布
-r($releaseTester->getToAndCcListTest($release2)) && p('0;1') && e('user1;user2,po1,'); // 测试创建者为空但有邮件通知人员的发布
-r($releaseTester->getToAndCcListTest($release3)) && p('0;1') && e('user1;user2,user3,po2,dev2'); // 测试产品PO为空的发布
-r($releaseTester->getToAndCcListTest($release4)) && p('0;1') && e('user4;po3,dev3'); // 测试只有单个邮件通知人员且创建者为空的发布
-r($releaseTester->getToAndCcListTest($release5)) && p('0;1') && e(';po1,dev1'); // 测试创建者和邮件通知人员都为空的发布
-r($releaseTester->getToAndCcListTest($release6)) && p('0;1') && e('test;,po3,dev3'); // 测试有创建者但无邮件通知人员的发布
-r($releaseTester->getToAndCcListTest($release7)) && p('0;1') && e('test;'); // 测试关联产品不存在的发布
-r($releaseTester->getToAndCcListTest($release8)) && p('0;1') && e('user1;user2,po1,dev1'); // 测试邮件通知人员格式化处理
+r($releaseTester->getToAndCcListTest($release1)) && p('0|1', '|') && e('admin|user1,user2,po1,dev1'); // 测试有创建者和邮件通知人员的发布
+r($releaseTester->getToAndCcListTest($release2)) && p('0|1', '|') && e('user1|user2,po1,'); // 测试创建者为空但有邮件通知人员的发布
+r($releaseTester->getToAndCcListTest($release3)) && p('0|1', '|') && e('user1|user2,user3,po2,dev2'); // 测试产品PO为空的发布
+r($releaseTester->getToAndCcListTest($release4)) && p('0|1', '|') && e('user4|po3,dev3'); // 测试只有单个邮件通知人员且创建者为空的发布
+r($releaseTester->getToAndCcListTest($release5)) && p('0|1', '|') && e('~~|po1,dev1'); // 测试创建者和邮件通知人员都为空的发布
+r($releaseTester->getToAndCcListTest($release6)) && p('0|1', '|') && e('test|,po3,dev3'); // 测试有创建者但无邮件通知人员的发布
+r($releaseTester->getToAndCcListTest($release7)) && p('0|1', '|') && e('test|~~'); // 测试关联产品不存在的发布
+r($releaseTester->getToAndCcListTest($release8)) && p('0|1', '|') && e('user1|user2,po1,dev1'); // 测试邮件通知人员格式化处理

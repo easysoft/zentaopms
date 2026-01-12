@@ -72,8 +72,8 @@ class aiModel extends model
 
         if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
         {
-            $isPublished = $object->published === '1';
-            $isBuiltIn   = $object->builtIn === '1';
+            $isPublished = $object->published == '1';
+            $isBuiltIn   = $object->builtIn == '1';
 
             if($action == 'editminiprogram')      return common::hasPriv('ai', 'editMiniProgram') && !$isPublished && !$isBuiltIn;
             if($action == 'testminiprogram')      return common::hasPriv('ai', 'testMiniProgram') && !$isPublished && !$isBuiltIn;
@@ -1322,7 +1322,7 @@ class aiModel extends model
     {
         $data = new stdClass();
         $data->published = $published;
-        if($published === '1')
+        if($published == '1')
         {
             $data->publishedDate = helper::now();
             $miniProgram = $this->getMiniProgramByID($appID);
@@ -1337,7 +1337,7 @@ class aiModel extends model
             ->where('id')->eq($appID)
             ->exec();
 
-        $this->loadModel('action')->create('miniProgram', $appID, $published === '1' ? 'published' : 'unpublished');
+        $this->loadModel('action')->create('miniProgram', $appID, $published == '1' ? 'published' : 'unpublished');
 
         if($published !== '1') $this->collectMiniProgram(null, $appID, 'true');
         return !dao::isError();
@@ -1412,7 +1412,7 @@ class aiModel extends model
         if(!isset($data->createdBy))   $data->createdBy   = $this->app->user->account;
         if(!isset($data->createdDate)) $data->createdDate = helper::now();
         if(!isset($data->prompt))      $data->prompt      = $this->lang->ai->miniPrograms->field->default[3];
-        if($data->published === '1')   $data->publishedDate = helper::now();
+        if($data->published == '1')   $data->publishedDate = helper::now();
         $data->builtIn = '0';
 
         if(!empty($data->iconName) && !empty($data->iconTheme))
@@ -1468,11 +1468,24 @@ class aiModel extends model
         return $appID;
     }
 
+    /**
+     * Extract ZT app zip file, only extract ztapp.json file.
+     *
+     * @param string $file
+     * @access public
+     * @return bool
+     */
     public function extractZtAppZip($file)
     {
         $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($file);
-        return $zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'tmp/');
+
+        $zip      = new pclzip($file);
+        $filePath = $this->app->getAppRoot() . 'tmp/';
+
+        /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
+        /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
+        $extractFiles = array('ztapp.json');
+        return $zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, '');
     }
 
     /**
@@ -1490,6 +1503,13 @@ class aiModel extends model
         {
             $this->dao->update(TABLE_AI_MINIPROGRAM)
                 ->set('prompt')->eq($data->prompt)
+                ->where('id')->eq($appID)
+                ->exec();
+        }
+        if(isset($data->knowledgeLib))
+        {
+            $this->dao->update(TABLE_AI_MINIPROGRAM)
+                ->set('knowledgeLib')->eq($data->knowledgeLib)
                 ->where('id')->eq($appID)
                 ->exec();
         }
@@ -1598,6 +1618,21 @@ class aiModel extends model
     }
 
     /**
+     * Get prompt fields by prompt id.
+     *
+     * @param  int   $promptID
+     * @access public
+     * @return array
+     */
+    public function getPromptFields(int $promptID): array
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_AI_PROMPTFIELD)
+            ->where('appID')->eq($promptID)
+            ->fetchAll('id', false);
+    }
+
+    /**
      * Create a prompt.
      *
      * @param  object    $prompt
@@ -1624,6 +1659,33 @@ class aiModel extends model
         $this->loadModel('action')->create('prompt', $promptId, 'created');
 
         return $promptId;
+    }
+
+    /**
+     * Save prompt fields.
+     *
+     * @param  int         $promptID
+     * @param  array       $fields
+     * @access public
+     * @return void
+     */
+    public function savePromptFields(int $promptID, array $fields): void
+    {
+        $this->dao->delete()
+            ->from(TABLE_AI_PROMPTFIELD)
+            ->where('appID')->eq($promptID)
+            ->exec();
+
+        foreach($fields as $field)
+        {
+            if(!is_object($field)) $field = (object)$field;
+
+            if(!isset($field->appID)) $field->appID = $promptID;
+
+            $this->dao->insert(TABLE_AI_PROMPTFIELD)
+                ->data($field)
+                ->exec();
+        }
     }
 
     /**
@@ -1755,6 +1817,24 @@ class aiModel extends model
         /* Handle empty sources array. */
         if(empty($sources)) return '';
 
+        $storyData = [];
+        if(in_array(['task', 'story'], $sources, true) && $data['task']['story'])
+        {
+            $story     = $this->loadModel('story')->getById($data['task']['story']);
+            $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
+            $storyData = [];
+            foreach($fields as $field)
+            {
+                $langLabel = $this->lang->story->$field;
+                $value     = $story->$field;
+                if($field == 'title') $langLabel = $this->lang->story->name;
+                if($field == 'type')  $value = zget($this->lang->story->typeList, $story->type);
+                if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
+
+                $storyData[$langLabel] = $value;
+            }
+        }
+
         $dataObject = array();
 
         $supplement = '';
@@ -1783,10 +1863,10 @@ class aiModel extends model
                 foreach(array_keys($obj) as $idx)
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
-                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
+                    if(isset($data[$objectName][$idx][$objectKey])) $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
                 }
             }
-
+            if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);
             if(in_array($objectKey, $supplementTypes) || !isset($this->lang->ai->dataType->$objectKey)) continue;
 
             $supplementTypes[] = $objectKey;
@@ -1869,6 +1949,8 @@ class aiModel extends model
      */
     public function getFunctionCallSchema($form)
     {
+        if($form == 'empty.empty') return $form;
+
         $formPath = explode('.', $form);
         if(count($formPath) !== 2) return array();
 
@@ -1888,7 +1970,7 @@ class aiModel extends model
      * @access public
      * @return array|false   array of object data and object, or false if error.
      */
-    public function getObjectForPromptById($prompt, $objectId)
+    public function getObjectForPromptById(object $prompt, int $objectId)
     {
         $module  = $prompt->module;
         $sources = array_filter(explode(',', $prompt->source));
@@ -2025,7 +2107,7 @@ class aiModel extends model
      */
     public static function assemblePrompt($prompt, $dataPrompt)
     {
-        $wholePrompt = "$dataPrompt\n";
+        $wholePrompt = empty($dataPrompt) ? '' : "$dataPrompt\n";
 
         $wholePrompt .= static::tryPunctuate($prompt->role);
         $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
@@ -2057,12 +2139,13 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
         if(empty($dataPrompt)) return -3;
 
-        $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
-        $schema      = $this->getFunctionCallSchema($prompt->targetForm);
+        $role   = static::tryPunctuate($prompt->role);
+        $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
+        $schema = $this->getFunctionCallSchema($prompt->targetForm);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('prompt' => $wholePrompt, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
     }
 
     /**
@@ -2216,11 +2299,39 @@ class aiModel extends model
 
         $targetForm = $prompt->targetForm;
         if(empty($targetForm)) return array(false, true);
+        if($targetForm === 'empty.empty') return array(false, false);
 
         list($m, $f) = explode('.', $targetForm);
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
+
+        if($targetForm == 'doc.create')
+        {
+            $objectType = '';
+            $params     = '';
+            $objectData = $object->{$prompt->module};
+            if(in_array($prompt->module, array('product', 'story', 'productplan', 'release', 'case', 'bug')))
+            {
+                $objectType = 'product';
+                $productID  = $prompt->module == 'product' ? $objectData->id : $objectData->product;
+                $params     = helper::safe64Encode("objectID=$productID");
+            }
+            if($prompt->module == 'project')
+            {
+                $objectType = 'project';
+                $params     = helper::safe64Encode("objectID={$objectData->id}");
+            }
+            if($prompt->module == 'execution' || $prompt->module == 'task')
+            {
+                $objectType  = 'project';
+                $executionID = $prompt->module == 'execution' ? $objectData->id : $objectData->execution;
+                $params      = helper::safe64Encode("&objectID=$objectData->project&executionID=$executionID");
+            }
+            if($prompt->module == 'doc') $objectType = 'mine';
+
+            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
+        }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
@@ -2597,7 +2708,7 @@ class aiModel extends model
         return $this->dao->select('*')->from(TABLE_AI_PROMPT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
-            ->beginIF(!commonModel::hasPriv('ai', 'designPrompt') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
+            ->andWhere('status')->eq('active')
             ->orderBy('id_desc')
             ->fetchAll('id', false);
     }
@@ -2621,6 +2732,8 @@ class aiModel extends model
         foreach($prompts as $idx => $prompt)
         {
             list($m, $f) = explode('.', $prompt->targetForm);
+            if($m === 'empty' && $f === 'empty') continue;
+
             $targetFormConfig = $this->config->ai->targetForm[$m][$f];
             if(empty($targetFormConfig))
             {
@@ -2640,6 +2753,79 @@ class aiModel extends model
             }
         }
         return array_values($prompts);
+    }
+
+    /**
+     * 获取禅道智能体的测试数据。
+     * Get prompt test data.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return array
+     */
+    public function getTestPromptData(object $prompt): array
+    {
+        $module       = $prompt->module;
+        $promptSource = $prompt->source;
+        $source       = explode(',', $promptSource);
+        $source       = array_filter($source, function($value) {return !empty($value);});
+
+        $titleData = $this->lang->ai->dataSource[$module];
+        $testData  = $this->lang->ai->prompts->testData[$module];
+
+        $categorized = array();
+        foreach($source as $value)
+        {
+            $prefix = explode('.', $value)[0];
+            $column = explode('.', $value)[1];
+            if(!isset($categorized[$prefix])) $categorized[$prefix] = [];
+            $categorized[$prefix][] = $column;
+        }
+
+        $result = '';
+        foreach($categorized as $groupKey => $pathInfo)
+        {
+            if(in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps')))
+            {
+                if($module == 'release' && $groupKey == 'bugs')
+                {
+                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
+                    $result .= $testData[$groupKey]['title'] . "\n";
+                }
+                else
+                {
+                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
+                    $result .= "| ";
+                    foreach($pathInfo as $value) $result .= $titleData[$groupKey][$value] . " | ";
+                    $result .= "\n";
+
+                    $result .= "| ";
+                    foreach($pathInfo as $value) $result .= "--- | ";
+                    $result .= "\n";
+
+                    $firstData = $pathInfo[0];
+                    $count     = count($testData[$groupKey][$firstData]);
+                    for($i = 0; $i < $count; $i++)
+                    {
+                        $result .= "| ";
+                        foreach($pathInfo as $value) $result .= $testData[$groupKey][$value][$i] . " | ";
+                        $result .= "\n";
+                    }
+                }
+            }
+            else
+            {
+                foreach($pathInfo as $value)
+                {
+                    if($groupKey == 'task' && $value == 'story') continue;
+
+                    $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
+                    $result .= $testData[$groupKey][$value] . "\n";
+                }
+            }
+        }
+
+        return array($testData, $result);
     }
 
     /**

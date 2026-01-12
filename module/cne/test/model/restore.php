@@ -5,7 +5,7 @@
 
 title=测试 cneModel::restore();
 timeout=0
-cid=0
+cid=15627
 
 - 执行cneTest模块的restoreTest方法，参数是$instance1, 'backup-001' 属性code @600
 - 执行cneTest模块的restoreTest方法，参数是$instance1, '' 属性code @600

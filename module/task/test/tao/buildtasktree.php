@@ -9,7 +9,7 @@ $task->name->setFields(array(
     array('field' => 'name1', 'range' => '父任务{3},子任务{3},普通任务{3}'),
     array('field' => 'name2', 'range' => '1-9')
 ));
-$task->parent->range('`-1`{3},,1{2},2,0{3}');
+$task->parent->range('0{3},1{2},2,0{3}');
 $task->status->range('doing,closed,wait{2},doing{3},wait{2}');
 $task->closedBy->range('[],admin,[]{7}');
 

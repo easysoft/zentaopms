@@ -148,7 +148,7 @@ class caselib extends control
         $libraries = $this->caselib->getLibraries();
         if(empty($libraries))
         {
-            if($from == 'doc')
+            if($from == 'doc' || $from == 'ai')
             {
                 $this->app->loadLang('doc');
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noCaselib));

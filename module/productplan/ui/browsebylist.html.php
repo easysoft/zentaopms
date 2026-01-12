@@ -17,8 +17,9 @@ jsVar('enterProjectList', $lang->productplan->enterProjectList);
 jsVar('plans', $plans);
 
 $isFromDoc = $from === 'doc';
+$isFromAI  = $from === 'ai';
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
@@ -74,18 +75,18 @@ featureBar
     set::module('productplan'),
     set::method('browse'),
     set::linkParams("productID={$productID}&branch={$branch}&browseType={key}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     li(searchToggle
     (
-        set::simple($isFromDoc),
+        set::simple($isFromDoc || $isFromAI),
         set::module('productplan'),
         set::open($browseType == 'bySearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     div(setID('docSearchForm'));
 }
@@ -93,7 +94,7 @@ if($isFromDoc)
 $canCreatePlan = common::canModify('product', $product) && common::hasPriv($app->rawModule, 'create');
 toolbar
 (
-    setClass(array('hidden' => $isFromDoc)),
+    setClass(array('hidden' => $isFromDoc || $isFromAI)),
     btnGroup
     (
         btn(setClass($viewType == 'list'   ? 'text-primary font-bold shadow-inner bg-canvas' : ''), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton'), setData('app', $app->tab)),
@@ -106,7 +107,7 @@ $cols = $this->loadModel('datatable')->getSetting('productplan');
 $cols['title']['data-app'] = $app->tab;
 if($app->rawModule == 'projectplan') $cols['actions']['list']['createExecution']['url']['params'] = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID={id}";
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
@@ -146,7 +147,7 @@ $canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
 $canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
 
 $footToolbar = array();
-if($canBatchAction && !$isFromDoc)
+if($canBatchAction && !$isFromDoc && !$isFromAI)
 {
     if($canBatchEdit)
     {
@@ -199,8 +200,9 @@ if($canBatchAction && !$isFromDoc)
 }
 
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#productPlans', 'productPlan', $blockID, '$insertListLink')"));
-$sortLink = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#productPlans', 'plan')"));
+$sortLink       = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$createPlanLink = $canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '';
 dtable
 (
     setID('productPlans'),
@@ -214,14 +216,14 @@ dtable
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}&from=$from&blockID=$blockID"))),
     ),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::height(400),
-    !$isFromDoc ? null : set::noNestedCheck(),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink($sortLink),
-    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
-    $isFromDoc ? null : set::createTip($lang->productplan->create),
-    $isFromDoc ? null : set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '')
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    (!$isFromDoc && !$isFromAI) ? null : set::noNestedCheck(),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink($sortLink),
+    ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->productplan->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createPlanLink)
 );
 
 modal

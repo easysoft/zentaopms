@@ -47,7 +47,6 @@
     let oldPageCofnig = null;
     const zinCallbacks = {
         onSelectLang: null,
-        onSelectTheme: null,
         onSelectVision: null,
         onChangeApp: null
     };
@@ -61,6 +60,11 @@
      */
     function registerZinCallback(name, callback)
     {
+        if(zinCallbacks[name] === undefined)
+        {
+            console.warn('[ZIN] registerZinCallback unknown callback name:', name);
+            return;
+        }
         if(typeof callback === 'function')
         {
             zinCallbacks[name] = callback;
@@ -556,7 +560,8 @@
         let updateFullPage = false;
         list.forEach(item =>
         {
-            renderPartial(item, options);
+            try{renderPartial(item, options);}
+            catch(error) {console.error('[ZIN] ', 'Render partial failed', error, {item, options});}
             if(item.name === 'html' || item.name === 'body') updateFullPage = true;
         });
         if(updateFullPage)
@@ -1459,7 +1464,7 @@
             return;
         }
         if(getUrlID(url) === 'index-index') return top.location.href = url;
-        $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
+        return $.apps.openApp(url, $.extend({code: appCode, forceReload: true}, options));
     }
 
     function autoLoad(id)
@@ -1520,6 +1525,23 @@
             options.url = url;
         }
 
+        if(typeof url === 'string' && url.includes('#'))
+        {
+            const hash = url.split('#')[1];
+            if(hash === 'open-modal' || hash.startsWith('open-modal?'))
+            {
+                const openModalParams = hash.includes('?') ? hash.split('?')[1] : '';
+                const openModalOptions = $.extend({}, {url: url, type: 'ajax'}, options);
+                if(openModalParams)
+                {
+                    const searchParams = new URLSearchParams(openModalParams);
+                    for(const key of searchParams.keys()) openModalOptions[key] = searchParams.getAll(key).join(',');
+                }
+                zui.Modal.open(openModalOptions);
+                return;
+            }
+        }
+
         if(DEBUG) showLog('Open url', url, options);
 
         if(options.app === 'current') options.app = currentCode;
@@ -1559,7 +1581,7 @@
 
         if(typeof options.back === 'string') return goBack(options.back, url);
 
-        openPage(url, options.app);
+        return openPage(url, options.app);
     }
 
     /**
@@ -1714,12 +1736,6 @@
         $.cookie.set('lang', lang, {expires: config.cookieLife, path: config.webRoot});
         ajaxSendScore('selectLang');
         $.apps.changeAppsLang(lang);
-
-        const callback = zinCallbacks.onSelectLang;
-        if(typeof callback === 'function')
-        {
-            try { callback(lang); } catch (e) { console.error('[ZIN] onSelectLang callback error:', e); }
-        }
     }
 
     /**
@@ -1731,12 +1747,6 @@
         $.cookie.set('theme', theme, {expires: config.cookieLife, path: config.webRoot});
         $.ajaxSendScore('selectTheme');
         $.apps.changeAppsTheme(theme);
-
-        const callback = zinCallbacks.onSelectTheme;
-        if(typeof callback === 'function')
-        {
-            try { callback(theme); } catch (e) { console.error('[ZIN] onSelectTheme callback error:', e); }
-        }
     }
 
     /**
@@ -1754,11 +1764,6 @@
             }
             if(response.result == 'success' && response.load)
             {
-                const callback = zinCallbacks.onSelectVision;
-                if(typeof callback === 'function')
-                {
-                    try { callback(getVisions(vision)); } catch (e) { console.error('[ZIN] onSelectVision callback error:', e); }
-                }
                 window.top.location.href = response.load;
             }
         });
@@ -1771,9 +1776,7 @@
      */
     function getVisions(vision)
     {
-        const userVisions  = window.getUserVisions();
-        const activeVision = vision !== undefined ? vision : config.vision;
-        return userVisions.map(key => ({id: key, label: config.visions[key], active: key === activeVision}));
+        return window.userVisions.map(key => ({id: key, label: window.config.visions[key], active: key === window.config.vision}));
     }
 
     function fetchMessage(force, fetchUrl)
@@ -1864,12 +1867,21 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.attr('download') || $link.attr('data-on') || $link.attr('zui-on') || $link.attr('zui-toggle') || $link.attr('zui-command') || $link.hasClass('show-in-app') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const href = $link.attr('href');
-        if($link.is('a') && (/^(https?|javascript):/.test(href)) && !$link.data('app')) return;
-
         if($link.hasClass('disabled') || $link.prop('disabled'))
         {
             e.preventDefault();
             return;
+        }
+
+        if(href && $link.is('a'))
+        {
+            if(href.startsWith('javascript:')) return;
+            if(/^https?:/.test(href) && !$link.data('app'))
+            {
+                e.preventDefault();
+                window.open(href, '_blank', 'noopener,noreferrer');
+                return;
+            }
         }
 
         const options = $link.dataset();

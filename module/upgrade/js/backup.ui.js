@@ -1,14 +1,26 @@
+let netConnct = 0;
 $.ajax(
 {
     url: $.createLink('misc', 'checkNetConnect'),
     timeout: 1000,
     success: function(data)
     {
-        if(data == 'fail') $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"");
-        $('.btn.primary.disabled').removeClass('disabled');
+        netConnect = +(data == 'success');
     },
     error: function(XMLHttpRequest, textStatus)
     {
-        $('.btn.primary.disabled').attr('onclick', "self.location.href=\"" + $.createLink('upgrade', 'consistency', "netConnect=0") + "\"").removeClass('disabled');
+        netConnect = 0;
     }
 });
+
+function confirmBackup(event)
+{
+    if($(event.target).prop('checked'))
+    {
+        $('#upgrade').removeClass('disabled').attr('href', $.createLink('upgrade', 'consistency', 'netConnect=' + netConnect));
+    }
+    else
+    {
+        $('#upgrade').addClass('disabled').removeAttr('href');
+    }
+}

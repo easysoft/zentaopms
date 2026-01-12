@@ -10,27 +10,46 @@
  * @link        https://www.zentao.net
  */
 $lang->upgrade->common          = '升級';
+$lang->upgrade->welcome         = '歡迎升級禪道';
+$lang->upgrade->execute         = '版本升級';
 $lang->upgrade->start           = '開始';
 $lang->upgrade->result          = '升級結果';
 $lang->upgrade->fail            = '升級失敗';
 $lang->upgrade->successTip      = '升級成功';
 $lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>恭喜您！</p><p>您的禪道已經成功升級。</p>";
 $lang->upgrade->tohome          = '訪問禪道';
-$lang->upgrade->license         = '禪道項目管理軟件已更換授權協議至 Z PUBLIC LICENSE(ZPL) 1.2';
-$lang->upgrade->warnning        = '警告';
+$lang->upgrade->notice          = '提示';
 $lang->upgrade->checkExtension  = '檢查插件';
 $lang->upgrade->consistency     = '一致性檢查';
-$lang->upgrade->warnningContent = <<<EOT
-<p>升級有危險，請先備份資料庫，以防萬一。</p>
-<pre>
-1. 可以通過phpMyAdmin進行備份。
-2. 使用mysql命令行的工具。
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   要將上面紅色的部分分別替換成對應的用戶名和禪道系統的資料庫名。
-   比如： mysqldump -u root -p zentao >zentao.bak
+$lang->upgrade->backupNotice    = <<<EOT
+<p>升級對資料庫權限要求較高，請使用 root 使用者。 </p>
+<p>升級有危險，請先備份資料庫，以防萬一。 </p>
+<pre class='leading-6 mt-1 p-3'>
+1. 可以透過phpMyAdmin進行備份。
+2. 使用mysql命令列的工具：
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
+   將上面紅色的部分分別替換成真實的使用者名稱和禪道系統的資料庫名稱。
+   <em>如</em>： mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->backupNotice = <<<EOT
+<p>升級對資料庫權限要求較高，請使用管理員使用者。</p>
+<p>升級有危險，請先備份資料庫，以防萬一。</p>
+<pre class='leading-6 mt-1 p-3'>
+1. 可以透過圖形化客戶端工具進行備份。
+2. 使用DIsql工具進行備份。
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
+   語句執行完後會在預設的備份路徑下產生名為「 filename」 的備份集目錄。
+   預設的備份路徑為 dm.ini 中 BAK_PATH 配置的路徑，若未配置 BAK_PATH，則預設使用 SYSTEM_PATH 下的 bak 目錄。
+   這是最簡單的資料庫備份語句，如果要設定其他的備份選項需了解線上備份資料庫的語法。
+</pre>
+EOT;
+}
+
+$lang->upgrade->confirmBackup      = '我已經備份了資料庫';
 $lang->upgrade->createFileWinCMD   = '打開命令行，執行<strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = '在命令行執行: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操作：</h4>
@@ -41,7 +60,7 @@ $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操�
                                       <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="#" onclick="location.reload()">繼續更新</a></strong></p>';
 
 $lang->upgrade->selectVersion  = '選擇版本';
-$lang->upgrade->continue       = '繼續';
+$lang->upgrade->continue       = '繼續升級';
 $lang->upgrade->noteVersion    = "務必選擇正確的版本，否則會造成數據丟失。";
 $lang->upgrade->fromVersion    = '原來的版本';
 $lang->upgrade->toVersion      = '升級到';
@@ -50,7 +69,7 @@ $lang->upgrade->sureExecute    = '確認執行';
 $lang->upgrade->forbiddenExt   = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile     = '需要更新附件信息。';
 $lang->upgrade->noticeSQL      = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
-$lang->upgrade->afterDeleted   = '請執行上面命令刪除檔案， 刪除後刷新！';
+$lang->upgrade->execCommand    = '請在伺服器上執行上述命令，執行後刷新頁面。';
 $lang->upgrade->mergeProgram   = '數據遷移';
 $lang->upgrade->mergeTips      = '數據遷移提示';
 $lang->upgrade->toPMS15Guide   = '禪道開源版15版本升級';

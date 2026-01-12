@@ -66,6 +66,13 @@ class story extends control
             if(isset($_POST['modules'])) $moduleID = reset($_POST['modules']);
             helper::setcookie('lastStoryModule', $moduleID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
+            /* API will post projectID or executionID. */
+            if($this->post->project)   $objectID = (int)$this->post->project;
+            if($this->post->execution) $objectID = (int)$this->post->execution;
+
+            /* API only has productID. */
+            if(!isset($_POST['product'])) $_POST['product'] = $productID;
+
             /* Get story data from post. */
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -236,8 +243,10 @@ class story extends control
      */
     public function commonAction(int $storyID, int $projectID = 0)
     {
-        /* Get datas. */
+        /* Get data. */
         $story = $this->story->getByID($storyID);
+        if(!$story) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStory));
+
         $this->story->replaceURLang($story->type);
 
         /* Set menu. */
@@ -1584,10 +1593,11 @@ class story extends control
     {
         $hasParent = $hasParent >= 1 ? true : false;
 
+        $modules = array();
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
-            $moduleID = $this->tree->getAllChildID($moduleID);
+            $modules  = $this->tree->getAllChildID($moduleID);
         }
 
         $storyStatus = $this->story->getStatusList($status);
@@ -1595,17 +1605,17 @@ class story extends control
 
         if($objectID)
         {
-            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $moduleID, $type, 'all', 'story', $hasParent);
+            $stories = $this->story->getExecutionStoryPairs($objectID, $productID, $branch, $modules, $type, 'all', 'story', $hasParent);
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         if($storyID && !isset($stories[$storyID]))
         {
-            $story   = $this->story->fetchByID($storyID);
-            $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
+            $story = $this->story->fetchByID($storyID);
+            if(!$moduleID || in_array($story->module, $modules)) $stories = arrayUnion($stories, array($storyID => $storyID . ':' . $story->title));
         }
 
         if($isHTML == 0)
@@ -1715,10 +1725,8 @@ class story extends control
         $modules = array();
         if($moduleID)
         {
-            $productModules  = $this->loadModel('tree')->getOptionMenu($productID, 'story');
-            $storyModuleID   = array_key_exists($moduleID, $productModules) ? $moduleID : 0;
-            $modules         = $this->tree->getStoryModule($storyModuleID);
-            $modules         = $this->tree->getAllChildID($modules);
+            $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
+            $modules  = $this->tree->getAllChildID($moduleID);
         }
 
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 0, '', 'story', false);

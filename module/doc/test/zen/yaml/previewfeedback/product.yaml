@@ -1,124 +1,75 @@
 ---
-title: product测试数据
-author: Claude
-version: 1.0
+title: 产品数据定义
+desc: previewFeedback方法测试产品数据
 
 fields:
 - field: id
   note: 产品ID
-  range: 1-5
-  prefix: ""
-  postfix: ""
+  range: 1-100
 - field: program
-  note: 项目集
+  note: 所属项目集
   range: 0
-  prefix: ""
-  postfix: ""
 - field: name
   note: 产品名称
-  range: "Product %d"
-  format: "sprintf"
-  prefix: ""
-  postfix: ""
+  range: 测试产品{100}
 - field: code
   note: 产品代号
-  range: "P%02d"
-  format: "sprintf"
-  prefix: ""
-  postfix: ""
+  range: product{100}
 - field: bind
-  note: 绑定
-  range: "0"
-  prefix: ""
-  postfix: ""
+  note: 绑定分支
+  range: 0
 - field: line
   note: 产品线
   range: 0
-  prefix: ""
-  postfix: ""
 - field: type
   note: 产品类型
-  range: "normal"
-  prefix: ""
-  postfix: ""
+  range: normal{80},branch{20}
 - field: status
-  note: 状态
-  range: "normal"
-  prefix: ""
-  postfix: ""
+  note: 产品状态
+  range: normal{80},closed{20}
 - field: subStatus
   note: 子状态
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: ''
 - field: desc
   note: 产品描述
-  range: "Product description"
-  prefix: ""
-  postfix: ""
+  range: 这是一个测试产品{100}
 - field: PO
   note: 产品负责人
-  range: "admin"
-  prefix: ""
-  postfix: ""
+  range: admin{50},user1{30},user2{20}
 - field: QD
   note: 测试负责人
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: admin{50},user1{30},user2{20}
 - field: RD
   note: 发布负责人
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: admin{50},user1{30},user2{20}
 - field: feedback
-  note: 反馈
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 反馈负责人
+  range: admin{100}
 - field: acl
   note: 访问控制
-  range: "open"
-  prefix: ""
-  postfix: ""
+  range: open{60},private{20},custom{20}
 - field: whitelist
   note: 白名单
-  range: "[]"
-  prefix: ""
-  postfix: ""
-- field: reviewer
-  note: 评审者
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: ''
 - field: createdBy
   note: 创建者
-  range: "admin"
-  prefix: ""
-  postfix: ""
+  range: admin{100}
 - field: createdDate
-  note: 创建时间
-  range: "(-1Y)-(-1M):30D"
-  format: "YYYY-MM-DD hh:mm:ss"
-  prefix: ""
-  postfix: ""
+  note: 创建日期
+  range: (-60D)-(-30D):1D
+  format: YYYY-MM-DD hh:mm:ss
 - field: createdVersion
   note: 创建版本
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: '0'
 - field: order
   note: 排序
-  range: 1-5
-  prefix: ""
-  postfix: ""
+  range: 1-100
 - field: vision
-  note: 视野
-  range: "rnd"
-  prefix: ""
-  postfix: ""
+  note: 视图
+  range: rnd{100}
+- field: reviewer
+  note: 评审人
+  range: ''
 - field: deleted
   note: 是否删除
-  range: "0"
-  prefix: ""
-  postfix: ""
+  range: '0{95},1{5}'

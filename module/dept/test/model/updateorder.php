@@ -32,8 +32,6 @@ for($i = 1; $i <= 10; $i++)
     $dept->path = $i <= 5 ? ",{$i}," : ",1,{$i},";
     $dept->grade = $i <= 5 ? 1 : 2;
     $dept->order = $i;
-    $dept->position = '';
-    $dept->function = '';
     $dept->manager = '';
     $tester->dao->insert(TABLE_DEPT)->data($dept)->exec();
 }

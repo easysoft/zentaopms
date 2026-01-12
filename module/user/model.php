@@ -169,6 +169,9 @@ class userModel extends model
      */
     public function checkVerifyPassword(string $verifyPassword): bool
     {
+        /* API has no verifyPassword. */
+        if($this->app->apiVersion == 'v2') return true;
+
         if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
         return !dao::isError();
@@ -449,7 +452,6 @@ class userModel extends model
         $user = $this->dao->select('*')->from(TABLE_USER)->where("`$field`")->eq($userID)->fetch();
         if(!$user) return false;
 
-        $user->last = date(DT_DATETIME1, $user->last);
         return $user;
     }
 
@@ -687,6 +689,7 @@ class userModel extends model
         }
 
         if(dao::isError()) return $this->rollBack();
+        if(!empty($user->password) && $user->password != $oldUser->password) $this->userTao->deleteImUserDevice($user->id);
 
         $this->dao->commit();
 
@@ -835,6 +838,7 @@ class userModel extends model
         $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('id')->eq($this->app->user->id)->exec();
         if(dao::isError()) return false;
 
+        $this->userTao->deleteImUserDevice($this->app->user->id);
         $this->loadModel('score')->create('user', 'changePassword', $this->computePasswordStrength($user->password1));
 
         $this->app->user->password             = $user->password;
@@ -889,12 +893,11 @@ class userModel extends model
         if(!$user) return false;
 
         $ip   = helper::getRemoteIp();
-        $last = $this->server->request_time;
+        $last = helper::now();
         $user = $this->checkNeedModifyPassword($user, $passwordStrength);
 
-        $user->lastTime = $user->last;
-        $user->last     = date(DT_DATETIME1, $last);
-        $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $user->last  = $last;
+        $user->admin = strpos($this->app->company->admins, ",{$user->account},") !== false;
 
         if($this->app->isServing())
         {
@@ -938,7 +941,8 @@ class userModel extends model
 
         if($passwordLength == 40)
         {
-            $hash = sha1($user->account . $user->password . $user->last);
+            $lastTimestamp = is_numeric($user->last) ? $user->last : strtotime($user->last);
+            $hash = sha1($user->account . $user->password . $lastTimestamp);
             if($password == $hash) return $user;
         }
 

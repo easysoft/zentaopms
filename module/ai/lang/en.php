@@ -21,6 +21,7 @@ $lang->prompt->source           = 'Data Source';
 $lang->prompt->targetForm       = 'Target Form';
 $lang->prompt->purpose          = 'Purpose';
 $lang->prompt->elaboration      = 'Elaboration';
+$lang->prompt->knowledgeLib     = 'Knowledge Library';
 $lang->prompt->role             = 'Role';
 $lang->prompt->characterization = 'Characterization';
 $lang->prompt->status           = 'Status';
@@ -102,6 +103,9 @@ $lang->ai->maintenanceGroup = 'Maintenance Group';
 
 $lang->ai->maintenanceGroupDuplicated = 'The group name cannot be duplicated.';
 
+$lang->ai->requiredList['0'] = 'Non-required';
+$lang->ai->requiredList['1'] = 'Required';
+
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s cannot be empty.';
 $lang->ai->validate->dirtyForm     = 'The design step of %s has changed. Do you want to save and return it?';
@@ -128,6 +132,10 @@ $lang->ai->prompts->publishedBy  = 'Published By';
 $lang->ai->prompts->draftedBy    = 'Drafted By';
 $lang->ai->prompts->lastEditor   = 'Last Editor';
 $lang->ai->prompts->modelNeutral = 'Model Neutral';
+
+$lang->ai->prompts->viewTypeList            = array();
+$lang->ai->prompts->viewTypeList['list']    = 'List View';
+$lang->ai->prompts->viewTypeList['card']    = 'Card View';
 
 $lang->ai->prompts->summary = 'There are %s zenTao agents on this page.';
 $lang->ai->prompts->fieldSeparator = ', ';
@@ -198,6 +206,182 @@ $lang->ai->prompts->selectTargetForm    = 'Select Target Form';
 $lang->ai->prompts->selectTargetFormTip = 'Results returned from LLMs can be directly inputed into forms within ZenTao.';
 $lang->ai->prompts->goingTesting        = 'Redirecting to testing page';
 $lang->ai->prompts->goingTestingFail    = 'No testable object available.';
+
+/* Prompt form settings. */
+$lang->ai->prompts->formDefaultTitle  = 'Please fill in the following form content:';
+$lang->ai->prompts->formSubmitBtnText = 'Generate';
+
+$lang->ai->prompts->testData['product']['product']['name'] = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['product']['product']['desc'] = 'The Corporate Website Construction Platform is a management platform designed specifically for modern enterprises, aimed at helping companies showcase themselves in a professional and innovative manner. The platform integrates the latest corporate news, project achievements, contact information, and business details, allowing visitors to easily understand the core values and services of the company. With a clear and concise interface and intuitive navigation, the platform enhances user experience and helps build closer connections between businesses and their customers and partners. Whether for information updates or content management, the platform provides efficient and flexible solutions for enterprises, supporting brand building and business development.';
+
+$lang->ai->prompts->testData['project']['project']['name']     = 'Corporate Website Development Project';
+$lang->ai->prompts->testData['project']['project']['type']     = 'Product Type';
+$lang->ai->prompts->testData['project']['project']['desc']     = 'The Corporate Website Development Project aims to quickly and efficiently build a fully functional, user-friendly, and highly scalable corporate website by combining waterfall and agile development methods. This project will ensure that the final product meets user needs and provides a good user experience through detailed requirements analysis, design, development, and testing phases.';
+$lang->ai->prompts->testData['project']['project']['begin']    = '2025-01-01';
+$lang->ai->prompts->testData['project']['project']['end']      = '2025-06-01';
+$lang->ai->prompts->testData['project']['project']['estimate'] = '800h';
+
+$lang->ai->prompts->testData['project']['programplans']['name']      = array('Requirements Analysis and Planning', 'System Design', 'Development and Testing', 'Deployment Preparation and Release');
+$lang->ai->prompts->testData['project']['programplans']['desc']      = array('During this phase, communication will be done with various stakeholders to collect, analyze, and confirm the functional requirements and user stories of the website.', 'Based on the confirmed requirements, system architecture design and page prototype design will lay the foundation for subsequent development.', 'In this phase, detailed development will be carried out according to the system design, and unit testing will be conducted to ensure functionality.', 'Final system testing, user acceptance testing, and deployment preparation will be conducted to ensure the website can be delivered smoothly.');
+$lang->ai->prompts->testData['project']['programplans']['status']    = array('Closed', 'Closed', 'In Progress', 'Not Started');
+$lang->ai->prompts->testData['project']['programplans']['begin']     = array('2025-01-01', '2025-02-01', '2025-04-01', '2025-05-15');
+$lang->ai->prompts->testData['project']['programplans']['end']       = array('2025-01-31', '2025-02-28', '2025-05-14', '2025-06-01');
+$lang->ai->prompts->testData['project']['programplans']['realBegan'] = array('2025-01-01', '2025-02-01', '2025-04-01', '-');
+$lang->ai->prompts->testData['project']['programplans']['realEnd']   = array('2025-01-31', '2025-02-28', '-', '-');
+$lang->ai->prompts->testData['project']['programplans']['progress']  = array('100%', '100%', '41%', '0%');
+$lang->ai->prompts->testData['project']['programplans']['estimate']  = array('190', '190', '290', '120');
+$lang->ai->prompts->testData['project']['programplans']['consumed']  = array('200', '190', '120', '0');
+$lang->ai->prompts->testData['project']['programplans']['left']      = array('0', '0', '170', '120');
+
+$lang->ai->prompts->testData['project']['executions']['name']      = array('Corporate Website 1.0', 'Corporate Website 2.0', 'Corporate Website 3.0');
+$lang->ai->prompts->testData['project']['executions']['desc']      = array('Develop the core functional modules of the intelligent corporate website, including the homepage, news center, and about us, completing unit testing.', 'Implement the Corporate Website 2.0 version, including the achievement display and after-sales service pages, fix bugs from version 1.0, and complete unit testing.', 'Develop additional functional modules such as contact information and business details, while conducting integration testing to ensure modules work together.');
+$lang->ai->prompts->testData['project']['executions']['status']    = array('In Progress', 'Not Started', 'Not Started');
+$lang->ai->prompts->testData['project']['executions']['begin']     = array('2025-04-01', '2025-04-14', '2025-04-21');
+$lang->ai->prompts->testData['project']['executions']['end']       = array('2025-04-11', '2025-04-18', '2025-05-14');
+$lang->ai->prompts->testData['project']['executions']['realBegan'] = array('2025-04-01', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['realEnd']   = array('-', '-', '-');
+$lang->ai->prompts->testData['project']['executions']['estimate']  = array('120', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['consumed']  = array('77', '0', '0');
+$lang->ai->prompts->testData['project']['executions']['left']      = array('50', '100', '70');
+$lang->ai->prompts->testData['project']['executions']['progress']  = array('64%', '0%', '0%');
+
+$lang->ai->prompts->testData['story']['story']['title']    = 'Implement Corporate Website Homepage';
+$lang->ai->prompts->testData['story']['story']['spec']     = 'As a user of this company, I want to conveniently access the basic information of the website on the homepage, so that I can quickly understand the company’s latest news, some achievement displays, contact information, and business details. <br> - Company latest news module. <br> - Company achievement display module. <br> - Company contact information and business details display.';
+$lang->ai->prompts->testData['story']['story']['verify']   = "1. The homepage should include the latest news section displaying recent news and event information. \n2. There should be a section for achievement display, highlighting the company\'s important projects and achievements.\n 3. Contact information should be clearly displayed, including phone, email, and address, ensuring visitors can easily find it.\n 4. Business details should be detailed, including company registration information and relevant qualifications, ensuring users can verify the legality and reliability of the company.\n 5. All information should be clearly visible on the homepage, with a beautiful layout and easy navigation.";
+$lang->ai->prompts->testData['story']['story']['product']  = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['story']['story']['module']   = 'Homepage';
+$lang->ai->prompts->testData['story']['story']['pri']      = '1';
+$lang->ai->prompts->testData['story']['story']['category'] = 'Development Demand';
+$lang->ai->prompts->testData['story']['story']['estimate'] = '3sp';
+
+$lang->ai->prompts->testData['productplan']['productplan']['title']  = 'Version 2.0';
+$lang->ai->prompts->testData['productplan']['productplan']['desc']   = "- Implement Corporate Website 2.0 version, including achievement display and after-sales service pages \n - Fix bugs left over from version 1.0";
+$lang->ai->prompts->testData['productplan']['productplan']['begin']  = '2025-04-14';
+$lang->ai->prompts->testData['productplan']['productplan']['end']    = '2025-04-18';
+
+$lang->ai->prompts->testData['productplan']['stories']['title']    = array('Implement Achievement Display Page', 'Implement After-sales Service Page');
+$lang->ai->prompts->testData['productplan']['stories']['module']   = array('Achievement Display', 'After-sales Service');
+$lang->ai->prompts->testData['productplan']['stories']['pri']      = array('1', '1');
+$lang->ai->prompts->testData['productplan']['stories']['estimate'] = array('1sp', '2sp');
+$lang->ai->prompts->testData['productplan']['stories']['status']   = array('Activated', 'Activated');
+$lang->ai->prompts->testData['productplan']['stories']['stage']    = array('Testing', 'In Development');
+
+$lang->ai->prompts->testData['productplan']['bugs']['title']  = array('Homepage Latest News Module Error', 'Achievement Display Icon Overlapping with Title');
+$lang->ai->prompts->testData['productplan']['bugs']['pri']    = array('1', '2');
+$lang->ai->prompts->testData['productplan']['bugs']['status'] = array('Resolved', 'Activated');
+
+$lang->ai->prompts->testData['release']['release']['product'] = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['release']['release']['name']    = 'Corporate Website Version 1.0';
+$lang->ai->prompts->testData['release']['release']['desc']    = "- Implement Corporate Website Homepage \n - Implement News Center Page \n - Implement About Us Page";
+$lang->ai->prompts->testData['release']['release']['date']    = '2025-04-11';
+
+$lang->ai->prompts->testData['release']['stories']['title']    = array('Implement Corporate Website Homepage', 'Implement News Center Page', 'Implement About Us Page');
+$lang->ai->prompts->testData['release']['stories']['estimate'] = array('3sp', '2sp', '1sp');
+
+$lang->ai->prompts->testData['release']['bugs']['title']  = 'None';
+
+$lang->ai->prompts->testData['execution']['execution']['name']     = 'Corporate Website 1.0';
+$lang->ai->prompts->testData['execution']['execution']['desc']     = 'Develop the core functional modules of the intelligent corporate website, including the homepage, news center, and about us, completing unit testing.';
+$lang->ai->prompts->testData['execution']['execution']['estimate'] = '120';
+
+$lang->ai->prompts->testData['execution']['tasks']['name']         = array('Iteration Planning Meeting', 'Homepage Development Design', 'Homepage Development', 'Homepage Testing', 'News Center Development Design', 'News Center Page Development', 'News Center Page Testing', 'About Us Development Design', 'About Us Page Development', 'About Us Page Testing', 'Iteration Review Meeting');
+$lang->ai->prompts->testData['execution']['tasks']['pri']          = array('1', '1', '2', '3', '1', '2', '3', '1', '2', '3', '4');
+$lang->ai->prompts->testData['execution']['tasks']['status']       = array('Closed', 'Completed', 'Completed', 'In Progress', 'Completed', 'In Progress', 'Not Started', 'In Progress', 'Not Started', 'Not Started', 'Not Started');
+$lang->ai->prompts->testData['execution']['tasks']['estimate']     = array('40h', '12h', '10h', '2h', '6h', '8h', '4h', '4h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['consumed']     = array('40h', '12h', '10h', '1h', '6h', '6h', '0h', '2h', '0h', '0h', '0h');
+$lang->ai->prompts->testData['execution']['tasks']['left']         = array('0h', '0h', '0h', '1h', '0h', '2h', '4h', '2h', '8h', '4h', '22h');
+$lang->ai->prompts->testData['execution']['tasks']['progress']     = array('100%', '100%', '100%', '50%', '100%', '75%', '0%', '50%', '0%', '0%', '0%');
+$lang->ai->prompts->testData['execution']['tasks']['estStarted']   = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '2025-04-07', '2025-04-03', '2025-04-03', '2025-04-08', '2025-04-11');
+$lang->ai->prompts->testData['execution']['tasks']['realStarted']  = array('2025-04-01', '2025-04-01', '2025-04-02', '2025-04-04', '2025-04-02', '2025-04-02', '-', '2025-04-03', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['finishedDate'] = array('2025-04-01', '2025-04-01', '2025-04-04', '-', '2025-04-02', '-', '-', '-', '-', '-', '-');
+$lang->ai->prompts->testData['execution']['tasks']['closedReason'] = array('Completed', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+
+$lang->ai->prompts->testData['task']['task']['name']        = 'Iteration Planning Meeting';
+$lang->ai->prompts->testData['task']['task']['desc']        = "The iteration planning meeting aims to ensure that the team has a clear direction and goals for the next development cycle, promote communication and collaboration among team members, and help the team allocate resources effectively.<br> objective of this planning meeting is to clarify the core functional modules of the corporate website (including the homepage, news center, and about us) with the product manager, ensuring that development and testing can complete the planned requirements on time during the iteration cycle.";
+$lang->ai->prompts->testData['task']['task']['pri']         = '1';
+$lang->ai->prompts->testData['task']['task']['status']      = 'Closed';
+$lang->ai->prompts->testData['task']['task']['estimate']    = '40h';
+$lang->ai->prompts->testData['task']['task']['consumed']    = '40h';
+$lang->ai->prompts->testData['task']['task']['left']        = '0h';
+$lang->ai->prompts->testData['task']['task']['progress']    = '100%';
+$lang->ai->prompts->testData['task']['task']['story']       = 0;
+$lang->ai->prompts->testData['task']['task']['estStarted']  = '2025-04-01';
+$lang->ai->prompts->testData['task']['task']['realStarted'] = '2025-04-01';
+
+$lang->ai->prompts->testData['case']['case']['title']         = 'Implement Corporate Website Homepage';
+$lang->ai->prompts->testData['case']['case']['precondition']  = '1. The basic framework of the corporate website has been established and deployed on the server. 2. Users can access the corporate website.';
+$lang->ai->prompts->testData['case']['case']['scene']         = 'User accesses the corporate website homepage';
+$lang->ai->prompts->testData['case']['case']['product']       = 'Corporate Website Construction Platform';
+$lang->ai->prompts->testData['case']['case']['module']        = 'Homepage';
+$lang->ai->prompts->testData['case']['case']['pri']           = '1';
+$lang->ai->prompts->testData['case']['case']['type']          = 'Functional Testing';
+$lang->ai->prompts->testData['case']['case']['lastRunResult'] = 'Passed';
+$lang->ai->prompts->testData['case']['case']['status']        = 'Normal';
+
+$lang->ai->prompts->testData['case']['steps']['desc']   = array('1. User accesses the corporate website homepage.', '2. User views the latest news module and checks if it includes recent news and event information.', '3. User checks the achievement display module to see if it prominently showcases the company\'s important projects and achievements.', '4. User checks the contact information module to confirm it contains valid phone numbers, emails, and company addresses.', '5. User checks the business information module to confirm that the company registration information and relevant qualifications are detailed and accurate.', '6. Check if all information is clearly visible in their display locations.', '7. User uses the navigation function to view other pages, ensuring navigation is easy to use.');
+$lang->ai->prompts->testData['case']['steps']['expect'] = array('User successfully accesses the corporate website homepage, and the homepage loads normally.', 'Latest news module: displays recent news and event information', 'Achievement display module: prominently showcases the company\'s important projects and achievements.', 'Contact information module: clearly displays phone, email, and address, making it easy for users to find.', 'Business information module: details the company registration information and relevant qualifications.', 'Users can see all information at a glance, with reasonable information placement and beautiful layout.', 'Users can smoothly use the navigation function to find other related pages, with a seamless navigation process.');
+
+$lang->ai->prompts->testData['bug']['bug']['title']     = 'Homepage Latest News Module Error';
+$lang->ai->prompts->testData['bug']['bug']['steps']     = "Steps:1. Open the application homepage<br> 2. Scroll to the latest news module <br>Result: <br> An error message appears in the module.<br>Expectation:<br> Latest news displays normally without errors.";
+$lang->ai->prompts->testData['bug']['bug']['severity']  = '1';
+$lang->ai->prompts->testData['bug']['bug']['pri']       = '1';
+$lang->ai->prompts->testData['bug']['bug']['status']    = 'Resolved';
+$lang->ai->prompts->testData['bug']['bug']['confirmed'] = 'Confirmed';
+$lang->ai->prompts->testData['bug']['bug']['type']      = 'Code Error';
+
+$lang->ai->prompts->testData['doc']['doc']['title']      = 'Why Do Well-Crafted Products Encounter Market Indifference?';
+$lang->ai->prompts->testData['doc']['doc']['addedBy']    = '-';
+$lang->ai->prompts->testData['doc']['doc']['addedDate']  = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedBy']   = '-';
+$lang->ai->prompts->testData['doc']['doc']['editedDate'] = '-';
+$lang->ai->prompts->testData['doc']['doc']['content']    = 'Every product manager has experienced this confusion: <br>
+We have invested countless efforts to develop products that outperform competitors, have competitive prices, and in which the team is confident... yet the market feedback is icy. Sales data is bleak, user growth has stagnated, and return on investment seems distant. <br>
+What’s even more frustrating is that when you gather the team to analyze the reasons, each department has its own explanation: <br>
+"It’s the marketing budget!" <br>"It’s the channel strategy!" <br>"The market hasn’t been educated!" <br>"It’s the sales team’s execution!" <br>
+Amidst this cacophony, the truth becomes increasingly unclear. You start to wonder: What have we overlooked? Why can a seemingly perfect product fail to win the market? <br>
+In fact, product success is never determined by a single factor. Like a precision lock, all gears need to align for it to open smoothly. In a fiercely competitive market, products fail not in areas where you excel, but in the shortcomings you’ve overlooked. <br>
+The Eight Dimensions of Product Success <br>
+The $APPEALS model is a systematic tool that helps us identify this "shortcoming." It breaks down product competitiveness into eight key dimensions: <br>
+$ (Price): It’s not just about the numbers; it’s about perceived value. <br>
+A (Availability): How easily can the target users access the product? <br>
+P (Packaging): The overall experience from visual to tactile. <br>
+P (Performance): The actual performance of core functionalities. <br>
+E (Easy to use): The convenience of user onboarding and usage. <br>
+A (Assurances): Quality guarantees and after-sales service. <br>
+L (Life cycle of cost): The overall cost of long-term use. <br>
+S (Social acceptance): Brand image and social recognition. <br>
+These eight dimensions collectively form the panoramic view of product market competitiveness. Just as a doctor needs a comprehensive examination to determine the cause of an illness, product teams also need a thorough diagnosis through the $APPEALS model to identify the real issues. <br>
+From Subjective Judgement to Data-Driven Decision Making <br>
+Some may question: "But we usually consider these dimensions, what’s different?" <br>
+Indeed, experienced product managers often rely on intuition to consider multiple factors. However, intuitive analysis has three major pitfalls: <br>
+Omitted Dimensions: We often focus on familiar areas while neglecting others. <br>
+Subjective Bias: Emotional investment in one’s own product can lead to biased assessments. <br>
+Weight Confusion: The importance of each dimension varies across different markets and product types. <br>
+The $APPEALS model transforms vague intuition into clear data through structured analysis, making product decisions more scientific and objective. <br>
+Making Powerful Models Accessible <br>
+However, knowing the $APPEALS model is just the first step; effectively applying it is key. This is the intention behind developing the "Zen Dao Decision Analysis Solution"—to make powerful theoretical models simple and usable. <br>
+The "Zen Dao Decision Analysis Solution" is an intelligent analysis tool designed for product and market decision-makers, with a robust model designer that digitizes and streamlines the $APPEALS model, helping teams quickly identify competitive advantages and critical shortcomings of their products. <br>
+How Intelligent Analysis Unlocks Product Potential?? <br>
+Smart Dimension Weight Configuration <br>
+The importance of the eight dimensions varies across different industries and product types. The Zen Dao Decision Analysis Solution can intelligently recommend weight configurations for each dimension based on product characteristics and also supports teams in customizing adjustments based on industry experience. <br>
+Structured Problem Guidance <br>
+Under each dimension, the "Thinking Guide" has designed a series of key questions to guide teams in comprehensive thinking. For example, under the "Social Acceptance" dimension, the system will prompt you to consider: "Does the product align with current social values?" "Is it recognized by well-known KOLs?" "Will users gain social recognition by using the product?" <br>
+Competitive Product Comparison Analysis <br>
+Simultaneously evaluate multiple competing products, visually displaying the performance differences across the eight dimensions through radar charts, allowing for an immediate understanding of your product’s strengths and weaknesses. <br>
+Intelligent Improvement Suggestions <br>
+Based on analysis results, provide a tabular view that supports both problem-oriented and analysis-object-oriented viewing, offering a multi-perspective overview of analysis results. It also provides built-in graphical suggestions for results, ensuring resource allocation is more precise and efficient. <br>
+Four-Step Path from Problems to Solutions?? <br>
+Configuration Object: Define the main product to be analyzed, its market segment, and competing products. <br>Dimension Configuration: Adjust the definitions and weights of the eight dimensions to highlight key factors. <br>Problem Assessment: The team collaboratively answers the system-guided structured questions and scores them for comparison. <br>Improvement Planning: Overview analysis results and system suggestions from multiple angles to formulate optimization plans. <br>
+The entire process usually takes only 1-2 hours, avoiding months of market trial-and-error costs. As one user said: "The $APPEALS model is like a holographic scanner for products, revealing systemic problems we have long ignored in a structured way, shifting product decisions from subjective guesses to precise, data-driven analysis." <br>
+The value of the Zen Dao Decision Analysis Solution lies not only in analysis but also in changing the way teams think: <br>
+Breaking Down Departmental Barriers: Eight-dimensional analysis requires collaboration across multiple departments, including R&D, marketing, and sales, fostering cross-departmental cooperation. <br>
+Overcoming Cognitive Bias: Structured questions and data visualization help teams break free from subjective judgments. <br>
+Forming a Consensus Foundation: Analysis results based on the same model make it easier for teams to reach strategic consensus. <br>
+Let Data Safeguard Your Product Decisions <br>
+Why are products not selling? The answer often lies not in your known strengths but in those overlooked dimensions. The $APPEALS eight-dimensional analysis framework serves as an accurate market map, guiding you to the optimal path for product success. <br>
+When market feedback falls short of expectations, and competitors seem to always seize the initiative, stop relying on intuition for decisions. Systematic analysis can bring genuine breakthroughs. <br>
+If your product is facing market challenges and you seek to find true differentiation in fierce competition, the $APPEALS analysis will be your most powerful decision-making tool. <br>
+Starting today, we offer a 30-day free trial. Scan the QR code below to start your product diagnosis journey immediately. Let data drive decisions, let models guide the way, and let your product find its true competitiveness!';
 
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
@@ -275,19 +459,18 @@ $lang->ai->dataSource['project']['project']['begin']    = 'Begin';
 $lang->ai->dataSource['project']['project']['end']      = 'End';
 $lang->ai->dataSource['project']['project']['estimate'] = 'Estimates';
 
-$lang->ai->dataSource['project']['programplans']['common']       = 'Program Plan';
-$lang->ai->dataSource['project']['programplans']['name']         = 'Name';
-$lang->ai->dataSource['project']['programplans']['desc']         = 'Description';
-$lang->ai->dataSource['project']['programplans']['status']       = 'Status';
-$lang->ai->dataSource['project']['programplans']['begin']        = 'Begin';
-$lang->ai->dataSource['project']['programplans']['end']          = 'End';
-$lang->ai->dataSource['project']['programplans']['realBegan']    = 'Actual Start';
-$lang->ai->dataSource['project']['programplans']['realEnd']      = 'Actual End';
-$lang->ai->dataSource['project']['programplans']['planDuration'] = 'Plan Duration';
-$lang->ai->dataSource['project']['programplans']['progress']     = 'Progress';
-$lang->ai->dataSource['project']['programplans']['estimate']     = 'Estimates';
-$lang->ai->dataSource['project']['programplans']['consumed']     = 'Consumed';
-$lang->ai->dataSource['project']['programplans']['left']         = 'Left';
+$lang->ai->dataSource['project']['programplans']['common']    = 'Program Plan';
+$lang->ai->dataSource['project']['programplans']['name']      = 'Name';
+$lang->ai->dataSource['project']['programplans']['desc']      = 'Description';
+$lang->ai->dataSource['project']['programplans']['status']    = 'Status';
+$lang->ai->dataSource['project']['programplans']['begin']     = 'Begin';
+$lang->ai->dataSource['project']['programplans']['end']       = 'End';
+$lang->ai->dataSource['project']['programplans']['realBegan'] = 'Actual Start';
+$lang->ai->dataSource['project']['programplans']['realEnd']   = 'Actual End';
+$lang->ai->dataSource['project']['programplans']['progress']  = 'Progress';
+$lang->ai->dataSource['project']['programplans']['estimate']  = 'Estimates';
+$lang->ai->dataSource['project']['programplans']['consumed']  = 'Consumed';
+$lang->ai->dataSource['project']['programplans']['left']      = 'Left';
 
 $lang->ai->dataSource['project']['executions']['common']    = 'Execution';
 $lang->ai->dataSource['project']['executions']['name']      = 'Name';
@@ -341,6 +524,7 @@ $lang->ai->dataSource['task']['task']['left']        = 'Left';
 $lang->ai->dataSource['task']['task']['progress']    = 'Progress';
 $lang->ai->dataSource['task']['task']['estStarted']  = 'Start Date';
 $lang->ai->dataSource['task']['task']['realStarted'] = 'Actual Start';
+$lang->ai->dataSource['task']['task']['story']       = 'Related story';
 
 $lang->ai->dataSource['case']['case']['common']        = 'Test Case';
 $lang->ai->dataSource['case']['case']['title']         = 'Title';
@@ -386,6 +570,7 @@ $lang->ai->targetForm['task']['common']           = 'Task';
 $lang->ai->targetForm['testcase']['common']       = 'Test Case';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = 'Document';
+$lang->ai->targetForm['empty']['common']          = '';
 
 $lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
 $lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
@@ -425,6 +610,8 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 
 $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
+
+$lang->ai->targetForm['empty']['empty'] = 'Empty';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
@@ -504,9 +691,13 @@ $lang->ai->miniPrograms->field->requiredOptions   = array('No', 'Yes');
 $lang->ai->miniPrograms->field->add               = 'New field';
 $lang->ai->miniPrograms->field->addTip            = 'Please click here to add field information';
 $lang->ai->miniPrograms->field->edit              = 'Edit field';
-$lang->ai->miniPrograms->field->configuration     = 'Field Configuration area';
-$lang->ai->miniPrograms->field->debug             = 'debug area';
-$lang->ai->miniPrograms->field->preview           = 'Preview area';
+$lang->ai->miniPrograms->field->configuration     = 'Configuration';
+$lang->ai->miniPrograms->field->debug             = 'Debug Area';
+$lang->ai->miniPrograms->field->preview           = 'Preview Area';
+$lang->ai->miniPrograms->field->fields            = 'Form Configuration';
+$lang->ai->miniPrograms->field->prompt            = 'Prompt';
+$lang->ai->miniPrograms->field->fieldConfig       = 'Field configuration';
+$lang->ai->miniPrograms->field->knowledgeLibs     = 'Knowledge Libraries Mounting';
 $lang->ai->miniPrograms->field->option            = 'Options';
 $lang->ai->miniPrograms->field->contentDebugging  = 'Content debugging';
 $lang->ai->miniPrograms->field->contentDebuggingTip = 'Please enter the field here to debug.';
@@ -907,6 +1098,8 @@ $lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string
 $lang->ai->formSchema['doc']['edit']->properties->content->description = 'Content of the document';
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
+$lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
+
 $lang->ai->formSchema['tree']['browse'] = new stdclass();
 $lang->ai->formSchema['tree']['browse']->title = 'Modules';
 $lang->ai->formSchema['tree']['browse']->type  = 'object';
@@ -949,7 +1142,7 @@ $lang->ai->formSchema['programplan']['create']->properties->stages->items->prope
 $lang->ai->formSchema['programplan']['create']->required = array('stages');
 
 $lang->ai->promptMenu = new stdclass();
-$lang->ai->promptMenu->dropdownTitle = 'AI';
+$lang->ai->promptMenu->dropdownTitle = '%s Assistant';
 
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = 'ZenTao agent execution results are filled in.';

@@ -93,7 +93,7 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
-        if($from == 'doc')
+        if($from == 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
             $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
@@ -102,7 +102,7 @@ class testcase extends control
 
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $this->products) : $productID;
+        $productID  = ($this->app->tab != 'project' || $from == 'doc' || $from == 'ai') ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = $this->testcaseZen->getBrowseBranch($branch);
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
@@ -112,13 +112,13 @@ class testcase extends control
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
-        list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
+        if($from != 'doc') list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
 
-        $currentModule  = ($this->app->tab == 'project' && $from != 'doc') ? 'project'  : 'testcase';
-        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc') ? 'testcase' : 'browse';
-        $projectParam   = ($this->app->tab == 'project' && $from != 'doc') ? "projectID={$this->session->project}&" : '';
+        $currentModule  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'project'  : 'testcase';
+        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? 'testcase' : 'browse';
+        $projectParam   = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
-        if($from == 'doc') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
+        if($from == 'doc' || $from == 'ai') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
@@ -599,7 +599,7 @@ class testcase extends control
     public function edit(int $caseID, string $comment = 'false', int $executionID = 0, string $from = 'testcase')
     {
         $oldCase = $this->testcase->getByID($caseID);
-        if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true)));
+        if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true), 'message' => $this->lang->testcase->noCase));
 
         $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
         $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
@@ -805,6 +805,9 @@ class testcase extends control
      */
     public function delete(int $caseID)
     {
+        $case = $this->testcase->getByID($caseID);
+        if(!$case) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->noCase));
+
         $this->testcase->delete(TABLE_CASE, $caseID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -813,7 +816,6 @@ class testcase extends control
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
-        $case = $this->testcase->getByID($caseID);
         $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $locateLink));
     }
@@ -2005,7 +2007,7 @@ class testcase extends control
 
             $cases  = $this->testcaseZen->buildCasesByXmind($productID, $branch, $testcaseList, $isInsert);
             $result = $this->testcase->saveXmindImport($sceneList, $cases);
-            if($result['result'] == 'success') $result['load'] = $this->createLink('testcase', 'browse');
+            if($result['result'] == 'success') $result['load'] = $this->app->tab == 'project' ? $this->createLink('project', 'testcase', "projectID={$this->session->project}&productID={$productID}") : inlink('browse', "productID={$productID}");
             return $this->send($result);
         }
 
@@ -2026,7 +2028,7 @@ class testcase extends control
         if(!commonModel::hasPriv('testcase', 'importXmind')) $this->loadModel('common')->deny('testcase', 'importXmind');
 
         /* Set menu. */
-        $this->testcaseZen->setMenu(0, 0, $productID, $branch);
+        $this->testcaseZen->setMenu($this->session->project, 0, $productID, $branch);
 
         $product  = $this->product->getByID($productID);
         $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
@@ -2074,5 +2076,24 @@ class testcase extends control
         $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items', array($caseID => $caseID));
         $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
         return print(json_encode($caseModuleItmes));
+    }
+
+    /**
+     * AJAX: 获取用例对应产品模块的场景。
+     * AJAX: Get scenes items for case.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return json
+     */
+    public function ajaxGetProductScenes(int $productID, int $moduleID, string $branch)
+    {
+        $items    = array();
+        $branches = $this->loadModel('branch')->getPairs($productID);
+        $scenes   = $this->testcase->getSceneMenu($productID, $moduleID, ($branch === 'all' || !isset($branches[$branch])) ? 'all' : (string)$branch);
+        foreach($scenes as $sceneID => $sceneName) $items[] = array('text' => $sceneName, 'value' => $sceneID);
+        return print(json_encode($items));
     }
 }

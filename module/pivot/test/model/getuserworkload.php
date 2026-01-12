@@ -34,7 +34,7 @@ $allHour = array(7, 8);
 
 foreach($executionIDList as $executionID)
 {
-    $tasks = $tester->dao->select('id,`left`')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
+    $tasks = $tester->dao->select('id,isParent,`left`')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
     $taskList = array();
     foreach($tasks as $task) $taskList[$task->id] = $task;
     $projects[1][$executionID] = $taskList;

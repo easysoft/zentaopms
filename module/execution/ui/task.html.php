@@ -16,9 +16,10 @@ namespace zin;
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
+$isFromAI      = $from === 'ai';
 
 jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $executions = $this->loadModel('execution')->getPairs();
@@ -70,19 +71,19 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("executionID={$executionID}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID"),
-    set::isModal($isFromDoc),
+    set::isModal($isFromDoc || $isFromAI),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle
     (
-        set::simple($isFromDoc),
+        set::simple($isFromDoc || $isFromAI),
         set::module('task'),
         set::open($browseType == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null,
-        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
+        ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
+        ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     div(setID('docSearchForm'));
 }
@@ -118,7 +119,7 @@ if(common::canModify('execution', $execution))
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 
-if($isFromDoc)
+if($isFromDoc || $isFromAI)
 {
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
@@ -172,7 +173,7 @@ if($config->edition == 'ipd')
 $viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
 toolbar
 (
-    setClass(array('hidden' => $isFromDoc)),
+    setClass(array('hidden' => $isFromDoc || $isFromAI)),
     item(set(array
     (
         'type'  => 'btnGroup',
@@ -232,7 +233,7 @@ toolbar
 
 /* zin: Define the sidebar in main content. */
 $activeKey = $browseType == 'byproduct' ? $productID : $moduleID;
-if(!$isFromDoc)
+if(!$isFromDoc && !$isFromAI)
 {
     sidebar
     (
@@ -303,6 +304,7 @@ if($canBatchAction)
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $assignedToItems,'type' => 'dropdown');
 }
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#tasks', 'task', $blockID, '$insertListLink')"));
+if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#tasks', 'task')"));
 
 jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
@@ -315,6 +317,7 @@ jsVar('teamLang',       $lang->task->team);
 jsVar('delayWarning',   $lang->task->delayWarning);
 
 if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
+$createTaskLink = $canCreate && common::canModify('execution', $execution) ? $createLink : '';
 dtable
 (
     set::id('tasks'),
@@ -322,12 +325,12 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($tableData),
-    set::checkable($canBatchAction || $isFromDoc),
+    set::checkable($canBatchAction || $isFromDoc || $isFromAI),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
-    set::isFromDoc($isFromDoc),
+    set::isFromDoc($isFromDoc || $isFromAI),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
@@ -335,13 +338,13 @@ dtable
         'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
-    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
-    !$isFromDoc ? null : set::noNestedCheck(true),
-    !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(true),
-    $isFromDoc ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
-    $isFromDoc ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
-    $isFromDoc ? null : set::createTip($lang->task->create),
-    $isFromDoc ? null : set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : ''),
+    (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
+    (!$isFromDoc && !$isFromAI) ? null : set::noNestedCheck(true),
+    (!$isFromDoc && !$isFromAI) ? null : set::height(400),
+    ($isFromDoc || $isFromAI) ? null : set::customCols(true),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    ($isFromDoc || $isFromAI) ? null : set::createTip($lang->task->create),
+    ($isFromDoc || $isFromAI) ? null : set::createLink($createTaskLink),
     set::emptyTip($lang->task->noTask)
 );

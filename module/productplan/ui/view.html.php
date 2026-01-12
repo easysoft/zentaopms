@@ -154,7 +154,7 @@ if($canBatchActionBug)
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
+foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
@@ -223,12 +223,14 @@ detailBody
         tabs
         (
             setClass('w-full relative'),
+            on::shown('.tab-pane')->call('$.apps.updateAppUrl', jsRaw('$this.data("url")')),
             tabPane
             (
                 to::prefix(icon($lang->icons['story'], setClass('text-secondary'))),
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
+                setData('url', sprintf($tabUrl, 'story')),
                 $plan->parent >= 0 ? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
@@ -264,7 +266,7 @@ detailBody
                         set::className('linkStory-btn'),
                         bind::click('window.showLink', array('params' => array('story')))
                     ) : null
-                ) : null,
+                ) : toolbar(setClass('tab-actions absolute right-0 gap-2'), setStyle('top', '-8px')),
                 dtable
                 (
                     setID('storyDTable'),
@@ -300,6 +302,7 @@ detailBody
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
+                setData('url', sprintf($tabUrl, 'bug')),
                 !$isInModal && $plan->parent >= 0 && common::hasPriv('productplan', 'linkBug') ? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
@@ -343,6 +346,7 @@ detailBody
                 set::key('planInfo'),
                 set::title($lang->productplan->view),
                 set::active($type == 'planInfo'),
+                setData('url', sprintf($tabUrl, 'planInfo')),
                 tableData
                 (
                     set::title($lang->productplan->basicInfo),

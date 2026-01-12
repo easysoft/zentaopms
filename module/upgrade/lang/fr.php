@@ -11,37 +11,38 @@
  */
 global $config;
 $lang->upgrade->common          = 'Mise à jour';
+$lang->upgrade->welcome         = 'Bienvenue dans la mise à niveau vers Zen Tao';
+$lang->upgrade->execute         = 'Mise à niveau';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Résultat';
 $lang->upgrade->fail            = 'Echec';
 $lang->upgrade->successTip      = 'Mise à jour effectuée';
 $lang->upgrade->success         = 'Mise à jour effectuée';
 $lang->upgrade->tohome          = 'Visitez ZenTao';
-$lang->upgrade->license         = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2.';
-$lang->upgrade->warnning        = 'Attention!';
+$lang->upgrade->notice          = 'Avis';
 $lang->upgrade->checkExtension  = 'Vérifiez Extensions';
 $lang->upgrade->consistency     = 'Vérifiez Consistence';
-$lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.</p>
-<p>Please backup your database before updating ZenTao!</p>
-<pre class='bg-white space-y-2 p-3'>
-1. Use phpMyAdmin to backup.
-2. Use mysqlCommand to backup.
-   $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
-   Change the red text into corresponding Username and Database name.
-   e.g. mysqldump -u root -p zentao > zentao.bak
+$lang->upgrade->backupNotice    = <<<EOT
+<p>Database upgrade requires high privileges. Please use the root user.</p>
+<p>Upgrade carries risks. Please back up your database first, just in case.</p>
+<pre class='leading-6 mt-1 p-3'>
+1. You can back up using phpMyAdmin..
+2. Use the mysql command-line tool:
+   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
+   Replace the red parts above with your actual username and database name.
+   <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 
 if($config->db->driver == 'dm')
 {
-    $lang->upgrade->warnningContent = <<<EOT
-<p>The upgrade requires high database privileges, please use the root user.<br>
-   Please backup your database before updating ZenTao!</p>
-<pre>
+    $lang->upgrade->backupNotice = <<<EOT
+<p>The upgrade requires high database privileges, please use the root user.</p>
+<p>Please backup your database before updating ZenTao!</p>
+<pre class='leading-6 mt-1 p-3'>
 1. It can be backed up by graphical client tools.
 2. Use DIsql tool to back up data.
-   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   $> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
    After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
    The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
    This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
@@ -49,6 +50,7 @@ if($config->db->driver == 'dm')
 EOT;
 }
 
+$lang->upgrade->confirmBackup      = "J'ai sauvegardé la base de données";
 $lang->upgrade->createFileWinCMD   = 'Ouvrez la fenêtre Ligne de commandes de windows et exécutez <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Executez la ligne de commande suivante: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
@@ -70,9 +72,8 @@ $lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la versio
 $lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
 $lang->upgrade->noticeErrSQL  = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
-$lang->upgrade->afterDeleted  = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
+$lang->upgrade->afterDeleted  = "Veuillez exécuter la commande ci-dessus sur le serveur et actualiser la page après exécution.";
 $lang->upgrade->afterExec     = 'Please modify the database manually according to the above error information, and refresh after the modification!';
-$lang->upgrade->afterDuckdb   = 'Please wait for Duckdb engine to install.';
 $lang->upgrade->mergeProgram  = 'Data Merge';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';

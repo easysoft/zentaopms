@@ -1570,10 +1570,13 @@ class doc extends control
      * 设置选择文档库类型的范围。
      * Set the scope of the document library type to be selected.
      *
+     * @param  string $objectType
+     * @param  string $params
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function selectLibType($objectType = 'mine', $params = '')
+    public function selectLibType($objectType = 'mine', $params = '', $from = '')
     {
         if($_POST)
         {
@@ -1585,6 +1588,7 @@ class doc extends control
             $docType   = isset($_POST['type']) ? $_POST['type'] : 'doc';
             if(empty($libID)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->doc->lib)));
 
+            $spaceID = 0;
             if(in_array($rootSpace, array('mine', 'custom', 'product', 'project')))
             {
                 $methodList = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'product' => 'productSpace', 'project' => 'projectSpace');
@@ -1601,7 +1605,7 @@ class doc extends control
 
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$url}\")";
+            $response['callback']   = "redirectParentWindow(\"{$url}\", \"{$from}\", \"{$spaceID}\", \"{$libID}\", \"{$moduleID}\")";
             return $this->send($response);
         }
 
@@ -1618,11 +1622,12 @@ class doc extends control
 
         $params = helper::safe64Decode($params);
         parse_str($params, $params);
-        $this->view->params    = $params;
 
+        $this->view->params     = $params;
         $this->view->objectType = $objectType;
-        $this->view->spaceList = $spaceList;
-        $this->view->typeList  = $typeList;
+        $this->view->spaceList  = $spaceList;
+        $this->view->typeList   = $typeList;
+        $this->view->from       = $from;
 
         $this->display();
     }
@@ -1986,7 +1991,7 @@ class doc extends control
         $this->view->spaceType  = $spaceType;
         $this->view->space      = $space;
         $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getAllSubSpaces();
+        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
         $this->view->libPairs   = $libPairs;
         $this->view->optionMenu = $chapterAndDocs;
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -2244,6 +2249,7 @@ class doc extends control
         }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
+            if($type == 'product' && $spaceID == 0) $spaceID = (int)$this->cookie->preProductID;
             $this->doc->setMenuByType($type, $spaceID, $libID);
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;

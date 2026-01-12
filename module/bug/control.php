@@ -109,7 +109,7 @@ class bug extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
-        if($from == 'doc')
+        if($from == 'doc' || $from === 'ai')
         {
             $this->app->loadLang('doc');
             $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
@@ -310,6 +310,8 @@ class bug extends control
     public function edit(int $bugID, bool $comment = false)
     {
         $oldBug = $this->bug->getByID($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
+
         if(!empty($_POST))
         {
             $formData = form::data($this->config->bug->form->edit, $bugID);
@@ -352,6 +354,7 @@ class bug extends control
         /* 获取更新前的 bug，并且检查所属执行的权限。*/
         /* Get old bug and check privilege of the execution. */
         $oldBug = $this->bug->getByID($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
@@ -404,6 +407,7 @@ class bug extends control
     public function confirm(int $bugID, string $kanbanParams = '', string $from = '')
     {
         $oldBug = $this->bug->getByID($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
 
         /* 检查 bug 所属执行的权限。*/
         /* Check privilege for execution of the bug. */
@@ -454,6 +458,7 @@ class bug extends control
         /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getById($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
@@ -529,6 +534,7 @@ class bug extends control
         /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
@@ -586,6 +592,7 @@ class bug extends control
         /* 获取 bug 信息，并检查 bug 所属执行的权限。*/
         /* Get bug info, and check privilege of bug 所属执行的权限。*/
         $oldBug = $this->bug->getByID($bugID);
+        if(!$oldBug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
         $this->bugZen->checkBugExecutionPriv($oldBug);
 
         if(!empty($_POST))
@@ -629,6 +636,8 @@ class bug extends control
         /* 删除 bug。 */
         /* Delete bug. */
         $bug = $this->bug->getByID($bugID);
+        if(!$bug) return $this->send(array('result' => 'fail', 'message' => $this->lang->bug->error->notExist));
+
         $this->bug->delete(TABLE_BUG, $bugID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -822,6 +831,7 @@ class bug extends control
             {
                 if(!empty($bug->assignedTo)) $bug->assignedDate = helper::now();
                 $bug->id = $this->bug->create($bug);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                 /* 批量创建后的一些其他操作。*/
                 /* Processing other operations after batch creation. */

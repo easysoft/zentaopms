@@ -1,158 +1,123 @@
 ---
-title: feedback测试数据
-author: Claude
-version: 1.0
+title: 反馈数据定义
+desc: previewFeedback方法测试数据
 
 fields:
 - field: id
   note: 反馈ID
-  range: 1-10
-  prefix: ""
-  postfix: ""
+  range: 1-100
 - field: product
   note: 所属产品
-  range: 1-5
-  prefix: ""
-  postfix: ""
+  range: 1-10
 - field: module
   note: 所属模块
-  range: 0,1,2
-  prefix: ""
-  postfix: ""
+  range: 0-5
 - field: title
   note: 反馈标题
-  range: "Feedback %d"
-  format: "sprintf"
-  prefix: ""
-  postfix: ""
+  range: 反馈问题{100}
 - field: type
   note: 反馈类型
-  range: "bug,feature,improvement,question"
-  prefix: ""
-  postfix: ""
+  range: bug{30},story{30},task{20},other{20}
 - field: solution
   note: 解决方案
-  range: "wontfix,fixed,postponed,replied"
-  prefix: ""
-  postfix: ""
+  range: done{20},tostory{20},tobug{20},totask{20},replied{20}
 - field: desc
   note: 反馈描述
-  range: "This is a test feedback description."
-  prefix: ""
-  postfix: ""
+  range: 这是一个测试反馈描述{100}
 - field: pri
   note: 优先级
   range: 1-4
-  prefix: ""
-  postfix: ""
 - field: status
-  note: 状态
-  range: "wait,doing,done,closed"
-  prefix: ""
-  postfix: ""
+  note: 反馈状态
+  range: wait{20},reviewing{20},replied{20},closed{20},noreview{20}
 - field: subStatus
   note: 子状态
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: ''
 - field: prevStatus
-  note: 之前状态
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 前一个状态
+  range: ''
 - field: public
   note: 是否公开
-  range: "0,1"
-  prefix: ""
-  postfix: ""
+  range: '0{50},1{50}'
 - field: notify
   note: 是否通知
-  range: "0,1"
-  prefix: ""
-  postfix: ""
+  range: '0{50},1{50}'
 - field: notifyEmail
   note: 通知邮箱
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: test@test.com{100}
 - field: source
-  note: 来源
-  range: "web,email,api"
-  prefix: ""
-  postfix: ""
+  note: 反馈来源
+  range: web{40},app{30},email{30}
 - field: likes
-  note: 点赞
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 点赞用户
+  range: ''
 - field: result
-  note: 结果
+  note: 结果ID
   range: 0
-  prefix: ""
-  postfix: ""
 - field: faq
-  note: FAQ
+  note: FAQ ID
   range: 0
-  prefix: ""
-  postfix: ""
 - field: openedBy
   note: 创建者
-  range: "admin,user1,user2"
-  prefix: ""
-  postfix: ""
+  range: admin{20},user1{20},user2{20},user3{20},user4{20}
 - field: openedDate
-  note: 创建时间
-  range: "(-1Y)-(-1D):60D"
-  format: "YYYY-MM-DD hh:mm:ss"
-  prefix: ""
-  postfix: ""
+  note: 创建日期
+  range: (-30D)-now:1D
+  format: YYYY-MM-DD hh:mm:ss
 - field: reviewedBy
-  note: 评审者
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 评审人
+  range: admin{50},''{50}
 - field: reviewedDate
-  note: 评审时间
-  range: "NULL"
-  prefix: ""
-  postfix: ""
+  note: 评审日期
+  range: 'NULL'
 - field: processedBy
-  note: 处理者
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 处理人
+  range: admin{50},''{50}
 - field: processedDate
-  note: 处理时间
-  range: "NULL"
-  prefix: ""
-  postfix: ""
+  note: 处理日期
+  range: 'NULL'
 - field: closedBy
-  note: 关闭者
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 关闭人
+  range: ''{80},admin{20}
 - field: closedDate
-  note: 关闭时间
-  range: "NULL"
-  prefix: ""
-  postfix: ""
+  note: 关闭日期
+  range: 'NULL'
 - field: closedReason
   note: 关闭原因
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: ''
 - field: editedBy
-  note: 编辑者
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  note: 编辑人
+  range: ''
 - field: editedDate
-  note: 编辑时间
-  range: "NULL"
-  prefix: ""
-  postfix: ""
+  note: 编辑日期
+  range: 'NULL'
 - field: assignedTo
   note: 指派给
-  range: "[]"
-  prefix: ""
-  postfix: ""
+  range: admin{30},user1{30},''{40}
+- field: prevAssignedTo
+  note: 前一个指派
+  range: ''
+- field: assignedDate
+  note: 指派日期
+  range: 'NULL'
+- field: activatedBy
+  note: 激活人
+  range: ''
+- field: activatedDate
+  note: 激活日期
+  range: 'NULL'
+- field: feedbackBy
+  note: 反馈人
+  range: customer1{20},customer2{20},customer3{20},customer4{20},customer5{20}
+- field: repeatFeedback
+  note: 重复反馈
+  range: 0
+- field: mailto
+  note: 抄送给
+  range: ''
+- field: keywords
+  note: 关键字
+  range: ''
+- field: deleted
+  note: 是否删除
+  range: '0{95},1{5}'

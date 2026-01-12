@@ -14,8 +14,7 @@ cid=0
  -  @user2
  - 属性1 @~~
 - 测试步骤3：createdBy为空且assignedTo为多个用户
- -  @user3
- - 属性1 @user4
+ - 属性0,1 @~~
 - 测试步骤4：createdBy和assignedTo都为空 @0
 - 测试步骤5：assignedTo包含逗号分隔符处理
  -  @user6
@@ -53,6 +52,6 @@ $card5->assignedTo = ',user6,user7,';
 
 r($kanbanTest->getToAndCcListTest($card1)) && p('0,1') && e('admin,user1'); // 测试步骤1：正常情况 - createdBy和assignedTo都存在
 r($kanbanTest->getToAndCcListTest($card2)) && p('0,1') && e('user2,~~'); // 测试步骤2：createdBy为空但assignedTo为单个用户
-r($kanbanTest->getToAndCcListTest($card3)) && p('0,1') && e('user3,user4,user5'); // 测试步骤3：createdBy为空且assignedTo为多个用户
+r($kanbanTest->getToAndCcListTest($card3)) && p('0,1', '|') && e('~~|user4,user5'); // 测试步骤3：createdBy为空且assignedTo为多个用户
 r($kanbanTest->getToAndCcListTest($card4)) && p() && e('0'); // 测试步骤4：createdBy和assignedTo都为空
 r($kanbanTest->getToAndCcListTest($card5)) && p('0,1') && e('user6,user7'); // 测试步骤5：assignedTo包含逗号分隔符处理

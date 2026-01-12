@@ -52,7 +52,7 @@ if($canBatchAction)
     $footToolbar['items'] = array();
     if($canBatchEdit)
     {
-        $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchEdit', "browseType=$type"));
+        $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchEdit', "browseType=$type&from={$app->rawMethod}"));
     }
     if($canBatchClose)
     {

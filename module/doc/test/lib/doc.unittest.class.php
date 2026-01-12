@@ -1904,75 +1904,19 @@ class docTest
      * @access public
      * @return mixed
      */
-    public function addBuiltInDocTemplateByTypeTest($scenario = 'normal')
+    public function addBuiltInDocTemplateByTypeTest(int $libID, array $types, string $title): int
     {
-        // 模拟方法执行检查
-        if($scenario == 'has_built_in')
-        {
-            // 测试已存在内置模板时的情况
-            $existingTemplate = new stdClass();
-            $existingTemplate->title = '测试模板';
-            $existingTemplate->builtIn = '1';
-            $existingTemplate->addedBy = 'system';
-            $existingTemplate->addedDate = helper::now();
-            $this->objectModel->dao->insert(TABLE_DOC)->data($existingTemplate)->exec();
+        $builtInTemplate = new stdClass();
+        $builtInTemplate->lib          = $libID;
+        $builtInTemplate->type         = 'text';
+        $builtInTemplate->addedBy      = 'system';
+        $builtInTemplate->addedDate    = helper::now();
+        $builtInTemplate->builtIn      = '1';
+        $builtInTemplate->title        = $title;
+        $builtInTemplate->templateType = current($types);
 
-            $builtInDocTemplate = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->fetchAll();
-            return !empty($builtInDocTemplate) ? 'return_early' : 'continue';
-        }
-        elseif($scenario == 'missing_baseline')
-        {
-            // 测试缺少baseline语言文件时的情况
-            return isset($this->objectModel->lang->baseline->objectList) ? 'has_baseline' : 'missing_baseline';
-        }
-        elseif($scenario == 'edition_check')
-        {
-            // 测试版本检查
-            return isset($this->objectModel->config->edition) ? $this->objectModel->config->edition : 'biz';
-        }
-        elseif($scenario == 'create_success')
-        {
-            // 模拟成功创建8个模板
-            $templateTypes = array(
-                'PP' => '项目计划',
-                'SRS' => '软件需求规格说明书',
-                'HLDS' => '概要设计说明书',
-                'DDS' => '详细设计说明书',
-                'ADS' => '接口设计文档',
-                'DBDS' => '数据库设计文档',
-                'ITTC' => '集成测试用例',
-                'STTC' => '系统测试用例'
-            );
-
-            $count = 0;
-            foreach($templateTypes as $type => $title)
-            {
-                $template = new stdClass();
-                $template->title = $title;
-                $template->templateType = $type;
-                $template->builtIn = '1';
-                $template->type = 'text';
-                $template->addedBy = 'system';
-                $template->addedDate = helper::now();
-                $this->objectModel->dao->insert(TABLE_DOC)->data($template)->exec();
-                $count++;
-            }
-            return $count;
-        }
-        elseif($scenario == 'check_pp_template')
-        {
-            $ppTemplate = $this->objectModel->dao->select('builtIn')->from(TABLE_DOC)->where('templateType')->eq('PP')->fetch();
-            return $ppTemplate ? $ppTemplate->builtIn : '0';
-        }
-        elseif($scenario == 'check_srs_template')
-        {
-            $srsTemplate = $this->objectModel->dao->select('builtIn')->from(TABLE_DOC)->where('templateType')->eq('SRS')->fetch();
-            return $srsTemplate ? $srsTemplate->builtIn : '0';
-        }
-        else
-        {
-            return 'success';
-        }
+        $this->objectModel->dao->insert(TABLE_DOC)->data($builtInTemplate)->exec();
+        return $this->objectModel->dao->lastInsertID() ? 1 : 0;
     }
 
     /**
@@ -5596,5 +5540,10 @@ class docTest
 
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    public function forEachDocBlockTest(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0, int $index = 0): mixed
+    {
+        return docModel::forEachDocBlock($rawContent, $callback, $data, $flavours, $types, $props, $level, $index);
     }
 }

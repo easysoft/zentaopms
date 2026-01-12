@@ -94,7 +94,7 @@ class StoryEstimateTester extends tester
 
         $form->dom->xpath['firstEstimateBtn'] = "//a[@title = '{$this->lang->execution->storyEstimate}']";
         $form->dom->firstEstimateBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         if($form->dom->noTeamInfo->getText() == $this->lang->execution->noTeam) return $this->success('没有团队成员提示成功');
         return $this->failed('没有团队成员提示失败');
     }

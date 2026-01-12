@@ -450,6 +450,7 @@ class user extends control
         $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) $users[$userID] = $user->realname;
+        unset($user->password);
 
         $this->view->title     = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->groups    = $this->loadModel('group')->getByAccount($user->account);
@@ -473,6 +474,15 @@ class user extends control
     {
         if(!empty($_POST))
         {
+            if($this->app->apiVersion == 'v2')
+            {
+                $_POST['password1']        = md5($_POST['password']);
+                $_POST['password2']        = md5($_POST['password']);
+                $_POST['passwordLength']   = strlen($_POST['password']);
+                $_POST['passwordStrength'] = 2;
+                $_POST['verifyPassword']   = 'PASSWORD';
+            }
+
             $user = form::data($this->config->user->form->create)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
@@ -550,6 +560,14 @@ class user extends control
     {
         if(!empty($_POST))
         {
+            if($this->app->apiVersion == 'v2')
+            {
+                $_POST['password1']        = isset($_POST['password']) ? md5($_POST['password']) : '';
+                $_POST['password2']        = isset($_POST['password']) ? md5($_POST['password']) : '';
+                $_POST['passwordLength']   = isset($_POST['password']) ? strlen($_POST['password']) : 0;
+                $_POST['passwordStrength'] = 2;
+            }
+
             $user = form::data($this->config->user->form->edit)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->add('id', $userID)
@@ -633,7 +651,7 @@ class user extends control
 
         if($_POST)
         {
-            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
+            if(!$this->user->checkVerifyPassword($this->post->verifyPassword)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
 
             $this->user->delete(TABLE_USER, $userID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1237,7 +1255,7 @@ class user extends control
     public function refreshRandom()
     {
         $rand = updateSessionRandom();
-        ob_end_clean();
+        if(!empty(ob_get_status(true))) ob_end_clean();
         echo (string)$rand;
     }
 

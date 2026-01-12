@@ -5,8 +5,20 @@ window.handleRenderRow = function($row, index, row)
     {
         $row.find('.form-batch-control[data-name="branch"] .picker-box').on('inited', function(e, info)
         {
-            let $branch = info[0];
-            $branch.$.setValue(row.branch);
+            const branchLink = $.createLink('branch', 'ajaxGetBranches', 'productID=' + row.product);
+            $.getJSON(branchLink, function(branches)
+            {
+                if(!branches.length)
+                {
+                    info[0].render({disabled: 'disabled'});
+                }
+                else
+                {
+                    let $branch = info[0];
+                    $branch.render({items: branches});
+                    $branch.$.setValue(row.branch);
+                }
+            });
         });
     }
     /* Set the modules for the row. */

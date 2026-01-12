@@ -215,15 +215,15 @@ REPLACE INTO `zt_casestep` (`id`, `parent`, `case`, `version`, `type`, `desc`, `
 (5, 4, 2, 1, 'step', '点击新闻中心', '进入新闻中心'),
 (6, 0, 3, 1, 'step', '进入新闻中心', '正常显示'),
 (7, 0, 4, 1, 'step', '进入成果展示', '正常显示');
-REPLACE INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `position`, `function`, `manager`) VALUES
-(1, '经理', 0, ',1,', 1, 0, '', '', ''),
-(2, '开发', 0, ',2,', 1, 0, '', '', ''),
-(3, '测试', 0, ',3,', 1, 0, '', '', ''),
-(4, '市场', 0, ',4,', 1, 0, '', '', ''),
-(5, '产品', 1, ',1,5,', 2, 0, '', '', ''),
-(6, '项目', 1, ',1,6,', 2, 0, '', '', ''),
-(7, '编程', 2, ',2,7,', 2, 0, '', '', ''),
-(8, '美工', 2, ',2,8,', 2, 0, '', '', '');
+REPLACE INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `manager`) VALUES
+(1, '经理', 0, ',1,', 1, 0, ''),
+(2, '开发', 0, ',2,', 1, 0, ''),
+(3, '测试', 0, ',3,', 1, 0, ''),
+(4, '市场', 0, ',4,', 1, 0, ''),
+(5, '产品', 1, ',1,5,', 2, 0, ''),
+(6, '项目', 1, ',1,6,', 2, 0, ''),
+(7, '编程', 2, ',2,7,', 2, 0, ''),
+(8, '美工', 2, ',2,8,', 2, 0, '');
 REPLACE INTO `zt_doclib` (`id`, `type`, `vision`, `product`, `project`, `execution`, `name`, `baseUrl`, `acl`, `groups`, `users`, `main`, `collector`, `desc`, `order`, `addedBy`, `addedDate`, `deleted`) VALUES
 (2, 'product', 'rnd', 1, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:13', '0'),
 (3, 'product', 'rnd', 2, 0, 0, '产品主库', '', 'default', '', NULL, '1', NULL, NULL, 0, 'admin', '2024-04-02 14:30:55', '0'),
@@ -418,10 +418,10 @@ REPLACE INTO `zt_productplan` (`id`, `product`, `branch`, `parent`, `title`, `st
 (1, 1, '0', 0, '1.0版本', 'wait', '<p><span style=\"font-size:13px;\">开发出企业网站1.0版本。</span></p>', '2030-01-01', '2030-01-01', NULL, NULL, '0', '', 'admin', '2024-04-02 14:42:47', '0');
 REPLACE INTO `zt_system` (`id`, `name`, `product`, `status`, `createdBy`, `createdDate`) VALUES (1, '企业网站', 1, 'active', 'admin', '2024-04-02 14:30:12');
 REPLACE INTO `zt_project` (`id`, `project`, `charter`, `model`, `type`, `category`, `lifetime`, `budget`, `budgetUnit`, `attribute`, `percent`, `milestone`, `output`, `auth`, `storyType`, `parent`, `path`, `grade`, `name`, `code`, `hasProduct`, `begin`, `end`, `firstEnd`, `realBegan`, `realEnd`, `days`, `status`, `subStatus`, `pri`, `desc`, `version`, `parentVersion`, `planDuration`, `realDuration`, `progress`, `estimate`, `left`, `consumed`, `teamCount`, `market`, `openedBy`, `openedDate`, `openedVersion`, `lastEditedBy`, `lastEditedDate`, `closedBy`, `closedDate`, `closedReason`, `canceledBy`, `canceledDate`, `suspendedDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `vision`, `stageBy`, `displayCards`, `fluidBoard`, `multiple`, `parallel`, `colWidth`, `minColWidth`, `maxColWidth`, `deleted`) VALUES
-(1, 0, 0, '', 'program', '', '', '', 'CNY', '', 0, '0', NULL, '', '', 0, ',1,', 1, '企业管理', '', 1, '2024-04-02', '2059-12-31', NULL, '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:25:12', '', '', NULL, '', NULL, '', '', NULL, NULL, '', '0', '', '', '', 'open', 'admin,projectManager', 5, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
-(2, 0, 0, 'scrum', 'project', '', '', '', 'CNY', '', 0, '0', NULL, 'extend', 'story,requirement', 1, ',1,2,', 2, '企业管理系统', '', 1, '2024-04-02', '2059-12-31', '2059-12-31', '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 3, 0, 'admin', '2024-04-02 14:34:13', '', 'admin', '2024-04-02 14:34:13', '', NULL, '', '', NULL, NULL, '', 'projectManager', '', '', '企业管理系统', 'open', '', 10, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
-(3, 2, 0, '', 'sprint', '', 'long', '0', 'CNY', '', 0, '0', NULL, '', '', 2, ',2,3,', 1, '企业网站第一期', '', 1, '2024-04-02', '2024-04-15', '2024-04-15', '2024-04-02', NULL, 10, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 0, 0, 'admin', '2024-04-02 14:35:31', '20.0.beta2', 'admin', '2024-04-02 14:35:31', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', '', 'productManager', '企业网站第一期 ', 'open', '', 15, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
-(4, 2, 0, '', 'sprint', '', 'long', '0', 'CNY', '', 0, '0', NULL, '', '', 2, ',2,4,', 1, '企业网站第二期', '', 1, '2024-04-02', '2024-05-02', NULL, NULL, NULL, 23, 'wait', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:36:20', '20.0.beta2', 'admin', '2024-04-02 14:36:20', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', 'admin', 'productManager', '企业网站第二期', 'open', '', 20, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0');
+(1, 0, 0, '', 'program', '', '', 0.00, 'CNY', '', 0, '0', NULL, '', '', 0, ',1,', 1, '企业管理', '', 1, '2024-04-02', '2059-12-31', NULL, '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:25:12', '', '', NULL, '', NULL, '', '', NULL, NULL, '', '0', '', '', '', 'open', 'admin,projectManager', 5, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
+(2, 0, 0, 'scrum', 'project', '', '', 0.00, 'CNY', '', 0, '0', NULL, 'extend', 'story,requirement', 1, ',1,2,', 2, '企业管理系统', '', 1, '2024-04-02', '2059-12-31', '2059-12-31', '2024-04-02', NULL, 0, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 3, 0, 'admin', '2024-04-02 14:34:13', '', 'admin', '2024-04-02 14:34:13', '', NULL, '', '', NULL, NULL, '', 'projectManager', '', '', '企业管理系统', 'open', '', 10, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
+(3, 2, 0, '', 'sprint', '', 'long', 0.00, 'CNY', '', 0, '0', NULL, '', '', 2, ',2,3,', 1, '企业网站第一期', '', 1, '2024-04-02', '2024-04-15', '2024-04-15', '2024-04-02', NULL, 10, 'doing', '', '1', '', 0, 0, 0, 0, 24.50, 52, 40, 13, 0, 0, 'admin', '2024-04-02 14:35:31', '20.0.beta2', 'admin', '2024-04-02 14:35:31', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', '', 'productManager', '企业网站第一期 ', 'open', '', 15, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0'),
+(4, 2, 0, '', 'sprint', '', 'long', 0.00, 'CNY', '', 0, '0', NULL, '', '', 2, ',2,4,', 1, '企业网站第二期', '', 1, '2024-04-02', '2024-05-02', NULL, NULL, NULL, 23, 'wait', '', '1', '', 0, 0, 0, 0, 0.00, 0, 0, 0, 0, 0, 'admin', '2024-04-02 14:36:20', '20.0.beta2', 'admin', '2024-04-02 14:36:20', '', NULL, '', '', NULL, NULL, 'productManager', 'projectManager', 'admin', 'productManager', '企业网站第二期', 'open', '', 20, 'rnd', 'product', 0, '0', '1', 0, 264, 200, 384, '0');
 REPLACE INTO `zt_projectadmin` (`group`, `account`, `programs`, `projects`, `products`, `executions`) VALUES
 (1, 'admin', NULL, '2', NULL, NULL);
 REPLACE INTO `zt_projectcase` (`project`, `product`, `case`, `count`, `version`, `order`) VALUES
@@ -674,16 +674,16 @@ REPLACE INTO `zt_testrun` (`id`, `task`, `case`, `version`, `assignedTo`, `lastR
 (4, 1, 4, 1, '', 'admin', '2024-04-02 16:30:26', 'pass', 'normal');
 REPLACE INTO `zt_testtask` (`id`, `project`, `product`, `name`, `execution`, `build`, `type`, `owner`, `pri`, `begin`, `end`, `realBegan`, `realFinishedDate`, `mailto`, `desc`, `report`, `status`, `testreport`, `auto`, `subStatus`, `createdBy`, `createdDate`, `deleted`, `members`) VALUES
 (1, 2, 1, '企业网站第一期测试任务', 3, '1', 'integrate', 'admin', 1, '2024-04-02', '2024-04-05', NULL, NULL, '', '', NULL, 'wait', 0, 'no', '', 'admin', '2024-04-02 16:26:35', '0', '');
-REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
-(0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 1338866083, 0, null, '', 0, 0, '0'),
-(0, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 4, '10.0.2.2', 1619580798, 0, null, '', 0, 0, '0'),
-(0, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '10.0.2.2', 1619586993, 0, null, '', 0, 0, '1'),
-(0, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 1619587173, 0, null, '', 0, 0, '1'),
-(0, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 1619587220, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 1338865739, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '192.168.0.8', 1338865450, 0, null, '', 0, 0, '1'),
-(0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 1, '192.168.0.8', 1338865125, 0, null, '', 0, 0, '1'),
-(0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 6, '192.168.0.8', 1338865842, 0, null, '', 0, 0, '1');
+REPLACE INTO `zt_user` (`company`, `dept`, `account`, `type`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `mobile`, `phone`, `weixin`, `dingding`, `slack`, `whatsapp`, `address`, `zipcode`, `nature`, `analysis`, `strategy`, `join`, `visits`, `ip`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
+(0, 5, 'productManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'po', '产品经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 0, null, '', 0, 0, '0'),
+(0, 6, 'projectManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'pm', '项目经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 4, '10.0.2.2', 0, null, '', 0, 0, '0'),
+(0, 2, 'dev1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 2, 'dev2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 2, 'dev3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'dev', '开发丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '10.0.2.2', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester1', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试甲', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 3, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester2', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试乙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 2, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 3, 'tester3', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qa', '测试丙', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 1, '192.168.0.8', 0, null, '', 0, 0, '1'),
+(0, 1, 'testManager', 'inside', 'e10adc3949ba59abbe56e057f20f883e', 'qd', '测试经理', '', '', '', null, 'm', '', '', '', '', '', '', '', '', '', '', '', '', '', '', null, 6, '192.168.0.8', 0, null, '', 0, 0, '1');
 REPLACE INTO `zt_usergroup` (`account`, `group`, `project`) VALUES
 ('productManager', 5, ''),
 ('projectManager', 4, ''),

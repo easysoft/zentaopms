@@ -171,7 +171,7 @@ class actionTest
      * @access public
      * @return array
      */
-    public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
+    public function getTrashesBySearchTest(string $objectType, string $type, string|int $queryID, string $orderBy, ?object $pager = null): array
     {
         $objects = $this->objectModel->getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
@@ -888,7 +888,7 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $output;
+        return str_replace("\n", '', $output);
     }
 
     /**
@@ -924,6 +924,24 @@ class actionTest
         $result = $this->objectModel->processActionForAPI($actions, $users, $objectLang);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * Test processActionForAPI method specifically for history field mapping.
+     *
+     * @param  array|object $actions
+     * @param  array|object $users
+     * @param  array|object $objectLang
+     * @access public
+     * @return string
+     */
+    public function processActionForAPIHistoryTest($actions, $users = array(), $objectLang = array()): string
+    {
+        $result = $this->processActionForAPITest($actions, $users, $objectLang);
+        if(empty($result) || !isset($result[0]->history) || !is_array($result[0]->history) || empty($result[0]->history)) {
+            return '';
+        }
+        return $result[0]->history[0]->fieldName ?? '';
     }
 
     /**
@@ -1341,6 +1359,23 @@ class actionTest
     public function getNeedRelatedFieldsTest(string $objectType, int $objectID, string $actionType = '', string $extra = ''): array
     {
         $result = $this->objectTao->getNeedRelatedFields($objectType, $objectID, $actionType, $extra);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 根据类型和ID获取操作记录列表。
+     * Get action list by type and ID.
+     *
+     * @param  string    $objectType
+     * @param  int|array $objectID
+     * @param  array     $modules
+     * @access public
+     * @return array
+     */
+    public function getActionListByTypeAndIDTest(string $objectType, int|array $objectID, array $modules): array
+    {
+        $result = $this->objectTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         if(dao::isError()) return dao::getError();
         return $result;
     }

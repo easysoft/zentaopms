@@ -1401,6 +1401,21 @@ class aiTest
     }
 
     /**
+     * Test getPromptFields method.
+     *
+     * @param  int $promptID
+     * @access public
+     * @return mixed
+     */
+    public function getPromptFieldsTest($promptID = null)
+    {
+        $result = $this->objectModel->getPromptFields($promptID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test createPrompt method.
      *
      * @param  object $prompt
@@ -1413,6 +1428,27 @@ class aiTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test savePromptFields method.
+     *
+     * @param  int   $promptID
+     * @param  mixed $data
+     * @access public
+     * @return mixed
+     */
+    public function savePromptFieldsTest($promptID = null, $data = null)
+    {
+        $this->objectModel->savePromptFields($promptID, $data);
+        if(dao::isError()) return dao::getError();
+
+        $fields = $this->objectModel->dao->select('*')
+            ->from(TABLE_AI_PROMPTFIELD)
+            ->where('appID')->eq($promptID)
+            ->fetchAll();
+
+        return count($fields);
     }
 
     /**
@@ -1677,7 +1713,7 @@ class aiTest
     {
         // Custom implementation to handle edge cases cleanly
         if(empty($form)) return array();
-        
+
         $formPath = explode('.', $form);
         if(count($formPath) !== 2) return array();
 
@@ -1768,7 +1804,7 @@ class aiTest
         $reflectionClass = new ReflectionClass('aiModel');
         $method = $reflectionClass->getMethod('autoPrependNewline');
         $method->setAccessible(true);
-        
+
         $result = $method->invoke(null, $text);
         if(dao::isError()) return dao::getError();
 
@@ -1970,16 +2006,16 @@ class aiTest
 
             $targetFormVars = array(
                 'story' => array(
-                    'change' => array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product')
+                    'change' => array('format' => '%d', 'args' => array('story' => 1), 'app' => 'product')
                 ),
                 'task' => array(
-                    'edit' => array('format' => 'taskID=%d', 'args' => array('task' => 1), 'app' => 'execution')
+                    'edit' => array('format' => '%d', 'args' => array('task' => 1), 'app' => 'execution')
                 ),
                 'bug' => array(
-                    'edit' => array('format' => 'bugID=%d', 'args' => array('bug' => 1), 'app' => 'qa')
+                    'edit' => array('format' => '%d', 'args' => array('bug' => 1), 'app' => 'qa')
                 ),
                 'doc' => array(
-                    'edit' => array('format' => 'docID=%d', 'args' => array('doc' => 1), 'app' => 'doc')
+                    'edit' => array('format' => '%d', 'args' => array('doc' => 1), 'app' => 'doc')
                 ),
             );
 
@@ -2429,11 +2465,26 @@ class aiTest
     public function deleteAssistantTest($assistantId = null)
     {
         if(empty($assistantId) || $assistantId < 0) return '0';
-        
+
         $result = $this->objectModel->deleteAssistant($assistantId);
         if(dao::isError()) return dao::getError();
 
         return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getTestPromptData method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestPromptDataTest($prompt)
+    {
+        $result = $this->objectModel->getTestPromptData($prompt);
+        if(dao::isError()) return dao::getError();
+
+        return !empty($result[1]) ? '1' : '0';
     }
 
     /**
@@ -2448,7 +2499,7 @@ class aiTest
     {
         try {
             $exception = new AIResponseException($type, $response);
-            
+
             // 验证基本属性设置正确
             if($exception->type === $type && $exception->response === $response) {
                 return '1';

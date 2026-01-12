@@ -45,15 +45,6 @@ try {
     // 表可能已存在，忽略错误
 }
 
-// 3. 准备测试数据
-$jiraRelationTable = zenData('jiratmprelation');
-$jiraRelationTable->AType->range('jissue{3},jchangeitem{1}');
-$jiraRelationTable->AID->range('1,2,3,1');
-$jiraRelationTable->BType->range('zstory,ztask,zbug,zaction');
-$jiraRelationTable->BID->range('1,2,3,101');
-$jiraRelationTable->extra->range('issue,issue,issue,action');
-$jiraRelationTable->gen(4);
-
 $actionTable = zenData('action');
 $actionTable->objectType->range('story,task,bug');
 $actionTable->objectID->range('1-3');

@@ -294,7 +294,7 @@ class productplan extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
-        if($from === 'doc')
+        if($from === 'doc' || $from == 'ai')
         {
             $this->app->loadLang('doc');
             $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
@@ -317,7 +317,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, (int)$branch, $from == 'doc' ? true : false);
+        $this->commonAction($productID, (int)$branch, ($from == 'doc' || $from == 'ai') ? true : false);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
@@ -421,6 +421,7 @@ class productplan extends control
         $this->view->link         = $link;
         $this->view->param        = $param;
         $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
+        $this->view->tabUrl       = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         if($this->viewType != 'json')
         {
@@ -923,11 +924,11 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'doc')
     {
         $this->app->loadLang('doc');
         $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
-        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        if(($this->app->tab == 'doc' || $from == 'ai') && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
@@ -971,6 +972,7 @@ class productplan extends control
         $this->view->idList       = $idList;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
+        $this->view->from         = $from;
         $this->display();
     }
 
@@ -988,11 +990,11 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'doc')
     {
         $this->app->loadLang('doc');
         $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
-        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        if(($this->app->tab == 'doc' || $from == 'ai') && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
@@ -1019,6 +1021,7 @@ class productplan extends control
         $this->view->idList    = $idList;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
+        $this->view->from      = $from;
         $this->display();
     }
 }

@@ -78,11 +78,6 @@ class api extends router
      */
     public function __construct(string $appName = 'api', string $appRoot = '')
     {
-        parent::__construct($appName, $appRoot);
-
-        $this->viewType    = 'json';
-        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
-
         $this->path = trim(substr((string) $_SERVER['REQUEST_URI'], strpos((string) $_SERVER['REQUEST_URI'], 'api.php') + 7), '/');
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
@@ -90,6 +85,10 @@ class api extends router
 
         $this->apiVersion = $subPos !== false ? substr($this->path, 0, $subPos) : '';
         $this->path       = $subPos !== false ? substr($this->path, $subPos) : '';
+        parent::__construct($appName, $appRoot);
+
+        $this->viewType    = 'json';
+        $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
         $this->loadApiLang();
     }
@@ -242,14 +241,18 @@ class api extends router
      *
      * @param  array $routes
      * @access private
-     * @return void
+     * @return string
      */
     public function parseRouteV2($routes)
     {
+        $methodName = '';
+
         list($info, $paramValues) = $this->matchRoutes($routes);
 
         if($info)
         {
+            if(isset($info['method'])) $methodName = $info['method'];
+
             if(isset($info['redirect']))
             {
                 foreach($paramValues as $key => $value)
@@ -271,9 +274,10 @@ class api extends router
                 }
 
                 list($info, $paramValues) = $this->matchRoutes($routes);
+                if(isset($info['method'])) $methodName = $info['method'];
             }
 
-            if(isset($info['response'])) $this->responseExtractor = $info['response'];
+            if(isset($info['response']) && $this->responseExtractor == '*') $this->responseExtractor = $info['response'];
         }
 
         foreach($paramValues as $key => $value)
@@ -281,6 +285,8 @@ class api extends router
             if(is_numeric($key)) continue;
             $_GET[$key] = $value;
         }
+
+        return $methodName;
     }
 
     /**
@@ -295,7 +301,8 @@ class api extends router
     {
         $this->action = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
-        if($this->action == 'get') $this->parseRouteV2($routes);
+        $methodName = '';
+        if($this->action == 'get') $methodName = $this->parseRouteV2($routes);
 
         $pathItems  = explode('/', trim($this->path, '/'));
         $moduleName = $this->singular($pathItems[0]);
@@ -306,8 +313,6 @@ class api extends router
             'put'    => 'edit',
             'delete' => 'delete'
         );
-
-        $methodName = $actionToMethod[$this->action];
 
         if(isset($pathItems[1]))
         {
@@ -328,14 +333,19 @@ class api extends router
             }
         }
 
-        if(isset($pathItems[2]))
-        {
-            $methodName = $pathItems[2];
-        }
+        if(isset($pathItems[2])) $methodName = $pathItems[2];
+        if(!$methodName) $methodName = $actionToMethod[$this->action];
 
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+
+        /* Set default params and post data to delete.*/
+        if($this->action == 'delete')
+        {
+            $defaultParams = $this->getDefaultParams();
+            if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
+        }
     }
 
     /**
@@ -381,6 +391,152 @@ class api extends router
     }
 
     /**
+     * 检查传入的对象是否有权限访问
+     *
+     * Check object priv.
+     *
+     * @param  object $object
+     * @param  string $table
+     * @access public
+     * @return bool
+     */
+    public function checkObjectPriv(object $object, string $table): bool
+    {
+        if($this->user->admin) return true;
+
+        $userView = $this->user->view;
+        switch($table)
+        {
+            case TABLE_STORY:
+            case TABLE_BUG:
+            case TABLE_CASE:
+            case TABLE_TICKET:
+            case TABLE_FEEDBACK:
+            case TABLE_PRODUCTPLAN:
+                return (!$object->product || strpos(",{$userView->products},", ",$object->product,") !== false);
+            case TABLE_PRODUCT:
+                return (!$object->id || strpos(",{$userView->products},", ",$object->id,") !== false);
+            case TABLE_PROJECT: // project,execution,program
+                $projects = ",{$userView->sprints},{$userView->projects},{$userView->programs},";
+                return (!$object->id || strpos($projects, ",$object->id,") !== false);
+            case TABLE_BUILD:
+            case TABLE_TASK:
+                return (!$object->execution || strpos(",{$userView->sprints},", ",$object->execution,") !== false);
+            default:
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 检查传入的对象是否可以访问
+     *
+     * Check access.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkAccess()
+    {
+        $objectMap = [
+            'program'       => TABLE_PROJECT,
+            'programID'     => TABLE_PROJECT,
+            'product'       => TABLE_PRODUCT,
+            'products'      => TABLE_PRODUCT,
+            'productID'     => TABLE_PRODUCT,
+            'project'       => TABLE_PROJECT,
+            'projectID'     => TABLE_PROJECT,
+            'productplan'   => TABLE_PRODUCTPLAN,
+            'productplanID' => TABLE_PRODUCTPLAN,
+            'plan'          => TABLE_PRODUCTPLAN,
+            'planID'        => TABLE_PRODUCTPLAN,
+            'execution'     => TABLE_PROJECT,
+            'executionID'   => TABLE_PROJECT,
+            'story'         => TABLE_STORY,
+            'storyID'       => TABLE_STORY,
+            'epic'          => TABLE_STORY,
+            'epicID'        => TABLE_STORY,
+            'requirement'   => TABLE_STORY,
+            'requirementID' => TABLE_STORY,
+            'task'          => TABLE_TASK,
+            'taskID'        => TABLE_TASK,
+            'bug'           => TABLE_BUG,
+            'bugID'         => TABLE_BUG,
+            'feedback'      => TABLE_FEEDBACK,
+            'feedbackID'    => TABLE_FEEDBACK,
+            'build'         => TABLE_BUILD,
+            'buildID'       => TABLE_BUILD,
+            'case'          => TABLE_CASE,
+            'caseID'        => TABLE_CASE,
+            'testcase'      => TABLE_CASE,
+            'testcaseID'    => TABLE_CASE,
+            'user'          => TABLE_USER,
+            'userID'        => TABLE_USER,
+            'ticket'        => TABLE_TICKET,
+            'ticketID'      => TABLE_TICKET,
+            'dept'          => TABLE_DEPT,
+            'deptID'        => TABLE_DEPT,
+        ];
+
+        /* Check assignedTo. */
+        if(isset($_POST['assignedTo']) && $_POST['assignedTo'])
+        {
+            $user = $this->dao->select('*')->from(TABLE_USER)
+                ->where('account')->eq($_POST['assignedTo'])
+                ->fetch();
+            if(!$user) return $this->control->sendError('User does not exist.');
+        }
+
+        $params = array_merge($this->params, $_POST);
+        foreach($params as $key => $value)
+        {
+            if(!isset($objectMap[$key]) || !$value) continue;
+
+            $table  = $objectMap[$key];
+            $result = $this->checkObjectExists($table, $value);
+
+            if($result === false) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' does not exist.');
+
+            foreach($result as $object)
+            {
+                if(!$this->checkObjectPriv($object, $table)) return $this->control->sendError(ucfirst(str_replace('ID', '', $key)) . ' is not allowed.');
+            }
+        }
+    }
+
+    /**
+     * 检查对象是否存在
+     *
+     * Check object exists.
+     *
+     * @param  string $table
+     * @param  int    $objectID
+     * @access public
+     * @return array|false
+     */
+    public function checkObjectExists($table, $objectIDList)
+    {
+        if(!is_array($objectIDList)) $objectIDList = [$objectIDList];
+
+        $objects = [];
+
+        foreach($objectIDList as $objectID)
+        {
+            $object = $this->dao->select('*')->from($table)
+                ->where('id')->eq($objectID)
+                ->beginIF(!in_array($table, [TABLE_DEPT]))->andWhere('deleted')->eq('0')->fi()
+                ->fetch();
+            if(!$object) return false;
+
+            $objects[] = $object;
+        }
+
+        return $objects;
+    }
+
+
+    /**
      * 执行对应模块
      *
      * Load the running module.
@@ -396,10 +552,16 @@ class api extends router
             if($this->apiVersion == 'v2')
             {
                 $this->setParams();
-                if(in_array($this->action, array('post', 'put')))
+
+                if(in_array($this->action, array('post', 'put', 'delete')))
                 {
                     $this->setFormData();
                 }
+                else
+                {
+                    $this->checkAccess();
+                }
+
                 return parent::loadModule();
             }
             elseif(!$this->apiVersion)
@@ -442,14 +604,19 @@ class api extends router
     public function setFormData()
     {
         $requestBody = file_get_contents("php://input");
-        if(!$requestBody) return;
 
         $_POST = json_decode($requestBody, true);
 
-        /* 更新操作的表单需要拼接原始的值。 Merge original values. */
-        /* Get form data by get request. */
-        $postData = $_POST;
-        $_POST    = array();
+        /* Avoid empty post body. */
+        if(in_array($this->control->moduleName, ['feedback', 'ticket']))
+        {
+            $_POST['uid'] = '1';
+        }
+        else
+        {
+            $_POST['verifyPassword'] = '1';
+        }
+
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
@@ -457,18 +624,32 @@ class api extends router
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
 
+        $this->checkAccess();
+
+        /* 其他方法不需要从GET页面获取post data。Other request directly. */
+        if(!in_array($this->methodName, ['create', 'edit'])) return;
+
+        /* 更新操作的表单需要拼接原始的值。 Merge original values. */
+        /* Get form data by get request. */
+        $postData = $_POST;
+        $_POST    = array();
+
         $this->control->viewType    = 'html';
         $this->control->getFormData = true;
 
         $zen = $this->control->moduleName . 'Zen';
-        $this->control->$zen->getFormData = true;
+        if(isset($this->control->$zen)) $this->control->$zen->getFormData = true;
 
-        $method = $this->control->methodName;
+        $control = $this->control;  // fetch method will change control.
+        $method  = $this->control->methodName;
         call_user_func_array(array($this->control, $method), $this->params);
 
+        /* Clean the output in get method. */
+        ob_clean();
+
         $this->control->getFormData       = false;
-        $this->control->$zen->getFormData = false;
         $this->control->viewType          = 'json';
+        $this->control                    = $control;
 
         $_POST = $postData;
         foreach($this->control->formData as $key => $value)
@@ -476,9 +657,13 @@ class api extends router
             if(!isset($_POST[$key])) $_POST[$key] = $value;
         }
 
-        foreach($this->control->$zen->formData as $key => $value)
+        if(isset($this->control->$zen))
         {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
+            $this->control->$zen->getFormData = false;
+            foreach($this->control->$zen->formData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
         }
     }
 
@@ -520,7 +705,8 @@ class api extends router
             }
             else
             {
-                $this->params[$key] = $defaultItem['default'];
+                /* Browse all items in api mode defaultly. */
+                $this->params[$key] = in_array($key, ['browseType', 'status']) ? 'all' : $defaultItem['default'];
             }
         }
 
@@ -626,5 +812,19 @@ class api extends router
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $this->config->vision = $vision ? $vision : $defaultVision;
+    }
+
+    /**
+     * 设置超级变量。
+     * Set the super vars.
+     *
+     * @access public
+     * @return void
+     */
+    public function setSuperVars()
+    {
+        $this->config->framework->filterCSRF = false;
+
+        parent::setSuperVars();
     }
 }

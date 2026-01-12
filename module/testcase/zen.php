@@ -1095,7 +1095,6 @@ class testcaseZen extends testcase
         /* 设置模块。 */
         /* Set modules. */
         $modules       = array();
-        $stories       = array();
         $branches      = $this->loadModel('branch')->getPairs($productID, 'active');
         $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
 
@@ -1104,17 +1103,8 @@ class testcaseZen extends testcase
             $modules[$branchID] = array();
             foreach($moduleList as $moduleID => $moduleName)
             {
-                $stories[$moduleID] = array();
                 $modules[$branchID][$moduleID] = $moduleName;
             }
-        }
-
-        /* Set stories. */
-        $storyList = $this->loadModel('story')->getProductStories($productID, $branch == 'all' ? 0 : $branch,  array(), 'all', 'story', 'id_desc', false);
-        foreach($storyList as $story)
-        {
-            $stories[0][] = array('value' => $story->id, 'text' => $story->title);
-            if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $story->title);
         }
 
         /* 如果导入的用例数大于最大导入数，则在最大导入时截取。 */
@@ -1146,7 +1136,6 @@ class testcaseZen extends testcase
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->modules    = $modules;
-        $this->view->stories    = $stories;
         $this->view->caseData   = $caseData;
         $this->view->branches   = $branches;
         $this->view->allCount   = $allCount;
@@ -1308,6 +1297,8 @@ class testcaseZen extends testcase
             ->setIF($from == 'execution' && $param, 'execution', $param)
             ->setIF($from != 'project' && $this->app->tab == 'project',   'project',   $this->session->project)
             ->setIF($from != 'execution' && $this->app->tab == 'execution', 'execution', $this->session->execution)
+            ->setIF($this->post->project, 'project', $this->post->project)       // API will post project param
+            ->setIF($this->post->execution, 'execution', $this->post->execution) // API will post execution param
             ->setIF($this->post->auto, 'auto', 'auto')
             ->setIF($this->post->auto && $this->post->script, 'script', $this->post->script ? htmlentities($this->post->script) : '')
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
@@ -1677,7 +1668,7 @@ class testcaseZen extends testcase
             foreach($fromSteps[$caseID] as $step)
             {
                 $stepID        = $step->id;
-                $step->version = zget($libCase, 'version', '0');
+                $step->version = zget($libCase, 'version', 1);
                 unset($step->id);
                 $steps[$caseID][$stepID] = $step;
             }

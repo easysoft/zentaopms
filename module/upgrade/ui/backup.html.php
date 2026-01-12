@@ -14,41 +14,43 @@ set::zui(true);
 
 div
 (
-    setID('main'),
-    div
+    setStyle(['padding' => '3rem 4rem', 'height' => '100vh']),
+    col
     (
-        setID('mainContent'),
-        panel
+        setClass('rounded-md bg-white gap-5 m-auto'),
+        setStyle(['padding' => '1.5rem 2rem', 'width' => '50rem']),
+        row
         (
-            set::style(array('margin' => '0 auto', 'width' => '600px')),
-            div
+            setClass('items-center gap-4'),
+            icon
             (
-                setClass('text-lg font-bold mb-4'),
-                icon
-                (
-                    'exclamation-sign',
-                    set::size('2x'),
-                    setClass('text-danger mr-2')
-                ),
-                $lang->upgrade->warnning
+                setClass('text-2xl text-warning'),
+                'exclamation-sign'
             ),
             div
             (
-                set::style(array('background-color' => 'var(--color-gray-100)')),
-                setClass('p-5 mb-4 space-y-2'),
-                html($lang->upgrade->warnningContent)
-            ),
-            div
+                setClass('text-xl font-medium'),
+                $lang->upgrade->notice
+            )
+        ),
+        col
+        (
+            setClass('rounded-md gap-2.5 bg-gray-100 p-4'),
+            html($lang->upgrade->backupNotice)
+        ),
+        checkbox
+        (
+            on::change('confirmBackup'),
+            $lang->upgrade->confirmBackup
+        ),
+        div
+        (
+            setClass('center'),
+            a
             (
-                setClass('text-center'),
-                btn
-                (
-                    on::click("self.location.href='" . createLink('upgrade', 'consistency') . "'"),
-                    set::type('primary'),
-                    setClass('px-10'),
-                    set('disabled', 'disabled'),
-                    $lang->upgrade->common
-                )
+                setID('upgrade'),
+                setClass('btn primary disabled w-24'),
+                $lang->upgrade->continue
             )
         )
     )
