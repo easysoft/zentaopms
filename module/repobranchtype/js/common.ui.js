@@ -64,8 +64,9 @@ window.deletePrefixItem = function()
     const obj     = $(event.target);
     const formRow = obj.closest('.form-row');
 
-    /* 第一行（带有标签的行）不允许删除。 */
-    if(formRow.find('.form-label').length > 0)
+    /* 第一行（标签文本不为空的行）不允许删除。 */
+    const labelText = formRow.find('.form-label .text').text().trim();
+    if(labelText.length > 0)
     {
         zui.Messager.show(minPrefixesTip, {type: 'warning', time: 3000});
         return false;
