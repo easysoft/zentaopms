@@ -54,7 +54,7 @@ formPanel
                 set::value($module->root),
                 set::items($products),
                 set::required(true),
-                on::change('loadBranches')
+                on::change('changeRoot')
             )
         ),
         formGroup
