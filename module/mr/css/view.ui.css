@@ -63,3 +63,27 @@ code {padding: 2px 4px; font-size: 90%; color: #37474f; background-color: #f3f5f
 .diff-back-btn::after {border: none;}
 .diff-back-btn::before {border: none;}
 .diff-label {border: none; --tw-ring-shadow: none; margin-left: 5px; margin-right: 10px}
+
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .nav-item {max-width: none !important;}
+.sidebar .tree{background-color: white;}
+.container .sidebar{width: 240px;}
+.tree li.tree-item.selected{color: #438EFF !important;}
+#monacoTree{overflow: auto;}
+.monaco-dropmenu{background: #efefef;}
+#fileTabs {flex: 1 1 auto;}
+#diff-sidebar-left {width: 100%; align-items: stretch; display: flex; gap: 1rem; justify-content: space-between; flex-direction: row-reverse; margin-top: 10px; background: var(--zt-page-bg);}
+
+#mrMenu menu.nav {border-bottom: 1px solid #ddd}
+#mrMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
+.mr-actions {position: absolute; right: 1rem; top: 10px;}
+.panel-body .detail-content{margin-top: 10px;}
+#log .action-btn .caret {display: none;}
+#fileTabs .monaco-dropmenu .caret {display: none;}
+#monacoTabs .gap-x-5 {-moz-column-gap: 0; column-gap: 0;}
+#log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
+
+.sidebar-left {z-index: 20;}
+
+.is-sidebar-resizing .repo-iframe {pointer-events: none;}
