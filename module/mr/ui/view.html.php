@@ -26,6 +26,7 @@ $tree         = $this->repo->getFileTree($repo, '', $diffs);
 $oldRevision  = helper::safe64Encode($oldRevision);
 $newRevision  = helper::safe64Encode($newRevision);
 $diffLink     = $this->repo->createLink('diff', "repoID={$mr->repoID}&objectID={$objectID}&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
+
 jsVar('diffs', $diffs);
 jsVar('mrID', $mr->id);
 jsVar('tree', $tree);
@@ -45,6 +46,7 @@ $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon'
 $encoding      = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
 $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+$minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
 $AICodeScore     = 3;     // AI评审代码分数
 $AISevereIssue   = 0;     // AI评审高危问题
@@ -148,9 +150,9 @@ div
                             set::active($type == 'basic'),
                             div
                             (
-                                $hasConflict == 'no' && $checkAI && $checkApproval && $checkScan && $checkPipeline ? section
+                                $hasConflict == 'no'? section
                                 (
-                                    setClass('flex w-full'),
+                                    setClass('flex w-full checkMerge'),
                                     div(setClass('py-6 border-l-4 border-r-4 border-success')),
                                     div
                                     (
@@ -159,7 +161,7 @@ div
                                     )
                                 ) : section
                                 (
-                                    setClass('flex w-full mt-2'),
+                                    setClass('flex w-full mt-2 checkMerge'),
                                     div(setClass('py-6 border-l-4 border-r-4 border-danger')),
                                     div
                                     (
@@ -230,7 +232,7 @@ div
                                     (
                                         setClass('border px-4 h-12 flex items-center'),
                                         span(setClass('font-bold'), $lang->mr->review),
-                                        $checkApproval ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']),
+                                        label(setID('approvalLabel'), setClass('success ml-4'), $lang->mr->checkStatusList['success']),
                                         div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
                                     ),
                                     div
@@ -240,23 +242,16 @@ div
                                         div
                                         (
                                             setClass('flex items-center py-1'),
-                                            $approvalStatus == 'approved' ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                            span("{$lang->mr->approvalStatus}: ", $lang->mr->approvalStatusList[$approvalStatus]),
+                                            icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check'),
+                                            span(setClass('reviewResult')),
                                             div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->approvalStatusList['approved']})"))
                                         ),
                                         div
                                         (
-                                            setClass('flex items-center py-1'),
-                                            $approvalReviewer >= $config->mr->approvalReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                            span("{$lang->mr->approvalReviewer}: ", $approvalReviewer),
+                                            setClass('flex items-center py-1' . ($minReviewers == 0 ? ' hidden' : '')),
+                                            icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check'),
+                                            span(setClass('reviewerCount')),
                                             div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->approvalReviewer})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $doneReviewer >= $config->mr->doneReviewer ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                            span("{$lang->mr->doneReviewer}: ", $doneReviewer),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->doneReviewer})"))
                                         )
                                     )
                                 ),
