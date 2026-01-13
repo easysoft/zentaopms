@@ -2450,7 +2450,9 @@ class storyModel extends model
     public function closeAllChildren(int $storyID, string $closedReason)
     {
         $now         = helper::now();
-        $childIdList = $this->getAllChildId($storyID, false);
+        $childIdList = $this->getAllChildId($storyID, false, false, 'closed');
+        if(empty($childIdList)) return;
+
         $childList   = $this->getByList($childIdList);
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
@@ -2482,10 +2484,11 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  bool   $includeSelf
      * @param  bool   $sameType true|false
+     * @param  string $excludeStatus
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID, bool $includeSelf = true, bool $sameType = false): array
+    public function getAllChildId(int $storyID, bool $includeSelf = true, bool $sameType = false, string $excludeStatus = ''): array
     {
         if($storyID == 0) return array();
 
@@ -2497,6 +2500,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
             ->beginIF($sameType)->andWhere('type')->eq($story->type)->fi()
+            ->beginIF(!empty($excludeStatus))->andWhere('status')->ne($excludeStatus)->fi()
             ->fetchPairs();
 
         return array_keys($children);
