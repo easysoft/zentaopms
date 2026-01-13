@@ -498,8 +498,7 @@ class mr extends control
      */
     public function close(int $id)
     {
-        $oldMR = $this->mr->fetchByID($id);
-        $this->mr->close($oldMR);
+        $this->mr->close($id);
         if(dao::isError()) return $this->sendError(dao::getError());
 
         $this->loadModel('action')->create($this->moduleName, $id, 'closed');
@@ -512,14 +511,19 @@ class mr extends control
      * 重新打开合并请求。
      * Reopen this MR.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function reopen(int $MRID)
+    public function reopen(int $id)
     {
-        $MR = $this->mr->fetchByID($MRID);
-        return $this->send($this->mr->reopen($MR));
+        $this->mr->reopen($id);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->loadModel('action')->create($this->moduleName, $id, 'reopen');
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

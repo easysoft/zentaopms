@@ -899,13 +899,13 @@ class mrModel extends model
      * 关闭合并请求。
      * Close this MR.
      *
-     * @param  object $MR
+     * @param  int $mrID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function close(object $MR): bool
+    public function close(int $mrID): bool
     {
-        $this->dao->update(TABLE_MR)->set('status')->eq('closed')->where('id')->eq($MR->id)->exec();
+        $this->dao->update(TABLE_MR)->set('status')->eq('closed')->where('id')->eq($mrID)->exec();
         return !dao::isError();
     }
 
@@ -913,19 +913,14 @@ class mrModel extends model
      * 重新打开合并请求。
      * Reopen this MR.
      *
-     * @param  object $MR
+     * @param  int $mrID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function reopen(object $MR): array
+    public function reopen(int $mrID): bool
     {
-        if($MR->status == 'opened') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation);
-
-        $this->loadModel('action')->create($this->moduleName, $MR->id, 'reopen');
-        $rawMR = $this->apiReopenMR($MR->hostID, $MR->targetProject, $MR->mriid);
-
-        if(!empty($rawMR) && empty($rawMR->message)) return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'load' => 'reload');
-        return array('result' => 'fail', 'message' => $this->lang->fail);
+        $this->dao->update(TABLE_MR)->set('status')->eq('opened')->where('id')->eq($mrID)->exec();
+        return !dao::isError();
     }
 
     /**
