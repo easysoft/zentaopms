@@ -903,17 +903,10 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function close(object $MR): array
+    public function close(object $MR): bool
     {
-        if($MR->status == 'closed') return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation);
-
-        $actionID = $this->loadModel('action')->create($this->moduleName, $MR->id, 'closed');
-        $rawMR    = $this->apiCloseMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        $changes  = common::createChanges($MR, $rawMR);
-        $this->action->logHistory($actionID, $changes);
-
-        if(isset($rawMR->state) && $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'load' => 'reload');
-        return array('result' => 'fail', 'message' => $this->lang->fail);
+        $this->dao->update(TABLE_MR)->set('status')->eq('closed')->where('id')->eq($MR->id)->exec();
+        return !dao::isError();
     }
 
     /**
@@ -1220,8 +1213,10 @@ class mrModel extends model
      * @access public
      * @return bool
      */
-    public static function isClickable(object $MR, string $action): bool
+    public static function isClickable(object $mr, string $action): bool
     {
+        if($action == 'reopen') return !empty($mr->status) && $mr->status == 'closed';
+        if($action == 'close')  return !empty($mr->status) && $mr->status == 'opened';
         return true;
     }
 
