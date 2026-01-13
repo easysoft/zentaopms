@@ -23,7 +23,16 @@ foreach($reviewers as $reviewer)
             icon(setClass('text-lg'), in_array($reviewer->account, $specifiedReviewers) ? 'customer' : 'contacts'),
             span(setClass('ml-2 text-lg'), zget($users, $reviewer->account)),
             label(setClass('success ml-4 size-sm'), $lang->mr->approvalStatusList[$reviewer->decision]),
-            div(setClass('flex flex-auto justify-end'), btn(setClass('ghost size-sm'), icon(setClass('text-primary'), 'trash')))
+            div
+            (
+                setClass('flex flex-auto justify-end'),
+                btn
+                (
+                    setClass('ghost size-sm ajax-submit'),
+                    icon(setClass('text-primary'), 'trash'),
+                    set::url('mr', 'ajaxDeleteReviewer', "mrID={$mrID}&reviewer={$reviewer->account}")
+                )
+            )
         ),
         div
         (
@@ -41,7 +50,7 @@ tabs
             'title' => $lang->mr->add,
             'icon'  => 'plus',
             'class' => 'ghost text-primary',
-            'url'   => createLink('mr', 'ajxAddReviewer', 'mrID' . $mrID),
+            'url'   => createLink('mr', 'ajaxAddReviewers', 'mrID=' . $mrID),
         )
     ),
     setClass('canvas rounded shadow py-2 px-4 mt-2'),
