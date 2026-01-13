@@ -862,25 +862,21 @@ class commonModel extends model
      */
     public static function getHasPrivLink(array $menu): array
     {
+        if(empty($menu['link'])) return array();
+
+        list($label, $module, $method, $params) = explode('|', $menu['link']);
+        if(common::hasPriv($module, $method)) return array($label, $module, $method, $params);
+
+        if(empty($menu['links'])) return array();
+
         $link = array();
-        if(!empty($menu['link']))
+        foreach($menu['links'] as $menuLink)
         {
-            list($label, $module, $method, $params) = explode('|', $menu['link']);
+            list($module, $method, $params) = explode('|', $menuLink);
             if(common::hasPriv($module, $method))
             {
                 $link = array($label, $module, $method, $params);
-            }
-            elseif(!empty($menu['links']))
-            {
-                foreach($menu['links'] as $menuLink)
-                {
-                    list($module, $method, $params) = explode('|', $menuLink);
-                    if(common::hasPriv($module, $method))
-                    {
-                        $link = array($label, $module, $method, $params);
-                        break;
-                    }
-                }
+                break;
             }
         }
 
