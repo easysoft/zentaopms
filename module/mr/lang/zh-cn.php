@@ -49,6 +49,7 @@ $lang->mr->filePath          = '文件路径';
 $lang->mr->conflictFiles     = '冲突文件';
 $lang->mr->changeFiles       = '变更的文件';
 $lang->mr->issueList         = '问题清单';
+$lang->mr->add               = '添加';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
@@ -116,9 +117,9 @@ $lang->mr->repeatedOperation = '请勿重复操作';
 
 $lang->mr->approvalStatus     = '审批流状态';
 $lang->mr->approvalStatusList = array();
-$lang->mr->approvalStatusList['notReviewed'] = '未评审';
-$lang->mr->approvalStatusList['approved']    = '已通过';
-$lang->mr->approvalStatusList['rejected']    = '已拒绝';
+$lang->mr->approvalStatusList['pending']  = '未评审';
+$lang->mr->approvalStatusList['approved'] = '已通过';
+$lang->mr->approvalStatusList['rejected'] = '已拒绝';
 
 $lang->mr->notApproved  = '审核拒绝的';
 $lang->mr->assignedToMe = '指派给我';
