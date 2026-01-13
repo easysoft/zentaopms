@@ -492,16 +492,20 @@ class mr extends control
      * 关闭合并请求。
      * Close this MR.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function close(int $MRID)
+    public function close(int $id)
     {
-        $MR = $this->mr->fetchByID($MRID);
-        $result = $this->mr->close($MR);
+        $oldMR = $this->mr->fetchByID($id);
+        $this->mr->close($oldMR);
+        if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->send($result);
+        $this->loadModel('action')->create($this->moduleName, $id, 'closed');
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
