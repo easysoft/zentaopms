@@ -1173,7 +1173,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function ajaxAddReviewers(int $mrID, string $callBack = '')
+    function ajaxAddReviewers(int $mrID)
     {
         $mr = $this->mr->fetchByID($mrID);
         if($_POST)
@@ -1186,7 +1186,7 @@ class mr extends control
             $response['result']     = 'success';
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
-            if(!empty($callBack)) $response['callBack'] = $callBack;
+            $response['callback']   = "loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + " . $mrID . "), '#reviewer');";
             return print $this->send($response);
         }
 
@@ -1200,5 +1200,27 @@ class mr extends control
 
         $this->view->users = array_column($users, 'realname', 'account');
         $this->display();
+    }
+
+    /**
+     * 删除审批人。
+     * AJAX delete reviewer.
+     *
+     * @param  int $mrID
+     * @param  string $reviewer
+     * @access public
+     * @return void
+     */
+    function ajaxDeleteReviewer(int $mrID, string $reviewer)
+    {
+        $this->mr->deleteReviewer($mrID, $reviewer);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $response = array();
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+        $response['closeModal'] = true;
+        $response['callback']   = "loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + " . $mrID . "), '#reviewer');";
+        return print $this->send($response);
     }
 }
