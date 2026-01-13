@@ -1450,8 +1450,6 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->setBranchRule = 'setBranchRule';
-
 $lang->resource->repo->browseBranchType = 'browseBranchType';
 $lang->resource->repo->createBranchType = 'createBranchType';
 $lang->resource->repo->editBranchType   = 'editBranchType';
