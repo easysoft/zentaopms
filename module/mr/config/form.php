@@ -15,3 +15,6 @@ $config->mr->form->edit = array();
 $config->mr->form->edit['title']      = array('type' => 'string', 'required' => true);
 $config->mr->form->edit['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->mr->form->edit['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->mr->form->addReviewers = array();
+$config->mr->form->addReviewers['reviewer'] = array('type' => 'array', 'required' => true, 'default' => array());
