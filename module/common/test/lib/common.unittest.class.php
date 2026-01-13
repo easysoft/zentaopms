@@ -3184,4 +3184,20 @@ class commonTest
                 return '0';
         }
     }
+
+    /**
+     * 获取有权限的链接。
+     * Get the authorized link.
+     *
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public function getHasPrivLinkTest(array $menu): array
+    {
+        $result = commonModel::getHasPrivLink($menu);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
