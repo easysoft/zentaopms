@@ -1142,4 +1142,25 @@ class mr extends control
         $this->view->conflictFiles = $conflictFileList;
         $this->display();
     }
+
+    /**
+     * 获取审批人列表。
+     * AJAX get reviewers.
+     *
+     * @param  int $mrID
+     * @access public
+     * @return void
+     */
+    function ajaxGetReviewers(int $mrID)
+    {
+        $mr       = $this->mr->fetchByID($mrID);
+        $flow     = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
+        $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
+
+        $this->view->flow      = $flow;
+        $this->view->mrID      = $mrID;
+        $this->view->reviewers = !empty($reviewID) ? array() : $this->mr->getReviewers($mrID);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
 }
