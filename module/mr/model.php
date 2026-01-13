@@ -220,7 +220,7 @@ class mrModel extends model
             $reviewData->repoID         = $mr->repoID;
             $reviewData->account        = $reviewer;
             $reviewData->decision       = 'pending';
-            $reviewData->latestReviewID = $mrID;
+            $reviewData->sha            = $mr->sourceSHA;
             $reviewData->createdBy      = $this->app->user->account;
             $reviewData->createdDate    = helper::now();
             $this->dao->insert(TABLE_MRREVIEWERS)->data($reviewData)->exec();
