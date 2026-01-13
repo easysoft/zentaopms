@@ -1163,4 +1163,42 @@ class mr extends control
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
+
+    /**
+     * 添加审批人。
+     * AJAX add reviewers.
+     *
+     * @param  int $mrID
+     * @param  string $callBack
+     * @access public
+     * @return void
+     */
+    function ajaxAddReviewers(int $mrID, string $callBack = '')
+    {
+        $mr = $this->mr->fetchByID($mrID);
+        if($_POST)
+        {
+            $data = form::data($this->config->mr->form->addReviewers)->get();
+            $this->mr->addReviewers($mr, $data->reviewer);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            if(!empty($callBack)) $response['callBack'] = $callBack;
+            return print $this->send($response);
+        }
+
+        $reviewers = $this->mr->getReviewers($mrID);
+        $repo      = $this->loadModel('repo')->getByID($mr->repoID);
+
+        $repoMembers = array_keys($repo->members);
+        $users = array();
+        foreach($repoMembers as $member) if(!isset($reviewers[$member])) $users[] = $member;
+        $users = $this->loadModel('user')->getListByAccounts($users);
+
+        $this->view->users = array_column($users, 'realname', 'account');
+        $this->display();
+    }
 }
