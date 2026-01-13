@@ -42,7 +42,7 @@ class repobranchruleModel extends model
             }
         }
 
-        $rule = $this->getBranchRule($branchTypeID);
+        $rule = $this->getBranchRule($branchTypeID, $repoID, '');
         if($rule && !empty($rule->createUser))
         {
             return strpos(',' . $rule->createUser . ',', ',' . $operator . ',') !== false;
@@ -90,7 +90,7 @@ class repobranchruleModel extends model
             }
         }
 
-        $rule = $this->getBranchRule($branchTypeID);
+        $rule = $this->getBranchRule($branchTypeID, $repoID, '');
         if($rule && !empty($rule->deleteUser))
         {
             return strpos(',' . $rule->deleteUser . ',', ',' . $operator . ',') !== false;

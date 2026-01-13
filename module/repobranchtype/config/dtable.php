@@ -28,5 +28,5 @@ $config->repobranchtype->dtable->fieldList['actions']['name']  = 'actions';
 $config->repobranchtype->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repobranchtype->dtable->fieldList['actions']['type']  = 'actions';
 $config->repobranchtype->dtable->fieldList['actions']['width'] = 100;
-$config->repobranchtype->dtable->fieldList['actions']['menu']  = array('setBranchRule', 'edit', 'delete');
+$config->repobranchtype->dtable->fieldList['actions']['menu']  = array('rule', 'edit', 'delete');
 $config->repobranchtype->dtable->fieldList['actions']['list']  = $config->repobranchtype->actionList;

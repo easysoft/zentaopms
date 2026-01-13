@@ -55,7 +55,7 @@ class branchRulesEntry extends baseEntry
                     }
                 }
             }
-            $rule = $this->repobranchrule->getBranchRule($branchTypeID);
+            $rule = $this->repobranchrule->getBranchRule($branchTypeID, $repoID, '');
         }
 
         if(!$rule)
