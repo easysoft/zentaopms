@@ -116,6 +116,7 @@ $actions = $this->loadModel('common')->buildOperateMenu($mr);
 
 div
 (
+    setID('mr-view'),
     setClass('detail-body rounded flex gap-1'),
     div
     (
