@@ -213,19 +213,9 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         $this->file->updateObjectID($this->post->uid, $mrID, 'mr');
 
-        foreach($reviewers as $reviewer)
-        {
-            $reviewData = new stdClass();
-            $reviewData->requestID      = $mrID;
-            $reviewData->repoID         = $mr->repoID;
-            $reviewData->account        = $reviewer;
-            $reviewData->decision       = 'pending';
-            $reviewData->sha            = $mr->sourceSHA;
-            $reviewData->createdBy      = $this->app->user->account;
-            $reviewData->createdDate    = helper::now();
-            $this->dao->insert(TABLE_MRREVIEWERS)->data($reviewData)->exec();
-            if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        }
+        $mr->id = $mrID;
+        $this->addReviewers($mr, $reviewers);
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $this->loadModel('action')->create($this->moduleName, $mrID, 'opened');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -1451,5 +1441,39 @@ class mrModel extends model
     public function getReviewers(int $mrID): array
     {
         return $this->dao->select('*')->from(TABLE_MRREVIEWERS)->where('requestID')->eq($mrID)->fetchAll('account', false);
+    }
+
+    /**
+     * 添加MR审阅者。
+     * Add MR reviewers.
+     *
+     * @param  object $mr
+     * @param  array $reviewers
+     * @access public
+     * @return bool
+     */
+    public function addReviewers(object $mr, array $reviewers): bool
+    {
+        if(empty($mr->id)) return false;
+
+        $this->loadModel('action');
+        foreach($reviewers as $reviewer)
+        {
+            $reviewData = new stdClass();
+            $reviewData->requestID      = $mr->id;
+            $reviewData->repoID         = $mr->repoID;
+            $reviewData->account        = $reviewer;
+            $reviewData->decision       = 'pending';
+            $reviewData->sha            = $mr->sourceSHA;
+            $reviewData->createdBy      = $this->app->user->account;
+            $reviewData->createdDate    = helper::now();
+            $this->dao->insert(TABLE_MRREVIEWERS)->data($reviewData)->exec();
+            if(dao::isError()) return false;
+
+            $this->action->create('mr', $mr->id, 'addReviewer', '', $reviewer);
+            if(dao::isError()) return false;
+        }
+
+        return true;
     }
 }
