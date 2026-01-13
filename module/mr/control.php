@@ -1157,10 +1157,14 @@ class mr extends control
         $flow     = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
         $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
 
-        $this->view->flow      = $flow;
-        $this->view->mrID      = $mrID;
-        $this->view->reviewers = !empty($reviewID) ? array() : $this->mr->getReviewers($mrID);
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $reviewers    = !empty($reviewID) ? array() : $this->mr->getReviewers($mrID);
+        $reviewResult = $this->mr->getReviewResult($reviewers, $flow);
+
+        $this->view->flow         = $flow;
+        $this->view->mrID         = $mrID;
+        $this->view->reviewers    = $reviewers;
+        $this->view->reviewResult = $reviewResult;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

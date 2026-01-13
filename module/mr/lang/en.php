@@ -51,6 +51,7 @@ $lang->mr->changeFiles       = 'Change Files';
 $lang->mr->issueList         = 'Issue List';
 $lang->mr->add               = 'Add';
 $lang->mr->addReviewer       = 'Add Reviewer';
+$lang->mr->reviewStatus      = 'Review Status';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';

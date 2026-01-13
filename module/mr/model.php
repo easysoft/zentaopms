@@ -1493,8 +1493,31 @@ class mrModel extends model
         $this->dao->delete()->from(TABLE_MRREVIEWERS)->where('requestID')->eq($mrID)->andWhere('account')->eq($reviewer)->exec();
         if(dao::isError()) return false;
 
-        $user = $this->loadModel('user')->getPairs('', '', 0, array($reviewer));
-        $this->loadModel('action')->create('mr', $mrID, 'deleteReviewer', '', empty($user) ? '' : $user[$reviewer]);
+        $user = $this->dao->select('realname')->from(TABLE_USER)->where('account')->eq($reviewer)->fetch();
+        $this->loadModel('action')->create('mr', $mrID, 'deleteReviewer', '', $user->realname);
+        return true;
+    }
+
+    /**
+     * 审阅结果。
+     * Get MR review result.
+     *
+     * @param  array|object $reviewers
+     * @param  array|object $flow
+     * @access public
+     * @return bool
+     */
+    public function getReviewResult(array|object $reviewers, array|object $flow): bool
+    {
+        if(empty($reviewers)) return false;
+        $minReviewers = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
+        if($minReviewers > count($reviewers)) return false;
+
+        foreach($reviewers as $reviewer)
+        {
+            if($reviewer->decision != 'approved') return false;
+        }
+
         return true;
     }
 }

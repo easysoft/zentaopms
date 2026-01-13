@@ -12,8 +12,19 @@ namespace zin;
 
 $reviewItems        = array();
 $specifiedReviewers = empty($flow) ? array() : $flow->definition->reviewFlow->approvals->specifiedReviewers;
+$minReviewers       = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
+$reviewerCount      = count($reviewers);
+
+jsVar('reviewResult', $reviewResult);
+jsVar('minReviewers', $minReviewers);
+jsVar('reviewerCount', $reviewerCount);
+jsVar('mrLang', $lang->mr);
+
 foreach($reviewers as $reviewer)
 {
+    $approvalClass = 'success';
+    if($reviewer->decision == 'reject') $approvalClass = 'danger';
+    if($reviewer->decision == 'pending') $approvalClass = 'secondary';
     $reviewItems[] = div
     (
         setClass('bg-gray-100 my-1 py-2 px-4'),
@@ -22,8 +33,8 @@ foreach($reviewers as $reviewer)
             setClass('flex items-center'),
             icon(setClass('text-lg'), in_array($reviewer->account, $specifiedReviewers) ? 'customer' : 'contacts'),
             span(setClass('ml-2 text-lg'), zget($users, $reviewer->account)),
-            label(setClass('success ml-4 size-sm'), $lang->mr->approvalStatusList[$reviewer->decision]),
-            div
+            label(setClass($approvalClass . ' ml-4 size-sm'), $lang->mr->approvalStatusList[$reviewer->decision]),
+            $reviewerCount > 1 ? div
             (
                 setClass('flex flex-auto justify-end'),
                 btn
@@ -32,17 +43,18 @@ foreach($reviewers as $reviewer)
                     icon(setClass('text-primary'), 'trash'),
                     set::url('mr', 'ajaxDeleteReviewer', "mrID={$mrID}&reviewer={$reviewer->account}")
                 )
-            )
+            ) : ''
         ),
         div
         (
             setClass('mt-2 pl-6'),
-            span("{$lang->mr->approvalResult}: ", $reviewer->opinion)
+            span("{$lang->mr->approvalResult}: ", empty($reviewer->opinion) ? $lang->noData : $reviewer->opinion)
         )
     );
 }
 tabs
 (
+    on::init()->call('loadApprovalsBlock'),
     set::headerBtn
     (
         array
