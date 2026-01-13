@@ -1142,4 +1142,85 @@ class mr extends control
         $this->view->conflictFiles = $conflictFileList;
         $this->display();
     }
+
+    /**
+     * 获取审批人列表。
+     * AJAX get reviewers.
+     *
+     * @param  int $mrID
+     * @access public
+     * @return void
+     */
+    function ajaxGetReviewers(int $mrID)
+    {
+        $mr       = $this->mr->fetchByID($mrID);
+        $flow     = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
+        $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
+
+        $this->view->flow      = $flow;
+        $this->view->mrID      = $mrID;
+        $this->view->reviewers = !empty($reviewID) ? array() : $this->mr->getReviewers($mrID);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
+
+    /**
+     * 添加审批人。
+     * AJAX add reviewers.
+     *
+     * @param  int $mrID
+     * @param  string $callBack
+     * @access public
+     * @return void
+     */
+    function ajaxAddReviewers(int $mrID)
+    {
+        $mr = $this->mr->fetchByID($mrID);
+        if($_POST)
+        {
+            $data = form::data($this->config->mr->form->addReviewers)->get();
+            $this->mr->addReviewers($mr, $data->reviewer);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['callback']   = "loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + " . $mrID . "), '#reviewer');";
+            return print $this->send($response);
+        }
+
+        $reviewers = $this->mr->getReviewers($mrID);
+        $repo      = $this->loadModel('repo')->getByID($mr->repoID);
+
+        $repoMembers = array_keys($repo->members);
+        $users = array();
+        foreach($repoMembers as $member) if(!isset($reviewers[$member])) $users[] = $member;
+        $users = $this->loadModel('user')->getListByAccounts($users);
+
+        $this->view->users = array_column($users, 'realname', 'account');
+        $this->display();
+    }
+
+    /**
+     * 删除审批人。
+     * AJAX delete reviewer.
+     *
+     * @param  int $mrID
+     * @param  string $reviewer
+     * @access public
+     * @return void
+     */
+    function ajaxDeleteReviewer(int $mrID, string $reviewer)
+    {
+        $this->mr->deleteReviewer($mrID, $reviewer);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $response = array();
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+        $response['closeModal'] = true;
+        $response['callback']   = "loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + " . $mrID . "), '#reviewer');";
+        return print $this->send($response);
+    }
 }

@@ -49,6 +49,8 @@ $lang->mr->filePath          = 'File Path';
 $lang->mr->conflictFiles     = 'Conflict Files';
 $lang->mr->changeFiles       = 'Change Files';
 $lang->mr->issueList         = 'Issue List';
+$lang->mr->add               = 'Add';
+$lang->mr->addReviewer       = 'Add Reviewer';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
@@ -116,9 +118,9 @@ $lang->mr->repeatedOperation = 'Do not repeat operations';
 
 $lang->mr->approvalStatus     = 'Approve status';
 $lang->mr->approvalStatusList = array();
-$lang->mr->approvalStatusList['notReviewed'] = 'notReviewed';
-$lang->mr->approvalStatusList['approved']    = 'Approved';
-$lang->mr->approvalStatusList['rejected']    = 'Rejected';
+$lang->mr->approvalStatusList['pending']  = 'notReviewed';
+$lang->mr->approvalStatusList['approved'] = 'Approved';
+$lang->mr->approvalStatusList['rejected'] = 'Rejected';
 
 $lang->mr->notApproved  = 'Rejected';
 $lang->mr->assignedToMe = 'AssignedToMe';
