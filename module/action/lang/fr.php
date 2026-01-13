@@ -1158,3 +1158,8 @@ $lang->action->reviewStatusList['reverting'] = 'Reverting';
 
 $lang->action->reviewResultList['pass']   = 'Pass';
 $lang->action->reviewResultList['reject'] = 'Reject';
+
+$lang->action->label->addreviewer    = 'Added reviewer';
+$lang->action->label->deletereviewer = 'Deleted reviewer';
+$lang->action->desc->addreviewer     = '$date, <strong>$actor</strong> Added reviewer <strong>$extra</strong>。';
+$lang->action->desc->deletereviewer  = '$date, <strong>$actor</strong> Deleted reviewer <strong>$extra</strong>。';

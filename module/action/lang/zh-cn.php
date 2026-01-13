@@ -1162,3 +1162,8 @@ $lang->action->reviewStatusList['reverting'] = '回退中';
 
 $lang->action->reviewResultList['pass']   = '通过';
 $lang->action->reviewResultList['reject'] = '不通过';
+
+$lang->action->label->addreviewer    = '添加了评审人';
+$lang->action->label->deletereviewer = '删除了评审人';
+$lang->action->desc->addreviewer     = '$date, <strong>$actor</strong> 添加了审批人<strong>$extra</strong>。';
+$lang->action->desc->deletereviewer  = '$date, <strong>$actor</strong> 删除了审批人<strong>$extra</strong>。';
