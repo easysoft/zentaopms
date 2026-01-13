@@ -51,6 +51,7 @@ $lang->mr->changeFiles       = '变更的文件';
 $lang->mr->issueList         = '问题清单';
 $lang->mr->add               = '添加';
 $lang->mr->addReviewer       = '添加评审人';
+$lang->mr->reviewStatus      = '审批状态';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
