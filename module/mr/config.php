@@ -51,7 +51,7 @@ $config->mr->actionList['view']['data-app'] = $app->tab;
 
 $config->mr->actionList['edit'] = array();
 $config->mr->actionList['edit']['icon']     = 'edit';
-$config->mr->actionList['edit']['hint']     = $lang->mr->edit;
+$config->mr->actionList['edit']['hint']     = $lang->edit;
 $config->mr->actionList['edit']['url']      = helper::createLink($module, 'edit', "MRID={id}");
 $config->mr->actionList['edit']['data-app'] = $app->tab;
 
@@ -135,4 +135,4 @@ $config->mr->groupPrivs['link']       = 'view';
 
 $config->mr->actions = new stdclass();
 $config->mr->actions->view = array();
-$config->mr->actions->view['mainActions'] = array('edit', 'close');
+$config->mr->actions->view['mainActions'] = array('edit', 'close', 'reopen');
