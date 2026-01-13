@@ -214,7 +214,12 @@ class repobranchtype extends control
         {
             $branchTypeIDs = $this->post->branchTypes;
             $result        = $this->repobranchtype->importBranchTypes($repo, $branchTypeIDs);
-            if(!$result) return $this->sendError($this->lang->fail);
+            if(!$result)
+            {
+                $isError = dao::isError();
+                $errorMessage = $isError ? dao::getError(true) : $this->lang->fail;
+                return $this->sendError(is_array($errorMessage) ? implode("\n", $errorMessage) : $errorMessage);
+            }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->importSuccess, 'load' => $this->createLink('repobranchtype', 'browse', "repoID=$repoID")));
         }
