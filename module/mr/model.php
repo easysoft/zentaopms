@@ -1476,4 +1476,25 @@ class mrModel extends model
 
         return true;
     }
+
+    /**
+     * 删除MR审阅者。
+     * Delete MR reviewers.
+     *
+     * @param  int    $mrID
+     * @param  string $reviewer
+     * @access public
+     * @return bool
+     */
+    public function deleteReviewer(int $mrID, string $reviewer): bool
+    {
+        if(empty($mrID) || empty($reviewer)) return false;
+
+        $this->dao->delete()->from(TABLE_MRREVIEWERS)->where('requestID')->eq($mrID)->andWhere('account')->eq($reviewer)->exec();
+        if(dao::isError()) return false;
+
+        $user = $this->loadModel('user')->getPairs('', '', 0, array($reviewer));
+        $this->loadModel('action')->create('mr', $mrID, 'deleteReviewer', '', empty($user) ? '' : $user[$reviewer]);
+        return true;
+    }
 }
