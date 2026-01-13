@@ -27,6 +27,7 @@ $oldRevision  = helper::safe64Encode($oldRevision);
 $newRevision  = helper::safe64Encode($newRevision);
 $diffLink     = $this->repo->createLink('diff', "repoID={$mr->repoID}&objectID={$objectID}&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
 jsVar('diffs', $diffs);
+jsVar('mrID', $mr->id);
 jsVar('tree', $tree);
 jsVar('file', $currentEntry);
 jsVar('entry', $entry);
@@ -41,7 +42,7 @@ if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->la
 $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
 $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
 
-$encoding = empty($encoding) ? '' : $encoding;
+$encoding      = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
 $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
 
@@ -72,11 +73,6 @@ $pipeline1->title  = 'a0001';
 $pipeline1->status = 'success';
 $pipelines[] = $pipeline1;
 
-$pipeline2 = new stdclass();
-$pipeline2->title  = 'hello world';
-$pipeline2->status = 'failed';
-$pipelines[] = $pipeline2;
-
 $checkPipeline = true;
 $pipelineBox   = array();
 foreach($pipelines as $pipeline)
@@ -105,7 +101,7 @@ foreach($pipelines as $pipeline)
     );
 }
 
-$checkAI       = $AICodeScore >= $config->mr->AICodeScore && $AISevereIssue <= $config->mr->AISevereIssue && $AIOrdinaryIssue <= $config->mr->AIOrdinaryIssue;
+$checkAI       = true;
 $checkApproval = $approvalStatus == 'approved' && $approvalReviewer >= $config->mr->approvalReviewer && $doneReviewer >= $config->mr->doneReviewer;
 $checkScan     = $scanSevereIssue <= $config->mr->scanSevereIssue && $scanOrdinaryIssue <= $config->mr->scanOrdinaryIssue && $scanPassRate >= $config->mr->scanPassRate;
 
@@ -115,29 +111,6 @@ $basicItems[] = item(set::name($lang->mr->createdDate),  $mr->createdDate);
 $basicItems[] = item(set::name($lang->mr->targetBranch), $mr->targetBranch);
 $basicItems[] = item(set::name($lang->mr->sourceBranch), $mr->sourceBranch);
 $basicItems[] = item(set::name($lang->mr->description),  !empty($mr->desc) ? strip_tags($mr->desc) : $lang->noData);
-
-$reviewers = array('admin', 'admin', 'admin');
-$reviewItems = array();
-foreach($reviewers as $reviewer)
-{
-    $reviewItems[] = div
-    (
-        setClass('bg-gray-100 my-1 py-2 px-4'),
-        div
-        (
-            setClass('flex items-center'),
-            icon(setClass('text-lg'), 'account'),
-            span(setClass('ml-2 text-lg'), zget($users, $reviewer)),
-            label(setClass('success ml-4 size-sm'), $lang->mr->approvalStatusList['approved']),
-            div(setClass('flex flex-auto justify-end'), btn(setClass('ghost size-sm'), icon(setClass('text-primary'), 'trash')))
-        ),
-        div
-        (
-            setClass('mt-2 pl-6'),
-            span("评审意见: ", '这里是评审意见')
-        )
-    );
-}
 
 $actions = $this->loadModel('common')->buildOperateMenu($mr);
 
@@ -153,20 +126,20 @@ div
             (
                 div
                 (
-                    setClass('py-1'),
+                    setClass('py-1 title-header'),
                     span(setClass('text-lg text-clip font-bold'), "#{$mr->id} {$mr->title}"),
                     label(setClass('primary ml-4'), zget($lang->mr->statusList, $mr->status))
                 ),
                 div
                 (
-                    setClass('my-2'),
+                    setClass('my-2 detail-header'),
                     span(html(sprintf($lang->mr->MRHistory, zget($users, $mr->createdBy), $mr->createdDate, $mr->sourceBranch, $commitPager->recTotal, $mr->targetBranch)))
                 ),
                 div
                 (
                     tabs
                     (
-                        set::headerClass('border-b'),
+                        set::headerClass('border-b mr-menu'),
                         tabPane
                         (
                             set::key('basic'),
@@ -466,8 +439,8 @@ div
     (
         setStyle(array('width' => '370px')),
         setClass('detail-side flex-none relative'),
-        tabs(setID('basic'),    setClass('canvas rounded shadow py-2 px-4'),      tabPane(set::title($lang->mr->basicInfo), tableData($basicItems))),
-        tabs(setID('reviewer'), set::headerBtn(array('title' => '添加', 'icon' => 'plus', 'class' => 'ghost text-primary', 'url' => createLink('repo', 'createBranch', 'objectID=0&repoID=1'))), setClass('canvas rounded shadow py-2 px-4 mt-2'), tabPane(set::title($lang->mr->reviewer),  tableData($reviewItems))),
+        tabs(setID('basic'), setClass('canvas rounded shadow py-2 px-4'), tabPane(set::title($lang->mr->basicInfo), tableData($basicItems))),
+        div(setID('reviewer')),
         history(setClass('mt-2 border-0 canvas shadow-sm'), setStyle(array('box-shadow' => 'var(--shadow-none)')))
     )
 );
