@@ -333,3 +333,23 @@ function setStoryRelated(event)
         if(!$row.find('td[data-name="story"][data-ditto="on"]').length) break;
     }
 }
+
+window.computeForParent = function(e)
+{
+    const $this    = $(e.target);
+    const field    = $this.attr('data-name');
+    const parentID = $this.closest('tr').attr('data-parent');
+    if(parentID == '0') return;
+
+    const $parent = $('input[name="id[' + parentID + ']"]');
+    if($parent.length == 0) return;
+
+    const oldParentHour = parseFloat($parent.closest('tr').find('input[data-name="' + field + '"]').val());
+
+    let parentHour = 0;
+    $('tr[data-parent="' + parentID + '"]').each(function()
+    {
+        parentHour += parseFloat($(this).find('input[data-name="' + field + '"]').val());
+    });
+    if(oldParentHour < parentHour) $parent.closest('tr').find('input[data-name="' + field + '"]').val(parentHour.toFixed(2));
+}
