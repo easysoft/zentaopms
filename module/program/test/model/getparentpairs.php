@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+
+/**
+
+title=测试 programModel::getParentPairs();
+cid=17690
+pid=1
+
+- 获取所有父项目集的数量 @5
+- 获取瀑布类型父项目集的数量 @1
+- 获取ID为1的父项目集的名称属性1 @/项目集1
+- 获取父项目集的名称显示根目录 @0
+- 获取ID为1的父项目集的名称不显示根目录 @项目集1
+
+*/
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 su('admin');
@@ -21,20 +36,6 @@ $program->begin->range('20220112 000000:0')->type('timestamp')->format('YYYY-MM-
 $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
 $program->deleted->range('0{15},1{5}');
 $program->gen(10);
-
-/**
-
-title=测试 programModel::getParentPairs();
-cid=17690
-pid=1
-
-获取所有父项目集的数量 >> 5
-获取瀑布类型父项目集的数量 >> 1
-获取ID为1的父项目集的名称 >> /项目集1
-获取父项目集的名称显示根目录 >> 0
-获取ID为1的父项目集的名称不显示根目录 >> 项目集1
-
-*/
 
 $programTester = new programTest();
 
