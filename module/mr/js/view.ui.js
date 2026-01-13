@@ -432,8 +432,9 @@ window.loadLinkPage = function(link)
     $('#linkObject').trigger('click');
 }
 
-window.loadReviewers = function()
+window.loadReviewers = function(id)
 {
+    if(typeof mrID == 'undefined') return;
     loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + mrID), '#reviewer');
 }
-waitDom('#reviewer', loadReviewers);
+waitDom('#mr-view #reviewer', loadReviewers);
