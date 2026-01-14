@@ -431,10 +431,3 @@ window.loadLinkPage = function(link)
     $('#linkObject').attr('href', link);
     $('#linkObject').trigger('click');
 }
-
-window.loadReviewers = function(id)
-{
-    if(typeof mrID == 'undefined') return;
-    loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + mrID), '#reviewer');
-}
-waitDom('#mr-view #reviewer', loadReviewers);
