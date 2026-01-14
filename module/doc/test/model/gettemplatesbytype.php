@@ -35,7 +35,7 @@ cid=16132
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('template')->gen(20);
 zenData('module')->loadYaml('templatemodule')->gen(10);
@@ -45,7 +45,7 @@ su('admin');
 $types  = array(null, 1);
 $status = array('all', 'normal', 'draft');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getTemplatesByTypeTest($types[0], $status[0])) && p('1:id,title,templateType') && e('1,产品模板1,PP');  // 获取所有模板
 r($docTester->getTemplatesByTypeTest($types[0], $status[1])) && p('2:id,title,templateType') && e('2,产品模板2,QAP'); // 获取所有已发布模板
 r($docTester->getTemplatesByTypeTest($types[0], $status[2])) && p('3:id,title,templateType') && e('3,产品模板3,CMP'); // 获取所有草稿模板

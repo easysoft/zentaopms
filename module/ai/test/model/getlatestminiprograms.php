@@ -18,7 +18,7 @@ cid=15037
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_miniprogram');
 $table->id->range('1-15');
@@ -40,7 +40,7 @@ $table->gen(15);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->getLatestMiniProgramsTest())) && p() && e('15');
 r(count($aiTest->getLatestMiniProgramsTest(null, 'name_asc'))) && p() && e('15');

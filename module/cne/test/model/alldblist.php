@@ -18,11 +18,11 @@ cid=15598
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->allDBListTest('success')) && p('zentaopaas-mysql:db_type,release') && e('mysql,zentaopaas');
 r($cneTest->allDBListTest('empty')) && p() && e('0');

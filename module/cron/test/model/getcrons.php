@@ -16,10 +16,10 @@ cid=15882
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$cron = new cronTest();
+$cron = new cronModelTest();
 $cron->init();
 
 $list       = $cron->getCronsTest();

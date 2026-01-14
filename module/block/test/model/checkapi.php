@@ -18,7 +18,7 @@ cid=15224
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 function initValidConfig()
 {
@@ -39,7 +39,7 @@ function initEmptyConfig()
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 
 // 步骤1：测试空字符串哈希值情况
 initValidConfig();

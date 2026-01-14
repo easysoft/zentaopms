@@ -16,7 +16,7 @@ cid=16610
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $pipeline = zenData('pipeline');
@@ -33,7 +33,7 @@ zenData('oauth')->gen(4);
 su('admin');
 
 // 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetNamespacesTest(1)) && p() && e('~~'); // 步骤1：有效GitLab ID获取namespace列表
 $result = $gitlabTest->apiGetNamespacesTest(1);

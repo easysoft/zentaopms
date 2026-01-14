@@ -16,7 +16,7 @@ cid=16790
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('instance')->loadYaml('instance_docneinstall', false, 2)->gen(5);
 zenData('space')->loadYaml('space_docneinstall', false, 2)->gen(3);
@@ -24,7 +24,7 @@ zenData('user')->loadYaml('user_docneinstall', false, 2)->gen(2);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 $validInstance = new stdclass;
 $validInstance->id = 1;

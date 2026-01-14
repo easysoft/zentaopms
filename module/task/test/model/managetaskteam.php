@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('effort')->loadYaml('effort_managetaskteam')->gen(10);
 zenData('taskteam')->loadYaml('taskteam_managetaskteam')->gen(10);
@@ -130,7 +130,7 @@ $teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceLis
 $teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[3], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[0], 'teamLeft' => $teamLeftList[0]);
 $teamData[]       = array('team' => $teamList[2], 'teamSource' => $teamSourceList[3], 'teamEstimate' => $teamEstimateList[0], 'teamConsumed' => $teamConsumedList[1], 'teamLeft' => $teamLeftList[0]);
 
-$task = new taskTest();
+$task = new taskModelTest();
 
 $result1 = $task->manageTaskTeamTest($taskIdList[0], $taskStatusList[0], $modeList[0], $teamData[0]);
 $result2 = $task->manageTaskTeamTest($taskIdList[0], $taskStatusList[0], $modeList[0], $teamData[1]);

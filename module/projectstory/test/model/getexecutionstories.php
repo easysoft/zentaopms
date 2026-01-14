@@ -16,7 +16,7 @@ cid=17978
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectstory.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->gen(20);
@@ -25,7 +25,7 @@ $project = zenData('project');
 $project->type->range('program{10},sprint{10}');
 $project->gen(20);
 
-$projectstory = new projectstoryTest();
+$projectstory = new projectstoryModelTest();
 
 $projectID  = array();
 $projectID[0] = 3;

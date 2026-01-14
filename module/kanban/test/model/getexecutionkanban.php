@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -46,7 +46,7 @@ $executionIDList = array(2, 3, 4);
 $browseTypeList  = array('story', 'task', 'bug');
 $groupByList     = array('pri', 'category', 'module', 'source', 'assignedTo', 'story', 'severity');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getExecutionKanbanTest($executionIDList[0]))                                      && p() && e('columns:0, lanes:0, cards:0');   // 测试获取execution2的执行看板信息
 r($kanban->getExecutionKanbanTest($executionIDList[0], $browseTypeList[0]))                  && p() && e('columns:0, lanes:0, cards:0');   // 测试获取execution2 story的执行看板信息

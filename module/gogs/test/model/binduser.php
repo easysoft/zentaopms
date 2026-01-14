@@ -21,13 +21,13 @@ cid=16690
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gogs.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('oauth')->loadYaml('oauth')->gen(10);
 su('admin');
 
-$gogs = new gogsTest();
+$gogs = new gogsModelTest();
 
 $userList = array();
 r($gogs->bindUserTester($userList)) && p() && e('0'); // 用户列表为空

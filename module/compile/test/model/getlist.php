@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('compile')->gen(1);
 zenData('job')->loadYaml('job')->gen(1);
@@ -22,7 +22,7 @@ cid=15748
 - 检查获取不存在的数据会返回什么 @0
 */
 
-$compile = new compileTest();
+$compile = new compileModelTest();
 
 r($compile->getListTest(1, 1)) && p('1:name,status,pipeline,triggerType') && e('构建1,success,simple-job,tag'); //检查是否能获取到数据
 r($compile->getListTest(3, 1)) && p('')                       && e('0');                                        //检查获取不存在的数据会返回什么

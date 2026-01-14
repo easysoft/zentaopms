@@ -18,9 +18,9 @@ cid=15609
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->dbDetailTest('', '')) && p() && e('0');                                                                      // 步骤1：测试空参数边界值
 r($cneTest->dbDetailTest('mysql', '')) && p() && e('0');                                                                 // 步骤2：测试部分参数为空的情况

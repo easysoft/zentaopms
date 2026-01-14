@@ -16,7 +16,7 @@ cid=15313
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('project');
 $project = zenData('project');
@@ -49,7 +49,7 @@ $metriclib->gen(20);
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 设置session项目ID
 global $app;

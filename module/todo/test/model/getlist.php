@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ cid=19260
 
 $typeList = array('today', 'yesterday', 'thisweek', 'lastweek', 'thismonth', 'lastmonth', 'thisseason', 'thisyear', 'future', 'before', 'cycle');
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 $thisYearDay = date('L') ? 366 : 365;
 $lastYearDay = date('L', strtotime("-1 years")) ? 366 : 365;

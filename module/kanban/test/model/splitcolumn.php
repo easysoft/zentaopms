@@ -17,7 +17,7 @@ cid=16960
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(2);
@@ -61,7 +61,7 @@ $columnF->color   = '#333';
 
 $childrenA = array($columnA, $columnB, $columnC);
 $childrenB = array($columnD, $columnE, $columnF);
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 $childrenA = $kanban->splitColumnTest(1, $childrenA);
 $childrenB = $kanban->splitColumnTest(2, $childrenB);

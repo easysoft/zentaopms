@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试 executionModel::setMenu();
@@ -33,7 +33,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->setMenuTest(3)) && p('build:link,subModule')        && e('构建|execution|build|executionID=3,build');            // 测试构建导航
 r($executionTester->setMenuTest(4)) && p('more:link')                   && e('更多|execution|more|3');                               // 测试设置迭代导航
 r($executionTester->setMenuTest(5)) && p('kanban:link,subModule,alias') && e('看板|execution|kanban|executionID=5,task,importtask'); // 测试看板导航

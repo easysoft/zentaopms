@@ -18,13 +18,13 @@ cid=15630
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 清理初始数据
 zenData('config')->gen(0);
 
 // 创建测试实例
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 // 测试步骤1：所有域名配置都为空的情况
 r($cneTest->sysDomainTest('empty_all')) && p() && e('0');

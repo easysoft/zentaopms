@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(2);
@@ -62,7 +62,7 @@ cid=18956
 
 */
 
-$testcase   = new testcaseTest();
+$testcase   = new testcaseModelTest();
 $caseIdList = array(array(), array(1, 2), array(3, 4));
 
 r($testcase->batchChangeCaseModuleTest($caseIdList[0], 1))        && p() && e('0'); // 用例参数为空返回 false。

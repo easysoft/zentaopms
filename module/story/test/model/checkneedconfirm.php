@@ -17,7 +17,7 @@ cid=18482
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $storyTable = zenData('story');
@@ -31,7 +31,7 @@ $storyTable->gen(5);
 su('admin');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：单个对象，story版本与数据库版本相同，期望needconfirm为false
 $data1 = new stdclass();

@@ -27,7 +27,7 @@ cid=17883
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $projectTable = zenData('project')->loadYaml('project');
@@ -43,7 +43,7 @@ $projectproductTable->gen(6);
 $projectIdList = range(1, 6);
 $whitelistList = array('admin,user1,user2', 'user2', '');
 
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 r($projectTester->updateWhitelistTest($projectIdList[0], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试敏捷项目添加白名单成员
 r($projectTester->updateWhitelistTest($projectIdList[1], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试瀑布项目添加白名单成员
 r($projectTester->updateWhitelistTest($projectIdList[2], $whitelistList[0])) && p() && e('admin|user1|user2'); // 测试看板项目添加白名单成员

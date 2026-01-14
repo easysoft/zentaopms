@@ -16,7 +16,7 @@ cid=16692
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gogs.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('pipeline');
@@ -29,7 +29,7 @@ $table->gen(10);
 
 su('admin');
 
-$gogsTest = new gogsTest();
+$gogsTest = new gogsModelTest();
 
 r($gogsTest->getApiRootTest(999)) && p() && e('0'); // 步骤1：不存在的服务器ID
 r($gogsTest->getApiRootTest(1)) && p() && e('0'); // 步骤2：非gogs类型的服务器ID（gitlab）

@@ -19,7 +19,7 @@ cid=18379
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -28,7 +28,7 @@ zenData('pipeline')->loadYaml('pipeline')->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 // 5. 测试步骤：必须包含至少5个测试步骤
 r($sonarqubeTest->apiGetReportTest(0, '')) && p() && e('return empty'); // 步骤1：无效sonarqubeID和空projectKey

@@ -18,7 +18,7 @@ cid=16459
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备基础测试数据 - 模拟已安装的插件
 $table = zenData('extension');
@@ -42,7 +42,7 @@ $table->gen(5);
 su('admin');
 
 // 创建测试实例
-$extensionTest = new extensionTest();
+$extensionTest = new extensionModelTest();
 
 // 测试步骤1：测试默认参数行为（无分组）
 r($extensionTest->getExpiringPluginsTest()) && p() && e('0'); // 测试步骤1：无已安装插件时获取即将到期的插件列表

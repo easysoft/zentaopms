@@ -16,13 +16,13 @@ cid=18206
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 用户登录
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试步骤1：测试card类型图表构建
 $cardComponent = new stdclass();

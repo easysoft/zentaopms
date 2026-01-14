@@ -24,7 +24,7 @@ cid=18631
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->product->range(1);
@@ -40,7 +40,7 @@ $story->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 // 创建测试故事对象1：有子故事的父故事
 $parentStory = new stdClass();

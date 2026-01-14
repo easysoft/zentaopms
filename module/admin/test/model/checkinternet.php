@@ -18,7 +18,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 创建测试实例
 global $tester;

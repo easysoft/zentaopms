@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -19,7 +19,7 @@ cid=18842
 
 */
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 r($taskTester->reportConditionTest())     && p() && e('1=1');                                                                                                     // 测试没有session条件
 

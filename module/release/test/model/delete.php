@@ -18,7 +18,7 @@ cid=17985
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据 - 手动插入数据避免system字段问题
 global $tester;
@@ -59,7 +59,7 @@ foreach($releaseData as $release)
 zenData('user')->gen(5);
 su('admin');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 
 r($releaseTester->deleteTest(0)) && p() && e('0'); // 步骤1：测试删除无效ID（0）的发布
 r($releaseTester->deleteTest(999)) && p() && e('0'); // 步骤2：测试删除不存在ID的发布

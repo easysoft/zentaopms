@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -23,7 +23,7 @@ cid=16615
 // 准备测试数据
 zendata('pipeline')->loadYaml('pipeline_apigetsinglebranch', false, 2)->gen(10);
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 // 执行测试
 $branch1 = $gitlab->apiGetSingleBranchTest(1, 2, 'branch1');

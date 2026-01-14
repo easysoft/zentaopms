@@ -20,13 +20,13 @@ cid=19424
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($tutorialTest->getDocLibTest()) && p('id,name,type') && e('2,Test Doc Lib,custom'); // 步骤1：正常调用getDocLib方法

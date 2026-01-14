@@ -19,7 +19,7 @@ cid=17475
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(2);
 
@@ -47,7 +47,7 @@ su('admin');
 $productIdList = array(1, 0);
 $queryIdList   = array(0, 1);
 
-$product = new productTest();
+$product = new productModelTest();
 r($product->buildSearchFormTest($productIdList[0], $queryIdList[1])) && p()                               && e('1');                          // 正确的执行，正确的queryID
 r($config->product->all->search)                                     && p('module')                       && e('product');                    // 构建后的搜索数据
 r($config->product->all->search)                                     && p('fields:name,reviewer,program') && e('产品名称,评审人,所属项目集'); // 构建后的搜索数据

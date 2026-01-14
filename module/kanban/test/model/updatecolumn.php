@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(5);
@@ -37,7 +37,7 @@ $columnIDList = array('1', '2', '3', '4', '5');
 $nameList     = array('测试修改列名1', '测试修改列名2', '测试修改列名3', '');
 $colorList    = array('2b519c', 'e48610', 'd2313d', '2a9f23', '777');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateColumnTest($columnIDList[0], $nameList[0], $colorList[0])) && p('0:field,new,old;1:field,new') && e('name,测试修改列名1,未开始;color,2b519c'); // 测试修改列1信息
 r($kanban->updateColumnTest($columnIDList[1], $nameList[1], $colorList[1])) && p('0:field,new,old;1:field,new') && e('name,测试修改列名2,进行中;color,e48610'); // 测试修改列2信息

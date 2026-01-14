@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ $repoBranch->branch->range('branch3');
 $repoBranch->gen(1);
 zenData('repofiles')->gen(10);
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $gitlabID = 1;
 $giteaID  = 3;

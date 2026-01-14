@@ -18,7 +18,7 @@ cid=16353
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('101-110');
@@ -63,7 +63,7 @@ $projectproduct->gen(5);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->linkStoriesTest(101, 1, 1)) && p() && e('1'); // 测试步骤1：正常的敏捷执行关联需求
 r($executionTest->linkStoriesTest(102, 0, 0)) && p() && e('0'); // 测试步骤2：瀑布执行关联需求（无计划）

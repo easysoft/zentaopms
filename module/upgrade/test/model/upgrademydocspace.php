@@ -53,11 +53,11 @@ cid=19563
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(10);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $beforeUpgrade = $tester->dao->select('*')->from('zt_doclib')->where('type')->eq('mine')->fetchAll('id');
 

@@ -22,14 +22,14 @@ cid=17131
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('metric')->loadYaml('metric_getviewtabledata', false, 2)->gen(5);
 zenData('product')->loadYaml('product_getviewtabledata', false, 2)->gen(3);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 构造测试用的metric对象
 $systemMetric = new stdclass();

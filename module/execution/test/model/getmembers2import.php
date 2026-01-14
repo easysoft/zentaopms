@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getMembers2ImportTest();
@@ -35,7 +35,7 @@ $accountList    = array('test1', 'test2');
 $allAccountList = array('test1', 'user1', 'user2');
 $count          = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getMembers2ImportTest($executionList[0], $accountList, $count[0]))    && p('user1:account,role') && e('user1,研发'); // 正常数据查询
 r($executionTester->getMembers2ImportTest($executionList[0], $allAccountList, $count[0])) && p()                     && e('无数据');     // 无效数据查询
 r($executionTester->getMembers2ImportTest($executionList[0], $accountList, $count[1]))    && p()                     && e('2');          // 正常数据查询统计

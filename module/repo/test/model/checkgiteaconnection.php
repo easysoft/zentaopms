@@ -18,11 +18,11 @@ cid=18032
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->checkGiteaConnectionTest('', '', '', ''))                       && p() && e('0');      // 步骤1：测试参数全为空的情况
 r($repoTest->checkGiteaConnectionTest('gitea', '', '1', 'test'))             && p() && e('0');      // 步骤2：测试name为空的情况

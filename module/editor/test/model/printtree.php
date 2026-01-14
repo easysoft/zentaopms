@@ -34,11 +34,11 @@ cid=16242
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->printTreeAdvancedTest()) && p('isArray,hasStructure,hasValidItems') && e('1,1,1');                    // 测试步骤1：正常文件结构转换
 r($editor->printTreeEmptyTest()) && p('isArray,isEmpty') && e('0,1');                                            // 测试步骤2：空数组输入处理

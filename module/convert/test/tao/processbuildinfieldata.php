@@ -15,11 +15,11 @@ cid=15865
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 测试步骤1：正常输入story模块，包含zentao字段映射
 $module = 'story';

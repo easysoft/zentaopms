@@ -18,7 +18,7 @@ cid=14925
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 清理测试数据
 global $tester;
@@ -54,7 +54,7 @@ zenData('actionrecent')->gen(0);
 su('admin');
 
 // 创建测试实例
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r(count($actionTest->processProjectActionsTest(array())))          && p('count') && e('0');    // 测试步骤1：空数组输入
 r(count($actionTest->processProjectActionsTest('1,2,3,4,5')))      && p('count') && e('5');    // 测试步骤2：包含project类型action的过滤

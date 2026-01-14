@@ -24,13 +24,13 @@ cid=18535
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('storygrade')->loadYaml('storygrade_getgrademenu', false, 2)->gen(6);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getGradeMenuTest('story')) && p('0:text,value') && e('查看,story');
 r($storyTest->getGradeMenuTest('epic')) && p('0:text,value') && e('查看,epic');

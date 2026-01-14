@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=16611
 
 zenData('pipeline')->gen(5);
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetPipelineTest(1, 2, 'master')) && p() && e('0'); // 步骤1：正常参数查询pipeline
 r($gitlabTest->apiGetPipelineTest(999, 2, 'master')) && p() && e('0'); // 步骤2：使用无效gitlabID查询

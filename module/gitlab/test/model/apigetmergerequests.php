@@ -16,7 +16,7 @@ cid=16609
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $pipeline = zenData('pipeline');
@@ -31,7 +31,7 @@ $pipeline->gen(5);
 su('admin');
 
 // 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetMergeRequestsTest(1, 18)) && p() && e('~~'); // 步骤1：使用有效的GitLab ID和项目ID获取合并请求
 $result = $gitlabTest->apiGetMergeRequestsTest(1, 18);

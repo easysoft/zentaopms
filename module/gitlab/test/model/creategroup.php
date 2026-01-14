@@ -16,12 +16,12 @@ cid=16638
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('pipeline')->gen(5);
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $gitlabID = 1;
 $group = new stdclass();

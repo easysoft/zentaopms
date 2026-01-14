@@ -16,7 +16,7 @@ cid=19271
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // zendata数据准备
 $table = zenData('todo');
@@ -36,7 +36,7 @@ $table->gen(10);
 su('admin');
 
 // 创建测试实例
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 测试步骤1：正常获取多个待办记录，使用关联数组形式的todoIdList
 r($todoTest->fetchRowsTest(array(1 => 'test', 2 => 'test', 3 => 'test'))) && p('1:name') && e('待办任务1');

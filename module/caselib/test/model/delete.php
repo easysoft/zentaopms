@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testsuite')->gen(5);
 zenData('user')->gen(1);
@@ -24,7 +24,7 @@ cid=15528
 
 $caselibIdList = array(1, 2, 3, 4, 5);
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 
 r($caselib->deleteTest($caselibIdList[0])) && p('deleted') && e('1');  // 测试删除之后用例库 1 deleted值是否为1
 r($caselib->deleteTest($caselibIdList[1])) && p('deleted') && e('1');  // 测试删除之后用例库 2 deleted值是否为1

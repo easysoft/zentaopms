@@ -28,11 +28,11 @@ cid=19561
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(30);
 zenData('user')->gen(5);
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->upgradeInExecutionModeTest(0)) && p('131:name,status,begin,end,days;132:name,status,begin,end,days;133:name,status,begin,end,days') && e('2020,doing,2020-01-01,2022-12-31,783;2021,doing,2021-01-01,2021-12-31,260;2022,doing,2022-01-01,2022-05-31,106'); //测试生成的项目

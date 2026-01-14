@@ -19,7 +19,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $process = zenData('process');
 $process->id->range('1-15');
@@ -32,7 +32,7 @@ $process->gen(15);
 
 su('admin');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 
 r($stakeholderTester->getProcessTest()) && p('1') && e('过程名称1'); // 测试步骤1：正常情况获取进度键值对
 r(count($stakeholderTester->getProcessTest())) && p() && e('10'); // 测试步骤2：验证返回数据数量

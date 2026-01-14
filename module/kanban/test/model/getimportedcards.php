@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanban')->gen('25');
@@ -42,7 +42,7 @@ $kanbanIDList = array('1', '2', '9', '10', '11', '12', '23', '25');
 $fromType     = array('productplan', 'release', 'execution', 'build');
 $archived     = 1;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getImportedCardsTest($kanbanIDList[0], $fromType[0])) && p('', '|') && e(',1,2,3,4,5,6,7,8,801,802,803,804,805,806,807,808');                  // 查看看板1的普通卡片和productplan卡片
 r($kanban->getImportedCardsTest($kanbanIDList[0], $fromType[1])) && p('', '|') && e(',1,2,3,4,5,6,7,8');                                                  // 查看看板1的普通卡片和release卡片

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('20');
 zenData('story')->gen('20');
@@ -31,7 +31,7 @@ cid=19025
 
 $caseIDList = array(1, 5, 9, 13, 17);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->syncCase2ProjectTest($caseIDList[0])) && p() && e('11,101'); // 测试同步用例 1  到关联项目中
 r($testcase->syncCase2ProjectTest($caseIDList[1])) && p() && e('12,102'); // 测试同步用例 5  到关联项目中

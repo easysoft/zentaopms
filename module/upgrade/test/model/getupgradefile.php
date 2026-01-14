@@ -16,7 +16,7 @@ cid=19530
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(5);
 
@@ -24,7 +24,7 @@ su('admin');
 
 $versions = array('18.1', '18.2', '18.3', '18.4', '18.5');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getUpgradeFileTest($versions[0])) && p() && e('update18.1.sql'); // 测试获取版本 18.1 的开源版版本
 r($upgrade->getUpgradeFileTest($versions[1])) && p() && e('update18.2.sql'); // 测试获取版本 18.2 的开源版版本
 r($upgrade->getUpgradeFileTest($versions[2])) && p() && e('update18.3.sql'); // 测试获取版本 18.3 的开源版版本

@@ -17,10 +17,10 @@ cid=15601
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 创建测试实例
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 // 3. 创建模拟实例对象用于测试
 $instance1 = new stdClass();

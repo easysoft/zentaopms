@@ -15,13 +15,13 @@ cid=16167
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('doc')->loadYaml('template')->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 r($docTester->doUpdateDocTest(1, array('lib' => 2)))          && p('lib')    && e('2');     // 修改文档库ID
 r($docTester->doUpdateDocTest(2, array('module' => 3)))       && p('module') && e('3');     // 修改所属目录
 r($docTester->doUpdateDocTest(3, array('acl' => 'open')))     && p('acl')    && e('open');  // 修改访问控制

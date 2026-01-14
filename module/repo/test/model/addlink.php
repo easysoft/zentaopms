@@ -18,11 +18,11 @@ cid=18028
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 // 测试数据准备
 $singleTaskComment = 'Finish task #1.';

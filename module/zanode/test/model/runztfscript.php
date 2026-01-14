@@ -17,11 +17,11 @@ cid=19843
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 r($zanodeTest->runZTFScriptTest(1, 100, 1001)) && p() && e('自动执行失败,请检查宿主机和执行节点状态'); // 步骤1:HTTP请求失败的情况
 r($zanodeTest->runZTFScriptTest(999, 100, 1002)) && p() && e('Attempt to read property "node" on bool'); // 步骤2:automation配置不存在

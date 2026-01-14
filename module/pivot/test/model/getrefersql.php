@@ -18,11 +18,11 @@ cid=17398
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->getReferSQLTest('user')) && p() && e('SELECT t1.*  FROM zt_user AS t1 ');
 r($pivotTest->getReferSQLTest('task', 'WHERE t1.status = "active"')) && p() && e('SELECT t1.*  FROM zt_task AS t1 WHERE t1.status = "active"');

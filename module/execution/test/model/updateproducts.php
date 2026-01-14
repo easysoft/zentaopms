@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -45,7 +45,7 @@ $productIdList   = array(1, 2, 3);
 $branchIdList    = array(array(1), array(2), array(3));
 $products        = array('products' => $productIdList, 'branch' => $branchIdList);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->updateProductsTest($executionIdList[0], $products)) && p('0:product') && e('1'); // 测试修改敏捷执行关联产品
 r($execution->updateProductsTest($executionIdList[1], $products)) && p('1:product') && e('2'); // 测试修改瀑布执行关联产品
 r($execution->updateProductsTest($executionIdList[2], $products)) && p('2:product') && e('3'); // 测试修改看板执行关联产品

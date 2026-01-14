@@ -16,14 +16,14 @@ cid=16685
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gogs.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->loadYaml('pipeline', false, 2)->gen(7);
 zenData('oauth')->loadYaml('oauth')->gen(1);
 
 su('admin');
 
-$gogsTest = new gogsTest();
+$gogsTest = new gogsModelTest();
 
 r($gogsTest->apiGetMergeRequestsTest(5, 'testuser/testrepo')) && p() && e('0'); // 步骤1：正常的gogsID和项目名称
 r($gogsTest->apiGetMergeRequestsTest(0, 'testuser/testrepo')) && p() && e('0'); // 步骤2：无效的gogsID（0）

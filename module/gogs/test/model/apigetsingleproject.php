@@ -18,7 +18,7 @@ cid=16688
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gogs.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $pipeline = zenData('pipeline');
 $pipeline->id->range('1-5');
@@ -33,7 +33,7 @@ zenData('oauth')->gen(3);
 
 su('admin');
 
-$gogsTest = new gogsTest();
+$gogsTest = new gogsModelTest();
 
 r($gogsTest->apiGetSingleProjectTest(999, 'test/project')) && p() && e('0'); // 测试步骤1：不存在的gogsID
 r($gogsTest->apiGetSingleProjectTest(0, 'test/project')) && p() && e('0'); // 测试步骤2：gogsID为0的边界值

@@ -31,7 +31,7 @@ cid=18005
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $release = zenData('release')->loadYaml('release');
 $release->bugs->range('1-5');
@@ -47,7 +47,7 @@ $types     = array('bug', 'leftBug');
 $bugs[0]   = array(2, 3);
 $bugs[1]   = array();
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->linkBugTest($releaseID[0], $types[0], $bugs[0])) && p()                   && e('0');            // 测试releaseID为0时，关联bug
 r($releaseTester->linkBugTest($releaseID[1], $types[0], $bugs[0])) && p('0:old;0:new', ';') && e('1;1,2,3');      // 测试releaseID为1时，关联bug
 r($releaseTester->linkBugTest($releaseID[2], $types[0], $bugs[0])) && p()                   && e('0');            // 测试releaseID不存在时，关联bug

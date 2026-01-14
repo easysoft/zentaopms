@@ -16,7 +16,7 @@ cid=16300
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -44,7 +44,7 @@ $burn->storyPoint->range('20,18,16,14,12,10,8,6,4,2,0');
 $burn->task->range('0');
 $burn->gen(15);
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->getBurnDataTest(3)) && p('3:01-12:value') && e('75');
 r($executionTest->getBurnDataTest(4)) && p('4:01-12:value') && e('75');

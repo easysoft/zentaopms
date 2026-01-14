@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 zenData('bug')->loadYaml('fetchbuginfo_bug')->gen(5);

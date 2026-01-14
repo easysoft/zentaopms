@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(1);
 
@@ -36,7 +36,7 @@ $resolvedDate = array('0', '-1', '-4', '4', '-4');
 
 $statusList = array('active', 'resolved', 'closed');
 
-$bug = new bugTest();
+$bug = new bugTaoTest();
 r($bug->appendDelayedDaysTest($deadline[0], $resolvedDate[0], $statusList[0])) && p('delay') && e('1'); // 检查deadline在1天前 resolvedDate不存在 状态为未解决的bug是否延期
 r($bug->appendDelayedDaysTest($deadline[0], $resolvedDate[0], $statusList[1])) && p('delay') && e('0'); // 检查deadline在1天前 resolvedDate不存在 状态为已解决的bug是否延期
 r($bug->appendDelayedDaysTest($deadline[0], $resolvedDate[0], $statusList[2])) && p('delay') && e('0'); // 检查deadline在1天前 resolvedDate不存在 状态为已关闭的bug是否延期

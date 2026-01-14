@@ -17,7 +17,7 @@ cid=15030
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 测试场景1:有多个启用模型
 $table = zenData('ai_model');
@@ -34,7 +34,7 @@ $table->gen(5);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->getDefaultLanguageModelTest()) && p('id') && e('1');
 

@@ -17,11 +17,11 @@ cid=18381
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 // 准备测试数据 - 设置错误映射配置
 global $tester;

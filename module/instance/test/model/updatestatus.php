@@ -16,7 +16,7 @@ cid=16824
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $instance = zenData('instance');
@@ -34,7 +34,7 @@ $instance->gen(10);
 su('admin');
 
 // 创建测试实例
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 测试步骤1：正常更新实例状态为running
 r($instanceTest->updateStatusTest(1, 'running')) && p() && e(0);

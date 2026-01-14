@@ -16,7 +16,7 @@ cid=15667
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester, $config;
 
@@ -25,7 +25,7 @@ $config->requestType = 'PATH_INFO';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 测试数据1：普通数组链接
 $menuItem1 = new stdclass();

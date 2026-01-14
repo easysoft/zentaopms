@@ -18,11 +18,11 @@ cid=15498
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // su('admin'); // 跳过用户登录避免数据库错误
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r($buildTest->getRelatedReleasesTest(array(1))) && p() && e('0'); // 步骤1：基本产品ID数组查询
 r($buildTest->getRelatedReleasesTest(1)) && p() && e('0'); // 步骤2：基本产品ID单个查询

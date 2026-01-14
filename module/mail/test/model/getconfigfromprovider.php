@@ -24,13 +24,13 @@ cid=17008
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($mailTest->getConfigFromProviderTest('qq.com', 'test@qq.com')) && p('host') && e('smtp.qq.com'); // 步骤1：测试qq.com邮件服务商配置获取

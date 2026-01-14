@@ -16,7 +16,7 @@ cid=15858
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zendata('user')->loadYaml('user', false, 2)->gen(10);
 zendata('product')->gen(5);
@@ -37,7 +37,7 @@ $fileTable->gen(0);
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 $fileData1 = new stdClass();
 $fileData1->id = 1;

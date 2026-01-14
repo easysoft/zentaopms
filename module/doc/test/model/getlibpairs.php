@@ -35,7 +35,7 @@ cid=16099
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -48,7 +48,7 @@ $extras       = array('', 'withObject');
 $objectIds    = array(0, 1, 11, 101);
 $excludeTypes = array('', 'mine');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibPairsTest($types[0], $extras[0], $objectIds[0], $excludeTypes[0])) && p('6')  && e('自定义文档库6');                      // 获取系统中所有的文档库
 r($docTester->getLibPairsTest($types[0], $extras[1], $objectIds[0], $excludeTypes[0])) && p('21') && e('敏捷项目1 / 迭代6 / 执行文档主库21'); // 获取系统中带对象名字的所有的文档库
 r($docTester->getLibPairsTest($types[0], $extras[0], $objectIds[0], $excludeTypes[1])) && p('8')  && e('自定义文档库8');                      // 获取系统中所有除了我的的文档库

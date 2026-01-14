@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('userview')->gen(0);
 
@@ -81,7 +81,7 @@ cid=18828
 
 */
 su('admin');
-$task = new taskTest();
+$task = new taskModelTest();
 
 r($task->getUserTasksTest('user1', 'assignedTo'))                               && p('20:name') && e('任务20'); // 查看指派给用户1的任务
 r(count($task->getUserTasksTest('user1', 'assignedTo')))                        && p()          && e('10');     // 检查指派给用户1的任务数量

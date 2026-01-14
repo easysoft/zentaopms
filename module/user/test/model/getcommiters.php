@@ -15,12 +15,12 @@ cid=19607
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(30);
 
-$user = new userTest();
+$user = new userModelTest();
 $commiters = $user->getCommitersTest();
 
 r($commiters)        && p('user1')  && e('用户1'); //获取源代码账号为user1的用户真实姓名

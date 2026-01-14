@@ -19,13 +19,13 @@ cid=15683
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（已登录状态进行测试）
 su('admin');
 
 // 3. 创建测试实例
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 4. 测试步骤：必须包含至少5个测试步骤
 r($commonTest->isOpenMethodTest('misc', 'changelog')) && p() && e('1');        // 步骤1：公开方法权限验证

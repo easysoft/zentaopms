@@ -19,7 +19,7 @@ cid=18047
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('pipeline')->gen(5);
@@ -29,7 +29,7 @@ zenData('repo')->loadYaml('repo')->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 5. 执行测试步骤（至少7个）
 r($repoTest->getBranchesTest(1, false, 'scm')) && p() && e('0'); // 步骤1：从SCM获取repo1分支

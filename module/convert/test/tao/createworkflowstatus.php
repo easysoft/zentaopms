@@ -17,7 +17,7 @@ cid=15853
 
 // 1. 导入依赖(路径固定,不可修改)
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 zenData('workflowfield')->gen(0);
@@ -26,7 +26,7 @@ zenData('workflowfield')->gen(0);
 su('admin');
 
 // 4. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 5. 测试步骤
 global $config;

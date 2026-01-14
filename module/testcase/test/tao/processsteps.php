@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
@@ -24,7 +24,7 @@ cid=19051
 
 $caseIDList = array(1, 2, 3, 1001);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 $steps = $testcase->objectModel->fetchStepsByList($caseIDList);
 

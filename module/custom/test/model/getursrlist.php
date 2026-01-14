@@ -26,14 +26,14 @@ cid=15905
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->loadYaml('lang')->gen(5);
 zenData('user')->gen(5);
 
 su('admin');
 
-$customTest = new customTest();
+$customTest = new customModelTest();
 
 r($customTest->getURSRListTest()) && p('1:key,ERName,SRName,URName,system') && e('1,业务需求,软件需求,用户需求,1'); // 测试步骤1：验证第一条数据完整属性
 r($customTest->getURSRListTest()) && p('2:SRName,URName') && e('研发需求,用户需求'); // 测试步骤2：验证第二条数据需求名称

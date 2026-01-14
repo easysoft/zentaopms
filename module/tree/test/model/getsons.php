@@ -21,7 +21,7 @@ cid=19378
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
@@ -31,7 +31,7 @@ $module = array(1, 2, 3, 4, 5, 6);
 $type   = array('task', 'story', 'doc', 'bug', 'case');
 $branch = array(0, 1);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getSonsTest($root[0], $module[0], $type[0], $branch[0])) && p() && e(',6');  // 测试获取root 1 module 1 type task branch 0 的子module
 r($tree->getSonsTest($root[0], $module[1], $type[1], $branch[0])) && p() && e(',7');  // 测试获取root 1 module 2 type story branch 0 的子module

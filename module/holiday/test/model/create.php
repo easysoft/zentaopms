@@ -21,14 +21,14 @@ cid=16738
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->gen(0);
 zenData('user')->gen(1);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 $createHoliday   = array('name' => '测试创建holiday', 'type' => 'holiday');
 $createWorking   = array('name' => '测试创建working', 'type' => 'working');

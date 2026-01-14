@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('casebug')->gen(20);
 
@@ -59,7 +59,7 @@ cid=15363
 $runIDList  = array('0', '2', '6', '10', '1000001');
 $caseIDList = array('0', '2', '6', '10', '1000001');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->getCaseBugsTest($runIDList[0], $caseIDList[1])) && p() && e('测试单转Bug1,测试单转Bug11');     // 测试获取runID为0 caseID为2的bug
 r($bug->getCaseBugsTest($runIDList[0], $caseIDList[2])) && p() && e('SonarQube_Bug2,SonarQube_Bug12'); // 测试获取runID为0 caseID为6的bug
 r($bug->getCaseBugsTest($runIDList[0], $caseIDList[3])) && p() && e('测试单转Bug3,测试单转Bug13');     // 测试获取runID为0 caseID为10的bug

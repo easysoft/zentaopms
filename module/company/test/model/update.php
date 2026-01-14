@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -30,7 +30,7 @@ $changeWebsite  = array('website' => 'www.baidu.com');
 $changeBackyard = array('backyard' => 'https://');
 $changeGuest    = array('guest' => '1');
 
-$company = new companyTest();
+$company = new companyModelTest();
 r($company->updateObject($companyID, $changeName))     && p('name')     && e('修改公司名一');  // 修改公司名称
 r($company->updateObject($companyID, $changePhone))    && p('phone')    && e('18640561601');   // 修改公司电话
 r($company->updateObject($companyID, $changeAddress))  && p('address')  && e('地址信息');      // 修改公司地址

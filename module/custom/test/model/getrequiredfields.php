@@ -16,7 +16,7 @@ cid=15901
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -64,7 +64,7 @@ $complexConfig = new stdclass();
 $complexConfig->batchcreate = new stdclass();
 $complexConfig->batchcreate->requiredFields = 'name,type,pri,estimate,assignedTo,deadline';
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->getRequiredFieldsTest($emptyConfig))     && p()                 && e('0');                   // 测试步骤1：空配置对象
 r($customTester->getRequiredFieldsTest($taskConfig))      && p('create', ';')    && e('name');                // 测试步骤2：单个方法配置
 r($customTester->getRequiredFieldsTest($storyConfig))     && p('edit', ';')      && e('title');               // 测试步骤3：需求配置方法

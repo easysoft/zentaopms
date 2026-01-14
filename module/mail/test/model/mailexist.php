@@ -16,9 +16,9 @@ cid=17014
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 // 测试步骤1：有邮箱用户存在的情况
 $user = zenData('user');

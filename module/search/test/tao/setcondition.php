@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -33,7 +33,7 @@ $fields    = array('module', 'title', 'dept', 'scene', 'id', 'date');
 $values    = array(1, 'test', '0', '$thisMonth', '1,2,3');
 $thisMonth = 1;
 
-$search = new searchTest();
+$search = new searchTaoTest();
 r($search->setConditionTest($fields[0], $operators[0], $values[0])) && p() && e("= '1'");                //测试 module 包含 id 为 1 的条件
 r($search->setConditionTest($fields[1], $operators[0], $values[1])) && p() && e(" LIKE '%test%'");       //测试 title 包含 test 的条件
 r($search->setConditionTest($fields[0], $operators[1], $values[0])) && p() && e(" != '1'");              //测试 module 不包含 id 为 1 的条件

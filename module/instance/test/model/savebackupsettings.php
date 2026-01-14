@@ -17,7 +17,7 @@ cid=16815
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $instance = zenData('instance');
@@ -48,7 +48,7 @@ $cron->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 模拟POST数据设置
 global $_POST;

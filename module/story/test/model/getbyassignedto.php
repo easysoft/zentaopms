@@ -16,7 +16,7 @@ cid=18500
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $productTable = zendata('product');
 $productTable->id->range('1-5');
@@ -47,7 +47,7 @@ $storyTable->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getByAssignedToTest(1, 0, '', 'admin'))) && p() && e('6'); // 步骤1：查询admin用户被分配的story（产品1中有6个admin的story）
 r(count($storyTest->getByAssignedToTest(1, 0, '', 'nonexist'))) && p() && e('0'); // 步骤2：查询不存在用户的story

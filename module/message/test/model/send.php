@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(1);
 zenData('story')->gen(2);
@@ -25,7 +25,7 @@ cid=17058
 
 */
 
-$message = new messageTest();
+$message = new messageModelTest();
 
 $objectType = array('story', 'feedback');
 $objectID   = array(2, 0);

@@ -18,7 +18,7 @@ cid=18404
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $user = zenData('user');
@@ -33,7 +33,7 @@ $user->gen(8);
 su('admin');
 
 // 创建测试实例
-$ssoTest = new ssoTest();
+$ssoTest = new ssoModelTest();
 
 r($ssoTest->getBindUserTest('ranzhi_admin')) && p('account') && e('admin'); // 步骤1：正常查询存在的ranzhi绑定用户
 r($ssoTest->getBindUserTest('')) && p('0') && e('0'); // 步骤2：空字符串参数查询

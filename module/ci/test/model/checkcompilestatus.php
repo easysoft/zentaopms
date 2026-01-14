@@ -20,7 +20,7 @@ cid=15587
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('compile');
 $table->id->range('1-10');
@@ -36,7 +36,7 @@ zenData('mr')->gen(0);
 
 su('admin');
 
-$ci = new ciTest();
+$ci = new ciModelTest();
 
 r($ci->checkCompileStatusTest(0)) && p('1:name;2:status') && e('构建1,created');     // 测试步骤1：不指定compileID检查所有未完成的编译任务
 r($ci->checkCompileStatusTest(1)) && p('status') && e('created');                   // 测试步骤2：指定存在的compileID检查特定编译任务

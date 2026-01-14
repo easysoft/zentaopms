@@ -17,7 +17,7 @@ cid=15078
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_prompt');
 $table->id->range('1-10');
@@ -34,7 +34,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 测试步骤1：正常更新提示信息
 $prompt = new stdClass();

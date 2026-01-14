@@ -13,7 +13,7 @@ cid=19569
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -24,5 +24,5 @@ $project->gen('3');
 
 $projectIdList = array(1, 2);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 r($upgrade->getDuplicateProjectNameTest($projectIdList)) && p('') && e('2,1,'); // 测试重复项目名称的 id 列表

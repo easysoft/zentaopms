@@ -18,7 +18,7 @@ cid=17772
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $project = zenData('project');
@@ -33,7 +33,7 @@ $project->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanTaoTest();
 
 // 5. 测试步骤（至少5个）
 r($programplanTest->getStageCountTest(1)) && p() && e('4'); // 步骤1：正常情况-planID=1有4个子阶段

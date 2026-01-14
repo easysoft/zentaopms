@@ -17,7 +17,7 @@ cid=16654
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('pipeline');
@@ -32,7 +32,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 // 5. 执行测试步骤（必须包含至少5个测试步骤）
 r($gitlabTest->getPairsTest()) && p() && e('array'); // 步骤1：正常获取GitLab pairs，验证返回类型

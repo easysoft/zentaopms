@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('todo')->loadYaml('create')->gen(5);
@@ -51,7 +51,7 @@ $todoWithCycle->cycle    = 1;
 $todoWithCycle->config   = json_encode(array('day' => 1, 'specify' => array('month' => 0, 'day' => 1), 'type' => 'day', 'beforeDays' => 1, 'end' => ''));
 $todoWithCycle->objectID = 0;
 
-$todoTest = new todoTest();
+$todoTest = new todoModelTest();
 r($todoTest->createTest($todoWithoutName))     && p() && e('0');  // 判断创建的待办数据name字段为空，返回结果id为0
 r($todoTest->createTest($todoInvalidObjectID)) && p() && e('0');  // 判断创建的待办数据objectID字段错误，返回结果id为0
 dao::getError();

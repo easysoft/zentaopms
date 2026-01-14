@@ -32,7 +32,7 @@ cid=17352
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('pipeline')->loadYaml('pipeline')->gen(6);
@@ -54,7 +54,7 @@ $emptyAccount   = array('name' => $names[6], 'url' => 'http://gitlab.com', 'toke
 $emptyToken     = array('name' => $names[8], 'url' => 'http://gitlab.com', 'token' => $tokens[0], 'password' => $passwords[0], 'account' => $accounts[1]);
 $emptyPassword  = array('name' => $names[7], 'url' => 'http://gitlab.com', 'token' => $tokens[0], 'password' => $passwords[0], 'account' => $accounts[1]);
 
-$pipelineTest = new pipelineTest();
+$pipelineTest = new pipelineModelTest();
 r($pipelineTest->updateTest($idList[0], $changeName))     && p()                  && e('0');                                                                                              // 测试id为0时，修改名称
 r($pipelineTest->updateTest($idList[1], $changeName))     && p('0:field,old,new') && e('name,gitLab,修改名称1');                                                                          // 测试id为1时，修改名称
 r($pipelineTest->updateTest($idList[1], $changeAccount))  && p('1:field,old,new') && e('account,account,root');                                                                           // 测试id为1时，修改账号

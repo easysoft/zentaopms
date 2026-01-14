@@ -16,7 +16,7 @@ cid=16376
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -56,7 +56,7 @@ $CFD->date->range('20220120 000000:0,20220121 000000:0,20220122 000000:0{3}')->t
 $CFD->name->range('backlog,doing,testing,done,closed');
 $CFD->gen(5);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 r(count($executionTester->updateCFDDataTest(3, '2022-01-22'))) && p() && e('5');  // 测试步骤1：已有日期的情况
 r(count($executionTester->updateCFDDataTest(3, '2099-01-01'))) && p() && e('0');  // 测试步骤2：未来日期的情况

@@ -37,7 +37,7 @@ cid=18660
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('storystage')->gen(0);
@@ -49,7 +49,7 @@ global $tester;
 $storyModel = $tester->loadModel('story');
 r($storyModel->setStageToPlanned(0)) && p() && e('0'); //不传入任何数据。
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 r($storyTest->setStageToPlannedTest(1)) && p('stage') && e('wait');    //传入未关联计划的需求。
 r($storyTest->setStageToPlannedTest(2)) && p('stage') && e('wait');    //传入未关联计划的需求。
 r($storyTest->setStageToPlannedTest(3)) && p('stage') && e('planned'); //传入关联一个计划的需求。

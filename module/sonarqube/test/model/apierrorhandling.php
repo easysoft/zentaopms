@@ -16,11 +16,11 @@ cid=18375
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 r($sonarqubeTest->apiErrorHandlingTest(null)) && p() && e('0');
 

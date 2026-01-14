@@ -18,7 +18,7 @@ cid=18659
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('storystage')->gen(0);
@@ -29,7 +29,7 @@ global $tester;
 $storyModel = $tester->loadModel('story');
 r($storyModel->setStageToClosed(0)) && p() && e('0'); //不传入任何数据。
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 r($storyTest->setStageToClosedTest(1)) && p('stage') && e('closed'); //传入需求，检查需求的阶段。
 
 $story = $storyTest->setStageToClosedTest(2, array(0, 1));

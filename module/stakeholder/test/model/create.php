@@ -53,7 +53,7 @@ cid=18426
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('company')->gen(1);
 zenData('product')->gen(0);
@@ -91,7 +91,7 @@ $programExistUser     = array('objectType' => 'program', 'objectID' => 1, 'from'
 $programCreateUser    = array('objectType' => 'program', 'objectID' => 1, 'from' => $from[2], 'user' => $account[0], 'newUser' => $newUser[1], 'name' => $name[1], 'company' => $company[1]);
 $programCreateCompany = array('objectType' => 'program', 'objectID' => 1, 'from' => $from[2], 'user' => $account[0], 'newUser' => $newUser[1], 'name' => $name[1], 'newCompany' => $newCompany[1], 'companyName' => $companyName[1]);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 
 /* Error condition. */
 r($stakeholderTester->createTest($emptyTeamUser))    && p('user')    && e('『用户』不能为空。');     // 测试创建团队干系人时，不填写用户名

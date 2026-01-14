@@ -17,7 +17,7 @@ cid=17162
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // 使用默认的metric和metriclib数据
@@ -28,7 +28,7 @@ zenData('metriclib')->gen(100);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$metricTest = new metricTest();
+$metricTest = new metricTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 // 测试基本功能，验证方法的异常处理和边界情况

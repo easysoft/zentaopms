@@ -16,7 +16,7 @@ cid=17474
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product', false, 2)->gen(10);
 zenData('story')->loadYaml('story', false, 2)->gen(20);
@@ -27,7 +27,7 @@ zenData('branch')->loadYaml('branch', false, 2)->gen(10);
 
 su('admin');
 
-$productTest = new productTest();
+$productTest = new productModelTest();
 
 r($productTest->buildSearchConfigTest(1, 'story')) && p('fields:title') && e('需求名称'); // 测试步骤1:正常产品story类型
 r($productTest->buildSearchConfigTest(1, 'requirement')) && p('fields:stage') && e('所处阶段'); // 测试步骤2:正常产品requirement类型

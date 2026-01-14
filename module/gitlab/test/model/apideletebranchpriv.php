@@ -16,11 +16,11 @@ cid=16585
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiDeleteBranchPrivTest(0, 1, 'master')) && p() && e('0'); // 步骤1：gitlabID为0
 r($gitlabTest->apiDeleteBranchPrivTest(1, 999, 'master')) && p('message') && e('404 Project Not Found'); // 步骤2：项目不存在

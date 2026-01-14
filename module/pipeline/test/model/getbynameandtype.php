@@ -20,7 +20,7 @@ cid=17345
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -28,7 +28,7 @@ zenData('pipeline')->loadYaml('pipeline')->gen(5);
 $names = array('', 'gitLab', 'test');
 $types = array('', 'gitlab', 'test');
 
-$pipelineTester = new pipelineTest();
+$pipelineTester = new pipelineModelTest();
 r($pipelineTester->getByNameAndTypeTest($names[0], $types[0])) && p()     && e('0'); // 获取名称为空类型为空的流水线ID
 r($pipelineTester->getByNameAndTypeTest($names[0], $types[1])) && p()     && e('0'); // 获取名称为空类型为gitlab的流水线ID
 r($pipelineTester->getByNameAndTypeTest($names[0], $types[2])) && p()     && e('0'); // 获取名称为空类型为test的流水线ID

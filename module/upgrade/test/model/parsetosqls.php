@@ -16,9 +16,9 @@ cid=19539
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $versions = array('18.1', '18.2', '18.3', '18.4', '18.5');
 r($upgrade->parseToSqlsTest($versions[0])) && p() && e('DELETE FROM `zt_config` WHERE '); // 测试将 18.1 的升级 sql 文件转为 sql 语句 获取前30个字符

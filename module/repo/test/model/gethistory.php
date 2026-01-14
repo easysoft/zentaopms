@@ -16,7 +16,7 @@ cid=18064
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 zenData('repohistory')->gen(0);
@@ -36,7 +36,7 @@ foreach($logs as $log)
     $revision ++;
 }
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getHistoryTest(1, $revisions))                               && p('0') && e('2e0dd521b4a29930d5670a2c142a4400d7cffc1a'); // 步骤1：正常查询有效revision列表
 r($repoTest->getHistoryTest(1, array()))                                 && p()    && e('empty');                                    // 步骤2：查询空revision数组

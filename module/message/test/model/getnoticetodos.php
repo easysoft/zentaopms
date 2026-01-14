@@ -18,14 +18,14 @@ cid=17052
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('todo')->loadYaml('todo_getnoticetodos', false, 2)->gen(15);
 zenData('user')->gen(5);
 
 su('admin');
 
-$message = new messageTest();
+$message = new messageModelTest();
 
 r($message->getNoticeTodosTest('admin', 'count')) && p() && e(0);                      // 测试admin用户的待办提醒情况
 r($message->getNoticeTodosTest('user1', 'count')) && p() && e(0);                      // 测试user1用户的待办提醒情况

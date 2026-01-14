@@ -22,7 +22,7 @@ cid=17749
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('project');
 $table->id->range('1-10');
@@ -34,7 +34,7 @@ $table->gen(10);
 
 su('admin');
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 r($programplan->getSiblingsTest(3)) && p('3') && e('4');
 r($programplan->getSiblingsTest([3, 4])) && p('3,4') && e('4,4');

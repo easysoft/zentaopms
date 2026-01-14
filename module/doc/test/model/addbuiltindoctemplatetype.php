@@ -23,14 +23,14 @@ cid=16039
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
 zenData('doclib')->gen(0);
 zenData('module')->gen(0);
-$docTester = new docTest();
+$docTester = new docModelTest();
 
 $checkPlan   = array('root' => 2, 'name' => '计划',               'short' => 'plan',   'path' => ',1,');
 $checkPP     = array('root' => 2, 'name' => '项目计划',           'short' => 'PP',     'path' => ',1,2,');

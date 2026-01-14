@@ -16,13 +16,13 @@ cid=16855
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zendata('job')->loadYaml('job_checkiframe', false, 2)->gen(10);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobTest = new jobTaoTest();
 
 // 测试步骤1：非jenkins引擎但frame为sonarqube的情况
 $job1 = new stdClass();

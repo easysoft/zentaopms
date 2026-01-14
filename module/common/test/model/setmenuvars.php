@@ -17,13 +17,13 @@ cid=15712
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($commonTest->setMenuVarsTest(1)) && p() && e('browse-123'); // 步骤1：正常情况

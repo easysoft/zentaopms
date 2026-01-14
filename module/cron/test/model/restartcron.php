@@ -17,7 +17,7 @@ cid=15886
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $oldWeekDate = date("Y-m-d H:i:s", strtotime("-1 week"));
@@ -29,7 +29,7 @@ $tester->dbh->exec("INSERT IGNORE INTO zt_queue (cron, type, command, status, cr
 su('admin');
 
 // 4. 创建测试实例
-$cronTest = new cronTest();
+$cronTest = new cronModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($cronTest->restartCronTest(2001)) && p('configAfter') && e('2001'); // 步骤1：正常执行ID

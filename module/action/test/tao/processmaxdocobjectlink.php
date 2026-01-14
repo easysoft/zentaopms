@@ -26,13 +26,13 @@ cid=14965
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('doc')->loadYaml('doc_processmaxdocobjectlink', false, 2)->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->processMaxDocObjectLinkTest(1, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('assetlib,practiceView');
 r($actionTest->processMaxDocObjectLinkTest(2, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('assetlib,componentView');

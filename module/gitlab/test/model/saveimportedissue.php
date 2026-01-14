@@ -17,7 +17,7 @@ cid=16665
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->gen(20);
 zenData('bug')->gen(10);
@@ -27,7 +27,7 @@ zenData('relation')->loadYaml('relation')->gen(4);
 
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $gitlabID   = 1;
 $projectID  = 2;

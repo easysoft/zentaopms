@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('treescene')->gen('20');
 zenData('branch')->gen('10');
@@ -25,7 +25,7 @@ $sceneList   = array(array(1,2,3,4,5,6,7,8,9,10), array(11,12,13,14,15,16,17,18,
 $sceneIdList = array(1, 2, 3, 11, 12, 13, 18, 19, 20);
 $tree        = array(array(), array());
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->buildTreeArrayTest($tree[0], $sceneList[0], $sceneIdList[0])) && p() && e('/这个是测试场景1|1');                                                       // 测试构建 tree 0 场景 1-10 场景 id 1 的tree
 r($testcase->buildTreeArrayTest($tree[0], $sceneList[0], $sceneIdList[1])) && p() && e('/这个是测试场景1|1,/这个是测试场景1/这个是测试场景2|2');                    // 测试构建 tree 0 场景 1-10 场景 id 2 的tree

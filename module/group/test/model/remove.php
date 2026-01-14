@@ -19,7 +19,7 @@ cid=16722
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $group = zenData('group');
@@ -41,7 +41,7 @@ $grouppriv->gen(3);
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 r($groupTest->removeTest(1)) && p() && e('1'); // 测试步骤1：删除存在的组ID
 r($groupTest->removeTest(999)) && p() && e('1'); // 测试步骤2：删除不存在的组ID

@@ -19,9 +19,9 @@ cid=15681
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->httpTest('https://example.com/api', null, array(), array(), 'data', 'GET')) && p() && e('GET response data');
 r($commonTest->httpTest('https://example.com/api', array('name' => 'test'), array(), array(), 'data', 'POST')) && p() && e('POST response with data');

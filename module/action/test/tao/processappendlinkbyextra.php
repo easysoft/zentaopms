@@ -16,7 +16,7 @@ cid=14959
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('task')->gen(10);
 zenData('story')->gen(10);
@@ -24,7 +24,7 @@ zenData('bug')->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->processAppendLinkByExtraTest('task:1')) && p('extra') && e('task');
 r($actionTest->processAppendLinkByExtraTest('story:1|comment')) && p('extra') && e('story');

@@ -15,10 +15,10 @@ cid=18384
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 
 r($sonarqube->getCacheFileTest(1, 'unit_test')) && p('') && e('path format correct'); // 测试步骤1：正常情况下获取缓存文件路径
 r($sonarqube->getCacheFileTest(2, 'project_key')) && p('') && e('path format correct'); // 测试步骤2：使用不同sonarqubeID获取缓存文件

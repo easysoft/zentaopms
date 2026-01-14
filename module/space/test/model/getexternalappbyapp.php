@@ -40,14 +40,14 @@ cid=18395
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
 
 $domains = array('', 'gitlabdev', 'sonardev', 'giteadev', 'gogsdev', 'jenkinsdev', 'testdev');
 
-$spaceTester = new spaceTest();
+$spaceTester = new spaceModelTest();
 r($spaceTester->getExternalAppByAppTest($domains[0])) && p('type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取域名为空的外部应用信息
 r($spaceTester->getExternalAppByAppTest($domains[1])) && p('type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取域名为gitlabdev的外部应用信息
 r($spaceTester->getExternalAppByAppTest($domains[2])) && p('type,name,url,account') && e('sonarqube,SonarQube,https://sonardev.qc.oop.cc/,sonar'); // 获取域名为sonardev的外部应用信息

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(100);
 zenData('product')->gen(100);
@@ -33,7 +33,7 @@ $skipProductIdList   = array(array(), array(2, 4));
 $skipExecutionIdList = array(array(), array(11, 13));
 $appendBugID         = array(array(), array(2, 4));
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->getUserBugPairsTest($accountIDList[0], $appendProduct[0], $limit[0], $skipProductIdList[0], $skipExecutionIdList[0], $appendBugID[0])) && p() && e('30'); // 测试获取用户admin 的bug
 r($bug->getUserBugPairsTest($accountIDList[0], $appendProduct[1], $limit[0], $skipProductIdList[0], $skipExecutionIdList[0], $appendBugID[0])) && p() && e('30'); // 测试获取用户admin 追加产品名称 的bug
 r($bug->getUserBugPairsTest($accountIDList[0], $appendProduct[0], $limit[1], $skipProductIdList[0], $skipExecutionIdList[0], $appendBugID[0])) && p() && e('10'); // 测试获取用户admin 限制数量10 的bug

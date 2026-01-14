@@ -60,7 +60,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -102,7 +102,7 @@ $assetlibTable->gen(5);
 
 $editionList = array('open', 'ipd', 'max');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 $openFeatures = $customTester->computeFeaturesTest($editionList[0]);
 $ipdFeatures  = $customTester->computeFeaturesTest($editionList[1]);
 $maxFeatures  = $customTester->computeFeaturesTest($editionList[2]);

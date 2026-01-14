@@ -18,13 +18,13 @@ cid=16748
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->loadYaml('holiday')->gen(10);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 r($holiday->isWorkingDayTest('2023-01-28')) && p() && e('It is a working day');     // 测试工作日期间的日期（春节补班）
 r($holiday->isWorkingDayTest('2023-04-23')) && p() && e('It is a working day');     // 测试工作日期间的日期（劳动节补班）

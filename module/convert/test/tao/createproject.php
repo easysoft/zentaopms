@@ -30,11 +30,11 @@ cid=15842
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 测试步骤1:正常情况,完整的项目数据,无团队成员
 $data1 = new stdclass();

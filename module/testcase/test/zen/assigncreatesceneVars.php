@@ -17,7 +17,7 @@ cid=19062
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备
 $productTable = zenData('product');
@@ -56,7 +56,7 @@ $sceneTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseZenTest();
 
 // 5. 测试步骤
 r($testcaseTest->assignCreateSceneVarsTest(1, '', 1)) && p('product:name') && e('产品1'); // 步骤1：正常产品ID，空分支，指定模块

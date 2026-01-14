@@ -17,10 +17,10 @@ cid=15682
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 创建测试实例
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 3. 测试步骤
 r($commonTest->initAuthorizeTest('', false)) && p('result') && e('0'); // 步骤1：无用户登录情况

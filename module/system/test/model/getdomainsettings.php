@@ -18,10 +18,10 @@ cid=18734
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/system.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
-$systemTest = new systemTest();
+$systemTest = new systemModelTest();
 
 // 测试步骤1：正常配置情况下验证https属性
 $configData = zenData('config');

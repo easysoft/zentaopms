@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-6');
@@ -37,7 +37,7 @@ cid=16297
 
 */
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 $executionTester->executionModel->app->user->admin = true;
 
 $executions = $executionTester->generateRowTest();

@@ -20,7 +20,7 @@ cid=19744
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $host = zenData('host');
 $host->id->range('1-3');
@@ -40,7 +40,7 @@ $tester->dao->update(TABLE_ZAHOST)->set('heartbeat')->eq(null)->where('id')->eq(
 
 su('admin');
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 
 r($zahost->getByIDTest(1)) && p('hostID,name,type,status') && e('1,宿主机1,zahost,offline');
 r($zahost->getByIDTest(999)) && p() && e('0');

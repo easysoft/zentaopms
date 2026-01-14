@@ -18,7 +18,7 @@ cid=16348
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备用户数据
 zenData('user')->gen(5);
@@ -84,7 +84,7 @@ $related->branch->range('0-1');
 $related->gen(5);
 
 // 创建测试实例
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 r($executionTester->getTreeTest(3))   && p('count')        && e('1');     // 测试步骤1：正常执行ID获取树形结构
 r($executionTester->getTreeTest(0))   && p()               && e('false');  // 测试步骤2：无效执行ID(0)获取树形结构

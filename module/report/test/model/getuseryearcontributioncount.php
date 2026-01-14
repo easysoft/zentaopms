@@ -19,7 +19,7 @@ cid=18174
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $actionTable = zenData('action');
 $actionTable->objectType->range('task{25},story{25},bug{25}');
@@ -38,7 +38,7 @@ su('admin');
 $currentYear = date('Y');
 $lastYear    = (string)((int)$currentYear - 1);
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getUserYearContributionCountTest(array('admin'), $currentYear)) && p() && e('25'); // 测试获取admin用户当前年份的贡献数
 r($report->getUserYearContributionCountTest(array('dev17'), $currentYear)) && p() && e('25'); // 测试获取dev17用户当前年份的贡献数

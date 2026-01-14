@@ -16,11 +16,11 @@ cid=15768
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 r($convertTest->createTmpTable4JiraTest()) && p('id') && e('int(8)');
 r($convertTest->createTmpTable4JiraTest()) && p('AType') && e('char(30)');

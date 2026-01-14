@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('projectcase')->gen(10);
@@ -34,7 +34,7 @@ $paramID     = array(0, 1);
 $query       = array("`product` = 'all' and `branch` = 'all'", "`title` like '%1%'");
 $orderBy     = array('id_desc', 'id_asc');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->getExecutionCasesBySearchTest($executionID[0], $productID[0], $branchID[0], $paramID[0], $query[0], $orderBy[0])) && p() && e('4;3;2;1'); // 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 倒序排序的用例
 r($testcase->getExecutionCasesBySearchTest($executionID[0], $productID[0], $branchID[0], $paramID[0], $query[0], $orderBy[1])) && p() && e('1;2;3;4'); // 测试获取执行 101 产品 0 分支 all paramID 0 query 查所有 id 正序排序的用例

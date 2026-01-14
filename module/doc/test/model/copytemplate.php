@@ -25,7 +25,7 @@ cid=16056
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $scope = zenData('doclib');
 $scope->id->range('1-10');
@@ -49,7 +49,7 @@ zenData('doccontent')->gen(5);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->copyTemplateTest(array(1))) && p('all:0;html:0') && e('6,6');   // 测试复制文档模板1
 r($docTester->copyTemplateTest(array(2))) && p('all:0;html:0') && e('7,7');   // 测试复制文档模板2
 r($docTester->copyTemplateTest(array(3))) && p('all:0;wiki:0') && e('8,8');   // 测试复制文档模板3

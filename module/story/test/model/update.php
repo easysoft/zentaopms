@@ -19,7 +19,7 @@ cid=18593
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->loadYaml('story')->gen(2);
@@ -32,7 +32,7 @@ $app->rawModule = 'story';
 $params1 = array('title' => '编辑后的名称1', 'pri' => 1, 'sourceNote' => '来源备注1', 'estimate' => 1, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '');
 $params2 = array('title' => '编辑后的名称2', 'pri' => 2, 'sourceNote' => '来源备注2', 'estimate' => 2, 'oldDocs' => array(), 'docVersions' => array(), 'docs' => null, 'linkStories' => '');
 
-$story   = new storyTest();
+$story   = new storyModelTest();
 $result1 = $story->updateTest(1, $params1);
 $result2 = $story->updateTest(2, $params2);
 

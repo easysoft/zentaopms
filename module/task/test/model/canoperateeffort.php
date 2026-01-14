@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -49,7 +49,7 @@ $task->assignedTo = 'admin';
 global $app;
 $app->user->admin = false;
 
-$taskTest = new taskTest();
+$taskTest = new taskModelTest();
 r($taskTest->canOperateEffort($task)) && p() && e('1');  //判断非多人任务
 
 $task->mode = 'linear';

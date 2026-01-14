@@ -16,11 +16,11 @@ cid=17357
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 准备测试数据1：空数据对象
 $emptyData = new stdClass();

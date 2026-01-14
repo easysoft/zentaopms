@@ -31,7 +31,7 @@ cid=16658
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('relation');
 $table->id->range('1-15');
@@ -49,7 +49,7 @@ $table->gen(15);
 
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 r($gitlab->getRelationByObjectTest('task', 1))    && p('issueID,gitlabID,projectID') && e('100,1,10');  // 测试步骤1：获取存在的任务关联记录
 r($gitlab->getRelationByObjectTest('bug', 6))     && p('issueID,gitlabID,projectID') && e('105,1,20');  // 测试步骤2：获取存在的bug关联记录

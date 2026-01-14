@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -30,7 +30,7 @@ zenData('config')->gen(0);
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 测试获取不存在的ZAI设置 */
 r($zai->getSettingTest()) && p() && e('0'); // 测试获取不存在的ZAI设置

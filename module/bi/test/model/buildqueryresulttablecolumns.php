@@ -41,9 +41,9 @@ class MockBiTest {
 // 尝试正常初始化，如果失败则使用模拟版本
 try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/model.class.php';
     su('admin');
-    $biTest = new biTest();
+    $biTest = new biModelTest();
 } catch (Exception $e) {
     $biTest = new MockBiTest();
     // 如果框架加载失败，定义测试框架函数

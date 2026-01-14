@@ -24,7 +24,7 @@ cid=18067
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(6);
@@ -36,7 +36,7 @@ $table->gen(3);
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->getLatestCommitTest(1)) && p('id,revision') && e('1,c808480afe22d3a55d94e91c59a8f3170212ade0');
 r($repo->getLatestCommitTest(3)) && p('id,commit') && e('2,2');

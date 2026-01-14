@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -18,7 +18,7 @@ cid=15193
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 // 测试步骤1：测试正常过滤器替换变量
 $sql1 = "SELECT * FROM zt_user WHERE account = \$username AND status = \$status";

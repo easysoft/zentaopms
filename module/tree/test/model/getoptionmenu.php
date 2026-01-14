@@ -17,7 +17,7 @@ cid=19372
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(50);
@@ -26,7 +26,7 @@ zenData('module')->loadYaml('module')->gen(100);
 
 $root = array(1, 2, 41, 42);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getOptionMenuTest(1))         && p(0) && e('/');      // 测试获取产品1 type story 的模块列表
 r($tree->getOptionMenuTest(1))         && p(2) && e('/模块2'); // 测试获取产品1 type story 的模块列表

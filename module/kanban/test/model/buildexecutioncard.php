@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(10);
@@ -36,7 +36,7 @@ $cardIdList   = array(1, 2, 3, 4, 5);
 $columnIdList = array(1, 2, 3, 4, 5);
 $laneType     = array('story', 'bug', 'task');
 
-$kanbanTester = new kanbanTest();
+$kanbanTester = new kanbanModelTest();
 
 r($kanbanTester->buildExecutionCardTest($cardIdList[0], $columnIdList[0], $laneType[0], ''))     && p('id,title') && e('1,~~');         // 构造看板卡片，查看id和title
 r($kanbanTester->buildExecutionCardTest($cardIdList[1], $columnIdList[1], $laneType[1], '测试')) && p('id,title') && e('0,0');          // 构造看板卡片，查看id和title

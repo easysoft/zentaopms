@@ -19,7 +19,7 @@ cid=18094
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('repo')->loadYaml('repo_savecommit', false, 2)->gen(10);
@@ -31,7 +31,7 @@ zenData('repobranch')->gen(0);  // 清空分支记录
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：正常保存Git仓库提交数据
 r($repoTest->saveCommitWithMockDataTest(1, 'Git', 1)) && p() && e('3'); // 步骤1：正常Git提交保存

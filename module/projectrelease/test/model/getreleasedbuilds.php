@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('release')->gen(20);
 zenData('user')->gen(1);
@@ -28,7 +28,7 @@ cid=17971
 
 $projectID = array(131, 11, 12, 0, 1000);
 
-$projectrelease = new projectreleaseTest();
+$projectrelease = new projectreleaseModelTest();
 
 r($projectrelease->getReleasedBuildsTest($projectID[0])) && p() && e('1,0,2,3,4,5,6,7'); // 测试获取项目 131 的已经发布的版本
 r($projectrelease->getReleasedBuildsTest($projectID[1])) && p() && e('1,0,3');           // 测试获取项目 11 的已经发布的版本

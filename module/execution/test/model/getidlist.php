@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getIdListTest();
@@ -49,7 +49,7 @@ $execution->gen(10);
 $projectIDList = array(2, 3, 4);
 $count         = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getIdListTest($projectIDList[0],$count[0])) && p('5') && e('5'); // 敏捷项目下执行id查询
 r($executionTester->getIdListTest($projectIDList[1],$count[0])) && p('7') && e('7'); // 瀑布项目下执行id查询
 r($executionTester->getIdListTest($projectIDList[2],$count[0])) && p('9') && e('9'); // 看板项目下执行id查询

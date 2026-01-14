@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('program')->gen(30);
@@ -19,7 +19,7 @@ $parentIdList  = array(0, 0, 1);
 $oldPathList   = array(',0,', ',1,', ',2,');
 $oldGradeList  = array(0, 1, 2);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 r($programTester->processNodeTest($programIdList[0], $parentIdList[0], $oldPathList[0], $oldGradeList[0])) && p('old,new') && e('0,0'); // 测试空数据
 r($programTester->processNodeTest($programIdList[1], $parentIdList[1], $oldPathList[0], $oldGradeList[1])) && p('old,new') && e('0,0'); // 测试给定错误路径更新项目集1下所有子项的层级

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('treescene')->gen('20');
 zenData('user')->gen('1');
@@ -35,7 +35,7 @@ $scenes = $tester->dao->update(TABLE_SCENE)->set("path= replace(`path`,',0,', ',
 
 $sceneIdList = array(1, 11, 12, 13, 18, 19, 20);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getAllChildIdTest($sceneIdList[0])) && p() && e('1,2');            // 测试获取场景 1 所有的子场景 id
 r($testcase->getAllChildIdTest($sceneIdList[1])) && p() && e('11,12,13,14,15'); // 测试获取场景 11 所有的子场景 id

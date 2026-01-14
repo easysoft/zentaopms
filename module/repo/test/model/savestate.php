@@ -16,7 +16,7 @@ cid=18101
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 
@@ -28,7 +28,7 @@ $projectProduct->gen(4);
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->saveStateTest(2)) && p() && e('2'); // 步骤1：正常设置有效的代码库ID
 r($repo->saveStateTest(10001)) && p() && e('1'); // 步骤2：设置无效的代码库ID

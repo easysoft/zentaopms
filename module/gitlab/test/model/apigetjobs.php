@@ -18,13 +18,13 @@ cid=16607
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetJobsTest(1, 2, 8)) && p('0:stage') && e('deploy');                   // 步骤1：正常查询pipeline jobs
 r($gitlabTest->apiGetJobsTest(999, 2, 8)) && p() && e('0');                               // 步骤2：不存在的GitLab ID

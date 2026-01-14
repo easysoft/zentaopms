@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ $count    = array(0, 1);
 $type     = array('noweekend', 'week');
 $interval = array(1, 7);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getDateListTest($start[0], $end[0], $type[0] ,$count[0]))               && p('0:0') && e('01/03/2022'); // 去除工作日日期列表
 r($execution->getDateListTest($start[0], $end[0], $type[0] ,$count[1]))               && p()      && e('5');          // 去除工作日日期列表统计
 r($execution->getDateListTest($start[0], $end[0], $type[1] ,$count[0]))               && p('0:0') && e('01/01/2022'); // 未去除工作日日期列表

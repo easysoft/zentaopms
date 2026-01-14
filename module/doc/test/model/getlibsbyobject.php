@@ -40,7 +40,7 @@ cid=16101
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -52,7 +52,7 @@ $typeList     = array('mine', 'project', 'execution', 'product', 'custom');
 $objectIdList = array(0, 11, 101, 1, 6);
 $appendLibs   = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibsByObjectTest($typeList[0], $objectIdList[4], $appendLibs[0])) && p('11:type,name') && e('mine,我的文档库11');        // 获取我的文档库
 r($docTester->getLibsByObjectTest($typeList[1], $objectIdList[1], $appendLibs[0])) && p('1:type,name')  && e('api,项目接口库1');          // 获取项目文档库
 r($docTester->getLibsByObjectTest($typeList[2], $objectIdList[2], $appendLibs[0])) && p('20:type,name') && e('execution,执行文档主库20'); // 获取执行文档库

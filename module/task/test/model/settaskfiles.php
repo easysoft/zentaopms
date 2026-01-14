@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $task = zenData('task');
 $task->id->range('1-6');
@@ -31,7 +31,7 @@ cid=18843
 
 $taskIdList = range(1, 5);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 $emptyData         = $taskTester->setTaskFilesTest(array());
 $multipleTaskData1 = $taskTester->setTaskFilesTest(array(5));
 $multipleTaskData2 = $taskTester->setTaskFilesTest($taskIdList);

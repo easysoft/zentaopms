@@ -17,7 +17,7 @@ cid=18243
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // 暂时移除zenData数据准备以避免输出干扰
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 5. 必须包含至少5个测试步骤
 r($screenTest->getLineChartOptionTest('normal_component_chart_filters')) && p() && e(1); // 步骤1：正常情况

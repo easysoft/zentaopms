@@ -18,7 +18,7 @@ cid=17392
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 global $tester;
@@ -41,7 +41,7 @@ foreach($testData as $data)
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->getMaxVersionByIDListTest(array(1, 2))) && p('1,2') && e('2.1,2.9');
 r($pivotTest->getMaxVersionByIDListTest('1')) && p('1') && e('2.1');

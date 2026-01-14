@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('program')->gen(20);
@@ -52,7 +52,7 @@ $projectIdList      = array(11, 60, 100);
 $productIdList      = array(0, 1, 2, 3);
 $otherProductIdList = array('4', '5', '6', '7');
 
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 $noLinkProduct[0] = $projectTester->updateProductsTest($projectIdList[0]);
 $noLinkProduct[1] = $projectTester->updateProductsTest($projectIdList[1]);
 $noLinkProduct[2] = $projectTester->updateProductsTest($projectIdList[2]);

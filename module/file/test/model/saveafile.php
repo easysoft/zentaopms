@@ -16,14 +16,14 @@ cid=16525
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $file = zenData('file');
 $file->id->range('1-100');
 $file->gen(5);
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 $validFile = array(
     'pathname' => '202509/test_valid_file.txt',

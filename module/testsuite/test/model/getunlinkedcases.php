@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('suitecase')->gen(0);
@@ -36,7 +36,7 @@ cid=19147
 $suiteID = array(1, 2);
 $param = array(0, 1);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->getUnlinkedCasesTest($suiteID[0], 'all',      $param[0])) && p('2:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为1,param值为0
 r($testsuite->getUnlinkedCasesTest($suiteID[1], 'all',      $param[0])) && p('2:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为2,param值为0

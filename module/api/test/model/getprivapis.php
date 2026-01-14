@@ -16,7 +16,7 @@ cid=15111
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $doclib = zenData('doclib');
 $doclib->id->range('1-10');
@@ -35,7 +35,7 @@ $api->gen(20);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r(count($apiTest->getPrivApisTest())) && p() && e('15');
 r(count($apiTest->getPrivApisTest('all'))) && p() && e('20');

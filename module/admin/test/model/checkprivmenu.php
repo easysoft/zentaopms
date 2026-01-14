@@ -18,11 +18,11 @@ cid=14976
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($adminTest->checkPrivMenuTest()) && p('hasMenuList') && e('1'); // 步骤1：检查是否有菜单列表

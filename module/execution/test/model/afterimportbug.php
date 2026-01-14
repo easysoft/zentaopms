@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $task = zenData('task');
 $task->id->range('1-10');
@@ -41,7 +41,7 @@ cid=16260
 $taskIdList = array(1, 2, 3, 4, 5);
 $bugIdList  = array(1, 2, 3, 4, 5);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->afterImportBugTest($taskIdList[0], $bugIdList[0])) && p() && e('1'); // 测试导入Bug1后的数据处理
 r($executionTester->afterImportBugTest($taskIdList[1], $bugIdList[1])) && p() && e('1'); // 测试导入Bug2后的数据处理
 r($executionTester->afterImportBugTest($taskIdList[2], $bugIdList[2])) && p() && e('1'); // 测试导入Bug3后的数据处理

@@ -24,11 +24,11 @@ cid=15953
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 // 测试步骤1：正常获取from和join表的别名
 $statement1 = new stdclass();

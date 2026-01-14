@@ -24,14 +24,14 @@ cid=18392
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('space')->gen(0);
 
 $accounts = array('', 'user1', 'test');
 
-$spaceTester = new spaceTest();
+$spaceTester = new spaceModelTest();
 r($spaceTester->createDefaultSpaceTest($accounts[0])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,admin,1'); // 测试传入空用户名创建默认空间
 r($spaceTester->createDefaultSpaceTest($accounts[1])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,user1,1'); // 测试传入已存在的用户名创建默认空间
 r($spaceTester->createDefaultSpaceTest($accounts[2])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,test,1'); // 测试传入不存在的用户名创建默认空间

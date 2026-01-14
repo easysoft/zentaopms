@@ -31,11 +31,11 @@ cid=18296
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$searchTest = new searchModelTest();
 
 r($searchTest->convertQueryFormTest(array('field1' => 'id', 'andOr1' => 'and', 'operator1' => '=', 'value1' => '1'))) && p('field1,andOr1') && e('id,and');
 r($searchTest->convertQueryFormTest(array(array('field' => 'id', 'andOr' => 'and', 'operator' => '=', 'value' => '1')))) && p('field1,andOr1,operator1,value1') && e('id,and,=,1');

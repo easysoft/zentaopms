@@ -41,11 +41,11 @@ cid=16232
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->getAPILinkTest('/module/user/model.php/getById', 'extendModel')) && p('hasDebug,hasApiModule,actionMatch,filePathEncoded') && e('1,1,1,1');
 r($editor->getAPILinkTest('/module/task/control.php/create', 'extendControl')) && p('hasDebug,hasAction,hasApiModule,isValidLink') && e('1,1,1,1');

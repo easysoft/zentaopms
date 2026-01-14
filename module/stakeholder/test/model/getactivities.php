@@ -18,7 +18,7 @@ cid=18430
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备正常活动数据
 $activity = zenData('activity');
@@ -31,7 +31,7 @@ $activity->gen(20);
 
 su('admin');
 
-$stakeholderTest = new stakeholderTest();
+$stakeholderTest = new stakeholderModelTest();
 
 r($stakeholderTest->getActivitiesTest()) && p('1') && e('活动名称1'); // 步骤1：获取正常活动数据的键值对
 r(count($stakeholderTest->getActivitiesTest())) && p() && e('20'); // 步骤2：验证返回数据的数量

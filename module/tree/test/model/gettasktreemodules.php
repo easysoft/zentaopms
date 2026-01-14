@@ -18,7 +18,7 @@ cid=19385
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $project = zenData('project');
@@ -68,7 +68,7 @@ $executionID = array(1, 2, 3, 4);
 $parent      = array(false, true);
 $linkObject  = array('story', 'case', 'bug', '');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getTaskTreeModulesTest($executionID[0], $parent[0], $linkObject[0])) && p() && e('1,11,31'); // 测试获取 execution 1 parent false story 的树
 r($tree->getTaskTreeModulesTest($executionID[1], $parent[1], $linkObject[0])) && p() && e('2,12,32'); // 测试获取 execution 2 parent true story 的树

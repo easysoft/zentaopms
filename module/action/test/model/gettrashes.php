@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(20);
@@ -53,7 +53,7 @@ $typeList       = array('all', 'hidden');
 $orderBy        = array('id_desc', 'id_asc');
 $pager          = null;
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getTrashesTest($objectTypeList[0], $typeList[0], $orderBy[0], $pager)) && p('0:objectType,objectID;1:objectType,objectID')                       && e('testreport,1;caselib,1');                     // 查询objectType all type all id desc排序的回收站信息
 r($action->getTrashesTest($objectTypeList[0], $typeList[0], $orderBy[1], $pager)) && p('0:objectType,objectID,objectName;1:objectType,objectID,objectName') && e('product,1,正常产品1;story,1,用户需求1');      // 查询objectType all type all id desc排序的回收站信息

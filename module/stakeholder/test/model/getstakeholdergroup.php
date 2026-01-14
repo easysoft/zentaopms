@@ -13,7 +13,7 @@ cid=18440
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
 zenData('user')->gen(5);
@@ -22,7 +22,7 @@ $objectIds[0] = array();
 $objectIds[1] = array(1, 11);
 $objectIds[2] = range(16, 20);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getStakeholderGroupTest($objectIds[0])) && p()          && e('0');     // 测试传入空的对象ID列表
 r($stakeholderTester->getStakeholderGroupTest($objectIds[1])) && p('1:admin') && e('admin'); // 测试传入对象ID列表
 r($stakeholderTester->getStakeholderGroupTest($objectIds[2])) && p()          && e('0');     // 测试传入不存在的对象ID列表

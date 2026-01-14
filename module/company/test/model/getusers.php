@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('company')->gen(1);
@@ -46,7 +46,7 @@ $queryID    = array('0', '3');
 $deptID     = array('0', '1');
 $sort       = array('realname_asc', 'account_desc');
 
-$company = new companyTest();
+$company = new companyModelTest();
 r($company->getUsersTest($count[0], $browseType[0], $type[0], $queryID[0], $deptID[0], $sort[0])) && p('0:account,realname')      && e('admin,admin');          // 查询内部人员
 r($company->getUsersTest($count[1], $browseType[0], $type[0], $queryID[0], $deptID[0], $sort[0])) && p()                          && e('999');                  // 查询内部人员统计
 r($company->getUsersTest($count[0], $browseType[1], $type[0], $queryID[0], $deptID[0], $sort[0])) && p('0:account,realname')      && e('outside1,外用户1');     // 查询外部人员

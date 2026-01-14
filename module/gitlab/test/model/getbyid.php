@@ -16,7 +16,7 @@ cid=16649
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('pipeline');
 $table->id->range('1-5');
@@ -29,7 +29,7 @@ $table->gen(5);
 
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 r($gitlab->getByIdTest(1)) && p('id') && e('1');          // 测试步骤1：正常获取存在的GitLab配置
 r($gitlab->getByIdTest(0)) && p() && e('0');              // 测试步骤2：使用ID为0的边界值测试

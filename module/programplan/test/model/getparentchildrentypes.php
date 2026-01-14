@@ -22,7 +22,7 @@ cid=17746
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $programplan = zenData('project');
@@ -34,7 +34,7 @@ $programplan->gen(10);
 
 $parentIDList = array(1, 2, 3, 4);
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 r($programplan->getParentChildrenTypesTest(0))                       && p()         && e('1');      // 查找父ID为 0 未删除的阶段类型
 r($programplan->getParentChildrenTypesTest($parentIDList[0]))        && p('stage')  && e('stage');  // 查找父ID为 1 未删除的阶段类型 stage

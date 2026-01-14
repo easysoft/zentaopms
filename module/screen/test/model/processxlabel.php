@@ -19,7 +19,7 @@ cid=18279
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('user')->gen(5);
@@ -29,7 +29,7 @@ zenData('product')->gen(3);
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->processXLabelTest(array('2023-11-03', '2023-11-07', '2023-11-13'), 'date', 'bug', 'date')) && p('2023-11-03,2023-11-07,2023-11-13') && e('2023-11-03,2023-11-07,2023-11-13'); // 步骤1：日期类型标签处理
 r($screenTest->processXLabelTest(array('admin', 'user1'), 'user', '', '')) && p('admin') && e('A:admin'); // 步骤2：用户类型标签处理

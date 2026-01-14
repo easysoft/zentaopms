@@ -29,13 +29,13 @@ cid=19704
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('log')->gen(0);
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 $webhook1 = new stdclass();
 $webhook1->id          = 1;

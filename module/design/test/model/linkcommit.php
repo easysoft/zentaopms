@@ -18,7 +18,7 @@ cid=15995
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('file')->gen(0);
 zenData('repo')->loadYaml('repo')->gen(1);
@@ -33,7 +33,7 @@ $revisions[0] = array();
 $revisions[1] = array(1, 2, 3);
 $revisions[2] = array(5, 6, 7, 8);
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->linkCommitTest($designs[0], $repos[0], $revisions[0])) && p() && e('0');      // 测试空数据
 r($designTester->linkCommitTest($designs[0], $repos[1], $revisions[1])) && p() && e('0');      // 测试designID为空的情况
 r($designTester->linkCommitTest($designs[1], $repos[0], $revisions[1])) && p() && e('0');      // 测试repoID为空的情况

@@ -17,7 +17,7 @@ cid=19333
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备 - 使用简单的数据生成方式
 $file = zenData('file');
@@ -39,7 +39,7 @@ $file->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$transferTest = new transferTest();
+$transferTest = new transferTaoTest();
 
 // 5. 执行测试步骤
 r(is_array($transferTest->getFileGroupsTest('bug', array(2)))) && p() && e('1'); // 步骤1：获取bug模块指定ID列表的附件分组

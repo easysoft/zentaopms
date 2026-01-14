@@ -16,7 +16,7 @@ cid=16935
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 数据准备
 zenData('user')->gen(5);
@@ -24,7 +24,7 @@ zenData('kanbanspace')->loadYaml('kanbanspace')->gen(5);
 zenData('kanban')->loadYaml('kanban')->gen(5);
 
 // 创建测试实例
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 // 测试步骤1：管理员用户查看所有看板数量
 su('admin');

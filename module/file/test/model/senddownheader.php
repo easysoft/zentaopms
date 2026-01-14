@@ -18,11 +18,11 @@ cid=16531
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 // 测试步骤1：测试内容类型下载正常文件名
 r($fileTest->sendDownHeaderTest('document.pdf', 'pdf', 'test content', 'content')) && p() && e('test content');

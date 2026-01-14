@@ -16,9 +16,9 @@ cid=15606
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->certInfoTest('')) && p() && e('0');                               // 步骤1：空证书名称查询
 r($cneTest->certInfoTest('invalid-cert-name')) && p() && e('0');             // 步骤2：无效证书名称查询

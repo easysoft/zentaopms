@@ -15,7 +15,7 @@ cid=16724
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -31,7 +31,7 @@ global $app;
 $app->rawModule = 'group';
 $app->rawMethod = 'updatePrivByGroup';
 
-$group = new groupTest();
+$group = new groupModelTest();
 $actions = array('my' => array('index', 'work'));
 
 r($group->updatePrivByGroupTest(1, 'my', '', $actions)) && p('my')      && e('index|work');  //更新my的权限，检查my模块的权限是否更新正确

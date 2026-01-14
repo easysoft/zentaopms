@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-8');
@@ -110,7 +110,7 @@ cid=0
 
 */
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 $queryID   = 1;
 
 /**

@@ -15,7 +15,7 @@ cid=17330
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $teamTable = zenData('team');
 $teamTable->id->range('1-12');
@@ -33,7 +33,7 @@ $projectTable->gen(10);
 
 su('admin');
 
-$personnelTest = new personnelTest();
+$personnelTest = new personnelModelTest();
 
 r($personnelTest->getInvolvedProjectsTest(array(11, 12, 13))) && p('admin,user1,user3') && e('3,2,3');
 r($personnelTest->getInvolvedProjectsTest(array())) && p() && e('0');

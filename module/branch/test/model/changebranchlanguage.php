@@ -17,7 +17,7 @@ cid=15320
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('41-46');
@@ -27,7 +27,7 @@ $product->gen(6);
 zenData('branch')->gen(10);
 su('admin');
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->changeBranchLanguageTest(41)) && p() && e('0');           // 步骤1：正常产品类型，期望返回false
 r($branch->changeBranchLanguageTest(42)) && p() && e('新建分支');     // 步骤2：多分支产品，验证语言修改

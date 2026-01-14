@@ -16,14 +16,14 @@ cid=18339
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 zenData('searchdict')->gen(0);
 
 su('admin');
 
-$search = new searchTest();
+$search = new searchTaoTest();
 
 // 测试步骤1：测试关键词标记功能
 $results1 = array();

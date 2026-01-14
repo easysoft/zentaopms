@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('config')->gen(7);
@@ -121,7 +121,7 @@ $paramString[11] = "";
 $method = array('select', 'delete');
 $print  = 'vision,owner,module,section,key';
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 r($setting->createDAOTest($paramString[0],  $method[0])) && p('vision,owner,module,section,key') && e('rnd,system,common,global,version');     //测试查询参数包含vision、owner、module、section、key的config数据
 r($setting->createDAOTest($paramString[1],  $method[0])) && p('vision,owner,module,section,key') && e('rnd,system,common,global,hourPoint');   //测试查询参数包含vision、owner、module、key的config数据

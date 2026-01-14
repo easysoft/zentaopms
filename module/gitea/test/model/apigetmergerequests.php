@@ -16,7 +16,7 @@ cid=16561
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('pipeline');
 $table->id->range('1-10');
@@ -30,7 +30,7 @@ $table->gen(10);
 
 su('admin');
 
-$giteaTest = new giteaTest();
+$giteaTest = new giteaModelTest();
 
 r($giteaTest->apiGetMergeRequestsTest(1, 'test/project')) && p() && e('0');
 r($giteaTest->apiGetMergeRequestsTest(999, 'test/project')) && p() && e('0');

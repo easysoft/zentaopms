@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=16844
 
 zenData('job')->gen(5);
 
-$job  = new jobTest();
+$job  = new jobModelTest();
 $list        = $job->getListTest();
 $repoList    = $job->getListTest(2);
 $jenkinsList = $job->getListTest(0, 'id_desc', null, 'jenkins');

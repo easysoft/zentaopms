@@ -18,11 +18,11 @@ cid=16878
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 r($kanbanTest->checkDisplayCardsTest(10)) && p() && e('1');
 r($kanbanTest->checkDisplayCardsTest(3)) && p() && e('1');

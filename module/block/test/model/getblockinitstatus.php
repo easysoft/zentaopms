@@ -18,7 +18,7 @@ cid=15228
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -26,7 +26,7 @@ global $tester;
 $tester->loadModel('setting')->setItem("admin.my.common.blockInited@rnd", '1');
 $tester->loadModel('setting')->setItem("user1.my.common.blockInited@rnd", '1');
 
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 
 r($blockTest->getBlockInitStatusTest('my')) && p('') && e('1');
 r($blockTest->getBlockInitStatusTest('product')) && p('') && e('0');

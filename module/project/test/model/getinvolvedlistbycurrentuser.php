@@ -86,11 +86,11 @@ catch(Error $e)
     // 如果su函数调用失败，继续执行
 }
 
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 try
 {
-    $projectTest = new projectTest();
+    $projectTest = new projectModelTest();
 }
 catch(Exception $e)
 {

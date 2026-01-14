@@ -22,13 +22,13 @@ cid=16231
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 // 4. 执行测试步骤（至少5个）
 r($editor->extendModelCreateTest()) && p('hasPhpTag,hasMethodSignature,hasParentCall') && e('1,1,1');         // 步骤1：正常情况-todo模块create方法扩展

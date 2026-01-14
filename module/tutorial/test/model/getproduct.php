@@ -24,11 +24,11 @@ cid=19449
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 su('admin');
 r($tutorial->getProductTest()) && p('id,program,PO,createdBy,reviewer') && e('1,0,admin,admin,admin'); // 测试是否能拿到 admin 的数据 id program PO createdBy reviewer

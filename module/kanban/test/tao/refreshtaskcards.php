@@ -17,7 +17,7 @@ cid=16992
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // 创建简单的测试数据，避免复杂依赖
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($kanbanTest->refreshTaskCardsTest(array('wait' => '', 'developing' => '', 'developed' => '', 'pause' => '', 'canceled' => '', 'closed' => ''), 0, '')) && p('wait') && e('0'); // 步骤1：正常情况，空的卡片对和执行ID

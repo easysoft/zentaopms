@@ -22,7 +22,7 @@ cid=18633
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->id->range('1-10');
@@ -48,7 +48,7 @@ $task->gen(10);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->getChildItemsTest(array(1 => (object)array('id' => 1)))) && p('1:total,finished') && e('3,1');
 r($storyTest->getChildItemsTest(array(2 => (object)array('id' => 2)))) && p('2:total,finished') && e('4,2');

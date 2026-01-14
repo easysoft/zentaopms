@@ -18,7 +18,7 @@ cid=15511
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('build');
@@ -43,7 +43,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$build = new buildTest();
+$build = new buildModelTest();
 
 // 测试数据组合
 $buildID = 1;

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -23,7 +23,7 @@ zenData('user')->gen(10);
 zenData('pipeline')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $project1 = $gitlab->apiGetSingleProjectTest(1, 2);
 $project2 = $gitlab->apiGetSingleProjectTest(0, 2);

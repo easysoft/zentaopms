@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试 programModel::activate();
@@ -39,7 +39,7 @@ $programID  = 1;
 $errorDate  = array('begin' => '2023-09-15', 'end' => '2023-09-10');
 $normalDate = array('begin' => '2023-09-12', 'end' => '2024-09-12');
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $result = $programTester->activateTest($programID, $normalDate);
 r($programTester->activateTest($programID, $errorDate))  && p('end')           && e('『计划完成』应当不小于『计划开始』。'); // 测试实际完成时间小于实际开始时间的情况

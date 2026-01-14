@@ -27,7 +27,7 @@ cid=15993
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(20);
 zenData('user')->gen(5);
@@ -35,7 +35,7 @@ zenData('user')->gen(5);
 $products = array(0, 1, 11);
 $types    = array('all', 'HLDS', 'DDS', 'DBDS', 'ADS', 'test');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->getPairsTest($products[0], $types[0])) && p('1')  && e('1:设计1');   // 获取关联所有产品的所有类型的设计
 r($designTester->getPairsTest($products[0], $types[1])) && p('1')  && e('1:设计1');   // 获取关联所有产品的概要设计
 r($designTester->getPairsTest($products[0], $types[2])) && p('2')  && e('2:设计2');   // 获取关联所有产品的详细设计

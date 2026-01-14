@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=18244
 
 */
 
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 $dimension = array(0, 1, 2, 3, 10000);
 r(count($screen->getListTest($dimension[0]))) && p('') && e(0); //测试获取dimension=0的数据

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $weeklyreportTable = zenData('weeklyreport');
 $weeklyreportTable->staff->range('0');
@@ -28,7 +28,7 @@ cid=19722
 $productID = array('41', '42', '43', '45');
 $date      = array('2022-05-03', '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 r($weekly->getFromDBTest($productID[0], $date[0])) && p('id,project') && e('1,41'); //查询项目为已挂起、日期不为空的数据
 r($weekly->getFromDBTest($productID[0], $date[1])) && p() && e('0');                //查询项目为已挂起、日期为空的数据
 r($weekly->getFromDBTest($productID[1], $date[0])) && p('id,project') && e('2,42'); //查询项目为已关闭、日期不为空的数据

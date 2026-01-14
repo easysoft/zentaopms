@@ -16,11 +16,11 @@ cid=15641
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->apiGetTest('')) && p() && e('Empty URL');
 r($commonTest->apiGetTest('invalid-url')) && p('code') && e('600');

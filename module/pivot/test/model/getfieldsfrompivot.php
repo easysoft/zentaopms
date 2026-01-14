@@ -17,7 +17,7 @@ cid=17384
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（此测试不需要数据库数据）
 // $table = zenData('pivot');
@@ -27,7 +27,7 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 创建测试用的pivot对象
 $pivot1 = new stdClass();

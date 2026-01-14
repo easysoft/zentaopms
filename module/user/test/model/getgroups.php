@@ -21,14 +21,14 @@ cid=19611
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('usergroup');
 $table->account->range('user1{3},user2{2},user3{2}');
 $table->group->range('1-3,2,3,3,4');
 $table->gen(7);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->getGroupsTest(''))      && p()        && e(0);       // 参数为空字符串，返回空数组。
 r($userTest->getGroupsTest('admin')) && p()        && e(0);       // 参数为不存在的用户名，返回空数组。

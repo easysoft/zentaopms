@@ -19,7 +19,7 @@ cid=15589
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('job')->loadYaml('job')->gen(5);
@@ -37,7 +37,7 @@ $responseFailure = '{"building":false,"result":"FAILURE","url":"http://test.jenk
 $responseInvalid = 'invalid json content';
 
 libxml_use_internal_errors(true);
-$ci = new ciTest();
+$ci = new ciModelTest();
 r($ci->saveCompileTest(1, $response404)) && p('result') && e(1); // 测试404响应处理
 r($ci->saveCompileTest(2, $responseXml)) && p('status') && e('created'); // 测试XML响应解析
 r($ci->saveCompileTest(3, $responseJson)) && p('result') && e(1); // 测试JSON executable响应

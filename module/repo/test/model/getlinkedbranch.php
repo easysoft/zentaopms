@@ -19,7 +19,7 @@ cid=18068
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('relation');
 $table->AType->range('story{5}, task{8}, bug{2}');
@@ -34,7 +34,7 @@ $table->gen(15);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getLinkedBranchTest(1, 'story', 1)) && p('0:BType,BID,AType') && e('master,1,story');
 r($repoTest->getLinkedBranchTest(0, 'task', 0, true)) && p() && e('8');

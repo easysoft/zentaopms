@@ -16,14 +16,14 @@ cid=15797
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 global $tester;
 $tester->loadModel('convert');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 r(method_exists($convertTest->objectModel, 'tableExists')) && p() && e('1'); // 步骤1：检查方法是否存在
 r(is_callable(array($convertTest->objectModel, 'tableExists'))) && p() && e('1'); // 步骤2：检查方法是否可调用

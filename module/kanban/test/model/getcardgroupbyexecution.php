@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -35,7 +35,7 @@ cid=16905
 $executionIDList = array(1, 2, 3, 4, 5);
 $browseTypeList  = array('task', 'bug', 'story');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 r($kanban->getCardGroupByExecutionTest($executionIDList[0]))                     && p() && e('2'); // 测试查询execution1的卡片数量
 r($kanban->getCardGroupByExecutionTest($executionIDList[0], $browseTypeList[0])) && p() && e('2'); // 测试查询execution1的task卡片数量
 r($kanban->getCardGroupByExecutionTest($executionIDList[0], $browseTypeList[1])) && p() && e('0'); // 测试查询execution1的bug卡片数量

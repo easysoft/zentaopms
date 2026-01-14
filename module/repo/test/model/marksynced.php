@@ -16,7 +16,7 @@ cid=18087
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $repoTable = zenData('repo');
@@ -35,7 +35,7 @@ zenData('repohistory')->loadYaml('repohistory')->gen(3);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->markSyncedTest(1)) && p('synced') && e('1');    // 步骤1：正常代码库ID
 r($repoTest->markSyncedTest(999)) && p('synced') && e('0');  // 步骤2：不存在的代码库ID

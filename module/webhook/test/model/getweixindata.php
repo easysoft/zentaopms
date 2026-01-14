@@ -16,11 +16,11 @@ cid=19702
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 r($webhook->getWeixinDataTest('测试消息', '13800138000')) && p('msgtype') && e('text'); // 测试有mobile参数时的消息类型
 r($webhook->getWeixinDataTest('测试消息', '13800138000')) && p('text:content') && e('测试消息'); // 测试有mobile参数时的文本内容

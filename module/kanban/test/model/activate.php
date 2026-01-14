@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('kanban')->gen(3);
 
@@ -41,7 +41,7 @@ $param3->status        = 'active';
 $param3->activatedBy   = 'admin';
 $param3->activatedDate = '2023-01-01';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->activateTest(1, $param1)) && p('status,activatedBy,activatedDate') && e('active,admin,2023-01-01 00:00:00');  // 查看激活后的字段
 r($kanban->activateTest(2, $param2)) && p('status,activatedBy,activatedDate') && e('active,user10,2023-01-02 00:00:00'); // 查看激活后的字段

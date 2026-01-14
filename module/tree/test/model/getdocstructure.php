@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=19367
 
 zenData('module')->loadYaml('module')->gen(30);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 $structure = $tree->getDocStructureTest();
 r(count($structure)) && p() && e('1'); //测试获取doc树的数量

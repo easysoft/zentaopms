@@ -18,7 +18,7 @@ cid=17342
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $pipelineTable = zenData('pipeline');
 $pipelineTable->id->range('1-5');
@@ -33,7 +33,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$pipelineTester = new pipelineTest();
+$pipelineTester = new pipelineModelTest();
 
 $jenkinsData = new stdClass();
 $jenkinsData->name = 'TestJenkins';

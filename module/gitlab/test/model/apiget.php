@@ -16,7 +16,7 @@ cid=16597
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $pipeline = zenData('pipeline');
@@ -33,7 +33,7 @@ ob_end_clean();
 su('admin');
 
 // 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetTest('https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w', '/user')) && p() && e('success'); // 步骤1：使用有效的host URL发送API请求
 r($gitlabTest->apiGetTest(1, '/user')) && p() && e('success'); // 步骤2：使用有效的host ID发送API请求

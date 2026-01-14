@@ -17,7 +17,7 @@ cid=16870
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('kanbanspace');
 $table->id->range('1-3');
@@ -31,7 +31,7 @@ $table->gen(3);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 r($kanbanTest->addSpaceMembersTest(1, 'whitelist', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue') && e('user3,admin,po1,dev1,qa1');
 r($kanbanTest->addSpaceMembersTest(2, 'team', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue') && e('po15,admin,po1,dev1,qa1');

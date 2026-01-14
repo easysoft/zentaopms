@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(30);
 $team = zenData('team')->loadYaml('team');
@@ -43,7 +43,7 @@ $stageTasks       = array(2, 4, 6, 7, 8, 11, 14, 16);
 $kanbanTasks      = array(9, 12, 18);
 $count            = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->importTaskTest($executionIDList[0], $count[0], $sprintTasks)) && p('0:id,execution') && e('1,101'); // 敏捷执行导入任务
 r($execution->importTaskTest($executionIDList[1], $count[0], $stageTasks))  && p('0:id,execution') && e('2,106'); // 瀑布执行导入任务
 r($execution->importTaskTest($executionIDList[2], $count[0], $kanbanTasks)) && p('0:id,execution') && e('9,124'); // 看板执行导入任务

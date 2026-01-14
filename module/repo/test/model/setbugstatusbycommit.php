@@ -22,7 +22,7 @@ cid=18102
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $bug = zenData('bug');
@@ -40,7 +40,7 @@ zenData('repo')->loadYaml('repo')->gen(4);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 准备基础action对象
 $baseAction = new stdclass();

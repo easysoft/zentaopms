@@ -16,7 +16,7 @@ cid=18567
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 $user = zenData('user');
 $user->account->range('admin,user1,user2');

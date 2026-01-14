@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -26,7 +26,7 @@ $vision      = 'vision=rnd';
 $paramString = array('', $lang, $lang.'&'.$module, $lang.'&'.$key.'&'.$section, $lang.'&'.$key.'&'.$section.'&'.$module, $lang.'&'.$key.'&'.$section.'&'.$module.'&'.$vision);
 $method      = array('select', 'delete');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->prepareSQLTest($paramString[0], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为空
 r($customTester->prepareSQLTest($paramString[1], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为lang
 r($customTester->prepareSQLTest($paramString[2], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为lang,module

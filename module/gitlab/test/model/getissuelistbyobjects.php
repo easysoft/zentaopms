@@ -26,13 +26,13 @@ cid=16651
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('relation')->loadYaml('relation')->gen(4);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->getIssueListByObjectsTest('task', array(18, 19))) && p('18:issueID;19:issueID;18:gitlabID;19:gitlabID') && e('4,1,1,1'); // 步骤1：获取多个任务的issue关联
 r($gitlabTest->getIssueListByObjectsTest('bug', array(5))) && p('5:issueID;5:gitlabID;5:projectID') && e('3,1,2'); // 步骤2：获取单个bug的issue关联

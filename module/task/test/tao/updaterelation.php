@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -18,7 +18,7 @@ cid=18891
 
 zenData('relation')->gen(0);
 
-$task = new taskTest();
+$task = new taskTaoTest();
 
 r($task->updateRelationTest(0, 0)) && p() && e('null');  //都传入空参数
 r($task->updateRelationTest(0, 1)) && p() && e('null');  //childID传入空参数

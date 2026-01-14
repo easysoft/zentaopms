@@ -16,7 +16,7 @@ cid=16645
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('pipeline')->gen(5);
@@ -26,7 +26,7 @@ zenData('action')->gen(0);
 su('admin');
 
 // 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 $gitlabID = 1;
 $validProjectID = 100;

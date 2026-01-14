@@ -9,7 +9,7 @@ cid=18004
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $release = zenData('release')->loadYaml('release');
 $release->stories->range('`1,2,3`,[]');
@@ -22,7 +22,7 @@ su('admin');
 $releases = array(1, 2);
 $actions  = array('linkStory', 'unlinkStory', 'linkBug', 'unlinkBug', 'unlinkLeftBug', 'play', 'pause', 'edit', 'notify', 'delete');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->isClickableTest($releases[0], $actions[0])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击关联需求按钮
 r($releaseTester->isClickableTest($releases[0], $actions[1])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击取消关联需求按钮
 r($releaseTester->isClickableTest($releases[0], $actions[2])) && p() && e('1'); // 测试关联需求和Bug的发布是否可以点击关联BUG按钮

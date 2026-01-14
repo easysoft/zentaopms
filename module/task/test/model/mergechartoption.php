@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -54,7 +54,7 @@ cid=18833
 
 $chartTypeList = array('tasksPerExecution', 'tasksPerModule', 'tasksPerAssignedTo', 'tasksPerType', 'tasksPerPri', 'tasksPerStatus', 'tasksPerDeadline', 'tasksPerEstimate', 'tasksPerLeft', 'tasksPerConsumed', 'tasksPerFinishedBy', 'tasksPerClosedReason', 'finishedTasksPerDay');
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->mergeChartOptionTest($chartTypeList[0]))  && p('graph:xAxisName,caption') && e('迭代,按迭代任务数统计');   // 合并按迭代任务数统计报表的配置
 r($taskTester->mergeChartOptionTest($chartTypeList[1]))  && p('graph:xAxisName,caption') && e('模块,按模块任务数统计');   // 合并按模块任务数统计报表的配置
 r($taskTester->mergeChartOptionTest($chartTypeList[2]))  && p('graph:xAxisName,caption') && e('用户,按指派给统计');       // 合并按指派给统计报表的配置

@@ -17,7 +17,7 @@ cid=16723
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('group')->gen(5);
 su('admin');
 
@@ -25,7 +25,7 @@ $updateName = array('name' => '更新分组',              'desc' => '');
 $updateDesc = array('name' => '我是一个分组',          'desc' => '更新描述');
 $repeatName = array('name' => '这是一个新的用户分组5', 'desc' => '');
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->updateTest(1, $updateName)) && p('name')    && e('更新分组');                // 测试更新分组为2的分组
 r($group->updateTest(2, $updateDesc)) && p('desc')    && e('更新描述');                // 测试更新分组为2的分组

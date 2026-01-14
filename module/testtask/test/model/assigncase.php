@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testrun')->gen(5);
 
@@ -34,7 +34,7 @@ $uid = uniqid();
 $runIdList      = array(1, 2, 3, 4, 5, 10001, 0);
 $assignedToList = array('admin', 'user2');
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->assignCaseTest($runIdList[0], $assignedToList[0])) && p('assignedTo') && e('admin'); // 测试指派测试单ID 为 1 的用例给 admin
 r($testtask->assignCaseTest($runIdList[1], $assignedToList[0])) && p('assignedTo') && e('admin'); // 测试指派测试单ID 为 2 的用例给 admin

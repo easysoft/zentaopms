@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(10);
 zenData('case')->gen(10);
@@ -42,7 +42,7 @@ $runIDList  = array(0, 2, 6, 10);
 $caseIDList = array(2, 6, 10);
 $stepIdList = array('2', '6', '10');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getBugInfoFromResultTest($runIDList[0], $caseIDList[0]))                 && p() && e('0');                // 测试获取runID为0 caseID为2的bug
 r($bug->getBugInfoFromResultTest($runIDList[0], $caseIDList[1]))                 && p() && e('0');                // 测试获取runID为0 caseID为6的bug

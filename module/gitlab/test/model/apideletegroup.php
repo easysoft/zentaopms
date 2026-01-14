@@ -16,11 +16,11 @@ cid=16586
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 $validGitlabID = 1;
 $validGroupID = 12345;

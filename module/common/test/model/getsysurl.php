@@ -16,9 +16,9 @@ cid=15677
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 测试模式下返回空字符串
 r($commonTest->getSysURLTest(1)) && p() && e('0');

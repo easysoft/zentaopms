@@ -18,7 +18,7 @@ cid=15592
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $repo = zenData('repo');
 $repo->id->range('1-10');
@@ -32,7 +32,7 @@ $repo->gen(10);
 zenData('pipeline')->gen(5);
 su('admin');
 
-$ci = new ciTest();
+$ci = new ciModelTest();
 
 r($ci->setMenuTest(0)) && p('code:link') && e('代码|repo|browse|repoID=1');
 r($ci->setMenuTest(2)) && p('code:link') && e('代码|repo|browse|repoID=2');

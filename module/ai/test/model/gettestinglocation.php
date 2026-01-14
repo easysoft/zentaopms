@@ -16,13 +16,13 @@ cid=15050
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 由于getTestingLocation测试已完全模拟化，不需要生成测试数据
 // 设置基本的用户登录以满足框架要求
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 创建测试prompt对象
 $myPrompt = new stdClass();

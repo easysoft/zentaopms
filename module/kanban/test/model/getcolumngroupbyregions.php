@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(100);
@@ -26,7 +26,7 @@ $regions3 = array(7,8,9);
 $regions4 = array(10,11,12);
 $regions5 = array(13,14,15);
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getColumnGroupByRegionsTest($regions1)) && p() && e('12'); // 测试获取region 1 2 3 的看板列数量
 r($kanban->getColumnGroupByRegionsTest($regions2)) && p() && e('12'); // 测试获取region 4,5,6的看板列数量

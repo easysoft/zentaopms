@@ -30,7 +30,7 @@ cid=16988
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $table = zenData('kanbancard');
 $table->id->range('1-5');
@@ -67,7 +67,7 @@ $userTable->gen(5);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
 r($kanbanTest->initCardItemTest(1, 1, 1, array('admin' => 'avatar1.jpg', 'user1' => 'avatar2.jpg'), array('admin' => '管理员', 'user1' => '用户1'))) && p('title,id,assignedTo') && e('测试卡片1,1,admin');
 r($kanbanTest->initCardItemTest(2, 2, 2, array('user1' => 'avatar2.jpg'), array('user1' => '用户1'))) && p('assignedTo,realnames') && e('user1,用户1 ');

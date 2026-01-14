@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(39);
@@ -158,7 +158,7 @@ $objectId   = array(1,2,3,4,5,6,7,8,1,1,1,1,11,1,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,
 $actionType = array('common', 'extra', 'opened', 'created', 'linked2build', 'unlinkedfrombuild', 'estimated', 'edited', 'assigned', 'closed', 'deleted', 'deletedfile', 'linked2testtask', 'unlinkedfromtesttask', 'assigned', 'run', 'commented', 'activated', 'blocked', 'moved', 'confirmed', 'caseconfirmed', 'bugconfirmed', 'deleted', 'started', 'unlinkedfromproject', 'linked2project', 'unlinkedfromexecution', 'linked2execution', 'linked2kanban');
 $extra      = array('1', '1', '1', '1', '11', '11', '11', '11', '1', '1', '1', '1', '11', '1', '1', '1', '1', '1', '1', '1', '1', '1', 'product', '1', '1', '1', '1', '33', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getRelatedFieldsTest($objectType[0],  $objectId[0],  $actionType[0],  $extra[0]))  && p('product|project|execution', '|') && e(',0,|0|0');     // 测试获取objectType program      ojbectID 1 actionType common                 extra 1  的动态信息
 r($action->getRelatedFieldsTest($objectType[1],  $objectId[1],  $actionType[1],  $extra[1]))  && p('product|project|execution', '|') && e(',2,|0|0');     // 测试获取objectType product      objectId 2 actionType extra                  extra 1  的动态信息

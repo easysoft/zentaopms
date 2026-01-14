@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 function initData()
@@ -46,7 +46,7 @@ initData();
 
 $bugIDList = array(1, 2, 3, 10001);
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->updateRelatedBugTest($bugIDList[0], '2', ''))    && p('2', ';')   && e('1');    //测试关联bug2的关联bug同步更新为1
 r($bug->updateRelatedBugTest($bugIDList[0], '3', '2'))   && p('2;3', ';') && e('~~;1'); //测试关联bug2的关联bug同步更新为空，bug3的关联bug为1
 r($bug->updateRelatedBugTest($bugIDList[0], '2,3', '3')) && p('2')        && e('1');    //测试关联bug2的关联bug同步更新为1

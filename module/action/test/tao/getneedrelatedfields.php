@@ -36,7 +36,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 $product = zenData('product');
@@ -108,7 +108,7 @@ $testtask->gen(5);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->getNeedRelatedFieldsTest('story', 1, 'created', '')) && p('0:0') && e('1'); // 测试story类型对象的相关字段获取
 r($actionTest->getNeedRelatedFieldsTest('productplan', 1, '', '')) && p('0,1,2') && e('1,0,0'); // 测试productplan类型对象的相关字段获取

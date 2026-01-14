@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(25);
 zenData('product')->gen(1);
@@ -81,7 +81,7 @@ cid=14908
 
 $actions = array('1,2,3,4,5', '6,7,8,9,10', '11,12,13,14,15', '16,17,18,19,20', '21,22,23,24,25');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getRelatedDataByActionsTest($actions[0], 'objectNames'))     && p('product:1;story:1;productplan:1;release:1;project:1;user:0') && e('正常产品1;用户需求1;1.0;产品正常的正常的发布1;项目集1;guest');         // 获取动态1 2 3 4 5 objectNames的关联信息
 r($action->getRelatedDataByActionsTest($actions[0], 'relatedProjects')) && p('project:1')                                                  && e('0');                                                                   // 获取动态1 2 3 4 5 relatedProjects的关联信息

@@ -18,11 +18,11 @@ cid=16785
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 准备基础配置数据，确保cne模块的sysDomain方法可以正常工作
 zenData('config')->gen(0);

@@ -16,12 +16,12 @@ cid=17396
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 不依赖zenData，直接测试
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 测试步骤1：验证测试方法存在
 r(method_exists($pivotTest, 'getProductsTest')) && p() && e('1');

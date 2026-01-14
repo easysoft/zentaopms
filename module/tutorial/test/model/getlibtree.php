@@ -24,11 +24,11 @@ cid=19443
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r(count($tutorialTest->getLibTreeTest())) && p() && e('1');
 r($tutorialTest->getLibTreeTest()) && p('0:id,name') && e('2,Test Doc Lib');

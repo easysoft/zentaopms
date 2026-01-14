@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/serverroom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('serverroom')->loadYaml('serverroom')->gen(3);
 su('admin');
@@ -14,7 +14,7 @@ cid=18356
 
 */
 
-$roomModel = new serverroomTest();
+$roomModel = new serverroomModelTest();
 
 $roomData = new stdclass();
 $roomData->name      = 'room1';

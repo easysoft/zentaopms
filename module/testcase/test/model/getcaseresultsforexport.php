@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testresult')->gen('10');
 zenData('testrun')->gen('10');
@@ -19,7 +19,7 @@ cid=18985
 $caseIdList = array(array(1,3,5), array(2,4,6), array(7,8,9));
 $taskIdList = array('0', '1');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 $testcase->initResult();
 
 r($testcase->getCaseResultsForExportTest($caseIdList[0], $taskIdList[0])) && p() && e('5,3,1'); // 获取用例 1,3,5 任务 0 的测试结果

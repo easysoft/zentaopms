@@ -16,11 +16,11 @@ cid=19453
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r($tutorialTest->getProgramPairsTest()) && p('1') && e('Test program');
 r(count($tutorialTest->getProgramPairsTest())) && p() && e('1');

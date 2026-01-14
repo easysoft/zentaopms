@@ -31,7 +31,7 @@ cid=17682
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -43,7 +43,7 @@ $program->name->setFields(array(
 ));
 $program->gen(5);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 r($programTester->getByIDTest(1))    && p('id,name,budget,type,status') && e('1,项目集1,900000.00,program,wait');  // 通过id字段获取id=1的项目集。
 r($programTester->getByIDTest(2))    && p('id,name,budget,type,status') && e('2,项目集2,899900.00,program,wait');  // 通过id字段获取id=2的项目集。

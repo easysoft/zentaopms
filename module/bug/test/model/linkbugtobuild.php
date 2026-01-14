@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(10);
 zenData('user')->gen(1);
@@ -37,7 +37,7 @@ $bugIDList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 $buildList = array(1, 3, 5, 'trunk', 0, '');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->linkBugToBuildTest($bugIDList[0], $buildList[0])) && p('bugs', '-')  && e('1');     // 把bug 1关联到build 1
 r($bug->linkBugToBuildTest($bugIDList[1], $buildList[1])) && p('bugs', '-')  && e('2');     // 把bug 2关联到build 3
 r($bug->linkBugToBuildTest($bugIDList[2], $buildList[2])) && p('bugs', '-')  && e('3');     // 把bug 3关联到build 5

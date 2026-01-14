@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug_getbysonarqubeid')->gen(10);
 
@@ -22,7 +22,7 @@ cid=15362
 
 $sonarqubeIDList = array(0, 1, 2, 3, 4, 5);
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->getBySonarqubeIDTest($sonarqubeIDList[0])) && p() && e('0'); //获取sonarqubeID为0的bug issueKey数量
 r($bug->getBySonarqubeIDTest($sonarqubeIDList[1])) && p() && e('3'); //获取sonarqubeID为1的bug issueKey数量

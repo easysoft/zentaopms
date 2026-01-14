@@ -17,13 +17,13 @@ cid=19450
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
 su('admin');
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 r($tutorial->getProductPairsTest()) && p('1') && e('Test product'); // 步骤1：测试获取产品ID为1的产品名称
 r(empty($tutorial->getProductPairsTest())) && p() && e('0'); // 步骤2：测试返回数组不为空

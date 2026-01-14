@@ -23,11 +23,11 @@ cid=15171
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试1：正常字段解析 - 模拟一个简单的statement对象
 $statement1 = new stdclass();

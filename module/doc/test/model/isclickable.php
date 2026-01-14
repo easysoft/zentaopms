@@ -16,13 +16,13 @@ cid=16142
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->gen(10);
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 // 创建测试用的文档对象
 $currentUserDoc = new stdClass();

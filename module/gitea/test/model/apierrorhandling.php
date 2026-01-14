@@ -18,9 +18,9 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$giteaModel = new giteaTest();
+$giteaModel = new giteaModelTest();
 
 $response = new stdclass();
 r($giteaModel->apiErrorHandlingTester($response)) && p('0') && e('error'); // 对象里没有任何属性

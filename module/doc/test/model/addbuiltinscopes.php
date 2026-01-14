@@ -36,13 +36,13 @@ cid=16040
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
 zenData('doclib')->gen(0);
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->addBuiltInScopesTest()) && p('1:name,type,main,vision') && e('产品,template,1,rnd');  // 测试添加研发界面内置产品范围
 r($docTester->addBuiltInScopesTest()) && p('2:name,type,main,vision') && e('项目,template,1,rnd');  // 测试添加研发界面内置项目范围
 r($docTester->addBuiltInScopesTest()) && p('5:name,type,main,vision') && e('市场,template,1,or');   // 测试添加OR界面内置市场范围

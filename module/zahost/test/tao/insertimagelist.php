@@ -16,7 +16,7 @@ cid=19758
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('host')->gen(0);
 $host = zenData('host');
@@ -57,7 +57,7 @@ $image3->desc     = '基于CentOS7的镜像';
 $imageList = array($image1, $image2, $image3);
 $hostID = 1;
 
-$zahost = new zahostTest();
+$zahost = new zahostTaoTest();
 
 // 测试步骤1：所有镜像都已下载，不插入任何镜像
 zenData('image')->gen(0);

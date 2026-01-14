@@ -16,11 +16,11 @@ cid=19491
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r($tutorialTest->getTesttaskPairsTest()) && p('1') && e('Test testtask'); // 步骤1：正常调用获取测试单键值对
 r(count($tutorialTest->getTesttaskPairsTest())) && p() && e(1); // 步骤2：验证返回数组长度

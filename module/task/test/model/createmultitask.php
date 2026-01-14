@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(0);
@@ -57,7 +57,7 @@ $teamLeftList      = array(0, 1, 3);
 $emptyTeamData     = array('team' => array(), 'teamEstimate' => array(), 'teamConsumed' => array(), 'teamLeft' => array(), 'teamSource' => array());
 $teamData          = array('team' => $teamList, 'teamEstimate' => $teamEstimateList, 'teamConsumed' => $teamConsumedList, 'teamLeft' => $teamLeftList, 'teamSource' => $teamSourceList);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->createMultiTaskObject())                                                 && p('name:0')         && e('『任务名称』不能为空。');     // 测试空数据
 r($taskTester->createMultiTaskObject($sprintTask,        $emptyTeamData))               && p('execution,name') && e('3,迭代下的任务');             // 测试创建迭代下的普通任务
 r($taskTester->createMultiTaskObject($stageTask,         $emptyTeamData))               && p('execution,name') && e('4,阶段下的任务');             // 测试创建阶段下的普通任务

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->loadYaml('dept')->gen(30);
@@ -37,7 +37,7 @@ $browseType = array('inside', 'outside');
 $count      = array('0', '1');
 $orderBy    = array('id', 'account');
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->getUsersTest($browseType[0], array(), $count[0], $orderBy[0])) && p('101:account,dept,realname')               && e('test2,11,测试2');   //全部用户查询
 r($dept->getUsersTest($browseType[1], array(), $count[0], $orderBy[0])) && p('')                                        && e('0');                //外部用户查询
 r($dept->getUsersTest($browseType[0], array($deptIDList[1]), $count[0], $orderBy[0])) && p('9:account,dept,realname')   && e('user19,2,用户19');  //根据部门查询用户

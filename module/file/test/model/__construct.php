@@ -17,7 +17,7 @@ cid=16491
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（__construct方法不依赖数据库数据）
 // 由于测试构造函数，无需准备数据库数据
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($fileTest->__constructTest()) && p('nowIsInt') && e('1'); // 步骤1：验证now属性为整数

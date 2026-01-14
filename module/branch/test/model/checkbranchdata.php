@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -35,7 +35,7 @@ cid=15321
 */
 $branchID = array(1, 2, 3, 4, 5, 6, 1000001);
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->checkBranchDataTest($branchID[0])) && p() && e('2'); // 测试验证branchID 1 的数据
 r($branch->checkBranchDataTest($branchID[1])) && p() && e('2'); // 测试验证branchID 2 的数据

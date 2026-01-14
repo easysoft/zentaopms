@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ cid=19256
 
 zenData('todo')->loadYaml('getbyexportlist')->gen(5);
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 $testWhere  = " `deleted` = '0' AND `vision` = 'rnd' AND `assignedTo` = 'admin' AND `date` >= '20230301' AND `date` <= '20230301' AND `status` IN ('wait') ";
 $testWhere2 = " `deleted` = '0' and `status` IN ('closed') ";

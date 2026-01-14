@@ -16,14 +16,14 @@ cid=16881
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备基础测试数据
 zenData('kanbancolumn')->gen(5);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 // 测试数据准备
 $regionID   = 100;

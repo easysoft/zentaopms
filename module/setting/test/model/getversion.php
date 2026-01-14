@@ -16,13 +16,13 @@ cid=18364
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('config')->gen(0);
 
 su('admin');
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 r($setting->getVersionTest()) && p() && e('0.3.beta');           // 步骤1：无版本配置时返回默认版本
 r($setting->getVersionTest('10.0')) && p() && e('10.0');        // 步骤2：正常版本号配置

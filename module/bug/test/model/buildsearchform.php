@@ -56,11 +56,11 @@ cid=15347
 
 global $tester;
 $tester->loadModel('bug');
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 initData();
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r($bugTest->buildSearchFormTest(1, array('1' => 'Product1', '2' => 'Product2'), 1, '/bug-browse-1.html', '0')) && p('actionURL,queryID,hasProductParams') && e('/bug-browse-1.html,1,1');
 r($bugTest->buildSearchFormTest(0, array(), 2, '/bug-browse-all.html', '0')) && p('actionURL,queryID,hasProductParams') && e('/bug-browse-all.html,2,1');

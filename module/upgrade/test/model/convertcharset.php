@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('doc')->gen(5);
@@ -22,7 +22,7 @@ cid=19507
 **/
 
 global $tester;
-$upgradeModel = new upgradeTest();
+$upgradeModel = new upgradeModelTest();
 $upgradeModel->convertCharset();
 r($upgradeModel->convertCharsetTest('zt_task'))    && p() && e('utf8mb4_general_ci');  // 检查zt_task字符集信息
 r($upgradeModel->convertCharsetTest('zt_bug'))     && p() && e('utf8mb4_general_ci');  // 检查zt_bug字符集信息

@@ -32,11 +32,11 @@ cid=15947
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$datatableTest = new datatableTest();
+$datatableTest = new datatableModelTest();
 
 // 测试步骤1：无固定列的空设置
 $emptySetting = array();

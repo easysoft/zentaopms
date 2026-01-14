@@ -25,7 +25,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(5);
 zenData('bug')->gen(5);
@@ -37,7 +37,7 @@ zenData('user')->gen(1);
 su('admin');
 
 global $tester, $app;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 // 设置用户视图权限
 $app->user->view = new stdClass();

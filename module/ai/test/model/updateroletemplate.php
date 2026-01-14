@@ -16,7 +16,7 @@ cid=15079
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_promptrole');
 $table->id->range('1-10');
@@ -29,7 +29,7 @@ $table->gen(5);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->updateRoleTemplateTest(1, '请你扮演一名高级产品经理。', '负责产品战略规划、需求分析、项目管理等工作')) && p() && e('1');
 r($aiTest->updateRoleTemplateTest(999, '测试角色', '测试角色描述')) && p() && e('1');

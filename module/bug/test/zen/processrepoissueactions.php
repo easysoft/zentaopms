@@ -22,13 +22,13 @@ cid=15469
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 // 4. 执行测试步骤
 r($bugTest->processRepoIssueActionsTest(1)) && p('repoID') && e('1'); // 步骤1：正常仓库ID

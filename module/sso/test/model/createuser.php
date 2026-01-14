@@ -17,7 +17,7 @@ cid=18403
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zendata('user')->loadYaml('user_createuser', false, 2)->gen(5);
@@ -26,7 +26,7 @@ zendata('user')->loadYaml('user_createuser', false, 2)->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$ssoTest = new ssoTest();
+$ssoTest = new ssoModelTest();
 
 // 5. 测试步骤执行
 

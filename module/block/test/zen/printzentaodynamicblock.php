@@ -16,9 +16,9 @@ cid=15316
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 su('admin');
 

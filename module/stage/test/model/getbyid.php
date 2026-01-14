@@ -15,14 +15,14 @@ cid=18420
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('stage')->loadYaml('stage')->gen(1);
 zenData('user')->gen(5);
 
 $stageIds = array(0, 1, 2);
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 r($stageTester->getByIDTest($stageIds[0])) && p()                    && e('0');                // 测试获取ID=0的阶段
 r($stageTester->getByIDTest($stageIds[1])) && p('name,percent,type') && e('需求1,10,request'); // 测试获取ID=1的阶段
 r($stageTester->getByIDTest($stageIds[2])) && p()                    && e('0');                // 测试获取ID不存在的阶段

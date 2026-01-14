@@ -1,12 +1,12 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 // 测试场景1：正常execution记录order排序
 $execution = zenData('project');

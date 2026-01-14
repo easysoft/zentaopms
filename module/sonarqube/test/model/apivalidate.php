@@ -17,7 +17,7 @@ cid=18380
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -33,7 +33,7 @@ $invalidHost    = 'not-a-valid-url';
 $emptyToken     = '';
 $specialCharHost = 'https://test<script>alert(1)</script>.com';
 
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 r($sonarqube->apiValidateTest())                                        && p() && e('success');      // 步骤1：使用默认有效配置验证
 r($sonarqube->apiValidateTest($validHost, $invalidToken, false))        && p() && e('return false'); // 步骤2：有效host但无效token
 r($sonarqube->apiValidateTest($validHost, $noAdminToken, false))        && p() && e('return false'); // 步骤3：有效host但非管理员token

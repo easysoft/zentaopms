@@ -11,11 +11,11 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('module')->loadYaml('module')->gen(9);
 
-$pivot = new pivotTest();
+$pivot = new pivotTaoTest();
 $dimensionIDList = array(1,2,3);
 $pathList        = array(',3',',6',',9');
 

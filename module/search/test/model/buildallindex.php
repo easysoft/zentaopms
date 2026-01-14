@@ -16,11 +16,11 @@ cid=18292
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$search = new searchTest();
+$search = new searchModelTest();
 
 r($search->buildAllIndexTest()) && p('finished') && e('1');  // 测试构建所有索引从空开始
 r($search->buildAllIndexTest('build')) && p('type') && e('build');  // 测试指定类型为build构建索引

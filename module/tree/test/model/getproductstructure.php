@@ -19,7 +19,7 @@ cid=19376
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(30);
@@ -37,7 +37,7 @@ $projectproduct->gen(100);
 $root = array(1, 2, 41);
 $type = array('story', 'bug', 'case');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getProductStructureTest($root[0], $type[0])) && p() && e('2:2;12:0;22:0;');               // 测试获取 root 1  type story 的树结构
 r($tree->getProductStructureTest($root[1], $type[0])) && p() && e('0');                            // 测试获取 root 2  type bug   的树结构

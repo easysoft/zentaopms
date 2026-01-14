@@ -39,7 +39,7 @@ cid=17403
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(10);
@@ -51,7 +51,7 @@ zenData('project')->loadYaml('execution_option')->gen(10, false, false);
 zenData('dept')->gen(10);
 zenData('bug')->gen(5);
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 $sql = 'SELECT * FROM `zt_user` WHERE `id` > 0 ';
 $typeList   = array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object', 'string');

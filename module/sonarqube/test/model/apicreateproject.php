@@ -17,7 +17,7 @@ cid=18373
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -31,7 +31,7 @@ $t_special_key_project = array('projectName' => 'Special Key Test', 'projectKey'
 $t_empty_values_project = array('projectName' => '', 'projectKey' => '');
 $t_long_name_project = array('projectName' => str_repeat('Test Project Name ', 20), 'projectKey' => 'long-name-test');
 
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 r($sonarqube->apiCreateProjectTest(0, $t_empty_project)) && p() && e('return false'); // 测试步骤1：使用无效的sonarqubeID创建项目
 r($sonarqube->apiCreateProjectTest($sonarqubeID, $t_empty_project)) && p() && e('object result'); // 测试步骤2：使用空项目对象创建项目
 r($sonarqube->apiCreateProjectTest($sonarqubeID, $t_project)) && p() && e('object result'); // 测试步骤3：使用正确的sonarqubeID和项目对象创建项目

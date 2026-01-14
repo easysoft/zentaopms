@@ -16,7 +16,7 @@ cid=16271
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -57,7 +57,7 @@ $CFD->gen(5);
 
 $typeList = array('task', 'story', 'bug');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r(count($executionTester->buildCFDDataTest()))                        && p()            && e('0'); // 不存在执行的累计流图信息
 r($executionTester->buildCFDDataTest(3, $typeList[0])['line'])        && p('看板列4:0') && e('0'); // 存在的执行的任务卡片累计流图信息
 r($executionTester->buildCFDDataTest(3, $typeList[1])['line'])        && p('看板列3:0') && e('0'); // 存在的执行的需求卡片累计流图信息

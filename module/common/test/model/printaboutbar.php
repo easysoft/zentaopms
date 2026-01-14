@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=15688
 
 */
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->printAboutBarTest(1)) && p() && e('1'); // 步骤1：验证方法存在
 r($commonTest->printAboutBarTest(2)) && p() && e('1'); // 步骤2：验证方法为静态方法

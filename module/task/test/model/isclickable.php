@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->gen(50);
 su('admin');
@@ -105,7 +105,7 @@ $task18 = new stdclass();
 $task18->isParent = 1;
 $task18->status   = 'cancel';
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->isClickableTest($task1,  'start'))          && p('1') && e("1"); //计算任务为父任务 状态为wait 能否进行start操作
 r($task->isClickableTest($task2,  'finished'))       && p('1') && e("1"); //计算任务为父任务 状态为doing 能否进行finished操作
 r($task->isClickableTest($task3,  'pause'))          && p('2') && e("2"); //计算任务为父任务 状态为done 能否进行pause操作

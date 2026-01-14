@@ -19,7 +19,7 @@ cid=16849
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $job = zenData('job');
@@ -34,7 +34,7 @@ $job->gen(7);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 r($jobTest->getTriggerConfigTest(1)) && p() && e('目录改动(/module/caselib)');            // 测试步骤1：tag触发类型且有svnDir
 r($jobTest->getTriggerConfigTest(4)) && p() && e('打标签');                              // 测试步骤2：tag触发类型但无svnDir

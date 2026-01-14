@@ -63,7 +63,7 @@ cid=16051
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 
 $doc = zenData('doclib');
@@ -95,7 +95,7 @@ $lib3->project = '1';
 $libIDs  = array(1, 2, 3, 4, 5);
 $libType = array('nolink', 'product', 'project');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->checkApiLibNameTest($lib1, $libType[0]))             && p() && e('独立接口库中『库名称』已经有『文档库1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');         // 测试lib1是否与已存在无关联接口库重名
 r($docTester->checkApiLibNameTest($lib1, $libType[0], $libIDs[0])) && p() && e('noerror');                                                                                                           // 测试lib1是否与除了ID为1的其他无关联接口库重名
 r($docTester->checkApiLibNameTest($lib1, $libType[0], $libIDs[1])) && p() && e('独立接口库中『库名称』已经有『文档库1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');         // 测试lib1是否与除了ID为2的其他无关联接口库重名

@@ -16,11 +16,11 @@ cid=18240
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getChartTypeTest('Tables')) && p() && e('pivot');
 r($screenTest->getChartTypeTest('pivot')) && p() && e('pivot');

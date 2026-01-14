@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(100);
 zenData('userquery')->loadYaml('userquery')->gen(1);
@@ -50,7 +50,7 @@ $queryID       = array(0, 1, 1001);
 $rawMethod     = array('work', 'contributeBug');
 $query         = '`id` < 10';
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getUserBugsTest($accountIDList[0], $typeList[0], $limit[0], $execution[0], $queryID[0], $rawMethod[0]))         && p() && e('30'); // 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量
 r($bug->getUserBugsTest($accountIDList[0], $typeList[1], $limit[0], $execution[0], $queryID[0], $rawMethod[0]))         && p() && e('30'); // 测试获取用户admin 关闭的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量

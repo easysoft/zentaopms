@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -66,7 +66,7 @@ $emptyTitleBlock = new stdclass();
 $emptyTitleBlock->id    = '4';
 $emptyTitleBlock->title = '';
 
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 $newBlockID = $blockTest->updateTest($block);
 
 r($tester->block->getByID($newBlockID)) && p('account,dashboard,module,code,title,vision,width,height') && e('admin,my,project,statistic,项目统计区块,rnd,1,3'); // 测试获取正常的block的内容

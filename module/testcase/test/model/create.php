@@ -15,7 +15,7 @@ cid=18969
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('0');
@@ -29,7 +29,7 @@ $testcase3 = array('title' => '测试创建测试用例3', 'keywords' => '测试
 $no_title = array('title' => '');
 $no_type  = array('type' => '', 'title' => '测试创建没有填写类型的用例');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->createTest($testcase1)) && p('status') && e('1');                      // 测试创建用例1
 r($testcase->createTest($testcase2)) && p('status') && e('2');                      // 测试创建用例2

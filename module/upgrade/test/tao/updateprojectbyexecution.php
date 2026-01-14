@@ -13,9 +13,9 @@ cid=19576
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 
 $types = array('bug', 'build', 'doc', 'doclib', 'effort', 'task', 'testtask', 'effort');
 

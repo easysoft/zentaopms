@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project', true)->gen(10);
@@ -29,7 +29,7 @@ $taskIdList = array(1, 6, 7, 8, 9);
 $beginList  = array('2020-11-01', '2020-11-08');
 $endList    = array('2022-02-01', '2020-12-30');
 
-$taskTester = new taskTest();
+$taskTester = new taskTaoTest();
 
 r($taskTester->updateTaskEsDateByGanttTest($taskIdList[0], $beginList[0], $endList[0])) && p('0') && e('已超出阶段计划开始时间，请先修改阶段计划开始时间');     // 测试检查普通任务开始日期
 r($taskTester->updateTaskEsDateByGanttTest($taskIdList[0], $beginList[1], $endList[0])) && p('0') && e('已超出阶段计划结束时间，请先修改阶段计划结束时间');     // 测试检查普通任务结束日期

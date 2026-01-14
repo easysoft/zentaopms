@@ -16,9 +16,9 @@ cid=17361
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 测试步骤1：正常情况 - 测试settings JSON解码
 $pivot1 = new stdClass();

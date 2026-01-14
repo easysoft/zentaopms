@@ -25,7 +25,7 @@ cid=18418
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('stage')->gen(0);
@@ -60,7 +60,7 @@ $param6 = array('name' => $name1, 'percent' => $percent1,       'type' => $empty
 $param7 = array('name' => $name1, 'percent' => $IllegalPercent, 'type' => $type1);
 $param8 = array('name' => $name1, 'percent' => $percentOver,    'type' => $type1);
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 
 /* Normal condition. */
 r($stageTester->batchCreateTest($param1)) && p() && e('2'); // 测试批量创建瀑布项目的阶段 1

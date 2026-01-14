@@ -17,7 +17,7 @@ cid=17031
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // Note: Testing without extensive data generation to avoid database issues
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$mailTest = new mailTest();
+$mailTest = new mailTaoTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r(count($mailTest->getImagesByFileIDTest(array('1' => array('/file-read-1.jpg', '/file-read-2.png'), '2' => array('1', '2'))))) && p() && e(2); // 步骤1：正常情况-有效图片文件ID

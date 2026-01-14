@@ -20,7 +20,7 @@ cid=16315
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -35,7 +35,7 @@ $project->path->range(',11,,60,,61,,100,,100,101,,100,102,,100,103,,100,104,,100
 $project->deleted->range('0');
 $project->gen(16);
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 $emptyArray = array();
 $singleGrade1Execution = (object)array('id' => '11', 'name' => '敏捷项目', 'grade' => 1, 'path' => ',11,');

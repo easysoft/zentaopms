@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('task')->loadYaml('task')->gen(9);
 zenData('effort')->loadYaml('effort')->gen(3);
@@ -25,7 +25,7 @@ cid=18871
 
 $taskIdList = array(0, 1, 2, 3, 4, 5);
 
-$task = new taskTest();
+$task = new taskTaoTest();
 
 r($task->copyTaskDataTest($taskIdList[1], 'subTaskEffort')) && p('objectID')      && e('10');                   // 测试父任务日志的objectID是否更改为子任务ID
 r($task->copyTaskDataTest($taskIdList[2], 'subTaskEffort')) && p('objectType')    && e('task');                 // 测试更新的日志类型是否为task

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -62,7 +62,7 @@ cid=18860
 zenData('user')->loadYaml('user')->gen(5);
 su('user4');
 
-$task = new taskTest();
+$task = new taskTaoTest();
 
 $taskTable = zenData('task');
 $taskTable->story->range(0);

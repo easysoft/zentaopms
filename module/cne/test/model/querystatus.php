@@ -16,11 +16,11 @@ cid=15626
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->queryStatusTest(1)) && p('code') && e('0');
 r($cneTest->queryStatusTest(999)) && p() && e('0');

@@ -16,10 +16,10 @@ cid=17071
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 每个测试步骤都重新生成数据，避免互相干扰
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 生成测试数据
 $table = zenData('metriclib');

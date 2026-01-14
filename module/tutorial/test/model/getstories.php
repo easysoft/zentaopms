@@ -46,11 +46,11 @@ cid=19474
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 su('admin');
 r($tutorial->getStoriesTest()) && p('1:id,title,estimate,status,pri,stage,openedBy') && e('1,Test epic,1,active,3,wait,admin');               // 测试获取需求1的信息

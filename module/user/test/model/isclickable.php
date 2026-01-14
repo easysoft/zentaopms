@@ -17,7 +17,7 @@ cid=19645
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -25,7 +25,7 @@ global $config;
 
 $config->user->lockMinutes = 10;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $user1 = (object)array('account' => 'user1', 'ranzhi' => '');
 $user2 = (object)array('account' => 'user2', 'ranzhi' => 'user2');

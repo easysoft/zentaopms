@@ -20,7 +20,7 @@ cid=18726
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $repo = zenData('repo')->loadYaml('repo_updatecommit', false, 2);
 $repo->gen(5);
@@ -29,7 +29,7 @@ $repoHistory->gen(10);
 
 su('admin');
 
-$svn = new svnTest();
+$svn = new svnModelTest();
 
 r($svn->updateCommitTest(3, array(), 'boolean')) && p() && e('true'); // 测试步骤1：初始化仓库应返回true
 r($svn->updateCommitTest(1, array(), 'history')) && p('repo,commit') && e('1,1'); // 测试步骤2：已同步仓库的正常updateCommit操作

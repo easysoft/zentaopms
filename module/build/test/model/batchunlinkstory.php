@@ -17,7 +17,7 @@ cid=15486
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $buildTable = zenData('build');
 $buildTable->id->range('1-5');
@@ -35,7 +35,7 @@ zenData('project')->gen(5);
 
 su('admin');
 
-$build = new buildTest();
+$build = new buildModelTest();
 
 r($build->batchUnlinkStoryTest(1, array('2', '4', '6'))) && p('1:stories', '|') && e('1,3,5'); // 步骤1：正常批量移除多个需求
 r($build->batchUnlinkStoryTest(2, array('2'))) && p('2:stories', '|') && e('1,3,4,5');         // 步骤2：移除单个需求

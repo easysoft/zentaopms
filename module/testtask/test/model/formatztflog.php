@@ -16,11 +16,11 @@ cid=19162
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 r($testtaskTest->formatZtfLogTest('', array())) && p() && e('0');
 r($testtaskTest->formatZtfLogTest('{"test": "value"}', array())) && p() && e('0');

@@ -20,7 +20,7 @@ cid=16144
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doccontent')->loadYaml('doccontent')->gen(10);
 zenData('docaction')->loadYaml('docaction')->gen(20);
@@ -30,6 +30,6 @@ su('admin');
 $docIdList[0] = array();
 $docIdList[1] = range(1, 10);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->processCollectorTest($docIdList[0])) && p()                                                                   && e('0');                                       // 测试空数据
 r($docTester->processCollectorTest($docIdList[1])) && p('1:id,project,product,execution,module,title,keywords,type,status') && e('1,0,0,0,0,文档标题1,关键词1,text,normal'); // 测试正常数据

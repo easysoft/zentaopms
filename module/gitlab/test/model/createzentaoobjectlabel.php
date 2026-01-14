@@ -19,7 +19,7 @@ cid=16642
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('relation')->loadYaml('relation')->gen(4);
@@ -28,7 +28,7 @@ zenData('relation')->loadYaml('relation')->gen(4);
 su('admin');
 
 // 4. 创建测试实例
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 // 5. 测试步骤 - 包含7个测试步骤，超过要求的5个
 r($gitlab->createZentaoObjectLabelTest(0, 0, 'task', '0')) && p() && e('0'); // 步骤1：无效的gitlabID和projectID

@@ -16,7 +16,7 @@ cid=15981
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -36,7 +36,7 @@ for($i = 1; $i <= 10; $i++)
     $tester->dao->insert(TABLE_DEPT)->data($dept)->exec();
 }
 
-$deptTest = new deptTest();
+$deptTest = new deptModelTest();
 
 r($deptTest->updateOrderTest(array('3', '1', '5', '2', '4'))) && p() && e('1'); // 测试步骤1：正常多部门排序更新
 r($deptTest->updateOrderTest(array('6'))) && p() && e('1'); // 测试步骤2：单个部门排序更新

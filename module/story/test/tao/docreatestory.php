@@ -16,7 +16,7 @@ cid=18619
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('story')->gen(0);
@@ -47,7 +47,7 @@ $data->version     = 1;
 $data->openedBy    = 'admin';
 $data->openedDate  = date('Y-m-d H:i:s');
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 $story = $storyTest->doCreateStoryTest($data);
 r($story) && p('product,title,status,pri') && e('1,test story,active,3'); //检查保存后的数据。
 

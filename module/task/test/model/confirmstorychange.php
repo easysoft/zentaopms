@@ -31,7 +31,7 @@ cid=18779
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project')->gen(3);
 zenData('task')->loadYaml('task')->gen(5);
@@ -42,7 +42,7 @@ su('admin');
 
 $taskIdList = range(1, 5);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->confirmStoryChangeTest($taskIdList[0])) && p('storyVersion,latestStoryVersion') && e('2,2'); // 测试普通任务确认需求变更
 r($taskTester->confirmStoryChangeTest($taskIdList[1])) && p('storyVersion,latestStoryVersion') && e('2,2'); // 测试父任务确认需求变更
 r($taskTester->confirmStoryChangeTest($taskIdList[2])) && p('storyVersion,latestStoryVersion') && e('2,2'); // 测试子任务确认需求变更

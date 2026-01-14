@@ -16,11 +16,11 @@ cid=19494
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 su('admin');
 r($tutorial->getUserPairsTest()) && p('admin') && e('admin'); // 测试是否能拿到 admin 数据 admin

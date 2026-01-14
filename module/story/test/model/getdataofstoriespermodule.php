@@ -16,7 +16,7 @@ cid=18517
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备story测试数据
 $story = zenData('story');
@@ -52,7 +52,7 @@ zenData('product')->gen(1);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 清除session条件，测试无条件情况
 unset($_SESSION['storyOnlyCondition']);

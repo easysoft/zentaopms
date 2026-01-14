@@ -18,7 +18,7 @@ cid=15374
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备 - 使用现有的YAML配置
 zenData('bug')->loadYaml('closeddate')->gen(10);
@@ -27,7 +27,7 @@ zenData('bug')->loadYaml('closeddate')->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 // 5. 测试步骤：必须包含至少5个测试步骤
 r($bugTest->getDataOfClosedBugsPerDayTest()) && p('0:value') && e('10'); // 步骤1：验证第一项统计数量

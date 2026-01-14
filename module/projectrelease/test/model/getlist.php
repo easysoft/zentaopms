@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('release')->gen(20);
 zenData('product')->gen(20);
@@ -36,7 +36,7 @@ $projectID = array(11, 1000, 0);
 $type      = array('all', 'normal', 'terminate', '');
 $orderBy   = array('t1.id_asc', 't1.id_desc');
 
-$projectrelease = new projectreleaseTest();
+$projectrelease = new projectreleaseModelTest();
 
 r($projectrelease->getListTest($projectID[0], $type[0], $orderBy[0])) && p() && e('9,19'); // 查询projectID正常存在, type为 all 排序 id_asc 的发布
 r($projectrelease->getListTest($projectID[0], $type[0], $orderBy[1])) && p() && e('19,9'); // 查询projectID正常存在, type为 all 排序 id_desc 的发布

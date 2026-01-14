@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(10);
@@ -40,7 +40,7 @@ $case2->reviewedBy   = 'test2';
 $case2->reviewedDate = '2023-08-29';
 $case2->comment      = '';
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->reviewTest($caseIDList[0], $case1)) && p('status,reviewedBy,reviewedDate') && e('normal,test1,2023-08-29'); // 测试评审用例 1
 r($testcase->reviewTest($caseIDList[1], $case2)) && p('status,reviewedBy,reviewedDate') && e('wait,test2,2023-08-29');   // 测试评审用例 1

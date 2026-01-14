@@ -73,7 +73,7 @@ cid=19612
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('group');
 $table->vision->range('rnd{3},lite{3},or{3}');
@@ -87,7 +87,7 @@ $config->edition = 'open';
 $app::$loadedLangs = array();
 $app->loadLang('common');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->getGroupsByVisionsTest(''))      && p() && e(0); // 传空字符串，返回空数组。
 r($userTest->getGroupsByVisionsTest(',,'))    && p() && e(0); // 传只包含逗号的字符串，返回空数组。

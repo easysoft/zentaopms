@@ -16,11 +16,11 @@ cid=15690
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->printClientLinkTest('both_enabled')) && p() && e('1');     // 步骤1：两个配置都启用
 r($commonTest->printClientLinkTest('xxserver_only')) && p() && e('0');    // 步骤2：仅xxserver安装

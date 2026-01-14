@@ -24,7 +24,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 global $app;
@@ -51,7 +51,7 @@ $data->end           = '2023-12-31';
 
 $projectIdList = array();
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->createProgramTest($data, $projectIdList)) && p('0,1,2') && e('1,0,0'); // 测试选择项目集1，没有选择项目，没有选择产品线时
 
 $data->lines = 1;

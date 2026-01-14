@@ -16,11 +16,11 @@ cid=15785
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 // 步骤1：测试开源版本返回空数组
 global $config;

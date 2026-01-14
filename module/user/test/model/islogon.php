@@ -17,11 +17,11 @@ cid=19646
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $_SESSION['user'] = $userTest->getbyIdTest('admin');
 r($userTest->isLogonTest()) && p() && e(1); // 步骤1：正常登录用户admin的状态检查

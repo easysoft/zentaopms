@@ -17,7 +17,7 @@ cid=18382
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -32,7 +32,7 @@ $longKeyProject = array('projectName' => 'valid_name', 'projectKey' => str_repea
 $emptyNameProject = array('projectName' => '', 'projectKey' => 'valid_key');
 $emptyKeyProject = array('projectName' => 'valid_name', 'projectKey' => '');
 
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 
 r($sonarqube->createProjectTest($sonarqubeID, $validProject))       && p() && e(1);                      // 步骤1：正常数据创建项目
 r($sonarqube->createProjectTest(0, $validProject))                 && p() && e('return false');         // 步骤2：无效sonarqubeID创建项目

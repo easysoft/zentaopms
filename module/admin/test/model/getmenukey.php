@@ -34,11 +34,11 @@ cid=14980
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
-$admin = new adminTest();
+$admin = new adminModelTest();
 
 $params1 = array('module' => 'project');
 $params2 = array('module' => 'todo');

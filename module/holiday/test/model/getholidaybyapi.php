@@ -16,14 +16,14 @@ cid=16742
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->gen(50);
 zenData('user')->gen(1);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 r($holiday->getHolidayByAPITest('this year')) && p() && e('11');
 r($holiday->getHolidayByAPITest('last year')) && p() && e('12');

@@ -15,12 +15,12 @@ cid=17736
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('checkleafstage/checkleafstage')->gen(10);
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 r($programplanTest->checkLeafStageTest(1)) && p() && e('1');     // 测试步骤1：正常输入有效阶段ID，测试叶子节点判断逻辑
 r($programplanTest->checkLeafStageTest(4)) && p() && e('1');      // 测试步骤2：正常输入有效阶段ID，测试叶子节点判断逻辑

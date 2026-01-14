@@ -20,14 +20,14 @@ cid=15880
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 global $app;
 include($app->getModuleRoot() . '/cron/control.php');
 $app->control = new cron();
 
-$cron           = new cronTest();
+$cron           = new cronModelTest();
 $cron1          = new stdClass();
 $cron1->m       = '55';
 $cron1->h       = '23';

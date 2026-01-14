@@ -21,13 +21,13 @@ cid=19830
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('host')->loadYaml('host')->gen(10);
 
 $ipList = array(1, 10, 0);
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 r($zanode->getHostByID($ipList[0])) && p('id,type,extranet') && e('1,node,10.0.0.1');       //获取ID为1的主机的id,type,extranet
 r($zanode->getHostByID($ipList[1])) && p('id,type,extranet') && e('10,physics,10.0.0.10');  //获取ID为10的主机的id,type,extranet

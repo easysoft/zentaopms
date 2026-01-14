@@ -14,7 +14,7 @@ cid=18489
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -32,7 +32,7 @@ $storyReview->gen(4);
 $story1 = $tester->loadModel('story')->fetchByID(1);
 $story1->reviewer = array('user2', 'user3', 'user4');
 
-$story = new storyTest();
+$story = new storyModelTest();
 r($story->doUpdateReviewerTest(0, (array)clone($story1))) && p() && e('0'); // 只传入评审人列表。
 r($story->doUpdateReviewerTest(1, (array)clone($story1))) && p('0:reviewer') && e('user2'); // 只传入软件需求 ID。
 

@@ -20,14 +20,14 @@ cid=14956
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('execution')->gen(1);
 zenData('task')->loadYaml('task')->gen(5);
 zenData('story')->gen(10);
 zenData('projectproduct')->gen(20);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $objectTypeList = array('task');
 $objectIDList   = array(1, 3);

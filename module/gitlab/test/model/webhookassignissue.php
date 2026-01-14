@@ -17,13 +17,13 @@ cid=16669
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(20);
 zenData('story')->gen(5);
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $issue = new stdclass();
 $issue->object     = new stdclass();

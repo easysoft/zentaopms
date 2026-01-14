@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('program')->gen(20);
@@ -22,7 +22,7 @@ $productIdList = array(0, 1, 2, 3);
 $branches      = array(0, 1, 2, 3);
 $plans         = array(1, 2, 3, 4);
 
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 r(count($projectTester->linkProductsTest($projectIdList[0])))                                    && p() && e('0'); // 测试敏捷项目没有关联产品的数量
 r(count($projectTester->linkProductsTest($projectIdList[0], $productIdList)))                    && p() && e('3'); // 测试敏捷项目关联产品的数量
 r(count($projectTester->linkProductsTest($projectIdList[0], $productIdList, $branches)))         && p() && e('3'); // 测试敏捷项目关联产品、分支的数量

@@ -16,7 +16,7 @@ cid=15647
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
@@ -34,7 +34,7 @@ $project->gen(10);
 su('admin');
 
 // 创建测试实例
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 模拟Tutorial模式进行一个测试
 $_SESSION['tutorialMode'] = true;

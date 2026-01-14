@@ -16,11 +16,11 @@ cid=17063
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->buildSearchFormTest(1, '/metric/browse')) && p() && e('1');
 r($metricTest->buildSearchFormTest(0, '/test/url')) && p() && e('1');

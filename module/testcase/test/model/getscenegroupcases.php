@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen('50');
 zenData('case')->loadYaml('modulescenecase')->gen('50');
@@ -44,7 +44,7 @@ $moduleIdList   = array(0, 1);
 $caseTypeList   = array('', 'install');
 $orderList      = array('id_desc', 'id_asc');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getSceneGroupCasesTest($productIdList[0], $branchList[0], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('4: 4; 3: 3; 2: 2; 1: 1;'); // 获取产品 1 分支 all 模块 0 用例类型 空 id_desc 的场景分组
 r($testcase->getSceneGroupCasesTest($productIdList[0], $branchList[1], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('4: 4; 3: 3; 2: 2; 1: 1;'); // 获取产品 1 分支 0 模块 0 用例类型 空 id_desc 的场景分组

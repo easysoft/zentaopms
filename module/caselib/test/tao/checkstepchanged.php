@@ -17,13 +17,13 @@ cid=15538
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$caselibTest = new caselibTest();
+$caselibTest = new caselibTaoTest();
 
 // 4. 准备测试数据：创建相同的步骤数据
 $step1 = new stdclass();

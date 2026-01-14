@@ -16,14 +16,14 @@ cid=15500
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('story')->gen(10);
 zenData('storystage')->gen(5);
 zenData('user')->gen(5);
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r($buildTest->getStoryListTest('')) && p() && e('0'); // 测试传入空字符串获取story列表数据
 r($buildTest->getStoryListTest('1,2,3,4,5')) && p('1:title') && e('需求1'); // 测试传入有效storyId列表获取story列表数据

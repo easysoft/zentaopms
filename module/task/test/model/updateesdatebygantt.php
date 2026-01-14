@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project', true)->gen(5)->fixPath();
@@ -22,7 +22,7 @@ cid=18850
 
 */
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 $executionID = 3;
 $taskID      = 1;

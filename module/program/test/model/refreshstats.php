@@ -16,7 +16,7 @@ cid=17708
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('program')->gen(20);
 zenData('task')->loadYaml('task')->gen(20);
@@ -24,7 +24,7 @@ zenData('team')->loadYaml('team')->gen(30);
 zenData('user')->gen(5);
 su('admin');
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 $result = $programTester->refreshStatsTest();
 r($result) && p('1:progress') && e('22.80'); // 更新系统中项目、项目集的统计信息
 r($result) && p('2:progress') && e('28.00'); // 更新系统中项目、项目集的统计信息

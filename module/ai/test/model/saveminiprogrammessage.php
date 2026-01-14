@@ -16,13 +16,13 @@ cid=15062
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('ai_message')->loadYaml('ai_message_saveminiprogrammessage', false, 2)->gen(0);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->saveMiniProgramMessageTest(1, 'req', '这是一个测试请求消息')) && p() && e('1');
 r($aiTest->saveMiniProgramMessageTest(2, 'res', '这是一个测试响应消息')) && p() && e('1');

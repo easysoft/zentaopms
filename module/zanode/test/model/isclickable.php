@@ -66,13 +66,13 @@ cid=19840
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $status   = array('suspend', 'shutoff', 'running', 'launch', 'wait', 'creating_img', 'creating_snap', 'restoring');
 $hostType = array('physics', '');

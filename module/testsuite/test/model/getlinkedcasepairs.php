@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(10);
@@ -25,7 +25,7 @@ cid=19142
 */
 $suiteID = array(0, 1, 2);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->getLinkedCasePairsTest($suiteID[0])) && p('1')   && e('0'); //测试suiteID值正常存在,orderBy值为id_desc,append值为true
 r($testsuite->getLinkedCasePairsTest($suiteID[1])) && p('2;1') && e('这个是测试用例2;这个是测试用例1');  //测试suiteID值正常存在,orderBy值为id_desc,append值为false

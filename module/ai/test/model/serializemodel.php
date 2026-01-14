@@ -22,11 +22,11 @@ cid=15064
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 $validOpenAIModel = new stdclass();
 $validOpenAIModel->name = 'Test OpenAI Model';

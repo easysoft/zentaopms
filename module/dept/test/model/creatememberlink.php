@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->gen(10);
@@ -20,7 +20,7 @@ cid=15964
 
 */
 
-$deptTest = new deptTest();
+$deptTest = new deptModelTest();
 
 r($deptTest->createMemberLinkTest(1)) && p() && e('index.php?m=company&f=browse&browseType=inside&dept=1'); // 步骤1：正常部门ID生成成员链接
 r($deptTest->createMemberLinkTest(2)) && p() && e('index.php?m=company&f=browse&browseType=inside&dept=2'); // 步骤2：部门ID为2的链接生成

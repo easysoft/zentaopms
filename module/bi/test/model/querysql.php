@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15212
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r($bi->querySQLTest('SELECT id FROM zt_user LIMIT 2', 'SELECT id FROM zt_user LIMIT 2', 'mysql')) && p('result') && e('success'); // 测试有效SQL查询
 r($bi->querySQLTest('SELECT id FROM zt_user', 'SELECT * FORM invalid_syntax', 'mysql')) && p('result') && e('fail'); // 测试无效SQL语法

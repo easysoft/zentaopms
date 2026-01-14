@@ -19,7 +19,7 @@ cid=17528
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $story = zenData('story');
 $story->estimate->range('1-10:2');

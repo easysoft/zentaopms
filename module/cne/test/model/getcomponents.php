@@ -16,10 +16,10 @@ cid=15616
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 创建测试实例
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->getComponentsTest()) && p('code') && e('600');
 r($cneTest->getComponentsTest(999)) && p() && e('0');

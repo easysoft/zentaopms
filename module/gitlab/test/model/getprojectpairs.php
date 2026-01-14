@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=16656
 
 */
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $normalResult   = $gitlab->getProjectPairsTest($gitlabID = 1);
 $notExistResult = $gitlab->getProjectPairsTest($gitlabID = 10);

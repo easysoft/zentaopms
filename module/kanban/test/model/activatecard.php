@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancard')->gen(5);
@@ -51,7 +51,7 @@ cid=16867
 $cardIDList   = array('1', '2', '3', '4', '5');
 $progressList = array('0', '50', '100', '101', '-1');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->activateCardTest($cardIDList[0], $progressList[0])) && p('id,name,status,progress') && e('1,卡片1,doing,0.00');  // 测试激活卡片1，进度0
 r($kanban->activateCardTest($cardIDList[0], $progressList[1])) && p('id,name,status,progress') && e('1,卡片1,doing,50.00'); // 测试激活卡片1，进度50

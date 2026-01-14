@@ -19,13 +19,13 @@ cid=18167
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
 su('admin');
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 // 测试数据准备
 $normalStatusStat = array('active' => 1, 'wait' => 2, 'doing' => 3, 'done' => 4, 'closed' => 5, 'cancel' => 6);

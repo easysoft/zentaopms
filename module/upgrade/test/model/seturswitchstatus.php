@@ -17,9 +17,9 @@ cid=19553
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $versionList = array('18.1', '18.3', 'biz8.1', 'biz8.3', 'max4.1', 'max4.3');
 function getResult()

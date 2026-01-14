@@ -17,7 +17,7 @@ cid=17676
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $program = zenData('project');
 $program->id->range('1-5');
@@ -31,7 +31,7 @@ $program->deleted->range('0');
 $program->gen(5);
 
 global $tester;
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 su('admin');
 r($programTester->checkPrivTest(0)) && p() && e('0'); // 测试步骤1:programID为0时应返回false

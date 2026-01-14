@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testrun')->gen(4);
 zenData('case')->loadYaml('case')->gen(4);
@@ -18,7 +18,7 @@ pid=1
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->unlinkCaseTest(1)) && p('run;cases;action:objectType|objectID|action|extra', '|') && e('0;1,2,3,4,1,2,3,4,2,3,4,2,3,4;case|1|unlinkedfromtesttask|1'); // 从测试单 1 中移除用例 1，同时从项目 3 和项目 4 中移除用例1。
 r($testtask->unlinkCaseTest(2)) && p('run;cases;action:objectType|objectID|action|extra', '|') && e('0;1,2,3,4,1,2,3,4,3,4,3,4;case|2|unlinkedfromtesttask|1');     // 从测试单 1 中移除用例 2，同时从项目 3 和项目 4 中移除用例2。

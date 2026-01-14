@@ -19,7 +19,7 @@ cid=19643
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('user');
 $table->password->range(md5(123456));
@@ -28,7 +28,7 @@ $table->gen(2);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $random = updateSessionRandom();
 $admin  = $userTest->getByIdTest('admin');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(10);
 su('admin');
 
@@ -50,7 +50,7 @@ $caseAction['url']['module'] = 'testtask';
 $caseAction['url']['method'] = 'runCase';
 $caseAction['url']['params'] = 'runID=0&caseID=1';
 
-$commonModel = new commonTest();
+$commonModel = new commonModelTest();
 r($commonModel->checkPrivForOperateActionTest('story',    'createeffort', $storyAction)) && p() && e('1'); //测试研发需求创建日志按钮权限
 r($commonModel->checkPrivForOperateActionTest('task',     'start',        $taskAction))  && p() && e('1'); //测试任务开始按钮权限
 r($commonModel->checkPrivForOperateActionTest('bug',      'confirm',      $bugAction))   && p() && e('1'); //测试确认BUG按钮权限

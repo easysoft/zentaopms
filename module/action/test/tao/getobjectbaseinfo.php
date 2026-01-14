@@ -28,14 +28,14 @@ cid=14951
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('bug')->gen(4);
 zenData('product')->gen(4);
 
 $actionIDList = array(1, 2, 3, 0);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $tableList = array(TABLE_BUG, TABLE_PRODUCT);
 $queryParamList = array(array('project' => 11), array('project' => 11), array('name' => '正常产品1', 'code' => 'code1'), array('name' => '正常产品2', 'code' => 'code2'));

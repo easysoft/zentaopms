@@ -28,11 +28,11 @@ cid=17024
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r($mailTest->setSMTPTest()) && p('host,debug,charset') && e('localhost,0,utf-8'); // 测试步骤1：默认SMTP配置验证
 

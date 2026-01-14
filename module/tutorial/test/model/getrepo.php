@@ -22,11 +22,11 @@ cid=19461
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r($tutorialTest->getRepoTest()) && p('id,name') && e('1,Test repo');
 r($tutorialTest->getRepoTest()) && p('SCM,encoding') && e('Git,utf-8');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen('5');
@@ -27,7 +27,7 @@ global $tester;
 $taskIdList = array(array(1, 2), array(3, 4), array(5, 6));
 $task = $tester->loadModel('task')->fetchByID(1);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 r($taskTester->afterBatchCreateObject($taskIdList[0])) && p() && e('1'); // 测试批量创建迭代下的任务后的数据处理
 r($taskTester->afterBatchCreateObject($taskIdList[1])) && p() && e('1'); // 测试批量创建阶段下的任务后的数据处理

@@ -16,13 +16,13 @@ cid=15248
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 4. 准备测试数据
 $block1 = new stdclass();

@@ -16,7 +16,7 @@ cid=16670
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('pipeline');
@@ -32,7 +32,7 @@ $table->gen(5);
 su('admin');
 
 // 创建测试实例
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 // 测试步骤1：使用空token验证
 $_GET['gitlab'] = 1;

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancard')->gen(1);
@@ -46,7 +46,7 @@ $card5 = clone $card1;
 $card5->begin = '2022-03-30';
 $card5->end   = '2022-03-01';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateCardTest(1, $card1)) && p('name,estimate,progress,pri') && e('修改名字,3.00,20.00,1');         // 正常编辑卡片
 r($kanban->updateCardTest(1, $card2)) && p('estimate')                   && e('预计不能为负数!');               // 卡片的预计不能是负数

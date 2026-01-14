@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -34,7 +34,7 @@ zenData('user')->gen(110);
 
 $executionIdList = array(101, 102, 103, 104, 105);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 r($executionTester->getToAndCcListTest($executionIdList[0])) && p('0|1', '|') && e('user4|~~'); // 获取执行 101 的通知人员
 r($executionTester->getToAndCcListTest($executionIdList[1])) && p('0|1', '|') && e('user5|~~'); // 获取执行 102 的通知人员

@@ -18,7 +18,7 @@ cid=16280
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备用户数据
 $user = zenData('user');
@@ -58,7 +58,7 @@ $task->status->range('wait{10},doing{10}');
 $task->deleted->range('0{20}');
 $task->gen(20);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 
 // 测试步骤1：正常修改执行状态为等待（无子阶段已开始且无消耗任务）
 r($execution->changeStatus2WaitTest(8)) && p('') && e('');

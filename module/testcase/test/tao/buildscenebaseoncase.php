@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('scene')->loadYaml('treescene')->gen('20');
 zenData('user')->gen('1');
@@ -50,7 +50,7 @@ $sceneIdList   = array(1, 2, 20);
 $fieldTypeList = array(array_merge($rule1, $rule2), array_merge($rule3, $rule4, $rule5));
 $caseIdList    = array(array(), array(1, 2));
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->buildSceneBaseOnCaseTest($sceneIdList[0], $fieldTypeList[0], $caseIdList[0])) && p() && e('1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene');             // 测试构建场景 1 rule1 rule2 用例 空 的用例信息
 r($testcase->buildSceneBaseOnCaseTest($sceneIdList[0], $fieldTypeList[1], $caseIdList[0])) && p() && e('1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene'); // 测试构建场景 1 rule3 rule4 rule5 用例 空 的用例信息

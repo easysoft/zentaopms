@@ -22,9 +22,9 @@ cid=17436
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 r($pivot->trimSemicolon('select id,name from zt_project;'))    && p() && e('select id,name from zt_project'); // 测试末尾存在分号。
 r($pivot->trimSemicolon('select id,name from zt_project '))    && p() && e('select id,name from zt_project'); // 测试末尾存在空格。

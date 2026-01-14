@@ -16,11 +16,11 @@ cid=15834
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createCaseTest(1, 1, 1, (object)array('id' => 'JIRA-001', 'summary' => '正常测试用例', 'priority' => '2', 'issuestatus' => 'open', 'issuetype' => 'test', 'creator' => 'admin', 'created' => '2023-01-01 10:00:00'), array())) && p('') && e('0');
 r($convertTest->createCaseTest(999, 1, 1, (object)array('id' => 'JIRA-002', 'summary' => '无效产品ID测试', 'priority' => '3', 'issuestatus' => 'open', 'issuetype' => 'test', 'creator' => 'admin', 'created' => '2023-01-01 11:00:00'), array())) && p('') && e('0');

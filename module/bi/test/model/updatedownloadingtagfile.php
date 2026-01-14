@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -19,7 +19,7 @@ cid=15218
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(method_exists($biTest->objectModel, 'updateDownloadingTagFile')) && p() && e('1');
 r(is_string($biTest->updateDownloadingTagFileTest())) && p() && e('1');

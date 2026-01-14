@@ -16,14 +16,14 @@ cid=16697
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 zenData('group')->gen(5);
 zenData('grouppriv')->loadYaml('grouppriv')->gen(10);
 
-$group = new groupTest();
+$group = new groupModelTest();
 r($group->copyPrivTest(1, 1)) && p() && e('1'); // 复制分组1权限到分组1
 r($group->copyPrivTest(1, 2)) && p() && e('1'); // 复制分组1权限到分组2
 r($group->copyPrivTest(2, 3)) && p() && e('1'); // 复制分组2权限到分组3

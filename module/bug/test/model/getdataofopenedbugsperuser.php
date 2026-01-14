@@ -33,7 +33,7 @@ cid=15377
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 测试步骤1：多用户不同数量bug统计
 $table = zenData('bug');
@@ -41,7 +41,7 @@ $table->openedBy->range('admin{5},dev1{3},test1{2},user1{1}');
 $table->gen(11);
 
 su('admin');
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfOpenedBugsPerUserTest()) && p('admin:name,value;dev1:name,value;test1:name,value;user1:name,value') && e('admin,5;dev1,3;test1,2;用户1,1'); // 测试步骤1：多用户不同数量bug统计
 
 // 测试步骤2：单用户场景统计

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug_linktask')->gen(6);
 zenData('task')->loadYaml('task')->gen(5);
@@ -23,7 +23,7 @@ cid=15382
 
 $taskIdList = array(1, 2, 3, 4, 100);
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->getLinkedBugsByTaskIDTest($taskIdList[0])) && p() && e('1:BUG1,5:BUG5'); // 测试获取任务 1 的相关 Bug
 r($bug->getLinkedBugsByTaskIDTest($taskIdList[1])) && p() && e('2:BUG2,6:BUG6'); // 测试获取任务 2 的相关 Bug

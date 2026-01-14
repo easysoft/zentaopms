@@ -19,7 +19,7 @@ cid=19369
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -29,7 +29,7 @@ $module->parent->range('0,1');
 $module->path->range(',1,`,1,2,`');
 $module->gen(2);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getHostTreeMenuTest())  && p('0:id,name,url') && e('1,这是一个模块1,host-browse-bymodule-1.html');  // 测试获取Host模块
 r($tree->getHostTreeMenuTest())  && p('1:id,name,url') && e('2,这是一个模块2,host-browse-bymodule-2.html');  // 测试获取Host模块

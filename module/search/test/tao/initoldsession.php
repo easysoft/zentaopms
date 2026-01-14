@@ -27,7 +27,7 @@ cid=18330
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 // 为测试环境准备基础数据
@@ -51,7 +51,7 @@ $userTable->gen(1);
 su('admin');
 
 // 4. 创建测试实例
-$searchTest = new searchTest();
+$searchTest = new searchTaoTest();
 
 // 5. 测试步骤
 r($searchTest->initOldSessionTest('bug', array('title' => 'Bug名称', 'keywords' => '关键词', 'assignedTo' => '指派给', 'status' => 'Bug状态'), array('title' => array('operator' => 'include'), 'keywords' => array('operator' => 'include'), 'assignedTo' => array('operator' => '='), 'status' => array('operator' => '=')), true)) && p('field1,operator1') && e('title,include'); // 步骤1：测试正常情况，验证session初始化

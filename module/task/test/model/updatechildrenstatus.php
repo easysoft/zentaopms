@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -46,7 +46,7 @@ zenData('task')->loadYaml('task')->gen(9);
 
 su('user1');
 $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
-$task = new taskTest();
+$task = new taskModelTest();
 
 $task->objectModel->dao->update(TABLE_TASK)->set("path = concat(',', id, ',')")->exec();
 $task->objectModel->dao->update(TABLE_TASK)->set("path = concat(',', parent, ',', id, ',')")->where('parent')->gt('0')->exec();

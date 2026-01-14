@@ -18,7 +18,7 @@ cid=16659
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('pipeline');
 $table->id->range('1-5');
@@ -32,7 +32,7 @@ $table->gen(5);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->getVersionTest('https://gitlab.example.com', 'glpat-test1234567890abcdef')) && p('version') && e('*');
 r($gitlabTest->getVersionTest('https://gitlab.example.com', 'invalid-token')) && p() && e('~~');

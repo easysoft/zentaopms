@@ -20,11 +20,11 @@ cid=15188
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r($bi->getTableAndFields('SELECT * FROM zt_story')) && p('tables:0') && e('zt_story');
 r($bi->getTableAndFields('SELECT * FROM zt_story')) && p('fields:*') && e('*');

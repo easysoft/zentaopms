@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getCFDData();
@@ -56,7 +56,7 @@ $CFD->gen(5);
 
 $typeList = array('story', 'task', 'bug', 'test');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r(count($executionTester->getCFDDataTest()))                  && p()                  && e('0');       // 不存在执行的累计流图信息
 r(current($executionTester->getCFDDataTest(3, $typeList[0]))) && p('2022-01-22:name') && e('看板列3'); // 存在的执行的需求卡片累计流图信息
 r(current($executionTester->getCFDDataTest(3, $typeList[1]))) && p('2022-01-22:name') && e('看板列1'); // 存在的执行的任务卡片累计流图信息

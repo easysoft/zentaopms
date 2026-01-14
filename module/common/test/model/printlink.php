@@ -16,9 +16,9 @@ cid=15696
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->printLinkTest('misc', 'ping', '', 'Ping', '', '', true, false, null)) && p('result') && e('1');
 r($commonTest->printLinkTest('admin', 'forbidden', '', 'Forbidden', '', '', true, false, null)) && p() && e('0');

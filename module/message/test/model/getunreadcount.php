@@ -16,7 +16,7 @@ cid=17056
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $notify = zenData('notify');
 $notify->id->range('1-10');
@@ -34,7 +34,7 @@ zenData('user')->gen(5);
 su('admin');
 
 global $tester;
-$messageTest = new messageTest();
+$messageTest = new messageModelTest();
 
 r($messageTest->getUnreadCountTest('admin')) && p() && e('3');
 r($messageTest->getUnreadCountTest('user1')) && p() && e('3');

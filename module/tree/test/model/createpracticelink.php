@@ -16,11 +16,11 @@ cid=19354
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$treeTest = new treeTest();
+$treeTest = new treeModelTest();
 
 // 测试步骤1：正常培训实践模块链接创建
 $module1 = new stdclass();

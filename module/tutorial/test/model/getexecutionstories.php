@@ -15,11 +15,11 @@ cid=19434
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 su('admin');
 r($tutorial->getExecutionStoriesTest()) && p('3:id')       && e('3');                 // 检查获取需求ID

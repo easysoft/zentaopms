@@ -16,9 +16,9 @@ cid=15700
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->printOrderLinkTest('id', 'name_asc', 'orderBy=%s', 'ID', 'user', 'browse')) && p() && e("<a href='/user-browse-orderBy=id_asc.html'  class='header' data-app=system>ID</a>"); // 步骤1：基本排序链接生成
 r($commonTest->printOrderLinkTest('id', 'id_asc', 'orderBy=%s', 'ID', 'user', 'browse')) && p() && e("<a href='/user-browse-orderBy=id_desc.html'  class='sort-up' data-app=system>ID</a>"); // 步骤2：当前字段升序排序链接

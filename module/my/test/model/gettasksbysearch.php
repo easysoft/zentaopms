@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('task')->gen('40');
 zenData('story')->gen('40');
@@ -30,7 +30,7 @@ cid=17303
 
 */
 
-$my    = new myTest();
+$my    = new myModelTest();
 $account  = array('admin', 'user5');
 $limit    = array(0, 5);
 

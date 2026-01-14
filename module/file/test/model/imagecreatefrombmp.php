@@ -17,13 +17,13 @@ cid=16516
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 // 4. 创建测试用的BMP文件
 $testDataDir = dirname(__FILE__) . '/data/imagecreatefrombmp/';

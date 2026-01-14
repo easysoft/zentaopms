@@ -18,13 +18,13 @@ cid=19600
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('usercontact');
 $table->account->range('user1');
 $table->gen(3);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $lists = $userTest->getContactListsTest('user1');
 r(count($lists)) && p()       && e(3); //联系人列表数量为 3。

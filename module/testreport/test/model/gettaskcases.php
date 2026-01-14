@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testreport')->gen(2);
 zenData('testtask')->gen(30);
@@ -33,7 +33,7 @@ $taskIdList = array(1, 0);
 $reportID   = 1;
 $idList     = array('1,2', '');
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 
 r($testreport->getTaskCasesTest($taskIdList[0], $reportID, $idList[0])[1]) && p('1:id;1:lastRunResult;2:id;2:lastRunResult') && e('1;pass;2;fail'); //正常查询
 r($testreport->getTaskCasesTest($taskIdList[0], $reportID, $idList[1])[1]) && p('1:id;2:id;3:id;4:id')                       && e('1;2;3;4');       //idList为空查询

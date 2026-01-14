@@ -18,11 +18,11 @@ cid=15216
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r($bi->sql2StatementTest('SELECT id, name FROM zt_user', 'text')) && p() && e('object'); // 测试正常的SELECT语句转换为statement对象
 r($bi->sql2StatementTest('', 'text')) && p() && e('请输入一条正确的SQL语句'); // 测试空SQL字符串输入(text模式)

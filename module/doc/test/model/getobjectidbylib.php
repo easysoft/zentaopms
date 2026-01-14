@@ -19,7 +19,7 @@ cid=16115
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('doclib');
@@ -29,7 +29,7 @@ $table->loadYaml('doclib_getobjectidbylib', false, 2)->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 // 准备测试用的doclib对象
 $productLib = new stdClass();

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15155
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(method_exists($biTest->objectModel, 'downloadDuckdb')) && p() && e('1'); // 步骤1：验证方法存在性
 r(is_string($biTest->downloadDuckdbTest())) && p() && e('1'); // 步骤2：检查返回值类型

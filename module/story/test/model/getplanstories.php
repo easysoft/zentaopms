@@ -19,7 +19,7 @@ cid=18548
 
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('product')->loadYaml('story_getplanstories', false, 2)->gen(5);
 zendata('story')->loadYaml('story_getplanstories', false, 2)->gen(50);
@@ -28,7 +28,7 @@ zendata('module')->loadYaml('module_getplanstories', false, 2)->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getPlanStoriesTest(1, 'all', 'id_desc'))) && p() && e('4');
 r(count($storyTest->getPlanStoriesTest(1, 'all', 'module,id_desc'))) && p() && e('4');

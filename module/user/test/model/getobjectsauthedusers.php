@@ -21,7 +21,7 @@ cid=19620
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $user = zenData('user');
@@ -65,7 +65,7 @@ $acl->gen(12);
 su('admin');
 
 // 4. 创建测试实例
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 // 5. 测试步骤
 // 创建项目对象

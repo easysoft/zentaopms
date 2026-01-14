@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $config = zenData('config');
@@ -24,7 +24,7 @@ cid=18371
 
 global $config;
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 $config->framework->extensionLevel = 1;
 
 r($setting->updateItemTest('key2', 'value20'))                              && p()        && e('0');                              //测试更新错误数据

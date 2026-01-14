@@ -17,7 +17,7 @@ cid=18748
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/system.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $configTable = zenData('config');
@@ -33,7 +33,7 @@ $configTable->gen(1);
 su('admin');
 
 // 4. 创建测试实例
-$systemTest = new systemTest();
+$systemTest = new systemModelTest();
 
 // 5. 测试步骤
 r($systemTest->unsetMaintenanceTest()) && p() && e('deleted'); // 步骤1：正常情况 - 存在维护配置时删除

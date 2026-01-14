@@ -28,7 +28,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('metric');
 $table->code->range('metric_nodate,metric_year,metric_month,metric_week,metric_day');
@@ -38,7 +38,7 @@ $table->gen(5);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->getRecordFieldsTest('metric_nodate')) && p('0') && e('system'); // 步骤1：dateType为nodate的度量
 r($metricTest->getRecordFieldsTest('metric_year')) && p('0,1') && e('product,year'); // 步骤2：dateType为year的度量

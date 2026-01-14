@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -30,7 +30,7 @@ $task->gen(50);
 $projectList = array(0, 1, 11);
 $dateList    = array('2022-07-30', '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getPostponedTest($projectList[0], $dateList[0])) && p('13:name') && e('开发任务60');  //测试project值为0，date值为2022-07-30
 r($weekly->getPostponedTest($projectList[0], $dateList[1])) && p('3:name')  && e('开发任务53');  //测试project值为0，date值为空

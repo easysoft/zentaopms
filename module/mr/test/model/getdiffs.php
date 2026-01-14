@@ -18,12 +18,12 @@ cid=17245
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 // 创建测试实例
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 // 测试步骤1：使用空的MR对象
 r($mrTest->getDiffsTest(new stdclass())) && p() && e('0');

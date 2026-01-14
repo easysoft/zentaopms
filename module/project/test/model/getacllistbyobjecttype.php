@@ -17,7 +17,7 @@ cid=17813
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('acl')->loadYaml('acl_getacllistbyobjecttype', false, 2)->gen(20);
 su('admin');
