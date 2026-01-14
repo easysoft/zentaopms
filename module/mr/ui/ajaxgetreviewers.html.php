@@ -23,7 +23,7 @@ jsVar('mrLang', $lang->mr);
 foreach($reviewers as $reviewer)
 {
     $approvalClass = 'success';
-    if($reviewer->decision == 'reject') $approvalClass = 'danger';
+    if($reviewer->decision == 'rejected') $approvalClass = 'danger';
     if($reviewer->decision == 'pending') $approvalClass = 'secondary';
     $reviewItems[] = div
     (
@@ -48,13 +48,13 @@ foreach($reviewers as $reviewer)
         div
         (
             setClass('mt-2 pl-6'),
-            span("{$lang->mr->approvalResult}: ", empty($reviewer->opinion) ? $lang->noData : $reviewer->opinion)
+            span("{$lang->mr->approvalResult}: ", empty($reviewer->opinion) ? $lang->noData : strip_tags($reviewer->opinion))
         )
     );
 }
 tabs
 (
-    on::init()->call('loadApprovalsBlock'),
+    on::init()->do("loadCurrentPage('#mr-detail');loadCurrentPage('.mr-toolbar');loadCurrentPage('#mr-history');"),
     set::headerBtn
     (
         array

@@ -114,6 +114,11 @@ $basicItems[] = item(set::name($lang->mr->targetBranch), $mr->targetBranch);
 $basicItems[] = item(set::name($lang->mr->sourceBranch), $mr->sourceBranch);
 $basicItems[] = item(set::name($lang->mr->description),  !empty($mr->desc) ? strip_tags($mr->desc) : $lang->noData);
 
+if(!in_array($app->user->account, array_keys($reviewers)))
+{
+    $config->mr->actions->view['mainActions'] = array_diff($config->mr->actions->view['mainActions'], array('review'));
+}
+
 $actions = $this->loadModel('common')->buildOperateMenu($mr);
 
 div
@@ -126,7 +131,7 @@ div
         sectionList
         (
             div
-            (
+            (   setID('mr-detail'),
                 div
                 (
                     setClass('py-1 title-header'),
@@ -150,7 +155,7 @@ div
                             set::active($type == 'basic'),
                             div
                             (
-                                $hasConflict == 'no'? section
+                                $hasConflict == 'no' && $reviewResult ? section
                                 (
                                     setClass('flex w-full checkMerge'),
                                     div(setClass('py-6 border-l-4 border-r-4 border-success')),
@@ -231,7 +236,7 @@ div
                                     div
                                     (
                                         setClass('border px-4 h-12 flex items-center'),
-                                        span(setClass('font-bold'), $lang->mr->review),
+                                        span(setClass('font-bold'), $lang->mr->manualReview),
                                         label(setID('approvalLabel'), setClass('success ml-4'), $lang->mr->checkStatusList['success']),
                                         div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
                                     ),
@@ -242,16 +247,16 @@ div
                                         div
                                         (
                                             setClass('flex items-center py-1'),
-                                            icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check'),
-                                            span(setClass('reviewResult')),
+                                            $reviewResult ? icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewResultIcon'), 'close'),
+                                            $reviewResult ? span("{$lang->mr->reviewStatus}: ", $lang->mr->checkStatusList['success']) : span("{$lang->mr->reviewStatus}: ", $lang->mr->checkStatusList['fail']),
                                             div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: {$lang->mr->approvalStatusList['approved']})"))
                                         ),
                                         div
                                         (
                                             setClass('flex items-center py-1' . ($minReviewers == 0 ? ' hidden' : '')),
-                                            icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check'),
-                                            span(setClass('reviewerCount')),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$config->mr->approvalReviewer})"))
+                                            count($reviewers) >= $minReviewers ? icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check') : icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check'),
+                                            span("{$lang->mr->approvalReviewer}: ", count($reviewers)),
+                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->mr->request}: ≥{$minReviewers})"))
                                         )
                                     )
                                 ),
@@ -417,7 +422,7 @@ div
         ),
         center
         (
-            setClass('pt-6 sticky bottom-0'),
+            setClass('pt-6 sticky bottom-0 mr-toolbar'),
             floatToolbar
             (
                 set::prefix(array(array('icon' => 'back', 'text' => $lang->goback, 'hint' => $lang->goback, 'data-back' => 'mr-browse', 'class' => 'open-url'))),
@@ -436,7 +441,15 @@ div
         setStyle(array('width' => '370px')),
         setClass('detail-side flex-none relative'),
         tabs(setID('basic'), setClass('canvas rounded shadow py-2 px-4'), tabPane(set::title($lang->mr->basicInfo), tableData($basicItems))),
-        div(setID('reviewer')),
-        history(setClass('mt-2 border-0 canvas shadow-sm'), setStyle(array('box-shadow' => 'var(--shadow-none)')))
+        div
+        (
+            setID('reviewer'),
+            h::js('loadTarget("' . createLink('mr', 'ajaxGetReviewers', "mrID={$mr->id}") . '", "#reviewer")'),
+        ),
+        div
+        (
+            setID('mr-history'),
+            history(setClass('mt-2 border-0 canvas shadow-sm mr-history'), setStyle(array('box-shadow' => 'var(--shadow-none)')))
+        )
     )
 );

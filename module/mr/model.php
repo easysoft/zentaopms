@@ -850,49 +850,17 @@ class mrModel extends model
      * 审核合并请求。
      * Reject or Approve this MR.
      *
-     * @param  object $MR
-     * @param  string $action  approve|reject
-     * @param  string $comment
-     * @return array
+     * @param  int    $mrID
+     * @param  object $formData
+     * @return bool
      */
-    public function approve(object $MR, string $action = 'approve', string $comment = ''): array
+    public function review(int $mrID, object $formData): bool
     {
-        if(isset($MR->status) && $MR->status == 'opened')
-        {
-            $oldMR = clone $MR;
-            $rawApprovalStatus = zget($MR, 'approvalStatus', '');
-            if($action == 'reject'  && $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
-            if($action == 'approve' && $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
-            if(isset($MR->approvalStatus) && $rawApprovalStatus != $MR->approvalStatus)
-            {
-                $changes = common::createChanges($oldMR, $MR);
-
-                unset($MR->editedDate);
-                $MR->approver = $this->app->user->account;
-                $this->dao->update(TABLE_MR)->data($MR)
-                    ->where('id')->eq($MR->id)
-                    ->exec();
-                if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-                /* Save approval history into db. */
-                $approval = new stdClass;
-                $approval->date    = helper::now();
-                $approval->mrID    = $MR->id;
-                $approval->account = $MR->approver;
-                $approval->action  = $action;
-                $approval->comment = $comment;
-                $this->dao->insert(TABLE_MRAPPROVAL)->data($approval, $this->config->mrapproval->create->skippedFields)
-                    ->batchCheck($this->config->mrapproval->create->requiredFields, 'notempty')
-                    ->autoCheck()
-                    ->exec();
-                if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-
-                $actionID = $this->loadModel('action')->create($this->moduleName, $MR->id, $action);
-                $this->action->logHistory($actionID, $changes);
-                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true);
-            }
-        }
-        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'load' => helper::createLink($this->moduleName, 'view', "mr={$MR->id}"));
+        $this->dao->update(TABLE_MRREVIEWERS)->data($formData)
+            ->where('requestID')->eq($mrID)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->exec();
+        return !dao::isError();
     }
 
     /**
@@ -919,6 +887,8 @@ class mrModel extends model
      */
     public function reopen(int $mrID): bool
     {
+        $mr    = $this->fetchByID($mrID);
+        $hasMr = $this->dao->select('id')->from(TABLE_MR)->where('id')->eq($mrID)->fetch();
         $this->dao->update(TABLE_MR)->set('status')->eq('opened')->where('id')->eq($mrID)->exec();
         return !dao::isError();
     }

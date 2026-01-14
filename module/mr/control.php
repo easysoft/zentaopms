@@ -323,9 +323,13 @@ class mr extends control
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
         }
+        $reviewID  = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
+        $reviewers = !empty($reviewID) ? array() : $this->mr->getReviewers($id);
 
         $this->view->title             = $this->lang->mr->view;
         $this->view->mr                = $mr;
+        $this->view->reviewers         = $reviewers;
+        $this->view->reviewResult      = $this->mr->getReviewResult($reviewers, $flow);
         $this->view->repo              = $repo;
         $this->view->repoID            = $repo->id;
         $this->view->flow              = $flow;
@@ -457,34 +461,35 @@ class mr extends control
 
     /**
      * 审核合并请求。
-     * Approval for this MR.
+     * review for this MR.
      *
-     * @param  int    $MRID
+     * @param  int    $id
      * @param  string $action
      * @return void
      */
-    public function approval(int $MRID, string $action = 'approve')
+    public function review(int $id)
     {
-        $MR = $this->mr->fetchByID($MRID);
+        $mr        = $this->mr->fetchByID($id);
+        $reviewers = $this->mr->getReviewers($id);
         if($_POST)
         {
-            $comment = $this->post->comment;
-            $result  = $this->mr->approve($MR, $action, $comment);
-            return $this->send($result);
+            $data = form::data($this->config->mr->form->review)->get();
+            if($data->decision == 'reject' && empty($data->opinion))
+            {
+                return $this->sendError(array('opinion' => sprintf($this->lang->error->notempty, $this->lang->mr->opinion)));
+            }
+
+            $this->mr->review($id, $data);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create($this->moduleName, $id, $data->decision == 'approved' ? 'approve' : 'reject');
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $showCompileResult = false;
-        if(!empty($MR->compileStatus))
-        {
-            $showCompileResult = true;
-            $this->view->compileUrl = $this->createLink('job', 'view', "jobID={$MR->jobID}&compileID={$MR->compileID}");
-        }
-
-        $this->view->MR                = $MR;
-        $this->view->action            = $action;
-        $this->view->actions           = $this->loadModel('action')->getList($this->app->rawModule, $MRID);
-        $this->view->users             = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->showCompileResult = $showCompileResult;
+        $this->view->title    = $this->lang->mr->review;
+        $this->view->reviewer = zget($reviewers, $this->app->user->account, array());
+        $this->view->mr       = $mr;
         $this->display();
     }
 
@@ -517,6 +522,18 @@ class mr extends control
      */
     public function reopen(int $id)
     {
+        $mr   = $this->mr->fetchByID($id);
+        $repo = $this->loadModel('repo')->getByID($mr->repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $branches = $scm->branch();
+        if(!in_array($mr->targetBranch, $branches)) return $this->sendError($this->lang->mr->sourceBranchNotExist);
+        if(!in_array($mr->sourceBranch, $branches)) return $this->sendError($this->lang->mr->targetBranchNotExist);
+
+        $checkSameOpened = $this->mr->checkSameOpened($mr->repoID, (string)$mr->sourceRepoID, $mr->sourceBranch, (string)$mr->targetRepoID, $mr->targetBranch);
+        if($checkSameOpened['result'] == 'fail') return $this->sendError($checkSameOpened['message']);
+
         $this->mr->reopen($id);
         if(dao::isError()) return $this->sendError(dao::getError());
 
