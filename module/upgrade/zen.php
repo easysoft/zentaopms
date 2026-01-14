@@ -169,9 +169,9 @@ class upgradeZen extends upgrade
     {
         $this->upgradeChanges = [];
 
-        $currentVersion  = $this->config->installedVersion;
+        $currentVersion  = str_replace('.', '_', $this->config->installedVersion);
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
-        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $currentVersion));
+        $fromOpenVersion = $this->upgrade->getOpenVersion($currentVersion);
         $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
         $upgradeVersions = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
