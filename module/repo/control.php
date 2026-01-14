@@ -2007,7 +2007,14 @@ class repo extends control
             $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
 
-            $prefix       = (strpos($branch->name, '/') !== false) ? substr($branch->name, 0, strpos($branch->name, '/') + 1) : $branch->name;
+            $separators = array('/', '-', '_', '.');
+            $minPos     = false;
+            foreach($separators as $separator)
+            {
+                $pos = strpos($branch->name, $separator);
+                if($pos !== false && ($minPos === false || $pos < $minPos)) $minPos = $pos;
+            }
+            $prefix = ($minPos !== false) ? substr($branch->name, 0, $minPos + 1) : $branch->name;
             $branch->type = '';
             foreach($types as $type)
             {
