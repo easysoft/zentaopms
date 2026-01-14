@@ -182,12 +182,8 @@ class aiModelTest extends baseTest
      */
     public function getDefaultLanguageModelTest()
     {
-        // 使用反射来测试私有方法
-        $method = new ReflectionMethod($this->instance, 'getDefaultLanguageModel');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance);
+        $result = $this->invokeArgs('getDefaultLanguageModel');
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -200,13 +196,8 @@ class aiModelTest extends baseTest
      */
     public function serializeModelTest($model = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('serializeModel');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $model);
+        $result = $this->invokeArgs('serializeModel', [$model]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -221,7 +212,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->unserializeModel($model);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -236,7 +226,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->createModel($model);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -405,13 +394,8 @@ class aiModelTest extends baseTest
      */
     public function getProxyTypeTest($proxyType = null)
     {
-        /* Using reflection to call private static method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('getProxyType');
-        $method->setAccessible(true);
-        $result = $method->invoke(null, $proxyType);
+        $result = $this->invokeArgs('getProxyType', [$proxyType]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -424,13 +408,8 @@ class aiModelTest extends baseTest
      */
     public function camelCaseToSnakeCaseTest($str = null)
     {
-        /* Using reflection to call private static method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('camelCaseToSnakeCase');
-        $method->setAccessible(true);
-        $result = $method->invoke(null, $str);
+        $result = $this->invokeArgs('camelCaseToSnakeCase', [$str]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -443,13 +422,8 @@ class aiModelTest extends baseTest
      */
     public function standardizeParamsTest($data = null)
     {
-        /* Using reflection to call private static method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('standardizeParams');
-        $method->setAccessible(true);
-        $result = $method->invoke(null, $data);
+        $result = $this->invokeArgs(i'standardizeParams', [$data]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -463,13 +437,8 @@ class aiModelTest extends baseTest
      */
     public function assembleRequestDataTest($type = null, $data = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('assembleRequestData');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $type, $data);
+        $result = $this->invokeArgs('assembleRequestData', [$type, $data]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -482,13 +451,8 @@ class aiModelTest extends baseTest
      */
     public function decodeResponseTest($response = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('decodeResponse');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $response);
+        $result = $this->invokeArgs('decodeResponse', [$response]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -501,13 +465,8 @@ class aiModelTest extends baseTest
      */
     public function parseTextResponseTest($response = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('parseTextResponse');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $response);
+        $result = $this->invokeArgs('parseTextResponse', [$response]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -520,13 +479,8 @@ class aiModelTest extends baseTest
      */
     public function parseChatResponseTest($response = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('parseChatResponse');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $response);
+        $result = $this->invokeArgs('parseChatResponse', [$response]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -539,13 +493,8 @@ class aiModelTest extends baseTest
      */
     public function parseFunctionCallResponseTest($response = null)
     {
-        /* Using reflection to call private method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('parseFunctionCallResponse');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance, $response);
+        $result = $this->invokeArgs('parseFunctionCallResponse', [$response]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -656,7 +605,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->converse($model, $messages, $options);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -846,7 +794,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->countLatestMiniPrograms();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -863,7 +810,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->saveMiniProgramMessage($appID, $type, $content);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -880,7 +826,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->deleteHistoryMessagesByID($appID, $userID, $messageIDs);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -896,7 +841,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getHistoryMessages($appID, $limit);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1057,7 +1001,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getMiniProgramByID($id);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1071,7 +1014,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getCustomCategories();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1085,7 +1027,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getUsedCustomCategories();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1099,7 +1040,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getPublishedCustomCategories();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1115,7 +1055,6 @@ class aiModelTest extends baseTest
         $_POST = $postData;
         $result = $this->instance->checkDuplicatedCategory();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1133,7 +1072,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getMiniPrograms($category, $status, $order, $pager);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1148,7 +1086,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getMiniProgramFields($appID);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1203,7 +1140,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->publishMiniProgram($appID, $published);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1220,7 +1156,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->collectMiniProgram($userID, $appID, $delete);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1235,7 +1170,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->canPublishMiniProgram($program);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1250,7 +1184,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->createMiniProgram($data);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1330,7 +1263,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->checkDuplicatedAppName($name, $appID);
         if(dao::isError()) return dao::getError();
-
         return $result ? '1' : '0';
     }
 
@@ -1345,7 +1277,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getUniqueAppName($name);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1362,7 +1293,6 @@ class aiModelTest extends baseTest
         $_POST = $postData;
         $result = $this->instance->verifyRequiredFields($requiredFields);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1380,7 +1310,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getPrompts($module, $status, $order, $pager);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1395,7 +1324,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getPromptById($id);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1410,7 +1338,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getPromptFields($promptID);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1425,7 +1352,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->createPrompt($prompt);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1442,12 +1368,11 @@ class aiModelTest extends baseTest
         $this->instance->savePromptFields($promptID, $data);
         if(dao::isError()) return dao::getError();
 
-        $fields = $this->instance->dao->select('*')
+        $count = $this->instance->dao->select('COUNT(1) AS count')
             ->from(TABLE_AI_PROMPTFIELD)
             ->where('appID')->eq($promptID)
-            ->fetchAll();
-
-        return count($fields);
+            ->fetch('count');
+        return $count;
     }
 
     /**
@@ -1462,7 +1387,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->updatePrompt($prompt, $originalPrompt);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1477,7 +1401,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->deletePrompt($id);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1493,7 +1416,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->togglePromptStatus($prompt, $status);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1691,13 +1613,8 @@ class aiModelTest extends baseTest
      */
     public function isAssocTest($array = null)
     {
-        /* Using reflection to call private static method */
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('isAssoc');
-        $method->setAccessible(true);
-        $result = $method->invoke(null, $array);
+        $result = $this->invokeArgs('isAssoc', [$array]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1800,13 +1717,8 @@ class aiModelTest extends baseTest
      */
     public function autoPrependNewlineTest($text = '')
     {
-        $reflectionClass = new ReflectionClass('aiModel');
-        $method = $reflectionClass->getMethod('autoPrependNewline');
-        $method->setAccessible(true);
-
-        $result = $method->invoke(null, $text);
+        $result = $this->invokeArgs('autoPrependNewline', [$text]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1820,13 +1732,8 @@ class aiModelTest extends baseTest
      */
     public function tryPunctuateTest($sentence = '', $newline = false)
     {
-        $reflectionClass = new ReflectionClass('aiModel');
-        $method = $reflectionClass->getMethod('tryPunctuate');
-        $method->setAccessible(true);
-
-        $result = $method->invoke(null, $sentence, $newline);
+        $result = $this->invokeArgs('tryPunctuate', [$sentence, $newline]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1842,7 +1749,6 @@ class aiModelTest extends baseTest
     {
         $result = aiModel::assemblePrompt($prompt, $dataPrompt);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1857,7 +1763,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->isExecutable($prompt);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2140,7 +2045,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->tryGetRelatedObjects($prompt, $object, $objectNames);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2155,7 +2059,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getLastActiveStep($prompt);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2217,7 +2120,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->filterPromptsForExecution($prompts, $keepUnauthorized);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2233,7 +2135,6 @@ class aiModelTest extends baseTest
     {
         $this->instance->setInjectData($form, $data);
         if(dao::isError()) return dao::getError();
-
         return '0';
     }
 
@@ -2247,7 +2148,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getRoleTemplates();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2263,7 +2163,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->createRoleTemplate($role, $characterization);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2278,7 +2177,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->deleteRoleTemplate($id);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2295,7 +2193,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->updateRoleTemplate($id, $role, $characterization);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2311,7 +2208,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getAssistants($pager, $orderBy);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2387,7 +2283,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getAssistantById($assistantId);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2403,7 +2298,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->createAssistant($assistant, $publish);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2418,7 +2312,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->updateAssistant($assistant);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2434,7 +2327,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->toggleAssistant($assistantId, $enabled);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2450,7 +2342,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->checkAssistantDuplicate($assistantName, $modelId);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -2467,7 +2358,6 @@ class aiModelTest extends baseTest
 
         $result = $this->instance->deleteAssistant($assistantId);
         if(dao::isError()) return dao::getError();
-
         return $result ? '1' : '0';
     }
 
@@ -2482,7 +2372,6 @@ class aiModelTest extends baseTest
     {
         $result = $this->instance->getTestPromptData($prompt);
         if(dao::isError()) return dao::getError();
-
         return !empty($result[1]) ? '1' : '0';
     }
 
