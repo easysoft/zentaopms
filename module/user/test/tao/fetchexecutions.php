@@ -27,7 +27,7 @@ cid=19667
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(3);
 zenData('company')->gen(1);
@@ -61,7 +61,7 @@ $app->rawMethod = 'project';
 $app->loadClass('pager');
 $pager = new pager(0, 5, 1);
 
-$userTest = new userTest();
+$userTest = new userTaoTest();
 
 r($userTest->fetchExecutionsTest(''))      && p() && e(0); // 用户名为空，返回空数组。
 r($userTest->fetchExecutionsTest('user2')) && p() && e(0); // 用户 user2 未参与任何执行，返回空数组。

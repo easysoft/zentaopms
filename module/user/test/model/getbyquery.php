@@ -41,7 +41,7 @@ cid=19605
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('user');
 $table->type->range('outside{2},inside{8}');
@@ -57,7 +57,7 @@ $app->rawModule = 'user';
 $app->rawMethod = 'browse';
 $pager = new pager(0, 5, 1);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $users = $userTest->getByQueryTest();
 r(count($users)) && p() && e(8); // 使用默认参数，有 8 个用户。

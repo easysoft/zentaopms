@@ -6,7 +6,7 @@ cid=19671
 pid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $projectTable = zenData('project');
 $projectTable->type->range('project');
@@ -26,7 +26,7 @@ $storyTable->gen(100);
 
 global $config;
 
-$userTest = new userTest();
+$userTest = new userTaoTest();
 
 $projectIdList = array(1, 2, 3, 4);
 

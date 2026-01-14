@@ -19,7 +19,7 @@ cid=19599
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('company')->gen(1);
@@ -27,7 +27,7 @@ zenData('usergroup')->gen(0);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->createUserGroupTest(array(),         'admin')) && p('result') && e(0); // 权限组为空，返回 false。
 r($userTest->createUserGroupTest(array('1'),      ''))      && p('result') && e(0); // 用户名为空，返回 false。

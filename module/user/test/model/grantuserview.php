@@ -26,7 +26,7 @@ cid=19639
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('projectproduct')->gen(0);
@@ -47,7 +47,7 @@ global $config;
 $config->userview->updateTime              = $time + 1;
 $config->userview->relatedTablesUpdateTime = $time;
 
-$user = new userTest();
+$user = new userModelTest();
 r($user->grantUserViewTest('admin')) && p('programs', '-') && e('1,1,4,7,10');              // 用户视图最后更新时间大于相关表最后更新时间，获取admin账户最终可见的项目集列表
 r($user->grantUserViewTest('admin')) && p('products', '-') && e('1,1,2,3,4,5,6,7,8,9,10');  // 用户视图最后更新时间大于相关表最后更新时间，获取admin账户最终可见的产品列表
 r($user->grantUserViewTest('admin')) && p('projects', '-') && e('11,13,16,19');             // 用户视图最后更新时间大于相关表最后更新时间，获取admin账户最终可见的项目列表

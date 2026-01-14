@@ -1,13 +1,12 @@
 <?php
 declare(strict_types = 1);
-class userTest
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class userModelTest extends baseTest
 {
-    public function __construct()
-    {
-        global $tester;
-        $this->objectModel = $tester->loadModel('user');
-        $this->objectTao   = $tester->loadTao('user');
-    }
+    protected $moduleName = 'user';
+    protected $className  = 'model';
 
     /**
      * Test get user list.
@@ -18,16 +17,13 @@ class userTest
      */
     public function getListTest($params = 'nodeleted', $count = false)
     {
-        $objects = $this->objectModel->getList($params);
+        $objects = $this->instance->getList($params);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $count ? count($objects) : $objects;
-        }
+        return $count ? count($objects) : $objects;
     }
 
     /**
@@ -40,11 +36,13 @@ class userTest
      */
     public function getListByAccountsTest($accounts = array(), $keyField = 'id')
     {
-        $objects = $this->objectModel->getListByAccounts($accounts, $keyField);
-        if(!dao::isError()) return $objects;
-
-        $error = dao::getError();
-        return $error[0];
+        $objects = $this->instance->getListByAccounts($accounts, $keyField);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        return $objects;
     }
 
     /**
@@ -56,13 +54,12 @@ class userTest
     public function suTest()
     {
         global $app;
-        $originalUser = $app->user;
 
-        $result = $this->objectModel->su();
+        $result = $this->instance->su();
         if(dao::isError()) return dao::getError();
 
         $responseData = new stdClass();
-        $responseData->result = $result;
+        $responseData->result      = $result;
         $responseData->currentUser = $app->user;
 
         return $responseData;
@@ -80,16 +77,13 @@ class userTest
      */
     public function getPairsTest($params = '', $usersToAppended = '', $maxCount = 0, $accounts = array())
     {
-        $objects = $this->objectModel->getPairs($params, $usersToAppended, $maxCount, $accounts);
+        $objects = $this->instance->getPairs($params, $usersToAppended, $maxCount, $accounts);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -105,7 +99,7 @@ class userTest
      */
     public function getProjectsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->objectModel->getProjects($account, $status, $orderBy, $pager);
+        return $this->instance->getProjects($account, $status, $orderBy, $pager);
     }
 
     /**
@@ -121,79 +115,7 @@ class userTest
      */
     public function getExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->objectModel->getExecutions($account, $status, $orderBy, $pager);
-    }
-
-    /**
-     * 测试根据用户和状态获取项目列表。
-     * Test fetch projects by user and status.
-     *
-     * @param  string $account
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function fetchProjectsTest(string $account, string $status = 'all', string $orderBy = 'id', ?object $pager = null): array
-    {
-        return $this->objectTao->fetchProjects($account, $status, $orderBy, $pager);
-    }
-
-    /**
-     * 测试获取某个用户参与的项目和项目包含的执行数键值对。
-     * Test fetch project execution count.
-     *
-     * @param  array  $projectidList
-     * @access public
-     * @return array
-     */
-    public function fetchProjectExecutionCountTest(array $projectIdList): array
-    {
-        return $this->objectTao->fetchProjectExecutionCount($projectIdList);
-    }
-
-    /**
-     * 测试获取某个用户参与的项目和项目包含的需求规模数和需求数。
-     * Test fetch project story estimate and count.
-     *
-     * @param  array  $projectIdList
-     * @access public
-     * @return array
-     */
-    public function fetchProjectStoryCountAndEstimateTest(array $projectIdList): array
-    {
-        return $this->objectTao->fetchProjectStoryCountAndEstimate($projectIdList);
-    }
-
-    /**
-     * 测试根据用户和状态获取执行列表。
-     * Test fetch executions by user and status.
-     *
-     * @param  string $account
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @access public
-     * @return array
-     */
-    public function fetchExecutionsTest(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
-    {
-        return $this->objectTao->fetchExecutions($account, $status, $orderBy, $pager);
-    }
-
-    /**
-     * 测试获取某个用户参与的执行和执行中指派给他的任务数的键值对。
-     * Get the executions that the user joined and the task count of the execution.
-     *
-     * @param  string $account
-     * @param  array  $executionIdList
-     * @access public
-     * @return
-     */
-    public function fetchExecutionTaskCountTest(string $account, array $executionIdList): array
-    {
-        return $this->objectTao->fetchExecutionTaskCount($account, $executionIdList);
+        return $this->instance->getExecutions($account, $status, $orderBy, $pager);
     }
 
     /**
@@ -208,7 +130,7 @@ class userTest
      */
     public function fetchExtraUsersTest(string|array $usersToAppended, string $fields, string $keyField): array
     {
-        return $this->objectModel->fetchExtraUsers($usersToAppended, $fields, $keyField);
+        return $this->instance->fetchExtraUsers($usersToAppended, $fields, $keyField);
     }
 
     /**
@@ -222,8 +144,7 @@ class userTest
      */
     public function processDisplayValueTest(array $users, string $params): array
     {
-        return $this->objectModel->processDisplayValue($users, $params);
-
+        return $this->instance->processDisplayValue($users, $params);
     }
 
     /**
@@ -235,16 +156,13 @@ class userTest
      */
     public function getAvatarPairsTest($param = 'nodeleted')
     {
-        $objects = $this->objectModel->getAvatarPairs($param);
+        $objects = $this->instance->getAvatarPairs($param);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -255,16 +173,13 @@ class userTest
      */
     public function getCommitersTest()
     {
-        $objects = $this->objectModel->getCommiters();
+        $objects = $this->instance->getCommiters();
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -276,16 +191,13 @@ class userTest
      */
     public function getRealNameAndEmailsTest($accounts)
     {
-        $objects = $this->objectModel->getRealNameAndEmails($accounts);
+        $objects = $this->instance->getRealNameAndEmails($accounts);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -298,16 +210,13 @@ class userTest
      */
     public function getUserRolesTest($accounts, $needRole = false)
     {
-        $objects = $this->objectModel->getUserRoles($accounts, $needRole);
+        $objects = $this->instance->getUserRoles($accounts, $needRole);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -320,16 +229,13 @@ class userTest
      */
     public function getByIdTest($userID, $field = 'account')
     {
-        $objects = $this->objectModel->getById($userID, $field);
+        $objects = $this->instance->getById($userID, $field);
         if(dao::isError())
         {
-            $error = dao::getError();
+             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -344,16 +250,13 @@ class userTest
      */
     public function getByQueryTest($browseType = 'inside', $query = '', $pager = null, $orderBy = 'id')
     {
-        $objects = $this->objectModel->getByQuery($browseType, $query, $pager, $orderBy);
+        $objects = $this->instance->getByQuery($browseType, $query, $pager, $orderBy);
         if(dao::isError())
         {
             $error = dao::getError();
             return $error[0];
         }
-        else
-        {
-            return $objects;
-        }
+        return $objects;
     }
 
     /**
@@ -366,7 +269,7 @@ class userTest
      */
     public function createTest(object $user): array
     {
-        $result = $this->objectModel->create($user);
+        $result = $this->instance->create($user);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -387,7 +290,7 @@ class userTest
      */
     public function createCompanyTest(string $companyName): array
     {
-        $result = $this->objectModel->createCompany($companyName);
+        $result = $this->instance->createCompany($companyName);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -409,7 +312,7 @@ class userTest
      */
     public function createUserGroupTest(array $groups, string $account): array
     {
-        $result = $this->objectModel->createUserGroup($groups, $account);
+        $result = $this->instance->createUserGroup($groups, $account);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -436,7 +339,7 @@ class userTest
 
         foreach(array_keys($users) as $index) $_POST['company'][$index] = 'ditto';
         $_POST['company']['0'] = $verifyPassword;
-        $result = $this->objectModel->batchCreate($users, $verifyPassword);
+        $result = $this->instance->batchCreate($users, $verifyPassword);
         $errors = dao::getError();
         unset($_POST);
 
@@ -458,7 +361,7 @@ class userTest
      */
     public function updateTest(object $user): array
     {
-        $result = $this->objectModel->update($user);
+        $result = $this->instance->update($user);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -480,7 +383,7 @@ class userTest
      */
     public function checkAccountChangeTest(string $oldAccount, string $newAccount): array
     {
-        $result = $this->objectModel->checkAccountChange($oldAccount, $newAccount);
+        $result = $this->instance->checkAccountChange($oldAccount, $newAccount);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -501,7 +404,7 @@ class userTest
      */
     public function checkGroupChangeTest(object $user): array
     {
-        $result = $this->objectModel->checkGroupChange($user);
+        $result = $this->instance->checkGroupChange($user);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -523,7 +426,7 @@ class userTest
      */
     public function batchUpdateTest(array $users, string $verifyPassword): array
     {
-        $result = $this->objectModel->batchUpdate($users, $verifyPassword);
+        $result = $this->instance->batchUpdate($users, $verifyPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -544,7 +447,7 @@ class userTest
      */
     public function updatePasswordTest(object $user): array
     {
-        $result = $this->objectModel->updatePassword($user);
+        $result = $this->instance->updatePassword($user);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -565,7 +468,7 @@ class userTest
      */
     public function resetPasswordTest(object $user): array
     {
-        $result = $this->objectModel->resetPassword($user);
+        $result = $this->instance->resetPassword($user);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -587,7 +490,7 @@ class userTest
      */
     public function checkBeforeCreateOrEditTest(object $user, bool $canNoPassword = false): array
     {
-        $result = $this->objectModel->checkBeforeCreateOrEdit($user, $canNoPassword);
+        $result = $this->instance->checkBeforeCreateOrEdit($user, $canNoPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -609,7 +512,7 @@ class userTest
      */
     public function checkBeforeBatchCreateTest(array $users, string $verifyPassword): array
     {
-        $result = $this->objectModel->checkBeforeBatchCreate($users, $verifyPassword);
+        $result = $this->instance->checkBeforeBatchCreate($users, $verifyPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -631,7 +534,7 @@ class userTest
      */
     public function checkBeforeBatchUpdateTest(array $users, string $verifyPassword): array
     {
-        $result = $this->objectModel->checkBeforeBatchUpdate($users, $verifyPassword);
+        $result = $this->instance->checkBeforeBatchUpdate($users, $verifyPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -653,7 +556,7 @@ class userTest
      */
     public function checkPasswordTest(object $user, bool $canNoPassword = false): array
     {
-        $result = $this->objectModel->checkPassword($user, $canNoPassword);
+        $result = $this->instance->checkPassword($user, $canNoPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -674,7 +577,7 @@ class userTest
      */
     public function checkVerifyPasswordTest(string $verifyPassword): array
     {
-        $result = $this->objectModel->checkVerifyPassword($verifyPassword);
+        $result = $this->instance->checkVerifyPassword($verifyPassword);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -697,7 +600,7 @@ class userTest
      */
     public function identifyTest(string $account, string $password, int $passwordStrength = 0): object|bool
     {
-        return $this->objectModel->identify($account, $password, $passwordStrength);
+        return $this->instance->identify($account, $password, $passwordStrength);
     }
 
     /**
@@ -711,7 +614,7 @@ class userTest
      */
     public function identifyUserTest(string $account, string $password): object|bool
     {
-        return $this->objectModel->identifyUser($account, $password);
+        return $this->instance->identifyUser($account, $password);
     }
 
     /**
@@ -725,7 +628,7 @@ class userTest
      */
     public function checkNeedModifyPasswordTest(object $user, int $passwordStrength): object
     {
-        return $this->objectModel->checkNeedModifyPassword($user, $passwordStrength);
+        return $this->instance->checkNeedModifyPassword($user, $passwordStrength);
     }
 
     /**
@@ -737,9 +640,7 @@ class userTest
      */
     public function authorizeTest($account)
     {
-        $user = $this->objectModel->authorize($account);
-
-        return $user;
+        return $this->instance->authorize($account);
     }
 
     /**
@@ -754,7 +655,7 @@ class userTest
      */
     public function loginTest(object $user, bool $addAction = true, bool $keepLogin = false): bool|object
     {
-        return $this->objectModel->login($user, $addAction, $keepLogin);
+        return $this->instance->login($user, $addAction, $keepLogin);
     }
 
     /**
@@ -767,7 +668,7 @@ class userTest
      */
     public function getGroupsTest(string $account): array
     {
-        return $this->objectModel->getGroups($account);
+        return $this->instance->getGroups($account);
     }
 
     /**
@@ -780,7 +681,7 @@ class userTest
      */
     public function getGroupsByVisionsTest(string|array $visions): array
     {
-        return $this->objectModel->getGroupsByVisions($visions);
+        return $this->instance->getGroupsByVisions($visions);
     }
 
     /**
@@ -793,7 +694,7 @@ class userTest
      */
     public function cleanLockedTest(string $account): array
     {
-        $result = $this->objectModel->cleanLocked($account);
+        $result = $this->instance->cleanLocked($account);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -813,16 +714,11 @@ class userTest
      */
     public function unbindTest($account)
     {
-        global $tester;
-
-        $this->objectModel->unbind($account);
-
+        $this->instance->unbind($account);
         if(dao::isError()) return dao::getError();
 
-        $ranzhi = $tester->dao->select('ranzhi')->from(TABLE_USER)->where('account')->eq($account)->fetch('ranzhi');
-
+        $ranzhi = $this->instance->dao->select('ranzhi')->from(TABLE_USER)->where('account')->eq($account)->fetch('ranzhi');
         $result = empty($ranzhi) ? 'success' : 'fail';
-
         return $result;
     }
 
@@ -836,10 +732,8 @@ class userTest
      */
     public function getContactListsTest($account = '', $params = '')
     {
-        $contacts = $this->objectModel->getContactLists($account, $params);
-
+        $contacts = $this->instance->getContactLists($account, $params);
         if(dao::isError()) return dao::getError();
-
         return $contacts ? $contacts : 0;
     }
 
@@ -852,7 +746,7 @@ class userTest
      */
     public function getParentStageAuthedUsersTest($stageID)
     {
-        return $this->objectModel->getParentStageAuthedUsers($stageID);
+        return $this->instance->getParentStageAuthedUsers($stageID);
     }
 
     /**
@@ -864,7 +758,7 @@ class userTest
      */
     public function getContactListByIDTest($listID)
     {
-        return $this->objectModel->getContactListByID($listID);
+        return $this->instance->getContactListByID($listID);
     }
 
     /**
@@ -877,7 +771,7 @@ class userTest
      */
     public function createContactListTest(object $userContact): array
     {
-        $result = $this->objectModel->createContactList($userContact);
+        $result = $this->instance->createContactList($userContact);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -898,7 +792,7 @@ class userTest
      */
     public function updateContactListTest(object $userContact): array
     {
-        $result = $this->objectModel->updateContactList($userContact);
+        $result = $this->instance->updateContactList($userContact);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -919,7 +813,7 @@ class userTest
      */
     public function deleteContactListTest(int $listID): array
     {
-        $result = $this->objectModel->deleteContactList($listID);
+        $result = $this->instance->deleteContactList($listID);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)
@@ -939,7 +833,7 @@ class userTest
      */
     public function getWeakUsersTest(): array
     {
-        return $this->objectModel->getWeakUsers();
+        return $this->instance->getWeakUsers();
     }
 
     /**
@@ -952,7 +846,7 @@ class userTest
      */
     public function computePasswordStrengthTest(string $password): int
     {
-        return $this->objectModel->computePasswordStrength($password);
+        return $this->instance->computePasswordStrength($password);
     }
 
     /**
@@ -965,8 +859,7 @@ class userTest
      */
     public function computeUserViewTest($account, $force = true)
     {
-        $userview = $this->objectModel->computeUserView($account, $force);
-
+        $userview = $this->instance->computeUserView($account, $force);
         if(dao::isError()) return dao::getError();
         return $userview;
     }
@@ -981,8 +874,7 @@ class userTest
      */
     public function getProductMembersTest($allProducts)
     {
-        $members = $this->objectModel->getProductMembers($allProducts);
-
+        $members = $this->instance->getProductMembers($allProducts);
         if(dao::isError()) return dao::getError();
         return $members;
     }
@@ -997,8 +889,7 @@ class userTest
      */
     public function grantUserViewTest($account = '', $acls = array(), $projects = '')
     {
-        $userView = $this->objectModel->grantUserView($account, $acls, $projects);
-
+        $userView = $this->instance->grantUserView($account, $acls, $projects);
         if(dao::isError()) return dao::getError();
         return $userView;
     }
@@ -1013,10 +904,9 @@ class userTest
      */
     public function updateProgramViewTest($programIdList = array(), $users = array())
     {
-        $this->objectModel->updateProgramView($programIdList, $users);
-
+        $this->instance->updateProgramView($programIdList, $users);
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->grantUserView(current($users));
+        return $this->instance->grantUserView(current($users));
     }
 
     /**
@@ -1031,9 +921,8 @@ class userTest
      */
     public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList, $admins)
     {
-        global $tester;
-        $product = $tester->loadModel('product')->getByID($productID);
-        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
+        $product = $this->instance->loadModel('product')->getByID($productID);
+        return $this->instance->getProductViewListUsers($product, $teams, $stakeholders, $whiteList, $admins);
     }
 
     /**
@@ -1048,7 +937,7 @@ class userTest
      */
     public function getTeamMemberPairsTest(string|array|int $objectIds, string $type = 'project', string $params = '', string|array $usersToAppended = '')
     {
-        return $this->objectModel->getTeamMemberPairs($objectIds, $type, $params, $usersToAppended);
+        return $this->instance->getTeamMemberPairs($objectIds, $type, $params, $usersToAppended);
     }
 
     /**
@@ -1061,7 +950,7 @@ class userTest
      */
     public function saveUserTemplateTest(object $template): array
     {
-        $result = $this->objectModel->saveUserTemplate($template);
+        $result = $this->instance->saveUserTemplate($template);
         $errors =  dao::getError();
 
         foreach($errors as $key => $error)
@@ -1082,7 +971,7 @@ class userTest
      */
     public function getUserTemplatesTest(string $type): array
     {
-        return $this->objectModel->getUserTemplates($type);
+        return $this->instance->getUserTemplates($type);
     }
 
     /**
@@ -1094,7 +983,7 @@ class userTest
      */
     public function getListForGitLabAPITest(array $accountList): array
     {
-        return $this->objectModel->getListForGitLabAPI($accountList);
+        return $this->instance->getListForGitLabAPI($accountList);
     }
 
     /**
@@ -1105,7 +994,7 @@ class userTest
      */
     public function getCanCreateStoryUsersTest()
     {
-        return $this->objectModel->getCanCreateStoryUsers();
+        return $this->instance->getCanCreateStoryUsers();
     }
 
     /**
@@ -1117,7 +1006,7 @@ class userTest
      */
     public function isLogonTest(): bool
     {
-        return $this->objectModel->isLogon();
+        return $this->instance->isLogon();
     }
 
     /**
@@ -1129,9 +1018,8 @@ class userTest
      */
     public function failPlusTest($account)
     {
-        $result = $this->objectModel->failPlus($account);
+        $result = $this->instance->failPlus($account);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1145,7 +1033,7 @@ class userTest
      */
     public function checkLockedTest(string $account): bool
     {
-        return $this->objectModel->checkLocked($account);
+        return $this->instance->checkLocked($account);
     }
 
     /**
@@ -1157,7 +1045,7 @@ class userTest
      */
     public function identifyByPhpAuthTest(): bool
     {
-        return $this->objectModel->identifyByPhpAuth();
+        return $this->instance->identifyByPhpAuth();
     }
 
     /**
@@ -1169,7 +1057,7 @@ class userTest
      */
     public function identifyByCookieTest(): bool
     {
-        return $this->objectModel->identifyByCookie();
+        return $this->instance->identifyByCookie();
     }
 
     /**
@@ -1183,7 +1071,7 @@ class userTest
      */
     public function isClickableTest(object $user, string $action): bool
     {
-        return $this->objectModel->isClickable($user, $action);
+        return $this->instance->isClickable($user, $action);
     }
 
     /**
@@ -1195,13 +1083,8 @@ class userTest
      */
     public function getUserAclsTest(string $account)
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getUserAcls');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account);
+        $result = $this->invokeArgs('getUserAcls', [$account]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1213,9 +1096,8 @@ class userTest
      */
     public function uploadAvatarTest(): array
     {
-        $result = $this->objectModel->uploadAvatar();
+        $result = $this->instance->uploadAvatar();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1228,13 +1110,8 @@ class userTest
      */
     public function initViewObjectsTest(bool $force = false)
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('initViewObjects');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $force);
+        $result = $this->invokeArgs('initViewObjects', [$force]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1252,13 +1129,8 @@ class userTest
      */
     public function getProgramViewTest(string $account = '', array $allPrograms = array(), array $manageObjects = array(), array $stakeholders = array(), array $whiteList = array(), array $programStakeholderGroup = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProgramView');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup);
+        $result = $this->invokeArgs('getProgramView', [$account, $allPrograms, $manageObjects, $stakeholders, $whiteList, $programStakeholderGroup]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1274,13 +1146,8 @@ class userTest
      */
     public function getProductViewTest(string $account = '', array $allProducts = array(), array $manageObjects = array(), array $whiteList = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProductView');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account, $allProducts, $manageObjects, $whiteList);
+        $result = $this->invokeArgs('getProductView', [$account, $allProducts, $manageObjects, $whiteList]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1299,13 +1166,8 @@ class userTest
      */
     public function getProjectViewTest(string $account = '', array $allProjects = array(), array $manageObjects = array(), array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $projectStakeholderGroup = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProjectView');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup);
+        $result = $this->invokeArgs('getProjectView', [$account, $allProjects, $manageObjects, $teams, $stakeholders, $whiteList, $projectStakeholderGroup]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1318,13 +1180,8 @@ class userTest
      */
     public function getManageListGroupByTypeTest(string $account = '')
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getManageListGroupByType');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account);
+        $result = $this->invokeArgs('getManageListGroupByType', [$account]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1337,13 +1194,8 @@ class userTest
      */
     public function getProgramStakeholderTest($programProduct = null)
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProgramStakeholder');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $programProduct);
+        $result = $this->invokeArgs('getProgramStakeholder', [$programProduct]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1359,13 +1211,8 @@ class userTest
      */
     public function mergeAclsToUserViewTest(string $account, object $userView, array $acls, string $projects)
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('mergeAclsToUserView');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $account, $userView, $acls, $projects);
+        $result = $this->invokeArgs(['mergeAclsToUserView', [$account, $userView, $acls, $projects]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1385,13 +1232,8 @@ class userTest
      */
     public function getObjectsAuthedUsersTest(array $objects, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): array
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getObjectsAuthedUsers');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($objects, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        $result = $this->invokeArgs('getObjectsAuthedUsers', [$objects, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1413,13 +1255,8 @@ class userTest
      */
     public function getLatestUserViewTest(string $account, string $view, object $object, string $objectType, array $stakeholderGroup = array(), array $teamsGroup = array(), array $whiteListGroup = array(), array $adminsGroup = array(), array $parentStakeholderGroup = array(), array $parentPMGroup = array()): string
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getLatestUserView');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($account, $view, $object, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup));
+        $result = $this->invokeArgs('getLatestUserView', [$account, $view, $object, $objectType, $stakeholderGroup, $teamsGroup, $whiteListGroup, $adminsGroup, $parentStakeholderGroup, $parentPMGroup]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1436,13 +1273,8 @@ class userTest
      */
     public function checkProgramPrivTest(object $program, string $account, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('checkProgramPriv');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($program, $account, $stakeholders, $whiteList, $admins));
+        $result = $this->invokeArgs('checkProgramPriv', [$program, $account, $stakeholders, $whiteList, $admins]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1460,13 +1292,8 @@ class userTest
      */
     public function checkProjectPrivTest(object $project, string $account, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('checkProjectPriv');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($project, $account, $stakeholders, $teams, $whiteList, $admins));
+        $result = $this->invokeArgs('checkProjectPriv', [$project, $account, $stakeholders, $teams, $whiteList, $admins]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1484,13 +1311,8 @@ class userTest
      */
     public function checkProductPrivTest(object $product, string $account, array $teams = array(), array $stakeholders = array(), array $whiteList = array(), array $admins = array()): bool
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('checkProductPriv');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($product, $account, $teams, $stakeholders, $whiteList, $admins));
+        $result = $this->invokeArgs('checkProductPriv', [$product, $account, $teams, $stakeholders, $whiteList, $admins]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1506,13 +1328,8 @@ class userTest
      */
     public function getProgramAuthedUsersTest(object $program, array $stakeholders = array(), array $whiteList = array(), array $admins = array()): array
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProgramAuthedUsers');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($program, $stakeholders, $whiteList, $admins));
+        $result = $this->invokeArgs('getProgramAuthedUsers', [$program, $stakeholders, $whiteList, $admins]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1529,13 +1346,8 @@ class userTest
      */
     public function getProjectAuthedUsersTest(object $project, array $stakeholders = array(), array $teams = array(), array $whiteList = array(), array $admins = array()): array
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getProjectAuthedUsers');
-        $method->setAccessible(true);
-
-        $result = $method->invokeArgs($this->objectModel, array($project, $stakeholders, $teams, $whiteList, $admins));
+        $result = $this->invokeArgs('getProjectAuthedUsers', [$project, $stakeholders, $teams, $whiteList, $admins]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -1549,7 +1361,7 @@ class userTest
      */
     public function saveOldUserTemplateTest(string $type): array
     {
-        $this->objectModel->saveOldUserTemplate($type);
+        $this->instance->saveOldUserTemplate($type);
         $errors = dao::getError();
 
         foreach($errors as $key => $error)

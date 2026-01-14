@@ -28,11 +28,11 @@ cid=19602
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->fetchExtraUsersTest('',      '*', '')) && p() && e(0); // usersToAppended 参数为空字符串，返回空数组。
 r($userTest->fetchExtraUsersTest(array(), '*', '')) && p() && e(0); // usersToAppended 参数为空数组，返回空数组。

@@ -19,7 +19,7 @@ cid=19627
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $stakeholderTable = zenData('stakeholder');
@@ -38,7 +38,7 @@ $projectTable->gen(6);
 su('admin');
 
 // 4. 创建测试实例
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 // 5. 测试步骤（必须包含至少5个）
 r($userTest->getProgramStakeholderTest(array(1 => array(1, 2), 2 => array(3)))) && p('1:admin') && e('admin'); // 步骤1：正常情况，检查产品1有admin

@@ -19,7 +19,7 @@ cid=19632
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->id->range('1001-1005');
@@ -29,7 +29,7 @@ $user->email->range('account1!qq.com,account2!qq.com,account3!qq.com,account4!qq
 $user->deleted->range('0{5}');
 $user->gen(5);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 $result   = $userTest->getRealNameAndEmailsTest(array());
 r(count($result)) && p() && e(0); // 参数为空数组，返回空数组。
 

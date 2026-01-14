@@ -40,9 +40,9 @@ cid=19587
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 global $app, $config;
 $config->safe = new stdclass();

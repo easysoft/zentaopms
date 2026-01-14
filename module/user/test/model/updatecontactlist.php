@@ -29,13 +29,13 @@ cid=19659
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('usercontact');
 $table->account->range('user1');
 $table->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $contact1 = (object)array('id' => 1, 'account' => 'user1', 'listName' => '',            'userList' => '',            'public' => 0);
 $contact2 = (object)array('id' => 1, 'account' => 'user1', 'listName' => '联系人列表2', 'userList' => 'user1,user2', 'public' => 0);

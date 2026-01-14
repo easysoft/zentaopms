@@ -18,7 +18,7 @@ cid=19630
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 $tester->dao->delete()->from(TABLE_PROJECT)->exec();
@@ -51,7 +51,7 @@ for($i = 1; $i <= 5; $i++)
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r(count($userTest->getProjectsTest(''))) && p() && e('0');
 r(count($userTest->getProjectsTest('nonexistuser'))) && p() && e('0');
