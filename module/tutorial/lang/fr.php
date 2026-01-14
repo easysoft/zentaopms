@@ -851,7 +851,7 @@ $lang->tutorial->waterfallProjectManage->design->step1->desc = 'You can manage d
 
 $lang->tutorial->waterfallProjectManage->design->step2 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step2->name = 'Click to Create Design';
-$lang->tutorial->waterfallProjectManage->design->step2->desc = 'You can create versions here.';
+$lang->tutorial->waterfallProjectManage->design->step2->desc = 'You can create design here.';
 
 $lang->tutorial->waterfallProjectManage->design->step3 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step3->name = 'Fill out the form';
