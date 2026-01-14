@@ -482,8 +482,6 @@ class kanbanTao extends kanbanModel
         $item['pri']          = $card->pri;
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
-        $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
-        $item['parent']       = !empty($card->rawParent) ? $card->rawParent : 0;
         $item['isParent']     = !empty($card->isParent) ? $card->isParent: 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
@@ -506,6 +504,10 @@ class kanbanTao extends kanbanModel
         $item['avatarList']   = array();
         $item['realnames']    = '';
         $item['order']        = $order;
+
+        $item['parent'] = 0;
+        if(!empty($card->originParent)) $item['parent'] = $card->originParent;
+        if(!empty($card->rawParent))    $item['parent'] = $card->rawParent;
 
         if($card->assignedTo)
         {
