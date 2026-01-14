@@ -9,20 +9,6 @@ class aiappModelTest extends baseTest
     protected $className  = 'model';
 
     /**
-     * Test __construct method.
-     *
-     * @access public
-     * @return mixed
-     */
-    public function __constructTest()
-    {
-        $result = $this->instance;
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
      * Test getLatestMiniPrograms method.
      *
      * @param object $pager
@@ -34,7 +20,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->getLatestMiniPrograms($pager, $order);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -46,12 +31,8 @@ class aiappModelTest extends baseTest
      */
     public function countLatestMiniProgramsTest()
     {
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('countLatestMiniPrograms');
-        $method->setAccessible(true);
-        $result = $method->invoke($this->instance);
+        $result = $this->invokeArgs('countLatestMiniPrograms');
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -68,7 +49,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->saveMiniProgramMessage($appID, $type, $content);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -83,12 +63,8 @@ class aiappModelTest extends baseTest
      */
     public function deleteHistoryMessagesByIDTest($appID, $userID, $messageIDs)
     {
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('deleteHistoryMessagesByID');
-        $method->setAccessible(true);
-        $method->invoke($this->instance, $appID, $userID, $messageIDs);
+        $this->invokeArgs('deleteHistoryMessagesByID', [$appID, $userID, $messageIDs]);
         if(dao::isError()) return dao::getError();
-
         return true;
     }
 
@@ -104,7 +80,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->getHistoryMessages($appID, $limit);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -120,7 +95,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->getCollectedMiniProgramIDs($userID, $pager);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -136,7 +110,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->getSquareCategoryArray($collectedIDs, $latestSum);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -150,7 +123,6 @@ class aiappModelTest extends baseTest
     {
         $result = $this->instance->getUsedCategoryArray();
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 }

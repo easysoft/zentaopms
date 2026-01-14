@@ -203,6 +203,7 @@ class baseTest
         $method = $reflection->getMethod($methodName);
         if(!$method->isPublic()) $method->setAccessible(true);
 
-        return $method->invokeArgs($instance, $args);
+        $object = $method->isStatic() ? null : $instance;
+        return $method->invokeArgs($object, $args);
     }
 }

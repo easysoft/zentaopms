@@ -19,7 +19,6 @@ class apiModelTest extends baseTest
     {
         $result = $this->instance->publishLib($data);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -846,7 +845,6 @@ class apiModelTest extends baseTest
     {
         $result = $this->instance->getPrivApis($mode);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 }
