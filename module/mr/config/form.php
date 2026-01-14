@@ -18,3 +18,7 @@ $config->mr->form->edit['editedDate'] = array('type' => 'string', 'required' => 
 
 $config->mr->form->addReviewers = array();
 $config->mr->form->addReviewers['reviewer'] = array('type' => 'array', 'required' => true, 'default' => array());
+
+$config->mr->form->review = array();
+$config->mr->form->review['decision'] = array('type' => 'string', 'required' => true, 'default' => 'pending', 'filter' => 'trim');
+$config->mr->form->review['opinion']  = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
