@@ -999,8 +999,6 @@ class programModel extends model
         $treeMenu = array();
         foreach($programList as $program)
         {
-            if(!$this->app->user->admin && strpos($mode, 'all') === false && strpos(",{$this->app->user->view->programs},", ",{$program->id},") === false) continue;
-
             $programName = $showRoot ? '/' : '';
             $parentList  = explode(',', trim($program->path, ','));
             foreach($parentList as $parentID)
@@ -1029,7 +1027,10 @@ class programModel extends model
             if(strpos($menu, '|') === false) continue;
 
             list($label, $moduleID) = explode('|', $menu);
-            $lastMenu[$moduleID]    = str_replace('&#166;', '|', $label);
+
+            /* Ignore the no priv programs. */
+            if(!$this->app->user->admin && strpos($mode, 'all') === false && strpos(",{$this->app->user->view->programs},", ",{$moduleID},") === false) continue;
+            $lastMenu[$moduleID] = str_replace('&#166;', '|', $label);
         }
 
         return $lastMenu;
