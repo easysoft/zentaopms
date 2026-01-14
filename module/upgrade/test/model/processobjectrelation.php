@@ -46,7 +46,7 @@ cid=19545
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -76,7 +76,7 @@ $build->gen(1);
 
 zenData('relation')->gen(0);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 zenData('relation')->gen(0);
 r($upgrade->processObjectRelationTest('bug', 1)) && p('0:AType,AID,relation,BType,BID;1:AType,AID,relation,BType,BID') && e('story,2,generated,bug,1;task,1,generated,bug,1'); // 获取bug的关联关系
 zenData('relation')->gen(0);

@@ -16,7 +16,7 @@ cid=18066
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('repo');
@@ -32,7 +32,7 @@ $table->gen(5);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：正常查询存在版本库的服务器ID为1
 r(count($repoTest->getImportedProjectsTest(1))) && p() && e('3'); // 期望返回3个项目

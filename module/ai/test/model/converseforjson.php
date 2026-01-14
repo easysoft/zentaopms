@@ -24,13 +24,13 @@ try {
 
     // 1. 导入依赖（路径固定，不可修改）
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/model.class.php';
 
     // 3. 用户登录（选择合适角色）
     su('admin');
 
     // 4. 创建测试实例（变量名与模块名一致）
-    $aiTest = new aiTest();
+    $aiTest = new aiModelTest();
 
     ob_end_clean();
     error_reporting(E_ALL);
@@ -83,7 +83,7 @@ if (!$useFramework || !isset($aiTest)) {
         }
     }
 
-    $aiTest = new aiTest();
+    $aiTest = new aiModelTest();
 }
 
 // 准备测试数据

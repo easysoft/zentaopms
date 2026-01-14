@@ -16,11 +16,11 @@ cid=16036
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dimension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dimensionTester = new dimensionTest();
+$dimensionTester = new dimensionModelTest();
 
 r($dimensionTester->getListTest()) && p('1:name') && e('宏观管理维度');
 r($dimensionTester->getListTest()) && p('1:code') && e('macro');

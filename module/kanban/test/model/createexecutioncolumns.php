@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancell')->gen(0);
@@ -34,7 +34,7 @@ $laneIDList      = array('100001', '100002', '100003', '10004', '10005');
 $executionIDList = array('101', '102', '103', '104', '105');
 $typeList        = array('story', 'task', 'bug');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createExecutionColumnsTest($laneIDList[0], $typeList[0], $executionIDList[0])) && p() && e('15'); // 创建泳道 100001 执行101 需求的看板列
 r($kanban->createExecutionColumnsTest($laneIDList[0], $typeList[1], $executionIDList[0])) && p() && e('7');  // 创建泳道 100001 执行101 任务的看板列

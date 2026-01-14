@@ -15,7 +15,7 @@ cid=16119
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(20);
 zenData('user')->gen(5);
@@ -23,7 +23,7 @@ su('admin');
 
 $appends = array(0, 1, 100);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getOrderedProductsTest($appends[0])) && p('0:1') && e('产品1'); // 获取系统中已排序的产品
 r($docTester->getOrderedProductsTest($appends[1])) && p('0:1') && e('产品1'); // 获取系统中包括ID=1已排序的产品
 r($docTester->getOrderedProductsTest($appends[2])) && p('0:1') && e('产品1'); // 获取系统中包括不存在ID已排序的产品

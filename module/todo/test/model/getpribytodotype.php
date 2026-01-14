@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -25,7 +25,7 @@ zenData('task')->gen(10);
 zenData('story')->gen(10);
 zenData('testtask')->gen(10);
 
-$todoTest = new todoTest();
+$todoTest = new todoModelTest();
 r($todoTest->getPriByTodoTypeTest('bug',      1)) && p() && e('1'); // 获取类型为bug,ID为1对象的优先级，结果为1
 r($todoTest->getPriByTodoTypeTest('task',     3)) && p() && e('3'); // 获取类型为bug,ID为1对象的优先级，结果为3
 r($todoTest->getPriByTodoTypeTest('story',    5)) && p() && e('1'); // 获取类型为bug,ID为1对象的优先级，结果为1

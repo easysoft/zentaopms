@@ -12,7 +12,7 @@ cid=19520
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $app;
 $path     = $app->getTmpRoot() . 'log/';
@@ -20,5 +20,5 @@ $filename = 'consistency.%s.log.php';
 
 $filePath = sprintf($path . $filename, date('Ymd'));
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getConsistencyLogFile() === $filePath) && p('') && e('1');  //获取一致性检查的日志文件地址是否正确

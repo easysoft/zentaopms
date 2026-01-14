@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('product')->gen(10);
 $module = zenData('module');
 $module->root->range('1');
@@ -48,7 +48,7 @@ cid=19331
 
 */
 
-$transfer = new transferTest();
+$transfer = new transferTaoTest();
 $result   = $transfer->parseExcelDropdownValuesTest('story', $rows);
 
 r($result) && p('3:product') && e('2');         // 测试当产品为单选时，是否正常识别

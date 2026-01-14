@@ -16,13 +16,13 @@ cid=17124
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('metric')->loadYaml('metric_getresultbycodes', false, 2)->gen(10);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->getResultByCodesTest(array('count_of_product', 'count_of_project'))) && p('count_of_product') && e('0'); // 步骤1：正常情况测试有效代码数组
 r($metricTest->getResultByCodesTest(array())) && p() && e('0'); // 步骤2：空数组测试

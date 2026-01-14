@@ -211,7 +211,7 @@ cid=18396
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('space')->loadYaml('space')->gen(5);
@@ -223,7 +223,7 @@ $searchNames = array('', '应用');
 $recPerPages = array(5, 10, 20);
 $pageIdList  = array(1, 2);
 
-$spaceTester = new spaceTest();
+$spaceTester = new spaceModelTest();
 r($spaceTester->getSpaceInstancesTest($spaceIdList[0], $statusList[0], $searchNames[0], $recPerPages[0], $pageIdList[0])) && p()                                     && e('0');                    // 获取空间ID=0、状态为空、搜索名称为空、每页记录数为5、页码为1的应用列表
 r($spaceTester->getSpaceInstancesTest($spaceIdList[0], $statusList[0], $searchNames[0], $recPerPages[0], $pageIdList[1])) && p()                                     && e('0');                    // 获取空间ID=0、状态为空、搜索名称为空、每页记录数为5、页码为1的应用列表
 r($spaceTester->getSpaceInstancesTest($spaceIdList[0], $statusList[0], $searchNames[0], $recPerPages[1], $pageIdList[0])) && p()                                     && e('0');                    // 获取空间ID=0、状态为空、搜索名称为空、每页记录数为10、页码为1的应用列表

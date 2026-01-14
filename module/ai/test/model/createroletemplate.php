@@ -17,7 +17,7 @@ cid=15014
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('ai_promptrole');
@@ -30,7 +30,7 @@ $table->gen(0);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($aiTest->createRoleTemplateTest('请你扮演一名资深的产品经理。', '负责产品战略、设计、开发、数据分析、用户体验、团队管理、沟通协调等方面。')) && p() && e('1'); // 步骤1：正常创建

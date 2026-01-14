@@ -18,7 +18,7 @@ cid=19698
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('webhook');
@@ -39,7 +39,7 @@ $table->gen(15);
 su('admin');
 
 // 创建测试实例
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 $result1 = $webhookTest->getListTest();
 $result2 = $webhookTest->getListTest('id_desc');

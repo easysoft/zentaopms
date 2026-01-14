@@ -16,7 +16,7 @@ cid=19841
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $host = zenData('host');
@@ -41,7 +41,7 @@ $image->gen(5);
 su('admin');
 
 // 创建测试实例
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 // 测试数据准备
 $validData = new stdClass();

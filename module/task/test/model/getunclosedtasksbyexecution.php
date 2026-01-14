@@ -23,7 +23,7 @@ cid=18824
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -33,7 +33,7 @@ zenData('project')->loadYaml('execution')->gen(10);
 
 $excutionIdList = array(101, 102, 106, array(101), array(102), array(106), array(101, 102), array(101, 106), 110, array(110));
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getUnclosedTasksByExecutionTest($excutionIdList[0])) && p() && e('开发任务11');  // 查询单个执行 101 未关闭的任务
 r($task->getUnclosedTasksByExecutionTest($excutionIdList[1])) && p() && e('开发任务12');  // 查询单个执行 102 未关闭的任务
 r($task->getUnclosedTasksByExecutionTest($excutionIdList[2])) && p() && e('0');           // 查询单个执行 106 未关闭的任务

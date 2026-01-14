@@ -27,7 +27,7 @@ cid=15388
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(140);
 zenData('user')->gen(1);
@@ -37,7 +37,7 @@ su('admin');
 $productIDList = array('1', '2', '3', '4','5', '6', '1000001', '45');
 $branchIDList  = array('9');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 $bug->objectModel->app->user->admin = true;
 r($bug->getProductBugPairsTest($productIDList[0]))                   && p() && e('3:BUG3,2:BUG2,1:BUG1');       // 测试获取productID为1的bug
 r($bug->getProductBugPairsTest($productIDList[1]))                   && p() && e('6:BUG6,5:BUG5,4:BUG4');       // 测试获取productID为2的bug

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanregion')->gen(1);
@@ -64,7 +64,7 @@ $region5 = new stdclass;
 $region5->name  = '';
 $region5->space = 1;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createRegionTest($kanban1))                          && p('name,space,kanban') && e('默认区域,1,100001');      // 创建默认区域
 r($kanban->createRegionTest($kanban1, $region1))                && p('name,space,kanban') && e('新增的区域1,1,100001');   // 创建自定义区域1

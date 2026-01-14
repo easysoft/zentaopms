@@ -18,7 +18,7 @@ cid=17413
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 直接在数据库中插入测试数据
 global $tester;
@@ -30,7 +30,7 @@ $tester->dao->exec("INSERT INTO " . TABLE_PIVOTSPEC . " (pivot, version) VALUES
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 测试步骤1：内置pivot对象，版本号低于最新版本(1.0 < 1.5)
 $pivot1 = new stdClass();

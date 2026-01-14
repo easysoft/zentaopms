@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->gen(10);
 zenData('user')->gen(1);
@@ -51,7 +51,7 @@ $task4->name    = '修改name';
 $task4->status  = 'doing';
 $task4->product = '10';
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->updateTest($task1)) && p('name,status,product') && e('修改name,wait,1');  // 测试修改测试单 name
 r($testtask->updateTest($task2)) && p('name,status,product') && e('测试单2,doing,2');   // 测试修改测试单 status

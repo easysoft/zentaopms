@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
@@ -41,7 +41,7 @@ pid=1
 
 $caseIDList = array(1, 2, 3, 4, 5, 1001);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getByIdTest($caseIDList[0])) && p('title,type,status') && e('这个是测试用例1,feature,wait');        // 测试获取case 1 的信息
 r($testcase->getByIdTest($caseIDList[1])) && p('title,type,status') && e('这个是测试用例2,performance,normal');  // 测试获取case 2 的信息

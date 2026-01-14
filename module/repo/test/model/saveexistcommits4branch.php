@@ -16,7 +16,7 @@ cid=18096
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $dao->exec('truncate table zt_repohistory');
 $dao->exec('truncate table zt_repobranch');
@@ -29,7 +29,7 @@ zenData('repobranch')->loadYaml('repobranch')->gen(2);
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->saveExistCommits4BranchTest(3, 'master')) && p() && e('1'); // 测试步骤1：正常情况-保存gitea版本库master分支的历史提交
 r($repo->saveExistCommits4BranchTest(999, 'master')) && p() && e('0'); // 测试步骤2：边界值测试-不存在的仓库ID

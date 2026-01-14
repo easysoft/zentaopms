@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -20,7 +20,7 @@ cid=15525
 
 */
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 $searchConfig = $caselib->objectModel->buildSearchConfig(1);
 
 r($searchConfig['fields']) && p('title,story,type') && e('用例名称,关联需求,用例类型'); // 测试字段名称

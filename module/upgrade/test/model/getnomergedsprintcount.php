@@ -13,7 +13,7 @@ cid=19526
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->project->range('0');
@@ -21,5 +21,5 @@ $project->type->range('sprint');
 $project->vision->range('rnd');
 $project->gen(10);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getNoMergedSprintCountTest()) && p() && e('10');  //获取没有项目集的产品数量

@@ -17,7 +17,7 @@ cid=19686
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 简化数据准备
 zenData('action')->gen(10);
@@ -31,7 +31,7 @@ su('admin');
 // 4. 创建测试实例
 global $tester;
 $tester->loadModel('action');
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 // 5. 执行测试步骤（必须包含至少5个测试步骤）
 r(true) && p() && e('1'); // 步骤1：正常参数测试

@@ -24,13 +24,13 @@ cid=15957
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 // 4. 测试步骤执行
 r($dataviewTest->includeTableTest('bug')) && p('primaryTable;tables:bug') && e('bug,zt_bug'); // 步骤1：加载存在的bug表配置文件

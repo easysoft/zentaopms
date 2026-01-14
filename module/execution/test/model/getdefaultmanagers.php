@@ -22,7 +22,7 @@ cid=16311
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('user')->gen(5);
@@ -59,7 +59,7 @@ $projectProduct->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($executionTest->getDefaultManagersTest(3)) && p('PO') && e('admin'); // 步骤1：获取执行3关联产品1的PO管理者

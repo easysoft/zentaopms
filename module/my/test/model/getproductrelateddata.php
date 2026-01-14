@@ -16,13 +16,13 @@ cid=17286
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 简单测试不生成复杂数据，专注于测试方法的基本功能
 
 su('admin');
 
-$myTest = new myTest();
+$myTest = new myModelTest();
 
 r($myTest->getProductRelatedDataTest([1, 2])) && p() && e('4'); // 步骤1：正常产品ID数组输入
 r($myTest->getProductRelatedDataTest([])) && p() && e('4'); // 步骤2：空数组输入情况

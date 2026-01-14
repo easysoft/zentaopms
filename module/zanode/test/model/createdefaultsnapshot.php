@@ -18,7 +18,7 @@ cid=19822
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $hostTable = zenData('host');
 $hostTable->id->range('1-10');
@@ -35,7 +35,7 @@ $hostTable->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 r($zanode->createDefaultSnapshotTest(1)) && p('name') && e('请检查执行节点状态,网络请求失败或Agent服务不可用'); // 步骤1：测试节点1创建默认快照
 r($zanode->createDefaultSnapshotTest(4)) && p('name') && e('请检查执行节点状态'); // 步骤2：测试节点4创建默认快照

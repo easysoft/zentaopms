@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -56,7 +56,7 @@ $closedTaskLeft = array('assignedTo' => 'user17','status' => 'closed');
 
 $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->assignTest($taskIDlist[0], $waitTask))       && p('0:field,old,new') && e('assignedTo,old1,user12'); // wait状态任务指派
 r($task->assignTest($taskIDlist[0], $waitTaskLeft))   && p('1:field,old,new') && e('left,0.00,1');            // wait状态任务指派修改预计剩余
 r($task->assignTest($taskIDlist[1], $doingTask))      && p('0:field,old,new') && e('assignedTo,old2,user13'); // doing状态任务指派

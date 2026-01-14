@@ -19,7 +19,7 @@ cid=18343
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -35,7 +35,7 @@ $queryList[] = "account = '\$@me'";
 $queryList[] = "title like 'normal query'";
 
 // 创建测试实例
-$search = new searchTest();
+$search = new searchTaoTest();
 
 // 执行测试步骤
 r($search->replaceDynamicTest($queryList[0])) && p() && e('1');                         // 测试替换 $lastWeek

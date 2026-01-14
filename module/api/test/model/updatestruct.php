@@ -16,7 +16,7 @@ cid=15123
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('apistruct');
 $table->id->range('1-10');
@@ -41,7 +41,7 @@ $doclib->gen(3);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r($apiTest->updateStructTest((object)array('id' => 1, 'lib' => 1, 'name' => '更新后的数据结构', 'type' => 'object', 'desc' => '更新后的描述', 'attribute' => '{"field1":"string","field2":"number"}'))) && p() && e(1);
 

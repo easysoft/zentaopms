@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -23,7 +23,7 @@ $app->loadLang('pivot', 'pivot');
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试步骤1：正常透视表数据转换
 $normalData = new stdclass();

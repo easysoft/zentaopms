@@ -18,10 +18,10 @@ cid=19007
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseModelTest();
 
 // 创建测试数据文件
 $tempDir = sys_get_temp_dir() . '/zentao_test_xml';

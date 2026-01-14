@@ -16,7 +16,7 @@ cid=15016
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_assistant');
 $table->name->range('AI助手1,AI助手2,AI助手3,AI助手4,AI助手5');
@@ -34,7 +34,7 @@ zenData('action')->gen(0);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->deleteAssistantTest(1)) && p() && e('1');
 r($aiTest->deleteAssistantTest(2)) && p() && e('1');

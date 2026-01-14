@@ -15,7 +15,7 @@ cid=19357
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
@@ -26,7 +26,7 @@ $extra3 = array('branchID' => 0, 'projectID' => array(), 'productID' => 1);
 $extra4 = array('branchID' => 0, 'executionID' => 1);
 $extra5 = array('branchID' => 0);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->createStoryLinkTest(1, 0, $extra1)) && p('url') && e("projectstory-story-1-0--byModule-1-story.html");      // 测试获取module 1 project 1 的 story link
 r($tree->createStoryLinkTest(1, 0, $extra2)) && p('url') && e("projectstory-story-1-1--byModule-1-story.html");      // 测试获取module 1 project 1 product 1 的 story link

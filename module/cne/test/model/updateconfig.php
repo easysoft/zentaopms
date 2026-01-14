@@ -16,11 +16,11 @@ cid=15634
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->updateConfigTest()) && p() && e('0');
 r($cneTest->updateConfigTest('2024.04.2401')) && p() && e('0');

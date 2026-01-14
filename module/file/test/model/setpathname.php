@@ -17,10 +17,10 @@ cid=16534
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->setPathNameTest(1, 'txt'))       && p('reg') && e('1'); // 测试正常的文件ID和扩展名
 r($file->setPathNameTest(0, ''))          && p('reg') && e('1'); // 测试边界值文件ID为0和空扩展名

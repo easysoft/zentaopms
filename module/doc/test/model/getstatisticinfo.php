@@ -26,13 +26,13 @@ cid=16128
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 $adminInfo = $docTester->getStatisticInfoTest('admin');
 $user1Info = $docTester->getStatisticInfoTest('user1');
 

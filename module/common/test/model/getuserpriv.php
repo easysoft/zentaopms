@@ -21,9 +21,9 @@ cid=15678
 
 */
 
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->getUserPrivTest('user', 'browse', null, '', 'nouser')) && p() && e('0');
 r($commonTest->getUserPrivTest('user', 'browse', null, '', 'admin')) && p() && e('1');

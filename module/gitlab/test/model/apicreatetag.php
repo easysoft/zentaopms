@@ -17,7 +17,7 @@ cid=16582
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('pipeline');
@@ -31,7 +31,7 @@ $table->gen(3);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 // 测试步骤1：使用有效参数创建标签（由于没有真实GitLab连接，期望返回null）

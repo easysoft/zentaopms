@@ -24,7 +24,7 @@ cid=16147
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -39,7 +39,7 @@ $libID     = 1;
 $types     = array('api', 'custom', 'mine', 'project', 'execution', 'product');
 $objectIds = array(0, 1, 11, 101);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->processObjectTree($libID, $types[0], $objectIds[2])) && p()                                && e('0');                          // 处理api文档库数据
 r($docTester->processObjectTree($libID, $types[1], $objectIds[0])) && p()                                && e('0');                          // 处理自定义文档库数据
 r($docTester->processObjectTree($libID, $types[2], $objectIds[0])) && p()                                && e('0');                          // 处理我的文档库数据

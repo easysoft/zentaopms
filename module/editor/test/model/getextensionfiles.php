@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=16235
 
 */
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 r($editor->getExtensionFilesBasicTest('todo')) && p() && e(1);                          // 步骤1：测试todo模块扩展文件
 r($editor->getExtensionFilesBasicTest('user')) && p() && e(1);                          // 步骤2：测试user模块扩展文件
 r($editor->getExtensionFilesEmptyModuleTest()) && p() && e(1);                          // 步骤3：测试空模块名

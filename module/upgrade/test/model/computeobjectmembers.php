@@ -19,7 +19,7 @@ cid=19505
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(40);
 zenData('usergroup')->gen(20);
@@ -48,7 +48,7 @@ $doclib->gen(110);
 
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 $upgrade->computeObjectMembersTest(true);
 
 $objectID   = array(11, 20, 1, 10, 101, 110);

@@ -16,13 +16,13 @@ cid=18311
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 用户登录
 su('admin');
 
 // 创建测试实例
-$searchTest = new searchTest();
+$searchTest = new searchModelTest();
 
 r($searchTest->setQueryTest('task', 0)) && p('') && e('1 = 1');
 r($searchTest->setQueryTest('bug', 0)) && p('') && e('1 = 1');

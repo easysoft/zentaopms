@@ -18,7 +18,7 @@ cid=15892
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('usergroup')->gen(10);
@@ -27,7 +27,7 @@ zenData('grouppriv')->gen(100);
 
 su('admin');
 
-$customTest = new customTest();
+$customTest = new customModelTest();
 
 r($customTest->buildMenuItemsTest('main'))      && p() && e('array'); // 测试主菜单构建
 r($customTest->buildMenuItemsTest('product'))   && p() && e('array'); // 测试产品模块菜单构建

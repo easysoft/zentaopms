@@ -21,7 +21,7 @@ cid=19174
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('testsuite');
@@ -43,7 +43,7 @@ $table->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($testtaskTest->getExistSuitesOfUnitResultTest(['UnitSuite1', 'UnitSuite2'], 1, 'unit')) && p('UnitSuite1,UnitSuite2') && e('1,2'); // 步骤1：正常情况

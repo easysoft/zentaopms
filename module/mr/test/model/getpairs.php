@@ -19,7 +19,7 @@ cid=17253
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $mr = zenData('mr');
 $mr->id->range('1-5');
@@ -32,7 +32,7 @@ $mr->gen(5);
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->getPairsTest(1)) && p('1,2,5') && e('Test MR 1,Test MR 2,Test MR 5'); // 测试步骤1：正常获取有效仓库的MR键值对
 r($mrTest->getPairsTest(999)) && p() && e('0');                                  // 测试步骤2：测试不存在的仓库ID

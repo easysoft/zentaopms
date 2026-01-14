@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -51,7 +51,7 @@ cid=16876
 $executionIdList = array(1, 2, 3);
 $laneIdList      = array(1, 2, 3, 4, 5, 6, 7, 8 ,9);
 
-$kanbanTester = new kanbanTest();
+$kanbanTester = new kanbanModelTest();
 r($kanbanTester->buildExecutionGroupTest($executionIdList[0], $laneIdList[0])) && p('0:id,title') && e('1,泳道1'); // 构造迭代的任务泳道组
 r($kanbanTester->buildExecutionGroupTest($executionIdList[1], $laneIdList[1])) && p('0:id,title') && e('2,泳道2'); // 构造阶段的任务泳道组
 r($kanbanTester->buildExecutionGroupTest($executionIdList[2], $laneIdList[2])) && p('0:id,title') && e('3,泳道3'); // 构造看板的任务泳道组

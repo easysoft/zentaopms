@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->gen(20);
@@ -39,7 +39,7 @@ cid=16923
 $executionIDList = array('1', '2', '3', '4', '5');
 $browseTypeList  = array('story', 'task', 'bug');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[0])) && p() && e('0'); // 测试获取执行1 story的操作数量
 r($kanban->getKanbanCardMenuTest($executionIDList[0], $browseTypeList[1])) && p() && e('32'); // 测试获取执行1 task的操作数量

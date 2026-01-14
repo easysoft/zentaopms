@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(5);
@@ -88,7 +88,7 @@ $emptyEstimate   = array('id' => 18, 'estimate' => 0);
 $emptyEstStarted = array('id' => 19, 'estStarted' => '');
 $emptyDeadline   = array('id' => 20, 'deadline' => '');
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 /* Modify task field. */
 r($taskTester->batchUpdateObject($taskIdList, $changeName))       && p('1[0]:old,new')  && e('开发任务11,修改1');      // 检查修改任务名称

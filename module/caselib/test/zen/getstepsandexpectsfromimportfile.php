@@ -17,13 +17,13 @@ cid=15551
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($caselibTest->getStepsAndExpectsFromImportFileTest('stepDesc', 1, '1. 登录系统\n2. 打开页面\n3. 执行操作', 'count')) && p() && e('1'); // 步骤1：标准格式步骤解析（方法实际返回1个步骤对象）

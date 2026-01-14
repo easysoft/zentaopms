@@ -19,7 +19,7 @@ cid=16808
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // isClickable方法不依赖数据库，只需要创建测试对象
@@ -28,7 +28,7 @@ include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($instanceTest->isClickableTest((object)array('type' => 'store', 'status' => 'stopped'), 'ajaxStart')) && p() && e('1'); // 步骤1：store类型，start动作，stopped状态

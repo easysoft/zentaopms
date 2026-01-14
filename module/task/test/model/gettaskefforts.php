@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 zenData('effort')->loadYaml('effort')->gen(5);
 
@@ -28,7 +28,7 @@ $userList     = array('', 'admin', 'guest');
 $taskIdList   = array(0, 1, 10);
 $effortIdList = array(0, 1, 10);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getTaskEffortsTest($taskIdList[0])) && p()                  && e('0');      // 任务ID为空的情况
 r($task->getTaskEffortsTest($taskIdList[1])) && p('1:id,objectType') && e('1,task'); // 任务ID正确的情况
 r($task->getTaskEffortsTest($taskIdList[2])) && p()                  && e('0');      // 任务ID错误的情况

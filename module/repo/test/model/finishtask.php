@@ -18,7 +18,7 @@ cid=18044
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('task')->loadYaml('task_finishtask', false, 2)->gen(10);
 zendata('taskteam')->gen(5);
@@ -27,7 +27,7 @@ zendata('action')->gen(5);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 构造正常测试任务对象
 $task1 = new stdclass();

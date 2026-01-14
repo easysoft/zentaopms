@@ -16,11 +16,11 @@ cid=17337
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$personnelTest = new personnelTest();
+$personnelTest = new personnelModelTest();
 
 $whitelistObject = new stdclass();
 $whitelistObject->id = 1;

@@ -20,8 +20,8 @@ $testEnvLoaded = false;
 try {
     if(file_exists(dirname(__FILE__, 5) . '/test/lib/init.php')) {
         include dirname(__FILE__, 5) . '/test/lib/init.php';
-        if(file_exists(dirname(__FILE__, 2) . '/lib/screen.unittest.class.php')) {
-            include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+        if(file_exists(dirname(__FILE__, 2) . '/lib/model.class.php')) {
+            include dirname(__FILE__, 2) . '/lib/model.class.php';
             su('admin');
             $testEnvLoaded = true;
         }
@@ -79,7 +79,7 @@ if (!$testEnvLoaded) {
     $_currentValue = null;
 }
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getMetricChartOptionTest('normal_case')) && p('') && e('object'); // 测试正常情况的处理结果
 r($screenTest->getMetricChartOptionTest('component_boundary')) && p('') && e('object'); // 测试组件参数的边界值处理

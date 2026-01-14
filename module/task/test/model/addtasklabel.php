@@ -18,7 +18,7 @@ cid=18757
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('task');
@@ -33,7 +33,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$taskTest = new taskTest();
+$taskTest = new taskModelTest();
 
 // 5. 测试步骤：必须包含至少5个测试步骤
 r(count($taskTest->addTaskLabelTest(array()))) && p() && e('0'); // 步骤1：空数组情况

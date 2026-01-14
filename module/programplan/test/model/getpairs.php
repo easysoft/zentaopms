@@ -15,7 +15,7 @@ cid=17745
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('getpairs')->gen(10);
@@ -24,7 +24,7 @@ zenData('projectproduct')->loadYaml('getprojectproduct')->gen(20);
 $executionIDList = array(11, 12, 13, 14, 15);
 $productIDList   = array(11, 12, 13, 14, 15);
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 r($programplan->getPairsTest($executionIDList[0], $productIDList[0], 'all'))  && p() && e('/项目11'); // 步骤1：测试获取执行11产品11的all类型计划键值对
 r($programplan->getPairsTest($executionIDList[1], $productIDList[1], 'leaf')) && p() && e('/项目12'); // 步骤2：测试获取执行12产品12的leaf类型计划键值对

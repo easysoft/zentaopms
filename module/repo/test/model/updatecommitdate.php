@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -20,7 +20,7 @@ cid=18112
 
 zenData('repo')->loadYaml('repo')->gen(5);
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->updateCommitDateTest(1)) && p('lastCommit') && e('2023-12-23 11:39:02'); // 步骤1：更新Gitlab版本库
 r($repo->updateCommitDateTest(3)) && p('lastCommit') && e('~~'); // 步骤2：更新Gitea版本库

@@ -18,7 +18,7 @@ cid=15232
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $block = zenData('block');
@@ -38,7 +38,7 @@ $block->gen(10);
 su('admin');
 
 // 创建测试实例
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 
 r(count($blockTest->getMyDashboardTest('my'))) && p('') && e('5'); // 步骤1：正常情况，查询admin用户my仪表盘的区块数量
 r($blockTest->getMyDashboardTest('my')) && p('0:width') && e('3'); // 步骤2：验证排序，检查第一个区块的宽度

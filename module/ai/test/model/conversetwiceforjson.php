@@ -16,7 +16,7 @@ cid=15007
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 $tester->dao->exec("DELETE FROM " . TABLE_AI_MODEL . " WHERE 1=1");
@@ -27,7 +27,7 @@ $tester->dao->exec("INSERT INTO " . TABLE_AI_MODEL . " (`id`, `type`, `vendor`, 
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 $validMessages = array(
     (object)array('role' => 'user', 'content' => 'Please analyze this data and provide structured output')

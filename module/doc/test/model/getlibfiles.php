@@ -40,7 +40,7 @@ cid=16098
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $storyTable = zenData('story');
 $storyTable->product->range('1-5');
@@ -98,7 +98,7 @@ $projects    = array(0, 11);
 $executions  = array(0, 101);
 $searchTitle = array(false, '文件');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibFilesTest($types[0], $products[0], $searchTitle[0]))   && p()                               && e('0');                      // 测试空数据
 r($docTester->getLibFilesTest($types[1], $products[0], $searchTitle[0]))   && p()                               && e('0');                      // 获取关联产品ID=0数据的附件
 r($docTester->getLibFilesTest($types[1], $products[1], $searchTitle[0]))   && p('16:title,objectType,objectID') && e('文件标题16,testcase,16'); // 获取关联产品ID=1数据的附件

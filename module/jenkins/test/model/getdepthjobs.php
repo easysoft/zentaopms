@@ -21,13 +21,13 @@ cid=16831
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/jenkins.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 
 su('admin');
 
-$jenkinsTest = new jenkinsTest();
+$jenkinsTest = new jenkinsModelTest();
 
 r($jenkinsTest->getDepthJobsDirectTest()) && p() && e('{"\/job\/simpleJob\/":"Simple Job","\/job\/paramJob\/":"Param Job","folder1":{"\/job\/folder1\/job\/subJob1\/":"Sub Job 1","\/job\/folder1\/job\/subJob2\/":"Sub Job 2"}}'); // 测试正常情况：深度为1时解析Jenkins作业结构
 r($jenkinsTest->getDepthJobsEmptyTest()) && p() && e('[]'); // 测试空数据：传入空的作业数组

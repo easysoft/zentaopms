@@ -29,7 +29,7 @@ cid=16041
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->gen(0);
 zenData('user')->gen(5);
@@ -42,7 +42,7 @@ $projectSubModule   = array('name' => '质量保证计划', 'root' => 2, 'grade'
 $executionModule    = array('name' => '开发计划',       'root' => 3, 'grade' => 1, 'order' => 10, 'type' => 'doctemplate');
 $executionSubModule = array('name' => '软件需求说明书', 'root' => 3, 'grade' => 2, 'order' => 20, 'type' => 'doctemplate', 'parent' => 5);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->addTemplateTypeTest($productModule))      && p('short|path', '|') && e('custom1|,1,');   // 添加产品模板类型
 r($docTester->addTemplateTypeTest($productSubModule))   && p('short|path', '|') && e('custom2|,1,2,'); // 添加产品子模板类型
 r($docTester->addTemplateTypeTest($projectModule))      && p('short|path', '|') && e('custom3|,3,');   // 添加项目模板类型

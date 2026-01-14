@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -146,7 +146,7 @@ $app->control = new repo();
 $app->rawModule = 'repo';
 $app->rawMethod = 'browse';
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);
 $result = $tester->loadModel('task')->getById(8);
 r($result) && p('status,consumed,left') && e('doing,11,3'); //处理push事件的webhook

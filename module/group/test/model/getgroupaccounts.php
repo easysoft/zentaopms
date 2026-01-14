@@ -16,7 +16,7 @@ cid=16704
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('usergroup');
 $table->account->range('user1,user2,user3,user4,user5,user6,user7,user8,user9,user10');
@@ -26,7 +26,7 @@ $table->gen(10);
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 r($groupTest->getGroupAccountsTest(array(1, 2))) && p('user1') && e('user1');
 r($groupTest->getGroupAccountsTest(array(1))) && p('user1') && e('user1');

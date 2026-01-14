@@ -16,11 +16,11 @@ cid=15190
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(is_string($biTest->initParquetTest()) || is_null($biTest->initParquetTest())) && p() && e('1'); // 步骤1:正常调用initParquet方法,验证返回值类型
 r(is_string($biTest->initParquetTest()) || is_null($biTest->initParquetTest())) && p() && e('1'); // 步骤2:测试DuckDB bin文件存在性检查

@@ -17,7 +17,7 @@ cid=18122
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $table = zenData('userquery');
@@ -33,7 +33,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoTaoTest();
 
 // 5. 测试步骤 - 每步之间清理session确保独立性
 $tester->session->set('repoQuery', '');

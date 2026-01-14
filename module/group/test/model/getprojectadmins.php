@@ -20,13 +20,13 @@ cid=16715
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 zenData('projectadmin')->gen(10);
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getProjectAdminsTest()) && p('admin,user9:programs,projects,products,executions')  && e('all,all,all,all');   // 获取admin的管理信息
 r($group->getProjectAdminsTest()) && p('user1:programs,projects,products,executions')        && e('1,6,1,16');          // 获取user1的管理信息

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=18273
 
 */
 
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 r($screen->prepareRadarDatasetTest('normal')) && p('radarIndicator:0') && e('indicator1');
 r($screen->prepareRadarDatasetTest('normal')) && p('seriesData:0') && e('series1');

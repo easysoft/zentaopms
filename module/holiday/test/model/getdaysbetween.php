@@ -14,13 +14,13 @@ cid=16741
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 r($holiday->getDaysBetweenTest('2022-04-01', '2022-04-21')) && p() && e('21');  //返回2022-04-01到2022-04-21之间的天数
 r($holiday->getDaysBetweenTest('2022-05-23', '2022-05-30')) && p() && e('8');   //返回2022-05-23到2022-05-30之间的天数

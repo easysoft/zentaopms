@@ -16,9 +16,9 @@ cid=17368
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->formatCellDataTest('test', array('test' => array('col1' => 100)))) && p('col1:value') && e('100');
 r($pivotTest->formatCellDataTest('data', array('data' => array('item1' => array('value' => 'hello'))))) && p('item1:value') && e('hello');

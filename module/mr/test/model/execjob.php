@@ -22,14 +22,14 @@ cid=17244
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(4);
 zenData('repo')->loadYaml('repo')->gen(1);
 zenData('job')->loadYaml('job')->gen(3);
 zenData('mr')->loadYaml('mr')->gen(1);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 $MRID  = 0;
 $jobID = 0;

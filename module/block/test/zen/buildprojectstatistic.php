@@ -17,7 +17,7 @@ cid=15237
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备（不需要数据库数据，直接创建对象）
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 5. 准备测试数据
 // 敏捷项目对象

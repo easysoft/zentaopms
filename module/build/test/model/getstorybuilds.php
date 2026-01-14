@@ -16,7 +16,7 @@ cid=15499
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $build = zenData('build');
 $build->id->range('1-15');
@@ -32,7 +32,7 @@ $build->gen(15);
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r(count($buildTest->getStoryBuildsTest(1))) && p() && e('2');
 r(count($buildTest->getStoryBuildsTest(0))) && p() && e('0');

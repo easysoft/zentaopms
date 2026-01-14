@@ -17,7 +17,7 @@ cid=15733
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 确保有基本的公司数据
 zendata('company')->gen(1);
@@ -25,7 +25,7 @@ zendata('company')->loadYaml('company_getoutsidecompanies', false, 2)->gen(5);
 
 su('admin');
 
-$company = new companyTest();
+$company = new companyModelTest();
 
 r($company->getOutsideCompaniesTest()) && p() && e('4'); // 步骤1：测试获取外部公司列表返回数组长度为4
 r($company->getOutsideCompaniesTest()) && p('2') && e('外部公司A'); // 步骤2：验证第一个外部公司名称为外部公司A

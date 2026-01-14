@@ -36,7 +36,7 @@ cid=16079
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
@@ -46,7 +46,7 @@ $libIdList   = array(0, 11);
 $modules     = array(0, 1);
 $browseTypes = array('all', 'draft');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[0])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=0、moduleID=0、browseType=all的文档列表
 r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[1])) && p() && e('0');                                      // 获取libID=0、moduleID=0、browseType=draft的文档列表
 r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[0])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=0、moduleID=1、browseType=all的文档列表

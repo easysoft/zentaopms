@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->gen(5);
 
@@ -26,7 +26,7 @@ $uid = uniqid();
 
 $taskIdList = array(1, 2, 3, 4, 5, 10001, 0);
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->updateStatusTest($taskIdList[0])) && p('status') && e('doing'); // 测试更新测试单 ID 为 1 的状态到doing
 r($testtask->updateStatusTest($taskIdList[1])) && p('status') && e('doing'); // 测试更新测试单 ID 为 2 的状态到doing

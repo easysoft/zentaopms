@@ -16,7 +16,7 @@ cid=16854
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('job');
 $table->id->range('1-5');
@@ -29,7 +29,7 @@ $table->gen(5);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 r($jobTest->updateLastTagTest(1, 'testTag')) && p('lastTag') && e('testTag');
 r($jobTest->updateLastTagTest(2, '')) && p('lastTag') && e('~~');

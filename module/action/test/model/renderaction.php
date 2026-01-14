@@ -18,7 +18,7 @@ cid=14928
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('renderaction', false, 2)->gen(20);
 zenData('story')->gen(10);
@@ -30,7 +30,7 @@ zenData('user')->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 $action1 = new stdClass();
 $action1->objectType = 'story';

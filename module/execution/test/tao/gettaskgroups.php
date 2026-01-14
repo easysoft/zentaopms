@@ -16,13 +16,13 @@ cid=16394
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('task')->gen(100);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 r(count($executionTest->getTaskGroupsTest(103))) && p() && e('1'); // 测试步骤1：查询包含任务的执行ID，返回任务分组结构
 r(count($executionTest->getTaskGroupsTest(999))) && p() && e('0'); // 测试步骤2：查询不存在任务的执行ID，应返回空数组

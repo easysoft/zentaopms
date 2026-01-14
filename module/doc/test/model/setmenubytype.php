@@ -29,7 +29,7 @@ cid=16153
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
 zenData('doclib')->loadYaml('doclib')->gen(50);
@@ -41,7 +41,7 @@ $objectIdList = array(0, 11, 101, 1);
 $libIdList    = array(0, 11, 16, 20, 26, 6);
 $appendList   = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->setMenuByTypeTest($typeList[0], $objectIdList[0], $libIdList[1], $appendList[0])[0]) && p('45:type,name') && e('mine,我的文档库45');        // 测试空数据
 r($docTester->setMenuByTypeTest($typeList[1], $objectIdList[0], $libIdList[1], $appendList[0])[0]) && p('45:type,name') && e('mine,我的文档库45');        // 设置我的文档库导航
 r($docTester->setMenuByTypeTest($typeList[2], $objectIdList[1], $libIdList[2], $appendList[0])[0]) && p('16:type,name') && e('project,项目文档主库16');   // 设置项目文档库导航

@@ -29,7 +29,7 @@ cid=14954
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $reviewTable = zenData('review');
 $reviewTable->id->range('1-20');
@@ -45,7 +45,7 @@ $projectproductTable->gen(12);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->getReviewRelatedTest('review', 1)) && p('0:1;0:2;1') && e('1;2;1');  // 步骤1：正常review查询project 1，返回第一个和第二个product以及project ID
 r($actionTest->getReviewRelatedTest('review', 999)) && p('0:0;1') && e('0;0');            // 步骤2：不存在的review对象，返回默认值

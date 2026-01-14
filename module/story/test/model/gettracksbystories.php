@@ -16,7 +16,7 @@ cid=18565
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('story');
 $table->id->range('1-10');
@@ -40,7 +40,7 @@ $lang->ERCommon = '业务需求';
 $lang->URCommon = '用户需求';
 $lang->SRCommon = '研发需求';
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 $result = $storyTest->getTracksByStoriesTest(array(), 'epic');
 r(is_array($result)) && p() && e('1');

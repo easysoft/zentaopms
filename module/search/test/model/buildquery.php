@@ -18,7 +18,7 @@ cid=18295
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -38,7 +38,7 @@ $searchConfig['onMenuBar'] = 'yes';
 $searchConfig['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bySearch&queryID=myQueryID';
 $searchConfig['queryID']   = 0;
 
-$search = new searchTest();
+$search = new searchModelTest();
 
 // 测试步骤1：正常搜索条件构建
 $postData1 = new stdclass();
@@ -87,7 +87,7 @@ $searchConfig2['onMenuBar'] = 'yes';
 $searchConfig2['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bySearch&queryID=myQueryID';
 $searchConfig2['queryID'] = 0;
 
-$search2 = new searchTest();
+$search2 = new searchModelTest();
 $postData4 = new stdclass();
 $postData4->field1    = 'title; DROP TABLE users; --';
 $postData4->andOr1    = 'and';

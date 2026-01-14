@@ -17,13 +17,13 @@ cid=18451
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$storeTest = new storeTest();
+$storeTest = new storeModelTest();
 
 // 5. 测试步骤 - 每个测试用例必须包含至少5个测试步骤
 r($storeTest->batchSetLatestVersionsTest(array())) && p() && e('0'); // 步骤1：空数组测试

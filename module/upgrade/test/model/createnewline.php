@@ -16,10 +16,10 @@ cid=19510
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $lineName = '产品线1';
 $programID = 1;
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->createNewLineTest($lineName, $programID)) && p('type,name,root') && e('line,产品线1,1'); // 测试新建产品线

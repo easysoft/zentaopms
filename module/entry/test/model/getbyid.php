@@ -21,7 +21,7 @@ cid=16247
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('entry');
 $table->id->range('1-10');
@@ -34,7 +34,7 @@ $table->gen(10);
 
 su('admin');
 
-$entryTest = new entryTest();
+$entryTest = new entryModelTest();
 
 r($entryTest->getByIdTest(1)) && p('name,account,code') && e('应用名称1,admin,app1'); // 步骤1：查询存在的entry记录
 r($entryTest->getByIdTest(999)) && p() && e('0');                                      // 步骤2：查询不存在的entry记录

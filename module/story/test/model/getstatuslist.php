@@ -20,11 +20,11 @@ cid=18555
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getStatusListTest('noclosed')) && p('1,2,3,4') && e('draft,reviewing,active,changing'); // 步骤1：获取noclosed状态列表
 r($storyTest->getStatusListTest('active')) && p() && e('active'); // 步骤2：获取active状态列表

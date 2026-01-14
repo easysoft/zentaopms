@@ -15,12 +15,12 @@ cid=19504
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $begin = array('2023-12-01', '2024-01-01');
 $end   = array('2023-12-31', '2024-01-31');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->computeDaysDeltaTest($begin[0], $end[0])) && p() && e('21'); // 测试计算 2023-12-01 到 2023-12-31 之间的天数
 r($upgrade->computeDaysDeltaTest($begin[0], $end[1])) && p() && e('43'); // 测试计算 2023-12-01 到 2024-01-31 之间的天数
 r($upgrade->computeDaysDeltaTest($begin[1], $end[1])) && p() && e('22'); // 测试计算 2024-01-01 到 2024-01-31 之间的天数

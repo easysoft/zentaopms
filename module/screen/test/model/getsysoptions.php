@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(10);
@@ -53,7 +53,7 @@ cid=18256
 
 */
 
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 $sql = 'SELECT * FROM `zt_user` WHERE `id` > 0 ';
 $typeList   = array('user', 'product', 'project', 'execution', 'dept', 'project.status', 'option', 'object', 'other');

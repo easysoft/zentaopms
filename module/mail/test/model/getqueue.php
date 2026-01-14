@@ -19,7 +19,7 @@ cid=17009
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 清理并准备测试数据（直接使用global $tester来避免依赖问题）
 global $tester;
@@ -53,7 +53,7 @@ if($tester && $tester->dao) {
 su('admin');
 
 // 4. 创建测试实例
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r(count($mailTest->getQueueTest('all'))) && p() && e('5'); // 步骤1：测试获取所有状态邮件队列数量（按收件人分组）
 r(count($mailTest->getQueueTest('fail'))) && p() && e('5'); // 步骤2：测试获取失败状态的邮件队列数量

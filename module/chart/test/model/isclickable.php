@@ -18,11 +18,11 @@ cid=15579
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/chart.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$chart = new chartTest();
+$chart = new chartModelTest();
 r($chart->isClickableTest(32, 'design')) && p() && e('0');      //测试不存在的图表按钮是否不可点击
 r($chart->isClickableTest(10020, 'design')) && p() && e('0');   //测试内置图表的设计按钮是否不可点击
 r($chart->isClickableTest(10020, 'edit'))   && p() && e('0');   //测试内置图表的编辑按钮是否不可点击

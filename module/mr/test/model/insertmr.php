@@ -19,7 +19,7 @@ cid=17254
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('mr')->gen(0);
 zenData('pipeline')->gen(5);
@@ -27,7 +27,7 @@ zenData('repo')->loadYaml('repo')->gen(1);
 zenData('job')->loadYaml('job')->gen(1);
 su('admin');
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 $MR = new stdclass();
 $MR->hostID             = 1;

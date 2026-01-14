@@ -17,7 +17,7 @@ cid=17029
 
 try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
     // 准备基础数据
     zenData('company')->gen(1);
@@ -25,7 +25,7 @@ try {
 
     su('admin');
 
-    $mailTest = new mailTest();
+    $mailTest = new mailTaoTest();
 } catch(Exception $e) {
     // 如果初始化失败，创建模拟的测试类
     class mailTest {
@@ -39,7 +39,7 @@ try {
             return false;
         }
     }
-    $mailTest = new mailTest();
+    $mailTest = new mailTaoTest();
 }
 
 // 创建测试数据

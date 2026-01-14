@@ -16,7 +16,7 @@ cid=16158
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('file')->gen(6);
 
@@ -36,7 +36,7 @@ $doccontentTable->gen(5);
 $docID      = 1;
 $fileIdList = array(1, 4, 7, 8, 9);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->updateDocFileTest($docID, $fileIdList[0])) && p('files') && e('2'); // 测试将文件ID为1的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[1])) && p('files') && e('2'); // 测试将文件ID为4的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[2])) && p('files') && e('2'); // 测试将文件ID为7的文件从文档ID为1的文档中移除

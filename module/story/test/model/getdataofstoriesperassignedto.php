@@ -18,7 +18,7 @@ cid=18512
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 清理session条件，确保测试环境干净
 unset($_SESSION['storyOnlyCondition']);
@@ -50,7 +50,7 @@ global $tester;
 $tester->loadModel('report');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getDataOfStoriesPerAssignedToTest('story')) && p('admin:name') && e('管理员'); // 测试story类型返回指派人
 

@@ -19,10 +19,10 @@ cid=16016
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 r($devTest->loadDefaultLangTest()) && p('URCommon') && e('$URCOMMON'); // 测试步骤1：默认参数调用检查URCommon属性
 r($devTest->loadDefaultLangTest('zh-cn', 'common')) && p('productCommon') && e('$PRODUCTCOMMON'); // 测试步骤2：指定zh-cn语言和common模块检查productCommon属性

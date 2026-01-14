@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testreport')->gen(10);
 zenData('user')->gen(1);
@@ -33,7 +33,7 @@ cid=19115
 */
 $reportID = array(1, 2, 3, 0, 16);
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 
 r($testreport->getByIdTest($reportID[0])) && p('id|owner|cases', '|') && e('1|user3|1,2,3,4');    // 正常查询 1
 r($testreport->getByIdTest($reportID[1])) && p('id|owner|cases', '|') && e('2|user4|5,6,7,8');    // 正常查询 2

@@ -16,9 +16,9 @@ cid=15240
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 r(count($blockTest->getAvailableModulesTest('my'))) && p() && e('7');
 r(count($blockTest->getAvailableModulesTest('product'))) && p() && e('0');

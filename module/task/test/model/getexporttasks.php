@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->loadYaml('task', true)->gen(30);
@@ -22,7 +22,7 @@ cid=18809
 
 $orderByList = array('id_desc', 'pri_asc');
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 r($taskTester->getExportTasksTest($orderByList[0]))                          && p()         && e('0');          // 按照id倒序获取任务数据
 r($taskTester->getExportTasksTest($orderByList[1]))                          && p()         && e('0');          // 按照优先级正序获取任务数据

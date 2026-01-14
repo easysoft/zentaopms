@@ -18,7 +18,7 @@ cid=15338
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 $branch_table = zenData('branch');
@@ -32,7 +32,7 @@ $branch_table->gen(20);
 
 su('admin');
 
-$branchTest = new branchTest();
+$branchTest = new branchModelTest();
 
 r($branchTest->sortTest(array('2' => '1', '1' => '2'))) && p() && e('2,1');
 r($branchTest->sortTest(array('4' => '1', '3' => '2', '6' => '3', '5' => '4'))) && p() && e('4,3,6,5');

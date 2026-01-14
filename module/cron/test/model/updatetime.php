@@ -14,10 +14,10 @@ cid=15889
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$cron = new cronTest();
+$cron = new cronModelTest();
 
 r($cron->updateTimeTest('scheduler', 1)) && p() && e(1); // 更新调度器1的最新时间
 r($cron->updateTimeTest('scheduler', 2)) && p() && e(2); // 更新调度器2的最新时间

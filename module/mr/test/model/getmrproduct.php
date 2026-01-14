@@ -18,13 +18,13 @@ cid=17252
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(1);
 zenData('repo')->loadYaml('repo')->gen(5);
 zenData('mr')->loadYaml('mr')->gen(6);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->getMRProductTester(4)) && p() && e('0'); // 不存在的产品
 r($mrModel->getMRProductTester(6)) && p() && e('0'); // 代码库不存在

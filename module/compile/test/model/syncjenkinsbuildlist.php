@@ -17,7 +17,7 @@ cid=15756
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $job = zenData('job');
 $job->loadYaml('job', false, 2)->gen(5);
@@ -32,7 +32,7 @@ $pipeline->gen(5);
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 // 准备测试数据
 $job = new stdClass();

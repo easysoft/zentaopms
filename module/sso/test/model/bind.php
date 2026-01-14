@@ -20,7 +20,7 @@ cid=18401
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sso.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->account->range('admin,user1,user2,test1,test2');
@@ -32,7 +32,7 @@ $user->gen(5);
 
 su('admin');
 
-$ssoTest = new ssoTest();
+$ssoTest = new ssoModelTest();
 
 // 测试步骤1：正常绑定已存在用户到ranzhi账号
 $_POST = array();

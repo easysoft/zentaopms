@@ -18,7 +18,7 @@ cid=18553
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $storyReview = zenData('storyreview');
 $storyReview->story->range('1,1,1,2,2,3');
@@ -29,7 +29,7 @@ $storyReview->gen(6);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getReviewerPairsTest(1, 1)) && p('admin') && e('pass');
 r($storyTest->getReviewerPairsTest(1, 1)) && p('user1') && e('reject');

@@ -15,7 +15,7 @@ cid=18383
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $table = zenData('pipeline');
@@ -27,7 +27,7 @@ $table->token->range('admin:password123,user:token456,test:secret789');
 $table->deleted->range('0{8},1{2}');
 $table->gen(10);
 
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 r($sonarqube->getApiBaseTest(2))     && p() && e('https://sonar.example.com/api/%s'); // 测试步骤1：有效sonarqubeID获取API基础信息
 r($sonarqube->getApiBaseTest(999))   && p() && e('return empty');                      // 测试步骤2：不存在的sonarqubeID获取API基础信息
 r($sonarqube->getApiBaseTest(-1))    && p() && e('return empty');                      // 测试步骤3：负数sonarqubeID获取API基础信息

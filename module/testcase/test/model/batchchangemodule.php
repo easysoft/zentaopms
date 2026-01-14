@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -12,7 +12,7 @@ pid=1
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->batchChangeModuleTest(array(),  array(),  0)) && p() && e('0'); // 用例和场景都为空返回 false。
 r($testcase->batchChangeModuleTest(array(1), array(),  0)) && p() && e('1'); // 用例不为空，场景为空返回 true。

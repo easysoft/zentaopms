@@ -53,7 +53,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 禁用zenData调用，使用Mock数据
 // zenData('user')->gen(20);
@@ -66,7 +66,7 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 // zenData('task')->gen(10);
 
 global $tester;
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 $pivotIDList = array(1002, 1000, 1001, 1025);
 

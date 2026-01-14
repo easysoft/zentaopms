@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->gen(0);
 zenData('actionrecent')->gen(0);
@@ -71,7 +71,7 @@ $uid                 = array('', uniqid());
 $autoDelete          = array(true, false);
 $versionList         = array('18.1', '18.7', '21.7.2');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->createTest($objectTypeList[0], $objectIDList[0], $actionTypeList[1])) && p('objectType;objectID;actor') && e('task;1;guest'); //测试创建task，1，edited
 r($action->createTest($objectTypeList[2], $objectIDList[0], $actionTypeList[6])) && p('') && e('0');                                     //测试创建user，1，logout

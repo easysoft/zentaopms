@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -26,7 +26,7 @@ $key         = 'key=1';
 $vision      = 'vision=rnd';
 $paramString = array('', $lang, $lang.'&'.$module, $lang.'&'.$key.'&'.$section, $lang.'&'.$key.'&'.$section.'&'.$module, $lang.'&'.$key.'&'.$section.'&'.$module.'&'.$vision);
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 
 r($customTester->deleteItemsTest($paramString[0])) && p() && e('1');  //测试参数为空
 r($customTester->deleteItemsTest($paramString[1])) && p() && e('1');  //测试参数为lang

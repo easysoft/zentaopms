@@ -17,7 +17,7 @@ cid=15874
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $task = zenData('task');
@@ -52,7 +52,7 @@ $bug->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($convertTest->updateRelatesObjectTest(array('jira_task_1' => 'jira_story_1'), array('jira_task_1' => array('BType' => 'ztask', 'BID' => '1'), 'jira_story_1' => array('BType' => 'zstory', 'BID' => '2')))) && p() && e('1'); // 步骤1：任务关联需求正常情况

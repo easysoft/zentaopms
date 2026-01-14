@@ -17,7 +17,7 @@ cid=17790
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备
 zendata('project')->loadYaml('project_buildstages', false, 2)->gen(10);
@@ -28,7 +28,7 @@ zendata('task')->loadYaml('task_buildstages', false, 2)->gen(20);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$programplanTest = new programplanTest();
+$programplanTest = new programplanZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($programplanTest->buildStagesTest(1, 0, 0, 'gantt', 'order_asc', '', 0)) && p() && e('2'); // 步骤1：测试gantt类型正常情况

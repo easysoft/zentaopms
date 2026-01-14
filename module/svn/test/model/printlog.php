@@ -16,11 +16,11 @@ cid=18719
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 r(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} Processing commit 12345/', $svnTest->printLogTest('Processing commit 12345'))) && p() && e(1); // 步骤1：正常日志输出
 r(preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $svnTest->printLogTest(''))) && p() && e(1); // 步骤2：空字符串输入

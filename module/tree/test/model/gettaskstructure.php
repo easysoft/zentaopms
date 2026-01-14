@@ -16,7 +16,7 @@ cid=19383
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
@@ -25,7 +25,7 @@ $projectproduct->project->range('2-100');
 $projectproduct->product->range('2-100');
 $projectproduct->gen(10);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getTaskStructureTest(1))  && p() && e('模块1:1;模块11:0'); // 获取root 1  的task 结构
 r($tree->getTaskStructureTest(2))  && p() && e('正常产品2:0;'); // 获取root 2  的task 结构

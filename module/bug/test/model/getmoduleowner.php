@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(10);
@@ -31,7 +31,7 @@ cid=15386
 $moduleIDList  = array(0, 1, 2, 3, 4);
 $productIDList = array(1, 2);
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->getModuleOwnerTest($moduleIDList[0], $productIDList[0]))    && p('0') && e('admin'); // 没有模块，返回产品测试负责人
 r($bug->getModuleOwnerTest($moduleIDList[1], $productIDList[0]))    && p('0') && e('user1'); // 模块有负责人，返回模块负责人

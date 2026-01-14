@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('task_computebeginandend')->gen(10);
 
@@ -31,7 +31,7 @@ cid=18775
 
 $taskIDList = array('1', '2', '3', '4', '100001');
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->computeBeginAndEndTest($taskIDList[0])) && p('estStartedDiff,deadlineDiff') && e('0,0');   // 根据taskID计算没有父任务的预计开始 实际开始 截止日期
 r($task->computeBeginAndEndTest($taskIDList[1])) && p('estStartedDiff,deadlineDiff') && e('29,25'); // 根据taskID计算有子任务的父任务预计开始 实际开始 截止日期
 r($task->computeBeginAndEndTest($taskIDList[2])) && p('estStartedDiff,deadlineDiff') && e('28,29'); // 根据子任务全部取消的父任务的计算预计开始 实际开始 截止日期

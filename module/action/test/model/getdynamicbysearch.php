@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(90);
 zenData('actionrecent')->gen(0);
@@ -57,7 +57,7 @@ $limit         = 50;
 $dateList      = array('', 'today');
 $directionList = array('next', 'pre');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[0], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('90,entry;89,testreport'); // 获取排序为id倒序的所有动态
 r(array_values($action->getDynamicBySearchTest($queryID[0], $orderByList[1], $limit, $dateList[0], $directionList[0]))) && p('0:id,objectType;1:id,objectType') && e('1,product;2,story');      // 获取排序为id正序的所有动态

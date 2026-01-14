@@ -16,7 +16,7 @@ cid=17872
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project_unlinkstorybytype', false, 2)->gen(10);
 zenData('story')->loadYaml('story_unlinkstorybytype', false, 2)->gen(20);
@@ -24,7 +24,7 @@ zenData('projectstory')->loadYaml('projectstory_unlinkstorybytype', false, 2)->g
 
 su('admin');
 
-$projectTest = new projectTest();
+$projectTest = new projectModelTest();
 
 r($projectTest->unlinkStoryByTypeTest(1, 'story'))             && p() && e('0');
 r($projectTest->unlinkStoryByTypeTest(999, 'story'))           && p() && e('0');

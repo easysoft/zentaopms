@@ -16,7 +16,7 @@ cid=17346
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 $table = zenData('pipeline');
@@ -35,7 +35,7 @@ $table->gen(10);
 
 su('admin');
 
-$pipelineTest = new pipelineTest();
+$pipelineTest = new pipelineModelTest();
 
 r($pipelineTest->getByUrlTest('https://gitlabdev.qc.oop.cc/')) && p('id') && e('201'); // 测试步骤1：正常查询system用户创建的存在URL记录
 r($pipelineTest->getByUrlTest('')) && p() && e('0'); // 测试步骤2：查询空URL字符串

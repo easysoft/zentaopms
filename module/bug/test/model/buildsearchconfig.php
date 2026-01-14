@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -20,7 +20,7 @@ cid=15346
 
 */
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 $searchConfig = $bug->objectModel->buildSearchConfig(1, 'story');
 
 r($searchConfig['fields']) && p('title,module,steps') && e('Bug标题,所属模块,重现步骤'); // 测试字段名称

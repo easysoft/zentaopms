@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $project = zenData('project');
@@ -72,7 +72,7 @@ cid=19381
 $root  = array(0, 1, 2, 3, 4);
 $extra = 'allModule';
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 $tree->objectModel->app->user->admin = true;
 
 r($tree->getTaskOptionMenuTest($root[0]))             && p('', '|') && e(',/');                                                                      // 测试获取 root 0 task目录

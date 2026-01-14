@@ -16,11 +16,11 @@ cid=15762
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 r($convertTest->checkDBNameTest('zentao_db')) && p() && e('1');
 r($convertTest->checkDBNameTest('test_db123')) && p() && e('1');

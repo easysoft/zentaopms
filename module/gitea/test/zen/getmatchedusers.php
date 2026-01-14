@@ -19,7 +19,7 @@ cid=16571
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 手动准备用户数据
 $userTable = zenData('user');
@@ -45,7 +45,7 @@ $oauthTable->gen(3);
 
 su('admin');
 
-$giteaTest = new giteaTest();
+$giteaTest = new giteaZenTest();
 
 // 准备测试数据：Gitea用户数组
 $giteaUsers = array();

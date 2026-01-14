@@ -24,7 +24,7 @@ cid=16396
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-6');
@@ -64,7 +64,7 @@ $module->gen(10);
 zenData('team')->gen(0);
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 r($executionTest->processTaskNodeTest(1)) && p('type,tasksCount') && e('module,2');    // 步骤1：有任务的模块节点处理
 r($executionTest->processTaskNodeTest(3)) && p('type,tasksCount') && e('module,0');    // 步骤2：无任务的模块节点处理

@@ -17,7 +17,7 @@ cid=15339
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 // 创建包含分支的项目产品关联数据，确保主键(project,product,branch)唯一
@@ -34,7 +34,7 @@ zenData('user')->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$branchTester = new branchTest();
+$branchTester = new branchModelTest();
 
 // 5. 强制要求：包含至少5个测试步骤
 r($branchTester->unlinkBranch4ProjectTest(array(6))) && p() && e('0'); // 步骤1：测试单个产品解除分支关联

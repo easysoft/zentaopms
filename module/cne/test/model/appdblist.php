@@ -16,11 +16,11 @@ cid=15602
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 // 测试步骤1：创建有效实例对象
 $instance1 = new stdClass();

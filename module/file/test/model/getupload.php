@@ -21,10 +21,10 @@ cid=16514
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 $fileNames   = array('file1.jpg', 'file2.txt');
 $fileSizes   = array(1888573, 2384);

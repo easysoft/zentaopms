@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -28,7 +28,7 @@ cid=17260
 zenData('action')->gen(0);
 zenData('relation')->loadYaml('relation')->gen(30);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 r($mrModel->unlinkTester(1, 'story')) && p('id,objectType,action') && e('1,story,deletemr'); // 取消关联需求
 r($mrModel->unlinkTester(1, 'bug'))   && p('id,objectType,action') && e('2,bug,deletemr');   // 取消关联bug
 r($mrModel->unlinkTester(1, 'task'))  && p('id,objectType,action') && e('3,task,deletemr');  // 取消关联任务

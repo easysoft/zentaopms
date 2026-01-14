@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getTeamMembersTest();
@@ -52,7 +52,7 @@ su('admin');
 $executionIDList = array('3', '4', '5');
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getTeamMembersTest($executionIDList[0], $count[0])) && p('user1:root,type,userID')   && e('3,execution,2');     // 敏捷执行查看team
 r($execution->getTeamMembersTest($executionIDList[1], $count[0])) && p('user2:root,type,realname') && e('4,execution,用户2'); // 瀑布执行查看team
 r($execution->getTeamMembersTest($executionIDList[2], $count[0])) && p('user3:root,type,realname') && e('5,execution,用户3'); // 看板执行查看team

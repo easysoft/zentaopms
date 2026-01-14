@@ -15,7 +15,7 @@ cid=18444
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(20);
 zenData('stakeholder')->gen(20);
@@ -23,7 +23,7 @@ zenData('stakeholder')->gen(20);
 $objectIds = array(0 , 11, 100);
 $fields    = array('user');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getStakeholderUsersTest($objectIds[0])) && p()    && e('0');                              // 获取项目ID=0的干系人id=>realname的键值对
 r($stakeholderTester->getStakeholderUsersTest($objectIds[1])) && p('1') && e('易软天创网络科技有限公司/admin'); // 获取项目ID=11的干系人id=>realname的键值对
 r($stakeholderTester->getStakeholderUsersTest($objectIds[2])) && p()    && e('0');                              // 获取项目ID不存在的干系人id=>realname的键值对

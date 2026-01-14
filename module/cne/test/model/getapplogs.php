@@ -16,9 +16,9 @@ cid=15612
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneModel = new cneTest();
+$cneModel = new cneModelTest();
 
 r($cneModel->getAppLogsTest()) && p('status') && e('0');
 

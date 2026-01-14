@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /* Create program data. */
@@ -39,7 +39,7 @@ cid=17693
 
 */
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $products1 = $programTester->getProductPairsTest(1, 'assign', 'all');
 $products2 = $programTester->getProductPairsTest(1, 'assign', 'noclosed');

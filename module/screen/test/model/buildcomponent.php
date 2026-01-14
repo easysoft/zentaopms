@@ -16,7 +16,7 @@ cid=18207
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('screen')->gen(0);
 zenData('chart')->gen(0);
@@ -26,7 +26,7 @@ zenData('action')->gen(0);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试步骤1：传入空对象时设置默认属性
 $emptyComponent = new stdClass();

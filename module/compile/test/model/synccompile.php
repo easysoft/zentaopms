@@ -17,7 +17,7 @@ cid=15754
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 简化数据准备
 zenData('job')->gen(5);
@@ -28,7 +28,7 @@ zenData('repo')->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($compileTest->syncCompileTest(0, 0)) && p() && e('1');      // 测试步骤1：无参数调用

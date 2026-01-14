@@ -17,7 +17,7 @@ cid=18374
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('pipeline');
@@ -43,7 +43,7 @@ $validProjectKey = 'test_delete_project_123';
 $specialCharProjectKey = 'test@#$%^&*()_project';
 
 // 创建测试实例
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 // 测试步骤1：使用无效的sonarqubeID删除项目
 r($sonarqubeTest->apiDeleteProjectTest($invalidSonarqubeID, $emptyProjectKey)) && p() && e('return false');

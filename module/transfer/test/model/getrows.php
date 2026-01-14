@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('story')->gen(20);
 $file = zenData('file');
 $file->objectType->range('task');
@@ -30,7 +30,7 @@ cid=19318
 - 测试当有数据需要单独处理时第1条的name属性 @[多人] 追加任务1
 
 */
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 
 //a($transfer->getRowsTest('task'));die;
 /* 测试导出任务。*/

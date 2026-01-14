@@ -18,7 +18,7 @@ cid=17544
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('projectproduct')->loadYaml('projectproduct')->gen(100);
 zenData('project')->loadYaml('project')->gen(100);

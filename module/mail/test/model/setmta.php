@@ -16,9 +16,9 @@ cid=17023
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r($mailTest->setMTATest()) && p('CharSet') && e('utf-8'); // 步骤1：验证setMTA方法基本功能和CharSet设置
 r($mailTest->mtaSingletonTest()) && p() && e('1'); // 步骤2：验证单例模式实现机制

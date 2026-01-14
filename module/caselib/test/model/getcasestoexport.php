@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -43,7 +43,7 @@ $sortList       = array('id_desc', 'id_asc');
 $checkedItem    = array('', '429,427,417');
 $limitList      = array(0, 10);
 
-$caselibTester = new caselibTest();
+$caselibTester = new caselibModelTest();
 r($caselibTester->getCasesToExportTest($browseTypeList[0], $exportTypeList[0], $sortList[0], $checkedItem[0], $limitList[0])) && p() && e('429;427;425;423;421;419;417;415;413;411;409;407;405;403;401'); // 测试导出用例库按照id倒序排列的所有用例
 r($caselibTester->getCasesToExportTest($browseTypeList[0], $exportTypeList[1], $sortList[0], $checkedItem[1], $limitList[0])) && p() && e('429;427;417');                                                 // 测试导出用例库按照id倒序排列的选择的用例
 r($caselibTester->getCasesToExportTest($browseTypeList[0], $exportTypeList[0], $sortList[1], $checkedItem[0], $limitList[0])) && p() && e('401;403;405;407;409;411;413;415;417;419;421;423;425;427;429'); // 测试导出用例库按照id正序排列的所有用例

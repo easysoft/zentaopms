@@ -16,11 +16,11 @@ cid=14994
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->__constructTest('invalid_format', 'test response')) && p() && e('1');
 r($aiTest->__constructTest('parse_error', array('error' => 'parsing failed'))) && p() && e('1');

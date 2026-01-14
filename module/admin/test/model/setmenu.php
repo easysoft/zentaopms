@@ -17,13 +17,13 @@ cid=14983
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（管理员权限）
 su('admin');
 
 // 3. 创建测试实例
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 // 4. 必须包含至少5个测试步骤
 r($adminTest->setMenuTest('admin', 'safe', array())) && p('hasSwitcherMenu') && e('1'); // 步骤1：admin模块在system组中的方法测试

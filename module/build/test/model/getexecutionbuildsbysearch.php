@@ -22,7 +22,7 @@ cid=15494
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build')->gen(20);
 zenData('project')->loadYaml('execution')->gen(30);
@@ -34,7 +34,7 @@ $executionIDList = array(0, 101);
 $queryIDList     = array(0, 5);
 $count           = array(0, 1);
 
-$build = new buildTest();
+$build = new buildModelTest();
 
 r($build->getExecutionBuildsBySearchTest($count[0], $executionIDList[0], $queryIDList[0])) && p('20:execution,name') && e('106,版本20'); // 执行id为0查询
 r($build->getExecutionBuildsBySearchTest($count[0], $executionIDList[1], $queryIDList[0])) && p('19:execution,name') && e('101,版本19'); // 正常执行查询

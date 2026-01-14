@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('execution')->gen(105);
@@ -42,7 +42,7 @@ $execution4->id = '104';
 $execution5 = new stdclass();
 $execution5->id = '105';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createRDKanbanTest($execution1)) && p() && e('1,4,38'); // 测试创建执行101的执行看板
 r($kanban->createRDKanbanTest($execution2)) && p() && e('1,4,38'); // 测试创建执行102的执行看板

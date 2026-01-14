@@ -17,7 +17,7 @@ cid=18187
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 简化数据准备（避免zendata生成错误）
 zendata('action')->gen(0);
@@ -31,7 +31,7 @@ zendata('testresult')->gen(0);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$reportTest = new reportTest();
+$reportTest = new reportTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($reportTest->getOutputDataTest(array('admin', 'user1'), '2024')) && p('case:createBug') && e('0'); // 步骤1：正常用户账号和年份查询

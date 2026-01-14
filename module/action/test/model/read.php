@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(5);
@@ -39,7 +39,7 @@ cid=14926
 $objectType = array('product', 'story', 'productplan', 'release', 'project');
 $objectID   = array(1,2,3,4,5);
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->readTest($objectType[0], $objectID[0])) && p('0:objectType,objectID,read') && e('product,1,1');     // 测试对action 1 进行阅读操作
 r($action->readTest($objectType[1], $objectID[1])) && p('0:objectType,objectID,read') && e('story,2,1');       // 测试对action 2 进行阅读操作

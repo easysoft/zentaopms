@@ -18,14 +18,14 @@ cid=16846
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('job')->gen(10);
 
 su('admin');
 
-$job = new jobTest();
+$job = new jobModelTest();
 
 r(count($job->getListByTriggerTypeTest('tag', array()))) && p() && e('4'); // 测试步骤1：正常获取tag类型job列表数量
 r(count($job->getListByTriggerTypeTest('commit', array()))) && p() && e('3'); // 测试步骤2：正常获取commit类型job列表数量

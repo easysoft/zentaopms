@@ -18,7 +18,7 @@ cid=16094
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->gen(10);
 zenData('bug')->gen(10);
@@ -28,7 +28,7 @@ zenData('file')->gen(45);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 $files     = $docTester->getFileSourcePairsTest();
 
 r($files['task'])     && p('1') && e('开发任务11');      // 获取有附件的任务

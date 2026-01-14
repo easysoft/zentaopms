@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('task_computeworkinghours')->gen(15);
 
@@ -51,7 +51,7 @@ cid=18778
 
 $taskIDList = array(1, 2, 3, 4, 5, 6, 1001);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->computeWorkingHoursTest($taskIDList[0])) && p('id,estimate,consumed,left') && e('1,2.00,0.00,1.00'); // 根据父taskID更新普通任务的任务工时
 r($task->computeWorkingHoursTest($taskIDList[1])) && p('id,estimate,consumed,left') && e('2,9.00,9.00,5.00'); // 根据父taskID更新任务工时
 r($task->computeWorkingHoursTest($taskIDList[2])) && p('id,estimate,consumed,left') && e('3,9.00,8.00,4.00'); // 根据父taskID更新父任务取消的任务工时

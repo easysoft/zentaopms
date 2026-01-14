@@ -15,11 +15,11 @@ cid=15642
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->apiPostTest('https://api.example.com/test', array('key' => 'value'))) && p('code') && e('200');
 r($commonTest->apiPostTest('https://api.example.com/success', array('data' => 'test'))) && p('code,message') && e('200,Success');

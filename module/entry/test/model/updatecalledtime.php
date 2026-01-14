@@ -17,7 +17,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('entry');
 $table->id->range('1-10');
@@ -37,7 +37,7 @@ $table->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$entryTest = new entryTest();
+$entryTest = new entryModelTest();
 
 r($entryTest->updateCalledTimeTest('code1', 1234567890)) && p('calledTime') && e('1234567890'); // 测试步骤1：正常entry代号更新calledTime
 r($entryTest->updateCalledTimeTest('code2', 0)) && p('calledTime') && e('0'); // 测试步骤2：边界值时间戳0更新calledTime

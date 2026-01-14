@@ -16,7 +16,7 @@ cid=18720
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 测试步骤1：正常流程 - 有SVN仓库时执行同步
 zenData('job')->gen(0);
@@ -25,7 +25,7 @@ zenData('repofiles')->gen(0);
 zenData('repohistory')->loadYaml('repohistory_run', false, 2)->gen(1);
 su('admin');
 
-$svn = new svnTest();
+$svn = new svnModelTest();
 
 r($svn->runTest('normal')) && p() && e('false'); // 测试步骤1：正常流程有SVN仓库时执行同步
 

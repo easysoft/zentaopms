@@ -16,13 +16,13 @@ cid=16547
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(1);
 zenData('repo')->loadYaml('repo')->gen(10);
 su('admin');
 
-$gitTest = new gitTest();
+$gitTest = new gitModelTest();
 
 $repos = $gitTest->getReposTest();
 r(count($repos)) && p() && e('8'); // 步骤1：正常情况下获取Git仓库路径列表

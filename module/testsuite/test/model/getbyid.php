@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('testsuite')->loadYaml('testsuite')->gen(1);
@@ -21,7 +21,7 @@ pid=1
 $suiteID    = array(0, 1, 1000);
 $setImgSize = array(true, false);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->getByIdTest($suiteID[0], $setImgSize[1])) && p()                      && e('0');                    //测试suiteID值为0,setImgSize值为false
 r($testsuite->getByIdTest($suiteID[2], $setImgSize[1])) && p()                      && e('0');                    //测试suiteID值为1000,setImgSize值为false

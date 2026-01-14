@@ -16,12 +16,12 @@ cid=17718
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->gen(20);
 su('admin');
 
-$tester = new programTest();
+$tester = new programTaoTest();
 
 r($tester->getNormalActionsTest(1))  && p('0:name') && e('edit');   // 项目集
 r($tester->getNormalActionsTest(1))  && p('1:name') && e('create'); // 项目集

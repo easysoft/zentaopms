@@ -18,11 +18,11 @@ cid=17005
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r($mailTest->convertCharsetTest('')) && p() && e('0');
 

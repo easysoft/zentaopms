@@ -17,7 +17,7 @@ cid=16320
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备用户数据
 zenData('user')->gen(5);
@@ -90,7 +90,7 @@ $bug->assignedTo->range('admin{4},user1{4},closed{2},[]{2}');
 $bug->resolvedBy->range('admin{3},user1{3},user2{3},[]{3}');
 $bug->gen(12);
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 构造测试数据
 $stories = array();

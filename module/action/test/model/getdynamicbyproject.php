@@ -16,7 +16,7 @@ cid=14897
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $action = zenData('actionrecent');
@@ -36,7 +36,7 @@ zenData('user')->loadYaml('user')->gen(3);
 su('admin');
 
 // 创建测试实例
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->getDynamicByProjectTest(101)) && p() && e('20');          // 正常项目ID获取所有用户动态
 r($actionTest->getDynamicByProjectTest(101, 'admin')) && p() && e('10'); // 指定用户admin获取项目动态

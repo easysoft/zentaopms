@@ -16,7 +16,7 @@ cid=18363
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据：创建包含URSR配置的config记录
 $configTable = zenData('config');
@@ -29,7 +29,7 @@ $configTable->gen(5);
 
 su('admin');
 
-$settingTest = new settingTest();
+$settingTest = new settingModelTest();
 
 // 步骤1：测试从配置文件获取URSR（如果配置中存在URSR）
 r($settingTest->getURSRTest()) && p() && e('12345');

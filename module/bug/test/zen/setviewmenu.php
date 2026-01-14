@@ -16,11 +16,11 @@ cid=15480
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 $bug = new stdClass();
 $bug->product = 1;

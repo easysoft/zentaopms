@@ -21,7 +21,7 @@ cid=18537
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('storygrade');
@@ -35,7 +35,7 @@ $table->gen(4);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($storyTest->getGradePairsTest()) && p('1,2') && e('SR,子'); // 步骤1：默认参数获取story类型启用等级

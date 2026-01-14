@@ -16,7 +16,7 @@ cid=17259
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $mr = zenData('mr');
 $mr->id->range('1-10');
@@ -29,7 +29,7 @@ $mr->gen(10);
 
 su('admin');
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 $openedMR1 = 1;  // opened状态
 $closedMR1 = 4;  // closed状态

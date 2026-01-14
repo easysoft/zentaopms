@@ -19,7 +19,7 @@ cid=19373
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('module');
@@ -59,7 +59,7 @@ $branchTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$treeTest = new treeTest();
+$treeTest = new treeModelTest();
 
 // 5. 测试步骤
 r($treeTest->getOptionMenuByBranchTest(1, 'story', 0, 'all', 'nodeleted', 'all', '/')) && p('0') && e('/'); // 步骤1：正常story类型根节点

@@ -16,14 +16,14 @@ cid=16744
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->loadYaml('holiday')->gen(10);
 zenData('user')->gen(1);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 $t_numyear = array('2024', '2023', '');
 $t_type    = array('all', 'holiday', 'working', '');
 

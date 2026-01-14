@@ -18,11 +18,11 @@ cid=15659
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->checkNotCNTest('zh-cn')) && p() && e('0'); // 步骤1：中文简体
 r($commonTest->checkNotCNTest('zh-tw')) && p() && e('0'); // 步骤2：中文繁体

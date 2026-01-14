@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -15,7 +15,7 @@ cid=18160
 pid=1
 
 */
-$report = new reportTest();
+$report = new reportModelTest();
 
 global $tester;
 $execution = $tester->loadModel('execution');

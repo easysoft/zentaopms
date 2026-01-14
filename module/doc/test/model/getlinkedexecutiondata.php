@@ -15,7 +15,7 @@ cid=16106
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $projectstoryTable = zenData('projectstory');
 $projectstoryTable->project->range('101-110');
@@ -35,7 +35,7 @@ su('admin');
 
 $executions = array(0, 101, 106);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLinkedExecutionDataTest($executions[2])) && p('2', ';') && e('6,16'); // 获取系统中关联执行ID=106的数据
 r($docTester->getLinkedExecutionDataTest($executions[1])) && p('1', ';') && e('1,11'); // 获取系统中关联执行ID=101的数据
 r($docTester->getLinkedExecutionDataTest($executions[0])) && p('0')      && e('~~');   // 获取系统中关联执行ID=0的数据

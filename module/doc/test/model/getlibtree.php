@@ -100,7 +100,7 @@ cid=16105
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1-2');
@@ -124,7 +124,7 @@ $objectIds   = array(0, 1, 11, 101);
 $browseTypes = array('', 'bysearch', 'byrelease');
 $queries     = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取接口库的树形结构
 r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取搜索后的api文档树
 r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('apiLib,项目接口库1,api,11');           // 获取切换版本后的api文档树

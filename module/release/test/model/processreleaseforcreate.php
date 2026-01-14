@@ -17,7 +17,7 @@ cid=18009
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $build = zenData('build')->loadYaml('build');
 $build->project->range('1{2},0{3}');
@@ -33,7 +33,7 @@ su('admin');
 $syncList = array(true, false);
 $releases = array(0, 1, 10);
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->processReleaseForCreateTest($releases[0], $syncList[0])) && p()       && e('0');     // 测试同步版本数据并处理空的数据
 r($releaseTester->processReleaseForCreateTest($releases[1], $syncList[0])) && p('name') && e('发布1'); // 测试同步版本数据并处理发布1的数据
 r($releaseTester->processReleaseForCreateTest($releases[2], $syncList[0])) && p()       && e('0');     // 测试同步版本数据并处理不存在发布的数据

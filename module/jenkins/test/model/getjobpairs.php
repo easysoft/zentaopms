@@ -18,14 +18,14 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/jenkins.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('job')->loadYaml('job')->gen('10');
 zenData('user')->gen('1');
 
 su('admin');
 
-$jenkins = new jenkinsTest();
+$jenkins = new jenkinsModelTest();
 
 $jenkinsID = array(1, 2, 3, 0, 111);
 

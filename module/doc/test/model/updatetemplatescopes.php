@@ -16,7 +16,7 @@ cid=16163
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $scope = zenData('doclib');
 $scope->id->range('1-10');
@@ -28,7 +28,7 @@ $scope->gen(10);
 
 $scopeList = array(array(1 => '修改后的产品范围'), array(2 => '修改后的项目范围'), array(3 => '修改后的执行范围'), array(4 => '修改后的个人范围'), array(10 => '修改后的自定义范围'));
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->updateTemplateScopesTest($scopeList[0])) && p('1')  && e('修改后的产品范围');   // 测试修改产品范围名称
 r($docTester->updateTemplateScopesTest($scopeList[1])) && p('2')  && e('修改后的项目范围');   // 测试修改项目范围名称
 r($docTester->updateTemplateScopesTest($scopeList[2])) && p('3')  && e('修改后的执行范围');   // 测试修改执行范围名称

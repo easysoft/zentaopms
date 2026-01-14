@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=19733
 */
 $date = array('2022-05-08', '2022-04-29', '2022-03-25', '2022-03-21');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getThisMondayTest(''))       && p() && e('1969-12-29'); //查询日期为空
 r($weekly->getThisMondayTest($date[0])) && p() && e('2022-05-02'); //查询日期为星期日

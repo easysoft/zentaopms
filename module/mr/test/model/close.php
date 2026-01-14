@@ -18,7 +18,7 @@ cid=17239
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $mrTable = zenData('mr');
 $mrTable->id->range('1-7');
@@ -40,7 +40,7 @@ $mrTable->deleted->range('0{7}');
 $mrTable->gen(7);
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->closeTester(1)) && p('message') && e('已关闭合并请求。');  // 测试步骤1：正常打开状态的MR关闭操作
 r($mrTest->closeTester(5)) && p('message') && e('请勿重复操作');      // 测试步骤2：已关闭状态的MR重复关闭操作

@@ -16,7 +16,7 @@ cid=15201
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $table = zenData('user');
@@ -27,7 +27,7 @@ $table->role->range('admin,dev{3},qa{3},pm{2},po{1}');
 $table->gen(10);
 
 su('admin');
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试用例1：简单SELECT语句
 $sql1 = "SELECT id, account FROM zt_user LIMIT 1";

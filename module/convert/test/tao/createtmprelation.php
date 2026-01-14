@@ -41,7 +41,7 @@ cid=15849
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 定义常量
 if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', 'jiratmprelation');
@@ -71,7 +71,7 @@ zenData('product')->gen(0);
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createTmpRelationTest('juser', 'admin', 'zuser', 'admin001', '')) && p('AType,BType,AID,BID,extra') && e('juser,zuser,admin,admin001,~~');
 r($convertTest->createTmpRelationTest('jproject', '1001', 'zproject', '2001', 'issue')) && p('AType,BType,AID,BID,extra') && e('jproject,zproject,1001,2001,issue');

@@ -16,7 +16,7 @@ cid=15234
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $blockTable = zenData('block');
@@ -46,7 +46,7 @@ $configTable->gen(3);
 su('admin');
 
 // 创建测试实例
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 
 // 测试步骤1：测试有效仪表盘名称的重置功能
 r($blockTest->resetTest('my')) && p() && e('1');

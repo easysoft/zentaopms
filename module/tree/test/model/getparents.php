@@ -31,12 +31,12 @@ cid=19374
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getParentsTest(1)) && p() && e(',1');   // 获取 module 1 的未删除父module
 r($tree->getParentsTest(2)) && p() && e(',2');   // 获取 module 2 的未删除父module

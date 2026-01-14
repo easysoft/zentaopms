@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_getreviewedlist')->gen('10');
 zenData('story')->gen('10');
@@ -30,7 +30,7 @@ cid=17289
 
 */
 
-$my = new myTest();
+$my = new myModelTest();
 
 $browseType = array('all', 'createdbyme');
 $orderBy    = array('id_desc', 'id_asc', 'time_desc');

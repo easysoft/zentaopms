@@ -16,14 +16,14 @@ cid=18230
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('metric')->loadYaml('metric_genmetriccomponent', false, 2)->gen(10);
 zenData('metriclib')->loadYaml('metriclib_genmetriccomponent', false, 2)->gen(50);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->genMetricComponentTest(1)) && p('hasComponent') && e('1');
 r($screenTest->genMetricComponentTest(2)) && p('isDeleted') && e('1');

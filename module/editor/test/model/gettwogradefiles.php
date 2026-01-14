@@ -15,11 +15,11 @@ cid=16240
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editorTest = new editorTest();
+$editorTest = new editorModelTest();
 
 r($editorTest->getTwoGradeFilesTest()) && p('isArray,hasLangDir') && e('1,1');
 r($editorTest->getTwoGradeFilesTest('')) && p('isArray,isEmpty') && e('1,1');

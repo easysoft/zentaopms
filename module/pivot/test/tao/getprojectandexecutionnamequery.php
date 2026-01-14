@@ -17,7 +17,7 @@ cid=17448
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $project = zenData('project');
@@ -34,7 +34,7 @@ $project->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$pivotTest = new pivotTest();
+$pivotTest = new pivotTaoTest();
 
 // 5. 执行测试步骤
 r(is_array($pivotTest->getProjectAndExecutionNameQueryTest())) && p() && e('1'); // 步骤1：验证返回数组类型

@@ -28,7 +28,7 @@ cid=15484
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build', false, 2)->gen(10);
 zenData('release')->loadYaml('release', false, 2)->gen(5);
@@ -36,7 +36,7 @@ zenData('product')->loadYaml('product', false, 2)->gen(5);
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r(count($buildTest->addReleaseLabelForBuildsTest(1, array()))) && p() && e('0'); // 测试空版本数组
 r($buildTest->addReleaseLabelForBuildsTest(1, array(1 => 'Build001'))) && p('0:value;0:text') && e('1;Build001'); // 测试单个版本无发布关联

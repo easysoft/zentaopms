@@ -13,7 +13,7 @@ cid=19562
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('doclib')->gen(30);
@@ -21,7 +21,7 @@ zenData('doc')->gen(30);
 zenData('user')->gen(5);
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $programID = array(1, 2);
 $fromMode  = array('classic', 'new');

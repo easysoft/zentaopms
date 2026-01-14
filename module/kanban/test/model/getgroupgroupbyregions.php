@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbangroup')->gen(20);
@@ -22,7 +22,7 @@ cid=16918
 
 $regions = array(array(1,2,3), array(4,5,6), array(7,8,9), array(10,11,12), array(13,14,15));
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getGroupGroupByRegionsTest($regions[0])) && p() && e('3'); //获取区域1 2 3的泳道组数量
 r($kanban->getGroupGroupByRegionsTest($regions[1])) && p() && e('3'); //获取区域4,5,6的泳道组数量

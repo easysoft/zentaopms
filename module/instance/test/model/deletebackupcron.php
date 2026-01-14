@@ -16,14 +16,14 @@ cid=16789
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('cron')->loadYaml('cron_deletebackupcron', false, 2)->gen(10);
 zendata('instance')->loadYaml('instance_deletebackupcron', false, 2)->gen(5);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 创建测试用的instance对象
 $instance1 = new stdClass();

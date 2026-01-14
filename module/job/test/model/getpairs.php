@@ -16,7 +16,7 @@ cid=16847
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $job = zenData('job');
@@ -31,7 +31,7 @@ $job->gen(10);
 su('admin');
 
 // 创建测试实例
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 // 测试步骤1：正常情况下获取repo为1的jenkins作业键值对
 r($jobTest->getPairsTest(1, 'jenkins')) && p('1') && e('Jenkins任务1');

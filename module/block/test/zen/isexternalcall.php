@@ -17,13 +17,13 @@ cid=15245
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 4. 测试步骤 - 必须包含至少5个测试步骤
 

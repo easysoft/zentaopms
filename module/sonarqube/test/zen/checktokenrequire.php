@@ -18,7 +18,7 @@ cid=18389
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqubeZen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 global $app;
 $app->setMethodName('ajaxtest');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -20,7 +20,7 @@ cid=19266
 
 zenData('todo')->loadYaml('start')->gen(5);
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 r($todo->startTest(1)) && p('status') && e('doing'); //开启一个状态为wait的todo
 r($todo->startTest(2)) && p('status') && e('doing'); //开启一个状态为doing的todo

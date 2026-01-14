@@ -26,13 +26,13 @@ cid=19739
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('weeklyreport')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
-$weeklyTest = new weeklyTest();
+$weeklyTest = new weeklyModelTest();
 
 r($weeklyTest->saveTest(1, '2023-10-15')) && p('project,weekStart') && e('1,2023-10-09');
 r($weeklyTest->saveTest(0, '2023-10-15')) && p('project,weekStart') && e('0,2023-10-09');

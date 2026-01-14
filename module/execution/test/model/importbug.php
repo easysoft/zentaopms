@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->importBug();
@@ -68,7 +68,7 @@ foreach($bugIdList as $bugID)
 }
 
 
-$executionModel = new executionTest();
+$executionModel = new executionModelTest();
 r($executionModel->importBugTest($executionIDList[0], $postData))        && p('273:taskID') && e('11'); // 测试在迭代中导入Bug
 r($executionModel->importBugTest($executionIDList[1], $postData))        && p('273:taskID') && e('15'); // 测试在阶段中导入Bug
 r($executionModel->importBugTest($executionIDList[1], $postData))        && p('273:taskID') && e('19'); // 测试在看板中导入Bug

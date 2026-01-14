@@ -17,7 +17,7 @@ cid=18612
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->gen(5);
 zenData('bug')->gen(1);
@@ -26,7 +26,7 @@ $file->objectType->range('bug');
 $file->objectID->range('1');
 $file->gen(5);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->closeBugWhenToStoryTest(0, 0)) && p() && e('0'); //不传入Bug，也不传入需求。
 r($storyTest->closeBugWhenToStoryTest(1, 0)) && p() && e('0'); //传入Bug，不传入需求。

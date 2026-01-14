@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(20);
 
@@ -25,7 +25,7 @@ cid=15406
 
 $bugIdList = array('1,2,3,4,5', '6,7,8,9,10', '11,12,13,14,15', '', '1000001');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->summaryTest($bugIdList[0])) && p() && e('本页共 <strong>5</strong> 个Bug，未解决 <strong>5</strong>。'); // 测试获取bugID 1,2,3,4,5 的统计信息
 r($bug->summaryTest($bugIdList[1])) && p() && e('本页共 <strong>5</strong> 个Bug，未解决 <strong>5</strong>。'); // 测试获取bugID 6,7,8,9,10 的统计信息
 r($bug->summaryTest($bugIdList[2])) && p() && e('本页共 <strong>5</strong> 个Bug，未解决 <strong>5</strong>。'); // 测试获取bugID 11,12,13,14,15 的统计信息

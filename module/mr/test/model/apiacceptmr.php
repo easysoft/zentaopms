@@ -17,7 +17,7 @@ cid=17221
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 su('admin');
@@ -26,7 +26,7 @@ $mr = zenData('mr')->loadYaml('mr');
 $mr->mriid->range(45);
 $mr->gen(10);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->apiAcceptMrTester(6)) && p() && e('0'); // 不存在的主机
 

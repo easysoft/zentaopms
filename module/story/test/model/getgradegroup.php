@@ -16,7 +16,7 @@ cid=18533
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('storygrade');
 $table->type->range('story{3},requirement{3},epic{3}');
@@ -27,7 +27,7 @@ $table->gen(9);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getGradeGroupTest())) && p() && e('3'); // 步骤1：正常获取等级分组数据
 r(count($storyTest->getGradeGroupTest()['story'])) && p() && e('3'); // 步骤2：测试story类型数据

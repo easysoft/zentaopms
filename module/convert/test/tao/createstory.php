@@ -15,11 +15,11 @@ cid=15845
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createStoryTest(1, 1, 1, 'story', (object)array('id' => 1001, 'summary' => '正常Story需求', 'description' => '详细描述', 'priority' => 2, 'issuestatus' => 'Open', 'issuetype' => 'Story', 'creator' => 'admin', 'created' => '2023-01-01 10:00:00', 'assignee' => 'user1'), array('zentaoFieldStory' => array(), 'zentaoReasonStory' => array(), 'zentaoStageStory' => array(), 'zentaoStatusStory' => array()))) && p() && e('1');
 r($convertTest->createStoryTest(2, 2, 2, 'requirement', (object)array('id' => 1002, 'summary' => '正常Requirement需求', 'description' => '需求描述', 'priority' => 3, 'issuestatus' => 'Open', 'issuetype' => 'Requirement', 'creator' => 'admin', 'created' => '2023-01-02 10:00:00'), array('zentaoFieldRequirement' => array(), 'zentaoReasonRequirement' => array(), 'zentaoStageRequirement' => array(), 'zentaoStatusRequirement' => array()))) && p() && e('1');

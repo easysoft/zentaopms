@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('case')->gen('20');
 zenData('file')->loadYaml('casefile')->gen('20');
@@ -24,7 +24,7 @@ pid=1
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 $caseIdList    = array(21, 22, 23, 24, 25, 26);
 $oldCaseIdList = array(1, 2, 3, 4, 5, 30);

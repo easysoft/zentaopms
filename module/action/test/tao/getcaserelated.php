@@ -32,12 +32,12 @@ cid=14946
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('action')->loadYaml('action')->gen(8);
 zenData('case')->gen(10);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $objectTypeList = array('case');
 $actionTypeList = array('linked2testtask', 'unlinkedfromtesttask', 'assigned', 'run', 'closed');

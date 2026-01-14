@@ -18,7 +18,7 @@ cid=17262
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -46,7 +46,7 @@ foreach($testData as $data) {
     $db->insert(TABLE_RELATION)->data($data)->exec();
 }
 
-$mrTest = new mrTest();
+$mrTest = new mrTaoTest();
 
 r(implode('|', $mrTest->getLinkedObjectPairsTest(1, 'story'))) && p() && e('1|4|7'); // 测试步骤1：查询MR ID为1关联的story对象
 r(implode('|', $mrTest->getLinkedObjectPairsTest(1, 'task'))) && p() && e('2|5|8'); // 测试步骤2：查询MR ID为1关联的task对象

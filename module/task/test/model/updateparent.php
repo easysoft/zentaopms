@@ -26,7 +26,7 @@ cid=18857
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('updateparent', false, 2)->gen(10);
 zenData('project')->loadYaml('execution', false, 4)->gen(5);
@@ -34,7 +34,7 @@ zenData('product')->gen(5);
 
 su('admin');
 
-$taskTest = new taskTest();
+$taskTest = new taskModelTest();
 
 $task1 = new stdClass();
 $task1->id = 4;

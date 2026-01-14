@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -19,7 +19,7 @@ cid=16397
 
 */
 
-$executionTester = new executionTest();
+$executionTester = new executionTaoTest();
 r($executionTester->saveSessionTest(1)) && p() && e('1'); // 测试保存执行ID
 r($executionTester->saveSessionTest(2)) && p() && e('2'); // 测试保存执行ID
 r($executionTester->saveSessionTest(3)) && p() && e('3'); // 测试保存执行ID

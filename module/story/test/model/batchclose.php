@@ -39,7 +39,7 @@ cid=18471
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -53,7 +53,7 @@ $storyspec->gen(12);
 
 zenData('product')->gen(1);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $storyIdList   = array(2, 4, 6, 8, 10, 12);
 $closedReasons = array(2 => 'done', 4 => 'willnotdo', 6 => 'putoff', 8 => 'duplicate', 10 => 'cancel', 12 => 'bydesign');
 $duplicateList = array(2 => 0, 4 => 0, 6 => 0, 8 => 20, 10 => 0, 12 => 0);

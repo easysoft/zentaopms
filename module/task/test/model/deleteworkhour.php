@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $effort = zenData('task');
@@ -33,7 +33,7 @@ cid=18786
 
 $estimateID = '1';
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,3,2'); // 根据estimateID查看消耗工时
 r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,2,1'); // 根据estimateID查看消耗工时
 r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,1,0'); // 根据estimateID查看消耗工时

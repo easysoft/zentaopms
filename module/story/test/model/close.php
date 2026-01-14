@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $stories = zenData('story');
@@ -54,7 +54,7 @@ $postData4->status = 'closed';
 $postData4->closedReason   = 'duplicate';
 $postData4->duplicateStory = 0;
 
-$story = new storyTest();
+$story = new storyModelTest();
 $story1 = $story->closeTest(1, $postData1);
 $story2 = $story->closeTest(2, $postData2);
 $story3 = $story->closeTest(3, $postData3);

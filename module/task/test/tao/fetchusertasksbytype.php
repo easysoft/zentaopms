@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $task = zenData('task');
@@ -79,7 +79,7 @@ cid=18876
 - 查看不存在的项目下由用户1完成的任务数量 @0
 
 */
-$task = new taskTest();
+$task = new taskTaoTest();
 
 r($task->fetchUserTasksByTypeTest('user1', 'assignedTo'))                               && p('20:name') && e('任务20'); // 查看指派给用户1的任务
 r(count($task->fetchUserTasksByTypeTest('user1', 'assignedTo')))                        && p()          && e('10');     // 检查指派给用户1的任务数量

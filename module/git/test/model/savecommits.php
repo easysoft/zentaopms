@@ -26,13 +26,13 @@ cid=16552
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(1);
 zenData('repohistory')->gen(0);
 su('admin');
 
-$git = new gitTest();
+$git = new gitModelTest();
 
 r($git->saveCommitsTest(1, 'empty')) && p('id,commits') && e('0,0'); // 没有提交信息
 r($git->saveCommitsTest(1, 'nolink')) && p('id,commits') && e('1,0'); // 没有关联信息

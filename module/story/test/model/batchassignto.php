@@ -15,7 +15,7 @@ cid=18464
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -26,7 +26,7 @@ zenData('storyspec')->gen(20);
 zenData('user')->gen(20);
 zenData('product')->gen(30);
 
-$story = new storyTest();
+$story = new storyModelTest();
 
 $params['assignedTo']  = 'test20';
 $params['storyIdList'] = array(1, 2, 3, 4, 5, 6);

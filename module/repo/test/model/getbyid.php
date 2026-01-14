@@ -25,7 +25,7 @@ cid=18048
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 使用现有的repo数据
 zenData('repo')->loadYaml('repo')->gen(4);
@@ -34,7 +34,7 @@ zenData('repo')->loadYaml('repo')->gen(4);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getByIDTest(1)) && p('id,name,SCM') && e('1,testHtml,Gitlab'); // 测试步骤1：正常获取存在的repo对象
 r($repoTest->getByIDTest(2)) && p('serviceProject') && e('1'); // 测试步骤2：验证repo对象的基本属性

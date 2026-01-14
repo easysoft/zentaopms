@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $task = zenData('task');
@@ -50,7 +50,7 @@ $testTasks[3]->left     = 0;
 $testTasks[2]->left     = 1;
 $testTasks[3]->mailto   = '';
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->createTestChildTasksTest())              && p()   && e('0');                         // 测试空数据
 r($taskTester->createTestChildTasksTest(0, $testTasks)) && p('type') && e('test');                  // 测试任务ID为空的情况
 r($taskTester->createTestChildTasksTest(1, array()))    && p('id')   && e('3');                     // 测试子测试任务的数据为空的情况

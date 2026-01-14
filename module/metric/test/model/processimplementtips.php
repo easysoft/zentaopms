@@ -31,11 +31,11 @@ cid=17147
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->processImplementTipsTest('count_of_bug')) && p('hasCodePlaceholder,hasTmpRootPlaceholder,tmpRootReplaced') && e('0,0,1');
 r($metricTest->processImplementTipsTest('')) && p('hasCodePlaceholder,hasTmpRootPlaceholder,tmpRootReplaced') && e('0,0,1');

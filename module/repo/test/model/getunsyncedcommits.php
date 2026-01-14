@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -22,7 +22,7 @@ cid=18082
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(4);
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $gitlabID = 1;
 $svnID    = 4;

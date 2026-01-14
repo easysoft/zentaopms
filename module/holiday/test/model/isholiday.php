@@ -19,7 +19,7 @@ cid=16747
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备 - 手动插入数据确保准确性
 global $tester;
@@ -37,7 +37,7 @@ zenData('user')->gen(1);
 su('admin');
 
 // 4. 创建测试实例
-$holidayTest = new holidayTest();
+$holidayTest = new holidayModelTest();
 
 // 5. 测试步骤（至少5个）
 r($holidayTest->isHolidayTest('2024-01-01')) && p() && e('It is a holiday');      // 步骤1：正常节假日（元旦）

@@ -15,14 +15,14 @@ cid=16745
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->loadYaml('holiday')->gen(24);
 zenData('user')->gen(1);
 
 su('admin');
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 $begin   = array('2023-01-28', '2023-12-25', '2024-01-05');
 $end     = array('2024-01-08', '2024-01-15', '2024-01-07');
 

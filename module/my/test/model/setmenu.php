@@ -20,10 +20,10 @@ cid=17305
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user_role')->gen('10');
-$my = new myTest();
+$my = new myModelTest();
 
 $accountList = array('admin', 'user1', 'user2', 'user3', 'user4');
 

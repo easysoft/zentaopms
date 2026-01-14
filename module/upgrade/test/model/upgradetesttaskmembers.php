@@ -15,13 +15,13 @@ cid=19565
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testrun')->loadYaml('user_testrun')->gen(10);
 zenData('user')->gen(10);
 zenData('testtask')->gen(3);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $upgrade->upgradeTesttaskMembers();
 

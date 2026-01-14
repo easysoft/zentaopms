@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -32,7 +32,7 @@ $repoIds = array(1);
 $paths   = array('', 'public');
 $branches = array('master', 'branch1');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $result = $repo->getGitlabFilesByPathTest($repoIds[0], $paths[0], $branches[0]);
 r($result)            && p('0:name,kind') && e('public,dir'); // 获取gitlab类型版本库1的master分支文件列表

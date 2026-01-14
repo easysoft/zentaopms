@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(5);
@@ -28,7 +28,7 @@ cid=17886
 
 */
 
-$projectTester = new projectTest();
+$projectTester = new projectTaoTest();
 
 r($projectTester->buildBatchUpdateProjectsTest(array()))        && p()            && e('0');                   // 测试空数据
 r($projectTester->buildBatchUpdateProjectsTest(array(1)))       && p('1:name,PM') && e('更新敏捷项目1,admin'); // 测试构造项目ID为1、2、3的更新数据

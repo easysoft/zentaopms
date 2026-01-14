@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 function initData()
@@ -28,5 +28,5 @@ cid=19044
 
 $storyIDList = array('1', '2', '3', '4', '5');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 r($testcase->getRelatedStoriesTest($storyIDList)) && p('1;2;3;4;5') && e('用户需求1;软件需求2;用户需求3;软件需求4;用户需求5'); // 测试获取关联的需求

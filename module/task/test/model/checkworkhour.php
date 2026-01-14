@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -99,7 +99,7 @@ $leftNotNumTaskEffort[1]->left     = 'asd';
 $leftNotNumTaskEffort[1]->work     = "剩余不为数字";
 $leftNotNumTaskEffort[1]->date     = "2022-01-01";
 
-$task = new taskTest();
+$task = new taskModelTest();
 r(count($task->checkWorkhourTest(1, $finishTaskEffort))) && p() && e('1'); // 正常完成任务，是否通过检查
 
 su('admin');

@@ -40,7 +40,7 @@ cid=17707
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('program')->gen(20);
 zenData('task')->loadYaml('task')->gen(20);
@@ -50,7 +50,7 @@ zenData('user')->gen(5);
 su('admin');
 
 $projectIdList = array(11, 60, 61, 100, 1111);
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 r($programTester->refreshProjectStatsTest($projectIdList[0])) && p('progress,teamCount,estimate,consumed,left') && e('22.80,4,51,13,44'); // 更新项目 11 的统计信息，获取项目 11 的统计信息
 r($programTester->refreshProjectStatsTest($projectIdList[1])) && p('progress,teamCount,estimate,consumed,left') && e('28.00,0,21,7,18');  // 更新项目 60 的统计信息，获取项目 60 的统计信息

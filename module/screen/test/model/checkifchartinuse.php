@@ -18,7 +18,7 @@ cid=18222
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 $tester->dbh->exec("TRUNCATE zt_screen");
@@ -31,7 +31,7 @@ $tester->dbh->exec("INSERT INTO zt_screen (id, name, scheme, status, deleted) VA
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->checkIFChartInUseTest('101', 'chart')) && p() && e('1');          // 步骤1：检查chart类型图表被使用
 r($screenTest->checkIFChartInUseTest('102', 'pivot')) && p() && e('1');          // 步骤2：检查pivot类型图表被使用

@@ -16,7 +16,7 @@ cid=18233
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('1-10');
@@ -39,7 +39,7 @@ $action->gen(15);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getActiveProjectCardTest('2024', '01')) && p('0:count') && e('3');
 r($screenTest->getActiveProjectCardTest('2023', '12')) && p('0:count') && e('2');

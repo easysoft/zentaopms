@@ -15,7 +15,7 @@ cid=19375
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
@@ -23,7 +23,7 @@ zenData('product')->gen(100);
 
 $moduleID = array(2, 7, 19, 47, 200);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getProductTest($moduleID[0])) && p('name') && e('正常产品1'); // 获取module 2 的产品
 r($tree->getProductTest($moduleID[1])) && p('name') && e('正常产品1'); // 获取module 7 的产品

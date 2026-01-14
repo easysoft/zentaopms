@@ -17,13 +17,13 @@ cid=15623
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 // 4. 执行测试步骤
 r($cneTest->getSettingsMappingTest()) && p('admin_username') && e('admin');

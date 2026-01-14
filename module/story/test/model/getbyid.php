@@ -24,7 +24,7 @@ cid=18503
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -67,7 +67,7 @@ zenData('storystage')->gen(30);
 zenData('bug')->gen(1);
 zenData('productplan')->gen(1);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $story1Version1  = $story->getByIdTest(1, 1);
 $story1Version2  = $story->getByIdTest(1, 2);
 $story2Version3  = $story->getByIdTest(2, 3);

@@ -18,7 +18,7 @@ cid=18073
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 生成产品数据
 $productTable = zenData('product');
@@ -36,7 +36,7 @@ $repoTable->name->range('singleProductRepo,multiProductRepo1,multiProductRepo2,t
 $repoTable->gen(13);
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->getProductsByRepoTest(0)) && p() && e('0');                    // 步骤1：无效代码库ID(0)
 r($repo->getProductsByRepoTest(99)) && p() && e('0');                   // 步骤2：不存在的代码库ID(99)

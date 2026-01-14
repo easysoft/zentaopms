@@ -16,7 +16,7 @@ cid=16619
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('pipeline');
 $table->id->range('1-10');
@@ -28,7 +28,7 @@ $table->gen(5);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetSinglePipelineTest(1, 2, 8)) && p('status') && e('failed');
 r($gitlabTest->apiGetSinglePipelineTest(0, 2, 8)) && p() && e('0');

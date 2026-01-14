@@ -16,7 +16,7 @@ cid=17994
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('release')->gen(0);
 zenData('product')->gen(0);
@@ -79,7 +79,7 @@ $tester->dao->exec("INSERT INTO zt_user (account, realname) VALUES
 
 su('admin');
 
-$releaseTest = new releaseTest();
+$releaseTest = new releaseModelTest();
 
 r($releaseTest->getNotifyListTest(1)) && p('0') && e('admin');
 r($releaseTest->getNotifyListTest(2)) && p('0') && e('admin');

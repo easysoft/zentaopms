@@ -24,7 +24,7 @@ cid=18195
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('case')->gen(1);
@@ -33,7 +33,7 @@ zenData('bug')->gen(1);
 $caseIds = array(0, 1, 2);
 $methods = array('createFormCase', 'saveTplModal', 'confirm', 'resolve', 'create');
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 r($scoreTester->computeBugScoreTest($caseIds[0], $methods[0])) && p('0:score') && e('1');  // 计算caseID=0时，用例建bug的积分
 r($scoreTester->computeBugScoreTest($caseIds[1], $methods[0])) && p('0:score') && e('1');  // 计算caseID=1时，用例建bug的积分
 r($scoreTester->computeBugScoreTest($caseIds[2], $methods[0])) && p('0:score') && e('1');  // 计算caseID不存在时，用例建bug的积分

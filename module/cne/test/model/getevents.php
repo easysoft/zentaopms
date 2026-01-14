@@ -16,9 +16,9 @@ cid=15620
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->getEventsTest(1, '')) && p() && e('200');
 r($cneTest->getEventsTest(2, 'mysql')) && p() && e('200');

@@ -17,7 +17,7 @@ cid=15661
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 zenData('product')->gen(3);
@@ -27,7 +27,7 @@ zenData('project')->gen(3);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 备份原始教程模式状态
 $originalTutorialMode = isset($_SESSION['tutorialMode']) ? $_SESSION['tutorialMode'] : null;

@@ -17,7 +17,7 @@ cid=18261
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $chart = zenData('chart');
@@ -33,7 +33,7 @@ $chart->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 准备基础测试对象
 $baseComponent = new stdclass();

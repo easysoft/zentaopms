@@ -17,7 +17,7 @@ cid=16087
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
@@ -26,7 +26,7 @@ zenData('user')->gen(5);
 
 $libIds = array(0, 11, 13, 14, 31);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocTreeTest($libIds[0])) && p() && e('0');                                                                            // 测试libiID=0时，获取文档结构
 r($docTester->getDocTreeTest($libIds[1])) && p() && e('/:我的文档1,我的文档2;模块2:我的草稿文档7,我的草稿文档8;模块1:我的草稿文档6;'); // 测试libiID=11时，获取文档结构
 r($docTester->getDocTreeTest($libIds[2])) && p() && e('/:我的文档1,我的文档2;模块3:;');                                                // 测试libiID=13时，获取文档结构

@@ -28,7 +28,7 @@ cid=18099
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('task')->gen(10);
@@ -41,7 +41,7 @@ zenData('repo')->loadYaml('repo')->gen(4);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试数据准备
 $taskID   = 1;

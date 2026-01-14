@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -70,7 +70,7 @@ $changedeadline   = array('deadline' => $deadline);
 $closedReason     = array('closedReason' => '关闭原因');
 $changeParent     = array('parent' => '1');
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->doUpdateTest($taskIDList[0], $changename))       && p('name,deadline')   && e('修改后的任务名称,2022-03-29'); // 测试修改任务名称和截止日期
 r($task->doUpdateTest($taskIDList[1], $changemodule))     && p('name,module')     && e('任务2,25');                    // 测试修改任务模块
 r($task->doUpdateTest($taskIDList[2], $changeassign))     && p('name,assignedTo') && e('任务3,user94');                // 测试修改任务指派人

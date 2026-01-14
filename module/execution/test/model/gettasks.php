@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -129,7 +129,7 @@ $moduleID        = array('0', '10');
 $sort            = array('status,id_desc', 'name_asc,id_asc', 'id_asc', 'pri_desc,id_desc');
 $count           = array('0', '1');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getTasksTest($productIDList[0], $executionIDList[1], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('1:execution,name')    && e('3,任务1'); // 敏捷执行任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[2], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('2:execution,project') && e('4,12');    // 瀑布执行任务查询
 r($execution->getTasksTest($productIDList[0], $executionIDList[3], $browseType[0], $queryID[0], $moduleID[0], $sort[0], $count[0])) && p('3:execution,status')  && e('5,wait');  // 看板执行任务查询

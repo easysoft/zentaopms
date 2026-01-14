@@ -13,7 +13,7 @@ cid=19555
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -28,7 +28,7 @@ $rightValue[1025] = 'select t1.*,if($product=\'\',0,t1.product) as customproduct
 $rightValue[1021] = '{"zh-cn":"\\u5217\\u51fa\\u4ea7\\u54c1\\u7684\\u9700\\u6c42\\u6570\\uff0c\\u5b8c\\u6210\\u7684\\u9700\\u6c42\\u603b\\u6570\\uff0cBug\\u6570\\uff0c\\u89e3\\u51b3\\u7684Bug\\u603b\\u6570\\uff0cBug\\/\\u9700\\u6c42\\uff0c\\u91cd\\u8981Bug\\u6570\\u91cf(\\u4e25\\u91cd\\u7a0b\\u5ea6\\u5c0f\\u4e8e3)\\u3002","zh-tw":"\\u5217\\u51fa\\u7522\\u54c1\\u7684\\u9700\\u6c42\\u6578\\uff0c\\u5b8c\\u6210\\u7684\\u9700\\u6c42\\u7e3d\\u6578\\uff0cBug\\u6578\\uff0c\\u89e3\\u6c7a\\u7684Bug\\u7e3d\\u6578\\uff0cBug\\/\\u9700\\u6c42\\uff0c\\u91cd\\u8981Bug\\u6578\\u91cf(\\u56b4\\u91cd\\u7a0b\\u5ea6\\u5c0f\\u65bc3)\\u3002","en":"Serious Bug (severity is less than 3).","de":"Serious Bug (severity is less than 3).","fr":"Serious Bug (severity is less than 3)."}';
 $rightValue[1023] = 'select t1.account, t1.consumed, t1.`date`, if($dept=\'\', 0, t2.dept) as dept from zt_effort as t1 left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = \'0\' and if($startDate=\'\', 1, t1.`date` >= $startDate) and if($endDate=\'\', 1, t1.`date` <= $endDate) and (t3.path like concat((select path from zt_dept where id=$dept), \'%\') or $dept=0) order by t1.`date` asc';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->updateBISQLTest(1025, $errorValue[1025], $rightValue[1025], 'sql'))  && p() && e('0'); //判断修改的sql是否正确
 r($upgrade->updateBISQLTest(1021, $errorValue[1021], $rightValue[1021], 'desc')) && p() && e('1'); //判断修改的desc是否正确
 r($upgrade->updateBISQLTest(1023, $errorValue[1023], $rightValue[1023], 'sql'))  && p() && e('0'); //判断修改的sql是否正确

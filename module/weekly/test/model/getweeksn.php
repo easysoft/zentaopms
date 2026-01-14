@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -19,7 +19,7 @@ cid=19737
 $begin = array('2022-05-02', '');
 $end   = array('2022-05-06', '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getWeekSNTest($begin[0], $end[0]))   && p() && e('1');     //开始时间和结束时间都不为空
 r($weekly->getWeekSNTest($begin[0], $end[1]))   && p() && e('-2730'); //开始时间不为空，结束时间为空

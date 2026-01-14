@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 function initData()
@@ -71,7 +71,7 @@ $t_resolution2     = array('closedBy'    => 'john',      'resolution'    => '');
 $t_unduplicateBug  = array('resolution'  => 'duplicate', 'duplicateBug'  => 0);
 $t_unresolvedBuild = array('resolution'  => 'fixed',     'resolvedBuild' => '');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->updateObject($bugIdList[0], $t_uptitle))         && p('0:field,old,new') && e('title,BUG1,john');                 // 测试更新bug标题
 r($bug->updateObject($bugIdList[0], $t_uptype))          && p('0:field,old,new') && e('type,codeerror,config');           // 测试更新bug类型
 r($bug->updateObject($bugIdList[0], $t_untitle))         && p()                  && e('没有数据更新');                    // 测试不更改bug标题

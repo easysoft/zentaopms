@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15178
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 // 测试用例1：简单SELECT语句
 $sql1 = "SELECT 1 as id, 'test' as name";

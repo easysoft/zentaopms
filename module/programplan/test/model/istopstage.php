@@ -18,7 +18,7 @@ cid=17753
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -32,7 +32,7 @@ $projectTable->status->range('wait{2},doing{4},suspended{2},closed{2}');
 $projectTable->deleted->range('0');
 $projectTable->gen(10);
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 r($programplanTest->isTopStageTest(3)) && p('') && e('1'); // 测试父项目类型为project的阶段ID=3
 r($programplanTest->isTopStageTest(5)) && p('') && e('1'); // 测试父项目类型为project的阶段ID=5

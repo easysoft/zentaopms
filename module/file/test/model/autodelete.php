@@ -16,7 +16,7 @@ cid=16492
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $fileTable = zenData('file');
 $fileTable->objectType->range('story,task,bug');
@@ -32,7 +32,7 @@ $fileTable->gen(10);
 su('admin');
 
 global $tester, $config;
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 $debug = $config->debug;
 $config->debug = 0;

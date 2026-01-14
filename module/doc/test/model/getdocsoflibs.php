@@ -29,7 +29,7 @@ cid=16084
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
@@ -39,7 +39,7 @@ $libs      = array(array(26), array(18), array(11));
 $spaceType = array('product', 'project', 'mine');
 $excludeID = array(0, 41, 31, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocsOfLibsTest($libs[0], $spaceType[0], $excludeID[0])) && p('41:lib,title') && e('26,产品文档41'); // 获取产品库26下的文档列表
 r($docTester->getDocsOfLibsTest($libs[1], $spaceType[1], $excludeID[0])) && p('31:lib,title') && e('18,项目文档31'); // 获取项目库18下的文档列表
 r($docTester->getDocsOfLibsTest($libs[2], $spaceType[2], $excludeID[0])) && p('1:lib,title')  && e('11,我的文档1');  // 获取我的文档库11下的文档列表

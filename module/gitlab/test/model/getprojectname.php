@@ -18,13 +18,13 @@ cid=16655
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(10);
 
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 r($gitlab->getProjectNameTest(1, 1)) && p() && e('Monitoring'); // 测试步骤1：获取有效GitLab服务器1项目ID 1的项目名称
 r($gitlab->getProjectNameTest(1, 2)) && p() && e('testHtml'); // 测试步骤2：获取有效GitLab服务器1项目ID 2的项目名称

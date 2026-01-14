@@ -21,7 +21,7 @@ cid=17010
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 简化数据准备，不依赖zendata
 global $tester;
@@ -44,7 +44,7 @@ foreach($notifyData as $notify) {
 su('admin');
 
 // 4. 创建测试实例
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($mailTest->getQueueByIdTest(1)) && p('id,objectType') && e('1,mail'); // 步骤1：正常获取ID为1的队列

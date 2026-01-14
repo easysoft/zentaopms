@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -31,7 +31,7 @@ cid=16266
 $projectIdList = array(11, 60, 100);
 $countList     = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->batchProcessNameTest($projectIdList[0], $countList[0])) && p('2:project,name') && e('11,迭代7');   // 测试处理敏捷项目下的执行名称
 r($executionTester->batchProcessNameTest($projectIdList[1], $countList[0])) && p('2:project,name') && e('60,阶段12');  // 测试处理瀑布项目下的执行名称
 r($executionTester->batchProcessNameTest($projectIdList[2], $countList[0])) && p('2:project,name') && e('100,看板30'); // 测试处理看板项目下的执行名称

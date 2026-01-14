@@ -27,13 +27,13 @@ cid=0
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 4. 必须包含至少5个测试步骤
 r($metricTest->getStartAndEndOfWeekTest(2024, 1, 'datetime')) && p('0,1') && e('2024-01-01 00:00:00,2024-01-07 23:59:59'); // 步骤1：正常情况，2024年第1周带时间格式

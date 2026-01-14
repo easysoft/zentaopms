@@ -28,13 +28,13 @@ cid=14941
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('action')->gen(5);
 
 $actionIDList = array(1, 2, 3, 0);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->fetchBaseInfo($actionIDList[0])) && p('id,objectType,objectID,action') && e('1,product,1,common');       //测试获取id为1的action的基本信息
 r($actionTest->fetchBaseInfo($actionIDList[1])) && p('id,objectType,objectID,action') && e('2,story,2,extra');          //测试获取id为2的action的基本信息

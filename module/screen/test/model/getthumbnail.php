@@ -24,13 +24,13 @@ cid=18258
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 4. 测试步骤
 

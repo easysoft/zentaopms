@@ -24,7 +24,7 @@ cid=17546
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $product = zenData('product')->loadYaml('product');
 $product->type->range('normal{3},branch{3},platform{3}');

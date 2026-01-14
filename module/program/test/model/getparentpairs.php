@@ -16,7 +16,7 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -37,7 +37,7 @@ $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD
 $program->deleted->range('0{15},1{5}');
 $program->gen(10);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $program1 = $programTester->getParentPairsTest();
 $program2 = $programTester->getParentPairsTest('waterfall');

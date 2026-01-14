@@ -16,7 +16,7 @@ cid=18484
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $storyTable = zenData('story');
@@ -28,7 +28,7 @@ zenData('storyspec')->gen(21);
 $storyIdList = array(1, 4, 7, 10, 13, 16, 19);
 $reasonList  = array('done', 'subdivided', 'duplicate', 'postponed', 'willnotdo', 'cancel', 'bydesign');
 
-$storyTester = new storyTest();
+$storyTester = new storyModelTest();
 r($storyTester->closeAllChildrenTest($storyIdList[0], $reasonList[0])) && p('closedReason') && e('done');       // 关闭父需求ID为1所有子需求关闭原因为已完成
 r($storyTester->closeAllChildrenTest($storyIdList[1], $reasonList[1])) && p('closedReason') && e('subdivided'); // 关闭父需求ID为4所有子需求关闭原因为已拆分
 r($storyTester->closeAllChildrenTest($storyIdList[2], $reasonList[2])) && p('closedReason') && e('duplicate');  // 关闭父需求ID为7所有子需求关闭原因为已复制

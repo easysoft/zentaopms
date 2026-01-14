@@ -2,7 +2,7 @@
 <?php
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -47,7 +47,7 @@ cid=14892
 
 */
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 $idList = array(array(1, 2, 3), array(4, 5, 6), array(7, 8, 9));
 

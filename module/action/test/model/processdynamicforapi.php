@@ -16,9 +16,9 @@ cid=14922
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 // 创建包含用户动态的测试数据（应该被过滤）
 $userDynamic = new stdClass();

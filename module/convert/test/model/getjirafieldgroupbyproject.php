@@ -16,7 +16,7 @@ cid=15778
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 创建临时表（如果不存在）
 global $tester;
@@ -49,7 +49,7 @@ global $app;
 $app->session->set('jiraMethod', 'file');
 
 // 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 // 测试步骤1：空参数情况
 r($convertTest->getJiraFieldGroupByProjectTest(array())) && p() && e('0');

@@ -16,11 +16,11 @@ cid=18711
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 r(get_class($svnTest->__constructTest('', ''))) && p() && e('svnModel');
 r(get_class($svnTest->__constructTest('testModule', ''))) && p() && e('svnModel');

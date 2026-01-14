@@ -25,7 +25,7 @@ cid=18470
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -35,7 +35,7 @@ zenData('storyspec')->gen(20);
 zenData('storystage')->gen(20);
 zenData('product')->gen(20);
 
-$story       = new storyTest();
+$story       = new storyModelTest();
 $storyIdList = array(1, 2, 6, 10, 14);
 $result      = $story->batchChangeStageTest($storyIdList, 'developing');
 

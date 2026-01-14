@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(50);
 zenData('user')->gen(1);
@@ -26,7 +26,7 @@ cid=16309
 
 $executionIDList = array('11', '0', '106', '106,107', '108,109,110');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getChildIdGroupTest($executionIDList[0])) && p() && e('11:101,102,103,104,105,133,134,135,136,137;'); // 测试获取父ID 11 的所有子ID
 r($executionTester->getChildIdGroupTest($executionIDList[1])) && p() && e('0');                                           // 测试获取父ID 0 的所有子ID
 r($executionTester->getChildIdGroupTest($executionIDList[2])) && p() && e('106:112,144;');                                // 测试获取父ID 106 的所有子ID

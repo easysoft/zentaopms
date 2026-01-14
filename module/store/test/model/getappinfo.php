@@ -19,7 +19,7 @@ cid=18452
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -30,7 +30,7 @@ $name      = array('', '禅道');
 $version   = array('', '1');
 $channel   = array('', 'stable');
 
-$store = new storeTest();
+$store = new storeModelTest();
 r($store->getAppInfoTest($appIdList[0], $analysis[0], $name[0], $version[0], $channel[0])) && p()     && e('0'); //测试ID为0
 r($store->getAppInfoTest($appIdList[1], $analysis[0], $name[0], $version[0], $channel[0])) && p()     && e('0'); //测试使用查询不到数据的ID
 r($store->getAppInfoTest($appIdList[2], $analysis[0], $name[0], $version[0], $channel[0])) && p('id') && e('70'); //测试使用查询不到数据的ID

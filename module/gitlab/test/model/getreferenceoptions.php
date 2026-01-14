@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=16657
 
 zenData('pipeline')->gen(5);
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $projectIds = array(1, 2);
 $branches   = $gitlab->getReferenceOptionsTest($gitlabID = 1, $projectIds[1]);

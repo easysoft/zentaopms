@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -80,7 +80,7 @@ $effort->gen(1);
 $user = zenData('user');
 $user->gen(20);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->processTaskTest(0)) && p() && e('任务未找到'); //计算一个不存在的任务进度
 r($task->processTaskTest(1)) && p('productType,progress') && e('normal,75');   //根据taskID计算wait的任务进度
 r($task->processTaskTest(2)) && p('productType|progress|teamMembers', '|') && e('branch|80|用户1,用户2,用户3,用户4,用户5'); //根据taskID计算wait的任务进度及任务团队

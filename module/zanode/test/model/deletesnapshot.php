@@ -16,7 +16,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $host = zenData('host');
 $host->id->range('1-3');
@@ -37,7 +37,7 @@ $image->gen(6);
 
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 r($zanodeTest->deleteSnapshotTest(1)) && p() && e('执行失败，请检查宿主机和执行节点状态'); //删除存在的快照ID=1
 r($zanodeTest->deleteSnapshotTest(999)) && p() && e('empty'); //删除不存在的快照ID=999

@@ -17,11 +17,11 @@ cid=16019
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 // 测试步骤1：enum类型字段处理，期望返回完整的枚举选项列表
 $enumField = array('name' => 'status', 'null' => 'NO');

@@ -19,7 +19,7 @@ cid=18458
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -30,7 +30,7 @@ $categories = 0;
 $page       = array(1, 2);
 $pageSize   = array(5, 10);
 
-$store = new storeTest();
+$store = new storeModelTest();
 r($store->searchAppsTest()) && p() && e('Success'); //测试不传参使用默认值获取
 
 r($store->searchAppsTest($orderBy[1])) && p() && e('Success'); //测试按照最近更新获取

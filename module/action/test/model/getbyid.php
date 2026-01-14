@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(5);
@@ -42,7 +42,7 @@ cid=14890
 
 $actionIDList = array('101', '102', '103', '104', '105');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getByIdTest($actionIDList[0])) && p('objectType,objectId,action,comment') && e('product,~~,common,这是一个系统日志测试备注1');     // 测试获取动态1的信息
 r($action->getByIdTest($actionIDList[1])) && p('objectType,objectId,action,comment') && e('story,~~,extra,这是一个系统日志测试备注2');        // 测试获取动态2的信息

@@ -17,7 +17,7 @@ cid=19199
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $testtaskTable = zenData('testtask');
@@ -62,7 +62,7 @@ zenData('action')->gen(0);
 su('admin');
 
 // 4. 创建测试实例
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 // 准备测试数据
 // 测试步骤1：空数据测试（最简单的情况）

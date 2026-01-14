@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('execution')->gen(1);
@@ -253,7 +253,7 @@ cid=19208
 
 */
 
-$testtask  = new testtaskTest();
+$testtask  = new testtaskModelTest();
 $taskModel = $testtask->objectModel;
 
 $case1  = (object)array('case' => 1, 'version' => 1);

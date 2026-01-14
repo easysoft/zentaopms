@@ -16,11 +16,11 @@ cid=15658
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->checkMenuVarsReplacedTest(1)) && p() && e('public_static_method');
 r($commonTest->checkMenuVarsReplacedTest(2)) && p() && e('no_return_type');

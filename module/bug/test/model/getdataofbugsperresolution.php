@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('resolution')->gen(15);
@@ -42,7 +42,7 @@ cid=15370
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerResolutionTest()) && p('fixed:name,value')      && e('已解决,5');   //获取解决方案为 fixed 的数据
 r($bug->getDataOfBugsPerResolutionTest()) && p('duplicate:name,value')  && e('重复Bug,2');  //获取解决方案为 duplicate 的数据
 r($bug->getDataOfBugsPerResolutionTest()) && p('bydesign:name,value')   && e('设计如此,2'); //获取解决方案为 external 的数据

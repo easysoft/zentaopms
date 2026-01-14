@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('user')->gen(1);
@@ -21,7 +21,7 @@ cid=18165
 
 */
 
-$report = new reportTest();
+$report = new reportModelTest();
 $names  = $report->getProjectExecutionsTest();
 
 r($names) && p('101') && e('敏捷项目1/迭代5');  //获取执行ID为101的名称

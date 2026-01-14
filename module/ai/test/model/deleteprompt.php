@@ -16,7 +16,7 @@ cid=15019
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_prompt');
 $table->id->range('1-10');
@@ -32,7 +32,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->deletePromptTest(1)) && p() && e('1');
 r($aiTest->deletePromptTest(999)) && p() && e('0');

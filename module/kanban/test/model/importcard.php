@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanban')->gen(5);
@@ -34,7 +34,7 @@ $regionIDList     = array('1', '2', '3', '4', '5');
 $groupIDList      = array('1', '2', '3', '4', '5');
 $columnIDList     = array('1', '5', '9', '13', '17');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->importCardTest($kanbanIDList[0], $regionIDList[0], $groupIDList[0], $columnIDList[0], $cards1, $targetLaneIDList[0])) && p('cards', '|') && e(',72,73,74,1,2,801,');  // 测试导入卡片72 73 74到column 1
 r($kanban->importCardTest($kanbanIDList[1], $regionIDList[1], $groupIDList[1], $columnIDList[1], $cards2, $targetLaneIDList[1])) && p('cards', '|') && e(',75,76,77,9,10,809,'); // 测试导入卡片75 77 77到column 5

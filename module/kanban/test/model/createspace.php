@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -72,7 +72,7 @@ $space5->owner           = '';
 $space5->desc            = '不填写负责人的公共空间描述';
 $space5->team            = 'user2,user3';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 r($kanban->createSpaceTest($space1)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建私人空间|private|私人空间的描述|admin|po15,admin|po15');               // 创建私人空间
 r($kanban->createSpaceTest($space2)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建协作空间|cooperation|协作空间的描述|po16|po15,admin,po16|~~');     // 创建协作空间
 r($kanban->createSpaceTest($space3)) && p('name|type|desc|owner|team|whitelist', '|') && e('测试创建公共空间|public|公共空间的描述|user1|user2,user3,admin,user1|~~'); // 创建公共空间

@@ -16,7 +16,7 @@ cid=17049
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('notify');
 $table->objectType->range('message{10},action{5},other{3}');
@@ -31,7 +31,7 @@ zenData('user')->gen(1);
 
 su('admin');
 
-$messageTest = new messageTest();
+$messageTest = new messageModelTest();
 
 $messageTest->objectModel->app->user->account = 'admin';
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -24,7 +24,7 @@ zenData('product')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
 su('admin');
 
-$checkPriv = new repoTest();
+$checkPriv = new repoModelTest();
 
 $repo = new stdclass();
 $repo->projects = '100';

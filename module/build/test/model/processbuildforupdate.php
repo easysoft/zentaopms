@@ -9,7 +9,7 @@ cid=15505
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build')->gen(20);
 zenData('story')->loadYaml('story')->gen(20);
@@ -23,7 +23,7 @@ $buildID = array(
 
 $type = array('noBranch', 'noBuild');
 
-$buildTester = new buildTest();
+$buildTester = new buildModelTest();
 
 r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[0])) && p('branch', '|') && e(',1,2');  // 没有执行的版本
 r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[1])) && p('branch', '|') && e('1');  // 没有执行的版本

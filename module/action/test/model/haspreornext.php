@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(6);
 zenData('actionrecent')->gen(0);
@@ -23,7 +23,7 @@ cid=14915
 
 */
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 $dateList      = array('', 'today', date('Y-m-d', strtotime('+3 day')));
 $directionList = array('', 'next', 'pre');

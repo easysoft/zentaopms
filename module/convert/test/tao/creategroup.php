@@ -18,11 +18,11 @@ cid=15840
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createGroupTest('project', '测试项目组', array('task', 'story'), 1, 1, array(), array(), array())) && p() && e('true');
 r($convertTest->createGroupTest('product', '测试产品组', array('bug', 'build'), 2, 2, array(2 => 1), array(), array())) && p() && e('true');

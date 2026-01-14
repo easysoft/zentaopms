@@ -98,7 +98,7 @@ cid=16049
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -116,7 +116,7 @@ $libs         = range(1, 5);
 $queryIdList  = array(0, 1);
 $typeList     = array('mine', 'project', 'execution', 'product', 'custom');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->buildSearchFormTest($libIdList[0], $libs, $queryIdList[0], $typeList[0])) && p('fields:title,id,status,addedDate,editedDate,keywords,version') && e('文档标题,ID,文档状态,创建日期,修改日期,关键字,版本号'); // 构造我的空间搜索表单
 r($docTester->buildSearchFormTest($libIdList[0], $libs, $queryIdList[1], $typeList[0])) && p('fields:title,id,status,addedDate,editedDate,keywords,version') && e('文档标题,ID,文档状态,创建日期,修改日期,关键字,版本号'); // 构造我的空间搜索表单
 r($docTester->buildSearchFormTest($libIdList[1], $libs, $queryIdList[0], $typeList[1])) && p('fields:title,id,lib,status,addedDate,editedDate,keywords,version') && e('文档标题,ID,所属库,文档状态,创建日期,修改日期,关键字,版本号'); // 构造项目空间搜索表单

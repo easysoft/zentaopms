@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('module')->gen(10);
@@ -31,7 +31,7 @@ cid=15368
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerModuleTest()) && p('0:name,value')    && e('/,2');                         // 获取未设置模块的数据
 r($bug->getDataOfBugsPerModuleTest()) && p('1:name,value') && e('/这是一个模块1,2');               // 获取一级模块也是父模块module1数据
 r($bug->getDataOfBugsPerModuleTest()) && p('2:name,value') && e('/这是一个模块2,2');               // 获取一级模块不是父模块module2数据

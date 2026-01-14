@@ -16,12 +16,12 @@ cid=17714
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->gen(10);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 r($programTester->updateOrderTest(10, 1))  && p('order') && e('1');  // 设置排序是1
 r($programTester->updateOrderTest(10, 5))  && p('order') && e('5');  // 设置排序是5

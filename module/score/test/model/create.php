@@ -104,7 +104,7 @@ cid=18198
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('score')->gen(0);
 zenData('user')->gen(5);
@@ -118,7 +118,7 @@ $modules = array('user', 'story', 'task', 'bug', 'testTask', 'execution', 'searc
 $methods = array('login', 'changePassword', 'close', 'finish', 'createFormCase', 'saveTplModal', 'confirm', 'resolve', 'runCase', 'saveQueryAdvanced', 'selectTheme');
 $params  = array(0, 1, 2, 6, 101, 110);
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 r($scoreTester->createTest($modules[0], $methods[0], $params[0]))  && p('account,module,method,score') && e('admin,user,login,1');               // 创建登录用户的积分
 r($scoreTester->createTest($modules[0], $methods[1], $params[0]))  && p('account,module,method,score') && e('admin,user,changePassword,10');     // 创建修改密码的积分
 r($scoreTester->createTest($modules[0], $methods[1], $params[1]))  && p()                              && e('1');                                // 创建修改密码的积分

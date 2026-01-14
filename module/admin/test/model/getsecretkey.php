@@ -16,11 +16,11 @@ cid=14981
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 r($adminTest->getSecretKeyTest()) && p() && e('type_error'); // 测试步骤1:在session缓存为空时调用
 r($adminTest->getSecretKeyTest()) && p() && e('type_error'); // 测试步骤2:网络不可用时调用

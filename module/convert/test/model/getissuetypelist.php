@@ -17,7 +17,7 @@ cid=15771
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（使用现有表结构进行模拟）
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 // 5. 执行测试步骤 - 必须包含至少5个测试步骤
 r($convertTest->getIssueTypeListTest(array('zentaoObject' => array('3001' => 'story', '3002' => 'task', '3003' => 'bug')))) && p() && e('0'); // 步骤1：正常情况

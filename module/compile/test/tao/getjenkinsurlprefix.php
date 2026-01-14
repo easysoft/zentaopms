@@ -17,12 +17,12 @@ cid=15758
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('job')->gen(1);
 su('admin');
 
-$compile = new compileTest();
+$compile = new compileTaoTest();
 
 $urlList = array('http://www.baidu.com', 'http://www.google.com', 'http://www.sina.com.cn');
 $pipelineList = array('/job/Job1', 'Job2', '/test3/job/Job3');

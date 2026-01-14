@@ -39,9 +39,9 @@ cid=15673
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->getDotStyleTest(true, 15)) && p('top,right,aspect-ratio,padding') && e('-3px,-10px,0,2px');
 r($commonTest->getDotStyleTest(true, 5)) && p('top,right,aspect-ratio,padding') && e('-3px,-5px,0,2px');

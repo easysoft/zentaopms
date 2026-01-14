@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -21,7 +21,7 @@ cid=18263
 
 zenData('screen')->gen(0);
 
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 $component1 = new stdclass();
 $component1->option = new stdclass();

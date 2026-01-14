@@ -41,7 +41,7 @@ cid=16131
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('templatemodule')->gen(10);
 su('admin');
@@ -49,7 +49,7 @@ su('admin');
 $roots  = array('all', 1, 2);
 $grades = array('all', 1, 2);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getTemplateModulesTest($roots[0], $grades[0])) && p('0:id,name,type,root,grade') && e('1,模板类型1,docTemplate,1,1');  // 获取所有模板类型模块
 r($docTester->getTemplateModulesTest($roots[1], $grades[1])) && p('1:id,name,type,root,grade') && e('3,模板类型3,docTemplate,1,1');  // 获取root为1, grade为1的模板类型的模块
 r($docTester->getTemplateModulesTest($roots[1], $grades[2])) && p('0:id,name,type,root,grade') && e('2,模板类型2,docTemplate,1,2');  // 获取root为1, grade为2的模板类型的模块

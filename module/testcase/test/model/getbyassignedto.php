@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen(10);
 zenData('testrun')->gen(10);
@@ -30,7 +30,7 @@ cid=18975
 
 $accountList = array('admin', 'user2', 'test3', 'dev4', 'test5');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getByAssignedToTest($accountList[0])) && p() && e('5,1'); // 测试获取指派给 admin 的用例执行
 r($testcase->getByAssignedToTest($accountList[1])) && p() && e('6,2'); // 测试获取指派给 user2 的用例执行

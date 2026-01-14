@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen(220);
 zenData('casestep')->gen(0);
@@ -31,7 +31,7 @@ cid=15527
 
 */
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 $_POST = array(
         'lib'          => array(2 => 201,             3 => 201),
         'title'        => array(2 => '测试导入添加1', 3 => '测试导入添加2'),

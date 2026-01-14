@@ -74,7 +74,7 @@ cid=16045
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
@@ -102,7 +102,7 @@ $normalModule->id = 3;
 $notExistModule = new stdclass();
 $notExistModule->id = 4;
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 
 /* Empty module object. */
 r($docTester->buildDocNodeTest($emptyModule, $libIds[0])) && p('type,docsCount,actions') && e('module,0,~~'); // 测试模块为空，libID=0时，获取的文档节点数据

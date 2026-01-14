@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('metric')->gen(1);
 
 /**
@@ -19,7 +19,7 @@ cid=18213
 */
 
 global $tester;
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 $tester->loadModel('bi');
 $metric1 = $tester->loadModel('metric')->getByID(1);

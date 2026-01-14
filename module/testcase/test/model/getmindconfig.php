@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 
@@ -102,7 +102,7 @@ $config12 = array();
 
 $type = array('xmind', 'freemind');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getMindConfigTest($type[0], $config1))  && p('module,scene,case,pri,group') && e('MM,SS,CC,PP,GG'); // 测试获取设置了 module scene case pri group 的配置
 r($testcase->getMindConfigTest($type[0], $config2))  && p('module,scene,case,pri,group') && e('M,SS,CC,PP,GG');  // 测试获取设置了 scene case pri group 的配置

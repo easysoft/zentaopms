@@ -15,7 +15,7 @@ cid=17011
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /* Create minimal required data for dependencies */
@@ -42,7 +42,7 @@ $dao->insert(TABLE_EXECUTION)
     ))
     ->exec();
 
-$mail = new mailTest();
+$mail = new mailModelTest();
 $mail->objectModel->app->user->realname = '管理员';
 
 $result1 = $mail->getSubjectTest('testtask', 1, '123', 'closed');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $execution = zenData('project');
@@ -51,7 +51,7 @@ cid=19738
 
 $projectList = array(0, 1, 11, 41);
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getWorkloadByTypeTest($projectList[0])) && p('design,devel,test,study,discuss,ui,affair,misc') && e('8.00,1.00,2.00,3.00,4.00,5.00,6.00,7.00'); //测试project值为0
 r($weekly->getWorkloadByTypeTest($projectList[1])) && p()                                                 && e('0');                                       //测试project值为1

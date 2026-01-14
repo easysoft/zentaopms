@@ -21,11 +21,11 @@ cid=14945
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->getActionTableTest('today')) && p() && e('`zt_actionrecent`');
 r($actionTest->getActionTableTest('yesterday')) && p() && e('`zt_actionrecent`');

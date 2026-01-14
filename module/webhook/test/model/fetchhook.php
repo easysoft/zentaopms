@@ -16,9 +16,9 @@ cid=19688
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 r($webhookTest->fetchHookTestError('invalid_url', 'test')) && p() && e('Could not resolve host'); // 步骤1：测试钉钉用户webhook类型，无绑定用户
 r($webhookTest->fetchHookTestMock('dinguser', 'test')) && p() && e('false'); // 步骤2：测试微信用户webhook类型，无绑定用户

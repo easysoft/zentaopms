@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -29,7 +29,7 @@ global $app;
 $app->rawModule = 'gitlab';
 $app->rawMethod = 'browse';
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $gitlabID     = 1;
 $gitlabUsers  = $gitlab->gitlab->apiGetUsers($gitlabID);

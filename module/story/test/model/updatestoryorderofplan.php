@@ -20,12 +20,12 @@ cid=18597
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('planstory')->gen(5);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $planStories1 = $story->updateStoryOrderOfPlanTest(1, 1);
 $planStories2 = $story->updateStoryOrderOfPlanTest(1, 2, 1);
 

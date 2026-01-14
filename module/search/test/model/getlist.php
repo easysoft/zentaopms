@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->gen(10);
 zenData('bug')->gen(10);
@@ -55,7 +55,7 @@ cid=18300
 
 */
 
-$search = new searchTest();
+$search = new searchModelTest();
 
 $searchType   = array();
 $searchType[] = 'all';

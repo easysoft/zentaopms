@@ -1,17 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-class actionTaoTest
-{
-    public $objectModel;
-    public $objectTao;
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
-    public function __construct()
-    {
-        global $tester;
-        $this->objectModel = $tester->loadModel('action');
-        $this->objectTao   = $tester->loadTao('action');
-    }
+class actionTaoTest extends baseTest
+{
+    protected $moduleName = 'action';
+    protected $className  = 'tao';
 
     /**
      * Test processLinkStoryAndBugActionExtra method.
@@ -27,7 +22,7 @@ class actionTaoTest
         $action = new stdClass();
         $action->extra = $ids;
 
-        $this->objectTao->processLinkStoryAndBugActionExtra($action, $module, $method);
+        $this->instance->processLinkStoryAndBugActionExtra($action, $module, $method);
         if(dao::isError()) return dao::getError();
         return $action;
     }
@@ -46,7 +41,7 @@ class actionTaoTest
         $action->extra = (string)$storyID;
         $action->product = $product;
 
-        $this->objectTao->processToStoryActionExtra($action);
+        $this->instance->processToStoryActionExtra($action);
         if(dao::isError()) return dao::getError();
         return $action;
     }
@@ -63,7 +58,7 @@ class actionTaoTest
         $action = new stdClass();
         $action->extra = $taskIDs;
 
-        $this->objectTao->processCreateChildrenActionExtra($action);
+        $this->instance->processCreateChildrenActionExtra($action);
         if(dao::isError()) return dao::getError();
         return $action;
     }

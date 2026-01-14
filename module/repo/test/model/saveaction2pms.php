@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -78,7 +78,7 @@ $log->date      = '2023-12-29 10:44:36';
 $log->files     = array('M' => array('/README.md'));
 $log->change    = array('/README.md' => array('action' => 'M', 'kind' => 'file', 'oldPath' => ''));
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 $repo->saveAction2PMSTest($log, $repoID);
 $result = $tester->loadModel('task')->getByIdList(array(1,2,8));
 r($result) && p('1:status,consumed,left') && e('doing,4,3'); //开始任务

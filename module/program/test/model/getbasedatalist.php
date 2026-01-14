@@ -13,7 +13,7 @@ cid=17680
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('team')->gen(5);
 $programTable = zenData('project')->loadYaml('program');
@@ -22,7 +22,7 @@ $programTable->gen(40)->fixPath();
 
 su('admin');
 
-$tester = new programTest();
+$tester = new programModelTest();
 $programList = $tester->program->getBaseDataList(array(1, 2, 3, 4, 5));
 
 r($programList) && p('1:path', ';') && e(',1,');   // 获取id为3的path

@@ -17,7 +17,7 @@ cid=17309
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 zenData('story')->gen(0);
@@ -30,7 +30,7 @@ zenData('storyreview')->gen(0);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$myTest = new myTest();
+$myTest = new myTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($myTest->fetchStoriesBySearchTest('t1.deleted = 0', 'contribute', 'id_desc', null, array(1 => 1, 2 => 2))) && p() && e('0'); // 步骤1：contribute类型搜索，包含指定的需求

@@ -16,7 +16,7 @@ cid=16335
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -39,7 +39,7 @@ $task->type->range('design,devel,test,study,discuss,ui,affair,misc');
 $task->status->range('wait,doing,done,closed');
 $task->gen(10);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 $emptyExecutionID = 1;
 $executionID      = 4;

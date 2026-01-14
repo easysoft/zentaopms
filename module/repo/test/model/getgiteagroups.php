@@ -17,7 +17,7 @@ cid=18058
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 准备测试数据
 $table = zenData('pipeline');
@@ -33,7 +33,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 5. 执行测试步骤
 r(is_array($repoTest->getGiteaGroupsTest(4))) && p() && e('1'); // 步骤1：验证返回值是数组类型

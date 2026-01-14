@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(50);
 zenData('team')->loadYaml('team')->gen(50);
@@ -25,7 +25,7 @@ cid=18166
 */
 $account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'));
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getProjectStatusOverviewTest())            && p() && e('doing:20;suspended:5;closed:5;wait:10;'); // 获取项目状态
 r($report->getProjectStatusOverviewTest($account[0])) && p() && e('doing:1;');                               // 获取 admin 的项目状态

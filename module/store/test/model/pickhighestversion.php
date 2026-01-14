@@ -16,11 +16,11 @@ cid=18457
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$storeTest = new storeTest();
+$storeTest = new storeModelTest();
 
 // 测试步骤1：传入包含多个版本的版本列表
 $version1 = new stdClass();

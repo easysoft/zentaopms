@@ -17,7 +17,7 @@ cid=15176
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $userTable = zenData('user');
@@ -38,7 +38,7 @@ $productTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($biTest->getObjectOptionsTest('user', 'id')) && p('1') && e('1'); // 步骤1：正常获取用户ID选项

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -62,7 +62,7 @@ $stageIDList  = array('7', '8');
 $kanbanIDList = array('9', '10');
 $count        = array('0','1');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getStageLinkProductPairsTest($sprintIDList, $count[0])) && p('5')  && e('正常产品1');   // 敏捷执行产品查询
 r($execution->getStageLinkProductPairsTest($stageIDList, $count[0]))  && p('7')  && e('多平台产品1'); // 瀑布执行产品查询
 r($execution->getStageLinkProductPairsTest($kanbanIDList, $count[0])) && p('9')  && e('多分支产品1'); // 看板执行产品查询

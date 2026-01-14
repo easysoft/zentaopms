@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(2);
 zenData('user')->gen(2);
@@ -49,7 +49,7 @@ $bug5 = new stdclass();
 $bug5->title     = '';
 $bug5->execution = $executionID;
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('title')     && e('问题1');                 // 测试正常的创建来源于gitlab issue的bug的title
 r($bug->createBugFromGitlabIssueTest($bug2, $executionID))    && p('execution') && e('1');                     // 测试正常的创建来源于gitlab issue的bug的execution
 r($bug->createBugFromGitlabIssueTest($bug3, $executionID))    && p('pri')       && e('3');                     // 测试正常的创建来源于gitlab issue的bug的pri

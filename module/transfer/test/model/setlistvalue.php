@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('project')->gen(15);
 zenData('bug')->gen(10);
 zenData('case')->gen(10);
@@ -21,7 +21,7 @@ cid=19330
 - 测试导出用例时的级联字段第cascade条的story属性 @module
 
 */
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 
 $result1 = $transfer->setListValueTest('bug');
 

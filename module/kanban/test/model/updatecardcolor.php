@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancard')->gen(5);
@@ -38,7 +38,7 @@ cid=16963
 $cardIDList = array('1', '2', '3', '4', '5');
 $colorList  = array('937c5a', 'fc5959', 'ff9f46');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 $card1 = $kanban->updateCardColorTest($cardIDList[0], $colorList[0]);
 $card2 = $kanban->updateCardColorTest($cardIDList[1], $colorList[1]);

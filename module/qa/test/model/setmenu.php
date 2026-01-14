@@ -16,7 +16,7 @@ cid=17979
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/qa.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -43,7 +43,7 @@ unset($_SESSION['tutorialMode']);
 
 su('admin');
 
-$qaTest = new qaTest();
+$qaTest = new qaModelTest();
 
 r($qaTest->setMenuTest(0)) && p() && e('1');
 r($qaTest->setMenuTest(1)) && p() && e('1');

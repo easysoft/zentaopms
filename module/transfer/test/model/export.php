@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('project')->gen(50);
 zenData('product')->gen(10);
 zenData('module')->gen(10);
@@ -24,7 +24,7 @@ cid=19312
 
 */
 
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 
 r($transfer->exportTest('task')) && p('rows[0]:name')   && e('开发任务11'); // 测试导出任务时任务名称字段
 r($transfer->exportTest('task')) && p('rows[0]:status') && e('wait');       // 测试导出任务的状态字段

@@ -16,7 +16,7 @@ cid=18632
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->product->range(1);
@@ -36,7 +36,7 @@ $storySpec->gen(90);
 
 zenData('branch')->gen(5);
 
-$story = new storyTest();
+$story = new storyTaoTest();
 $affectedStory2  = $story->getAffectedTwinsTest(2);
 $affectedStory28 = $story->getAffectedTwinsTest(28);
 

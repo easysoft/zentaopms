@@ -25,7 +25,7 @@ cid=16696
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -42,7 +42,7 @@ $normal3Group = array('name' => '复制的分组3', 'project' => '0');
 $normal4Group = array('name' => '复制的分组4', 'project' => '0');
 $existGroup   = array('name' => '这是一个新的用户分组5', 'project' => '0');
 
-$group = new groupTest();
+$group = new groupModelTest();
 r($group->copyTest($groupID, $normal1Group)) && p('name')   && e('复制的分组1');                                                            // 正常复制
 r($group->copyTest($groupID, $existGroup))   && p('name:0') && e('『分组名称』已经有『这是一个新的用户分组5』这条记录了，请调整后再试。');  // 分组名称已存在
 r($group->copyTest($groupID, $normal2Group, array('copyPriv')))             && p('name,privs,users') && e('复制的分组2,module2-method2|module7-method7,~~');           // 只复制权限

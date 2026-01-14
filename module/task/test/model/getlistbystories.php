@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 global $tester;
@@ -40,7 +40,7 @@ cid=18812
 
 */
 
-$taskTest = new taskTest();
+$taskTest = new taskModelTest();
 
 r($taskTest->getListByStoriesTest(array(1, 2, 3))) && p() && e(6); // 测试步骤1：根据需求ID 1,2,3获取任务（排除deleted=1的任务7）
 r($taskTest->getListByStoriesTest(array(1, 2), 1)) && p() && e(3); // 测试步骤2：根据需求ID 1,2和执行ID 1获取任务

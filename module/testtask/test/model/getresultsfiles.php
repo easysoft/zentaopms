@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('file')->loadYaml('resultfile')->gen('20');
@@ -51,7 +51,7 @@ $resultIdList[] = array (16, 17, 18);
 $resultIdList[] = array (19, 20);
 $resultIdList[] = array (21, 22);
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->getResultsFilesTest($resultIdList[0])) && p('result,step') && e('1: 1 3: 3,2: 2');       // 测试获取结果 1 2 3 的文件
 r($testtask->getResultsFilesTest($resultIdList[1])) && p('result,step') && e('5: 5,4: 4 6: 6');       // 测试获取结果 4 5 6 的文件

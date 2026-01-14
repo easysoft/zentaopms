@@ -17,13 +17,13 @@ cid=15408
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zendata('bug')->loadYaml('bug', false, 2)->gen(10);
 zendata('repohistory')->loadYaml('repohistory', false, 2)->gen(20);
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r($bugTest->updateLinkedCommitsTest(1, 1, array(1, 2))) && p() && e('1'); // 步骤1:正常情况
 r($bugTest->updateLinkedCommitsTest(0, 1, array(1))) && p() && e('1'); // 步骤2:bugID为0

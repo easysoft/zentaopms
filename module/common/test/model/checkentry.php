@@ -21,14 +21,14 @@ cid=15652
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('entry')->loadYaml('checkentry/entry', false, 2)->gen(10);
 zenData('user')->loadYaml('checkentry/user', false, 2)->gen(10);
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->checkEntryTest('', '', '', '')) && p() && e('EMPTY_ENTRY'); // 测试步骤1:缺少模块参数
 r($commonTest->checkEntryTest('user', '', '', '')) && p() && e('EMPTY_ENTRY'); // 测试步骤2:缺少方法参数

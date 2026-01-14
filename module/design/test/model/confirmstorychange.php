@@ -15,14 +15,14 @@ cid=15984
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(5);
 zenData('story')->loadYaml('story')->gen(3);
 
 $idList = array(1, 2, 3, 4, 5, 0);
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->confirmStoryChangeTest($idList[0])) && p() && e('1'); // 确认id 1 的设计需求变更
 r($designTester->confirmStoryChangeTest($idList[1])) && p() && e('1'); // 确认id 2 的设计需求变更
 r($designTester->confirmStoryChangeTest($idList[2])) && p() && e('1'); // 确认id 3 的设计需求变更

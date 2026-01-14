@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -37,7 +37,7 @@ $jenkins3->password = '';
 $jenkins3->token    = '';
 $jenkins3->pipeline = '';
 
-$compile = new compileTest();
+$compile = new compileModelTest();
 
 r($compile->getBuildUrlTest($jenkins1)) && p('userPWD') && e('123456:zxd');                                        //检测password为空时获取的信息
 r($compile->getBuildUrlTest($jenkins2)) && p('url')     && e('https://gitlabdev.qc.oop.cc/job/11/build/api/json'); //检测token为空时获取的信息

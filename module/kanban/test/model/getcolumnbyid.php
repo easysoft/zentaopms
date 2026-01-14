@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(5);
@@ -43,7 +43,7 @@ cid=16911
 
 $columnIDList = array('1', '2', '3', '4', '5', '1000001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getColumnByIDTest($columnIDList[0])) && p('type,region,name,limit') && e('column1,1,未开始,100'); // 测试查询看板列1的信息
 r($kanban->getColumnByIDTest($columnIDList[1])) && p('type,region,name,limit') && e('column2,1,进行中,100'); // 测试查询看板列2的信息

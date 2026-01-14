@@ -18,14 +18,14 @@ cid=16606
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('job')->gen(10);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetJobLogTest(1, 2, 8)) && p() && e('0');
 r($gitlabTest->apiGetJobLogTest(999, 2, 8)) && p() && e('0');

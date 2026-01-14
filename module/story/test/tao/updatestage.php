@@ -33,7 +33,7 @@ cid=18663
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $product = zenData('product');
@@ -52,7 +52,7 @@ $stages[0] = 'developed';
 $stages[1] = 'testing';
 r($storyModel->updateStage(0, $stages)) && p() && e('0'); //不传入任何数据。
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 r($storyTest->updateStageTest(1, $stages)) && p('stage') && e('developed'); //传入不是多分支产品的需求，检查需求的阶段。
 r($storyTest->updateStageTest(3, $stages)) && p('stage') && e('developed'); //传入从属多分支的需求，检查需求的阶段。
 

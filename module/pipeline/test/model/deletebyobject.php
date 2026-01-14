@@ -17,7 +17,7 @@ cid=17343
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('user')->gen(5);
@@ -39,7 +39,7 @@ $jobTable->gen(1);
 
 su('admin');
 
-$pipelineTest = new pipelineTest();
+$pipelineTest = new pipelineModelTest();
 
 // 测试步骤1：删除不存在的流水线
 r($pipelineTest->deleteByObjectTest(0, 'gitlab')) && p() && e('0');

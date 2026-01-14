@@ -47,9 +47,9 @@ cid=15103
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 // 用户登录
 su('admin');

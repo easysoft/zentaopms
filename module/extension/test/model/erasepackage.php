@@ -16,13 +16,13 @@ cid=16452
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('extension')->gen(10);
 
 su('admin');
 
-$extensionTest = new extensionTest();
+$extensionTest = new extensionModelTest();
 
 r($extensionTest->erasePackageTest('code1')) && p() && e('0'); // 步骤1：正常清除已安装插件包并验证返回数组
 r($extensionTest->erasePackageTest('nonexistent')) && p() && e('0'); // 步骤2：清除不存在的插件包验证处理结果

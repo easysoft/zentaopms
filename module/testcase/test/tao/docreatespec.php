@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('0');
@@ -64,7 +64,7 @@ $case2->title        = '标题2';
 $case2->version      = 2;
 $case2->precondition = '前置条件2';
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->doCreateSpecTest($caseID[0], $case1, $files[0])) && p('title|precondition|version|files', '|') && e('标题1|前置条件1|1|0');     // 测试创建用例1 文件 ''
 r($testcase->doCreateSpecTest($caseID[0], $case1, $files[1])) && p('title|precondition|version|files', '|') && e('标题1|前置条件1|1|0');     // 测试创建用例1 文件 array()

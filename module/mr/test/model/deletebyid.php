@@ -23,7 +23,7 @@ cid=17243
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 zenData('action')->gen(0);
@@ -32,7 +32,7 @@ $mr = zenData('mr')->loadYaml('mr');
 $mr->synced->range('0');
 $mr->gen(3);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->deleteByIDTester(2)) && p('1:id,objectType,action') && e('1,mr,deleted');   // 没有关联对象的合并请求
 

@@ -17,7 +17,7 @@ cid=18551
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $storyTable = zenData('story');
@@ -50,7 +50,7 @@ if(!isset($config->vision)) $config->vision = 'rnd';
 su('admin');
 
 // 5. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 6. 必须包含至少5个测试步骤
 r(count($storyTest->getRequirementParentsTest(1, '', 'requirement', 0))) && p() && e('0'); // 步骤1：正常产品获取父需求，当前数据预期返回0

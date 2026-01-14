@@ -35,7 +35,7 @@ cid=15997
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(5);
 zenData('designspec')->loadYaml('designspec')->gen(5);
@@ -53,7 +53,7 @@ $emptyName     = array('name' => '');
 $emptyType     = array('type' => '');
 $emptyDesc     = array('desc' => '');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 
 /* Normal condition. */
 r($designTester->updateTest($idList[0], $changeProduct)) && p('0:field,old,new') && e('product,0,1');                     // 修改设计的所属产品

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 function initData()
@@ -38,6 +38,6 @@ initData();
 $caseIDList = array('1');
 $toLinkBugs = array(array('1'), array('2', '3'));
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 r($testcase->linkBugsTest($caseIDList[0], $toLinkBugs[0])) && p('0:id,case') && e('1,1');               // 测试修改用例 1 关联 bug 1 
 r($testcase->linkBugsTest($caseIDList[0], $toLinkBugs[1])) && p('0:id,case;1:id,case') && e('2,1;3,1'); // 测试修改用例 1 关联 bug 2,3

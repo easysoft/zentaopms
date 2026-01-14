@@ -17,7 +17,7 @@ cid=18448
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -25,7 +25,7 @@ su('admin');
 $pageIdList = array(1, 2);
 $pageList   = array(20, 5, 10, 15, 30);
 
-$store = new storeTest();
+$store = new storeModelTest();
 r($store->appDynamicTest(29, $pageIdList[0], $pageList[0])) && p() && e('Success'); //测试获取应用动态第一页信息
 r($store->appDynamicTest(29, $pageIdList[0], $pageList[1])) && p() && e('5');       //测试每页展示5条动态
 r($store->appDynamicTest(29, $pageIdList[0], $pageList[2])) && p() && e('7');       //测试每页最多展示10条动态

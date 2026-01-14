@@ -18,7 +18,7 @@ cid=16312
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('group')->gen(0);
 zenData('userview')->gen(0);
@@ -41,7 +41,7 @@ $execution->gen(10);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->getExecutionCountsTest(1)) && p() && e('5'); // 步骤1：项目ID为1的执行数量统计
 r($executionTest->getExecutionCountsTest(2)) && p() && e('3'); // 步骤2：项目ID为2的执行数量统计

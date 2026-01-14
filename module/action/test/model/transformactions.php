@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(25);
@@ -72,7 +72,7 @@ $app->loadLang('action');
 
 $actions = array('1,2,3,4,5', '26,27,28,29,30', '51,52,53,54,55', '71,72,73,74,75');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->transformActionsTest($actions[0])) && p('1:objectName;2:objectName;3:objectName;4:objectName;5:objectName')       && e('正常产品1;用户需求1;1.0;产品正常的正常的发布1;项目集1');                                          // 测试转换动态1 2 3 4 5
 r($action->transformActionsTest($actions[1])) && p('26:objectName;27:objectName;28:objectName;29:objectName;30:objectName')  && e('开发任务11;项目版本版本1;BUG1;这个是测试用例1;这个是测试用例1');                                  // 测试转换动态26 27 28 29 30

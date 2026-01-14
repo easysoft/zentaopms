@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ cid=18088
 
 */
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $finishTaskComment  = 'Finish task#8.';
 $finishTaskComment2 = 'Finish task#1,8,12.';

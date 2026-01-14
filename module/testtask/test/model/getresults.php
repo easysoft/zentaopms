@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen(5);
 zenData('casestep')->gen(5);
@@ -298,7 +298,7 @@ $caseIdList = array(0, 1, 2, 3, 4 ,5);
 $statusList = array('all', 'done');
 $typeList   = array('all', 'pass', 'fail');
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->getResultsTest($runIdList[0], $caseIdList[0])) && p() && e('0'); // 获取执行 0 用例 0 执行结果。
 

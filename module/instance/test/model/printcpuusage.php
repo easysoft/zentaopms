@@ -16,7 +16,7 @@ cid=16810
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $instance = zenData('instance');
 $instance->id->range('1-5');
@@ -26,7 +26,7 @@ $instance->gen(5);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 测试步骤1：用户来源实例应返回空数组
 $userInstance = new stdClass();

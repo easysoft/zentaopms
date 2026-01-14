@@ -20,9 +20,9 @@ cid=15604
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 r($cneTest->backupDetailTest(new stdClass(), 0)) && p() && e('0'); // 测试步骤1：空实例对象输入
 $instance = new stdClass(); $instance->spaceData = new stdClass(); $instance->spaceData->k8space = '';

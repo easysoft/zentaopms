@@ -12,7 +12,7 @@ cid=0
 */
 
 // 直接包含测试类，避免完整框架初始化
-include dirname(__FILE__, 2) . '/lib/cne.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 简化的测试环境模拟
 global $tester, $config, $app;
@@ -32,7 +32,7 @@ $app->user->account = 'admin';
 $tester = null;
 
 // 创建测试实例
-$cneTest = new cneTest();
+$cneTest = new cneModelTest();
 
 // 创建模拟实例对象的辅助函数
 function createMockInstance($id, $k8name, $source = 'internal', $k8space = 'test-namespace') {

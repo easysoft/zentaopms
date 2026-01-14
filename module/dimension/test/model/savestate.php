@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dimension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('dimension');
 $table->id->range('1-10');
@@ -27,7 +27,7 @@ cid=16037
 
 */
 
-$dimensionTest = new dimensionTest();
+$dimensionTest = new dimensionModelTest();
 r($dimensionTest->saveStateTest(1)) && p() && e('1'); // 步骤1：正常传入有效维度ID
 r($dimensionTest->saveStateTest(0)) && p() && e('1'); // 步骤2：传入0获取第一个维度
 r($dimensionTest->saveStateTest(999)) && p() && e('1'); // 步骤3：传入不存在的维度ID，返回第一个可见维度ID

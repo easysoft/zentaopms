@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -40,7 +40,7 @@ $realModule = 'my';
 $failMethod = 'method';
 $realMethod = 'todo';
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 r($devTester->getCustomedLangTest('test'))   && p()                && e("0");     // 错误的类型返回数据
 r($devTester->getCustomedLangTest('common')) && p('productCommon') && e("测试1"); // 正确的类型返回数据
 

@@ -16,13 +16,13 @@ cid=16141
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->gen(0);
 
 $scopeList = array('产品范围', '项目范围', '执行范围', '个人范围', '自定义范围');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->insertTemplateScopesTest($scopeList)) && p('1:name') && e('产品范围');   // 测试插入产品范围
 r($docTester->insertTemplateScopesTest($scopeList)) && p('2:name') && e('项目范围');   // 测试插入项目范围
 r($docTester->insertTemplateScopesTest($scopeList)) && p('3:name') && e('执行范围');   // 测试插入执行范围
