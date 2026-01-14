@@ -100,7 +100,10 @@ $canBatchResolve      = $canBeChanged && hasPriv('bug', 'batchResolve');
 $canBatchAssignTo     = $canBeChanged && hasPriv('bug', 'batchAssignTo');
 $canBatchClose        = hasPriv('bug', 'batchClose');
 $canManageModule      = hasPriv('tree', 'browse');
-$canBatchAction       = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo;
+
+/* 如果是多分支多平台产品，且选定的是所有分支，则不允许批量更改所属模块。 If it is a multi-branch multi-platform product, and all branches are selected, it is not allowed to batch change the module. */
+if($product->type != 'normal' && $branch == 'all') $canBatchChangeModule = false;
+$canBatchAction = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo;
 
 if(!isonlybody())
 {
