@@ -17,6 +17,7 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
+$app->loadLang('reporeviewflow');
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
 $currentEntry = $this->repo->encodePath($entry);
 $fileInfo     = $entry ? pathinfo($entry) : array();
@@ -45,6 +46,7 @@ $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon'
 
 $encoding      = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
+$checkMessage  = zget($mergeCheckMessage, 'message', '');
 $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
@@ -114,6 +116,21 @@ $basicItems[] = item(set::name($lang->mr->targetBranch), $mr->targetBranch);
 $basicItems[] = item(set::name($lang->mr->sourceBranch), $mr->sourceBranch);
 $basicItems[] = item(set::name($lang->mr->description),  !empty($mr->desc) ? strip_tags($mr->desc) : $lang->noData);
 
+$mergeTypeList    = empty($flow) ? array() : $flow->definition->reviewFlow->merge->options;
+$defaultMergeType = empty($defaultMergeType) ? $mergeTypeList[0] : $defaultMergeType;
+$mergeBtnItems    = array();
+foreach($mergeTypeList as $mergeType)
+{
+    $mergeBtnItems[] = array
+    (
+        'id'        => $mergeType,
+        'icon'      => $mergeType == $defaultMergeType ? 'check text-black' : 'docspace scale-50',
+        'content'   => array('html' => "<div><span><strong>{$lang->reporeviewflow->mergeOptionList[$mergeType]}</strong></span><div style=' white-space: normal; text-overflow: clip; overflow: visible;'><p>{$lang->mr->mergeTypeInfoList[$mergeType]}<p></div></div>"),
+        'data-on'   => 'click',
+        'data-call' => "loadMergeBtn('{$mergeType}')"
+    );
+}
+
 if(!in_array($app->user->account, array_keys($reviewers)))
 {
     $config->mr->actions->view['mainActions'] = array_diff($config->mr->actions->view['mainActions'], array('review'));
@@ -155,14 +172,33 @@ div
                             set::active($type == 'basic'),
                             div
                             (
-                                $hasConflict == 'no' && $reviewResult ? section
+                                $hasConflict == 'no' && $reviewResult && !$checkMessage ? section
                                 (
                                     setClass('flex w-full checkMerge'),
                                     div(setClass('py-6 border-l-4 border-r-4 border-success')),
                                     div
                                     (
-                                        setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center'),
-                                        span(setClass('text-success font-bold'), $lang->mr->checkSuccess)
+                                        setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
+                                        set::style(array('justify-content' => 'space-between')),
+                                        div(span(setClass('text-success font-bold'), $lang->mr->checkSuccess)),
+                                        hasPriv('mr', 'merge') && !empty($mergeBtnItems) && $mr->status == 'opened' ? div(btnGroup
+                                        (
+                                            setClass('merge-btn-group'),
+                                            btn
+                                            (
+                                                setClass('btn primary ajax-submit'),
+                                                set::url(createLink('mr', 'merge', "mrID={$mr->id}&type={$defaultMergeType}")),
+                                                $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
+                                            ),
+
+                                            count($mergeBtnItems) > 1 ? dropDown
+                                            (
+                                                btn(setClass('btn primary dropdown-toggle'),
+                                                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                                                set::placement('bottom-end'),
+                                                set::items($mergeBtnItems)
+                                            ) : null
+                                        )) : null
                                     )
                                 ) : section
                                 (
@@ -171,7 +207,7 @@ div
                                     div
                                     (
                                         setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                                        span(setClass('text-danger font-bold'), $lang->mr->checkFailed)
+                                        span(setClass('text-danger font-bold'), $lang->mr->checkFailed . ($checkMessage ? "({$checkMessage})" : '')),
                                     )
                                 ),
                                 section
@@ -237,7 +273,7 @@ div
                                     (
                                         setClass('border px-4 h-12 flex items-center'),
                                         span(setClass('font-bold'), $lang->mr->manualReview),
-                                        label(setID('approvalLabel'), setClass('success ml-4'), $lang->mr->checkStatusList['success']),
+                                        $reviewResult ? label(setClass('success ml-4'), $lang->mr->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->mr->checkStatusList['fail']),
                                         div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->mr->locateView)))
                                     ),
                                     div
