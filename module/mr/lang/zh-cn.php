@@ -55,6 +55,7 @@ $lang->mr->reviewStatus      = '审批状态';
 $lang->mr->review            = '评审';
 $lang->mr->decision          = '评审结果';
 $lang->mr->opinion           = '评审意见';
+$lang->mr->merge             = '合并';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';

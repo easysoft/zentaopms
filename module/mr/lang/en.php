@@ -55,6 +55,7 @@ $lang->mr->reviewStatus      = 'Review Status';
 $lang->mr->review            = 'Review';
 $lang->mr->decision          = 'Review Decision';
 $lang->mr->opinion           = 'Review Opinion';
+$lang->mr->merge             = 'Merge';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
