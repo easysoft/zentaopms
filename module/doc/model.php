@@ -1796,7 +1796,9 @@ class docModel extends model
         {
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
                  ->set('name')->eq($doc->title)
+                 ->set('docVersion')->eq($doc->version)
                  ->where('doc')->eq($docID)
+                 ->andWhere('status')->eq('draft')
                  ->exec();
         }
 
