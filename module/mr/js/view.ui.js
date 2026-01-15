@@ -431,3 +431,9 @@ window.loadLinkPage = function(link)
     $('#linkObject').attr('href', link);
     $('#linkObject').trigger('click');
 }
+
+window.loadMergeBtn = function(mergeType)
+{
+    $.cookie.set('mergeType', mergeType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage('#mr-detail');
+}
