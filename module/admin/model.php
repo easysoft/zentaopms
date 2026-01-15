@@ -508,7 +508,7 @@ class adminModel extends model
      * @access public
      * @return array
      */
-    public function getdeliverableReviewPairs(int $groupID = 0): array
+    public function getDeliverableReviewPairs(int $groupID = 0): array
     {
         return $this->dao->select('t1.id, t1.review')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')

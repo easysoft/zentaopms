@@ -178,7 +178,7 @@ class admin extends control
                 /* 关闭项目变更后将交付物解冻。*/
                 if($closedFeature == 'projectChange')
                 {
-                    $deliverableReviewPairs = $this->admin->getdeliverableReviewPairs();
+                    $deliverableReviewPairs = $this->admin->getDeliverableReviewPairs();
                     if(!empty($deliverableReviewPairs)) $this->loadModel('deliverable')->setFrozen(array_filter($deliverableReviewPairs), '', 'all');
                 }
             }
