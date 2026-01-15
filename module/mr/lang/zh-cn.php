@@ -304,3 +304,9 @@ $lang->mr->bug->type     = '类型';
 $lang->mr->bug->file     = '所属文件';
 $lang->mr->bug->severity = '严重程度';
 $lang->mr->bug->status   = '状态';
+
+$lang->mr->mergeTypeInfoList = array();
+$lang->mr->mergeTypeInfoList['merge']  = '此分支上的所有提交将通过合并提交的方式添加到基础分支。';
+$lang->mr->mergeTypeInfoList['squash'] = '此分支上的所有提交将合并为一个提交，并添加到基础分支。';
+$lang->mr->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变基并添加到基础分支。';
+$lang->mr->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接添加到基础分支，而不产生合并提交,可能需要进行变基。';
