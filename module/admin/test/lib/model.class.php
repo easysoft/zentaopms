@@ -854,4 +854,20 @@ class adminModelTest extends baseTest
             return 'fail';
         }
     }
+
+    /**
+     * 获取交付物评审信息。
+     * Get deliverable review info.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getDeliverableReviewPairsTest(int $groupID = 0): array
+    {
+        $result = $this->invokeArgs('getDeliverableReviewPairs', [$groupID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+
+    }
 }
