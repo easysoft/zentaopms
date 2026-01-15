@@ -232,7 +232,7 @@ class upgradeZen extends upgrade
 
         if($version == 'pro1_1_1')
         {
-            $sqlFile    = $this->ugprade->getUpgradeFile('pro1.1');
+            $sqlFile    = $this->upgrade->getUpgradeFile('pro1.1');
             $sqlChanges = $this->getChangesBySql($version, $sqlFile);
             $changes    = array_merge($changes, $sqlChanges);
         }
