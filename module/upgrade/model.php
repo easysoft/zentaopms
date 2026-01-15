@@ -13012,7 +13012,8 @@ class upgradeModel extends model
             $params = [];
             foreach($parts as $index => $value)
             {
-                $key   = 'param' . $index + 1;
+                $index ++;
+                $key   = "param{$index}";
                 $value = $cleanValue($value);
 
                 $params[$key] = $value;
