@@ -162,6 +162,8 @@ UPDATE zt_activity SET optional = CASE
     ELSE optional
 END;
 
+UPDATE `zt_activity` SET `optional` = 'yes' WHERE `optional` = '';
+
 ALTER TABLE `zt_process` CHANGE `model` `model` varchar(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_auditplan` ADD `cycleType` varchar(10) NOT NULL DEFAULT 'noCycle' COMMENT '周期类型' AFTER `status`;
