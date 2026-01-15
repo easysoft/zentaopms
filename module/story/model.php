@@ -887,12 +887,29 @@ class storyModel extends model
 
         if($story->product != $oldStory->product || $story->branch != $oldStory->branch)
         {
+            $this->loadModel('productplan');
+            $oldPlans = explode(',', $oldStory->plan);
+            foreach($oldPlans as $oldPlanID)
+            {
+                if(!$oldPlanID) continue;
+                $this->productplan->unlinkStory($storyID, (int)$oldPlanID);
+            }
+
             $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
-            $childStories = $this->getAllChildId($storyID, false);
-            $story->id    = $storyID;
-            foreach($childStories as $childStoryID)
+            $childStories      = $this->getAllChildId($storyID, false);
+            $childStoryAndPlan = $this->dao->select('id,plan')->from(TABLE_STORY)->where('id')->in($childStories)->fetchPairs();
+            $story->id         = $storyID;
+            foreach($childStoryAndPlan as $childStoryID => $planIDList)
             {
                 $this->updateStoryProduct($childStoryID, $story, $story->product);
+
+                /* 切换产品后，移除子需求与原产品下计划的关联。*/
+                $plans = explode(',', $planIDList);
+                foreach($plans as $planID)
+                {
+                    if(!$planID) continue;
+                    $this->productplan->unlinkStory($childStoryID, (int)$planID);
+                }
             }
         }
         if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
@@ -1000,6 +1017,7 @@ class storyModel extends model
                  ->set('product')->eq($parent->product)
                  ->set('branch')->eq($parent->branch)
                  ->set('module')->eq(0)
+                 ->set('plan')->eq('')
                  ->set('root')->eq($parent->id)
                  ->set('path')->eq($childPath)
                  ->where('id')->eq($storyID)
