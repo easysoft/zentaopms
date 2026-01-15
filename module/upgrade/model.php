@@ -12614,7 +12614,7 @@ class upgradeModel extends model
             if(!$review->template && !$review->doc)
             {
                 $doc->title     = $review->title;
-                $doc->lib       = $projectMainLibPairs[$review->project];
+                $doc->lib       = zget($projectMainLibPairs, $review->project, 0);
                 $doc->project   = $review->project;
                 $doc->addedBy   = $review->createdBy;
                 $doc->addedDate = $review->createdDate;
