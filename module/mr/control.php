@@ -107,6 +107,15 @@ class mr extends control
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
         $projects       = $this->mrZen->getAllProjects($repo);
+        $canEdit        = common::hasPriv($this->app->rawModule, 'edit');
+        $reviewResults  = $this->mr->getReviewResults(array_keys($MRList), $repoID);
+        foreach($MRList as $MR)
+        {
+            $MR->canEdit        = $canEdit ? '' : 'disabled';
+            $MR->approvalStatus = !empty($reviewResults[$MR->id]) && $reviewResults[$MR->id]['result'] ? $this->lang->mr->approve : $this->lang->mr->reject;
+
+            if($MR->status == 'merged' || $MR->status == 'closed') $MR->mergeStatus = $MR->status;
+        }
 
         $this->view->title      = $this->lang->mr->common . $this->lang->hyphen . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;

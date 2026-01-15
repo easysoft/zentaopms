@@ -14,23 +14,6 @@ jsVar('repoID', $repo->id);
 
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
-foreach($MRList as $MR)
-{
-    /* The user whether has the permission of delete and edit does not require the judge of the permission from the project of the server. */
-    $MR->canDelete = hasPriv($app->rawModule, 'delete') ? '' : 'disabled';
-    $MR->canEdit   = hasPriv($app->rawModule, 'edit')   ? '' : 'disabled';
-
-    if($MR->status == 'merged' || $MR->status == 'closed')
-    {
-        $MR->mergeStatus    = $MR->status;
-        $MR->approvalStatus = '-';
-    }
-    else
-    {
-        $MR->approvalStatus = empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];
-    }
-}
-
 $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
 
 featureBar
