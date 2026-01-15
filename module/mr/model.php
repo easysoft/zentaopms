@@ -1468,7 +1468,12 @@ class mrModel extends model
     public function getReviewResult(array|object $reviewers, array|object $flow): bool
     {
         if(empty($reviewers)) return false;
-        $minReviewers = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
+        $minReviewers = 0;
+        if(!empty($flow))
+        {
+            if(!is_object($flow->definition)) $flow->definition = json_decode($flow->definition);
+            $minReviewers = $flow->definition->reviewFlow->approvals->minReviewers;
+        }
         if($minReviewers > count($reviewers)) return false;
 
         foreach($reviewers as $reviewer)
@@ -1477,6 +1482,41 @@ class mrModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 获取MR的审阅结果列表。
+     * Get MR review results.
+     *
+     * @param  array $mrList
+     * @param  int   $repoID
+     * @access public
+     * @return array
+     */
+    public function getReviewResults(array $mrList, int $repoID): array
+    {
+        $reviewers = $this->dao->select('distinct t1.*, t2.reviewFlowID')->from(TABLE_MRREVIEWERS)->alias('t1')
+            ->leftJoin(TABLE_MR)->alias('t2')
+            ->on('t1.requestID', 't2.id')
+            ->where('t1.requestID')->in($mrList)
+            ->fetchAll();
+        $repoFlows = $this->loadModel('reporeviewflow')->getList($repoID);
+
+        $reviewerList = array();
+        foreach($reviewers as $reviewer)
+        {
+            $flow = empty($reviewer->reviewFlowID) ? array() : zget($repoFlows, $reviewer->reviewFlowID, array());
+            $reviewerList[$reviewer->requestID]['flow']        = $flow;
+            $reviewerList[$reviewer->requestID]['reviewers'][$reviewer->account] = $reviewer;
+        }
+
+        $reviewResults = array();
+        foreach($reviewerList as $mrID => $reviewerInfo)
+        {
+            $reviewResults[$mrID]['result']    = $this->getReviewResult(zget($reviewerInfo, 'reviewers', array()), zget($reviewerInfo, 'flow', array()));
+            $reviewResults[$mrID]['reviewers'] = zget($reviewerInfo, 'reviewers', array());
+        }
+        return $reviewResults;
     }
 
     /**
