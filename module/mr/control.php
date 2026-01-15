@@ -346,6 +346,7 @@ class mr extends control
         $this->view->mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $mr->sourceBranch, $mr->targetBranch);
         $this->view->oldRevision       = $mr->targetBranch;
         $this->view->newRevision       = $mr->sourceBranch;
+        $this->view->defaultMergeType  = $this->cookie->mergeType;
         $this->display();
     }
 
@@ -1251,5 +1252,26 @@ class mr extends control
         $response['closeModal'] = true;
         $response['callback']   = "loadTarget($.createLink('mr', 'ajaxGetReviewers', 'mrID=' + " . $mrID . "), '#reviewer');";
         return print $this->send($response);
+    }
+
+    /**
+     * 合并请求。
+     * Merge PPM.
+     *
+     * @param  int $mrID
+     * @param  string $mergeType
+     * @access public
+     * @return void
+     */
+    function merge(int $mrID, string $mergeType)
+    {
+        $this->mr->merge($mrID, $mergeType);
+        if(dao::isError()) return $this->sendError(zget(dao::getError(), 'apiMessage', $this->lang->error->httpServerError));
+
+        $mr = $this->mr->fetchByID($mrID);
+        $this->mr->logMergedAction($mr);
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('load' => true));
     }
 }

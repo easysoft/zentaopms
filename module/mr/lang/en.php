@@ -55,6 +55,7 @@ $lang->mr->reviewStatus      = 'Review Status';
 $lang->mr->review            = 'Review';
 $lang->mr->decision          = 'Review Decision';
 $lang->mr->opinion           = 'Review Opinion';
+$lang->mr->merge             = 'Merge';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
@@ -304,3 +305,9 @@ $lang->mr->bug->type     = 'Type';
 $lang->mr->bug->file     = 'File';
 $lang->mr->bug->severity = 'Severity';
 $lang->mr->bug->status   = 'Type';
+
+$lang->mr->mergeTypeInfoList = array();
+$lang->mr->mergeTypeInfoList['merge']  = 'All commits on this branch will be added to the base branch via a merge commit.';
+$lang->mr->mergeTypeInfoList['squash'] = 'All commits on this branch will be merged into a single commit and added to the base branch.';
+$lang->mr->mergeTypeInfoList['rebase'] = 'All commits on this branch will be rebased and added to the base branch.';
+$lang->mr->mergeTypeInfoList['fast']   = 'All commits on this branch will be added directly to the base branch without generating merge commits, and rebasing may be required.';

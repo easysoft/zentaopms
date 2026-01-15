@@ -61,4 +61,3 @@ window.loadReviewers = function()
     });
 }
 waitDom('[name=targetBranch]', loadReviewers);
-

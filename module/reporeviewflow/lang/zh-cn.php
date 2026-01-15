@@ -54,7 +54,7 @@ $lang->reporeviewflow->newCommitsAddressOptionList['requireReReview'] = '需重�
 $lang->reporeviewflow->mergeOptionList = array();
 $lang->reporeviewflow->mergeOptionList['merge']  = '普通合并';
 $lang->reporeviewflow->mergeOptionList['squash'] = '压缩并合并';
-$lang->reporeviewflow->mergeOptionList['rebase'] = '编辑并合并';
+$lang->reporeviewflow->mergeOptionList['rebase'] = '变基并合并';
 $lang->reporeviewflow->mergeOptionList['fast']   = '快速合并';
 
 $lang->reporeviewflow->autoArchiveStatusList = array();

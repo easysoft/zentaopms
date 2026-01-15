@@ -55,6 +55,7 @@ $lang->mr->reviewStatus      = '审批状态';
 $lang->mr->review            = '评审';
 $lang->mr->decision          = '评审结果';
 $lang->mr->opinion           = '评审意见';
+$lang->mr->merge             = '合并';
 
 $lang->mr->action = new stdclass();
 $lang->mr->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
@@ -304,3 +305,9 @@ $lang->mr->bug->type     = '类型';
 $lang->mr->bug->file     = '所属文件';
 $lang->mr->bug->severity = '严重程度';
 $lang->mr->bug->status   = '状态';
+
+$lang->mr->mergeTypeInfoList = array();
+$lang->mr->mergeTypeInfoList['merge']  = '此分支上的所有提交将通过合并提交的方式添加到基础分支。';
+$lang->mr->mergeTypeInfoList['squash'] = '此分支上的所有提交将合并为一个提交，并添加到基础分支。';
+$lang->mr->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变基并添加到基础分支。';
+$lang->mr->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接添加到基础分支，而不产生合并提交,可能需要进行变基。';
