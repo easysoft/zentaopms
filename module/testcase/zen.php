@@ -49,7 +49,9 @@ class testcaseZen extends testcase
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
 
-        if($this->cookie->preProductID != $productID || $this->cookie->preBranch != $branch)
+        $productChanged = $this->cookie->preProductID != $productID;
+        $branchChanged  = $this->cookie->preBranch != $branch;
+        if($productChanged || $branchChanged || $browseType == 'bysearch')
         {
             $_COOKIE['caseModule'] = 0;
             helper::setcookie('caseModule', '0');
