@@ -1108,8 +1108,6 @@ class mrModel extends model
                 $this->action->create($type, $object->id, 'merged' . $this->moduleName, '', helper::createLink($this->moduleName, 'view', "mr={$MR->id}"));
             }
         }
-
-        $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))->where('id')->eq($MR->id)->exec();
         return !dao::isError();
     }
 
@@ -1479,5 +1477,39 @@ class mrModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 合并MR。
+     * Merge MR.
+     *
+     * @param  int    $mrID
+     * @param  string $mergeType
+     * @param  bool   $dryRun
+     * @param  bool   $byPass
+     * @access public
+     * @return object|bool
+     */
+    public function merge(int $mrID, string $mergeType, bool $dryRun = false, bool $byPass = false): object|bool
+    {
+        if($mergeType == 'fast') $mergeType = 'fast-forward';
+        $mr = $this->fetchByID($mrID);
+
+        $param = array();
+        $param['dryRun']      = $dryRun;
+        $param['method']      = $mergeType;
+        $param['sourceSHA']   = $mr->sourceSHA;
+        $param['bypassRules'] = $byPass;
+        if(!in_array($mergeType, array('rebase', 'fast-forward')))
+        {
+            $repo = $this->loadModel('repo')->getByID($mr->repoID);
+            $param['title']   = $mr->title;
+            $param['message'] = "Merge branch {$mr->sourceBranch} of {$repo->name} (#{$mr->id})";
+        }
+
+        $apiRoot  = $this->loadModel('gitfox')->getApiRoot();
+        $url      = sprintf($apiRoot->url, "/repos/{$mr->targetRepoID}/pullreq/{$mrID}/merge");
+        $response = json_decode(commonModel::http($url, $param, array(), $apiRoot->header, 'json', 'POST'));
+        return $this->gitfox->getResponse($response);
     }
 }
