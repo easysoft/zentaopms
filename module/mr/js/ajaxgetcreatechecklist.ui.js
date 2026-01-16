@@ -93,7 +93,6 @@ function getIframeHeight()
     var mainNavbar         = parseInt($('#navbar').height());
     var tabsbar            = parseInt($('.nav-tabs').height());
     var mainMenuHeight     = parseInt($('#mainContent').css('padding-top')) + parseInt($('#mainContent').css('padding-bottom'));
-    var detailHeaderHeight = parseInt($('.detail-header').height());
     var mrMenuHeight       = parseInt($('#mrMenu').height());
     var appTabsHeight      = parseInt($('#appTabs').height());
     var appsBarHeight      = parseInt($('#appsBar').height());
@@ -102,7 +101,7 @@ function getIframeHeight()
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - detailHeaderHeight - mrMenuHeight - 28;
+    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - mrMenuHeight - 28;
 
     return iframeHeight;
 }
@@ -124,14 +123,13 @@ function getSidebarHeight()
     var mainMenuHeight     = parseInt($('#mainContent').css('padding-top')) + parseInt($('#mainContent').css('padding-bottom'));
     var appTabsHeight      = parseInt($('#appTabs').height());
     var appsBarHeight      = parseInt($('#appsBar').height());
-    var detailHeaderHeight = parseInt($('.detail-header').height());
     var mrMenuHeight       = parseInt($('#mrMenu').height());
 
     appsBarHeight      = appsBarHeight ? appsBarHeight : 0;
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    sidebarHeight  = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - detailHeaderHeight - mrMenuHeight - 20;
+    sidebarHeight  = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - mrMenuHeight - 20;
 
     return sidebarHeight;
 }

@@ -31,10 +31,11 @@ $config->mr->dtable->fieldList['targetBranch']['type']  = 'text';
 #$config->mr->dtable->fieldList['mergeStatus']['width']     = '120';
 #$config->mr->dtable->fieldList['mergeStatus']['statusMap'] = $lang->mr->statusList + $lang->mr->mergeStatusList;
 
-$config->mr->dtable->fieldList['approvalStatus']['name']     = 'approvalStatus';
-$config->mr->dtable->fieldList['approvalStatus']['title']    = $lang->mr->reviewStatus;
-$config->mr->dtable->fieldList['approvalStatus']['type']     = 'type';
-$config->mr->dtable->fieldList['approvalStatus']['sortType'] = true;
+$config->mr->dtable->fieldList['status']['name']     = 'status';
+$config->mr->dtable->fieldList['status']['title']    = $lang->mr->status;
+$config->mr->dtable->fieldList['status']['type']     = 'type';
+$config->mr->dtable->fieldList['status']['sortType'] = true;
+$config->mr->dtable->fieldList['status']['map']      = $lang->mr->statusList;
 
 #$config->mr->dtable->fieldList['assignee']['name']     = 'assignee';
 #$config->mr->dtable->fieldList['assignee']['title']    = $lang->mr->reviewer;
