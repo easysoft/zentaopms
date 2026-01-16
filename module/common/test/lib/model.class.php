@@ -17,11 +17,7 @@ class commonModelTest extends baseTest
      */
     public function apiErrorTest($result = null)
     {
-        $reflection = new ReflectionClass('commonModel');
-        $method = $reflection->getMethod('apiError');
-        $method->setAccessible(true);
-
-        $result = $method->invoke(null, $result);
+        $result = $this->invokeArgs('apiError', [$result]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -43,37 +39,172 @@ class commonModelTest extends baseTest
     }
 
     /**
-     * Test printBack method metadata.
+     * Test canOperateEffort method.
      *
-     * @param  string $checkType
+     * @param  object $effort
      * @access public
      * @return mixed
      */
-    public function printBackMetaTest(string $checkType)
+    public function canOperateEffortTest($effort = null)
     {
-        if($checkType == 'exists')
-        {
-            return method_exists('commonModel', 'printBack') ? '1' : '0';
+        $result = $this->instance->canOperateEffort($effort);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test checkIP method.
+     *
+     * @param  string $ipWhiteList
+     * @access public
+     * @return mixed
+     */
+    public function checkIPTest($ipWhiteList = '')
+    {
+        $result = $this->instance->checkIP($ipWhiteList);
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test checkPrivByObject method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObjectTest(string $objectType, int $objectID): bool
+    {
+        $result = $this->instance->checkPrivByObject($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 检查详情页操作按钮的权限。
+     * Check the privilege of the operate action.
+     *
+     * @param  string     $moduleName
+     * @param  object     $data
+     * @param  object     $menu
+     * @access protected
+     * @return array|bool
+     */
+    public function checkPrivForOperateActionTest(string $moduleName, string $action, array $actionData)
+    {
+        $object = $this->instance->dao->select('*')->from($this->instance->config->objectTables[$moduleName])->where('id')->eq(1)->fetch();
+        $result = $this->instance->checkPrivForOperateAction($actionData, $action, $moduleName, $object, 'mainActions');
+        return is_array($result) ? !empty($result['url']) : $result;
+    }
+
+    /**
+     * Test createMenuLink method.
+     *
+     * @param  object $menuItem
+     * @access public
+     * @return mixed
+     */
+    public function createMenuLinkTest($menuItem)
+    {
+        $result = $this->instance->createMenuLink($menuItem);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getDotStyle method.
+     *
+     * @param  bool $showCount
+     * @param  int  $unreadCount
+     * @access public
+     * @return array
+     */
+    public function getDotStyleTest(bool $showCount, int $unreadCount): array
+    {
+        $result = commonModel::getDotStyle($showCount, $unreadCount);
+        return $result;
+    }
+
+    /**
+     * Test getMainNavList method.
+     *
+     * @param  string $moduleName
+     * @param  bool   $useDefault
+     * @access public
+     * @return mixed
+     */
+    public function getMainNavListTest($moduleName, $useDefault = false)
+    {
+        $result = commonModel::getMainNavList($moduleName, $useDefault);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test isOpenMethod method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return bool
+     */
+    public function isOpenMethodTest($module, $method)
+    {
+        $result = $this->objectModel->isOpenMethod($module, $method);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test isTutorialMode method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function isTutorialModeTest()
+    {
+        $result = commonModel::isTutorialMode();
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test setUser method.
+     *
+     * @param  string $mode 测试模式：'guest'测试访客，'session'测试已登录用户
+     * @access public
+     * @return mixed
+     */
+    public function setUserTest($mode = '')
+    {
+        // 如果指定测试guest模式，先清除session
+        if($mode === 'guest') {
+            if(isset($_SESSION['user'])) unset($_SESSION['user']);
+            if(isset($this->instance->app->user)) unset($app->user);
         }
 
-        $reflection = new ReflectionMethod('commonModel', 'printBack');
+        // 执行setUser方法
+        $this->instance->setUser();
+        if(dao::isError()) return dao::getError();
 
-        if($checkType == 'static')
-        {
-            return $reflection->isStatic() ? '1' : '0';
-        }
+        // 返回结果
+        return $this->instance->app->user;
+    }
 
-        if($checkType == 'public')
-        {
-            return $reflection->isPublic() ? '1' : '0';
-        }
-
-        if($checkType == 'paramCount')
-        {
-            return (string)$reflection->getNumberOfParameters();
-        }
-
-        return '0';
+    /**
+     * Test strEndsWith method.
+     *
+     * @param  string $haystack
+     * @param  string $needle
+     * @access public
+     * @return bool
+     */
+    public function strEndsWithTest($haystack, $needle)
+    {
+        $result = commonModel::strEndsWith($haystack, $needle);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -121,7 +252,6 @@ class commonModelTest extends baseTest
     {
         $result = commonModel::printDuration($seconds, $format);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 

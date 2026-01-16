@@ -422,7 +422,7 @@ class aiModelTest extends baseTest
      */
     public function standardizeParamsTest($data = null)
     {
-        $result = $this->invokeArgs(i'standardizeParams', [$data]);
+        $result = $this->invokeArgs('standardizeParams', [$data]);
         if(dao::isError()) return dao::getError();
         return $result;
     }

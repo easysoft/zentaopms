@@ -709,7 +709,7 @@ class bugZenTest extends baseTest
     public function getTasksForCreateTest(object $bug)
     {
         $result = $this->invokeArgs('getTasksForCreate', [$bug]);
-        if(dao::isError()) return false;
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -723,7 +723,7 @@ class bugZenTest extends baseTest
     public function initBugTest(array $fields = array()): object
     {
         $result = $this->invokeArgs('initBug', [$fields]);
-        if(dao::isError()) return (object)array();
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -1019,4 +1019,170 @@ class bugZenTest extends baseTest
         if(dao::isError()) return false;
         return $result;
     }
+
+    /**
+     * Test setBrowseCookie method.
+     *
+     * @param  object $product
+     * @param  string $branch
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @access public
+     * @return bool
+     */
+    public function setBrowseCookieTest(object $product, string $branch, string $browseType, int $param, string $orderBy): bool
+    {
+        $this->instance->app->rawModule = 'bug';
+        $this->instance->app->rawMethod = 'browse';
+
+        return $this->invokeArgs('setBrowseCookie', [$product, $branch, $browseType, $param, $orderBy]);
+    }
+
+    /**
+     * Test setCreateMenu method.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  array  $output
+     * @access public
+     * @return bool
+     */
+    public function setCreateMenuTest(int $productID, string $branch, array $output): bool
+    {
+        // 设置app属性
+        if(isset($output['executionID']))
+        {
+            $this->instance->app->tab = 'execution';
+            $this->instance->session->set('execution', $output['executionID']);
+        }
+        elseif(isset($output['projectID']))
+        {
+            $this->instance->app->tab = 'project';
+        }
+        else
+        {
+            $this->instance->app->tab = 'qa';
+        }
+
+        $result = $this->invokeArgs('setCreateMenu', [$productID, $branch, $output]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test setEditMenu method.
+     *
+     * @param  int    $bugID
+     * @param  string $tab
+     * @access public
+     * @return int
+     */
+    public function setEditMenuTest(int $bugID, string $tab): int
+    {
+        // 获取bug对象
+        $bug = $this->instance->getById($bugID);
+        if(!$bug) return 0;
+
+        // 设置app tab
+        $this->instance->app->tab = $tab;
+
+        $result = $this->invokeArgs('setEditMenu', [$bug]);
+        if(dao::isError()) return 0;
+        return $result ? 1 : 0;
+    }
+
+    /**
+     * Test setViewMenu method.
+     *
+     * @param  object $bug
+     * @param  string $tab
+     * @access public
+     * @return bool
+     */
+    public function setViewMenuTest(object $bug, string $tab): bool
+    {
+        // 设置app tab
+        $this->instance->app->tab = $tab;
+
+        $result = $this->invokeArgs('setViewMenu', [$bug]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getBranchesForCreate method.
+     *
+     * @param  object $bug
+     * @access public
+     * @return object|array|string
+     */
+    public function getBranchesForCreateTest(object $bug): object|array|string
+    {
+        $result = $this->invokeArgs('getBranchesForCreate', [$bug]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test assignProjectRelatedVars method.
+     *
+     * @param  array|null $bugs
+     * @param  array|null $products
+     * @access public
+     * @return object|array|string
+     */
+    public function assignProjectRelatedVarsTest($bugs = null, $products = null)
+    {
+        $result = $this->invokeArgs('assignProjectRelatedVars', [$bugs, $products]);
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
+     * Test responseAfterOperate method.
+     *
+     * @param  int    $bugID
+     * @param  array  $changes
+     * @param  string $message
+     * @param  bool   $isInKanban
+     * @access public
+     * @return array
+     */
+    public function responseAfterOperateTest(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): array
+    {
+        $result = $this->invokeArgs('responseAfterOperate', [$bugID, $changes, $message, $isInKanban]);
+        if(dao::isError()) return array('error' => dao::getError());
+        return $result;
+    }
+
+    /**
+     * Test getToBeProcessedData method.
+     *
+     * @param  object $bug
+     * @param  object $oldBug
+     * @access public
+     * @return array
+     */
+    public function getToBeProcessedDataTest(object $bug, object $oldBug): array
+    {
+        $result = $this->invokeArgs('getToBeProcessedData', [$bug, $oldBug]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processRepoIssueActions method.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return mixed
+     */
+    public function processRepoIssueActionsTest($repoID = null)
+    {
+        $result = $this->invokeArgs('processRepoIssueActions', [$repoID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
 }

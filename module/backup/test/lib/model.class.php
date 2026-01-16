@@ -136,35 +136,9 @@ class backupModelTest extends baseTest
      */
     public function getBackupListTest()
     {
-        global $tester;
-
-        // 手动实现getBackupList的逻辑，避免复杂的类加载问题
-        $backupPath = $this->instance->getBackupPath();
-        $sqlFiles = glob("{$backupPath}*.sql*");
-
-        if(empty($sqlFiles)) return array();
-
-        $backupList = array();
-        foreach($sqlFiles as $file)
-        {
-            $fileName = basename($file);
-            $backupFile = new stdclass();
-            $backupFile->time = filemtime($file);
-            $backupFile->name = substr($fileName, 0, strpos($fileName, '.'));
-            $backupFile->files = array();
-            $backupFile->files[$file] = $this->instance->getBackupSummary($file);
-
-            $fileBackup = $this->instance->getBackupFile($backupFile->name, 'file');
-            if($fileBackup) $backupFile->files[$fileBackup] = $this->instance->getBackupSummary($fileBackup);
-
-            $codeBackup = $this->instance->getBackupFile($backupFile->name, 'code');
-            if($codeBackup) $backupFile->files[$codeBackup] = $this->instance->getBackupSummary($codeBackup);
-
-            $backupList[$backupFile->name] = $backupFile;
-        }
-        krsort($backupList);
-
-        return $backupList;
+        $result = $this->instance->getBackupList();
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -177,20 +151,9 @@ class backupModelTest extends baseTest
      */
     public function backupSQLTest($fileName = null, $reload = 'no')
     {
-        // Mock implementation to simulate backupSQL behavior
-        if(empty($fileName))
-        {
-            $fileName = 'test_backup_' . time();
-        }
-
-        // Mock different scenarios based on input
-        if($fileName === 'fail_test')
-        {
-            return array('result' => 'fail', 'message' => 'Mock backup failed');
-        }
-
-        // Return success for normal cases
-        return array('result' => 'success');
+        $result = $this->instance->backupSQL($fileName, $reload);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -203,34 +166,9 @@ class backupModelTest extends baseTest
      */
     public function backupFileTest($fileName = null, $reload = 'no')
     {
-        // Mock implementation to simulate backupFile behavior
-        if(empty($fileName))
-        {
-            $fileName = 'test_backup_file_' . time();
-        }
-
-        // Mock different scenarios based on input
-        if($fileName === 'fail_test')
-        {
-            if($reload === 'yes')
-            {
-                return array('result' => 'fail', 'message' => 'Mock file backup failed');
-            }
-            else
-            {
-                // For reload=no, it would print error directly, but we mock as returning the message
-                return array('result' => 'fail', 'message' => 'Mock file backup failed');
-            }
-        }
-
-        // Mock nofile setting check - if nofile is in config, skip file backup
-        if(isset($this->instance->config->backup->setting) && str_contains($this->instance->config->backup->setting, 'nofile'))
-        {
-            return array('result' => 'success');
-        }
-
-        // Return success for normal cases
-        return array('result' => 'success');
+        $result = $this->instance->backupFile($fileName, $reload);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -333,24 +271,5 @@ class backupModelTest extends baseTest
         $result = $this->instance->removeFileHeader($fileName);
         if(dao::isError()) return dao::getError();
         return $result;
-    }
-
-    /**
-     * Clean up test directory.
-     *
-     * @param  string $dir
-     * @access private
-     * @return void
-     */
-    private function cleanupTestDir($dir)
-    {
-        if(!is_dir($dir)) return;
-
-        $files = glob($dir . '*');
-        foreach($files as $file)
-        {
-            if(is_file($file)) unlink($file);
-        }
-        rmdir($dir);
     }
 }

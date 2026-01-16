@@ -20,9 +20,7 @@ class branchModelTest extends baseTest
     public function getByIdTest($branchID, $productID = 0, $field = 'name')
     {
         $object = $this->instance->getById($branchID, $productID, $field);
-
         if(dao::isError()) return dao::getError();
-
         return $object;
     }
 
@@ -39,12 +37,9 @@ class branchModelTest extends baseTest
     public function getListTest($productID, $executionID = 0, $browseType = 'active', $withMainBranch = true)
     {
         $objects = $this->instance->getList($productID, $executionID, $browseType, 'order', null, $withMainBranch);
-
         if(dao::isError()) return dao::getError();
 
-        $ids = '';
-        foreach($objects as $object) $ids .= ',' . $object->id;
-        return $ids;
+        return implode(',', array_column($objects, 'id'));
     }
 
     /**
@@ -60,12 +55,9 @@ class branchModelTest extends baseTest
     public function getPairsTest($productID, $params = '', $executionID = 0, $mergedBranches = '')
     {
         $objects = $this->instance->getPairs($productID, $params, $executionID, $mergedBranches);
-
         if(dao::isError()) return dao::getError();
 
-        $ids = '';
-        foreach($objects as $id => $object) $ids .= ',' . $id;
-        return $ids;
+        return implode(',', array_keys($objects));
     }
 
     /**
@@ -78,9 +70,7 @@ class branchModelTest extends baseTest
     public function getAllPairsTest($params = '')
     {
         $objects = $this->instance->getAllPairs($params);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -94,9 +84,7 @@ class branchModelTest extends baseTest
     public function getStatusListTest($productID)
     {
         $result = $this->instance->getStatusList($productID);
-
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -113,9 +101,7 @@ class branchModelTest extends baseTest
         $objectID = $this->instance->create($productID, (object) $param);
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($objectID)->fetch();
-        return $object;
+        return $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($objectID)->fetch();
     }
 
     /**
@@ -138,9 +124,7 @@ class branchModelTest extends baseTest
         foreach($param as $key => $value) $newBranch->$key = $value;
 
         $objects = $this->instance->update($branchID, $newBranch);
-
         if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -153,10 +137,8 @@ class branchModelTest extends baseTest
      */
     public function batchUpdateTest($param = array())
     {
-        global $tester;
-
         $productID = 6;
-        $branches  = $tester->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchAll('id');
+        $branches  = $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('product')->eq($productID)->fetchAll('id');
 
         $newBranches = array();
         foreach($branches as $branch)
@@ -181,7 +163,6 @@ class branchModelTest extends baseTest
         }
 
         $objects = $this->instance->batchUpdate($productID, $newBranches);
-
         if(dao::isError()) return dao::getError();
         return $objects;
     }
@@ -196,12 +177,9 @@ class branchModelTest extends baseTest
     public function closeTest($branchID)
     {
         $this->instance->close($branchID);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
-        return $object;
+        return $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
     }
 
     /**
@@ -214,12 +192,9 @@ class branchModelTest extends baseTest
     public function activateTest($branchID)
     {
         $this->instance->activate($branchID);
-
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $object = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
-        return $object;
+        return $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
     }
 
     /**
@@ -232,11 +207,9 @@ class branchModelTest extends baseTest
     public function unlinkBranch4ProjectTest(array $productIDList): array|int
     {
         $this->instance->unlinkBranch4Project($productIDList);
-
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetchAll();
-        return count($objects);
+        return $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetch('count');
     }
 
     /**
@@ -250,11 +223,9 @@ class branchModelTest extends baseTest
     public function linkBranch4ProjectTest(int|array $productID): array|int
     {
         $this->instance->linkBranch4Project($productID);
-
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productID)->andWhere('branch')->gt(0)->fetchAll();
-        return count($objects);
+        return $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetch('count');
     }
 
     /**
@@ -270,7 +241,6 @@ class branchModelTest extends baseTest
     public function getByProductsTest(array $productIdList, string $params = '', array $appendBranch = array()): array|string
     {
         $objects = $this->instance->getByProducts($productIdList, $params, $appendBranch);
-
         if(dao::isError()) return dao::getError();
 
         $ids = '';
@@ -293,9 +263,7 @@ class branchModelTest extends baseTest
     public function getProductTypeTest($branchID)
     {
         $type = $this->instance->getProductType($branchID);
-
         if(dao::isError()) return dao::getError();
-
         return $type;
     }
 
@@ -310,12 +278,12 @@ class branchModelTest extends baseTest
     public function sortTest(array $branchOrderList): array|string
     {
         $branchIdList = array_keys($branchOrderList);
-        $this->instance->sort($branchOrderList);
 
+        $this->instance->sort($branchOrderList);
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($branchIdList)->orderBy('order asc')->fetchAll('id');
-        return implode(',', array_keys($objects));
+        $idList = $this->instance->dao->select('id')->from(TABLE_BRANCH)->where('id')->in($branchIdList)->orderBy('`order`')->fetchPairs();
+        return implode(',', $idList);
     }
 
     /**
@@ -328,9 +296,7 @@ class branchModelTest extends baseTest
     public function checkBranchDataTest($branchID)
     {
         $objects = $this->instance->checkBranchData($branchID);
-
         if(dao::isError()) return dao::getError();
-
         return $objects ? 1 : 2;
     }
 
@@ -344,12 +310,9 @@ class branchModelTest extends baseTest
     public function setDefaultTest(int $productID,  int $branchID)
     {
         $this->instance->setDefault($productID, $branchID);
-
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getById($branchID, $productID, '');
-
-        return $object;
+        return $this->instance->getById($branchID, $productID, '');
     }
 
     /**
@@ -363,7 +326,6 @@ class branchModelTest extends baseTest
     public function getPairsByProjectProductTest($projectID, $productID)
     {
         $objects = $this->instance->getPairsByProjectProduct($projectID, $productID);
-
         if(dao::isError()) return dao::getError();
 
         $names = '';
@@ -383,9 +345,7 @@ class branchModelTest extends baseTest
     public function showBranchTest($productID, $moduleID = 0, $executionID = 0)
     {
         $show = $this->instance->showBranch($productID, $moduleID = 0, $executionID = 0);
-
         if(dao::isError()) return dao::getError();
-
         return $show ? 1 : 2;
     }
 
@@ -398,20 +358,12 @@ class branchModelTest extends baseTest
      */
     public function changeBranchLanguageTest($productID)
     {
-        global $tester;
-        global $app;
-
-        $app::$loadedLangs = array();
-        $app->loadLang('branch');
-
         $result = $this->instance->changeBranchLanguage($productID);
-
         if(dao::isError()) return dao::getError();
 
         if($result === false) return '0';
 
-        $createLang = $tester->lang->branch->create;
-        return $createLang;
+        return $this->instance->lang->branch->create;
     }
 
     /**
@@ -432,28 +384,7 @@ class branchModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll();
-    }
-
-    /**
-     * 合并分支后的其他数据处理。
-     * other data process after merge branch.
-     *
-     * @param  int       $productID
-     * @param  string    $mergedBranches
-     * @param  object    $data
-     * @access public
-     * @return array|int
-     */
-    public function afterMergeTest(int $productID, string $mergedBranches, object $data): array|int
-    {
-        $targetBranch = $data->targetBranch;
-        $objectID     = $this->instance->afterMerge($productID, $targetBranch, $mergedBranches, $data);
-
-        if(dao::isError()) return dao::getError();
-
-        $releases = $this->instance->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('branch')->in($data->mergedBranchIDList)->fetchAll();
-        return count($releases);
+        return $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll('', false);
     }
 
     /**
@@ -464,7 +395,7 @@ class branchModelTest extends baseTest
      * @access public
      * @return bool
      */
-    public function testIsClickable(int $branchID, string $status): bool
+    public function isClickableTest(int $branchID, string $status): bool
     {
         $branch = $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
         return $this->instance->isClickable($branch, $status);
@@ -481,18 +412,13 @@ class branchModelTest extends baseTest
      */
     public function manageTest(int $productID, array $branchData = array(), array $newBranches = array())
     {
-        global $tester;
-
-        // 清空之前的POST数据
-        $_POST = array();
-
         // 设置POST数据以模拟实际提交
-        $_POST['branch'] = $branchData; // 确保branch总是存在,即使是空数组
+        $_POST = [];
+        $_POST['branch']    = $branchData; // 确保branch总是存在,即使是空数组
         $_POST['newbranch'] = $newBranches; // 确保newbranch总是存在
 
         // 调用被测方法
         $result = $this->instance->manage($productID);
-
         if(dao::isError()) return dao::getError();
 
         // 如果返回false，表示DAO错误或其他问题

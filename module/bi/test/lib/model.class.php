@@ -683,6 +683,38 @@ class biModelTest extends baseTest
     }
 
     /**
+     * Test saveLogs method.
+     *
+     * @param  string $log
+     * @access public
+     * @return mixed
+     */
+    public function saveLogsTest($log)
+    {
+        $logFile = $this->instance->getLogFile();
+        if(file_exists($logFile)) unlink($logFile);
+
+        $this->instance->saveLogs($log);
+
+        // 检查文件是否被创建
+        if(!file_exists($logFile)) return false;
+
+        // 读取文件内容进行验证
+        $content = file_get_contents($logFile);
+
+        // 清理测试文件
+        if(file_exists($logFile)) unlink($logFile);
+
+        return array(
+            'fileExists' => true,
+            'hasPhpHeader' => strpos($content, '<?php') === 0,
+            'hasDieStatement' => strpos($content, 'die();') !== false,
+            'hasLogContent' => strpos($content, $log) !== false,
+            'hasTimestamp' => preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $content) === 1
+        );
+    }
+
+    /**
      * Test parseSqlVars method.
      *
      * @param  string $sql

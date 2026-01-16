@@ -718,7 +718,7 @@ class bugModel extends model
         $staticData = array();
         foreach($dateFields as $field)
         {
-            $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
+            $bugCount = $this->dao->select("COUNT(id) AS num, DATE_FORMAT($field, '%m/%d') AS date")->from(TABLE_BUG)
                 ->where('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')

@@ -21,7 +21,7 @@ cid=15525
 */
 
 $caselib = new caselibModelTest();
-$searchConfig = $caselib->objectModel->buildSearchConfig(1);
+$searchConfig = $caselib->instance->buildSearchConfig(1);
 
 r($searchConfig['fields']) && p('title,story,type') && e('用例名称,关联需求,用例类型'); // 测试字段名称
 r($searchConfig['params']['module']) && p('operator,control') && e('belong,select');   // 测试模块字段

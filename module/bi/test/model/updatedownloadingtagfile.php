@@ -9,7 +9,7 @@ title=测试 biModel::updateDownloadingTagFile();
 timeout=0
 cid=15218
 
-- 执行$biTest->objectModel, 'updateDownloadingTagFile' @1
+- 检查$biTest->instance是否存在updateDownloadingTagFile方法 @1
 - 执行biTest模块的updateDownloadingTagFileTest方法  @1
 - 执行biTest模块的updateDownloadingTagFileTest方法，参数是'file', 'create'), array  @1
 - 执行biTest模块的updateDownloadingTagFileTest方法，参数是'file', 'check'), array  @1
@@ -21,7 +21,7 @@ cid=15218
 
 $biTest = new biModelTest();
 
-r(method_exists($biTest->objectModel, 'updateDownloadingTagFile')) && p() && e('1');
+r(method_exists($biTest->instance, 'updateDownloadingTagFile')) && p() && e('1');
 r(is_string($biTest->updateDownloadingTagFileTest())) && p() && e('1');
 r(in_array($biTest->updateDownloadingTagFileTest('file', 'create'), array('ok', 'fail'))) && p() && e('1');
 r(in_array($biTest->updateDownloadingTagFileTest('file', 'check'), array('ok', 'fail', 'loading'))) && p() && e('1');
