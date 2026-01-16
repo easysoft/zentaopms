@@ -499,4 +499,21 @@ class adminModel extends model
 
         $this->lang->switcherMenu = $output;
     }
+
+    /**
+     * 获取交付物评审信息。
+     * Get deliverable review info.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getDeliverableReviewPairs(int $groupID = 0): array
+    {
+        return $this->dao->select('t1.id, t1.review')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('1=1')
+            ->beginIF($groupID)->andWhere('t2.workflowGroup')->eq($groupID)->fi()
+            ->fetchPairs('id');
+    }
 }
