@@ -602,18 +602,18 @@ class customModelTest extends baseTest
 
     /**
      * 检查系统中是否有敏捷项目的问题数据。
-     * Check if there is scrum issue data in the system.
+     * Check if there is issue data in the system.
      *
      * @param  string    $edition
      * @access public
      * @return int|array
      */
-    public function hasScrumIssueDataTest(string $edition): int|array
+    public function hasIssueDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumIssueData();
+        $count = $this->instance->hasIssueData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
@@ -622,18 +622,18 @@ class customModelTest extends baseTest
 
     /**
      * 检查系统中是否有敏捷项目的风险数据。
-     * Check if there is scrum risk data in the system.
+     * Check if there is risk data in the system.
      *
      * @param  string    $edition
      * @access public
      * @return int|array
      */
-    public function hasScrumRiskDataTest(string $edition): int|array
+    public function hasRiskDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumRiskData();
+        $count = $this->instance->hasRiskData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
@@ -648,12 +648,12 @@ class customModelTest extends baseTest
      * @access public
      * @return int|array
      */
-    public function hasScrumOpportunityDataTest(string $edition): int|array
+    public function hasOpportunityDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumOpportunityData();
+        $count = $this->instance->hasOpportunityData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
@@ -668,12 +668,12 @@ class customModelTest extends baseTest
      * @access public
      * @return int|array
      */
-    public function hasScrumMeetingDataTest(string $edition): int|array
+    public function hasMeetingDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumMeetingData();
+        $count = $this->instance->hasMeetingData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
@@ -688,12 +688,12 @@ class customModelTest extends baseTest
      * @access public
      * @return int|array
      */
-    public function hasScrumAuditplanDataTest(string $edition): int|array
+    public function hasAuditplanDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumAuditplanData();
+        $count = $this->instance->hasAuditplanData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
@@ -708,12 +708,92 @@ class customModelTest extends baseTest
      * @access public
      * @return int|array
      */
-    public function hasScrumProcessDataTest(string $edition): int|array
+    public function hasProcessDataTest(string $edition): int|array
     {
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasScrumProcessData();
+        $count = $this->instance->hasProcessData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有交付数据。
+     * Check if there is project activity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasDeliverableDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasDeliverableData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有评审数据。
+     * Check if there is review data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasReviewDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasReviewData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有基线项目数据。
+     * Check if there is baseline project data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasCmDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasCmData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有变更管理项目数据。
+     * Check if there is change management project data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasProjectchangeDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasProjectchangeData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
