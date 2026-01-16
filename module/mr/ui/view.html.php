@@ -449,6 +449,7 @@ div
                                 set::cols($config->mr->createCheck->linkObject->dtable->fieldList),
                                 set::data(array_values($linkObjects)),
                                 set::loadPartial(true),
+                                set::onRenderCell(jsRaw('window.renderObjectCell')),
                                 set::footPager(usePager('objectPager'))
                             )
                         )
