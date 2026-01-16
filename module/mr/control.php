@@ -1234,7 +1234,7 @@ class mr extends control
 
         $repoMembers = array_keys($repo->members);
         $users = array();
-        foreach($repoMembers as $member) if(!isset($reviewers[$member])) $users[] = $member;
+        foreach($repoMembers as $member) if(!isset($reviewers[$member]) && $member != $this->app->user->account) $users[] = $member;
         $users = $this->loadModel('user')->getListByAccounts($users);
 
         $this->view->users = array_column($users, 'realname', 'account');
