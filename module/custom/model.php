@@ -1257,7 +1257,7 @@ class customModel extends model
      */
     public function hasCmData(): int
     {
-        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_OBJECT)->where('deleted')->eq('0')->andWhere('type')->eq('baseline')->count();
+        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_OBJECT)->where('deleted')->eq('0')->andWhere('type')->eq('taged')->count();
         return 0;
     }
 

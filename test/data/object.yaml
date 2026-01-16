@@ -54,7 +54,7 @@ fields:
     format: ""
   - field: type
     note: "评审/基线"
-    range: reviewed,taged,baseline
+    range: reviewed,taged
     prefix: ""
     postfix: ""
     loop: 0

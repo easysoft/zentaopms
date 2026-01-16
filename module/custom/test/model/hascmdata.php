@@ -31,7 +31,7 @@ r($customTester->hasCmDataTest($editionList[1])) && p() && e('0'); // 测试ipd�
 r($customTester->hasCmDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无项目基线数据
 
 $object = zenData('object');
-$object->type->range('baseline');
+$object->type->range('taged');
 $object->gen(1);
 
 r($customTester->hasCmDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有项目基线数据
