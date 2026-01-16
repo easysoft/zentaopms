@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 customModel->hasScrumIssueData();
+title=测试 customModel->hasIssueData();
 timeout=0
 cid=15911
 
