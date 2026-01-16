@@ -1136,7 +1136,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
+    public function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
     {
         $repo = $this->loadModel('repo')->fetchByID($repoID);
         $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
@@ -1162,7 +1162,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function ajaxGetReviewers(int $mrID)
+    public function ajaxGetReviewers(int $mrID)
     {
         $mr       = $this->mr->fetchByID($mrID);
         $flow     = $this->loadModel('reporeviewflow')->getByID(zget($mr, 'reviewFlowID', 0));
@@ -1188,7 +1188,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function ajaxAddReviewers(int $mrID)
+    public function ajaxAddReviewers(int $mrID)
     {
         $mr = $this->mr->fetchByID($mrID);
         if($_POST)
@@ -1226,7 +1226,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function ajaxDeleteReviewer(int $mrID, string $reviewer)
+    public function ajaxDeleteReviewer(int $mrID, string $reviewer)
     {
         $this->mr->deleteReviewer($mrID, $reviewer);
         if(dao::isError()) return $this->sendError(dao::getError());
@@ -1248,7 +1248,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    function merge(int $mrID, string $mergeType)
+    public function merge(int $mrID, string $mergeType)
     {
         $this->mr->merge($mrID, $mergeType);
         if(dao::isError()) return $this->sendError(zget(dao::getError(), 'apiMessage', $this->lang->error->httpServerError));
