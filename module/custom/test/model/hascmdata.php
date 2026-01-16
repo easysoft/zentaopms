@@ -7,12 +7,12 @@ title=测试 customModel->hasCmData();
 timeout=0
 cid=15914
 
-- 测试开源版中无项目活动数据 @0
-- 测试ipd版中无项目活动数据 @0
-- 测试旗舰版中无项目活动数据 @0
-- 测试开源版中有项目活动数据 @0
-- 测试ipd版中有项目活动数据 @1
-- 测试旗舰版中有项目活动数据 @1
+- 测试开源版中无项目基线数据 @0
+- 测试ipd版中无项目基线数据 @0
+- 测试旗舰版中无项目基线数据 @0
+- 测试开源版中有项目基线数据 @0
+- 测试ipd版中有项目基线数据 @1
+- 测试旗舰版中有项目基线数据 @1
 
 */
 
@@ -26,11 +26,14 @@ su('admin');
 $editionList = array('open', 'ipd', 'max');
 
 $customTester = new customModelTest();
-r($customTester->hasCmDataTest($editionList[0])) && p() && e('0'); // 测试开源版中无项目活动数据
-r($customTester->hasCmDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无项目活动数据
-r($customTester->hasCmDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无项目活动数据
+r($customTester->hasCmDataTest($editionList[0])) && p() && e('0'); // 测试开源版中无项目基线数据
+r($customTester->hasCmDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无项目基线数据
+r($customTester->hasCmDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无项目基线数据
 
-zenData('object')->gen(1);
-r($customTester->hasCmDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有项目活动数据
-r($customTester->hasCmDataTest($editionList[1])) && p() && e('1'); // 测试ipd版中有项目活动数据
-r($customTester->hasCmDataTest($editionList[2])) && p() && e('1'); // 测试旗舰版中有项目活动数据
+$object = zenData('object');
+$object->type->range('baseline');
+$object->gen(1);
+
+r($customTester->hasCmDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有项目基线数据
+r($customTester->hasCmDataTest($editionList[1])) && p() && e('1'); // 测试ipd版中有项目基线数据
+r($customTester->hasCmDataTest($editionList[2])) && p() && e('1'); // 测试旗舰版中有项目基线数据

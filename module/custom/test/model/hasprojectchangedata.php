@@ -30,7 +30,7 @@ r($customTester->hasProjectchangeDataTest($editionList[0])) && p() && e('0'); //
 r($customTester->hasProjectchangeDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无项目活动数据
 r($customTester->hasProjectchangeDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无项目活动数据
 
-zenData('object')->gen(1);
+zenData('projectchange')->gen(1);
 r($customTester->hasProjectchangeDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有项目活动数据
 r($customTester->hasProjectchangeDataTest($editionList[1])) && p() && e('1'); // 测试ipd版中有项目活动数据
 r($customTester->hasProjectchangeDataTest($editionList[2])) && p() && e('1'); // 测试旗舰版中有项目活动数据

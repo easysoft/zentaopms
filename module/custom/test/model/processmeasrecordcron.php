@@ -30,7 +30,7 @@ $disabledFeatures[2] = 'scrumMeasrecord';
 $disabledFeatures[3] = 'agileMeasrecord';
 $disabledFeatures[4] = 'waterfallMeasrecord';
 $disabledFeatures[5] = 'waterfallplusMeasrecord';
-$disabledFeatures[6] = 'waterfall,waterfallplus,scrumMeasrecord,agileMeasrecord,waterfallplusMeasrecord';
+$disabledFeatures[6] = 'waterfall,waterfallplus,projectMeasrecord';
 
 $customTester = new customModelTest();
 r($customTester->processMeasrecordCronTest($disabledFeatures[0])) && p() && e('normal'); // 检查没有瀑布项目时，定时任务的状态

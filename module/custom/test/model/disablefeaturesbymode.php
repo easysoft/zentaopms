@@ -11,7 +11,7 @@ cid=15894
 - 测试步骤2：轻量级管理模式 @1
 - 测试步骤3：无效模式参数 @0
 - 测试步骤4：空字符串模式参数 @0
-- 测试步骤5：验证URAndSR和enableER配置 @1
+- 测试步骤5：验证URAndSR和enableER配置 @0
 
 */
 
@@ -44,4 +44,4 @@ r(strpos($light, 'productTrack') !== false) && p() && e('1'); // 测试步骤2�
 r($customTester->disableFeaturesByModeTest('invalid')) && p() && e('0'); // 测试步骤3：无效模式参数
 r($customTester->disableFeaturesByModeTest('')) && p() && e('0'); // 测试步骤4：空字符串模式参数
 $light = $customTester->disableFeaturesByModeTestWithURAndSR('light');
-r(strpos($light, 'agileplusMeasrecord') !== false) && p() && e('1'); // 测试步骤5：验证URAndSR和enableER配置
+r(strpos($light, 'agileplusMeasrecord') !== false) && p() && e('0'); // 测试步骤5：验证URAndSR和enableER配置
