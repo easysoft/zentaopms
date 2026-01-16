@@ -389,16 +389,16 @@ class custom extends control
             return $this->sendSuccess(array('callback' => '$.apps.updateAppsMenu(true);', 'load' => true, 'closeModel' => true));
         }
 
-        list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
+        list($disabledFeatures, $enabledProjectFeatures, $disabledProjectFeatures) = $this->custom->computeFeatures();
 
-        $this->view->title                 = $this->lang->custom->mode;
-        $this->view->mode                  = $mode;
-        $this->view->programs              = $this->loadModel('program')->getTopPairs('noclosed', true);
-        $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
-        $this->view->disabledFeatures      = $disabledFeatures;
-        $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
-        $this->view->disabledScrumFeatures = $disabledScrumFeatures;
-        $this->view->currentModeTips       = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
+        $this->view->title                   = $this->lang->custom->mode;
+        $this->view->mode                    = $mode;
+        $this->view->programs                = $this->loadModel('program')->getTopPairs('noclosed', true);
+        $this->view->programID               = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->disabledFeatures        = $disabledFeatures;
+        $this->view->enabledProjectFeatures  = $enabledProjectFeatures;
+        $this->view->disabledProjectFeatures = $disabledProjectFeatures;
+        $this->view->currentModeTips         = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
 
         $this->display();
     }
