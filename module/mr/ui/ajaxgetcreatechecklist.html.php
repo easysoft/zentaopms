@@ -15,6 +15,8 @@ jsVar('entry', $entry);
 jsVar('urlParams', "repoID=$repoID&objectID=0&entry=%s&oldRevision=$sourceBranch&newRevision=$targetBranch&showBug=0");
 h:css("#monacoTree .text-clip {overflow: visible;}");
 
+if(!hasPriv('repo', 'diff')) unset($config->mr->createCheck->linkObject->dtable->fieldList['id']['link']);
+
 tabs
 (
     tabPane
