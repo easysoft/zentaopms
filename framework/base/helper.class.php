@@ -1192,6 +1192,74 @@ class baseHelper
     {
         return rtrim(rtrim(number_format((float)$hours, $decimals, $characters, ''), '0'), $characters);
     }
+
+    /**
+     * 判断当前页面是否需要进行htmlspecialchars_decode解码。
+     * Check if current page need to decode with htmlspecialchars_decode.
+     *
+     * @access public
+     * @return bool
+     */
+    public static function needDecodeHtmlSpecialChars()
+    {
+        /* API模式下，所有页面都需要解码。In API mode, all pages need to be decoded. */
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+
+        global $app, $config;
+
+        /* baseRouter 构造函数中会调用此方法，此时 $app 还未初始化完成。The baseRouter constructor will call this method, at this time $app is not initialized yet. */
+        if(is_null($app)) return false;
+
+        /* 当前请求已经判断过，直接返回结果。 The current request has been judged, return the result directly. */
+        if(!is_null($app->needDecodeHtmlSpecialChars)) return $app->needDecodeHtmlSpecialChars;
+
+        /* 如果是旧页面，则不需要解码。 If it is an old page, no need to decode. */
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+        if(!isset($config->index->oldPages)) $app->loadConfig('index');
+        $app->needDecodeHtmlSpecialChars = !in_array("{$moduleName}-{$methodName}", $config->index->oldPages);
+
+        return $app->needDecodeHtmlSpecialChars;
+    }
+
+    /**
+     * 对数据对象或数组中的标题字段进行htmlspecialchars_decode解码。
+     * Decode the title field in data object or array with htmlspecialchars_decode.
+     *
+     * @param  string       $table
+     * @param  object|array $data
+     * @access public
+     * @return bool|object|array
+     */
+    public static function decodeHtmlSpecialChars(string $table, bool|object|array $data): bool|object|array
+    {
+        if(empty($data)) return $data;
+        if(!is_object($data) && !is_array($data)) return $data;
+        if(!self::needDecodeHtmlSpecialChars()) return $data;
+
+        global $app, $config;
+
+        $objectType = str_replace(['`', $config->db->prefix], '', $table);
+        if(in_array($objectType, array('config', 'user'))) return $data;
+
+        if(!isset($config->action->objectNameFields)) $app->loadConfig('action');
+        $titleField = $config->action->objectNameFields[$objectType] ?? '';
+        if(!$titleField) return $data;
+
+        if(is_object($data))
+        {
+            if(isset($data->$titleField)) $data->$titleField = htmlspecialchars_decode($data->$titleField, ENT_QUOTES);
+            return $data;
+        }
+
+        foreach($data as $key => $row)
+        {
+            if(is_object($row) && isset($row->$titleField)) $row->$titleField = htmlspecialchars_decode($row->$titleField, ENT_QUOTES);
+            if(is_array($row)  && isset($row[$titleField])) $row[$titleField] = htmlspecialchars_decode($row[$titleField], ENT_QUOTES);
+            $data[$key] = $row;
+        }
+        return $data;
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//

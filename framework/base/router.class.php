@@ -472,6 +472,14 @@ class baseRouter
     public $cacheModel;
 
     /**
+     * 是否需要对htmlspecialchars进行解码。
+     * Whether need to decode htmlspecialchars.
+     *
+     * @var bool
+     */
+    public $needDecodeHtmlSpecialChars = null;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
