@@ -6,11 +6,11 @@ class createPage extends page
         parent::__construct($webdriver);
         $xpath = array(
             'settings'    => "//*[@id='navbar']/menu/li[14]/a/span",
-            'deleteBtn_2' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[2]/td[19]/button[4]",
-            'deleteBtn_3' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[3]/td[19]/button[4]",
-            'deleteBtn_4' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[4]/td[19]/button[4]",
-            'deleteBtn_5' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[5]/td[19]/button[4]",
-            'deleteBtn_6' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[6]/td[19]/button[4]",
+            'deleteBtn_2' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[2]/td[20]/button[4]",
+            'deleteBtn_3' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[3]/td[20]/button[4]",
+            'deleteBtn_4' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[4]/td[20]/button[4]",
+            'deleteBtn_5' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[5]/td[20]/button[4]",
+            'deleteBtn_6' => "//*[@id='zin_programplan_create_formBatch']/div[1]/table/tbody/tr[6]/td[20]/button[4]",
             'begin'       => "//*[@id='begin_0']/div/input[2]",
             'end'         => "//*[@id='end_0']/div/input[2]",
             'submitBtn'   => "//*[@id='zin_programplan_create_formBatch']/div[2]/button",

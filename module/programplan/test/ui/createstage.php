@@ -28,15 +28,15 @@ chdir(__DIR__);
 include '../lib/ui/createstage.ui.class.php';
 
 $stage = zendata('stage');
-$stage->id->range('1-12');
+$stage->id->range('1-6');
 $stage->name->range('需求, 设计, 开发, 测试, 发布, 总结评审');
 $stage->percent->range('10,10,40,15,10,5');
 $stage->type->range('request,design,dev,qa,release,review');
-$stage->projectType->range('waterfall{6},waterfallplus{6}');
+$stage->projectType->range('waterfall{6}');
 $stage->createdBy->range('admin');
 $stage->createdDate->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $stage->deleted->range('0');
-$stage->gen(12);
+$stage->gen(6);
 
 $project = zenData('project');
 $project->id->range('1');
