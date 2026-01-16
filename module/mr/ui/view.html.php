@@ -116,7 +116,7 @@ $basicItems[] = item(set::name($lang->mr->targetBranch), $mr->targetBranch);
 $basicItems[] = item(set::name($lang->mr->sourceBranch), $mr->sourceBranch);
 $basicItems[] = item(set::name($lang->mr->description),  !empty($mr->desc) ? strip_tags($mr->desc) : $lang->noData);
 
-$mergeTypeList    = empty($flow) ? array() : $flow->definition->reviewFlow->merge->options;
+$mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
 $defaultMergeType = empty($defaultMergeType) ? $mergeTypeList[0] : $defaultMergeType;
 $mergeBtnItems    = array();
 foreach($mergeTypeList as $mergeType)
@@ -132,7 +132,7 @@ foreach($mergeTypeList as $mergeType)
 }
 if(!hasPriv('repo', 'diff')) unset($config->mr->commitLogs->dtable->fieldList['id']['link']);
 
-if(!in_array($app->user->account, array_keys($reviewers)))
+if(!in_array($app->user->account, array_keys($reviewers)) || $mr->status != 'opened')
 {
     $config->mr->actions->view['mainActions'] = array_diff($config->mr->actions->view['mainActions'], array('review'));
 }
@@ -173,44 +173,47 @@ div
                             set::active($type == 'basic'),
                             div
                             (
-                                $hasConflict == 'no' && $reviewResult && !$checkMessage ? section
+                                $mr->status == 'opened' ? div
                                 (
-                                    setClass('flex w-full checkMerge'),
-                                    div(setClass('py-6 border-l-4 border-r-4 border-success')),
-                                    div
+                                    $hasConflict == 'no' && $reviewResult && !$checkMessage ? section
                                     (
-                                        setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
-                                        set::style(array('justify-content' => 'space-between')),
-                                        div(span(setClass('text-success font-bold'), $lang->mr->checkSuccess)),
-                                        hasPriv('mr', 'merge') && !empty($mergeBtnItems) && $mr->status == 'opened' ? div(btnGroup
+                                        setClass('flex w-full checkMerge'),
+                                        div(setClass('py-6 border-l-4 border-r-4 border-success')),
+                                        div
                                         (
-                                            setClass('merge-btn-group'),
-                                            btn
+                                            setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
+                                            set::style(array('justify-content' => 'space-between')),
+                                            div(span(setClass('text-success font-bold'), $lang->mr->checkSuccess)),
+                                            hasPriv('mr', 'merge') && !empty($mergeBtnItems) && $mr->status == 'opened' ? div(btnGroup
                                             (
-                                                setClass('btn primary ajax-submit'),
-                                                set::url(createLink('mr', 'merge', "mrID={$mr->id}&type={$defaultMergeType}")),
-                                                $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
-                                            ),
+                                                setClass('merge-btn-group'),
+                                                btn
+                                                (
+                                                    setClass('btn primary ajax-submit'),
+                                                    set::url(createLink('mr', 'merge', "mrID={$mr->id}&type={$defaultMergeType}")),
+                                                    $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
+                                                ),
 
-                                            count($mergeBtnItems) > 1 ? dropDown
-                                            (
-                                                btn(setClass('btn primary dropdown-toggle'),
-                                                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-                                                set::placement('bottom-end'),
-                                                set::items($mergeBtnItems)
-                                            ) : null
-                                        )) : null
-                                    )
-                                ) : section
-                                (
-                                    setClass('flex w-full mt-2 checkMerge'),
-                                    div(setClass('py-6 border-l-4 border-r-4 border-danger')),
-                                    div
+                                                count($mergeBtnItems) > 1 ? dropDown
+                                                (
+                                                    btn(setClass('btn primary dropdown-toggle'),
+                                                    setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                                                    set::placement('bottom-end'),
+                                                    set::items($mergeBtnItems)
+                                                ) : null
+                                            )) : null
+                                        )
+                                    ) : section
                                     (
-                                        setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                                        span(setClass('text-danger font-bold'), $lang->mr->checkFailed . ($checkMessage ? "({$checkMessage})" : '')),
-                                    )
-                                ),
+                                        setClass('flex w-full mt-2 checkMerge'),
+                                        div(setClass('py-6 border-l-4 border-r-4 border-danger')),
+                                        div
+                                        (
+                                            setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
+                                            span(setClass('text-danger font-bold'), $lang->mr->checkFailed . ($checkMessage ? "({$checkMessage})" : '')),
+                                        )
+                                    ),
+                                ) : null,
                                 section
                                 (
                                     div

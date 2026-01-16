@@ -1543,7 +1543,6 @@ class mrModel extends model
         if(!in_array($mergeType, array('rebase', 'fast-forward')))
         {
             $repo = $this->loadModel('repo')->getByID($mr->repoID);
-            $param['title']   = $mr->title;
             $param['message'] = "Merge branch {$mr->sourceBranch} of {$repo->name} (#{$mr->id})";
         }
 

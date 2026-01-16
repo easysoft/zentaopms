@@ -338,7 +338,7 @@ class mr extends control
         $this->view->title             = $this->lang->mr->view;
         $this->view->mr                = $mr;
         $this->view->reviewers         = $reviewers;
-        $this->view->reviewResult      = $this->mr->getReviewResult($reviewers, $flow);
+        $this->view->reviewResult      = $this->mr->getReviewResult($reviewers, empty($flow) ? array() : $flow);
         $this->view->repo              = $repo;
         $this->view->repoID            = $repo->id;
         $this->view->flow              = $flow;
@@ -1125,10 +1125,10 @@ class mr extends control
         $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
         $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
 
-        if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
-        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
-        if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
-        if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
+        if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && !in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
+        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && !in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
+        if(!empty($canMergeTargetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
+        if(!empty($canMergeSourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
 
         $result = new stdclass();
         $result->checkSourceBranch = $checkSourceBranch;
@@ -1193,7 +1193,7 @@ class mr extends control
         $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
 
         $reviewers    = !empty($reviewID) ? array() : $this->mr->getReviewers($mrID);
-        $reviewResult = $this->mr->getReviewResult($reviewers, $flow);
+        $reviewResult = $this->mr->getReviewResult($reviewers, empty($flow) ? array() : $flow);
 
         $this->view->flow         = $flow;
         $this->view->mrID         = $mrID;
