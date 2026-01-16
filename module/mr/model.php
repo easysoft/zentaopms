@@ -557,7 +557,7 @@ class mrModel extends model
             $response = zget($response, 'data', array());
             foreach($response as $commit)
             {
-                $commit->id            = $commit->sha;
+                $commit->id            = substr($commit->sha, 0, 10);
                 $commit->repoID        = $mr->repoID;
                 $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
                 $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
@@ -1289,7 +1289,7 @@ class mrModel extends model
        $commits = empty($commits->data) ? array() : zget($commits->data, 'commits', array());
        foreach($commits as $commit)
        {
-           $commit->id            = $commit->sha;
+           $commit->id            = substr($commit->sha, 0, 10);
            $commit->repoID        = $repo->id;
            $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
            $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;

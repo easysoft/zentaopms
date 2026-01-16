@@ -130,6 +130,7 @@ foreach($mergeTypeList as $mergeType)
         'data-call' => "loadMergeBtn('{$mergeType}')"
     );
 }
+if(!hasPriv('repo', 'diff')) unset($config->mr->commitLogs->dtable->fieldList['id']['link']);
 
 if(!in_array($app->user->account, array_keys($reviewers)))
 {
@@ -449,6 +450,7 @@ div
                                 set::cols($config->mr->createCheck->linkObject->dtable->fieldList),
                                 set::data(array_values($linkObjects)),
                                 set::loadPartial(true),
+                                set::onRenderCell(jsRaw('window.renderObjectCell')),
                                 set::footPager(usePager('objectPager'))
                             )
                         )

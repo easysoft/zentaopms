@@ -144,7 +144,7 @@ $config->mr->commitLogs->dtable->fieldList['id']['name']     = 'id';
 $config->mr->commitLogs->dtable->fieldList['id']['title']    = $lang->repo->revisions;
 $config->mr->commitLogs->dtable->fieldList['id']['type']     = 'text';
 $config->mr->commitLogs->dtable->fieldList['id']['data-app'] = $app->tab;
-$config->mr->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={id}");
+$config->mr->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={sha}");
 $config->mr->commitLogs->dtable->fieldList['id']['minWidth'] = 40;
 
 $config->mr->commitLogs->dtable->fieldList['committedDate']['name']     = 'committedDate';
@@ -200,7 +200,7 @@ $config->mr->createCheck->linkObject->dtable->fieldList['type']['map']      = ar
 $config->mr->createCheck->linkObject->dtable->fieldList['id']['name']   = 'id';
 $config->mr->createCheck->linkObject->dtable->fieldList['id']['title']  = $lang->repo->id;
 $config->mr->createCheck->linkObject->dtable->fieldList['id']['width']  = 60;
-$config->mr->createCheck->linkObject->dtable->fieldList['id']['link']   = array('module' => '{type}', 'method' => 'view', 'params' => 'id={id}', 'target' => '_blank');
+$config->mr->createCheck->linkObject->dtable->fieldList['id']['link']   = array('module' => '{type}', 'method' => 'view', 'params' => 'id={sha}', 'target' => '_blank');
 
 $config->mr->createCheck->linkObject->dtable->fieldList['title']['name']  = 'title';
 $config->mr->createCheck->linkObject->dtable->fieldList['title']['title'] = $lang->repo->title;
