@@ -2823,7 +2823,6 @@ class testcaseModel extends model
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
-            ->andWhere('lib')->eq($libID)
             ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('fromCaseID')->ne('0')
             ->andWhere('deleted')->eq('0')
