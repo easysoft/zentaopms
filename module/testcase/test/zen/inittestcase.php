@@ -19,13 +19,13 @@ cid=19100
  - 属性story @1
 - 步骤3：从Bug模板创建
  - 属性title @Bug标题1
- - 属性type @codeerror
+ - 属性type @feature
  - 属性pri @2
  - 属性story @2
 - 步骤4：Story关联测试属性story @3
 - 步骤5：复合条件测试（Bug优先）
  - 属性title @Bug标题2
- - 属性type @codeerror
+ - 属性type @feature
  - 属性pri @2
 
 */
@@ -74,6 +74,6 @@ $testcaseTest = new testcaseZenTest();
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($testcaseTest->initTestcaseTest(0, 0, 0)) && p('type,pri,scene,story') && e('feature,3,0,0'); // 步骤1：基础初始化测试
 r($testcaseTest->initTestcaseTest(0, 1, 0)) && p('title,type,pri,story') && e('测试用例1,feature,1,1'); // 步骤2：从测试用例模板创建
-r($testcaseTest->initTestcaseTest(0, 0, 1)) && p('title,type,pri,story') && e('Bug标题1,codeerror,2,2'); // 步骤3：从Bug模板创建
+r($testcaseTest->initTestcaseTest(0, 0, 1)) && p('title,type,pri,story') && e('Bug标题1,feature,2,2'); // 步骤3：从Bug模板创建
 r($testcaseTest->initTestcaseTest(3, 0, 0)) && p('story') && e('3'); // 步骤4：Story关联测试
-r($testcaseTest->initTestcaseTest(0, 2, 2)) && p('title,type,pri') && e('Bug标题2,codeerror,2'); // 步骤5：复合条件测试（Bug优先）
+r($testcaseTest->initTestcaseTest(0, 2, 2)) && p('title,type,pri') && e('Bug标题2,feature,2'); // 步骤5：复合条件测试（Bug优先）
