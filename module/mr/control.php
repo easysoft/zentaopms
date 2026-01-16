@@ -92,7 +92,7 @@ class mr extends control
         $repoID = $this->repo->saveState($repoID, $objectID);
         if(!isset($repoList[$repoID])) return $this->locate($this->createLink('repo', 'browse', "repoID=$repoID&objectID=$objectID"));
 
-        $repo   = $repoList[$repoID];
+        $repo = $repoList[$repoID];
         $this->loadModel('ci')->setMenu($repo->id);
 
         if($param == 'assignee' || $param == 'creator')
@@ -104,7 +104,7 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => $repo->serviceProject);
+        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceProject);
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
         $projects       = $this->mrZen->getAllProjects($repo);
         $canEdit        = common::hasPriv($this->app->rawModule, 'edit');
