@@ -11,6 +11,16 @@ declare(strict_types=1);
 namespace zin;
 jsVar('repoID', $repoID);
 
+$fields = defineFieldList('mr');
+$fields->field('title')->required(true)->width('1/2');
+$fields->control('branchBox')->label($lang->mr->sourceBranch)->required(true)->control('inputGroup')->width('full')->itemBegin('sourceBranch')->control('picker')->items($branches)->value($activeBranch)->itemEnd()->item(array('control' => 'icon', 'name' => 'angle-double-right', 'class' => 'icon-x center mx-1'))->itemBegin('targetBranch')->control('picker')->items($branches)->value($defaultBranch)->itemEnd();
+$fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->width('full');
+$fields->field('desc')->label($lang->mr->description)->control('editor')->width('full');
+$fields->field('message')->label('')->data(array('canMerge' => $canMerge, 'conflictFiles' => $conflictFiles))->hidden($canMerge)->control(array('control' => 'formTips', 'icon' => 'alert', 'text' => $mergeMessage))->width('full');
+
+$fields->autoLoad('sourceBranch', 'reviewer,message');
+$fields->autoLoad('targetBranch', 'reviewer,message');
+
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -19,90 +29,17 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-formPanel
+formGridPanel
 (
     setID('createForm'),
+    set::modeSwitcher(false),
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
-    on::change('[name=targetBranch]')->call('loadReviewers'),
-    on::change('[name=sourceBranch]')->call('loadReviewers'),
-    formGroup
-    (
-        set::width('535px'),
-        set::required(true),
-        set::name('title'),
-        set::label($lang->mr->title)
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('458px'),
-            set::required(true),
-            set::label($lang->mr->sourceBranch),
-            set::name('sourceBranch'),
-            set::items($branches),
-            set::value($activeBranch)
-        ),
-        span
-        (
-            setClass('ml-5 mr-2'),
-            icon('angle-double-right icon-2x')
-        ),
-        formGroup
-        (
-            set::width('458px'),
-            set::required(true),
-            set::label($lang->mr->targetBranch),
-            set::name('targetBranch'),
-            set::items($branches),
-            set::value($defaultBranch)
-        )
-    ),
-    formGroup
-    (
-        set::width('535px'),
-        set::required(true),
-        set::name('reviewer'),
-        set::label($lang->mr->reviewer),
-        set::items($users),
-        set::multiple(true)
-    ),
-    formGroup
-    (
-        set::name('desc'),
-        set::label($lang->mr->description),
-        set::control(array('control' => 'editor', 'upload-url' => 'disabled'))
-    ),
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('reviewFlowID'),
-        set::value(0)
-    ),
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('sourceSHA')
-    ),
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('mergeTargetSHA')
-    ),
-    formGroup
-    (
-        setID('failMessage'),
-        setClass('hidden'),
-        set::label(''),
-        div
-        (
-            set::name('failMessage'),
-            setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
-            icon(setClass('text-danger'), 'alert'),
-            span(setClass('ml-2'), '')
-        )
-    ),
+    on::change('[name=targetBranch]', 'loadReviewers'),
+    on::change('[name=sourceBranch]', 'loadReviewers'),
+    set::fields($fields),
+    set::loadUrl(createLink('mr', 'create', "repoID={$repoID}&objectID={$objectID}&sourceBranch={sourceBranch}&targetBranch={targetBranch}")),
+    on::formloaded()->call('loadReviewers', '>>> formload', jsRaw('event'), jsRaw('args'))
 );
 
 div(setID('createCheckList'), setClass('panel-form size-lg hidden'));

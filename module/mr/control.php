@@ -204,10 +204,21 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function create(int $repoID = 0, int $objectID = 0)
+    public function create(int $repoID = 0, int $objectID = 0, string $sourceBranch = '', string $targetBranch = '')
     {
         $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
+        $scm    = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $branches          = $scm->branch('', 'date_desc');
+        $defaultBranches   = array_values(array_slice($branches, 0, 2));
+        $targetBranch      = $targetBranch ?: zget($defaultBranches, 0, '');
+        $sourceBranch      = $sourceBranch ?: zget($defaultBranches, 1, '');
+        $flow              = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
+        $flow->definition  = json_decode($flow->definition);
+        $flow->reviewers   = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
+        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
 
         if($_POST)
         {
@@ -217,27 +228,67 @@ class mr extends control
                 ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
                 ->add('targetRepoID', zget($repo, 'gitfoxID', 0))
                 ->add('status', 'opened')
+                ->add('reviewFlowID', !empty($flow->id) ? $flow->id : 0)
+                ->add('sourceSHA', zget($mergeCheckMessage, 'sourceSHA', ''))
+                ->add('targetSHA', zget($mergeCheckMessage, 'targetSHA', ''))
                 ->skipSpecial('title,description')
                 ->get();
+
             $result = $this->mr->create($MR);
             return $this->send($result);
         }
 
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
-        $branches        = $scm->branch('', 'date_desc');
-        $defaultBranches = array_values(array_slice($branches, 0, 2));
+        $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
+        $canMergeSourceBranchType = array();
+        $canMergeTargetBranchType = array();
+        $branchTypeRules          = array();
+        foreach($branchRuleList as $branchRule)
+        {
+            if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
+            if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
+            if(empty($branchRule->branchType)) continue;
+            $branchTypeRules[$branchRule->branchType] = $branchRule;
+        }
 
-        $this->view->title       = $this->lang->mr->create;
-        $this->view->users       = $this->repo->getRepoMembers($repo);
-        $this->view->repo        = $repo;
-        $this->view->repoID      = $repoID;
-        $this->view->executionID = $objectID;
-        $this->view->objectID    = $objectID;
-        $this->view->branches    = $branches;
+        $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
+        $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
+        $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
 
-        $this->view->defaultBranch = zget($defaultBranches, 0, '');
-        $this->view->activeBranch  = zget($defaultBranches, 1, '');
+        $checkSourceBranch = $checkTargetBranch = true;
+        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
+        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
+
+        if(empty($canMergeTargetBranchType)  && !empty($sourceTypeTargetRule) && !in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
+        if(empty($canMergeSourceBranchType)  && !empty($targetTypeSourceRule) && !in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
+        if(!empty($canMergeTargetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
+        if(!empty($canMergeSourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
+
+        if($mergeCheckMessage)
+        {
+            $canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
+            $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+            $message       = zget($mergeCheckMessage, 'message', '');
+
+            if(!empty($conflictFiles)) $message .= $this->lang->mr->checkConflicts;
+            if(!$checkSourceBranch)    $message .= $this->lang->mr->checkSourceBranch;
+            if(!$checkTargetBranch)    $message .= $this->lang->mr->checkTargetBranch;
+        }
+
+        $this->view->title             = $this->lang->mr->create;
+        $this->view->users             = $this->repo->getRepoMembers($repo);
+        $this->view->repo              = $repo;
+        $this->view->repoID            = $repoID;
+        $this->view->executionID       = $objectID;
+        $this->view->objectID          = $objectID;
+        $this->view->branches          = $branches;
+        $this->view->defaultBranch     = $targetBranch;
+        $this->view->activeBranch      = $sourceBranch;
+        $this->view->reviewers         = implode(',', $flow->reviewers);
+        $this->view->mergeMessage      = isset($message)       ? $message       : '';
+        $this->view->canMerge          = isset($canMerge)      ? $canMerge      : true;
+        $this->view->conflictFiles     = isset($conflictFiles) ? $conflictFiles : array();
+        $this->view->checkSourceBranch = $checkSourceBranch;
+        $this->view->checkTargetBranch = $checkTargetBranch;
         $this->display();
     }
 
@@ -1037,24 +1088,6 @@ class mr extends control
     }
 
     /**
-     * 获取合并请求的审批流程。
-     * AJAX get MR approval flow.
-     *
-     * @param  int $repoID
-     * @param  string $targetBranch
-     * @access public
-     * @return void
-     */
-    public function ajaxGetReviewFlow(int $repoID, string $targetBranch)
-    {
-        $flow = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
-        if(!$flow) return $this->send(array());
-
-        $flow->definition = json_decode($flow->definition);
-        return $this->send($flow);
-    }
-
-    /**
      * 获取创建合并请求的检查列表。
      * AJAX get create MR check list.
      *
@@ -1091,63 +1124,6 @@ class mr extends control
         $this->view->targetBranch = $targetBranch;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         $this->display();
-    }
-
-    /**
-     * 获取合并请求的检查信息。
-     * AJAX get MR check message.
-     *
-     * @param  int $repoID
-     * @param  string $sourceBranch
-     * @param  string $targetBranch
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMergeCheckMessage(int $repoID, string $sourceBranch, string $targetBranch)
-    {
-        $branchRuleList           = $this->loadModel('repobranchrule')->getList($repoID);
-        $canMergeSourceBranchType = array();
-        $canMergeTargetBranchType = array();
-        $branchTypeRules          = array();
-        foreach($branchRuleList as $branchRule)
-        {
-            if($branchRule->branchName == $sourceBranch && !empty($branchRule->targetBranch)) $canMergeTargetBranchType = explode(',', $branchRule->targetBranch);
-            if($branchRule->branchName == $targetBranch && !empty($branchRule->sourceBranch)) $canMergeSourceBranchType = explode(',', $branchRule->sourceBranch);
-            if(empty($branchRule->branchType)) continue;
-            $branchTypeRules[$branchRule->branchType] = $branchRule;
-        }
-
-        $branchTypeList = $this->loadModel('repobranchtype')->getByBranches($repoID, array($sourceBranch, $targetBranch));
-        $sourceBranchType = empty($branchTypeList) || empty($branchTypeList[$sourceBranch]) ? 0 : $branchTypeList[$sourceBranch]->id;
-        $targetBranchType = empty($branchTypeList) || empty($branchTypeList[$targetBranch]) ? 0 : $branchTypeList[$targetBranch]->id;
-
-        $checkSourceBranch = $checkTargetBranch = true;
-        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
-        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
-
-        if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && !in_array($targetBranch, $sourceTypeTargetRule)) $checkSourceBranch = false;
-        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && !in_array($sourceBranch, $targetTypeSourceRule)) $checkTargetBranch = false;
-        if(!empty($canMergeTargetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType)) $checkSourceBranch = false;
-        if(!empty($canMergeSourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType)) $checkTargetBranch = false;
-
-        $result = new stdclass();
-        $result->checkSourceBranch = $checkSourceBranch;
-        $result->checkTargetBranch = $checkTargetBranch;
-
-        $repo = $this->loadModel('repo')->fetchByID($repoID);
-        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
-        if($mergeCheckMessage)
-        {
-            $result->canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
-            $result->conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
-            $result->message       = zget($mergeCheckMessage, 'message', '');
-            $result->sourceSHA     = zget($mergeCheckMessage, 'sourceSHA', '');
-            $result->targetSHA     = zget($mergeCheckMessage, 'targetSHA', '');
-            if(!empty($result->conflictFiles)) $result->message .= $this->lang->mr->checkConflicts;
-            if(!$checkSourceBranch) $result->message .= $this->lang->mr->checkSourceBranch;
-            if(!$checkTargetBranch) $result->message .= $this->lang->mr->checkTargetBranch;
-        }
-        return $this->send($result);
     }
 
     /**
