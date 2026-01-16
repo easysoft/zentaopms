@@ -42,7 +42,7 @@ r($actionTest->getDynamicByProductTest($productID, $accountList[1])) && p() && e
 r($actionTest->getDynamicByProductTest($productID, $accountList[2])) && p() && e('2');  // 查找用户dev17动态
 r($actionTest->getDynamicByProductTest($productID, $accountList[3])) && p() && e('2');  // 查找用户test18动态
 
-$actionTest->objectModel->dao->update(TABLE_ACTIONPRODUCT)->set('product')->eq('1')->where('action')->eq('33')->exec();
+$actionTest->instance->dao->update(TABLE_ACTIONPRODUCT)->set('product')->eq('1')->where('action')->eq('33')->exec();
 r($actionTest->getDynamicByProductTest($productID, $accountList[3], $typeList[1])) && p() && e('1');   // 查找今天的动态
 r($actionTest->getDynamicByProductTest($productID, $accountList[1], $typeList[2])) && p() && e('0');   // 查找昨天的动态
 

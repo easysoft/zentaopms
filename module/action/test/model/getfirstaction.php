@@ -30,5 +30,5 @@ $action = new actionModelTest();
 
 r($action->getFirstActionTest())  && p('id,objectID,objectType,action,extra') && e('1,1,product,common,1'); // 测试获取对象类型 story 对象ID 1 的动态信息
 
-$action->objectModel->dao->delete()->from(TABLE_ACTION)->exec();
+$action->instance->dao->delete()->from(TABLE_ACTION)->exec();
 r($action->getFirstActionTest())  && p() && e('0'); // 没有动态数据

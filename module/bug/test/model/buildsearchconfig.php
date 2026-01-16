@@ -20,8 +20,8 @@ cid=15346
 
 */
 
-$bug=new bugModelTest();
-$searchConfig = $bug->objectModel->buildSearchConfig(1, 'story');
+$bugTest = new bugModelTest();
+$searchConfig = $bugTest->instance->buildSearchConfig(1, 'story');
 
 r($searchConfig['fields']) && p('title,module,steps') && e('Bug标题,所属模块,重现步骤'); // 测试字段名称
 r($searchConfig['params']['assignedTo']) && p('operator,control') && e('=,select');     // 测试指派给字段

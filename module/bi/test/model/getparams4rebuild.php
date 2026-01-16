@@ -21,27 +21,27 @@ $bi = new biModelTest();
 
 // 测试用例1：简单SELECT语句
 $sql1 = "SELECT 1 as id, 'test' as name";
-$statement1 = $bi->objectModel->sql2Statement($sql1);
+$statement1 = $bi->instance->sql2Statement($sql1);
 $columnFields1 = array('id' => 'id', 'name' => 'name');
 
-// 测试用例2：带别名的SELECT语句  
+// 测试用例2：带别名的SELECT语句
 $sql2 = "SELECT 1 as user_id, 'admin' as user_name";
-$statement2 = $bi->objectModel->sql2Statement($sql2);
+$statement2 = $bi->instance->sql2Statement($sql2);
 $columnFields2 = array('user_id' => 'user_id', 'user_name' => 'user_name');
 
 // 测试用例3：空字段列表
 $sql3 = "SELECT 'test' as value";
-$statement3 = $bi->objectModel->sql2Statement($sql3);
+$statement3 = $bi->instance->sql2Statement($sql3);
 $columnFields3 = array();
 
 // 测试用例4：多字段
 $sql4 = "SELECT 1 as id, 'name' as title, 'desc' as description";
-$statement4 = $bi->objectModel->sql2Statement($sql4);
+$statement4 = $bi->instance->sql2Statement($sql4);
 $columnFields4 = array('id' => 'id', 'title' => 'title', 'description' => 'description');
 
 // 测试用例5：聚合函数
 $sql5 = "SELECT COUNT(1) as total, 'admin' as role";
-$statement5 = $bi->objectModel->sql2Statement($sql5);
+$statement5 = $bi->instance->sql2Statement($sql5);
 $columnFields5 = array('total' => 'total', 'role' => 'role');
 
 r(count($bi->getParams4RebuildTest($sql1, $statement1, $columnFields1))) && p() && e(4);                    // 测试简单SELECT语句，检查返回数组包含4个元素

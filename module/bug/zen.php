@@ -483,8 +483,6 @@ class bugZen extends bug
         return true;
     }
 
-
-
     /**
      * 为创建 bug 设置导航数据。
      * Set menu for create bug page.
