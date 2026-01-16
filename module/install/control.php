@@ -324,12 +324,12 @@ class install extends control
         {
             $this->app->loadLang('upgrade');
 
-            list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
+            list($disabledFeatures, $enabledProjectFeatures, $disabledProjectFeatures) = $this->loadModel('custom')->computeFeatures();
 
-            $this->view->edition               = $this->config->edition;
-            $this->view->disabledFeatures      = $disabledFeatures;
-            $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
-            $this->view->disabledScrumFeatures = $disabledScrumFeatures;
+            $this->view->edition                 = $this->config->edition;
+            $this->view->disabledFeatures        = $disabledFeatures;
+            $this->view->enabledProjectFeatures  = $enabledProjectFeatures;
+            $this->view->disabledProjectFeatures = $disabledProjectFeatures;
             $this->display();
         }
     }
