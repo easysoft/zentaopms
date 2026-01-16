@@ -1983,7 +1983,7 @@ class testcaseZen extends testcase
         if($bugID > 0)
         {
             $bug = $this->loadModel('bug')->getById($bugID);
-            $case->type      = $bug->type;
+            $case->type      = 'feature';
             $case->pri       = $bug->pri ? $bug->pri : $bug->severity;
             $case->story     = $bug->story;
             $case->title     = $bug->title;
