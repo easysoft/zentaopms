@@ -1342,7 +1342,7 @@ window.browserNotify = function()
                         placement: 'bottom-right',
                         time: 0,
                         icon: 'envelope-o',
-                        className: 'bg-secondary-50 text-secondary-600 messager-notice'
+                        className: 'bg-secondary-50 text-secondary-600 messager-notice w-96'
                     });
                 }
             }
