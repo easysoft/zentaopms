@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->getURPairs();
 timeout=0
 cid=15903
+
+- 获取用需概念集合
+ - 属性1 @用户需求
+ - 属性2 @用户需求
+ - 属性3 @用需
+ - 属性4 @史诗
+ - 属性5 @用户需求
 
 */
 

@@ -10,6 +10,31 @@ title=测试 customModel->prepareSQL();
 timeout=0
 cid=15920
 
+- 测试method为select，paramString参数为空
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,module
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section,module
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section,module,vision
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为delete，paramString参数为空 @1
+- 测试method为delete，paramString参数为lang @0
+- 测试method为delete，paramString参数为lang,module @0
+- 测试method为delete，paramString参数为lang,key,section @0
+- 测试method为delete，paramString参数为lang,key,section,module @0
+- 测试method为delete，paramString参数为lang,key,section,module,vision @0
+
 */
 
 $lang = zenData('lang');

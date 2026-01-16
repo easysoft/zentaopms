@@ -1,10 +1,12 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->computeFeatures();
 timeout=0
 cid=0
+
 - 计算开源版不启用的功能
  -  @program
  - 属性1 @productLine
@@ -42,7 +44,7 @@ cid=0
  - 属性2 @productER
  - 属性3 @productUR
  - 属性4 @projectWaterfall
- - 计算无相关数据时，ipd版敏捷项目启用的功能 @0
+- 计算无相关数据时，ipd版敏捷项目启用的功能 @0
 - 计算无相关数据时，ipd版敏捷项目不启用的功能
  -  @问题
  - 属性1 @风险

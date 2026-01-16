@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->hasIssueData();
 timeout=0
 cid=15911
+
+- 测试开源版中无问题数据 @0
+- 测试ipd版中无问题数据 @0
+- 测试旗舰版中无问题数据 @0
+- 测试开源版中有问题数据 @0
+- 测试ipd版中有问题数据 @5
+- 测试旗舰版中有问题数据 @5
 
 */
 

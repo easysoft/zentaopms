@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->hasAuditplanData();
 timeout=0
 cid=15910
+
+- 测试开源版中无审计数据 @0
+- 测试ipd版中无审计数据 @0
+- 测试旗舰版中无审计数据 @0
+- 测试开源版中有审计数据 @0
+- 测试ipd版中有审计数据 @5
+- 测试旗舰版中有审计数据 @5
 
 */
 

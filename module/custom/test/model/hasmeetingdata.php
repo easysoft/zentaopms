@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->hasMeetingData();
 timeout=0
 cid=15912
+
+- 测试开源版中无会议数据 @0
+- 测试ipd版中无会议数据 @0
+- 测试旗舰版中无会议数据 @0
+- 测试开源版中有会议数据 @0
+- 测试ipd版中有会议数据 @5
+- 测试旗舰版中有会议数据 @5
 
 */
 

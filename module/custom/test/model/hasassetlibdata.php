@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->hasAssetlibData();
 timeout=0
 cid=15907
+
+- 测试开源版中无资产库数据 @0
+- 测试ipd版中无资产库数据 @0
+- 测试旗舰版中无资产库数据 @0
+- 测试开源版中有资产库数据 @0
+- 测试ipd版中有资产库数据 @5
+- 测试旗舰版中有资产库数据 @5
 
 */
 

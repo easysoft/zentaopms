@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->getSRPairs();
 timeout=0
 cid=15902
+
+- 获取软需概念集合。
+ - 属性1 @软件需求
+ - 属性2 @研发需求
+ - 属性3 @软需
+ - 属性4 @故事
+ - 属性5 @需求
 
 */
 
