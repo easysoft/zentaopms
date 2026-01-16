@@ -40,9 +40,9 @@ class mrModel extends model
         $filterProjectSql = '';
         if(!$this->app->user->admin && !empty($filterProjects))
         {
-            foreach($filterProjects as $hostID => $projectID)
+            foreach($filterProjects as $repoID)
             {
-                $filterProjectSql .= "(hostID = {$hostID} AND sourceProject = '{$projectID}') OR ";
+                $filterProjectSql .= "(sourceRepoID = '{$repoID}') OR ";
             }
 
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
