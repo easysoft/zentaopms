@@ -18,7 +18,7 @@ class formTips extends wg
 
     protected function build()
     {
-        list($icon, $text, $theme) = $this->prop(array('icon', 'text', 'theme'));
+        list($icon, $text) = $this->prop(array('icon', 'text'));
         return div
         (
             setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
