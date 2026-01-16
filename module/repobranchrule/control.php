@@ -83,7 +83,7 @@ class repobranchrule extends control
             {
                 if($originRule->id == 0) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
                 $result = $this->repobranchrule->deleteBranchRule($originRule->id);
-                if(!$result) $this->sendError($this->lang->fail);
+                if(!$result) $this->sendError($this->lang->repobranchrule->defaultValueRestoreError);
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
             }
 

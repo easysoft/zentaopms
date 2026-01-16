@@ -1,7 +1,8 @@
 <?php
-$lang->repobranchrule->common                 = 'Branch Rule';
-$lang->repobranchrule->setBranchRule          = 'Set Branch Rule';
-$lang->repobranchrule->specifyValueEmptyError = 'Specify Value Not Allowed Empty';
+$lang->repobranchrule->common                   = 'Branch Rule';
+$lang->repobranchrule->setBranchRule            = 'Set Branch Rule';
+$lang->repobranchrule->specifyValueEmptyError   = 'Specify Value Not Allowed Empty';
+$lang->repobranchrule->defaultValueRestoreError = 'Default Value Restore Failed';
 
 $lang->repo->branchType            = 'Branch Type';
 $lang->repo->applicableBranchTypes = 'Applicable Branch Types';
