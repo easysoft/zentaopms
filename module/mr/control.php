@@ -356,6 +356,7 @@ class mr extends control
         $this->view->oldRevision       = $mr->targetBranch;
         $this->view->newRevision       = $mr->sourceBranch;
         $this->view->defaultMergeType  = $this->cookie->mergeType;
+        $this->view->gitfoxServer      = $this->gitfox->getServer();
         $this->display();
     }
 

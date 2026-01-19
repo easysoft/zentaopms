@@ -399,7 +399,55 @@ $(document).ready(function()
 
     $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
     $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
+
+    connectSSE();
 });
+
+/**
+ * 调用 SSE 接口并输出返回值
+ * Call SSE endpoint and output returned values
+ */
+function connectSSE() {
+    console.log(`正在连接 SSE: ${sseURL}`);
+
+    eventSource = new EventSource(sseURL);
+
+    eventSource.onopen = function(event) {
+        console.log('SSE 连接已建立');
+    };
+
+    // 监听默认消息
+    eventSource.onmessage = function(event) {
+        console.log('收到消息:', event);
+    };
+
+    // 监听自定义事件类型
+    const eventTypes = [
+        'execution_updated',
+        'execution_running',
+        'execution_completed',
+        'execution_canceled',
+        'repository_import_completed',
+        'pullreq_updated',
+        'pullreq_reviewer_added',
+        'pullreq_reviewer_removed'
+    ];
+
+    eventTypes.forEach(type => {
+        eventSource.addEventListener(type, function(event) {
+            console.log(`收到 ${type} 事件:`, event.data);
+        });
+    });
+
+    eventSource.onerror = function(error) {
+        console.error('SSE 错误:', error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+            console.log('closed', '连接已关闭');
+        } else {
+            console.log('error', '连接发生错误 (正在重试...)');
+        }
+    };
+}
 
 window.inlineAppose = function()
 {
