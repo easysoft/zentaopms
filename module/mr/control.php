@@ -216,8 +216,11 @@ class mr extends control
         $targetBranch      = $targetBranch ?: zget($defaultBranches, 0, '');
         $sourceBranch      = $sourceBranch ?: zget($defaultBranches, 1, '');
         $flow              = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
-        $flow->definition  = json_decode($flow->definition);
-        $flow->reviewers   = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
+        if(!empty($flow))
+        {
+            $flow->definition  = json_decode($flow->definition);
+            $flow->reviewers   = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
+        }
         $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
 
         if($_POST)
@@ -283,7 +286,7 @@ class mr extends control
         $this->view->branches          = $branches;
         $this->view->defaultBranch     = $targetBranch;
         $this->view->activeBranch      = $sourceBranch;
-        $this->view->reviewers         = implode(',', $flow->reviewers);
+        $this->view->reviewers         = implode(',', zget($flow, 'reviewers', array()));
         $this->view->mergeMessage      = isset($message)       ? $message       : '';
         $this->view->canMerge          = isset($canMerge)      ? $canMerge      : true;
         $this->view->conflictFiles     = isset($conflictFiles) ? $conflictFiles : array();
