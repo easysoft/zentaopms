@@ -61,7 +61,7 @@ class baseTest
      * @var object
      * @access private
      */
-    protected $instance = null;
+    public $instance = null;
 
     /**
      * 被测试的类的反射对象。
