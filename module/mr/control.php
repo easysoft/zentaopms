@@ -322,6 +322,7 @@ class mr extends control
         $this->view->title     = $this->lang->mr->edit;
         $this->view->MR        = $mr;
         $this->view->repo      = $this->loadModel('repo')->getByID($mr->repoID);
+        $this->view->repoID    = $mr->repoID;
         $this->view->reviewers = !empty($reviewID) ? array() : array_keys($this->mr->getReviewers($id));
         $this->view->users     = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();

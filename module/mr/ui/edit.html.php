@@ -10,6 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$fields = defineFieldList('mr');
+$fields->field('sourceBranch')->required(true)->value($MR->sourceBranch)->disabled(true)->width('1/2');
+$fields->field('targetBranch')->required(true)->value($MR->targetBranch)->disabled(true)->width('1/2');
+$fields->field('title')->required(true)->value($MR->title)->width('1/2');
+$fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->disabled(true)->width('1/2');
+$fields->field('desc')->label($lang->mr->description)->control('editor')->value($MR->desc)->width('full');
+
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -18,54 +25,12 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-formPanel
+formGridPanel
 (
-    set::title($lang->mr->edit),
-    formGroup
-    (
-        set::width('535px'),
-        set::required(true),
-        set::name('title'),
-        set::label($lang->mr->title),
-        set::value($MR->title)
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::width('458px'),
-            set::required(true),
-            set::label($lang->mr->sourceBranch),
-            set::value($MR->sourceBranch),
-            set::control(array('control' => 'input', 'disabled' => true))
-        ),
-        span
-        (
-            setClass('ml-5 mr-2'),
-            icon('angle-double-right icon-2x')
-        ),
-        formGroup
-        (
-            set::width('458px'),
-            set::label($lang->mr->targetBranch),
-            set::value($MR->targetBranch),
-            set::control(array('control' => 'input', 'disabled' => true))
-        )
-    ),
-    !empty($reviewers) ? formGroup
-    (
-        set::width('535px'),
-        set::name('reviewer'),
-        set::label($lang->mr->reviewer),
-        set::items($users),
-        set::control(array('control' => 'picker', 'disabled' => true, 'multiple' => true)),
-        set::value($reviewers)
-    ) : null,
-    formGroup
-    (
-        set::name('desc'),
-        set::label($lang->mr->description),
-        set::control(array('control' => 'editor', 'upload-url' => 'disabled')),
-        set::value($MR->desc)
-    )
+    setID('editForm'),
+    set::modeSwitcher(false),
+    set::title($title),
+    set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
+    set::fields($fields),
+    set::loadUrl(createLink('mr', 'edit', "id={$MR->id}")),
 );
