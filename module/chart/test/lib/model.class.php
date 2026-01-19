@@ -64,7 +64,9 @@ class chartModelTest extends baseTest
      */
     public function isClickableTest(int $chartID, string $action)
     {
-        $chart  = $this->getByIdTest($chartID);
+        $chart = $this->getByIdTest($chartID);
+        if(!$chart) return false;
+
         $result = chartModel::isClickable($chart, $action);
         if(dao::isError()) return dao::getError();
         return $result;

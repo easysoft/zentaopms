@@ -303,7 +303,7 @@ class bugModelTest extends baseTest
         $this->instance->resolve($bug, $output);
         if(dao::isError()) return str_replace('\n', '', dao::getError(true));
 
-        return $tester->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
+        return $this->instance->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
     }
 
     /**
@@ -1005,7 +1005,7 @@ class bugModelTest extends baseTest
         $this->instance->createBuild($bug, $oldBug);
         if(dao::isError()) return dao::getError(true);
 
-        return $tester->dao->findByID($bug->resolvedBuild)->from(TABLE_BUILD)->fetch();
+        return $this->instance->dao->findByID($bug->resolvedBuild)->from(TABLE_BUILD)->fetch();
     }
 
     /**
@@ -1179,7 +1179,7 @@ class bugModelTest extends baseTest
     public function getRelatedObjectsTest(string $object, string $pairs = ''): object
     {
         /* 设置bugQueryCondition来模拟有查询条件的情况 */
-        $_SESSION['bugQueryCondition'] = "SELECT * FROM " . TABLE_BUG . " WHERE deleted = '0'";
+        $_SESSION['bugQueryCondition'] = "deleted = '0'";
         $_SESSION['bugOnlyCondition']  = true;
 
         $objects = $this->instance->getRelatedObjects($object, $pairs);

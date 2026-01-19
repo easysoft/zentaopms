@@ -225,7 +225,7 @@ class branchModelTest extends baseTest
         $this->instance->linkBranch4Project($productID);
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetch('count');
+        return $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productID)->andWhere('branch')->gt(0)->fetch('count');
     }
 
     /**
@@ -398,7 +398,9 @@ class branchModelTest extends baseTest
     public function isClickableTest(int $branchID, string $status): bool
     {
         $branch = $this->instance->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch();
-        return $this->instance->isClickable($branch, $status);
+        $result = $this->invokeArgs('isClickable', [$branch, $status]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

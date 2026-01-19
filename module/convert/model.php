@@ -65,8 +65,7 @@ class convertModel extends model
     public function dbExists(string $dbName = ''): object|false
     {
         if(!$this->checkDBName($dbName)) return false;
-        $quotedDbName = $this->dbh->quote($dbName);
-        return $this->dbh->query("SHOW DATABASES like {$quotedDbName}")->fetch();
+        return $this->dbh->dbExists($dbName);
     }
 
     /**

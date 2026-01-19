@@ -39,11 +39,11 @@ cid=15734
 
 */
 
-$count      = array('0','1');
+$count      = array(0,1);
 $browseType = array('inside', 'outside');
 $type       = array('', 'bydept');
-$queryID    = array('0', '3');
-$deptID     = array('0', '1');
+$queryID    = array(0, 3);
+$deptID     = array(0, 1);
 $sort       = array('realname_asc', 'account_desc');
 
 $company = new companyModelTest();

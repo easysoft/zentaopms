@@ -27,7 +27,7 @@ zenData('build')->loadYaml('build')->gen(20);
 zenData('project')->loadYaml('project')->gen(100);
 su('admin');
 
-$buildIDList = array('1', '11');
+$buildIDList = array(1, 11);
 
 $normalExecution = array('name' => '修改版本一', 'builder' => 'admin');
 $executionBuild  = array('name' => '修改执行版本一', 'builder' => 'admin');

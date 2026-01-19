@@ -25,8 +25,8 @@ $tester->loadModel('convert');
 
 $convertTest = new convertModelTest();
 
-r(method_exists($convertTest->objectModel, 'dbExists')) && p() && e('1'); // 步骤1：检查方法是否存在
-r(is_callable(array($convertTest->objectModel, 'dbExists'))) && p() && e('1'); // 步骤2：检查方法是否可调用
-r($convertTest->dbExistsTest('')) && p() && e('0'); // 步骤3：测试空数据库名称
-r($convertTest->dbExistsTest('123invalid')) && p() && e('0'); // 步骤4：测试无效数据库名称（数字开头）
-r($convertTest->dbExistsTest('test-db')) && p() && e('0'); // 步骤5：测试无效数据库名称（特殊字符）
+r(method_exists($convertTest->instance, 'dbExists'))      && p() && e('1'); // 步骤1：检查方法是否存在
+r(is_callable(array($convertTest->instance, 'dbExists'))) && p() && e('1'); // 步骤2：检查方法是否可调用
+r($convertTest->dbExistsTest(''))                         && p() && e('0'); // 步骤3：测试空数据库名称
+r($convertTest->dbExistsTest('123invalid'))               && p() && e('0'); // 步骤4：测试无效数据库名称（数字开头）
+r($convertTest->dbExistsTest('test-db'))                  && p() && e('0'); // 步骤5：测试无效数据库名称（特殊字符）

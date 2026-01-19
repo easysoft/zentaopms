@@ -8,7 +8,9 @@ su('admin');
 /**
 
 title=bugModel->buildSearchConfig();
+timeout=0
 cid=15346
+
 - 测试字段名称
  - 属性title @Bug标题
  - 属性module @所属模块

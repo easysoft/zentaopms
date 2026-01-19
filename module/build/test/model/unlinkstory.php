@@ -24,8 +24,8 @@ zenData('build')->gen(20);
 zenData('story')->gen(10);
 su('admin');
 
-$buildIDList = array('1', '11', '15');
-$stories     = array('2', '4', '6');
+$buildIDList = array(1, 11, 15);
+$stories     = array(2, 4, 6);
 
 $build = new buildModelTest();
 
