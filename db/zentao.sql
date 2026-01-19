@@ -15289,6 +15289,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_model` (
 -- DROP TABLE IF EXISTS `zt_ai_agent`;
 CREATE TABLE IF NOT EXISTS `zt_ai_agent` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(30) NOT NULL DEFAULT '' COMMENT '内部 code',
   `name` varchar(20) NOT NULL DEFAULT '',
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
