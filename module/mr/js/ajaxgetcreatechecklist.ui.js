@@ -93,7 +93,6 @@ function getIframeHeight()
     var mainNavbar         = parseInt($('#navbar').height());
     var tabsbar            = parseInt($('.nav-tabs').height());
     var mainMenuHeight     = parseInt($('#mainContent').css('padding-top')) + parseInt($('#mainContent').css('padding-bottom'));
-    var mrMenuHeight       = parseInt($('#mrMenu').height());
     var appTabsHeight      = parseInt($('#appTabs').height());
     var appsBarHeight      = parseInt($('#appsBar').height());
 
@@ -101,7 +100,7 @@ function getIframeHeight()
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
     mainMenuHeight     = mainMenuHeight ? mainMenuHeight : 0;
     mainNavbar         = mainNavbar ? mainNavbar : 0;
-    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - mrMenuHeight - 28;
+    iframeHeight       = windowHeight - headerHeight - appsBarHeight - appTabsHeight - mainMenuHeight - mainNavbar - tabsbar - 28;
 
     return iframeHeight;
 }
@@ -208,6 +207,7 @@ $(function()
 
         /* Load default tab content. */
         var height = getIframeHeight();
+        console.log(height);
         $.cookie.set('repoCodePath', file, {expires:config.cookieLife, path:config.webRoot});
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
 
@@ -221,7 +221,7 @@ $(function()
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
-    }, 300);
+    }, 500);
 });
 
 /**
