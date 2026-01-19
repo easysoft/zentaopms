@@ -1437,6 +1437,7 @@
                         }
                     });
                 }
+                $(`#${id}`).trigger('formloaded', [info, options]);
                 return true;
             }
         })
