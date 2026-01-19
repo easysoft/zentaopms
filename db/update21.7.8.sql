@@ -389,3 +389,8 @@ WHERE `name` = '编写结项报告' AND `createdBy` = 'system';
 UPDATE `zt_ai_agent`
 SET `code` = 'zt_automatic_test'
 WHERE `name` = '编写自动化测试脚本' AND `createdBy` = 'system';
+
+ALTER TABLE `zt_projectadmin` MODIFY COLUMN `programs` text DEFAULT NULL;
+ALTER TABLE `zt_projectadmin` MODIFY COLUMN `projects` text DEFAULT NULL;
+ALTER TABLE `zt_projectadmin` MODIFY COLUMN `executions` text DEFAULT NULL;
+ALTER TABLE `zt_projectadmin` MODIFY COLUMN `products` text DEFAULT NULL;
