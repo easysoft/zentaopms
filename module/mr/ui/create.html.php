@@ -14,12 +14,12 @@ jsVar('repoID', $repoID);
 $fields = defineFieldList('mr');
 $fields->field('sourceBranch')->required(true)->control('picker')->items($branches)->value($activeBranch)->width('1/2');
 $fields->field('targetBranch')->required(true)->control('picker')->items($branches)->value($defaultBranch)->width('1/2');
-$fields->field('title')->required(true)->width('1/2');
+$fields->field('title')->required(true)->value($commitMessage)->width('1/2');
 $fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->width('1/2');
 $fields->field('desc')->label($lang->mr->description)->control('editor')->width('full');
 $fields->field('message')->label('')->data(array('canMerge' => $canMerge, 'conflictFiles' => $conflictFiles, 'mergeMessage' => $mergeMessage))->hidden($canMerge)->control(array('control' => 'formTips', 'icon' => 'alert', 'text' => $mergeMessage))->width('full');
 
-$fields->autoLoad('sourceBranch', 'reviewer,message');
+$fields->autoLoad('sourceBranch', 'reviewer,message,title');
 $fields->autoLoad('targetBranch', 'reviewer,message');
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
