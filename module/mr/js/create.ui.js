@@ -4,7 +4,6 @@ window.loadReviewers = function()
     const sourceBranch  = $('[name="sourceBranch"]').val();
     const canMerge      = $('[data-name=message]').data('canMerge');
     const conflictFiles = $('[data-name=message]').data('conflictFiles');
-    console.log(canMerge, conflictFiles);
 
     if(!canMerge)
     {
