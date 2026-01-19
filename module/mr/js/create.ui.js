@@ -4,12 +4,13 @@ window.loadReviewers = function()
     const sourceBranch  = $('[name="sourceBranch"]').val();
     const canMerge      = $('[data-name=message]').data('canMerge');
     const conflictFiles = $('[data-name=message]').data('conflictFiles');
+    console.log(canMerge, conflictFiles);
 
     if(!canMerge)
     {
         $('button[type=submit]').addClass('disabled');
         $('button[type=submit]').attr('disabled', 'disabled');
-        if(conflictFiles > 0)
+        if(conflictFiles.length > 0)
         {
             loadTarget($.createLink('mr', 'ajaxGetConflictFiles', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
             $('#createCheckList').removeClass('hidden');

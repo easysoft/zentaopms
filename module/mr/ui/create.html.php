@@ -12,11 +12,12 @@ namespace zin;
 jsVar('repoID', $repoID);
 
 $fields = defineFieldList('mr');
+$fields->field('sourceBranch')->required(true)->control('picker')->items($branches)->value($activeBranch)->width('1/2');
+$fields->field('targetBranch')->required(true)->control('picker')->items($branches)->value($defaultBranch)->width('1/2');
 $fields->field('title')->required(true)->width('1/2');
-$fields->control('branchBox')->label($lang->mr->sourceBranch)->required(true)->control('inputGroup')->width('full')->itemBegin('sourceBranch')->control('picker')->items($branches)->value($activeBranch)->itemEnd()->item(array('control' => 'icon', 'name' => 'angle-double-right', 'class' => 'icon-x center mx-1'))->itemBegin('targetBranch')->control('picker')->items($branches)->value($defaultBranch)->itemEnd();
-$fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->width('full');
+$fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->width('1/2');
 $fields->field('desc')->label($lang->mr->description)->control('editor')->width('full');
-$fields->field('message')->label('')->data(array('canMerge' => $canMerge, 'conflictFiles' => $conflictFiles))->hidden($canMerge)->control(array('control' => 'formTips', 'icon' => 'alert', 'text' => $mergeMessage))->width('full');
+$fields->field('message')->label('')->data(array('canMerge' => $canMerge, 'conflictFiles' => $conflictFiles, 'mergeMessage' => $mergeMessage))->hidden($canMerge)->control(array('control' => 'formTips', 'icon' => 'alert', 'text' => $mergeMessage))->width('full');
 
 $fields->autoLoad('sourceBranch', 'reviewer,message');
 $fields->autoLoad('targetBranch', 'reviewer,message');
@@ -35,8 +36,6 @@ formGridPanel
     set::modeSwitcher(false),
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
-    on::change('[name=targetBranch]', 'loadReviewers'),
-    on::change('[name=sourceBranch]', 'loadReviewers'),
     set::fields($fields),
     set::loadUrl(createLink('mr', 'create', "repoID={$repoID}&objectID={$objectID}&sourceBranch={sourceBranch}&targetBranch={targetBranch}")),
     on::formloaded()->call('loadReviewers', '>>> formload', jsRaw('event'), jsRaw('args'))
