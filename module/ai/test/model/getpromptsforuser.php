@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('prompt1{3},prompt2{3},prompt3{2},prompt4{1},prompt5{1}');
 $table->module->range('story{3},task{3},bug{2},project{1},user{1}');

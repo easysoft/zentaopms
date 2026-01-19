@@ -13117,7 +13117,7 @@ class upgradeModel extends model
             unset($aiPrompt->id);
             $aiPrompt->createdBy   = 'system';
             $aiPrompt->createdDate = helper::now();
-            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
+            $this->dao->insert(TABLE_AI_AGENT)->data($aiPrompt)->autoCheck()->exec();
 
             $promptID = $this->dao->lastInsertID();
             if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
@@ -13134,7 +13134,7 @@ class upgradeModel extends model
      */
     public function checkExistAIPrompt(object $aiPrompt): bool
     {
-        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_AGENT)
             ->where('name')->eq($aiPrompt->name)
             ->fetch('count');
         return $count == 0;
@@ -13184,7 +13184,7 @@ class upgradeModel extends model
         foreach($aiPromptFields as $field)
         {
             $field->appID = $promptID;
-            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
+            $this->dao->insert(TABLE_AI_AGENTFIELD)->data($field, 'id')->exec();
         }
     }
 

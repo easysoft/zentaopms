@@ -1369,7 +1369,7 @@ class aiModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         $count = $this->instance->dao->select('COUNT(1) AS count')
-            ->from(TABLE_AI_PROMPTFIELD)
+            ->from(TABLE_AI_AGENTFIELD)
             ->where('appID')->eq($promptID)
             ->fetch('count');
         return $count;

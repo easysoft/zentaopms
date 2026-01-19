@@ -22,7 +22,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$promptTable = zenData('ai_prompt');
+$promptTable = zenData('ai_agent');
 $promptTable->id->range('1-20');
 $promptTable->name->range('需求润色,一键拆用例,项目分析,产品评审,任务拆解,缺陷修复,文档生成,代码评审,测试计划,执行分析,用例设计,项目管理,产品规划,需求分析,bug分析,story优化,task创建,project总结,execution监控,doc编写');
 $promptTable->module->range('story{3},task{3},project{3},product{3},execution{3},bug{2},case{2},doc{1}');

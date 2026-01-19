@@ -18,7 +18,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_promptfield');
+$table = zenData('ai_agentfield');
 $table->id->range('1-20');
 $table->appID->range('1{5},2{5},3{5},999{2},0{3}');
 $table->name->range('字段1,字段2,字段3,字段4,字段5,字段6,字段7,字段8,字段9,字段10,字段11,字段12,字段13,字段14,字段15,字段16,字段17,字段18,字段19,字段20');

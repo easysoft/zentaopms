@@ -18,7 +18,7 @@ cid=15024
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('prompt1,prompt2,prompt3{2},prompt4{3},prompt5{3}');
 $table->module->range('story{3},task{3},bug{3},testcase');

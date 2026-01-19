@@ -20,8 +20,8 @@ cid=15022
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 创建ai_prompt测试数据
-$promptTable = zenData('ai_prompt');
+// 创建ai_agent测试数据
+$promptTable = zenData('ai_agent');
 $promptTable->name->range('测试提示词1,测试提示词2,测试提示词3,测试提示词4,测试提示词5');
 $promptTable->module->range('story,task,bug,project,testcase');
 $promptTable->source->range('story.title,task.name,bug.title,project.name,testcase.title');

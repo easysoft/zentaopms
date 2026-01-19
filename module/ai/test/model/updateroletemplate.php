@@ -18,7 +18,7 @@ cid=15079
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_promptrole');
+$table = zenData('ai_agentrole');
 $table->id->range('1-10');
 $table->name->range('产品经理,开发工程师,测试工程师,QA工程师,文案编辑,项目经理');
 $table->desc->range('负责产品管理,负责开发工作,负责测试工作,负责质量管理,负责文案编辑,负责项目管理');
