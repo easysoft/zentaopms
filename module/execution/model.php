@@ -5463,26 +5463,19 @@ class executionModel extends model
     {
         $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
         $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
-        $deliverables = $this->dao->select('t1.template,t1.name,t2.required,t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+        $deliverables = $this->dao->select('t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
             ->andWhere('t1.status')->eq('enabled')
+            ->andWhere('t2.required')->eq('1')
             ->andWhere('t2.stage')->eq($stageType)
-            ->fetchAll('id');
+            ->fetchPairs();
 
         if(empty($deliverables)) return true;
 
-        $executionDeliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
+        $countExecutionDeliverables = $this->dao->select('count(*) as count')->from(TABLE_PROJECTDELIVERABLE)->where('project')->eq($execution->project)->andWhere('deliverable')->in($deliverables)->fetch('count');
 
-        foreach($deliverables as $id => $deliverable)
-        {
-            if(empty($deliverable->required)) continue;
-
-            if(!isset($executionDeliverables[$id])) return false;
-            if(empty($executionDeliverables[$id]['fileID']) && empty($executionDeliverables[$id]['doc'])) return false;
-        }
-
-        return true;
+        return $countExecutionDeliverables >= count($deliverables);
     }
 }
