@@ -211,15 +211,16 @@ class mr extends control
         $scm    = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $branches          = $scm->branch('', 'date_desc');
-        $defaultBranches   = array_values(array_slice($branches, 0, 2));
-        $targetBranch      = $targetBranch ?: zget($defaultBranches, 0, '');
-        $sourceBranch      = $sourceBranch ?: zget($defaultBranches, 1, '');
-        $flow              = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
+        $branches        = $scm->branch('all', 'date_desc');
+        $branchNameList  = array_column($branches, 'name', 'name');
+        $defaultBranches = array_values(array_slice($branchNameList, 0, 2));
+        $targetBranch    = $targetBranch ?: zget($defaultBranches, 0, '');
+        $sourceBranch    = $sourceBranch ?: zget($defaultBranches, 1, '');
+        $flow            = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
         if(!empty($flow))
         {
-            $flow->definition  = json_decode($flow->definition);
-            $flow->reviewers   = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
+            $flow->definition = json_decode($flow->definition);
+            $flow->reviewers  = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
         }
         $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
 
@@ -283,7 +284,7 @@ class mr extends control
         $this->view->repoID            = $repoID;
         $this->view->executionID       = $objectID;
         $this->view->objectID          = $objectID;
-        $this->view->branches          = $branches;
+        $this->view->branches          = $branchNameList;
         $this->view->defaultBranch     = $targetBranch;
         $this->view->activeBranch      = $sourceBranch;
         $this->view->reviewers         = implode(',', zget($flow, 'reviewers', array()));
@@ -292,6 +293,7 @@ class mr extends control
         $this->view->conflictFiles     = isset($conflictFiles) ? $conflictFiles : array();
         $this->view->checkSourceBranch = $checkSourceBranch;
         $this->view->checkTargetBranch = $checkTargetBranch;
+        $this->view->commitMessage     = empty($branches[$sourceBranch]) ? '' : $branches[$sourceBranch]->commit->message;
         $this->display();
     }
 
