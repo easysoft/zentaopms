@@ -1,5 +1,4 @@
 <?php
-$lang->ppm = new stdclass;
 $lang->ppm->common            = "合并请求";
 $lang->ppm->server            = "服务器";
 $lang->ppm->hostID            = "服务器";
@@ -173,8 +172,8 @@ $lang->ppm->accessGitlabFailed   = "当前无法连接到GitLab服务器。";
 $lang->ppm->reopenSuccess        = "已重新打开合并请求。";
 $lang->ppm->closeSuccess         = "已关闭合并请求。";
 $lang->ppm->unsupportedFeature   = "暂不支持该功能。";
-$lang->ppm->checkSourceBranch    = '源分支规则限制当前评审';
-$lang->ppm->checkTargetBranch    = '目标分支规则限制当前评审';
+$lang->ppm->checkSourceBranch    = '源分支允许合并到的目标分支类型：%s';
+$lang->ppm->checkTargetBranch    = '目标分支允许合并的源分支类型：%s';
 $lang->ppm->checkConflicts       = '检测到代码冲突，请先在本地解决冲突后再创建合并请求。';
 $lang->ppm->checkReviewers       = '评审人必须包含%s';
 $lang->ppm->sourceBranchNotExist = '源分支不存在';

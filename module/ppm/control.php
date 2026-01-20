@@ -246,15 +246,29 @@ class ppm extends control
         $checkSourceBranch = $mergeRuleResult[$sourceBranch]['result'];
         $checkTargetBranch = $mergeRuleResult[$targetBranch]['result'];
 
+        $message = '';
         if($mergeCheckMessage)
         {
             $canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
             $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
             $message       = zget($mergeCheckMessage, 'message', '');
+            if($message) $message = sprintf($this->config->ppm->messageTips, $message);
 
-            if(!empty($conflictFiles)) $message .= $this->lang->ppm->checkConflicts;
-            if(!$checkSourceBranch)    $message .= $this->lang->ppm->checkSourceBranch;
-            if(!$checkTargetBranch)    $message .= $this->lang->ppm->checkTargetBranch;
+            if(!empty($conflictFiles))
+            {
+                if($message) $message .= '</br>';
+                $message .= sprintf($this->config->ppm->messageTips, $this->lang->ppm->checkConflicts);
+            }
+        }
+        if(!$checkSourceBranch)
+        {
+            if($message) $message .= '</br>';
+            $message .= sprintf($this->config->ppm->messageTips, sprintf($this->lang->ppm->checkSourceBranch, implode(',', $mergeRuleResult[$sourceBranch]['branchType'])));
+        }
+        if(!$checkTargetBranch)
+        {
+            if($message) $message .= '</br>';
+            $message .= sprintf($this->config->ppm->messageTips, sprintf($this->lang->ppm->checkTargetBranch, implode(',', $mergeRuleResult[$targetBranch]['branchType'])));
         }
 
         $this->view->title             = $this->lang->ppm->create;

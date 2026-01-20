@@ -4,6 +4,7 @@ $module = $app->rawModule;
 if($module != 'ppm' && $module != 'pullreq') $module = 'ppm';
 
 $config->ppm = new stdclass();
+$config->ppm->messageTips = '<i class="icon icon-alert text-danger"></i><span class="ml-2">%s</span>';
 
 $config->ppm->create = new stdclass();
 $config->ppm->create->skippedFields  = 'reviewer';
