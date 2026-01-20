@@ -22,8 +22,8 @@ class formTips extends wg
         return div
         (
             setClass('border-danger border-2 bg-danger bg-opacity-5 rounded-lg w-full p-2'),
-            icon(setClass('text-danger'), $icon),
-            span(setClass('ml-2'), $text)
+            $icon ? icon(setClass('text-danger'), $icon) : null,
+            $icon ? span(setClass('ml-2'), $text) : span(html($text))
         );
     }
 }
