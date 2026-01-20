@@ -1,4 +1,7 @@
 <?php
+$config->project->create->requiredFields = str_replace(',workflowGroup', '', $config->project->create->requiredFields);
+$config->project->edit->requiredFields   = str_replace(',workflowGroup', '', $config->project->edit->requiredFields);
+
 $config->project->list->exportFields = 'id,code,name,status,PM,desc';
 
 if(!isset($config->project->datatable)) $config->project->datatable = new stdclass();
