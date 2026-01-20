@@ -65,6 +65,8 @@ class gantt extends wg
         $project      = data('project');
         $showFields   = data('showFields');
         $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
+        $ganttLang    = $this->prop('ganttLang');
+        $ganttFields  = $this->prop('ganttFields');
 
         return div
         (
@@ -79,10 +81,10 @@ class gantt extends wg
             jsVar('showChart',       $showChart),
             jsVar('colResize',       $colResize),
             jsVar('userList',        $this->getUserList()),
-            jsVar('ganttLang',       $this->prop('ganttLang')),
+            jsVar('ganttLang',       $ganttLang),
             jsVar('canGanttEdit',    $this->prop('canEdit')),
             jsVar('canEditDeadline', $this->prop('canEditDeadline')),
-            jsVar('ganttFields',     $this->prop('ganttFields')),
+            jsVar('ganttFields',     $ganttFields),
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('options',         $this->prop('options')),
             jsVar('colsWidth',       (float)$colsWidth),
@@ -93,7 +95,21 @@ class gantt extends wg
             setID('ganttContainer'),
             on::click('.toggle-all-icon')->call('toggleAllTasks'),
             div(setID($id), setClass('gantt is-collapsed')),
-            div(setID('myCover'), div(setID('gantt_here'), setData('reviewpoints', json_encode($reviewPoints))))
+            div(setID('myCover'), div(setID('gantt_here'), setData('reviewpoints', json_encode($reviewPoints)))),
+            modal
+            (
+                setID('changeDeadlineModal'),
+                set::size('sm'),
+                set::title($ganttLang->edit),
+                inputGroup
+                (
+                    $ganttFields['column_deadline'],
+                    datePicker(set::name('deadline')),
+                    formHidden('reviewID', ''),
+                    formHidden('projectID', ''),
+                    btn(setClass('primary'), $ganttLang->edit, on::click('saveDeadline'))
+                )
+            )
         );
     }
 }
