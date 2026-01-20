@@ -79,7 +79,13 @@ class repobranchrule extends control
                     $allDefault = false;
                 }
             }
-            if($allDefault) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+            if($allDefault)
+            {
+                if($originRule->id == 0) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+                $result = $this->repobranchrule->deleteBranchRule($originRule->id);
+                if(!$result) $this->sendError($this->lang->repobranchrule->defaultValueRestoreError);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+            }
 
             $rule = $this->repobranchruleZen->buildBranchRuleData($branchTypeID, $repoID, $branchName, $formData);
             if(dao::isError()) $this->sendError(dao::getError());
