@@ -1022,6 +1022,18 @@ class ppmModel extends model
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $canMergeSourceBranchType;
         }
+        if(!$checkResult[$targetBranch]['result'] || !$checkResult[$sourceBranch]['result'])
+        {
+            $branchTypes = $this->repobranchtype->getBranchTypeByRepoID($repoID);
+            foreach($checkResult as $branch => $result)
+            {
+                if(empty($result['rule'])) continue;
+                foreach($result['rule'] as $branchType)
+                {
+                    if(!empty($branchTypes[$branchType])) $checkResult[$branch]['branchType'][$branchType] = $branchTypes[$branchType]->name;
+                }
+            }
+        }
 
         return $checkResult;
     }
