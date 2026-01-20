@@ -808,7 +808,7 @@ class actionTao extends actionModel
             $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
             $action->objectName = implode(',', $modules);
         }
-        elseif($action->objectType == 'mr' && $action->action == 'deleted')
+        elseif($action->objectType == 'ppm' && $action->action == 'deleted')
         {
             $action->objectName = $action->extra;
         }
@@ -826,7 +826,7 @@ class actionTao extends actionModel
         {
             $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
         }
-        if (empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|mr)/', $objectType)) $action->objectName = $action->extra;
+        if (empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|ppm)/', $objectType)) $action->objectName = $action->extra;
     }
 
     /**
@@ -963,7 +963,7 @@ class actionTao extends actionModel
         }
 
         if($action->objectType == 'docTemplate' && !common::hasPriv('docTempalte', 'view')) return false;
-        if($action->objectType == 'mr' && (empty($action->objectName) || $action->action == 'deleted')) return false;
+        if($action->objectType == 'ppm' && (empty($action->objectName) || $action->action == 'deleted')) return false;
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;

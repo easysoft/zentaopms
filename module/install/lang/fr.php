@@ -296,7 +296,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Crée
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Créer des Jenkins récurrents';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchroniser le statut Jenkins';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Executer Jenkins';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
 $lang->install->dbProgress = "Installing Database Table";
 $lang->install->dbFinish   = "Table install finished";

@@ -177,7 +177,7 @@ class bugModel extends model
             $bug->identifyTitle  = is_numeric($bug->identify) ? zget($identifyList, $bug->identify, '') : zget($this->lang->bug->identifyList, $bug->identify, '');
         }
 
-        $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');
+        $bug->linkMRTitles = $this->loadModel('ppm')->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
 

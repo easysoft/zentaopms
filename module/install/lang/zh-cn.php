@@ -294,7 +294,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = '生�
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = '创建周期性任务';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = '同步Jenkins任务状态';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = '执行Jenkins任务';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定时同步GitLabMR信息';
 
 $lang->install->dbProgress = "正在安装数据库表";
 $lang->install->dbFinish   = "数据库表安装完毕";

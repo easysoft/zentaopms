@@ -28,7 +28,7 @@ class ciModel extends model
         if($this->session->repoID)
         {
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
-            if(!empty($repo) && !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!empty($repo) && !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->ppm);
             if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->tag);
             if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->branch);
         }
@@ -54,7 +54,7 @@ class ciModel extends model
             ->fetchAll();
 
         $notCompileMR = $this->dao->select('jobID,id')
-            ->from(TABLE_MR)
+            ->from(TABLE_PPM)
             ->where('jobID')->gt(0)
             ->andWhere('compileStatus')->eq('created')
             ->fetchPairs();
@@ -187,7 +187,7 @@ class ciModel extends model
             $this->updateBuildStatus($compile, 'failure');
 
             /* Added merge request result push to xuanxuan. */
-            if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
+            if($MRID) $this->loadModel('message')->send('ppm', $MRID, 'compilefail', 0);
             return false;
         }
 
@@ -201,13 +201,13 @@ class ciModel extends model
         $response = common::http($queueUrl, '', array(CURLOPT_USERPWD => $userPWD));
         $result   = '';
 
-        if($this->app->rawModule != 'mr') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
+        if($this->app->rawModule != 'ppm') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         $this->saveCompile($response, $compile, $userPWD, $jenkinsServer);
 
         if($MRID && in_array($result, array('success', 'failure')))
         {
             $actionType = $result == 'success' ? 'compilepass' : 'compilefail';
-            $this->loadModel('message')->send('mr', $MRID, $actionType, 0);
+            $this->loadModel('message')->send('ppm', $MRID, $actionType, 0);
         }
 
         return !dao::isError();
@@ -254,11 +254,11 @@ class ciModel extends model
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
 
         /* Send mr message by compile status. */
-        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($compile->id)->fetch();
+        $relateMR = $this->dao->select('*')->from(TABLE_PPM)->where('compileID')->eq($compile->id)->fetch();
         if($relateMR)
         {
-            if($data->status == 'success') $this->loadModel('action')->create('mr', $relateMR->id, 'compilePass');
-            if($data->status == 'failed')  $this->loadModel('action')->create('mr', $relateMR->id, 'compileFail');
+            if($data->status == 'success') $this->loadModel('action')->create('ppm', $relateMR->id, 'compilePass');
+            if($data->status == 'failed')  $this->loadModel('action')->create('ppm', $relateMR->id, 'compileFail');
         }
 
         return !dao::isError();
@@ -299,7 +299,7 @@ class ciModel extends model
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq(helper::now())->set('lastStatus')->eq($status)->where('id')->eq($build->job)->exec();
         if($status == 'building') return false;
 
-        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($build->id)->fetch();
+        $relateMR = $this->dao->select('*')->from(TABLE_PPM)->where('compileID')->eq($build->id)->fetch();
         if(empty($relateMR)) return false;
 
         if($status != 'success')
@@ -309,19 +309,19 @@ class ciModel extends model
             $newMR->mergeStatus   = 'cannot_merge_by_fail';
             $newMR->compileStatus = $status;
 
-            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
+            $this->dao->update(TABLE_PPM)->data($newMR)->where('id')->eq($relateMR->id)->exec();
         }
         elseif(isset($relateMR->synced) && $relateMR->synced == '0')
         {
-            $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->hostID, $relateMR);
+            $rawMR = $this->loadModel('ppm')->apiCreateMR($relateMR->hostID, $relateMR);
             if(!empty($rawMR->iid))
             {
                 $newMR = new stdclass();
                 $newMR->mriid     = $rawMR->iid;
                 $newMR->status    = $rawMR->state;
                 $newMR->synced    = '1';
-                $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
-                $this->mr->linkObjects($relateMR);
+                $this->dao->update(TABLE_PPM)->data($newMR)->where('id')->eq($relateMR->id)->exec();
+                $this->ppm->linkObjects($relateMR);
             }
         }
 

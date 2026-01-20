@@ -57,7 +57,7 @@ class repoModel extends model
         {
             $repo = $this->getByID($repoID);
             if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
-            if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+            if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->ppm);
             if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM))
             {
                 unset($this->lang->devops->menu->tag);
@@ -3061,7 +3061,7 @@ class repoModel extends model
             if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR     && common::hasPriv('mr', 'browse');
+        $showMR     = $showMR     && common::hasPriv('ppm', 'browse');
         $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
         $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs  && common::hasPriv('repo', 'review');
@@ -3070,7 +3070,7 @@ class repoModel extends model
         {
             if(!isset($this->lang->{$module}->menu->devops['subMenu'])) continue;
 
-            if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
+            if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->ppm);
             if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
             if(!$showBranch) unset($this->lang->{$module}->menu->devops['subMenu']->branch);
             if(!$showReview) unset($this->lang->{$module}->menu->devops['subMenu']->review);

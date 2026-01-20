@@ -37,7 +37,7 @@ $canModify    = !empty($project) ? common::canModify('project', $project) : true
 $isInModal    = isInModal();
 $canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
-$canViewMR    = hasPriv('mr', 'view');
+$canViewMR    = hasPriv('ppm', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 $operateList  = $this->loadModel('common')->buildOperateMenu($bug);
 

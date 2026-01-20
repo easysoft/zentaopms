@@ -102,3 +102,6 @@ CREATE TABLE `zt_ops_request_reviewers` (
 ) ENGINE=InnoDB;
 CREATE INDEX `idx_requestID` ON `zt_ops_request_reviewers` (`requestID`);
 CREATE INDEX `idx_account` ON `zt_ops_request_reviewers` (`account`);
+
+DROP TABLE IF EXISTS `zt_mrapproval`;
+DROP TABLE IF EXISTS `zt_mr`;

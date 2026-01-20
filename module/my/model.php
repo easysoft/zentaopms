@@ -1075,7 +1075,7 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
         if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
-        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'mr';
+        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'ppm';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -1111,7 +1111,7 @@ class myModel extends model
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'mr'))                                                $reviewList = array_merge($reviewList, $this->getReviewingMRs());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'ppm'))                                               $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if(empty($reviewList)) return array();
@@ -1241,7 +1241,7 @@ class myModel extends model
 
     /**
      * 获取待评审的MR。
-     * Get reviewing mrs.
+     * Get reviewing ppms.
      *
      * @param  string $orderBy
      * @access public
@@ -1249,7 +1249,7 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select("`id`, `title`, IF(`flow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, 0 AS product, 0 AS project")->from(TABLE_MR)
+        return $this->dao->select("`id`, `title`, IF(`flow`='1', 'pullreq', 'ppm') AS type, `createdDate` AS time, 0 AS product, 0 AS project")->from(TABLE_PPM)
             ->where('status')->ne('closed')
             ->andWhere('createdBy')->eq($this->app->user->account)
             ->orderBy($orderBy)

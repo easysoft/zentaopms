@@ -1354,56 +1354,6 @@ CREATE INDEX `root` ON `zt_module`(`root`);
 CREATE INDEX `type` ON `zt_module`(`type`);
 CREATE INDEX `path` ON `zt_module`(`path`);
 
--- DROP TABLE IF EXISTS `zt_mr`;
-CREATE TABLE IF NOT EXISTS `zt_mr` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `hostID` int unsigned NOT NULL DEFAULT 0,
-  `sourceProject` varchar(50) NOT NULL DEFAULT '',
-  `sourceBranch` varchar(100) NOT NULL DEFAULT '',
-  `targetProject` varchar(50) NOT NULL DEFAULT '',
-  `targetBranch` varchar(100) NOT NULL DEFAULT '',
-  `mriid` int unsigned NOT NULL DEFAULT 0,
-  `title` varchar(255) NOT NULL DEFAULT '',
-  `description` text DEFAULT NULL,
-  `assignee` varchar(255) NOT NULL DEFAULT '',
-  `reviewer` varchar(255) NOT NULL DEFAULT '',
-  `approver` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `mergeStatus` varchar(30) NOT NULL DEFAULT '',
-  `approvalStatus` varchar(30) NOT NULL DEFAULT '',
-  `needApproved` tinyint unsigned NOT NULL DEFAULT 0,
-  `needCI` tinyint unsigned NOT NULL DEFAULT 0,
-  `repoID` int unsigned NOT NULL DEFAULT 0,
-  `jobID` int unsigned NOT NULL DEFAULT 0,
-  `executionID` int unsigned NOT NULL DEFAULT 0,
-  `compileID` int unsigned NOT NULL DEFAULT 0,
-  `compileStatus` varchar(30) NOT NULL DEFAULT '',
-  `removeSourceBranch` tinyint unsigned NOT NULL DEFAULT 0,
-  `squash` tinyint unsigned NOT NULL DEFAULT 0,
-  `isFlow` tinyint unsigned NOT NULL DEFAULT 0,
-  `synced` tinyint unsigned NOT NULL DEFAULT 1,
-  `syncError` varchar(255) NOT NULL DEFAULT '',
-  `hasNoConflict` tinyint unsigned NOT NULL DEFAULT 0,
-  `diffs` longtext DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
--- DROP TABLE IF EXISTS `zt_mrapproval`;
-CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `mrID` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `date` datetime DEFAULT NULL,
-  `action` varchar(30) NOT NULL DEFAULT '',
-  `comment` text DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

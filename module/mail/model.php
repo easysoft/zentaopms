@@ -604,31 +604,14 @@ class mailModel extends model
         if(!$addressees) return;
         list($toList, $ccList) = $addressees;
 
-        /* Send it. */
-        if($objectType == 'mr')
-        {
-            $mailContent = $this->mailTao->getMRMailContent($object, $action->action);
-            if($action->action == 'compilefail') $this->send($toList, $subject, $mailContent, $ccList);
-            if($action->action == 'compilepass')
-            {
-                $this->send($toList, $subject, $mailContent);
-                $this->send($ccList, $subject, $this->mailTao->getMRMailContent($object, $action->action, 'cc'));
+        if($objectType == 'review') $this->app->loadLang('baseline');
 
-                /* Create a todo item for this MR. */
-                $this->loadModel('mr')->apiCreateMRTodo($object->hostID, $object->targetProject, $object->mriid);
-            }
-        }
-        else
-        {
-            if($objectType == 'review') $this->app->loadLang('baseline');
+        $emails      = array();
+        $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
 
-            $emails      = array();
-            $mailContent = $this->mailTao->getMailContent($objectType, $object, $action);
+        if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
 
-            if($objectType == 'ticket') $emails = $this->loadModel('ticket')->getContactEmails($object->id, $toList, $ccList, $action->action == 'closed');
-
-            $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
-        }
+        $this->send($toList, $subject, $mailContent, $ccList, false, $emails);
 
         if($this->isError()) error_log(implode("\n", $this->getError()));
     }
