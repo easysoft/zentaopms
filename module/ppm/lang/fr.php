@@ -1,5 +1,4 @@
 <?php
-$lang->ppm = new stdclass;
 $lang->ppm->common            = 'Merge Requests';
 $lang->ppm->server            = "Server";
 $lang->ppm->hostID            = "Server";
@@ -173,8 +172,8 @@ $lang->ppm->accessGitlabFailed   = "Unable to connect to the GitLab server.";
 $lang->ppm->reopenSuccess        = "The merge request was reopened.";
 $lang->ppm->closeSuccess         = "Merge request closed.";
 $lang->ppm->unsupportedFeature   = "Unsupported feature.";
-$lang->ppm->checkSourceBranch    = 'The source branch does not comply with the review flow.';
-$lang->ppm->checkTargetBranch    = 'The target branch does not comply with the review flow.';
+$lang->ppm->checkSourceBranch    = 'The source branch can be merged into the target branch type: %s';
+$lang->ppm->checkTargetBranch    = 'The target branch allows merging of the following source branch types: %s';
 $lang->ppm->checkConflicts       = 'Code conflicts have been detected. Please resolve the conflicts locally before submitting the merge request.';
 $lang->ppm->checkReviewers       = 'The reviewers must contain %s';
 $lang->ppm->sourceBranchNotExist = 'The source branch does not exist.';
