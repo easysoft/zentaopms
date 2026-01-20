@@ -1425,7 +1425,7 @@ class repo extends control
     {
         if($module == 'repo' && $method == 'editreviewflow') $method = 'browsereviewflow';
         if($module == 'repo' && !in_array($method, array('review', 'diff', 'browsetag', 'browsebranch', 'log', 'browsereviewflow', 'createreviewflow'))) $method = 'browse';
-        if($module == 'mr' && $method != 'create')  $method = 'browse';
+        if($module == 'ppm' && $method != 'create')  $method = 'browse';
         if($module == 'job') $method = 'browse';
         if($module == 'compile' and $method == 'logs') $method = 'browse';
         if($module == 'bug' and $method == 'view')

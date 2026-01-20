@@ -39,7 +39,7 @@ $config->action->objectNameFields['budget']       = 'name';
 $config->action->objectNameFields['job']          = 'name';
 $config->action->objectNameFields['team']         = 'name';
 $config->action->objectNameFields['pipeline']     = 'name';
-$config->action->objectNameFields['mr']           = 'title';
+$config->action->objectNameFields['ppm']          = 'title';
 $config->action->objectNameFields['reviewcl']     = 'title';
 $config->action->objectNameFields['kanbancolumn'] = 'name';
 $config->action->objectNameFields['kanbanlane']   = 'name';
@@ -98,7 +98,7 @@ $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caseli
 $config->action->needGetRelateField       = ',branch,story,epic,requirement,productplan,release,task,build,bug,testcase,case,testtask,testreport,design,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,projectchange,';
 $config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,productline,chapter,doc,caselib,devopsspace,ops_review_flow,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
-$config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr,syncdoingbyticket,syncdoingbystory,syncdoingbyuserstory,syncdoingbyepic,syncdoingbytask,syncdoingbybug,syncdoingbytodo,syncdoingbydemand';
+$config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editppm,removeppm,syncdoingbyticket,syncdoingbystory,syncdoingbyuserstory,syncdoingbyepic,syncdoingbytask,syncdoingbybug,syncdoingbytodo,syncdoingbydemand';
 if(in_array($config->edition, array('open', 'biz'))) $config->action->ignoreObjectType4Dynamic .= ',reporttemplate';
 
 $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');
@@ -124,7 +124,7 @@ $config->trash->search['params']['objectID']   = array('operator' => 'include', 
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'date',  'values' => '');
 
-$config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus', 'board');
+$config->action->newPageModule  = array('repo', 'ppm', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus', 'board');
 $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');
 
 $config->action->userFields         = 'openedBy,addedBy,createdBy,editedBy,assignedTo,finishedBy,canceledBy,closedBy,activatedBy,resolvedBy,lastEditedBy,builder,owner,reviewedBy,forwardBy,scriptedBy,manager,commitedBy,archivedBy,PO,QD,RD,feedback,PM,account,changedBy,submitedBy,retractedBy,lastRunner,assignedBy,processedBy';

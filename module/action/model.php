@@ -706,17 +706,17 @@ class actionModel extends model
             {
                 $desc = $this->lang->{$objectType}->action->{$action->action};
             }
-            elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
+            elseif(strpos('createppm,editppm,removeppm', $action->action) !== false && strpos($action->extra, '::') !== false)
             {
-                $mrAction = str_replace('mr', '', $action->action) . 'Action';
-                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
-                if(!$mrActor) $mrActor = $action->actor;
-                if(is_numeric($mrLink)) $mrLink = helper::createLink('mr', 'view', "mrID={$mrLink}");
+                $ppmAction = str_replace('ppm', '', $action->action) . 'Action';
+                list($ppmDate, $ppmActor, $ppmLink) = explode('::', $action->extra);
+                if(!$ppmActor) $ppmActor = $action->actor;
+                if(is_numeric($ppmLink)) $ppmLink = helper::createLink('ppm', 'view', "id={$ppmLink}");
 
-                if(isInModal()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                if(isInModal()) $ppmLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
-                $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);
+                $this->app->loadLang('ppm');
+                $desc = sprintf($this->lang->ppm->{$ppmAction}, $ppmDate, $ppmActor, $ppmLink);
             }
             elseif(in_array($this->config->edition, array('max', 'ipd')) && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
             {

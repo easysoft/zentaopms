@@ -2775,7 +2775,7 @@ class storyModel extends model
                 $products   += $productList;
             }
         }
-        elseif($this->app->rawModule == 'mr' && $this->session->repoID)
+        elseif($this->app->rawModule == 'ppm' && $this->session->repoID)
         {
             $repo     = $this->loadModel('repo')->fetchByID((int)$this->session->repoID);
             $products = $repo ? array_flip(explode(',', $repo->product)) : array();

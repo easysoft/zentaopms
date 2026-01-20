@@ -2369,7 +2369,7 @@ class projectModel extends model
 
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
-        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
+        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'ppm') $this->loadModel('repo')->setHideMenu($projectID);
 
         if(!empty($project->isTpl)) dao::$filterTpl = 'never';
         return $projectID;

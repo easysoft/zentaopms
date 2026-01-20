@@ -239,7 +239,7 @@ $lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projec
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
-if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
+if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm');
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -281,13 +281,13 @@ $lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->c
 $lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
 $lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
-$lang->scrum->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->scrum->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
 
 $lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
 $lang->scrum->menu->devops['menuOrder'][10] = 'commit';
 $lang->scrum->menu->devops['menuOrder'][15] = 'branch';
 $lang->scrum->menu->devops['menuOrder'][20] = 'tag';
-$lang->scrum->menu->devops['menuOrder'][25] = 'mr';
+$lang->scrum->menu->devops['menuOrder'][25] = 'ppm';
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
@@ -297,7 +297,7 @@ $lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|pro
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
-if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
+if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm');
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -340,13 +340,13 @@ $lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->rep
 $lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
 $lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
-$lang->waterfall->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->waterfall->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
 
 $lang->waterfall->menu->devops['menuOrder'][5]  = 'repo';
 $lang->waterfall->menu->devops['menuOrder'][10] = 'commit';
 $lang->waterfall->menu->devops['menuOrder'][15] = 'branch';
 $lang->waterfall->menu->devops['menuOrder'][20] = 'tag';
-$lang->waterfall->menu->devops['menuOrder'][25] = 'mr';
+$lang->waterfall->menu->devops['menuOrder'][25] = 'ppm';
 
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();
@@ -371,7 +371,7 @@ $lang->kanbanProject->menu->settings['subMenu']->module    = array('link' => "{$
 
 /* Execution menu. */
 $lang->execution->homeMenu = new stdclass();
-$lang->execution->homeMenu->all             = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'create,batchedit', 'exclude' => 'mr-create');
+$lang->execution->homeMenu->all             = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'create,batchedit', 'exclude' => 'ppm-create');
 $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
@@ -384,7 +384,7 @@ if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$
 
 $lang->execution->menu->story      = array('link' => "{$lang->common->story}|execution|story|executionID=%s", 'subModule' => 'story,requirement,epic', 'alias' => 'storyview,storykanban,linkstory,batchtotask');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
+if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm', 'alias' => 'create');
 $lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
@@ -432,13 +432,13 @@ $lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->rep
 $lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
 $lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
-$lang->execution->menu->devops['subMenu']->mr     = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
+$lang->execution->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
 $lang->execution->menu->devops['menuOrder'][10] = 'commit';
 $lang->execution->menu->devops['menuOrder'][15] = 'branch';
 $lang->execution->menu->devops['menuOrder'][20] = 'tag';
-$lang->execution->menu->devops['menuOrder'][25] = 'mr';
+$lang->execution->menu->devops['menuOrder'][25] = 'ppm';
 
 $lang->execution->menu->settings['subMenu'] = new stdclass();
 $lang->execution->menu->settings['subMenu']->view      = array('link' => "$lang->overview|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
@@ -542,7 +542,7 @@ $lang->devops->menu->code     = array('link' => "{$lang->repocode->common}|repo|
 $lang->devops->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
-$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
 $lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule');
@@ -571,7 +571,7 @@ $lang->devops->menuOrder[15]  = 'code';
 $lang->devops->menuOrder[20]  = 'commit';
 $lang->devops->menuOrder[25]  = 'branch';
 $lang->devops->menuOrder[35]  = 'tag';
-$lang->devops->menuOrder[40]  = 'mr';
+$lang->devops->menuOrder[40]  = 'ppm';
 $lang->devops->menuOrder[45]  = 'compile';
 $lang->devops->menuOrder[55]  = 'deploy';
 $lang->devops->menuOrder[70]  = 'settings';
@@ -752,7 +752,7 @@ $lang->navGroup->repo             = 'devops';
 $lang->navGroup->repo_setRules    = 'admin';
 $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
-$lang->navGroup->mr               = 'devops';
+$lang->navGroup->ppm              = 'devops';
 $lang->navGroup->gitlab           = 'devops';
 $lang->navGroup->gogs             = 'devops';
 $lang->navGroup->gitea            = 'devops';
