@@ -45,7 +45,7 @@ else
         'name'  => 'index',
         'label' => $lang->idAB,
         'control' => 'index',
-        'width' => '32px'
+        'width' => '50px'
     );
 
     $items[] = array
@@ -198,14 +198,18 @@ else
         }
         else
         {
-            $insert = false;
-
+            $case->id    = trim($case->id);
             $case->rawID = $case->id;
-            if(!isset($case->module))  $case->module  = $cases[$case->id]->module;
-            if(!isset($case->pri))     $case->pri     = $cases[$case->id]->pri;
-            if(!isset($case->type))    $case->type    = $cases[$case->id]->type;
-            if(empty($case->stage))    $case->stage   = $cases[$case->id]->stage;
-            $case->product = $cases[$case->id]->product;
+
+            $insert = false;
+            $dbCase = zget($cases, $case->id, array());
+            if(empty($dbCase)) continue;
+
+            $case->product = $dbCase->product;
+            if(!isset($case->module)) $case->module = $dbCase->module;
+            if(!isset($case->pri))    $case->pri    = $dbCase->pri;
+            if(!isset($case->type))   $case->type   = $dbCase->type;
+            if(empty($case->stage))   $case->stage  = $dbCase->stage;
         }
     }
 
