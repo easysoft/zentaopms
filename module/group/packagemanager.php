@@ -367,9 +367,9 @@ $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
 $config->group->subset->notifysetting->nav   = 'admin';
 
-$config->group->subset->devopsspace = new stdclass();
-$config->group->subset->devopsspace->order = 2300;
-$config->group->subset->devopsspace->nav   = 'devops';
+$config->group->subset->space = new stdclass();
+$config->group->subset->space->order = 2300;
+$config->group->subset->space->nav   = 'devops';
 
 $config->group->subset->repo = new stdclass();
 $config->group->subset->repo->order = 2310;
@@ -453,10 +453,6 @@ $config->group->subset->repoSettings->nav   = 'devops';
 $config->group->subset->configure = new stdclass();
 $config->group->subset->configure->order = 2900;
 $config->group->subset->configure->nav   = 'devops';
-
-$config->group->subset->app = new stdclass();
-$config->group->subset->app->order = 3000;
-$config->group->subset->app->nav   = 'devops';
 
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
@@ -1885,30 +1881,30 @@ $config->group->package->host->privs['host-delete']       = array('edition' => '
 $config->group->package->host->privs['host-changeStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('host-browse'), 'recommend' => array('host-create', 'host-edit'));
 $config->group->package->host->privs['host-treemap']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('host-browse'), 'recommend' => array());
 
-$config->group->package->devopsspace = new stdclass();
-$config->group->package->devopsspace->order  = 2230;
-$config->group->package->devopsspace->subset = 'devopsspace';
-$config->group->package->devopsspace->privs  = array();
-$config->group->package->devopsspace->privs['devopsspace-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-delete', 'devopsspace-view'));
-$config->group->package->devopsspace->privs['devopsspace-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-edit', 'devopsspace-view', 'devopsspace-delete'));
-$config->group->package->devopsspace->privs['devopsspace-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-view', 'devopsspace-delete'));
-$config->group->package->devopsspace->privs['devopsspace-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-browse'), 'recommend' => array('devopsspace-create', 'devopsspace-edit', 'devopsspace-view'));
+$config->group->package->space = new stdclass();
+$config->group->package->space->order  = 2230;
+$config->group->package->space->subset = 'space';
+$config->group->package->space->privs  = array();
+$config->group->package->space->privs['space-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('space-create', 'space-edit', 'space-delete', 'space-view'));
+$config->group->package->space->privs['space-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse'), 'recommend' => array('space-edit', 'space-view', 'space-delete'));
+$config->group->package->space->privs['space-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('space-browse'), 'recommend' => array('space-create', 'space-view', 'space-delete'));
+$config->group->package->space->privs['space-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('space-browse'), 'recommend' => array('space-create', 'space-edit', 'space-view'));
 
-$config->group->package->devopsspaceSetting = new stdclass();
-$config->group->package->devopsspaceSetting->order  = 2240;
-$config->group->package->devopsspaceSetting->subset = 'devopsspace';
-$config->group->package->devopsspaceSetting->privs  = array();
-$config->group->package->devopsspaceSetting->privs['devopsspace-view']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('devopsspace-browse'),  'recommend' => array('devopsspace-member', 'devopsspace-group'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-members']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('devopsspace-view'),    'recommend' => array('devopsspace-manageMembers', 'devopsspace-removeMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-manageMembers']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('devopsspace-members'), 'recommend' => array('devopsspace-removeMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-removeMember']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('devopsspace-members'), 'recommend' => array('devopsspace-manageMembers'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-group']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('devopsspace-view'),    'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-deleteGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-createGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-editGroup', 'devopsspace-deleteGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-editGroup']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-deleteGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-deleteGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 36, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-managePriv', 'devopsspace-manageGroupMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-managePriv']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-deleteGroup', 'devopsspace-manageGroupMember'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-manageGroupMember'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-deleteGroup', 'devopsspace-managePriv'));
-$config->group->package->devopsspaceSetting->privs['devopsspace-importGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('devopsspace-group'),   'recommend' => array('devopsspace-createGroup', 'devopsspace-editGroup', 'devopsspace-deleteGroup', 'devopsspace-managePriv'));
+$config->group->package->spaceSetting = new stdclass();
+$config->group->package->spaceSetting->order  = 2240;
+$config->group->package->spaceSetting->subset = 'space';
+$config->group->package->spaceSetting->privs  = array();
+$config->group->package->spaceSetting->privs['space-view']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('space-browse'),  'recommend' => array('space-member', 'space-group'));
+$config->group->package->spaceSetting->privs['space-members']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-view'),    'recommend' => array('space-manageMembers', 'space-removeMember'));
+$config->group->package->spaceSetting->privs['space-manageMembers']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('space-members'), 'recommend' => array('space-removeMember'));
+$config->group->package->spaceSetting->privs['space-removeMember']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('space-members'), 'recommend' => array('space-manageMembers'));
+$config->group->package->spaceSetting->privs['space-group']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('space-view'),    'recommend' => array('space-createGroup', 'space-editGroup', 'space-deleteGroup', 'space-managePriv', 'space-manageGroupMember'));
+$config->group->package->spaceSetting->privs['space-createGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('space-group'),   'recommend' => array('space-editGroup', 'space-deleteGroup', 'space-managePriv', 'space-manageGroupMember'));
+$config->group->package->spaceSetting->privs['space-editGroup']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('space-group'),   'recommend' => array('space-createGroup', 'space-deleteGroup', 'space-managePriv', 'space-manageGroupMember'));
+$config->group->package->spaceSetting->privs['space-deleteGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 36, 'depend' => array('space-group'),   'recommend' => array('space-createGroup', 'space-editGroup', 'space-managePriv', 'space-manageGroupMember'));
+$config->group->package->spaceSetting->privs['space-managePriv']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('space-group'),   'recommend' => array('space-createGroup', 'space-editGroup', 'space-deleteGroup', 'space-manageGroupMember'));
+$config->group->package->spaceSetting->privs['space-manageGroupMember'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('space-group'),   'recommend' => array('space-createGroup', 'space-editGroup', 'space-deleteGroup', 'space-managePriv'));
+$config->group->package->spaceSetting->privs['space-importGroup']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('space-group'),   'recommend' => array('space-createGroup', 'space-editGroup', 'space-deleteGroup', 'space-managePriv'));
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;
@@ -3060,10 +3056,6 @@ $config->group->package->webhook->privs['webhook-log']        = array('edition' 
 $config->group->package->webhook->privs['webhook-bind']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 30, 'depend' => array('webhook-chooseDept'), 'recommend' => array());
 $config->group->package->webhook->privs['webhook-chooseDept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 35, 'depend' => array('webhook-browse'), 'recommend' => array('webhook-create', 'webhook-delete', 'webhook-edit'));
 
-$config->group->package->gitlab = new stdclass();
-$config->group->package->gitlab->order  = 10;
-$config->group->package->gitlab->subset = 'repo';
-
 $config->group->package->sms = new stdclass();
 $config->group->package->sms->order  = 20;
 $config->group->package->sms->subset = 'notifysetting';
@@ -3186,10 +3178,6 @@ $config->group->package->chat->privs['client-create']         = array('edition' 
 $config->group->package->chat->privs['client-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['watermark-index']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
-
-$config->group->package->jenkins = new stdclass();
-$config->group->package->jenkins->order  = 25;
-$config->group->package->jenkins->subset = 'repo';
 
 $config->group->package->systemSetting = new stdclass();
 $config->group->package->systemSetting->order  = 5;
@@ -4272,18 +4260,6 @@ $config->group->package->deleteCodeIssue->order  = 2640;
 $config->group->package->deleteCodeIssue->subset = 'codereview';
 $config->group->package->deleteCodeIssue->privs  = array();
 $config->group->package->deleteCodeIssue->privs['repo-deleteBug'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-editComment', 'repo-review'));
-
-$config->group->package->browseApplication = new stdclass();
-$config->group->package->browseApplication->order  = 2840;
-$config->group->package->browseApplication->subset = 'app';
-$config->group->package->browseApplication->privs  = array();
-$config->group->package->browseApplication->privs['space-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
-
-$config->group->package->mangeApplication = new stdclass();
-$config->group->package->mangeApplication->order  = 2840;
-$config->group->package->mangeApplication->subset = 'app';
-$config->group->package->mangeApplication->privs  = array();
-$config->group->package->mangeApplication->privs['instance-manage'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse'), 'recommend' => array());
 
 $config->group->package->trainPracticeLib = new stdclass();
 $config->group->package->trainPracticeLib->order  = 8;

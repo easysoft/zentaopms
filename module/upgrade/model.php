@@ -13027,7 +13027,7 @@ class upgradeModel extends model
                     if(strpos($package, 'browse') !== 0 && !in_array($package, $includePackage) && !in_array($method, $includeMethod) && !in_array($priv->method, array('browse', 'view'))) continue;
                     if(in_array($method, array('store-browse'))) continue;
                 }
-                if($group == 'DEVOPSUSER' && ($priv->module == 'devopsspace' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
+                if($group == 'DEVOPSUSER' && ($priv->module == 'space' || $priv->subset == 'repoSettings' || in_array($package, $excludePackage))) continue;
 
                 $insertPriv = new stdclass();
                 $insertPriv->group  = $groupID;

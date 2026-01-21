@@ -52,20 +52,10 @@ $config->repo->dtable->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repo->dtable->fieldList['actions']['type']  = 'actions';
 $config->repo->dtable->fieldList['actions']['width'] = '132';
-$config->repo->dtable->fieldList['actions']['menu']  = array('execJob', 'reportView', 'edit', 'delete');
+$config->repo->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
-
-$config->repo->dtable->fieldList['actions']['list']['execJob']['icon']       = 'sonarqube';
-$config->repo->dtable->fieldList['actions']['list']['execJob']['hint']       = $lang->sonarqube->execJob;
-$config->repo->dtable->fieldList['actions']['list']['execJob']['url']        = array('module' => 'sonarqube', 'method' => 'execJob', 'params' => "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['execJob']['className']  = 'ajax-submit';
-
-$config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
-$config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
-$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = array('module' => 'sonarqube', 'method' => 'reportView', 'params' => "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;

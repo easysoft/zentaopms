@@ -146,9 +146,9 @@ $lang->my->devopsspaceLinkList['repo-maintain'] = '空间下的代码库列表';
 $lang->my->devopsspaceLinkList['repo-browse']   = '最近一个浏览的代码库';
 
 $lang->my->devopsLinkList = array();
-$lang->my->devopsLinkList['devopsspace-browse'] = '空间列表';
-$lang->my->devopsLinkList['repo-maintain']      = '代码库列表';
-$lang->my->devopsLinkList['repo-browse']        = '最近一个浏览的代码库';
+$lang->my->devopsLinkList['space-browse']  = '空间列表';
+$lang->my->devopsLinkList['repo-maintain'] = '代码库列表';
+$lang->my->devopsLinkList['repo-browse']   = '最近一个浏览的代码库';
 
 $lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT

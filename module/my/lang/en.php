@@ -146,9 +146,9 @@ $lang->my->devopsspaceLinkList['repo-maintain'] = 'Code library list in space';
 $lang->my->devopsspaceLinkList['repo-browse']   = 'The most recently visited code library';
 
 $lang->my->devopsLinkList = array();
-$lang->my->devopsLinkList['devopsspace-browse'] = 'Space list';
-$lang->my->devopsLinkList['repo-maintain']      = 'Code library list';
-$lang->my->devopsLinkList['repo-browse']        = 'The most recently visited code library';
+$lang->my->devopsLinkList['space-browse']  = 'Space list';
+$lang->my->devopsLinkList['repo-maintain'] = 'Code library list';
+$lang->my->devopsLinkList['repo-browse']   = 'The most recently visited code library';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT

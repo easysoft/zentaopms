@@ -193,9 +193,9 @@ class dropmenu extends wg
         {
             if(!data('inSpace')) return array();
 
-            $tab      = 'devopsspace';
+            $tab      = 'space';
             $objectID = data('spaceID');
-            $url      = createLink('devopsspace', 'ajaxGetDropMenu', "objectID={$objectID}&module={$module}&method={$method}");
+            $url      = createLink('space', 'ajaxGetDropMenu', "objectID={$objectID}&module={$module}&method={$method}");
         }
 
         /* 打印工作流1.5级导航. */

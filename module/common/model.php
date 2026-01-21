@@ -3930,7 +3930,7 @@ EOF;
         if(empty($spaceID) and $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
         if(empty($spaceID)) return;
 
-        $space = $this->loadModel('devopsspace')->getByID($spaceID);
+        $space = $this->loadModel('space')->getByID($spaceID);
         if(empty($space)) return;
 
         $spaceRights = $this->dao->select('t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
@@ -3952,7 +3952,7 @@ EOF;
         if($space->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($spaceRightGroup, $rights);
         if($space->auth == 'reset')
         {
-            $spacePrivs = $this->devopsspace->getPrivs();
+            $spacePrivs = $this->space->getPrivs();
             foreach($spacePrivs as $module => $methods)
             {
                 foreach($methods as $method => $label)
@@ -3974,8 +3974,8 @@ EOF;
             }
 
             /* Set base priv for devopsspace. */
-            $devopsSpaceRights = zget($this->app->user->rights['rights'], 'devopsspace', array());
-            if(isset($devopsSpaceRights['browse']) and !isset($rights['devopsspace']['browse'])) $rights['project']['browse'] = 1;
+            $devopsSpaceRights = zget($this->app->user->rights['rights'], 'space', array());
+            if(isset($devopsSpaceRights['browse']) and !isset($rights['space']['browse'])) $rights['project']['browse'] = 1;
 
             $this->app->user->rights['rights'] = $rights;
         }

@@ -127,7 +127,6 @@ class repo extends control
         $this->repoZen->buildRepoSearchForm($inSpace, $space, $products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
         $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
-        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitlab');
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
@@ -137,9 +136,8 @@ class repo extends control
         $this->view->projects      = $projects;
         $this->view->sonarRepoList = $sonarRepoList;
         $this->view->successJobs   = $successJobs;
-        $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
         $this->view->spaceID       = $space;
-        $this->view->spaces        = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces        = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->view->inSpace       = $inSpace;
 
         $this->display();
@@ -1105,36 +1103,23 @@ class repo extends control
     {
         if($this->viewType !== 'json') $this->commonAction();
 
-        $serverList = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
-        if(!$serverID) $serverID = key($serverList);
-
         if($_POST)
         {
             if($this->post->product)
             {
                 $repos = form::batchData($this->config->repo->form->import)->get();
 
-                if($repos) $this->repo->batchCreate($repos, $serverID, (string)$this->post->serverType);
+                if($repos) $this->repo->batchCreate($repos, 0, (string)$this->post->serverType);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
         }
-
-        $server      = $this->pipeline->getByID($serverID);
-        $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
-
-        $linkUser = $server ? $this->pipeline->getOpenIdByAccount($server->id, $server->type, $this->app->user->account) : array();
-        $repoList = $server && ($linkUser || $this->app->user->admin) ? $this->repoZen->getNotExistRepos($server) : array();
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
-        $this->view->servers     = $serverList;
         $this->view->products    = $products;
-        $this->view->server      = $server;
-        $this->view->repoList    = array_values($repoList);
-        $this->view->hiddenRepos = explode(',', $hiddenRepos);
-        $this->view->spaces      = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces      = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->display();
     }
 
@@ -1477,25 +1462,6 @@ class repo extends control
         return print(json_encode($options));
     }
 
-    /**
-     * 获取服务器下拉列表数据。
-     * Ajax get hosts.
-     *
-     * @param  string    $scm
-     * @access public
-     * @return void
-     */
-    public function ajaxGetHosts(string $scm)
-    {
-        $hosts = $this->loadModel('pipeline')->getPairs($scm, true);
-
-        $options = array();
-        foreach($hosts as $hostID => $host)
-        {
-            $options[] = array('text' => $host, 'value' => $hostID);
-        }
-        return print(json_encode($options));
-    }
 
     /**
      * 获取各个服务器下的项目。
@@ -1507,87 +1473,8 @@ class repo extends control
      */
     public function ajaxGetProjects(int $serverID)
     {
-        $server         = $this->loadModel('pipeline')->getByID($serverID);
-        $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
-
-        $repos = $this->$getProjectFunc($serverID);
+        $repos = $this->repo->ajaxGetGitFoxProjects($serverID);
         return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
-    }
-
-    /**
-     * 获取Gitea项目。
-     * Ajax get gitea projects.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGiteaProjects(int $giteaID): array
-    {
-        $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
-
-        $importedProjects = $this->repo->getImportedProjects($giteaID);
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(in_array($project->full_name, $importedProjects)) continue;
-            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
-        }
-        return $options;
-    }
-
-    /**
-     * 获取Gogs项目。
-     * Ajax get gogs projects.
-     *
-     * @param  int    $gogsID
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGogsProjects(int $gogsID): array
-    {
-        $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
-
-        $importedProjects = $this->repo->getImportedProjects($gogsID);
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(in_array($project->full_name, $importedProjects)) continue;
-            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
-        }
-        return $options;
-    }
-
-    /**
-     * 获取Gitlab项目。
-     * Ajax get gitlab projects.
-     *
-     * @param  int    $gitlabID
-     * @param  string $projectIdList
-     * @param  string $filter
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
-    {
-        $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
-
-        if(!$projects) return array();
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
-        }
-
-        return $options;
     }
 
     /**
@@ -1601,11 +1488,9 @@ class repo extends control
     public function ajaxGetGroups(int $serverID)
     {
         $options = $this->repo->getGroups($serverID);
-        $server  = $this->loadModel('pipeline')->getByID($serverID);
 
         $result = new stdclass();
         $result->options = $options;
-        $result->server  = $server;
 
         return print(json_encode($result));
     }
@@ -2089,7 +1974,7 @@ class repo extends control
     public function ajaxGetSpaceMembers(int $spaceID)
     {
         $users     = $this->loadModel('user')->getPairs('noletter');
-        $spaceUser = $this->loadModel('devopsspace')->getSpaceUsers($spaceID);
+        $spaceUser = $this->loadModel('space')->getSpaceUsers($spaceID);
 
         $userList = array();
         foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
