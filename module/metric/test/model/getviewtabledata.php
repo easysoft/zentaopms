@@ -1,20 +1,19 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 metricModel::getViewTableData();
 timeout=0
 cid=17131
 
-- 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $systemResult 
+- 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $systemResult
  - 第0条的value属性 @100
  - 第0条的calcType属性 @cron
-- 执行metricTest模块的getViewTableDataTest方法，参数是$productMetric, $productResult 
+- 执行metricTest模块的getViewTableDataTest方法，参数是$productMetric, $productResult
  - 第0条的scopeID属性 @1
  - 第0条的value属性 @200
 - 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, array  @0
-- 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $invalidResult 
+- 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $invalidResult
  - 第0条的value属性 @300
  - 第0条的calcType属性 @inference
 - 执行metricTest模块的getViewTableDataTest方法，参数是$systemMetric, $floatResult 第0条的value属性 @123.46
