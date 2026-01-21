@@ -83,7 +83,6 @@ class ppm extends control
         }
 
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('ppm', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
-        session_write_close();
 
         $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
@@ -207,6 +206,7 @@ class ppm extends control
     public function create(int $repoID = 0, int $objectID = 0, string $sourceBranch = '', string $targetBranch = '')
     {
         $repoID = $this->loadModel('repo')->saveState($repoID);
+        if($repoID) $this->ci->setMenu($repoID);
         $repo   = $this->repo->getByID($repoID);
         $scm    = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -251,7 +251,7 @@ class ppm extends control
             $canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
             $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
         }
-        $message = $this->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
+        $message = $this->ppmZen->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
 
         $this->view->title             = $this->lang->ppm->create;
         $this->view->users             = $this->repo->getRepoMembers($repo);
