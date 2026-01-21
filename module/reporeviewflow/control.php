@@ -137,7 +137,7 @@ class reporeviewflow extends control
         $this->reporeviewflow->updateStatus($flowID, $status);
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('ops_review_flow', $flowID, $status);
+        $this->loadModel('action')->create('ops_review_flow', $flowID, $status . 'reviewflow');
         return $this->sendSuccess(array('message' => $this->lang->reporeviewflow->{$status . 'Success'}, 'load' => true));
     }
 
