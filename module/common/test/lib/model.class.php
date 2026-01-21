@@ -122,7 +122,8 @@ class commonModelTest extends baseTest
      */
     public function getDotStyleTest(bool $showCount, int $unreadCount): array
     {
-        $result = commonModel::getDotStyle($showCount, $unreadCount);
+        $result = $this->invokeArgs('getDotStyle', [$showCount, $unreadCount]);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -136,7 +137,7 @@ class commonModelTest extends baseTest
      */
     public function getMainNavListTest($moduleName, $useDefault = false)
     {
-        $result = commonModel::getMainNavList($moduleName, $useDefault);
+        $result = $this->invokeArgs('getMainNavList', [$moduleName, $useDefault]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -151,7 +152,7 @@ class commonModelTest extends baseTest
      */
     public function isOpenMethodTest($module, $method)
     {
-        $result = $this->objectModel->isOpenMethod($module, $method);
+        $result = $this->invokeArgs('isOpenMethod', [$module, $method]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -164,7 +165,7 @@ class commonModelTest extends baseTest
      */
     public function isTutorialModeTest()
     {
-        $result = commonModel::isTutorialMode();
+        $result = $this->invokeArgs('isTutorialMode');
         if(dao::isError()) return dao::getError();
         return $result ? '1' : '0';
     }
@@ -184,11 +185,8 @@ class commonModelTest extends baseTest
             if(isset($this->instance->app->user)) unset($app->user);
         }
 
-        // 执行setUser方法
-        $this->instance->setUser();
+        $this->invokeArgs('setUser');
         if(dao::isError()) return dao::getError();
-
-        // 返回结果
         return $this->instance->app->user;
     }
 
@@ -202,41 +200,8 @@ class commonModelTest extends baseTest
      */
     public function strEndsWithTest($haystack, $needle)
     {
-        $result = commonModel::strEndsWith($haystack, $needle);
+        $result = $this->invokeArgs('strEndsWith', [$haystack, $needle]);
         if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test printBack method.
-     *
-     * @param  string $backLink
-     * @param  string $class
-     * @param  string $misc
-     * @param  bool   $onlyBody
-     * @access public
-     * @return mixed
-     */
-    public function printBackTest(string $backLink, string $class = '', string $misc = '', bool $onlyBody = false)
-    {
-        if($onlyBody)
-        {
-            $_GET['onlybody'] = 'yes';
-        }
-        else
-        {
-            unset($_GET['onlybody']);
-        }
-
-        ob_start();
-        $result = commonModel::printBack($backLink, $class, $misc);
-        $output = ob_get_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        // Return different data based on what we're testing
-        if($onlyBody) return $result;
-        if(!empty($output)) return $output;
         return $result;
     }
 
@@ -266,13 +231,6 @@ class commonModelTest extends baseTest
      */
     public function printPreAndNextTest($preAndNext = '', string $linkTemplate = '', bool $onlyBody = false)
     {
-        global $app, $lang;
-
-        // 保存原始值
-        $originalApp = $app ?? null;
-        $originalLang = $lang ?? null;
-        $originalGet = $_GET ?? array();
-
         // 设置onlybody模式
         if($onlyBody)
         {
@@ -283,38 +241,13 @@ class commonModelTest extends baseTest
             unset($_GET['onlybody']);
         }
 
-        // 模拟完整的app对象
-        $app = new class {
-            public $tab = 'my';
-            public $apiVersion = '';
-            private $moduleName = 'test';
-            private $methodName = 'view';
-            private $appName = 'sys';
-            private $viewType = '';
-            public function getModuleName() { return $this->moduleName; }
-            public function getMethodName() { return $this->methodName; }
-            public function getAppName() { return $this->appName; }
-            public function getViewType() { return $this->viewType; }
-            public function setModuleName($name) { $this->moduleName = $name; }
-            public function setMethodName($name) { $this->methodName = $name; }
-        };
-
         // 设置语言
-        if(!isset($lang))
-        {
-            $lang = new stdClass();
-        }
         if(!isset($lang->preShortcutKey)) $lang->preShortcutKey = '(←)';
         if(!isset($lang->nextShortcutKey)) $lang->nextShortcutKey = '(→)';
 
         ob_start();
         $result = commonModel::printPreAndNext($preAndNext, $linkTemplate);
         $output = ob_get_clean();
-
-        // 恢复原始值
-        if($originalApp !== null) $app = $originalApp;
-        if($originalLang !== null) $lang = $originalLang;
-        $_GET = $originalGet;
 
         if(dao::isError()) return dao::getError();
 
@@ -334,8 +267,132 @@ class commonModelTest extends baseTest
      */
     public function processMarkdownTest(string $markdown)
     {
-        $result = commonModel::processMarkdown($markdown);
+        $result = $this->invokeArgs('processMarkdown', [$markdown]);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * Test checkSafeFile method.
+     *
+     * @param string $scenario 测试场景
+     * @access public
+     * @return mixed
+     */
+    public function checkSafeFileTest($scenario = '')
+    {
+        // 备份原始配置和状态
+        $originalInContainer = $this->instance->config->inContainer;
+        $originalModuleName  = $this->instance->app->getModuleName();
+        $originalUpgrading   = $this->instance->app->upgrading ?? false;
+        $originalSafeFileEnv = getenv('ZT_CHECK_SAFE_FILE');
+
+        try {
+            // 根据场景设置不同的测试环境
+            switch($scenario) {
+                case 'inContainer':
+                    $this->instance->config->inContainer = true;
+                    break;
+
+                case 'validSafeFile':
+                    $this->instance->config->inContainer = false;
+                    // 设置环境变量模拟有效的安全文件状态
+                    putenv('ZT_CHECK_SAFE_FILE=true');
+                    break;
+
+                case 'upgradeModule':
+                    $this->instance->config->inContainer = false;
+                    if(isset($_SESSION)) $_SESSION['upgrading'] = true;
+                    $this->instance->app->setModuleName('upgrade');
+                    break;
+
+                case 'noSafeFile':
+                case 'expiredSafeFile':
+                default:
+                    $this->instance->config->inContainer = false;
+                    // 确保没有有效的安全文件
+                    putenv('ZT_CHECK_SAFE_FILE=false');
+                    if(isset($_SESSION)) $_SESSION['upgrading'] = false;
+                    break;
+            }
+
+            $result = $this->invokeArgs('checkSafeFile');
+            if(dao::isError()) return dao::getError();
+            return $result;
+        } finally {
+            // 恢复原始配置和状态
+            $this->instance->config->inContainer = $originalInContainer;
+            if(isset($_SESSION)) $_SESSION['upgrading'] = $originalUpgrading;
+            $this->instance->app->setModuleName($originalModuleName);
+            if($originalSafeFileEnv !== false) {
+                putenv("ZT_CHECK_SAFE_FILE=$originalSafeFileEnv");
+            } else {
+                putenv('ZT_CHECK_SAFE_FILE');
+            }
+        }
+    }
+
+    /**
+     * Test checkSafeFile method.
+     *
+     * @param string $scenario 测试场景
+     * @access public
+     * @return mixed
+     */
+    public function checkSafeFileTest($scenario = '')
+    {
+        global $app, $config;
+
+        // 备份原始配置和状态
+        $originalInContainer = isset(\$this->instance->configinContainer) ? \$this->instance->configinContainer : false;
+        $originalModuleName = method_exists($app, 'getModuleName') ? \$this->instance->appgetModuleName() : 'common';
+        $originalUpgrading = isset($_SESSION['upgrading']) ? $_SESSION['upgrading'] : false;
+        $originalSafeFileEnv = getenv('ZT_CHECK_SAFE_FILE');
+
+        try {
+            // 根据场景设置不同的测试环境
+            switch($scenario) {
+                case 'inContainer':
+                    \$this->instance->configinContainer = true;
+                    break;
+
+                case 'validSafeFile':
+                    \$this->instance->configinContainer = false;
+                    // 设置环境变量模拟有效的安全文件状态
+                    putenv('ZT_CHECK_SAFE_FILE=true');
+                    break;
+
+                case 'upgradeModule':
+                    \$this->instance->configinContainer = false;
+                    if(isset($_SESSION)) $_SESSION['upgrading'] = true;
+                    // 设置为upgrade模块
+                    if(method_exists($app, 'setModuleName')) \$this->instance->appsetModuleName('upgrade');
+                    break;
+
+                case 'noSafeFile':
+                case 'expiredSafeFile':
+                default:
+                    \$this->instance->configinContainer = false;
+                    // 确保没有有效的安全文件
+                    putenv('ZT_CHECK_SAFE_FILE=false');
+                    if(isset($_SESSION)) $_SESSION['upgrading'] = false;
+                    break;
+            }
+
+            $result = $this->instance->checkSafeFile();
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } finally {
+            // 恢复原始配置和状态
+            \$this->instance->configinContainer = $originalInContainer;
+            if(isset($_SESSION)) $_SESSION['upgrading'] = $originalUpgrading;
+            if(method_exists($app, 'setModuleName')) \$this->instance->appsetModuleName($originalModuleName);
+            if($originalSafeFileEnv !== false) {
+                putenv("ZT_CHECK_SAFE_FILE=$originalSafeFileEnv");
+            } else {
+                putenv('ZT_CHECK_SAFE_FILE');
+            }
+        }
     }
 }

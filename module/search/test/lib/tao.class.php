@@ -343,4 +343,225 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 获取变量参数数据的测试用例。
+     * Get param values test.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function getParamValuesTest(array $fields, array $params): array
+    {
+        $_SESSION['project'] = 0;
+
+        return $this->instance->getParamValues('bug', $fields, $params);
+    }
+
+    /**
+     * 获取查询语句的参数的测试用例。
+     * Get sql params test.
+     *
+     * @param  string $keywords
+     * @access public
+     * @return array
+     */
+    public function getSqlParamsTest(string $keywords): array
+    {
+        return $this->instance->getSqlParams($keywords);
+    }
+
+    /**
+     * Test getSummary method.
+     *
+     * @param  string $content
+     * @param  string $words
+     * @access public
+     * @return string
+     */
+    public function getSummaryTest(string $content, string $words): string
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('getSummary');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->instance, array($content, $words));
+        if(function_exists('dao') && dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test initOldSession method.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @param  bool   $clearSession
+     * @access public
+     * @return array
+     */
+    public function initOldSessionTest(string $module, array $fields, array $fieldParams, bool $clearSession = true): array
+    {
+        $formSessionName = $module . 'Form';
+
+        // 根据参数决定是否清理session数据
+        if($clearSession) {
+            unset($_SESSION[$formSessionName]);
+        }
+
+        $this->instance->initOldSession($module, $fields, $fieldParams);
+
+        if(dao::isError()) return dao::getError();
+
+        return $_SESSION[$formSessionName] ?? array();
+    }
+
+    /**
+     * Test markKeywords method directly.
+     *
+     * @param  string $content
+     * @param  string $keywords
+     * @access public
+     * @return string
+     */
+    public function markKeywordsDirectTest(string $content, string $keywords): string
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('markKeywords');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->instance, array($content, $keywords));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processIssueRecord method.
+     *
+     * @param  object $record
+     * @param  array  $objectList
+     * @access public
+     * @return object
+     */
+    public function processIssueRecordTest(object $record, array $objectList): object
+    {
+        // 使用反射访问私有方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('processIssueRecord');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->instance, array($record, $objectList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试生成查询表单数据。
+     * Process query form datas test.
+     *
+     * @param  array  $fieldParams
+     * @param  string $field
+     * @param  string $andOrName
+     * @param  string $operatorName
+     * @param  string $valueName
+     * @access public
+     * @return object
+     */
+    public function processQueryFormDatasTest(array $fieldParams, string $field, string $andOrName, string $operatorName, string $valueName): array
+    {
+        $_POST = $fieldParams;
+
+        return $this->instance->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
+    }
+
+    /**
+     * 测试处理搜索结果。
+     * Process results test.
+     *
+     * @param  array  $results
+     * @param  array  $objectList
+     * @param  string $words
+     * @access public
+     * @return array
+     */
+    public function processResultsTest(array $results, array $objectList, string $words): array
+    {
+        $result = $this->instance->processResults($results, $objectList, $words);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * 测试替换日期和用户变量。
+     * Replace dynamic test.
+     *
+     * @param  string $query
+     * @access public
+     * @return string
+     */
+    public function replaceDynamicTest(string $query): string
+    {
+        $replacedQuery = $this->instance->replaceDynamic($query);
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        \$this->instance->app->loadClass('date');
+
+        $lastWeek  = date::getLastWeek();
+        $thisWeek  = date::getThisWeek();
+        $lastMonth = date::getLastMonth();
+        $thisMonth = date::getThisMonth();
+        $yesterday = date::yesterday();
+        $today     = date(DT_DATE1);
+
+        if(strpos($query, 'lastWeek') !== false)  return ($replacedQuery == "date between '" . $lastWeek['begin'] . "' and '" . $lastWeek['end'] . "'") ? '1' : '0';
+        if(strpos($query, 'thisWeek') !== false)  return ($replacedQuery == "date between '" . $thisWeek['begin'] . "' and '" . $thisWeek['end'] . "'") ? '1' : '0';
+        if(strpos($query, 'lastMonth') !== false) return ($replacedQuery == "date between '" . $lastMonth['begin'] . "' and '" . $lastMonth['end'] . "'") ? '1' : '0';
+        if(strpos($query, 'thisMonth') !== false) return ($replacedQuery == "date between '" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'") ? '1' : '0';
+        if(strpos($query, 'yesterday') !== false) return ($replacedQuery == "date between '" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'") ? '1' : '0';
+        if(strpos($query, 'today') !== false)     return ($replacedQuery == "date between '" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'") ? '1' : '0';
+        if(strpos($query, '$@me') !== false)      return str_replace('$@me', \$this->instance->app->user->account, $query);
+
+        return $replacedQuery;
+    }
+
+    /**
+     * 测试设置搜索条件。
+     * Set condition test.
+     *
+     * @param  string     $field
+     * @param  string     $operator
+     * @param  string|int $value
+     * @access public
+     * @return string
+     */
+    public function setConditionTest($field, $operator, $value)
+    {
+        // setCondition method is in tao layer and is protected, use reflection to access it
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('setCondition');
+        $method->setAccessible(true);
+        return $method->invoke($this->instance, $field, $operator, $value);
+    }
+
+    /**
+     * 测试设置搜索条件。
+     * Set where test.
+     *
+     * @access public
+     * @return string
+     */
+    public function setWhereTest(string $field, string $operator, string $value, string $andOr): string
+    {
+        $where = '';
+        return $this->instance->setWhere($where, $field, $operator, $value, $andOr);
+    }
 }

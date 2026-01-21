@@ -404,7 +404,7 @@ class apiModelTest extends baseTest
         $result = $this->instance->config->api->search;
 
         // 恢复原始配置
-        if($originalConfig !== null) $tester->config->api->search = $originalConfig;
+        if($originalConfig !== null) $this->instance->config->api->search = $originalConfig;
 
         return $result;
     }

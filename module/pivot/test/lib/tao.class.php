@@ -116,4 +116,103 @@ class pivotTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getFirstGroup method.
+     *
+     * @param  int $dimensionID
+     * @access public
+     * @return int
+     */
+    public function getFirstGroupTest(int $dimensionID): int
+    {
+        $method = new ReflectionMethod($this->instance, 'getFirstGroup');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $dimensionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getProjectAndExecutionNameQuery method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProjectAndExecutionNameQueryTest(): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('getProjectAndExecutionNameQuery');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->instance);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getTeamTasks method.
+     *
+     * @param  array $taskIDList
+     * @access public
+     * @return array
+     */
+    public function getTeamTasksTest(array $taskIDList): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('getTeamTasks');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->instance, array($taskIDList));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test mergePivotSpecData method.
+     *
+     * @param  mixed $pivots
+     * @param  bool  $isObject
+     * @access public
+     * @return mixed
+     */
+    public function mergePivotSpecDataTest($pivots, $isObject = true)
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('mergePivotSpecData');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->instance, $pivots, $isObject);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processPlanStories method.
+     *
+     * @param  array  $products
+     * @param  string $storyType
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function processPlanStoriesTest(array $products, string $storyType, array $plans): array
+    {
+        // 使用反射访问protected方法
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('processPlanStories');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->instance, array(&$products, $storyType, $plans));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

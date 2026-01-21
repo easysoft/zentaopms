@@ -17,7 +17,7 @@ class blockModelTest extends baseTest
      */
     public function createTest($block)
     {
-        $blockID = $this->objectModel->create($block);
+        $blockID = $this->instance->create($block);
         if(dao::isError()) return dao::getError();
         return $blockID;
     }
@@ -31,7 +31,7 @@ class blockModelTest extends baseTest
      */
     public function getBlockInitStatusTest($dashboard)
     {
-        $result = $this->objectModel->getBlockInitStatus($dashboard);
+        $result = $this->instance->getBlockInitStatus($dashboard);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -59,7 +59,7 @@ class blockModelTest extends baseTest
      */
     public function getMyDashboardTest(string $dashboard)
     {
-        $result = $this->objectModel->getMyDashboard($dashboard);
+        $result = $this->instance->getMyDashboard($dashboard);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -75,7 +75,7 @@ class blockModelTest extends baseTest
      */
     public function getSpecifiedBlockIDTest(string $dashboard, string $module, string $code)
     {
-        $result = $this->objectModel->getSpecifiedBlockID($dashboard, $module, $code);
+        $result = $this->instance->getSpecifiedBlockID($dashboard, $module, $code);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -89,7 +89,7 @@ class blockModelTest extends baseTest
      */
     public function resetTest(string $dashboard)
     {
-        $result = $this->objectModel->reset($dashboard);
+        $result = $this->instance->reset($dashboard);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -103,7 +103,7 @@ class blockModelTest extends baseTest
      */
     public function updateTest($block)
     {
-        $blockID = $this->objectModel->update($block);
+        $blockID = $this->instance->update($block);
         if(dao::isError()) return dao::getError();
         return $blockID;
     }

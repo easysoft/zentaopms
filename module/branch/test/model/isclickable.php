@@ -12,6 +12,15 @@ title=测试branchModel->isClickable();
 timeout=0
 cid=15332
 
+- 分支为空 @0
+- 分支2状态为为activate,action为activate @0
+- 分支3状态为为close,action为activate @1
+- 分支不存在 @0
+- 分支为空 @0
+- 分支2状态为为activate,action为close @1
+- 分支3状态为为close,action为close @0
+- 分支不存在 @0
+
 */
 $branch = new branchModelTest('admin');
 $idList = array(0, 2, 3, 30);
