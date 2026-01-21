@@ -1230,7 +1230,7 @@ class customModel extends model
      */
     public function hasDeliverableData(): int
     {
-        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->count();
+        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_PROJECTDELIVERABLE)->count();
         return 0;
     }
 
