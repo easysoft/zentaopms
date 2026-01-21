@@ -35,10 +35,10 @@ class epicModelTest extends baseTest
     {
         global $app, $tester;
 
-        // 确保\$this->instance->appcontrol存在并能加载story模型
-        if(!isset(\$this->instance->appcontrol))
+        // 确保$this->instance->appcontrol存在并能加载story模型
+        if(!isset($this->instance->appcontrol))
         {
-            \$this->instance->appcontrol = $tester;
+            $this->instance->appcontrol = $tester;
         }
 
         $result = $this->instance->isClickable($data, $action);

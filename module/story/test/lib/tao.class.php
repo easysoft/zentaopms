@@ -391,7 +391,7 @@ class storyTaoTest extends baseTest
     {
         global $tester;
         $users['admin'] = '管理员';
-        $story = \$this->instance->loadModel('story')->getById($storyID);
+        $story = $this->instance->loadModel('story')->getById($storyID);
         return $this->instance->getAffectedBugs($story, $users);
     }
 
@@ -407,7 +407,7 @@ class storyTaoTest extends baseTest
     {
         global $tester;
         $users['admin'] = '管理员';
-        $story = \$this->instance->loadModel('story')->getById($storyID);
+        $story = $this->instance->loadModel('story')->getById($storyID);
         return $this->instance->getAffectedCases($story, $users);
     }
 
@@ -445,7 +445,7 @@ class storyTaoTest extends baseTest
     {
         global $tester;
         $users['admin'] = '管理员';
-        $story = \$this->instance->loadModel('story')->getById($storyID);
+        $story = $this->instance->loadModel('story')->getById($storyID);
         return $this->instance->getAffectedProjects($story, $users);
     }
 
@@ -461,7 +461,7 @@ class storyTaoTest extends baseTest
     {
         global $tester;
         $users['admin'] = '管理员';
-        $story = \$this->instance->loadModel('story')->getById($storyID);
+        $story = $this->instance->loadModel('story')->getById($storyID);
         return $this->instance->getAffectedTwins($story, $users);
     }
 

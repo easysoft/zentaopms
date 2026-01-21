@@ -1088,11 +1088,11 @@ class convertTaoTest extends baseTest
     {
         try {
             global $tester;
-            $project = \$this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+            $project = $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
             if(!$project) return 0;
 
             /* Load doc language to avoid createDocLib error. */
-            \$this->instance->loadModel('doc');
+            $this->instance->loadModel('doc');
 
             $reflection = new ReflectionClass($this->instance);
             $method = $reflection->getMethod('createDefaultExecution');
@@ -1204,7 +1204,7 @@ class convertTaoTest extends baseTest
     public function createExecutionTest($jiraProjectID = 1001, $projectID = 1, $sprintGroup = array(), $projectRoleActor = array())
     {
         global $tester;
-        $project = \$this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $project = $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         if(!$project) return 0;
 
         // Simulate createExecution method behavior
@@ -1531,7 +1531,7 @@ class convertTaoTest extends baseTest
 
             // 确保数据库连接可用
             if(empty($this->instance->dbh)) {
-                $this->instance->dbh = \$this->instance->dbh;
+                $this->instance->dbh = $this->instance->dbh;
             }
 
             // 确保常量已定义
@@ -1571,9 +1571,9 @@ class convertTaoTest extends baseTest
         {
             // 备份和设置必要的session数据
             global $app, $config;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
-            if(empty(\$this->instance->appsession->jiraMethod)) {
-                \$this->instance->appsession->jiraMethod = 'test';
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
+            if(empty($this->instance->appsession->jiraMethod)) {
+                $this->instance->appsession->jiraMethod = 'test';
             }
 
             // 确保tao对象使用当前的config
@@ -1589,9 +1589,9 @@ class convertTaoTest extends baseTest
 
             // 恢复session数据
             if($originalJiraMethod !== null) {
-                \$this->instance->appsession->jiraMethod = $originalJiraMethod;
+                $this->instance->appsession->jiraMethod = $originalJiraMethod;
             } else {
-                unset(\$this->instance->appsession->jiraMethod);
+                unset($this->instance->appsession->jiraMethod);
             }
 
             return $result;
@@ -1600,9 +1600,9 @@ class convertTaoTest extends baseTest
         {
             // 恢复session数据
             if(isset($originalJiraMethod) && $originalJiraMethod !== null) {
-                \$this->instance->appsession->jiraMethod = $originalJiraMethod;
-            } elseif(isset(\$this->instance->appsession->jiraMethod)) {
-                unset(\$this->instance->appsession->jiraMethod);
+                $this->instance->appsession->jiraMethod = $originalJiraMethod;
+            } elseif(isset($this->instance->appsession->jiraMethod)) {
+                unset($this->instance->appsession->jiraMethod);
             }
             return 'exception: ' . $e->getMessage();
         }
@@ -1661,13 +1661,13 @@ class convertTaoTest extends baseTest
         global $config;
 
         // 模拟版本配置
-        $originalEdition = isset(\$this->instance->configedition) ? \$this->instance->configedition : 'open';
-        \$this->instance->configedition = $edition;
+        $originalEdition = isset($this->instance->configedition) ? $this->instance->configedition : 'open';
+        $this->instance->configedition = $edition;
 
         // 如果是开源版，直接返回原始relations
         if($edition == 'open')
         {
-            \$this->instance->configedition = $originalEdition;
+            $this->instance->configedition = $originalEdition;
             return serialize($relations);
         }
 
@@ -1675,7 +1675,7 @@ class convertTaoTest extends baseTest
         // 如果没有项目关系，返回原始relations
         if(empty($projectRelations))
         {
-            \$this->instance->configedition = $originalEdition;
+            $this->instance->configedition = $originalEdition;
             return serialize($relations);
         }
 
@@ -1690,7 +1690,7 @@ class convertTaoTest extends baseTest
         }
 
         // 恢复原始配置
-        \$this->instance->configedition = $originalEdition;
+        $this->instance->configedition = $originalEdition;
 
         return serialize($relations);
     }
@@ -1708,7 +1708,7 @@ class convertTaoTest extends baseTest
 
         // 模拟原方法的核心逻辑
         // 1. 如果是开源版本，直接返回relations
-        if(isset(\$this->instance->configedition) && \$this->instance->configedition == 'open')
+        if(isset($this->instance->configedition) && $this->instance->configedition == 'open')
         {
             return serialize($relations);
         }
@@ -1891,16 +1891,16 @@ class convertTaoTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
 
             // 设置测试session数据
-            if(empty(\$this->instance->appsession->jiraMethod)) {
-                \$this->instance->appsession->set('jiraMethod', 'file');
+            if(empty($this->instance->appsession->jiraMethod)) {
+                $this->instance->appsession->set('jiraMethod', 'file');
             }
 
             // 设置dbh属性，确保数据库连接可用
             if(empty($this->instance->dbh)) {
-                $this->instance->dbh = \$this->instance->appdbh;
+                $this->instance->dbh = $this->instance->appdbh;
             }
 
             // 测试不同场景
@@ -2003,7 +2003,7 @@ class convertTaoTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraRelation = \$this->instance->appsession->jiraRelation ?? null;
+            $originalJiraRelation = $this->instance->appsession->jiraRelation ?? null;
             $originalEdition = $this->instance->config->edition ?? null;
 
             // 设置测试session数据
@@ -2015,14 +2015,14 @@ class convertTaoTest extends baseTest
                     'relates' => 'relates'
                 )
             );
-            \$this->instance->appsession->set('jiraRelation', json_encode($testRelations));
+            $this->instance->appsession->set('jiraRelation', json_encode($testRelations));
 
             // 设置edition为open以简化测试
             $this->instance->config->edition = 'open';
 
             // 设置dbh属性，确保数据库连接可用
             if(empty($this->instance->dbh)) {
-                $this->instance->dbh = \$this->instance->appdbh;
+                $this->instance->dbh = $this->instance->appdbh;
             }
 
             // 对于简化测试，只验证方法调用是否正常
@@ -2081,7 +2081,7 @@ class convertTaoTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraRelation = \$this->instance->appsession->jiraRelation ?? null;
+            $originalJiraRelation = $this->instance->appsession->jiraRelation ?? null;
             $originalEdition = $this->instance->config->edition ?? null;
 
             // 设置测试session数据
@@ -2093,14 +2093,14 @@ class convertTaoTest extends baseTest
                     'relates' => 'relates'
                 )
             );
-            \$this->instance->appsession->set('jiraRelation', json_encode($testRelations));
+            $this->instance->appsession->set('jiraRelation', json_encode($testRelations));
 
             // 设置edition为open以简化测试
             $this->instance->config->edition = 'open';
 
             // 设置dbh属性，确保数据库连接可用
             if(empty($this->instance->dbh)) {
-                $this->instance->dbh = \$this->instance->appdbh;
+                $this->instance->dbh = $this->instance->appdbh;
             }
 
             // 对于简化测试，只验证方法调用是否正常
@@ -2159,20 +2159,20 @@ class convertTaoTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
-            $originalJiraUser = \$this->instance->appsession->jiraUser ?? null;
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
+            $originalJiraUser = $this->instance->appsession->jiraUser ?? null;
 
             // 设置测试session数据
-            if(empty(\$this->instance->appsession->jiraMethod)) {
-                \$this->instance->appsession->set('jiraMethod', 'file');
+            if(empty($this->instance->appsession->jiraMethod)) {
+                $this->instance->appsession->set('jiraMethod', 'file');
             }
-            if(empty(\$this->instance->appsession->jiraUser)) {
-                \$this->instance->appsession->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
+            if(empty($this->instance->appsession->jiraUser)) {
+                $this->instance->appsession->set('jiraUser', json_encode(array('password' => '123456', 'group' => 1, 'mode' => 'account')));
             }
 
             // 设置dbh属性，确保数据库连接可用
             if(empty($this->instance->dbh)) {
-                $this->instance->dbh = \$this->instance->appdbh;
+                $this->instance->dbh = $this->instance->appdbh;
             }
 
             // 使用反射来访问protected方法
@@ -2215,8 +2215,8 @@ class convertTaoTest extends baseTest
     {
         try {
             global $app;
-            $originalJiraUser = \$this->instance->appsession->jiraUser ?? null;
-            \$this->instance->appsession->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => $mode));
+            $originalJiraUser = $this->instance->appsession->jiraUser ?? null;
+            $this->instance->appsession->set('jiraUser', array('password' => '123456', 'group' => 1, 'mode' => $mode));
 
             $reflection = new ReflectionClass($this->instance);
             $method = $reflection->getMethod('importJiraUser');
@@ -2226,16 +2226,16 @@ class convertTaoTest extends baseTest
             if(dao::isError()) return dao::getError();
 
             if($originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return $result;
         } catch (Exception|Error $e) {
             if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return get_class($e) === 'Exception' ? 'exception: ' . $e->getMessage() : 'error: ' . $e->getMessage();
         }
@@ -2634,7 +2634,7 @@ class convertTaoTest extends baseTest
     public function processJiraIssueContentTest($issueList = array())
     {
         global $tester;
-        $this->instance->dbh = \$this->instance->dbh;
+        $this->instance->dbh = $this->instance->dbh;
 
         $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('processJiraIssueContent');

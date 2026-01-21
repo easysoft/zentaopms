@@ -32,7 +32,7 @@ class tutorialModelTest extends baseTest
     public function checkNoviceTest(int $modifyPassword): int|array
     {
         global $tester;
-        if(\$this->instance->app->user->account != 'guest') \$this->instance->app->user->modifyPassword = $modifyPassword;
+        if($this->instance->app->user->account != 'guest') $this->instance->app->user->modifyPassword = $modifyPassword;
 
         $return = $this->instance->checkNovice();
 
