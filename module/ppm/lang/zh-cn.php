@@ -122,9 +122,10 @@ $lang->ppm->repeatedOperation = '请勿重复操作';
 
 $lang->ppm->approvalStatus     = '审批流状态';
 $lang->ppm->approvalStatusList = array();
-$lang->ppm->approvalStatusList['pending']  = '未评审';
-$lang->ppm->approvalStatusList['approved'] = '已通过';
-$lang->ppm->approvalStatusList['rejected'] = '已拒绝';
+$lang->ppm->approvalStatusList['pending']    = '未评审';
+$lang->ppm->approvalStatusList['inProgress'] = '评审中';
+$lang->ppm->approvalStatusList['approved']   = '已通过';
+$lang->ppm->approvalStatusList['rejected']   = '已拒绝';
 
 $lang->ppm->notApproved  = '审核拒绝的';
 $lang->ppm->assignedToMe = '指派给我';
@@ -280,7 +281,7 @@ $lang->ppm->notDelbranch      = "源分支为受保护分支时不可删除";
 $lang->ppm->addForApp         = "该服务器下没有项目，是否前往添加？";
 $lang->ppm->checkSuccess      = '检查已通过，此分支允许合并';
 $lang->ppm->checkFailed       = '检查未通过，此分支无法合并';
-$lang->ppm->MRHistory         = "本次合并是由 <strong>%s</strong> 于 <strong>%s</strong> 创建，将 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 的 <strong>%s</strong> 次提交，合并到 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 。";
+$lang->ppm->MRHistory         = "本次合并由 <strong>%s</strong> 于 <strong>%s</strong> 创建，申请将 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 的 <strong>%s</strong> 次提交，合并到 <label class='label primary size-sm px-2 cursor-pointer' data-on='click' data-call='copy' data-params='event'>%s<icon class='icon-copy ml-1'/></label> 。";
 
 $lang->ppm->checkStatusList = array();
 $lang->ppm->checkStatusList['fail']    = '未通过';

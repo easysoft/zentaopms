@@ -176,7 +176,7 @@ div
                             (
                                 $ppm->status == 'opened' ? div
                                 (
-                                    $hasConflict == 'no' && $reviewResult && !$checkMessage ? section
+                                    $hasConflict == 'no' && $reviewResult == 'approved' && !$checkMessage ? section
                                     (
                                         setClass('flex w-full checkMerge'),
                                         div(setClass('py-6 border-l-4 border-r-4 border-success')),
@@ -278,7 +278,9 @@ div
                                     (
                                         setClass('border px-4 h-12 flex items-center'),
                                         span(setClass('font-bold'), $lang->ppm->manualReview),
-                                        $reviewResult ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail']),
+                                        $reviewResult == 'approved' ? label(setClass('success ml-4'), $lang->ppm->approvalStatusList[$reviewResult]) : null,
+                                        $reviewResult == 'rejected' ? label(setClass('danger ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
+                                        $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
                                         div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
                                     ),
                                     div
@@ -288,8 +290,8 @@ div
                                         div
                                         (
                                             setClass('flex items-center py-1'),
-                                            $reviewResult ? icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewResultIcon'), 'close'),
-                                            $reviewResult ? span("{$lang->ppm->reviewStatus}: ", $lang->ppm->checkStatusList['success']) : span("{$lang->ppm->reviewStatus}: ", $lang->ppm->checkStatusList['fail']),
+                                            $reviewResult == 'approved' ? icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewResultIcon'), 'close'),
+                                            span("{$lang->ppm->reviewStatus}: ", $lang->ppm->approvalStatusList[$reviewResult]),
                                             div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->approvalStatusList['approved']})"))
                                         ),
                                         div

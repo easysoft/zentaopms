@@ -255,7 +255,7 @@ class ppmModel extends model
             $response = zget($response, 'data', array());
             foreach($response as $commit)
             {
-                $commit->id            = substr($commit->sha, 0, 10);
+                $commit->id            = substr($commit->sha, 0, 7);
                 $commit->repoID        = $ppm->repoID;
                 $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
                 $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
@@ -704,7 +704,7 @@ class ppmModel extends model
        $commits = empty($commits->data) ? array() : zget($commits->data, 'commits', array());
        foreach($commits as $commit)
        {
-           $commit->id            = substr($commit->sha, 0, 10);
+           $commit->id            = substr($commit->sha, 0, 7);
            $commit->repoID        = $repo->id;
            $commit->committedDate = empty($commit->author) ? '' : $commit->author->when;
            $commit->authorName    = empty($commit->author) ? '' : $commit->author->identity->name;
@@ -878,25 +878,27 @@ class ppmModel extends model
      * @param  array|object $reviewers
      * @param  array|object $flow
      * @access public
-     * @return bool
+     * @return string
      */
-    public function getReviewResult(array|object $reviewers, array|object $flow): bool
+    public function getReviewResult(array|object $reviewers, array|object $flow): string
     {
-        if(empty($reviewers)) return false;
+        if(empty($reviewers)) return 'rejected';
         $minReviewers = 0;
         if(!empty($flow))
         {
             if(!is_object($flow->definition)) $flow->definition = json_decode($flow->definition);
             $minReviewers = $flow->definition->reviewFlow->approvals->minReviewers;
         }
-        if($minReviewers > count($reviewers)) return false;
+        if($minReviewers > count($reviewers)) return 'rejected';
 
+        $result = 'approved';
         foreach($reviewers as $reviewer)
         {
-            if($reviewer->decision != 'approved') return false;
+            if($reviewer->decision == 'pending') $result = 'inProgress';
+            if($reviewer->decision == 'rejected') return 'rejected';
         }
 
-        return true;
+        return $result;
     }
 
     /**

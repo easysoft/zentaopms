@@ -234,7 +234,7 @@ class ppm extends control
                 ->add('status', 'opened')
                 ->add('reviewFlowID', !empty($flow->id) ? $flow->id : 0)
                 ->add('sourceSHA', zget($mergeCheckMessage, 'sourceSHA', ''))
-                ->add('targetSHA', zget($mergeCheckMessage, 'targetSHA', ''))
+                ->add('mergeTargetSHA', zget($mergeCheckMessage, 'targetSHA', ''))
                 ->skipSpecial('title,description')
                 ->get();
 

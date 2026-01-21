@@ -122,9 +122,10 @@ $lang->ppm->repeatedOperation = 'Do not repeat operations';
 
 $lang->ppm->approvalStatus     = 'Approve status';
 $lang->ppm->approvalStatusList = array();
-$lang->ppm->approvalStatusList['pending']  = 'notReviewed';
-$lang->ppm->approvalStatusList['approved'] = 'Approved';
-$lang->ppm->approvalStatusList['rejected'] = 'Rejected';
+$lang->ppm->approvalStatusList['pending']    = 'notReviewed';
+$lang->ppm->approvalStatusList['inProgress'] = 'inProgress';
+$lang->ppm->approvalStatusList['approved']   = 'Approved';
+$lang->ppm->approvalStatusList['rejected']   = 'Rejected';
 
 $lang->ppm->notApproved  = 'Rejected';
 $lang->ppm->assignedToMe = 'AssignedToMe';
