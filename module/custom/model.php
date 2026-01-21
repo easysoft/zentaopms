@@ -1184,6 +1184,18 @@ class customModel extends model
     }
 
     /**
+     * 检查系统中是否有度量数据。
+     * Check whether there is measrecord data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasMeasrecordData(): int
+    {
+        return 0;
+    }
+
+    /**
      * 检查系统中是否有审计数据。
      * Check whether there is auditplan data in the system.
      *
@@ -1223,7 +1235,7 @@ class customModel extends model
     }
 
     /**
-     * 检查系统中是否有评审数据。
+     * 检查系统中是否有评审数据,有交付物就算有评审。
      * Check whether there is review data in the system.
      *
      * @access public
@@ -1231,7 +1243,12 @@ class customModel extends model
      */
     public function hasReviewData(): int
     {
-        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_REVIEW)->where('deleted')->eq('0')->count();
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $reviewCount      = (int)$this->dao->select('*')->from(TABLE_REVIEW)->where('deleted')->eq('0')->count();
+            $deliverableCount = (int)$this->dao->select('*')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->count();
+            return $reviewCount + $deliverableCount;
+        }
         return 0;
     }
 
@@ -1242,7 +1259,7 @@ class customModel extends model
      * @access public
      * @return int
      */
-    public function hasProjectchangeData(): int
+    public function hasChangeData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_PROJECTCHANGE)->where('deleted')->eq('0')->count();
         return 0;
