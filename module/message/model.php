@@ -135,7 +135,7 @@ class messageModel extends model
         }
         if(isset($messageSetting['message']))
         {
-            $isBuildinMethod = true;
+            $isBuiltinMethod = true;
             if($this->config->edition != 'open')
             {
                 $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
