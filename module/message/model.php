@@ -140,11 +140,11 @@ class messageModel extends model
             {
                 $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
                 $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-                if($method && !$method->buildin) $isBuildinMethod = false;
+                if($method && !$method->buildin) $isBuiltinMethod = false;
             }
 
             $actions = $messageSetting['message']['setting'];
-            if($isBuildinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
