@@ -215,13 +215,6 @@ foreach($modules as $moduleID => $module)
     $moduleItems[] = array('text' => $module, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchChangeModule', "moduleID=$moduleID"));
 }
 
-$assignedToItems = array();
-foreach ($memberPairs as $key => $value)
-{
-    $key = base64_encode((string)$key); // 编码用户名中的特殊字符
-    $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
-}
-
 $footToolbar = array();
 if($canBatchAction)
 {
@@ -241,6 +234,13 @@ if($canBatchAction)
     }
     if($canBatchAssignTo)
     {
+        $pinyinItems     = common::convert2Pinyin($memberPairs);
+        $assignedToItems = array();
+        foreach($memberPairs as $key => $value)
+        {
+            $key = base64_encode((string)$key); // 编码用户名中的特殊字符
+            $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&productID={$product->id}&type=product"));
+        }
         $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems, 'data-menu' => array('searchBox' => true));
     }
     $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
