@@ -166,7 +166,7 @@ class ppmZen extends ppm
      * @access public
      * @return string
      */
-    public function parseCreateCheckMsg(object $mergeCheckMessage, array $mergeRuleResult, string $sourceBranch, string $targetBranch): string
+    public function parseCreateCheckMsg(object|bool $mergeCheckMessage, array $mergeRuleResult, string $sourceBranch, string $targetBranch): string
     {
         if(empty($mergeCheckMessage) || empty($mergeRuleResult[$sourceBranch]) || empty($mergeRuleResult[$targetBranch])) return '';
         $checkSourceBranch = $mergeRuleResult[$sourceBranch]['result'];
