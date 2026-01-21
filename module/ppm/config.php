@@ -6,6 +6,12 @@ if($module != 'ppm' && $module != 'pullreq') $module = 'ppm';
 $config->ppm = new stdclass();
 $config->ppm->messageTips = '<i class="icon icon-alert text-danger"></i><span class="ml-2">%s</span>';
 
+$config->ppm->mergeImages = array();
+$config->ppm->mergeImages['merge']  = 'static/images/merge.gif';
+$config->ppm->mergeImages['squash'] = 'static/images/squash.gif';
+$config->ppm->mergeImages['rebase'] = 'static/images/rebase.gif';
+$config->ppm->mergeImages['fast']   = 'static/images/fast.gif';
+
 $config->ppm->create = new stdclass();
 $config->ppm->create->skippedFields  = 'reviewer';
 $config->ppm->create->requiredFields = 'sourceBranch,targetBranch,title,repoID';
