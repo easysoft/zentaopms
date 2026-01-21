@@ -1392,38 +1392,38 @@ $lang->zanode->methodOrder[75] = 'restoreSnapshot';
 $lang->zanode->methodOrder[80] = 'deleteSnapshot';
 $lang->zanode->methodOrder[85] = 'instruction';
 
-$lang->resource->devopsspace = new stdclass();
-$lang->resource->devopsspace->browse = 'browse';
-$lang->resource->devopsspace->view   = 'view';
-$lang->resource->devopsspace->create = 'create';
-$lang->resource->devopsspace->edit   = 'edit';
-$lang->resource->devopsspace->delete = 'delete';
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse = 'browse';
+$lang->resource->space->view   = 'view';
+$lang->resource->space->create = 'create';
+$lang->resource->space->edit   = 'edit';
+$lang->resource->space->delete = 'delete';
 
-$lang->resource->devopsspace->members           = 'members';
-$lang->resource->devopsspace->manageMembers     = 'manageMembers';
-$lang->resource->devopsspace->removeMember      = 'removeMember';
-$lang->resource->devopsspace->group             = 'group';
-$lang->resource->devopsspace->createGroup       = 'createGroup';
-$lang->resource->devopsspace->editGroup         = 'editGroup';
-$lang->resource->devopsspace->deleteGroup       = 'deleteGroup';
-$lang->resource->devopsspace->managePriv        = 'managePriv';
-$lang->resource->devopsspace->manageGroupMember = 'manageGroupMember';
-$lang->resource->devopsspace->importGroup       = 'importGroup';
+$lang->resource->space->members           = 'members';
+$lang->resource->space->manageMembers     = 'manageMembers';
+$lang->resource->space->removeMember      = 'removeMember';
+$lang->resource->space->group             = 'group';
+$lang->resource->space->createGroup       = 'createGroup';
+$lang->resource->space->editGroup         = 'editGroup';
+$lang->resource->space->deleteGroup       = 'deleteGroup';
+$lang->resource->space->managePriv        = 'managePriv';
+$lang->resource->space->manageGroupMember = 'manageGroupMember';
+$lang->resource->space->importGroup       = 'importGroup';
 
-$lang->devopsspace->methodOrder[0]  = 'browse';
-$lang->devopsspace->methodOrder[5]  = 'view';
-$lang->devopsspace->methodOrder[10] = 'create';
-$lang->devopsspace->methodOrder[15] = 'edit';
-$lang->devopsspace->methodOrder[20] = 'delete';
-$lang->devopsspace->methodOrder[25] = 'members';
-$lang->devopsspace->methodOrder[30] = 'manageMembers';
-$lang->devopsspace->methodOrder[35] = 'removeMember';
-$lang->devopsspace->methodOrder[40] = 'group';
-$lang->devopsspace->methodOrder[45] = 'createGroup';
-$lang->devopsspace->methodOrder[50] = 'editGroup';
-$lang->devopsspace->methodOrder[52] = 'deleteGroup';
-$lang->devopsspace->methodOrder[55] = 'managePriv';
-$lang->devopsspace->methodOrder[60] = 'manageGroupMember';
+$lang->space->methodOrder[0]  = 'browse';
+$lang->space->methodOrder[5]  = 'view';
+$lang->space->methodOrder[10] = 'create';
+$lang->space->methodOrder[15] = 'edit';
+$lang->space->methodOrder[20] = 'delete';
+$lang->space->methodOrder[25] = 'members';
+$lang->space->methodOrder[30] = 'manageMembers';
+$lang->space->methodOrder[35] = 'removeMember';
+$lang->space->methodOrder[40] = 'group';
+$lang->space->methodOrder[45] = 'createGroup';
+$lang->space->methodOrder[50] = 'editGroup';
+$lang->space->methodOrder[52] = 'deleteGroup';
+$lang->space->methodOrder[55] = 'managePriv';
+$lang->space->methodOrder[60] = 'manageGroupMember';
 
 $lang->resource->repo = new stdclass();
 $lang->resource->repo->browse          = 'browseAction';
@@ -1557,16 +1557,6 @@ $lang->serverroom->methodOrder[5]  = 'create';
 $lang->serverroom->methodOrder[10] = 'edit';
 $lang->serverroom->methodOrder[15] = 'delete';
 $lang->serverroom->methodOrder[20] = 'view';
-
-$lang->resource->instance = new stdclass();
-$lang->resource->instance->manage = 'manage';
-
-$lang->resource->space = new stdclass();
-$lang->resource->space->browse = 'browse';
-
-$lang->resource->store = new stdclass();
-$lang->resource->store->browse  = 'browse';
-$lang->resource->store->appview = 'appView';
 
 $lang->resource->system = new stdclass();
 $lang->resource->system->dashboard    = 'dashboard';
@@ -2309,7 +2299,7 @@ if(!$inUpgrade)
         unset($lang->resource->gitea);
         unset($lang->resource->sonarqube);
         unset($lang->resource->ppm);
-        unset($lang->resource->devopsspace);
+        unset($lang->resource->space);
     }
     if(!helper::hasFeature('kanban')) unset($lang->resource->kanban);
 

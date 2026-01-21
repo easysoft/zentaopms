@@ -16,7 +16,7 @@ $lang->mainNav->compile = "{$lang->navIcons['compile']} {$lang->devops->compile}
 $lang->mainNav->deploy  = "{$lang->navIcons['deploy']} {$lang->deployment->common}|host|browse|";
 $lang->mainNav->bi      = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->env     = "{$lang->navIcons['env']} {$lang->devops->env}|env|browse|";
-$lang->mainNav->space   = "{$lang->navIcons['space']} {$lang->devops->space}|devopsspace|view|";
+$lang->mainNav->space   = "{$lang->navIcons['space']} {$lang->devops->space}|space|view|";
 $lang->mainNav->dynamic = "{$lang->navIcons['dynamic']} {$lang->devops->dynamic}|company|dynamic|";
 $lang->mainNav->system  = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->setting = "{$lang->navIcons['admin']} {$lang->admin->common}|repo|setrules|";
@@ -106,9 +106,9 @@ if($config->edition != 'open')
 
 $lang->space = new stdclass();
 $lang->space->menu = new stdclass();
-$lang->space->menu->baseinfo = array('link' => "{$lang->devops->spaceInfo}|devopsspace|view");
-$lang->space->menu->team     = array('link' => "{$lang->devops->spaceTeam}|devopsspace|team");
-$lang->space->menu->spaces   = array('link' => "{$lang->devops->spaces}|devopsspace|browse");
+$lang->space->menu->baseinfo = array('link' => "{$lang->devops->spaceInfo}|space|view");
+$lang->space->menu->team     = array('link' => "{$lang->devops->spaceTeam}|space|team");
+$lang->space->menu->spaces   = array('link' => "{$lang->devops->spaces}|space|browse");
 
 $lang->space->menuOrder[5]  = 'baseinfo';
 $lang->space->menuOrder[10] = 'team';

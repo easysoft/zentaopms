@@ -64,7 +64,7 @@ class repoModel extends model
                 unset($this->lang->devops->menu->branch);
             }
         }
-        $this->loadModel('devopsspace')->setMenu($spaceID);
+        $this->loadModel('space')->setMenu($spaceID);
 
         if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
         $this->session->set('repoID', $repoID);
@@ -632,7 +632,7 @@ class repoModel extends model
         $repo->serviceHost    = (int)$repo->serviceHost;
         $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
-        $repo->members        = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('devopsspace')->getSpaceMembers($repo->space, true);
+        $repo->members        = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->space, true);
 
         return $repo;
     }
@@ -1766,9 +1766,6 @@ class repoModel extends model
         }
         else
         {
-            $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
-            if(!$service) return $repo;
-
             if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
             {
                 $path = $this->app->getAppRoot() . "www/data/repo/{$repo->name}_{$repo->SCM}";
@@ -1777,7 +1774,7 @@ class repoModel extends model
                 $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
             }
 
-            $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
+            $repo->codePath = $repo->path;
         }
 
         $repo->gitService = (int)$repo->serviceHost;
@@ -1808,9 +1805,9 @@ class repoModel extends model
 
         $jobs = zget($commentGroup, $repo->id, array());
 
-        $accountPairs  = array();
-        $userList      = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
-        $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
+        $accountPairs   = array();
+        $userList       = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
+        $accountIDPairs = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
         foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($accountIDPairs, $gitlabUser->id, '');
 
         foreach($data->commits as $commit)
@@ -2288,45 +2285,6 @@ class repoModel extends model
     }
 
     /**
-     * 获取gitlab项目列表。
-     * Get gitlab projects.
-     *
-     * @param  int    $gitlabID
-     * @param  string $projectFilter
-     * @access public
-     * @return array
-     */
-    public function getGitlabProjects(int $gitlabID, string $projectFilter = ''): array
-    {
-        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
-        {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, 'true', 0, 0, false);
-        }
-        else
-        {
-            $gitlabUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
-            if(!$gitlabUser) return array();
-
-            $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $projectFilter ? 'false' : 'true');
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-            if($projectFilter == 'IS_DEVELOPER')
-            {
-                foreach($projects as $key => $project)
-                {
-                    if(!$this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
-                }
-            }
-        }
-
-        $importedProjects = $this->getImportedProjects($gitlabID);
-        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
-
-        return $projects;
-    }
-
-    /**
      * Get repo groups.
      *
      * @param  int    $serverID
@@ -2336,9 +2294,6 @@ class repoModel extends model
      */
     public function getGroups(int $serverID, int|string $groupID = 0): string|array|false
     {
-        $server = $this->loadModel('pipeline')->getByID($serverID);
-        if(empty($server->type)) return false;
-
         $getGroupFunc = 'get' . $server->type . 'Groups';
         $groups       = $this->$getGroupFunc($serverID);
 
@@ -2352,42 +2307,6 @@ class repoModel extends model
         }
 
         return $groups;
-    }
-
-    /**
-     * Get gitlab groups.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return void
-     */
-    public function getGitlabGroups(int $gitlabID): array
-    {
-        $groups = $this->loadModel('gitlab')->apiGetGroups($gitlabID, 'name_asc');
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-        return $options;
-    }
-
-    /**
-     * Get gitea groups.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function getGiteaGroups(int $giteaID): array
-    {
-        $groups = $this->loadModel('gitea')->apiGetGroups($giteaID);
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->username, 'value' => $group->id);
-        }
-        return $options;
     }
 
     /**
@@ -2910,7 +2829,7 @@ class repoModel extends model
      */
     public function getListByCondition(string $repoQuery, string $SCM, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $userSpaces = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
+        $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->beginIF($space)->andWhere('space')->eq($space)->fi()

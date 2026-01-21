@@ -657,16 +657,13 @@ $lang->group->package->projectTemplate       = 'Project Template';
 $lang->group->package->browseReportTemplate  = 'Browse Report Template';
 $lang->group->package->manageReportTemplate  = 'Manage Report Template';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
-$lang->group->package->devopsspace           = 'Manage Space';
-$lang->group->package->devopsspaceSetting    = 'Space Setting';
+$lang->group->package->space                 = 'Manage Space';
+$lang->group->package->spaceSetting          = 'Space Setting';
 $lang->group->package->repoReviewFlow        = 'Review Flow';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
-<<<<<<< HEAD
 $lang->group->package->branchRule            = 'Branch Rule';
 $lang->group->package->branchType            = 'Branch Type';
-=======
 $lang->group->package->featureSwitch         = 'Feature Switch';
->>>>>>> release/22.0.alpha1
 
 include (dirname(__FILE__) . '/resource.php');

@@ -86,23 +86,6 @@ class repoZen extends repo
     }
 
     /**
-     * 准备创建版本库的数据。
-     * Prepare create repo data.
-     *
-     * @param  object       $repo
-     * @access protected
-     * @return object|false
-     */
-    protected function prepareCreateRepo(object $repo): object|false
-    {
-        $group  = $this->repo->getGroups($repo->serviceHost, $repo->namespace);
-        $server = $this->loadModel('pipeline')->getByID($repo->serviceHost);
-        $repo->path = "{$server->url}/{$group}/{$repo->name}";
-
-        return $repo;
-    }
-
-    /**
      * 准备编辑版本库的数据。
      * Prepare edit repo data.
      *
@@ -367,9 +350,8 @@ class repoZen extends repo
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->account);
     }
 
     /**
@@ -396,21 +378,14 @@ class repoZen extends repo
         }
 
         $repoGroups   = array();
-        $serviceHosts = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
-        if(!empty($serviceHosts))
-        {
-            $serverID   = key($serviceHosts);
-            $repoGroups = $this->repo->getGroups($serverID);
-        }
 
         $this->view->title        = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->create;
         $this->view->groups       = $this->loadModel('group')->getPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
-        $this->view->serviceHosts = $serviceHosts;
         $this->view->repoGroups   = $repoGroups;
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('devopsspace')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
     }
 
     /**
@@ -440,8 +415,7 @@ class repoZen extends repo
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
         $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
-        $this->view->serviceHosts    = $this->loadModel('pipeline')->getPairs($repo->SCM);
-        $this->view->spaces          = $this->loadModel('devopsspace')->getPairs($this->app->user->account);
+        $this->view->spaces          = $this->loadModel('space')->getPairs($this->app->user->account);
     }
 
     /**
@@ -1198,25 +1172,6 @@ class repoZen extends repo
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         return array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true);
-    }
-
-    /**
-     * Get SCM by service host.
-     *
-     * @param  int    $serviceHost
-     * @access protected
-     * @return string
-     */
-    protected function getSCM(int|string $serviceHost)
-    {
-        $server = $this->loadModel('pipeline')->getByID($serviceHost);
-
-        foreach($this->lang->repo->scmList as $scmKey => $scmLang)
-        {
-            if($server->type == strtolower($scmKey)) return $scmKey;
-        }
-
-        return '';
     }
 
     /**

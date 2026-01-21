@@ -113,7 +113,7 @@ class visionSwitcher extends wg
         );
 
         $devopsItems = array();
-        $spaces = $app->control->loadModel('devopsspace')->getListByAccount($user->account);
+        $spaces = $app->control->loadModel('space')->getListByAccount($user->account);
         if(!empty($spaces))
         {
             foreach($spaces as $space)

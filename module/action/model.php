@@ -511,10 +511,10 @@ class actionModel extends model
             }
         }
 
-        if(!empty($typeTrashes['devopsspace']))
+        if(!empty($typeTrashes['space']))
         {
-            $devopsspaceList = $this->loadModel('devopsspace')->getByIdList($typeTrashes['devopsspace']);
-            foreach($devopsspaceList as $devopsspace) $objectNames['devopsspace'][$devopsspace->id] = $devopsspace->name;
+            $spaceList = $this->loadModel('space')->getByIdList($typeTrashes['space']);
+            foreach($spaceList as $space) $objectNames['space'][$space->id] = $space->name;
         }
 
         /* 将对象名称字段添加到回收站数据中。 */
@@ -1431,10 +1431,10 @@ class actionModel extends model
             $relatedProjects[$objectType] = $relatedProject;
         }
 
-        if(!empty($objectTypes['devopsspace']))
+        if(!empty($objectTypes['space']))
         {
-            $devopsspaceList = $this->loadModel('devopsspace')->getByIdList($objectTypes['devopsspace']);
-            foreach($devopsspaceList as $devopsspace) $objectNames['devopsspace'][$devopsspace->id] = $devopsspace->name;
+            $spaceList = $this->loadModel('space')->getByIdList($objectTypes['space']);
+            foreach($spaceList as $space) $objectNames['space'][$space->id] = $space->name;
         }
 
         $objectNames['user'][0] = 'guest';    // Add guest account.
@@ -1787,7 +1787,7 @@ class actionModel extends model
 
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
-        if($action->objectType == 'devopsspace') return $this->loadModel('devopsspace')->restore($action->objectID, $actionID);
+        if($action->objectType == 'space') return $this->loadModel('space')->restore($action->objectID, $actionID);
 
         list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
         if(empty($queryKey)) $queryKey = 'id';

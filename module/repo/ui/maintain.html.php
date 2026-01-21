@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('deleteConfirm', $lang->repo->notice->deleteConfirm);
-jsVar('defaultServer', empty($defaultServer) ? 0 : $defaultServer->id);
-
 $createRepoURL = createLink('repo', 'createRepo', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
 
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
@@ -23,14 +20,6 @@ foreach($repoList as $repo)
 {
     $repo->space  = $repo->space ? $repo->space : '';
     $jobID        = 0;
-    $repo->exec   = 'disabled';
-    $repo->report = 'disabled';
-    if(isset($sonarRepoList[$repo->id]))
-    {
-        $repo->exec = '';
-        $repo->job = $sonarRepoList[$repo->id]->id;
-        if(in_array($repo->job, $successJobs)) $repo->report = '';
-    }
 
     $productNames = array();
     $productList  = explode(',', str_replace(' ', '', $repo->product));
@@ -80,15 +69,6 @@ foreach($repos as $repo)
     /* Set the url and check status for visiting the repo. */
     $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
     $repo->actions[0]['url']      = $repo->path;
-    if(in_array($repo->SCM, array('Gogs', 'Gitea')))
-    {
-        $resp = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
-        if(!empty($resp->url))
-        {
-            $repo->actions[0]['disabled'] = false;
-            $repo->actions[0]['url']      = $resp->url . '/' . $repo->serviceProject;
-        }
-    }
 }
 
 $spaceItems = array();
@@ -112,49 +92,36 @@ featureBar
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
 );
-if($config->inCompose && empty($repoServers))
-{
-    toolBar
+
+toolBar
+(
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
     (
-        hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-    );
-}
-else
-{
-    toolBar
+        'icon'  => 'plus',
+        'class' => 'btn primary'
+    ))) : null,
+    !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
     (
-        hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+        'icon'  => 'plus',
+        'class' => 'btn primary'
+    ))) : null,
+    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
+    (
+        'icon'  => 'plus',
+        'class' => 'btn primary'
+    ))) : null,
+    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
+    (
+        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
+        dropDown
         (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $serverPairs ? item(set($batchCreateItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
-        (
-            btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
-            $serverPairs ? dropDown
-            (
-                btn(setClass('btn primary dropdown-toggle'),
-                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-                set::placement('bottom-end'),
-                set::items(array($createItem, $batchCreateItem))
-            ) : null
-        ) : null,
-    );
-}
+            btn(setClass('btn primary dropdown-toggle'),
+            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+            set::placement('bottom-end'),
+            set::items(array($createItem, $batchCreateItem))
+        )
+    ) : null,
+);
 
 dtable
 (
@@ -162,6 +129,5 @@ dtable
     set::data($repos),
     set::sortLink(createLink('repo', 'maintain', "inSpace={$inSpace}&space={$spaceID}&objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
-    set::actionItemCreator(jsRaw('window.renderActions'))
+    set::footPager(usePager())
 );

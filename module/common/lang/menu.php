@@ -522,20 +522,20 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-$lang->devops->homeMenu->space   = array('link' => "{$lang->devopsspace->common}|devopsspace|browse", 'alias' => 'create,edit', 'exclude' => 'devopsspace-view');
+$lang->devops->homeMenu->space   = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit', 'exclude' => 'space-view');
 $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 
 $configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,space,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
-$lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|devopsspace|view|spaceID=%s", 'subModule' =>'devopsspace', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+$lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
-$lang->devops->homeMenu->spaceSetting['subMenu']->overview = array('link' => "{$lang->devops->overview}|devopsspace|view|spaceID=%s");
-$lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|devopsspace|members|spaceID=%s", 'alias' => 'managemembers');
-$lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|devopsspace|group|spaceID=%s", 'alias' => 'managepriv');
+$lang->devops->homeMenu->spaceSetting['subMenu']->overview = array('link' => "{$lang->devops->overview}|space|view|spaceID=%s");
+$lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|space|members|spaceID=%s", 'alias' => 'managemembers');
+$lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|space|group|spaceID=%s", 'alias' => 'managepriv');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule');
@@ -770,7 +770,6 @@ $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
 $lang->navGroup->host             = 'devops';
-$lang->navGroup->devopsspace      = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';

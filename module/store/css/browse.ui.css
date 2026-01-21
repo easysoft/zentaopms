@@ -1,8 +1,0 @@
-.app-name {font-size: 16px; font-weight: 700; display: inline-block;padding: 8px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
-.store-item {justify-content: space-between;}
-#storePager {background: white; margin-top: 20px; padding: 6px 15px; display: flex; justify-content: end; font-weight: 700; color: rgb(131, 138, 157);}
-#storePager .ghost {color: rgb(131, 138, 157);}
-#mainContent > .icon-search {display: none;}
-#cloudAppContainer .install-btn {padding-left: 25px; padding-right: 25px;}
-
-#cloudAppContainer .line-2 {word-break:break-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}

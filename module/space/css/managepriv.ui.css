@@ -1,0 +1,8 @@
+#featureBar > .menu {background: unset;}
+
+#privList {border: 1px solid var(--table-border-color);}
+#privList thead {background: unset;}
+#privList th.module {width: 160px;}
+#privList tr {border-bottom-width: 0; background: #FFF;}
+#privList th, #privList td {border: 1px solid var(--table-border-color);}
+#privList tbody > tr > td .group-item {display: inline-block; width: 20%;}
