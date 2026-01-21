@@ -148,11 +148,6 @@ $config->ppm->commitLogs->dtable->fieldList['id']['data-app'] = $app->tab;
 $config->ppm->commitLogs->dtable->fieldList['id']['link']     = helper::createLink('repo', 'diff', "repoID={repoID}&objectID=0&entry=&oldrevision=^&newRevision={sha}");
 $config->ppm->commitLogs->dtable->fieldList['id']['minWidth'] = 40;
 
-$config->ppm->commitLogs->dtable->fieldList['committedDate']['name']     = 'committedDate';
-$config->ppm->commitLogs->dtable->fieldList['committedDate']['title']    = $lang->repo->time;
-$config->ppm->commitLogs->dtable->fieldList['committedDate']['type']     = 'datetime';
-$config->ppm->commitLogs->dtable->fieldList['committedDate']['sortType'] = false;
-
 $config->ppm->commitLogs->dtable->fieldList['authorName']['name']     = 'authorName';
 $config->ppm->commitLogs->dtable->fieldList['authorName']['title']    = $lang->repo->committer;
 $config->ppm->commitLogs->dtable->fieldList['authorName']['type']     = 'user';
@@ -163,6 +158,12 @@ $config->ppm->commitLogs->dtable->fieldList['title']['title']    = $lang->repo->
 $config->ppm->commitLogs->dtable->fieldList['title']['type']     = 'text';
 $config->ppm->commitLogs->dtable->fieldList['title']['minWidth'] = 342;
 $config->ppm->commitLogs->dtable->fieldList['title']['hint']     = '{message}';
+
+$config->ppm->commitLogs->dtable->fieldList['committedDate']['name']       = 'committedDate';
+$config->ppm->commitLogs->dtable->fieldList['committedDate']['title']      = $lang->repo->time;
+$config->ppm->commitLogs->dtable->fieldList['committedDate']['type']       = 'datetime';
+$config->ppm->commitLogs->dtable->fieldList['committedDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+$config->ppm->commitLogs->dtable->fieldList['committedDate']['sortType']   = false;
 
 $config->ppm->createCheck = new stdclass();
 $config->ppm->createCheck->commit = new stdclass();
@@ -185,10 +186,11 @@ $config->ppm->createCheck->commit->dtable->fieldList['title']['type']     = 'tex
 $config->ppm->createCheck->commit->dtable->fieldList['title']['minWidth'] = 342;
 $config->ppm->createCheck->commit->dtable->fieldList['title']['hint']     = '{message}';
 
-$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['name']     = 'committedDate';
-$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['title']    = $lang->repo->time;
-$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['type']     = 'datetime';
-$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['sortType'] = false;
+$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['name']       = 'committedDate';
+$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['title']      = $lang->repo->time;
+$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['type']       = 'datetime';
+$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['sortType']   = false;
+$config->ppm->createCheck->commit->dtable->fieldList['committedDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->ppm->createCheck->linkObject = new stdclass();
 $config->ppm->createCheck->linkObject->dtable = new stdclass();
