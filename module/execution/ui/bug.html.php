@@ -60,12 +60,13 @@ $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 
 if($canBatchAssignTo)
 {
+    $pinyinItems     = common::convert2Pinyin($users);
     $assignedToItems = array();
-    foreach ($users as $account => $name)
+    foreach($users as $account => $name)
     {
         if(empty($account)) continue;
         $account = base64_encode((string)$account); // 编码用户名中的特殊字符
-        if($account != 'closed') $assignedToItems[] = array('text' => $name, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
+        if($account != 'closed') $assignedToItems[] = array('text' => $name, 'keys' => zget($pinyinItems, $name, ''), 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo={$account}&objectID={$execution->id}"));
     }
 
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top', 'data-menu' => array('searchBox' => true));

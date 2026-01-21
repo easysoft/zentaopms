@@ -40,13 +40,7 @@ $canBatchClose    = common::hasPriv('feedback', 'batchClose');
 $canBatchAssignTo = common::hasPriv('feedback', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchClose || $canBatchAssignTo;
 
-$footToolbar     = array();
-$assignedToItems = array();
-foreach($users as $key => $value)
-{
-    if($value) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('feedback', 'batchAssignTo', "assignedTo=$key"));
-}
-
+$footToolbar = array();
 if($canBatchAction)
 {
     $footToolbar['items'] = array();
@@ -60,6 +54,12 @@ if($canBatchAction)
     }
     if($canBatchAssignTo)
     {
+        $pinyinItems     = common::convert2Pinyin($users);
+        $assignedToItems = array();
+        foreach($users as $key => $value)
+        {
+            if($value) $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('feedback', 'batchAssignTo', "assignedTo=$key"));
+        }
         $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->feedback->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems, 'data-menu' => array('searchBox' => true));
     }
     $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
