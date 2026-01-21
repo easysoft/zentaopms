@@ -135,8 +135,16 @@ class messageModel extends model
         }
         if(isset($messageSetting['message']))
         {
+            $isBuildinMethod = true;
+            if($this->config->edition != 'open')
+            {
+                $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
+                $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
+                if($method && !$method->buildin) $isBuildinMethod = false;
+            }
+
             $actions = $messageSetting['message']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuildinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
@@ -222,7 +230,7 @@ class messageModel extends model
 
         foreach(explode(',', trim($toList, ',')) as $to)
         {
-            if($to == $actor) continue;
+            if($to == $actor || empty($to)) continue;
             $notify = new stdclass();
             $notify->objectType  = 'message';
             $notify->action      = $actionID;
@@ -307,7 +315,7 @@ class messageModel extends model
             $flow    = $this->loadModel('workflow')->getByModule($objectType);
             $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
             $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-            if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
+            if(($flow && !$flow->buildin) || ($method && !$method->buildin)) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
         if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;
