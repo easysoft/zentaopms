@@ -721,6 +721,22 @@ class customModelTest extends baseTest
     }
 
     /**
+     * 检查系统中是否有度量数据。
+     * Check if there is project activity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasMeasrecordDataTest(string $edition): int|array
+    {
+        $count = $this->instance->hasMeasrecordData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
      * 检查系统中是否有交付数据。
      * Check if there is project activity data in the system.
      *

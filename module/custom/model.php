@@ -1184,6 +1184,18 @@ class customModel extends model
     }
 
     /**
+     * 检查系统中是否有度量数据。
+     * Check whether there is measrecord data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasMeasrecordData(): int
+    {
+        return 0;
+    }
+
+    /**
      * 检查系统中是否有审计数据。
      * Check whether there is auditplan data in the system.
      *
