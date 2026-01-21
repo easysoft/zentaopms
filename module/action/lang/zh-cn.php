@@ -964,6 +964,9 @@ $lang->action->label->holiday      = '节假日|holiday|browse|';
 $lang->action->label->devopsspace  = '空间|devopsspace|view|id=%s';
 $lang->action->label->deliverable  = '交付物类型|deliverable|view|id=%s';
 
+$lang->action->label->enablereviewflow  = '启用';
+$lang->action->label->disablereviewflow = '禁用';
+
 /* Object type. */
 $lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';

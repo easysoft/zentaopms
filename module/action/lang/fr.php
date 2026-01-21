@@ -960,6 +960,9 @@ $lang->action->label->holiday      = 'Holiday|holiday|browse|';
 $lang->action->label->devopsspace  = 'Space|devopsspace|view|id=%s';
 $lang->action->label->deliverable  = 'Deliverable Category|deliverable|view|id=%s';
 
+$lang->action->label->enablereviewflow  = 'Enable';
+$lang->action->label->disablereviewflow = 'Disable';
+
 /* Object type. */
 $lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';
