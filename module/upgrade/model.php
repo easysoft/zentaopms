@@ -13269,4 +13269,19 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 从轻量模式升级后，禁用新增的功能。
+     * Disable new features after upgrading from light mode.
+     *
+     * @access public
+     * @return bool
+     */
+    public function disableFeaturesByMode(): bool
+    {
+        if($this->config->systemMode != 'light') return true;
+
+        $this->loadModel('custom')->disableFeaturesByMode('light');
+        return true;
+    }
 }

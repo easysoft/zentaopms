@@ -1259,7 +1259,7 @@ class customModel extends model
      * @access public
      * @return int
      */
-    public function hasProjectchangeData(): int
+    public function hasChangeData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_PROJECTCHANGE)->where('deleted')->eq('0')->count();
         return 0;

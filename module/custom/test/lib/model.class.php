@@ -809,7 +809,7 @@ class customModelTest extends baseTest
         $oldEdition = $this->instance->config->edition;
 
         $this->instance->config->edition = $edition;
-        $count = $this->instance->hasProjectchangeData();
+        $count = $this->instance->hasChangeData();
 
         $this->instance->config->edition = $oldEdition;
         if(dao::isError()) return dao::getError();
