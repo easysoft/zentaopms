@@ -105,7 +105,7 @@ class kanbanTaoTest extends baseTest
         global $tester;
 
         // 记录操作前的单元格数量
-        $beforeCount = \$this->instance->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
+        $beforeCount = $this->instance->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
 
         // 使用反射来调用protected方法
         $reflection = new ReflectionClass($this->instance);
@@ -117,7 +117,7 @@ class kanbanTaoTest extends baseTest
         if(dao::isError()) return array('success' => 0, 'error' => dao::getError());
 
         // 记录操作后的单元格数量
-        $afterCount = \$this->instance->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
+        $afterCount = $this->instance->dao->select('COUNT(1) as count')->from(TABLE_KANBANCELL)->where('`column`')->eq($childColumnID)->fetch('count');
 
         // 判断是否成功创建了新的单元格
         $success = $afterCount > $beforeCount ? 1 : 0;
@@ -357,25 +357,25 @@ class kanbanTaoTest extends baseTest
         if($testType === 'singleBug')
         {
             // 获取单个Bug对象
-            $bug = \$this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
+            $bug = $this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
             if($bug) $objects = array($bug);
         }
         elseif($testType === 'multipleBugs')
         {
             // 获取多个Bug对象
-            $objects = \$this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->in('1,2,3')->fetchAll('id');
+            $objects = $this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->in('1,2,3')->fetchAll('id');
         }
         elseif($testType === 'bugWithDifferentStatus')
         {
             // 获取不同状态的Bug
-            $bug = \$this->instance->dao->select('*')->from(TABLE_BUG)->where('status')->eq('resolved')->limit(1)->fetch();
+            $bug = $this->instance->dao->select('*')->from(TABLE_BUG)->where('status')->eq('resolved')->limit(1)->fetch();
             if($bug) $objects = array($bug);
         }
         elseif($testType === 'permissionTest')
         {
             // 权限测试用例
             su('user1');
-            $bug = \$this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
+            $bug = $this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->eq(1)->fetch();
             if($bug) $objects = array($bug);
         }
 
@@ -525,11 +525,11 @@ class kanbanTaoTest extends baseTest
         global $tester;
 
         // 获取卡片数据
-        $card = \$this->instance->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        $card = $this->instance->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
         if(!$card) return array('error' => 'Card not found');
 
         // 获取单元格数据
-        $cell = \$this->instance->dao->select('*')->from(TABLE_KANBANCELL)->where('id')->eq($cellID)->fetch();
+        $cell = $this->instance->dao->select('*')->from(TABLE_KANBANCELL)->where('id')->eq($cellID)->fetch();
         if(!$cell) return array('error' => 'Cell not found');
 
         // 使用反射来调用protected方法
@@ -579,7 +579,7 @@ class kanbanTaoTest extends baseTest
         global $tester;
 
         // 获取待测试的列信息
-        $column = \$this->instance->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch();
+        $column = $this->instance->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->fetch();
 
         if(!$column) return array('result' => 0, 'error' => 'Column not found');
 
@@ -594,7 +594,7 @@ class kanbanTaoTest extends baseTest
         }
 
         // 记录调用前的同父列子列数量
-        $siblingCount = \$this->instance->dao->select('COUNT(1) AS count')->from(TABLE_KANBANCOLUMN)
+        $siblingCount = $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_KANBANCOLUMN)
             ->where('parent')->eq($column->parent)
             ->andWhere('id')->ne($column->id)
             ->andWhere('deleted')->eq('0')
@@ -611,7 +611,7 @@ class kanbanTaoTest extends baseTest
         if(dao::isError()) return array('result' => 0, 'error' => dao::getError());
 
         // 获取父列的当前parent值
-        $parentColumn = \$this->instance->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($column->parent)->fetch();
+        $parentColumn = $this->instance->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($column->parent)->fetch();
         $currentParent = $parentColumn ? $parentColumn->parent : -1;
 
         // 判断结果：如果没有其他兄弟列，父列的parent应该被重置为0
@@ -639,7 +639,7 @@ class kanbanTaoTest extends baseTest
         global $tester;
 
         // 获取操作前的单元格数据
-        $beforeCell = \$this->instance->dao->select('*')->from(TABLE_KANBANCELL)
+        $beforeCell = $this->instance->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
             ->andWhere('lane')->eq($laneID)
             ->andWhere('`column`')->eq($colID)
@@ -655,7 +655,7 @@ class kanbanTaoTest extends baseTest
         if(dao::isError()) return array('result' => 'error', 'message' => dao::getError());
 
         // 获取操作后的单元格数据
-        $afterCell = \$this->instance->dao->select('*')->from(TABLE_KANBANCELL)
+        $afterCell = $this->instance->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
             ->andWhere('lane')->eq($laneID)
             ->andWhere('`column`')->eq($colID)

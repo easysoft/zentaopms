@@ -344,8 +344,8 @@ class commonModelTest extends baseTest
         global $app, $config;
 
         // 备份原始配置和状态
-        $originalInContainer = isset(\$this->instance->configinContainer) ? \$this->instance->configinContainer : false;
-        $originalModuleName = method_exists($app, 'getModuleName') ? \$this->instance->appgetModuleName() : 'common';
+        $originalInContainer = isset($this->instance->configinContainer) ? $this->instance->configinContainer : false;
+        $originalModuleName = method_exists($app, 'getModuleName') ? $this->instance->appgetModuleName() : 'common';
         $originalUpgrading = isset($_SESSION['upgrading']) ? $_SESSION['upgrading'] : false;
         $originalSafeFileEnv = getenv('ZT_CHECK_SAFE_FILE');
 
@@ -353,26 +353,26 @@ class commonModelTest extends baseTest
             // 根据场景设置不同的测试环境
             switch($scenario) {
                 case 'inContainer':
-                    \$this->instance->configinContainer = true;
+                    $this->instance->configinContainer = true;
                     break;
 
                 case 'validSafeFile':
-                    \$this->instance->configinContainer = false;
+                    $this->instance->configinContainer = false;
                     // 设置环境变量模拟有效的安全文件状态
                     putenv('ZT_CHECK_SAFE_FILE=true');
                     break;
 
                 case 'upgradeModule':
-                    \$this->instance->configinContainer = false;
+                    $this->instance->configinContainer = false;
                     if(isset($_SESSION)) $_SESSION['upgrading'] = true;
                     // 设置为upgrade模块
-                    if(method_exists($app, 'setModuleName')) \$this->instance->appsetModuleName('upgrade');
+                    if(method_exists($app, 'setModuleName')) $this->instance->appsetModuleName('upgrade');
                     break;
 
                 case 'noSafeFile':
                 case 'expiredSafeFile':
                 default:
-                    \$this->instance->configinContainer = false;
+                    $this->instance->configinContainer = false;
                     // 确保没有有效的安全文件
                     putenv('ZT_CHECK_SAFE_FILE=false');
                     if(isset($_SESSION)) $_SESSION['upgrading'] = false;
@@ -385,9 +385,9 @@ class commonModelTest extends baseTest
             return $result;
         } finally {
             // 恢复原始配置和状态
-            \$this->instance->configinContainer = $originalInContainer;
+            $this->instance->configinContainer = $originalInContainer;
             if(isset($_SESSION)) $_SESSION['upgrading'] = $originalUpgrading;
-            if(method_exists($app, 'setModuleName')) \$this->instance->appsetModuleName($originalModuleName);
+            if(method_exists($app, 'setModuleName')) $this->instance->appsetModuleName($originalModuleName);
             if($originalSafeFileEnv !== false) {
                 putenv("ZT_CHECK_SAFE_FILE=$originalSafeFileEnv");
             } else {

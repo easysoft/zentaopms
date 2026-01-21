@@ -513,7 +513,7 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        \$this->instance->app->loadClass('date');
+        $this->instance->app->loadClass('date');
 
         $lastWeek  = date::getLastWeek();
         $thisWeek  = date::getThisWeek();
@@ -528,7 +528,7 @@ class searchTaoTest extends baseTest
         if(strpos($query, 'thisMonth') !== false) return ($replacedQuery == "date between '" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'") ? '1' : '0';
         if(strpos($query, 'yesterday') !== false) return ($replacedQuery == "date between '" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'") ? '1' : '0';
         if(strpos($query, 'today') !== false)     return ($replacedQuery == "date between '" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'") ? '1' : '0';
-        if(strpos($query, '$@me') !== false)      return str_replace('$@me', \$this->instance->app->user->account, $query);
+        if(strpos($query, '$@me') !== false)      return str_replace('$@me', $this->instance->app->user->account, $query);
 
         return $replacedQuery;
     }

@@ -39,7 +39,7 @@ class metricTaoTest extends baseTest
         if(empty($code)) return 'invalid_code';
 
         // 记录删除前的记录数
-        $beforeCount = \$this->instance->dao->select('COUNT(*) as count')
+        $beforeCount = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->fetch('count');
@@ -53,7 +53,7 @@ class metricTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         // 记录删除后的记录数
-        $afterCount = \$this->instance->dao->select('COUNT(*) as count')
+        $afterCount = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->fetch('count');
@@ -177,7 +177,7 @@ class metricTaoTest extends baseTest
         if(empty($code)) return 'invalid_code';
 
         // 记录操作前未删除的记录数
-        $beforeUndeleted = \$this->instance->dao->select('COUNT(*) as count')
+        $beforeUndeleted = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq('0')
@@ -192,7 +192,7 @@ class metricTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         // 记录操作后未删除的记录数
-        $afterUndeleted = \$this->instance->dao->select('COUNT(*) as count')
+        $afterUndeleted = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq('0')
@@ -220,7 +220,7 @@ class metricTaoTest extends baseTest
         if(empty($testType))
         {
             // 测试空表情况
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             $method->invoke($this->instance);
             if(dao::isError()) return dao::getError();
             return array('result' => 'empty_table');
@@ -229,7 +229,7 @@ class metricTaoTest extends baseTest
         if($testType == 'normal')
         {
             // 清空表并插入正常数据
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 5; $i++)
             {
                 $record = new stdClass();
@@ -239,14 +239,14 @@ class metricTaoTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i);
                 $record->date = '2024-01-' . sprintf('%02d', $i);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $method->invoke($this->instance);
             if(dao::isError()) return dao::getError();
 
             // 验证ID是否从1开始连续
-            $records = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
+            $records = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
             for($i = 0; $i < count($records); $i++)
             {
                 if($records[$i]->id != ($i + 1)) return array('result' => 'failed');
@@ -257,7 +257,7 @@ class metricTaoTest extends baseTest
         if($testType == 'discontinuous')
         {
             // 清空表并插入不连续ID数据
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             $ids = array(2, 5, 8, 12, 15);
             foreach($ids as $index => $id)
             {
@@ -268,15 +268,15 @@ class metricTaoTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $index + 1);
                 $record->date = '2024-01-' . sprintf('%02d', $index + 1);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
-                \$this->instance->dao->update(TABLE_METRICLIB)->set('id')->eq($id)->where('metricCode')->eq('test_metric_' . $id)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->update(TABLE_METRICLIB)->set('id')->eq($id)->where('metricCode')->eq('test_metric_' . $id)->exec();
             }
 
             $method->invoke($this->instance);
             if(dao::isError()) return dao::getError();
 
             // 验证ID是否变为连续
-            $records = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
+            $records = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
             for($i = 0; $i < count($records); $i++)
             {
                 if($records[$i]->id != ($i + 1)) return array('result' => 'failed');
@@ -287,7 +287,7 @@ class metricTaoTest extends baseTest
         if($testType == 'large')
         {
             // 清空表并插入大量数据测试
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 50; $i++)
             {
                 $record = new stdClass();
@@ -297,15 +297,15 @@ class metricTaoTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i % 28 + 1);
                 $record->date = '2024-01-' . sprintf('%02d', $i % 28 + 1);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $method->invoke($this->instance);
             if(dao::isError()) return dao::getError();
 
             // 验证大量数据的ID连续性
-            $count = \$this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->fetch('count');
-            $maxId = \$this->instance->dao->select('MAX(id) as maxId')->from(TABLE_METRICLIB)->fetch('maxId');
+            $count = $this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->fetch('count');
+            $maxId = $this->instance->dao->select('MAX(id) as maxId')->from(TABLE_METRICLIB)->fetch('maxId');
             if($count == $maxId && $count == 50) return array('result' => 'success');
             return array('result' => 'failed');
         }
@@ -313,7 +313,7 @@ class metricTaoTest extends baseTest
         if($testType == 'autoincrement')
         {
             // 验证AUTO_INCREMENT值设置
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 3; $i++)
             {
                 $record = new stdClass();
@@ -323,7 +323,7 @@ class metricTaoTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i);
                 $record->date = '2024-01-' . sprintf('%02d', $i);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $method->invoke($this->instance);
@@ -337,9 +337,9 @@ class metricTaoTest extends baseTest
             $record->month = '01';
             $record->day = '04';
             $record->date = '2024-01-04';
-            \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+            $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
 
-            $newId = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->where('metricCode')->eq('auto_increment_test')->fetch('id');
+            $newId = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->where('metricCode')->eq('auto_increment_test')->fetch('id');
             return array('autoIncrement' => ($newId == 4 ? '1' : '0'));
         }
 
@@ -361,7 +361,7 @@ class metricTaoTest extends baseTest
         if(empty($code)) return 'invalid_code';
 
         // 记录更新前的状态
-        $beforeCount = \$this->instance->dao->select('COUNT(*) as count')
+        $beforeCount = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq($value)
@@ -376,7 +376,7 @@ class metricTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         // 记录更新后的状态
-        $afterCount = \$this->instance->dao->select('COUNT(*) as count')
+        $afterCount = $this->instance->dao->select('COUNT(*) as count')
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->andWhere('deleted')->eq($value)

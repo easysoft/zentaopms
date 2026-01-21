@@ -208,16 +208,16 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraApi = \$this->instance->appsession->jiraApi ?? null;
+            $originalJiraApi = $this->instance->appsession->jiraApi ?? null;
 
             // 检查是否有session数据，如果没有则设置默认测试数据
-            if(empty(\$this->instance->appsession->jiraApi)) {
+            if(empty($this->instance->appsession->jiraApi)) {
                 $testJiraApi = array(
                     'domain' => 'https://test.atlassian.net',
                     'admin' => 'testuser',
                     'token' => 'testtoken123'
                 );
-                \$this->instance->appsession->set('jiraApi', json_encode($testJiraApi));
+                $this->instance->appsession->set('jiraApi', json_encode($testJiraApi));
             }
 
             $result = $this->instance->callJiraAPI($url, $start);
@@ -225,26 +225,26 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据
             if($originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if(isset($originalJiraApi) && $originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据
             if(isset($originalJiraApi) && $originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
             return 'error: ' . $e->getMessage();
         }
@@ -312,14 +312,14 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraApi = \$this->instance->appsession->jiraApi ?? null;
+            $originalJiraApi = $this->instance->appsession->jiraApi ?? null;
 
             // 设置测试session数据
             if(!empty($jiraApiData)) {
-                \$this->instance->appsession->set('jiraApi', json_encode($jiraApiData));
+                $this->instance->appsession->set('jiraApi', json_encode($jiraApiData));
             } else {
                 // 清空jiraApi session数据
-                \$this->instance->appsession->set('jiraApi', '');
+                $this->instance->appsession->set('jiraApi', '');
             }
 
             $result = $this->instance->checkJiraApi();
@@ -329,26 +329,26 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据
             if($originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if(isset($originalJiraApi) && $originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据
             if(isset($originalJiraApi) && $originalJiraApi !== null) {
-                \$this->instance->appsession->set('jiraApi', $originalJiraApi);
+                $this->instance->appsession->set('jiraApi', $originalJiraApi);
             } else {
-                \$this->instance->appsession->destroy('jiraApi');
+                $this->instance->appsession->destroy('jiraApi');
             }
             return 'error: ' . $e->getMessage();
         }
@@ -368,7 +368,7 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraRelation = \$this->instance->appsession->jiraRelation ?? null;
+            $originalJiraRelation = $this->instance->appsession->jiraRelation ?? null;
 
             // 如果没有提供relations参数，设置测试session数据
             if(empty($relations)) {
@@ -385,7 +385,7 @@ class convertModelTest extends baseTest
                         'done' => 'developed'
                     )
                 );
-                \$this->instance->appsession->set('jiraRelation', json_encode($testRelations));
+                $this->instance->appsession->set('jiraRelation', json_encode($testRelations));
             }
 
             $result = $this->instance->convertStage($jiraStatus, $issueType, $relations);
@@ -393,26 +393,26 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据
             if($originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据
             if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
             return 'error: ' . $e->getMessage();
         }
@@ -433,10 +433,10 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据和配置
             global $app, $config;
-            $originalJiraRelation = \$this->instance->appsession->jiraRelation ?? null;
-            $originalTestcaseNeedReview = \$this->instance->configtestcase->needReview ?? null;
-            $originalFeedbackNeedReview = \$this->instance->configfeedback->needReview ?? null;
-            $originalFeedbackTicket = \$this->instance->configfeedback->ticket ?? null;
+            $originalJiraRelation = $this->instance->appsession->jiraRelation ?? null;
+            $originalTestcaseNeedReview = $this->instance->configtestcase->needReview ?? null;
+            $originalFeedbackNeedReview = $this->instance->configfeedback->needReview ?? null;
+            $originalFeedbackTicket = $this->instance->configfeedback->ticket ?? null;
 
             // 如果没有提供relations参数，设置测试session数据
             if(empty($relations)) {
@@ -453,7 +453,7 @@ class convertModelTest extends baseTest
                         'done' => 'done'
                     )
                 );
-                \$this->instance->appsession->set('jiraRelation', json_encode($testRelations));
+                $this->instance->appsession->set('jiraRelation', json_encode($testRelations));
             }
 
             $result = $this->instance->convertStatus($objectType, $jiraStatus, $issueType, $relations);
@@ -461,57 +461,57 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据和配置
             if($originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
 
             if($originalTestcaseNeedReview !== null) {
-                \$this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
+                $this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
             }
             if($originalFeedbackNeedReview !== null) {
-                \$this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
+                $this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
             }
             if($originalFeedbackTicket !== null) {
-                \$this->instance->configfeedback->ticket = $originalFeedbackTicket;
+                $this->instance->configfeedback->ticket = $originalFeedbackTicket;
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据和配置
             if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
 
             if(isset($originalTestcaseNeedReview) && $originalTestcaseNeedReview !== null) {
-                \$this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
+                $this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
             }
             if(isset($originalFeedbackNeedReview) && $originalFeedbackNeedReview !== null) {
-                \$this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
+                $this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
             }
             if(isset($originalFeedbackTicket) && $originalFeedbackTicket !== null) {
-                \$this->instance->configfeedback->ticket = $originalFeedbackTicket;
+                $this->instance->configfeedback->ticket = $originalFeedbackTicket;
             }
 
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据和配置
             if(isset($originalJiraRelation) && $originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
 
             if(isset($originalTestcaseNeedReview) && $originalTestcaseNeedReview !== null) {
-                \$this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
+                $this->instance->configtestcase->needReview = $originalTestcaseNeedReview;
             }
             if(isset($originalFeedbackNeedReview) && $originalFeedbackNeedReview !== null) {
-                \$this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
+                $this->instance->configfeedback->needReview = $originalFeedbackNeedReview;
             }
             if(isset($originalFeedbackTicket) && $originalFeedbackTicket !== null) {
-                \$this->instance->configfeedback->ticket = $originalFeedbackTicket;
+                $this->instance->configfeedback->ticket = $originalFeedbackTicket;
             }
 
             return 'error: ' . $e->getMessage();
@@ -558,7 +558,7 @@ class convertModelTest extends baseTest
         try {
             // 获取jirafile目录路径
             global $app;
-            $jiraPath = \$this->instance->appgetTmpRoot() . 'jirafile/';
+            $jiraPath = $this->instance->appgetTmpRoot() . 'jirafile/';
 
             // 创建测试目录和测试文件
             if(!is_dir($jiraPath)) mkdir($jiraPath, 0777, true);
@@ -602,14 +602,14 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
 
             // 设置测试session数据
-            \$this->instance->appsession->set('jiraMethod', 'db');
+            $this->instance->appsession->set('jiraMethod', 'db');
 
             // 模拟sourceDBH连接
             if(empty($this->instance->sourceDBH)) {
-                $this->instance->sourceDBH = \$this->instance->appdbh;
+                $this->instance->sourceDBH = $this->instance->appdbh;
             }
 
             $result = $this->instance->getIssueTypeList($relations);
@@ -646,12 +646,12 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
-            $originalJiraUser = \$this->instance->appsession->jiraUser ?? null;
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
+            $originalJiraUser = $this->instance->appsession->jiraUser ?? null;
 
             // 设置测试session数据
-            \$this->instance->appsession->set('jiraMethod', 'test');
-            \$this->instance->appsession->set('jiraUser', array('mode' => 'account'));
+            $this->instance->appsession->set('jiraMethod', 'test');
+            $this->instance->appsession->set('jiraUser', array('mode' => 'account'));
 
             // 创建模拟的getJiraData方法
             $originalGetJiraData = null;
@@ -666,7 +666,7 @@ class convertModelTest extends baseTest
                 // 使用反射来模拟getJiraData方法的返回值
                 $mockModel = $this->createMockConvertModel();
                 $mockModel->mockUsers = $mockUsers;
-                $mockModel->session = \$this->instance->appsession;
+                $mockModel->session = $this->instance->appsession;
 
                 $result = $mockModel->getJiraAccount($userKey);
             } else {
@@ -675,42 +675,42 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据
             if($originalJiraMethod !== null) {
-                \$this->instance->appsession->set('jiraMethod', $originalJiraMethod);
+                $this->instance->appsession->set('jiraMethod', $originalJiraMethod);
             } else {
-                \$this->instance->appsession->destroy('jiraMethod');
+                $this->instance->appsession->destroy('jiraMethod');
             }
 
             if($originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if(isset($originalJiraMethod) && $originalJiraMethod !== null) {
-                \$this->instance->appsession->set('jiraMethod', $originalJiraMethod);
+                $this->instance->appsession->set('jiraMethod', $originalJiraMethod);
             } else {
-                \$this->instance->appsession->destroy('jiraMethod');
+                $this->instance->appsession->destroy('jiraMethod');
             }
             if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据
             if(isset($originalJiraMethod) && $originalJiraMethod !== null) {
-                \$this->instance->appsession->set('jiraMethod', $originalJiraMethod);
+                $this->instance->appsession->set('jiraMethod', $originalJiraMethod);
             } else {
-                \$this->instance->appsession->destroy('jiraMethod');
+                $this->instance->appsession->destroy('jiraMethod');
             }
             if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return 'error: ' . $e->getMessage();
         }
@@ -728,15 +728,15 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraMethod = \$this->instance->appsession->jiraMethod ?? null;
-            $originalJiraApi = \$this->instance->appsession->jiraApi ?? null;
+            $originalJiraMethod = $this->instance->appsession->jiraMethod ?? null;
+            $originalJiraApi = $this->instance->appsession->jiraApi ?? null;
 
             // 设置测试session数据
-            \$this->instance->appsession->set('jiraMethod', 'db');
+            $this->instance->appsession->set('jiraMethod', 'db');
 
             // 模拟sourceDBH连接
             if(empty($this->instance->sourceDBH)) {
-                $this->instance->sourceDBH = \$this->instance->appdbh;
+                $this->instance->sourceDBH = $this->instance->appdbh;
             }
 
             $result = $this->instance->getJiraArchivedProject($dataList);
@@ -1036,11 +1036,11 @@ class convertModelTest extends baseTest
     {
         // 备份原始session数据
         global $app;
-        $originalJiraRelation = \$this->instance->appsession->jiraRelation ?? null;
+        $originalJiraRelation = $this->instance->appsession->jiraRelation ?? null;
 
         // 设置测试session数据
         if(!empty($sessionData['jiraRelation'])) {
-            \$this->instance->appsession->set('jiraRelation', $sessionData['jiraRelation']);
+            $this->instance->appsession->set('jiraRelation', $sessionData['jiraRelation']);
         }
 
         try {
@@ -1049,26 +1049,26 @@ class convertModelTest extends baseTest
                 $errors = dao::getError();
                 // 恢复原始session数据
                 if($originalJiraRelation !== null) {
-                    \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                    $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
                 } else {
-                    \$this->instance->appsession->destroy('jiraRelation');
+                    $this->instance->appsession->destroy('jiraRelation');
                 }
                 return $errors;
             }
 
             // 恢复原始session数据
             if($originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if($originalJiraRelation !== null) {
-                \$this->instance->appsession->set('jiraRelation', $originalJiraRelation);
+                $this->instance->appsession->set('jiraRelation', $originalJiraRelation);
             } else {
-                \$this->instance->appsession->destroy('jiraRelation');
+                $this->instance->appsession->destroy('jiraRelation');
             }
             return 'exception: ' . $e->getMessage();
         }
@@ -1112,12 +1112,12 @@ class convertModelTest extends baseTest
     public function getZentaoObjectListTestWithoutER()
     {
         global $config;
-        $originalER = \$this->instance->configenableER ?? true;
-        \$this->instance->configenableER = false;
+        $originalER = $this->instance->configenableER ?? true;
+        $this->instance->configenableER = false;
 
         $result = $this->instance->getZentaoObjectList();
 
-        \$this->instance->configenableER = $originalER;
+        $this->instance->configenableER = $originalER;
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1204,13 +1204,13 @@ class convertModelTest extends baseTest
         try {
             // 备份原始session数据
             global $app;
-            $originalJiraUser = \$this->instance->appsession->jiraUser ?? null;
+            $originalJiraUser = $this->instance->appsession->jiraUser ?? null;
 
             // 设置测试用户配置
             if(!empty($userConfig)) {
-                \$this->instance->appsession->set('jiraUser', $userConfig);
+                $this->instance->appsession->set('jiraUser', $userConfig);
             } else {
-                \$this->instance->appsession->set('jiraUser', array('mode' => 'account'));
+                $this->instance->appsession->set('jiraUser', array('mode' => 'account'));
             }
 
             $result = $this->instance->processJiraUser($jiraAccount, $jiraEmail);
@@ -1218,26 +1218,26 @@ class convertModelTest extends baseTest
 
             // 恢复原始session数据
             if($originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
 
             return $result;
         } catch (Exception $e) {
             // 恢复原始session数据
             if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return 'exception: ' . $e->getMessage();
         } catch (Error $e) {
             // 恢复原始session数据
             if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                \$this->instance->appsession->set('jiraUser', $originalJiraUser);
+                $this->instance->appsession->set('jiraUser', $originalJiraUser);
             } else {
-                \$this->instance->appsession->destroy('jiraUser');
+                $this->instance->appsession->destroy('jiraUser');
             }
             return 'error: ' . $e->getMessage();
         }
@@ -1283,7 +1283,7 @@ class convertModelTest extends baseTest
         }
 
         global $app;
-        \$this->instance->appsession->set('state', $state);
+        $this->instance->appsession->set('state', $state);
 
         return is_array($state) ? 'array' : gettype($state);
     }
@@ -1299,7 +1299,7 @@ class convertModelTest extends baseTest
         try {
             // 检查源文件是否存在
             global $app;
-            $jiraPath = \$this->instance->appgetTmpRoot() . 'jirafile/';
+            $jiraPath = $this->instance->appgetTmpRoot() . 'jirafile/';
             $sourceFile = $jiraPath . 'entities.xml';
 
             if(!file_exists($sourceFile))

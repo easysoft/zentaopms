@@ -203,12 +203,12 @@ class metricModelTest extends baseTest
         if(empty($code) || empty($cycle)) return 0;
 
         // 记录删除前的数据量
-        $beforeCount = \$this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
+        $beforeCount = $this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
 
         $this->instance->clearOutDatedRecords($code, $cycle);
 
         // 记录删除后的数据量
-        $afterCount = \$this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
+        $afterCount = $this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetch('count');
 
         return $beforeCount - $afterCount;
     }
@@ -392,7 +392,7 @@ class metricModelTest extends baseTest
     {
         if($dao === null) {
             global $tester;
-            $dao = \$this->instance->dao;
+            $dao = $this->instance->dao;
         }
 
         $result = $this->instance->getDataset($dao);
@@ -958,8 +958,8 @@ class metricModelTest extends baseTest
     public function processOldMetricsOpenTest()
     {
         global $config;
-        $originalEdition = \$this->instance->configedition;
-        \$this->instance->configedition = 'open';
+        $originalEdition = $this->instance->configedition;
+        $this->instance->configedition = 'open';
 
         try {
             $metrics = array();
@@ -996,7 +996,7 @@ class metricModelTest extends baseTest
         }
         finally
         {
-            \$this->instance->configedition = $originalEdition;
+            $this->instance->configedition = $originalEdition;
         }
     }
 
@@ -1052,7 +1052,7 @@ class metricModelTest extends baseTest
         if(empty($testType))
         {
             // 测试空表情况
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             $this->instance->rebuildPrimaryKey();
             if(dao::isError()) return dao::getError();
             return null;
@@ -1061,7 +1061,7 @@ class metricModelTest extends baseTest
         if($testType == 'normal')
         {
             // 清空表并插入正常数据
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 5; $i++)
             {
                 $record = new stdClass();
@@ -1071,14 +1071,14 @@ class metricModelTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i);
                 $record->date = '2024-01-' . sprintf('%02d', $i);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $this->instance->rebuildPrimaryKey();
             if(dao::isError()) return dao::getError();
 
             // 验证ID是否从1开始连续
-            $records = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
+            $records = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
             for($i = 0; $i < count($records); $i++)
             {
                 if($records[$i]->id != ($i + 1)) return array('result' => 'failed');
@@ -1089,7 +1089,7 @@ class metricModelTest extends baseTest
         if($testType == 'discontinuous')
         {
             // 清空表并插入不连续ID数据
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             $ids = array(2, 5, 8, 12, 15);
             foreach($ids as $index => $id)
             {
@@ -1100,15 +1100,15 @@ class metricModelTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $index + 1);
                 $record->date = '2024-01-' . sprintf('%02d', $index + 1);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
-                \$this->instance->dao->update(TABLE_METRICLIB)->set('id')->eq($id)->where('metricCode')->eq('test_metric_' . $id)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->update(TABLE_METRICLIB)->set('id')->eq($id)->where('metricCode')->eq('test_metric_' . $id)->exec();
             }
 
             $this->instance->rebuildPrimaryKey();
             if(dao::isError()) return dao::getError();
 
             // 验证ID是否变为连续
-            $records = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
+            $records = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->orderBy('id')->fetchAll();
             for($i = 0; $i < count($records); $i++)
             {
                 if($records[$i]->id != ($i + 1)) return array('result' => 'failed');
@@ -1119,7 +1119,7 @@ class metricModelTest extends baseTest
         if($testType == 'large')
         {
             // 清空表并插入大量数据测试
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 50; $i++)
             {
                 $record = new stdClass();
@@ -1129,15 +1129,15 @@ class metricModelTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i % 28 + 1);
                 $record->date = '2024-01-' . sprintf('%02d', $i % 28 + 1);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $this->instance->rebuildPrimaryKey();
             if(dao::isError()) return dao::getError();
 
             // 验证大量数据的ID连续性
-            $count = \$this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->fetch('count');
-            $maxId = \$this->instance->dao->select('MAX(id) as maxId')->from(TABLE_METRICLIB)->fetch('maxId');
+            $count = $this->instance->dao->select('COUNT(*) as count')->from(TABLE_METRICLIB)->fetch('count');
+            $maxId = $this->instance->dao->select('MAX(id) as maxId')->from(TABLE_METRICLIB)->fetch('maxId');
             if($count == $maxId && $count == 50) return array('result' => 'success');
             return array('result' => 'failed');
         }
@@ -1145,7 +1145,7 @@ class metricModelTest extends baseTest
         if($testType == 'verify')
         {
             // 验证AUTO_INCREMENT值设置
-            \$this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
+            $this->instance->dao->delete()->from(TABLE_METRICLIB)->exec();
             for($i = 1; $i <= 3; $i++)
             {
                 $record = new stdClass();
@@ -1155,7 +1155,7 @@ class metricModelTest extends baseTest
                 $record->month = '01';
                 $record->day = sprintf('%02d', $i);
                 $record->date = '2024-01-' . sprintf('%02d', $i);
-                \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+                $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
             }
 
             $this->instance->rebuildPrimaryKey();
@@ -1169,9 +1169,9 @@ class metricModelTest extends baseTest
             $record->month = '01';
             $record->day = '04';
             $record->date = '2024-01-04';
-            \$this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
+            $this->instance->dao->insert(TABLE_METRICLIB)->data($record)->exec();
 
-            $newId = \$this->instance->dao->select('id')->from(TABLE_METRICLIB)->where('metricCode')->eq('auto_increment_test')->fetch('id');
+            $newId = $this->instance->dao->select('id')->from(TABLE_METRICLIB)->where('metricCode')->eq('auto_increment_test')->fetch('id');
             return array('autoIncrement' => ($newId == 4));
         }
 
@@ -1240,13 +1240,13 @@ class metricModelTest extends baseTest
         global $tester;
 
         // 记录更新前有多少条 createdDate 为 null 的记录
-        $beforeCount = \$this->instance->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
+        $beforeCount = $this->instance->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
 
         $this->instance->updateMetricDate();
         if(dao::isError()) return dao::getError();
 
         // 记录更新后有多少条 createdDate 为 null 的记录
-        $afterCount = \$this->instance->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
+        $afterCount = $this->instance->dao->select('count(*)')->from(TABLE_METRIC)->where('createdDate is null')->fetch('count(*)');
 
         return array('before' => $beforeCount, 'after' => $afterCount, 'updated' => $beforeCount - $afterCount);
     }

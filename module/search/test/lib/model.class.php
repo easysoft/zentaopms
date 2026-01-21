@@ -149,7 +149,7 @@ class searchModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $count = \$this->instance->dao->select('COUNT(1) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
+        $count = $this->instance->dao->select('COUNT(1) AS count')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetch('count');
 
         return intval($count);
     }
