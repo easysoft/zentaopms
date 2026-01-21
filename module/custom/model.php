@@ -1223,7 +1223,7 @@ class customModel extends model
     }
 
     /**
-     * 检查系统中是否有评审数据。
+     * 检查系统中是否有评审数据,有交付物就算有评审。
      * Check whether there is review data in the system.
      *
      * @access public
@@ -1231,7 +1231,12 @@ class customModel extends model
      */
     public function hasReviewData(): int
     {
-        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_REVIEW)->where('deleted')->eq('0')->count();
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $reviewCount      = (int)$this->dao->select('*')->from(TABLE_REVIEW)->where('deleted')->eq('0')->count();
+            $deliverableCount = (int)$this->dao->select('*')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->count();
+            return $reviewCount + $deliverableCount;
+        }
         return 0;
     }
 
