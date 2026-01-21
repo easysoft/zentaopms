@@ -154,4 +154,51 @@ class ppmZen extends ppm
         $this->view->allTasks = $allTasks;
         $this->view->pager    = $pager;
     }
+
+    /**
+     * 解析创建合并检查结果。
+     * Parse the create merge check result.
+     *
+     * @param  object $mergeCheckMessage
+     * @param  array $mergeRuleResult
+     * @param  string $sourceBranch
+     * @param  string $targetBranch
+     * @access public
+     * @return string
+     */
+    public function parseCreateCheckMsg(object $mergeCheckMessage, array $mergeRuleResult, string $sourceBranch, string $targetBranch): string
+    {
+        if(empty($mergeCheckMessage) || empty($mergeRuleResult[$sourceBranch]) || empty($mergeRuleResult[$targetBranch])) return '';
+        $checkSourceBranch = $mergeRuleResult[$sourceBranch]['result'];
+        $checkTargetBranch = $mergeRuleResult[$targetBranch]['result'];
+
+        $sourceBranchType = zget($mergeRuleResult[$sourceBranch], 'branchType', array());
+        $targetBranchType = zget($mergeRuleResult[$targetBranch], 'branchType', array());
+        $conflictFiles    = zget($mergeCheckMessage, 'conflictFiles', array());
+
+        $message = '';
+        if($mergeCheckMessage)
+        {
+            $message = zget($mergeCheckMessage, 'message', '');
+            if($message) $message = sprintf($this->config->ppm->messageTips, $message);
+
+            if(!empty($conflictFiles))
+            {
+                if($message) $message .= '</br>';
+                $message .= sprintf($this->config->ppm->messageTips, $this->lang->ppm->checkConflicts);
+            }
+        }
+        if(!$checkSourceBranch && !empty($sourceBranchType))
+        {
+            if($message) $message .= '</br>';
+            $message .= sprintf($this->config->ppm->messageTips, sprintf($this->lang->ppm->checkSourceBranch, implode(',', $sourceBranchType)));
+        }
+        if(!$checkTargetBranch && !empty($targetBranchType))
+        {
+            if($message) $message .= '</br>';
+            $message .= sprintf($this->config->ppm->messageTips, sprintf($this->lang->ppm->checkTargetBranch, implode(',', $targetBranchType)));
+        }
+
+        return $message;
+    }
 }
