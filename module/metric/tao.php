@@ -405,10 +405,10 @@ class metricTao extends metricModel
         $metric       = $this->getByCode($code);
         $dateType     = $metric->dateType;
         $lastCalcDate = substr($metric->lastCalcTime, 0, 10);
-        $objectList   = $this->getObjectsWithPager($metric, $query);
 
         $query['dateType'] = $dateType;
 
+        $objectList = $this->getObjectsWithPager($metric, $query);
         $scopeValue = $this->processRecordQuery($query, 'scope');
         $scopeKey   = $metric->scope;
 
