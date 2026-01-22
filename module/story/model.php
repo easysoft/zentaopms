@@ -1603,7 +1603,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldStory, $story);
-        if($changes)
+        if($changes && empty($postData->retractedReason))
         {
             $preStatus = $oldStory->status;
             $isChanged = !empty($oldStory->changedBy) ? true : false;
