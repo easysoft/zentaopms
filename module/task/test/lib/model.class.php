@@ -1895,8 +1895,10 @@ class taskModelTest extends baseTest
      */
     public function appendLaneObject(array $taskIdList): array
     {
-        $tasks = $this->instance->getByIdList($taskIdList);
-        return $this->instance->appendLane($tasks);
+        $tasks  = $this->instance->getByIdList($taskIdList);
+        $result = $this->invokeArgs('appendLane', [$tasks]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

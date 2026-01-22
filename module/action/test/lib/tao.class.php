@@ -172,24 +172,6 @@ class actionTaoTest extends baseTest
     }
 
     /**
-     * Test processCreateChildrenActionExtra method.
-     *
-     * @param  string $taskIds
-     * @access public
-     * @return object
-     */
-    public function processCreateChildrenActionExtraTest(string $taskIds): object
-    {
-        // 创建模拟的action对象
-        $action = new stdClass();
-        $action->extra = $taskIds;
-
-        $this->instance->processCreateChildrenActionExtra($action);
-        if(dao::isError()) return dao::getError();
-        return $action;
-    }
-
-    /**
      * Test processCreateRequirementsActionExtra method.
      *
      * @param  string $storyIds
@@ -222,38 +204,6 @@ class actionTaoTest extends baseTest
         $action->objectType = $objectType;
 
         $this->instance->processAppendLinkByExtra($action);
-        if(dao::isError()) return dao::getError();
-        return $action;
-    }
-
-    /**
-     * Test processLinkStoryAndBugActionExtra method.
-     *
-     * @param  string $extra
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return object
-     */
-    public function processLinkStoryAndBugActionExtraTest(string $extra, string $module, string $method): object
-    {
-        $action = new stdClass();
-        $action->extra = $extra;
-
-        $this->instance->processLinkStoryAndBugActionExtra($action, $module, $method);
-        return $action;
-    }
-
-    /**
-     * Test processToStoryActionExtra method.
-     *
-     * @param  object $action
-     * @access public
-     * @return object
-     */
-    public function processToStoryActionExtraTest(object $action): object
-    {
-        $this->instance->processToStoryActionExtra($action);
         if(dao::isError()) return dao::getError();
         return $action;
     }
