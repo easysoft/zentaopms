@@ -17,10 +17,10 @@ class executionTaoTest extends baseTest
      */
     public function computeCFDTest($executionID = 0)
     {
-        $this->executionModel->computeCFD($executionID);
+        $this->instance->computeCFD($executionID);
 
         $today = helper::today();
-        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+        return $this->instance->dao->select('*')->from(TABLE_CFD)
             ->where('date')->eq($today)
             ->beginIF(!empty($executionID))->andWhere('execution')->in($executionID)->fi()
             ->fetchAll('id');
@@ -35,7 +35,7 @@ class executionTaoTest extends baseTest
      */
     public function getFullNameListTest($executions = array())
     {
-        $result = $this->executionModel->getFullNameList($executions);
+        $result = $this->instance->getFullNameList($executions);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -54,7 +54,7 @@ class executionTaoTest extends baseTest
      */
     public function checkBeginAndEndDateTest(int $projectID, string $begin, string $end, int $parentID): bool|array
     {
-        $this->executionModel->checkBeginAndEndDate($projectID, $begin, $end, $parentID);
+        $this->instance->checkBeginAndEndDate($projectID, $begin, $end, $parentID);
 
         if(dao::isError()) return dao::getError();
         return true;
@@ -76,8 +76,8 @@ class executionTaoTest extends baseTest
 
         $_POST['products'][0] = 1;
         $_POST['branch'][0]   = array();
-        $oldExecution = empty($executionID) ? '' : $this->executionModel->getByID($executionID);
-        $this->executionModel->checkWorkload($type, $percent, $oldExecution);
+        $oldExecution = empty($executionID) ? '' : $this->instance->getByID($executionID);
+        $this->instance->checkWorkload($type, $percent, $oldExecution);
 
         if(dao::isError()) return dao::getError();
         return true;
@@ -93,10 +93,10 @@ class executionTaoTest extends baseTest
      */
     public function setKanbanTest($executionID, $param = array()): array|object
     {
-        $object = $this->executionModel->dao->select('displayCards,fluidBoard,colWidth,minColWidth,maxColWidth')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        $object = $this->instance->dao->select('displayCards,fluidBoard,colWidth,minColWidth,maxColWidth')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
         foreach($param as $key => $value) $object->$key = $value;
 
-        $this->executionModel->setKanban($executionID, $object);
+        $this->instance->setKanban($executionID, $object);
 
         if(dao::isError())
         {
@@ -104,7 +104,7 @@ class executionTaoTest extends baseTest
         }
         else
         {
-            return $this->executionModel->getByID($executionID);
+            return $this->instance->getByID($executionID);
         }
     }
 
@@ -119,7 +119,7 @@ class executionTaoTest extends baseTest
     public function setProjectSessionTest(int $executionID): int
     {
         unset($_SESSION['project']);
-        $this->executionModel->setProjectSession($executionID);
+        $this->instance->setProjectSession($executionID);
         return empty($_SESSION['project']) ? 0 : $_SESSION['project'];
     }
 
@@ -132,7 +132,7 @@ class executionTaoTest extends baseTest
     public function setProjectSessionTestWithStringInput(): int
     {
         unset($_SESSION['project']);
-        $this->executionModel->setProjectSession((int)'abc');
+        $this->instance->setProjectSession((int)'abc');
         return empty($_SESSION['project']) ? 0 : $_SESSION['project'];
     }
 
@@ -146,7 +146,7 @@ class executionTaoTest extends baseTest
      */
     public function saveStateTest($executionID = 0, $executions = array())
     {
-        return $this->executionModel->saveState($executionID, $executions);
+        return $this->instance->saveState($executionID, $executions);
     }
 
     /**
@@ -158,7 +158,7 @@ class executionTaoTest extends baseTest
      */
     public function checkPrivTest($executionID)
     {
-        return $this->executionModel->checkPriv($executionID);
+        return $this->instance->checkPriv($executionID);
     }
 
     /**
@@ -212,15 +212,15 @@ class executionTaoTest extends baseTest
         foreach($createFields as $field => $defaultValue) $execution->$field = $defaultValue;
         foreach($param as $key => $value) $execution->$key = $value;
 
-        $this->executionModel->config->execution->create->requiredFields = 'project,name,code,begin,end';
-        $objectID = $this->executionModel->create($execution, $teamMembers);
+        $this->instance->config->execution->create->requiredFields = 'project,name,code,begin,end';
+        $objectID = $this->instance->create($execution, $teamMembers);
         if(dao::isError())
         {
             return dao::getError();
         }
         else
         {
-            $object = $this->executionModel->getByID($objectID);
+            $object = $this->instance->getByID($objectID);
             return $object;
         }
     }
@@ -246,7 +246,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $change = $this->executionModel->update($objectID, (object)$_POST);
+        $change = $this->instance->update($objectID, (object)$_POST);
 
         if($change == array()) $change = '没有数据更新';
 
@@ -288,7 +288,7 @@ class executionTaoTest extends baseTest
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $object = $this->executionModel->batchUpdate((object)$_POST);
+        $object = $this->instance->batchUpdate((object)$_POST);
 
         unset($_POST);
 
@@ -313,7 +313,7 @@ class executionTaoTest extends baseTest
      */
     public function batchChangeStatusObject($executionIdList = '', $status = '')
     {
-        $result = $this->executionModel->batchChangeStatus($executionIdList, $status);
+        $result = $this->instance->batchChangeStatus($executionIdList, $status);
 
         if(dao::isError())
         {
@@ -351,7 +351,7 @@ class executionTaoTest extends baseTest
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
+        $result = $this->instance->changeStatus2Wait($executionID, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -383,7 +383,7 @@ class executionTaoTest extends baseTest
 
         $selfAndChildren = $selfAndChildrenList[$executionID];
 
-        $result = $this->executionModel->changeStatus2Wait($executionID, $selfAndChildren);
+        $result = $this->instance->changeStatus2Wait($executionID, $selfAndChildren);
 
         if(dao::isError()) return dao::getError();
 
@@ -412,7 +412,7 @@ class executionTaoTest extends baseTest
         $execution = $selfAndChildren[$executionID];
         if(empty($execution)) return false;
 
-        $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
+        $this->instance->changeStatus2Doing($executionID, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -447,7 +447,7 @@ class executionTaoTest extends baseTest
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->executionModel->changeStatus2Inactive($executionID, $status, $selfAndChildren);
+        $result = $this->instance->changeStatus2Inactive($executionID, $status, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -479,7 +479,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->executionModel->start($executionID, (object)$_POST);
+        $obj = $this->instance->start($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -492,8 +492,8 @@ class executionTaoTest extends baseTest
 
         if($testParent)
         {
-            $execution       = $this->executionModel->getByID($executionID);
-            $executionParent = $this->executionModel->getByID($execution->parent);
+            $execution       = $this->instance->getByID($executionID);
+            $executionParent = $this->instance->getByID($execution->parent);
             return $executionParent;
         }
 
@@ -521,7 +521,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->executionModel->putoff($executionID, (object)$_POST);
+        $obj = $this->instance->putoff($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -552,7 +552,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->executionModel->suspend($executionID, (object)$_POST);
+        $obj = $this->instance->suspend($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -589,7 +589,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->executionModel->activate($executionID, (object)$_POST);
+        $obj = $this->instance->activate($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -602,8 +602,8 @@ class executionTaoTest extends baseTest
         {
             if($testParent)
             {
-                $execution       = $this->executionModel->getByID($executionID);
-                $executionParent = $this->executionModel->getByID($execution->parent);
+                $execution       = $this->instance->getByID($executionID);
+                $executionParent = $this->instance->getByID($execution->parent);
                 return $executionParent;
             }
             return $obj;
@@ -630,7 +630,7 @@ class executionTaoTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->executionModel->close($executionID, (object)$_POST);
+        $obj = $this->instance->close($executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -645,8 +645,8 @@ class executionTaoTest extends baseTest
             {
                 global $tester;
                 $tester->loadModel('programplan')->computeProgress($executionID, 'close');
-                $execution       = $this->executionModel->getByID($executionID);
-                $executionParent = $this->executionModel->getByID($execution->parent);
+                $execution       = $this->instance->getByID($executionID);
+                $executionParent = $this->instance->getByID($execution->parent);
                 return $executionParent;
             }
             return $obj;
@@ -665,7 +665,7 @@ class executionTaoTest extends baseTest
      */
     public function getPairsTest(int $projectID, int $count, string $mode = ''): array|int
     {
-        $object = $this->executionModel->getPairs($projectID, 'all', $mode);
+        $object = $this->instance->getPairs($projectID, 'all', $mode);
 
         if(dao::isError())
         {
@@ -691,7 +691,7 @@ class executionTaoTest extends baseTest
      */
     public function getByIDTest(int $executionID, bool $setImgSize = false): string|object|false
     {
-        $object = $this->executionModel->getByID($executionID, $setImgSize);
+        $object = $this->instance->getByID($executionID, $setImgSize);
 
         if(dao::isError())
         {
@@ -719,7 +719,7 @@ class executionTaoTest extends baseTest
      */
     public function getListTest(int $projectID, string $type, string $status, int $limit, int $productID, int $count): array|int
     {
-        $object = $this->executionModel->getList($projectID, $type, $status, $limit, $productID);
+        $object = $this->instance->getList($projectID, $type, $status, $limit, $productID);
 
         if(dao::isError())
         {
@@ -749,7 +749,7 @@ class executionTaoTest extends baseTest
      */
     public function getInvolvedExecutionListTest(int $projectID, int $limit, int $productID, int $count): array|int
     {
-        $object = $this->executionModel->getInvolvedExecutionList($projectID, $status = 'involved', $limit, $productID);
+        $object = $this->instance->getInvolvedExecutionList($projectID, $status = 'involved', $limit, $productID);
 
         if(dao::isError())
         {
@@ -782,7 +782,7 @@ class executionTaoTest extends baseTest
      */
     public function getByProjectTest(int $projectID, string $status, int $limit, bool $pairs = false, bool $devel = false, int $appendedID = 0, int $count = 0): array|int
     {
-        $object = $this->executionModel->getByProject($projectID, $status, $limit, $pairs, $devel, $appendedID);
+        $object = $this->instance->getByProject($projectID, $status, $limit, $pairs, $devel, $appendedID);
 
         if(dao::isError())
         {
@@ -810,7 +810,7 @@ class executionTaoTest extends baseTest
      */
     public function getIdListTest(int $projectID, int $count): array|int
     {
-        $object = $this->executionModel->getIdList($projectID);
+        $object = $this->instance->getIdList($projectID);
 
         if(dao::isError())
         {
@@ -843,7 +843,7 @@ class executionTaoTest extends baseTest
      */
     public function getStatDataTest($projectID = 0, $browseType = 'undone', $productID = 0, $branch = 0, $withTasks = false, $param = '', $orderBy = 'id_asc', $pager = null)
     {
-        $objects = $this->executionModel->getStatData($projectID);
+        $objects = $this->instance->getStatData($projectID);
         return count($objects);
     }
 
@@ -857,7 +857,7 @@ class executionTaoTest extends baseTest
      */
     public function getBranchesTest($executionID, $count)
     {
-        $object = $this->executionModel->getBranches($executionID);
+        $object = $this->instance->getBranches($executionID);
 
         if(dao::isError())
         {
@@ -892,7 +892,7 @@ class executionTaoTest extends baseTest
         if($executionID > 100) return false; // 不存在的ID
 
         try {
-            $object = $this->executionModel->getTree($executionID);
+            $object = $this->instance->getTree($executionID);
         } catch(Exception $e) {
             return false;
         }
@@ -941,7 +941,7 @@ class executionTaoTest extends baseTest
      */
     public function getRelatedExecutionsTest($executionID, $count)
     {
-        $object = $this->executionModel->getRelatedExecutions($executionID);
+        $object = $this->instance->getRelatedExecutions($executionID);
 
         if(dao::isError())
         {
@@ -969,7 +969,7 @@ class executionTaoTest extends baseTest
      */
     public function getChildExecutionsTest($executionID, $count): array|int
     {
-        $object = $this->executionModel->getChildExecutions($executionID);
+        $object = $this->instance->getChildExecutions($executionID);
 
         if(dao::isError())
         {
@@ -994,7 +994,7 @@ class executionTaoTest extends baseTest
      */
     public function getLimitedExecutionTest()
     {
-        return $this->executionModel->getLimitedExecution();
+        return $this->instance->getLimitedExecution();
     }
 
     /**
@@ -1018,7 +1018,7 @@ class executionTaoTest extends baseTest
 
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
-        $object     = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort);
+        $object     = $this->instance->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort);
 
         if(dao::isError())
         {
@@ -1045,7 +1045,7 @@ class executionTaoTest extends baseTest
      */
     public function getTaskGroupByExecutionTest($executionIdList = array(), $showCount = true)
     {
-        $objects = $this->executionModel->getTaskGroupByExecution($executionIdList);
+        $objects = $this->instance->getTaskGroupByExecution($executionIdList);
         return $showCount ? count($objects) : $objects;
     }
 
@@ -1060,7 +1060,7 @@ class executionTaoTest extends baseTest
      */
     public function getBranchByProductTest(int $productID, int $count): array|int
     {
-        $object = $this->executionModel->getBranchByProduct(array($productID));
+        $object = $this->instance->getBranchByProduct(array($productID));
 
         if(dao::isError())
         {
@@ -1089,7 +1089,7 @@ class executionTaoTest extends baseTest
      */
     public function getOrderedExecutionsTest(int $executionID, string $status, int $count): array|int
     {
-        $object = $this->executionModel->getOrderedExecutions($executionID, $status);
+        $object = $this->instance->getOrderedExecutions($executionID, $status);
 
         if(dao::isError())
         {
@@ -1112,7 +1112,7 @@ class executionTaoTest extends baseTest
      */
     public function getToImportTest(array $executionIdList, string $type, int $count): array|int
     {
-        $object = $this->executionModel->getToImport($executionIdList, $type);
+        $object = $this->instance->getToImport($executionIdList, $type);
 
         if(dao::isError())
         {
@@ -1146,7 +1146,7 @@ class executionTaoTest extends baseTest
 
         foreach($param as $key => $value) $postData->$key = $value;
 
-        $this->executionModel->updateProducts($executionID, $postData);
+        $this->instance->updateProducts($executionID, $postData);
 
         if(dao::isError())
         {
@@ -1155,7 +1155,7 @@ class executionTaoTest extends baseTest
         }
         else
         {
-            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchAll();
+            return $this->instance->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
@@ -1169,8 +1169,8 @@ class executionTaoTest extends baseTest
      */
     public function getTasks2ImportedTest($toExecution, $count)
     {
-        $branches = $this->executionModel->getBranches($toExecution);
-        $object   = $this->executionModel->getTasks2Imported($toExecution, $branches);
+        $branches = $this->instance->getBranches($toExecution);
+        $object   = $this->instance->getTasks2Imported($toExecution, $branches);
 
         if(dao::isError())
         {
@@ -1199,7 +1199,7 @@ class executionTaoTest extends baseTest
      */
     public function importTaskTest(int $executionID, int $count, array $taskIdList = array()): array|int
     {
-        $this->executionModel->importTask($executionID, $taskIdList);
+        $this->instance->importTask($executionID, $taskIdList);
 
         if(dao::isError())
         {
@@ -1208,12 +1208,12 @@ class executionTaoTest extends baseTest
         }
         elseif($count == 1)
         {
-            $taskList = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
+            $taskList = $this->instance->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
             return count($taskList);
         }
         else
         {
-            $taskList = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
+            $taskList = $this->instance->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->fetchAll();
             return $taskList;
         }
     }
@@ -1234,8 +1234,8 @@ class executionTaoTest extends baseTest
         $dateExceed   = array();
         $taskStories  = array();
         $parents      = array();
-        $execution    = $this->executionModel->fetchByID($executionID);
-        $tasks        = $this->executionModel->loadModel('task')->getByIdList($taskIdList);
+        $execution    = $this->instance->fetchByID($executionID);
+        $tasks        = $this->instance->loadModel('task')->getByIdList($taskIdList);
         $assignedToes = array();
         foreach($tasks as $task)
         {
@@ -1245,9 +1245,9 @@ class executionTaoTest extends baseTest
             if($task->parent < 0) $parents[$task->id] = $task->id;
         }
 
-        $this->executionModel->afterImportTask($execution, $parents, $assignedToes, $taskStories);
+        $this->instance->afterImportTask($execution, $parents, $assignedToes, $taskStories);
 
-        $teams = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('execution')->andWhere('root')->eq($executionID)->fetchAll();
+        $teams = $this->instance->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('execution')->andWhere('root')->eq($executionID)->fetchAll();
         return $count ? count($teams) : $teams;
     }
 
@@ -1261,7 +1261,7 @@ class executionTaoTest extends baseTest
      */
     public function statRelatedDataTest(int $executionID): object|array
     {
-        $object = $this->executionModel->statRelatedData($executionID);
+        $object = $this->instance->statRelatedData($executionID);
 
         if(dao::isError())
         {
@@ -1285,13 +1285,13 @@ class executionTaoTest extends baseTest
      */
     public function importBugTest(int $executionID, array $postData): array|bool
     {
-        $this->executionModel->loadModel('task');
+        $this->instance->loadModel('task');
 
         $tasks          = array();
-        $execution      = $this->executionModel->getByID($executionID);
-        $bugs           = $this->executionModel->loadModel('bug')->getByIdList(array_keys($postData));
-        $showAllModule  = isset($this->executionModel->config->execution->task->allModule) ? $this->executionModel->config->execution->task->allModule : '';
-        $modules        = $this->executionModel->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule ? 'allModule' : '');
+        $execution      = $this->instance->getByID($executionID);
+        $bugs           = $this->instance->loadModel('bug')->getByIdList(array_keys($postData));
+        $showAllModule  = isset($this->instance->config->execution->task->allModule) ? $this->instance->config->execution->task->allModule : '';
+        $modules        = $this->instance->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule ? 'allModule' : '');
         $now            = helper::now();
         foreach($postData as $bugID => $task)
         {
@@ -1311,12 +1311,12 @@ class executionTaoTest extends baseTest
             $task->consumed     = 0;
             $task->status       = 'wait';
             $task->openedDate   = $now;
-            $task->openedBy     = $this->executionModel->app->user->account;
+            $task->openedBy     = $this->instance->app->user->account;
 
             $tasks[$bugID] = $task;
         }
 
-        return $this->executionModel->importBug($tasks);
+        return $this->instance->importBug($tasks);
     }
 
     /**
@@ -1332,10 +1332,10 @@ class executionTaoTest extends baseTest
      */
     public function changeProjectTest(int $newProjectID, int $oldProjectID, int $executionID, string $syncStories = 'no'): array|object
     {
-        $this->executionModel->changeProject($newProjectID, $oldProjectID, $executionID, $syncStories);
+        $this->instance->changeProject($newProjectID, $oldProjectID, $executionID, $syncStories);
 
         if(dao::isError()) return dao::getError();
-        return $this->executionModel->dao->select('parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        return $this->instance->dao->select('parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
     }
 
     /**
@@ -1350,13 +1350,13 @@ class executionTaoTest extends baseTest
     public function linkStoryTest(int $executionID, int $count, array $stories = array()): array|int
     {
 
-        $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
-        $this->executionModel->linkStory($executionID, $stories);
+        $this->instance->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
+        $this->instance->linkStory($executionID, $stories);
 
         if(dao::isError()) return dao::getError();
 
-        if($count == 1) return count($this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll());
-        return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+        if($count == 1) return count($this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll());
+        return $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
     }
 
     /**
@@ -1371,19 +1371,19 @@ class executionTaoTest extends baseTest
      */
     public function linkStoriesTest(int $executionID, int $productID = 0, int $planID = 0): int
     {
-        if($planID) $this->executionModel->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
+        if($planID) $this->instance->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
 
-        $result = $this->executionModel->linkStories($executionID);
+        $result = $this->instance->linkStories($executionID);
         if(dao::isError()) return 0;
 
         if($productID > 0)
         {
-            $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
+            $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
             return count($objects);
         }
         else
         {
-            $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
             return count($objects);
         }
     }
@@ -1401,12 +1401,12 @@ class executionTaoTest extends baseTest
      */
     public function linkCasesTest(int $executionID, int $productID, int $storyID, int $count): array|int
     {
-        $this->executionModel->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
-        $this->executionModel->linkCases($executionID, $productID, $storyID);
+        $this->instance->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
+        $this->instance->linkCases($executionID, $productID, $storyID);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->executionModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
+        $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
         return $count ? count($objects) : $objects;
     }
 
@@ -1423,21 +1423,21 @@ class executionTaoTest extends baseTest
      */
     public function unlinkStoryTest(int $executionID, int $storyID, array $stories, int $count): array|int
     {
-        $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
+        $this->instance->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
 
-        $this->executionModel->linkStory($executionID, $stories);
-        $this->executionModel->unlinkStory($executionID, $storyID);
+        $this->instance->linkStory($executionID, $stories);
+        $this->instance->unlinkStory($executionID, $storyID);
 
         if(dao::isError()) return dao::getError();
 
         if($count == 1)
         {
-            $object = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            $object = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
             return count($object);
         }
         else
         {
-            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
+            return $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
@@ -1453,10 +1453,10 @@ class executionTaoTest extends baseTest
      */
     public function unlinkCasesTest(int $executionID, int $productID, int $storyID): array
     {
-        $this->executionModel->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
+        $this->instance->dao->delete()->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->exec();
 
-        $this->executionModel->linkCases($executionID, $productID, $storyID);
-        $this->executionModel->unlinkCases($executionID, $storyID);
+        $this->instance->linkCases($executionID, $productID, $storyID);
+        $this->instance->unlinkCases($executionID, $storyID);
 
         if(dao::isError())
         {
@@ -1464,7 +1464,7 @@ class executionTaoTest extends baseTest
         }
         else
         {
-            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
+            return $this->instance->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->fetchAll();
         }
     }
 
@@ -1479,7 +1479,7 @@ class executionTaoTest extends baseTest
      */
     public function getTeamMembersTest(int $executionID, int $count): int|array
     {
-        $object = $this->executionModel->getTeamMembers($executionID);
+        $object = $this->instance->getTeamMembers($executionID);
 
         if(dao::isError())
         {
@@ -1506,7 +1506,7 @@ class executionTaoTest extends baseTest
      */
     public function getMembersByIdListTest($executionIdList, $count)
     {
-        $object = $this->executionModel->getMembersByIdList($executionIdList);
+        $object = $this->instance->getMembersByIdList($executionIdList);
 
         if(dao::isError())
         {
@@ -1534,7 +1534,7 @@ class executionTaoTest extends baseTest
      */
     public function getMembers2ImportTest(int $executionID, array $currentMembers, int $count): int|string|array
     {
-        $object = $this->executionModel->getMembers2Import($executionID, $currentMembers);
+        $object = $this->instance->getMembers2Import($executionID, $currentMembers);
 
         if(dao::isError())
         {
@@ -1569,7 +1569,7 @@ class executionTaoTest extends baseTest
      */
     public function getCanCopyObjectsTest(int $projectID = 0, int $count = 0): array|int|string
     {
-        $object = $this->executionModel->getCanCopyObjects($projectID);
+        $object = $this->instance->getCanCopyObjects($projectID);
 
         if(dao::isError())
         {
@@ -1605,7 +1605,7 @@ class executionTaoTest extends baseTest
      */
     public function manageMembersTest(int $executionID, int $count, array $params = array()): array|string|int
     {
-        $this->executionModel->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->exec();
+        $this->instance->dao->delete()->from(TABLE_TEAM)->where('root')->eq($executionID)->exec();
 
         $members = array();
         foreach($params as $key => $valueList)
@@ -1617,10 +1617,10 @@ class executionTaoTest extends baseTest
             }
         }
 
-        $execution = $this->executionModel->getByID($executionID);
-        $this->executionModel->manageMembers($execution, $members);
+        $execution = $this->instance->getByID($executionID);
+        $this->instance->manageMembers($execution, $members);
 
-        $objects = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->orderBy('id_asc')->fetchAll();
+        $objects = $this->instance->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->orderBy('id_asc')->fetchAll();
 
         if(dao::isError())
         {
@@ -1655,12 +1655,12 @@ class executionTaoTest extends baseTest
      */
     public function addProjectMembersTest(int $projectID = 0, int $executionID = 0, int $count = 0): array|int
     {
-        $this->executionModel->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->exec();
-        $executionMembers = $this->executionModel->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
+        $this->instance->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->exec();
+        $executionMembers = $this->instance->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
 
-        $this->executionModel->addProjectMembers($projectID, $executionMembers);
+        $this->instance->addProjectMembers($projectID, $executionMembers);
 
-        $object = $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
+        $object = $this->instance->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
 
         if(dao::isError())
         {
@@ -1692,7 +1692,7 @@ class executionTaoTest extends baseTest
         global $tester;
         $oldObject = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
 
-        $this->executionModel->unlinkMember($executionID, $account);
+        $this->instance->unlinkMember($executionID, $account);
 
         $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll();
 
@@ -1727,7 +1727,7 @@ class executionTaoTest extends baseTest
      */
     public function computeBurnTest($executionID = '')
     {
-        $result = $this->executionModel->computeBurn($executionID);
+        $result = $this->instance->computeBurn($executionID);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1759,12 +1759,12 @@ class executionTaoTest extends baseTest
             $burnData->$key = $value;
         }
 
-        $this->executionModel->computeBurn();
-        $this->executionModel->fixFirst($burnData);
+        $this->instance->computeBurn();
+        $this->instance->fixFirst($burnData);
 
         unset($_POST);
 
-        $object = $this->executionModel->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($date)->fetchAll();
+        $object = $this->instance->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($date)->fetchAll();
 
         if(dao::isError())
         {
@@ -1797,9 +1797,9 @@ class executionTaoTest extends baseTest
     public function getBurnDataFlotTest(int $executionID, string $burnBy, bool $showDelay = false, string $begin = '', string $end = ''):array|null
     {
         $dateList = array();
-        if($begin && $end) list($dateList) = $this->executionModel->getDateList($begin, $end, 'noweekend', 0, 'Y-m-d');
+        if($begin && $end) list($dateList) = $this->instance->getDateList($begin, $end, 'noweekend', 0, 'Y-m-d');
 
-        $object = $this->executionModel->getBurnDataFlot($executionID, $burnBy, $showDelay, $dateList);
+        $object = $this->instance->getBurnDataFlot($executionID, $burnBy, $showDelay, $dateList);
 
         if(dao::isError())
         {
@@ -1822,10 +1822,10 @@ class executionTaoTest extends baseTest
      */
     public function getBurnDataTest(int $executionID = 0): string|array
     {
-        $execution = $this->executionModel->getByID($executionID);
+        $execution = $this->instance->getByID($executionID);
         if(empty($execution)) return '0';
 
-        $object = $this->executionModel->getBurnData(array($executionID => $execution));
+        $object = $this->instance->getBurnData(array($executionID => $execution));
 
         if(dao::isError())
         {
@@ -1852,8 +1852,8 @@ class executionTaoTest extends baseTest
      */
     public function processBurnDataTest(int $executionID, int $itemCounts, string $begin, string $end, int $count): array|int
     {
-        $dateList = $this->executionModel->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
-        $object   = $this->executionModel->processBurnData($dateList, $itemCounts, $begin, $end);
+        $dateList = $this->instance->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
+        $object   = $this->instance->processBurnData($dateList, $itemCounts, $begin, $end);
 
         if(dao::isError())
         {
@@ -1880,7 +1880,7 @@ class executionTaoTest extends baseTest
      */
     public function summaryTest($tasks): string
     {
-        $result = $this->executionModel->summary($tasks);
+        $result = $this->instance->summary($tasks);
 
         if(dao::isError()) return dao::getError();
 
@@ -1898,7 +1898,7 @@ class executionTaoTest extends baseTest
      */
     public function isClickableTest(object $execution, string $action): string
     {
-        $object = $this->executionModel->isClickable($execution, $action);
+        $object = $this->instance->isClickable($execution, $action);
 
         if(dao::isError())
         {
@@ -1932,7 +1932,7 @@ class executionTaoTest extends baseTest
      */
     public function getDateListTest(string $begin, string $end, string $type, int $count, int|string $interval = 0): array|string|int
     {
-        $object = $this->executionModel->getDateList($begin, $end, $type, $interval);
+        $object = $this->instance->getDateList($begin, $end, $type, $interval);
 
         if(dao::isError())
         {
@@ -1967,7 +1967,7 @@ class executionTaoTest extends baseTest
     {
         global $tester;
 
-        $this->executionModel->fixOrder();
+        $this->instance->fixOrder();
 
         $object = $tester->dao->select('id,`order`')->from(TABLE_EXECUTION)->fetchAll('id');
 
@@ -1987,7 +1987,7 @@ class executionTaoTest extends baseTest
      */
     public function getKanbanTasksTest(int $executionID, int $count, array $excludeTasks = array()): array|int
     {
-        $object = $this->executionModel->getKanbanTasks($executionID, 'id_desc', $excludeTasks);
+        $object = $this->instance->getKanbanTasks($executionID, 'id_desc', $excludeTasks);
 
         if(dao::isError())
         {
@@ -2013,7 +2013,7 @@ class executionTaoTest extends baseTest
      */
     public function getKanbanSettingTest($param = 0)
     {
-        $object = $this->executionModel->getKanbanSetting();
+        $object = $this->instance->getKanbanSetting();
 
         if(dao::isError())
         {
@@ -2070,18 +2070,18 @@ class executionTaoTest extends baseTest
                 break;
             case 'count_default':
                 $kanbanSetting->allCols = false;
-                $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+                $result = $this->instance->getKanbanColumns($kanbanSetting);
                 return count($result);
             case 'count_all':
                 $kanbanSetting->allCols = true;
-                $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+                $result = $this->instance->getKanbanColumns($kanbanSetting);
                 return count($result);
             case 'empty':
                 // 空对象，不设置allCols属性
                 break;
         }
 
-        $result = $this->executionModel->getKanbanColumns($kanbanSetting);
+        $result = $this->instance->getKanbanColumns($kanbanSetting);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2096,8 +2096,8 @@ class executionTaoTest extends baseTest
      */
     public function getKanbanStatusMapTest($count)
     {
-        $kanbanSetting = $this->executionModel->getKanbanSetting();
-        $object        = $this->executionModel->getKanbanStatusMap($kanbanSetting);
+        $kanbanSetting = $this->instance->getKanbanSetting();
+        $object        = $this->instance->getKanbanStatusMap($kanbanSetting);
 
         if(dao::isError())
         {
@@ -2123,8 +2123,8 @@ class executionTaoTest extends baseTest
      */
     public function getKanbanStatusListTest($count)
     {
-        $kanbanSetting = $this->executionModel->getKanbanSetting();
-        $object        = $this->executionModel->getKanbanStatusList($kanbanSetting);
+        $kanbanSetting = $this->instance->getKanbanSetting();
+        $object        = $this->instance->getKanbanStatusList($kanbanSetting);
 
         if(dao::isError())
         {
@@ -2152,14 +2152,14 @@ class executionTaoTest extends baseTest
     {
         if($testType === 'default')
         {
-            $kanbanSetting = $this->executionModel->getKanbanSetting();
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $kanbanSetting = $this->instance->getKanbanSetting();
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
         }
         elseif($testType === 'empty')
         {
             $kanbanSetting = new stdclass();
             $kanbanSetting->colorList = array();
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
             return count($object);
         }
         elseif($testType === 'custom')
@@ -2170,24 +2170,24 @@ class executionTaoTest extends baseTest
                 'doing'  => '#00FF00',
                 'done'   => '#0000FF'
             );
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
         }
         elseif($testType === 'count')
         {
-            $kanbanSetting = $this->executionModel->getKanbanSetting();
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $kanbanSetting = $this->instance->getKanbanSetting();
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
             return count($object);
         }
         elseif($testType === 'specific_color')
         {
-            $kanbanSetting = $this->executionModel->getKanbanSetting();
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $kanbanSetting = $this->instance->getKanbanSetting();
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
             return isset($object['wait']) ? $object['wait'] : false;
         }
         elseif($testType === 'all_keys')
         {
-            $kanbanSetting = $this->executionModel->getKanbanSetting();
-            $object = $this->executionModel->getKanbanColorList($kanbanSetting);
+            $kanbanSetting = $this->instance->getKanbanSetting();
+            $object = $this->instance->getKanbanColorList($kanbanSetting);
             $expectedKeys = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
             $actualKeys = array_keys($object);
             sort($expectedKeys);
@@ -2220,8 +2220,8 @@ class executionTaoTest extends baseTest
         $begin = '2022-01-07';
         $end   = '2022-01-17';
 
-        $dateList = $this->executionModel->getDateList($begin, $end, $type, 0, 'Y-m-d');
-        $object   = $this->executionModel->buildBurnData($executionID, $dateList[0], $burnBy);
+        $dateList = $this->instance->getDateList($begin, $end, $type, 0, 'Y-m-d');
+        $object   = $this->instance->buildBurnData($executionID, $dateList[0], $burnBy);
 
         if(dao::isError())
         {
@@ -2251,7 +2251,7 @@ class executionTaoTest extends baseTest
      */
     public function getPlansTest(array $productIdList, string $param, int $executionID, int $count): array|int
     {
-        $object = $this->executionModel->getPlans($productIdList, $param, $executionID);
+        $object = $this->instance->getPlans($productIdList, $param, $executionID);
 
         if(dao::isError())
         {
@@ -2278,7 +2278,7 @@ class executionTaoTest extends baseTest
      */
     public function getStageLinkProductPairsTest($projects, $count)
     {
-        $object = $this->executionModel->getStageLinkProductPairs($projects);
+        $object = $this->instance->getStageLinkProductPairs($projects);
 
         if(dao::isError())
         {
@@ -2306,7 +2306,7 @@ class executionTaoTest extends baseTest
     {
         global $tester;
 
-        $this->executionModel->setTreePath($executionID);
+        $this->instance->setTreePath($executionID);
 
         $object = $tester->dao->select('id,project,parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetchAll('id');
 
@@ -2333,8 +2333,8 @@ class executionTaoTest extends baseTest
     {
         global $tester;
 
-        $execution = $this->executionModel->getByID($executionID);
-        $object    = $this->executionModel->getBeginEnd4CFD($execution);
+        $execution = $this->instance->getByID($executionID);
+        $object    = $this->instance->getBeginEnd4CFD($execution);
 
         $object[0] = $object[0] == date('Y-m-d', strtotime('-13 days', time())) ? 1 : 0;
         $object[1] = $object[1] == helper::today() ? 1 : 0;
@@ -2369,7 +2369,7 @@ class executionTaoTest extends baseTest
         $tester->app->loadClass('pager', $static = true);
         $pager = new pager(0, $recPerPage, 1);
 
-        $objects = $this->executionModel->getSearchTasks($condition, $orderBy, $pager);
+        $objects = $this->instance->getSearchTasks($condition, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
 
         return $objects;
@@ -2387,7 +2387,7 @@ class executionTaoTest extends baseTest
      */
     public function getKanbanGroupDataTest($stories, $tasks, $bugs, $type = 'story')
     {
-        $object = $this->executionModel->getKanbanGroupData($stories, $tasks, $bugs, $type);
+        $object = $this->instance->getKanbanGroupData($stories, $tasks, $bugs, $type);
 
         if(dao::isError())
         {
@@ -2408,7 +2408,7 @@ class executionTaoTest extends baseTest
      */
     public function getPrevKanbanTest(int $executionID): array|string|null
     {
-        $result = $this->executionModel->getPrevKanban($executionID);
+        $result = $this->instance->getPrevKanban($executionID);
 
         if(dao::isError())
         {
@@ -2438,7 +2438,7 @@ class executionTaoTest extends baseTest
             global $tester;
             $contents    = array('story', 'wait', 'doing', 'done', 'cancel');
             $stories     = $tester->loadModel('story')->getExecutionStories($executionID, 0, 'id_asc');
-            $kanbanTasks = $this->executionModel->getKanbanTasks($executionID, "id");
+            $kanbanTasks = $this->instance->getKanbanTasks($executionID, "id");
             $kanbanBugs  = $tester->loadModel('bug')->getExecutionBugs($executionID);
             $users       = array();
             $taskAndBugs = array();
@@ -2469,7 +2469,7 @@ class executionTaoTest extends baseTest
             $kanbanDataList = $datas;
         }
 
-        $object = $this->executionModel->saveKanbanData($executionID, $kanbanDataList);
+        $object = $this->instance->saveKanbanData($executionID, $kanbanDataList);
 
         if(dao::isError())
         {
@@ -2478,7 +2478,7 @@ class executionTaoTest extends baseTest
         }
         else
         {
-            $result = $this->executionModel->getPrevKanban($executionID);
+            $result = $this->instance->getPrevKanban($executionID);
             return !$result ? 'empty' : $result;
         }
     }
@@ -2495,7 +2495,7 @@ class executionTaoTest extends baseTest
      */
     public function updateUserViewTest(int $executionID, string $objectType = 'sprint', array $users = array()): string|array
     {
-        $this->executionModel->updateUserView($executionID, $objectType, $users);
+        $this->instance->updateUserView($executionID, $objectType, $users);
 
         if(dao::isError())
         {
@@ -2523,7 +2523,7 @@ class executionTaoTest extends baseTest
         if(empty($projectID) || !is_numeric($projectID)) return 0;
 
         // 获取项目信息，如果不存在则返回0
-        $project = $this->executionModel->fetchByID($projectID);
+        $project = $this->instance->fetchByID($projectID);
         if(empty($project)) return 0;
 
         // 为项目对象添加缺失的必需字段
@@ -2561,14 +2561,14 @@ class executionTaoTest extends baseTest
         $executionData->whitelist = '';
         $executionData->plans = array();
         $executionData->hasProduct = $project->hasProduct;
-        $executionData->openedBy = $this->executionModel->app->user->account;
+        $executionData->openedBy = $this->instance->app->user->account;
         $executionData->openedDate = helper::now();
         $executionData->parent = $projectID;
         $executionData->isTpl = $project->isTpl;
         if($project->code) $executionData->code = $project->code;
 
         try {
-            $executionID = $this->executionModel->create($executionData, array($this->executionModel->app->user->account));
+            $executionID = $this->instance->create($executionData, array($this->instance->app->user->account));
             if(dao::isError()) return 0;
             return $executionID ? $executionID : 0;
         } catch(Exception $e) {
@@ -2586,10 +2586,10 @@ class executionTaoTest extends baseTest
      */
     public function setMenuTest($executionID = 0): object|string
     {
-        $execution = $this->executionModel->getByID($executionID);
+        $execution = $this->instance->getByID($executionID);
         if(empty($execution)) return '0';
 
-        $this->executionModel->setMenu($executionID);
+        $this->instance->setMenu($executionID);
 
         global $lang;
         return $lang->execution->menu;
@@ -2604,8 +2604,8 @@ class executionTaoTest extends baseTest
      */
     public function syncNoMultipleSprintTest(int $projectID): string|object
     {
-        $executionID = $this->executionModel->syncNoMultipleSprint($projectID);
-        return !$executionID ? '' : $this->executionModel->fetchByID($executionID);
+        $executionID = $this->instance->syncNoMultipleSprint($projectID);
+        return !$executionID ? '' : $this->instance->fetchByID($executionID);
     }
 
     /**
@@ -2617,7 +2617,7 @@ class executionTaoTest extends baseTest
      */
     public function buildSearchFormTest($queryID)
     {
-        $this->executionModel->buildSearchForm($queryID, 'searchUrl');
+        $this->instance->buildSearchForm($queryID, 'searchUrl');
 
         return $_SESSION['executionsearchParams']['queryID'];
     }
@@ -2633,8 +2633,8 @@ class executionTaoTest extends baseTest
     {
         global $app;
         $app->moduleName = 'task';
-        $tree = $this->executionModel->getTree($executionID);
-        return $this->executionModel->buildTree($tree);
+        $tree = $this->instance->getTree($executionID);
+        return $this->instance->buildTree($tree);
     }
 
     /**
@@ -2648,7 +2648,7 @@ class executionTaoTest extends baseTest
      */
     public function buildTreeTestDirect(array $trees, bool $hasProduct = true, array $gradeGroup = array()): array
     {
-        $result = $this->executionModel->buildTree($trees, $hasProduct, $gradeGroup);
+        $result = $this->instance->buildTree($trees, $hasProduct, $gradeGroup);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2698,7 +2698,7 @@ class executionTaoTest extends baseTest
         $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
         if(empty($fullTrees)) return '0';
 
-        return $this->executionModel->fillTasksInTree((object)$fullTrees[0], $executionID);
+        return $this->instance->fillTasksInTree((object)$fullTrees[0], $executionID);
     }
 
     /**
@@ -2715,7 +2715,7 @@ class executionTaoTest extends baseTest
      */
     public function buildTaskSearchFormTest($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc): array
     {
-        return $this->executionModel->buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc);
+        return $this->instance->buildTaskSearchForm($executionID, $executions, $queryID, $actionURL, $module, $cacheSearchFunc);
     }
 
     /**
@@ -2733,8 +2733,8 @@ class executionTaoTest extends baseTest
         $product = $this->productModel->getByID($productID);
         if(empty($product)) return 0;
 
-        $this->executionModel->loadModel('bug');
-        $this->executionModel->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug', $type);
+        $this->instance->loadModel('bug');
+        $this->instance->buildBugSearchForm(array($productID => $product), $queryID, 'searchBug', $type);
 
         return $_SESSION['executionBugsearchParams']['queryID'];
     }
@@ -2750,13 +2750,13 @@ class executionTaoTest extends baseTest
      */
     public function buildStorySearchFormTest(int $executionID, int $queryID): int
     {
-        $execution = $this->executionModel->getByID($executionID);
+        $execution = $this->instance->getByID($executionID);
         if(empty($execution)) return 0;
 
-        $this->executionModel->loadModel('story');
-        $products     = $this->executionModel->loadModel('product')->getProducts($executionID);
-        $branchGroups = $this->executionModel->loadModel('branch')->getByProducts(array_keys($products));
-        $this->executionModel->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
+        $this->instance->loadModel('story');
+        $products     = $this->instance->loadModel('product')->getProducts($executionID);
+        $branchGroups = $this->instance->loadModel('branch')->getByProducts(array_keys($products));
+        $this->instance->buildStorySearchForm($products, $branchGroups, array(), $queryID, 'searchStory', 'executionStory', $execution);
 
         return $_SESSION['executionStorysearchParams']['queryID'];
     }
@@ -2778,7 +2778,7 @@ class executionTaoTest extends baseTest
         $dateList = array();
         for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
 
-        return $this->executionModel->getCFDData($executionID, $dateList, $type);
+        return $this->instance->getCFDData($executionID, $dateList, $type);
     }
 
     /**
@@ -2798,7 +2798,7 @@ class executionTaoTest extends baseTest
         $dateList = array();
         for($date = $begin; $date <= $end; $date += 24 * 3600) $dateList[] = date('Y-m-d', $date);
 
-        return $this->executionModel->buildCFDData($executionID, $dateList, $type);
+        return $this->instance->buildCFDData($executionID, $dateList, $type);
     }
 
     /**
@@ -2812,9 +2812,9 @@ class executionTaoTest extends baseTest
      */
     public function updateCFDDataTest(int $executionID, string $date): array
     {
-        $this->executionModel->updateCFDData($executionID, $date);
+        $this->instance->updateCFDData($executionID, $date);
 
-        return $this->executionModel->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+        return $this->instance->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
             ->where('execution')->eq((int)$executionID)
             ->andWhere('date')->eq($date)
             ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
@@ -2829,7 +2829,7 @@ class executionTaoTest extends baseTest
      */
     public function buildExecutionByStatusTest($status)
     {
-        return $this->executionModel->buildExecutionByStatus($status);
+        return $this->instance->buildExecutionByStatus($status);
     }
 
     /**
@@ -2845,14 +2845,14 @@ class executionTaoTest extends baseTest
     {
         $executions           = array();
         $executionIDList      = '';
-        $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+        $executions = $this->instance->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('project')->eq($projectID)
             ->andWhere('type')->in('sprint,stage,kanban')
             ->orderBy('order_asc')
             ->fetchAll('id');
 
-        $executions = $this->executionModel->resetExecutionSorts($executions);
+        $executions = $this->instance->resetExecutionSorts($executions);
         if(!empty($executions))
         {
             $executionIDList = array_keys($executions);
@@ -2870,7 +2870,7 @@ class executionTaoTest extends baseTest
      */
     public function getExtendFieldsTest($moduleName = 'project')
     {
-        $extendFields = $this->executionModel->getExtendFields($moduleName);
+        $extendFields = $this->instance->getExtendFields($moduleName);
         return $extendFields;
     }
 
@@ -2884,9 +2884,9 @@ class executionTaoTest extends baseTest
      */
     public function getExecutionQueryTest(int $queryID): string
     {
-        if(!$queryID) $this->executionModel->session->set('executionQuery', "(( `project` = 'all' ) AND ( 1  AND `status` = 'doing'))");
+        if(!$queryID) $this->instance->session->set('executionQuery', "(( `project` = 'all' ) AND ( 1  AND `status` = 'doing'))");
 
-        return $this->executionModel->getExecutionQuery($queryID);
+        return $this->instance->getExecutionQuery($queryID);
     }
 
     /**
@@ -2898,8 +2898,8 @@ class executionTaoTest extends baseTest
      */
     public function setKanbanMenuTest(): object
     {
-        $this->executionModel->setKanbanMenu();
-        return $this->executionModel->lang->execution->menu;
+        $this->instance->setKanbanMenu();
+        return $this->instance->lang->execution->menu;
     }
 
     /**
@@ -2911,8 +2911,8 @@ class executionTaoTest extends baseTest
      */
     public function setKanbanMenuWithLangTest(): object
     {
-        $this->executionModel->setKanbanMenu();
-        return $this->executionModel->lang->execution;
+        $this->instance->setKanbanMenu();
+        return $this->instance->lang->execution;
     }
 
     /**
@@ -2925,9 +2925,9 @@ class executionTaoTest extends baseTest
      */
     public function removeMenuTest(int $executionID): object
     {
-        $execution = $this->executionModel->fetchByID($executionID);
-        $this->executionModel->removeMenu($execution);
-        return $this->executionModel->lang->execution->menu;
+        $execution = $this->instance->fetchByID($executionID);
+        $this->instance->removeMenu($execution);
+        return $this->instance->lang->execution->menu;
     }
 
     /**
@@ -2940,7 +2940,7 @@ class executionTaoTest extends baseTest
      */
     public function getExecutionFeaturesTest(object $execution): array
     {
-        $features =  $this->executionModel->getExecutionFeatures($execution);
+        $features =  $this->instance->getExecutionFeatures($execution);
         foreach($features as $key => $value)
         {
             if(!$value) $features[$key] = 0;
@@ -2959,8 +2959,8 @@ class executionTaoTest extends baseTest
      */
     public function saveSessionTest(int $executionID): int
     {
-        $this->executionModel->saveSession($executionID);
-        return $this->executionModel->session->execution;
+        $this->instance->saveSession($executionID);
+        return $this->instance->session->execution;
     }
 
     /**
@@ -2982,9 +2982,9 @@ class executionTaoTest extends baseTest
         $laneGroup = array(array($columnCard));
         $count     = $cardIdList ? count(explode(',', $cardIdList)) : 0;
 
-        $this->executionModel->updateTodayCFDData($executionID, $type, $colName, $laneGroup);
+        $this->instance->updateTodayCFDData($executionID, $type, $colName, $laneGroup);
 
-        return $this->executionModel->dao->select('*')->from(TABLE_CFD)
+        return $this->instance->dao->select('*')->from(TABLE_CFD)
             ->where('execution')->eq($executionID)
             ->andWhere('date')->eq(helper::today())
             ->andWhere('name')->eq($colName)
@@ -3004,15 +3004,15 @@ class executionTaoTest extends baseTest
      */
     public function buildExecutionPairsTest(int $projectID, string $mode = ''): array
     {
-         $executions = $this->executionModel->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
-            ->where('vision')->eq($this->executionModel->config->vision)
+         $executions = $this->instance->dao->select("*, IF(INSTR('done,closed', status) < 2, 0, 1) AS isDone, INSTR('doing,wait,suspended,closed', status) AS sortStatus")->from(TABLE_EXECUTION)
+            ->where('vision')->eq($this->instance->config->vision)
             ->andWhere('type')->in('stage,sprint,kanban')
             ->andWhere('project')->eq($projectID)
             ->beginIF(strpos($mode, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
             ->fetchAll('id');
 
-         $allExecutions = $this->executionModel->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
+         $allExecutions = $this->instance->dao->select('id,name,parent,grade')->from(TABLE_EXECUTION)
             ->where('type')->notin(array('program', 'project'))
             ->andWhere('deleted')->eq('0')
             ->andWhere('project')->eq($projectID)
@@ -3021,9 +3021,9 @@ class executionTaoTest extends baseTest
          $parents = array();
          foreach($allExecutions as $exec) $parents[$exec->parent] = true;
 
-         $projectPairs = strpos($mode, 'withobject') !== false ? $this->executionModel->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
+         $projectPairs = strpos($mode, 'withobject') !== false ? $this->instance->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
 
-         return $this->executionModel->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
+         return $this->instance->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
     }
 
     /**
@@ -3037,14 +3037,14 @@ class executionTaoTest extends baseTest
      */
     public function processProductPlansTest(array $productIdList, string $param = ''): array
     {
-        $plans = $this->executionModel->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->instance->dao->select('t1.id,t1.title,t1.product,t1.parent,t1.begin,t1.end,t1.branch,t2.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
             ->where('t1.product')->in($productIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin desc, t1.id desc')
             ->fetchAll('id');
 
-        return $this->executionModel->processProductPlans($plans, $param);
+        return $this->instance->processProductPlans($plans, $param);
     }
 
     /**
@@ -3058,10 +3058,10 @@ class executionTaoTest extends baseTest
      */
     public function afterImportBugTest(int $taskID, int $bugID): bool
     {
-        $task = $this->executionModel->loadModel('task')->getByID($taskID);
-        $bug  = $this->executionModel->loadModel('bug')->getByID($bugID);
+        $task = $this->instance->loadModel('task')->getByID($taskID);
+        $bug  = $this->instance->loadModel('bug')->getByID($bugID);
 
-        return $this->executionModel->afterImportBug($task, $bug);
+        return $this->instance->afterImportBug($task, $bug);
     }
 
     /**
@@ -3082,11 +3082,11 @@ class executionTaoTest extends baseTest
         $storyGroups = array();
         foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
 
-        $taskGroups = $this->executionModel->getTaskGroups($executionID);
+        $taskGroups = $this->instance->getTaskGroups($executionID);
 
         $node = (object)$fullTrees[0];
         if(!isset($node->id)) $node->id = 0;
-        return $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, 0);
+        return $this->instance->processStoryNode($node, $storyGroups, $taskGroups, 0);
     }
 
     /**
@@ -3104,9 +3104,9 @@ class executionTaoTest extends baseTest
         $storyGroups = array();
         foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
 
-        $taskGroups = $this->executionModel->getTaskGroups($executionID);
+        $taskGroups = $this->instance->getTaskGroups($executionID);
 
-        $result = $this->executionModel->processStoryNode($node, $storyGroups, $taskGroups, $executionID);
+        $result = $this->instance->processStoryNode($node, $storyGroups, $taskGroups, $executionID);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3128,8 +3128,8 @@ class executionTaoTest extends baseTest
         $node = (object)$fullTrees[0];
         if(!isset($node->id)) $node->id = 0;
 
-        $taskGroups = $this->executionModel->getTaskGroups($executionID);
-        return $this->executionModel->processTaskNode($node, $taskGroups);
+        $taskGroups = $this->instance->getTaskGroups($executionID);
+        return $this->instance->processTaskNode($node, $taskGroups);
     }
 
     /**
@@ -3143,8 +3143,8 @@ class executionTaoTest extends baseTest
      */
     public function batchProcessNameTest(int $projectID, int $count): array|int
     {
-        $project    = $this->executionModel->loadModel('project')->getByID($projectID);
-        $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+        $project    = $this->instance->loadModel('project')->getByID($projectID);
+        $executions = $this->instance->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage,kanban')
             ->andWhere('project')->eq($projectID)
@@ -3165,18 +3165,18 @@ class executionTaoTest extends baseTest
      */
     public function afterUnlinkStoryTest(int $executionID, int $storyID, int $count): array|int
     {
-        $execution = $this->executionModel->getByID($executionID);
-        $this->executionModel->afterUnlinkStory($execution, $storyID);
+        $execution = $this->instance->getByID($executionID);
+        $this->instance->afterUnlinkStory($execution, $storyID);
         if(dao::isError()) return dao::getError();
 
         if($count == 1)
         {
-            $object = $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
+            $object = $this->instance->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
             return count($object);
         }
         else
         {
-            return $this->executionModel->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
+            return $this->instance->dao->select('*')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('execution')->eq($executionID)->fetchAll();
         }
     }
 
@@ -3188,8 +3188,8 @@ class executionTaoTest extends baseTest
      */
     public function generateRowTest()
     {
-        $executions = $this->executionModel->getStatData();
-        return $this->executionModel->generateRow($executions, array(), array());
+        $executions = $this->instance->getStatData();
+        return $this->instance->generateRow($executions, array(), array());
     }
 
     /**
@@ -3200,10 +3200,10 @@ class executionTaoTest extends baseTest
      */
     public function appendTasksTest()
     {
-        $executions = $this->executionModel->getStatData(0, 'all', 0, 0, true);
+        $executions = $this->instance->getStatData(0, 'all', 0, 0, true);
         if(empty($executions[0]->tasks)) return false;
 
-        return $this->executionModel->appendTasks($executions[0]->tasks, array());
+        return $this->instance->appendTasks($executions[0]->tasks, array());
     }
 
     /**
@@ -3217,12 +3217,12 @@ class executionTaoTest extends baseTest
      */
     public function processTasksTest(int $executionID, int $count): array|int
     {
-        $tasks = $this->executionModel->dao->select('*')->from(TABLE_TASK)
+        $tasks = $this->instance->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('execution')->eq($executionID)
             ->fetchAll('id');
 
-        $tasks = $this->executionModel->processTasks($tasks);
+        $tasks = $this->instance->processTasks($tasks);
         return $count ? count($tasks) : $tasks;
     }
 
@@ -3236,7 +3236,7 @@ class executionTaoTest extends baseTest
      */
     public function createMainLibTest(int $executionID, string $type = 'sprint'): object|array
     {
-        $libID = $this->executionModel->createMainLib(1, $executionID, $type);
+        $libID = $this->instance->createMainLib(1, $executionID, $type);
 
         if(dao::isError())
         {
@@ -3245,7 +3245,7 @@ class executionTaoTest extends baseTest
         else
         {
             if(!$libID) return array();
-            $object = $this->executionModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
+            $object = $this->instance->dao->select('*')->from(TABLE_DOCLIB)->where('id')->eq($libID)->fetch();
             return $object;
         }
     }
@@ -3261,7 +3261,7 @@ class executionTaoTest extends baseTest
      */
     public function addExecutionMembersTest(int $executionID, array $members): object|array
     {
-        $this->executionModel->addExecutionMembers($executionID, $members);
+        $this->instance->addExecutionMembers($executionID, $members);
 
         if(dao::isError())
         {
@@ -3269,7 +3269,7 @@ class executionTaoTest extends baseTest
         }
         else
         {
-            return $this->executionModel->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchAll();
+            return $this->instance->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($executionID)->andWhere('type')->eq('execution')->fetchAll();
         }
     }
 
@@ -3283,7 +3283,7 @@ class executionTaoTest extends baseTest
      */
     public function getPairsByListTest(string $executionIdList): string|array
     {
-        $executions = $this->executionModel->getPairsByList(explode(',', $executionIdList));
+        $executions = $this->instance->getPairsByList(explode(',', $executionIdList));
 
         if(dao::isError()) return dao::getError();
         return implode(',', $executions);
@@ -3299,7 +3299,7 @@ class executionTaoTest extends baseTest
      */
     public function getChildIdGroupTest(string $parentIdList): string|array
     {
-        $executions = $this->executionModel->getChildIdGroup(explode(',', $parentIdList));
+        $executions = $this->instance->getChildIdGroup(explode(',', $parentIdList));
 
         if(dao::isError()) return dao::getError();
         $return = '';
@@ -3324,7 +3324,7 @@ class executionTaoTest extends baseTest
     public function checkAccessTest(int $executionID, array $executions)
     {
         if(!isset($executions[$executionID])) return (int)key($executions);
-        return $this->executionModel->checkAccess($executionID, $executions);
+        return $this->instance->checkAccess($executionID, $executions);
     }
 
     /**
@@ -3339,8 +3339,8 @@ class executionTaoTest extends baseTest
      */
     public function getSwitcherTest(int $executionID, string $module, string $method): bool
     {
-        $executionName = $this->executionModel->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('name');
-        $output      = $this->executionModel->getSwitcher($executionID, $module, $method);
+        $executionName = $this->instance->dao->select('name')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('name');
+        $output      = $this->instance->getSwitcher($executionID, $module, $method);
 
         if(!$output) return false;
         return strpos($output, $output) !== false;
@@ -3356,8 +3356,8 @@ class executionTaoTest extends baseTest
      */
     public function getToAndCcListTest(int $executionID): array
     {
-        $execution = $this->executionModel->getByID($executionID);
-        $return = $this->executionModel->getToAndCcList($execution);
+        $execution = $this->instance->getByID($executionID);
+        $return = $this->instance->getToAndCcList($execution);
         return $return;
     }
 
@@ -3372,8 +3372,8 @@ class executionTaoTest extends baseTest
      */
     public function deleteTest(int $executionID = 0)
     {
-        $this->executionModel->delete(TABLE_EXECUTION, $executionID);
-        return $this->executionModel->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('deleted');
+        $this->instance->delete(TABLE_EXECUTION, $executionID);
+        return $this->instance->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('deleted');
     }
 
     /**
@@ -3385,7 +3385,7 @@ class executionTaoTest extends baseTest
      */
     public function getByBuildTest($buildID = 0)
     {
-        $result = $this->executionModel->getByBuild((int)$buildID);
+        $result = $this->instance->getByBuild((int)$buildID);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3403,8 +3403,8 @@ class executionTaoTest extends baseTest
      */
     public function buildCaseSearchFormTest(array $products, int $queryID, string $actionURL, int $executionID): string
     {
-        $this->executionModel->loadModel('testcase');
-        $this->executionModel->buildCaseSearchForm($products, $queryID, $actionURL, $executionID);
+        $this->instance->loadModel('testcase');
+        $this->instance->buildCaseSearchForm($products, $queryID, $actionURL, $executionID);
 
         return 'executionCase';
     }
@@ -3513,7 +3513,7 @@ class executionTaoTest extends baseTest
      */
     public function buildStoryTreeTest(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0)
     {
-        $result = $this->executionModel->buildStoryTree($stories, $taskGroups, $executionID, $node, $parentID);
+        $result = $this->instance->buildStoryTree($stories, $taskGroups, $executionID, $node, $parentID);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3532,7 +3532,7 @@ class executionTaoTest extends baseTest
     {
         global $tester;
 
-        $oldExecution = $this->executionModel->getByID($executionID);
+        $oldExecution = $this->instance->getByID($executionID);
         if(empty($oldExecution)) return 0;
 
         // 模拟不同的测试场景
@@ -3583,7 +3583,7 @@ class executionTaoTest extends baseTest
             ->fetch('count');
 
         // 调用updateTeam方法
-        $this->executionModel->updateTeam($executionID, $oldExecution, $execution);
+        $this->instance->updateTeam($executionID, $oldExecution, $execution);
 
         // 获取更新后的团队成员数量
         $afterCount = $tester->dao->select('count(*) as count')->from(TABLE_TEAM)
@@ -3628,7 +3628,7 @@ class executionTaoTest extends baseTest
 
         $selfAndChildren = $selfAndChildrenList[$executionID];
 
-        $result = $this->executionModel->changeStatus2Doing($executionID, $selfAndChildren);
+        $result = $this->instance->changeStatus2Doing($executionID, $selfAndChildren);
 
         if(dao::isError()) return dao::getError();
 
@@ -3646,7 +3646,7 @@ class executionTaoTest extends baseTest
     {
         if($executionID <= 0) return false;
 
-        $execution = $this->executionModel->dao->select('id,status,realBegan,lastEditedBy,lastEditedDate')
+        $execution = $this->instance->dao->select('id,status,realBegan,lastEditedBy,lastEditedDate')
             ->from(TABLE_EXECUTION)
             ->where('id')->eq($executionID)
             ->fetch();
