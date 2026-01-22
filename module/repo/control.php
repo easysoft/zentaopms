@@ -117,28 +117,22 @@ class repo extends control
         if($repoList && !isset($repoList[$pageID - 1])) $pageID = 1;
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
-        /* Get success jobs of sonarqube.*/
-        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(helper::arrayColumn($repoList, 'id'));
-        $successJobs   = $this->loadModel('compile')->getSuccessJobs(helper::arrayColumn($sonarRepoList, 'id'));
-
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $projects = $this->loadModel('project')->getPairs();
 
         $this->repoZen->buildRepoSearchForm($inSpace, $space, $products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
-        $this->view->type          = $type;
-        $this->view->orderBy       = $orderBy;
-        $this->view->objectID      = $objectID;
-        $this->view->pager         = $pager;
-        $this->view->repoList      = $repoList;
-        $this->view->products      = $products;
-        $this->view->projects      = $projects;
-        $this->view->sonarRepoList = $sonarRepoList;
-        $this->view->successJobs   = $successJobs;
-        $this->view->spaceID       = $space;
-        $this->view->spaces        = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
-        $this->view->inSpace       = $inSpace;
+        $this->view->title    = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
+        $this->view->type     = $type;
+        $this->view->orderBy  = $orderBy;
+        $this->view->objectID = $objectID;
+        $this->view->pager    = $pager;
+        $this->view->repoList = $repoList;
+        $this->view->products = $products;
+        $this->view->projects = $projects;
+        $this->view->spaceID  = $space;
+        $this->view->spaces   = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->inSpace  = $inSpace;
 
         $this->display();
     }
