@@ -127,9 +127,10 @@ class upgradeModel extends model
             $methods['importLiteModules']          = [];
             $methods['addSubStatus']               = [];
             $methods['processDataset']             = [];
-            $methods['upgradeScreenAndMetricData'] = [];
-            $methods['upgradeBIData']              = [];
         }
+
+        $methods['upgradeScreenAndMetricData'] = [];
+        $methods['upgradeBIData']              = [];
         $methods['disableFeaturesByMode']      = []; // 新增了一些功能，轻量级升级上来要禁用掉
         $methods['convertCharset']             = [];
         $methods['program-refreshStats']       = [true];
