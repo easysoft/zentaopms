@@ -135,7 +135,7 @@ class baseHelper
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
             foreach($vars as $key => $value) $link .= "&$key=$value";
 
-            return self::processOnlyBodyParam($link, $onlyBody);
+            return static::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -150,7 +150,7 @@ class baseHelper
             foreach($vars as $value) $link .= "{$config->requestFix}$value";
             $link .= '.' . $viewType;
 
-            return self::processOnlyBodyParam($link, $onlyBody);
+            return static::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -161,7 +161,7 @@ class baseHelper
         if($moduleName == $config->default->module)
         {
             $link .= $config->default->method . '.' . $viewType;
-            return self::processOnlyBodyParam($link, $onlyBody);
+            return static::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -172,7 +172,7 @@ class baseHelper
         if($viewType == $app->getViewType())
         {
             $link .= $moduleName . '.' . $viewType;
-            return self::processOnlyBodyParam($link, $onlyBody);
+            return static::processOnlyBodyParam($link, $onlyBody);
         }
 
         /**
@@ -181,7 +181,7 @@ class baseHelper
          *
          */
         $link .= $moduleName . '.' . $viewType;
-        return self::processOnlyBodyParam($link, $onlyBody);
+        return static::processOnlyBodyParam($link, $onlyBody);
     }
 
     /**
@@ -203,8 +203,8 @@ class baseHelper
 
         $sign = !str_contains($link, '?') ? "?" : "&";
         $appendString = '';
-        if($onlyBody or (self::inOnlyBodyMode() && !self::isAjaxRequest('modal'))) $appendString = $sign . "onlybody=yes";
-        if(self::isWithTID() and !str_contains($link, 'tid=')) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
+        if($onlyBody or (static::inOnlyBodyMode() && !static::isAjaxRequest('modal'))) $appendString = $sign . "onlybody=yes";
+        if(static::isWithTID() and !str_contains($link, 'tid=')) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
         return $link . $appendString;
     }
 
@@ -247,11 +247,11 @@ class baseHelper
         $file = realpath($file);
         if($file === false) return false;
 
-        if(isset(self::$includedFiles[$file])) return true;
+        if(isset(static::$includedFiles[$file])) return true;
         if(!is_file($file)) return false;
 
         include $file;
-        self::$includedFiles[$file] = true;
+        static::$includedFiles[$file] = true;
         return true;
     }
 
@@ -699,7 +699,7 @@ class baseHelper
     static public function ls($dir, $pattern = '')
     {
         if(empty($dir)) return array();
-        if(isset(self::$loadedDirs[$dir][$pattern])) return self::$loadedDirs[$dir][$pattern];
+        if(isset(static::$loadedDirs[$dir][$pattern])) return static::$loadedDirs[$dir][$pattern];
 
         $files = array();
         $dir   = realpath($dir);
@@ -708,9 +708,9 @@ class baseHelper
 
         if(is_dir($dir)) $files = glob($dir . DIRECTORY_SEPARATOR . '*' . $pattern);
 
-        self::$loadedDirs[$dir][$pattern] = $files ?: array();
+        static::$loadedDirs[$dir][$pattern] = $files ?: array();
 
-        return self::$loadedDirs[$dir][$pattern];
+        return static::$loadedDirs[$dir][$pattern];
     }
 
     /**
@@ -1235,7 +1235,7 @@ class baseHelper
     {
         if(empty($data)) return $data;
         if(!is_object($data) && !is_array($data)) return $data;
-        if(!self::needDecodeHtmlSpecialChars()) return $data;
+        if(!static::needDecodeHtmlSpecialChars()) return $data;
 
         global $app, $config;
 
