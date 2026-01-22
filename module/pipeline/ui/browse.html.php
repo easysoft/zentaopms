@@ -28,13 +28,11 @@ featureBar
 );
 
 /* zin: Define the toolbar on main menu. */
-$canCreate  = hasPriv('pipeline', 'create') && (!$this->config->inCompose || $hasJobServer);
+$canCreate  = hasPriv('pipeline', 'create');
 $createItem = array('text' => $lang->pipeline->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
 
 foreach($pipelineList as $pipeline) $pipeline->space = $pipeline->space ? $pipeline->space : '';
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
-if(isset($cols['space'])) $cols['space']['map'] = $spaces;
-if(!empty($inSpace)) unset($cols['space']);
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);
 
 toolbar
