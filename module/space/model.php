@@ -383,13 +383,14 @@ class spaceModel extends model
                     $link = $menu['link'];
                     if(strpos($link, '|inSpace=1') !== false) continue;
 
-                    $menu['link'] = in_array($label, array('compile', 'system')) ? $link . '|space=' . $spaceID : $link . '|inSpace=1&space=' . $spaceID;
+                    $menu['link'] = in_array($label, array('pipeline', 'system')) ? $link . '|space=' . $spaceID : $link . '|inSpace=1&space=' . $spaceID;
                 }
             }
         }
         else
         {
             $this->session->set('devopsSpace', 0);
+            unset($this->lang->devops->homeMenu->pipeline);
             unset($this->lang->devops->homeMenu->spaceSetting);
         }
     }
