@@ -495,7 +495,6 @@ class searchTaoTest extends baseTest
     {
         $result = $this->instance->processResults($results, $objectList, $words);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 
@@ -509,28 +508,9 @@ class searchTaoTest extends baseTest
      */
     public function replaceDynamicTest(string $query): string
     {
-        $replacedQuery = $this->instance->replaceDynamic($query);
+        $result = $this->invokeArgs('replaceDynamic', [$query]);
         if(dao::isError()) return dao::getError();
-
-        global $tester;
-        $this->instance->app->loadClass('date');
-
-        $lastWeek  = date::getLastWeek();
-        $thisWeek  = date::getThisWeek();
-        $lastMonth = date::getLastMonth();
-        $thisMonth = date::getThisMonth();
-        $yesterday = date::yesterday();
-        $today     = date(DT_DATE1);
-
-        if(strpos($query, 'lastWeek') !== false)  return ($replacedQuery == "date between '" . $lastWeek['begin'] . "' and '" . $lastWeek['end'] . "'") ? '1' : '0';
-        if(strpos($query, 'thisWeek') !== false)  return ($replacedQuery == "date between '" . $thisWeek['begin'] . "' and '" . $thisWeek['end'] . "'") ? '1' : '0';
-        if(strpos($query, 'lastMonth') !== false) return ($replacedQuery == "date between '" . $lastMonth['begin'] . "' and '" . $lastMonth['end'] . "'") ? '1' : '0';
-        if(strpos($query, 'thisMonth') !== false) return ($replacedQuery == "date between '" . $thisMonth['begin'] . "' and '" . $thisMonth['end'] . "'") ? '1' : '0';
-        if(strpos($query, 'yesterday') !== false) return ($replacedQuery == "date between '" . $yesterday . ' 00:00:00' . "' and '" . $yesterday . ' 23:59:59' . "'") ? '1' : '0';
-        if(strpos($query, 'today') !== false)     return ($replacedQuery == "date between '" . $today     . ' 00:00:00' . "' and '" . $today     . ' 23:59:59' . "'") ? '1' : '0';
-        if(strpos($query, '$@me') !== false)      return str_replace('$@me', $this->instance->app->user->account, $query);
-
-        return $replacedQuery;
+        return $result;
     }
 
     /**
@@ -545,11 +525,9 @@ class searchTaoTest extends baseTest
      */
     public function setConditionTest($field, $operator, $value)
     {
-        // setCondition method is in tao layer and is protected, use reflection to access it
-        $reflection = new ReflectionClass($this->instance);
-        $method = $reflection->getMethod('setCondition');
-        $method->setAccessible(true);
-        return $method->invoke($this->instance, $field, $operator, $value);
+        $result = $this->invokeArgs('setCondition', [$field, $operator, $value]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

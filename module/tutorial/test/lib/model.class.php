@@ -31,14 +31,10 @@ class tutorialModelTest extends baseTest
      */
     public function checkNoviceTest(int $modifyPassword): int|array
     {
-        global $tester;
         if($this->instance->app->user->account != 'guest') $this->instance->app->user->modifyPassword = $modifyPassword;
-
-        $return = $this->instance->checkNovice();
-
+        $result = $this->instance->checkNovice();
         if(dao::isError()) return dao::getError();
-
-        return $return ? 1 : 0;
+        return $result;
     }
 
     /**
@@ -1114,21 +1110,6 @@ class tutorialModelTest extends baseTest
     public function getStoryGradeTest(): array
     {
         $result = $this->instance->getStoryGrade();
-        if(dao::isError()) return dao::getError();
-
-        return $result;
-    }
-
-    /**
-     * 测试获取新手模式研发需求键值对。
-     * Test get tutorial story pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getStoryPairsTest(): array
-    {
-        $result = $this->instance->getStoryPairs();
         if(dao::isError()) return dao::getError();
 
         return $result;

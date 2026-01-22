@@ -18,7 +18,7 @@ class epicModelTest extends baseTest
      */
     public function getToAndCcListTest($story, $actionType)
     {
-        $result = $this->invokeArgs('getToAndCcList', array($story, $actionType));
+        $result = $this->invokeArgs('getToAndCcList', [$story, $actionType]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -33,17 +33,8 @@ class epicModelTest extends baseTest
      */
     public function isClickableTest($data = null, $action = '')
     {
-        global $app, $tester;
-
-        // 确保$this->instance->appcontrol存在并能加载story模型
-        if(!isset($this->instance->appcontrol))
-        {
-            $this->instance->appcontrol = $tester;
-        }
-
-        $result = $this->instance->isClickable($data, $action);
+        $result = $this->invokeArgs('isClickable', [$data, $action]);
         if(dao::isError()) return dao::getError();
-
         return $result;
     }
 }
