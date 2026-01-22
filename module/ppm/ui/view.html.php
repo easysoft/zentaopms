@@ -47,7 +47,7 @@ $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon'
 
 $encoding      = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
-$checkMessage  = zget($mergeCheckMessage, 'message', '');
+$checkMessage  = empty($mergeCheckMessage) ? '' : zget($mergeCheckMessage, 'message', '');
 $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
