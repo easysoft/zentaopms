@@ -133,11 +133,7 @@ foreach($mergeTypeList as $mergeType)
 }
 if(!hasPriv('repo', 'diff')) unset($config->ppm->commitLogs->dtable->fieldList['id']['link']);
 
-if(!in_array($app->user->account, array_keys($reviewers)) || $ppm->status != 'opened')
-{
-    $config->ppm->actions->view['mainActions'] = array_diff($config->ppm->actions->view['mainActions'], array('review'));
-}
-
+if(!empty($reviewers)) $ppm->reviewers = implode(',', $reviewers);
 $actions = $this->loadModel('common')->buildOperateMenu($ppm);
 
 div

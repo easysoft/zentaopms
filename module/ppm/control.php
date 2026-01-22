@@ -163,9 +163,7 @@ class ppm extends control
         foreach($repoList as $repo)
         {
             if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
-
             $repoPairs[$repo->id] = $repo->name;
-            if($repoID && $repoID != $repo->id) continue;
         }
 
         $openIDList = array();
@@ -226,7 +224,7 @@ class ppm extends control
 
         if($_POST)
         {
-            $MR = form::data($this->config->ppm->form->create)
+            $ppm = form::data($this->config->ppm->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
                 ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
@@ -238,8 +236,10 @@ class ppm extends control
                 ->skipSpecial('title,description')
                 ->get();
 
-            $result = $this->ppm->create($MR);
-            return $this->send($result);
+            $this->ppm->create($ppm);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', "repoID={$repoID}")));
         }
 
         $mergeRuleResult   = $this->ppm->checkMergeRule($repoID, $sourceBranch, $targetBranch);
@@ -263,6 +263,7 @@ class ppm extends control
         $this->view->defaultBranch     = $targetBranch;
         $this->view->activeBranch      = $sourceBranch;
         $this->view->reviewers         = implode(',', zget($flow, 'reviewers', array()));
+        $this->view->flow              = $flow;
         $this->view->mergeMessage      = isset($message)       ? $message       : '';
         $this->view->canMerge          = isset($canMerge)      ? $canMerge      : true;
         $this->view->conflictFiles     = isset($conflictFiles) ? $conflictFiles : array();
@@ -401,8 +402,8 @@ class ppm extends control
      */
     public function syncMR()
     {
-        $MRList = $this->ppm->getList();
-        $this->ppm->batchSyncMR($MRList);
+        $ppmList = $this->ppm->getList();
+        $this->ppm->batchSyncMR($ppmList);
 
         if(dao::isError())
         {
