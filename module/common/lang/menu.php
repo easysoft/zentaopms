@@ -522,10 +522,13 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-$lang->devops->homeMenu->space   = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit', 'exclude' => 'space-view');
-$lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
-$lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
+$lang->devops->homeMenu->space    = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit', 'exclude' => 'space-view');
+$lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
+$lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse", 'subModule' => 'compile,pipeline');
+$lang->devops->homeMenu->deploy   = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
+
+$lang->devops->homeMenu->pipeline['subMenu'] = new stdclass();
+$lang->devops->homeMenu->pipeline['subMenu']->pipeline  = array('link' => "{$lang->pipeline->common}|pipeline|browse");
 
 $configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
@@ -543,7 +546,9 @@ $lang->devops->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|
 $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
-$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|repoID=%s", 'subModule' => 'compile,pipeline');
+$lang->devops->menu->pipeline['subMenu'] = new stdclass();
+$lang->devops->menu->pipeline['subMenu']->pipeline  = array('link' => "{$lang->pipeline->common}|pipeline|browse|repoID=%s");
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule');
 
@@ -572,7 +577,7 @@ $lang->devops->menuOrder[20]  = 'commit';
 $lang->devops->menuOrder[25]  = 'branch';
 $lang->devops->menuOrder[35]  = 'tag';
 $lang->devops->menuOrder[40]  = 'ppm';
-$lang->devops->menuOrder[45]  = 'compile';
+$lang->devops->menuOrder[45]  = 'pipeline';
 $lang->devops->menuOrder[55]  = 'deploy';
 $lang->devops->menuOrder[70]  = 'settings';
 $lang->devops->menuOrder[75]  = 'apps';
@@ -750,7 +755,6 @@ $lang->navGroup->caselib       = 'qa';
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
 $lang->navGroup->repo_setRules    = 'admin';
-$lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->ppm              = 'devops';
 $lang->navGroup->gitlab           = 'devops';

@@ -221,7 +221,7 @@ class space extends control
         if($module == 'deploy' && in_array($method, array('steps', 'managestep', 'cases', 'linkcases', 'artifact', 'view'))) $method = 'browse';
         $link = in_array($method, array('view', 'group', 'managemember', 'browsesystem')) ? $this->createLink($module, $method, "spaceID=%s") : $this->createLink($module, $method, "inSpace=1&spaceID=%s");
         $link = $method == 'createrepo' ? $this->createLink('repo', 'createRepo', "objectID=0&spaceID=%s") : $link;
-        $link = $module == 'job' ? $this->createLink('job', 'browse', "spaceID=%s") : $link;
+        $link = $module == 'pipeline' ? $this->createLink('pipeline', 'browse', "spaceID=%s") : $link;
         $link = $module == 'deploy' ? $this->createLink('deploy', $method, "spaceID=%s") : $link;
 
         $this->view->spaceID    = $spaceID;
