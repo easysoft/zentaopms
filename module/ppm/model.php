@@ -91,31 +91,44 @@ class ppmModel extends model
      *
      * @param  object $ppm
      * @access public
-     * @return array
+     * @return int|false
      */
-    public function create(object $ppm): array
+    public function create(object $ppm): int|false
     {
         $result = $this->checkSameOpened($ppm->repoID, $ppm->sourceRepoID, $ppm->sourceBranch, $ppm->targetRepoID, $ppm->targetBranch);
-        if($result['result'] == 'fail') return $result;
-        $reviewers = explode(',', $ppm->reviewer);
-        if(!empty($ppm->reviewFlowID))
+        if($result['result'] == 'fail')
         {
-            $flow = $this->loadModel('reporeviewflow')->getByID($ppm->reviewFlowID);
-            if(empty($flow)) return array('result' => 'fail', 'message' => $this->lang->ppm->errorLang[10]);
+            dao::$errors['message'] = $result['message'];
+            return false;
+        }
 
-            $specifiedReviewers = $flow->definition->reviewFlow->approvals->specifiedReviewers;
-            $noHasReviewers     = array_diff($specifiedReviewers, $reviewers);
-
-            if(!empty(array_filter($noHasReviewers)))
+        if(!empty($ppm->reviewer) && is_string($ppm->reviewer))
+        {
+            $reviewers = explode(',', $ppm->reviewer);
+            if(!empty($ppm->reviewFlowID))
             {
-                $noHasReviewers = $this->loadModel('user')->getListByAccounts($noHasReviewers);
-                $noHasReviewers = array_column($noHasReviewers, 'realname');
-                return array('result' => 'fail', 'message' => array('reviewer' => sprintf($this->lang->ppm->checkReviewers, implode(',', $noHasReviewers))));
+                $flow = $this->loadModel('reporeviewflow')->getByID($ppm->reviewFlowID);
+                if(empty($flow))
+                {
+                    dao::$errors['message'] = $this->lang->ppm->errorLang[10];
+                    return false;
+                }
+
+                $specifiedReviewers = $flow->definition->reviewFlow->approvals->specifiedReviewers;
+                $noHasReviewers     = array_diff($specifiedReviewers, $reviewers);
+
+                if(!empty(array_filter($noHasReviewers)))
+                {
+                    $noHasReviewers = $this->loadModel('user')->getListByAccounts($noHasReviewers);
+                    $noHasReviewers = array_column($noHasReviewers, 'realname');
+                    dao::$errors['reviewer'] = sprintf($this->lang->ppm->checkReviewers, implode(',', $noHasReviewers));
+                    return false;
+                }
             }
         }
 
         $diffStats = $this->loadModel('gitfox')->apiGetDiffStats((int)$ppm->sourceRepoID, $ppm->sourceBranch, $ppm->targetBranch);
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        if(dao::isError()) return false;
         if(!empty($diffStats))
         {
             $ppm->additions   = zget($diffStats, 'additions', 0);
@@ -127,21 +140,22 @@ class ppmModel extends model
 
         $ppm->mergeBaseSHA = $ppm->mergeTargetSHA;
         $ppmID = $this->insertMr($ppm);
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        if(dao::isError()) return false;
         $this->file->updateObjectID($this->post->uid, $ppmID, 'ppm');
 
         $ppm->id = $ppmID;
-        $this->addReviewers($ppm, $reviewers);
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        if(!empty($reviewers))
+        {
+            $this->addReviewers($ppm, $reviewers);
+            if(dao::isError()) return false;
+        }
 
         $this->loadModel('action')->create($this->moduleName, $ppmID, 'opened');
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+        if(dao::isError()) return false;
 
         $this->linkObjects($ppm);
 
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$ppm->executionID}" : "repoID={$ppm->repoID}";
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', $linkParams));
+        return $ppmID;
     }
 
     /**
@@ -283,8 +297,6 @@ class ppmModel extends model
         $scm->setEngine($repo);
 
         $lines = array();
-        $lines = $this->apiGetDiffs($ppm->targetRepoID, $ppm->id);
-
         $lines = preg_replace('/^\s*$\n?\r?/m', '', $ppm->diffs);
 
         if(is_string($lines)) $lines = explode("\n", $lines);
@@ -614,15 +626,20 @@ class ppmModel extends model
      * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
-     * @param  object $mr
+     * @param  object $ppm
      * @param  string $action
      * @access public
      * @return bool
      */
     public static function isClickable(object $ppm, string $action): bool
     {
+        global $app;
+
         if($action == 'reopen') return !empty($ppm->status) && $ppm->status == 'closed';
         if($action == 'close')  return !empty($ppm->status) && $ppm->status == 'opened';
+        if($action == 'review') return $ppm->status == 'opened' && strpos(",{$ppm->reviewers},", ",{$app->user->account},") !== false;
+        if($action == 'submit') return $ppm->reviewStatus == 'wait' || $ppm->reviewStatus == 'reject' || $ppm->reviewStatus == 'reverting';
+        if($action == 'recall') return $ppm->reviewStatus == 'reviewing' && $app->control->loadModel('approval')->canCancel($ppm);
         return true;
     }
 

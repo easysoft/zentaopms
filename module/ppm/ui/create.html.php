@@ -20,7 +20,7 @@ $fields->field('desc')->label($lang->ppm->description)->control('editor')->width
 $fields->field('message')->label('')->data(array('canMerge' => $canMerge, 'conflictFiles' => $conflictFiles, 'mergeMessage' => $mergeMessage))->hidden($canMerge)->control(array('control' => 'formTips', 'text' => $mergeMessage))->width('full');
 
 $fields->autoLoad('sourceBranch', 'reviewer,message,title');
-$fields->autoLoad('targetBranch', 'reviewer,message');
+$fields->autoLoad('targetBranch', 'reviewer,message,title');
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
