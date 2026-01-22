@@ -125,7 +125,6 @@ class ppm extends control
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->orderBy    = $orderBy;
-        $this->view->openIDList = $this->app->user->admin ? array() : $this->loadModel('pipeline')->getProviderPairsByAccount($repo->SCM);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
