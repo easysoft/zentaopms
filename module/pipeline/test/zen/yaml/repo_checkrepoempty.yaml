@@ -1,0 +1,196 @@
+---
+title: repo表测试数据 - checkRepoEmpty方法
+desc: 用于测试checkRepoEmpty方法的代码库数据
+author: Claude
+version: 1.0
+
+fields:
+- field: id
+  note: 代码库ID
+  range: 1-10
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: product
+  note: 关联产品ID
+  range: 1,2,3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: projects
+  note: 关联项目ID
+  range: 1,2,3
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: name
+  note: 代码库名称
+  range: test-repo-{1-5}, demo-repo-{1-3}, sample-repo-{1-2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: path
+  note: 代码库路径
+  range: /tmp/repos/repo{1-10}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: prefix
+  note: 代码库前缀
+  range: trunk,branches,tags
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: encoding
+  note: 编码格式
+  range: utf-8{5}, gbk{3}, gb2312{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: SCM
+  note: 版本控制系统
+  range: Git{5}, Gitlab{3}, Subversion{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: client
+  note: 客户端路径
+  range: /usr/bin/git, /usr/bin/svn, /usr/local/bin/git
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: serviceHost
+  note: 服务主机
+  range: gitlab.test.com, github.com, gitee.com
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: serviceProject
+  note: 服务项目
+  range: test/project{1-5}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: commits
+  note: 提交数量
+  range: 0-1000:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: account
+  note: 账号
+  range: admin, user1, user2, test
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: password
+  note: 密码
+  range: password123, 123456, admin
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: encrypt
+  note: 加密方式
+  range: plain{8}, md5{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: acl
+  note: 访问控制
+  range: '{}', '{"acl":"open"}', '{"acl":"private"}'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: synced
+  note: 是否已同步
+  range: 0{3}, 1{7}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastSync
+  note: 最后同步时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: lastCommit
+  note: 最后提交时间
+  range: 2023-01-01 00:00:00-2023-12-31 23:59:59:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: desc
+  note: 描述
+  range: 测试代码库, 演示代码库, 示例代码库
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: extra
+  note: 额外信息
+  range: '', 'extra1', 'extra2'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: preMerge
+  note: 预合并
+  range: 0{8}, 1{2}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: job
+  note: 关联任务
+  range: 0{5}, 1-5:R
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fileServerUrl
+  note: 文件服务器URL
+  range: '', 'http://file.test.com', 'https://files.demo.com'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fileServerAccount
+  note: 文件服务器账号
+  range: '', 'fileuser', 'admin'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: fileServerPassword
+  note: 文件服务器密码
+  range: '', 'filepass', '123456'
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""
+- field: deleted
+  note: 是否删除
+  range: 0{9}, 1{1}
+  prefix: ""
+  postfix: ""
+  loop: 0
+  format: ""

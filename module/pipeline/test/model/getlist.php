@@ -1,136 +1,34 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+su('admin');
 
 /**
 
-title=测试 pipelineModel->getList();
+title=jobModel->getList();
 timeout=0
-cid=17347
+cid=16844
 
-- 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照name正序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照id倒序排序，每页10条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照id倒序排序，每页5条，第2页的流水线列表
- - 第11条的type属性 @gitlab
- - 第11条的name属性 @gitLab
- - 第11条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第11条的account属性 @root
-- 获取类型为空按照id倒序排序，每页20条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照id倒序排序，每页20条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照name正序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照name正序排序，每页10条，第2页的流水线列表
- - 第17条的type属性 @sonarqube
- - 第17条的name属性 @SonarQube
- - 第17条的url属性 @https://sonardev.qc.oop.cc/
- - 第17条的account属性 @sonar
-- 获取类型为gitlab按照id倒序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页5条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页20条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页20条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页10条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为test按照id倒序排序，每页5条，第1页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页5条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页10条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页5条，第2页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页20条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页20条，第2页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页10条，第1页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页10条，第2页的流水线列表 @0
+- 测试获取列表的个数 @5
+- 测试获取列表某个job的名称信息第1条的name属性 @这是一个Job1
+- 测试获取版本库为2列表的个数 @1
+- 测试获取版本库为2的列表某个job的名称信息第2条的name属性 @这是一个Job2
+- 测试获取jenkins类型列表的个数 @3
+- 测试获取jenkins类型列表某个job的名称信息第5条的name属性 @这是一个Job5
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+zenData('job')->gen(5);
 
-zenData('user')->gen(5);
-zenData('pipeline')->loadYaml('pipeline')->gen(20);
+$job  = new jobTest();
+$list        = $job->getListTest();
+$repoList    = $job->getListTest(0, 2);
+$jenkinsList = $job->getListTest(0, 0, 'id_desc', null, 'jenkins');
 
-$types       = array('', 'gitlab', 'test');
-$sorts       = array('id_desc', 'name_asc');
-$recPerPages = array(5, 10, 20);
-$pageIdList  = array(1, 2);
-
-$pipelineTester = new pipelineTest();
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[0], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[1], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[0], $pageIdList[1])) && p('11:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[2], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[2], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[1], $pageIdList[1])) && p('17:type,name,url,account') && e('sonarqube,SonarQube,https://sonardev.qc.oop.cc/,sonar'); // 获取类型为空按照name正序排序，每页10条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[0], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[2], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[2], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[1], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页10条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[0], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[0], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[1], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[0], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[2], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[2], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[1], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[1], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页10条，第2页的流水线列表
+r(count($list))        && p()         && e('5');             //测试获取列表的个数
+r($list)               && p('1:name') && e('这是一个Job1');  //测试获取列表某个job的名称信息
+r(count($repoList))    && p()         && e('1');             //测试获取版本库为2列表的个数
+r($repoList)           && p('2:name') && e('这是一个Job2');  //测试获取版本库为2的列表某个job的名称信息
+r(count($jenkinsList)) && p()         && e('3');             //测试获取jenkins类型列表的个数
+r($jenkinsList)        && p('5:name') && e('这是一个Job5');  //测试获取jenkins类型列表某个job的名称信息

@@ -1,0 +1,49 @@
+---
+title: pipeline表测试数据 - getJobList方法
+desc: 为getJobList方法提供pipeline测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 流水线服务器ID
+- field: type
+  range: 'jenkins{3}, gitlab{2}'
+  note: 服务器类型
+- field: name
+  range: 'Jenkins Server 1, Jenkins Server 2, Jenkins Server 3, GitLab Server 1, GitLab Server 2'
+  note: 服务器名称
+- field: url
+  range: 'http://jenkins1:8080, http://jenkins2:8080, http://jenkins3:8080, http://gitlab1, http://gitlab2'
+  note: 服务器URL
+- field: account
+  range: 'admin{3}, root{2}'
+  note: 账户
+- field: password
+  range: 'admin123{3}, root123{2}'
+  note: 密码
+- field: token
+  range: '"{3}, token123{1}, token456{1}'
+  note: 访问令牌
+- field: private
+  range: '"{5}'
+  note: 私有密钥
+- field: instanceID
+  range: 0{5}
+  note: 实例ID
+- field: createdBy
+  range: 'admin{5}'
+  note: 创建者
+- field: createdDate
+  range: '2024-01-01 00:00:00{5}'
+  note: 创建时间
+- field: editedBy
+  range: 'admin{3}, ""{2}'
+  note: 编辑者
+- field: editedDate
+  range: 'null{2}, 2024-01-01 12:00:00{3}'
+  note: 编辑时间
+- field: deleted
+  range: '0{5}'
+  note: 删除标记

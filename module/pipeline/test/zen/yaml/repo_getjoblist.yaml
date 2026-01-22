@@ -1,0 +1,64 @@
+---
+title: repo表测试数据 - getJobList方法
+desc: 为getJobList方法提供repo测试数据
+author: Claude Code
+version: 1.0
+
+fields:
+- field: id
+  range: 1-5
+  note: 版本库ID
+- field: product
+  range: '1,2,3{2}, 1{3}'
+  note: 产品ID
+- field: projects
+  range: '"{3}, 1{1}, 1,2{1}'
+  note: 项目ID列表
+- field: name
+  range: 'test_repo_1, test_repo_2, main_repo, dev_repo, prod_repo'
+  note: 版本库名称
+- field: path
+  range: '/var/repo1, /var/repo2, /opt/main, /opt/dev, /opt/prod'
+  note: 版本库路径
+- field: prefix
+  range: '"{5}'
+  note: 前缀
+- field: encoding
+  range: 'utf-8{5}'
+  note: 编码
+- field: SCM
+  range: 'Git{3}, Subversion{2}'
+  note: 版本控制系统类型
+- field: client
+  range: '"{5}'
+  note: 客户端
+- field: serviceHost
+  range: 1{2}, 2{1}, 3{1}, ""{1}
+  note: 服务主机
+- field: serviceProject
+  range: 1{2}, 2{1}, 3{1}, 0{1}
+  note: 服务项目
+- field: desc
+  range: '测试版本库1, 测试版本库2, 主版本库, 开发版本库, 生产版本库'
+  note: 版本库描述
+- field: account
+  range: 'admin{2}, user{2}, ""{1}'
+  note: 账户
+- field: password
+  range: '"{5}'
+  note: 密码
+- field: encrypt
+  range: 'base64{5}'
+  note: 加密方式
+- field: acl
+  range: 'open{5}'
+  note: 访问控制
+- field: synced
+  range: '1{5}'
+  note: 同步状态
+- field: lastSync
+  range: '2024-01-01 00:00:00{5}'
+  note: 最后同步时间
+- field: deleted
+  range: '0{5}'
+  note: 删除标记
