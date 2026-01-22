@@ -817,6 +817,46 @@ class customModelTest extends baseTest
     }
 
     /**
+     * 检查系统中是否有培训计划数据。
+     * Check whether there is gapanalysis data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasGapanalysisDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasGapanalysisData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有调研计划数据。
+     * Check whether there is researchplan data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasResearchplanDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->instance->config->edition;
+
+        $this->instance->config->edition = $edition;
+        $count = $this->instance->hasResearchplanData();
+
+        $this->instance->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
      * 获取更新项目权限的数据。
      * Get data for update project acl.
      *

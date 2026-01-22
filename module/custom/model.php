@@ -1158,6 +1158,32 @@ class customModel extends model
     }
 
     /**
+     * 检查系统中是否有培训计划数据。
+     * Check whether there is gapanalysis data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasGapanalysisData(): int
+    {
+        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_GAPANALYSIS)->where('deleted')->eq('0')->count();
+        return 0;
+    }
+
+    /**
+     * 检查系统中是否有调研计划数据。
+     * Check whether there is researchplan data in the system.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasResearchplanData(): int
+    {
+        if(in_array($this->config->edition, array('max', 'ipd'))) return (int)$this->dao->select('*')->from(TABLE_RESEARCHPLAN)->where('deleted')->eq('0')->count();
+        return 0;
+    }
+
+    /**
      * 检查系统中是否有机会数据。
      * Check whether there is opportunity data in the system.
      *
