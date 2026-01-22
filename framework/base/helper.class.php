@@ -1254,8 +1254,8 @@ class baseHelper
 
         foreach($data as $key => $row)
         {
-            if(is_object($row) && isset($row->$titleField)) $row->$titleField = htmlspecialchars_decode((string)$row->$titleField, ENT_QUOTES);
-            if(is_array($row)  && isset($row[$titleField])) $row[$titleField] = htmlspecialchars_decode((string)$row[$titleField], ENT_QUOTES);
+            if(is_object($row) && isset($row->$titleField) && is_string($row->$titleField)) $row->$titleField = htmlspecialchars_decode($row->$titleField, ENT_QUOTES);
+            if(is_array($row)  && isset($row[$titleField]) && is_string($row[$titleField])) $row[$titleField] = htmlspecialchars_decode($row[$titleField], ENT_QUOTES);
             $data[$key] = $row;
         }
         return $data;
