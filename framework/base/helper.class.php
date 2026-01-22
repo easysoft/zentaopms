@@ -1244,7 +1244,7 @@ class baseHelper
 
         if(!isset($config->action->objectNameFields)) $app->loadConfig('action');
         $titleField = $config->action->objectNameFields[$objectType] ?? '';
-        if(!$titleField) return $data;
+        if(!$titleField || $titleField == 'id') return $data;
 
         if(is_object($data))
         {
@@ -1252,7 +1252,6 @@ class baseHelper
             return $data;
         }
 
-        if($titleField == 'id') return $data; // When the value is number, no symbol parsing is performed.
         foreach($data as $key => $row)
         {
             if(is_object($row) && isset($row->$titleField)) $row->$titleField = htmlspecialchars_decode($row->$titleField, ENT_QUOTES);
