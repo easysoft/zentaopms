@@ -105,12 +105,13 @@ $config->testcase->dtable->fieldList['lastRunDate']['sortType'] = true;
 $config->testcase->dtable->fieldList['lastRunDate']['show']     = true;
 $config->testcase->dtable->fieldList['lastRunDate']['group']    = 4;
 
-$config->testcase->dtable->fieldList['lastRunResult']['title']     = $lang->testcase->lastRunResult;
-$config->testcase->dtable->fieldList['lastRunResult']['type']      = 'status';
-$config->testcase->dtable->fieldList['lastRunResult']['statusMap'] = $lang->testcase->resultList;
-$config->testcase->dtable->fieldList['lastRunResult']['show']      = true;
-$config->testcase->dtable->fieldList['lastRunResult']['group']     = 4;
-$config->testcase->dtable->fieldList['lastRunResult']['sortType']  = true;
+$config->testcase->dtable->fieldList['lastRunResult']['title']      = $lang->testcase->lastRunResult;
+$config->testcase->dtable->fieldList['lastRunResult']['type']       = 'status';
+$config->testcase->dtable->fieldList['lastRunResult']['statusMap']  = $lang->testcase->resultList;
+$config->testcase->dtable->fieldList['lastRunResult']['show']       = true;
+$config->testcase->dtable->fieldList['lastRunResult']['group']      = 4;
+$config->testcase->dtable->fieldList['lastRunResult']['sortType']   = true;
+$config->testcase->dtable->fieldList['lastRunResult']['dataSource'] = array('lang' => 'resultList');
 
 $config->testcase->dtable->fieldList['bugs']['title']       = $lang->testcase->bugsAB;
 $config->testcase->dtable->fieldList['bugs']['link']        = array('module' => 'testcase', 'method' => 'bugs', 'params' => "runID=0&caseID={caseID}");
@@ -124,7 +125,6 @@ $config->testcase->dtable->fieldList['results']['title']      = $lang->testcase-
 $config->testcase->dtable->fieldList['results']['type']       = 'number';
 $config->testcase->dtable->fieldList['results']['group']      = 5;
 $config->testcase->dtable->fieldList['results']['sortType']   = false;
-$config->testcase->dtable->fieldList['results']['dataSource'] = array('lang' => 'resultList');
 
 $config->testcase->dtable->fieldList['stepNumber']['title']    = $lang->testcase->stepNumberAB;
 $config->testcase->dtable->fieldList['stepNumber']['type']     = 'number';
