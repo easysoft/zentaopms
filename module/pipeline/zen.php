@@ -52,73 +52,6 @@ class pipelineZen extends pipeline
     }
 
     /**
-     * 返回创建或者编辑的响应。
-     * Return reponse after create or edit.
-     *
-     * @param  int       $repoID
-     * @access protected
-     * @return array
-     */
-    protected function reponseAfterCreateEdit(int $repoID = 0): array
-    {
-        if(dao::isError())
-        {
-            $errors = dao::getError();
-            if($this->post->engine == 'gitlab' and isset($errors['server']))
-            {
-                if(!isset($errors['repo'])) $errors['repo'][] = sprintf($this->lang->error->notempty, $this->lang->pipeline->repoServer);
-                unset($errors['server']);
-                unset($errors['pipeline']);
-            }
-            elseif($this->post->engine == 'jenkins')
-            {
-                if(isset($errors['server']))
-                {
-                    $errors['jkServer'] = $errors['server'];
-                    unset($errors['server']);
-                }
-                if(isset($errors['pipeline']))
-                {
-                    $errors['jkTask'] = $errors['pipeline'];
-                    unset($errors['pipeline']);
-                }
-            }
-            return array('result' => 'fail', 'message' => $errors);
-        }
-
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', 'repoID=' . ($repoID ? $repoID : $this->post->repo)));
-    }
-
-    /**
-     * 获取svn目录。
-     * Get subversion dir.
-     *
-     * @param  object    $repo
-     * @access protected
-     * @return void
-     */
-    protected function getSubversionDir(object $repo): void
-    {
-        if($repo->SCM == 'Subversion')
-        {
-            $dirs = array();
-            $path = empty($repo->prefix) ? '/' : $this->loadModel('repo')->decodePath('');
-            $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
-            if($tags)
-            {
-                $dirs['/'] = $path ? $path : '/';
-                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
-            }
-            $this->view->dirs = $dirs;
-
-            foreach($this->lang->pipeline->triggerTypeList as $type => $name)
-            {
-                if($type == 'tag') $this->lang->pipeline->triggerTypeList[$type] = $this->lang->pipeline->dirChange;
-            }
-        }
-    }
-
-    /**
      * 获取流水线执行数据。
      * Get pipeline compile data.
      *
@@ -218,5 +151,31 @@ class pipelineZen extends pipeline
         $pipelineQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $pipelineQuery);
 
         return $pipelineQuery;
+    }
+
+    /**
+     * 获取现有的流水线列表。
+     * getExistPipelines
+     *
+     * @access public
+     * @return void
+     */
+    public function getExistPipelines()
+    {
+        $spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $pipelines = $this->pipeline->getBySpaces(array_keys($spaces));
+
+        $pipelineItems = array();
+        foreach($pipelines as $pipeline)
+        {
+            if(empty($pipeline->spaceID)) continue;
+            if(!isset($pipelineItems[$pipeline->spaceID]))
+            {
+                $pipelineItems[$pipeline->spaceID]['items'] = array();
+                $pipelineItems[$pipeline->spaceID]['text']  = $spaces[$pipeline->spaceID];
+            }
+            $pipelineItems[$pipeline->spaceID]['items'][] = array('value' => $pipeline->id, 'text' => $pipeline->name);
+        }
+        return $pipelineItems;
     }
 }
