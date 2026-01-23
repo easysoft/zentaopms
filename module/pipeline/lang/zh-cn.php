@@ -1,6 +1,6 @@
 <?php
 $lang->pipeline->browse        = '浏览流水线';
-$lang->pipeline->create        = '导入流水线';
+$lang->pipeline->create        = '创建流水线';
 $lang->pipeline->edit          = '编辑流水线';
 $lang->pipeline->exec          = '执行流水线';
 $lang->pipeline->runPipeline   = '运行流水线';
@@ -13,11 +13,14 @@ $lang->pipeline->execSuccess   = '执行成功';
 $lang->pipeline->trigger       = '触发器';
 $lang->pipeline->autoRun       = '是否触发';
 $lang->pipeline->addTrigger    = '添加触发方式';
+$lang->pipeline->createType    = '创建方式';
+$lang->pipeline->existPipeline = '现有流水线';
 
 $lang->pipeline->browseAction = '流水线列表';
 
 $lang->pipeline->id              = 'ID';
-$lang->pipeline->name            = '流水线名称';
+$lang->pipeline->name            = '名称';
+$lang->pipeline->desc            = '描述';
 $lang->pipeline->repo            = '关联代码库';
 $lang->pipeline->branch          = '分支';
 $lang->pipeline->product         = '关联' . $lang->productCommon;
@@ -112,3 +115,7 @@ $lang->pipeline->setReferenceTips                  = "在执行构建前，请�
 
 $lang->pipeline->featureBar['browse']['job']     = '列表';
 $lang->pipeline->featureBar['browse']['compile'] = '执行历史';
+
+$lang->pipeline->createTypeList = array();
+$lang->pipeline->createTypeList['new']  = '创建空白流水线';
+$lang->pipeline->createTypeList['copy'] = '从现有流水线复制';

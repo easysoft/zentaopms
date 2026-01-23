@@ -29,19 +29,14 @@ featureBar
 
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('pipeline', 'create');
-$createItem = array('text' => $lang->pipeline->create, 'url' => inLink('create', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus');
+$createItem = array('text' => $lang->pipeline->create, 'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
 
-foreach($pipelineList as $pipeline) $pipeline->space = $pipeline->space ? $pipeline->space : '';
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);
 
-toolbar
-(
-    $canCreate ? item(set($createItem)) : null
-);
+toolbar($canCreate ? item(set($createItem)) : null);
 
-jsVar('confirmDelete',    $lang->pipeline->confirmDelete);
-jsVar('canBrowseProject', common::hasPriv('pipeline', 'browseProject'));
+jsVar('confirmDelete', $lang->pipeline->confirmDelete);
 
 dtable
 (

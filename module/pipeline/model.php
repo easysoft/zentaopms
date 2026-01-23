@@ -23,24 +23,9 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object
     {
-        $pipeline = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($id)->fetch();
-        if(empty($pipeline)) return new stdClass();
+        $pipeline = $this->fetchByID($id);
 
-        if(strtolower($pipeline->engine) == 'gitlab')
-        {
-            $pipeline = json_decode($pipeline->pipeline);
-            if(!isset($pipeline->reference)) return $pipeline;
-            $pipeline->project   = $pipeline->project;
-            $pipeline->reference = $pipeline->reference;
-        }
-        elseif($pipeline->engine == 'jenkins')
-        {
-            if(strpos($pipeline->pipeline, '/pipeline/') === 0)
-            {
-                $pipeline->rawPipeline = $pipeline->pipeline;
-                $pipeline->pipeline    = trim(substr($pipeline->pipeline, 5), '/');
-            }
-        }
+        $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
         return $pipeline;
     }
 
@@ -176,19 +161,20 @@ class pipelineModel extends model
      */
     public function create(object $pipeline): int|bool
     {
-        $repo = $this->loadModel('repo')->getByID($pipeline->repo);
-        $pipeline  = $this->pipelineTao->getServerAndPipeline($pipeline, $repo);
-        if(dao::isError()) return false;
+        $check = empty($pipeline->repoID) ? "spaceID = {$pipeline->spaceID}" : "repoID = {$pipeline->repoID}";
 
-        $result = $this->pipelineTao->checkIframe($pipeline);
-        if(!$result) return false;
-
+        $pipeline = $this->loadModel('file')->processImgURL($pipeline, $this->config->pipeline->editor->create['id'], (string)$this->post->uid);
         $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
+            ->check('name', 'unique', $check)
+            ->autoCheck()
             ->exec();
+
         if(dao::isError()) return false;
 
-        return $this->dao->lastInsertId();
+        $pipelineID = $this->dao->lastInsertId();
+        $this->file->updateObjectID($this->post->uid, $pipelineID, 'pipeline');
+        return $pipelineID;
     }
 
     /**
@@ -611,5 +597,21 @@ class pipelineModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * 通过空间ID获取流水线
+     * Get pipelines by spaceID list.
+     *
+     * @param  array $spaceIdList
+     * @access public
+     * @return array
+     */
+    public function getBySpaces(array $spaceIdList): array
+    {
+        return $this->dao->select('*')->from(TABLE_PIPELINE)
+            ->where('spaceID')->in($spaceIdList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
     }
 }
