@@ -1166,14 +1166,14 @@ class executionModel extends model
             $projectModel = isset($projectInfo->model) ? $projectInfo->model : '';
             $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
+            if(!empty($projectInfo->isTpl)) $this->dao->filterTpl('never');
+
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($projectModel, array('waterfall', 'waterfallplus')))
             {
                 $statistic = $this->dao->select("count(id) as executions, sum(IF(INSTR('closed', status) < 1, 0, 1)) as closedExecutions")->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('deleted')->eq('0')->fetch();
                 if($statistic->executions == $statistic->closedExecutions) $orderBy = 'sortStatus_asc,begin_desc,id_asc';
             }
-
-            if(!empty($projectInfo->isTpl)) $this->dao->filterTpl('never');
         }
 
         /* Order by status's content whether or not done. */
