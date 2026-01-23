@@ -1,6 +1,6 @@
 <?php
 $lang->pipeline->browse        = 'Browse Pipeline';
-$lang->pipeline->create        = 'Import Pipeline';
+$lang->pipeline->create        = 'Create Pipeline';
 $lang->pipeline->edit          = 'Edit Pipeline';
 $lang->pipeline->exec          = 'Execute Pipeline';
 $lang->pipeline->runPipeline   = 'Run pipeline';
@@ -13,11 +13,14 @@ $lang->pipeline->execSuccess   = 'Build success';
 $lang->pipeline->trigger       = 'Trigger';
 $lang->pipeline->autoRun       = 'Is it triggered';
 $lang->pipeline->addTrigger    = 'Add Trigger';
+$lang->pipeline->createType    = 'Create Type';
+$lang->pipeline->existPipeline = 'Existing Pipeline';
 
 $lang->pipeline->browseAction = 'Pipeline List';
 
 $lang->pipeline->id              = 'ID';
 $lang->pipeline->name            = 'Name';
+$lang->pipeline->desc            = 'Description';
 $lang->pipeline->repo            = 'Repo';
 $lang->pipeline->branch          = 'Branch';
 $lang->pipeline->product         = $lang->productCommon;
@@ -112,3 +115,7 @@ $lang->pipeline->setReferenceTips                  = "Before performing a build,
 
 $lang->pipeline->featureBar['browse']['job']     = 'List';
 $lang->pipeline->featureBar['browse']['compile'] = 'History';
+
+$lang->pipeline->createTypeList = array();
+$lang->pipeline->createTypeList['new']  = 'Create Empty Pipeline';
+$lang->pipeline->createTypeList['copy'] = 'Copy From Existing Pipeline';
