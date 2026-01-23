@@ -5,8 +5,11 @@ $app->loadLang('compile');
 $config->pipeline = new stdclass();
 $config->pipeline->create = new stdclass();
 $config->pipeline->edit   = new stdclass();
-$config->pipeline->create->requiredFields = 'name,repo,engine,server,pipeline';
-$config->pipeline->edit->requiredFields   = 'name,repo,server,pipeline';
+$config->pipeline->create->requiredFields = 'name';
+$config->pipeline->edit->requiredFields   = 'name';
+
+$config->pipeline->editor = new stdclass();
+$config->pipeline->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 
 /* Search config. */
 $config->pipeline->search['module']                = 'pipeline';
