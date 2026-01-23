@@ -1162,8 +1162,11 @@ class executionModel extends model
         $projectModel = '';
         if($projectID)
         {
-            $projectModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
+            $projectInfo  = $this->dao->select('model,isTpl')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
+            $projectModel = isset($projectInfo->model) ? $projectInfo->model : '';
             $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
+
+            if(!empty($projectInfo->isTpl)) $this->dao->filterTpl('never');
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($projectModel, array('waterfall', 'waterfallplus')))
