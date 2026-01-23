@@ -122,45 +122,36 @@ class pipeline extends control
     /**
      * Create a pipeline.
      *
+     * @param  int    $spaceID
      * @param  string $repoID
      * @access public
      * @return void
      */
-    public function create(int $repoID = 0)
+    public function create(int $spaceID = 0, int $repoID = 0)
     {
         if($_POST)
         {
+            if($this->post->createType == 'copy' && empty($this->post->existPipeline))
+            {
+                return $this->sendError(array('existPipeline' => sprintf($this->lang->error->notempty, $this->lang->pipeline->existPipeline)));
+            }
             $pipeline = form::data($this->config->pipeline->form->create)
-                ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
-                ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
                 ->add('createdBy', $this->app->user->account)
+                ->add('repoID', $repoID)
+                ->add('spaceID', $spaceID)
+                ->add('type', $repoID ? 'repo' : 'space')
                 ->get();
 
-            if($pipeline->engine == 'gitlab' && $pipeline->repo)
-            {
-                $repo    = $this->loadModel('repo')->fetchByID($pipeline->repo);
-                $project = $this->loadModel('gitlab')->apiGetSingleProject((int)$repo->serviceHost, (int)$pipeline->repo, false);
-                $pipeline->reference = zget($project, 'default_branch', 'master');
-            }
-
             $pipelineID = $this->pipeline->create($pipeline);
-            if(!dao::isError()) $this->loadModel('action')->create('pipeline', $pipelineID, 'imported');
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->send($this->pipelineZen->reponseAfterCreateEdit());
+            $this->loadModel('action')->create('pipeline', $pipelineID, 'created');
+
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->loadModel('ci');
-        $spaceID = $this->session->devopsSpace ? $this->session->devopsSpace : 0;
-
-        $this->view->title               = $this->lang->ci->pipeline . $this->lang->hyphen . $this->lang->pipeline->create;
-        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
-        $this->view->repoID              = $repoID;
-        $this->view->repo                = $repoID ? $this->repo->getByID($repoID) : null;
-        $this->view->products            = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
-        $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
-        $this->view->sonarqubeServerList = array('' => '') + $this->pipeline->getPairs('sonarqube');
-        $this->view->inSpace             = !empty($spaceID);
-        $this->view->spaceID             = $spaceID;
+        $this->view->title          = $this->lang->pipeline->create;
+        $this->view->existPipelines = $this->pipelineZen->getExistPipelines($spaceID, $repoID);
 
         $this->display();
     }
@@ -482,5 +473,19 @@ class pipeline extends control
     {
         $this->lang->pipeline->edit = $this->lang->pipeline->trigger;
         $this->edit($pipelineID);
+    }
+
+    /**
+     * AJAX: 获取流水线信息。
+     * Get pipeline info.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPipeline(int $pipelineID)
+    {
+        $pipeline = $this->pipeline->getByID($pipelineID);
+        $this->send(array('result' => 'success', 'data' => $pipeline));
     }
 }
