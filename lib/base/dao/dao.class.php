@@ -1580,7 +1580,7 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        if(isset($config->db->prefix))
+        if(isset($config->db->prefix) && strpos($this->table, $config->db->prefix) === 0)
         {
             $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
         }
