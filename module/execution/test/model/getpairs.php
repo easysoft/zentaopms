@@ -57,7 +57,6 @@ $count         = array(0, 1);
 $modeList      = array('', 'all', 'noclosed', 'stagefilter', 'withdelete', 'multiple', 'leaf', 'order_asc', 'noprefix', 'withobject', 'hideMultiple');
 
 $executionTester = new executionModelTest();
-$executionTester->executionModel->app->user->admin = true;
 r($executionTester->getPairsTest($projectIDList[0], $count[0], $modeList[0]))  && p('105') && e('敏捷项目1(不启用迭代的项目)'); // 敏捷项目执行查看
 r($executionTester->getPairsTest($projectIDList[1], $count[0], $modeList[0]))  && p('109') && e('/阶段13');                     // 瀑布项目执行查看
 r($executionTester->getPairsTest($projectIDList[2], $count[0], $modeList[0]))  && p('126') && e('/看板30');                     // 看板项目执行查看
