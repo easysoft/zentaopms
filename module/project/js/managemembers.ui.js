@@ -134,13 +134,10 @@ window.changeProjectMembers = function()
     {
         zui.Modal.confirm({message: unlinkExecutionMembers}).then((res) =>
         {
-            if(res)
-            {
-                $('#removeExecution').val('yes');
-                const formData = new FormData($("#teamForm")[0]);
-                const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
-                $.ajaxSubmit(options);
-            }
+            if(res) $('#removeExecution').val('yes');
+            const formData = new FormData($("#teamForm")[0]);
+            const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
+            $.ajaxSubmit(options);
         });
     }
     return false;
