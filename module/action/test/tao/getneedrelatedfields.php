@@ -26,8 +26,8 @@ cid=0
  - 第0条的1属性 @~~
  - 第0条的2属性 @~~
 - 测试task类型对象的相关字段获取
- - 第0条的0属性 @~~
- - 第0条的1属性 @1
+ - 第0条的0属性 @1
+ - 第0条的1属性 @~~
  - 第0条的2属性 @~~
 - 测试release类型对象的相关字段获取
  - 第0条的0属性 @1
@@ -110,10 +110,10 @@ su('admin');
 
 $actionTest = new actionTaoTest();
 
-r($actionTest->getNeedRelatedFieldsTest('story', 1, 'created', '')) && p('0:0') && e('1'); // 测试story类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('productplan', 1, '', '')) && p('0,1,2') && e('1,0,0'); // 测试productplan类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('branch', 1, '', '')) && p('0,1,2') && e('1,0,0'); // 测试branch类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('story', 1, 'created', ''))             && p('0:0')     && e('1');       // 测试story类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('productplan', 1, '', ''))              && p('0,1,2')   && e('1,0,0');   // 测试productplan类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('branch', 1, '', ''))                   && p('0,1,2')   && e('1,0,0');   // 测试branch类型对象的相关字段获取
 r($actionTest->getNeedRelatedFieldsTest('testcase', 1, 'linked2testtask', '1')) && p('0:0,1,2') && e('1,~~,~~'); // 测试testcase类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('case', 1, 'run', '1')) && p('0:0,1,2') && e('1,~~,~~'); // 测试case类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('task', 1, '', '')) && p('0:0,1,2') && e('~~,1,~~'); // 测试task类型对象的相关字段获取
-r($actionTest->getNeedRelatedFieldsTest('release', 1, '', '')) && p('0:0,1') && e('1,~~'); // 测试release类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('case', 1, 'run', '1'))                 && p('0:0,1,2') && e('1,~~,~~'); // 测试case类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('task', 1, '', ''))                     && p('0:0,1,2') && e('1,~~,~~'); // 测试task类型对象的相关字段获取
+r($actionTest->getNeedRelatedFieldsTest('release', 1, '', ''))                  && p('0:0,1')   && e('1,~~');    // 测试release类型对象的相关字段获取
