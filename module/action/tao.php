@@ -99,6 +99,7 @@ class actionTao extends actionModel
                 list($product, $project, $execution) = $this->getCaseRelated($objectType, $actionType, $objectID, (int)$extra);
                 break;
             case 'repo':
+            case 'nc':
             case 'kanbanlane':
                 $execution = $this->dao->select('execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('execution');
                 break;
