@@ -48,7 +48,6 @@ class entry extends control
             $this->user->cleanLocked($user->account);
 
             $user->lastTime       = $user->last;
-            $user->last           = date(DT_DATETIME1, $user->last);
             $user->admin          = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
             if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
