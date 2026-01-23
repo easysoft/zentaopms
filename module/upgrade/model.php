@@ -13284,16 +13284,13 @@ class upgradeModel extends model
         if($this->config->systemMode != 'light') return true;
         if($this->config->edition == 'ipd')
         {
-            $disabledFeatures = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('disabledFeatures')->andWhere('owner')->eq('system')->fetch('value');
-            if($disabledFeatures)
-            {
-                $disabledFeatures = str_replace(',waterfallplus', '', $disabledFeatures);
-                $this->dao->update(TABLE_CONFIG)->set('value')->eq($disabledFeatures)->where('`key`')->eq('disabledFeatures')->andWhere('owner')->eq('system')->exec();
-            }
-            return true;
+            $this->loadModel('custom')->disableFeaturesByMode('PLM');
+        }
+        else
+        {
+            $this->loadModel('custom')->disableFeaturesByMode('light');
         }
 
-        $this->loadModel('custom')->disableFeaturesByMode('light');
         return true;
     }
 }
