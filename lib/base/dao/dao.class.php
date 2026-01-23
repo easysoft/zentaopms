@@ -1580,20 +1580,11 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        if(isset($config->db->prefix) && strpos($this->table, $config->db->prefix) === 0)
-        {
-            $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
-        }
-        elseif(strpos($this->table, '_') !== false)
-        {
-            $table = strtolower(substr($this->table, strpos($this->table, '_') + 1));
-            $table = str_replace('`', '', $table);
-        }
-        else
-        {
-            $table = strtolower($this->table);
-        }
-        $fieldLabel = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
+        $module = ltrim(trim($this->table, '`'), $config->db->prefix);
+        $module = strrpos($module, '_') ? substr($module, strrpos($module, '_') + 1) : $module;
+        $module = strtolower($module);
+
+        $fieldLabel = isset($lang->$module->$fieldName)      ? $lang->$module->$fieldName      : $fieldName;
         $value      = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
 
         /*
