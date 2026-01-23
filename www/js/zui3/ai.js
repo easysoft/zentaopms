@@ -19,6 +19,7 @@ window.checkZAIPanel = async function(showMessage)
 window.openPageForm = function(url, data, callback)
 {
     return new Promise((resolve, reject) => {
+        localStorage.setItem('aiResult', JSON.stringify(data));
         const openedApp = openUrl(url);
         if(!openedApp) return;
         let updateTimer = 0;
@@ -172,7 +173,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 };
                 diffView = h`<h6>${info.targetFormName}</h6><div class="ring rounded p-2 article whitespace-prewrap col gap-2 success-pale">${Object.entries(result).map(entry => renderProp(entry[0], entry[1]))}</div>`;
             }
-            localStorage.setItem('aiResult', JSON.stringify(result));
 
             return {
                 view: [response.title ? h`<h4>${response.title}</h4>` : null, diffView, explainView],
