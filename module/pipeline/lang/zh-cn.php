@@ -55,6 +55,8 @@ $lang->pipeline->repoServer      = '版本库服务器';
 $lang->pipeline->sonarqubeServer = 'SonarQube服务器';
 $lang->pipeline->projectKey      = 'SonarQube项目';
 $lang->pipeline->space           = '空间';
+$lang->pipeline->status          = '状态';
+$lang->pipeline->triggerPerson   = '触发人';
 
 $lang->pipeline->lblBasic = '基本信息';
 
@@ -113,9 +115,31 @@ $lang->pipeline->pipelineVariablesValuePlaceHolder = "输入变量的值";
 $lang->pipeline->pipelineVariablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值。";
 $lang->pipeline->setReferenceTips                  = "在执行构建前，请先设置代码库的分支信息。";
 
-$lang->pipeline->featureBar['browse']['job']     = '列表';
-$lang->pipeline->featureBar['browse']['compile'] = '执行历史';
+$lang->pipeline->featureBar['browse']['all']   = '全部';
+$lang->pipeline->featureBar['browse']['space'] = '空间下流水线';
+$lang->pipeline->featureBar['browse']['repo']  = '代码库下流水线';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = '创建空白流水线';
 $lang->pipeline->createTypeList['copy'] = '从现有流水线复制';
+
+$lang->pipeline->statusList = array();
+$lang->pipeline->statusList['draft']  = '草稿';
+$lang->pipeline->statusList['active'] = '激活';
+
+$lang->pipeline->execStatusList = array();
+$lang->pipeline->execStatusList['success']  = '成功';
+$lang->pipeline->execStatusList['failure']  = '失败';
+$lang->pipeline->execStatusList['running']  = '运行中';
+$lang->pipeline->execStatusList['pending']  = '等待中';
+$lang->pipeline->execStatusList['error']    = '错误';
+$lang->pipeline->execStatusList['skipped']  = '跳过';
+$lang->pipeline->execStatusList['blocked']  = '阻塞';
+$lang->pipeline->execStatusList['declined'] = '拒绝';
+
+$lang->pipeline->triggerTypeList = array();
+$lang->pipeline->triggerTypeList['push']         = '代码推送';
+$lang->pipeline->triggerTypeList['manual']       = '手动触发';
+$lang->pipeline->triggerTypeList['cron']         = '定时触发';
+$lang->pipeline->triggerTypeList['pull_request'] = '拉取请求';
+$lang->pipeline->triggerTypeList['tag']          = '打标签';
