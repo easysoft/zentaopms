@@ -533,7 +533,7 @@ $lang->devops->homeMenu->pipeline['subMenu']->execution = array('link' => "{$lan
 
 $configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repo|setrules|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
 $lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
@@ -559,17 +559,9 @@ $lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->
 $lang->devops->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->devops->reviewFlow}|reporeviewflow|browse|repoID=%s", 'alias' => 'create,edit');
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
-if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
-if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = array('link' => "{$lang->devops->platform}|system|dblist", 'subModule' => 'system', 'exclude' => 'system-dashboard');
-$lang->devops->homeMenu->configure['subMenu']->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
-if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->store = array('link' => "{$lang->devops->components}|store|browse", 'subModule' => 'store');
-$lang->devops->homeMenu->configure['subMenu']->rules    = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
+$lang->devops->homeMenu->configure['subMenu']->rules = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 
-if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
-if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][10] = 'platform';
-$lang->devops->homeMenu->configure['menuOrder'][15] = 'apps';
-if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
-$lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
+$lang->devops->homeMenu->configure['menuOrder'][5] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[5]   = 'space';
