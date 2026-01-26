@@ -41,17 +41,67 @@ class pipelineModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $spaceID = 0, int $repoID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.space AS space, t2.name AS repoName')->from(TABLE_PIPELINE)->alias('t1')
+        $pipelines = $this->dao->select('t1.*, t2.space AS space, t2.name AS repoName')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
             ->where('t1.deleted')->eq('0')
             ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
             ->beginIF($spaceID)->andWhere('t1.spaceID')->eq($spaceID)->fi()
+            ->beginIF($type == 'repo')->andWhere('t1.repoID')->ne(0)->fi()
+            ->beginIF($type == 'space')->andWhere('t1.repoID')->eq(0)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
+        if(empty($pipelines)) return array();
+
+        $executions = $this->getExecutionByPipeline(array_keys($pipelines), true);
+        if(empty($executions)) return $pipelines;
+
+        foreach($pipelines as $pipeline)
+        {
+            $execution = zget($executions, $pipeline->id, array());
+            $pipeline->lastExecStatus = zget($execution, 'status', '');
+            $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
+            $pipeline->triggerType    = zget($execution, 'event', '');
+            $pipeline->lastExecDate   = zget($execution, 'finished', '');
+        }
+
+        return $pipelines;
+    }
+
+    /**
+     * 获取流水线执行记录。
+     * Get pipeline execution.
+     *
+     * @param  array $pipelineIdList
+     * @access public
+     * @return array
+     */
+    public function getExecutionByPipeline(array $pipelineIdList, bool $showLast = false): array
+    {
+        $executions = $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
+            ->where('pipelineID')->in($pipelineIdList)
+            ->fetchAll('id', false);
+        if(empty($executions)) return array();
+        if(!$showLast) return $executions;
+
+        $executionDateList = array();
+        $executionList     = array();
+        foreach($executions as $execution)
+        {
+            $createTime = strtotime($execution->createdDate);
+            if(!isset($executionDateList[$execution->pipelineID]))
+            {
+                $executionDateList[$execution->pipelineID] = $createTime;
+                $executionList[$execution->pipelineID]     = $execution;
+            }
+            if($createTime > $executionDateList[$execution->pipelineID]) $executionList[$execution->pipelineID] = $execution;
+        }
+
+        return $executionList;
     }
 
      /**
@@ -613,5 +663,22 @@ class pipelineModel extends model
             ->where('spaceID')->in($spaceIdList)
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
+    }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $pipeline
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $pipeline, string $action): bool
+    {
+        $action = strtolower($action);
+        if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
+
+        return true;
     }
 }

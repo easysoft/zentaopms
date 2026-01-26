@@ -55,7 +55,6 @@ class pipeline extends control
         $this->view->inSpace = !empty($spaceID);
     }
 
-
     /**
      * 流水线列表。
      * Browse pipeline.
@@ -71,11 +70,9 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function browse(int $space = 0, int $repoID = 0, string $type = '', string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $space = 0, int $repoID = 0, string $type = 'space', string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($space);
-        $this->loadModel('ci');
-        $this->app->loadLang('compile');
 
         if($repoID)
         {
@@ -83,16 +80,15 @@ class pipeline extends control
             $repoID = $this->loadModel('repo')->saveState($repoID);
 
             /* Set session. */
-            $this->ci->setMenu($repoID);
+            $this->loadModel('ci')->setMenu($repoID);
 
-            unset($this->config->pipeline->search['fields']['repo']);
-            unset($this->config->pipeline->search['params']['repo']);
+            unset($this->config->pipeline->search['fields']['repoID']);
+            unset($this->config->pipeline->search['params']['repoID']);
         }
         else
         {
             $this->session->set('repoID', '');
         }
-        if($space) $this->loadModel('space')->setMenu($space);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -100,21 +96,18 @@ class pipeline extends control
         $queryID   = $type == 'bySearch' ? $queryID : 0;
         $actionURL = $this->createLink('pipeline', 'browse', "space={$space}&repoID={$repoID}&type=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
         $this->pipelineZen->buildSearchForm($this->config->pipeline->search, $queryID, $actionURL);
-        $pipelineQuery = $type == 'bySearch' ? $this->pipelineZen->getJobSearchQuery((int)$queryID) : '';
+        $pipelineQuery = $type == 'bySearch' ? $this->pipelineZen->getPipelineSearchQuery((int)$queryID) : '';
 
-        $pipelineList = $this->pipelineZen->getPipelineList($space, $repoID, $pipelineQuery, $orderBy, $pager);
+        $pipelineList = $this->pipeline->getList($space, $repoID, $type, $pipelineQuery, $orderBy, $pager);
 
-        $this->view->title   = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->browse;
-        $this->view->repoID  = $repoID;
-        $this->view->repo    = $this->loadModel('repo')->fetchByID($repoID);
-        $this->view->orderBy = $orderBy;
-        $this->view->type    = $type;
-        $this->view->queryID = $queryID;
-        $this->view->pager   = $pager;
-
+        $this->view->title        = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->browse;
+        $this->view->repoID       = $repoID;
+        $this->view->repo         = $this->loadModel('repo')->fetchByID($repoID);
+        $this->view->orderBy      = $orderBy;
+        $this->view->type         = $type;
+        $this->view->queryID      = $queryID;
+        $this->view->pager        = $pager;
         $this->view->pipelineList = $pipelineList;
-        $this->view->hasJobServer = true;
-        $this->view->spaces       = $this->loadModel('space')->getPairs();
 
         $this->display();
     }
@@ -122,8 +115,8 @@ class pipeline extends control
     /**
      * Create a pipeline.
      *
-     * @param  int    $spaceID
-     * @param  string $repoID
+     * @param  int $spaceID
+     * @param  int $repoID
      * @access public
      * @return void
      */
@@ -135,11 +128,13 @@ class pipeline extends control
             {
                 return $this->sendError(array('existPipeline' => sprintf($this->lang->error->notempty, $this->lang->pipeline->existPipeline)));
             }
+            if($repoID) $repo = $this->loadModel('repo')->fetchByID($repoID);
             $pipeline = form::data($this->config->pipeline->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
-                ->add('spaceID', $spaceID)
+                ->add('spaceID', ($repoID && !empty($repo)) ? $repo->space : $spaceID)
                 ->add('type', $repoID ? 'repo' : 'space')
+                ->add('status', 'draft')
                 ->get();
 
             $pipelineID = $this->pipeline->create($pipeline);
@@ -151,7 +146,7 @@ class pipeline extends control
         }
 
         $this->view->title          = $this->lang->pipeline->create;
-        $this->view->existPipelines = $this->pipelineZen->getExistPipelines($spaceID, $repoID);
+        $this->view->existPipelines = $this->pipelineZen->getExistPipelines($repoID);
 
         $this->display();
     }
