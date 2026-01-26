@@ -27,15 +27,6 @@ class pipeline extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        if(in_array($this->app->methodName, array('create', 'edit', 'trigger')))
-        {
-            if($this->session->repoID) $this->loadModel('ci')->setMenu();
-        }
-        elseif($this->app->methodName != 'browse')
-        {
-            $this->loadModel('ci')->setMenu();
-        }
-
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
@@ -108,6 +99,7 @@ class pipeline extends control
         $this->view->queryID      = $queryID;
         $this->view->pager        = $pager;
         $this->view->pipelineList = $pipelineList;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noclosed');
 
         $this->display();
     }
@@ -482,5 +474,66 @@ class pipeline extends control
     {
         $pipeline = $this->pipeline->getByID($pipelineID);
         $this->send(array('result' => 'success', 'data' => $pipeline));
+    }
+
+    /**
+     * 流水线执行列表。
+     * Browse pipeline executions.
+     *
+     * @param  int    $space
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
+     * @param  string $queryID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function execution(int $space = 0, int $repoID = 0, string $type = 'space', int $pipelineID = 0, string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->commonAction($space);
+
+        if($repoID)
+        {
+            $this->pipelineZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
+
+            /* Set session. */
+            $this->loadModel('ci')->setMenu($repoID);
+
+            unset($this->config->pipeline->execution->search['fields']['repoID']);
+            unset($this->config->pipeline->execution->search['params']['repoID']);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $queryID   = $type == 'bySearch' ? $queryID : 0;
+        $actionURL = $this->createLink('pipeline', 'execution', "space={$space}&repoID={$repoID}&type=bySearch&pipelineID={$pipelineID}&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+        $this->pipelineZen->buildSearchForm($this->config->pipeline->execution->search, $queryID, $actionURL);
+        $executionQuery = $type == 'bySearch' ? $this->pipelineZen->getPipelineSearchQuery((int)$queryID, 'pipelineexecQuery') : '';
+
+        $executionList = $this->pipeline->getExecutionList($space, $repoID, $type, $pipelineID, $executionQuery, $orderBy, $pager);
+        foreach($executionList as $execution) $execution->repo = $execution->repo ? $execution->repo : '';
+
+        $this->view->title         = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->execution;
+        $this->view->repoID        = $repoID;
+        $this->view->repo          = $this->loadModel('repo')->fetchByID($repoID);
+        $this->view->orderBy       = $orderBy;
+        $this->view->type          = $type;
+        $this->view->queryID       = $queryID;
+        $this->view->pager         = $pager;
+        $this->view->executionList = $executionList;
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->repos         = $this->repo->getRepoPairs('', 0, false);
+
+        $this->display();
     }
 }

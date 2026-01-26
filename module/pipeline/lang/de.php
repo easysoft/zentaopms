@@ -15,6 +15,8 @@ $lang->pipeline->autoRun       = 'Is it triggered';
 $lang->pipeline->addTrigger    = 'Add Trigger';
 $lang->pipeline->createType    = 'Create Type';
 $lang->pipeline->existPipeline = 'Existing Pipeline';
+$lang->pipeline->execution     = 'Execution History';
+$lang->pipeline->log           = 'Execution Log';
 
 $lang->pipeline->browseAction = 'Pipeline List';
 
@@ -57,6 +59,9 @@ $lang->pipeline->projectKey      = 'SonarQube Project';
 $lang->pipeline->space           = 'Space';
 $lang->pipeline->status          = 'Status';
 $lang->pipeline->triggerPerson   = 'Trigger Person';
+$lang->pipeline->triggerDate     = 'Trigger Date';
+$lang->pipeline->duration        = 'Duration';
+$lang->pipeline->pipelineName    = 'Pipeline Name';
 
 $lang->pipeline->lblBasic = 'Basic Info';
 
@@ -118,6 +123,10 @@ $lang->pipeline->setReferenceTips                  = "Before performing a build,
 $lang->pipeline->featureBar['browse']['all']   = 'All';
 $lang->pipeline->featureBar['browse']['space'] = 'Space Pipeline';
 $lang->pipeline->featureBar['browse']['repo']  = 'Repo Pipeline';
+
+$lang->pipeline->featureBar['execution']['all']   = 'All';
+$lang->pipeline->featureBar['execution']['space'] = 'Space Execution History';
+$lang->pipeline->featureBar['execution']['repo']  = 'Repo Execution History';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = 'Create Empty Pipeline';

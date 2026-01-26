@@ -357,7 +357,10 @@ class spaceModel extends model
             $this->session->set('devopsSpace', $spaceID);
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
-            $this->lang->devops->homeMenu->spaceSetting = common::setMenuVarsEx($this->lang->devops->homeMenu->spaceSetting, $spaceID);
+            if(isset($this->lang->devops->homeMenu->spaceSetting))
+            {
+                $this->lang->devops->homeMenu->spaceSetting = common::setMenuVarsEx($this->lang->devops->homeMenu->spaceSetting, $spaceID);
+            }
 
             foreach($this->lang->devops->homeMenu as $label => &$menu)
             {
@@ -368,7 +371,7 @@ class spaceModel extends model
                     $menu = common::setMenuVarsEx($menu, $spaceID);
                     foreach($menu['subMenu'] as &$subMenu)
                     {
-                        $subMenu = common::setMenuVarsEx($subMenu, $spaceID);;
+                        $subMenu = common::setMenuVarsEx($subMenu, $spaceID);
                     }
                 }
                 elseif($label == 'deploy')

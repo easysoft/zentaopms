@@ -107,9 +107,8 @@ class pipelineZen extends pipeline
      * @access public
      * @return string
      */
-    public function getPipelineSearchQuery(int $queryID): string
+    public function getPipelineSearchQuery(int $queryID, string $queryName = 'pipelineQuery'): string
     {
-        $queryName = 'pipelineQuery';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -119,9 +118,13 @@ class pipelineZen extends pipeline
                 $this->session->set('pipelineForm', $query->form);
             }
         }
-        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+        if(!$this->session->$queryName) $this->session->set($queryName, ' 1 = 1');
         $pipelineQuery = $this->session->$queryName;
         $pipelineQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $pipelineQuery);
+        if($queryName == 'pipelineexecQuery')
+        {
+            $pipelineQuery = str_replace(array('t1.`repoID`', 't1.`name`'), array('t2.`repoID`', 't2.`name`'), $pipelineQuery);
+        }
 
         return $pipelineQuery;
     }

@@ -35,6 +35,8 @@ class pipelineModel extends model
      *
      * @param  int    $spaceID
      * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
      * @param  string $pipelineQuery
      * @param  string $orderBy
      * @param  object $pager
@@ -65,11 +67,41 @@ class pipelineModel extends model
             $execution = zget($executions, $pipeline->id, array());
             $pipeline->lastExecStatus = zget($execution, 'status', '');
             $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
-            $pipeline->triggerType    = zget($execution, 'event', '');
+            $pipeline->triggerType    = zget($execution, 'trigger', '');
             $pipeline->lastExecDate   = zget($execution, 'finished', '');
         }
 
         return $pipelines;
+    }
+
+    /**
+     * 获取流水线列表。
+     * Get pipeline list.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
+     * @param  string $pipelineQuery
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    {
+        return $this->dao->select('t1.*, t2.spaceID AS space, t2.repoID AS repo, t2.name AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
+            ->where('1=1')
+            ->beginIF($repoID)->andWhere('t2.repoID')->eq($repoID)->fi()
+            ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
+            ->beginIF($spaceID)->andWhere('t2.spaceID')->eq($spaceID)->fi()
+            ->beginIF($type == 'repo' && !$pipelineID)->andWhere('t2.repoID')->ne(0)->fi()
+            ->beginIF($type == 'space' && !$pipelineID)->andWhere('t2.repoID')->eq(0)->fi()
+            ->beginIF($pipelineID)->andWhere('t1.pipelineID')->eq($pipelineID)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
     }
 
     /**
