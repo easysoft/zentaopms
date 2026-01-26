@@ -48,6 +48,7 @@ dtable
     set::customCols(true),
     set::cols($cols),
     set::data($tableData),
+    set::userMap($users),
     set::sortLink(createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
