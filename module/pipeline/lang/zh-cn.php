@@ -15,6 +15,8 @@ $lang->pipeline->autoRun       = '是否触发';
 $lang->pipeline->addTrigger    = '添加触发方式';
 $lang->pipeline->createType    = '创建方式';
 $lang->pipeline->existPipeline = '现有流水线';
+$lang->pipeline->execution     = '执行历史';
+$lang->pipeline->log           = '执行日志';
 
 $lang->pipeline->browseAction = '流水线列表';
 
@@ -57,6 +59,9 @@ $lang->pipeline->projectKey      = 'SonarQube项目';
 $lang->pipeline->space           = '空间';
 $lang->pipeline->status          = '状态';
 $lang->pipeline->triggerPerson   = '触发人';
+$lang->pipeline->triggerDate     = '触发时间';
+$lang->pipeline->duration        = '执行时长';
+$lang->pipeline->pipelineName    = '流水线名称';
 
 $lang->pipeline->lblBasic = '基本信息';
 
@@ -118,6 +123,10 @@ $lang->pipeline->setReferenceTips                  = "在执行构建前，请�
 $lang->pipeline->featureBar['browse']['all']   = '全部';
 $lang->pipeline->featureBar['browse']['space'] = '空间下流水线';
 $lang->pipeline->featureBar['browse']['repo']  = '代码库下流水线';
+
+$lang->pipeline->featureBar['execution']['all']   = '全部';
+$lang->pipeline->featureBar['execution']['space'] = '空间下执行历史';
+$lang->pipeline->featureBar['execution']['repo']  = '代码库下执行历史';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = '创建空白流水线';
