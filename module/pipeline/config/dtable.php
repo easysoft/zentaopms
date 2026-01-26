@@ -72,21 +72,21 @@ $config->pipeline->dtable->fieldList['lastExecDate']['show']       = true;
 $config->pipeline->dtable->fieldList['lastExecDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->pipeline->actionList = array();
-$config->pipeline->actionList['compile']['icon'] = 'file-log';
-$config->pipeline->actionList['compile']['text'] = $lang->compile->browse;
-$config->pipeline->actionList['compile']['hint'] = $lang->compile->browse;
-$config->pipeline->actionList['compile']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&jobID={id}");
-
-$config->pipeline->actionList['edit']['icon'] = 'edit';
-$config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['hint'] = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}");
+$config->pipeline->actionList['execution']['icon'] = 'file-log';
+$config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
+$config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
+$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&type={type}&pipelineID={id}");
 
 $config->pipeline->actionList['exec']['icon']      = 'play';
 $config->pipeline->actionList['exec']['text']      = $lang->pipeline->exec;
 $config->pipeline->actionList['exec']['hint']      = $lang->pipeline->exec;
 $config->pipeline->actionList['exec']['className'] = 'ajax-submit';
 $config->pipeline->actionList['exec']['url']       = helper::createLink('pipeline', 'exec',"id={id}");
+
+$config->pipeline->actionList['edit']['icon'] = 'edit';
+$config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
+$config->pipeline->actionList['edit']['hint'] = $lang->pipeline->edit;
+$config->pipeline->actionList['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}");
 
 $config->pipeline->actionList['delete']['icon']       = 'trash';
 $config->pipeline->actionList['delete']['text']       = $lang->pipeline->delete;
@@ -98,5 +98,76 @@ $config->pipeline->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->dtable->fieldList['actions']['width'] = 150;
 $config->pipeline->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->dtable->fieldList['actions']['menu']  = array('compile', 'exec', 'edit', 'delete');
+$config->pipeline->dtable->fieldList['actions']['menu']  = array('execution', 'exec', 'edit', 'delete');
 $config->pipeline->dtable->fieldList['actions']['list']  = $config->pipeline->actionList;
+
+$config->pipeline->execution->dtable = new stdclass();
+
+$config->pipeline->execution->dtable->fieldList['id']['title']    = 'ID';
+$config->pipeline->execution->dtable->fieldList['id']['name']     = 'id';
+$config->pipeline->execution->dtable->fieldList['id']['fixed']    = 'left';
+$config->pipeline->execution->dtable->fieldList['id']['type']     = 'id';
+$config->pipeline->execution->dtable->fieldList['id']['sortType'] = 'text';
+
+$config->pipeline->execution->dtable->fieldList['ref']['title']    = $lang->pipeline->branch;
+$config->pipeline->execution->dtable->fieldList['ref']['name']     = 'ref';
+$config->pipeline->execution->dtable->fieldList['ref']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['ref']['hint']     = true;
+
+$config->pipeline->execution->dtable->fieldList['name']['title']    = $lang->pipeline->pipelineName;
+$config->pipeline->execution->dtable->fieldList['name']['name']     = 'pipelineName';
+$config->pipeline->execution->dtable->fieldList['name']['fixed']    = 'left';
+$config->pipeline->execution->dtable->fieldList['name']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['name']['minWidth'] = '350';
+$config->pipeline->execution->dtable->fieldList['name']['hint']     = true;
+
+$config->pipeline->execution->dtable->fieldList['status']['title']    = $lang->pipeline->status;
+$config->pipeline->execution->dtable->fieldList['status']['name']     = 'status';
+$config->pipeline->execution->dtable->fieldList['status']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['status']['width']    = '110';
+$config->pipeline->execution->dtable->fieldList['status']['hint']     = true;
+$config->pipeline->execution->dtable->fieldList['status']['map']      = $lang->pipeline->execStatusList;
+
+$config->pipeline->execution->dtable->fieldList['createdBy']['title']    = $lang->pipeline->triggerPerson;
+$config->pipeline->execution->dtable->fieldList['createdBy']['name']     = 'createdBy';
+$config->pipeline->execution->dtable->fieldList['createdBy']['type']     = 'user';
+$config->pipeline->execution->dtable->fieldList['createdBy']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['createdBy']['hint']     = true;
+
+$config->pipeline->execution->dtable->fieldList['trigger']['title']    = $lang->pipeline->triggerType;
+$config->pipeline->execution->dtable->fieldList['trigger']['name']     = 'trigger';
+$config->pipeline->execution->dtable->fieldList['trigger']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['trigger']['width']    = '100';
+$config->pipeline->execution->dtable->fieldList['trigger']['hint']     = true;
+$config->pipeline->execution->dtable->fieldList['trigger']['map']      = $lang->pipeline->triggerTypeList;
+
+$config->pipeline->execution->dtable->fieldList['repo']['title']    = $lang->pipeline->repo;
+$config->pipeline->execution->dtable->fieldList['repo']['name']     = 'repo';
+$config->pipeline->execution->dtable->fieldList['repo']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['repo']['width']    = '100';
+$config->pipeline->execution->dtable->fieldList['repo']['hint']     = true;
+
+$config->pipeline->execution->dtable->fieldList['duration']['title']    = $lang->pipeline->duration;
+$config->pipeline->execution->dtable->fieldList['duration']['name']     = 'duration';
+$config->pipeline->execution->dtable->fieldList['duration']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['duration']['hint']     = true;
+
+$config->pipeline->execution->dtable->fieldList['createdDate']['title']    = $lang->pipeline->triggerDate;
+$config->pipeline->execution->dtable->fieldList['createdDate']['name']     = 'createdDate';
+$config->pipeline->execution->dtable->fieldList['createdDate']['type']     = 'datetime';
+$config->pipeline->execution->dtable->fieldList['createdDate']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['createdDate']['width']    = '110';
+$config->pipeline->execution->dtable->fieldList['createdDate']['hint']     = true;
+
+$config->pipeline->execution->actionList = array();
+$config->pipeline->execution->actionList['log']['icon'] = 'file-log';
+$config->pipeline->execution->actionList['log']['text'] = $lang->pipeline->log;
+$config->pipeline->execution->actionList['log']['hint'] = $lang->pipeline->log;
+$config->pipeline->execution->actionList['log']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&type={type}&pipelineID={id}");
+
+$config->pipeline->execution->dtable->fieldList['actions']['name']  = 'actions';
+$config->pipeline->execution->dtable->fieldList['actions']['title'] = $lang->actions;
+$config->pipeline->execution->dtable->fieldList['actions']['width'] = 100;
+$config->pipeline->execution->dtable->fieldList['actions']['type']  = 'actions';
+$config->pipeline->execution->dtable->fieldList['actions']['menu']  = array('log');
+$config->pipeline->execution->dtable->fieldList['actions']['list']  = $config->pipeline->execution->actionList;
