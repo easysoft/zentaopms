@@ -3071,4 +3071,21 @@ class repoModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取指定空间下的所有代码库。
+     * Get all repos by spaces.
+     *
+     * @param  array $spaceIdList
+     * @access public
+     * @return array
+     */
+    public function getListBySpaces(array $spaceIdList): array
+    {
+        return $this->dao->select('t1.*')->from(TABLE_REPO)->alias('t1')
+            ->leftJoin(TABLE_SPACE)->alias('t2')->on('t1.space = t2.id')
+            ->where('t1.space')->in($spaceIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+    }
 }
