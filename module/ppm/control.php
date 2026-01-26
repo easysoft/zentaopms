@@ -103,8 +103,7 @@ class ppm extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceProject);
-        $ppmList        = $this->ppm->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
+        $ppmList        = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager);
         $projects       = $this->ppmZen->getAllProjects($repo);
         $canEdit        = common::hasPriv($this->app->rawModule, 'edit');
         $reviewResults  = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
