@@ -40,14 +40,15 @@ window.handleLinkObjectClick = function($this)
  * Set task summary for table footer.
  *
  * @param  element element
- * @param  array   checkedidlist
+ * @param  array   checkedIDList
+ * @param  string  pageSummary
  * @access public
  * @return object
  */
-window.setStoryStatistics = function(element, checkedIDList)
+window.setStoryStatistics = function(element, checkedIDList, pageSummary)
 {
     const checkedTotal = checkedIDList.length;
-    if(checkedTotal == 0) return {html: summary};
+    if(checkedTotal == 0) return {html: pageSummary};
 
     let checkedEstimate = 0;
     let checkedCase     = 0;
