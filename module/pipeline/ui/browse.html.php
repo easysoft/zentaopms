@@ -17,15 +17,20 @@ jsVar('repoID', $repoID);
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
+    unset($lang->pipeline->featureBar['browse']);
+    unset($config->pipeline->dtable->fieldList['repo']);
+    featureBar(div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch'))));
 }
-
-/* zin: Define the set::module('pipeline') feature bar on main menu. */
-featureBar
-(
-    set::current('pipeline'),
-    set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
-    div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch')))
-);
+else
+{
+    /* zin: Define the set::module('pipeline') feature bar on main menu. */
+    featureBar
+    (
+        set::current($type),
+        set::link($this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={key}")),
+        div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch')))
+    );
+}
 
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('pipeline', 'create');
