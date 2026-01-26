@@ -358,13 +358,12 @@ class spaceModel extends model
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
             $this->lang->devops->homeMenu->spaceSetting = common::setMenuVarsEx($this->lang->devops->homeMenu->spaceSetting, $spaceID);
-            $this->lang->devops->homeMenu->pipeline     = common::setMenuVarsEx($this->lang->devops->homeMenu->pipeline, $spaceID);
 
             foreach($this->lang->devops->homeMenu as $label => &$menu)
             {
                 if(empty($menu['link'])) continue;
 
-                if($label == 'spaceSetting' && !empty($menu['subMenu']))
+                if(in_array($label, array('spaceSetting', 'pipeline')) && !empty($menu['subMenu']))
                 {
                     $menu = common::setMenuVarsEx($menu, $spaceID);
                     foreach($menu['subMenu'] as &$subMenu)
