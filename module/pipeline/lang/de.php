@@ -55,6 +55,8 @@ $lang->pipeline->repoServer      = 'Repo Server';
 $lang->pipeline->sonarqubeServer = 'SonarQube Server';
 $lang->pipeline->projectKey      = 'SonarQube Project';
 $lang->pipeline->space           = 'Space';
+$lang->pipeline->status          = 'Status';
+$lang->pipeline->triggerPerson   = 'Trigger Person';
 
 $lang->pipeline->lblBasic = 'Basic Info';
 
@@ -113,9 +115,27 @@ $lang->pipeline->pipelineVariablesValuePlaceHolder = "Input variable value";
 $lang->pipeline->pipelineVariablesTips             = "Specify variable values to be used in this run. The values specified in CI/CD settings will be used by default.";
 $lang->pipeline->setReferenceTips                  = "Before performing a build, please set up the branch information of the code base.";
 
-$lang->pipeline->featureBar['browse']['job']     = 'List';
-$lang->pipeline->featureBar['browse']['compile'] = 'History';
+$lang->pipeline->featureBar['browse']['all']   = 'All';
+$lang->pipeline->featureBar['browse']['space'] = 'Space Pipeline';
+$lang->pipeline->featureBar['browse']['repo']  = 'Repo Pipeline';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = 'Create Empty Pipeline';
 $lang->pipeline->createTypeList['copy'] = 'Copy From Existing Pipeline';
+
+$lang->pipeline->execStatusList = array();
+$lang->pipeline->execStatusList['success']  = 'Success';
+$lang->pipeline->execStatusList['failure']  = 'Failure';
+$lang->pipeline->execStatusList['running']  = 'Running';
+$lang->pipeline->execStatusList['pending']  = 'Pending';
+$lang->pipeline->execStatusList['error']    = 'Error';
+$lang->pipeline->execStatusList['skipped']  = 'Skipped';
+$lang->pipeline->execStatusList['blocked']  = 'Blocked';
+$lang->pipeline->execStatusList['declined'] = 'Declined';
+
+$lang->pipeline->triggerTypeList = array();
+$lang->pipeline->triggerTypeList['push']         = 'Code Push';
+$lang->pipeline->triggerTypeList['manual']       = 'Manual';
+$lang->pipeline->triggerTypeList['cron']         = 'Cron';
+$lang->pipeline->triggerTypeList['pull_request'] = 'Pull Request';
+$lang->pipeline->triggerTypeList['tag']          = 'Tag';

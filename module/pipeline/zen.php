@@ -26,32 +26,6 @@ class pipelineZen extends pipeline
     }
 
     /**
-     * 获取流水线列表。
-     * Get pipeline list.
-     *
-     * @param  int       $spaceID
-     * @param  int       $repoID
-     * @param  string    $pipelineQuery
-     * @param  string    $orderBy
-     * @param  object    $pager
-     * @access protected
-     * @return array
-     */
-    protected function getPipelineList(int $spaceID, int $repoID, string $pipelineQuery, string $orderBy, object $pager): array
-    {
-        $products     = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
-        $pipelineList = $this->pipeline->getList($spaceID, $repoID, $pipelineQuery, $orderBy, $pager);
-        foreach($pipelineList as $pipeline)
-        {
-            $pipeline->lastExec    = '';
-            $pipeline->triggerType = '';
-            $pipeline->productName = zget($products, $pipeline->product, '');
-        }
-
-        return $pipelineList;
-    }
-
-    /**
      * 获取流水线执行数据。
      * Get pipeline compile data.
      *
@@ -120,8 +94,7 @@ class pipelineZen extends pipeline
         $searchConfig['queryID']   = (int)$queryID;
         $searchConfig['actionURL'] = $actionURL;
 
-        if(isset($searchConfig['params']['repo'])) $searchConfig['params']['repo']['values'] = $this->loadModel('repo')->getRepoPairs('');
-        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+        if(isset($searchConfig['params']['repoID'])) $searchConfig['params']['repoID']['values'] = $this->loadModel('repo')->getRepoPairs('');
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
@@ -134,7 +107,7 @@ class pipelineZen extends pipeline
      * @access public
      * @return string
      */
-    public function getJobSearchQuery(int $queryID): string
+    public function getPipelineSearchQuery(int $queryID): string
     {
         $queryName = 'pipelineQuery';
         if($queryID)
@@ -157,24 +130,44 @@ class pipelineZen extends pipeline
      * 获取现有的流水线列表。
      * getExistPipelines
      *
+     * @param  int $repoID
      * @access public
      * @return void
      */
-    public function getExistPipelines()
+    public function getExistPipelines(int $repoID = 0)
     {
-        $spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
-        $pipelines = $this->pipeline->getBySpaces(array_keys($spaces));
+        $spaces = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+
+        $spaceIdList = array_keys($spaces);
+        $pipelines   = $this->pipeline->getBySpaces($spaceIdList);
 
         $pipelineItems = array();
-        foreach($pipelines as $pipeline)
+        if($repoID)
         {
-            if(empty($pipeline->spaceID)) continue;
-            if(!isset($pipelineItems[$pipeline->spaceID]))
+            $repoList = $this->loadModel('repo')->getListBySpaces($spaceIdList);
+            foreach($pipelines as $pipeline)
             {
-                $pipelineItems[$pipeline->spaceID]['items'] = array();
-                $pipelineItems[$pipeline->spaceID]['text']  = $spaces[$pipeline->spaceID];
+                if(empty($pipeline->repoID)) continue;
+                if(!isset($pipelineItems[$pipeline->repoID]))
+                {
+                    $pipelineItems[$pipeline->repoID]['items'] = array();
+                    $pipelineItems[$pipeline->repoID]['text']  = $repoList[$pipeline->repoID]->name;
+                }
+                $pipelineItems[$pipeline->repoID]['items'][] = array('value' => $pipeline->id, 'text' => $pipeline->name);
             }
-            $pipelineItems[$pipeline->spaceID]['items'][] = array('value' => $pipeline->id, 'text' => $pipeline->name);
+        }
+        else
+        {
+            foreach($pipelines as $pipeline)
+            {
+                if(empty($pipeline->spaceID)) continue;
+                if(!isset($pipelineItems[$pipeline->spaceID]))
+                {
+                    $pipelineItems[$pipeline->spaceID]['items'] = array();
+                    $pipelineItems[$pipeline->spaceID]['text']  = $spaces[$pipeline->spaceID];
+                }
+                $pipelineItems[$pipeline->spaceID]['items'][] = array('value' => $pipeline->id, 'text' => $pipeline->name);
+            }
         }
         return $pipelineItems;
     }
