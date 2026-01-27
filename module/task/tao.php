@@ -318,11 +318,11 @@ class taskTao extends taskModel
      * 复制任务数据。
      * Copy the task data and update the effort to the new task.
      *
-     * @param  object    $parentTask
-     * @access protected
+     * @param  object $parentTask
+     * @access public
      * @return bool
      */
-    protected function copyTaskData(object $task): bool
+    public function copyTaskData(object $task): bool
     {
         /* 复制当前任务信息。 */
         /* Copy the current task to child task, and change the parent field value. */
