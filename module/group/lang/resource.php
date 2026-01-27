@@ -1521,29 +1521,24 @@ $lang->resource->ci->checkCompileStatus = 'checkCompileStatus';
 $lang->ci->methodOrder[5]  = 'commitResult';
 $lang->ci->methodOrder[10] = 'checkCompileStatus';
 
-$lang->resource->compile = new stdclass();
-$lang->resource->compile->browse = 'browse';
-$lang->resource->compile->logs   = 'logs';
+$lang->resource->pipeline = new stdclass();
+$lang->resource->pipeline->browse    = 'browse';
+$lang->resource->pipeline->execution = 'execution';
+$lang->resource->pipeline->logs      = 'logs';
+$lang->resource->pipeline->create    = 'create';
+$lang->resource->pipeline->edit      = 'edit';
+$lang->resource->pipeline->delete    = 'delete';
+$lang->resource->pipeline->exec      = 'exec';
+$lang->resource->pipeline->view      = 'view';
 
-$lang->compile->methodOrder[5]  = 'browse';
-$lang->compile->methodOrder[10] = 'logs';
-
-$lang->resource->job = new stdclass();
-$lang->resource->job->browse  = 'browseAction';
-$lang->resource->job->create  = 'create';
-$lang->resource->job->edit    = 'edit';
-$lang->resource->job->delete  = 'delete';
-$lang->resource->job->exec    = 'exec';
-$lang->resource->job->view    = 'view';
-$lang->resource->job->trigger = 'trigger';
-
-$lang->job->methodOrder[5]  = 'browse';
-$lang->job->methodOrder[10] = 'create';
-$lang->job->methodOrder[15] = 'edit';
-$lang->job->methodOrder[20] = 'delete';
-$lang->job->methodOrder[25] = 'exec';
-$lang->job->methodOrder[30] = 'view';
-$lang->job->methodOrder[35] = 'trigger';
+$lang->pipeline->methodOrder[5]  = 'browse';
+$lang->pipeline->methodOrder[10] = 'execution';
+$lang->pipeline->methodOrder[15] = 'logs';
+$lang->pipeline->methodOrder[20] = 'create';
+$lang->pipeline->methodOrder[25] = 'edit';
+$lang->pipeline->methodOrder[30] = 'delete';
+$lang->pipeline->methodOrder[35] = 'exec';
+$lang->pipeline->methodOrder[40] = 'view';
 
 $lang->resource->serverroom = new stdclass();
 $lang->resource->serverroom->browse = 'browse';
@@ -2222,7 +2217,6 @@ $lang->resource->systemschedule     = new stdclass();
 $lang->resource->systemeffort       = new stdclass();
 $lang->resource->systemdynamic      = new stdclass();
 $lang->resource->systemcompany      = new stdclass();
-$lang->resource->pipeline           = new stdclass();
 $lang->resource->devopssetting      = new stdclass();
 $lang->resource->featureswitch      = new stdclass();
 $lang->resource->importdata         = new stdclass();
@@ -2293,7 +2287,7 @@ if(!$inUpgrade)
         unset($lang->resource->ci);
         unset($lang->resource->compile);
         unset($lang->resource->jenkins);
-        unset($lang->resource->job);
+        unset($lang->resource->pipeline);
         unset($lang->resource->gitlab);
         unset($lang->resource->gogs);
         unset($lang->resource->gitea);

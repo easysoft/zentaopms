@@ -3064,30 +3064,23 @@ $config->group->package->sms->privs['sms-index'] = array('edition' => 'biz,max,i
 $config->group->package->sms->privs['sms-test']  = array('edition' => 'biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 10, 'depend' => array('sms-index'), 'recommend' => array());
 $config->group->package->sms->privs['sms-reset'] = array('edition' => 'biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 15, 'depend' => array('sms-index'), 'recommend' => array());
 
-$config->group->package->browseJob = new stdclass();
-$config->group->package->browseJob->order  = 5;
-$config->group->package->browseJob->subset = 'pipeline';
-$config->group->package->browseJob->privs  = array();
-$config->group->package->browseJob->privs['job-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('job-create', 'job-edit'));
-$config->group->package->browseJob->privs['job-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit'));
-$config->group->package->browseJob->privs['job-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-exec'));
+$config->group->package->browsePipeline = new stdclass();
+$config->group->package->browsePipeline->order  = 5;
+$config->group->package->browsePipeline->subset = 'pipeline';
+$config->group->package->browsePipeline->privs  = array();
+$config->group->package->browsePipeline->privs['pipeline-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('pipeline-create', 'pipeline-edit'));
+$config->group->package->browsePipeline->privs['pipeline-view']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-exec'));
+$config->group->package->browsePipeline->privs['pipeline-execution'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('piopeline-logs', 'pipeline-exec', 'pipeline-view'));
+$config->group->package->browsePipeline->privs['pipeline-logs']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-execution', 'pipeline-exec', 'pipeline-view'));
 
-$config->group->package->manageJob = new stdclass();
-$config->group->package->manageJob->order  = 10;
-$config->group->package->manageJob->subset = 'pipeline';
-$config->group->package->manageJob->privs  = array();
-$config->group->package->manageJob->privs['compile-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-logs', 'job-exec', 'job-view'));
-$config->group->package->manageJob->privs['compile-logs']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'job-exec', 'job-view'));
-$config->group->package->manageJob->privs['job-create']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-edit'));
-$config->group->package->manageJob->privs['job-edit']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('job-create'));
-$config->group->package->manageJob->privs['job-trigger']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit', 'compile-browse', 'compile-logs', 'job-view'));
-$config->group->package->manageJob->privs['job-exec']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
-
-$config->group->package->deleteJob = new stdclass();
-$config->group->package->deleteJob->order  = 2720;
-$config->group->package->deleteJob->subset = 'pipeline';
-$config->group->package->deleteJob->privs  = array();
-$config->group->package->deleteJob->privs['job-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit'));
+$config->group->package->managePipeline = new stdclass();
+$config->group->package->managePipeline->order  = 10;
+$config->group->package->managePipeline->subset = 'pipeline';
+$config->group->package->managePipeline->privs  = array();
+$config->group->package->managePipeline->privs['pipeline-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-edit'));
+$config->group->package->managePipeline->privs['pipeline-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create'));
+$config->group->package->managePipeline->privs['pipeline-exec']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
+$config->group->package->managePipeline->privs['pipeline-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit'));
 
 $config->group->package->browseMR = new stdclass();
 $config->group->package->browseMR->order  = 5;
