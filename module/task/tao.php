@@ -318,11 +318,11 @@ class taskTao extends taskModel
      * 复制任务数据。
      * Copy the task data and update the effort to the new task.
      *
-     * @param  object    $parentTask
-     * @access protected
+     * @param  object $parentTask
+     * @access public
      * @return bool
      */
-    protected function copyTaskData(object $task): bool
+    public function copyTaskData(object $task): bool
     {
         /* 复制当前任务信息。 */
         /* Copy the current task to child task, and change the parent field value. */
@@ -347,6 +347,10 @@ class taskTao extends taskModel
         $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
         $copyTaskID = $this->dao->lastInsertID();
 
+        if(dao::isError()) return false;
+
+        $path = $copyTask->path . "{$copyTaskID},";
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($copyTaskID)->exec();
         if(dao::isError()) return false;
 
         /* 将父任务的日志记录更新到子任务下。 */
