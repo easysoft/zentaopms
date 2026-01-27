@@ -22,7 +22,14 @@ class projectZenTest extends baseTest
         return $result;
     }
 
-    public function buildEditFormTest($projectID)
+    /**
+     * Test buildEditForm method
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function buildEditFormTest(int $projectID)
     {
         $project = $this->instance->loadModel('project')->fetchByID($projectID);
         $result  = $this->invokeArgs('buildEditForm', [$projectID, $project]);
