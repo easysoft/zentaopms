@@ -119,7 +119,7 @@ $basicItems[] = item(set::name($lang->ppm->description),  !empty($ppm->desc) ? s
 $canMerge = $hasConflict == 'no' && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$checkMessage;
 
 $mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
-$defaultMergeType = empty($defaultMergeType) ? $mergeTypeList[0] : $defaultMergeType;
+$defaultMergeType = empty($defaultMergeType) ? 'rebase' : $defaultMergeType;
 $mergeBtnItems    = array();
 foreach($mergeTypeList as $mergeType)
 {
