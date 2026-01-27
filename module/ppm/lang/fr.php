@@ -311,3 +311,7 @@ $lang->ppm->mergeTypeInfoList['merge']  = 'All commits on this branch will be ad
 $lang->ppm->mergeTypeInfoList['squash'] = 'All commits on this branch will be merged into a single commit and added to the base branch.';
 $lang->ppm->mergeTypeInfoList['rebase'] = 'All commits on this branch will be rebased and added to the base branch.';
 $lang->ppm->mergeTypeInfoList['fast']   = 'All commits on this branch will be added directly to the base branch without generating merge commits, and rebasing may be required.';
+
+$lang->ppm->notice = new stdclass();
+$lang->ppm->notice->confirmClose  = 'Are you sure to close this merge request?';
+$lang->ppm->notice->confirmReopen = 'Are you sure to reopen this merge request?';

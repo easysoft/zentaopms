@@ -311,3 +311,7 @@ $lang->ppm->mergeTypeInfoList['merge']  = '此分支上的所有提交将通过�
 $lang->ppm->mergeTypeInfoList['squash'] = '此分支上的所有提交将合并为一个提交，并添加到基础分支。';
 $lang->ppm->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变基并添加到基础分支。';
 $lang->ppm->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接添加到基础分支，而不产生合并提交,可能需要进行变基。';
+
+$lang->ppm->notice = new stdclass();
+$lang->ppm->notice->confirmClose  = '是否确认关闭该合并请求？';
+$lang->ppm->notice->confirmReopen = '是否开启该合并请求？';
