@@ -222,6 +222,7 @@ class ppm extends control
 
         if($_POST)
         {
+            $approvalflow = !empty($flow) && !empty($flow->definition->reviewFlow->approvals->approvalID) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
             $ppm = form::data($this->config->ppm->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
@@ -231,6 +232,7 @@ class ppm extends control
                 ->add('reviewFlowID', !empty($flow->id) ? $flow->id : 0)
                 ->add('sourceSHA', zget($mergeCheckMessage, 'sourceSHA', ''))
                 ->add('mergeTargetSHA', zget($mergeCheckMessage, 'targetSHA', ''))
+                ->add('approvalflow', $approvalflow)
                 ->skipSpecial('title,description')
                 ->get();
 
