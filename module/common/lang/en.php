@@ -690,9 +690,6 @@ $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Model List';
 $lang->aiapp->config       = 'ZAI Setting';
 
-if(!helper::hasFeature('program'))
-{
-    unset($lang->searchObjects['program'], $lang->createObjects['program']);
-}
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
 
 include (dirname(__FILE__) . '/menu.php');
