@@ -203,7 +203,7 @@ $config->ppm->createCheck->linkObject->dtable->fieldList['type']['map']      = a
 $config->ppm->createCheck->linkObject->dtable->fieldList['id']['name']   = 'id';
 $config->ppm->createCheck->linkObject->dtable->fieldList['id']['title']  = $lang->repo->id;
 $config->ppm->createCheck->linkObject->dtable->fieldList['id']['width']  = 60;
-$config->ppm->createCheck->linkObject->dtable->fieldList['id']['link']   = array('module' => '{type}', 'method' => 'view', 'params' => 'id={sha}', 'target' => '_blank');
+$config->ppm->createCheck->linkObject->dtable->fieldList['id']['link']   = array('url' => helper::createLink('{type}', 'view', "id={id}"), 'target' => '_blank');
 
 $config->ppm->createCheck->linkObject->dtable->fieldList['title']['name']  = 'title';
 $config->ppm->createCheck->linkObject->dtable->fieldList['title']['title'] = $lang->repo->title;
