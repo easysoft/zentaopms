@@ -1342,6 +1342,9 @@ $config->delete['20_1'][] = 'execution/ipd/testcase/ext/ui/view.effort.html.hook
 $config->delete['20_1_1'][] = 'extension/max/design/ext/ui/browse.zentamax.html.hook.php';
 $config->delete['20_1_1'][] = 'extension/max/doc/ext/ui/create.zentamax.html.hook.php';
 $config->delete['20_1_1'][] = 'extension/max/doc/ext/view/create.zentamax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/design/ext/ui/browse.zentamax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/doc/ext/ui/create.zentamax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/doc/ext/view/create.zentamax.html.hook.php';
 
 $config->delete['20_3_0'][] = 'extension/ipd/story/ext/tao/class/ipd.class.php';
 $config->delete['20_3_0'][] = 'extension/ipd/story/ext/tao/ipd.php';
