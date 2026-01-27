@@ -102,9 +102,9 @@ class ppmModel extends model
             return false;
         }
 
-        if(!empty($ppm->reviewer) && is_string($ppm->reviewer))
+        if(!empty($ppm->reviewer) && !$ppm->approvalflow)
         {
-            $reviewers = explode(',', $ppm->reviewer);
+            $reviewers = is_string($ppm->reviewer) ? explode(',', $ppm->reviewer) : $ppm->reviewer;
             if(!empty($ppm->reviewFlowID))
             {
                 $flow = $this->loadModel('reporeviewflow')->getByID($ppm->reviewFlowID);
