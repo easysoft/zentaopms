@@ -97,6 +97,7 @@ $lang->admin->setModule->qa             = 'QA';
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
+$lang->admin->setModule->program        = 'Program';
 $lang->admin->setModule->testsuite      = 'Testsuite';
 $lang->admin->setModule->automated      = 'Automated';
 $lang->admin->setModule->AI             = 'AI';

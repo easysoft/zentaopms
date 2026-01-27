@@ -97,6 +97,7 @@ $lang->admin->setModule->qa             = '测试';
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '其他功能';
 
+$lang->admin->setModule->program        = '项目集';
 $lang->admin->setModule->testsuite      = '套件';
 $lang->admin->setModule->automated      = '自动化';
 $lang->admin->setModule->AI             = 'AI';
