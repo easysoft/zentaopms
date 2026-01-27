@@ -48,7 +48,7 @@ $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon'
 $encoding      = empty($encoding) ? '' : $encoding;
 $hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
 $checkMessage  = empty($mergeCheckMessage) ? '' : zget($mergeCheckMessage, 'message', '');
-$conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
+$conflictFiles = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
 $AICodeScore     = 3;     // AI评审代码分数
@@ -106,9 +106,8 @@ foreach($pipelines as $pipeline)
     );
 }
 
-$checkAI       = true;
-$checkApproval = $approvalStatus == 'approved' && $approvalReviewer >= $config->ppm->approvalReviewer && $doneReviewer >= $config->ppm->doneReviewer;
-$checkScan     = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
+$checkAI   = true;
+$checkScan = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
 
 $basicItems = array();
 $basicItems[] = item(set::name($lang->ppm->author),       zget($users, $ppm->createdBy));
@@ -116,6 +115,8 @@ $basicItems[] = item(set::name($lang->ppm->createdDate),  $ppm->createdDate);
 $basicItems[] = item(set::name($lang->ppm->targetBranch), $ppm->targetBranch);
 $basicItems[] = item(set::name($lang->ppm->sourceBranch), $ppm->sourceBranch);
 $basicItems[] = item(set::name($lang->ppm->description),  !empty($ppm->desc) ? strip_tags($ppm->desc) : $lang->noData);
+
+$canMerge = $hasConflict == 'no' && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$checkMessage;
 
 $mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
 $defaultMergeType = empty($defaultMergeType) ? $mergeTypeList[0] : $defaultMergeType;
@@ -158,7 +159,7 @@ div
                     setClass('my-2 detail-header flex'),
                     set::style(array('justify-content' => 'space-between')),
                     div(setClass('mr-2'), span(html(sprintf($lang->ppm->MRHistory, zget($users, $ppm->createdBy), $ppm->createdDate, $ppm->sourceBranch, $commitPager->recTotal, $ppm->targetBranch)))),
-                    $ppm->status == 'opened' && $hasConflict == 'no' && $reviewResult == 'approved' && !$checkMessage && $defaultMergeType ? div(img(set::src($config->ppm->mergeImages[$defaultMergeType]))) : null
+                    $ppm->status == 'opened' && $canMerge && !$checkMessage && $defaultMergeType ? div(img(set::src($config->ppm->mergeImages[$defaultMergeType]))) : null
                 ),
                 div
                 (
@@ -174,7 +175,7 @@ div
                             (
                                 $ppm->status == 'opened' ? div
                                 (
-                                    $hasConflict == 'no' && $reviewResult == 'approved' && !$checkMessage ? section
+                                    $canMerge ? section
                                     (
                                         setClass('flex w-full checkMerge'),
                                         div(setClass('py-6 border-l-4 border-r-4 border-success')),
@@ -272,14 +273,14 @@ div
                                 ),
                                 section
                                 (
+                                    setID('manualReview'),
                                     div
                                     (
                                         setClass('border px-4 h-12 flex items-center'),
                                         span(setClass('font-bold'), $lang->ppm->manualReview),
                                         $reviewResult == 'approved' ? label(setClass('success ml-4'), $lang->ppm->approvalStatusList[$reviewResult]) : null,
                                         $reviewResult == 'rejected' ? label(setClass('danger ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
-                                        $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
-                                        div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
+                                        $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null
                                     ),
                                     div
                                     (
