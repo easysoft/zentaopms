@@ -101,6 +101,7 @@ $lang->admin->setModule->testsuite      = '套件';
 $lang->admin->setModule->automated      = '自动化';
 $lang->admin->setModule->AI             = 'AI';
 $lang->admin->setModule->BI             = 'BI';
+$lang->admin->setModule->workestimation = '估算';
 $lang->admin->setModule->score          = '积分';
 $lang->admin->setModule->repo           = '代码';
 $lang->admin->setModule->issue          = '问题';
