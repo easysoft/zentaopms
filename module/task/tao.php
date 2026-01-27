@@ -675,7 +675,7 @@ class taskTao extends taskModel
         }
 
         /* 如果该任务是多人团队任务则做一些额外的处理。*/
-        if(empty($task->team)) return $left;
+        if(empty($task->team)) return (float)$left;
 
         /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
         $currentTeam = $this->getTeamByAccount($task->team, $effort->account, array('effortID' => $effort->id, 'order' => $effort->order));
