@@ -790,21 +790,6 @@ class ppmModel extends model
             $objectList[] = $object;
         }
 
-        $bugs = empty($relationList['bug']) ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']), '`id`, `title`, `status`, `openedBy`, `openedDate`', 'id_desc');
-        foreach($bugs as $bug)
-        {
-            $object = new stdClass();
-            $object->type        = 'bug';
-            $object->id          = $bug->id;
-            $object->title       = $bug->title;
-            $object->status      = $this->lang->bug->statusList[$bug->status];
-            $object->createdBy   = $bug->openedBy;
-            $object->createdDate = $bug->openedDate;
-            $object->hasViewPriv = common::hasPriv('bug', 'view');
-
-            $objectList[] = $object;
-        }
-
         $tasks = empty($relationList['task']) ? array() : $this->loadModel('task')->getByIdList(array_keys($relationList['task']), 'id_desc');
         foreach($tasks as $task)
         {
@@ -816,6 +801,21 @@ class ppmModel extends model
             $object->createdBy   = $task->openedBy;
             $object->createdDate = $task->openedDate;
             $object->hasViewPriv = common::hasPriv('task', 'view');
+
+            $objectList[] = $object;
+        }
+
+        $bugs = empty($relationList['bug']) ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']), '`id`, `title`, `status`, `openedBy`, `openedDate`', 'id_desc');
+        foreach($bugs as $bug)
+        {
+            $object = new stdClass();
+            $object->type        = 'bug';
+            $object->id          = $bug->id;
+            $object->title       = $bug->title;
+            $object->status      = $this->lang->bug->statusList[$bug->status];
+            $object->createdBy   = $bug->openedBy;
+            $object->createdDate = $bug->openedDate;
+            $object->hasViewPriv = common::hasPriv('bug', 'view');
 
             $objectList[] = $object;
         }
