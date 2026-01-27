@@ -358,6 +358,7 @@ class metricModel extends model
         $groupMetrics = array_fill_keys(array_keys($this->lang->metric->objectList), array());
         foreach($metrics as $metric)
         {
+            if(!helper::hasFeature('program') && $metric->object == 'program') continue;
             $group = isset($groupMetrics[$metric->object]) ? $metric->object : 'other';
             $groupMetrics[$group][] = $metric;
         }

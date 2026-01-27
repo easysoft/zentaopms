@@ -22,6 +22,14 @@ class projectZenTest extends baseTest
         return $result;
     }
 
+    public function buildEditFormTest($projectID)
+    {
+        $project = $this->instance->loadModel('project')->fetchByID($projectID);
+        $result  = $this->invokeArgs('buildEditForm', [$projectID, $project]);
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
     /**
      * Test buildEditForm method
      *
