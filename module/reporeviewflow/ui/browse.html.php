@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('branchTypePairs', array_merge(array(0 => $lang->all), $branchTypePairs));
+jsVar('branchTypePairs', array(0 => $lang->all) + $branchTypePairs);
 $canCreate = hasPriv('reporeviewflow', 'create');
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
