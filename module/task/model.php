@@ -295,8 +295,11 @@ class taskModel extends model
         /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->isParent == 0 && $oldParentTask->consumed > 0)
         {
-            $this->taskTao->copyTaskData($oldParentTask);
+            $copyTaskID = $this->taskTao->copyTaskData($oldParentTask);
             if(dao::isError()) return false;
+
+            $this->loadModel('action')->create('task', $copyTaskID, 'Opened', '');
+            $childrenIdList = arrayUnion(array($copyTaskID), $childrenIdList);
         }
 
         $parentTask = new stdclass();
