@@ -153,6 +153,9 @@ class ppmModel extends model
         $this->loadModel('action')->create($this->moduleName, $ppmID, 'opened');
         if(dao::isError()) return false;
 
+        $this->apiTriggerEvent((int)$ppm->targetRepoID, $ppmID, 'create');
+        if(dao::isError()) return false;
+
         $this->linkObjects($ppm);
 
         return $ppmID;
@@ -331,6 +334,9 @@ class ppmModel extends model
     public function close(int $ppmID): bool
     {
         $this->dao->update(TABLE_PPM)->set('status')->eq('closed')->where('id')->eq($ppmID)->exec();
+
+        $ppm = $this->fetchByID($ppmID);
+        $this->apiTriggerEvent((int)$ppm->targetRepoID, $ppmID, 'close');
         return !dao::isError();
     }
 
@@ -345,6 +351,9 @@ class ppmModel extends model
     public function reopen(int $ppmID): bool
     {
         $this->dao->update(TABLE_PPM)->set('status')->eq('opened')->where('id')->eq($ppmID)->exec();
+
+        $ppm = $this->fetchByID($ppmID);
+        $this->apiTriggerEvent((int)$ppm->targetRepoID, $ppmID, 'reopen');
         return !dao::isError();
     }
 
@@ -1055,5 +1064,27 @@ class ppmModel extends model
         }
 
         return $checkResult;
+    }
+
+    /**
+     * 触发合并请求事件
+     * Trigger merge request event
+     *
+     * @param  int    $repoID
+     * @param  int    $ppmID
+     * @param  string $type
+     * @access public
+     * @return object|bool
+     */
+    public function apiTriggerEvent(int $repoID, int $ppmID, string $type): object|bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+
+        $data = array();
+        $data['type'] = $type;
+
+        $url      = sprintf($apiRoot->url, "/repos/{$repoID}/pullreq/{$ppmID}/event-trigger");
+        $response = json_decode(commonModel::http($url, $data, array(), $apiRoot->header, 'json', 'POST'));
+        return $this->gitfox->getResponse($response);
     }
 }

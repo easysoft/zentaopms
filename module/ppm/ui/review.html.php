@@ -18,7 +18,7 @@ formPanel
         set::label($lang->ppm->decision),
         set::name('decision'),
         set::required(true),
-        set::value(zget($reviewer, 'decision') == 'pending' ? 'approved' : zget($reviewer, 'decision')),
+        set::value(empty($reviewer) || zget($reviewer, 'decision') == 'pending' ? 'approved' : zget($reviewer, 'decision')),
         set::control('radioListInline'),
         set::items($lang->ppm->approvalResultList)
     ),

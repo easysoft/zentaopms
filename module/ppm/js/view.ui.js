@@ -408,43 +408,60 @@ $(document).ready(function()
  * Call SSE endpoint and output returned values
  */
 function connectSSE() {
-    console.log(`正在连接 SSE: ${sseURL}`);
+    // 如果已存在相同的 SSE 连接，则先关闭它
+    if (window.eventSource && window.eventSource.readyState !== EventSource.CLOSED) {
+        window.eventSource.close();
+        console.log('Existing SSE connection closed');
+    }
 
-    eventSource = new EventSource(sseURL);
+    // 用于存储 EventSource 实例
+    window.eventSource = new EventSource(sseURL);
 
-    eventSource.onopen = function(event) {
-        console.log('SSE 连接已建立');
+    // 重连计数器
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+
+    // 重连间隔时间（毫秒）
+    const reconnectInterval = 5000;
+
+    window.eventSource.onopen = function(event) {
+        console.log('SSE Connected:', event);
+        // 重置重连计数器
+        reconnectAttempts = 0;
     };
 
     // 监听默认消息
-    eventSource.onmessage = function(event) {
-        console.log('收到消息:', event);
+    window.eventSource.onmessage = function(event) {
+        console.log('Message:', event);
     };
 
-    // 监听自定义事件类型
-    const eventTypes = [
-        'execution_updated',
-        'execution_running',
-        'execution_completed',
-        'execution_canceled',
-        'repository_import_completed',
-        'pullreq_updated',
-        'pullreq_reviewer_added',
-        'pullreq_reviewer_removed'
-    ];
-
-    eventTypes.forEach(type => {
-        eventSource.addEventListener(type, function(event) {
-            console.log(`收到 ${type} 事件:`, event.data);
-        });
+    window.eventSource.addEventListener('pullreq_updated', function(event)
+    {
+        if(mrID == event.data.id)
+        {
+            loadCurrentPage('#mr-detail');
+        }
     });
 
-    eventSource.onerror = function(error) {
-        console.error('SSE 错误:', error);
-        if (eventSource.readyState === EventSource.CLOSED) {
-            console.log('closed', '连接已关闭');
+    window.eventSource.onerror = function(error) {
+        console.error('SSE Error:', error);
+        if (window.eventSource.readyState === EventSource.CLOSED) {
+            console.log('closed', 'Connected closed');
+
+            // 尝试重连
+            if (reconnectAttempts < maxReconnectAttempts) {
+                reconnectAttempts++;
+                console.log(`Attempting to reconnect... (${reconnectAttempts}/${maxReconnectAttempts})`);
+
+                // 使用 setTimeout 实现延迟重连
+                setTimeout(() => {
+                    connectSSE();
+                }, reconnectInterval);
+            } else {
+                console.log('Max reconnection attempts reached. Giving up.');
+            }
         } else {
-            console.log('error', '连接发生错误 (正在重试...)');
+            console.log('error', 'Connected error, reconnecting...');
         }
     };
 }
