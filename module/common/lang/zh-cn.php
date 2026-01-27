@@ -692,5 +692,6 @@ $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
 
 if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
 
 include(dirname(__FILE__) . '/menu.php');
