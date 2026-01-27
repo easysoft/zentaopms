@@ -691,4 +691,9 @@ $lang->aiapp->generalAgent = '通用智能体';
 $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
 
+if(!helper::hasFeature('program'))
+{
+    unset($lang->searchObjects['program'], $lang->createObjects['program']);
+}
+
 include(dirname(__FILE__) . '/menu.php');
