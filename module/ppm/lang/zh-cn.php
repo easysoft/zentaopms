@@ -122,7 +122,7 @@ $lang->ppm->repeatedOperation = '请勿重复操作';
 
 $lang->ppm->approvalStatus     = '审批流状态';
 $lang->ppm->approvalStatusList = array();
-$lang->ppm->approvalStatusList['pending']    = '未评审';
+$lang->ppm->approvalStatusList['pending']    = '待评审';
 $lang->ppm->approvalStatusList['inProgress'] = '评审中';
 $lang->ppm->approvalStatusList['approved']   = '已通过';
 $lang->ppm->approvalStatusList['rejected']   = '已拒绝';
