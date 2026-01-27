@@ -23,7 +23,21 @@ class spaceModel extends model
      */
     public function getListByAccount(string $account, ?object $pager = null): array|object
     {
-        $userSpaces = $this->getSpacesByAccount($account);
+        $members = $this->getMemberList();
+
+        $userSpaces = array();
+        if($this->app->user->admin)
+        {
+            $userSpaces = $members;
+        }
+        else
+        {
+            foreach($members as $spaceID => $users)
+            {
+                if(!isset($users[$account])) continue;
+                $userSpaces[$spaceID] = $users;
+            }
+        }
 
         $query = array();
         $query['ids']    = implode(',', array_keys($userSpaces));
@@ -31,7 +45,7 @@ class spaceModel extends model
 
         $result = $this->loadModel('gitfox')->apiGetSpaces($query, $pager);
         if(empty($result) || empty($result->data)) return array();
-        foreach($result->data as &$space) $space->members = zget($userSpaces, $space->id, array());
+        foreach($result->data as &$space) $space->members = zget($members, $space->id, array());
 
         return is_null($pager) ? $result->data : $result;
     }
@@ -115,10 +129,10 @@ class spaceModel extends model
      * @access public
      * @return array
      */
-    public function getSpacesByAccount(string $account): array
+    public function getSpacesByAccount(string $account = ''): array
     {
         $members = $this->getMemberList();
-        if($this->app->user->admin) return $members;
+        if($this->app->user->admin || !$account) return $members;
 
         $userSpaces = array();
         foreach($members as $spaceID => $users)
