@@ -349,6 +349,10 @@ class taskTao extends taskModel
 
         if(dao::isError()) return false;
 
+        $path = $copyTask->path . "{$copyTaskID},";
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($copyTaskID)->exec();
+        if(dao::isError()) return false;
+
         /* 将父任务的日志记录更新到子任务下。 */
         /* Update the logs of the parent task under the subtask. */
         $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($copyTaskID)
