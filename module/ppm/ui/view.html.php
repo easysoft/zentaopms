@@ -351,7 +351,7 @@ div
                                 set::cols($config->ppm->bug->dtable->fieldList),
                                 set::data(array_values($bugs)),
                                 set::loadPartial(true),
-                                set::footPager(usePager('bugPager'))
+                                set::footPager(usePager('bugPager', '', array('recPerPage' => $bugPager->recPerPage, 'recTotal' => $bugPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=bug&param=&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                             )
                         ),
                         tabPane
@@ -365,7 +365,7 @@ div
                                 set::cols($config->ppm->commitLogs->dtable->fieldList),
                                 set::data(array_values($commitLogs)),
                                 set::loadPartial(true),
-                                set::footPager(usePager('commitPager'))
+                                set::footPager(usePager('commitPager', '', array('recPerPage' => $commitPager->recPerPage, 'recTotal' => $commitPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=commit&param=&recTotal={$commitPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                             )
                         ),
                         tabPane
@@ -446,7 +446,7 @@ div
                         ),
                         tabPane
                         (
-                            set::key('related'),
+                            set::key('object'),
                             set::title($lang->ppm->linkedObject . " ({$objectPager->recTotal})"),
                             set::active($type == 'object'),
                             dtable
@@ -456,7 +456,7 @@ div
                                 set::data(array_values($linkObjects)),
                                 set::loadPartial(true),
                                 set::onRenderCell(jsRaw('window.renderObjectCell')),
-                                set::footPager(usePager('objectPager'))
+                                set::footPager(usePager('objectPager', '', array('recPerPage' => $objectPager->recPerPage, 'recTotal' => $objectPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=object&param=&recTotal={$objectPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                             )
                         )
                     )
