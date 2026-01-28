@@ -753,6 +753,7 @@ class ppmModel extends model
      */
     public function getRelationByBranch(object $repo, string $sourceBranch, string $targetBranch, string $type= '', ?object $pager = null)
     {
+        if($type == 'all') $type = '';
         $params = array();
         $params['gitRef']   = $sourceBranch;
         $params['after']    = $targetBranch;
@@ -786,6 +787,7 @@ class ppmModel extends model
             $object->status      = $this->lang->story->statusList[$story->status];
             $object->createdBy   = $story->openedBy;
             $object->createdDate = $story->openedDate;
+            $object->assignedTo  = $story->assignedTo;
             $object->hasViewPriv = common::hasPriv('story', 'view');
 
             $objectList[] = $object;
@@ -801,12 +803,13 @@ class ppmModel extends model
             $object->status      = $this->lang->task->statusList[$task->status];
             $object->createdBy   = $task->openedBy;
             $object->createdDate = $task->openedDate;
+            $object->assignedTo  = $task->assignedTo;
             $object->hasViewPriv = common::hasPriv('task', 'view');
 
             $objectList[] = $object;
         }
 
-        $bugs = empty($relationList['bug']) ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']), '`id`, `title`, `status`, `openedBy`, `openedDate`', 'id_desc');
+        $bugs = empty($relationList['bug']) ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']), '`id`, `title`, `status`, `openedBy`, `openedDate`, `assignedTo`', 'id_desc');
         foreach($bugs as $bug)
         {
             $object = new stdClass();
@@ -816,6 +819,7 @@ class ppmModel extends model
             $object->status      = $this->lang->bug->statusList[$bug->status];
             $object->createdBy   = $bug->openedBy;
             $object->createdDate = $bug->openedDate;
+            $object->assignedTo  = $bug->assignedTo;
             $object->hasViewPriv = common::hasPriv('bug', 'view');
 
             $objectList[] = $object;

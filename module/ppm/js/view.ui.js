@@ -237,7 +237,7 @@ window.afterPageUpdate = function()
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});
         $('.btn-right').on('click', function() {arrowTabs('monacoTabs', -2);});
-    }, 500);
+    }, 1000);
 };
 
 /**
