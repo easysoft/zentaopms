@@ -34,7 +34,7 @@ foreach($reviewers as $reviewer)
             icon(setClass('text-lg'), in_array($reviewer->account, $specifiedReviewers) ? 'customer' : 'contacts'),
             span(setClass('ml-2 text-lg'), zget($users, $reviewer->account)),
             label(setClass($approvalClass . ' ml-4 size-sm'), $lang->ppm->approvalStatusList[$reviewer->decision]),
-            $reviewerCount > 1 ? div
+            $reviewerCount > 1 && !in_array($reviewer->account, $specifiedReviewers) ? div
             (
                 setClass('flex flex-auto justify-end'),
                 btn
