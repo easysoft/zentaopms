@@ -696,6 +696,7 @@ class ppmModel extends model
     {
         $this->dao->insert(TABLE_PPM)->data($ppm, $this->config->ppm->create->skippedFields)
             ->batchCheck($this->config->ppm->create->requiredFields, 'notempty')
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
