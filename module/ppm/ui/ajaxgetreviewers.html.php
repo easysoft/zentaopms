@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+global $app;
 
 $reviewItems        = array();
 $specifiedReviewers = empty($flow) ? array() : $flow->definition->reviewFlow->approvals->specifiedReviewers;
@@ -34,7 +35,7 @@ foreach($reviewers as $reviewer)
             icon(setClass('text-lg'), in_array($reviewer->account, $specifiedReviewers) ? 'customer' : 'contacts'),
             span(setClass('ml-2 text-lg'), zget($users, $reviewer->account)),
             label(setClass($approvalClass . ' ml-4 size-sm'), $lang->ppm->approvalStatusList[$reviewer->decision]),
-            $reviewerCount > 1 ? div
+            $reviewerCount > 1 && !in_array($reviewer->account, $specifiedReviewers) && $app->user->account == $ppm->createdBy ? div
             (
                 setClass('flex flex-auto justify-end'),
                 btn
@@ -55,7 +56,7 @@ foreach($reviewers as $reviewer)
 tabs
 (
     empty($type) || $type == 'basic' ? on::init()->do('loadCurrentPage("#mr-detail"); loadCurrentPage(".mr-toolbar"); loadCurrentPage("#mr-history");') : null,
-    set::headerBtn
+    $app->user->account == $ppm->createdBy ? set::headerBtn
     (
         array
         (
@@ -64,7 +65,7 @@ tabs
             'class' => 'ghost text-primary',
             'url'   => createLink('ppm', 'ajaxAddReviewers', 'ppmID=' . $ppmID . '&type=' . $type),
         )
-    ),
+    ) : null,
     setClass('canvas rounded shadow py-2 px-4 mt-2'),
     tabPane
     (
