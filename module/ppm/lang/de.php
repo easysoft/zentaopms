@@ -57,6 +57,8 @@ $lang->ppm->opinion           = 'Review Opinion';
 $lang->ppm->merge             = 'Merge';
 $lang->ppm->assignedTo        = 'Assigned To';
 
+$lang->ppm->opinionPlaceholder = 'Please input your opinion';
+
 $lang->ppm->action = new stdclass();
 $lang->ppm->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
 $lang->ppm->action->imported = '$date, <strong>$actor</strong> imported this Merge Request.';

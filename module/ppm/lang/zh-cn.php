@@ -57,6 +57,8 @@ $lang->ppm->opinion           = '评审意见';
 $lang->ppm->merge             = '合并';
 $lang->ppm->assignedTo        = '指派给';
 
+$lang->ppm->opinionPlaceholder = '请输入评审意见';
+
 $lang->ppm->action = new stdclass();
 $lang->ppm->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
 $lang->ppm->action->imported = '$date, 由 <strong>$actor</strong> 导入了合并请求。';

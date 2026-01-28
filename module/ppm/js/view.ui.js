@@ -437,8 +437,11 @@ function connectSSE() {
 
     window.eventSource.addEventListener('pullreq_updated', function(event)
     {
-        if(mrID == event.data.id)
+        const eventData = JSON.parse(event.data);
+        console.log('pullreq_updated', eventData);
+        if(mrID == eventData.id)
         {
+            $.getJSON($.createLink('ppm', 'ajaxCheckReviewFlow', 'id=' + mrID));
             loadCurrentPage('#mr-detail');
         }
     });

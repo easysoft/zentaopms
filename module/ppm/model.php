@@ -314,11 +314,12 @@ class ppmModel extends model
      * @param  object $formData
      * @return bool
      */
-    public function review(int $ppmID, object $formData): bool
+    public function review(int $ppmID, object $formData, $account = ''): bool
     {
+        if(!$account) $account = $this->app->user->account;
         $this->dao->update(TABLE_PPMREVIEWERS)->data($formData)
             ->where('requestID')->eq($ppmID)
-            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('account')->eq($account)
             ->exec();
         return !dao::isError();
     }
@@ -647,8 +648,8 @@ class ppmModel extends model
         if($action == 'reopen') return !empty($ppm->status) && $ppm->status == 'closed';
         if($action == 'close')  return !empty($ppm->status) && $ppm->status == 'opened';
         if($action == 'review') return $ppm->status == 'opened' && strpos(",{$ppm->reviewers},", ",{$app->user->account},") !== false;
-        if($action == 'submit') return $ppm->reviewStatus == 'wait' || $ppm->reviewStatus == 'reject' || $ppm->reviewStatus == 'reverting';
-        if($action == 'recall') return $ppm->reviewStatus == 'reviewing' && $app->control->loadModel('approval')->canCancel($ppm);
+        if($action == 'submit') return $ppm->reviewStatus == 'pending' || $ppm->reviewStatus == 'rejected' || $ppm->reviewStatus == 'reverting';
+        if($action == 'recall') return $ppm->reviewStatus == 'inProgress' && $app->control->loadModel('approval')->canCancel($ppm);
         if($action == 'progress') return !empty($ppm->approvalflow);
         return true;
     }
