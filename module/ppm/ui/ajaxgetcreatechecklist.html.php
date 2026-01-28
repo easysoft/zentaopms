@@ -15,7 +15,8 @@ jsVar('entry', $entry);
 jsVar('urlParams', "repoID=$repoID&objectID=0&entry=%s&oldRevision=$sourceBranch&newRevision=$targetBranch&showBug=0");
 h:css("#monacoTree .text-clip {overflow: visible;}");
 
-if(!hasPriv('repo', 'diff')) unset($config->ppm->createCheck->linkObject->dtable->fieldList['id']['link']);
+if(!hasPriv('repo', 'diff')) unset($config->ppm->createCheck->commit->dtable->fieldList['id']['link']);
+unset($config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']);
 
 tabs
 (

@@ -222,6 +222,12 @@ $config->ppm->createCheck->linkObject->dtable->fieldList['createdBy']['type']   
 $config->ppm->createCheck->linkObject->dtable->fieldList['createdBy']['sortType'] = false;
 $config->ppm->createCheck->linkObject->dtable->fieldList['createdBy']['width']    = 100;
 
+$config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']['name']     = 'assignedTo';
+$config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']['title']    = $lang->repo->assignedTo;
+$config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']['type']     = 'user';
+$config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']['sortType'] = false;
+$config->ppm->createCheck->linkObject->dtable->fieldList['assignedTo']['width']    = 100;
+
 $config->ppm->createCheck->linkObject->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->ppm->createCheck->linkObject->dtable->fieldList['createdDate']['title']    = $lang->repo->time;
 $config->ppm->createCheck->linkObject->dtable->fieldList['createdDate']['type']     = 'datetime';

@@ -55,6 +55,7 @@ $lang->ppm->review            = 'Review';
 $lang->ppm->decision          = 'Review Decision';
 $lang->ppm->opinion           = 'Review Opinion';
 $lang->ppm->merge             = 'Merge';
+$lang->ppm->assignedTo        = 'Assigned To';
 
 $lang->ppm->action = new stdclass();
 $lang->ppm->action->synced   = '$date, <strong>$actor</strong> synced this Merge Request.';
@@ -315,3 +316,9 @@ $lang->ppm->mergeTypeInfoList['fast']   = 'All commits on this branch will be ad
 $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = 'Are you sure to close this merge request?';
 $lang->ppm->notice->confirmReopen = 'Are you sure to reopen this merge request?';
+
+$lang->ppm->featureBar = array();
+$lang->ppm->featureBar['view']['all']   = 'All';
+$lang->ppm->featureBar['view']['story'] = 'Story';
+$lang->ppm->featureBar['view']['task']  = 'Task';
+$lang->ppm->featureBar['view']['bug']   = 'Bug';

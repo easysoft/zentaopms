@@ -41,7 +41,7 @@ foreach($reviewers as $reviewer)
                 (
                     setClass('ghost size-sm ajax-submit'),
                     icon(setClass('text-primary'), 'trash'),
-                    set::url('ppm', 'ajaxDeleteReviewer', "ppmID={$ppmID}&reviewer={$reviewer->account}")
+                    set::url('ppm', 'ajaxDeleteReviewer', "ppmID={$ppmID}&reviewer={$reviewer->account}&type={$type}")
                 )
             ) : ''
         ),
@@ -54,7 +54,7 @@ foreach($reviewers as $reviewer)
 }
 tabs
 (
-    on::init()->do("loadCurrentPage('#mr-detail');loadCurrentPage('.mr-toolbar');loadCurrentPage('#mr-history');"),
+    empty($type) || $type == 'basic' ? on::init()->do('loadCurrentPage("#mr-detail"); loadCurrentPage(".mr-toolbar"); loadCurrentPage("#mr-history");') : null,
     set::headerBtn
     (
         array
@@ -62,7 +62,7 @@ tabs
             'title' => $lang->ppm->add,
             'icon'  => 'plus',
             'class' => 'ghost text-primary',
-            'url'   => createLink('ppm', 'ajaxAddReviewers', 'ppmID=' . $ppmID),
+            'url'   => createLink('ppm', 'ajaxAddReviewers', 'ppmID=' . $ppmID . '&type=' . $type),
         )
     ),
     setClass('canvas rounded shadow py-2 px-4 mt-2'),
