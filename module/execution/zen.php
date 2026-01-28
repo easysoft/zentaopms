@@ -369,6 +369,8 @@ class executionZen extends execution
 
         $project = $this->project->getByID($execution->project);
 
+        $this->view->hasFrozenStories = $this->project->hasFrozenObject($execution->project, 'SRS');
+
         $this->view->title        = $this->lang->execution->kanban;
         $this->view->userList     = $userList;
         $this->view->realnames    = $users;
@@ -1203,18 +1205,16 @@ class executionZen extends execution
     {
         $members = form::batchData()->get();
 
+        $oldMemberDays = $this->dao->select('`account`, `days`')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetchPairs('account', 'days');
         foreach($members as $rowIndex => $member)
         {
             $member->root = $execution->id;
-            if(!empty($execution->days) and $member->days > $execution->days)
+
+            if($member->hours > 24) dao::$errors["hours[$rowIndex]"] = $this->lang->execution->errorHours;
+            if(!empty($execution->days))
             {
-                dao::$errors["days[$rowIndex]"] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
-                return false;
-            }
-            if($member->hours > 24)
-            {
-                dao::$errors["hours[$rowIndex]"] = $this->lang->execution->errorHours;
-                return false;
+                if(isset($oldMemberDays[$member->account]) && $member->days == $oldMemberDays[$member->account]) continue;
+                if($member->days > $execution->days) dao::$errors["days[$rowIndex]"] = sprintf($this->lang->execution->daysGreaterProject, $execution->days);
             }
         }
         return $members;
@@ -1597,7 +1597,7 @@ class executionZen extends execution
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
+            if(!empty($flow) && in_array($flow->app, array('scrum', 'waterfall', 'kanbanProject'))) $flow->app = 'project';
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . "#app=$flow->app";
         }
 
@@ -1642,7 +1642,11 @@ class executionZen extends execution
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
-        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        elseif($module == 'pssp')
+        {
+            $link = helper::createLink($module, 'browse', "projectID=%s") . "#app={$this->app->tab}";
+        }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'auditplan', 'nc', 'meeting')))
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
         }
@@ -1657,6 +1661,10 @@ class executionZen extends execution
         elseif($method == 'createrelation')
         {
             $link = helper::createLink('execution', 'relation', "executionID=%s");
+        }
+        elseif($module == 'project' && $method == 'deliverablechecklist')
+        {
+            $link = helper::createLink('project', 'deliverableChecklist', "projectID=%s") . "#app={$this->app->tab}";
         }
 
         if($type != '') $link .= "&type=$type";

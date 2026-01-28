@@ -16,11 +16,11 @@ cid=16005
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 r($devTest->getMenuObjectTest('用户管理', 'user', 'browse')) && p('module') && e('user');
 r($devTest->getMenuObjectTest('任务列表', 'task', 'browse', true)) && p('active') && e('1');

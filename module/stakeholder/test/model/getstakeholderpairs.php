@@ -17,14 +17,14 @@ cid=18442
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(20);
 zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
 
 $objectIds = array(0, 1, 11, 100);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getStakeHolderPairsTest($objectIds[0])) && p()         && e('0');      // 获取objectID=0的干系人键值对
 r($stakeholderTester->getStakeHolderPairsTest($objectIds[1])) && p('user1')  && e('用户1');  // 获取objectID=1的干系人键值对
 r($stakeholderTester->getStakeHolderPairsTest($objectIds[2])) && p('user11') && e('用户11'); // 获取objectID=11的干系人键值对

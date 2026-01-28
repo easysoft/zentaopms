@@ -16,7 +16,7 @@ cid=15839
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('feedback')->gen(0);
 zenData('action')->gen(0);
@@ -25,7 +25,7 @@ zenData('user')->gen(10);
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 $normalData = new stdclass();
 $normalData->id = 1;

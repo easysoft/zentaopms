@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanlane')->gen(5);
@@ -35,7 +35,7 @@ $idList    = array('1' ,'2', '3', '4', '5');
 $nameList  = array('修改泳道1', '修改泳道2', '修改泳道3', '修改泳道4', '修改泳道5', '');
 $colorList = array('333', '2b529c');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->setLaneTest($idList[0], $nameList[0], $colorList[0])) && p('name,color') && e('修改泳道1,333');          // 测试设置泳道1
 r($kanban->setLaneTest($idList[1], $nameList[1], $colorList[1])) && p('name,color') && e('修改泳道2,2b529c');       // 测试设置泳道2

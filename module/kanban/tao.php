@@ -482,8 +482,6 @@ class kanbanTao extends kanbanModel
         $item['pri']          = $card->pri;
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
-        $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
-        $item['parent']       = !empty($card->rawParent) ? $card->rawParent : 0;
         $item['isParent']     = !empty($card->isParent) ? $card->isParent: 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
@@ -506,6 +504,10 @@ class kanbanTao extends kanbanModel
         $item['avatarList']   = array();
         $item['realnames']    = '';
         $item['order']        = $order;
+
+        $item['parent'] = 0;
+        if(!empty($card->originParent)) $item['parent'] = $card->originParent;
+        if(!empty($card->rawParent))    $item['parent'] = $card->rawParent;
 
         if($card->assignedTo)
         {
@@ -621,13 +623,14 @@ class kanbanTao extends kanbanModel
         $avatarPairs = $this->loadModel('user')->getAvatarPairs();
         $users       = $this->loadModel('user')->getPairs('noletter');
         $module      = $browseType == 'parentStory' ? 'story' : $browseType;
+        $regionID    = $this->session->execution ? $this->dao->select('id')->from(TABLE_KANBANREGION)->where('deleted')->eq('0')->andWhere('kanban')->eq($this->session->execution)->orderBy('id_asc')->limit(1)->fetch('id') : 0;
         foreach($lanes as $laneID => $lane)
         {
             $laneData = array();
             $laneData['id']     = $groupBy . $laneID;
             $laneData['type']   = $browseType;
             $laneData['name']   = $laneData['id'];
-            $laneData['region'] = $lane->execution;
+            $laneData['region'] = $regionID ? $regionID : $lane->execution;
             $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$module->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']  = $lane->color;
             $laneData['order']  = $lane->order;
@@ -984,8 +987,8 @@ class kanbanTao extends kanbanModel
             if(common::hasPriv($story->type, 'change') and $this->story->isClickable($story, 'change'))     $menu[] = array('label' => $this->lang->story->change, 'icon' => 'alter', 'url' => helper::createLink($story->type, 'change', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
             if(common::hasPriv($story->type, 'review') and $this->story->isClickable($story, 'review'))     $menu[] = array('label' => $this->lang->story->review, 'icon' => 'search', 'url' => helper::createLink($story->type, 'review', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
             if(common::hasPriv($story->type, 'activate') and $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink($story->type, 'activate', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct)                       $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no&from=taskkanban"));
-            if(common::hasPriv($story->type, 'delete'))                                                     $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink($story->type, 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
+            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct && empty($story->frozen)) $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no&from=taskkanban"));
+            if(common::hasPriv($story->type, 'delete') && empty($story->frozen))                               $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink($story->type, 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
 
             $menus[$story->id] = $menu;
         }
@@ -1017,8 +1020,8 @@ class kanbanTao extends kanbanModel
             if(common::hasPriv('task', 'create') && $toTaskPriv)                                      $menu[] = array('label' => $this->lang->execution->wbs, 'icon' => 'plus', 'url' => helper::createLink('task', 'create', "executionID={$execution->id}&storyID=$story->id&moduleID=$story->module"), 'modal' => true, 'size' => 'lg');
             if(common::hasPriv('task', 'batchCreate') && $toTaskPriv)                                 $menu[] = array('label' => $this->lang->execution->batchWBS, 'icon' => 'pluses', 'url' => helper::createLink('task', 'batchCreate', "executionID={$execution->id}&storyID=$story->id&moduleID=0&taskID=0&iframe=true"), 'modal' => true, 'size' => 'lg');
             if(common::hasPriv('story', 'activate') && $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink('story', 'activate', "storyID=$story->id"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct)                 $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID={$execution->id}&storyID=$story->story&confirm=no&from=taskkanban"));
-            if(common::hasPriv('story', 'delete'))                                                    $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink('story', 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
+            if(common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct && empty($story->frozen)) $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID={$execution->id}&storyID=$story->story&confirm=no&from=taskkanban"));
+            if(common::hasPriv('story', 'delete') && empty($story->frozen))                                    $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink('story', 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
 
             $menus[$story->id] = $menu;
         }

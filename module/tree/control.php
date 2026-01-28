@@ -322,6 +322,36 @@ class tree extends control
     }
 
     /**
+     * 新增一个模块。
+     * Create a module.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @access public
+     * @return void
+     */
+    public function create(int $rootID, string $viewType)
+    {
+        if(!empty($_POST))
+        {
+            if(empty($_POST['name'])) return $this->sendError(array('name' => sprintf($this->lang->error->notempty, $this->lang->tree->name)));
+
+            $count = $this->dao->select(`order`)->from(TABLE_MODULE)->where('type')->eq($viewType)->andWhere('root')->eq($rootID)->andWhere('parent')->eq('0')->count();
+            $_POST['parentModuleID'] = 0;
+            $_POST['modules']        = array($_POST['name']);
+            $_POST['shorts']         = array($_POST['short']);
+            $_POST['maxOrder']       = $count ? $count * 10 : 0;
+
+            $this->tree->manageChild($rootID, $viewType);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true, 'closeModel' => true));
+        }
+        $this->view->title = $this->lang->tree->create;
+        $this->display();
+    }
+
+    /**
      * 查看模块历史记录。
      * View module histories.
      *

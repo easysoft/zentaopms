@@ -472,6 +472,14 @@ class baseRouter
     public $cacheModel;
 
     /**
+     * 是否需要对htmlspecialchars进行解码。
+     * Whether need to decode htmlspecialchars.
+     *
+     * @var bool
+     */
+    public $needDecodeHtmlSpecialChars = null;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
@@ -3519,45 +3527,26 @@ class baseRouter
     }
 }
 
-if(version_compare(PHP_VERSION, '8.2.0', '>='))
-{
-    #[\AllowDynamicProperties] // https://www.php.net/manual/zh/class.allowdynamicproperties.php
-    class config
-    {
-        public function set(string $key, $value)
-        {
-            helper::setMember('config', $key, $value);
-        }
-    }
-}
-else
+#[AllowDynamicProperties]
+class config
 {
     /**
-     * config类。
-     * The config class.
+     * 设置成员变量，成员可以是'db.user'类似的格式。
+     * Set the value of a member. the member can be the format like db.user.
      *
-     * @package framework
+     * <code>
+     * <?php
+     * $config->set('db.user', 'wwccss');
+     * ?>
+     * </code>
+     * @param   string  $key    the key of the member
+     * @param   mixed   $value  the value
+     * @access  public
+     * @return  void
      */
-    class config
+    public function set(string $key, $value)
     {
-        /**
-         * 设置成员变量，成员可以是'db.user'类似的格式。
-         * Set the value of a member. the member can be the format like db.user.
-         *
-         * <code>
-         * <?php
-         * $config->set('db.user', 'wwccss');
-         * ?>
-         * </code>
-         * @param   string  $key    the key of the member
-         * @param   mixed   $value  the value
-         * @access  public
-         * @return  void
-         */
-        public function set(string $key, $value)
-        {
-            helper::setMember('config', $key, $value);
-        }
+        helper::setMember('config', $key, $value);
     }
 }
 

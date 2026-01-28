@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('scene')->loadYaml('treescene')->gen(10);
 zenData('user')->gen(1);
@@ -32,7 +32,7 @@ cid=19036
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 $sceneIdList  = array(2, 3, 4);
 $pSceneIdList = array(1, 7);

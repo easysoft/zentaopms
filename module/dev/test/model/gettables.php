@@ -18,11 +18,11 @@ cid=16011
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 r($devTest->getTablesTest()) && p('my:todo') && e('zt_todo'); // 测试步骤1：正常获取所有数据表并验证my分组下todo表
 r($devTest->getTablesTest()) && p('product:product') && e('zt_product'); // 测试步骤2：验证product分组下product表的完整名称

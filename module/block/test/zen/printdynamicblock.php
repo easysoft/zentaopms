@@ -17,7 +17,7 @@ cid=15260
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备
 zendata('action')->loadYaml('action_printdynamicblock', false, 2)->gen(30);
@@ -27,7 +27,7 @@ zendata('user')->loadYaml('user_printdynamicblock', false, 2)->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 $result = $blockTest->printDynamicBlockTest();

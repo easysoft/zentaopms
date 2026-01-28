@@ -16,13 +16,13 @@ cid=19205
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('testresult')->loadYaml('testresult_initresultforautomatedtest', false, 2)->gen(0);
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 r($testtaskTest->initResultForAutomatedTestTest(1, 2, 1, 3)) && p() && e('1');
 r($testtaskTest->initResultForAutomatedTestTest(0, 0, 0, 0)) && p() && e('2');

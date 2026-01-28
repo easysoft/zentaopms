@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -18,7 +18,7 @@ cid=18203
 */
 
 global $app;
-$screen = new screenTest();
+$screen = new screenModelTest();
 $scheme = file_get_contents($app->moduleRoot . 'screen/json/screen.json');
 $scheme = json_decode($scheme);
 

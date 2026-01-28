@@ -10,7 +10,7 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: program
+  - field: project
     note: "所属项目"
     range: 1-10000
     prefix: ""
@@ -70,22 +70,6 @@ fields:
     note: "链接者"
     from: common.user.v1.yaml
     use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: createdBy
-    note: "创建者"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: createdDate
-    note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateB
     prefix: ""
     postfix: ""
     loop: 0

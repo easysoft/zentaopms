@@ -19,13 +19,13 @@ cid=18033
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 4. 执行测试步骤（至少5个测试步骤）
 r($repoTest->checkNameTest('validRepoName')) && p() && e('1');           // 步骤1：正常英文名称

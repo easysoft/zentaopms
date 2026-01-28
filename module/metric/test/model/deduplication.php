@@ -15,7 +15,7 @@ cid=17073
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 // 准备测试数据
 zenData('metriclib')->loadYaml('metriclib_deduplication', true)->gen(40, true, false);
 
@@ -23,7 +23,7 @@ zenData('metriclib')->loadYaml('metriclib_deduplication', true)->gen(40, true, f
 su('admin');
 
 // 创建测试实例
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 测试步骤1：正常度量代码去重操作（数据库错误处理）
 r($metricTest->deduplicationTest('count_of_bug')) && p() && e("ERROR 1054 (42S22) at line 1: Unknown column 'deleted' in 'field list'");

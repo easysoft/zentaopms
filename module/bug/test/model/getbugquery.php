@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 zenData('project')->gen(40);
@@ -27,7 +27,7 @@ $bugQuery[] = " `story` LIKE '%2%'";
 $bugQuery[] = " `story` NOT LIKE '%2%'";
 $bugQuery[] = " `product` = '1' and `project` = '1' and `story` > 'abc'";
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 
 global $app;

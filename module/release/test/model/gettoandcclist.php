@@ -35,7 +35,7 @@ cid=18003
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备产品数据 - 必须先创建产品才能在release测试中引用
 $product = zenData('product');
@@ -49,7 +49,7 @@ $product->gen(5);
 zenData('user')->gen(10);
 su('admin');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 
 // 创建模拟发布数据对象进行测试
 $release1 = new stdClass();

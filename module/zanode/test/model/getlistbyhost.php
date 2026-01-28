@@ -26,12 +26,12 @@ cid=19833
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('host')->loadYaml('host')->gen(12);
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $hostIDList  = array(0, 1, 2);
 $orderByList = array('', 'heartbeat_desc');

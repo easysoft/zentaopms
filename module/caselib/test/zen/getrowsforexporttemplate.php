@@ -19,14 +19,14 @@ cid=15550
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $module = zenData('module');
 $module->loadYaml('module_getrowsforexporttemplate', false, 2)->gen(10);
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 $modules1 = array(101 => '模块1', 102 => '模块2');
 $modules2 = array(101 => '模块1', 102 => '模块2', 103 => '模块3');

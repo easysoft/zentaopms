@@ -7,7 +7,7 @@ title=测试 testtaskModel::initResult();
 timeout=0
 cid=19204
 
-- 执行testtaskTest模块的initResultTest方法，参数是$now 
+- 执行testtaskTest模块的initResultTest方法，参数是$now
  - 属性case @0
  - 属性version @1
  - 属性caseResult @pass
@@ -19,11 +19,11 @@ cid=19204
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 $now = helper::now();
 $fixedTime = '2023-12-25 10:30:00';

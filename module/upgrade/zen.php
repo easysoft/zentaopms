@@ -169,9 +169,9 @@ class upgradeZen extends upgrade
     {
         $this->upgradeChanges = [];
 
-        $currentVersion  = $this->config->installedVersion;
+        $currentVersion  = str_replace('.', '_', $this->config->installedVersion);
         $fromEdition     = $this->upgrade->getEditionByVersion($fromVersion);
-        $fromOpenVersion = $this->upgrade->getOpenVersion(str_replace('.', '_', $currentVersion));
+        $fromOpenVersion = $this->upgrade->getOpenVersion($currentVersion);
         $toOpenVersion   = $this->upgrade->getOpenVersion($toVersion);
         $upgradeVersions = $this->upgrade->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
@@ -232,7 +232,7 @@ class upgradeZen extends upgrade
 
         if($version == 'pro1_1_1')
         {
-            $sqlFile    = $this->ugprade->getUpgradeFile('pro1.1');
+            $sqlFile    = $this->upgrade->getUpgradeFile('pro1.1');
             $sqlChanges = $this->getChangesBySql($version, $sqlFile);
             $changes    = array_merge($changes, $sqlChanges);
         }
@@ -676,8 +676,6 @@ class upgradeZen extends upgrade
     {
         $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
         $this->setting->setItem('system.custom.URAndSR', '1');
-        $this->setting->setItem('system.common.closedFeatures', '');
-        $this->setting->setItem('system.common.disabledFeatures', '');
         $this->upgrade->addORPriv($openVersion);
     }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $date = date('Y-m-d', time() + 8 * 24 * 3600);
 $project = zenData('project');
@@ -31,7 +31,7 @@ cid=19732
 $projectList = array(0, 1, 11);
 $dateList    = array('2022-07-30', '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 r($weekly->getTasksOfNextWeekTest($projectList[0], $dateList[0])) && p('48:name') && e('开发任务58'); //测试project值为0，date值为2022-07-30
 r($weekly->getTasksOfNextWeekTest($projectList[0], $dateList[1])) && p('47:name') && e('开发任务57'); //测试project值为0，date值为空
 r($weekly->getTasksOfNextWeekTest($projectList[1], $dateList[0])) && p('48:name') && e('开发任务58'); //测试project值为1，date值为2022-07-30

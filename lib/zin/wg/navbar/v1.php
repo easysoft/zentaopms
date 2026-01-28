@@ -153,7 +153,8 @@ class navbar extends wg
         global $app, $lang, $config;
         if($app->tab == 'admin')
         {
-            $app->control->loadModel('admin')->setMenu();
+            $groupID = data('groupID') ? data('groupID') : 0;
+            $app->control->loadModel('admin')->setMenu($groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
             jsVar('adminMenuKey', $adminMenuKey);
         }
@@ -272,14 +273,22 @@ class navbar extends wg
                         if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                         /* Parse drop menu link. */
-                        $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                        if(!empty($dropMenuItem['links']))
+                        {
+                            $dropMenuLink = common::getHasPrivLink($dropMenuItem);
+                            if(empty($dropMenuLink)) continue;
 
-                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
-                        if(!common::hasPriv($subModule, $subMethod)) continue;
+                            list($subLabel, $subModule, $subMethod, $subParams) = $dropMenuLink;
+                        }
+                        else
+                        {
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            if(!common::hasPriv($subModule, $subMethod)) continue;
+                        }
 
-                        $subLink = createLink($subModule, $subMethod, $subParams);
-
-                        $subActive = false;
+                        $subLink        = createLink($subModule, $subMethod, $subParams);
+                        $subActive      = false;
                         $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
                         {
@@ -288,7 +297,9 @@ class navbar extends wg
                         else
                         {
                             $subModule = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                            $subAlias  = zget($dropMenuItem, 'alias', '');
                             if($subModule and in_array($currentModule, $subModule) and !str_contains(",$exclude,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
+                            if(str_contains(",$subAlias,", ",$currentModule-$currentMethod,")) $activeMainMenu = true;
                         }
 
                         if($activeMenuID) $activeMainMenu = $dropMenuName == $activeMenuID;

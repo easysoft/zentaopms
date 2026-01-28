@@ -16,7 +16,7 @@ cid=14895
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 ob_start();
 zenData('action')->gen(10);
@@ -26,7 +26,7 @@ ob_end_clean();
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->getDynamicByExecutionTest(1)) && p() && e('0');
 r($actionTest->getDynamicByExecutionTest(999)) && p() && e('0');

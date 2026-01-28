@@ -17,7 +17,7 @@ cid=15750
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('compile');
@@ -63,7 +63,7 @@ zenData('repo')->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r(is_string($compileTest->getLogsTest((object)array('engine' => 'jenkins', 'server' => 1, 'pipeline' => '{"name": "test"}'), (object)array('id' => 1, 'queue' => 123)))) && p() && e('1');

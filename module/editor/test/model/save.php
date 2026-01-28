@@ -16,10 +16,10 @@ cid=16243
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 $okFile = $editor->objectModel->app->getBasePath() . 'www' . DS . 'data' . DS . 'ok.txt';
 
 if(file_exists($okFile)) unlink($okFile);

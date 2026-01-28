@@ -17,7 +17,7 @@ cid=15379
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $bugTable = zenData('bug');
 $bugTable->id->range('1-20');
@@ -46,7 +46,7 @@ $userTable->gen(5);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r($bugTest->getDataOfResolvedBugsPerUserTest()) && p('admin:value') && e('8'); // 测试步骤1：验证admin用户解决的bug数量
 r($bugTest->getDataOfResolvedBugsPerUserTest()) && p('user1:value') && e('6'); // 测试步骤2：验证user1用户解决的bug数量

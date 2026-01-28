@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->loadYaml('lang')->gen(5);
 zenData('user')->gen(5);
@@ -170,7 +170,7 @@ cid=15897
 $moduleName = array('product', 'story', 'productplan', 'release', 'execution', 'task', 'build', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'testtask', 'doc', 'user');
 $method     = array('', 'create', 'edit', 'change', 'close', 'review', 'start', 'finish', 'activate', 'resolve', 'importUnit');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->getFormFieldsTest($moduleName[0], $method[0]))   && p()                           && e('0');                                              // 测试moduleName值为product，method为空
 r($customTester->getFormFieldsTest($moduleName[0], $method[1]))   && p('PO,QD,RD,type')            && e('产品负责人,测试负责人,发布负责人,产品类型');      // 测试moduleName值为product，method为create
 r($customTester->getFormFieldsTest($moduleName[0], $method[2]))   && p('PO,QD,RD,type,status')     && e('产品负责人,测试负责人,发布负责人,产品类型,状态'); // 测试moduleName值为product，method为edit

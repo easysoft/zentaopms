@@ -500,6 +500,8 @@ class project extends control
         }
 
         $this->projectZen->buildCreateForm((string)$model, (int)$programID, (int)$copyProjectID, (string)$extra);
+
+        $this->display('project', 'create');
     }
 
     /**
@@ -526,7 +528,7 @@ class project extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $workflowGroup = isset($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
 
         if($_POST)
         {
@@ -885,21 +887,22 @@ class project extends control
             $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
-        $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
-        $this->view->productList    = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
-        $this->view->productID      = $productID;
-        $this->view->product        = $this->product->getByID($productID);
-        $this->view->projectID      = $projectID;
-        $this->view->project        = $project;
-        $this->view->projects       = $projects;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->status         = $status;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
-        $this->view->avatarList     = $this->user->getAvatarPairs('');
-        $this->view->queryID        = $queryID;
+        $this->view->title               = $this->lang->execution->allExecutions;
+        $this->view->executionStats      = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
+        $this->view->productList         = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
+        $this->view->productID           = $productID;
+        $this->view->product             = $this->product->getByID($productID);
+        $this->view->projectID           = $projectID;
+        $this->view->project             = $project;
+        $this->view->projects            = $projects;
+        $this->view->pager               = $pager;
+        $this->view->orderBy             = $orderBy;
+        $this->view->status              = $status;
+        $this->view->users               = $this->loadModel('user')->getPairs('noletter');
+        $this->view->isStage             = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
+        $this->view->avatarList          = $this->user->getAvatarPairs('');
+        $this->view->queryID             = $queryID;
+        $this->view->hasFrozenExecutions = $this->project->hasFrozenObject($project->id, 'PP');
 
         $this->display();
     }
@@ -1138,7 +1141,7 @@ class project extends control
         $project = $this->project->getByID((int)$projectID);
         $this->projectZen->processGroupPrivs($project);
 
-        $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint');
+        $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint', $projectID);
 
         $getPrivs = $this->group->getPrivs($groupID);
         foreach($getPrivs as $moduleName => $actions)
@@ -1778,25 +1781,6 @@ class project extends control
         $this->view->projectID     = $projectID;
         $this->view->currentMethod = $currentMethod;
         $this->display();
-    }
-
-    /**
-     * Ajax get workflow group items.
-     *
-     * @param  string $model
-     * @param  int    $hasProduct
-     * @param  string $category
-     * @access public
-     * @return void
-     */
-    public function ajaxGetWorkflowGroups(string $model, int $hasProduct, string $category)
-    {
-        if($this->config->edition == 'open') return false;
-
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0', $category);
-
-        $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
-        return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
     }
 
     /**

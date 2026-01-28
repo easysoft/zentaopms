@@ -17,11 +17,11 @@ cid=17007
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mail = new mailTest();
+$mail = new mailModelTest();
 
 r($mail->getConfigByMXRRTest('qq.com', 'test')) && p('host') && e('smtp.qq.com');
 r($mail->getConfigByMXRRTest('263.net', 'test')) && p('host') && e('smtp.263.net');

@@ -7,13 +7,13 @@ title=测试 treeModel::createManageLink();
 timeout=0
 cid=19352
 
-- 执行treeTest模块的createManageLinkTest方法，参数是'story', $module1 
+- 执行treeTest模块的createManageLinkTest方法，参数是'story', $module1
  - 属性id @1
  - 属性parent @0
  - 属性name @Story模块
 - 执行treeTest模块的createManageLinkTest方法，参数是'bug', $module2 属性name @Bug模块[B][admin]
 - 执行treeTest模块的createManageLinkTest方法，参数是'case', $module3 属性name @Case模块[C]
-- 执行treeTest模块的createManageLinkTest方法，参数是'task', $module4 
+- 执行treeTest模块的createManageLinkTest方法，参数是'task', $module4
  - 属性id @4
  - 属性parent @0
  - 属性name @普通模块
@@ -22,14 +22,14 @@ cid=19352
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('module')->loadYaml('module_createmanagelink', false, 2)->gen(10);
 zendata('user')->loadYaml('user_createmanagelink', false, 2)->gen(10);
 
 su('admin');
 
-$treeTest = new treeTest();
+$treeTest = new treeModelTest();
 
 // 测试步骤1：创建story类型的管理链接
 $module1 = new stdclass();

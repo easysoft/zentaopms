@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('kanban')->gen(1);
 zenData('kanbanregion')->gen(1);
 
@@ -88,7 +88,7 @@ $kanban6->minColWidth = 300;
 $kanban6->desc        = '测试创建重名的公共看板的描述';
 
 su('admin');
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createTest($kanban1)) && p('name,space,owner,whitelist') && e('测试创建协作看板,1,po15,~~');     // 创建协同空间
 r($kanban->createTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,admin,user4'); // 创建私人空间

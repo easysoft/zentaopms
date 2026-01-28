@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+unset($lang->testcase->typeList['unit']);
+
 formPanel
 (
     // on::click('#refresh', 'clickRefresh'),

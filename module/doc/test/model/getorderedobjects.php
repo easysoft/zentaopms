@@ -23,7 +23,7 @@ cid=16118
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(30);
 zenData('product')->loadYaml('product')->gen(20);
@@ -34,7 +34,7 @@ $types       = array('', 'product', 'project', 'execution');
 $returnTypes = array('', 'merge');
 $appends     = array(0, 1, 11, 101);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getOrderedObjectsTest($types[0], $returnTypes[0], $appends[0])) && p()      && e('0');                 // 测试空数据
 r($docTester->getOrderedObjectsTest($types[1], $returnTypes[0], $appends[0])) && p('1')   && e('产品1');             // 获取已排序的产品数据
 r($docTester->getOrderedObjectsTest($types[1], $returnTypes[1], $appends[0])) && p('1')   && e('产品1');             // 获取已排序的产品数据

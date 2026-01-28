@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('scene')->gen(2);
@@ -62,7 +62,7 @@ cid=18959
 
 */
 
-$testcase    = new testcaseTest();
+$testcase    = new testcaseModelTest();
 $sceneIdList = array(array(), array(1, 2), array(3, 4));
 
 r($testcase->batchChangeSceneBranchTest($sceneIdList[0], 1))        && p() && e('0'); // 场景参数为空返回 false。

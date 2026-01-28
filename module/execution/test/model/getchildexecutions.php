@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -33,7 +33,7 @@ cid=16308
 $executionID = 3;
 $count       = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getChildExecutionsTest($executionID, $count[0])) && p('4:name') && e('子阶段1'); // 查询子阶段1
 r($executionTester->getChildExecutionsTest($executionID, $count[0])) && p('5:name') && e('子阶段2'); // 查询子阶段2
 r($executionTester->getChildExecutionsTest($executionID, $count[0])) && p('6:name') && e('子阶段3'); // 查询子阶段3

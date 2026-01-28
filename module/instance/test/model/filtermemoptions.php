@@ -19,13 +19,13 @@ cid=16793
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 4. 测试步骤
 r(count($instanceTest->filterMemOptionsTest(1024 * 1024))) && p() && e('6'); // 步骤1：1GB内存，期望返回6个选项

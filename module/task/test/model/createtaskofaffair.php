@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(0);
@@ -46,7 +46,7 @@ $notModuleTask     = array('execution' => 3, 'name' => '迭代下的任务', 'mo
 $assignedToList    = array('admin', 'user1', 'user2');
 $emptyAssignedTo   = array(0 => '');
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->createTaskOfAffairObject())                                                   && p()                             && e('0');                          // 测试空数据
 r($taskTester->createTaskOfAffairObject($sprintTask,        $emptyAssignedTo))               && p('1:execution,name')           && e('3,迭代下的任务');             // 测试创建迭代下的事务任务
 r($taskTester->createTaskOfAffairObject($stageTask,         $emptyAssignedTo))               && p('2:execution,name')           && e('4,阶段下的任务');             // 测试创建阶段下的事务任务

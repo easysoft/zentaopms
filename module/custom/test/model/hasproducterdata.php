@@ -16,13 +16,13 @@ cid=15908
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->hasProductERDataTest()) && p() && e('0'); // 步骤1：测试空数据库情况
 
 $storyTable = zenData('story');

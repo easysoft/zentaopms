@@ -18,7 +18,7 @@ cid=15926
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 ob_start();
 zenData('lang')->loadYaml('lang')->gen(15);
@@ -26,7 +26,7 @@ zenData('user')->gen(5);
 ob_end_clean();
 su('admin');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 
 r($customTester->setMenuByConfigTest((object)array('home' => 'Home|index|index', 'project' => 'Project|project|index'), array(), 'main')) && p() && e('array'); // 测试步骤1：使用标准对象菜单和空自定义菜单
 r($customTester->setMenuByConfigTest(array('task' => 'Task|task|browse', 'bug' => 'Bug|bug|browse'), '[{"name":"task","order":1},{"name":"bug","order":2}]', 'product')) && p() && e('array'); // 测试步骤2：使用数组菜单和JSON字符串自定义菜单

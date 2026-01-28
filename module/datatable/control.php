@@ -217,6 +217,12 @@ class datatable extends control
             if(!empty($project->isTpl)) unset($cols['deliverable']);
         }
 
+        if($module == 'deliverable')
+        {
+            $hasProcess = $this->loadModel('workflowgroup')->hasFeature((int)$extra, 'process');
+            if(!$hasProcess) unset($cols['activity'], $cols['trimmable'], $cols['trimRule']);
+        }
+
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
 
         if($this->config->edition == 'ipd' && $module == 'product' && $method == 'browse' && $extra == 'story') unset($cols['roadmap']);

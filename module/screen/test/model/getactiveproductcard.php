@@ -16,7 +16,7 @@ cid=18232
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -40,7 +40,7 @@ $action->gen(18);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getActiveProductCardTest('2025', '1')) && p('0:count') && e('5'); // 测试2025年1月的活跃产品数
 r($screenTest->getActiveProductCardTest('2025', '2')) && p('0:count') && e('3'); // 测试2025年2月的活跃产品数

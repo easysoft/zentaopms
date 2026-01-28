@@ -483,8 +483,6 @@ class bugZen extends bug
         return true;
     }
 
-
-
     /**
      * 为创建 bug 设置导航数据。
      * Set menu for create bug page.
@@ -675,6 +673,7 @@ class bugZen extends bug
             ->setDefault('product', $oldBug->product)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('resolvedDate', $oldBug->resolvedDate)
             ->add('lastEditedDate', $now)
             ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
@@ -1967,7 +1966,7 @@ class bugZen extends bug
         {
             $this->loadModel('kanban');
 
-            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'bug', (string)$bugID);
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell((int)$executionID, $laneID, $columnID, 'bug', (string)$bugID);
             if(empty($laneID) or empty($columnID))    $this->kanban->updateLane((int)$executionID, 'bug');
         }
 

@@ -14,7 +14,7 @@ cid=16120
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(20);
 zenData('user')->gen(5);
@@ -22,7 +22,7 @@ su('admin');
 
 $appends = array(0, 11);
 
-$docTester      = new docTest();
+$docTester      = new docModelTest();
 $allProjects    = $docTester->getOrderedProjectsTest($appends[0]);
 $appendProjects = $docTester->getOrderedProjectsTest($appends[1]);
 

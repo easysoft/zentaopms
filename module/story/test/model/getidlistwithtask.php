@@ -16,7 +16,7 @@ cid=18538
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $task = zenData('task');
@@ -31,7 +31,7 @@ $task->gen(10);
 su('admin');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：正常情况 - 获取包含关联需求任务的执行的需求ID列表数量
 r(count($storyTest->getIdListWithTaskTest(101))) && p() && e('3'); // 执行101有3个任务关联需求1,2,3

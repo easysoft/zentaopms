@@ -15,14 +15,14 @@ cid=16523
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $file = zenData('file');
 $file->pathname->range('202305/0414225006610005,202305/0414225006610006,202305/0414225006610007,202305/0414225006610008,202305/0414225006610009,202305/0414225006610010,202305/0414225006610011');
 $file->gen(5);
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 $files  = array('name' => 'file3.ppt', 'size' => '2893', 'tmp_name' => '/tmp/phpu2el', 'error' => 0);
 $labels = array('file3.ppt');

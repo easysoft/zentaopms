@@ -99,7 +99,7 @@ cid=17347
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('pipeline')->loadYaml('pipeline')->gen(20);
@@ -109,7 +109,7 @@ $sorts       = array('id_desc', 'name_asc');
 $recPerPages = array(5, 10, 20);
 $pageIdList  = array(1, 2);
 
-$pipelineTester = new pipelineTest();
+$pipelineTester = new pipelineModelTest();
 r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[0], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表
 r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照name正序排序，每页5条，第1页的流水线列表
 r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[1], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页10条，第1页的流水线列表

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15196
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试步骤1：空下钻数组情况
 r(count($biTest->prepareBuilitinPivotDrillSQLTest(1, array(), 1))) && p() && e('0'); // 步骤1：空下钻数组情况

@@ -16,7 +16,7 @@ cid=18162
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 生成测试数据
 zenData('task')->gen(60);
@@ -26,7 +26,7 @@ zenData('user')->gen(1);
 
 su('admin');
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getAllTimeStatusStatTest()) && p('story') && e('changing:15;active:15;');                                 // 测试步骤1：正常情况下获取story状态统计
 r($report->getAllTimeStatusStatTest()) && p('task')  && e('wait:10;doing:10;done:10;pause:10;cancel:10;closed:10;'); // 测试步骤2：正常情况下获取task状态统计

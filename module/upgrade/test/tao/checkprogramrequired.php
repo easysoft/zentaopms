@@ -17,7 +17,7 @@ cid=19567
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -31,7 +31,7 @@ $data->longTime      = false;
 
 $objectTypeList = array('project', 'execution');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 r($upgrade->checkProgramRequiredTest($data, $objectTypeList[0])) && p('programName:0') && e('『项目集名称』不能为空。'); // 测试项目集名称不能为空
 
 $data->programName = '项目集1';

@@ -27,7 +27,7 @@ cid=19540
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $charter = zenData('charter');
 $charter->id->range('1-5');
@@ -53,7 +53,7 @@ $plan->gen(5);
 
 zenData('charterproduct')->gen(0);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->processCharterBranchTest(1)) && p('product,branch') && e('1,1'); //获取立项1的产品和分支
 r($upgrade->processCharterBranchTest(2)) && p('product,branch') && e('2,2'); //获取立项2的产品和分支
 r($upgrade->processCharterBranchTest(3)) && p('product,branch') && e('3,3'); //获取立项3的产品和分支

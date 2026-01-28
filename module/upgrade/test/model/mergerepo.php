@@ -13,14 +13,14 @@ cid=19537
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->gen(2);
 
 $products = array('1,2', '3,4');
 $repoList = array(array(1), array(2));
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $upgrade->mergeRepo($repoList[0], $products[0]);
 $upgrade->mergeRepo($repoList[1], $products[1]);

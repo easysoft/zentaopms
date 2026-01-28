@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->gen(5);
@@ -44,7 +44,7 @@ $linearTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
 $multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 $output     = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 $taskTester->objectModel->app->moduleName = 'task';
 $taskTester->objectModel->app->rawMethod  = 'start';
 

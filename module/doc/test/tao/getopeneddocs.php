@@ -42,7 +42,7 @@ cid=16173
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
@@ -56,7 +56,7 @@ $hasPrivDocIdList[1] = range(1, 30);
 $hasPrivDocIdList[2] = range(41, 60);
 $hasPrivDocIdList[3] = range(51, 60);
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 r($docTester->getOpenedDocsTest($hasPrivDocIdList[0], $sorts[0])) && p()                   && e('0');                // 获取没有可查看文档时，按id倒序排序的文档
 r($docTester->getOpenedDocsTest($hasPrivDocIdList[0], $sorts[1])) && p()                   && e('0');                // 获取没有可查看文档时，按id正序排序的文档
 r($docTester->getOpenedDocsTest($hasPrivDocIdList[0], $sorts[2])) && p()                   && e('0');                // 获取没有可查看文档时，按标题正序排序的文档

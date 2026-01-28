@@ -21,13 +21,13 @@ cid=16566
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('oauth')->loadYaml('oauth')->gen(10);
 su('admin');
 
-$gitea = new giteaTest();
+$gitea = new giteaModelTest();
 
 $userList = array();
 r($gitea->bindUserTester($userList)) && p() && e('0'); // 用户列表为空

@@ -155,7 +155,7 @@ cid=15992
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -171,7 +171,7 @@ $types    = array('', 'all', 'bySearch', 'HLDS', 'DDS', 'DBDS', 'ADS', 'test');
 $queries  = array(0, 1, 2);
 $sorts    = array('id_desc', 'id_asc');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->getListTest($projects[0], $products[0], $types[0], $queries[0], $sorts[0])) && p()                               && e('0');               // 测试空数据
 r($designTester->getListTest($projects[1], $products[0], $types[0], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID=0,type='',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[1], $queries[0], $sorts[0])) && p('1:name,project,product,type')  && e('设计1,60,0,HLDS'); // 获取projectID=1,prouctID=0,type='',query=0时，所有按照id倒序排列设计数据

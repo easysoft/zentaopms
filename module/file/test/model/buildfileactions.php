@@ -15,7 +15,7 @@ cid=16493
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('file')->gen(5);
@@ -24,7 +24,7 @@ $fileIdList     = range(1, 5);
 $showDeleteList = array(true, false);
 $showEdit       = array(true, false);
 
-$fileTester = new fileTest();
+$fileTester = new fileModelTest();
 
 $result1 = $fileTester->buildFileActionsTest($fileIdList[0], $showDeleteList[0], $showEdit[0]);
 $result2 = $fileTester->buildFileActionsTest($fileIdList[1], $showDeleteList[1], $showEdit[0]);

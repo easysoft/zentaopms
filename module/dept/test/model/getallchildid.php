@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->loadYaml('dept')->gen(15);
@@ -22,7 +22,7 @@ cid=15967
 $deptIDList = array('2', '5', '20');
 $count      = array('0', '1');
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->getAllChildIdTest($deptIDList[0], $count[0]))    && p('0') && e('2'); //有子部门查询
 r($dept->getAllChildIdTest($deptIDList[1], $count[0]))    && p('0') && e('5'); //无子部门查询
 r($dept->getAllChildIdTest($deptIDList[0], $count[1]))    && p()    && e('1'); //子部门数量统计

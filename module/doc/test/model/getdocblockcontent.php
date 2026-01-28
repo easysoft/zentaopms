@@ -16,11 +16,11 @@ cid=16075
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 r($docTest->getDocBlockContentTest(1)) && p('title') && e('测试文档块'); // 测试1：存在的文档块返回解析后的JSON数组
 r($docTest->getDocBlockContentTest(999)) && p() && e('0'); // 测试2：不存在的文档块ID

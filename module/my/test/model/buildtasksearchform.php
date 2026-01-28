@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -117,7 +117,7 @@ cid=0
 
 */
 
-$my = new myTest();
+$my = new myModelTest();
 
 $queryID      = 1;
 $module       = 'workTask';

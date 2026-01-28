@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 // 手动插入测试数据
@@ -14,7 +14,7 @@ $dao->delete()->from(TABLE_TASK)->where('id')->le(20)->exec();
 // 插入测试任务数据
 $tasks = array(
     array('id' => 1, 'name' => '任务1', 'execution' => 1, 'deleted' => '0'),
-    array('id' => 2, 'name' => '任务2', 'execution' => 1, 'deleted' => '0'), 
+    array('id' => 2, 'name' => '任务2', 'execution' => 1, 'deleted' => '0'),
     array('id' => 3, 'name' => '任务3', 'execution' => 1, 'deleted' => '0'),
     array('id' => 9, 'name' => '任务9', 'execution' => 1, 'deleted' => '1'), // 已删除
     array('id' => 10, 'name' => '任务10', 'execution' => 1, 'deleted' => '1'), // 已删除

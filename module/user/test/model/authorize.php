@@ -21,7 +21,7 @@ cid=19578
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -30,7 +30,7 @@ zenData('group')->loadYaml('group')->gen(100);
 zenData('usergroup')->loadYaml('usergroup')->gen(100);
 zenData('grouppriv')->loadYaml('grouppriv')->gen(100);
 
-$user = new userTest();
+$user = new userModelTest();
 
 r($user->authorizeTest('user2')) && p('rights[index]:index;rights[module3]:method3') && e('1,1');                     // 获取user2用户的访问权限。
 r($user->authorizeTest('user2')) && p('acls[programs]:0,1')                          && e('1,6');                     // 获取user2用户的可访问项目集、项目、产品。

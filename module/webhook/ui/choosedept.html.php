@@ -34,7 +34,7 @@ panel
     h::ul
     (
         setID('deptList'),
-        setClass('list-unstyled'),
+        setClass('list-unstyled load-indicator'),
         on::init()->call('loadDeptTree')
     ),
     div

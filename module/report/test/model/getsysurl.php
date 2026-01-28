@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -21,7 +21,7 @@ cid=18168
 - 测试获取 config->mail->demain demain name argv1 https:localhost:8080 的 system url @demain name
 
 */
-$report = new reportTest();
+$report = new reportModelTest();
 
 $demain = array('the demain', '', 'demain name');
 $argv = array('https://localhost', 'https://localhost:8080');

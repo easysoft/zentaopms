@@ -1323,9 +1323,9 @@ class userModel extends model
             $project->storyPoints    = $projectStory ? round($projectStory->estimate, 1) : 0;
             $project->storyCount     = $projectStory ? $projectStory->count : 0;
             $project->executionCount = zget($projectExecutionCount, $project->id, 0);
-
-            if(in_array($this->config->edition, array('max', 'ipd'))) $project->deliverable = $this->project->countDeliverable($project);
         }
+
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projects = $this->project->countDeliverable($projects, 'project');
 
         return $projects;
     }

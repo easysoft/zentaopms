@@ -16,9 +16,9 @@ cid=15024
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('prompt1,prompt2,prompt3{2},prompt4{3},prompt5{3}');
 $table->module->range('story{3},task{3},bug{3},testcase');
@@ -33,7 +33,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->filterPromptsForExecutionTest(array()))) && p() && e('0');
 r(count($aiTest->filterPromptsForExecutionTest(array((object)array('id' => 1, 'name' => 'test1', 'module' => 'story', 'source' => 'story.story', 'targetForm' => 'story.create', 'purpose' => '测试', 'status' => 'active'))))) && p() && e('1');

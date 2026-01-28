@@ -15,7 +15,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('config')->gen(0);
 zenData('user')->gen(1);
@@ -23,7 +23,7 @@ zenData('user')->gen(1);
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 测试没有ZAI设置时获取知识内容块列表 */
 $result1 = $zai->getKnowledgeChunksTest('memory-id-1', 'content-id-1');

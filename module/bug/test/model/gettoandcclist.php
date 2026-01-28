@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(82);
 
@@ -21,7 +21,7 @@ cid=15398
 
 $bugIDList = array(1, 2, 3, 51, 81);
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getToAndCcListTest($bugIDList[0])) && p() && e('admin,admin');       // 测试获取bug1的联系人
 r($bug->getToAndCcListTest($bugIDList[1])) && p() && e('admin,admin');       // 测试获取bug2的联系人
 r($bug->getToAndCcListTest($bugIDList[2])) && p() && e('admin,admin');       // 测试获取bug3的联系人

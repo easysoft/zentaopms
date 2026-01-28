@@ -249,7 +249,7 @@ window.renderAvatar = function(item)
 
     if(item.cardType == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
     if(item.cardType == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'task' && priv.canAssignTask && item.dbPrivs && item.dbPrivs.assignto) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
+    if(item.cardType == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
 
     if(item.assignedTo.length == 0)
     {

@@ -17,10 +17,7 @@ data('storyType', $type);
 data('gradeRule', $gradeRule);
 if($app->tab == 'product') data('activeMenuID', $type);
 
-$forceReview  = $this->story->checkForceReview($type);
 $createFields = useFields('story.create');
-$createFields->field('needNotReview')->value($forceReview ? 0 : 1);
-if(!$forceReview) $createFields->field('reviewer')->hidden(true);
 
 if((isset($fields['branch']) && $type == 'story') || $type != 'story')
 {
@@ -82,7 +79,7 @@ else
     if($type != 'story') $fullModeOrders = 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
     if($type == 'story' and isset($fields['branch']))
     {
-        $fullModeOrders = 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files';
+        $fullModeOrders = 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,title,category,pri,estimate,spec,verify,files';
     }
 
     $createFields->orders('product,module,twinsStory,parent,grade,reviewer,region,lane,assignedTo,category,title,pri,estimate,spec,verify,files');
@@ -98,6 +95,9 @@ jsVar('langSourceNote', $lang->story->sourceNote);
 jsVar('feedbackSource', $config->story->feedbackSource);
 
 $pinnedItems = !empty($this->config->{$type}->custom->createFields) ? $this->config->{$type}->custom->createFields : array();
+
+$createFields->autoLoad('product', array('items' => 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,' . (!empty($lang->{$type}->flowExtraFields) ? implode(',', $lang->{$type}->flowExtraFields) : ''), 'updateOrders' => true));
+if($type != 'story') $createFields->autoLoad('branch', 'module');
 
 formGridPanel
 (
@@ -117,10 +117,8 @@ formGridPanel
     set::fields($createFields),
     set::pinnedItems($pinnedItems),
     set::data($initStory),
-    on::click('#loadProductPlans', "loadProductPlans('{$productID}')"),
     on::change('[name=parent]', 'loadGrade'),
-    on::change('[name=product]', 'loadProduct'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
     on::change('[name=region]', 'setLane'),
-    $type != 'story' ? on::change('[name=branch]', "loadBranchModule('{$productID}')") : null,
+    set::loadUrl($loadUrl)
 );

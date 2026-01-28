@@ -16,11 +16,11 @@ cid=18249
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 创建测试用的metric对象
 $metric = new stdClass();
@@ -34,7 +34,7 @@ class SimpleMockMetric {
     public function isObjectMetric($header) {
         return true;
     }
-    
+
     public function getGroupTable($header, $data, $dateType, $flag) {
         $groupHeader = 'Test Header';
         $groupData = array(array('Item1', 100), array('Item2', 200));

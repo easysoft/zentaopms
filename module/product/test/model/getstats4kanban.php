@@ -19,7 +19,7 @@ cid=17515
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->type->range('program{10},project{10},sprint{10}');

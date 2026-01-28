@@ -16,7 +16,7 @@ cid=18888
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $table = zenData('taskspec');
 $table->task->range('1-10');
@@ -28,7 +28,7 @@ $table->gen(5);
 
 su('admin');
 
-$taskTest = new taskTest();
+$taskTest = new taskTaoTest();
 
 r($taskTest->recordTaskVersionTest((object)array('id' => 11, 'version' => 1, 'name' => '新任务', 'estStarted' => '2023-03-01', 'deadline' => '2023-03-15'))) && p() && e('1');
 r($taskTest->recordTaskVersionTest((object)array('id' => 12, 'version' => 2, 'name' => '测试任务', 'estStarted' => null, 'deadline' => null))) && p() && e('1');

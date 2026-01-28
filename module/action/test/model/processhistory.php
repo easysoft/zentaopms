@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('action')->gen(10);
@@ -61,7 +61,7 @@ cid=14924
 
 $idList = array(1, 9, 10, 11, 16, 17, 20, 23, 24, 25);
 
-$actionTester = new actionTest();
+$actionTester = new actionModelTest();
 r($actionTester->processHistoryTest($idList[0])) && p('field,oldValue,newValue') && e('PO,~~,用户1'); // 测试处理ID为的产品历史记录
 r($actionTester->processHistoryTest($idList[1])) && p('field,oldValue,newValue') && e('status,未开始,已关闭'); // 测试处理ID为的需求历史记录
 r($actionTester->processHistoryTest($idList[2])) && p('field,oldValue,newValue') && e('closedReason,~~,已完成'); // 测试处理ID为的计划历史记录

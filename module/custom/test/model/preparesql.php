@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -9,6 +9,31 @@ su('admin');
 title=测试 customModel->prepareSQL();
 timeout=0
 cid=15920
+
+- 测试method为select，paramString参数为空
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,module
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section,module
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为select，paramString参数为lang,key,section,module,vision
+ - 第key1条的lang属性 @zh-cn
+ - 第key1条的module属性 @custom
+- 测试method为delete，paramString参数为空 @1
+- 测试method为delete，paramString参数为lang @0
+- 测试method为delete，paramString参数为lang,module @0
+- 测试method为delete，paramString参数为lang,key,section @0
+- 测试method为delete，paramString参数为lang,key,section,module @0
+- 测试method为delete，paramString参数为lang,key,section,module,vision @0
 
 */
 
@@ -26,7 +51,7 @@ $vision      = 'vision=rnd';
 $paramString = array('', $lang, $lang.'&'.$module, $lang.'&'.$key.'&'.$section, $lang.'&'.$key.'&'.$section.'&'.$module, $lang.'&'.$key.'&'.$section.'&'.$module.'&'.$vision);
 $method      = array('select', 'delete');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->prepareSQLTest($paramString[0], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为空
 r($customTester->prepareSQLTest($paramString[1], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为lang
 r($customTester->prepareSQLTest($paramString[2], $method[0])) && p('key1:lang,module') && e('zh-cn,custom');  //测试method为select，paramString参数为lang,module

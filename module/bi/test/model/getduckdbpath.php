@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15168
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(is_object($biTest->getDuckDBPathTest()) || $biTest->getDuckDBPathTest() === false) && p() && e('1'); // 步骤1：正常调用getDuckDBPath方法返回对象或false
 r(is_object($biTest->getDuckDBPathTest()) || $biTest->getDuckDBPathTest() === false) && p() && e('1'); // 步骤2：验证方法调用无错误

@@ -16,13 +16,13 @@ cid=15049
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 模拟测试数据，避免zenData调试输出
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->getTargetFormLocationTest(1, (object)array('story' => (object)array('id' => 1, 'status' => 'active', 'type' => 'story')))) && p('0') && e('story-change-1.html#app=product');
 r($aiTest->getTargetFormLocationTest(999, (object)array()))                                                                           && p('1') && e('1');

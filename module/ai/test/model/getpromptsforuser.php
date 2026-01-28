@@ -17,10 +17,10 @@ cid=15045
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('prompt1{3},prompt2{3},prompt3{2},prompt4{1},prompt5{1}');
 $table->module->range('story{3},task{3},bug{2},project{1},user{1}');
@@ -34,7 +34,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($aiTest->getPromptsForUserTest('story')) && p() && e('3'); // 步骤1：正常情况 - story模块有数据

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -27,7 +27,7 @@ $repo->acl->range('[{"acl":"private"}]');
 $repo->product->range('1,1,1000');
 $repo->gen(4);
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $repoID = 2;
 r($repo->setMenuTest($repoID)) && p() && e('2'); //正常设置版本库id

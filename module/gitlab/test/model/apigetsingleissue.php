@@ -17,7 +17,7 @@ cid=16617
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 1. zendata数据准备
 $table = zenData('pipeline');
@@ -31,7 +31,7 @@ $table->gen(5);
 su('admin');
 
 // 3. 创建测试实例
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 // 4. 执行测试步骤 - 符合指南要求的至少5个测试步骤
 r($gitlab->apiGetSingleIssueTest(1, 2, 1)) && p('title') && e('issue1');                      // 步骤1：正常获取存在的issue信息

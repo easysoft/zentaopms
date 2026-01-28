@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=15730
 
 */
 
-$companyTest = new companyTest();
+$companyTest = new companyModelTest();
 r($companyTest->buildSearchFormTest(1, '/company-browse-inside-0-id-1.html')) && p('queryID') && e('1');
 r($companyTest->buildSearchFormTest(0, '/company-browse-inside-0-id.html')) && p('actionURL') && e('/company-browse-inside-0-id.html');
 r($companyTest->buildSearchFormTest(5, '')) && p('queryID') && e('5');

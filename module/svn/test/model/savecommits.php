@@ -26,13 +26,13 @@ cid=18721
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(1);
 zenData('repohistory')->loadYaml('repohistory')->gen(1);
 su('admin');
 
-$svn = new svnTest();
+$svn = new svnModelTest();
 
 r($svn->saveCommitsTest(1, 'empty')) && p('id,commits') && e('1,1'); // 没有提交信息
 r($svn->saveCommitsTest(1, 'nolink')) && p('id,commits') && e('1,2'); // 没有关联信息

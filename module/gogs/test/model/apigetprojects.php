@@ -18,14 +18,14 @@ cid=16686
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gogs.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
 
 su('admin');
 
-$gogsTest = new gogsTest();
+$gogsTest = new gogsModelTest();
 
 r($gogsTest->apiGetProjectsTest(1)) && p() && e('0');
 r($gogsTest->apiGetProjectsTest(999)) && p() && e('0');

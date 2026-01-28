@@ -1,6 +1,7 @@
-#pick-pop-admin-menu {width: 145px!important;}
+#pick-pop-admin-menu {width: 155px!important;}
 #pick-pop-admin-menu .dropmenu-list {padding: 8px;}
 #pick-pop-admin-menu .dropmenu-item + .dropmenu-item {margin-top: 4px}
 #pick-pop-admin-menu .dropmenu-item.active {background-color: unset;}
 #pick-pop-admin-menu .dropmenu-item:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity)); background-color: rgba(var(--color-primary-50-rgb),var(--tw-bg-opacity));}
 .dropmenu-item .item-content .label {flex-shrink: 0;}
+.svg-icon {height: 24px; width: 24px; text-align: center;}

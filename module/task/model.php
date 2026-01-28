@@ -295,8 +295,11 @@ class taskModel extends model
         /* When a normal task is consumed, create the subtask and update the parent task status. */
         if($oldParentTask->isParent == 0 && $oldParentTask->consumed > 0)
         {
-            $this->taskTao->copyTaskData($oldParentTask);
+            $copyTaskID = $this->taskTao->copyTaskData($oldParentTask);
             if(dao::isError()) return false;
+
+            $this->loadModel('action')->create('task', $copyTaskID, 'Opened', '');
+            $childrenIdList = arrayUnion(array($copyTaskID), $childrenIdList);
         }
 
         $parentTask = new stdclass();
@@ -2511,7 +2514,7 @@ class taskModel extends model
         if($action == 'restart')            return $task->status == 'pause';
         if($action == 'pause')              return $task->status == 'doing';
         if($action == 'assignto')           return !in_array($task->status, array('closed', 'cancel'));
-        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel';
+        if($action == 'close')              return $task->status == 'done' || $task->status == 'cancel' || ($task->isParent && $task->status != 'closed');
         if($action == 'activate')           return $task->status == 'done' || $task->status == 'closed' || $task->status == 'cancel';
         if($action == 'finish')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
         if($action == 'cancel')             return $task->status != 'done' && $task->status != 'closed' && $task->status != 'cancel';
@@ -3397,8 +3400,15 @@ class taskModel extends model
      */
     public function updateExecutionEsDateByGantt(object $postData): bool
     {
+        $stage = $this->dao->select('project,parent,frozen')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
+        if(!empty($stage->frozen))
+        {
+            $this->app->loadLang('execution');
+            dao::$errors[] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->ganttDrag);
+            return false;
+        }
+
         /* Get parent information. */
-        $stage      = $this->dao->select('project,parent')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
         $parentID   = $stage->project != $stage->parent ? $stage->parent : 0;
         $parentData = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($parentID ? $parentID : $stage->project)->fetch();
 

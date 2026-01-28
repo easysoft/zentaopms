@@ -15,7 +15,7 @@ cid=16707
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -24,7 +24,7 @@ zenData('group')->loadYaml('group')->gen(10);
 global $app;
 $app->user->feedback = 1;
 
-$group = new groupTest();
+$group = new groupModelTest();
 r($group->getPairsTest())   && p('1')  && e('这是一个新的用户分组1'); // 获取权限分组
 r($group->getPairsTest())   && p('3')  && e('这是一个新的用户分组3'); // 获取权限分组
 r($group->getPairsTest(2))  && p('7')  && e('这是一个新的用户分组7'); // 获取project=2的权限分组

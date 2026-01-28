@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->loadYaml('testtask')->gen(18);
 
@@ -15,7 +15,7 @@ pid=1
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->getPairsTest(0))    && p() && e(0); // 产品 0 没有测试单。
 r($testtask->getPairsTest(1))    && p() && e(0); // 产品 1 没有测试单。

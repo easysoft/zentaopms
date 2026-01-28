@@ -27,7 +27,7 @@ cid=15588
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zendata('pipeline')->gen(3);
@@ -38,7 +38,7 @@ zendata('compile')->loadYaml('compile')->gen(3);
 su('admin');
 
 // 创建测试实例
-$ciTest = new ciTest();
+$ciTest = new ciModelTest();
 
 r($ciTest->getCompileByIdTest(1)) && p('id,name,status') && e('1,构建1,created');
 r($ciTest->getCompileByIdTest(0)) && p() && e('0');

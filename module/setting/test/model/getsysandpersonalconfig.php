@@ -16,7 +16,7 @@ cid=18362
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 使用默认数据，数量少一些避免重复
 zenData('config')->gen(7);
@@ -25,7 +25,7 @@ zenData('config')->gen(7);
 su('admin');
 
 // 创建测试实例
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 // 测试步骤1：测试正常用户account参数，验证返回不为假
 r(empty($setting->getSysAndPersonalConfigTest('admin')) ? 0 : 1) && p() && e('1');

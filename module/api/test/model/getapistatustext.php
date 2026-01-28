@@ -18,11 +18,11 @@ cid=15104
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r($apiTest->getApiStatusTextTest('doing')) && p() && e('开发中');       // 步骤1：正常状态doing
 r($apiTest->getApiStatusTextTest('done')) && p() && e('开发完成');       // 步骤2：正常状态done

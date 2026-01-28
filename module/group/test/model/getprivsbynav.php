@@ -20,14 +20,14 @@ cid=16711
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 global $app;
 $app->rawModule = 'group';
 $app->rawMethod = 'browse';
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getPrivsByNavTest('my'))            && p('my-todo,todo-view,mail-index') && e('my-todo,todo-view,~~');   // 验证my菜单的权限
 r($group->getPrivsByNavTest('admin'))         && p('mail-index,cron-index')        && e('mail-index,cron-index');   // 验证admin菜单的权限

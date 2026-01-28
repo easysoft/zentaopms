@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 
@@ -29,7 +29,7 @@ global $lang;
 $lang->SRCommon = '研发需求';
 $lang->URCommon = '用户需求';
 
-$my = new myTest();
+$my = new myModelTest();
 
 $queryID   = array(0, 1);
 $actionURL = array('actionURL1', 'actionURL2');

@@ -18,7 +18,7 @@ cid=19700
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 数据准备 - 简化版本
 $oauthTable = zenData('oauth');
@@ -30,7 +30,7 @@ $oauthTable->gen(4);
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 // 执行5个测试步骤
 r($webhookTest->getOpenIdListTest(1, 0, 'admin,user1')) && p() && e('openid_001,openid_002'); // 步骤1：传入toList参数

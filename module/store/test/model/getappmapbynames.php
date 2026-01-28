@@ -15,12 +15,12 @@ cid=18453
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
-$store = new storeTest();
+$store = new storeModelTest();
 
 r($store->getAppMapByNamesTest(array())) && p() && e('0');
 r($store->getAppMapByNamesTest(array('adminer'))) && p('adminer:name') && e('adminer');

@@ -122,7 +122,7 @@ $printGroup = function(&$formSession, &$fieldNO, $group) use ($lang, $config, $m
         echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
         /* Print value. */
-        echo "<td id='valueBox$fieldNO'>";
+        echo "<td id='valueBox$fieldNO' style='overflow: visible'>";
         if(isset($config->moreLinks["field{$currentField}"]))
         {
             $selected = $formSession["value$fieldNO"];

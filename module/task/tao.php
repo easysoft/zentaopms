@@ -318,11 +318,11 @@ class taskTao extends taskModel
      * 复制任务数据。
      * Copy the task data and update the effort to the new task.
      *
-     * @param  object    $parentTask
-     * @access protected
-     * @return bool
+     * @param  object   $parentTask
+     * @access public
+     * @return bool|int
      */
-    protected function copyTaskData(object $task): bool
+    public function copyTaskData(object $task): bool|int
     {
         /* 复制当前任务信息。 */
         /* Copy the current task to child task, and change the parent field value. */
@@ -349,6 +349,10 @@ class taskTao extends taskModel
 
         if(dao::isError()) return false;
 
+        $path = $copyTask->path . "{$copyTaskID},";
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($copyTaskID)->exec();
+        if(dao::isError()) return false;
+
         /* 将父任务的日志记录更新到子任务下。 */
         /* Update the logs of the parent task under the subtask. */
         $this->dao->update(TABLE_EFFORT)->set('objectID')->eq($copyTaskID)
@@ -356,7 +360,7 @@ class taskTao extends taskModel
             ->andWhere('objectType')->eq('task')
             ->exec();
 
-        return !dao::isError();
+        return !dao::isError() ? $copyTaskID : false;
     }
 
     /**
@@ -675,7 +679,7 @@ class taskTao extends taskModel
         }
 
         /* 如果该任务是多人团队任务则做一些额外的处理。*/
-        if(empty($task->team)) return $left;
+        if(empty($task->team)) return (float)$left;
 
         /* 获取要删除的工时的团队，如果要删除的工时的用户不是团队成员则不做任何处理。*/
         $currentTeam = $this->getTeamByAccount($task->team, $effort->account, array('effortID' => $effort->id, 'order' => $effort->order));

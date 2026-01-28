@@ -16,13 +16,13 @@ cid=16984
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(3);
 zenData('company')->gen(1);
 zenData('risk')->gen(10);
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
 $emptyRisks = array();
 

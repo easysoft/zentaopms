@@ -123,13 +123,15 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
         {
-            $methods['importBuildinModules']        = [];
-            $methods['importLiteModules']           = [];
-            $methods['addSubStatus']                = [];
+            $methods['importBuildinModules']       = [];
+            $methods['importLiteModules']          = [];
+            $methods['addSubStatus']               = [];
             $methods['processDataset']             = [];
-            $methods['upgradeScreenAndMetricData'] = [];
-            $methods['upgradeBIData']              = [];
         }
+
+        $methods['upgradeScreenAndMetricData'] = [];
+        $methods['upgradeBIData']              = [];
+        $methods['disableFeaturesByMode']      = []; // 新增了一些功能，轻量级升级上来要禁用掉
         $methods['convertCharset']             = [];
         $methods['program-refreshStats']       = [true];
         $methods['product-refreshStats']       = [true];
@@ -3807,7 +3809,7 @@ class upgradeModel extends model
 
             $projectList = $result;
         }
-        else if(!empty($data->projects))
+        elseif(!empty($data->projects))
         {
             $projectList = (int)$data->projects;
             $this->dao->update(TABLE_PROJECT)->set('status')->eq($data->projectStatus)->where('id')->eq($projectList)->exec();
@@ -9494,7 +9496,7 @@ class upgradeModel extends model
             $data->app = $app;
             foreach($appModules as $module => $options)
             {
-                if($importModule && $importModule != $module) continue;
+                if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
                 $this->app->loadLang($module);
 
@@ -9526,7 +9528,7 @@ class upgradeModel extends model
         $data->createdDate   = $now;
         foreach($actions as $module => $moduleActions)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $data->module = $module;
             foreach($moduleActions as $action)
@@ -9574,7 +9576,7 @@ class upgradeModel extends model
         $data->createdDate = $now;
         foreach($fields as $module => $moduleFields)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $order = 1;
             $data->module = $module;
@@ -9615,7 +9617,7 @@ class upgradeModel extends model
         $data = new stdclass();
         foreach($layouts as $module => $moduleLayouts)
         {
-            if($importModule && $importModule != $module) continue;
+            if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
             $data->module = $module;
             foreach($moduleLayouts as $action => $layoutFields)
@@ -9653,7 +9655,7 @@ class upgradeModel extends model
         {
             foreach($appModules as $module => $options)
             {
-                if($importModule && $importModule != $module) continue;
+                if($importModule && strpos(",$importModule,", ",$module,") === false) continue;
 
                 $labels = array();
                 if($module == 'product')
@@ -11337,6 +11339,931 @@ class upgradeModel extends model
     }
 
     /**
+     *
+     * 为项目流程内置其他活动。
+     * Add other activity.
+     *
+     * @access public
+     * @return void
+     */
+    public function addWorkflowGroupOtherActivity()
+    {
+        $projectModules  = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('process')->andWhere('extra')->eq('project')->fetchPairs();
+        $groupList       = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
+        foreach($groupList as $group)
+        {
+            if($this->config->edition != 'open' && $group->projectModel == 'ipd')
+            {
+                $this->loadModel('workflowGroup')->addProcessAndActivity($group, 'ipd');
+            }
+            elseif(!empty($projectModules[$group->id]))
+            {
+                $this->createOtherActivity($projectModules[$group->id], $group->id);
+            }
+        }
+    }
+
+    /**
+     * 为项目流程内置默认分类。
+     * Add deliverable default modules.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultDeliverableModule()
+    {
+        $groupList = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
+        foreach($groupList as $group)
+        {
+            foreach($this->lang->upgrade->deliverableModule as $code => $name) $this->createDeliverableModule($group->id, $name, $code);
+        }
+    }
+
+    /**
+     * 升级设计类型为交付物。
+     * Upgrade design type to deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDesignToDeliverable()
+    {
+        $this->app->loadLang('design');
+        $clientLang = $this->app->getClientLang();
+        $typeList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('design')
+            ->andWhere('section')->eq('typeList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        $plusTypeList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('design')
+            ->andWhere('section')->eq('plusTypeList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if($typeList)     $this->lang->design->typeList     = $typeList;
+        if($plusTypeList) $this->lang->design->plusTypeList = $plusTypeList;
+
+        $modelList  = array('waterfall', 'waterfallplus', 'ipd');
+        $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('deliverable')
+            ->andWhere('t1.extra')->eq('design')
+            ->andWhere('t2.projectModel')->in($modelList)
+            ->fetchAll();
+
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'enabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->systemList  = 1;
+        $deliverable->trimmable   = '1';
+        $deliverable->template    = '[]';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->required = '0';
+        $deliverableStage->stage    = 'project';
+        foreach($moduleList as $module)
+        {
+            if(empty($activityList[$module->workflowGroup])) continue;
+            $otherActivity   = reset($activityList[$module->workflowGroup]);
+            $otherActivityID = $otherActivity->id;
+
+            $nameFilter = array();
+            $deliverable->workflowGroup = $module->workflowGroup;
+            $deliverable->module        = $module->id;
+            $deliverable->activity      = $otherActivityID;
+            foreach(array_filter($this->lang->design->typeList) as $key => $value)
+            {
+                if(empty($value) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
+                $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
+                $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
+
+                /* 将历史设计的设计类型替换为交付物ID。 */
+                if(!empty($projectWorkflowGroup[$module->workflowGroup]))
+                {
+                    $projects = array_keys($projectWorkflowGroup[$module->workflowGroup]);
+                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in($projects)->exec();
+                }
+            }
+
+            foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
+            {
+                if(empty($value) || $module->projectModel != 'waterfallplus') continue;
+                $deliverable->category = $key; // 将设计的类型转换为交付物的类型。
+                $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
+
+                /* 将历史设计的设计类型替换为交付物ID。 */
+                if(!empty($projectWorkflowGroup[$module->workflowGroup]))
+                {
+                    $projects = array_keys($projectWorkflowGroup[$module->workflowGroup]);
+                    $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($key)->andWhere('project')->in($projects)->exec();
+                }
+            }
+        }
+    }
+
+    /**
+     * 创建交付物。
+     * Add deliverable.
+     *
+     * @param  string $name
+     * @param  object $deliverable
+     * @param  object $deliverableStage
+     * @param  array  $nameFilter
+     * @access public
+     * @return int
+     */
+    public function addDeliverable(string $name, object $deliverable, object $deliverableStage, array &$nameFilter = array()): int
+    {
+        /* 重名的交付物名称后面加数字。 */
+        if(!empty($nameFilter[$name]))
+        {
+            $deliverable->name = $name . $nameFilter[$name];
+            $nameFilter[$name] ++;
+        }
+        else
+        {
+            $deliverable->name = $name;
+            $nameFilter[$name] = 1;
+        }
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $deliverableStage->deliverable = $deliverableID;
+        $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+
+        return $deliverableID;
+    }
+
+    /**
+     * 将通用交付物升级为项目流程下的交付物。
+     * Upgrade deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDeliverable()
+    {
+        $this->app->loadLang('tree');
+
+        $deliverable = new stdClass();
+        $deliverable->status    = 'disabled';
+        $deliverable->trimmable = '1';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
+
+        $deliverableList = array();
+        $nameFilter      = array(); // 过滤重名交付物。
+        $workflowGroups  = $this->dao->select('id,deliverable,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll();
+        $deliverables    = $this->dao->select('id,name,model,`desc`,createdBy,createdDate')->from(TABLE_DELIVERABLE)->where('deleted')->eq('0')->andWhere('model')->ne('')->fetchAll('id');
+        $fileList        = $this->dao->select('id,title,objectType,objectID')->from(TABLE_FILE)->where('objectType')->eq('deliverable')->fetchAll('objectID');
+        $otherModules    = $this->dao->select('root,id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('extra')->eq('other')->fetchPairs();
+        $activityList    = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        /* 将旧的交付物按照适用范围升级到各个项目流程中。 */
+        foreach($deliverables as $oldDeliverable)
+        {
+            $models = explode(',', $oldDeliverable->model);
+            /* 原瀑布、敏捷追加融合模式。 */
+            foreach($models as $model)
+            {
+                if(strpos($model, 'product_waterfall') !== false) $models[] = str_replace('product_waterfall', 'product_waterfallplus', $model);
+                if(strpos($model, 'project_waterfall') !== false) $models[] = str_replace('project_waterfall', 'project_waterfallplus', $model);
+                if(strpos($model, 'product_scrum') !== false)     $models[] = str_replace('product_scrum', 'product_agileplus', $model);
+                if(strpos($model, 'project_scrum') !== false)     $models[] = str_replace('project_scrum', 'project_agileplus', $model);
+            }
+
+            foreach($models as $model)
+            {
+                foreach($workflowGroups as $workflowGroup)
+                {
+                    if($workflowGroup->projectModel == 'kanban') $workflowGroup->projectModel = 'scrum_kanban';
+                    if(!empty($deliverableList[$workflowGroup->id][$oldDeliverable->id])) continue;
+                    if(strpos($model, "{$workflowGroup->projectType}_{$workflowGroup->projectModel}") === false) continue;
+
+                    if(empty($activityList[$workflowGroup->id])) continue;
+                    $otherActivity   = reset($activityList[$workflowGroup->id]);
+                    $otherActivityID = $otherActivity->id;
+
+                    $deliverableFile            = $fileList[$oldDeliverable->id]; // 原交付物只会上传一个附件。
+                    $deliverable->workflowGroup = $workflowGroup->id;
+                    $deliverable->desc          = $oldDeliverable->desc;
+                    $deliverable->module        = isset($otherModules[$workflowGroup->id]) ? $otherModules[$workflowGroup->id] : '0';
+                    $deliverable->activity      = $otherActivityID;
+                    $deliverable->template      = $deliverableFile ? '{"new_0":{"name":"' . $deliverableFile->title . '","doc":"","fileID":"' . $deliverableFile->id . '"}}' : '[]';
+                    $deliverable->createdBy     = $oldDeliverable->createdBy;
+                    $deliverable->createdDate   = !empty($oldDeliverable->createdDate) ? $oldDeliverable->createdDate : null;
+
+                    /* 重名的交付物名称后面加数字。 */
+                    if(!empty($nameFilter[$workflowGroup->id][$oldDeliverable->name]))
+                    {
+                        $deliverable->name = $oldDeliverable->name . $nameFilter[$workflowGroup->id][$oldDeliverable->name];
+                        $nameFilter[$workflowGroup->id][$oldDeliverable->name] ++;
+                    }
+                    else
+                    {
+                        $deliverable->name = $oldDeliverable->name;
+                        $nameFilter[$workflowGroup->id][$oldDeliverable->name] = 1;
+                    }
+
+                    $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+                    $deliverableID = $this->dao->lastInsertID();
+                    $deliverableList[$workflowGroup->id][$oldDeliverable->id] = $deliverableID;
+
+                    $deliverableStage->deliverable = $deliverableID;
+                    $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                }
+            }
+        }
+
+        $sprintFilter = array(); // 过滤重复交付物检查规则。
+        /* 按照项目流程下的交付物配置设置各个交付物的检查规则。 */
+        foreach($workflowGroups as $workflowGroup)
+        {
+            /* 解析项目流程的交付物配置。 */
+            $groupDeliverable  = !empty($workflowGroup->deliverable) ? json_decode($workflowGroup->deliverable, true) : array();
+            foreach($groupDeliverable as $stageCode => $methodDeliverable)
+            {
+                foreach($methodDeliverable as $deliverableConfigs)
+                {
+                    foreach($deliverableConfigs as $config)
+                    {
+                        if(empty($deliverableList[$workflowGroup->id][$config['deliverable']])) continue;
+
+                        $projectModel = $workflowGroup->projectModel;
+                        if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+                        if($projectModel == 'agileplus')     $projectModel = 'scrum';
+
+                        $deliverableID                 = $deliverableList[$workflowGroup->id][$config['deliverable']];
+                        $workflowGroupModel            = "{$workflowGroup->projectType}_{$projectModel}";
+                        $deliverableStage->stage       = $stageCode == $workflowGroupModel ? 'project' : str_replace("{$workflowGroupModel}_", '', $stageCode);
+                        $deliverableStage->required    = !empty($config['required']) ? '1' : '0';
+                        $deliverableStage->deliverable = $deliverableID;
+
+                        /* 如果这个交付物在项目流程下有交付物配置，则启用交付物并删除默认的交付物检查规则。 */
+                        if(!isset($sprintFilter[$deliverableID]))
+                        {
+                            $this->dao->update(TABLE_DELIVERABLE)->set('status')->eq('enabled')->where('id')->eq($deliverableID)->exec();
+                            $this->dao->delete()->from(TABLE_DELIVERABLESTAGE)->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('project')->exec();
+                        }
+
+                        /* 按照交付物配置生成交付物检查规则。 */
+                        if(in_array($deliverableStage->stage, array('short', 'long', 'ops')))
+                        {
+                            /* 将原来不同类型的迭代合并成一个迭代。 */
+                            $deliverableStage->stage = 'sprint';
+                            /* 其中有一个类型是必填的合并后的结果就是必填。 */
+                            if(isset($sprintFilter[$deliverableID]['sprint']) && empty($sprintFilter[$deliverableID]['sprint']) && !empty($deliverableStage->required))
+                            {
+                                $this->dao->update(TABLE_DELIVERABLESTAGE)->set('required')->eq('1')->where('deliverable')->eq($deliverableID)->andWhere('stage')->eq('sprint')->exec();
+                            }
+                            if(!isset($sprintFilter[$deliverableID]['sprint']))
+                            {
+                                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                            }
+                        }
+                        elseif(!isset($sprintFilter[$deliverableID][$deliverableStage->stage]))
+                        {
+                            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+                        }
+                        $sprintFilter[$deliverableID][$deliverableStage->stage] = $deliverableStage->required;
+                    }
+                }
+            }
+
+            $this->createOtherDeliverable($workflowGroup->id); // 创建名为其他的交付物类型。
+        }
+
+        /* 将已升级的历史交付物数据删掉。 */
+        $this->dao->delete()->from(TABLE_DELIVERABLE)->where('id')->in(array_keys($deliverables))->andWhere('workflowGroup')->eq('0')->exec();
+
+        /* 升级完后把没用的字段删掉。 */
+        $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+
+        if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
+    }
+
+    /**
+     * 内置交付物其他分类。
+     * Create other module.
+     *
+     * @param  int    $workflowGroupID
+     * @param  string $name
+     * @param  string $extra
+     * @access public
+     * @return int
+     */
+    public function createDeliverableModule(int $workflowGroupID, string $name, string $extra = ''): int
+    {
+        $module = new stdclass();
+        $module->root      = $workflowGroupID;
+        $module->branch    = '0';
+        $module->name      = $name;
+        $module->parent    = '0';
+        $module->path      = '';
+        $module->grade     = '1';
+        $module->order     = '0';
+        $module->type      = 'deliverable';
+        $module->from      = '0';
+        $module->owner     = '';
+        $module->collector = null;
+        $module->short     = '';
+        $module->extra     = $extra;
+        $module->deleted   = '0';
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
+    }
+
+    /**
+     * 创建名为其他的交付物类型。
+     * Create other deliverable.
+     *
+     * @param  int    $workflowGroupID
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function createOtherDeliverable(int $workflowGroupID)
+    {
+        $moduleID   = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('deliverable')->andWhere('root')->eq($workflowGroupID)->andWhere('extra')->eq('other')->fetch('id');
+        $activityID = $this->dao->select('id')->from(TABLE_ACTIVITY)->where('name')->eq($this->lang->other)->andWhere('workflowGroup')->eq($workflowGroupID)->fetch('id');
+
+        /* 创建名为其他的交付物类型。 */
+        $deliverable = new stdclass();
+        $deliverable->name          = $this->lang->other;
+        $deliverable->category      = 'other';
+        $deliverable->module        = $moduleID;
+        $deliverable->activity      = $activityID ? $activityID : 0;
+        $deliverable->workflowGroup = $workflowGroupID;
+        $deliverable->template      = '[]';
+        $deliverable->trimmable     = '1';
+        $deliverable->builtin       = '1';
+        $deliverable->status        = 'enabled';
+        $deliverable->createdBy     = 'system';
+        $deliverable->createdDate   = helper::now();
+
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $stageList = $this->config->edition != 'biz' ? $this->loadModel('deliverable')->buildStageList($workflowGroupID) : array();
+        foreach($stageList as $key => $stage)
+        {
+            $deliverableStage = new stdclass();
+            $deliverableStage->deliverable = $deliverableID;
+            $deliverableStage->stage       = $key;
+            $deliverableStage->required    = '0';
+            $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+        }
+    }
+
+    /**
+     * 内置默认的过程活动。
+     * Create other process and activity.
+     *
+     * @param  int    $moduleID
+     * @param  int    $workflowGroupID
+     * @access public
+     * @return int
+     */
+    public function createOtherActivity(int $moduleID, int $workflowGroupID): int
+    {
+        $existsProcess = $this->dao->select('id')->from(TABLE_PROCESS)->where('workflowGroup')->eq($workflowGroupID)->andWhere('name')->eq($this->lang->other)->fetch('id');
+        if($existsProcess) return $existsProcess;
+
+        $process = new stdclass();
+        $process->workflowGroup = $workflowGroupID;
+        $process->name          = $this->lang->other;
+        $process->module        = $moduleID;
+        $process->createdBy     = 'system';
+        $process->createdDate   = '2020-01-09 00:00:00';
+        $process->editedDate    = null;
+        $process->assignedDate  = null;
+        $process->deleted       = '0';
+        $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
+
+        $processID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_PROCESS)->set('`order`')->eq($processID * 5)->where('id')->eq($processID)->exec();
+
+        $activity = new stdclass();
+        $activity->workflowGroup = $workflowGroupID;
+        $activity->process       = $processID;
+        $activity->name          = $this->lang->other;
+        $activity->optional      = 'no';
+        $activity->createdBy     = 'system';
+        $activity->createdDate   = '2020-01-09 00:00:00';
+        $activity->editedDate    = null;
+        $activity->assignedDate  = null;
+        $activity->deleted       = '0';
+        $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
+
+        $activityID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_ACTIVITY)->set('`order`')->eq($activityID * 5)->where('id')->eq($activityID)->exec();
+
+        return $activityID;
+    }
+
+    /**
+     * 内置测试环节列表交付物。
+     * Buildin testcase stage deliverable.
+     *
+     * @access public
+     * @return bool
+     */
+    public function buildinTestcaseStageDeliverable(): bool
+    {
+        $this->app->loadLang('testcase');
+        $clientLang        = $this->app->getClientLang();
+        $testcaseStageList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('testcase')
+            ->andWhere('section')->eq('stageList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if(empty($testcaseStageList)) $testcaseStageList = $this->lang->testcase->stageList;
+        $this->createTestcaseDeliverable($testcaseStageList);
+
+        return true;
+    }
+
+    /**
+     * 创建测试用例阶段类型交付物。
+     * Create testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function createTestcaseDeliverable(array $modules): bool
+    {
+        $testModules = $this->dao->select('root,id')->from(TABLE_MODULE)
+            ->where('type')->eq('deliverable')
+            ->andWhere('extra')->eq('test')
+            ->fetchPairs();
+
+        $testDeliverable = $this->dao->select('category')->from(TABLE_DELIVERABLE)
+            ->where('builtin')->eq('0')
+            ->andWhere('module')->in($testModules)
+            ->fetchPairs();
+
+        /* 已经存在但是被删除的交付物进行还原操作。 */
+        foreach($modules as $key => $name)
+        {
+            if(empty($name)) continue;
+            if(!empty($testDeliverable[$key]))
+            {
+                $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('0')->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
+                unset($modules[$key]);
+            }
+        }
+
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        if(empty($modules)) return true;
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'enabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->template    = '[]';
+        $deliverable->trimmable   = '1';
+        $deliverable->builtin     = '0';
+        $deliverable->systemList  = 1;
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->required = '0';
+        $deliverableStage->stage    = 'project';
+
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->ne('kanban')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            $groupID = $workflow->id;
+
+            if(empty($activityList[$groupID])) continue;
+            $otherActivity   = reset($activityList[$groupID]);
+            $otherActivityID = $otherActivity->id;
+
+            $deliverable->module        = zget($testModules, $workflow->id, 0);
+            $deliverable->workflowGroup = $workflow->id;
+            $deliverable->activity      = $otherActivityID;
+            foreach($modules as $key => $name)
+            {
+                if(empty($name)) continue;
+                $deliverable->category = $key; // 标记交付物的类型。
+                $this->addDeliverable($name . $this->lang->upgrade->list, $deliverable, $deliverableStage);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 删除测试用例阶段交付物。
+     * Delete testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function deleteTestcaseDeliverable(array $modules): bool
+    {
+        foreach($modules as $key => $name)
+        {
+            $this->dao->update(TABLE_DELIVERABLE)->set('deleted')->eq('1')->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
+        }
+        return true;
+    }
+
+    /**
+     * 变更测试用例阶段交付物名称。
+     * Change testcase deliverable.
+     *
+     * @param  array  $modules
+     * @access public
+     * @return bool
+     */
+    public function changeTestcaseDeliverable(array $modules): bool
+    {
+        foreach($modules as $key => $name)
+        {
+            $this->dao->update(TABLE_DELIVERABLE)->set('name')->eq($name . $this->lang->upgrade->list)->where('category')->eq($key)->andWhere('builtin')->eq('0')->exec();
+        }
+        return true;
+    }
+
+
+    /**
+     * 升级项目和迭代的交付物配置。
+     * Upgrade project deliverable.
+     *
+     * @param  array  $deliverableList
+     * @access public
+     * @return void
+     */
+    public function upgradeProjectDeliverable(array $deliverableList)
+    {
+        $projectList           = $this->dao->select('id,deliverable,workflowGroup,type,project')->from(TABLE_PROJECT)->where('deliverable')->ne('')->fetchAll('id');
+        $projectMainLibPairs   = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->andWhere('project')->in(array_keys($projectList))->fetchPairs();
+        $executionMainLibPairs = $this->dao->select('execution, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('execution')->andWhere('execution')->in(array_keys($projectList))->fetchPairs();
+        $fileList              = $this->dao->select('*')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('extra')->like('deliverable%')->fetchAll('id');
+        $otherDeliverablePairs = $this->dao->select('workflowGroup, id')->from(TABLE_DELIVERABLE)->where('category')->eq('other')->andWhere('builtin')->eq('1')->fetchPairs();
+
+        foreach($projectList as $project)
+        {
+            $oldProjectDeliverable = !empty($project->deliverable) ? json_decode($project->deliverable, true) : array();
+            if(empty($oldProjectDeliverable)) continue;
+
+            if($project->type != 'project' && isset($projectList[$project->project])) $project->workflowGroup = $projectList[$project->project]->workflowGroup; // 执行用项目的项目流程
+
+            /* 解析项目的交付物配置。 */
+            foreach($oldProjectDeliverable as $methodDeliverable)
+            {
+                foreach($methodDeliverable as $deliverableConfigs)
+                {
+                    foreach($deliverableConfigs as $config)
+                    {
+                        if(empty($config['doc']) && empty($config['file'])) continue;
+
+                        $oldDeliverableID = $config['deliverable'];
+                        if(strpos($oldDeliverableID, 'new_') !== false)
+                        {
+                            $deliverableID = $otherDeliverablePairs[$project->workflowGroup]; // 其他类型的交付物。
+                        }
+                        else
+                        {
+                            $deliverableID = !empty($deliverableList[$project->workflowGroup][$oldDeliverableID]) ? $deliverableList[$project->workflowGroup][$oldDeliverableID] : $oldDeliverableID;
+                        }
+
+                        $newProjectDeliverable = new stdclass();
+                        $newProjectDeliverable->deliverable = $deliverableID;
+                        $newProjectDeliverable->project     = $project->type == 'project' ? $project->id : $project->project;
+                        $newProjectDeliverable->submitFrom  = $project->id;
+                        $newProjectDeliverable->status      = 'draft';
+
+                        /* 将原来的附件类型的交付物变成附件类型的文档并关联到交付物。 */
+                        if(!empty($config['file']) && !empty($fileList[$config['file']]))
+                        {
+                            $file = $fileList[$config['file']];
+                            $newProjectDeliverable->doc         = $this->moveFileToDoc($project, $projectMainLibPairs, $executionMainLibPairs, $file);
+                            $newProjectDeliverable->createdBy   = $file->addedBy;
+                            $newProjectDeliverable->createdDate = substr($file->addedDate, 0, 10);
+                        }
+                        else
+                        {
+                            $newProjectDeliverable->doc = $config['doc'];
+                        }
+
+                        $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($newProjectDeliverable)->exec();
+                    }
+                }
+            }
+        }
+
+        /* 之前交付物没存文档名称、版本，升级的时候补上。 */
+        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version,t2.addedBy,t2.addedDate')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id')
+            ->where('t1.name')->eq('')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll('id');
+
+        foreach($emptyNameDocs as $deliverableID => $doc)
+        {
+            $deliverableCreatedDate = date('Y-m-d', strtotime($doc->addedDate));
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('name')->eq($doc->title)
+                ->set('docVersion')->eq($doc->version)
+                ->set('createdBy')->eq($doc->addedBy)
+                ->set('createdDate')->eq($deliverableCreatedDate)
+                ->where('id')->eq($deliverableID)
+                ->exec();
+        }
+
+        $this->dao->query("ALTER TABLE " . TABLE_PROJECT . " DROP COLUMN `deliverable`;");
+    }
+
+    /**
+     * 将附件类型的交付物变成附件类型的文档并关联到交付物。
+     * Move file to doc.
+     *
+     * @param  object $project
+     * @param  array  $projectMainLibPairs
+     * @param  array  $executionMainLibPairs
+     * @param  array  $files
+     * @access public
+     * @return int
+     */
+    public function moveFileToDoc(object $project, array $projectMainLibPairs, array $executionMainLibPairs, object $file): int
+    {
+        $projectType = $project->type == 'project' ? 'project' : 'execution';
+
+        $title    = $file->title;
+        $position = strrpos($title, '.');
+        if($position > 0) $title = substr($title, 0, $position);
+
+        $doc = new stdclass();
+        $doc->title       = $title;
+        $doc->lib         = $projectType == 'project' ? $projectMainLibPairs[$project->id] : $executionMainLibPairs[$project->id];
+        $doc->project     = $projectType == 'project' ? $project->id : 0;
+        $doc->execution   = $projectType == 'execution' ? $project->id : 0;
+        $doc->addedBy     = 'admin';
+        $doc->addedDate   = helper::today();
+        $doc->acl         = 'open';
+        $doc->vision      = 'rnd';
+        $doc->version     = 1;
+        $doc->type        = 'attachment';
+
+        $this->dao->insert(TABLE_DOC)->data($doc)->exec();
+        $docID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_FILE)->set('objectID')->eq($docID)->set('objectType')->eq('doc')->where('id')->eq($file->id)->exec(); // 将附件的对象变成文档。
+
+        $docContent          = new stdclass();
+        $docContent->doc     = $docID;
+        $docContent->title   = $title;
+        $docContent->content = '';
+        $docContent->type    = 'attachment';
+        $docContent->digest  = '';
+        $docContent->version = 1;
+        $docContent->files   = ",$file->id";
+
+        $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+
+        return $docID;
+    }
+
+    /**
+     * 将检查单迁移到内置项目流程中。
+     * Migrate auditcl to built-in project workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeAuditcl()
+    {
+        $workflows = $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->andWhere('projectModel')->in('scrum,agileplus,waterfall,waterfallplus')->fetchAll('id');
+        foreach($workflows as $id => $workflow)
+        {
+            if($workflow->projectType == 'product' && $workflow->main == '1')
+            {
+                $this->dao->update(TABLE_AUDITCL)->set('workflowGroup')->eq($id)->where('model')->eq($workflow->projectModel)->exec();
+            }
+            else
+            {
+                /* 复制一份检查单放到项目型项目流程中。*/
+                $idMap       = array();
+                $auditclList = $this->dao->select('*')->from(TABLE_AUDITCL)->where('model')->eq($workflow->projectModel)->fetchAll('id', false);
+                foreach($auditclList as $auditcl)
+                {
+                    $oldID = $auditcl->id;
+                    unset($auditcl->id);
+                    $auditcl->workflowGroup = $id;
+                    $auditcl->model         = '';
+                    if(helper::isZeroDate($auditcl->editedDate))   $auditcl->editedDate   = null;
+                    if(helper::isZeroDate($auditcl->assignedDate)) $auditcl->assignedDate = null;
+                    $this->dao->insert(TABLE_AUDITCL)->data($auditcl)->exec();
+                    $idMap[$oldID] = $this->dao->lastInsertID();
+                }
+
+                $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($id)->fetchPairs();
+                foreach($idMap as $oldID => $newID)
+                {
+                    $this->dao->update(TABLE_NC)->set('listID')->eq($newID)->where('listID')->eq($oldID)->andWhere('project')->in($projectIdList)->exec();
+                }
+            }
+        }
+
+        /* 将auditplan中的execution迁移到nc中。 */
+        $ncs = $this->dao->select('t1.id, t2.execution')->from(TABLE_NC)->alias('t1')
+            ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.auditplan=t2.id')
+            ->where('t2.execution')->ne('0')
+            ->fetchPairs();
+
+        foreach($ncs as $ncID => $executionID)
+        {
+            $this->dao->update(TABLE_NC)->set('execution')->eq($executionID)->where('id')->eq($ncID)->exec();
+        }
+
+        $this->dao->exec("ALTER TABLE " . TABLE_AUDITCL . " DROP `model`;");
+    }
+
+    /**
+     * 之前IPD、融合瀑布使用的是瀑布项目流程，融合敏捷使用的是敏捷项目流程。现在统一使用自己的项目流程。
+     * Before IPD, fusion waterfall uses the waterfall project workflow, and fusion agile uses the agile project workflow. Now use the own project workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function modifyProjectWorkflowGroup()
+    {
+        if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有项目流程
+
+        $projectGroup = $this->dao->select('id,workflowGroup,model,category,hasProduct')->from(TABLE_PROJECT)->where('model')->in('ipd,waterfallplus,agileplus')->andWhere('deleted')->eq('0')->fetchGroup('workflowGroup', 'id');
+        $workflows    = $this->dao->select('*')->from(TABLE_WORKFLOWGROUP)->where('id')->in(array_keys($projectGroup))->fetchAll('id', false);
+
+        $tableList = array(
+            TABLE_WORKFLOW,
+            TABLE_WORKFLOWFIELD,
+            TABLE_WORKFLOWACTION,
+            TABLE_WORKFLOWLABEL,
+            TABLE_WORKFLOWLAYOUT,
+            TABLE_WORKFLOWUI
+        );
+
+        $this->loadModel('project');
+        $codeWorkflowPairs = array();
+        $oldNewFlowPairs   = array();
+        foreach($workflows as $workflow)
+        {
+            $projects = $projectGroup[$workflow->id];
+            $index    = 1;
+            $name     = $workflow->name;
+            foreach($projects as $project)
+            {
+                $oldWorkflowGroupID = $project->workflowGroup;
+                $hasProduct         = $project->hasProduct ? 'product' : 'project';
+                $code               = $project->model == 'ipd' ? strtolower($project->category) . $hasProduct : $project->model . $hasProduct;
+                $projectType        = $project->model == 'ipd' ? strtolower($project->category) : $hasProduct;
+
+                if($projectType == 'cpd') $projectType = 'cpd' . $hasProduct;
+
+                unset($workflow->id);
+                if(isset($codeWorkflowPairs[$code][$oldWorkflowGroupID]))
+                {
+                    $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($codeWorkflowPairs[$code][$oldWorkflowGroupID])->where('id')->eq($project->id)->exec();
+                    continue;
+                }
+
+                $workflow->name         = $name . $index;
+                $workflow->createdDate  = helper::now();
+                $workflow->projectModel = $project->model;
+                $workflow->projectType  = $projectType;
+                $workflow->code         = $code;
+                $workflow->editedDate   = null;
+                $workflow->main         = '0';
+
+                $this->dao->insert(TABLE_WORKFLOWGROUP)->data($workflow)->exec();
+                $newWorkflowGroupID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_PROJECT)->set('workflowGroup')->eq($newWorkflowGroupID)->where('id')->eq($project->id)->exec();
+
+                foreach($tableList as $table)
+                {
+                    $this->project->copyWorkflow($project->workflowGroup, $newWorkflowGroupID, $table);
+                }
+
+                if(!isset($oldNewFlowPairs[$oldWorkflowGroupID])) $oldNewFlowPairs[$oldWorkflowGroupID] = array();
+                $oldNewFlowPairs[$oldWorkflowGroupID][] = $newWorkflowGroupID;
+                $codeWorkflowPairs[$code][$oldWorkflowGroupID] = $newWorkflowGroupID;
+                $index++;
+            }
+        }
+
+        /* 处理报告模板的适用流程。*/
+        $reportTemplateList = $this->dao->select('id,objects')->from(TABLE_DOC)->where('templateType')->eq('reportTemplate')->fetchPairs('id');
+        foreach($reportTemplateList as $templateID => $objects)
+        {
+            $newObjects   = array();
+            $objectIdList = array_filter(explode(',', $objects));
+            foreach($objectIdList as $objectID)
+            {
+                $newObjects[] = $objectID;
+                if(!isset($oldNewFlowPairs[$objectID])) continue;
+                $newObjects = array_merge($newObjects, $oldNewFlowPairs[$objectID]);
+            }
+
+            if(!empty($newObjects))
+            {
+                $newObjectList = implode(',', array_filter(array_unique($newObjects)));
+                $this->dao->update(TABLE_DOC)->set('objects')->eq($newObjectList)->where('id')->eq($templateID)->exec();
+            }
+        }
+    }
+
+    /**
+     * 升级流程和活动, 将流程和活动中的数据迁移到流程中。
+     * Upgrade process and activity.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeProcessAndActivity()
+    {
+        $this->loadModel('workflowgroup');
+        $this->app->loadLang('process');
+        $groupList = $this->upgradeTao->getWorkflowGroupForProcess();
+
+        $classifyModule = array();
+        foreach($groupList as $groupID => $group)
+        {
+            $projectModel = $group->projectModel;
+            if($projectModel == 'agileplus')     $projectModel = 'scrum';
+            if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+            if(in_array($group->projectModel, array('scrum', 'agileplus', 'waterfall', 'waterfallplus')))
+            {
+                $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t3')->on('t2.workflowGroup=t3.id')
+                    ->where('t3.projectModel')->eq($group->projectModel)
+                    ->limit(1)
+                    ->fetch('id');
+
+                if($projectActivity)
+                {
+                    /* 更新groupID到过程表，获取旧分类和新模块的对应关系。 */
+                    if($group->projectType == 'product' && $group->main == '1')
+                    {
+                        $classifyModule = $this->upgradeTao->handleBuildinWorkflowGroup($group, $groupID, $classifyModule);
+                    }
+                    else
+                    {
+                        $classifyModule = $this->upgradeTao->handleNeedCopyWorkflowGroup($group, $groupID, $classifyModule);
+                        $this->upgradeTao->migrateOutputToDeliverable($group);
+                    }
+                }
+                else
+                {
+                    $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                    $this->dao->delete()->from(TABLE_AUDITCL)->where('workflowGroup')->eq($groupID)->exec(); // 新增活动删除旧的检查单
+                }
+            }
+            else
+            {
+                $this->workflowgroup->addProcessAndActivity($group, $projectModel);
+                $this->dao->delete()->from(TABLE_AUDITCL)->where('workflowGroup')->eq($groupID)->exec(); // 新增活动删除旧的检查单
+            }
+        }
+
+        /* 迁移过程分类到模块表。 */
+        $this->upgradeTao->updateProcessModules($classifyModule);
+
+        /* 删除旧分类。 */
+        $this->dao->delete()->from(TABLE_PROCESS)->where('workflowGroup')->eq(0)->exec();
+        $this->dao->delete()->from(TABLE_ACTIVITY)->where('workflowGroup')->eq(0)->exec();
+        $this->dao->delete()->from(TABLE_LANG)->where('module')->eq('process')->exec();
+    }
+
+    /**
      * 获取需要更新的项目报告数据。
      * Get project reports that need to be updated.
      *
@@ -11397,29 +12324,588 @@ class upgradeModel extends model
             $weekNumber = ceil(helper::diffDate($data['weekStart'], $data['projectBegin']) / 7) + 1;
             $weekEnd    = date('Y-m-d', strtotime('+6 day', strtotime($data['weekStart'])));
 
-            $report->project      = $data['project'];
-            $report->title        = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
-            $report->reportModule = 'week';
-            $report->addedDate    = $data['weekStart'] . ' 00:00:00';
-            $report->editedDate   = $data['weekStart'] . ' 00:00:00';
-            $report->weeklyDate   = str_replace('-', '', $data['weekStart']);
+            $report->project    = $data['project'];
+            $report->title      = sprintf($this->lang->upgrade->weeklyReportTitle, $weekNumber, $data['weekStart'], $weekEnd);
+            $report->module     = 'week';
+            $report->addedDate  = $data['weekStart'] . ' 00:00:00';
+            $report->weeklyDate = str_replace('-', '', $data['weekStart']);
         }
         else
         {
-            $report->title        = $this->lang->upgrade->milestoneTitle;
-            $report->reportModule = 'milestone';
-            $report->project      = $data['id'];
-            $report->addedDate    = helper::now();
-            $report->editedDate   = helper::now();
+            $report->title     = $this->lang->upgrade->milestoneTitle;
+            $report->module    = 'milestone';
+            $report->project   = $data['id'];
+            $report->addedDate = helper::now();
         }
 
-        $report->template     = '0';
         $report->templateType = 'projectReport';
         $report->addedBy      = 'system';
-        $report->editedBy     = 'system';
         $this->dao->insert(TABLE_DOC)->data($report)->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 内置基线评审到项目流程中。
+     * Buildin baseline review flow.
+     *
+     * @access public
+     * @return bool
+     */
+    public function buildinBaselineReview(): bool
+    {
+        $reviewFlow = new stdclass();
+        $reviewFlow->flow        = '1';
+        $reviewFlow->objectID    = '0';
+        $reviewFlow->relatedBy   = 'system';
+        $reviewFlow->relatedDate = helper::now();
+        $reviewFlow->extra       = 'baseline';
+
+        $workflows = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->notin('scrum,projectModel')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            foreach($this->lang->upgrade->baselineReview as $key => $name)
+            {
+                $reviewFlow->root       = $workflow->id;
+                $reviewFlow->objectType = $key;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 升级检查单分类到项目流程下。
+     * Upgrade reviewcl category.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeReviewclCategory(): bool
+    {
+        $this->loadModel('custom');
+        $clientLang   = $this->app->getClientLang();
+        $categoryList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('reviewcl')
+            ->andWhere('section')->eq('waterfallCategoryList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        $categoryPlusList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('reviewcl')
+            ->andWhere('section')->eq('waterfallplusCategoryList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if(empty($categoryList) && empty($categoryPlusList)) return true;
+        $workflows = $this->dao->select('id,projectModel')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('waterfall,waterfallplus')->fetchAll('id');
+        foreach($workflows as $workflow)
+        {
+            if($workflow->projectModel == 'waterfall' && !empty($categoryList))
+            {
+                foreach($categoryList as $key => $value) $this->custom->setItem("{$clientLang}.reviewcl.{$workflow->id}CategoryList.{$key}.1", $value);
+            }
+
+            if($workflow->projectModel == 'waterfallplus' && !empty($categoryPlusList))
+            {
+                foreach($categoryPlusList as $key => $value) $this->custom->setItem("{$clientLang}.reviewcl.{$workflow->id}CategoryList.{$key}.1", $value);
+            }
+        }
+
+        $this->dao->delete()->from(TABLE_LANG)->where('section')->in('waterfallCategoryList,waterfallplusCategoryList')->exec();
+        return true;
+    }
+
+    /**
+     * 升级项目评审对象到项目流程中。
+     * Upgrade baseline objects.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeBaselineObjects()
+    {
+        $this->app->loadLang('baseline');
+        $clientLang = $this->app->getClientLang();
+        $objectList = $this->dao->select('`key`, value')->from(TABLE_LANG)
+            ->where('module')->eq('baseline')
+            ->andWhere('section')->eq('objectList')
+            ->andWhere('lang')->in(array($clientLang, 'all'))
+            ->orderBy('id_asc')
+            ->fetchPairs();
+
+        if(empty($objectList) && !empty($this->lang->baseline->objectList)) $objectList = $this->lang->baseline->objectList;
+        if(empty($objectList)) $objectList = $this->lang->upgrade->reviewObjectList;
+
+        $workflowGroups = $this->dao->select('id, projectModel, projectType')->from(TABLE_WORKFLOWGROUP)->where('type')->eq('project')->fetchAll('id');
+
+        $moduleGroup = $this->dao->select('id, root, extra')->from(TABLE_MODULE)
+            ->where('type')->eq('deliverable')
+            ->andWhere('root')->in(array_keys($workflowGroups))
+            ->fetchGroup('root', 'extra');
+
+        $reviewclList = $this->dao->select('*')->from(TABLE_REVIEWCL)->where('type')->ne('')->fetchGroup('type');
+        $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
+            ->where('t1.name')->eq($this->lang->other)
+            ->andWhere('t2.name')->eq($this->lang->other)
+            ->fetchGroup('workflowGroup');
+
+        $actionIdList    = array();
+        $reviewclActions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('reviewcl')->fetchGroup('objectID', 'id');
+        foreach($reviewclActions as $actions) $actionIdList = arrayUnion($actionIdList, $actions);
+        $reviewclHistory = $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in(array_keys($actionIdList))->fetchGroup('action', 'id');
+
+        $deliverable = new stdClass();
+        $deliverable->status      = 'enabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->trimmable   = '1';
+        $deliverable->template    = '[]';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
+
+        $reviewFlow = new stdclass();
+        $reviewFlow->flow        = 1;
+        $reviewFlow->objectType  = 'deliverable';
+        $reviewFlow->relatedBy   = 'system';
+        $reviewFlow->relatedDate = helper::now();
+        $reviewFlow->extra       = 'review';
+
+        $upgradeReviewcls  = array();
+        $categoryModuleMap = array('PP' => 'plan', 'SRS' => 'story');
+
+        foreach($workflowGroups as $groupID => $workflowGroup)
+        {
+            $projectModel = $workflowGroup->projectModel;
+
+            if(empty($activityList[$groupID])) continue;
+            $otherActivity   = reset($activityList[$groupID]);
+            $otherActivityID = $otherActivity->id;
+
+            $nameFilter = array();
+            $deliverable->workflowGroup = $groupID;
+            $deliverable->activity      = $otherActivityID;
+
+            foreach(array_filter($objectList) as $key => $value)
+            {
+                if(empty($value)) continue;
+                if(in_array($key, array('HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC', 'intergrate', 'system'))) continue; // 设计类型和测试类型的上面处理过了，跳过。
+                if($key == 'PP' && in_array($projectModel, array('scrum', 'agileplus'))) continue; // 敏捷、融合敏捷没有项目计划
+                if($key == 'SRS') $value = $this->lang->upgrade->reviewObjectList['SRS']; // 将软件需求规格说明书改成项目需求规格说明书
+                $deliverable->category   = $key; // 标记交付物的类型。
+                $deliverable->systemList = (int)in_array($key, ['PP', 'SRS']);
+
+                /* 将原来的评审对象放到新交付物的模块下：计划类、需求类、设计类、测试类。其他类放到其他模块下。 */
+                $moduleKey           = isset($categoryModuleMap[$key]) ? $categoryModuleMap[$key] : 'other';
+                $deliverable->module = isset($moduleGroup[$groupID][$moduleKey]) ? $moduleGroup[$groupID][$moduleKey]->id : 0;
+
+                $deliverableID = $this->addDeliverable((string)$value, $deliverable, $deliverableStage, $nameFilter);
+
+                $reviewFlow->root     = $groupID;
+                $reviewFlow->objectID = $deliverableID;
+                $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($reviewFlow)->exec();
+                $flowID = $this->dao->lastInsertID();
+
+                /* 迁移评审对象对应的检查清单。 */
+                if(empty($reviewclList[$projectModel])) continue;
+                foreach($reviewclList[$projectModel] as $reviewcl)
+                {
+                    if($key != $reviewcl->object) continue;
+                    $upgradeReviewcls[$reviewcl->id] = $reviewcl->id;
+
+                    $reviewclData = clone $reviewcl;
+                    unset($reviewclData->id);
+                    unset($reviewclData->editedDate);
+                    unset($reviewclData->assignedDate);
+                    $reviewclData->workflowGroup = $groupID;
+                    $reviewclData->object        = $flowID;
+                    $this->dao->insert(TABLE_REVIEWCL)->data($reviewclData)->exec();
+                    $reviewclID = $this->dao->lastInsertID();
+
+                    $this->dao->update(TABLE_REVIEWISSUE)->set('listID')->eq($reviewclID)->where('listID')->eq($reviewcl->id)->exec();
+
+                    /* 迁移检查清单历史记录。 */
+                    if(empty($reviewclActions[$reviewcl->id])) continue;
+                    foreach($reviewclActions[$reviewcl->id] as $action)
+                    {
+                        $actionData = clone $action;
+                        unset($actionData->id);
+                        $actionData->objectID = $reviewclID;
+                        $this->dao->insert(TABLE_ACTION)->data($actionData)->exec();
+
+                        if(empty($reviewclHistory[$action->id])) continue;
+                        $actionID = $this->dao->lastInsertID();
+                        foreach($reviewclHistory[$action->id] as $history)
+                        {
+                            unset($history->id);
+                            $history->action = $actionID;
+                            $this->dao->insert(TABLE_HISTORY)->data($history)->exec();
+                        }
+                    }
+                }
+            }
+        }
+
+        /* 将已升级的历史检查清单数据删掉。 */
+        $this->dao->delete()->from(TABLE_REVIEWCL)->where('id')->in($upgradeReviewcls)->exec();
+
+        $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " CHANGE `object` `object` mediumint(8) unsigned NOT NULL DEFAULT '0';");
+        $this->dao->exec("ALTER TABLE " . TABLE_REVIEWCL . " DROP `type`;");
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `model`');
+        $this->dao->exec('ALTER TABLE ' . TABLE_PROCESS . ' DROP `type`');
+    }
+
+    /**
+     * 升级项目评审对象到项目交付物。
+     * Upgrade review to deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeReviewToDeliverable()
+    {
+        if(!in_array($this->config->edition, array('ipd', 'max'))) return; // 开源版、企业版没有评审功能。
+
+        $this->loadModel('review');
+        $this->loadModel('baseline');
+        $reviewPointList = $this->config->edition == 'ipd' ? $this->lang->review->reviewPoint->titleList : array();
+        $reviews = $this->dao->select('t1.*, t2.category, t2.version')->from(TABLE_REVIEW)->alias('t1')
+            ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($reviewPointList)->andWhere('t2.category')->notin(array_keys($reviewPointList))->fi() // IPD 模式下，只升级非评审点的评审。
+            ->orderBy('t1.id_asc')
+            ->fetchAll('id');
+
+        $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
+            ->where('t2.category')->ne('')
+            ->fetchGroup('id', 'category');
+
+        $docIdList = array_column($reviews, 'doc');
+        $docIdList = array_filter($docIdList);
+        $docList   = $this->dao->select('id, title')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchPairs();
+
+        $projectMainLibPairs = $this->dao->select('project, id')->from(TABLE_DOCLIB)->where('main')->eq('1')->andWhere('type')->eq('project')->fetchPairs();
+        $fileGroup           = $this->dao->select('id, objectID')->from(TABLE_FILE)->where('deleted')->eq('0')->andWhere('objectType')->eq('review')->fetchGroup('objectID', 'id');
+
+        $doc = new stdclass();
+        $doc->version   = 1;
+        $doc->type      = 'text';
+        $doc->acl       = 'open';
+        $doc->addedBy   = 'system';
+        $doc->addedDate = helper::now();
+
+        foreach($reviews as $review)
+        {
+            if(!isset($projectDeliverables[$review->project][$review->category])) continue;
+
+            $files = '';
+            if(!empty($fileGroup[$review->id]))
+            {
+                $fileIdList = array_keys($fileGroup[$review->id]);
+                $files      = implode(',', $fileIdList);
+            }
+
+            /* 不是系统模板生成、也没选文档的，自动生成文档。 */
+            if(!$review->template && !$review->doc)
+            {
+                $doc->title     = $review->title;
+                $doc->lib       = zget($projectMainLibPairs, $review->project, 0);
+                $doc->project   = $review->project;
+                $doc->addedBy   = $review->createdBy;
+                $doc->addedDate = $review->createdDate;
+                $doc->version   = 1;
+                $doc->type      = $files ? 'attachment' : 'text';
+
+                $this->dao->insert(TABLE_DOC)->data($doc)->exec();
+                $review->doc        = $this->dao->lastInsertID();
+                $review->docVersion = 1;
+
+                $docContent = new stdclass();
+                $docContent->type    = 'doc';
+                $docContent->doc     = $review->doc;
+                $docContent->title   = $review->title;
+                $docContent->files   = $files;
+                $docContent->version = 1;
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
+            }
+            elseif($review->doc && $files)
+            {
+                /* 原来有文档也有附件，将附件关联到文档。 */
+                $maxVersion = $this->dao->select('max(version) as version')->from(TABLE_DOCCONTENT)->where('doc')->eq($review->doc)->fetch('version');
+                $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($review->doc)->andWhere('version')->eq($review->docVersion)->fetch();
+
+                unset($docContent->id);
+                $docContent->version = $maxVersion + 1;
+                $docContent->files   = $files;
+                $review->docVersion  = $docContent->version;
+
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->dao->update(TABLE_FILE)->set('objectType')->eq('doc')->set('objectID')->eq($review->doc)->where('id')->in($files)->exec();
+                $this->dao->update(TABLE_DOC)->set('version')->eq($review->docVersion)->where('id')->eq($review->doc)->exec();
+                $this->dao->update(TABLE_REVIEW)->set('docVersion')->eq($review->docVersion)->where('id')->eq($review->id)->exec();
+            }
+
+            $deliverable = new stdclass();
+            $deliverable->name        = (!empty($docList[$review->doc]) && $docList[$review->doc] != $review->title) ? $docList[$review->doc] : $review->title; // 优先使用文档的标题
+            $deliverable->project     = $review->project;
+            $deliverable->submitFrom  = $review->project;
+            $deliverable->review      = $review->id;
+            $deliverable->deliverable = $projectDeliverables[$review->project][$review->category]->deliverable;
+            $deliverable->doc         = $review->doc;
+            $deliverable->docVersion  = $review->docVersion;
+            $deliverable->createdBy   = $review->createdBy;
+            $deliverable->createdDate = $review->createdDate;
+            $deliverable->status      = $review->status;
+            $deliverable->version     = $review->version;
+
+            $deliverableID = $this->dao->select('id')->from(TABLE_PROJECTDELIVERABLE)
+                ->where('project')->eq($deliverable->project)
+                ->andWhere('deliverable')->eq($deliverable->deliverable)
+                ->andWhere('doc')->eq($deliverable->doc)
+                ->fetch('id');
+
+            /* 保证交付物在项目下的唯一性，如果不存在，则插入。 */
+            if(!$deliverableID)
+            {
+                $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+                $deliverableID = $this->dao->lastInsertID();
+            }
+            else
+            {
+                $this->dao->update(TABLE_PROJECTDELIVERABLE)->set('docVersion')->eq($deliverable->docVersion)->set('review')->eq($deliverable->review)->where('id')->eq($deliverableID)->exec();
+            }
+
+            $this->dao->update(TABLE_REVIEW)->set('deliverable')->eq($deliverableID)->set('title')->eq($deliverable->name)->where('id')->eq($review->id)->exec();
+            $this->dao->update(TABLE_OBJECT)->set('category')->eq($deliverable->deliverable)->where('id')->eq($review->object)->exec(); // 将评审对象改成交付物ID
+
+            /* 如果是系统模板类型、但没有选系统模板生成，则复制一份交付物，让用户升级上来后可以继续使用系统模板。 */
+            if(in_array($review->category, array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'intergrate', 'system')) && !$review->template)
+            {
+                $deliverable->name       = zget($this->lang->upgrade->reviewObjectList, $review->category);
+                $deliverable->doc        = 0;
+                $deliverable->docVersion = 0;
+                $deliverable->status     = 'draft';
+                $deliverable->version    = '';
+                $deliverable->review     = 0;
+
+                $deliverableID = $this->dao->select('id')->from(TABLE_PROJECTDELIVERABLE)
+                    ->where('project')->eq($deliverable->project)
+                    ->andWhere('deliverable')->eq($deliverable->deliverable)
+                    ->andWhere('doc')->eq($deliverable->doc)
+                    ->fetch('id');
+
+                if(!$deliverableID) $this->dao->insert(TABLE_PROJECTDELIVERABLE)->data($deliverable)->exec();
+            }
+        }
+
+        $this->dao->exec('ALTER TABLE ' . TABLE_REVIEW . ' DROP `doc`');
+    }
+
+    /**
+     * 升级历史基线。
+     * Upgrade baseline.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeBaseline()
+    {
+        $baselines = $this->dao->select('id,`from`')->from(TABLE_OBJECT)->where('type')->eq('taged')->fetchAll();
+        $reviews   = $this->dao->select('id,object,deliverable')->from(TABLE_REVIEW)->where('status')->eq('pass')->fetchAll('object');
+        foreach($baselines as $baseline)
+        {
+            if(empty($reviews[$baseline->from])) continue;
+
+            $review = $reviews[$baseline->from];
+            $data   = new stdclass();
+            $data->category        = $review->deliverable;
+            $data->categoryVersion = json_encode(array($review->deliverable => $review->id));
+            $data->status          = 'pass';
+            $this->dao->update(TABLE_OBJECT)->data($data)->where('id')->eq($baseline->id)->exec();
+
+            $this->dao->update(TABLE_REVIEW)->set('isBaseline')->eq('1')->where('id')->eq($review->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * 新增交付物权限。
+     * Add deliverable privs for all groups.
+     *
+     * @access public
+     * @return void
+     */
+    public function addDeliverablePrivs()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('deliverable')->fetchPairs();
+        $group  = new stdclass();
+        $group->module = 'project';
+        foreach($groups as $groupID)
+        {
+            foreach(array('createDeliverable', 'deleteDeliverable', 'viewDeliverable') as $method)
+            {
+                $group->method = $method;
+                $group->group  = $groupID;
+                $this->dao->insert(TABLE_GROUPPRIV)->data($group)->exec();
+            }
+        }
+    }
+
+    /**
+     * 升级开源版的阶段。
+     * Update stage for PMS.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeStage4PMS()
+    {
+        if($this->config->edition != 'open') return true;
+
+        $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
+        if(empty($stageGroup)) return true;
+
+        $typeNamePairs   = array();
+        $needDeleteStage = array();
+        foreach($stageGroup as $projectModel => $stageList)
+        {
+            if($projectModel == 'ipd') continue;
+            foreach($stageList as $stageInfo)
+            {
+                if(isset($typeNamePairs[$stageInfo->type]) && in_array($stageInfo->name, $typeNamePairs[$stageInfo->type]))
+                {
+                    $needDeleteStage[$stageInfo->id] = $stageInfo->id;
+                    continue;
+                }
+                if(!isset($typeNamePairs[$stageInfo->type])) $typeNamePairs[$stageInfo->type] = array();
+                $typeNamePairs[$stageInfo->type][] = $stageInfo->name;
+            }
+        }
+
+        if(!empty($needDeleteStage)) $this->dao->delete()->from(TABLE_STAGE)->where('id')->in($needDeleteStage)->exec();
+        return true;
+    }
+
+    /**
+     * 升级阶段列表及评审点。
+     * Update stage and point.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeStageAndPoint()
+    {
+        $stageGroup = $this->dao->select('*')->from(TABLE_STAGE)->where('workflowGroup')->eq(0)->fetchGroup('projectType', 'id');
+        if(empty($stageGroup)) return true;
+
+        $this->app->loadConfig('project');
+        $this->app->loadConfig('stage');
+        $workflowList = $this->dao->select('projectModel, code, id')->from(TABLE_WORKFLOWGROUP)->where('projectModel')->in('waterfall,waterfallplus,ipd')->fetchAll('id');
+        foreach($workflowList as $flow)
+        {
+            $projectModel = $flow->projectModel;
+            if(!isset($stageGroup[$projectModel])) continue;
+
+            $flowCode = $flow->code;
+            foreach($stageGroup[$projectModel] as $stage)
+            {
+                if($flowCode == 'tpdproduct' && !in_array($stage->type, $this->config->project->categoryStages['TPD'])) continue;
+                if($flowCode == 'cbbproduct' && !in_array($stage->type, $this->config->project->categoryStages['CBB'])) continue;
+                if(in_array($flowCode, array('cpdproduct', 'cpdproject')) && !in_array($stage->type, $this->config->project->categoryStages['CPD'])) continue;
+
+                unset($stage->id);
+                $stage->workflowGroup = $flow->id;
+                if(empty($stage->editedDate)) $stage->editedDate = null;
+                $this->dao->insert(TABLE_STAGE)->data($stage)->exec();
+                $stageID = $this->dao->lastInsertID();
+
+                /* 添加IPD项目流程阶段的评审点。*/
+                if($projectModel == 'ipd')
+                {
+                    $decision = new stdClass();
+                    $decision->builtin     = '1';
+                    $decision->createdBy   = 'system';
+                    $decision->createdDate = helper::now();
+
+                    $decisionFlow = new stdClass();
+                    $decisionFlow->flow        = 1;
+                    $decisionFlow->objectType  = 'decision';
+                    $decisionFlow->relatedBy   = 'system';
+                    $decisionFlow->relatedDate = helper::now();
+                    foreach($this->config->stage->ipdReviewPoint->{$stage->type} as $index => $point)
+                    {
+                        $decision->workflowGroup = $stage->workflowGroup;
+                        $decision->stage         = $stageID;
+                        $decision->order         = $index + 1;
+                        $decision->title         = $point;
+                        $decision->type          = strpos($point, 'TR') !== false ? 'TR' : 'DCP';
+                        $decision->category      = $point;
+                        $this->dao->insert(TABLE_DECISION)->data($decision)->exec();
+                        $decisionID = $this->dao->lastInsertID();
+
+                        $decisionFlow->root     = $stage->workflowGroup;
+                        $decisionFlow->objectID = $decisionID;
+                        $decisionFlow->extra    = $decision->type;
+                        $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($decisionFlow)->exec();
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 升级评审点评审。
+     * Upgrade object of decision.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeObjectOfDecision()
+    {
+        $ipdProject = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('model')->eq('ipd')->andWhere('type')->eq('project')->fetchPairs('id');
+        if(empty($ipdProject)) return true;
+
+        $this->app->loadConfig('review');
+        $stagePointGroup = array();
+        $ipdProjectStage = $this->dao->select('id,project,attribute')->from(TABLE_PROJECT)->where('project')->in(array_keys($ipdProject))->andWhere('type')->eq('stage')->fetchGroup('project', 'attribute');
+        foreach($ipdProjectStage as $projectID => $stageList)
+        {
+            if(!isset($stagePointGroup[$projectID])) $stagePointGroup[$projectID] = array();
+            foreach($stageList as $attribute => $stage)
+            {
+                foreach($this->config->review->ipdReviewPoint->$attribute as $pointCategory)
+                {
+                    $stagePointGroup[$projectID][$pointCategory] = $stage->id;
+                }
+            }
+        }
+
+        $decisionGroup  = $this->dao->select('id,workflowGroup,category')->from(TABLE_DECISION)->fetchGroup('workflowGroup', 'category');
+        $ipdStagePoints = $this->dao->select('*')->from(TABLE_OBJECT)->where('project')->in(array_keys($ipdProject))->andWhere('category')->in($this->config->review->ipdPointOrder)->fetchAll();
+        foreach($ipdStagePoints as $point)
+        {
+            $category      = $point->category;
+            $projectID     = $point->project;
+            $workflowGroup = $ipdProject[$projectID];
+
+            $this->dao->update(TABLE_OBJECT)
+                ->set('type')->eq('decision')
+                ->set('categoryTitle')->eq($category)
+                ->set('execution')->eq(!empty($stagePointGroup[$projectID][$category]) ? $stagePointGroup[$projectID][$category] : 0)
+                ->set('category')->eq(!empty($decisionGroup[$workflowGroup][$category]->id) ? $decisionGroup[$workflowGroup][$category]->id : 0)
+                ->where('id')->eq($point->id)
+                ->exec();
+        }
+        return true;
     }
 
     /**
@@ -11454,6 +12940,168 @@ class upgradeModel extends model
     }
 
     /**
+     * 四个项目模型的功能开关合并成一个。
+     * Merge four project model feature switches into one.
+     * 内置AI禅道智能体。
+     * Initialize the AI prompts.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeClosedFeature()
+    {
+
+        $disabledFeatures = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->fetch('value');
+        if(empty($disabledFeatures)) return true;
+
+        $disabledFeatures = explode(',', $disabledFeatures);
+        $countFeature     = array();
+        foreach($this->config->featureGroup->project as $newFeature)
+        {
+            $countFeature[$newFeature] = 0;
+            foreach($disabledFeatures as $key => $feature)
+            {
+                $feature = strtolower(trim($feature));
+                if(strpos($feature, $newFeature) !== false)
+                {
+                    $countFeature[$newFeature]++;
+                    unset($disabledFeatures[$key]);
+                }
+            }
+        }
+
+        /* 之前在所有模型下都关闭的功能升级上来才关闭，否则开启。*/
+        $disabledFeatures = array_values($disabledFeatures);
+        foreach($countFeature as $feature => $count)
+        {
+            if($count == 4 || ($count == 2 && in_array($feature, array('gapanalysis', 'researchplan', 'track'))))
+            {
+                $disabledFeatures[] = 'project' . ucfirst($feature);
+            }
+        }
+
+        $disabledFeatures = implode(',', array_unique($disabledFeatures));
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq($disabledFeatures)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->exec();
+    }
+
+    /**
+     * 之前object表中data字段直接存入URL，如果改变请求方式则无法使用，现在升级为模块名、方法名、参数的形式。
+     * Before the object table directly stores the URL in the data field, if the request method changes, it cannot be used, now upgrade to the form of module name, method name, and parameters.
+     *
+     * @access public
+     * @return bool
+     */
+    public function parseDocFetcherURL()
+    {
+        $objects = $this->dao->select('id,data')->from(TABLE_OBJECT)->where('data')->like('%tml-zentaolist%')->fetchPairs();
+
+        $cleanValue = function($value)
+        {
+            if(preg_match('/__(\w+)__([0-9]+)/', $value, $m)) return $m[2];
+            return $value;
+        };
+
+        $parsePathInfoUrl = function($url) use ($cleanValue)
+        {
+            $url = ltrim($url, '/');
+            $url = preg_replace('/\.html$/', '', $url);
+
+            $parts = explode('-', $url);
+            array_shift($parts); // 删掉模块名
+            array_shift($parts); // 删掉方法名
+
+            $params = [];
+            foreach($parts as $index => $value)
+            {
+                $index ++;
+                $key   = "param{$index}";
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+            }
+
+            return $params;
+        };
+
+        $parseGetUrl = function($url) use ($cleanValue)
+        {
+            $parts = parse_url($url);
+            parse_str($parts['query'] ?? '', $query);
+
+            unset($query['m'], $query['f']);
+
+            $params = [];
+            $index  = 1;
+            foreach($query as $key => $value)
+            {
+                $key   = 'param' . $index;
+                $value = $cleanValue($value);
+
+                $params[$key] = $value;
+                $index++;
+            }
+
+            return $params;
+        };
+
+        foreach($objects as $id => $data)
+        {
+            $data = json_decode($data, true);
+            $html = $data['$data'];
+
+            preg_match('/data-export-url=\'([^\']+)\'/', $html, $exportMatch);
+            preg_match('/data-fetcher=\'([^\']+)\'/', $html, $fetcherMatch);
+
+            $exportUrl  = $exportMatch[1] ?? null;
+            $fetcherUrl = $fetcherMatch[1] ?? null;
+
+            if(!$exportUrl && !$fetcherUrl) continue;
+
+            if(strpos($exportUrl, '?') !== false)
+            {
+                $data['exportParams'] = $parseGetUrl($exportUrl);
+            }
+            else
+            {
+                $data['exportParams'] = $parsePathInfoUrl($exportUrl);
+            }
+
+            if(strpos($fetcherUrl, '?') !== false)
+            {
+                $data['fetcherParams'] = $parseGetUrl($fetcherUrl);
+            }
+            else
+            {
+                $data['fetcherParams'] = $parsePathInfoUrl($fetcherUrl);
+            }
+
+            $data['$data'] = str_replace($exportMatch[1],  '', $data['$data']);
+            $data['$data'] = str_replace($fetcherMatch[1], '', $data['$data']);
+
+            $data = json_encode($data);
+            $this->dao->update(TABLE_OBJECT)->set('data')->eq($data)->where('id')->eq($id)->exec();
+        }
+    }
+
+    /**
+     * 处理升级新增的工作流数据源。
+     * Process workflow datasource.
+     *
+     * @param  array  $codeList
+     * @access public
+     * @return void
+     */
+    public function processWorkflowDatasource($codeList)
+    {
+        $datasources = $this->dao->select('id,code')->from(TABLE_WORKFLOWDATASOURCE)->where('code')->in(array_keys($codeList))->fetchAll();
+        foreach($datasources as $datasource)
+        {
+            list($module, $field) = explode('_', $codeList[$datasource->code]);
+            $this->dao->update(TABLE_WORKFLOWFIELD)->set('options')->eq($datasource->id)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
+        }
+    }
+
+    /**
      * 内置AI禅道智能体。
      * Initialize the AI prompts.
      *
@@ -11471,7 +13119,7 @@ class upgradeModel extends model
             unset($aiPrompt->id);
             $aiPrompt->createdBy   = 'system';
             $aiPrompt->createdDate = helper::now();
-            $this->dao->insert(TABLE_AI_PROMPT)->data($aiPrompt)->autoCheck()->exec();
+            $this->dao->insert(TABLE_AI_AGENT)->data($aiPrompt)->autoCheck()->exec();
 
             $promptID = $this->dao->lastInsertID();
             if(!empty($this->config->ai->initAIPromptFields[$index])) $this->initAIPromptFields($this->config->ai->initAIPromptFields[$index], $promptID);
@@ -11488,7 +13136,7 @@ class upgradeModel extends model
      */
     public function checkExistAIPrompt(object $aiPrompt): bool
     {
-        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_PROMPT)
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_AI_AGENT)
             ->where('name')->eq($aiPrompt->name)
             ->fetch('count');
         return $count == 0;
@@ -11538,7 +13186,111 @@ class upgradeModel extends model
         foreach($aiPromptFields as $field)
         {
             $field->appID = $promptID;
-            $this->dao->insert(TABLE_AI_PROMPTFIELD)->data($field, 'id')->exec();
+            $this->dao->insert(TABLE_AI_AGENTFIELD)->data($field, 'id')->exec();
         }
+    }
+
+    /*
+     * 升级项目流程相关的权限。
+     * Update the priv of workflow group.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateWorkflowGroupPriv(): bool
+    {
+        $designFlowGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowfield')
+            ->andWhere('method')->eq('browse')
+            ->fetchPairs();
+        foreach($designFlowGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('designFlow')->exec();
+
+        $flowReportGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('design')
+            ->fetchPairs();
+        foreach($flowReportGroupIdList as $groupID) $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('workflowgroup')->set('method')->eq('report')->exec();
+
+        $setDelieverableGroupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('workflowgroup')
+            ->andWhere('method')->eq('deliverable')
+            ->fetchPairs();
+        foreach($setDelieverableGroupIdList as $groupID)
+        {
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('enable')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('deliverable')->set('method')->eq('disable')->exec();
+        }
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('workflowgroup')->andWhere('method')->eq('deliverable')->exec();
+
+        return true;
+    }
+
+    /**
+     * 处理报告模板中内置的适用流程。
+     * Upgrade report template objects.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeReportTemplateObjects(): bool
+    {
+        $templateList = $this->dao->select('id,objects')->from(TABLE_DOC)->where('templateType')->eq('reportTemplate')->fetchPairs('id');
+        $workflowList = $this->dao->select('id,projectModel,projectType')->from(TABLE_WORKFLOWGROUP)->where('main')->eq('1')->fetchAll('id');
+
+        $flowGroup = array();
+        foreach($workflowList as $flowID => $flow)
+        {
+            if(!isset($flowGroup[$flow->projectModel])) $flowGroup[$flow->projectModel] = array();
+            if(!isset($flowGroup[$flow->projectModel][$flow->projectType])) $flowGroup[$flow->projectModel][$flow->projectType] = array();
+            $flowGroup[$flow->projectModel][$flow->projectType][] = $flowID;
+        }
+
+        foreach($templateList as $templateID => $objects)
+        {
+            $newObjects   = array();
+            $objectIdList = array_filter(explode(',', $objects));
+            foreach($objectIdList as $objectID)
+            {
+                $newObjects[] = $objectID;
+                if(!isset($workflowList[$objectID])) continue;
+
+                $projectModel = $workflowList[$objectID]->projectModel;
+                $projectType  = $workflowList[$objectID]->projectType;
+                if($projectModel == 'scrum' && $projectType == 'product') $newObjects = array_merge($newObjects, $flowGroup['agileplus']['product']);
+                if($projectModel == 'scrum' && $projectType == 'project') $newObjects = array_merge($newObjects, $flowGroup['agileplus']['project']);
+                if($projectModel == 'waterfall' && $projectType == 'product') $newObjects = array_merge($newObjects, $flowGroup['waterfallplus']['product'], $flowGroup['ipd']['ipd'], $flowGroup['ipd']['tpd'], $flowGroup['ipd']['cbb'], $flowGroup['ipd']['cpdproduct']);
+                if($projectModel == 'waterfall' && $projectType == 'project') $newObjects = array_merge($newObjects, $flowGroup['waterfallplus']['project'], $flowGroup['ipd']['cpdproject']);
+            }
+
+            if(!empty($newObjects))
+            {
+                $newObjectList = implode(',', array_filter(array_unique($newObjects)));
+                $this->dao->update(TABLE_DOC)->set('objects')->eq($newObjectList)->where('id')->eq($templateID)->exec();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 从轻量模式升级后，禁用新增的功能。
+     * Disable new features after upgrading from light mode.
+     *
+     * @access public
+     * @return bool
+     */
+    public function disableFeaturesByMode(): bool
+    {
+        if($this->config->systemMode != 'light') return true;
+        if($this->config->edition == 'ipd')
+        {
+            $this->loadModel('custom')->disableFeaturesByMode('PLM');
+        }
+        else
+        {
+            $this->loadModel('custom')->disableFeaturesByMode('light');
+        }
+
+        return true;
     }
 }

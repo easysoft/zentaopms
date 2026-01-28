@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->loadYaml('modulecase')->gen('100');
@@ -53,7 +53,7 @@ $browseList    = array('', 'wait');
 $autoList      = array('', 'no', 'unit');
 $caseTypeList  = array('', 'feature');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getModuleCasesTest($productIDList[0], $branchList[0], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('4,2,1'); // 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases
 r($testcase->getModuleCasesTest($productIDList[0], $branchList[1], $moduleIdList[0], $browseList[0], $autoList[0], $caseTypeList[0])) && p() && e('4,2,1'); // 测试获取产品1 分支 all 模块 0 browse 空 auto 空 用例类型 空 的cases

@@ -16,7 +16,7 @@ cid=17136
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $metric = zenData('metric');
 $metric->id->range('1-5');
@@ -37,7 +37,7 @@ $metriclib->gen(0);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 准备测试数据
 $singleRecord = new stdClass();

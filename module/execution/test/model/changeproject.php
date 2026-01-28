@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -37,7 +37,7 @@ $executionIDList  = array(8, 9, 10);
 $oldProjectIDlist = array(2, 3, 4);
 $newProjectIDlist = array(5, 6, 7);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->changeProjectTest($oldProjectIDlist[0], $oldProjectIDlist[0], $executionIDList[0])) && p('parent')    && e('2');       // 测试不修改敏捷执行关联项目
 r($executionTester->changeProjectTest($oldProjectIDlist[1], $oldProjectIDlist[1], $executionIDList[1])) && p('path', ';') && e(',1,3,9,'); // 测试不修改瀑布执行关联项目
 r($executionTester->changeProjectTest($oldProjectIDlist[2], $oldProjectIDlist[2], $executionIDList[2])) && p('parent')    && e('4');       // 测试不修改看板执行关联项目

@@ -19,7 +19,7 @@ cid=17350
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
@@ -27,7 +27,7 @@ zenData('oauth')->loadYaml('oauth')->gen(5);
 $providerTypes = array('', 'gitlab', 'test');
 $accounts      = array('', 'user1', 'test');
 
-$pipelineTester = new pipelineTest();
+$pipelineTester = new pipelineModelTest();
 r($pipelineTester->getProviderPairsByAccountTest($providerTypes[0], $accounts[0])) && p()    && e('0'); // 获取providerType为空、account为空的providerID
 r($pipelineTester->getProviderPairsByAccountTest($providerTypes[0], $accounts[1])) && p()    && e('0'); // 获取providerType为空、account为user1的providerID
 r($pipelineTester->getProviderPairsByAccountTest($providerTypes[0], $accounts[2])) && p()    && e('0'); // 获取providerType为空、account为test的providerID

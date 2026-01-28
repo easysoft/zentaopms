@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -44,7 +44,7 @@ global $config;
 
 $_SERVER['HTTP_HOST'] = $config->db->host; // 记日志需要用到 HTTP_HOST
 
-$bug          = new bugTest();
+$bug          = new bugModelTest();
 $kanbanParams = array();
 
 r($bug->activateTest(2)) && p('status,activatedCount') && e('active,1'); // 状态是 resolved 的 bug 激活后的状态是 active，激活次数加 1。

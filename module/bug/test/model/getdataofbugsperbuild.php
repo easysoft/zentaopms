@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('build')->gen(10);
@@ -31,7 +31,7 @@ cid=15366
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 $result = $bug->getDataOfBugsPerBuildTest();
 r($result[''])      && p('name,value') && e('未设定,9');      // 获取版本为空 bug 数
 r($result['trunk']) && p('name,value') && e('主干,6');        // 获取主干 bug 数

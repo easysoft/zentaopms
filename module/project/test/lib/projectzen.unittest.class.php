@@ -66,6 +66,34 @@ class projectzenTest
     }
 
     /**
+     * Test formatExportProjects method.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function formatExportProjectsTest(string $status, string $orderBy)
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('formatExportProjects');
+            $method->setAccessible(true);
+
+            $result = $method->invoke($this->objectZen, $status, $orderBy);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
+
+    /**
      * Test displayAfterCreated method.
      *
      * @param  int $projectID

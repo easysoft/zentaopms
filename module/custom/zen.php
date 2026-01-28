@@ -216,7 +216,7 @@ class customZen extends custom
         $this->checkDuplicateKeys($module, $field);
         if(dao::$errors) return false;
 
-        $this->checkInvalidKeys($module, $field);
+        $oldCustoms = $this->checkInvalidKeys($module, $field);
         if(dao::$errors) return false;
 
         $lang        = $_POST['lang'];
@@ -225,6 +225,29 @@ class customZen extends custom
         if($lang == 'all') $this->custom->deleteItems("lang={$currentLang}&module={$module}&section={$field}&vision={$this->config->vision}");
 
         $this->checkEmptyKeys($module, $field);
+
+        if($module == 'testcase' && $field == 'stageList')
+        {
+            $oldItems = array();
+            foreach($oldCustoms as $key => $item) $oldItems[$key] = $item->value;
+            $oldItems = arrayUnion($oldItems, zget($this->lang->$module, $field, array()));
+
+            $newItems = array();
+            $newCustoms = $this->custom->getItems("lang={$lang}&module={$module}&section={$field}");
+            foreach($newCustoms as $key => $item) $newItems[$key] = $item->value;
+
+            $addItems = array_diff_key($newItems, $oldItems);
+            $delItems = array_diff_key($oldItems, $newItems);
+            $changeItems = array();
+            foreach($oldItems as $key => $item)
+            {
+                if(!empty($newItems[$key]) && $newItems[$key] != $item) $changeItems[$key] = $newItems[$key];
+            }
+            $this->loadModel('upgrade');
+            if($addItems)    $this->upgrade->createTestcaseDeliverable($addItems);
+            if($delItems)    $this->upgrade->deleteTestcaseDeliverable($delItems);
+            if($changeItems) $this->upgrade->changeTestcaseDeliverable($changeItems);
+        }
         return !dao::isError();
     }
 
@@ -259,9 +282,9 @@ class customZen extends custom
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
      * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
      * @access protected
-     * @return bool|string
+     * @return array|string
      */
-    protected function checkInvalidKeys(string $module = 'story', string $field = 'priList'): bool|string
+    protected function checkInvalidKeys(string $module = 'story', string $field = 'priList'): array|string
     {
         $lang       = $_POST['lang'];
         $oldCustoms = $this->custom->getItems("lang={$lang}&module={$module}&section={$field}");
@@ -287,7 +310,7 @@ class customZen extends custom
             if((in_array($module, array('bug', 'testcase')) || (in_array($module, array('story', 'task')) && $field == 'reasonList')) && strlen($key) > 30) return dao::$errors['message'] = $this->lang->custom->notice->invalidStrlen['thirty'];
         }
 
-        return true;
+        return $oldCustoms;
     }
 
     /**

@@ -16,12 +16,12 @@ cid=18716
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(3);
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 r($svnTest->getRepoLogsTest(0)) && p() && e('0'); // 步骤1：正常提交ID为0的情况
 r($svnTest->getRepoLogsTest(1)) && p() && e('0'); // 步骤2：正常提交ID为1的情况

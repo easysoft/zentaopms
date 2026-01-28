@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -47,7 +47,7 @@ cid=15210
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 $sqls = array();
 

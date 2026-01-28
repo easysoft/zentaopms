@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -76,7 +76,7 @@ $user->status  = 'done';
 $user->order   = '4';
 $users[] = $user;
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getTeamByAccountTest($users, 'admin')) && p() && e('admin_wait'); //获取未开始的指定账号的团队信息
 
 $users[0]->status = 'doing';

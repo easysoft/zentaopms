@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('20');
 zenData('projectcase')->gen('20');
@@ -50,7 +50,7 @@ $branchIdList  = array(0, 'all');
 $autoList      = array('no', 'auto');
 $orderByList   = array('id_desc', 'id_asc');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getBySearchTest($tabList[0], $projectIdList[0], $productIdList[0], $branchIdList[0], 0, $autoList[0], $orderByList[0])) && p() && e('20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1'); // 测试搜索 qa 下 项目 0 产品 0 下的用例
 r($testcase->getBySearchTest($tabList[0], $projectIdList[0], $productIdList[0], $branchIdList[1], 0, $autoList[0], $orderByList[0])) && p() && e('20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1'); // 测试搜索 qa 下 项目 0 产品 0 分支 all 下的用例

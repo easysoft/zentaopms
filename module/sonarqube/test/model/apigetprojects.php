@@ -17,7 +17,7 @@ cid=18377
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
@@ -26,7 +26,7 @@ zenData('pipeline')->loadYaml('pipeline')->gen(5);
 su('admin');
 
 // 创建测试实例
-$sonarqube = new sonarqubeTest();
+$sonarqube = new sonarqubeModelTest();
 
 // 测试参数定义
 $validSonarqubeID = 2;

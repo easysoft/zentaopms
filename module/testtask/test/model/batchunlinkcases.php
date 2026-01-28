@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testrun')->loadYaml('testrun')->gen(6);
 
@@ -40,7 +40,7 @@ cid=19157
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->batchUnlinkCasesTest(0, array(1))) && p() && e(0); // 测试单参数为 0 返回 false。
 r($testtask->batchUnlinkCasesTest(1, array()))  && p() && e(0); // 测试用例参数为空返回 false。

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+zendata('webhook')->gen(0);
+
 /**
 
 title=测试 webhookModel::bind();
@@ -16,7 +18,7 @@ cid=19685
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('webhook')->gen(3);
@@ -24,7 +26,7 @@ zenData('oauth')->gen(0);
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 // 步骤1：测试正常绑定用户到webhook
 $validUserList = array('admin' => 'openid_admin_123', 'user1' => 'openid_user1_456');

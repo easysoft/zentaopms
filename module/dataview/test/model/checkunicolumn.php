@@ -18,11 +18,11 @@ cid=15951
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 // 测试数据1：唯一列数组
 $uniqueColumns = array(

@@ -16,7 +16,7 @@ cid=19365
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -43,7 +43,7 @@ $case->product->range('1');
 $case->project->range('1');
 $case->gen(20);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getCaseTreeMenuTest(1, 1))   && p() && e('正常产品1');  // 测试获取产品1的Case模块
 r($tree->getCaseTreeMenuTest(2, 2))   && p() && e('正常产品2');  // 测试获取产品1的Case模块

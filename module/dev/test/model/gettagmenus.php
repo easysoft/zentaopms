@@ -18,10 +18,10 @@ cid=16012
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 r($devTest->getTagMenusTest('', '', '')) && p() && e('0'); // 测试空模块参数情况
 r($devTest->getTagMenusTest('my', 'my', 'todo')) && p('calendar:active') && e('1'); // 测试有效模块菜单生成

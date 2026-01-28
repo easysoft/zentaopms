@@ -22,10 +22,16 @@ cid=19277
  - 属性4 @2
 - 步骤5：验证返回数组长度 @3
 
+- 验证task获得的键值对的个数 @1
+- 验证taskID为10的project为20属性10 @20
+- 验证project获得的键值对的个数 @1
+- 获取不到的情况属性10 @0
+- 验证bugID为10的project为24属性10 @14
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 $taskTable = zenData('task');
@@ -51,7 +57,7 @@ $testtaskTable->gen(5);
 
 su('admin');
 
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 r($todoTest->getProjectListTest('zt_task', array(1 => 1, 2 => 2, 3 => 3))) && p('1,2,3') && e('1,1,1'); // 步骤1：正常task表查询
 r($todoTest->getProjectListTest('zt_task', array())) && p() && e(0); // 步骤2：空ID列表

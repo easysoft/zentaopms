@@ -18,7 +18,7 @@ cid=16791
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $instanceTable = zenData('instance');
 $instanceTable->id->range('1-5');
@@ -42,7 +42,7 @@ $configData->gen(2);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 r($instanceTest->domainExistsTest('existing')) && p('') && e('1');
 r($instanceTest->domainExistsTest('nonexistent')) && p('') && e('0');

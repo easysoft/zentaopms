@@ -16,7 +16,7 @@ cid=19022
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -35,7 +35,7 @@ $user->gen(5);
 
 su('admin');
 
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseModelTest();
 
 // 测试1: 正常导入1个场景和1个测试用例
 $scenes1 = array(

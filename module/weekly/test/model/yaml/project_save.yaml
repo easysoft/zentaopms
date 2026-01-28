@@ -11,7 +11,7 @@ fields:
   range: project{1-10}
 - field: begin
   range: 2023-09-01{5},2023-10-01{5}
-- field: end  
+- field: end
   range: 2023-12-31{5},2024-01-31{5}
 - field: realBegan
   range: 2023-09-01{5},2023-10-01{5}

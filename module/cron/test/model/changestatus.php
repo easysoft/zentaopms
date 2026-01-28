@@ -19,13 +19,13 @@ cid=15877
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例并初始化数据
-$cronTest = new cronTest();
+$cronTest = new cronModelTest();
 $cronTest->init();
 
 // 4. 测试步骤执行和验证

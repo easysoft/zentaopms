@@ -16,11 +16,11 @@ cid=15779
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 r($convertTest->getJiraProjectRoleActorTest('normal')) && p('1001:admin') && e('admin');
 r($convertTest->getJiraProjectRoleActorTest('normal')) && p('1001:JIRAUSER100') && e('JIRAUSER100');

@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(50);
@@ -36,7 +36,7 @@ cid=17055
 
 */
 
-$message = new messageTest();
+$message = new messageModelTest();
 
 $objectType = array('todo', 'testtask', 'mr', 'release', 'task', 'story');
 $objectID   = array(1, 9);

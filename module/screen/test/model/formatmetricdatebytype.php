@@ -22,11 +22,11 @@ cid=18224
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->formatMetricDateByTypeTest(1609459200000, 'year')) && p('year') && e('2021'); // 步骤1：year类型
 r($screenTest->formatMetricDateByTypeTest(1609459200000, 'month')) && p('year,month') && e('2021,2021-01'); // 步骤2：month类型

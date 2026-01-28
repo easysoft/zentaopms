@@ -49,7 +49,9 @@ class testcaseZen extends testcase
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
 
-        if($this->cookie->preProductID != $productID || $this->cookie->preBranch != $branch)
+        $productChanged = $this->cookie->preProductID != $productID;
+        $branchChanged  = $this->cookie->preBranch != $branch;
+        if($productChanged || $branchChanged || $browseType == 'bysearch')
         {
             $_COOKIE['caseModule'] = 0;
             helper::setcookie('caseModule', '0');
@@ -1626,6 +1628,7 @@ class testcaseZen extends testcase
                 $cases[$caseID] = $case;
                 $steps[$caseID] = zget($fromSteps, $caseID, array());
                 $files[$caseID] = zget($fromFiles, $caseID, array());
+                foreach($files[$caseID] as $file) $file->oldpathname = $file->pathname;
             }
         }
 
@@ -1980,7 +1983,7 @@ class testcaseZen extends testcase
         if($bugID > 0)
         {
             $bug = $this->loadModel('bug')->getById($bugID);
-            $case->type      = $bug->type;
+            $case->type      = 'feature';
             $case->pri       = $bug->pri ? $bug->pri : $bug->severity;
             $case->story     = $bug->story;
             $case->title     = $bug->title;
@@ -3022,6 +3025,8 @@ class testcaseZen extends testcase
 
                 if(empty($rows))
                 {
+                    unset($this->lang->testcase->typeList['unit']);
+
                     $row->typeValue  = join("\n", $this->lang->testcase->typeList);
                     $row->stageValue = join("\n", $this->lang->testcase->stageList);
                     if($product->type != 'normal') $row->branchValue = join("\n", $branches);

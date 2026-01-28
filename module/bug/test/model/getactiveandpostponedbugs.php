@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->loadYaml('product_type')->gen(10);
@@ -42,7 +42,7 @@ cid=15354
 $productIDList = array(array(1, 2), array(3), array(1000001), array());
 $executionList = array(1, 4, 7);
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r(count($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[0]))) && p('') && e('3');                  // 查询普通产品1 2 执行1 下的 bug 数量
 r(count($bug->getActiveAndPostponedBugsTest($productIDList[0], $executionList[2]))) && p('') && e('0');                  // 查询普通产品1 2 执行7 下的 bug 数量

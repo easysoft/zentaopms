@@ -137,10 +137,11 @@ if($canBatchAction)
     if(!$canBatchEdit && $canBatchUnlink) $footToolbar['items'][] = array('text' => $lang->unlink, 'className' => 'batch-btn not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchUnlinkCases', "taskID={$task->id}"));
     if($canBatchAssign)
     {
-        $userItems = array();
-        foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID={$task->id}"), 'data-account' => $account);
+        $pinyinItems = common::convert2Pinyin($assignedToList);
+        $assignItems = array();
+        foreach($assignedToList as $account => $realname) $assignItems[] = array('text' => $realname, 'keys' => zget($pinyinItems, $realname, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID={$task->id}"), 'data-account' => $account);
 
-        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
+        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $assignItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
     }
     if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID={$productID}&orderBy=id_desc&from=testtask&taskID={$task->id}&confirm=yes"));
 }

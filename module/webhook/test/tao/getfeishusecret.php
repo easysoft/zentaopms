@@ -16,7 +16,7 @@ cid=19711
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $table = zenData('webhook');
 $table->id->range('1-10');
@@ -26,7 +26,7 @@ $table->gen(5);
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookTaoTest();
 
 // 步骤1：正常情况测试 - 有效的feishuAppId和feishuAppSecret
 $validWebhook = new stdClass();

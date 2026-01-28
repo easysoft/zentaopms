@@ -30,7 +30,7 @@ cid=16841
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('job');
@@ -47,7 +47,7 @@ $table->gen(7);
 su('admin');
 
 // 创建测试实例
-$job = new jobTest();
+$job = new jobModelTest();
 
 r($job->getByIdTest(1)) && p('id,engine,name,pipeline') && e('1,jenkins,Jenkins Job,test-pipeline'); // 测试步骤1：查询有效jenkins类型job的基本信息
 r($job->getByIdTest(2)) && p('id,engine,name') && e('2,gitlab,Gitlab Job');                    // 测试步骤2：查询有效gitlab类型job基本信息

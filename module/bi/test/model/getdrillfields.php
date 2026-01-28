@@ -18,9 +18,9 @@ cid=15166
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->getDrillFieldsTest(0, 'product', array(0 => array('drillFields' => array('product' => array('name' => 'ZenTao', 'id' => 1)))))) && p('name') && e('ZenTao'); // 测试步骤1：正常情况
 r($biTest->getDrillFieldsTest(0, 'product', array())) && p() && e('0'); // 测试步骤2：空钻取数据返回空数组

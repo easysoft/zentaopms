@@ -18,7 +18,7 @@ cid=16652
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('pipeline');
 $table->id->range('1-10');
@@ -30,7 +30,7 @@ $table->gen(10);
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->getListTest('id_desc')) && p('5:id') && e('5');                          // 步骤1：正常获取gitlab列表，按id降序排序
 r($gitlabTest->getListTest('id_asc')) && p('1:id') && e('1');                           // 步骤2：正常获取gitlab列表，按id升序排序

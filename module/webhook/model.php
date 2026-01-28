@@ -29,12 +29,16 @@ class webhookModel extends model
      * Get a webhook by type.
      *
      * @param  string $type
+     * @param  int    $id
      * @access public
      * @return object
      */
-    public function getByType(string $type)
+    public function getByType(string $type, int $id = 0)
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)
+           ->andWhere('deleted')->eq('0')
+           ->beginIF($id)->andWhere('id')->eq($id)->fi()
+           ->fetch();
     }
 
     /**
@@ -189,6 +193,7 @@ class webhookModel extends model
             $webhook = $this->webhookTao->getFeishuSecret($webhook);
         }
 
+        if(!empty($webhook->url) && !preg_match('/^http(s)?:\/\//', $webhook->url)) dao::$errors['url'] = $this->lang->webhook->error->url;
         if(dao::isError()) return false;
 
         $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
@@ -228,6 +233,9 @@ class webhookModel extends model
         {
             $webhook = $this->webhookTao->getFeishuSecret($webhook);
         }
+
+        if(!empty($webhook->url) && !preg_match('/^http(s)?:\/\//', $webhook->url)) dao::$errors['url'] = $this->lang->webhook->error->url;
+        if(dao::isError()) return false;
 
         $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
@@ -349,7 +357,9 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
+
         $field          = $this->config->action->objectNameFields[$objectType];
         $host           = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
         $viewLink       = $this->getViewLink($objectType == 'kanbancard' ? 'kanban' : $objectType, $objectType == 'kanbancard' ? $object->kanban : $objectID);

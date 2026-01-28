@@ -24,7 +24,7 @@ cid=15714
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $companyTable = zenData('company');
@@ -33,7 +33,7 @@ $companyTable->name->range('禅道软件');
 $companyTable->guest->range('1');
 $companyTable->gen(1);
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->setUserTest('guest')) && p('account,realname') && e('guest,guest'); // 测试步骤1：无session用户且允许访客访问时创建guest用户
 r($commonTest->setUserTest('guest')) && p('id,dept') && e('0,0'); // 测试步骤2：验证guest用户的基本属性设置

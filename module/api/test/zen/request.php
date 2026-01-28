@@ -16,11 +16,11 @@ cid=15127
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiZenTest();
 
 r($apiTest->requestTest('user', 'getById', 'extendModel', array('userID' => '1', 'account' => 'admin'))) && p('content') && e('mock_response_content');
 r($apiTest->requestTest('user', 'getList', 'extendModel', array('noparam' => true))) && p('content') && e('mock_response_content');

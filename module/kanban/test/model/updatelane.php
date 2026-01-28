@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -31,7 +31,7 @@ cid=16965
 $executionID = array('1', '2', '3');
 $laneType    = array('story', 'bug', 'task');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateLaneTest($executionID[0], $laneType[0])) && p('', '|') && e('0');      // 测试更新执行101的story泳道
 r($kanban->updateLaneTest($executionID[0], $laneType[1])) && p('', '|') && e('0');      // 测试更新执行101的bug泳道

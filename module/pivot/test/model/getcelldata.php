@@ -44,7 +44,7 @@ try {
     }
 }
 
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 // 如果完整环境可用，使用标准用户切换
@@ -57,7 +57,7 @@ if($useFullEnvironment && function_exists('su')) {
 }
 
 // 3. 创建测试实例（变量名与模块名一致）
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 4. 准备测试数据
 $records = array(

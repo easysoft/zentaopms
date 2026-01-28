@@ -25,7 +25,7 @@ cid=16055
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $doclibTable = zenData('doclib')->loadYaml('doclib');
 $doclibTable->acl->range('open, default');
@@ -40,7 +40,7 @@ su('admin');
 $libIdList = array(1, 5, 6, 11, 20);
 $docIdList = array(1, 18, 21, 23, 41);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->checkPrivLibTest('lib', $libIdList[0])) && p() && e('1'); // 测试ID=1的文档库的权限
 r($docTester->checkPrivLibTest('lib', $libIdList[1])) && p() && e('1'); // 测试ID=5的文档库的权限
 r($docTester->checkPrivLibTest('lib', $libIdList[2])) && p() && e('1'); // 测试ID=6的文档库的权限

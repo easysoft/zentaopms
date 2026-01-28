@@ -22,7 +22,7 @@ cid=18441
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(20);
 zenData('issue')->loadYaml('issue')->gen(20);
@@ -30,7 +30,7 @@ zenData('issue')->loadYaml('issue')->gen(20);
 $projectIds = array(0, 60, 100);
 $accounts   = array('','admin','test01');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getStakeholderIssueTest($projectIds[0], $accounts[0])) && p()                                 && e('0');                    // 获取项目ID=0、用户名为空的问题信息
 r($stakeholderTester->getStakeholderIssueTest($projectIds[0], $accounts[1])) && p()                                 && e('0');                    // 获取项目ID=0、用户名=admin的问题信息
 r($stakeholderTester->getStakeholderIssueTest($projectIds[0], $accounts[2])) && p()                                 && e('0');                    // 获取项目ID=0、用户名=test01的问题信息

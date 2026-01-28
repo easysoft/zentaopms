@@ -75,7 +75,9 @@ $config->upgrade->maxVersion['max7_3']         = '21_7_4';
 $config->upgrade->maxVersion['max7_4']         = '21_7_5';
 $config->upgrade->maxVersion['max7_5']         = '21_7_6';
 $config->upgrade->maxVersion['max7_6']         = '21_7_7';
-$config->upgrade->maxVersion['max7_7']         = '21_7_8'; // max insert position.
+$config->upgrade->maxVersion['max7_7']         = '21_7_8';
+$config->upgrade->maxVersion['max7_8']         = '21_7_9';
+$config->upgrade->maxVersion['max8_0_beta']    = '22_0_beta'; // max insert position.
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']          = '9_5_1';
@@ -189,7 +191,9 @@ $config->upgrade->bizVersion['biz12_3']         = '21_7_4';
 $config->upgrade->bizVersion['biz12_4']         = '21_7_5';
 $config->upgrade->bizVersion['biz12_5']         = '21_7_6';
 $config->upgrade->bizVersion['biz12_6']         = '21_7_7';
-$config->upgrade->bizVersion['biz12_7']         = '21_7_8'; // biz insert position.
+$config->upgrade->bizVersion['biz12_7']         = '21_7_8';
+$config->upgrade->bizVersion['biz12_8']         = '21_7_9';
+$config->upgrade->bizVersion['biz13_0_beta']    = '22_0_beta'; // biz insert position.
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';
@@ -340,7 +344,9 @@ $config->upgrade->ipdVersion['ipd4_3']         = '21_7_4';
 $config->upgrade->ipdVersion['ipd4_4']         = '21_7_5';
 $config->upgrade->ipdVersion['ipd4_5']         = '21_7_6';
 $config->upgrade->ipdVersion['ipd4_6']         = '21_7_7';
-$config->upgrade->ipdVersion['ipd4_7']         = '21_7_8'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd4_7']         = '21_7_8';
+$config->upgrade->ipdVersion['ipd4_8']         = '21_7_9';
+$config->upgrade->ipdVersion['ipd5_0_beta']    = '22_0_beta'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
@@ -1333,9 +1339,12 @@ $config->delete['20_1'][] = 'execution/ipd/bug/ext/ui/view.effort.html.hook.php'
 $config->delete['20_1'][] = 'execution/ipd/story/ext/ui/view.effort.html.hook.php';
 $config->delete['20_1'][] = 'execution/ipd/testcase/ext/ui/view.effort.html.hook.php';
 
-$config->delete['20_1_1'][] = 'extension/max/design/ext/ui/browse.zentamax.html.hook.php';
-$config->delete['20_1_1'][] = 'extension/max/doc/ext/ui/create.zentamax.html.hook.php';
-$config->delete['20_1_1'][] = 'extension/max/doc/ext/view/create.zentamax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/max/design/ext/ui/browse.zentaomax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/max/doc/ext/ui/create.zentaomax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/max/doc/ext/view/create.zentaomax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/design/ext/ui/browse.zentaomax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/doc/ext/ui/create.zentaomax.html.hook.php';
+$config->delete['20_1_1'][] = 'extension/ipd/doc/ext/view/create.zentaomax.html.hook.php';
 
 $config->delete['20_3_0'][] = 'extension/ipd/story/ext/tao/class/ipd.class.php';
 $config->delete['20_3_0'][] = 'extension/ipd/story/ext/tao/ipd.php';
@@ -1504,6 +1513,9 @@ $config->delete['21_6_beta'][] = 'extension/max/project/ext/model/zentaoipd.php'
 $config->delete['21_6_beta'][] = 'extension/biz/project/ext/model/zentaoipd.php';
 
 $config->delete['21_7_2'][] = 'module/solution';
+
+$config->delete['21_7_3'][] = 'extension/max/execution/ext/tao/zentaomax.php';
+$config->delete['21_7_3'][] = 'extension/ipd/execution/ext/tao/zentaomax.php';
 
 $config->delete['21_7_5'][] = 'extension/biz/doc/ext/js/app/zentaobiz.ui.js';
 $config->delete['21_7_5'][] = 'extension/max/doc/ext/js/app/zentaobiz.ui.js';
@@ -1725,6 +1737,19 @@ $config->delete['21_7_7'][] = 'module/upgrade/css/common.ui.css';
 $config->delete['21_7_7'][] = 'module/upgrade/css/confirm.ui.css';
 $config->delete['21_7_7'][] = 'module/upgrade/js/common.js';
 $config->delete['21_7_7'][] = 'module/upgrade/js/confirm.ui.js';
+
+$config->delete['22_0_beta'][] = 'extension/ipd/auditcl/ext/css/browse.css';
+$config->delete['22_0_beta'][] = 'extension/max/auditcl/ext/css/browse.css';
+$config->delete['22_0_beta'][] = 'extension/ipd/auditcl/ext/js/edit.js';
+$config->delete['22_0_beta'][] = 'extension/max/auditcl/ext/js/edit.js';
+$config->delete['22_0_beta'][] = 'extension/ipd/auditcl/view';
+$config->delete['22_0_beta'][] = 'extension/max/auditcl/view';
+$config->delete['22_0_beta'][] = 'extension/ipd/auditplan/view';
+$config->delete['22_0_beta'][] = 'extension/max/auditplan/view';
+$config->delete['22_0_beta'][] = 'extension/ipd/project/ext/tao/class/zentaoipd.class.php';
+$config->delete['22_0_beta'][] = 'extension/ipd/project/ext/tao/zentaoipd.php';
+$config->delete['22_0_beta'][] = 'extension/max/design/ext/ui/browse.zentaomax.html.hook.php';
+$config->delete['22_0_beta'][] = 'extension/ipd/design/ext/ui/browse.zentaomax.html.hook.php';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'attend', 'holiday', 'leave', 'makeup', 'overtime', 'lieu', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');

@@ -16,11 +16,11 @@ cid=16496
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 r($fileTest->cropImageTest('/valid/image.jpg', '/target/output.jpg', 10, 10, 100, 100)) && p() && e('exception');
 r($fileTest->cropImageTest('/valid/image.jpg', '/target/output.jpg', 0, 0, 50, 50, 200, 150)) && p() && e('exception');

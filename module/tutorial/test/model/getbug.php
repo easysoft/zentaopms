@@ -16,11 +16,11 @@ cid=19405
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r($tutorialTest->getBugTest()) && p('id') && e('1'); // 步骤1：验证Bug对象ID
 r($tutorialTest->getBugTest()) && p('title') && e('Test bug-active'); // 步骤2：验证Bug对象标题

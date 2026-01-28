@@ -117,6 +117,7 @@ $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
 $lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification.';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
+$lang->programplan->emptyStageTip     = 'Please contact the administrator to set up the IPD stage list in the "Project Process Configuration" in the backend.';
 
 $lang->programplan->stageCustom['date'] = 'Show Date';
 $lang->programplan->stageCustom['task'] = 'Show Task';
@@ -134,7 +135,7 @@ $lang->programplan->ganttCustom['delay']        = 'Delay';
 $lang->programplan->ganttCustom['delayDays']    = 'Delay days';
 
 $lang->programplan->error                  = new stdclass();
-$lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
+$lang->programplan->error->percentNumber   = '"Workload %" must be non-negative';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub phases cannot be added.';

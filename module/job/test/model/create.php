@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -28,7 +28,7 @@ $job_name_blank        = array('name' => '');
 $job_engine_blank      = array('engine' => '');
 $job_triggerType_blank = array('triggerType' => '');
 
-$job = new jobTest();
+$job = new jobModelTest();
 r($job->createObject($job_name_blank))        && p('name:0')        && e('『流水线名称』不能为空。'); // 测试创建job name为空的情况
 r($job->createObject($job_engine_blank))      && p('engine:0')      && e('『引擎』不能为空。');       // 测试创建job engine为空的情况
 r($job->createObject($job_name))              && p('name')          && e('这是一个job007');           // 测试创建job name为《这是一个job007》的情况

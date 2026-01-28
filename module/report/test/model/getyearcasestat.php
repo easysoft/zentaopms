@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_annual')->gen(200);
 zenData('case')->gen(80);
@@ -26,7 +26,7 @@ cid=18181
 */
 $account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getYearCaseStatTest($account[0])) && p() && e('0');          // 测试获取本年度 admin 的用例数
 r($report->getYearCaseStatTest($account[1])) && p() && e('0');   // 测试获取本年度 dev17 的用例数

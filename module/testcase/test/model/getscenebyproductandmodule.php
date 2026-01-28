@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('modulescene')->gen('100');
 zenData('user')->gen('1');
@@ -32,7 +32,7 @@ cid=18995
 $productIdList = array(0, 1, 2, 3);
 $moduleIdList  = array(0, 1821, 1825, 1829);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getSceneByProductAndModuleTest($productIdList[0], $moduleIdList[0])) && p() && e('0');                                          // 获取产品 0 模块 0 的场景信息
 r($testcase->getSceneByProductAndModuleTest($productIdList[1], $moduleIdList[0])) && p() && e('sceneMaps:1 2 3 4;topScenes:1;');             // 获取产品 1 模块 0 的场景信息

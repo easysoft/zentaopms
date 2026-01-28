@@ -47,7 +47,7 @@ cid=19588
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
@@ -56,7 +56,7 @@ su('admin');
 
 global $config;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $user1 = (object)array('password1' => '');
 $user2 = (object)array('password1' => '123456', 'password2' => '12345',  'passwordStrength' => 0, 'passwordLength' => 6);

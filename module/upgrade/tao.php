@@ -903,4 +903,303 @@ class upgradeTao extends upgradeModel
 
         return $duplicateList;
     }
+
+    /**
+     * 获取工作流组列表
+     * Get workflow group list for process.
+     *
+     * @return array
+     */
+    protected function getWorkflowGroupForProcess()
+    {
+        return $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)
+            ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 处理使用内置数据的流程。
+     * Handle buildin workflow group.
+     *
+     * @param object $group           流程对象
+     * @param int    $groupID         流程ID
+     * @param array  $classifyModule  分类模块数组
+     * @return array
+     */
+    protected function handleBuildinWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    {
+        $this->dao->update(TABLE_PROCESS)->set('workflowGroup')->eq($groupID)->where('model')->eq($group->projectModel)->exec();
+
+        /* 更新活动的流程。 */
+        $processList = $this->dao->select('id')->from(TABLE_PROCESS)->where('workflowGroup')->eq($groupID)->andWhere('deleted')->eq('0')->fetchPairs();
+        $this->dao->update(TABLE_ACTIVITY)->set('workflowGroup')->eq($groupID)->where('process')->in(array_keys($processList))->exec();
+
+        $this->migrateOutputToDeliverable($group);
+
+        $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
+
+        return $classifyModule;
+    }
+
+    /**
+     * 将过程分类从语言表迁移到模块表
+     * Migrate process classify from language table to module table.
+     *
+     * @param object $group  流程对象
+     * @param int   $groupID 流程ID
+     * @return array
+     */
+    protected function migrateClassifyToModule(object $group, int $groupID)
+    {
+        $this->app->loadLang('process');
+        $classifyKey  = $group->projectModel == 'waterfall' ? 'classify' : $group->projectModel . 'Classify';
+        $classifyList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('process')->andWhere('section')->eq($classifyKey)->fetchPairs();
+        if(empty($classifyList)) $classifyList = $this->lang->process->classifyList;
+
+        $orderList = array('project' => 10, 'engineering' => 20, 'support' => 30);
+
+        $classifyModule = array();
+        $customOrder    = 40;
+        foreach($classifyList as $key => $value)
+        {
+            $order    = isset($orderList[$key]) ? $orderList[$key] : $customOrder;
+            $moduleID = $this->createProcessModule($groupID, $key, $value, $order);
+            $classifyModule[$key] = $moduleID;
+            if(!isset($orderList[$key])) $customOrder += 10;
+        }
+
+        return $classifyModule;
+    }
+
+    /**
+     * 创建过程模块。
+     * Create process module.
+     *
+     * @param  int    $groupID 流程ID
+     * @param  string $key     模块标识
+     * @param  string $name    模块名称
+     * @param  int    $order   排序
+     * @return int
+     */
+    protected function createProcessModule(int $groupID, string $key, string $name, int $order)
+    {
+        $module = new stdclass();
+        $module->root   = $groupID;
+        $module->branch = '0';
+        $module->name   = $name;
+        $module->grade  = '1';
+        $module->order  = $order;
+        $module->type   = 'process';
+        $module->extra  = $key;
+
+        $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+        $moduleID = $this->dao->lastInsertID();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
+    }
+
+    /**
+     * 处理需要复制过程和活动的流程。
+     * Handle need copy workflow group.
+     *
+     * @param object $group          流程对象
+     * @param int    $groupID        流程ID
+     * @param array  $classifyModule 分类模块数组
+     */
+    protected function handleNeedCopyWorkflowGroup(object $group, int $groupID, array $classifyModule)
+    {
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
+        $processList   = $this->dao->select('*')->from(TABLE_PROCESS)->where('model')->eq($group->projectModel)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $activityGroup = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('process')->in(array_keys($processList))->andWhere('deleted')->eq('0')->fetchGroup('process', 'id');
+        $outputGroup   = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
+            ->alias('t1')->leftJoin(TABLE_ACTIVITY)
+            ->alias('t2')->on('t1.activity = t2.id')
+            ->where('t2.process')->in(array_keys($processList))
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchGroup('activity', 'id');
+
+        foreach($processList as $process)
+        {
+            $this->copyProcessWithActivities($process, $groupID, $activityGroup, $outputGroup, $projectIdList);
+        }
+
+        $classifyModule[$groupID] = $this->migrateClassifyToModule($group, $groupID);
+
+        return $classifyModule;
+    }
+
+    /**
+     * 复制过程及其活动。
+     * Copy process and activities.
+     *
+     * @param object $process 过程对象
+     * @param int    $groupID 流程ID
+     * @param array  $activityGroup 活动分组
+     * @param array  $outputGroup 文档分组
+     * @param array  $projectIdList 项目ID列表
+     */
+    protected function copyProcessWithActivities(object $process, int $groupID, array $activityGroup, array $outputGroup, array $projectIdList)
+    {
+        $activityList = zget($activityGroup, $process->id, array());
+        unset($process->id);
+        $process->workflowGroup = $groupID;
+        $process->model         = '';
+        $process->editedBy      = '';
+        $process->editedDate    = null;
+        $process->assignedDate  = null;
+        $this->dao->insert(TABLE_PROCESS)->data($process)->exec();
+        $processID = $this->dao->lastInsertID();
+
+        foreach($activityList as $activity)
+        {
+            $this->copyActivity($activity, $processID, $groupID, $outputGroup, $projectIdList);
+        }
+    }
+
+    /**
+     * 复制活动。
+     * Copy activity.
+     *
+     * @param object $activity    活动对象
+     * @param int    $processID   过程ID
+     * @param int    $groupID     流程ID
+     * @param array  $outputGroup 文档分组
+     * @param array  $projectIdList 项目ID列表
+     */
+    protected function copyActivity(object $activity, int $processID, int $groupID, array $outputGroup, array $projectIdList)
+    {
+        $outputList = zget($outputGroup, $activity->id, array());
+
+        $oldActivityID = $activity->id;
+        unset($activity->id);
+
+        $activity->process       = $processID;
+        $activity->optional      = !empty($activity->optional) ? $activity->optional : 'no';
+        $activity->workflowGroup = $groupID;
+        $activity->editedBy      = '';
+        $activity->editedDate    = null;
+        $activity->assignedDate  = null;
+        $this->dao->insert(TABLE_ACTIVITY)->data($activity)->exec();
+
+        $newActivityID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('objectType')->eq('activity')->andWhere('project')->in($projectIdList)->exec();
+        $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newActivityID)->where('objectID')->eq($oldActivityID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('activity')->exec();
+        $this->dao->update(TABLE_PROGRAMACTIVITY)->set('activity')->eq($newActivityID)->where('activity')->eq($oldActivityID)->andWhere('project')->in($projectIdList)->exec();
+
+        $idMap = array();
+        foreach($outputList as $output)
+        {
+            $oldID = $output->id;
+            unset($output->id);
+            $output->activity   = $newActivityID;
+            $output->editedBy   = '';
+            $output->editedDate = null;
+            $this->dao->insert(TABLE_ZOUTPUT)->data($output)->exec();
+            $newOutputID = $this->dao->lastInsertID();
+
+            $idMap[$oldID] = $newOutputID;
+        }
+
+        foreach($idMap as $oldID => $newOutputID)
+        {
+            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('workflowGroup')->eq($groupID)->andWhere('objectType')->eq('zoutput')->exec();
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newOutputID)->where('objectID')->eq($oldID)->andWhere('objectType')->eq('zoutput')->andWhere('project')->in($projectIdList)->exec();
+        }
+    }
+
+    /**
+     * 将过程文档迁移到交付物。
+     * Migrate process output to deliverable.
+     *
+     * @param object $group
+     * @return void
+     */
+    public function migrateOutputToDeliverable(object $group): void
+    {
+        $outputList = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
+            ->alias('t1')->leftJoin(TABLE_ACTIVITY)
+            ->alias('t2')->on('t1.activity = t2.id')
+            ->where('t2.workflowGroup')->eq($group->id)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id');
+
+        if(empty($outputList)) return;
+
+        $otherModule = $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($group->id)->andWhere('type')->eq('deliverable')->andWhere('deleted')->eq('0')->andWhere('extra')->eq('other')->fetch('id');
+
+        $deliverable = new stdclass();
+        $deliverable->template      = '[]';
+        $deliverable->status        = 'hidden';
+        $deliverable->workflowGroup = $group->id;
+        $deliverable->module        = $otherModule;
+        $deliverable->builtin       = 1;
+        $deliverable->deleted       = '1';
+
+        $idMap = array();
+        foreach($outputList as $output)
+        {
+            $deliverable->name      = $output->name;
+            $deliverable->activity  = $output->activity;
+            $deliverable->trimmable = $output->optional == 'yes' ? '1' : '0';
+
+            $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+            $deliverableID = $this->dao->lastInsertID();
+
+            $idMap[$output->id] = $deliverableID;
+        }
+
+        $projectIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('workflowGroup')->eq($group->id)->fetchPairs();
+
+        $projectOutputList = $this->dao->select('id,output')->from(TABLE_PROGRAMOUTPUT)->where('project')->in($projectIdList)->andWhere('output')->in(array_keys($idMap))->fetchPairs();
+        foreach($projectOutputList as $id => $outputID)
+        {
+            $newID = $idMap[$outputID];
+            $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($newID)->where('id')->eq($id)->exec();
+        }
+
+        $auditplans = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)
+            ->where('objectType')->eq('zoutput')
+            ->andWhere('objectID')->in(array_keys($idMap))
+            ->andWhere('project')->in($projectIdList)
+            ->fetchPairs();
+
+        foreach($auditplans as $id => $objectID)
+        {
+            $newID = $idMap[$objectID];
+            $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
+        }
+
+        $auditcls = $this->dao->select('id, objectID')->from(TABLE_AUDITCL)
+            ->where('objectType')->eq('zoutput')
+            ->andWhere('workflowGroup')->eq($group->id)
+            ->andWhere('objectID')->in(array_keys($outputList))
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+
+        foreach($auditcls as $id => $objectID)
+        {
+            $newID = $idMap[$objectID];
+            $this->dao->update(TABLE_AUDITCL)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
+        }
+    }
+
+    /**
+     * 更新过程的模块分类。
+     * Update process modules.
+     *
+     * @param array $classifyModule
+     */
+    protected function updateProcessModules(array $classifyModule)
+    {
+        foreach($classifyModule as $groupID => $modules)
+        {
+            foreach($modules as $key => $moduleID)
+            {
+                $this->dao->update(TABLE_PROCESS)->set('module')->eq($moduleID)->where('workflowGroup')->eq($groupID)->andWhere('type')->eq($key)->exec();
+            }
+        }
+    }
 }

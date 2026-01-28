@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(5);
@@ -28,7 +28,7 @@ cid=18765
 
 $taskIdList = array(array(), array(1, 2), array(3, 4), array(1, 2, 3, 4, 5, 6 ,7 ,8));
 
-$taskTest = new taskTest();
+$taskTest = new taskModelTest();
 r($taskTest->appendLaneObject($taskIdList[0]))        && p()         && e('0');     // 测试空数据
 r($taskTest->appendLaneObject($taskIdList[1]))        && p('1:lane') && e('lane1'); // 测试给任务1、2追加泳道名称
 r(count($taskTest->appendLaneObject($taskIdList[1]))) && p()         && e('2');     // 测试给任务1、2追加泳道名称的数量

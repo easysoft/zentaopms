@@ -26,7 +26,7 @@ cid=16887
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(5);
@@ -98,7 +98,7 @@ $column8->group  = '1';
 $column8->parent = '3';
 $column8->order  = 8;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createColumnTest(1, $column1)) && p('name,limit,parent,group') && e('测试创建不限制看板列,-1,0,1');                // 创建没有在制品限制的看板列
 r($kanban->createColumnTest(1, $column2)) && p('limit:0')                 && e('父列的在制品数量不能小于子列在制品数量之和'); // 创建没有在制品限制的看板列

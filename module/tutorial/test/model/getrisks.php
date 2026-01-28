@@ -17,13 +17,13 @@ cid=19470
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 // 4. 执行测试步骤
 r(count($tutorialTest->getRisksTest())) && p() && e('1'); // 步骤1：获取风险列表，验证数组长度

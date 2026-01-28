@@ -27,6 +27,8 @@ $config->project->dtable->fieldList['status']['show']    = false;
 $config->project->dtable->fieldList['budget']['show']    = false;
 $config->project->dtable->fieldList['hasProduct']['map'] = $lang->project->projectTypeList;
 
+if($config->edition != 'open') $config->project->dtable->fieldList['workflowGroup']['map'] = $this->loadModel('workflowGroup')->getPairs('project', 'all', 1, 'all');
+
 $settings = $this->loadModel('datatable')->getSetting('my');
 $projects = initTableData($projects, $settings, $this->project);
 

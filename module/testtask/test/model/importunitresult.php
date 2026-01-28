@@ -16,7 +16,7 @@ cid=19202
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('product')->gen(10);
 zendata('project')->gen(10);
@@ -30,7 +30,7 @@ zendata('suitecase')->gen(0);
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 // 准备测试数据
 $validXML = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>

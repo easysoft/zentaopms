@@ -17,7 +17,7 @@ cid=15085
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/aiapp.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('ai_miniprogram');
@@ -45,7 +45,7 @@ global $tester;
 $tester->app->loadClass('pager', true);
 
 // 5. 创建测试实例（变量名与模块名一致）
-$aiappTest = new aiappTest();
+$aiappTest = new aiappModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤  
 r(count($aiappTest->getLatestMiniProgramsTest())) && p() && e('15'); // 步骤1：正常情况获取最新小程序总数

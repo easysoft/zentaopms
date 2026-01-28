@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancard')->gen(20);
@@ -28,7 +28,7 @@ $kanbanIDList = array(1, 2, 1000001);
 $regionIDList = array(1, 2, 1000001);
 $statusList   = array('doing', 'done');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getCardsByObjectTest($objectType[0], $kanbanIDList[0])) && p() && e('8');  // 测试查询kanban 1的卡片数量
 r($kanban->getCardsByObjectTest($objectType[0], $kanbanIDList[1])) && p() && e('8');  // 测试查询kanban 2的卡片数量

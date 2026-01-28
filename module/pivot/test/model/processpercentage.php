@@ -16,11 +16,11 @@ cid=17423
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 步骤1：正常结构的crystal数据处理
 $result1 = $pivotTest->processPercentageTest(

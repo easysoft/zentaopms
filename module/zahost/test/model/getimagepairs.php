@@ -16,7 +16,7 @@ cid=19748
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('image');
 $table->host->range('1{3},2{2},3{2}');
@@ -26,7 +26,7 @@ $table->gen(7);
 
 su('admin');
 
-$zahostTest = new zahostTest();
+$zahostTest = new zahostModelTest();
 
 r($zahostTest->getImagePairsTest(1)) && p('1') && e('ubuntu18.04');
 r($zahostTest->getImagePairsTest(2)) && p('4') && e('mysql8.0');

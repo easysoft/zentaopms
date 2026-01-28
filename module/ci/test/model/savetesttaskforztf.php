@@ -25,7 +25,7 @@ cid=15590
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('testtask')->gen(5);
@@ -38,7 +38,7 @@ $productID = 0;
 $taskID    = 0;
 $name      = '';
 
-$ci = new ciTest();
+$ci = new ciModelTest();
 r($ci->saveTestTaskForZtfTest($productID, $taskID, $name)) && p('id,name') && e('5,测试单5'); // 空数据返回ID为5的测试单
 
 $taskID = 10;

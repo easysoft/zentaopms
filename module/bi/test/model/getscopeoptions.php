@@ -29,7 +29,7 @@ $useMockMode = false;
 try {
     // 1. 导入依赖（路径固定，不可修改）
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/model.class.php';
 
     // 2. zendata数据准备（根据需要配置）
     $user = zenData('user');
@@ -83,7 +83,7 @@ try {
     su('admin');
 
     // 4. 创建测试实例（变量名与模块名一致）
-    $biTest = new biTest();
+    $biTest = new biModelTest();
 } catch (Exception $e) {
     $useMockMode = true;
 } catch (Error $e) {

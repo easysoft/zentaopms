@@ -17,7 +17,7 @@ cid=18515
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 清理数据并准备测试数据
 $story = zenData('story');
@@ -30,7 +30,7 @@ $story->gen(30);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：测试默认story类型的预计工时统计
 unset($_SESSION['storyOnlyCondition']);

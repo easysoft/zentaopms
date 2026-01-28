@@ -22,7 +22,7 @@ cid=16116
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -35,7 +35,7 @@ $docIdList[1] = range(1, 30);
 $docIdList[2] = range(1, 60);
 $docIdList[3] = range(61, 80);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 
 list($projects, $executions, $products) = $docTester->getObjectsByDocTest($docIdList[0]);
 r($projects)   && p() && e('0'); // 测试传入空的文档ID数组时，获取的项目数据

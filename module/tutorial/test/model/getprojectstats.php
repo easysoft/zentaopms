@@ -52,9 +52,9 @@ cid=19457;
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 $browseType = array('', 'all', 'noclosed');
 

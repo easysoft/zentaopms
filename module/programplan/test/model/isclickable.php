@@ -19,7 +19,7 @@ cid=17751
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $project = zenData('project');
@@ -42,7 +42,7 @@ $task->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 // 5. 测试数据准备
 $emptyStage = new stdclass();

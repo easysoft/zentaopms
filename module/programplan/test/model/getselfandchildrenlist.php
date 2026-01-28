@@ -20,12 +20,12 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('getselfandchildrenlist')->gen(6);
 
-$plan = new programplanTest();
+$plan = new programplanModelTest();
 
 $result2 = $plan->getSelfAndChildrenListTest(2);
 $result2Count = count($result2[2]);

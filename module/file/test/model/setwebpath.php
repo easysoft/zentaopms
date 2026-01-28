@@ -15,10 +15,10 @@ cid=16536
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->setWebPathTest()) && p() && e('/data/upload/1/'); // 测试默认公司ID（1）的webPath设置
 r($file->setWebPathTest(5)) && p() && e('/data/upload/5/'); // 测试自定义公司ID（5）的webPath设置

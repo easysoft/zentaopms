@@ -26,7 +26,7 @@ cid=19595
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('userview')->loadYaml('userview')->gen(10);
@@ -46,7 +46,7 @@ global $config;
 $config->userview->updateTime              = $time + 1;
 $config->userview->relatedTablesUpdateTime = $time;
 
-$user = new userTest();
+$user = new userModelTest();
 r($user->computeUserViewTest('test1', false)) && p('programs', '-') && e(',3');   // 不强制更新，获取test1账户的可查看项目集列表。
 r($user->computeUserViewTest('test1', false)) && p('products', '-') && e(',3');   // 不强制更新，获取test1账户的可查看产品列表。
 r($user->computeUserViewTest('test1', false)) && p('projects', '-') && e(',13');  // 不强制更新，获取test1账户的可查看项目列表。

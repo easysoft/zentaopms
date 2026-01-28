@@ -62,7 +62,7 @@ cid=19582
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(1);
 zenData('config')->gen(0);  // config 表置空，防止安全设置影响测试结果。
@@ -105,7 +105,7 @@ $users4 = array
 $random         = updateSessionRandom();
 $verifyPassword = md5(md5('123456') . $random);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $config->safe = new stdclass();
 $config->safe->mode = 0;

@@ -76,7 +76,6 @@ if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' &&
 }
 
 /* Table data and setting for finished stories tab. */
-jsVar('summary', $summary);
 jsVar('storyCases', $storyCases);
 jsVar('confirmunlinkstory', $lang->release->confirmUnlinkStory);
 jsVar('checkedSummary', $lang->product->checkedSRSummary);
@@ -258,7 +257,7 @@ detailBody
                     set::extraHeight('+144'),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array('recPerPage' => $storyPager->recPerPage, 'recTotal' => $storyPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")))),
-                    set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
+                    set::checkInfo(jsRaw("function(checkedIDList){return window.setStoryStatistics(this, checkedIDList, '{$summary}');}")),
                 )
             ),
 
@@ -316,7 +315,7 @@ detailBody
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
                     set::footToolbar($leftBugFootToolbar),
-                    set::footPager(usePager('leftBugPager', '', array('recPerPage' => $leftBugPager->recPerPage, 'recTotal' => $leftBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                    set::footPager(usePager('leftBugPager', '', array('recPerPage' => $leftBugPager->recPerPage, 'recTotal' => $leftBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )
             ),
 

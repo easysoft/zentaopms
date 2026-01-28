@@ -30,7 +30,7 @@ cid=16088
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
@@ -39,7 +39,7 @@ $objectIds = array(0, 1, 11);
 $modules   = array('doc', 'api');
 $methods   = array('index', 'browse');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDropMenuLinkTest($types[0], $objectIds[0], $modules[0], $methods[0])) && p() && e('0');                                                                                                         // 获取type=all, objectID=0, module=doc, method=index的链接
 r($docTester->getDropMenuLinkTest($types[1], $objectIds[0], $modules[0], $methods[0])) && p() && e('getdropmenulink.php?m=doc&f=ajaxGetDropMenu&objectType=project&objectID=0&module=doc&method=index');         // 获取type=project, objectID=0, module=doc, method=index的链接
 r($docTester->getDropMenuLinkTest($types[2], $objectIds[0], $modules[0], $methods[0])) && p() && e('getdropmenulink.php?m=doc&f=ajaxGetDropMenu&objectType=product&objectID=0&module=doc&method=index');         // 获取type=product, objectID=0, module=doc, method=index的链接

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -23,7 +23,7 @@ zenData('repo')->loadYaml('repo')->gen(1);
 
 su('admin');
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 r($gitlab->apiGetByGraphqlTest('')) && p('0') && e('Unexpected end of document'); // 测试步骤1：空查询字符串
 r($gitlab->apiGetByGraphqlTest('error')) && p('0') && e('Parse error on "error" (IDENTIFIER) at [1, 1]'); // 测试步骤2：无效的GraphQL语法

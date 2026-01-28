@@ -22,7 +22,7 @@ cid=18626
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->gen(10);
 zenData('project')->gen(50);
@@ -40,7 +40,7 @@ $story->type->range('story');
 $story->branch->range('0{30},1{10},2{10}');
 $story->gen(50);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 $productID = array(0, 1);
 $projectID = array(0, 11);

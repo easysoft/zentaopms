@@ -16,7 +16,7 @@ cid=19203
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->account->range('admin,test1,test2');
@@ -26,7 +26,7 @@ $user->gen(3);
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 r($testtaskTest->initCaseTest(1, 'Test Case Title', '2024-01-01 10:00:00', 'no', 'phpunit')) && p('product') && e('1');
 r($testtaskTest->initCaseTest(2, 'Another Test Case', '2024-01-02 11:00:00', 'yes', 'jest')) && p('type') && e('unit');

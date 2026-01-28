@@ -185,12 +185,12 @@ class projectModel extends model
      */
     public static function isClickable(object $project, string $action)
     {
-        if(empty($project) || !isset($project->type)) return true;
-
+        global $config;
         $action = strtolower($action);
 
-        if($action == 'publishtemplate') return $project->status == 'wait' || $project->status == 'closed';
-        if($action == 'disabletemplate') return $project->status == 'doing';
+        if($action == 'publishtemplate')   return $project->status == 'wait' || $project->status == 'closed';
+        if($action == 'disabletemplate')   return $project->status == 'doing';
+        if($action == 'deletedeliverable') return !$project->review && empty($project->systemList) && $project->status == 'draft';
 
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
@@ -642,7 +642,7 @@ class projectModel extends model
         if($this->config->edition != 'open')
         {
             $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow->app) && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
+            if(!empty($flow->app) && in_array($flow->app, array('scrum', 'waterfall', 'kanbanProject'))) $flow->app = 'project';
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . "#app=$flow->app";
         }
 
@@ -956,14 +956,30 @@ class projectModel extends model
      * Get project priv data according by the project type.
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
+     * @param  int    $projectID
      * @access public
      * @return object|false
      */
-    public function getPrivsByModel(string $model = 'waterfall'): object|false
+    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+
+        $hasBaseline    = true;
+        $hasAuditplan   = true;
+        $hasProcess     = true;
+        $hasDeliverable = true;
+        $hasChange      = true;
+        if($this->config->edition != 'open' && $projectID)
+        {
+            $project        = $this->fetchByID($projectID);
+            $hasBaseline    = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
+            $hasDeliverable = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'deliverable');
+            $hasChange      = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'change');
+            $hasAuditplan   = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'auditplan');
+            $hasProcess     = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process');
+        }
 
         $this->app->loadLang('group');
         $privs = new stdclass();
@@ -972,6 +988,23 @@ class projectModel extends model
             if(empty($methods)) continue;
 
             if(!in_array($module, $this->config->programPriv->$model)) continue;
+
+            if($module == 'cm' && !$hasBaseline) continue;
+            if($module == 'auditplan' && !$hasAuditplan) continue;
+            if($module == 'pssp' && !$hasProcess) continue;
+            if($module == 'projectchange' && !$hasChange) continue;
+            if($module == 'review' && !$hasDeliverable) continue;
+            if($module == 'reviewissue' && !$hasDeliverable) continue;
+
+            if($module == 'review')
+            {
+                if(!$hasDeliverable) unset($methods->submitDeliverable);
+                if(!$hasChange)      unset($methods->submitProjectchange);
+                if(!$hasBaseline)    unset($methods->submitBaseline);
+                if(!empty($project) && $project->model == 'scrum') unset($methods->submitIpd, $methods->submitProjectchange, $methods->submitBaseline);
+            }
+
+            if($module == 'project' && !$hasDeliverable) unset($methods->deliverable);
 
             foreach($methods as $method => $label)
             {
@@ -1006,6 +1039,7 @@ class projectModel extends model
         $programPairs  = array(0 => '');
         $programPairs += $this->loadModel('program')->getPairs();
         $this->config->project->search['params']['parent']['values'] = $programPairs;
+        if($this->config->edition != 'open') $this->config->project->search['params']['workflowGroup']['values'] = $this->loadModel('workflowGroup')->getPairs('project', 'all');
 
         if(!isset($this->config->setCode) or $this->config->setCode == 0) unset($this->config->project->search['fields']['code'], $this->config->project->search['params']['code']);
         if($this->config->systemMode == 'light') unset($this->config->project->search['fields']['parent'], $this->config->project->search['params']['parent']);
@@ -1528,6 +1562,7 @@ class projectModel extends model
             if($unlinkType) $this->unlinkStoryByType($projectID, $unlinkType);
         }
         if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
+        if(in_array($this->config->edition, array('max', 'ipd')) && $oldProject->workflowGroup != $project->workflowGroup) $this->modifyWorkflowGroup($projectID, $oldProject->workflowGroup, $project->workflowGroup); // 更新项目流程。
 
         if($oldProject->model != $project->model && !in_array($oldProject->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
@@ -1905,25 +1940,24 @@ class projectModel extends model
      */
     public function manageMembers(int $projectID, array $members): bool
     {
-        $project = $this->projectTao->fetchProjectInfo($projectID);
-        $oldJoin = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchPairs();
+        $project    = $this->projectTao->fetchProjectInfo($projectID);
+        $oldMembers = $this->dao->select('`account`, `join`, `days`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->fetchAll();
+        $oldJoin    = array_column($oldMembers, 'join', 'account');
+        $oldDays    = array_column($oldMembers, 'days', 'account');
 
         /* Check fields. */
         foreach($members as $key => $member)
         {
             if(empty($member->account)) continue;
 
-            if(!empty($project->days) and (int)$member->days > $project->days)
+            if((float)$member->hours > 24) dao::$errors = $this->lang->project->errorHours;
+            if(!empty($project->days))
             {
-                dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
-                return false;
-            }
-            if((float)$member->hours > 24)
-            {
-                dao::$errors = $this->lang->project->errorHours;
-                return false;
+                if(isset($oldDays[$member->account]) && $oldDays[$member->account] == $member->days) continue;
+                if((int)$member->days > $project->days) dao::$errors = sprintf($this->lang->project->daysGreaterProject, $project->days);
             }
         }
+        if(dao::isError()) return false;
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq('project')->exec();
 
@@ -2386,6 +2420,19 @@ class projectModel extends model
         $lang->project->menuOrder   = $lang->$navGroup->menuOrder;
         $lang->project->dividerMenu = $lang->$navGroup->dividerMenu;
         $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
+
+        /* 无迭代项目不开启过程删除导航。 */
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('workflowgroup');
+            if(!$this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process')) unset($lang->project->menu->other['dropMenu']->pssp);
+            if(!$this->workflowgroup->hasFeature((int)$project->workflowGroup, 'deliverable'))
+            {
+                unset($lang->project->menu->deliverable);
+                unset($lang->project->menu->auditplan['subMenu']->deliverable);
+            }
+            if(!$this->workflowgroup->hasFeature((int)$project->workflowGroup, 'auditplan')) unset($lang->project->menu->other['dropMenu']->auditplan);
+        }
 
         /* If projectID is set, cannot use homeMenu. */
         unset($lang->project->homeMenu);
@@ -2906,5 +2953,27 @@ class projectModel extends model
             }
         }
         return $disabledProducts;
+    }
+
+    /**
+     * 查找项目下是否有冻结的对象。
+     * Has frozen object.
+     *
+     * @param int    $projectID
+     * @param string $category SRS|PP
+     * @return bool
+    */
+    public function hasFrozenObject(int $projectID, string $category): bool
+    {
+        if(empty($projectID) || empty($category)) return false;
+
+        $frozenObject = $this->dao->select('1')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.frozen')->ne('')
+            ->andWhere('t2.category')->eq($category)
+            ->limit(1)
+            ->fetch('1');
+        return !empty($frozenObject);
     }
 }

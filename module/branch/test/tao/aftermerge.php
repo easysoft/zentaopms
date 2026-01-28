@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(30);
@@ -51,7 +51,7 @@ $mergeBranch3->createBranch       = 0;
 $mergeBranch3->mergedBranchIDList = array(4, 5);
 $mergeBranch3->targetBranch       = 0;
 
-$branchTester = new branchTest();
+$branchTester = new branchTaoTest();
 r($branchTester->afterMergeTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p() && e('0'); // 测试合并分支1 到 分支2
 r($branchTester->afterMergeTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p() && e('1'); // 测试合并分支4 到 新建分支
 r($branchTester->afterMergeTest($productID[1], $mergedBranches[0], $mergeBranch1)) && p() && e('0'); // 测试合并分支6 到 分支2

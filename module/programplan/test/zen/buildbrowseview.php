@@ -17,7 +17,7 @@ cid=17786
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 不使用zendata，直接在测试方法中模拟数据
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$programplanTest = new programplanTest();
+$programplanTest = new programplanZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($programplanTest->buildBrowseViewTest(1, 1, 'gantt', 'order_asc', '')) && p('success') && e('1'); // 步骤1：正常参数gantt类型

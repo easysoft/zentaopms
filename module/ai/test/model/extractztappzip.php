@@ -17,7 +17,7 @@ cid=15023
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 简化数据准备，避免复杂数据库操作
 zenData('config')->gen(0);
@@ -26,7 +26,7 @@ zenData('config')->gen(0);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 准备测试文件 - 使用正确的临时目录
 $tmpDir = '/tmp/claude/';

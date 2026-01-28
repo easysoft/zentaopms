@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(10);
 zenData('product')->loadYaml('product')->gen(3);
@@ -23,7 +23,7 @@ cid=14910
 
 */
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 $actionIDList = array(1, 2, 3, 5, 6, 7, 8);
 

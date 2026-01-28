@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -29,7 +29,7 @@ $job_upName    = array('name' => '这是一个job11');
 $job_emptyName = array('name' => '');
 $job_upEngine  = array('engine' => 'gitlab');
 
-$job = new jobTest();
+$job = new jobModelTest();
 
 r($job->updateObject($jobID, $job_emptyName)) && p('name:0')  && e('『流水线名称』不能为空。');                            //测试job名称为空
 r($job->updateObject($jobID, $job_upName))    && p('name')    && e('这是一个job11');                                       //测试更新job名称

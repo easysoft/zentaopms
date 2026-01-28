@@ -17,7 +17,7 @@ cid=16836
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $pipelineTable = zenData('pipeline');
@@ -41,7 +41,7 @@ $jobTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($jobTest->checkParameterizedBuildTest(1)) && p() && e('0'); // 步骤1：正常Jenkins Job（无参数化构建）

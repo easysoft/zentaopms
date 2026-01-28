@@ -16,11 +16,11 @@ cid=19447
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r($tutorialTest->getPlanPairsTest()) && p('1') && e('Test plan'); // 测试1：验证键1对应的值
 r($tutorialTest->getPlanPairsTest()) && p('1') && e('Test plan'); // 测试2：再次验证键1的值

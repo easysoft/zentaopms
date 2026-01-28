@@ -16,7 +16,7 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('product')->gen(5);
@@ -26,7 +26,7 @@ zenData('storyspec')->gen(10);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->batchChangeParentTest('6,7', 1, 'story')) && p() && e('0'); // 测试批量修改父需求
 r($storyTest->batchChangeParentTest('', 1, 'story')) && p() && e('0'); // 测试批量修改父需求

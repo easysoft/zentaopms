@@ -16,14 +16,14 @@ cid=17349
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pipeline.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('pipeline')->loadYaml('pipeline')->gen(20);
 
 $types = array('', 'gitlab', 'test');
 
-$pipelineTester = new pipelineTest();
+$pipelineTester = new pipelineModelTest();
 r($pipelineTester->getPairsTest($types[0])) && p('1') && e('gitLab'); // 获取type为空的流水线信息
 r($pipelineTester->getPairsTest($types[1])) && p('1') && e('gitLab'); // 获取type为gitlab的流水线信息
 r($pipelineTester->getPairsTest($types[2])) && p(0)   && e('0');      // 获取type为test的流水线信息

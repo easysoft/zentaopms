@@ -33,7 +33,7 @@ cid=16538
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('file')->gen(20);
@@ -48,7 +48,7 @@ $albums5 = array('used' => array($uid => array('9', '10', '11')));
 $objectID   = array(101, 102, 103, 104, 105);
 $objectType = array('bug', 'story', 'task', 'traincourse', 'testcase');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->updateObjectIDTest($uid, $objectID[0], $objectType[0], $albums1)) && p('1:id,objectID,objectType,extra') && e('1,101,bug,editor');         // 测试更新 id 1 的objectID 为 101 objectType 为 bug
 r($file->updateObjectIDTest($uid, $objectID[1], $objectType[1], $albums2)) && p('2:id,objectID,objectType,extra') && e('2,102,story,editor');       // 测试更新 id 2 的objectID 为 102 objectType 为 story

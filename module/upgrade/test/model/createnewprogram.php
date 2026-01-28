@@ -21,7 +21,7 @@ cid=19511
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->name->range('项目1{2},项目2,项目集1');
@@ -38,7 +38,7 @@ $data->longTime      = false;
 
 $projectIdList = array();
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->createNewProgramTest($data, $projectIdList)) && p('programName:0') && e('『项目集名称』不能为空。'); // 测试项目集名称不能为空
 
 $data->programName = '项目集2';

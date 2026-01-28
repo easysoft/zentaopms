@@ -140,13 +140,6 @@ class projectZen extends project
      */
     private function checkProductAndBranch(object $project, object $rawdata): bool
     {
-        $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
-        if($project->hasProduct && !empty($project->parent) && empty($linkedProductsCount) && empty($rawdata->addProduct))
-        {
-            dao::$errors['products[0]'] = $this->lang->project->errorNoProducts;
-            return false;
-        }
-
         if(!empty($rawdata->products))
         {
             $topProgramID     = (int)$this->loadModel('program')->getTopByID((int)$project->parent);
@@ -338,7 +331,6 @@ class projectZen extends project
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
         $this->view->branchID            = isset($output['branchID'])  ? $output['branchID']  : 0;
-        $this->view->category            = isset($output['category'])  ? $output['category']  : '';
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $copyProjects;
@@ -355,8 +347,6 @@ class projectZen extends project
 
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
-
-        $this->display('project', 'create');
     }
 
     /**
@@ -479,7 +469,7 @@ class projectZen extends project
         $this->view->disableParent        = $disableParent;
         $this->view->groups               = $this->loadModel('group')->getPairs();
 
-        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($project))
+        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($projectID))
         {
             $this->view->disableModel = true;
         }
@@ -1395,12 +1385,10 @@ class projectZen extends project
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
 
-            /* 交付物提交进度。 */
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $project->deliverable = $this->project->countDeliverable($project);
-            }
         }
+
+        /* 交付物提交进度。 */
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
 
         return array_values($projectList);
     }
@@ -1643,6 +1631,7 @@ class projectZen extends project
         $canViewProjects = $this->app->user->view->projects;
         $storyGroup      = $this->loadModel('story')->fetchStoriesByProjectIdList(array_keys($projects));
         $executionGroup  = $this->loadModel('execution')->fetchExecutionsByProjectIdList(array_keys($projects));
+        if($this->config->edition != 'open') $workflowGroups = $this->loadModel('workflowGroup')->getPairs('project', 'all');
         foreach($projects as $i => $project)
         {
             if(!$this->app->user->admin && strpos(",{$canViewProjects},", ",{$project->id},") === false)
@@ -1672,6 +1661,7 @@ class projectZen extends project
             $project->invested  = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
             $project->invested .= " {$this->lang->project->manDay}";
             $project->progress  = floor((float)$project->progress) . '%';
+            if($this->config->edition != 'open') $project->workflowGroup = zget($workflowGroups, $project->workflowGroup);
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);

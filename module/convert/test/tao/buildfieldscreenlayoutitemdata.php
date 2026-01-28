@@ -17,13 +17,13 @@ cid=15811
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 4. 测试步骤
 r($convertTest->buildFieldScreenLayoutItemDataTest(array('id' => '1001', 'fieldidentifier' => 'field_summary', 'fieldscreentab' => 'main_tab'))) && p('id') && e('1001'); // 步骤1：正常完整数据ID检查

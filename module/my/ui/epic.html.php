@@ -77,10 +77,11 @@ if($canBatchReview)
 $assignedToItems = array();
 if($canBatchAssignTo)
 {
+    $pinyinItems = common::convert2Pinyin($users);
     foreach($users as $key => $value)
     {
         if(empty($key) || $key == 'closed') continue;
-        $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('epic', 'batchAssignTo', "storyType=epic&assignedTo={$key}"));
+        $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('epic', 'batchAssignTo', "storyType=epic&assignedTo={$key}"));
     }
 }
 
@@ -95,6 +96,14 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->epic->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->epic->dtable->fieldList, $this->story);
+foreach($stories as $id => $story)
+{
+    if(!isset($story->actions)) continue;
+    foreach($story->actions as $key => $action)
+    {
+        if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+    }
+}
 
 if($viewType == 'tiled') $config->my->epic->dtable->fieldList['title']['nestedToggle'] = false;
 $cols = array_values($config->my->epic->dtable->fieldList);

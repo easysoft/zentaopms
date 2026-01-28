@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -39,7 +39,7 @@ $changeStatus1 = array('status'  => array('1' => 'closed'));
 $existName     = array('name'    => array('2' => '修改分支1的名称'));
 $changeStatus3 = array('status'  => array('3' => 'active'));
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->batchUpdateTest($changeName1)[1])    && p('0:field,old,new') && e('name,分支1,修改分支1的名称'); // 测试批量更新名称
 r($branch->batchUpdateTest($changeDesc1)[1])    && p('0:field,old,new') && e('desc,~~,修改分支1的描述');    // 测试批量更新描述

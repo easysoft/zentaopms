@@ -35,14 +35,14 @@ cid=19844
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('automation')->gen(1);
 
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $node1 = new stdclass();
 $node1->product    = 1;

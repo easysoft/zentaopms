@@ -18,7 +18,7 @@ cid=17987
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $bug = zenData('bug');
 $bug->id->range('1-20');
@@ -33,7 +33,7 @@ $bug->gen(20);
 zenData('user')->gen(5);
 su('admin');
 
-$releaseTest = new releaseTest();
+$releaseTest = new releaseModelTest();
 
 r($releaseTest->getBugListTest('')) && p() && e('0'); // 步骤1：测试传入空bugIdList
 r($releaseTest->getBugListTest('1,2,3,4,5')) && p('4:title') && e('Bug5'); // 步骤2：测试传入有效bugIdList获取bug列表

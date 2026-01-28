@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testreport')->gen(5);
 zenData('user')->gen(1);
@@ -32,7 +32,7 @@ $members  = 'dev1,dev11';
 $cases    = '1,2,3,4';
 $title    = array('正常修改', '负责人为空测试', '参与人员为空测试', '');
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 
 $normalReport = array('owner' => 'user3', 'members' => $members, 'title' => $title[0], 'report' => '', 'cases' => $cases);
 $noOwner      = array('owner' => '',      'members' => $members, 'title' => $title[1], 'report' => '', 'cases' => $cases);

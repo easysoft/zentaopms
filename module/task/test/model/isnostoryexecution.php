@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project_isnostoryexecution')->gen(9);
 
@@ -25,7 +25,7 @@ cid=18830
 
 $executionIdList = array(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->isNoStoryExecutionTest($executionIdList[0]))   && p() && e('0'); // 测试执行为短期执行 阶段类型为mix的执行是否有需求列表
 r($task->isNoStoryExecutionTest($executionIdList[1]))   && p() && e('0'); // 测试执行为短期执行 阶段类型request为的执行是否有需求列表
 r($task->isNoStoryExecutionTest($executionIdList[2]))   && p() && e('0'); // 测试执行为短期执行 阶段类型为review的执行是否有需求列表

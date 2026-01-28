@@ -16,11 +16,11 @@ cid=18192
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/requirement.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$requirementTest = new requirementTest();
+$requirementTest = new requirementModelTest();
 
 // 测试步骤1：正常story对象和changed动作类型
 $story1 = new stdClass();

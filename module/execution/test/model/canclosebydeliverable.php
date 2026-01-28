@@ -1,10 +1,11 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$execution = zenData('project')->gen(5);
+$execution = zenData('project');
 $execution->id->range('1-5');
+$execution->project->range('1-5');
 $execution->name->range('迭代1,迭代2,迭代3,迭代4,迭代5');
 $execution->type->range('stage');
 $execution->status->range('doing');
@@ -13,7 +14,6 @@ $execution->grade->range('1{2},2{3}');
 $execution->path->range('1,2,`1,3`,`1,4`,`1,5`')->prefix(',')->postfix(',');
 $execution->begin->range('20230102 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD');
-$execution->deliverable->range('`{"product_waterfall_request":{"whenClosed":[{"deliverable":"1","required":true,"category":"test","template":""}]}}`');
 $execution->gen(5);
 su('admin');
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -40,7 +40,7 @@ $hook = new stdclass();
 $hook->url                   = 'http://unittest.com/api.php/v1/gitlab/webhook?repoID=1';
 $hook->merge_requests_events = 0;
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 r($gitlabTest->apiUpdateHookTest($gitlabID, 0, $hookID, $hook))    && p('message') && e('404 Project Not Found'); //使用空的projectID更新gitlab群组
 r($gitlabTest->apiUpdateHookTest($gitlabID, $projectID, 0, $hook)) && p('message') && e('404 Not found'); //使用空的hookID更新gitlab群组
 r($gitlabTest->apiUpdateHookTest(0, $projectID, $hookID, $hook))   && p() && e('0'); //使用错误gitlabID更新群组

@@ -15,10 +15,16 @@ cid=19275
 - 空lastCycle按天类型，不符合间隔返回0 @0
 - 过期配置应返回false或empty @0
 
+- 获取类型为按天生成的周期待办的日期，结果1 @1
+- 获取类型为按周生成的周期待办的日期，结果1 @1
+- 获取类型为按月生成的周期待办的日期，结果1 @1
+- 生成周期为按天生成的周期待办的日期，结果0 @0
+- 生成周期为空的周期待办的日期，结果0 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据 - 使用原来的简单方式
 zenData('todo')->loadYaml('getcycletododate')->gen(3);
@@ -27,7 +33,7 @@ zenData('todo')->loadYaml('getcycletododate')->gen(3);
 su('admin');
 
 // 创建测试实例
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 测试步骤1：测试按天类型周期待办（使用原来的测试数据ID=1）
 r($todoTest->getCycleTodoDateTestSimple('day', 1)) && p() && e('0'); // 按天类型测试，返回0说明不符合间隔要求

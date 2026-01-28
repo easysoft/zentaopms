@@ -20,6 +20,13 @@ class heading extends wg
         'dropmenu' => array('map' => 'dropmenu')
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        #heading>[data-zui-dropmenu]+div .dropmenu-btn>.text,#heading>[data-zui-dropmenu]+div+div .dropmenu-btn>.text{max-width:120px}
+        CSS;
+    }
+
     protected function buildAppName()
     {
         list($tab, $lang) = data(array('app.tab', 'lang'));

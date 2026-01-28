@@ -17,12 +17,12 @@ cid=15177
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->getOptionsFromSqlTest('SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'account')) && p('1') && e('admin');
 r($biTest->getOptionsFromSqlTest('SELECT id, account FROM zt_user WHERE deleted = "0"', 'mysql', 'id', 'account')) && p('2') && e('user1');

@@ -36,7 +36,7 @@ class designZen extends control
         $count = 1;
         foreach(array_filter($this->lang->design->{$typeList}) as $key => $value)
         {
-            $key     = strtolower($key);
+            $key     = strtolower((string)$key);
             $exclude = $type == $key ? '' : 'design';
             $alias   = $type == $key ? $this->app->rawMethod : '';
 

@@ -17,11 +17,11 @@ cid=17248
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->getGogsProjectsTester(5)) && p() && e('1');           // 测试步骤1：有效服务器ID查询项目数量
 r($mrTest->getGogsProjectsDetailTester(5)) && p('id') && e('1'); // 测试步骤2：项目详细信息验证-id

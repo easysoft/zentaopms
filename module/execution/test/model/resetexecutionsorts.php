@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -40,7 +40,7 @@ cid=16361
 
 $projectList = array(0, 2, 60, 61, 100);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->resetExecutionSortsTest($projectList[0])) && p() && e('0');           // 检查没有执行时的排序
 r($executionTester->resetExecutionSortsTest($projectList[1])) && p() && e('3,5,7,8,6,4'); // 检查项目 2 的执行排序
 

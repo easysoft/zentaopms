@@ -45,8 +45,8 @@ class custom extends control
     public function set(string $module = 'story', string $field = 'priList', string $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if($module == 'user' && $field == 'priList') $field = 'statusList';
-        if($module == 'block' && $field == 'priList')$field = 'closed';
+        if($module == 'user' && $field == 'priList')  $field = 'statusList';
+        if($module == 'block' && $field == 'priList') $field = 'closed';
         $currentLang = $this->app->getClientLang();
 
         $this->customZen->assignVarsForSet($module, $field, $lang, $currentLang);
@@ -56,6 +56,7 @@ class custom extends control
             $this->customZen->setFieldListForSet($module, $field);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($module == 'baseline' && $field == 'objectList') return $this->sendSuccess(array('load' => true));
+            if($module == 'reviewcl') return $this->sendSuccess(array('load' => true));
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
@@ -388,16 +389,16 @@ class custom extends control
             return $this->sendSuccess(array('callback' => '$.apps.updateAppsMenu(true);', 'load' => true, 'closeModel' => true));
         }
 
-        list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();
+        list($disabledFeatures, $enabledProjectFeatures, $disabledProjectFeatures) = $this->custom->computeFeatures();
 
-        $this->view->title                 = $this->lang->custom->mode;
-        $this->view->mode                  = $mode;
-        $this->view->programs              = $this->loadModel('program')->getTopPairs('noclosed', true);
-        $this->view->programID             = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
-        $this->view->disabledFeatures      = $disabledFeatures;
-        $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
-        $this->view->disabledScrumFeatures = $disabledScrumFeatures;
-        $this->view->currentModeTips       = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
+        $this->view->title                   = $this->lang->custom->mode;
+        $this->view->mode                    = $mode;
+        $this->view->programs                = $this->loadModel('program')->getTopPairs('noclosed', true);
+        $this->view->programID               = isset($this->config->global->defaultProgram) ? $this->config->global->defaultProgram : 0;
+        $this->view->disabledFeatures        = $disabledFeatures;
+        $this->view->enabledProjectFeatures  = $enabledProjectFeatures;
+        $this->view->disabledProjectFeatures = $disabledProjectFeatures;
+        $this->view->currentModeTips         = sprintf($this->lang->custom->currentModeTips, $this->lang->custom->modeList[$mode], $this->lang->custom->modeList[$mode == 'light' ? 'ALM' : 'light']);
 
         $this->display();
     }

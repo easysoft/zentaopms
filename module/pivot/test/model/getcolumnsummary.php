@@ -16,7 +16,7 @@ cid=17376
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $data = [
     [
@@ -32,7 +32,7 @@ $data = [
     ]
 ];
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->getColumnSummaryTest($data[0], 'total'))   && p('col1:value')  && e('25');
 r($pivotTest->getColumnSummaryTest($data[1], 'summary')) && p('col1:value')  && e('text');

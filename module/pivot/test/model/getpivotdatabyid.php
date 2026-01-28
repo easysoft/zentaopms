@@ -17,7 +17,7 @@ cid=17393
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 初始化pivot测试数据（只加载pivot.sql）
 global $tester, $app;
@@ -29,7 +29,7 @@ $tester->dbh->exec(file_get_contents($sqlFile));
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($pivotTest->getPivotDataByIDTest(1001)) && p('id') && e('1001'); // 步骤1：正常情况-获取存在的透视表ID

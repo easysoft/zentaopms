@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('config')->gen(0);
 
@@ -29,7 +29,7 @@ $realModule = 'program';
 $failMethod = 'method';
 $realMethod = 'browse';
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 r($devTester->getOriginalLangTest('test'))   && p('my')            && e("地盘"); // 错误的类型返回数据
 r($devTester->getOriginalLangTest('common')) && p('projectCommon') && e("项目"); // 正确的类型返回数据
 

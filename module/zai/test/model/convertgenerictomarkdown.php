@@ -19,7 +19,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -28,7 +28,7 @@ global $app;
 
 $app->loadLang('zai');
 
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 $app->lang->zai->syncingTypeList['custom'] = '自定义类型';
 

@@ -101,10 +101,11 @@ class adminModel extends model
      * 设置后台二级导航。
      * Set admin menu.
      *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function setMenu(): void
+    public function setMenu(int $groupID = 0): void
     {
         $this->checkPrivMenu();
 
@@ -117,6 +118,7 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
+            if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID) $this->lang->admin->menuList->{$menuKey}['subMenu'] = $this->lang->admin->menuList->{$menuKey}['childMenu'];
             if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
             {
                 $moduleName = $this->app->rawModule;
@@ -130,6 +132,23 @@ class adminModel extends model
                     {
                         if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) && strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
                         if($firstParam == $subMenuKey) $subModule = 'custom';
+                    }
+
+                    /* 针对项目流程和产品流程菜单做特殊处理。 */
+                    if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID)
+                    {
+                        $workflowGroup = $this->fetchByID($groupID, 'workflowgroup');
+                        if($subMenuKey == 'review' && $workflowGroup->projectModel == 'kanban') continue;
+                        if($subMenuKey == 'stage' && in_array($workflowGroup->projectModel, array('kanban', 'scrum', 'agileplus'))) continue;
+
+                        $subMenu['link'] = sprintf($subMenu['link'], $groupID);
+                        if(isset($subMenu['subMenu']))
+                        {
+                            foreach($subMenu['subMenu'] as $subSubMenuKey => $subSubMenu)
+                            {
+                                $subMenu['subMenu'][$subSubMenuKey]['link'] = sprintf($subSubMenu['link'], $groupID);
+                            }
+                        }
                     }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
@@ -192,17 +211,17 @@ class adminModel extends model
                 if($dept && common::hasPriv('company', 'browse')) $menu['link'] = helper::createLink('company', 'browse');
             }
 
-            /* Set links to authorized navigation. */
-            if(isset($menu['subMenu']))
-            {
-                $menu = $this->setSubMenu($menuKey, $menu);
-            }
-
             if(!empty($menu['link']) && strpos($menu['link'], '|') !== false)
             {
                 list($module, $method, $params) = explode('|', $menu['link'] . '|');
                 $menu['link'] = helper::createLink($module, $method, $params);
                 if(($this->app->user->admin || $module . $method != 'adminregister') && common::hasPriv($module, $method)) $menu['disabled'] = false;
+            }
+
+            /* Set links to authorized navigation. */
+            if(!in_array($menuKey, array('productflow', 'projectflow')) && isset($menu['subMenu']))
+            {
+                $menu = $this->setSubMenu($menuKey, $menu);
             }
 
             $order = $menu['order'];
@@ -235,7 +254,7 @@ class adminModel extends model
     {
         /* Reorder secondary navigation. */
         $subMenuList   = array();
-        $subMenuOrders = $menu['menuOrder'];
+        $subMenuOrders = !empty($menu['menuOrder']) ? $menu['menuOrder'] : array();
         if(empty($subMenuOrders)) return array();
         ksort($subMenuOrders);
         foreach($subMenuOrders as $value)
@@ -280,8 +299,11 @@ class adminModel extends model
                 $menu['subMenu'][$subMenuKey]['link'] = substr($subMenu['link'], 0, strpos($subMenu['link'], '|') + 1) . $module . '|' . $method . '|' . $params;
 
                 /* Update the level 1 navigation link. */
-                if(empty($menu['link'])) $menu['link'] = helper::createLink($module, $method, $params);
-                $menu['disabled'] = false;
+                if(!empty($menu['disabled']))
+                {
+                    $menu['link']     = helper::createLink($module, $method, $params);
+                    $menu['disabled'] = false;
+                }
             }
         }
 
@@ -371,6 +393,11 @@ class adminModel extends model
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
         $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
+        if($this->config->edition == 'open')
+        {
+            $this->config->admin->menuGroup['feature'][] = 'stage|browse';
+            $this->config->admin->menuGroup['feature'][] = 'stage|batchcreate';
+        }
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
@@ -383,6 +410,11 @@ class adminModel extends model
                 if($moduleName == 'custom' && ($methodName == 'required' || $methodName == 'set'))
                 {
                     if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
+                }
+                elseif($moduleName == 'workflowgroup' && $firstParam && !in_array($methodName, array('project', 'product')))
+                {
+                    $workflowgroup = $this->loadModel('workflowgroup')->fetchByID($firstParam);
+                    return $workflowgroup->type == 'project' ? 'projectflow' : 'productflow';
                 }
                 else
                 {
@@ -460,11 +492,28 @@ class adminModel extends model
         {
             if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
-            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
+            if(!empty($menuGroup['disabled'])) $class .= ' disabled not-clear-menu';
+            $output .= "<li class='$class'>" . html::a(!empty($menuGroup['disabled']) ? '###' : (!empty($menuGroup['link']) ? $menuGroup['link'] : ''), (!empty($menuGroup['icon']) ? "<i class='icon icon-{$menuGroup['icon']} svg-icon bg-{$menuGroup['bg']}' style='height:24px;width:24px;text-align:center;border-radius:0.375rem;color:#fff;align-content:center;margin-left:6px;opacity:1;transform: scale(1);'></i>" : "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>") . $menuGroup['name']) . "</li>";
         }
         $output .= "</ul></div>";
 
         $this->lang->switcherMenu = $output;
+    }
+
+    /**
+     * 获取交付物评审信息。
+     * Get deliverable review info.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getDeliverableReviewPairs(int $groupID = 0): array
+    {
+        return $this->dao->select('t1.id, t1.review')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('1=1')
+            ->beginIF($groupID)->andWhere('t2.workflowGroup')->eq($groupID)->fi()
+            ->fetchPairs('id');
     }
 }

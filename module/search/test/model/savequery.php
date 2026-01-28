@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -67,7 +67,7 @@ global $app;
 include($app->getModuleRoot() . '/search/control.php');
 $app->control = new search();
 
-$search = new searchTest();
+$search = new searchModelTest();
 r($search->saveQueryTest($module, $title[0], $where, $queryForm))       && p('title:0') && e('『标题』不能为空。'); //标题非空测试
 r($search->saveQueryTest($module, $title[1], $where, $queryForm))       && p('module') && e('bug');   //测试保存的查询的模块
 r($search->saveQueryTest('epic',  $title[1], $where, $queryForm))       && p('module') && e('story'); //业需使用需求的模块名

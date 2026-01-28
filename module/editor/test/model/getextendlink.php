@@ -16,11 +16,11 @@ cid=16234
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->getExtendLinkNormalTest()) && p() && e(1);
 r($editor->getExtendLinkWithExtendsTest()) && p() && e(1);

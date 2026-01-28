@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -26,7 +26,7 @@ $effort->gen(100);
 $projectList = array(0, 5, 10);
 $dateList    = array(date('Y-m-d'), '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getACTest($projectList[0], $dateList[0])) && p() && e('485.00'); //测试project值为0，date值为2022-05-01
 r($weekly->getACTest($projectList[0], $dateList[1])) && p() && e('485.00'); //测试project值为0，date值为空

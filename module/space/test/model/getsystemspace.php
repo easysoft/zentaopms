@@ -29,14 +29,14 @@ cid=18399
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/space.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('space')->loadYaml('space')->gen(5);
 
 $owners = array('', 'admin', 'user1', 'test');
 
-$spaceTester = new spaceTest();
+$spaceTester = new spaceModelTest();
 r($spaceTester->getSystemSpaceTest($owners[0])) && p('name,k8space,owner,default') && e('空间1,quickon-system,admin,0');    // 获取用户名为空的系统空间
 r($spaceTester->getSystemSpaceTest($owners[1])) && p('name,k8space,owner,default') && e('空间1,quickon-system,admin,0');    // 获取用户名为admin的系统空间
 r($spaceTester->getSystemSpaceTest($owners[2])) && p('name,k8space,owner,default') && e('系统空间,quickon-system,user1,0'); // 获取用户名为user1的系统空间

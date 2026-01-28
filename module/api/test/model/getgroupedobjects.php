@@ -16,7 +16,7 @@ cid=15108
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(5);
 zenData('project')->gen(5);
@@ -24,7 +24,7 @@ zenData('doclib')->gen(10);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r(array_key_exists('product', $apiTest->getGroupedObjectsTest())) && p() && e('1'); // 步骤1：获取分组对象数据包含product键
 r(array_key_exists('project', $apiTest->getGroupedObjectsTest())) && p() && e('1'); // 步骤2：获取分组对象数据包含project键

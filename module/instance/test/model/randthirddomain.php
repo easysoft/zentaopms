@@ -17,7 +17,7 @@ cid=16812
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('instance');
@@ -30,7 +30,7 @@ $table->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 5. 测试步骤
 r(strlen($instanceTest->randThirdDomainTest(4))) && p('') && e('4'); // 步骤1：测试默认长度4的域名生成

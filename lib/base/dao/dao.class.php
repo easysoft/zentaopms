@@ -1303,7 +1303,9 @@ class baseDAO
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)
         {
+            $table  = $this->table;
             $result = $this->query($sql)->fetch(PDO::FETCH_OBJ);
+            $result = helper::decodeHtmlSpecialChars($table, $result);
             $this->setCache($key, $sql, $result);
         }
 
@@ -1389,7 +1391,9 @@ class baseDAO
         $rows = $this->getCache($key);
         if($rows === self::CACHE_MISS)
         {
-            $rows = $this->query($sql)->fetchAll();
+            $table = $this->table;
+            $rows  = $this->query($sql)->fetchAll();
+            $rows  = helper::decodeHtmlSpecialChars($table, $rows);
             $this->setCache($key, $sql, $rows);
         }
 
@@ -1411,12 +1415,14 @@ class baseDAO
      */
     public function fetchGroup($groupField, $keyField = '')
     {
-        $sql = $this->processSQL();
-        $key = $this->createCacheKey('fetchAll', md5($sql));
+        $sql  = $this->processSQL();
+        $key  = $this->createCacheKey('fetchAll', md5($sql));
         $rows = $this->getCache($key);
         if($rows === self::CACHE_MISS)
         {
-            $rows = $this->query($sql)->fetchAll();
+            $table = $this->table;
+            $rows  = $this->query($sql)->fetchAll();
+            $rows  = helper::decodeHtmlSpecialChars($table, $rows);
             $this->setCache($key, $sql, $rows);
         }
 
@@ -1447,7 +1453,9 @@ class baseDAO
         $rows = $this->getCache($key);
         if($rows === self::CACHE_MISS)
         {
-            $rows = $this->query($sql)->fetchAll();
+            $table = $this->table;
+            $rows  = $this->query($sql)->fetchAll();
+            $rows  = helper::decodeHtmlSpecialChars($table, $rows);
             $this->setCache($key, $sql, $rows);
         }
 

@@ -16,9 +16,9 @@ cid=15887
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$cron = new cronTest();
+$cron = new cronModelTest();
 
 // 测试步骤1：cron全局配置为空的情况
 $tester->config->global->cron = 0;

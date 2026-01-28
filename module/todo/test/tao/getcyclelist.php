@@ -13,10 +13,18 @@ cid=19274
 - 验证按ID倒序排序后第一个key是10 @10
 - 验证混合输入只返回2条有效记录 @2
 
+- 获取通过周期待办的生成的待办数据为空的情况，结果为 0 @0
+- 获取有周期待办生成的待办数量，结果为 3 @3
+- 获取有周期待办生成的待办数据详细信息
+ - 第2条的account属性 @admin
+ - 第2条的name属性 @周期待办：每月的每天，提前1天生成
+ - 第2条的begin属性 @0801
+ - 第2条的end属性 @1801
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 $todoTable = zenData('todo');
@@ -26,7 +34,7 @@ $todoTable->loadYaml('todo_getcyclelist', false, 2)->gen(15);
 su('admin');
 
 // 创建测试实例
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 测试步骤1：测试空的todoList输入
 r($todoTest->getCycleListTaoTest(array())) && p() && e('0'); // 空输入返回0

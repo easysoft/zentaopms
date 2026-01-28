@@ -16,7 +16,7 @@ cid=15504
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $buildTable = zenData('build');
 $buildTable->id->range('1-5');
@@ -39,7 +39,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r($buildTest->linkStoryTest(1, array(1, 2))) && p('result') && e('1'); // 步骤1：正常情况下关联需求
 r($buildTest->linkStoryTest(2, array())) && p('result') && e('0'); // 步骤2：空需求列表输入

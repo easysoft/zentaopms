@@ -46,14 +46,14 @@ cid=15542
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('case')->loadYaml('case_assigncaseparamsforcreatecase', false, 2)->gen(10);
 zenData('casestep')->loadYaml('casestep_assigncaseparamsforcreatecase', false, 2)->gen(20);
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 r($caselibTest->assignCaseParamsForCreateCaseTest(0)) && p('type,pri,caseTitle,precondition,keywords,stage') && e('feature,3,~~,~~,~~,~~');
 r($caselibTest->assignCaseParamsForCreateCaseTest(1)) && p('type,pri,caseTitle,precondition,keywords,stage') && e('feature,1,这个是测试用例1,这是前置条件1,这是关键词1,unittest');

@@ -7,16 +7,16 @@ title=测试 storyTao::getAffectedChildren();
 timeout=0
 cid=18631
 
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array
  - 属性id @1
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$normalStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$normalStory, array
  - 属性id @6
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array
  - 属性id @1
  - 属性type @story
-- 执行storyTest模块的getAffectedChildrenTest方法，参数是$emptyChildrenStory, array 
+- 执行storyTest模块的getAffectedChildrenTest方法，参数是$emptyChildrenStory, array
  - 属性id @2
  - 属性type @story
 - 执行storyTest模块的getAffectedChildrenTest方法，参数是$parentStory, array 属性type @story
@@ -24,7 +24,7 @@ cid=18631
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->product->range(1);
@@ -40,7 +40,7 @@ $story->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 // 创建测试故事对象1：有子故事的父故事
 $parentStory = new stdClass();

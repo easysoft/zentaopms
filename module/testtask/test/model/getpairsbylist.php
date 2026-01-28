@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->gen(15);
 zenData('user')->gen(1);
@@ -23,7 +23,7 @@ cid=19182
 
 $testtaskIdList = array('1,2,3', '4,5,6', '7,8,9', '10,11,12', '13,14,15');
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->getPairsByListTest($testtaskIdList[0])) && p() && e('测试单1,测试单2,测试单3');    // 测试查找测试单 ID 1 2 3 的名称
 r($testtask->getPairsByListTest($testtaskIdList[1])) && p() && e('测试单4,测试单5,测试单6');    // 测试查找测试单 ID 4 5 6 的名称

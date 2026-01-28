@@ -16,14 +16,14 @@ cid=16779
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('instance')->loadYaml('instance_backup', false, 2)->gen(5);
 zenData('user')->loadYaml('user_backup', false, 2)->gen(5);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 $validInstance = new stdClass();
 $validInstance->id = 1;

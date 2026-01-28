@@ -24,25 +24,15 @@ cid=18421
 - 获取敏捷模型下按照id倒序排列的所有阶段 @0
 - 获取瀑布模型下按照id正序排列的所有阶段 @0
 - 获取瀑布模型下按照id倒序排列的所有阶段
- - 第1条的projectType属性 @waterfall
  - 第1条的type属性 @request
  - 第1条的name属性 @需求1
 - 获取瀑布模型下按照id正序排列的所有阶段
- - 第1条的projectType属性 @waterfall
  - 第1条的type属性 @request
  - 第1条的name属性 @需求1
-- 获取融合瀑布模型下按照id倒序排列的所有阶段
- - 第7条的projectType属性 @waterfallplus
- - 第7条的type属性 @request
- - 第7条的name属性 @需求2
-- 获取融合瀑布模型下按照id正序排列的所有阶段
- - 第7条的projectType属性 @waterfallplus
- - 第7条的type属性 @request
- - 第7条的name属性 @需求2
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('project')->loadYaml('project')->gen(10);
@@ -50,20 +40,18 @@ zenData('stage')->loadYaml('stage')->gen(12);
 
 $sorts      = array('id_desc', 'id_asc');
 $projectIds = array(0, 11, 60, 100);
-$types      = array('scrum', 'waterfall', 'waterfallplus');
+$types      = array(2, 4);
 
-$stageTester = new stageTest();
-r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[0])) && p()                && e('0');                                     // 获取敏捷模型下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[0])) && p()                && e('0');                                     // 获取瀑布模型下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[1], $types[0])) && p('101:type,name') && e('sprint,迭代5');                          // 获取敏捷项目下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[1], $types[0])) && p('105:type,name') && e('sprint,迭代9');                          // 获取敏捷项目下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[2], $types[0])) && p('106:type,name') && e('stage,阶段10');                          // 获取瀑布项目下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[2], $types[0])) && p('106:type,name') && e('stage,阶段10');                          // 获取瀑布项目下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[3], $types[0])) && p()                && e('0');                                     // 获取看板项目下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[3], $types[0])) && p()                && e('0');                                     // 获取看板项目下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[0])) && p()                && e('0');                                     // 获取敏捷模型下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[0])) && p()                && e('0');                                     // 获取瀑布模型下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[1])) && p('1:projectType,type,name') && e('waterfall,request,需求1');     // 获取瀑布模型下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[1])) && p('1:projectType,type,name') && e('waterfall,request,需求1');     // 获取瀑布模型下按照id正序排列的所有阶段
-r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[2])) && p('7:projectType,type,name') && e('waterfallplus,request,需求2'); // 获取融合瀑布模型下按照id倒序排列的所有阶段
-r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[2])) && p('7:projectType,type,name') && e('waterfallplus,request,需求2'); // 获取融合瀑布模型下按照id正序排列的所有阶段
+$stageTester = new stageModelTest();
+r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[0])) && p()                && e('0');             // 获取敏捷模型下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[0])) && p()                && e('0');             // 获取瀑布模型下按照id正序排列的所有阶段
+r($stageTester->getStagesTest($sorts[0], $projectIds[1], $types[0])) && p('101:type,name') && e('sprint,迭代5');  // 获取敏捷项目下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[1], $types[0])) && p('105:type,name') && e('sprint,迭代9');  // 获取敏捷项目下按照id正序排列的所有阶段
+r($stageTester->getStagesTest($sorts[0], $projectIds[2], $types[0])) && p('106:type,name') && e('stage,阶段10');  // 获取瀑布项目下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[2], $types[0])) && p('106:type,name') && e('stage,阶段10');  // 获取瀑布项目下按照id正序排列的所有阶段
+r($stageTester->getStagesTest($sorts[0], $projectIds[3], $types[0])) && p()                && e('0');             // 获取看板项目下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[3], $types[0])) && p()                && e('0');             // 获取看板项目下按照id正序排列的所有阶段
+r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[0])) && p()                && e('0');             // 获取敏捷模型下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[0])) && p()                && e('0');             // 获取瀑布模型下按照id正序排列的所有阶段
+r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[1])) && p('1:type,name')   && e('request,需求1'); // 获取瀑布模型下按照id倒序排列的所有阶段
+r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[1])) && p('1:type,name')   && e('request,需求1'); // 获取瀑布模型下按照id正序排列的所有阶段

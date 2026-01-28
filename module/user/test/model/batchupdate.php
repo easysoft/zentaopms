@@ -40,7 +40,7 @@ cid=19580
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 zenData('action')->gen(0);
@@ -50,7 +50,7 @@ su('admin');
 
 global $app;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $random = updateSessionRandom();
 $verify = md5($app->user->password . $random);

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanlane')->gen(5);
@@ -23,7 +23,7 @@ cid=16952
 
 $laneIDList = array('1', '2', '3', '4', '5');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->refreshCardsTest($laneIDList[0])) && p('', '|') && e('1:1,2,801,; 2:3,4,803,; 3:5,6,805,; 4:7,8,807,');             // 刷新泳道101的卡片
 r($kanban->refreshCardsTest($laneIDList[1])) && p('', '|') && e('5:9,10,809,; 6:11,12,811,; 7:13,14,813,; 8:15,16,815,');      // 刷新泳道102的卡片

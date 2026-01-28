@@ -19,7 +19,7 @@ cid=17694
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /* 创建项目集测试数据 */
@@ -38,7 +38,7 @@ $tester->dao->exec("INSERT INTO " . TABLE_PRODUCT . " (id, name, program, type, 
     (3, '产品3', 1, 'normal', 'normal', '0', 'rnd'),
     (4, '产品4', 2, 'normal', 'normal', '0', 'rnd')");
 
-$programTest = new programTest();
+$programTest = new programModelTest();
 
 r($programTest->getProductPairsByIDTest(1)) && p('1,2,3') && e('产品1,产品2,产品3'); // 获取项目集ID为1的所有产品键值对
 r($programTest->getProductPairsByIDTest(2)) && p('4') && e('产品4'); // 获取项目集ID为2的所有产品键值对

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 zenData('stage')->gen(5);
 zenData('project')->loadYaml('project')->gen(5);
@@ -27,7 +27,7 @@ cid=14930
 
 */
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 $actions = $action->restoreStagesTest(array(2 => 2, 3 => 3), array(1, 2));
 r($actions[1]) && p('id,action,extra') && e('1,deleted,0');  // 测试还原id为2的阶段

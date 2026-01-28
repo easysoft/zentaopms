@@ -16,11 +16,11 @@ cid=18455
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/store.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$storeTest = new storeTest();
+$storeTest = new storeModelTest();
 
 r($storeTest->getUpgradableVersionsTest('1.0.0', 1)) && p() && e('0');
 r($storeTest->getUpgradableVersionsTest('1.0.0', 0, 'testapp')) && p() && e('0');

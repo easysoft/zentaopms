@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testsuite')->gen(10);
 zenData('user')->gen(1);
@@ -47,7 +47,7 @@ $lib5->id   = 5;
 $lib5->desc = '';
 $lib5->uid  = '';
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 r($caselib->updateTest($lib1)) && p('name:0') && e('『名称』不能为空。'); //测试更新名称为空时候返回
 r($caselib->updateTest($lib2)) && p('name')   && e('测试修改名称');       //测试更新之后名称信息
 r($caselib->updateTest($lib3)) && p('desc')   && e('测试修改描述');       //测试更新之后描述信息

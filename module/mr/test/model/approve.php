@@ -18,13 +18,13 @@ cid=17236
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('mr')->loadYaml('mr')->gen(10);
 zenData('mrapproval')->gen(0);
 su('admin');
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 $openedMR     = 1;  // 开放状态的MR
 $closedMR     = 3;  // 关闭状态的MR

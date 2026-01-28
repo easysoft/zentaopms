@@ -16,11 +16,11 @@ cid=15755
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 // 创建测试对象 - 空ID测试
 $emptyGitlab = new stdClass();

@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->gen(0);
 zenData('user')->gen(1);
@@ -37,7 +37,7 @@ $lang->ERCommon = '业务需求';
 $app::$loadedLangs = array();
 $app->loadLang('action');
 
-$message = new messageTest();
+$message = new messageModelTest();
 $objectTypes = $message->getObjectTypesTest();
 
 r($objectTypes) && p('product')     && e('产品');     //查询objectType为product的objectTypes

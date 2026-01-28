@@ -829,6 +829,7 @@ if(in_array($config->edition, array('max', 'ipd')))
         'title'  => $lang->tutorial->waterfallProjectManage->review->step8->name,
         'desc'   => $lang->tutorial->waterfallProjectManage->review->step8->desc
     );
+    unset($waterfallProjectManage->advance->tasks['review']);
 
     $waterfallProjectManage->advance->tasks['manageIssue'] = array();
     $waterfallProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';

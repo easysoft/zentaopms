@@ -19,7 +19,7 @@ cid=18504
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(3);
@@ -40,7 +40,7 @@ $storySpec->title->range('需求标题1,需求标题2,需求标题3,需求标题
 $storySpec->spec->range('需求描述1,需求描述2,需求描述3,需求描述4,需求描述5,需求描述6,需求描述7,需求描述8');
 $storySpec->gen(8);
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getByListTest(array(1, 2, 3, 4, 5)))) && p() && e('4'); // 测试步骤1：传入有效ID列表，获取未删除需求
 r(count($storyTest->getByListTest(array(1, 2, 3, 4, 5), 'all'))) && p() && e('5'); // 测试步骤2：传入有效ID列表使用all模式，获取所有需求

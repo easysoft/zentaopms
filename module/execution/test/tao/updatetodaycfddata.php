@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -127,7 +127,7 @@ $typeList        = array('story', 'bug', 'task');
 $colName         = array('未开始', '进行中');
 $cardIdList      = array('', '1,2,3');
 
-$executionTester = new executionTest();
+$executionTester = new executionTaoTest();
 r($executionTester->updateTodayCFDDataTest($executionIdList[0], $typeList[0], $colName[0], $cardIdList[0])) && p('execution,type')  && e('1,story');  // 更新迭代1今日需求未开始列无卡片累计流图数据
 r($executionTester->updateTodayCFDDataTest($executionIdList[1], $typeList[0], $colName[0], $cardIdList[0])) && p('execution,type')  && e('2,story');  // 更新迭代2今日需求未开始列无卡片累计流图数据
 r($executionTester->updateTodayCFDDataTest($executionIdList[2], $typeList[0], $colName[0], $cardIdList[0])) && p('execution,type')  && e('3,story');  // 更新迭代3今日需求未开始列无卡片累计流图数据

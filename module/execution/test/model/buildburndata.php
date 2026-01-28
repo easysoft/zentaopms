@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -38,7 +38,7 @@ $count           = array('0', '1');
 $typeList        = array('noweekend', 'withweekend');
 $burnByList      = array('left', 'estimate', 'storyPoint');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->buildBurnDataTest($executionIDList[0], $count[0], $typeList[0], $burnByList[0])) && p('labels:0')   && e('7/1');  // 按照剩余工时查看敏捷执行燃尽图数据
 r($executionTester->buildBurnDataTest($executionIDList[1], $count[0], $typeList[0], $burnByList[0])) && p('burnLine:0') && e('0');    // 按照剩余工时查看瀑布执行燃尽图数据
 r($executionTester->buildBurnDataTest($executionIDList[2], $count[0], $typeList[0], $burnByList[0])) && p('baseLine:0') && e('36');   // 按照剩余工时查看看板执行燃尽图数据

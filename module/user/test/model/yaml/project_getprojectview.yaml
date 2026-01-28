@@ -6,39 +6,39 @@ fields:
 - field: id
   note: 项目ID
   range: 1-10
-  
+
 - field: name
   note: 项目名称
   range: '项目{3}, 禅道项目{3}, 敏捷项目{2}, 瀑布项目{2}'
-  
+
 - field: type
   note: 项目类型
   range: 'project{5}, sprint{3}, kanban{2}'
-  
+
 - field: acl
   note: 权限控制
   range: 'open{4}, private{3}, program{3}'
-  
+
 - field: status
   note: 项目状态
   range: 'wait{2}, doing{5}, suspended{2}, closed{1}'
-  
+
 - field: openedBy
   note: 创建者
   range: 'admin{3}, user1{2}, user2{2}, manager{3}'
-  
+
 - field: PM
   note: 项目经理
   range: 'manager{5}, user1{2}, user2{3}'
-  
+
 - field: begin
   note: 开始日期
   range: '2024-01-01{3}, 2024-02-01{3}, 2024-03-01{4}'
-  
+
 - field: end
   note: 结束日期
   range: '2024-12-31{3}, 2024-06-30{3}, 2024-09-30{4}'
-  
+
 - field: deleted
   note: 是否删除
   range: '0{9}, 1{1}'

@@ -367,7 +367,8 @@ class commonTao extends commonModel
         global $app, $lang;
 
         $inProject = ((isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project') || (!empty($object->type) and $object->type == 'project'));
-        $projectID = empty($object->id) ? $app->session->project : $object->id;
+        $projectID = $app->session->project;
+        if(!empty($object->type) && $object->type == 'project') $projectID = $object->id;
         if($inProject and $projectID and (strpos(",{$app->user->rights['projects']},", ",{$projectID},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
         $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');

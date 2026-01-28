@@ -17,10 +17,10 @@ cid=15048
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
-$table = zenData('ai_promptrole');
+$table = zenData('ai_agentrole');
 $table->id->range('1-10');
 $table->name->range('系统分析师,项目经理,开发工程师,测试工程师,产品经理,技术专家,AI助手,客服代表,[],特殊角色');
 $table->desc->range('专注于系统需求分析和架构设计,负责项目整体规划和管理,专注于代码开发和技术实现,负责软件质量保证和测试,负责产品规划和需求管理,提供技术咨询和解决方案,智能化辅助工具,客户服务支持,[],特殊角色描述');
@@ -34,7 +34,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 测试步骤（必须包含至少5个测试步骤）
 r(count($aiTest->getRoleTemplatesTest())) && p() && e('8'); // 步骤1：获取所有未删除角色模板，期望8个

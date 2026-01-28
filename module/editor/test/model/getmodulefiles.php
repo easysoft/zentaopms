@@ -16,11 +16,11 @@ cid=16237
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->getModuleFilesTest('todo')) && p('isArray') && e('1');                                                              // 测试获取todo模块的文件列表
 r($editor->getModuleFilesTest('todo')) && p('hasModulePath') && e('1');                                                        // 测试检查模块路径存在性

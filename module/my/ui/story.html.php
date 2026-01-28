@@ -80,10 +80,11 @@ if($canBatchReview)
 $assignedToItems = array();
 if($canBatchAssignTo)
 {
+    $pinyinItems = common::convert2Pinyin($users);
     foreach($users as $key => $value)
     {
         if(empty($key) || $key == 'closed') continue;
-        $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchAssignTo', "storyType=story&assignedTo={$key}"));
+        $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('story', 'batchAssignTo', "storyType=story&assignedTo={$key}"));
     }
 }
 
@@ -107,6 +108,7 @@ foreach($stories as $id => $story)
         foreach($story->actions as $key => $action)
         {
             if($action['name'] == 'create' && $story->isParent == '1') $stories[$id]->actions[$key]['disabled'] = 1;
+            if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
         }
     }
     $story->estimate = helper::formatHours($story->estimate);

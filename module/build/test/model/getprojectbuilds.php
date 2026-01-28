@@ -25,7 +25,7 @@ cid=15496
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build')->gen(20);
 zenData('project')->loadYaml('execution')->gen(30);
@@ -37,7 +37,7 @@ $projectIDList = array(0, 17, 7);
 $type          = array('all', 'product', 'bysearch', 'test');
 $parm          = array(7, "t1.name = '版本7'", "test");
 
-$build = new buildTest();
+$build = new buildModelTest();
 r($build->getProjectBuildsTest($count[0], $projectIDList[0], $type[0]))           && p('1:project,name')  && e('11,版本1');  // 全部项目版本查询
 r($build->getProjectBuildsTest($count[0], $projectIDList[1], $type[0]))           && p('7')               && e('0');         // 单独项目版本查询
 r($build->getProjectBuildsTest($count[0], $projectIDList[2], $type[0]))           && p()                  && e('0');         // 不存在项目版本查询

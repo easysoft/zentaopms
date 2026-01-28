@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('kanban')->gen(1);
@@ -89,7 +89,7 @@ $kanban6->fluidBoard  = '1';
 $kanban6->minColWidth = 300;
 $kanban6->desc        = '测试创建重名的公共看板的描述';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanTaoTest();
 
 r($kanban->createKanbanTest($kanban1)) && p('name,space,owner,whitelist') && e('测试创建协作看板,1,po15,~~');     // 创建协同空间
 r($kanban->createKanbanTest($kanban2)) && p('name,space,owner,whitelist') && e('测试创建私人看板,2,po16,user4');  // 创建私人空间

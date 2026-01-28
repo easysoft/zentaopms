@@ -17,13 +17,13 @@ cid=15819
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 4. 测试步骤
 r($convertTest->buildNodeAssociationDataTest(array('sourceNodeId' => '1001', 'sourceNodeEntity' => 'issue', 'sinkNodeId' => '1002', 'sinkNodeEntity' => 'issue', 'associationType' => 'depends'))) && p('source_node_id') && e('1001');

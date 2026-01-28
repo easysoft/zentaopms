@@ -16,7 +16,7 @@ cid=17717
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('project')->loadYaml('program')->gen(30)->fixPath();
@@ -29,7 +29,7 @@ $projectproduct->product->range('2');
 $projectproduct->project->range('11');
 $projectproduct->gen(1);
 
-$programTester = new programTest();
+$programTester = new programTaoTest();
 r($programTester->fixLinkedProductTest(0, 0, 0, ',0,'))     && p() && e('0'); // 测试空数据
 r($programTester->fixLinkedProductTest(3, 1, 0, ',14,2'))   && p() && e('4'); // 测试含有影子产品的项目修改。
 r($programTester->fixLinkedProductTest(3, 4, 0, ',14,2'))   && p() && e('4'); // 测试含有影子产品的项目修改。

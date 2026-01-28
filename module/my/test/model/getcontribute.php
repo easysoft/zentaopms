@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('program')->gen('15');
 zenData('product')->loadYaml('product')->gen('20');
@@ -30,7 +30,7 @@ cid=17281
 
 */
 
-$my = new myTest();
+$my = new myModelTest();
 
 $myTaskTotal          = $my->getContributeTest()->myTaskTotal;
 $myStoryTotal         = $my->getContributeTest()->myStoryTotal;

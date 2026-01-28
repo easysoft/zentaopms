@@ -16,7 +16,7 @@ cid=18501
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $productTable = zendata('product');
 $productTable->id->range('1-5');
@@ -49,10 +49,10 @@ $storyTable->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getByClosedByTest(1, 0, '', 'admin'))) && p() && e('5'); // 步骤1：查询admin关闭的story（产品1中有5个admin关闭的story）
-r(count($storyTest->getByClosedByTest(1, 0, '', 'nonexist'))) && p() && e('0'); // 步骤2：查询不存在用户关闭的story  
+r(count($storyTest->getByClosedByTest(1, 0, '', 'nonexist'))) && p() && e('0'); // 步骤2：查询不存在用户关闭的story
 r(count($storyTest->getByClosedByTest(1, 0, '', ''))) && p() && e('0'); // 步骤3：查询空字符串关闭的story
 r(count($storyTest->getByClosedByTest(array(1, 2), 'all', '', 'user1'))) && p() && e('9'); // 步骤4：多产品查询user1关闭的story（user1关闭了9个story）
 r($storyTest->getByClosedByTest(1, 0, '', 'admin', 'story', 'id_desc')) && p('1:id') && e('1'); // 步骤5：按ID倒序查询admin关闭的story

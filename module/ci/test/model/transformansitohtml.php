@@ -16,11 +16,11 @@ cid=15595
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$ciTest = new ciTest();
+$ciTest = new ciModelTest();
 
 r($ciTest->transformAnsiToHtmlTest('normal text')) && p() && e('normal text');
 r($ciTest->transformAnsiToHtmlTest("\x1B[31;40mred text\x1B[0;m")) && p() && e('<font style="color: red">red text</font><br>');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanregion')->gen(0);
@@ -29,7 +29,7 @@ $laneIDList      = array('101', '102', '103', '104', '105', '106');
 $laneTypeList    = array('story', 'bug', 'task');
 $executionIDList = array('161', '162');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createRDColumnTest($regionIDList[0], $groupIDList[0], $laneIDList[0], $laneTypeList[0], $executionIDList[0])) && p() && e('15'); // 测试创建执行161 区域101 泳道组101 泳道101 story执行看板的泳道列
 r($kanban->createRDColumnTest($regionIDList[0], $groupIDList[1], $laneIDList[1], $laneTypeList[1], $executionIDList[0])) && p() && e('9');  // 测试创建执行161 区域101 泳道组102 泳道102 bug执行看板的泳道列

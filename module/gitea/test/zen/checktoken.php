@@ -16,7 +16,7 @@ cid=16570
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 

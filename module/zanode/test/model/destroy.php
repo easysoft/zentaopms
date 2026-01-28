@@ -16,7 +16,7 @@ cid=19825
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('host');
 $table->id->range('1-10');
@@ -34,7 +34,7 @@ $table->gen(10);
 
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 r($zanodeTest->destroyTest(1)) && p() && e('没有发现Agent服务');
 r($zanodeTest->destroyTest(6)) && p() && e('success');

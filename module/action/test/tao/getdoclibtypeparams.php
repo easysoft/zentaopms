@@ -26,7 +26,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 手动设置doc模块配置
 global $config;
@@ -55,7 +55,7 @@ $doclib->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 // 测试步骤1：api类型文档库（无关联，默认api模块）
 $action1 = new stdClass();

@@ -17,17 +17,17 @@ cid=19018
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseModelTest();
 
-// 4. 🔴 强制要求：必须包含至少5个测试步骤  
+// 4. 🔴 强制要求：必须包含至少5个测试步骤
 r($testcaseTest->processStepsOrExpectsTest("1. 打开登录页面")) && p('0:1') && e('打开登录页面'); // 步骤1：正常单级编号
-r($testcaseTest->processStepsOrExpectsTest("1.1. 输入用户名")) && p('0:0') && e("1.1. 输入用户名"); // 步骤2：多级编号处理  
+r($testcaseTest->processStepsOrExpectsTest("1.1. 输入用户名")) && p('0:0') && e("1.1. 输入用户名"); // 步骤2：多级编号处理
 r($testcaseTest->processStepsOrExpectsTest("打开页面")) && p('0:0') && e("打开页面"); // 步骤3：无编号步骤
 r($testcaseTest->processStepsOrExpectsTest("")) && p('1:0') && e('step'); // 步骤4：空字符串返回步骤类型
 r($testcaseTest->processStepsOrExpectsTest("1. 主步骤\n1.1. 子步骤1")) && p('0:1') && e('主步骤'); // 步骤5：复杂嵌套

@@ -16,7 +16,7 @@ cid=15283
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 准备基础测试数据
 $table = zenData('product');
@@ -29,7 +29,7 @@ $table->gen(5);
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 $normalBlock = new stdclass();
 $normalBlock->params = new stdclass();

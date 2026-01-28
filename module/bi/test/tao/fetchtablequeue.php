@@ -16,7 +16,7 @@ cid=15222
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 global $tester;
 $dao = $tester->dao;
@@ -67,7 +67,7 @@ $dao->insert(TABLE_DUCKDBQUEUE)->data(array(
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biTaoTest();
 
 r(is_array($biTest->fetchTableQueueTest())) && p() && e('1');
 r(count($biTest->fetchTableQueueTest())) && p() && e('4');

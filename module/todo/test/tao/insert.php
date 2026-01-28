@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 /**
@@ -20,7 +20,7 @@ cid=19280
 
 zenData('todo')->gen(1);
 
-$todoTester = new todoTest();
+$todoTester = new todoTaoTest();
 
 $todo = new stdclass();
 $todo->account = 'admin';

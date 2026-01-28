@@ -23,7 +23,7 @@ cid=19756
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $host = zenData('host');
@@ -41,7 +41,7 @@ $hostInfo->cpuCores = '';
 $hostInfo->memory   = '';
 $hostInfo->diskSize = '';
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 r($zahost->updateTest($hostInfo)) && p('name:0')     && e('『名称』不能为空。');                   //测试名称不能为空
 r($zahost->updateTest($hostInfo)) && p('cpuCores:0') && e('『单CPU核心数』不能为空。');            //测试单CPU核心数不能为空
 r($zahost->updateTest($hostInfo)) && p('cpuCores:1') && e('『单CPU核心数』应当大于『0』。');       //测试单CPU核心数应当大于0

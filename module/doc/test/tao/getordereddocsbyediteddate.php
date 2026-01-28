@@ -27,7 +27,7 @@ cid=16174
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
@@ -44,7 +44,7 @@ $allLibIDList[1] = range(1, 20);
 $allLibIDList[2] = range(21, 40);
 $allLibIDList[3] = range(31, 40);
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 r($docTester->getOrderedDocsByEditedDateTest($hasPrivDocIdList[0], $allLibIDList[0])) && p()           && e('0');              // 获取没有可查看文档、没有可查看文档库、按照编辑日期倒序排列的文档列表
 r($docTester->getOrderedDocsByEditedDateTest($hasPrivDocIdList[0], $allLibIDList[1])) && p()           && e('0');              // 获取没有可查看文档、有可查看文档库、按照编辑日期倒序排列的文档列表
 r($docTester->getOrderedDocsByEditedDateTest($hasPrivDocIdList[0], $allLibIDList[2])) && p()           && e('0');              // 获取没有可查看文档、有可查看文档库、按照编辑日期倒序排列的文档列表

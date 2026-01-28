@@ -68,8 +68,15 @@ window.deleteMessage = function(obj)
     renderMessage();
 };
 
-window.clickMessage = function(obj)
+window.clickMessage = function(obj, event)
 {
+    // Prevent default link behavior to avoid double navigation
+    if(event)
+    {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     let $obj = $(obj);
     let url  = $obj.attr('data-url').replace(/\?onlybody=yes/g, '').replace(/\&onlybody=yes/g, '');
     markRead(obj);

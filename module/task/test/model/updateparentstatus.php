@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -61,7 +61,7 @@ zenData('project')->loadYaml('project')->gen(1);
 
 su('user1');
 $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
-$task = new taskTest();
+$task = new taskModelTest();
 
 /**
 doing           + done   = doing

@@ -19,7 +19,7 @@ cid=18465
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -40,7 +40,7 @@ $plans[2][2]->branch = 3;
 $plans[2][3] = new stdclass();
 $plans[2][3]->branch = 3;
 
-$story    = new storyTest();
+$story    = new storyModelTest();
 $stories1 = $story->batchChangeBranchTest($storyIdList, 2);
 $stories2 = $story->batchChangeBranchTest($storyIdList, 3, 'yes', $plans);
 

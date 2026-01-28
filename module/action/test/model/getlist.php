@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action')->gen(99);
 zenData('actionrecent')->gen(0);
@@ -131,7 +131,7 @@ $testtaskID  = array(1, 2, 3);
 $executionID = array(101, 102, 103, 104);
 $projectID   = array(11, 12, 13, 14);
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 // 操作以 linked2 或 unlinked2 开头
 r($action->getListTest($objectType[0], $storyID[0]))  && p() && e('nochanged'); // 测试获取对象类型 story 对象ID 1 的动态信息

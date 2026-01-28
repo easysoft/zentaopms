@@ -16,14 +16,14 @@ cid=18119
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(4);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoTaoTest();
 
 r($repoTest->getMatchedReposByUrlTest('http://github.com/example/test.git')) && p() && e('0');
 r($repoTest->getMatchedReposByUrlTest('https://bitbucket.org/example/test.git')) && p() && e('0');

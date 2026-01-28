@@ -16,14 +16,14 @@ cid=15375
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('bug')->loadYaml('closedby')->gen(20);
 
 su('admin');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getDataOfClosedBugsPerUserTest()) && p('admin:value') && e('8'); // 测试步骤1：测试admin用户关闭bug的数量
 r($bug->getDataOfClosedBugsPerUserTest()) && p('user1:value') && e('5'); // 测试步骤2：测试user1用户关闭bug的数量

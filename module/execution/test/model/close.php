@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('action')->gen(0);
 zenData('user')->gen(5);
 su('admin');
@@ -36,7 +36,7 @@ cid=16285
 $executionIDList = array(2, 3, 4, 6);
 $noRealEnd       = array('realEnd' => '');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->closeTest($executionIDList[0]))                && p('')                && e('1');                          // 敏捷执行关闭
 r($executionTester->closeTest($executionIDList[1]))                && p('')                && e('2');                          // 瀑布执行关闭
 r($executionTester->closeTest($executionIDList[2]))                && p('')                && e('3');                          // 看板执行关闭

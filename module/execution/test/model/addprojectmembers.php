@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -50,7 +50,7 @@ $projectIDList   = array(2, 3, 4);
 $executionIDList = array(5, 6, 7);
 $count           = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->addProjectMembersTest($projectIDList[0], $executionIDList[0], $count[0])) && p('0:account,role') && e('admin,研发'); // 敏捷项目根据执行添加团队信息
 r($executionTester->addProjectMembersTest($projectIDList[1], $executionIDList[1], $count[0])) && p('0:account,role') && e('admin,研发'); // 瀑布项目根据执行添加团队信息
 r($executionTester->addProjectMembersTest($projectIDList[2], $executionIDList[2], $count[0])) && p('0:account,role') && e('admin,研发'); // 看板项目根据执行添加团队信息

@@ -26,7 +26,7 @@ cid=16140
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doccontent')->gen(0);
@@ -50,7 +50,7 @@ $draftDoc           = array('lib' => $libIDs[3], 'title' => '新建我的草稿�
 $noLib              = array('lib' => $libIDs[0], 'title' => '无文档库',         'acl' => $acl[0]);
 $noTitle            = array('lib' => $libIDs[1], 'title' => '',                 'acl' => $acl[0]);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->insertSeperateDocsTest($createProductDoc))   && p('1:title')           && e('新建产品文档');            // 创建产品文档
 r($docTester->insertSeperateDocsTest($createProjectDoc))   && p('2:title')           && e('新建项目文档');            // 创建项目文档
 r($docTester->insertSeperateDocsTest($createExecutionDoc)) && p('3:title')           && e('新建执行文档');            // 创建执行文档

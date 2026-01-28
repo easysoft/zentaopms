@@ -17,7 +17,7 @@ cid=17089
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 创建测试数据
 su('admin');
@@ -26,7 +26,7 @@ su('admin');
 include_once dirname(__FILE__, 4) . '/metric/calc.class.php';
 
 // 3. 创建测试实例（变量名与模块名一致）
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 创建模拟的calculator对象，继承自baseCalc
 class testCalculator extends baseCalc

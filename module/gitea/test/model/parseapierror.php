@@ -15,9 +15,9 @@ cid=16569
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitea.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$giteaTest = new giteaTest();
+$giteaTest = new giteaModelTest();
 
 r($giteaTest->parseApiErrorTester('unknown error message')) && p('0') && e('unknown error message'); // 测试步骤1：解析未知错误消息
 r($giteaTest->parseApiErrorTester('The repository with the same name already exists.')) && p('name') && e('名称已存在。'); // 测试步骤2：解析已知API错误消息

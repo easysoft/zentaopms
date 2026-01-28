@@ -27,13 +27,13 @@ cid=19819
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('host')->loadYaml('host')->gen(1);
 zenData('user')->gen(5);
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $physicsRequiredTest = array();
 $physicsRequiredTest['hostType']      = 'physics';

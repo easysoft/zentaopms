@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -23,7 +23,7 @@ zenData('user')->gen(5);
 zenData('notify')->gen(0);
 
 global $tester;
-$messageTest = new messageTest();
+$messageTest = new messageModelTest();
 
 su('admin');
 

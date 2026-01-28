@@ -16,7 +16,7 @@ cid=15035
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_model');
 $table->id->range('1-10');
@@ -32,7 +32,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->getLanguageModelsTest())) && p() && e('8');
 r(count($aiTest->getLanguageModelsTest('gpt'))) && p() && e('2');

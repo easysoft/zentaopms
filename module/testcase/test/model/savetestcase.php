@@ -17,7 +17,7 @@ cid=19021
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 基础数据准备
 zenData('product')->gen(3);
@@ -27,7 +27,7 @@ zenData('user')->gen(1);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 
@@ -54,7 +54,7 @@ $nodeID2 = $testcase2->tmpPId;
 $scene2 = isset($sceneIdList2[$nodeID2]['id']) ? $sceneIdList2[$nodeID2]['id'] : 0;
 r($scene2) && p() && e('5'); // 步骤2：测试tmpPId在sceneIdList中存在
 
-// 步骤3：测试tmpPId不存在于sceneIdList中的情况  
+// 步骤3：测试tmpPId不存在于sceneIdList中的情况
 $testcase3 = new stdclass();
 $testcase3->tmpPId = 'invalidKey';
 $sceneIdList3 = array('validKey' => array('id' => 20), 'anotherKey' => array('id' => 25));

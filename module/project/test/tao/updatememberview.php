@@ -17,9 +17,9 @@ cid=17921
 
 try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/tao.class.php';
     su('admin');
-    $projectTest = new projectTest();
+    $projectTest = new projectTaoTest();
 } catch(Exception $e) {
     // 如果初始化失败，使用简化的测试类
     class projectTest
@@ -31,7 +31,7 @@ try {
             return 'TABLE_NOT_EXISTS';
         }
     }
-    $projectTest = new projectTest();
+    $projectTest = new projectTaoTest();
 }
 
 r($projectTest->updateMemberViewTest(1, array('admin', 'user1'), array())) && p() && e('TABLE_NOT_EXISTS');

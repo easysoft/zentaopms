@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -70,7 +70,7 @@ $svn = array(
     'desc'           => '',
 );
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 r($repo->createTest($gitlab))      && p('id')     && e('1');                                                                                         //正常创建gitlab版本库
 r($repo->createTest($gitlab))      && p('name:0') && e('『名称』已经有『zzxx』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); //当已有版本库时提示已有记录
 r($repo->createTest($gitea))       && p('client:0')    && e('『客户端』不能为空。');                                                                 //客户端为空创建gitea版本库

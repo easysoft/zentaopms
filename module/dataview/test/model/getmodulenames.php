@@ -20,11 +20,11 @@ cid=15954
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 r($dataviewTest->getModuleNamesTest(array('zt_bug', 'zt_project'))) && p('zt_bug,zt_project') && e('bug,project'); // 步骤1：正常表名转换测试
 r($dataviewTest->getModuleNamesTest(array())) && p() && e('0'); // 步骤2：空数组输入测试

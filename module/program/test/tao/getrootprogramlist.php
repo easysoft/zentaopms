@@ -37,12 +37,12 @@ cid=17719
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('program')->gen(40);
 su('admin');
 
-$tester = new programTest();
+$tester = new programTaoTest();
 $programList = $tester->program->getRootProgramList();
 
 r(count($programList)) && p() && e('10');

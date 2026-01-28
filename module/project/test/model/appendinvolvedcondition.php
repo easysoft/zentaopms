@@ -16,7 +16,7 @@ cid=17799
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $projectTable = zenData('project');
 $projectTable->id->range('1-5');
@@ -45,7 +45,7 @@ $stakeholderTable->gen(8);
 
 su('admin');
 
-$projectTest = new projectTest();
+$projectTest = new projectModelTest();
 
 r(!empty($projectTest->appendInvolvedConditionTest())) && p() && e('1'); // 测试步骤1：正常查询语句添加参与条件
 r(!empty($projectTest->appendInvolvedConditionTest(null))) && p() && e('1'); // 测试步骤2：空查询语句添加参与条件

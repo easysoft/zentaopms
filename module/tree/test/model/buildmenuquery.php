@@ -17,11 +17,11 @@ cid=19343
 
 - 测试查询root 43 type story 的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '43' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`
 
-- 测试查询root 101 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '101' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
+- 测试查询root 101 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '101' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
 
-- 测试查询root 102 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '102' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
+- 测试查询root 102 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '102' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
 
-- 测试查询root 103 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '103' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
+- 测试查询root 103 type task 的查询语句 @SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '103' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc
 
 - 测试查询root 41 type story startModule 1821的查询语句 @SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`
 
@@ -30,7 +30,7 @@ cid=19343
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(0);
 zenData('product')->gen(0);
@@ -41,7 +41,7 @@ $type        = array('story', 'task');
 $startModule = array(1821, 1982);
 $branch      = 1;
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->buildMenuQueryTest($root[0], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '1' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                 // 测试查询root 1 type story 的查询语句
 r($tree->buildMenuQueryTest($root[1], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '2' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                 // 测试查询root 2 type story 的查询语句
@@ -49,8 +49,8 @@ r($tree->buildMenuQueryTest($root[2], $type[0]))                           && p(
 r($tree->buildMenuQueryTest($root[3], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                // 测试查询root 41 type story 的查询语句
 r($tree->buildMenuQueryTest($root[4], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '42' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                // 测试查询root 42 type story 的查询语句
 r($tree->buildMenuQueryTest($root[5], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '43' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                // 测试查询root 43 type story 的查询语句
-r($tree->buildMenuQueryTest($root[6], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '101' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 101 type task 的查询语句
-r($tree->buildMenuQueryTest($root[7], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '102' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 102 type task 的查询语句
-r($tree->buildMenuQueryTest($root[8], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type FROM `zt_module` WHERE `root`  = '103' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 103 type task 的查询语句
+r($tree->buildMenuQueryTest($root[6], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '101' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 101 type task 的查询语句
+r($tree->buildMenuQueryTest($root[7], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '102' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 102 type task 的查询语句
+r($tree->buildMenuQueryTest($root[8], $type[1]))                           && p() && e("SELECT id, name, root, branch, grade, path, parent, owner, type, extra FROM `zt_module` WHERE `root`  = '103' AND  `type`  = 'task' AND  `deleted`  = '0' ORDER BY `grade` desc,`order`,`type` desc"); // 测试查询root 103 type task 的查询语句
 r($tree->buildMenuQueryTest($root[3], $type[0], $startModule[0]))          && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                                                     // 测试查询root 41 type story startModule 1821的查询语句
 r($tree->buildMenuQueryTest($root[3], $type[0], $startModule[1], $branch)) && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '41' AND ( `type` = 'story') AND  (branch  = '0' OR `branch`  = '1') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");             // 测试查询root 41 type story startModule 0 branch 1 的查询语句

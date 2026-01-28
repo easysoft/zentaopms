@@ -16,7 +16,7 @@ cid=18257
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('chart')->gen(0);
@@ -27,7 +27,7 @@ zenData('screen')->gen(0);
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 创建有SQL的图表对象
 $chartWithSQL = new stdclass();

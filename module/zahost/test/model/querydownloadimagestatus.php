@@ -17,7 +17,7 @@ cid=19755
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（这里不生成实际数据，在测试方法中模拟）
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例
-$zahostTest = new zahostTest();
+$zahostTest = new zahostModelTest();
 
 // 5. 测试步骤：必须包含至少5个测试步骤
 r($zahostTest->queryDownloadImageStatusTest((object)array('id' => 1, 'host' => 1, 'name' => 'ubuntu18.04', 'status' => 'creating'))) && p('id') && e('1'); // 步骤1：正常创建状态镜像

@@ -30,7 +30,7 @@ cid=15086
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/aiapp.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $miniPrograms = zenData('ai_miniprogram');
 $miniPrograms->id->range('1-3');
@@ -49,7 +49,7 @@ $miniPrograms->gen(3);
 
 su('admin');
 
-$aiappTest = new aiappTest();
+$aiappTest = new aiappModelTest();
 
 r($aiappTest->getSquareCategoryArrayTest(array('1', '2', '3'), 5)) && p('collection,discovery,latest') && e('我的收藏,发现,最新');
 r($aiappTest->getSquareCategoryArrayTest(array('1', '2'), 0)) && p('collection,discovery;latest') && e('我的收藏,发现;~~');

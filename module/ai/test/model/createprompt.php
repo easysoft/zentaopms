@@ -17,10 +17,10 @@ cid=15013
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$ai_prompt = zenData('ai_prompt');
+$ai_prompt = zenData('ai_agent');
 $ai_prompt->id->range('1');
 $ai_prompt->name->range('existing_prompt');
 $ai_prompt->desc->range('这是一个已存在的提示词');
@@ -37,7 +37,7 @@ $action->gen(0);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($aiTest->createPromptTest((object)array('name' => 'test_new_prompt', 'desc' => '新测试提示词'))) && p() && e('2'); // 步骤1：正常情况创建成功

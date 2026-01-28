@@ -39,7 +39,7 @@ cid=16156
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doccontent')->gen(50);
 zenData('doc')->loadYaml('doc')->gen(50);
@@ -61,7 +61,7 @@ $mineDoc            = array('lib' => $libIDs[4], 'title' => '修改我的文档'
 $customDoc          = array('lib' => $libIDs[5], 'title' => '修改自定义文档', 'acl' => $acl[2], 'groups' => $groups, 'users' => $users);
 $noTitle            = array('lib' => $libIDs[0], 'title' => '',               'acl' => $acl[0]);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->updateTest($docIDs[0], $updateProductDoc))   && p('0:field,old,new') && e('title,文档标题41,修改产品文档');   // 修改产品文档
 r($docTester->updateTest($docIDs[1], $updateProjectDoc))   && p('0:field,old,new') && e('title,文档标题31,修改项目文档');   // 修改项目文档
 r($docTester->updateTest($docIDs[2], $updateExecutionDoc)) && p('0:field,old,new') && e('module,3,0');                      // 修改执行文档

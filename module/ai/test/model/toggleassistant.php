@@ -17,7 +17,7 @@ cid=15069
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('ai_assistant');
@@ -49,7 +49,7 @@ $modelTable->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 执行测试步骤（必须至少5个）
 r($aiTest->toggleAssistantTest(1, true)) && p() && e('1'); // 步骤1：启用已禁用的助手

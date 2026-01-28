@@ -815,10 +815,19 @@ class commonModel extends model
                         if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                         /* Parse drop menu link. */
-                        $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                        if(!empty($dropMenuItem['links']))
+                        {
+                            $dropMenuLink = common::getHasPrivLink($dropMenuItem);
+                            if(empty($dropMenuLink)) continue;
 
-                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
-                        if(!common::hasPriv($subModule, $subMethod)) continue;
+                            list($subLabel, $subModule, $subMethod, $subParams) = $dropMenuLink;
+                        }
+                        else
+                        {
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            if(!common::hasPriv($subModule, $subMethod)) continue;
+                        }
 
                         $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
@@ -829,7 +838,9 @@ class commonModel extends model
                         {
                             $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
                             $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                            $subAlias   = zget($dropMenuItem, 'alias', '');
                             if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
+                            if(strpos(",$subAlias,", ",$currentModule-$currentMethod,") !== false) $activeMainMenu = true;
                         }
 
                         if($activeMainMenu) $activeMenu = $dropMenuName;
@@ -839,6 +850,37 @@ class commonModel extends model
         }
 
         return $activeMenu;
+    }
+
+    /**
+     * 获取有权限的链接。
+     * Get the authorized link.
+     *
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public static function getHasPrivLink(array $menu): array
+    {
+        if(empty($menu['link'])) return array();
+
+        list($label, $module, $method, $params) = explode('|', $menu['link']);
+        if(common::hasPriv($module, $method)) return array($label, $module, $method, $params);
+
+        if(empty($menu['links'])) return array();
+
+        $link = array();
+        foreach($menu['links'] as $menuLink)
+        {
+            list($module, $method, $params) = explode('|', $menuLink);
+            if(common::hasPriv($module, $method))
+            {
+                $link = array($label, $module, $method, $params);
+                break;
+            }
+        }
+
+        return $link;
     }
 
     /**
@@ -1464,15 +1506,6 @@ eof;
             if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
             if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
-            if(isset($projectPrivs->story))
-            {
-                foreach($projectPrivs->story as $method => $label)
-                {
-                    $method = strtolower($method);
-                    $rights['story'][$method] = 1;
-                }
-            }
-
             $this->app->user->rights['rights'] = $rights;
         }
     }
@@ -1884,11 +1917,16 @@ eof;
 
         /* Check the project is closed. */
         $productModuleList = array('story', 'bug', 'testcase', 'case', 'testtask', 'release');
-        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
+        if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and (empty($config->CRProject) || empty($config->CRExecution)))
         {
             if(!isset($projectsStatus[$object->project]))
             {
                 $project = $commonModel->loadModel('project')->getByID((int)$object->project);
+                if($project && $project->status == 'closed')
+                {
+                    /* 有的表项目和执行都存在project里。 */
+                    return $project->type == 'project' ? !empty($config->CRProject) : !empty($config->CRExecution);
+                }
                 $projectsStatus[$object->project] = $project ? $project->status : '';
             }
             if($projectsStatus[$object->project] == 'closed') return false;
@@ -2300,6 +2338,10 @@ eof;
 
             $link = sprintf($menu['link'], $objectID);
             $menu['link'] = vsprintf($link, $params);
+            if(!empty($menu['links']))
+            {
+                foreach($menu['links'] as $key => $link) $menu['links'][$key] = sprintf($link, $objectID);
+            }
         }
         else
         {
@@ -2596,7 +2638,7 @@ eof;
 
         if(!empty($actionData['notLoadModel']) && $moduleName != $rawModule) $moduleName = $rawModule;
         if(!isset($this->$moduleName)) $this->loadModel($moduleName);
-        if(isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
+        if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 
         if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';

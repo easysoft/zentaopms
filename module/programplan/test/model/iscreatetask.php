@@ -16,7 +16,7 @@ cid=17752
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project')->gen(5);
 zenData('project')->loadYaml('stage')->gen(5, $isClear = false);
@@ -28,7 +28,7 @@ $task->gen(10);
 
 su('admin');
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 r($programplan->isCreateTaskTest(-1)) && p() && e('1');
 r($programplan->isCreateTaskTest(0)) && p() && e('1');
 r($programplan->isCreateTaskTest(1)) && p() && e('0');

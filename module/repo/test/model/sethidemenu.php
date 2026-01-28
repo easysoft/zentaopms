@@ -17,7 +17,7 @@ cid=18103
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 数据准备 - 直接插入数据，避免zenData配置问题
 global $tester;
@@ -56,7 +56,7 @@ foreach($projects as $project) {
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 5. 测试步骤（必须包含至少5个测试步骤）
 $tester->session->set('repoID', 1);

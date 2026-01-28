@@ -19,7 +19,7 @@ cid=17395
 $useStandardFramework = false;
 try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/model.class.php';
 
     // 准备测试数据
     global $tester;
@@ -52,7 +52,7 @@ try {
     }
 
     su('admin');
-    $pivotTest = new pivotTest();
+    $pivotTest = new pivotModelTest();
     $useStandardFramework = true;
 } catch (Throwable $e) {
     $useStandardFramework = false;
@@ -155,7 +155,7 @@ if(!$useStandardFramework) {
             }
         }
     }
-    $pivotTest = new pivotTest();
+    $pivotTest = new pivotModelTest();
 }
 
 // 执行测试步骤

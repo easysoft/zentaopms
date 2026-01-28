@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=14886
 
 */
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->formatActionCommentTest("Simple text")) && p() && e("Simple text"); // 测试纯文本处理
 r($actionTest->formatActionCommentTest("<p>This is a <strong>formatted</strong> text.</p>")) && p() && e("<p>This is a <strong>formatted</strong> text.</p>"); // 测试HTML标签保留

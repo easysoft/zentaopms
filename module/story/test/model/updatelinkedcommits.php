@@ -16,7 +16,7 @@ cid=18594
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('story')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -24,7 +24,7 @@ zenData('relation')->gen(0);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->updateLinkedCommitsTest(1, 1, array(123, 456))) && p() && e(1);
 r($storyTest->updateLinkedCommitsTest(0, 1, array(123))) && p() && e(1);

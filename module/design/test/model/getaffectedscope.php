@@ -16,14 +16,14 @@ cid=15986
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(2);
 zenData('task')->loadYaml('task')->gen(5);
 
 $idList = array(0, 1, 2, 3);
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->getAffectedScopeTest($idList[0])) && p()                   && e('0');                   // 测试设计ID为0时，受影响的任务信息
 r($designTester->getAffectedScopeTest($idList[1])) && p('1:id,name,design') && e('4,关联设计的任务4,1'); // 测试设计ID为1时，受影响的任务信息
 r($designTester->getAffectedScopeTest($idList[2])) && p()                   && e('0');                   // 测试设计ID为2时，受影响的任务信息

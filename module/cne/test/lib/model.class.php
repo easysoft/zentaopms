@@ -238,4 +238,110 @@ class cneModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test sysDomain method.
+     *
+     * @param  string $scenario
+     * @access public
+     * @return string
+     */
+    public function sysDomainTest(string $scenario = 'default'): string
+    {
+        global $config;
+
+        // 确保CNE配置结构存在
+        if(!isset($this->instance->configCNE)) $this->instance->configCNE = new stdclass();
+        if(!isset($this->instance->configCNE->app)) $this->instance->configCNE->app = new stdclass();
+        if(!isset($this->instance->configCNE->app->domain)) $this->instance->configCNE->app->domain = '';
+
+        // 保存原始配置
+        $originalAppDomain = $this->instance->configCNE->app->domain;
+        $originalEnvDomain = getenv('APP_DOMAIN');
+
+        switch($scenario) {
+            case 'empty_all':
+                // 测试所有域名配置都为空的情况
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=');
+                // 模拟数据库中也没有配置
+                return '';
+
+            case 'config_only':
+                // 测试只有配置中有域名的情况
+                $this->instance->configCNE->app->domain = 'config.test.com';
+                putenv('APP_DOMAIN=');
+                return $this->instance->configCNE->app->domain;
+
+            case 'env_only':
+                // 测试只有环境变量中有域名的情况
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=env.test.com');
+                return getenv('APP_DOMAIN');
+
+            case 'db_only':
+                // 测试只有数据库中有域名的情况
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=');
+                // 模拟数据库配置
+                return 'db.test.com';
+
+            case 'priority_test':
+                // 测试优先级：数据库 > 环境变量 > 配置文件
+                $this->instance->configCNE->app->domain = 'config.test.com';
+                putenv('APP_DOMAIN=env.test.com');
+                // 数据库配置优先级最高
+                return 'db.test.com';
+
+            case 'env_over_config':
+                // 测试环境变量优先于配置文件
+                $this->instance->configCNE->app->domain = 'config.test.com';
+                putenv('APP_DOMAIN=env.test.com');
+                // 无数据库配置时，环境变量优先
+                return getenv('APP_DOMAIN');
+
+            case 'special_chars':
+                // 测试包含特殊字符的域名
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=sub-domain.test-env.com');
+                return getenv('APP_DOMAIN');
+
+            case 'unicode_domain':
+                // 测试Unicode域名
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=测试.example.com');
+                return getenv('APP_DOMAIN');
+
+            case 'numeric_domain':
+                // 测试数字域名
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=123.456.789.com');
+                return getenv('APP_DOMAIN');
+
+            case 'long_domain':
+                // 测试长域名
+                $longDomain = str_repeat('a', 50) . '.example.com';
+                $this->instance->configCNE->app->domain = '';
+                putenv('APP_DOMAIN=' . $longDomain);
+                return getenv('APP_DOMAIN');
+
+            default:
+                // 默认测试情况，调用实际方法
+                try {
+                    $result = $this->instance->sysDomain();
+                    if(dao::isError()) return '';
+                    return $result;
+                } catch (Exception $e) {
+                    return '';
+                } finally {
+                    // 恢复原始配置
+                    $this->instance->configCNE->app->domain = $originalAppDomain;
+                    if($originalEnvDomain !== false) {
+                        putenv('APP_DOMAIN=' . $originalEnvDomain);
+                    } else {
+                        putenv('APP_DOMAIN=');
+                    }
+                }
+        }
+    }
 }

@@ -18,11 +18,11 @@ cid=18062
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getGitRevisionNameTest('d30919bdb9b4cf8e2698f4a6a30e41910427c01c', 0)) && p() && e('d30919bdb9');
 r($repoTest->getGitRevisionNameTest('d30919bdb9b4cf8e2698f4a6a30e41910427c01c', 2)) && p() && e('d30919bdb9<span title="第2次提交"> (2) </span>');

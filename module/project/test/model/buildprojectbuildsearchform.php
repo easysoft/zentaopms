@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('1-5');
@@ -41,7 +41,7 @@ cid=17802
 
 $queryIDList = array('0', '1');
 
-$project = new projectTest();
+$project = new projectModelTest();
 r($project->buildProjectBuildSearchFormTest(0, 0, 'project'))   && p() && e('0'); // 不传递项目ID
 r($project->buildProjectBuildSearchFormTest(100, 0, 'project')) && p() && e('0'); // 项目ID不存在
 

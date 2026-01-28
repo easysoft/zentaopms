@@ -193,7 +193,10 @@ $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
 $lang->action->objectTypes['system']           = $lang->product->system;
-$lang->action->objectTypes['deliverable']      = '交付物';
+$lang->action->objectTypes['deliverable']      = '交付物类型';
+$lang->action->objectTypes['cm']               = '基线';
+$lang->action->objectTypes['baseline']         = '基线';
+$lang->action->objectTypes['projectchange']    = '项目变更';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -942,7 +945,6 @@ $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
-$lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 $lang->action->label->module       = '模块|tree|browse|productid=%s&view=story&currentModuleID=0&branch=all';
 $lang->action->label->ticket       = '工单|ticket|view|id=%s';
 $lang->action->label->chartgroup   = '分组';
@@ -953,7 +955,7 @@ $lang->action->label->instance     = '服务|instance|view|id=%s';
 $lang->action->label->prompt       = '禅道智能体|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = '通用智能体|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = '节假日|holiday|browse|';
-$lang->action->label->deliverable  = '交付物|deliverable|view|id=%s';
+$lang->action->label->deliverable  = '交付物类型|deliverable|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

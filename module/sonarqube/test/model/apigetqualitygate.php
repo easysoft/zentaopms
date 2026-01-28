@@ -18,7 +18,7 @@ cid=18378
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('pipeline');
@@ -35,7 +35,7 @@ $table->gen(5);
 su('admin');
 
 // 创建测试实例
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 // 测试步骤1：无效的sonarqubeID和空项目key
 r($sonarqubeTest->apiGetQualitygateTest(0, '')) && p() && e('return empty');

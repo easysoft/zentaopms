@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('config')->gen(7);
@@ -93,7 +93,7 @@ cid=18365
 
 */
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 $params     = array();
 $params[0]  = "vision=rnd&owner=system&module=common&section=global&key=version";

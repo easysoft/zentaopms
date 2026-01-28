@@ -200,10 +200,17 @@ class blockZen extends block
         foreach($blocks as $key => $block)
         {
             /* 将没有开启功能区块过虑。 */
-            if($block->code == 'waterfallrisk'  && !helper::hasFeature('waterfall_risk'))  continue;
-            if($block->code == 'waterfallissue' && !helper::hasFeature('waterfall_issue')) continue;
-            if($block->code == 'scrumrisk'      && !helper::hasFeature('scrum_risk'))      continue;
-            if($block->code == 'scrumissue'     && !helper::hasFeature('scrum_issue'))     continue;
+            if(!helper::hasFeature('project_risk') && ($block->code == 'waterfallrisk'  || $block->code == 'scrumrisk'))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
+            if(!helper::hasFeature('project_issue') && ($block->code == 'waterfallissue' || $block->code == 'scrumissue'))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
 
             /* 过滤目前已经不存在的区块。 */
             if(!isset($this->lang->block->moduleList[$block->code]) && !isset($this->lang->block->modules[$block->module]->availableBlocks[$block->code]))
@@ -214,7 +221,7 @@ class blockZen extends block
 
             /* 将没有视图权限的区块过滤。 */
             $module = $block->module;
-            if($module == 'scrumproject' || $module == 'waterfallproject') $module = 'project';
+            if(in_array($module, array('scrumproject', 'waterfallproject', 'waterfallplusproject', 'agileplusproject', 'ipdproject'))) $module = 'project';
             if($module == 'singleproduct') $module = 'product';
             if(!empty($module) && !in_array($module, array('welcome', 'guide', 'assigntome', 'zentaodynamic', 'teamachievement', 'dynamic', 'html')) && !empty($acls['views']) && !isset($acls['views'][$module]))
             {
@@ -2058,9 +2065,9 @@ class blockZen extends block
      *
      * @param  object    $block
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function printAssignToMeBlock(object $block): void
+    protected function printAssignToMeBlock(object $block): array
     {
         $hasIssue    = helper::hasFeature('issue');
         $hasRisk     = helper::hasFeature('risk');
@@ -2098,13 +2105,14 @@ class blockZen extends block
         if((common::hasPriv('task',  'view') && $this->config->vision == 'rnd') || (common::hasPriv('researchtask', 'view') && $this->config->vision == 'or')) $hasViewPriv['task'] = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                   $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')         $hasViewPriv['requirement'] = true;
-        if(common::hasPriv('bug',   'view')     && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['bug']         = true;
-        if(common::hasPriv('testcase', 'view')  && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testcase']    = true;
-        if(common::hasPriv('testtask', 'cases') && !in_array($this->config->vision, array('lite', 'or')))         $hasViewPriv['testtask']    = true;
-        if(common::hasPriv('risk',  'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
-        if(common::hasPriv('issue', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
-        if(common::hasPriv('meeting', 'view')   && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
-        if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                                  $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('bug',   'view')       && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['bug']         = true;
+        if(common::hasPriv('testcase', 'view')    && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testcase']    = true;
+        if(common::hasPriv('testtask', 'cases')   && !in_array($this->config->vision, array('lite', 'or')))       $hasViewPriv['testtask']    = true;
+        if(common::hasPriv('risk', 'view')        && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['risk']        = true;
+        if(common::hasPriv('reviewissue', 'view') && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasRisk)    $hasViewPriv['reviewissue'] = true;
+        if(common::hasPriv('issue', 'view')       && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasIssue)   $hasViewPriv['issue']       = true;
+        if(common::hasPriv('meeting', 'view')     && in_array($this->config->edition, array('max', 'ipd')) && !in_array($this->config->vision, array('lite', 'or')) && $hasMeeting) $hasViewPriv['meeting']     = true;
+        if((common::hasPriv('feedback', 'view') || common::hasPriv('feedback', 'adminView')) && in_array($this->config->edition, array('max', 'biz', 'ipd')))                       $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view')    && in_array($this->config->edition, array('max', 'biz', 'ipd')) && $this->config->vision != 'or') $hasViewPriv['ticket']   = true;
 
         $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
@@ -2112,7 +2120,7 @@ class blockZen extends block
         {
             if($hasRisk) $objectList += array('risk' => 'risks');
             if($hasIssue) $objectList += array('issue' => 'issues');
-            $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
+            $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets', 'reviewissue' => 'reviewissues');
             if($this->config->edition == 'ipd' && $this->config->vision == 'or') $objectList += array('demand' => 'demands');
         }
 
@@ -2129,7 +2137,7 @@ class blockZen extends block
                 ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
-                ->beginIF($objectType == 'issue' || $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
+                ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
                 ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
@@ -2141,12 +2149,12 @@ class blockZen extends block
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
-                ->beginIF($objectType == 'issue' || $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($objectType == 'ticket')->andWhere('t1.status')->in('wait,doing,done')->fi()
                 ->beginIF($objectType == 'demand')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
-                ->fetchAll();
+                ->fetchAll('id', false);
 
             if($objectType == 'todo')
             {
@@ -2196,9 +2204,10 @@ class blockZen extends block
                 }
             }
 
-            if($objectType == 'bug')   $this->app->loadLang('bug');
-            if($objectType == 'risk')  $this->app->loadLang('risk');
-            if($objectType == 'issue') $this->app->loadLang('issue');
+            if($objectType == 'bug')         $this->app->loadLang('bug');
+            if($objectType == 'risk')        $this->app->loadLang('risk');
+            if($objectType == 'reviewissue') $this->app->loadLang('reviewissue');
+            if($objectType == 'issue')       $this->app->loadLang('issue');
 
             if($objectType == 'feedback' || $objectType == 'ticket')
             {
@@ -2247,6 +2256,7 @@ class blockZen extends block
         $this->view->products       = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->projects       = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->count          = $count;
+        return $count;
     }
 
     /**

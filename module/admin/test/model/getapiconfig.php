@@ -17,11 +17,11 @@ cid=14979
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$admin = new adminTest();
+$admin = new adminModelTest();
 
 r($admin->getApiConfigTest()) && p() && e('null');
 r($admin->getApiConfigWithCacheTest()) && p() && e('cached_config');

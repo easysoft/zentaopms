@@ -8,133 +8,133 @@ fields:
 - field: id
   note: 用户ID
   range: 1-10
-  
+
 - field: account
   note: 用户账号
   range: admin{1}, user1{1}, user2{1}, user3{1}, tester{1}, developer{1}, manager{1}, guest{1}, qa{1}, pm{1}
-  
+
 - field: password
   note: 用户密码
   range: 098f6bcd4621d373cade4e832627b4f6{10}
-  
+
 - field: role
   note: 用户角色
   range: admin{1}, top{1}, dev{3}, qa{2}, pm{2}, others{1}
-  
+
 - field: dept
   note: 部门ID
   range: 1{3}, 2{3}, 3{2}, 4{2}
-  
+
 - field: realname
   note: 真实姓名
   range: 管理员{1}, 用户一{1}, 用户二{1}, 用户三{1}, 测试员{1}, 开发者{1}, 经理{1}, 访客{1}, QA{1}, PM{1}
-  
+
 - field: nickname
   note: 昵称
   range: Admin{1}, User1{1}, User2{1}, User3{1}, Tester{1}, Dev{1}, Manager{1}, Guest{1}, QA{1}, PM{1}
-  
+
 - field: commiter
   note: 提交者标识
   range: admin{1}, user1{1}, user2{1}, []{7}
-  
+
 - field: avatar
   note: 头像
   range: []{10}
-  
+
 - field: birthday
   note: 生日
   range: 0000-00-00{5}, (-30Y)-(-20Y):365d{5}
   format: YYYY-MM-DD
-  
+
 - field: gender
   note: 性别
   range: m{5}, f{3}, []{2}
-  
+
 - field: email
   note: 电子邮件
   range: admin@zentao.com{1}, user1@zentao.com{1}, user2@zentao.com{1}, user3@zentao.com{1}, test@zentao.com{6}
-  
+
 - field: skype
   note: Skype账号
   range: []{10}
-  
+
 - field: qq
   note: QQ号码
   range: []{8}, 123456789{1}, 987654321{1}
-  
+
 - field: yahoo
   note: Yahoo账号
   range: []{10}
-  
+
 - field: gtalk
   note: GTalk账号
   range: []{10}
-  
+
 - field: wangwang
   note: 旺旺账号
   range: []{10}
-  
+
 - field: mobile
   note: 手机号码
   range: []{7}, 13800138000{1}, 15900159000{1}, 18600186000{1}
-  
+
 - field: phone
   note: 电话号码
   range: []{8}, 020-12345678{1}, 010-87654321{1}
-  
+
 - field: address
   note: 地址
   range: []{8}, 广州市天河区{1}, 北京市朝阳区{1}
-  
+
 - field: zipcode
   note: 邮政编码
   range: []{8}, 510000{1}, 100000{1}
-  
+
 - field: join
   note: 入职时间
   range: (-365d)-(-30d):30d
   format: YYYY-MM-DD
-  
+
 - field: visits
   note: 访问次数
   range: 0{2}, 1-100:R{8}
-  
+
 - field: ip
   note: IP地址
   range: []{5}, 192.168.1.100{2}, 127.0.0.1{3}
-  
+
 - field: last
   note: 最后登录时间
   range: 0{2}, (-30d)-(0d):1d{8}
-  
+
 - field: fails
   note: 登录失败次数
   range: 0{8}, 1{1}, 2{1}
-  
+
 - field: locked
   note: 锁定时间
   range: 0000-00-00 00:00:00{10}
-  
+
 - field: feedback
   note: 反馈设置
   range: 0{5}, 1{5}
-  
+
 - field: ranzhi
   note: 然之集成账号
   range: []{10}
-  
+
 - field: ldap
   note: LDAP账号
   range: []{10}
-  
+
 - field: score
   note: 积分
   range: 0{10}
-  
+
 - field: scoreLevel
   note: 积分等级
   range: 0{10}
-  
+
 - field: deleted
   note: 删除状态
   range: 0{9}, 1{1}

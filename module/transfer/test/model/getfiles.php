@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('file')->gen(10);
 su('admin');
 
@@ -33,7 +33,7 @@ $file8->id = 8;
 
 $rows = array(1 => $file1, 2 => $file2, 3 => $file3, 7 => $file7, 8 => $file8);
 
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 r($transfer->getFilesTest('bug', $rows, 2))   && p('') && e("File isset"); // 测试ID为2的bug附件是否存在
 r($transfer->getFilesTest('bug', $rows, 3))   && p('') && e("No File");    // 测试ID为3的bug附件是否存在
 r($transfer->getFilesTest('task', $rows, 1))  && p('') && e("File isset"); // 测试ID为1的task附件是否存在

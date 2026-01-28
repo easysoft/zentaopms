@@ -25,11 +25,11 @@ cid=19455
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 su('admin');
 r($tutorial->getProjectTest()) && p('id,type,PM,PO,QD,RD') && e('2,project,admin,admin,admin,admin'); // 测试是否能拿到 admin 的数据

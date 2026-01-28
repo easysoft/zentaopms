@@ -20,7 +20,7 @@ cid=16107
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $storyTable = zenData('story');
 $storyTable->product->range('1-5');
@@ -76,7 +76,7 @@ $products   = array(0 ,1, 2);
 $projects   = array(0, 11, 60);
 $executions = array(0, 101, 106);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLinkedObjectDataTest($types[0], $products[0]))   && p()          && e('0');                                                                      // 测试传入错误的type
 r($docTester->getLinkedObjectDataTest($types[1], $products[1]))   && p('4')       && e("SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'"); // 获取开源版关联产品ID=1的数据
 r($docTester->getLinkedObjectDataTest($types[1], $products[2]))   && p('4')       && e("SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'"); // 获取开源版关联产品ID=2的数据

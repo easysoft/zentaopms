@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -19,7 +19,7 @@ cid=16321
 
 $count = array('0', '1');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getKanbanSettingTest($count[0])) && p('colorList:wait') && e('~f:7EC5FF$~'); // 步骤1：验证colorList中wait颜色配置
 r($execution->getKanbanSettingTest($count[1])) && p()                 && e('6');           // 步骤2：验证colorList总数量
 r($execution->getKanbanSettingTest('allCols')) && p()                 && e('1');           // 步骤3：验证默认allCols属性值

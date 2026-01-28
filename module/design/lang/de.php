@@ -82,3 +82,4 @@ $lang->design->confirmDelete  = 'Do you want to delete this design?';
 $lang->design->confirmUnlink  = 'Are you sure you want to remove this submission?';
 $lang->design->errorDate      = 'The start date can not be greater than the end date.';
 $lang->design->deleted        = 'Deleted';
+$lang->design->frozenTip      = 'After the design are baselined, %s is not allowed.';

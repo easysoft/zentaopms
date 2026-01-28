@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=16572
 zenData('pipeline')->gen(5);
 zenData('repo')->gen(2);
 
-$gitlab = new gitlabTest();
+$gitlab = new gitlabModelTest();
 
 $token  = '';
 $_SERVER['REQUEST_URI'] = 'http://unittest/';

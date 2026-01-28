@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -21,7 +21,7 @@ cid=18288
 
 */
 
-$screen = new screenTest();
+$screen = new screenTaoTest();
 
 $typeList = array('line', 'table', 'bar', 'pie', 'piecircle', 'waterpolo', 'radar', 'funnel', 'xlabel');
 

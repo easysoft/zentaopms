@@ -17,7 +17,7 @@ cid=16781
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('instance')->gen(0);
@@ -27,7 +27,7 @@ zenData('space')->gen(0);
 su('admin');
 
 // 4. 创建测试实例
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 // 5. 创建测试实例对象
 $instance1 = new stdClass();

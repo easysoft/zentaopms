@@ -6,129 +6,129 @@ fields:
 - field: id
   note: 产品ID
   range: 1-10
-  
+
 - field: program
   note: 项目集ID
   range: 1-3
-  
+
 - field: name
   note: 产品名称
   range: "产品A,产品B,产品C,产品D,产品E,Shadow产品,Workflow产品,Feedback产品,Project产品,Normal产品"
-  
+
 - field: code
   note: 产品代码
   range: "PRODA,PRODB,PRODC,PRODD,PRODE,SHADOWS,WORKFLOW,FEEDBACK,PROJECT,NORMAL"
-  
+
 - field: shadow
   note: 影子产品标识
   range: 0{8},1{2}
-  
+
 - field: bind
   note: 绑定标识
   range: "0"
-  
+
 - field: line
   note: 产品线ID
   range: 0-2
-  
+
 - field: type
   note: 产品类型
   range: "normal{8},branch{2}"
-  
+
 - field: status
   note: 产品状态
   range: "normal{7},closed{3}"
-  
+
 - field: subStatus
   note: 子状态
   range: ""
-  
+
 - field: desc
   note: 产品描述
   range: "这是产品A的描述,这是产品B的描述,这是产品C的描述,这是产品D的描述,这是产品E的描述,这是Shadow产品的描述,这是Workflow产品的描述,这是Feedback产品的描述,这是Project产品的描述,这是Normal产品的描述"
-  
+
 - field: PO
   note: 产品负责人
   range: "admin,user1,user2,user3"
-  
+
 - field: QD
   note: 测试负责人
   range: "admin,user1,user2"
-  
+
 - field: RD
   note: 发布负责人
   range: "admin,user1,user2"
-  
+
 - field: feedback
   note: 反馈负责人
   range: "admin,user1"
-  
+
 - field: ticket
   note: 工单负责人
   range: "admin"
-  
+
 - field: workflowGroup
   note: 工作流组
   range: 0{8},1{2}
-  
+
 - field: acl
   note: 访问控制
   range: "open{6},private{2},custom{2}"
-  
+
 - field: groups
   note: 用户组
   range: "1,2,3,1,2,2,3,1,2,3"
-  
+
 - field: whitelist
   note: 白名单
   range: "admin,user1,admin,user2,admin,user1,user2,admin,user1,admin"
-  
+
 - field: reviewer
   note: 评审人员
   range: "admin,user1,admin,user2,admin,user1,user2,admin,user1,admin"
-  
+
 - field: PMT
   note: PMT成员
   range: "admin,user1,admin,user2,admin,user1,user2,admin,user1,admin"
-  
+
 - field: draftEpics
   note: 草稿史诗数量
   range: 0-5
-  
+
 - field: activeEpics
   note: 激活史诗数量
   range: 0-8
-  
+
 - field: changingEpics
   note: 变更史诗数量
   range: 0-3
-  
+
 - field: order
   note: 排序
   range: 10-50:5
-  
+
 - field: vision
   note: 视角
   range: "rnd"
-  
+
 - field: createdBy
   note: 创建者
   range: "admin,user1,user2"
-  
+
 - field: createdDate
   note: 创建时间
   range: "(-1M)-(0D):1D"
   format: "YYYY-MM-DD hh:mm:ss"
-  
+
 - field: editedBy
   note: 编辑者
   range: "admin,user1,user2"
-  
+
 - field: editedDate
   note: 编辑时间
   range: "(-1w)-(0D):1D"
   format: "YYYY-MM-DD hh:mm:ss"
-  
+
 - field: deleted
   note: 是否删除
   range: "0"

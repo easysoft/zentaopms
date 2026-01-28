@@ -17,7 +17,7 @@ cid=15838
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('project');
@@ -42,7 +42,7 @@ $userTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($convertTest->createExecutionTest(1001, 1, array(1001 => array((object)array('id' => 1, 'name' => 'Sprint 1', 'state' => 'active', 'goal' => 'Test sprint', 'startDate' => '2023-01-01T00:00:00.000+0000', 'endDate' => '2023-01-15T00:00:00.000+0000'))), array(1001 => array('jira_user1', 'jira_user2')))) && p('') && e('2'); // 步骤1：正常创建带Sprint的执行计划

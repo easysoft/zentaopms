@@ -16,7 +16,7 @@ cid=18500
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $productTable = zendata('product');
 $productTable->id->range('1-5');
@@ -47,10 +47,10 @@ $storyTable->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getByAssignedToTest(1, 0, '', 'admin'))) && p() && e('6'); // 步骤1：查询admin用户被分配的story（产品1中有6个admin的story）
-r(count($storyTest->getByAssignedToTest(1, 0, '', 'nonexist'))) && p() && e('0'); // 步骤2：查询不存在用户的story  
+r(count($storyTest->getByAssignedToTest(1, 0, '', 'nonexist'))) && p() && e('0'); // 步骤2：查询不存在用户的story
 r(count($storyTest->getByAssignedToTest(array(1, 2), 'all', '', 'user1'))) && p() && e('6'); // 步骤3：多产品全分支查询user1的story（user1有6个story）
 r(count($storyTest->getByAssignedToTest(1, 0, '', 'admin', 'story'))) && p() && e('6'); // 步骤4：查询admin的story类型需求（产品1中admin有6个story类型）
 r($storyTest->getByAssignedToTest(1, 0, '', 'admin', 'story', 'id_desc')) && p('15:id') && e('15'); // 步骤5：按ID倒序查询admin的story

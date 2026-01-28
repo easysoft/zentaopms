@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -27,7 +27,7 @@ cid=16272
 
 */
 
-$execution  = new executionTest();
+$execution  = new executionModelTest();
 r($execution->buildExecutionByStatusTest('wait'))      && p('status,closedBy,canceledBy') && e("wait,~~,~~");   // 测试传入未开始状态
 r($execution->buildExecutionByStatusTest('doing'))     && p('status,closedBy,canceledBy') && e("doing,~~,~~");  // 测试传入进行中状态
 r($execution->buildExecutionByStatusTest('suspended')) && p('status,closedBy')            && e('suspended,~~'); // 测试传入已挂起状态

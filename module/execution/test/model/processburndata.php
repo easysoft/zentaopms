@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 zenData('burn')->loadYaml('burn')->gen(15);
 
@@ -25,7 +25,7 @@ $begin           = array('2022-01-15','2022-03-22');
 $end             = array('2022-03-22','2022-01-15');
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->processBurnDataTest($executionIDList[0], $itemCounts[0], $begin[0], $end[0], $count[1])) && p() && e('30'); // 敏捷执行查询统计
 r($execution->processBurnDataTest($executionIDList[1], $itemCounts[1], $begin[0], $end[0], $count[1])) && p() && e('60'); // 瀑布执行查询统计
 r($execution->processBurnDataTest($executionIDList[2], $itemCounts[2], $begin[0], $end[0], $count[1])) && p() && e('67'); // 看板执行查询统计

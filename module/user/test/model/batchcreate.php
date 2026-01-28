@@ -35,7 +35,7 @@ cid=19579
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('company')->gen(1);
@@ -46,7 +46,7 @@ su('admin');
 
 global $app;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $random = updateSessionRandom();
 $verify = md5($app->user->password . $random);

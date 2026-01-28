@@ -16,7 +16,7 @@ cid=19603
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $user = zenData('user');
@@ -28,7 +28,7 @@ $user->avatar->range('1-5')->prefix('/home/z/user/');
 $user->deleted->range('0{4}, 1{1}');
 $user->gen(5);
 
-$user = new userTest();
+$user = new userModelTest();
 
 r(count($user->getAvatarPairsTest()))      && p()           && e('4');              // 未删除的用户头像的数量
 r(count($user->getAvatarPairsTest('all'))) && p()           && e('5');              // 所有用户头像的数量

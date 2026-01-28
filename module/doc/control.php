@@ -810,6 +810,7 @@ class doc extends control
      * 上传文档。
      * Upload docs.
      *
+     * @param  int        $docID
      * @param  string     $objectType product|project|execution|custom
      * @param  int        $objectID
      * @param  int|string $libID
@@ -818,7 +819,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function uploadDocs(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
     {
         if(!empty($_POST))
         {
@@ -849,12 +850,16 @@ class doc extends control
 
             $this->config->doc->create->requiredFields = trim(str_replace(array(',content,', ',keywords,'), ",", ",{$this->config->doc->create->requiredFields},"), ',');
 
-            $docData = form::data($this->config->doc->form->create)
-                ->setDefault('addedBy', $this->app->user->account)
-                ->get();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $docData = form::data(!empty($docID) ? $this->config->doc->form->edit : $this->config->doc->form->create)->remove('fromVersion')->get();
+            if(empty($docID))  $docData->addedBy  = $this->app->user->account;
+            if(!empty($docID)) $docData->editedBy = $this->app->user->account;
 
-            if($this->post->uploadFormat == 'combinedDocs')
+            if(!empty($docID))
+            {
+                $docResult   = $this->doc->update($docID, $docData);
+                $docData->id = $docID;
+            }
+            elseif($this->post->uploadFormat == 'combinedDocs')
             {
                 $docResult = $this->doc->create($docData);
             }
@@ -864,7 +869,7 @@ class doc extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterUploadDocs($docResult);
+            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'], $docResult['deletedFiles'])) : $this->docZen->responseAfterUploadDocs($docResult);
         }
 
         if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
@@ -873,7 +878,7 @@ class doc extends control
             $objectID = $this->doc->getObjectIDByLib($lib);
         }
 
-        $this->docZen->assignVarsForUploadDocs($objectType, $objectID, $libID, $moduleID, $docType);
+        $this->docZen->assignVarsForUploadDocs($docID, $objectType, $objectID, $libID, $moduleID, $docType);
         $this->display();
     }
 
@@ -1028,7 +1033,7 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->docZen->responseAfterEdit($doc, $changes, $files);
+            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
         }
 
         /* Get doc and set menu. */
@@ -1387,7 +1392,9 @@ class doc extends control
         $_SESSION["doc_{$doc->id}_nopriv"] = '';
         if(!$isApi && !$this->doc->checkPrivDoc($doc))
         {
-            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? $this->lang->doc->accessDenied : $_SESSION["doc_{$doc->id}_nopriv"];
+            $user         = $this->loadModel('user')->getByID($doc->addedBy);
+            $realname     = $user->deleted ? $user->account : $user->realname;
+            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? sprintf($this->lang->doc->cannotView, $realname) : $_SESSION["doc_{$doc->id}_nopriv"];
             unset($_SESSION["doc_{$doc->id}_nopriv"]);
             return $this->sendError($errorMessage, inlink('index'));
         }
@@ -2430,7 +2437,7 @@ class doc extends control
             $doc->content = $doc->rawContent;
             unset($doc->rawContent);
 
-            if($doc->contentType == 'doc' && preg_match('/ src="{([0-9]+)(\.(\w+))?}" /', $doc->html))
+            if(empty($doc->templateType) && $doc->contentType == 'doc' && preg_match('/ src="{([0-9]+)(\.(\w+))?}" /', $doc->html))
             {
                 $doc->contentType = 'html';
                 $doc->content     = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $doc->html);
@@ -2587,7 +2594,18 @@ class doc extends control
             $this->view->groups = $this->loadModel('group')->getPairs();
         }
 
+        $docTitle = '';
+        if(!empty($doc))
+        {
+            $docTitle = $doc->title;
+        }
+        elseif($this->post->title)
+        {
+            $docTitle = $this->post->title;
+        }
+
         $this->view->docID      = $docID;
+        $this->view->docTitle   = $docTitle;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;

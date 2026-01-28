@@ -20,7 +20,7 @@ cid=18629
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->product->range(1);
@@ -42,7 +42,7 @@ $bug = zenData('bug');
 $bug->story->range('2-30:2');
 $bug->gen(40);
 
-$story = new storyTest();
+$story = new storyTaoTest();
 $affectedStory2  = $story->getAffectedBugsTest(2);
 $affectedStory28 = $story->getAffectedBugsTest(28);
 

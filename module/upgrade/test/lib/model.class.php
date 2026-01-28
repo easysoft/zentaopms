@@ -1,0 +1,917 @@
+<?php
+declare(strict_types = 1);
+
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+
+class upgradeModelTest extends baseTest
+{
+    protected $moduleName = 'upgrade';
+    protected $className  = 'model';
+
+    /**
+     * 测试获取升级版本。
+     * Test get update version.
+     *
+     * @param  string $openVersion
+     * @param  string $fromEdition
+     * @access public
+     * @return string
+     */
+    public function getVersionsToUpdateTest(string $openVersion, string $fromEdition): string
+    {
+        $versions = $this->instance->getVersionsToUpdate($openVersion, $fromEdition);
+        $return   = '';
+        foreach($versions[$openVersion] as $edition => $version)
+        {
+            if(!isset($version[0])) $version[0] = '0';
+            $return .="{$edition}:{$version[0]};";
+        }
+        return trim($return, ';');
+    }
+
+    /**
+     * __call魔术方法，如果比较简单的方法可以直接调用，不需要单独写方法。
+     * __call magic method, if the method is simple, you can call it directly, no need to write a method.
+     *
+     * @param  string $method
+     * @param  array  $args
+     * @access public
+     * @return mixed
+     */
+    public function __call(string $method, array $args): mixed
+    {
+        return call_user_func_array(array($this->instance, $method), $args);
+    }
+
+    /**
+     * 测试通过版本号获取产品版本类型。
+     * Test get edition by version.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getEditionByVersionTest(string $version): string
+    {
+        return $this->instance->getEditionByVersion($version);
+    }
+
+    /**
+     * 测试获取开源版版本。
+     * Test get open version.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getOpenVersionTest(string $version): string
+    {
+        return $this->instance->getOpenVersion($version);
+    }
+
+    /**
+     * 测试打开UR开关。
+     * Test set UR switch status.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function setURSwitchStatusTest(string $version): bool
+    {
+        $this->instance->fromVersion = $version;
+        return $this->instance->setURSwitchStatus();
+    }
+
+    /**
+     * 测试删除临时 model 文件。
+     * Test delete tmp model files.
+     *
+     * @access public
+     * @return int
+     */
+    public function deleteTmpModelTest(): int
+    {
+        $this->instance->deleteTmpModel();
+        global $tester;
+        return count(glob($tester->app->getTmpRoot() . 'model/*.php'));
+    }
+
+    /**
+     * 测试处理devOps上线步骤的历史记录。
+     * Test process deploy step action.
+     *
+     * @param  int deployStepID
+     * @access public
+     * @return object|false
+     */
+    public function processDeployStepActionTest(int $deployStepID): object|false
+    {
+        $this->instance->processDeployStepAction();
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($deployStepID)->andWhere('objectType')->eq('deploystep')->fetch();
+    }
+
+    /**
+     * 测试删除补丁记录。
+     * Test delete patch records.
+     *
+     * @access public
+     * @return int
+     */
+    public function deletePatchTest(): int
+    {
+        $this->instance->deletePatch();
+        global $tester;
+        return $tester->dao->select('count(1) as count')->from(TABLE_EXTENSION)->where('type')->eq('patch')->orWhere('code')->in('zentaopatch,patch')->fetch('count');
+    }
+
+    /**
+     * 测试获取升级 sql 文件路径。
+     * Test get the upgrade sql file.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function getUpgradeFileTest(string $version): string
+    {
+        $filepath = $this->instance->getUpgradeFile($version);
+        global $tester;
+        return str_replace($tester->app->getAppRoot() . 'db' . DS, '', $filepath);
+    }
+
+    /**
+     * 测试获取项目集下的项目键值对。
+     * Test get the project of the program it belongs to.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return string
+     */
+    public function getProjectPairsByProgramTest(int $programID): string
+    {
+        $projects = $this->instance->getProjectPairsByProgram($programID);
+        $return = '';
+        foreach($projects as $projectID => $projectName) $return .= "{$projectID}:{$projectName};";
+        return trim($return, ';');
+    }
+
+    /**
+     * 测试将 sql 文件解析为 sql 语句。
+     * Test parse sql file to sqls.
+     *
+     * @param  string $version
+     * @access public
+     * @return string
+     */
+    public function parseToSqlsTest(string $version): string
+    {
+        $sqlFile = $this->instance->getUpgradeFile($version);
+        $sqls    = $this->instance->parseToSqls($sqlFile);
+        return substr($sqls[0], 0, 30);
+    }
+
+    /**
+     * 测试将 sql 文件解析为 sql 语句。
+     * Test parse sql file to sqls.
+     *
+     * @access public
+     * @return string
+     */
+    public function addORPrivTest(): string
+    {
+        $this->instance->addORPriv();
+
+        global $tester;
+        $groups     = $tester->dao->select('count(1) as count')->from(TABLE_GROUP)->fetch('count');
+        $groupPrivs = $tester->dao->select('count(1) as count')->from(TABLE_GROUPPRIV)->fetch('count');
+        return "groups:{$groups},groupPrivs:{$groupPrivs}";
+    }
+
+    /**
+     * 测试判断是否出现错误。
+     * Test judge any error occurs.
+     *
+     * @param  array  $errors
+     * @access public
+     * @return bool
+     */
+    public function isErrorTest(array $errors): bool
+    {
+        $this->instance::$errors = $errors;
+        return $this->instance->isError();
+    }
+
+    /**
+     * 测试获取升级时的错误。
+     * Test get errors during the upgrading.
+     *
+     * @param  array  $errors
+     * @access public
+     * @return string
+     */
+    public function getErrorTest(array $errors): string
+    {
+        $this->instance::$errors = $errors;
+        $return = $this->instance->getError();
+        return implode(',', $return);
+    }
+
+    /**
+     * 测试检查流程。
+     * Test check weither process or not.
+     *
+     * @param  string $installedVersion
+     * @param  string $systemMode
+     * @access public
+     * @return string
+     */
+    public function checkProcessTest(string $installedVersion, string $systemMode): string
+    {
+        global $tester;
+        $tester->config->installedVersion = $installedVersion;
+        $tester->config->systemMode       = $systemMode;
+        $process = $this->instance->checkProcess();
+        $return  = '';
+        foreach($process as $key => $value) $return .= "{$key}:{$value};";
+        return trim($return, ';');
+    }
+
+    /**
+     * 测试更新BI相关zt_pivot表的sql字段。
+     * Update BI SQL for 18.4.stable new function: dataview model.php checkUniColumn().
+     *
+     * @param  int    $pivotID
+     * @param  string $errorValue
+     * @param  string $rightValue
+     * @param  string $testField
+     * @access public
+     * @return bool
+     */
+    public function updateBISQLTest(int $pivotID, string $errorValue, string $rightValue, string $testField): bool
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQLs     = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        foreach($pivotSQLs as $pivotSQL) if(trim($pivotSQL)) $tester->dbh->exec($pivotSQL);
+
+        $tester->dao->update(TABLE_PIVOT)->set('sql')->eq($errorValue)->where('id')->eq($pivotID)->exec();
+        $this->instance->updateBISQL();
+
+        $pivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
+        return $pivot->$testField == $rightValue;
+    }
+
+    /**
+     * 测试初始化用户视图。
+     * Test initialize user view.
+     *
+     * @access public
+     * @return int
+     */
+    public function initUserViewTest(): int
+    {
+        $this->instance->initUserView();
+        global $tester;
+        return $tester->dao->select('count(1) as count')->from(TABLE_USERVIEW)->fetch('count');
+    }
+
+    /**
+     * 测试存储日志。
+     * Test save logs.
+     *
+     * @param  string $log
+     * @access public
+     * @return string
+     */
+    public function saveLogsTest(string $log): string
+    {
+        $this->instance->saveLogs($log);
+        $logFile = $this->getLogFile();
+        $logContent = file_get_contents($logFile);
+        $logContent = explode("\n", $logContent);
+        array_pop($logContent);
+        return substr(array_pop($logContent), 20, 30);
+    }
+
+    /**
+     * 测试设置项目集默认权限。
+     * Test set program default priv.
+     *
+     * @access public
+     * @return bool
+     */
+    public function setDefaultPrivTest(): bool
+    {
+        $this->instance->setDefaultPriv();
+        return true;
+    }
+
+    /**
+     * 测试更新透视表的阶段。
+     * Test update pivot stage.
+     *
+     * @param  array $changeFields
+     * @access public
+     * @return void
+     */
+    public function updatePivotStageTest(array $changeFields)
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQLs    = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        foreach($pivotSQLs as $pivotSQL) if(trim($pivotSQL)) $tester->dbh->exec($pivotSQL);
+
+        $tester->dao->update(TABLE_PIVOT)->data($changeFields)->where('id')->eq($changeFields['id'])->exec();
+
+        $this->instance->updatePivotStage();
+
+        $afterUpdatePivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($changeFields['id'])->fetch();
+        return $afterUpdatePivot;
+    }
+
+    /**
+     * 测试获取自定义的模块。
+     * Test get custom modules.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return string
+     */
+    public function getCustomModulesTest(array $allModules): string
+    {
+        $return = $this->instance->getCustomModules($allModules);
+        return implode(',', $return);
+    }
+
+    /**
+     * 测试为用户故事添加创建动作。
+     * Test add create action for story.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function addCreateAction4StoryTest(string $version): void
+    {
+        $this->instance->fromVersion = $version;
+        $this->instance->addCreateAction4Story();
+    }
+
+    /**
+     * 测试更新透视表中字段的类型。
+     * Test update pivot fields type.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updatePivotFieldsTypeTest(int $pivotID, array $changeFields, array $rightValue): bool
+    {
+        global $tester;
+
+        /* Init pivot table data. */
+        $pivotSqlFile = $tester->app->getAppRoot() . 'test' . DS . 'data' . DS . 'pivot.sql';
+        $pivotSQLs    = explode(";", file_get_contents($pivotSqlFile));
+        $tester->dao->delete()->from(TABLE_PIVOT)->exec();
+        foreach($pivotSQLs as $pivotSQL) if(trim($pivotSQL)) $tester->dbh->exec($pivotSQL);
+
+        $tester->dao->update(TABLE_PIVOT)->data($changeFields)->where('id')->eq($pivotID)->exec();
+
+        $this->instance->updatePivotFieldsType();
+
+        $afterUpdatePivot = $tester->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
+
+        $result = $afterUpdatePivot->fields == $rightValue[$pivotID]['fields'];
+        if(isset($rightValue[$pivotID]['langs'])) $result = $afterUpdatePivot->langs == $rightValue[$pivotID]['langs'];
+        return  $result;
+    }
+
+    /**
+     * 测试为项目创建项目主库。
+     * Test create doc lib for project.
+     *
+     * @param  object  $project
+     * @access public
+     * @return object
+     */
+    public function createProjectDocLibTest(int $projectID): object
+    {
+         global $tester;
+         $project = $tester->loadModel('project')->getByID($projectID);
+         $this->instance->createProjectDocLib($project);
+
+         return $tester->dao->select('*')->from(TABLE_DOCLIB)->where('project')->eq($projectID)->fetch();
+    }
+
+    /**
+     * 测试更新在编辑器中的文件 objectID。
+     * Test update file objectID in editor.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @access public
+     * @return string
+     */
+    public function updateFileObjectIDTest(string $type, int $lastID): object
+    {
+        global $tester;
+        $tester->dao->update(TABLE_FILE)->set('extra')->eq('editor')->exec();
+
+        $result = $this->instance->updateFileObjectID($type, $lastID);
+
+        $return = new stdclass();
+        foreach($result as $key => $value) $return->$key = $value;
+        $files = $tester->dao->select('id')->from(TABLE_FILE)->where('extra')->eq('editor')->beginIF($type != '' && $type != 'comment')->andWhere('objectType')->eq($type)->fi()->fetchPairs();
+        $return->files = implode(',', $files);
+        return $return;
+    }
+
+    /**
+     * 测试更新文件对象。
+     * Test update file objects.
+     *
+     * @param  string $type
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return string
+     */
+    public function updateFileObjectsTest(string $type, int $lastID, int $limit): string
+    {
+        global $tester;
+        $tester->dao->update(TABLE_FILE)->set('extra')->eq('editor')->exec();
+
+        list($objectCount, $lastID) = $this->instance->updateFileObjects($type, $lastID, $limit);
+
+        $files = $tester->dao->select('id')->from(TABLE_FILE)->where('objectType')->eq($type)->andWhere('extra')->eq('editor')->fetchPairs();
+
+        return "count:{$objectCount},lastID:{$lastID},fileID:" . implode(',', $files);
+    }
+
+    /**
+     * 测试获取没有合并的产品的数量。
+     * Get no merged product count test.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedProductCountTest(): int
+    {
+        return $this->instance->getNoMergedProductCount();
+    }
+
+    /**
+     * 测试计算项目、产品、迭代的成员。
+     * Test compute project, product and sprint members.
+     *
+     * @param  bool   $execute
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return string
+     */
+    public function computeObjectMembersTest(bool $execute = false, int $objectID = 0, string $objectType = ''): string
+    {
+        if($execute) $this->instance->computeObjectMembers();
+        $return = '';
+        if($objectID && $objectType)
+        {
+            global $tester;
+            $acls  = $tester->dao->select('account')->from(TABLE_ACL)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetchPairs();
+            $teams = $tester->dao->select('account')->from(TABLE_TEAM)->where('type')->eq($objectType)->andWhere('root')->eq($objectID)->fetchPairs();
+            $return = 'acls:' . implode(',', $acls) . ';' . 'teams:' . implode(',', $teams);
+        }
+        return $return;
+    }
+
+    /**
+     * 测试获取没有合并的迭代的数量。
+     * Get no merged sprint count test.
+     *
+     * @access public
+     * @return int
+     */
+    public function getNoMergedSprintCountTest(): int
+    {
+        return $this->instance->getNoMergedSprintCount();
+    }
+
+    /**
+     * 测试计算产品的 acl。
+     * Test compute product acl.
+     *
+     * @param  array      $productIdList
+     * @param  int        $programID
+     * @param  int|object $lineID
+     * @access public
+     * @return string
+     */
+    public function computeProductAclTest(array $productIdList = array(), int $programID = 0, int|object $lineID = null): string
+    {
+        $this->instance->computeProductAcl($productIdList, $programID, $lineID);
+
+        global $tester;
+        $return = '';
+        $products = $tester->dao->select('id,program,acl,line')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
+        foreach($products as $product) $return .= "{$product->id}:{$product->program},{$product->acl},{$product->line}; ";
+        return $return;
+    }
+
+    /**
+     * 测试将历史的项目作为执行升级。
+     * Test historical projects are upgraded by execution.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function upgradeInExecutionModeTest(int $programID): array
+    {
+        $_POST['projectType'] = 'execution';
+
+        $this->instance->upgradeInExecutionMode($programID);
+
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
+    }
+
+    /**
+     * 测试创建一个项目。
+     * Test create a project.
+     *
+     * @param  int           $programID
+     * @param  object        $data
+     * @access public
+     * @return string|array
+     */
+    public function createProjectTest(int $programID = 0, ?object $data = null): string|array
+    {
+        $projectID = $this->instance->createProject($programID, $data);
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        $actionCount = $tester->dao->select('count(1) as count')->from(TABLE_ACTION)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->fetch('count');
+        $project     = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $program     = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+        return "project:{$project->id},{$project->team},{$project->end},{$project->acl}; program:{$program->begin},{$program->end}; actionCount:{$actionCount}";
+    }
+
+    /**
+     * 测试计算开始和结束日期中间的工作日数。
+     * Test compute delta between the begin and end date.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return int
+     */
+    public function computeDaysDeltaTest(string $begin, string $end): int
+    {
+        return $this->instance->computeDaysDelta($begin, $end);
+    }
+
+    /**
+     * 测试将历史的项目作为香米升级。
+     * Test historical projects are upgraded by project.
+     *
+     * @param  int    $programID
+     * @param  string $fromMode
+     * @access public
+     * @return string
+     */
+    public function upgradeInProjectModeTest(int $programID, string $fromMode): string
+    {
+        $this->instance->upgradeInProjectMode($programID, $fromMode);
+
+        global $tester;
+        $return   = '';
+        $projects = $tester->dao->select('id,parent,multiple')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll();
+        foreach($projects as $project) $return .= "{$project->id}:{$project->parent},{$project->multiple};";
+        return trim($return, ';');
+    }
+
+    /**
+     * 测试安装IPD。
+     * Test install IPD.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function installIPDTest(string $version): void
+    {
+        $this->instance->fromVersion = $version;
+        $this->instance->installIPD();
+    }
+
+    /**
+     * 测试新建项目集。
+     * Test create program.
+     *
+     * @param  object $data
+     * @param  array  $projectIdList
+     * @access public
+     * @return array|bool
+     */
+    public function createProgramTest(object $data, array $projectIdList): bool|array
+    {
+        foreach($data as $key => $value) $_POST[$key] = $value;
+
+        $result = $this->instance->createProgram($projectIdList);
+        return $result;
+    }
+
+    /**
+     * 测试新建一个项目集。
+     * Test create a program.
+     *
+     * @param  object $data
+     * @param  array  $projectIdList
+     * @access public
+     * @return array|object
+     */
+    public function createNewProgramTest(object $data, array $projectIdList): array|object
+    {
+        $result = $this->instance->createNewProgram($data, $projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $result;
+
+        global $tester;
+        $programID = $result;
+        return $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($programID)->fetch();
+    }
+
+    /**
+     * 测试合并项目。
+     * Test merge project.
+     *
+     * @param  object $data
+     * @param  int    $programID
+     * @param  array  $projectIdList
+     * @access public
+     * @return array|object|bool
+     */
+    public function createNewProjectTest(object $data, int $programID, array $projectIdList): array|object|bool
+    {
+        $result = $this->instance->createNewProject($data, $programID, $projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        if(is_array($result) && isset($result['result']) && $result['result'] == 'fail') return $result;
+
+        if($data->projectType == 'execution')
+        {
+            $projectID = $result;
+            global $tester;
+            return $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        }
+
+        if($data->projectType == 'project') return $result;
+    }
+
+    /**
+     * 测试新建产品线。
+     * Test create new line.
+     *
+     * @param  string       $lineName
+     * @param  int          $programID
+     * @access public
+     * @return array|object
+     */
+    public function createNewLineTest(string $lineName, int $programID): array|object
+    {
+        $result = $this->instance->createNewLine($lineName, $programID);
+        if(dao::isError()) return dao::getError();
+
+        $lineID = $result;
+        global $tester;
+        $productLine = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
+        return $productLine;
+    }
+
+    /**
+     * 测试检查必填项。
+     * Test check program required.
+     *
+     * @param  object     $data
+     * @param  string     $projectType
+     * @access public
+     * @return array|bool
+     */
+    public function checkProgramRequiredTest(object $data, string $projectType): array|bool
+    {
+        $this->instance->checkProgramRequired($data, $projectType);
+        if(dao::isError()) return dao::getError();
+        return true;
+    }
+
+    /**
+     * 测试获取重复名称的项目 id 列表。
+     * Test get duplicate project name.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return string
+     */
+    public function getDuplicateProjectNameTest(array $projectIdList): string
+    {
+        return $this->instance->getDuplicateProjectName($projectIdList);
+    }
+
+    /**
+     * Test revert story custom fields.
+     *
+     * @access public
+     * @return void
+     */
+    public function revertStoryCustomFieldsTest()
+    {
+        $this->instance->revertStoryCustomFields();
+        return $this->instance->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('datatable')->andWhere('section')->eq('productBrowse')->andWhere('key')->eq('cols')->fetch();
+    }
+
+    /**
+     * 测试补充模型分类项。
+     * Test complete classify lang.
+     *
+     * @param  string $section
+     * @param  string $key
+     * @access public
+     * @return string
+     */
+    public function completeClassifyLangTest(string $section, string $key): string
+    {
+        $this->instance->completeClassifyLang();
+        return $this->instance->dao->select('value')->from(TABLE_LANG)
+            ->where('lang')->eq('all')
+            ->andWhere('module')->eq('process')
+            ->andWhere('section')->eq($section)
+            ->andWhere('`key`')->eq($key)
+            ->andWhere('system')->eq(1)
+            ->andWhere('vision')->eq('rnd')
+            ->fetch('value');
+    }
+
+    /**
+     * 测试更新任务关系权限。
+     * Test update the priv of task relation.
+     *
+     * @access public
+     * @return array
+     */
+    public function updateTaskRelationPrivTest()
+    {
+        $this->instance->updateTaskRelationPriv();
+        return $this->instance->dao->select('method')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('execution')
+            ->fetchPairs();
+    }
+
+    /**
+     * 将旧的度量指标转换为新的度量指标。
+     * Convert old metrics to new metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processOldMetricsTest(string $checkField)
+    {
+        $oldMetrics = $this->instance->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+        $check      = true;
+        foreach($oldMetrics as $oldMetric)
+        {
+            $metric = $this->instance->dao->select('*')->from(TABLE_METRIC)->where('fromID')->eq($oldMetric->id)->fetch();
+            if(!$metric)
+            {
+                $check = false;
+                break;
+            }
+
+            if($metric->$checkField != zget($scopeMap, $oldMetric->checkField, 'other'))
+            {
+                $check = false;
+                break;
+            }
+        }
+        return $check;
+    }
+
+    /**
+     * 转换数据库的字符集。
+     * Convert database charset.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertCharsetTest(string $tableName)
+    {
+        $tableInfo = $this->instance->dbh->query("SHOW TABLE STATUS LIKE '$tableName'")->fetch();
+        return $tableInfo->Collation;
+    }
+
+    /**
+     * 修改执行模块工作流动作名称
+     * Fix workflow action and field name for execution.
+     *
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function fixWorkflowNameForExecutionTest(string $action)
+    {
+        $this->instance->fixWorkflowNameForExecution();
+        return $this->instance->dao->select('name')->from(TABLE_WORKFLOWACTION)->where('module')->eq('execution')->andWhere('action')->eq($action)->fetch('name');
+    }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocsTest(): array
+    {
+        $docs = $this->instance->getUpgradeDocs();
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * Process object relations.
+     * 将系统内原有关联关系合并到relation表中：需求关联需求、bug关联bug、用例关联用例、问题关联风险、风险关联问题.
+     *
+     * @param  string $aType
+     * @param  int    $aID
+     * @access public
+     * @return object
+     */
+    public function processObjectRelationTest(string $aType, int $aID)
+    {
+        $this->instance->processObjectRelation();
+        return $this->instance->dao->select('*')->from(TABLE_RELATION)->where('BType')->eq($aType)->andWhere('BID')->eq($aID)->fetchAll();
+    }
+
+    /**
+     * 升级文档模板，设置新编辑器文档的 html。
+     * Upgrade doc template, set doc html generated by new editor.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @param  string $content
+     * @return bool
+     */
+    public function upgradeDocTemplateTest(int $docID, int $version)
+    {
+        $this->instance->upgradeDocTemplate($docID, $version);
+        return $this->instance->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->orderBy('id_desc')->fetch();
+    }
+
+    /**
+     * 计算立项的分支。
+     * Process charter branch.
+     *
+     * @param  int    $charterID
+     * @access public
+     * @return bool
+     */
+    public function processCharterBranchTest(int $charterID)
+    {
+        $this->instance->processCharterBranch();
+        return $this->instance->dao->select('*')->from(TABLE_CHARTERPRODUCT)->where('charter')->eq($charterID)->fetch();
+    }
+
+    /**
+     * 升级wiki类型的文档模板。
+     * Upgrade templates of wiki.
+     *
+     * @param  int  $wikiTemplateID
+     * @return bool
+     */
+    public function upgradeWikiTemplatesTest(int $wikiTemplateID)
+    {
+        $this->instance->upgradeWikiTemplates(array($wikiTemplateID));
+        return $this->instance->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($wikiTemplateID)->orderBy('id_desc')->fetch();
+    }
+
+    /**
+     * 升级项目报告数据。
+     * Upgrade project report data.
+     *
+     * @param  array  $data
+     * @access public
+     * @return object
+     */
+    public function upgradeProjectReportTest(array $data): object
+    {
+        $this->instance->upgradeProjectReport($data);
+        return $this->instance->dao->select('*')->from(TABLE_DOC)->orderBy('id_desc')->limit(1)->fetch();
+    }
+}

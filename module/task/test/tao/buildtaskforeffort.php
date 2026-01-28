@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 /**
@@ -126,7 +126,7 @@ $normalRecord->left     = 5;
 $normalRecord->work     = "记录了日志";
 $normalRecord->date     = "2022-01-01";
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->buildTaskForEffortTest($finishRecord, 1, '2021-01-01', true))  && p('0:consumed,left,estimate,status') && e('8,0,0.00,done');      // 传入的lastDate比record中的日期小，说明是正常记录工时，并且是完成任务的情况
 r($task->buildTaskForEffortTest($finishRecord, 1, '2023-01-01', true))  && p('0:consumed,left,estimate,status') && e('8,1.00,0.00,doing');  // 传入的lastDate比record中的大，说明是补录工时，并且是完成任务的情况，但剩余不为0
 r($task->buildTaskForEffortTest($finishRecord, 1, '2021-01-01', false)) && p('0:consumed,left,estimate,status') && e('8,0,0.00,doing');     // 传入的lastDate比record中的日期小，说明是正常记录工时，并且不是完成任务的情况

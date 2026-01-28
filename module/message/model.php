@@ -101,9 +101,6 @@ class messageModel extends model
             if($story) $objectType = $story->type;
         }
 
-        /* 如果对象类型是审批，动作是提交审计或者审计，使用瀑布项目审批的发信配置。*/
-        if($objectType == 'review' && strpos(',toaudit,audited,', ",{$actionType},") !== false) $objectType = 'waterfall';
-
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
@@ -138,8 +135,16 @@ class messageModel extends model
         }
         if(isset($messageSetting['message']))
         {
+            $isBuiltinMethod = true;
+            if($this->config->edition != 'open')
+            {
+                $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $objectID);
+                $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
+                if($method && !$method->buildin) $isBuiltinMethod = false;
+            }
+
             $actions = $messageSetting['message']['setting'];
-            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+            if($isBuiltinMethod && isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 
@@ -214,17 +219,18 @@ class messageModel extends model
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         if($objectType == 'kanbancard') $moduleName = 'kanban';
         if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
+        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
         $space      = common::checkNotCN() ? ' ' : '';
         $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
+        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}") . "#app={$this->app->tab}";
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
         foreach(explode(',', trim($toList, ',')) as $to)
         {
-            if($to == $actor) continue;
+            if($to == $actor || empty($to)) continue;
             $notify = new stdclass();
             $notify->objectType  = 'message';
             $notify->action      = $actionID;
@@ -274,7 +280,7 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback', 'bug')) && $actionID)
+        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback', 'reviewissue', 'bug')) && $actionID)
         {
             $action      = $this->loadModel('action')->getById($actionID);
             $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
@@ -309,7 +315,7 @@ class messageModel extends model
             $flow    = $this->loadModel('workflow')->getByModule($objectType);
             $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
             $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
-            if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
+            if(($flow && !$flow->buildin) || ($method && !$method->buildin)) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
         if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;

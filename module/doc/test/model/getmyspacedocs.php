@@ -46,7 +46,7 @@ cid=16113
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
@@ -59,7 +59,7 @@ $types       = array('view', 'collect', 'createdby', 'editedby');
 $browseTypes = array('all', 'draft', 'bysearch');
 $queries     = array('', "(( 1 AND `title` LIKE '%文档%' ) AND ( 1 ))");
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getMySpaceDocsTest($types[0], $browseTypes[0], $queries[0])) && p('3:title,status') && e('我的文档3,normal');    // 获取最近浏览的所有文档
 r($docTester->getMySpaceDocsTest($types[0], $browseTypes[1], $queries[0])) && p('6:title,status') && e('我的草稿文档6,draft'); // 获取最近浏览的草稿文档
 r($docTester->getMySpaceDocsTest($types[0], $browseTypes[2], $queries[1])) && p('3:title,status') && e('我的文档3,normal');    // 获取最近浏览并且文档名字中有“文档”的文档

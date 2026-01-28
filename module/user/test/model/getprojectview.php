@@ -19,7 +19,7 @@ cid=19631
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // 由于测试私有方法不需要数据库数据，此处不需要zendata生成数据
@@ -28,7 +28,7 @@ include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($userTest->getProjectViewTest('admin', array(1 => (object)array('id' => 1, 'acl' => 'open', 'PO' => '', 'QD' => '', 'RD' => '', 'PM' => '', 'type' => 'project', 'parent' => 0, 'path' => ',1,'), 2 => (object)array('id' => 2, 'acl' => 'open', 'PO' => '', 'QD' => '', 'RD' => '', 'PM' => '', 'type' => 'project', 'parent' => 0, 'path' => ',2,'), 3 => (object)array('id' => 3, 'acl' => 'private', 'PO' => '', 'QD' => '', 'RD' => '', 'PM' => '', 'type' => 'project', 'parent' => 0, 'path' => ',3,')), array('projects' => array('isAdmin' => 1)), array(), array(), array(), array())) && p() && e('1,2,3'); // 步骤1：管理员用户可访问所有项目

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -20,7 +20,7 @@ cid=16290
 
 zenData('project')->loadYaml('execution')->gen(10);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->deleteTest(101)) && p() && e('1'); //测试删除迭代5
 r($execution->deleteTest(102)) && p() && e('1'); //测试删除迭代6
 r($execution->deleteTest(103)) && p() && e('1'); //测试删除迭代7

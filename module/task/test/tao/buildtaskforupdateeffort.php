@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 /**
@@ -94,7 +94,7 @@ $dateGtTodayEffort->left     = 3;
 $dateGtTodayEffort->work     = '无消耗变更工作内容测试';
 $dateGtTodayEffort->date     = date('Y-m-d', strtotime('+1 day'));
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->buildTaskForUpdateEffortTest(1, 1, $normalEffort))      && p('consumed,left,status') && e('4.1,6.00,wait'); // 正常编辑的工时信息，查看返回的任务信息
 r($task->buildTaskForUpdateEffortTest(2, 2, $noLeftEffort))      && p('consumed,left,status') && e('4.1,7.00,wait'); // 无剩余工时的工时信息，查看返回的任务信息
 r($task->buildTaskForUpdateEffortTest(3, 3, $noConsumedEffort))  && p('consumed,left,status') && e('2,8.00,doing');  // 编辑日志消耗为0，查看返回的任务信息

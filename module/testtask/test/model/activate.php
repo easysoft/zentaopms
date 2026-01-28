@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->gen(7);
 zenData('action')->gen(10);
@@ -44,7 +44,7 @@ $task7 = array('id' => 3, 'status' => 'doing', 'uid' => $uid, 'comment' => '');
 $task8 = array('id' => 7, 'status' => 'doing', 'uid' => $uid, 'comment' => 'comment');
 $task9 = array('id' => 4, 'status' => 'doing', 'uid' => $uid, 'comment' => 'comment');
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->activateTest($task1)) && p() && e(0); // 测试单 ID 为 0 返回 false。
 r($testtask->activateTest($task2)) && p() && e(0); // 测试单 ID 为空字符串返回 false。

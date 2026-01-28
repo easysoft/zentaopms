@@ -21,7 +21,7 @@ cid=16540
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $table = zenData('file');
@@ -40,7 +40,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$fileTest = new fileTest();
+$fileTest = new fileTaoTest();
 
 // 5. 测试步骤1：正常保存文件数据
 $normalFile = array(

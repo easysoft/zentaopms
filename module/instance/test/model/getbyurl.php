@@ -18,7 +18,7 @@ cid=16801
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('instance');
 $table->id->range('1-10');
@@ -30,7 +30,7 @@ $table->gen(10);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 r($instanceTest->getByUrlTest('rila.dops.corp.cc')) && p('id') && e('1');
 r($instanceTest->getByUrlTest('https://7czx.dops.corp.cc')) && p('id') && e('2');

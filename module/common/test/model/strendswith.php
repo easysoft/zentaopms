@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -20,7 +20,7 @@ cid=15717
 
 */
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->strEndsWithTest('hello world', 'world')) && p() && e('1'); // 步骤1：正常情况-字符串以指定后缀结尾
 r($commonTest->strEndsWithTest('hello world', 'hello')) && p() && e('0'); // 步骤2：不匹配情况-字符串不以指定后缀结尾

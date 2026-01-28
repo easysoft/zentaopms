@@ -18,11 +18,11 @@ cid=19326
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$transferTest = new transferTest();
+$transferTest = new transferModelTest();
 
 r($transferTest->initWorkflowFieldListTest('', array())) && p() && e('0');
 r($transferTest->initWorkflowFieldListTest('story', array())) && p() && e('0');

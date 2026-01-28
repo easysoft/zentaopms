@@ -8,22 +8,17 @@ if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,123
 $config->admin->menuGroup['system']        = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'cache|setting', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'admin|metriclib', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
 $config->admin->menuGroup['company']       = array('dept', 'company', 'user', 'group', 'tutorial');
 $config->admin->menuGroup['switch']        = array('admin|setmodule');
-$config->admin->menuGroup['model']         = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
-$config->admin->menuGroup['feature']       = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
+$config->admin->menuGroup['feature']       = array('stage|settype', 'baseline', 'design', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'holiday', 'reviewsetting', 'custom|project', 'custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
 $config->admin->menuGroup['message']       = array('mail', 'webhook', 'sms', 'message');
 $config->admin->menuGroup['dev']           = array('dev', 'entry', 'editor');
 $config->admin->menuGroup['extension']     = array('extension');
 $config->admin->menuGroup['convert']       = array('convert');
 $config->admin->menuGroup['adminregister'] = array('admin|register');
 
-$config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
-$config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
-$config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'epic', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket');
-$config->admin->menuModuleGroup['feature']['custom|required'] = array('bug', 'doc', 'product', 'epic', 'requirement', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
+$config->admin->menuModuleGroup['feature']['custom|set']      = array('project', 'issue', 'risk', 'opportunity', 'nc', 'todo', 'block', 'epic', 'requirement', 'story', 'task', 'bug', 'testcase', 'testtask', 'feedback', 'user', 'ticket', 'projectchange');
+$config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'build', 'bug', 'doc', 'product', 'epic', 'requirement', 'story', 'productplan', 'release', 'task', 'testcase', 'testsuite', 'testtask', 'testreport', 'caselib', 'doc', 'feedback', 'user', 'execution');
 if($config->vision == 'lite')
 {
-    $config->admin->menuModuleGroup['model']['custom|set']        = array();
-    $config->admin->menuModuleGroup['model']['custom|required']   = array('build');
     $config->admin->menuModuleGroup['feature']['custom|set']      = array('todo', 'block', 'task', 'story', 'user');
     $config->admin->menuModuleGroup['feature']['custom|required'] = array('project', 'task', 'story', 'doc', 'user');
 }
@@ -71,7 +66,7 @@ $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExte
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
 $config->admin->dynamicAPIURL  = $config->admin->apiSite . 'dynamic-activities-%s.json';
 $config->admin->videoAPIURL    = $config->admin->apiSite . 'zentao.json';
-$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev');
+$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev', 'workflow', 'approvalFlow');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
 $config->admin->helpURL['company']   = 'https://www.zentao.net/book/zentaopms/38.html';
@@ -85,11 +80,9 @@ $config->admin->helpURL['convert']   = 'https://www.zentao.net/book/zentaopms/65
 
 $config->admin->navsGroup['feature']['my']        = ',todo,block,';
 $config->admin->navsGroup['feature']['product']   = ',product,epic,requirement,story,productplan,release,';
-$config->admin->navsGroup['feature']['project']   = ',project,';
+$config->admin->navsGroup['feature']['project']   = ',project,build,issue,risk,opportunity,nc,projectchange,';
 $config->admin->navsGroup['feature']['execution'] = ',execution,task,';
-$config->admin->navsGroup['feature']['project']   = ',project,story,';
 $config->admin->navsGroup['feature']['qa']        = ',bug,testcase,testsuite,testtask,testreport,caselib,';
-$config->admin->navsGroup['model']['common']      = ',project,build,issue,risk,opportunity,nc,';
 if($config->vision == 'lite') $config->admin->navsGroup['feature']['my'] .= 'task,';
 
 global $lang, $app;

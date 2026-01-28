@@ -17,13 +17,13 @@ cid=16940
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('kanban')->gen(3);
 zenData('kanbanregion')->gen(3);
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 su('admin');
 r(count($kanbanTest->getRDRegionActionsTest(1, 1, 1)[0]['items'])) && p() && e('3'); // 测试步骤1：admin用户在单个区域时获取操作数量

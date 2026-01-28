@@ -23,7 +23,7 @@ cid=17906
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $project = zenData('project');
 $project->id->range('11-19');

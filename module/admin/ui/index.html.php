@@ -81,11 +81,12 @@ $buildUsed = function(int $amount, string $unit = ''): array
 };
 
 $settingItems = array();
+$flowItems    = array();
 foreach($lang->admin->menuList as $menuKey => $menu)
 {
     if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;
 
-    $settingItems[] = div
+    $items = div
     (
         setClass('pb-4 pr-4 h-32 w-1/' . ($config->vision == 'lite' ? 3 : 5)),
         col
@@ -101,9 +102,9 @@ foreach($lang->admin->menuList as $menuKey => $menu)
                 div
                 (
                     setClass('flex gap-1 font-bold text-md'),
-                    img(set::src("static/svg/admin-{$menuKey}.svg")),
+                    !empty($menu['icon']) ? icon(setClass("svg-icon rounded-lg content-center bg-{$menu['bg']} text-white"), $menu['icon']) : img(set::src("static/svg/admin-{$menuKey}.svg")),
                     $menu['name'],
-                    $menuKey != 'adminregister' ?
+                    !empty($config->admin->helpURL[$menuKey]) ?
                     a
                     (
                         setClass('text-gray'),
@@ -122,6 +123,15 @@ foreach($lang->admin->menuList as $menuKey => $menu)
             )
         )
     );
+
+    if(!empty($menu['group']) && $menu['group'] == 'flow')
+    {
+        $flowItems[] = $items;
+    }
+    else
+    {
+        $settingItems[] = $items;
+    }
 }
 
 $pluginItems = array();
@@ -248,7 +258,7 @@ if($config->edition != 'ipd')
 div
 (
     set::style(array('width' => '70%')),
-    div
+    $settingItems ? div
     (
         setID('settings'),
         setClass('bg-white rounded-md mb-4'),
@@ -259,7 +269,19 @@ div
             on::click('redirectSetting'),
             $settingItems
         )
-    ),
+    ) : null,
+    $flowItems ? div
+    (
+        setID('flows'),
+        setClass('bg-white rounded-md mb-4'),
+        $buildHeader($lang->admin->setFlow),
+        div
+        (
+            setClass('flex flex-wrap pl-4'),
+            on::click('redirectSetting'),
+            $flowItems
+        )
+    ) : null,
     $pluginItems ? div
     (
         setID('plugin'),

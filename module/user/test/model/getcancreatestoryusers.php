@@ -20,7 +20,7 @@ cid=19606
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('company')->gen(1);
 
@@ -41,7 +41,7 @@ $privTable->module->range('story{6},task{6},bug{6},story{6},story{6}');
 $privTable->method->range('create,batchCreate,edit,batchEdit,delete,batchDelete');
 $privTable->gen(30);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $users = $userTest->getCanCreateStoryUsersTest();
 r(count($users)) && p()        && e(4);         // 有创建需求权限的用户数为 4。

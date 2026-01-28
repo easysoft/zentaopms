@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->gen(50);
 su('admin');
@@ -22,7 +22,7 @@ cid=17916
 
 */
 
-$projectTester = new projectTest();
+$projectTester = new projectTaoTest();
 
 r($projectTester->setMenuByModelTest(''))              && p() && e('迭代');     // 项目不存在的情况
 r($projectTester->setMenuByModelTest('error'))         && p() && e('迭代');     // 项目不存在的情况

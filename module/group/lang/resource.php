@@ -393,7 +393,6 @@ $lang->resource->stage->batchCreate = 'batchCreate';
 $lang->resource->stage->edit        = 'edit';
 $lang->resource->stage->setType     = 'setType';
 $lang->resource->stage->delete      = 'delete';
-$lang->resource->stage->plusBrowse  = 'plusBrowse';
 
 $lang->stage->methodOrder[5]  = 'browse';
 $lang->stage->methodOrder[10] = 'create';
@@ -401,7 +400,6 @@ $lang->stage->methodOrder[15] = 'batchCreate';
 $lang->stage->methodOrder[20] = 'edit';
 $lang->stage->methodOrder[25] = 'setType';
 $lang->stage->methodOrder[30] = 'delete';
-$lang->stage->methodOrder[35] = 'plusBrowse';
 
 /* Program. */
 $lang->resource->program = new stdclass();
@@ -1608,7 +1606,7 @@ $lang->resource->custom = new stdclass();
 $lang->resource->custom->set                = 'set';
 $lang->resource->custom->product            = 'productName';
 $lang->resource->custom->project            = 'projectCommon';
-$lang->resource->custom->execution          = 'executionCommon';
+$lang->resource->custom->execution          = 'setExecutionClose';
 $lang->resource->custom->required           = 'required';
 $lang->resource->custom->restore            = 'restore';
 $lang->resource->custom->flow               = 'flow';
@@ -1810,6 +1808,7 @@ $lang->user->methodOrder[85] = 'setPublicTemplate';
 $lang->resource->tree = new stdclass();
 $lang->resource->tree->browse      = 'browse';
 $lang->resource->tree->browseTask  = 'browseTask';
+$lang->resource->tree->create      = 'create';
 $lang->resource->tree->updateOrder = 'updateOrder';
 $lang->resource->tree->manageChild = 'manageChild';
 $lang->resource->tree->edit        = 'edit';
@@ -1818,10 +1817,11 @@ $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
 $lang->tree->methodOrder[10] = 'browseTask';
-$lang->tree->methodOrder[20] = 'updateOrder';
-$lang->tree->methodOrder[25] = 'manageChild';
-$lang->tree->methodOrder[30] = 'edit';
-$lang->tree->methodOrder[35] = 'delete';
+$lang->tree->methodOrder[12] = 'create';
+$lang->tree->methodOrder[15] = 'updateOrder';
+$lang->tree->methodOrder[20] = 'manageChild';
+$lang->tree->methodOrder[25] = 'edit';
+$lang->tree->methodOrder[30] = 'delete';
 
 /* Screen. */
 $lang->resource->screen = new stdclass();

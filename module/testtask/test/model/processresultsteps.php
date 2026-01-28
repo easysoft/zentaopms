@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
@@ -22,7 +22,7 @@ pid=1
 
 $resultIdList = array(1, 2, 3, 4, 5);
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 $testtask->initResult();
 

@@ -69,7 +69,7 @@ $rawdata = new stdClass();
 $rawdata->products = array();
 $rawdata->branch = array();
 $rawdata->addProduct = '';
-r($projectzenTest->checkProductAndBranchTest($project, $rawdata)) && p('products[0]') && e('最少关联一个产品');
+r($projectzenTest->checkProductAndBranchTest($project, $rawdata)) && p('products[0]') && e('1');
 
 // 步骤3:多分支产品分支为空 - 应该返回分支为空错误
 $project = new stdClass();

@@ -28,7 +28,7 @@ cid=16161
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(6);
 zenData('project')->loadYaml('project')->gen(2);
@@ -57,7 +57,7 @@ $noProject       = array('type' => $type[1], 'project' => $project[0], 'name' =>
 $noExecution     = array('type' => $type[2], 'execution' => $execution[0], 'name' => $name[1], 'acl' => $acl[1]);
 $noName          = array('type' => $type[0], 'product' => $product[1], 'name' => $name[0], 'acl' => $acl[0]);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->updateLibTest($docLibIds[0], $updateProduct))   && p('0:field,old,new') && e('product,1,2');                    // 正常修改产品文档库
 r($docTester->updateLibTest($docLibIds[1], $updateProject))   && p('0:field,old,new') && e('name,项目文档主库18,编辑文档库'); // 正常修改项目文档库
 r($docTester->updateLibTest($docLibIds[2], $updateExecution)) && p('0:field,old,new') && e('execution,101,102');              // 正常修改执行文档库

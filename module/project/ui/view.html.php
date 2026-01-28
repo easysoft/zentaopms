@@ -235,7 +235,7 @@ row
                         set::title($project->code),
                         $project->code
                     ) : null,
-                    label
+                    $config->edition != 'open' ? null : label
                     (
                         setClass('label warning-pale ring-warning rounded-full ml-2 flex-none projectType'),
                         $lang->project->projectTypeList[$project->hasProduct]
@@ -510,7 +510,7 @@ row
     cell
     (
         setClass('side ml-4'),
-        panel
+        $project->isTpl ? null : panel
         (
             setID('dynamicBlock'),
             to::heading

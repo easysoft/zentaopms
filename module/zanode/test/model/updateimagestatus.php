@@ -21,7 +21,7 @@ cid=19847
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('image');
 $table->id->range('1-10');
@@ -37,7 +37,7 @@ $table->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $postData1 = new stdclass();
 $postData1->status = 'failed';

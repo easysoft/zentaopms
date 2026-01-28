@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancell')->gen(1);
@@ -73,7 +73,7 @@ $cards3[] = $estimate;
 $cards4[] = $normalCard;
 $cards4[] = $beginGtEnd;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->batchCreateCardTest($cards1))     && p('kanban|column|lane|type|cards', '|') && e('1|1|1|common|,2,1,2,801,');       // 批量创建正常的卡片
 r($kanban->batchCreateCardTest($cards2))     && p('name:0')                             && e('『卡片名称』不能为空。');         // 批量创建卡片，其中一个没有名称

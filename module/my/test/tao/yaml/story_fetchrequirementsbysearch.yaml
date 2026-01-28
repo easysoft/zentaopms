@@ -7,60 +7,60 @@ version: "1.0"
 fields:
 - field: id
   range: 1-10
-  
+
 - field: vision
   range: rnd{10}
-  
+
 - field: parent
   range: 0{10}
-  
+
 - field: isParent
   range: 0{10}
-  
+
 - field: root
   range: 0{10}
-  
+
 - field: product
   range: 1-3
-  
+
 - field: branch
   range: 0{10}
-  
+
 - field: module
   range: 0{10}
-  
+
 - field: title
   range: '用户需求{1-10}'
-  
+
 - field: type
   range: requirement{10}
-  
+
 - field: category
   range: feature{10}
-  
+
 - field: pri
   range: 1-4
-  
+
 - field: estimate
   range: 1-10
-  
+
 - field: status
   range: active{3},reviewing{2},draft{2},closed{3}
-  
+
 - field: assignedTo
   range: admin{3},user1{3},user2{3},user3{1}
-  
+
 - field: openedBy
   range: admin{4},user1{3},user2{3}
-  
+
 - field: openedDate
   range: '2024-01-01 10:00:00{5},2024-02-01 10:00:00{5}'
-  
+
 - field: closedBy
   range: ''{7},admin{2},user1{1}
-  
+
 - field: closedDate
   range: '0000-00-00 00:00:00'{7},'2024-03-01 10:00:00'{3}
-  
+
 - field: deleted
   range: 0{10}

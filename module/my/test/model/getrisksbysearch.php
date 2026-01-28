@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('risk')->gen('20');
 zenData('userquery')->loadYaml('userquery')->gen('1');
@@ -34,7 +34,7 @@ cid=17300
 
 */
 
-$my      = new myTest();
+$my      = new myModelTest();
 $queryID = array(0, 1);
 $type    = array('work', 'contribute');
 $orderBy = array('id_desc', 'id_asc');

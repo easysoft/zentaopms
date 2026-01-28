@@ -23,7 +23,7 @@ cid=19764
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->gen(0);
 zenData('designspec')->gen(0);
@@ -31,7 +31,7 @@ zenData('designspec')->gen(0);
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 // 创建完整的设计对象
 $design1 = new stdClass();

@@ -6,27 +6,27 @@ fields:
 - field: id
   note: 用户ID
   range: 1-10
-  
+
 - field: account
   note: 用户账号
   range: [admin, user1, user2, user3, dev1, dev2, qa1, qa2, pm1, pm2]
-  
+
 - field: password
   note: 密码
   range: e10adc3949ba59abbe56e057f20f883e{10}
-  
+
 - field: realname
   note: 真实姓名
   range: [管理员, 用户1, 用户2, 用户3, 开发1, 开发2, 测试1, 测试2, 项目经理1, 项目经理2]
-  
+
 - field: email
   note: 邮箱
   range: [admin@test.com, user1@test.com, user2@test.com, user3@test.com, dev1@test.com]
-  
+
 - field: role
   note: 角色
   range: [admin, dev, qa, pm, user]
-  
+
 - field: deleted
   note: 删除状态
   range: ['0']

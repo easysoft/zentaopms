@@ -19,7 +19,7 @@ cid=17258
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 zenData('action')->gen(0);
@@ -29,7 +29,7 @@ zenData('repo')->loadYaml('repo')->gen(5);
 zenData('relation')->loadYaml('relation')->gen(5);
 zenData('mr')->loadYaml('mr')->gen(5);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->logMergedActionTester(2)) && p('id,objectType,objectID') && e('1,mr,2');   // 没有关联的对象
 r($mrModel->logMergedActionTester(1)) && p('id,objectType,objectID') && e('7,task,2'); // 有关联的对象

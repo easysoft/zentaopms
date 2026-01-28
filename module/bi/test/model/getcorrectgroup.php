@@ -17,7 +17,7 @@ cid=15164
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $module = zenData('module');
 $module->id->range('1-20');
@@ -38,7 +38,7 @@ $module->gen(20);
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->getCorrectGroupTest('32', 'chart')) && p() && e('1'); // 测试步骤1: 测试单个有效的chart模块ID
 r($biTest->getCorrectGroupTest('59', 'pivot')) && p() && e('13'); // 测试步骤2: 测试单个有效的pivot模块ID

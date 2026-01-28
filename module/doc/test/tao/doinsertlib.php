@@ -16,13 +16,13 @@ cid=16166
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zendata('doclib')->loadYaml('doclib_doinsertlib', false, 2)->gen(5);
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docTaoTest();
 
 // 测试步骤1：正常插入有效的文档库数据
 $validLib = new stdClass();

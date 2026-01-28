@@ -243,7 +243,7 @@ window.handleRenderRow = function($row, index, data)
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
 
-        const $point = $row.find('[data-name="point"]');
+        const $point = $row.find('[data-name="point"],[data-name="defaultPoint"]');
         $point.find('.picker-box').on('inited', function(e, info)
         {
             let items    = [{text: '', value: ''}];
@@ -251,21 +251,21 @@ window.handleRenderRow = function($row, index, data)
 
             if(typeof data != 'undefined' && typeof data.attribute != 'undefined' && !disabled)
             {
-                const attribute = data.attribute;
-                for(let point in ipdStagePoint[attribute])
+                const stageID = data.stageID;
+                for(let point in ipdStagePoint[stageID])
                 {
                     let disabled = false
-                    let value    = ipdStagePoint[attribute][point];
-                    let hint     = value;
+                    let text     = ipdStagePoint[stageID][point];
+                    let hint     = text;
 
                     /* 如果已经评审过，则置灰不能选。*/
-                    if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
+                    if(reviewedPoints[point] !== undefined && reviewedPoints[point].disabled)
                     {
                         disabled = true;
                         hint     = reviewedPointTip;
                     }
 
-                    items.push({text: value, value: value, disabled: disabled, hint: hint});
+                    items.push({text: text, value: point, disabled: disabled, hint: hint});
                 }
             }
 
@@ -296,11 +296,11 @@ window.handleRenderRow = function($row, index, data)
         {
             let selection = $row.find('div.picker-multi-selection');
             selection.each(function(index, element) {
-                /* 获取title。*/
-                let $title = $(element).attr('title');
+                /* 获取评审点ID。*/
+                let pointID = $(element).find('div.picker-deselect-btn').data('value');
 
                 /* 如果该评审点以提交评审，则不能取消选择。*/
-                if(reviewedPoints[$title] !== undefined && reviewedPoints[$title].disabled)
+                if(reviewedPoints[pointID] !== undefined && reviewedPoints[pointID].disabled)
                 {
                     $(element).attr('title', reviewedPointTip); // 修改title
                     $(element).find(".picker-deselect-btn").remove(); // 禁用点击事件

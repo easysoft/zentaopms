@@ -324,12 +324,12 @@ class install extends control
         {
             $this->app->loadLang('upgrade');
 
-            list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->loadModel('custom')->computeFeatures();
+            list($disabledFeatures, $enabledProjectFeatures, $disabledProjectFeatures) = $this->loadModel('custom')->computeFeatures();
 
-            $this->view->edition               = $this->config->edition;
-            $this->view->disabledFeatures      = $disabledFeatures;
-            $this->view->enabledScrumFeatures  = $enabledScrumFeatures;
-            $this->view->disabledScrumFeatures = $disabledScrumFeatures;
+            $this->view->edition                 = $this->config->edition;
+            $this->view->disabledFeatures        = $disabledFeatures;
+            $this->view->enabledProjectFeatures  = $enabledProjectFeatures;
+            $this->view->disabledProjectFeatures = $disabledProjectFeatures;
             $this->display();
         }
     }
@@ -377,9 +377,13 @@ class install extends control
             $this->setting->setItem('system.common.global.cron', '1');
             $this->setting->setItem('system.common.userview.relatedTablesUpdateTime', time());
 
-            /* 处理BI数据表。*/
+            /* 处理BI数据表, 内置流程数据。*/
             /* Process BI dataview. */
-            if($this->config->edition != 'open') $this->loadModel('upgrade')->processDataset();
+            if($this->config->edition != 'open')
+            {
+                $this->loadModel('upgrade')->processDataset();
+                $this->loadModel('workflowGroup')->initAllWorkflowGroup();
+            }
 
             /* 更新度量项的创建时间。*/
             /* Update created date of metrics. */

@@ -16,11 +16,11 @@ cid=15822
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 $testData1 = array('id' => 1, 'name' => 'High');
 $testData2 = array('id' => 2, 'name' => 'Medium');

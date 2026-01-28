@@ -24,7 +24,7 @@ cid=19049
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('0');
@@ -70,7 +70,7 @@ $steps7     = array();
 $expects7   = array();
 $stepTypes7 = array();
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->insertStepsTest($caseIdList[0], $steps1, $expects1, $stepTypes1)) && p() && e('1,2,3');          // 测试插入基础步骤（简单步骤类型）
 r($testcase->insertStepsTest($caseIdList[1], $steps2, $expects2, $stepTypes2)) && p() && e('4,5,6');          // 测试插入层级结构步骤（组+项目+步骤）

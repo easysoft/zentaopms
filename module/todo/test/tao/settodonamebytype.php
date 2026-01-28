@@ -19,7 +19,7 @@ cid=19281
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 zenData('todo')->loadYaml('settodonamebytype')->gen(7);
@@ -28,7 +28,7 @@ zenData('todo')->loadYaml('settodonamebytype')->gen(7);
 su('admin');
 
 // 4. 创建测试实例
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 5. 准备测试数据
 global $tester;

@@ -88,7 +88,7 @@ cid=16117
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1-2');
@@ -112,7 +112,7 @@ $objectIds   = array(0, 1, 11, 101);
 $browseTypes = array('', 'bysearch', 'bysearch');
 $queries     = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getObjectTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[0], $queries[0])) && p()                                   && e('0');                                   // 获取api文档树
 r($docTester->getObjectTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[1], $queries[1])) && p()                                   && e('0');                                   // 获取搜索后的api文档树
 r($docTester->getObjectTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2], $browseTypes[2], $queries[1])) && p()                                   && e('0');                                   // 获取切换版本后的api文档树

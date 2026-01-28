@@ -16,11 +16,11 @@ cid=15782
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 r($convertTest->getJiraStatusListTest(1, array('zentaoObject' => array(1 => 'story')))) && p() && e('2'); // 步骤1：正常情况
 r($convertTest->getJiraStatusListTest(1, array())) && p() && e('0'); // 步骤2：空relations参数

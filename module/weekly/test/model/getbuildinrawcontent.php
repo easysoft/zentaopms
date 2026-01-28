@@ -16,12 +16,12 @@ cid=19719
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
-$weeklyTester = new weeklyTest();
+$weeklyTester = new weeklyModelTest();
 $content      = $weeklyTester->getBuildinRawContentTest();
 
 r($content['meta'])                                                                                      && p('title')          && e('项目周报模板');                                        // 检查模板标题

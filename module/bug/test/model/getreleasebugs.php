@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(10);
 zenData('product')->gen(10);
@@ -30,7 +30,7 @@ cid=15394
 $buildIDList   = array(11, 12, 13, 14, 15, 16);
 $productIDList = array(1, 2);
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->getReleaseBugsTest($buildIDList[0], $productIDList[1])) && p('') && e('BUG4,BUG5,BUG6'); // 测试获取buildID为11 productID为2的bug
 r($bug->getReleaseBugsTest($buildIDList[1], $productIDList[1])) && p('') && e('0');              // 测试获取buildID为12 productID为2的bug
 r($bug->getReleaseBugsTest($buildIDList[2], $productIDList[0])) && p('') && e('BUG1,BUG2,BUG3'); // 测试获取buildID为13 productID为1的bug

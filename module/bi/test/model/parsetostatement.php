@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15195
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r($bi->parseToStatementTest('SELECT id, name FROM zt_user')) && p() && e('object');                                          // 测试简单SELECT语句解析
 r($bi->parseToStatementTest('SELECT id, name FROM zt_user WHERE deleted = "0"')) && p() && e('object');                    // 测试带WHERE条件的SELECT语句解析

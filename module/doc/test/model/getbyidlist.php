@@ -38,7 +38,7 @@ cid=16072
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('doccontent')->gen(50);
@@ -50,7 +50,7 @@ $docIdList[1] = range(1, 30);
 $docIdList[2] = range(1, 60);
 $docIdList[3] = range(61, 80);
 
-$docTester       = new docTest();
+$docTester       = new docModelTest();
 $emptyData       = $docTester->getByIdListTest($docIdList[0]);
 $docData         = $docTester->getByIdListTest($docIdList[1]);
 $hasNotExistData = $docTester->getByIdListTest($docIdList[2]);

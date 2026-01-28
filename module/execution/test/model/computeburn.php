@@ -18,7 +18,7 @@ cid=16286
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备用户数据
 zenData('user')->gen(5);
@@ -73,7 +73,7 @@ $product->name->range('产品1,产品2,产品3,产品4,产品5');
 $product->gen(5);
 
 // 创建测试实例
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 // 测试步骤1：空参数计算所有符合条件的执行燃尽图
 r($executionTester->computeBurnTest('')) && p('3:executionName') && e('code3');

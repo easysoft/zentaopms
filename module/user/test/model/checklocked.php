@@ -14,7 +14,7 @@ cid=19586
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $config;
 if(empty($config->user)) $config->user = new stdclass();
@@ -30,7 +30,7 @@ $table->account->range('admin,user1,user2');
 $table->locked->range("`{$locked}`,`{$now}`,`{$locked}`");
 $table->gen(3);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->checkLockedTest('admin')) && p() && e(1); // admin 用户被锁定，返回 true。
 r($userTest->checkLockedTest('user1')) && p() && e(1); // user1 用户锁定时间未超过锁定时长限制，返回 true。

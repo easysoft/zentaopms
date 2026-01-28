@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -30,7 +30,7 @@ $executionIdList = array(11, 60);
 
 global $lang;
 $executionMenu = clone $lang->execution->menu;
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 $lang->execution->menu = clone $executionMenu;
 r(empty($executionTester->removeMenuTest($executionIdList[0])->burn))  && p('') && e('1'); // 测试移除燃尽图的导航

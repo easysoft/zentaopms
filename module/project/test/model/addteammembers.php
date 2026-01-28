@@ -16,7 +16,7 @@ cid=17798
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('team')->gen(0);
 zenData('user')->gen(10);
@@ -24,7 +24,7 @@ zenData('project')->gen(5);
 
 su('admin');
 
-$projectTest = new projectTest();
+$projectTest = new projectModelTest();
 
 $project1 = new stdClass();
 $project1->PM = 'pm1';

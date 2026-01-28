@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -52,7 +52,7 @@ foreach($gitlabUsers as $gitlabUser)
 $user->name            = 'apiUpdatedUser';
 $user->password_repeat = '';
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 r($gitlabTest->editUserTest($gitlabID, $user)) && p('account:0') && e('禅道用户不能为空'); //使用空的account更新gitlab用户
 
 $user->account = 'admin';

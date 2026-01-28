@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(50);
 zenData('user')->gen(20);
@@ -28,7 +28,7 @@ cid=17331
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 $programID = array(1, 2, 3, 4, 5);
 
 r($personnel->getIssueInvestTest($programID[0])) && p()  && e('admin:4,4,1;user12:0,0,0;user22:0,0,0;user32:0,0,0;');  //项目集 1 下的参与人的项目风险

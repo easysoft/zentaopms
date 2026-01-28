@@ -16,7 +16,7 @@ cid=17233
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $pipeline = zenData('pipeline');
 $pipeline->id->range('1-5');
@@ -30,7 +30,7 @@ $pipeline->gen(5);
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->apiReopenMRTest(1, '3', 138)) && p() && e('0'); // 测试步骤1：正常的gitlab主机重新打开MR
 r($mrTest->apiReopenMRTest(999, '3', 138)) && p() && e('0'); // 测试步骤2：不存在的主机ID重新打开MR

@@ -224,7 +224,7 @@ class productZenTest extends baseTest
         }
         $this->instance->app->rawModule = $isProjectStory ? 'projectstory' : 'product';
         $this->instance->app->rawMethod = 'browse';
-        $this->instance->app->tab = 'product';
+        $this->instance->app->tab       = 'product';
         try {
             $this->invokeArgs('buildSearchFormForBrowse', array($project, $projectID, &$productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from, $blockID));
         } catch (Throwable $e) {}
@@ -260,7 +260,7 @@ class productZenTest extends baseTest
         }
         $this->instance->app->rawModule = $projectID > 0 ? 'projectstory' : 'product';
         $this->instance->app->rawMethod = 'track';
-        $this->instance->app->tab = 'product';
+        $this->instance->app->tab       = 'product';
         try {
             $this->invokeArgs('buildSearchFormForTrack', array(&$productID, $branch, $projectID, $browseType, $param, $storyType));
         } catch (Throwable $e) {}
@@ -1103,8 +1103,8 @@ class productZenTest extends baseTest
         global $tester;
 
         /* Set up app environment for the test. */
-        $this->instance->app->rawModule = 'product';
-        $this->instance->app->rawMethod = 'roadmap';
+        $this->instance->app->rawModule  = 'product';
+        $this->instance->app->rawMethod  = 'roadmap';
         $this->instance->app->moduleName = 'product';
         $this->instance->app->methodName = 'roadmap';
 
@@ -1141,7 +1141,7 @@ class productZenTest extends baseTest
      */
     public function setCreateMenuTest(int $programID = 0, string $tab = 'product', string $viewType = '', string $rawModule = 'product', string $rawMethod = 'create')
     {
-        $this->instance->app->tab = $tab;
+        $this->instance->app->tab       = $tab;
         $this->instance->app->rawModule = $rawModule;
         $this->instance->app->rawMethod = $rawMethod;
 

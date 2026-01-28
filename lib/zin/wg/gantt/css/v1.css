@@ -43,7 +43,9 @@
 #ganttContainer .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
 
 #ganttContainer .submitBtn{display:none}
-#ganttContainer .editDeadline {display: none; line-height: normal !important; padding: 2px 6px; color: #fff !important;}
+#ganttContainer input.deadline {text-align: center; background-color: inherit; width: 100%;}
+#ganttContainer .deadlineBox {position: relative;}
+#ganttContainer .editDeadline {display: none; line-height: normal !important; padding: 2px 6px; position: absolute; right:0; top:5px;}
 #ganttContainer td:hover > .editDeadline {display: inline-block !important;}
 #ganttContainer .icon-confirm {color: #18a6fd; font-size: 18px;}
 #ganttContainer .icon-seal{font-size: 18px;}

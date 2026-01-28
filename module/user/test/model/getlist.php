@@ -18,7 +18,7 @@ cid=19615
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $user = zenData('user');
@@ -29,7 +29,7 @@ $user->type->range('inside{3},outside{2}');
 $user->deleted->range('0-1');
 $user->gen(5);
 
-$user = new userTest();
+$user = new userModelTest();
 
 r($user->getListTest())                  && p('0:realname') && e('用户名1'); // 查找系统中第一个未删除的、内部用户真实姓名,根据account正序排
 r($user->getListTest())                  && p('1:realname') && e('用户名3'); // 查找系统中第二个未删除的、内部用户真实姓名,根据account正序排

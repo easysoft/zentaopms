@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -42,7 +42,7 @@ $task4->fromBug = 3;
 $task5 = new stdclass();
 $task5->fromBug = 4;
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->objectModel->needUpdateBugStatus($task1)) && p() && e('0'); //计算不来源于bug的任务是否需要更新bug状态
 r($task->objectModel->needUpdateBugStatus($task2)) && p() && e('1'); //计算来源于bug的任务是否需要更新bug状态 bug状态为active
 r($task->objectModel->needUpdateBugStatus($task3)) && p() && e('0'); //计算来源于bug的任务是否需要更新bug状态 bug状态为resolved

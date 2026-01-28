@@ -16,7 +16,7 @@ cid=19701
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $kanbanTable = zenData('kanbancard');
@@ -31,7 +31,7 @@ $meetingTable->gen(5);
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 r($webhookTest->getViewLinkTest('product', 1)) && p() && e('/getviewlink.php?m=product&f=view&id=1');
 r($webhookTest->getViewLinkTest('case', 1)) && p() && e('/getviewlink.php?m=testcase&f=view&id=1');

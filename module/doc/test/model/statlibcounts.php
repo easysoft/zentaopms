@@ -14,7 +14,7 @@ cid=16154
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
@@ -25,7 +25,7 @@ $libIds[0] = array();
 $libIds[1] = range(1, 30);
 $libIds[2] = range(41, 50);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->statLibCountsTest($libIds[0])) && p()     && e('0'); // 文档库ID列表为空时，获取文档、模块的数量
 r($docTester->statLibCountsTest($libIds[1])) && p('11') && e('4'); // 文档库ID列表为1-30时，获取文档ID=11、模块的数量
 r($docTester->statLibCountsTest($libIds[1])) && p('12') && e('3'); // 文档库ID列表为1-30时，获取文档ID=12、模块的数量

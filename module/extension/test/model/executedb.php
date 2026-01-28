@@ -16,13 +16,13 @@ cid=16453
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('extension')->gen(10);
 
 su('admin');
 
-$extensionTest = new extensionTest();
+$extensionTest = new extensionModelTest();
 
 // 设置临时的pkgRoot用于测试
 global $tester;

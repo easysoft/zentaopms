@@ -18,7 +18,7 @@ cid=17069
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('metriclib');
 $table->id->range('1-10');
@@ -31,7 +31,7 @@ $table->gen(10);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->checkHasInferenceOfDateTest('test_metric_year', 'year', '2024-01-15')) && p() && e('1');
 r($metricTest->checkHasInferenceOfDateTest('test_metric_year', 'month', '2024-01-15')) && p() && e('1');

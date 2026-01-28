@@ -32,14 +32,14 @@ cid=19838
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('image')->loadYaml('image')->gen(20);
 
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $nodeID  = array(1, 2, 3, 4, 0, 1000);
 $orderBy = array('id_desc', 'id_asc');

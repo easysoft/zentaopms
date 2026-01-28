@@ -17,11 +17,11 @@ cid=16238
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->getParamTest('todo', 'create', '')) && p('params') && e('$date=\'today\', $from=\'todo\'');                // 测试获取控制器方法参数（包含默认值）
 r($editor->getParamTest('todo', 'create', 'Model')) && p('params') && e('$todo');                                   // 测试获取模型方法参数（无默认值）

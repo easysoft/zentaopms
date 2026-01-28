@@ -16,7 +16,7 @@ cid=15476
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // zendata数据准备
 $table = zenData('product');
@@ -28,7 +28,7 @@ $table->gen(5);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 // 测试步骤1：正常产品和分支的浏览类型为bymodule
 $product = new stdClass();

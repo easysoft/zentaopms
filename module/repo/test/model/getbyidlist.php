@@ -18,7 +18,7 @@ cid=18049
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('repo');
@@ -35,7 +35,7 @@ $table->gen(8);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：正常获取多个存在的代码库ID
 r(count($repoTest->getByIdListTest(array(1, 2, 3, 4)))) && p() && e('4');

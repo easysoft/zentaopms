@@ -17,13 +17,13 @@ cid=19313
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$transferTest = new transferTest();
+$transferTest = new transferModelTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
 // 注：format方法依赖复杂的文件系统和Excel处理，此测试仅验证参数验证逻辑

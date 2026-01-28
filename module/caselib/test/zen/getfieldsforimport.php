@@ -16,11 +16,11 @@ cid=15548
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 r($caselibTest->getFieldsForImportTest('count')) && p() && e('9');
 r($caselibTest->getFieldsForImportTest()) && p('用例名称') && e('title');

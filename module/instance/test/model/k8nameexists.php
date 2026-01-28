@@ -16,7 +16,7 @@ cid=16809
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/instance.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('instance');
 $table->id->range('1-5');
@@ -26,7 +26,7 @@ $table->gen(5);
 
 su('admin');
 
-$instanceTest = new instanceTest();
+$instanceTest = new instanceModelTest();
 
 r($instanceTest->k8nameExistsTest('test-k8name-1')) && p() && e('1');
 r($instanceTest->k8nameExistsTest('nonexistent-k8name')) && p() && e('0');

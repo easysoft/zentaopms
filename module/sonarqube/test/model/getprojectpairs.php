@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/sonarqube.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->loadYaml('pipeline')->gen(5);
 zenData('job')->loadYaml('job_getprojectpairs')->gen(3);
@@ -23,7 +23,7 @@ cid=18386
 
 su('admin');
 
-$sonarqubeTest = new sonarqubeTest();
+$sonarqubeTest = new sonarqubeModelTest();
 
 r(count($sonarqubeTest->getProjectPairsTest(0))) && p() && e('0');
 r(count($sonarqubeTest->getProjectPairsTest(2))) && p() && e('6');

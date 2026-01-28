@@ -97,6 +97,7 @@ if($canBatchEdit)
     );
 }
 
+if($config->edition != 'open') $config->project->dtable->fieldList['workflowGroup']['map'] = $this->loadModel('workflowGroup')->getPairs('project', 'all', 1, 'all');
 $settings = $this->loadModel('datatable')->getSetting('project');
 foreach($settings as $key => $value)
 {
@@ -104,6 +105,12 @@ foreach($settings as $key => $value)
     if(commonModel::isTutorialMode() && in_array($value['name'], array('PM', 'budget', 'teamCount'))) unset($settings[$key]);
 }
 $tableData = initTableData($projectStats, $settings, $this->project);
+$tableData = array_map(function($item)
+{
+    if(!$item->workflowGroup) $item->workflowGroup = '';
+    return $item;
+}, $tableData);
+
 /* zin: Define the dtable in main content. */
 dtable
 (

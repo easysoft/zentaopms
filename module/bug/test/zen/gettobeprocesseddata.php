@@ -21,7 +21,7 @@ cid=15461
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('bug')->gen(10);
 zenData('task')->gen(5);
@@ -29,7 +29,7 @@ zenData('productplan')->gen(5);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 // 测试步骤1：正常情况，无状态变化，无计划变化
 $bug = (object)array('id' => 1, 'status' => 'active', 'plan' => 1, 'toTask' => 0);

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -36,7 +36,7 @@ cid=16938
 */
 $executionIDList = array(1, 2, 3);
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getRDKanbanTest($executionIDList[0])[0]['items'][0]['data']['lanes'])          && p('0:id,title') && e('1,泳道1');  // 获取执行1的看板信息
 r($kanban->getRDKanbanTest($executionIDList[1])[0]['items'][0]['data']['items'][7][7])    && p('0:id,title') && e('7,任务7');  // 获取执行2的看板信息

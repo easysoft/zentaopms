@@ -28,7 +28,8 @@ class moduleMenu extends wg
         'appendSettingItems?: array',
         'onCheck?: function',
         'toggleSidebar?: bool=true',
-        'isInModal?: bool=false'
+        'isInModal?: bool=false',
+        'onClickItem?: function'
     );
 
     protected static array $defineBlocks = array
@@ -94,7 +95,7 @@ class moduleMenu extends wg
 
             $items = $this->buildMenuTree($child->id);
             if($items) $item['items'] = $items;
-            if($child->id === $activeKey || $child->id === 'product-' . $activeKey)
+            if((string)$child->id === (string)$activeKey || $child->id === 'product-' . $activeKey)
             {
                 $itemKey = $this->prop('checkbox') ? 'checked' : 'selected';
                 $item[$itemKey] = true;
@@ -311,6 +312,7 @@ class moduleMenu extends wg
                     set::hover(true),
                     set::lines(true),
                     set::preserve($preserve),
+                    set::itemActions($this->prop('moduleActions')),
                     set($treeProps),
                     set($userTreeProps)
                 ),

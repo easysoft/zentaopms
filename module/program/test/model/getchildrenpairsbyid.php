@@ -24,7 +24,7 @@ exec("mysql -h127.0.0.1 -uroot -pzentao zttest -e \"INSERT IGNORE INTO zt_compan
 exec("mysql -h127.0.0.1 -uroot -pzentao zttest -e \"INSERT IGNORE INTO zt_user (id, account, password, realname, role) VALUES (1, 'admin', 'e3ceb5881a0a1fdaad01296d7554868d', 'Admin', 'admin')\" 2>/dev/null");
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -43,7 +43,7 @@ INSERT INTO " . TABLE_PROJECT . " (id, name, type, parent, deleted, status, grad
 (10, '子项目集5', 'program', 9, '0', 'doing', 2, ',9,10,')
 ");
 
-$programTest = new programTest();
+$programTest = new programModelTest();
 
 r($programTest->getChildrenPairsByIDTest(1)) && p('3,4') && e('子项目集1,子项目集2'); // 测试步骤1：获取有子项目集的项目集ID为1的子项目集和项目
 r($programTest->getChildrenPairsByIDTest(2)) && p('5,7') && e('子项目集3,项目2'); // 测试步骤2：获取有单个子项目集的项目集ID为2的子项目集

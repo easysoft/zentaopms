@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug_assign')->gen(6);
 zenData('user')->gen(1);
@@ -92,7 +92,7 @@ $bug6->lastEditedDate = $now;
 $bug6->mailto         = 'user3';
 $bug6->comment        = '';
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->assignTest($bug1))  && p('assignedTo;mailto', ';') && e('user2;user1,user3;'); // 指派bug状态为激活的bug 更改指派人
 r($bug->assignTest($bug2))  && p('assignedTo;mailto', ';') && e('user2;user2;');       // 指派bug状态为解决的bug 更改指派人
 r($bug->assignTest($bug3))  && p('assignedTo;mailto', ';') && e('user1;admin');        // 指派bug状态为关闭的bug 更改指派人

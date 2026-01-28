@@ -16,11 +16,11 @@ cid=16077
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 // 测试步骤（必须包含至少5个测试步骤）
 r($docTest->getDocIdByTitleTest(1001, '')) && p() && e('0'); // 步骤1：空标题测试

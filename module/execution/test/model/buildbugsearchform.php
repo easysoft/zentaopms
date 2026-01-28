@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -76,7 +76,7 @@ $productIDList = array(1, 0);
 $queryIDList   = array(0, 1);
 $typeList      = array('execution', 'project');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[1], $typeList[0])) && p() && e('1'); // 测试获取execution下的正确的产品，正确的queryID
 r($execution->buildBugSearchFormTest($productIDList[1], $queryIDList[1], $typeList[0])) && p() && e('0'); // 测试获取execution下的错误的产品，正确的queryID
 r($execution->buildBugSearchFormTest($productIDList[0], $queryIDList[0], $typeList[0])) && p() && e('0'); // 测试获取execution下的正确的产品，错误的queryID

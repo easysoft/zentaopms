@@ -17,11 +17,11 @@ cid=19646
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $_SESSION['user'] = $userTest->getbyIdTest('admin');
 r($userTest->isLogonTest()) && p() && e(1); // 步骤1：正常登录用户admin的状态检查
@@ -31,6 +31,9 @@ r($userTest->isLogonTest()) && p() && e(1); // 步骤2：正常登录用户user1
 
 $_SESSION['user'] = (object)array('account' => 'guest');
 r($userTest->isLogonTest()) && p() && e(0); // 步骤3：guest用户的登录状态检查
+
+$_SESSION['user'] = $userTest->getbyIdTest('test999');
+r($userTest->isLogonTest()) && p() && e(0); // session 中用户为 test999 时获取用户的登录状态。
 
 $_SESSION['user'] = false;
 r($userTest->isLogonTest()) && p() && e(0); // 步骤4：session中用户为false时的状态检查

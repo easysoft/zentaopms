@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -32,7 +32,7 @@ cid=16264
 
 */
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->batchChangeStatusObject(array(4), 'doing'))     && p('byChild') && e("'阶段a子1'");   // 测试批量修改执行状态为进行中
 r($execution->batchChangeStatusObject(array(2), 'wait'))      && p('byChild') && e('~~');           // 测试批量修改执行状态为未开始
 r($execution->batchChangeStatusObject(array(5), 'suspended')) && p('byChild') && e('~~');           // 测试批量修改执行状态为已挂起

@@ -83,7 +83,7 @@ class twinsStory extends wg
                         picker(setID('plans_0'), set::name('plans[0]'), set::items($planItems), set::value($defaultPlan))
                     )
                 ),
-                count($branchItems) > 1 ? formGroup
+                !empty($branchItems) && count($branchItems) > 1 ? formGroup
                 (
                     setClass('c-actions'),
                     btn(setClass('btn-link addNewLine'), setData(array('on' => 'click', 'call' => 'addBranchesBox', 'params' => 'event')), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$productType])), icon('plus'))

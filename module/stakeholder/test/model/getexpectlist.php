@@ -45,7 +45,7 @@ cid=18434
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(20);
 zenData('expect')->loadYaml('expect')->gen(20);
@@ -62,7 +62,7 @@ $browseTypes = array('all', 'bysearch');
 $queryIds    = array(0, 1, 2);
 $sorts       = array('id_desc', 'expect_desc');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getExpectListTest($projectIds[0], $browseTypes[0], $queryIds[0], $sorts[0])) && p()                    && e('0');     // 获取项目ID=0时，Id按照倒序排列的所有期望
 r($stakeholderTester->getExpectListTest($projectIds[0], $browseTypes[0], $queryIds[0], $sorts[1])) && p()                    && e('0');     // 获取项目ID=0时，期望按照倒序排列的所有期望
 r($stakeholderTester->getExpectListTest($projectIds[1], $browseTypes[0], $queryIds[0], $sorts[0])) && p('19:userID,project') && e('11,11'); // 获取项目ID=11时，Id按照倒序排列的所有期望

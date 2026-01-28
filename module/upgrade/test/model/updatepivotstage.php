@@ -16,7 +16,7 @@ cid=19558
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -41,7 +41,7 @@ $testRepeatColumn['sql'] = 'select id,id from zt_pivot;';
 $testNormalData = array();
 $testNormalData['id'] = 1007;
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->updatePivotStageTest($testStageDraft))   && p('stage') && e('draft');     //测试阶段为草稿的情况
 r($upgrade->updatePivotStageTest($testSQLEmpty))     && p('stage') && e('draft');     //测试sql为空时阶段是否为草稿
 r($upgrade->updatePivotStageTest($testErrorSQL))     && p('stage') && e('draft');     //测试sql错误时阶段是否被修改为草稿

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanspace')->gen(15);
@@ -29,7 +29,7 @@ cid=16917
 $spaceIDList  = array(array(1,2,3), array(4,5,6), array(7,8,9), array(10,11,12), array(13,14,15));
 $kanbanIDList = array(array(1,2,3,4), array(7,8,11,12), array(15,16,17,18), array(19,20,21,22,23,24,25), array(26,28,30));
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getGroupBySpaceListTest($spaceIDList[0]))                   && p() && e('6'); // 获取空间1 2 3的看板
 r($kanban->getGroupBySpaceListTest($spaceIDList[0], $kanbanIDList[0])) && p() && e('2'); // 获取空间1 2 3 看板1,2,3,4的看板

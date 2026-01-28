@@ -15,14 +15,14 @@ cid=18439
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('programactivity')->loadYaml('programactivity')->gen(25);
 zenData('user')->gen(5);
 
 $objectIds = array(0 , 60, 70);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getProcessGroupTest($objectIds[0]))    && p()                     && e('0');   // 获取项目ID为0的按照进度分组的活动列表
 r($stakeholderTester->getProcessGroupTest($objectIds[1])[5]) && p('0:process,activity') && e('5,5'); // 获取项目ID为60的按照进度分组的活动列表
 r($stakeholderTester->getProcessGroupTest($objectIds[2]))    && p()                     && e('0');   // 获取项目ID不存在的按照进度分组的活动列表

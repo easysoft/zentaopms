@@ -25,7 +25,7 @@ cid=19360
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -34,7 +34,7 @@ zenData('module')->loadYaml('module')->gen(100);
 $root = array(1, 2);
 $type = array('task', 'story', 'doc', 'bug', 'case');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->fixModulePathTest(1, $type[0])) && p('1,6') && e('1,1+6');  // 修复root为 1 的module path
 r($tree->fixModulePathTest(1, $type[1])) && p('2,7')  && e('2,2+7');  // 修复root为 2 的module path

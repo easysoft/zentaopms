@@ -21,7 +21,7 @@ cid=18200
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('score')->loadYaml('score')->gen(40);
@@ -30,7 +30,7 @@ $accounts    = array('admin', 'user1');
 $recPerPages = array(5, 10, 20);
 $pageIDs     = array(1, 2);
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 
 /* Admin user. */
 $adminScores1 = $scoreTester->getListByAccountTest($accounts[0], $recPerPages[0], $pageIDs[0]);

@@ -16,11 +16,11 @@ cid=16621
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/gitlab.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$gitlabTest = new gitlabTest();
+$gitlabTest = new gitlabModelTest();
 
 r($gitlabTest->apiGetSingleTagTest(1, 2, 'tag3')) && p('name') && e('tag3');
 r($gitlabTest->apiGetSingleTagTest(0, 2, 'tag3')) && p() && e('0');

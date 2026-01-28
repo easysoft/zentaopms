@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -37,7 +37,7 @@ cid=16358
 $executionIdList = array(0, 2, 3, 4);
 $count           = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->processTasksTest($executionIdList[0], $count[0])) && p()             && e('0');             // 测试空数据
 r($executionTester->processTasksTest($executionIdList[1], $count[0])) && p('30:id,name') && e('30,开发任务40'); // 测试处理迭代下的任务信息
 r($executionTester->processTasksTest($executionIdList[2], $count[0])) && p('15:id,name') && e('15,开发任务25'); // 测试处理阶段下的任务信息

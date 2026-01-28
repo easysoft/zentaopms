@@ -21,7 +21,7 @@ cid=15378
 
 // 1. 导入依赖 - 初始化测试框架和bug测试类
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备 - 使用自定义YAML配置生成测试数据
 // 配置包含：resolved状态的bug，有效的resolvedDate，以及resolvedBy字段
@@ -31,7 +31,7 @@ zenData('bug')->loadYaml('resolveddate')->gen(10);
 su('admin');
 
 // 4. 创建测试实例 - 实例化bug模块的单元测试类
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 // 5. 测试步骤执行 - 覆盖多种测试场景，确保方法的健壮性和准确性
 r($bugTest->getDataOfResolvedBugsPerDayTest()) && p('0:value') && e('10'); // 步骤1：验证解决bug数量统计 - 测试统计功能的准确性

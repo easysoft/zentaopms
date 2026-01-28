@@ -17,11 +17,11 @@ cid=17795
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanZenTest();
 
 // 测试步骤1：空数组排序
 r($programplanTest->sortPlansTest(array())) && p() && e(0);

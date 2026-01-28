@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -23,7 +23,7 @@ pid=1
 */
 $year = array('2020', '2021', '2022', '2023', '2024');
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getYearMonthsTest($year[0])) && p() && e('2020-01,2020-02,2020-03,2020-04,2020-05,2020-06,2020-07,2020-08,2020-09,2020-10,2020-11,2020-12'); // 测试获取 2020 的月份
 r($report->getYearMonthsTest($year[1])) && p() && e('2021-01,2021-02,2021-03,2021-04,2021-05,2021-06,2021-07,2021-08,2021-09,2021-10,2021-11,2021-12'); // 测试获取 2021 的月份

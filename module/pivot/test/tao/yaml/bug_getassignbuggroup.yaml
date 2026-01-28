@@ -7,40 +7,40 @@ fields:
   - field: id
     note: Bug ID
     range: 1-20
-    
+
   - field: product
     note: 产品ID
     range: 1{5},2{7},3{8}
-    
+
   - field: assignedTo
     note: 指派给用户
     range: user1{4},user2{5},user3{3},{2},closed{2},user4{4}
-    
+
   - field: status
     note: Bug状态
     range: active{15},resolved{3},closed{2}
-    
+
   - field: deleted
     note: 是否删除
     range: 0{18},1{2}
-    
+
   - field: openedBy
     note: 由谁创建
     range: admin{10},user1{5},user2{5}
-    
+
   - field: openedDate
     note: 开启日期
     range: '2024-01-01 00:00:00'{5},'2024-06-01 12:00:00'{10},'2024-09-01 18:00:00'{5}
-    
+
   - field: title
     note: Bug标题
     range: 'Bug Title %d'
     format: "%02d"
-    
+
   - field: severity
     note: 严重程度
     range: 1{5},2{7},3{5},4{3}
-    
+
   - field: resolution
     note: 解决方案
     range: ''{12},fixed{3},bydesign{2},duplicate{3}

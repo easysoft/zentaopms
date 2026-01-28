@@ -18,7 +18,7 @@ cid=16966
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $kanbanregion = zenData('kanbanregion');
 $kanbanregion->id->range('1-5');
@@ -35,7 +35,7 @@ $kanbanregion->gen(5);
 
 su('admin');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateRegionTest(1, '更新后的区域名称')) && p('name') && e('更新后的区域名称'); // 步骤1：正常更新看板区域名称
 r($kanban->updateRegionTest(2, '')) && p('name:0') && e('『区域名称』不能为空。'); // 步骤2：更新区域名称为空值

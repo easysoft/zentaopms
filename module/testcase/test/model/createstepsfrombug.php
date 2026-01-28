@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=18971
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 $steps1   = "<p>[步骤]</p><br/>一个步骤\n<p>[结果]</p><br/>一个结果\n<br/><p>[期望]</p><br/>一个期望\n<br/>";
 $steps2   = "<p>[步骤]</p><br/>1. 步骤1\n2. 步骤2<br/><p>[结果]</p><br/>1. 结果1\n2. 结果2\n<br/><p>[期望]</p><br/>期望\n<br/>";

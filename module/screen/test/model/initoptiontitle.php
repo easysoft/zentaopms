@@ -16,11 +16,11 @@ cid=18265
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试步骤1：pivot类型未设置caption时自动设置
 $component1 = new stdclass();

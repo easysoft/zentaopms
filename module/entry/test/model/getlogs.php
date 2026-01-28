@@ -22,7 +22,7 @@ cid=16250
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('log');
 $table->id->range('1-15');
@@ -40,7 +40,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$entryTest = new entryTest();
+$entryTest = new entryModelTest();
 
 r(count($entryTest->getLogsTest(1))) && p() && e('6'); // 步骤1：正常情况-获取ID为1的entry日志列表数量
 r(count($entryTest->getLogsTest(999))) && p() && e('5'); // 步骤2：边界值-获取不存在ID的entry日志列表数量

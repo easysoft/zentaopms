@@ -37,7 +37,7 @@ cid=16100
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -51,7 +51,7 @@ $appendLibs   = array('0', '1');
 $objectIds    = array(0, 1, 11, 101);
 $excludeTypes = array('', 'mine');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibsTest($types[0], $extras[0], $appendLibs[0], $objectIds[0], $excludeTypes[0])) && p('6')  && e('自定义文档库6');                      // 获取系统中所有的文档库
 r($docTester->getLibsTest($types[0], $extras[1], $appendLibs[0], $objectIds[0], $excludeTypes[0])) && p('22') && e('敏捷项目1 / 迭代7 / 执行文档主库22'); // 查看id为22的文档库
 r($docTester->getLibsTest($types[0], $extras[0], $appendLibs[1], $objectIds[0], $excludeTypes[0])) && p('1')  && e('项目接口库1	');                       // 获取系统中包括id=1的文档库

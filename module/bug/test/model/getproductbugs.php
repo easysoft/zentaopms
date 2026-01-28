@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -57,7 +57,7 @@ $typeList      = array('', 'resolved', 'opened');
 $beginList     = array('today', 'lastweek');
 $endList       = array('today', 'nextweek');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getProductBugsTest($productIdList[0], $typeList[0], $beginList[0], $endList[0])) && p() && e('1,2,3,4,5,6,7,8,9');          // 测试获取产品ID为1 2 3 的bug
 r($bug->getProductBugsTest($productIdList[0], $typeList[0], $beginList[1], $endList[1])) && p() && e('1,2,3,4,5,6,7,8,9');          // 测试获取产品ID为1 2 3 的bug

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_year')->gen(35);
 zenData('actionrecent')->loadYaml('action_year')->gen(35);
@@ -39,7 +39,7 @@ $accountList     = array('', 'admin', 'dev17', 'test18');
 $typeList        = array('all', 'today', 'yesterday', 'lastweek');
 $dateList        = array('', 'today');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 su('admin');
 r($action->getDynamicByAccountTest($accountList[0])) && p() && e('12');  // 查找用户admin动态

@@ -14,7 +14,7 @@ cid=17758
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(10);
@@ -24,7 +24,7 @@ $projectID = 1;
 
 $changeName = array('name' => '修改后的阶段');
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 r($programplan->objectModel->update(0, 0, null)) && p() && e('0'); // 传入空参数
 

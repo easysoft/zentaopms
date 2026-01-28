@@ -45,7 +45,7 @@ cid=17406
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -56,7 +56,7 @@ zenData('project')->gen(10);
 zenData('project')->loadYaml('execution_workload')->gen(10, false, false);
 zenData('team')->loadYaml('team')->gen(5);
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 global $tester;
 $users = $tester->loadModel('user')->getPairs('noletter|noclosed');

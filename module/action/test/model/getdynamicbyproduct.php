@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_year')->gen(35);
 zenData('actionrecent')->loadYaml('action_year')->gen(35);
@@ -34,7 +34,7 @@ $accountList = array('all', 'admin', 'dev17', 'test18');
 $typeList    = array('all', 'today', 'yesterday', 'lastweek');
 $dateList    = array('', 'today');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 su('admin');
 r($actionTest->getDynamicByProductTest($productID, $accountList[0])) && p() && e('7');  // 查找所有用户动态
@@ -42,7 +42,7 @@ r($actionTest->getDynamicByProductTest($productID, $accountList[1])) && p() && e
 r($actionTest->getDynamicByProductTest($productID, $accountList[2])) && p() && e('2');  // 查找用户dev17动态
 r($actionTest->getDynamicByProductTest($productID, $accountList[3])) && p() && e('2');  // 查找用户test18动态
 
-$actionTest->objectModel->dao->update(TABLE_ACTIONPRODUCT)->set('product')->eq('1')->where('action')->eq('33')->exec();
+$actionTest->instance->dao->update(TABLE_ACTIONPRODUCT)->set('product')->eq('1')->where('action')->eq('33')->exec();
 r($actionTest->getDynamicByProductTest($productID, $accountList[3], $typeList[1])) && p() && e('1');   // 查找今天的动态
 r($actionTest->getDynamicByProductTest($productID, $accountList[1], $typeList[2])) && p() && e('0');   // 查找昨天的动态
 

@@ -16,7 +16,7 @@ cid=14902
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('1-5');
@@ -34,7 +34,7 @@ zenData('actionrecent')->gen(0);
 
 su('admin');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getLikeObjectTest(TABLE_PROJECT, 'name', 'name', '%项目集%')) && p() && e('5');
 r($action->getLikeObjectTest(TABLE_PROJECT, 'code', 'code', '%program%')) && p() && e('5');

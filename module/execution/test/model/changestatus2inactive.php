@@ -18,7 +18,7 @@ cid=16279
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 准备用户数据
 zenData('user')->gen(5);
@@ -40,7 +40,7 @@ $execution->realBegan->range('20220112 000000:0')->type('timestamp')->format('YY
 $execution->gen(10);
 
 // 4. 创建测试实例
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($executionTest->changeStatus2InactiveObject(2, 'suspended')) && p('') && e("'顶级阶段A',"); // 步骤1：修改顶级父阶段状态为suspended，子阶段未全部挂起/关闭

@@ -16,11 +16,11 @@ cid=15152
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 $testPath = sys_get_temp_dir() . '/zentao_test_duckdb_' . uniqid() . '/';
 if(!is_dir($testPath)) mkdir($testPath, 0755, true);

@@ -20,12 +20,12 @@ cid=15656
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 设置测试环境的IP地址，模拟客户端IP
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 r($commonTest->checkIPTest('*')) && p() && e('1');                            // 步骤1：通配符允许所有IP
 r($commonTest->checkIPTest('127.0.0.1')) && p() && e('1');                 // 步骤2：精确匹配当前IP

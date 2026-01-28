@@ -18,11 +18,11 @@ cid=17037
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailTaoTest();
 
 r($mailTest->replaceImageURLTest('<img src="/test.jpg" />', array())) && p() && e('<img src="/test.jpg" />');  // 步骤1：空图片数组保持原内容
 r($mailTest->replaceImageURLTest('<img src="/image1.jpg" />', array('/image1.jpg' => 'file1.jpg'))) && p() && e('<img src="cid:file1.jpg" />');  // 步骤2：单个图片URL替换
