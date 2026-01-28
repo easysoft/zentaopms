@@ -361,7 +361,8 @@ div
                             set::active($type == 'commit'),
                             dtable
                             (
-                                set::id('commitLogs'),
+                                set::id('commit'),
+                                set::userMap($users),
                                 set::cols($config->ppm->commitLogs->dtable->fieldList),
                                 set::data(array_values($commitLogs)),
                                 set::loadPartial(true),
@@ -449,14 +450,21 @@ div
                             set::key('object'),
                             set::title($lang->ppm->linkedObject . " ({$objectPager->recTotal})"),
                             set::active($type == 'object'),
+                            featureBar
+                            (
+                                set::current($param),
+                                set::labelCount($objectPager->recTotal),
+                                set::link($this->createLink('ppm', 'view', "id={$ppm->id}&type=object&param={key}")),
+                            ),
                             dtable
                             (
                                 set::id('linkObjects'),
                                 set::cols($config->ppm->createCheck->linkObject->dtable->fieldList),
+                                set::userMap($users),
                                 set::data(array_values($linkObjects)),
                                 set::loadPartial(true),
                                 set::onRenderCell(jsRaw('window.renderObjectCell')),
-                                set::footPager(usePager('objectPager', '', array('recPerPage' => $objectPager->recPerPage, 'recTotal' => $objectPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=object&param=&recTotal={$objectPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                                set::footPager(usePager('objectPager', '', array('recPerPage' => $objectPager->recPerPage, 'recTotal' => $objectPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=object&param={$param}&recTotal={$objectPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                             )
                         )
                     )
@@ -487,7 +495,7 @@ div
         div
         (
             setID('reviewer'),
-            h::js('loadTarget("' . createLink('ppm', 'ajaxGetReviewers', "ppmID={$ppm->id}") . '", "#reviewer")'),
+            h::js('loadTarget("' . createLink('ppm', 'ajaxGetReviewers', "ppmID={$ppm->id}&type={$type}") . '", "#reviewer")'),
         ),
         div
         (
