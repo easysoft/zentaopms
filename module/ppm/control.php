@@ -335,7 +335,7 @@ class ppm extends control
      * @access public
      * @return void
      */
-    public function view(int $id, string $type = 'basic', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
+    public function view(int $id, string $type = 'basic', string $param = 'all', int $recTotal = 0, int $recPerPage = 20, int $pageID = 0)
     {
         $ppm  = $this->ppm->fetchByID($id);
         $repo = $this->loadModel('repo')->getByID($ppm->repoID);
@@ -390,6 +390,7 @@ class ppm extends control
         $this->view->newRevision       = $ppm->sourceBranch;
         $this->view->defaultMergeType  = $this->cookie->mergeType;
         $this->view->gitfoxServer      = $this->gitfox->getServer();
+        $this->view->param             = $param;
         $this->display();
     }
 
@@ -872,7 +873,7 @@ class ppm extends control
      * @access public
      * @return void
      */
-    public function ajaxGetReviewers(int $ppmID)
+    public function ajaxGetReviewers(int $ppmID, $type = '')
     {
         $ppm      = $this->ppm->fetchByID($ppmID);
         $flow     = $this->loadModel('reporeviewflow')->getByID(zget($ppm, 'reviewFlowID', 0));
@@ -886,6 +887,7 @@ class ppm extends control
         $this->view->reviewers    = $reviewers;
         $this->view->reviewResult = $reviewResult;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type         = $type;
         $this->display();
     }
 
@@ -898,7 +900,7 @@ class ppm extends control
      * @access public
      * @return void
      */
-    public function ajaxAddReviewers(int $ppmID)
+    public function ajaxAddReviewers(int $ppmID, string $type = 'basic')
     {
         $ppm = $this->ppm->fetchByID($ppmID);
         if($_POST)
@@ -911,7 +913,14 @@ class ppm extends control
             $response['result']     = 'success';
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
-            $response['callback']   = "loadTarget($.createLink('ppm', 'ajaxGetReviewers', 'ppmID=' + " . $ppmID . "), '#reviewer');";
+            if($type == 'basic')
+            {
+                $response['callback'] = "loadTarget($.createLink('ppm', 'ajaxGetReviewers', 'ppmID={$ppmID}&type=basic'), '#reviewer');";
+            }
+            else
+            {
+                $response['load'] = $this->createLink('ppm', 'view', "id={$ppmID}&type=basic");
+            }
             return print $this->send($response);
         }
 
@@ -933,10 +942,11 @@ class ppm extends control
      *
      * @param  int $ppmID
      * @param  string $reviewer
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxDeleteReviewer(int $ppmID, string $reviewer)
+    public function ajaxDeleteReviewer(int $ppmID, string $reviewer, $type = 'basic')
     {
         $this->ppm->deleteReviewer($ppmID, $reviewer);
         if(dao::isError()) return $this->sendError(dao::getError());
@@ -945,7 +955,14 @@ class ppm extends control
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
-        $response['callback']   = "loadTarget($.createLink('ppm', 'ajaxGetReviewers', 'ppmID=' + " . $ppmID . "), '#reviewer');";
+        if($type == 'basic')
+        {
+            $response['callback'] = "loadTarget($.createLink('ppm', 'ajaxGetReviewers', 'ppmID={$ppmID}&type=basic'), '#reviewer');";
+        }
+        else
+        {
+            $response['load'] = $this->createLink('ppm', 'view', "id={$ppmID}&type=basic");
+        }
         return print $this->send($response);
     }
 
