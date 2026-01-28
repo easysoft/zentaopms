@@ -317,7 +317,6 @@ $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = 'Are you sure to close this merge request?';
 $lang->ppm->notice->confirmReopen = 'Are you sure to reopen this merge request?';
 
-$lang->ppm->featureBar = array();
 $lang->ppm->featureBar['view']['all']   = 'All';
 $lang->ppm->featureBar['view']['story'] = 'Story';
 $lang->ppm->featureBar['view']['task']  = 'Task';

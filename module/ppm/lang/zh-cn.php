@@ -317,7 +317,6 @@ $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = '是否确认关闭该合并请求？';
 $lang->ppm->notice->confirmReopen = '是否开启该合并请求？';
 
-$lang->ppm->featureBar = array();
 $lang->ppm->featureBar['view']['all']   = '全部';
 $lang->ppm->featureBar['view']['story'] = '需求';
 $lang->ppm->featureBar['view']['task']  = '任务';
