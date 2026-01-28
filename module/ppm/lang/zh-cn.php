@@ -55,6 +55,7 @@ $lang->ppm->review            = '评审';
 $lang->ppm->decision          = '评审结果';
 $lang->ppm->opinion           = '评审意见';
 $lang->ppm->merge             = '合并';
+$lang->ppm->assignedTo        = '指派给';
 
 $lang->ppm->action = new stdclass();
 $lang->ppm->action->synced   = '$date, 由 <strong>$actor</strong> 同步了合并请求。';
@@ -315,3 +316,9 @@ $lang->ppm->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接�
 $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = '是否确认关闭该合并请求？';
 $lang->ppm->notice->confirmReopen = '是否开启该合并请求？';
+
+$lang->ppm->featureBar = array();
+$lang->ppm->featureBar['view']['all']   = '全部';
+$lang->ppm->featureBar['view']['story'] = '需求';
+$lang->ppm->featureBar['view']['task']  = '任务';
+$lang->ppm->featureBar['view']['bug']   = '缺陷';
