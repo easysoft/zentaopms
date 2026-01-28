@@ -23,11 +23,11 @@ cid=16123
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getPrivLibsByDocTest()) && p('11,12,13,6,7,8,16,20,17,18,25,26') && e('11,12,13,6,7,8,16,20,17,18,25,26'); // 获取有权限访问的文档库

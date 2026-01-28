@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=17320
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 
 $programID = array(1, 2, 3);
 $deptID    = array(1, 2);

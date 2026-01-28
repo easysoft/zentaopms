@@ -20,7 +20,7 @@ cid=16384
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 $storyTable = zenData('story');
@@ -34,7 +34,7 @@ $userTable->loadYaml('user_buildstorytree', false, 2)->gen(5);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 // 准备测试需要的数据结构
 $stories = array();

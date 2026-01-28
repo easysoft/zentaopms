@@ -16,11 +16,11 @@ cid=14960
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->processAttributeTest('user')) && p() && e('user');
 r($actionTest->processAttributeTest('testtask')) && p() && e('task');

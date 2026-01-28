@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->setKanban();
@@ -44,7 +44,7 @@ $emptyFixColWidth    = array('fluidBoard' => 0, 'colWidth' => '0');
 $emptyNoFixColWidth  = array('fluidBoard' => 1, 'minColWidth' => 0, 'maxColWidth' => 0);
 $minGtMaxWidth       = array('fluidBoard' => 1, 'minColWidth' => '400', 'maxColWidth' => '210');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 $executionTester->executionModel->config->minColWidth = '200';
 r($executionTester->setKanbanTest($executionID, $changeFixColWidth))   && p('fluidBoard,colWidth')                && e('0,300');                           // 测试修改固定列宽
 r($executionTester->setKanbanTest($executionID, $changeNoFixColWidth)) && p('fluidBoard,minColWidth,maxColWidth') && e('1,210,400');                       // 测试修改自适应列宽

@@ -25,7 +25,7 @@ cid=15271
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备
 $table = zenData('block');
@@ -38,7 +38,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 // 5. 创建测试数据对象
 $block1 = new stdclass();

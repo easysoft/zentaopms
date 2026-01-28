@@ -16,7 +16,7 @@ cid=18297
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 缓冲zenData输出，避免干扰测试结果
 ob_start();
@@ -25,7 +25,7 @@ ob_end_clean();
 
 su('admin');
 
-$search = new searchTest();
+$search = new searchModelTest();
 
 r($search->deleteIndexTest('project', 1)) && p() && e('0');
 r($search->deleteIndexTest('story', 2)) && p() && e('0');

@@ -22,13 +22,13 @@ if(isset($error))
 $trs = array();
 foreach($disabledFeatures as $feature)
 {
-    if(is_array($feature) && empty($disabledScrumFeatures)) continue;
+    if(is_array($feature) && empty($disabledProjectFeatures)) continue;
     $trs[] = h::tr
     (
         h::td
         (
             setClass('text-left'),
-            is_array($feature) && !empty($disabledScrumFeatures) ? sprintf($lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $lang->custom->features[$feature]
+            is_array($feature) && !empty($disabledProjectFeatures) ? implode($lang->comma, $disabledProjectFeatures) : $lang->custom->features[$feature]
         ),
         h::td
         (
@@ -51,14 +51,14 @@ foreach($disabledFeatures as $feature)
 foreach($config->custom->allFeatures as $feature)
 {
     if(in_array($feature, $disabledFeatures)) continue;
-    if($feature == 'scrumDetail' && empty($enabledScrumFeatures)) continue;
+    if($feature == 'projectDetail' && empty($enabledProjectFeatures)) continue;
 
     $trs[] = h::tr
     (
         h::td
         (
             setClass('text-left'),
-            ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $lang->custom->features[$feature]
+            ($feature == 'projectDetail' && !empty($enabledProjectFeatures)) ? implode($lang->comma, $enabledProjectFeatures) : $lang->custom->features[$feature]
         ),
         h::td
         (

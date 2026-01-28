@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen('100');
@@ -24,7 +24,7 @@ cid=18986
 $caseIDList     = array('1');
 $browseTypeList = array('bySearch');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 $result = $testcase->getCases2LinkTest($caseIDList[0], $browseTypeList[0]);
 r(count($result)) && p('') && e('3'); // 获取相关的用例的数量

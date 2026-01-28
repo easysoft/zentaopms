@@ -16,11 +16,11 @@ cid=19311
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$transferTest = new transferTest();
+$transferTest = new transferModelTest();
 
 r($transferTest->createTmpFileTest(array(1 => (object)array('title' => '测试标题1', 'status' => 'active')))) && p() && e('Success');
 r($transferTest->createTmpFileTest(array())) && p() && e('Success');

@@ -1413,6 +1413,8 @@ class biModel extends model
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser($sql);
 
+        if(!isset($this->lang->dataview)) $this->app->loadLang('dataview');
+
         if($parser->statementsCount == 0)
         {
             if($mode == 'builder') return $this->lang->dataview->emptyBuilder;

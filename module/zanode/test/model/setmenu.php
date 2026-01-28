@@ -22,11 +22,11 @@ cid=19845
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 r($zanodeTest->setMenuTest(true)) && p('beforeCall,afterCall,createHost') && e('1,1,1');
 r($zanodeTest->setMenuTest(false)) && p('beforeCall,afterCall,createHost') && e('1,0,0');

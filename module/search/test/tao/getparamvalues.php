@@ -27,7 +27,7 @@ cid=18327
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('user')->gen(5);
@@ -56,7 +56,7 @@ $params2['product']['values'] = 'products';
 $params3 = array();
 $params3['execution']['values'] = 'executions';
 
-$search = new searchTest();
+$search = new searchTaoTest();
 r($search->getParamValuesTest($fields, $params1)) && p('0:admin,user1,user2,user3,user4') && e('A:admin,U:用户1,U:用户2,U:用户3,U:用户4'); //测试获取产品变量的产品数据
 r($search->getParamValuesTest($fields, $params2)) && p('1:5,4,3,2,1') && e('正常产品5,正常产品4,正常产品3,正常产品2,正常产品1');           //测试获取用户变量的用户数据
 r($search->getParamValuesTest($fields, $params3)) && p('2:5,4,3') && e('/迭代3,/迭代2,/迭代1');                                               //测试获取执行变量的执行数据

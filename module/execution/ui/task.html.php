@@ -281,10 +281,11 @@ if($canBatchAction)
 
     if($canBatchAssignTo)
     {
+        $pinyinItems     = common::convert2Pinyin($memberPairs);
         $assignedToItems = array();
-        foreach ($memberPairs as $account => $name)
+        foreach($memberPairs as $account => $name)
         {
-            $assignedToItems[] = array('text' => $name, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
+            $assignedToItems[] = array('text' => $name, 'keys' => zget($pinyinItems, $name, ''), 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('task', 'batchAssignTo', "executionID={$execution->id}&assignedTo={$account}"));
         }
     }
 

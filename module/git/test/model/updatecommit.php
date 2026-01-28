@@ -16,7 +16,7 @@ cid=16557
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $repo = zenData('repo');
 $repo->id->range('101-105');
@@ -31,7 +31,7 @@ $repo->gen(5);
 
 su('admin');
 
-$git = new gitTest();
+$git = new gitModelTest();
 
 r($git->updateCommitTest(101)) && p('result') && e('1'); // 测试步骤1：未同步的代码库更新提交
 r($git->updateCommitTest(102)) && p('result') && e('1'); // 测试步骤2：已同步的空代码库更新提交

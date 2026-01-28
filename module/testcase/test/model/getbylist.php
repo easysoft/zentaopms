@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('20');
 zenData('user')->gen('1');
@@ -38,7 +38,7 @@ cid=18977
 $caseIDList = array(array(1,2,3), array(4,5,6), array(7,8,9), array(10,11,12), array(13,14,15));
 $query      = " id < 11";
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getByListTest($caseIDList[0])) && p() && e('1,2,3');    // 测试获取case 1 2 3 的信息
 r($testcase->getByListTest($caseIDList[1])) && p() && e('4,5,6');    // 测试获取case 4 5 6 的信息

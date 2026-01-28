@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $task = zenData('task');
 $task->id->range('1-5');
@@ -67,7 +67,7 @@ cid=18869
 
 */
 
-$task   = new taskTest();
+$task   = new taskTaoTest();
 $task1  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[0], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
 $task2  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[0], $autoStatus[0], $hasEfforts[0], $members[0]);
 $task3  = $task->computeTaskStatusTest($currentTasks[0], $oldTasks[1], $tasks[1], $autoStatus[0], $hasEfforts[0], $members[0]);

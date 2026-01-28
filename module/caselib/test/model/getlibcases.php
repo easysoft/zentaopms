@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testsuite')->gen(405);
 zenData('case')->loadYaml('libcase')->gen(30);
@@ -102,7 +102,7 @@ $browseTypeList = array('bymodule', 'all', 'wait', 'bysearch', 'othertype');
 $moduleIdList   = array(0, 1, 11);
 $sortList       = array('id_desc', 'id_asc');
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 
 r($caselib->getLibCasesTest($libIdList[0], $browseTypeList[0], $moduleIdList[0], $sortList[0])) && p() && e('429,427,425,423,421,419,417,415,413,411,409,407,405,403,401'); // bymodule 状态下 查询用例库 201 模块 0 排序 id_desc 的用例 id
 r($caselib->getLibCasesTest($libIdList[0], $browseTypeList[0], $moduleIdList[1], $sortList[0])) && p() && e('421,401');                                                     // bymodule 状态下 查询用例库 201 模块 1 排序 id_desc 的用例 id

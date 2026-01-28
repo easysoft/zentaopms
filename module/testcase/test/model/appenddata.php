@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('100');
 zenData('casestep')->gen('100');
@@ -254,7 +254,7 @@ $cases = array(array(1 => $case1, 2 => $case2), array(3 => $case3, 4 => $case4),
 $type  = array('case', 'run');
 $caseIdList = array(1, 3, 5, 7);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->appendDataTest($cases[0], $type[0])) && p('1:bugs,results,caseFails,stepNumber;2:bugs,results,caseFails,stepNumber')  && e('6,1,0,1;6,1,1,1'); // 获取case 1 2 可以加入的数据
 r($testcase->appendDataTest($cases[1], $type[0])) && p('3:bugs,results,caseFails,stepNumber;4:bugs,results,caseFails,stepNumber')  && e('6,1,0,1;0,1,1,1'); // 获取case 3 4 可以加入的数据

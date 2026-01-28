@@ -18,7 +18,22 @@ class epicModelTest extends baseTest
      */
     public function getToAndCcListTest($story, $actionType)
     {
-        $result = $this->invokeArgs('getToAndCcList', array($story, $actionType));
+        $result = $this->invokeArgs('getToAndCcList', [$story, $actionType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test isClickable method.
+     *
+     * @param  object $data
+     * @param  string $action
+     * @access public
+     * @return mixed
+     */
+    public function isClickableTest($data = null, $action = '')
+    {
+        $result = $this->invokeArgs('isClickable', [$data, $action]);
         if(dao::isError()) return dao::getError();
         return $result;
     }

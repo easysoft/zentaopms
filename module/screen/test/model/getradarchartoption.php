@@ -21,7 +21,7 @@ cid=18255
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(5);
 zenData('project')->loadYaml('program')->gen(5);
@@ -29,7 +29,7 @@ zenData('story')->loadYaml('story')->gen(20);
 zenData('bug')->loadYaml('bug')->gen(15);
 zenData('action')->loadYaml('action')->gen(100);
 
-$screen = new screenTest();
+$screen = new screenModelTest();
 
 global $tester;
 $chart = new stdClass();

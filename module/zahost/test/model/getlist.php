@@ -20,7 +20,7 @@ cid=19749
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $host = zenData('host');
@@ -38,7 +38,7 @@ $userquery->gen(1);
 $browseTypeList = array('all', 'browseType');
 $paramList      = array(0, 1);
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 r($zahost->getListTest($browseTypeList[0], $paramList[0])) && p('0:hostID,name') && e('2,宿主机2');  //查询所有的宿主机中第一个宿主机
 r($zahost->getListTest($browseTypeList[0], $paramList[0])) && p('1:hostID,name') && e('1,宿主机1');  //查询所有的宿主机中第二个宿主机
 r($zahost->getListTest($browseTypeList[1], $paramList[1])) && p('1:hostID,name') && e('1,宿主机1');  //搜索标题中包含1的宿主机

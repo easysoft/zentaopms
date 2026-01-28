@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('scene')->gen(0);
@@ -39,7 +39,7 @@ $scene16 = array('product' => 1, 'title' => '这个是测试场景4', 'branch' =
 $scene17 = array('product' => 1, 'title' => '这个是测试场景1');
 $scene18 = array('product' => 2, 'title' => '这个是测试场景1');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->createSceneTest($scene1))  && p('product:0') && e('『所属产品』不能为空。');                           // 所属产品设为数字 0 输出错误提示。
 r($testcase->createSceneTest($scene2))  && p('product:0') && e('『所属产品』应当是数字。');                         // 所属产品设为空字符串输出错误提示。

@@ -32,7 +32,7 @@ cid=18421
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('project')->loadYaml('project')->gen(10);
@@ -42,7 +42,7 @@ $sorts      = array('id_desc', 'id_asc');
 $projectIds = array(0, 11, 60, 100);
 $types      = array(2, 4);
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 r($stageTester->getStagesTest($sorts[0], $projectIds[0], $types[0])) && p()                && e('0');             // 获取敏捷模型下按照id倒序排列的所有阶段
 r($stageTester->getStagesTest($sorts[1], $projectIds[0], $types[0])) && p()                && e('0');             // 获取瀑布模型下按照id正序排列的所有阶段
 r($stageTester->getStagesTest($sorts[0], $projectIds[1], $types[0])) && p('101:type,name') && e('sprint,迭代5');  // 获取敏捷项目下按照id倒序排列的所有阶段

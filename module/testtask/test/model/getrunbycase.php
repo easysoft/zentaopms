@@ -26,7 +26,7 @@ cid=19189
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('testrun');
 $table->id->range('1-5');
@@ -42,7 +42,7 @@ $table->gen(5);
 
 su('admin');
 
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 r($testtaskTest->getRunByCaseTest(1, 1)) && p('task,case') && e('1,1');
 r($testtaskTest->getRunByCaseTest(1, 2)) && p('task,case') && e('1,2');

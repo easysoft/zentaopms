@@ -24,13 +24,13 @@ cid=19837
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('host')->loadYaml('host')->gen(10);
 
 $orderByList = array('', 'id_desc');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $result = $zanode->getPairs($orderByList[0]);
 r($result) && p('1,5,6,10') && e('node1,node3,physics3,physics5');   //判断获取的键值对是否正确。

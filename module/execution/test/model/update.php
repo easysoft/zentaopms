@@ -45,7 +45,7 @@ cid=16375
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-11');
@@ -92,7 +92,7 @@ $noChange       = array();
 $noName         = array('name' => '');
 $repeatcode     = array('name' => '迭代1', 'code' => '执行2');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 $execution->executionModel->lang->projectCommon   = '项目';
 $execution->executionModel->lang->executionCommon = '迭代';
 $execution->executionModel->config->setCode       = 1;

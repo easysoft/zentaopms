@@ -15,7 +15,7 @@ cid=18628
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $product = zenData('product');
 $product->type->range('normal,branch');

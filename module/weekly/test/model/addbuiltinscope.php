@@ -15,12 +15,12 @@ cid=19715
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
-$weeklyTester = new weeklyTest();
+$weeklyTester = new weeklyModelTest();
 r($weeklyTester->addBuiltinScopeTest()) && p('name,type,main,addedBy') && e('项目,reportTemplate,1,system'); // 测试添加内置范围
 r($weeklyTester->addBuiltinScopeTest()) && p('id')                     && e('1');                            // 测试重复添加内置范围

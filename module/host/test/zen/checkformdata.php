@@ -17,13 +17,13 @@ cid=16764
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/host.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$hostTest = new hostTest();
+$hostTest = new hostZenTest();
 
 // 4. 测试步骤1：正常输入数据验证
 $validFormData = new stdClass();

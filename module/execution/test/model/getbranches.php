@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -37,7 +37,7 @@ cid=16299
 $executionIDList = array(3, 4, 5);
 $count           = array('0','1');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getBranchesTest($executionIDList[0],$count[0])) && p('1')      && e('1');     // 敏捷项目下根据执行查询产品分支
 r($executionTester->getBranchesTest($executionIDList[1],$count[0])) && p('2', '|') && e('0,1,2'); // 瀑布项目下根据执行查询产品分支
 r($executionTester->getBranchesTest($executionIDList[2],$count[0])) && p('1')      && e('2');     // 看板项目下根据执行查询产品分支

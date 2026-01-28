@@ -31,7 +31,7 @@ cid=17656
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('productplan')->gen(3);
 zenData('story')->gen(20);

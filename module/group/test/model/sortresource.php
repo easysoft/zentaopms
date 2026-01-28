@@ -23,11 +23,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 $resource = $group->sortResourceTest();
 
 r(array_keys((array)$resource)) && p('2,3') && e('program,personnel');                     // 测试步骤1：验证program和personnel模块的排序

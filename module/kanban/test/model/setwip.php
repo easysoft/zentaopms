@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(500);
@@ -40,7 +40,7 @@ cid=16958
 $columnIDList = array('401', '402', '403', '404', '405', '406', '407', '408');
 $limitList    = array('-1', '0', '100', '150', '220');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->setWIPTest($columnIDList[0], $limitList[0], -1))  && p('limit')      && e('子列在制品数量之和不能大于父列的在制品数量'); // 测试设置看板列401的在制品限制
 r($kanban->setWIPTest($columnIDList[1], $limitList[2], 0))   && p('name,limit') && e('进行中,100');                                 // 测试设置看板列402的在制品限制

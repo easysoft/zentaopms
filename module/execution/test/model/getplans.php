@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('execution')->gen(10);
@@ -48,7 +48,7 @@ $paramList       = array('', 'withMainPlan', 'skipParent', 'unexpired', 'noclose
 $executionIdList = array(0, 11);
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[0], $count[0])) && p('1:3')  && e('计划3 [2022-01-01 ~ 2022-01-30]');        // 查询全部执行关联计划信息
 r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[1], $count[0])) && p('1:2')  && e('计划1 /计划2 [2021-06-01 ~ 2021-06-30]'); // 查询迭代1关联计划信息
 r($execution->getPlansTest($productIdList, $paramList[0], $executionIdList[0], $count[1])) && p()       && e('6');                                      // 查询全部执行关联计划数量

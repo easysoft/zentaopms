@@ -30,13 +30,13 @@ cid=17757
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project')->gen(10);
 
 su('admin');
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 r($programplanTest->setTreePathTest(2)) && p('path|grade', '|') && e(',1,2,|1');
 r($programplanTest->setTreePathTest(3)) && p('path|grade', '|') && e(',1,2,3,|2');

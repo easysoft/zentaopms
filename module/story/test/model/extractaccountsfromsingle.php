@@ -17,7 +17,7 @@ cid=18491
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('story');
@@ -32,7 +32,7 @@ $table->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 5. 测试步骤（至少5个）
 r(count($storyTest->extractAccountsFromSingleTest((object)array('openedBy' => 'admin', 'assignedTo' => 'user1', 'closedBy' => 'pm1', 'lastEditedBy' => 'dev1')))) && p() && e('4'); // 步骤1：包含全部不同账号字段

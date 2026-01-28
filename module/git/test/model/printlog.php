@@ -17,11 +17,11 @@ cid=16550
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$gitTest = new gitTest();
+$gitTest = new gitModelTest();
 
 $result1 = $gitTest->printLogTest('test log message');
 r(strpos($result1, 'test log message') !== false) && p() && e(1); // 测试步骤1：正常字符串日志输出

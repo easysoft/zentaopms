@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -52,7 +52,7 @@ $release4->status  = 'normal';
 
 $actions = array('notify', 'play', 'pause', 'edit');
 
-$projectrelease = new projectreleaseTest();
+$projectrelease = new projectreleaseModelTest();
 
 r($projectrelease->isClickableTest($release1, $actions[0])) && p() && e('2');  // 测试获取 没有 需求 和 bug 的发布是否可以点击 notify 按钮
 r($projectrelease->isClickableTest($release2, $actions[0])) && p() && e('1');  // 测试获取 有 需求 没有 bug 的发布是否可以点击 notify 按钮

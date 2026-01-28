@@ -18,7 +18,7 @@ cid=18072
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('repo');
@@ -39,7 +39,7 @@ $table->gen(12);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：查询Git类型代码库 - 检查第一个记录的SCM类型
 $gitResults = $repoTest->getListBySCMTest('Git');

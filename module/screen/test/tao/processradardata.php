@@ -17,10 +17,10 @@ cid=18287
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 4. 创建测试实例（变量名与模块名一致）
-$screenTest = new screenTest();
+$screenTest = new screenTaoTest();
 
 // 准备测试数据
 // 测试步骤1：正常雷达图数据处理

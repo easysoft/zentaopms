@@ -16,7 +16,7 @@ cid=18427
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $expectTable = zenData('expect');
 $expectTable->id->range('1-10');
@@ -34,7 +34,7 @@ zenData('user')->gen(10);
 
 su('admin');
 
-$stakeholderTest = new stakeholderTest();
+$stakeholderTest = new stakeholderModelTest();
 
 r($stakeholderTest->deleteExpectTest(1)) && p('deleted') && e('1'); // 测试步骤1：删除有效期望记录
 r($stakeholderTest->deleteExpectTest(0)) && p() && e('0'); // 测试步骤2：删除无效ID(0)的期望记录

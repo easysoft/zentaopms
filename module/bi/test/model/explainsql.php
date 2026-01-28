@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -18,7 +18,7 @@ cid=15157
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->explainSQLTest('SELECT * FROM zt_user WHERE id = 1', 'mysql')) && p('result') && e('success'); // 使用有效SQL和mysql驱动
 r($biTest->explainSQLTest('SELECT * FROM zt_user WHERE id = 1', 'duckdb')) && p('result') && e('success'); // 使用有效SQL和duckdb驱动

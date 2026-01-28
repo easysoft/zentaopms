@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('testrun')->gen(10);
@@ -20,7 +20,7 @@ cid=19053
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 r($testcase->unlinkCaseFromTesttaskTest(1, 1)) && p() && e(0); //测试取消测试单与用例的关联。
 r($testcase->unlinkCaseFromTesttaskTest(0, 1)) && p() && e(1); //测试取消测试单与用例的关联。
 r($testcase->unlinkCaseFromTesttaskTest(1, 0)) && p() && e(1); //测试取消测试单与用例的关联。

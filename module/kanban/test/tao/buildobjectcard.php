@@ -20,13 +20,13 @@ cid=16973
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('kanbancard')->gen(0);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
 // 准备测试数据
 $objectCard1 = new stdclass();

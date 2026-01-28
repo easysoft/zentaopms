@@ -18,7 +18,7 @@ cid=15380
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -26,7 +26,7 @@ zendata('product')->loadYaml('product_getdatatablemodules', false, 2)->gen(3);
 zendata('branch')->loadYaml('branch_getdatatablemodules', false, 2)->gen(4);
 zendata('module')->loadYaml('module_getdatatablemodules', false, 2)->gen(10);
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r(count($bugTest->getDatatableModulesTest(1))) && p('') && e('7'); // 测试普通产品(无分支)获取模块列表，查看模块数量
 r($bugTest->getDatatableModulesTest(1)) && p('0') && e('/'); // 测试普通产品(无分支)获取模块列表，检查根节点

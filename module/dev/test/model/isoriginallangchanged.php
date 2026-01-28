@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -22,7 +22,7 @@ pid=1
 
 */
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 
 $defaultValue = '产品列表';
 $customedLang = '';

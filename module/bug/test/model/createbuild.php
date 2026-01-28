@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project_createbuild')->gen(20);
 zenData('bug')->loadYaml('bug_createbuild')->gen(10);
@@ -62,7 +62,7 @@ $emptyBuildExecution->buildExecution = 0;
 $emptyBuildExecution->buildName      = 'bug新建的版本2';
 $emptyBuildExecution->resolution     = 'bydesign';
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->createBuildTest($bydesignBug1,        $bugIdList[0])) && p('name') && e('bug新建的版本1');           // 测试解决版本执行11 解决方案为设计如此的时候创建一个版本
 r($bug->createBuildTest($bydesignBug2,        $bugIdList[1])) && p('name') && e('bug新建的版本2');           // 测试解决版本执行12 解决方案为设计如此的时候创建一个版本

@@ -30,7 +30,7 @@ cid=17652
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $plan = zenData('productplan')->loadYaml('productplan');
 $plan->parent->range('0,`-1`,2,`-1`,4,`-1`,6,`-1`,8');

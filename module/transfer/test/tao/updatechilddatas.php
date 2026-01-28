@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('story')->gen(20);
 $file = zenData('file');
 $file->objectType->range('task');
@@ -29,7 +29,7 @@ cid=19336
 - 测试导出子任务第4条的name属性 @开发任务15
 
 */
-$transfer = new transferTest();
+$transfer = new transferTaoTest();
 
 /* 测试导出任务。*/
 r($transfer->updateChildDatasTest('task')) && p('0:name') && e('[多人] 开发任务11'); // 测试导出多人并行任务

@@ -17,7 +17,7 @@ cid=14952
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('api')->loadYaml('getobjectlinkparams/api', false, 2)->gen(5);
 zenData('kanbanspace')->loadYaml('getobjectlinkparams/kanbanspace', false, 2)->gen(3);
@@ -26,7 +26,7 @@ zenData('module')->loadYaml('getobjectlinkparams/module', false, 2)->gen(5);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $action1 = new stdClass();
 $action1->objectType = 'api';

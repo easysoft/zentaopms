@@ -18,12 +18,12 @@ cid=17704
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 zenData('project')->loadYaml('program')->gen(20)->fixpath();
 su('admin');
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 r($programTester->hasUnfinishedChildrenTest(1))  && p() && e('1'); // 获取项目集1下未完成的项目和项目集数量
 r($programTester->hasUnfinishedChildrenTest(2))  && p() && e('1'); // 获取项目集2下未完成的项目和项目集数量
 r($programTester->hasUnfinishedChildrenTest(3))  && p() && e('0'); // 获取项目集3下未完成的项目和项目集数量

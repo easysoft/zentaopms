@@ -18,7 +18,7 @@ cid=18086
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo', true)->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(1);
@@ -30,7 +30,7 @@ $emptyLinks = array();
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $validLinks)) && p('0:relation') && e('commit');
 r($repoTest->linkTest(1, $validRevision, 'story', 'repo', $validLinks)) && p('0:BType') && e('story');

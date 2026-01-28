@@ -1592,7 +1592,7 @@ class aiModel extends model
      */
     public function getPrompts($module = '', $status = '', $order = 'id_desc', $pager = null)
     {
-        $prompts = $this->dao->select('*')->from(TABLE_AI_PROMPT)
+        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('deleted')->eq(0)
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
@@ -1612,7 +1612,7 @@ class aiModel extends model
      */
     public function getPromptById($id)
     {
-        return $this->dao->select('*')->from(TABLE_AI_PROMPT)
+        return $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('id')->eq($id)
             ->fetch();
     }
@@ -1627,7 +1627,7 @@ class aiModel extends model
     public function getPromptFields(int $promptID): array
     {
         return $this->dao->select('*')
-            ->from(TABLE_AI_PROMPTFIELD)
+            ->from(TABLE_AI_AGENTFIELD)
             ->where('appID')->eq($promptID)
             ->fetchAll('id', false);
     }
@@ -1647,7 +1647,7 @@ class aiModel extends model
         /* Override uniqueness error message. */
         $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
 
-        $this->dao->insert(TABLE_AI_PROMPT)
+        $this->dao->insert(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
             ->check('name', 'unique')
@@ -1672,7 +1672,7 @@ class aiModel extends model
     public function savePromptFields(int $promptID, array $fields): void
     {
         $this->dao->delete()
-            ->from(TABLE_AI_PROMPTFIELD)
+            ->from(TABLE_AI_AGENTFIELD)
             ->where('appID')->eq($promptID)
             ->exec();
 
@@ -1682,7 +1682,7 @@ class aiModel extends model
 
             if(!isset($field->appID)) $field->appID = $promptID;
 
-            $this->dao->insert(TABLE_AI_PROMPTFIELD)
+            $this->dao->insert(TABLE_AI_AGENTFIELD)
                 ->data($field)
                 ->exec();
         }
@@ -1727,7 +1727,7 @@ class aiModel extends model
         /* Override uniqueness error message. */
         $this->lang->error->unique = $this->lang->ai->validate->nameNotUnique;
 
-        $this->dao->update(TABLE_AI_PROMPT)
+        $this->dao->update(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
             ->check('name', 'unique', "`id` != {$prompt->id}")
@@ -1754,7 +1754,7 @@ class aiModel extends model
         $prompt = $this->getPromptById($id);
         if(empty($prompt)) return false;
 
-        $this->dao->update(TABLE_AI_PROMPT)
+        $this->dao->update(TABLE_AI_AGENT)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
@@ -2705,7 +2705,7 @@ class aiModel extends model
      */
     public function getPromptsForUser($module)
     {
-        return $this->dao->select('*')->from(TABLE_AI_PROMPT)
+        return $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('deleted')->eq(0)
             ->andWhere('module')->eq($module)
             ->andWhere('status')->eq('active')
@@ -2857,7 +2857,7 @@ class aiModel extends model
      */
     public function getRoleTemplates()
     {
-        return $this->dao->select('*')->from(TABLE_AI_PROMPTROLE)
+        return $this->dao->select('*')->from(TABLE_AI_AGENTROLE)
             ->where('deleted')->eq(0)
             ->fetchAll('id', false);
     }
@@ -2876,7 +2876,7 @@ class aiModel extends model
         $roleTemplate->role = $role;
         $roleTemplate->characterization = $characterization;
 
-        $this->dao->insert(TABLE_AI_PROMPTROLE)
+        $this->dao->insert(TABLE_AI_AGENTROLE)
             ->data($roleTemplate)
             ->exec();
         if(dao::isError()) return false;
@@ -2893,7 +2893,7 @@ class aiModel extends model
      */
     public function deleteRoleTemplate($id)
     {
-        $this->dao->update(TABLE_AI_PROMPTROLE)
+        $this->dao->update(TABLE_AI_AGENTROLE)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
@@ -2916,7 +2916,7 @@ class aiModel extends model
         $roleTemplate->role = $role;
         $roleTemplate->characterization = $characterization;
 
-        $this->dao->update(TABLE_AI_PROMPTROLE)
+        $this->dao->update(TABLE_AI_AGENTROLE)
             ->data($roleTemplate)
             ->where('id')->eq($id)
             ->exec();

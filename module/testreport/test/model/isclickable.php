@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -20,7 +20,7 @@ cid=19125
 $object     = new stdclass();
 $actionList = array('edit', 'delete', 'create', 'view', 'browse');
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 
 r($testreport->isClickableTest($object, $actionList[0])) && p() && e('1'); // 测试 edit 方法是否可以点击
 r($testreport->isClickableTest($object, $actionList[1])) && p() && e('1'); // 测试 delete 方法是否可以点击

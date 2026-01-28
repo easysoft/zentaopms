@@ -119,11 +119,18 @@ class story extends control
         $fields = $this->storyZen->setModuleField($fields, $moduleID);
         $fields = $this->storyZen->removeFormFieldsForCreate($fields, $storyType);
 
-        $this->view->title     = $this->view->product->name . $this->lang->hyphen . $this->lang->story->create;
-        $this->view->fields    = $fields;
-        $this->view->blockID   = $this->storyZen->getAssignMeBlockID();
-        $this->view->type      = $storyType;
-        $this->view->initStory = $initStory;
+        $this->view->title       = $this->view->product->name . $this->lang->hyphen . $this->lang->story->create;
+        $this->view->fields      = $fields;
+        $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
+        $this->view->type        = $storyType;
+        $this->view->initStory   = $initStory;
+        $this->view->forceReview = $this->story->checkForceReview($storyType);
+
+        $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
+        parse_str($extras, $params);
+        if(!isset($params['needNotReview'])) $extra .= ',needNotReview={needNotReview}';
+        $this->view->needNotReview = $params['needNotReview'] ?? !$this->view->forceReview;
+        $this->view->loadUrl       = $this->createLink($storyType, 'create', "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
 
         $this->display();
     }

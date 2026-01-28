@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('epic')->gen('20');
 zenData('storyreview')->gen('0');
@@ -35,7 +35,7 @@ cid=17283
 $_SESSION['contributeEpicQuery'] = '';
 $_SESSION['workEpicQuery'] = '';
 
-$my       = new myTest();
+$my       = new myModelTest();
 $queryID  = array(0, 2);
 $typeList = array('contribute', 'other');
 $orderBy  = array('id_desc', 'id_asc');

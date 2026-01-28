@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('actionrecent')->gen(0);
 su('admin');
@@ -52,7 +52,7 @@ $actionType   = array('common', 'extra', 'opened', 'created', 'changed', 'edited
 $requirements = array('25' => '25');
 $epics        = array('26' => '26');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getObjectLabelTest($objectType[0],  $objectId[0],  $actionType[0],  $requirements, $epics)) && p() && e('产品|product|view|productID=%s');                                        // 测试获取objectType product objectId 1的动态信息
 r($action->getObjectLabelTest($objectType[1],  $objectId[1],  $actionType[1],  $requirements, $epics)) && p() && e('研发需求|story|storyView|storyID=%s');                                   // 测试获取objectType story objectId 2的动态信息

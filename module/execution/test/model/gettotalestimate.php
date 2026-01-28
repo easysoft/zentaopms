@@ -16,7 +16,7 @@ cid=16347
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 $execution = zenData('project');
@@ -40,7 +40,7 @@ $task->deleted->range('0{12},1{3}');
 $task->left->range('1-5');
 $task->consumed->range('1-8');
 $task->gen(15);
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 5. 测试步骤（至少5个）
 r($executionTest->getTotalEstimateTest(3))   && p() && e('13'); // 步骤1：执行3有3个任务(2.5+4.0+6.0=12.5，四舍五入为13)

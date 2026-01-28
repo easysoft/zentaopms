@@ -115,7 +115,7 @@ cid=18202
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('score')->gen(0);
 zenData('user')->gen(5);
@@ -124,7 +124,7 @@ $accounts = array('admin', 'user1');
 $modules  = array('', 'user', 'story', 'task', 'bug', 'testTask', 'execution', 'search', 'ajax');
 $methods  = array('', 'login', 'changePassword', 'close', 'finish', 'createFormCase', 'saveTplModal', 'confirm', 'resolve', 'runCase', 'saveQueryAdvanced', 'selectTheme');
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 
 /* Admin user. */
 r($scoreTester->saveScoreTest($accounts[0], $modules[0], $methods[0]))  && p()                              && e('1');                                // 测试空数据

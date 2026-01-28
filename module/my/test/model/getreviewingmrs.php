@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('mr')->loadYaml('mrreview')->gen('10');
 zenData('user')->gen('5');
@@ -26,7 +26,7 @@ $account    = array('admin', 'user1');
 $orderBy    = array('id_desc', 'id_asc');
 $checkExist = array(false, true);
 
-$my = new myTest();
+$my = new myModelTest();
 r($my->getReviewingMRsTest($account[0], $orderBy[0])) && p('9:title,id') && e('Test MR9,9'); // 测试获取用户 account 排序 id_desc 的合并请求。
 r($my->getReviewingMRsTest($account[0], $orderBy[1])) && p('3:title,id') && e('Test MR3,3'); // 测试获取用户 account 排序 id_asc 的合并请求。
 r($my->getReviewingMRsTest($account[1], $orderBy[0])) && p()             && e('0');          // 测试获取没有审批用户的数据。

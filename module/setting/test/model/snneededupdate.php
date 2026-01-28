@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=18370
 
 $snList = array('', '281602d8ff5ee7533eeafd26eda4e776', '9bed3108092c94a0db2b934a46268b4a', '8522dd4d76762a49d02261ddbe4ad432', '13593e340ee2bdffed640d0c4eed8bec', 'error');
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 r($setting->snNeededUpdateTest($snList[0])) && p() && e('1'); //测试sn值为空，返回true
 r($setting->snNeededUpdateTest($snList[1])) && p() && e('1'); //测试sn值为281602d8ff5ee7533eeafd26eda4e776，返回true

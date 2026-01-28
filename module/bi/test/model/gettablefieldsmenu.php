@@ -16,11 +16,11 @@ cid=15186
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r($bi->getTableFieldsMenuTest()) && p() && e('array');                          // 测试正常调用返回数组类型
 r($bi->getTableFieldsMenuTestEmpty()) && p() && e('not_empty');                 // 测试返回空数组的情况

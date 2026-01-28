@@ -17,7 +17,7 @@ cid=18730
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/system.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $spaceTable = zenData('space');
@@ -30,7 +30,7 @@ $instanceTable->loadYaml('instance_getbackuplist', false, 2)->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$systemTest = new systemTest();
+$systemTest = new systemModelTest();
 
 // 5. 创建测试实例对象
 $spaceData = new stdClass();

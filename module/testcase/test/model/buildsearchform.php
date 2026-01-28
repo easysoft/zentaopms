@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen('45');
 zenData('branch')->gen('10');
@@ -43,7 +43,7 @@ $projectID = array(0, 11);
 $moduleID  = array(0, 1);
 $branch    = array('all', 0);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->buildSearchFormTest($productID[0], $projectID[0], $moduleID[0], $branch[0])) && p() && e('title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene');        // 测试构建产品 0 project 0 module 0 branch all 的搜索表单
 r($testcase->buildSearchFormTest($productID[1], $projectID[0], $moduleID[0], $branch[0])) && p() && e('title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene');        // 测试构建产品 1 project 0 module 0 branch all 的搜索表单

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -22,7 +22,7 @@ cid=18046
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 $gitlabID    = 1;
 $oldRevision = 'c808480afe22d3a55d94e91c59a8f3170212ade0';
 $newRevision = '1b9405639ddef9585b3743b0637b4f79775409b7';

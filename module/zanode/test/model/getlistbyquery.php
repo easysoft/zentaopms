@@ -71,7 +71,7 @@ cid=19834
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('host')->loadYaml('host')->gen(10);
 zenData('image')->loadYaml('image')->gen(10);
@@ -79,7 +79,7 @@ zenData('userquery')->loadYaml('userquery')->gen(1);
 
 $ipList = array(1, 10, 0);
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $browseTypeList = array('all', 'bysearch');
 $paramList = array(0, 1);

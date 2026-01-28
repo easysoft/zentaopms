@@ -25,7 +25,7 @@ cid=19592
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(1);
 
@@ -33,7 +33,7 @@ su('admin');
 
 $random = updateSessionRandom();
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $result1 = $userTest->checkVerifyPasswordTest('');
 r($result1) && p('result') && e(0);                                                         // 验证密码传空字符串返回 false。

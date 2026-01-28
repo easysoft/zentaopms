@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -46,7 +46,7 @@ $bug_nobuild      = array('title' => 'bug_nobuild', 'openedBuild' => '');
 $bug_erremail     = array('title' => 'bug_erremail', 'notifyEmail' => '123456');
 
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->createObject($bug_codeerror))    && p('title')         && e('bug_codeerror');                   // 测试bug的名称
 r($bug->createObject($bug_project))      && p('project')       && e('1');                               // 测试bug的项目
 r($bug->createObject($bug_execution))    && p('execution')     && e('2');                               // 测试bug的执行

@@ -30,7 +30,7 @@ cid=19343
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(0);
 zenData('product')->gen(0);
@@ -41,7 +41,7 @@ $type        = array('story', 'task');
 $startModule = array(1821, 1982);
 $branch      = 1;
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->buildMenuQueryTest($root[0], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '1' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                 // 测试查询root 1 type story 的查询语句
 r($tree->buildMenuQueryTest($root[1], $type[0]))                           && p() && e("SELECT * FROM `zt_module` WHERE 1=1  AND  `root`  = '2' AND ( `type` = 'story') AND  `deleted`  = '0' ORDER BY `root`,`grade` desc,`order`");                 // 测试查询root 2 type story 的查询语句

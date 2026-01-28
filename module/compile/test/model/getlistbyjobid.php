@@ -17,7 +17,7 @@ cid=15749
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $compileTable = zenData('compile');
@@ -37,7 +37,7 @@ $jobTable->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($compileTest->getListByJobIDTest(1)) && p('2:name') && e('构建2'); // 步骤1：正常jobID查询

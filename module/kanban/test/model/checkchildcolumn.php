@@ -17,7 +17,7 @@ cid=16877
 */
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 准备测试数据
 $table = zenData('kanbancolumn');
@@ -33,7 +33,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 // 5. 准备测试场景数据
 // 父列有限制（限制为5）

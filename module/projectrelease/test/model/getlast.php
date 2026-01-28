@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('release')->gen(20);
 zenData('user')->gen(1);
@@ -24,7 +24,7 @@ cid=17969
 
 $projectID = array(11, 12, 13, 0, 1000);
 
-$projectrelease = new projectreleaseTest();
+$projectrelease = new projectreleaseModelTest();
 
 r($projectrelease->getLastTest($projectID[0])) && p('id') && e('9');  // 测试获取项目 11 的最后一次发布
 r($projectrelease->getLastTest($projectID[1])) && p('id') && e('10'); // 测试获取项目 12 的最后一次发布

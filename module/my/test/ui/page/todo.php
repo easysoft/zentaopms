@@ -37,7 +37,7 @@ class todoPage extends page
             'assignDate'   => '//*[@name="date"]',
             'submitBtn'    => '//*[@class="form load-indicator form-ajax no-morph form-horz"]/div[4]/div/button',
             /* 待办详情页*/
-            'name'    => '//*[@class="entity-label space-x-1.5 overflow-hidden nowrap"]/span[2]',
+            'name'    => '//*[@class="modal modal-async load-indicator modal-trans show in"]/div/div/div[2]/div[4]/div/div/span[2]',
             'statusA' => '//*[@id="legendBasic"]/table/tbody/tr[2]/td',
             'typeA'   => '//*[@id="legendBasic"]/table/tbody/tr[3]/td',
             'dateA'   => '//*[@id="legendBasic"]/table/tbody/tr[5]/td',

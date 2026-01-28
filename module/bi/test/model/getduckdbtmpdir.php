@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15169
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(is_string($biTest->getDuckDBTmpDirTest(false)) || $biTest->getDuckDBTmpDirTest(false) === false) && p() && e('1'); // 步骤1：正常获取DuckDB临时目录路径，static=false
 r(is_string($biTest->getDuckDBTmpDirTest(true))) && p() && e('1'); // 步骤2：获取静态路径，static=true

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen(20);
 zenData('suitecase')->gen(3);
@@ -27,7 +27,7 @@ cid=19139
 $suiteID = 1;
 $cases   = array(1, 2);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r(count($testsuite->getLinkedCasesTest($suiteID)))       && p() && e('2'); //检查当前关联的用例数量
 r($testsuite->deleteCaseBySuiteIDTest($cases, $suiteID)) && p() && e('2'); //测试suiteID值为1

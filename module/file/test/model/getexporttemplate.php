@@ -18,12 +18,12 @@ cid=16508
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('usertpl')->gen(10);
 $moduleName = array('task', 'bug', 'story');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 $file->objectModel->app->user->account = 'admin';
 r($file->getExportTemplateTest($moduleName[0])) && p() && e('1'); // 测试获取 用户admin task 模块的用户模板

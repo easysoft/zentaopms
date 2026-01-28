@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -51,7 +51,7 @@ $stepsList = array(array(), array($step1), array($step2, $step3), array($step1, 
 
 $count = 1;
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->appendStepsTest($stepsList[0]))         && p() && e('3'); // 测试添加原有步骤数量 0
 r($testcase->appendStepsTest($stepsList[1]))         && p() && e('3'); // 测试添加原有步骤数量 1

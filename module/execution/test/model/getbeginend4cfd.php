@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=executionModel->getBeginEnd4CFD();
@@ -41,7 +41,7 @@ $execution->gen(5);
 
 $executionIDList = array(1, 2, 3, 4, 5);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getBeginEnd4CFDTest($executionIDList[0])) && p('0,1') && e('1,1'); // ID 1 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
 r($executionTester->getBeginEnd4CFDTest($executionIDList[1])) && p('0,1') && e('1,1'); // ID 2 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
 r($executionTester->getBeginEnd4CFDTest($executionIDList[2])) && p('0,1') && e('1,1'); // ID 3 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致

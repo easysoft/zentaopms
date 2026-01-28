@@ -17,9 +17,9 @@ cid=17409
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 r($pivot->initSqlTest('select id,name from zt_user;;;;', array('name' => array('field' => 'name', 'operator' => '=', 'value' => 'admin')), 'id,name')) && p('0') && e('select id,name from zt_user');
 r($pivot->initSqlTest('select * from zt_user where name = $username', array(), 'id')) && p('0') && e("select * from zt_user where name = ''");

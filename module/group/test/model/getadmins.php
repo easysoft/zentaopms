@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('projectadmin')->gen(50);
@@ -36,7 +36,7 @@ $projectIdList   = array(6, 8, 10, 15);
 $productIdList   = array(1, 3, 10, 20);
 $executionIdList = array(16, 20, 30, 24, 25);
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getAdminsTest(array())) && p() && e('0');       //测试不传入任何数据
 $programAdmins = $group->getAdminsTest($programIdList, 'programs');

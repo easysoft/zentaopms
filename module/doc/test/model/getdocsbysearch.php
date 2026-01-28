@@ -40,7 +40,7 @@ cid=16083
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -59,7 +59,7 @@ $objectIdList = array(0, 11, 101, 1);
 $libIdList    = array(11, 16, 20, 26, 6);
 $queryIdList  = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocsBySearchTest($typeList[0], $objectIdList[0], $libIdList[0], $queryIdList[0])) && p('1:lib,title')  && e('11,我的文档1');   // 根据搜索条件获取我的空间下文档
 r($docTester->getDocsBySearchTest($typeList[0], $objectIdList[0], $libIdList[0], $queryIdList[1])) && p('1:lib,title')  && e('11,我的文档1');   // 根据搜索条件获取我的空间下文档
 r($docTester->getDocsBySearchTest($typeList[1], $objectIdList[1], $libIdList[1], $queryIdList[0])) && p('21:lib,title') && e('16,项目文档21');  // 根据搜索条件获取项目空间下文档

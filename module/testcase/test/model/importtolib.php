@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('20');
 zenData('file')->loadYaml('casefile')->gen('20');
@@ -29,7 +29,7 @@ cid=19011
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 $caseIdList = array(array(1, 2), array(3, 4), array(100));
 

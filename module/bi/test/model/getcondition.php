@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -23,7 +23,7 @@ cid=15163
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 r($bi->getConditionTest(null, 'deleted', '=', null, "0"))       && p('') && e("`deleted` = '0'");            // 测试 `deleted` = '0'
 r($bi->getConditionTest('t1', 'deleted', '=', null, "0"))       && p('') && e("`t1`.`deleted` = '0'");       // 测试 `t1`.`deleted` = '0'
 r($bi->getConditionTest('t1', 'project', '=', 't2', 'id'))        && p('') && e("`t1`.`project` = `t2`.`id`"); // 测试 `t1`.`project` = `t2`.`id`

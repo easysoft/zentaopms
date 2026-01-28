@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 /**
@@ -105,7 +105,7 @@ $nodateRecord[1]->left     = 5;
 $nodateRecord[1]->work     = "记录了日志";
 $nodateRecord[1]->date     = "2022-01-01";
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->objectModel->buildWorkhour(1, $startRecord))  && p('1:consumed,left,task,account') && e('5,5,1,admin'); // 以admin账号登录，构造待创建的工时信息 
 r($task->objectModel->buildWorkhour(2, $startRecord))  && p('1:consumed,left,task,account') && e('5,5,2,admin'); // 以admin账号登录，构造待创建的工时信息 
 r($task->objectModel->buildWorkhour(3, $finishRecord)) && p('1:consumed,left,task,account') && e('5,0,3,admin'); // 以admin账号登录，构造待创建的工时信息

@@ -27,14 +27,14 @@ cid=14953
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('release')->loadYaml('release_getreleaserelated', false, 2)->gen(10);
 zenData('build')->loadYaml('build_getreleaserelated', false, 2)->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->getReleaseRelated('release', 1))   && p('0:0;1') && e('1,11');  // 步骤1：正常情况
 r($actionTest->getReleaseRelated('release', 8))   && p('0:0;1') && e('2,18');  // 步骤2：正常情况

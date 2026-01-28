@@ -17,7 +17,7 @@ cid=17279
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $actions = zendata('action');
 $actions->date->range('(-30D):1D')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
@@ -36,7 +36,7 @@ $lang->SRCommon = '研发需求';
 $lang->URCommon = '用户需求';
 $app->loadLang('action');
 
-$my = new myTest();
+$my = new myModelTest();
 
 $actions = $my->getActionsTest();
 r($actions) && p('0') && e('93'); // 查询最近两年的动态中序号为0的actionID

@@ -18,11 +18,11 @@ cid=18036
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 // 测试数据1：SVN单个文件修改
 $log1 = new stdclass();

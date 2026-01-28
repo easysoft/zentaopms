@@ -16,7 +16,7 @@ cid=16532
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $file = zenData('file');
@@ -32,7 +32,7 @@ $file->addedDate->range('`2023-05-01 10:00:00`,`2023-05-02 11:00:00`,`2023-05-03
 $file->deleted->range('0{10}');
 $file->gen(10);
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 // 测试步骤1：普通文件的路径设置
 $normalFile = $fileTest->setFileWebAndRealPathsTest(1);

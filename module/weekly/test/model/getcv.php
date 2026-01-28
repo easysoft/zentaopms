@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -25,7 +25,7 @@ pid=1
 $evList = array(0, 10, 100);
 $acList = array(0, 10, 100);
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getCVTest($evList[0], $acList[0])) && p() && e('0');       //测试ev值为0，ac值为0
 r($weekly->getCVTest($evList[0], $acList[1])) && p() && e('-100.00'); //测试ev值为0，ac值为10

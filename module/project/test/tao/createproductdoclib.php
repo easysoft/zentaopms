@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('doclib')->gen(1);
@@ -21,5 +21,5 @@ cid=17895
 
 */
 
-$projectTester = new projectTest();
+$projectTester = new projectTaoTest();
 r($projectTester->createProductDocLibTest(10)) && p('id,type,name,product,addedBy') && e('2,product,产品主库,10,admin');  // 测试创建产品文档库

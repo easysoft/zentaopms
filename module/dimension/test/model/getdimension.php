@@ -17,7 +17,7 @@ cid=16034
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dimension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('dimension');
@@ -34,7 +34,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$dimensionTest = new dimensionTest();
+$dimensionTest = new dimensionModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($dimensionTest->getDimensionTest(1, '1,2,3,4,5')) && p() && e(1); // 步骤1：传入有效维度ID

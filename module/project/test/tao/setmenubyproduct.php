@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->gen(50);
 zenData('projectproduct')->gen(50);
@@ -15,7 +15,7 @@ pid=1
 
 */
 
-$projectTester = new projectTest();
+$projectTester = new projectTaoTest();
 
 r($projectTester->setMenuByProductTest(0, 'scrum'))         && p() && e('scrum|projectplan|settings'); // 敏捷无产品项目
 r($projectTester->setMenuByProductTest(0, 'waterfall'))     && p() && e('waterfall||settings');        // 瀑布无产品项目

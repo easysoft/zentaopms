@@ -16,7 +16,7 @@ cid=16978
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $tester->loadModel('productplan');
 
@@ -35,7 +35,7 @@ $branch->gen(10);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanTaoTest();
 
 $normalProduct = new stdClass();
 $normalProduct->id = 1;

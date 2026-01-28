@@ -16,7 +16,7 @@ cid=15513
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('build')->loadYaml('build')->gen(5);
 zenData('user')->gen(5);

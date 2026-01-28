@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 /**
@@ -30,7 +30,7 @@ cid=18113
 $files = array('/LICENSE', '/README.md');
 $files2 = array('/tag/README.md', '/README.md', '/README');
 
-$repo = new repoTest();
+$repo = new repoTaoTest();
 $result = $repo->buildFileTreeTest($files);
 r($result)            && p('0:parent,name,path') && e('0,LICENSE,LICENSE'); //获取代码文件得提交信息第一个文件
 r(count($result) > 1) && p()                     && e('1'); //获取代码文件得提交信息数量

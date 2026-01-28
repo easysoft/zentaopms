@@ -15,14 +15,14 @@ cid=18563
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(100);
 zenData('task')->gen(100);
 
 su('admin');
 
-$story = new storyTest();
+$story = new storyModelTest();
 $storyIdList1 = array(9, 41, 73);
 $storyIdList2 = array(1, 2, 3);
 

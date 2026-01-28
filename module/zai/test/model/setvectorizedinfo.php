@@ -16,14 +16,14 @@ cid=19778
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('config')->gen(0);
 
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 测试设置对象类型的向量化信息 */
 $vectorInfo1 = new stdClass();

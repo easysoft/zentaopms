@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('product')->gen(10);
 $module = zenData('module');
 $module->root->range('1');
@@ -24,7 +24,7 @@ cid=19321
 
 */
 
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 $result   = $transfer->initFieldListTest('story');
 
 r($result) && p('product:title')    && e('所属产品');       // 测试初始化导出需求时所属产品字段

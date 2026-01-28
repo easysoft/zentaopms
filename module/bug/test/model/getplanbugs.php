@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('bug')->gen(20);
@@ -33,7 +33,7 @@ cid=15387
 $planIDList = array(1, 4, 7, 1000001);
 $statusList = array('all', 'active', 'resolved', 'closed');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->getPlanBugsTest($planIDList[0], $statusList[0])) && p('title', '-') && e('BUG3,BUG2,BUG1'); // 查询计划1 状态为all的bug
 r($bug->getPlanBugsTest($planIDList[0], $statusList[1])) && p('title', '-') && e('BUG3,BUG2,BUG1'); // 查询计划1 状态为active的bug

@@ -13,13 +13,13 @@ cid=19577
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $types = array('bug', 'testreport', 'testsuite', 'release');
 
 foreach ($types as $type) zenData($type)->loadYaml($type . '_mergedata')->gen(4);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 
 $projectIDList = array(1, 2);
 $productIDList = array(array(1, 2), array(3, 4));

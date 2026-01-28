@@ -20,7 +20,7 @@ function initData()
     $block->params->range('{"count":10}{3},{"type":"list"}{3},{}{4}');
     $block->hidden->range('0{8},1{2}');
     $block->vision->range('rnd{8},lite{2}');
-    
+
     $block->gen(10);
 }
 

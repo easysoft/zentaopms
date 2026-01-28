@@ -14,12 +14,12 @@ cid=16512
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $pathnames = array('202205/1.txt', '202204/2.png', '202203/3.mp4', '202202/4.zip', '202201/5');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->getRealPathNameTest($pathnames[0])) && p() && e('202205/1'); // 获取 202205/1.txt 的实际存储路径
 r($file->getRealPathNameTest($pathnames[1])) && p() && e('202204/2'); // 获取 202204/2.png 的实际存储路径

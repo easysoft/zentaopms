@@ -31,7 +31,7 @@ cid=17984
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $build = zenData('build')->loadYaml('build');
 $build->project->range('1{2},0{3}');
@@ -53,7 +53,7 @@ $syncRelease         = array('product' => 1, 'branch' => 0, 'project' => 0,   'n
 $noSyncnormalRelease = array('product' => 1, 'branch' => 0, 'project' => 0,   'name' => '新增不关联发布',   'status' => 'wait',   'system' => 1, 'marker' => 0, 'build' => '3', 'desc' => '');
 $noNameRelease       = array('product' => 1, 'branch' => 0, 'project' => 0,   'name' => '',                 'status' => 'normal', 'system' => 1, 'marker' => 0, 'build' => '',  'desc' => '');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->createTest($executionRelease,    $syncList[0])) && p('id,name,build') && e('1,新增执行版本发布,1');                                                                                    // 执行版本新增发布
 r($releaseTester->createTest($projectRelease,      $syncList[0])) && p('id,name,build') && e('2,新增项目版本发布,2');                                                                                     // 项目版本新增发布
 r($releaseTester->createTest($markerRelease,       $syncList[0])) && p('id,name')       && e('3,新增里程碑发布');                                                                                      // 创建里程碑发布

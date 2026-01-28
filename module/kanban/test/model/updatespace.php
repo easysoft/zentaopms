@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanspace')->gen(5);
@@ -72,7 +72,7 @@ $param6 = new stdclass();
 $param6->type  = 'public';
 $param6->owner = '';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateSpaceTest($spaceIDList[0], $param1)) && p('name|owner|whitelist|team', '|') && e('测试修改名称1|user3|~~|,user3,po15,'); // 测试修改空间1
 r($kanban->updateSpaceTest($spaceIDList[1], $param2)) && p('name|owner|whitelist|team', '|') && e('测试修改名称2|po16|~~|,user4,po16,');  // 测试修改空间2

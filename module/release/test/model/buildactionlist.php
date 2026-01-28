@@ -25,7 +25,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $release = zenData('release')->loadYaml('release');
 $release->status->range('normal,terminate');
@@ -36,6 +36,6 @@ su('admin');
 
 $releases = array(1, 2);
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->buildActionListTest($releases[0])) && p('0,1,2,3,4,5') && e('linkStory,linkBug,pause,edit,notify,delete'); // 测试获取正常状态的发布单的操作列表
 r($releaseTester->buildActionListTest($releases[1])) && p('0,1,2,3,4,5') && e('linkStory,linkBug,play,edit,notify,delete');  // 测试获取停止维护状态的发布单的操作列表

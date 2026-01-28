@@ -23,7 +23,7 @@ function updateProgressInterval()
             if(result.finished)
             {
                 clearInterval(interval);
-                window.location.reload();
+                $('#continueBtn').removeClass('disabled').attr('onclick', 'loadCurrentPage()');
             }
         })
     }, 500);

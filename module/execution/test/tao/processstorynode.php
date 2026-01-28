@@ -16,7 +16,7 @@ cid=16395
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 项目执行数据
 $execution = zenData('project');
@@ -115,7 +115,7 @@ $related->gen(5);
 zenData('team')->gen(0);
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 // 创建测试节点对象
 $nodeWithStories = new stdclass();

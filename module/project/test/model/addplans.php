@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project')->gen(100);
 zenData('product')->gen(100);
@@ -33,7 +33,7 @@ cid=17797
 
 */
 
-$project = new projectTest();
+$project = new projectModelTest();
 
 $plan = array();
 $plan[3] = array(1, 4, 7);

@@ -21,7 +21,7 @@ cid=17738
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $project = zenData('project');
@@ -36,7 +36,7 @@ $end      = array();
 $idList   = array(11, 12);
 $create   = array('name' => $names, 'parent' => $parent, 'begin' => $begin, 'end' => $end, 'id' => $idList);
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 $programplan->objectModel->create(array());
 r(dao::getError()) && p('message:0') && e('『阶段名称』不能为空。'); // 传入空数据

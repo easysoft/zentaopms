@@ -18,7 +18,7 @@ cid=15233
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 手动准备测试数据
 global $tester;
@@ -82,7 +82,7 @@ $dao->insert(TABLE_BLOCK)->data(array(
 su('admin');
 
 // 4. 创建测试实例
-$blockTest = new blockTest();
+$blockTest = new blockModelTest();
 
 // 5. 至少5个测试步骤
 r($blockTest->getSpecifiedBlockIDTest('my', 'welcome', 'welcome')) && p('') && e('1'); // 步骤1：正常情况查找存在的区块
@@ -93,5 +93,5 @@ r($blockTest->getSpecifiedBlockIDTest('my', 'project', 'list')) && p('') && e('3
 
 // 步骤6：验证不同用户权限
 su('user1');
-$blockTest2 = new blockTest(); // 重新创建实例以获取新的用户上下文
+$blockTest2 = new blockModelTest(); // 重新创建实例以获取新的用户上下文
 r($blockTest2->getSpecifiedBlockIDTest('my', 'guide', 'guide')) && p('') && e('4'); // 步骤6：用户1的区块

@@ -16,7 +16,7 @@ cid=15962
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $deptTable = zenData('dept');
 $deptTable->id->range('1-20');
@@ -28,7 +28,7 @@ $deptTable->gen(20);
 
 su('admin');
 
-$deptTest = new deptTest();
+$deptTest = new deptModelTest();
 
 r($deptTest->createGroupManageMemberLinkTest(1, 1)) && p() && e('index.php?m=group&f=managemember&groupID=1&deptID=1'); // 步骤1：正常参数链接生成
 r($deptTest->createGroupManageMemberLinkTest(1, 999)) && p() && e('index.php?m=group&f=managemember&groupID=999&deptID=1'); // 步骤2：边界值测试大权限组ID

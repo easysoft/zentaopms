@@ -5,10 +5,10 @@
  * @access public
  * @return void
  */
-function loadBranches(e)
+function loadBranches()
 {
-    var productID  = $(e.target).val();
-    var $branchBox = $('.branchBox');
+    const productID  = $(['name=root']).val();
+    const $branchBox = $('.branchBox');
     $branchBox.addClass('hidden');
     $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=withClosed"), function(data)
     {
@@ -33,8 +33,8 @@ function loadBranches(e)
  */
 function loadModules(e)
 {
-    var productID = $('[name=root]').val();
-    var branchID  = $(e.target).val();
+    const productID = $('[name=root]').val();
+    const branchID  = $('[name=branch]').val();
     if(typeof(branchID) == 'undefined') branchID = 0;
 
     ajaxLoadModules(productID, branchID);
@@ -42,21 +42,21 @@ function loadModules(e)
 
 function changeRoot()
 {
-    var root = $('[name=root]').val();
-    var confirmRoot = type == 'doc' ? confirmRoot4Doc : confirmRoot;
-    if(moduleRoot != root)
+    const productID      = $('[name=root]').val();
+    const confirmMessage = type == 'doc' ? confirmRoot4Doc : confirmRoot;
+    if(moduleRoot != productID)
     {
         if(type == 'docTemplate')
         {
-            ajaxLoadModules(root, 0, 'docTemplate', moduleID, '1');
+            ajaxLoadModules(productID, 0, 'docTemplate', moduleID, '1');
         }
         else
         {
-            zui.Modal.confirm(confirmRoot).then(result =>
+            zui.Modal.confirm(confirmMessage).then(result =>
             {
                 if(result)
                 {
-                    ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+                    ajaxLoadModules(productID, 0, type, moduleID);
                 }
                 else
                 {
@@ -67,7 +67,7 @@ function changeRoot()
     }
     else
     {
-        ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+        ajaxLoadModules(productID, 0, type, moduleID);
     }
 }
 

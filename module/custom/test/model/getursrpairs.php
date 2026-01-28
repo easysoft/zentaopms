@@ -28,13 +28,13 @@ cid=15906
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$customTest = new customTest();
+$customTest = new customModelTest();
 
 // 4. 测试步骤 - 至少5个测试步骤
 

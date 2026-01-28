@@ -17,12 +17,12 @@ cid=16555
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo_setreporoot', false, 2)->gen(6);
 su('admin');
 
-$gitTest = new gitTest();
+$gitTest = new gitModelTest();
 
 $normalRepo = new stdclass();
 $normalRepo->path = '/home/git/normal';

@@ -34,13 +34,13 @@ cid=15173
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($biTest->getFieldsWithTableTest('SELECT id, account, realname FROM zt_user')) && p('account,id,realname') && e('zt_user,zt_user,zt_user'); // 步骤1：简单单表查询

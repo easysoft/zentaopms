@@ -18,14 +18,14 @@ cid=18118
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(3);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoTaoTest();
 
 r($repoTest->getLatestCommitTimeTest(1, 'HEAD', '')) && p() && e('2023-12-13 19:00:25'); // 测试步骤1：正常获取版本库1的HEAD提交时间
 r($repoTest->getLatestCommitTimeTest(3, 'HEAD', '')) && p() && e('2023-12-18 19:00:25'); // 测试步骤2：正常获取版本库3的HEAD提交时间

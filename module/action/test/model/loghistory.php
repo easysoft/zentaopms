@@ -34,7 +34,7 @@ cid=14918
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('company')->gen(1);
 zenData('user')->gen(5);
@@ -51,7 +51,7 @@ $changes3[0] = array('field' => 'name', 'old' => 'name1', 'new' => 'name2');
 $changes4[0] = array('field' => 'code', 'old' => 'code1', 'new' => 'code2');
 $changes5[0] = array('field' => 'assignedTo', 'old' => 'test2', 'new' => 'test1');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->logHistoryTest($actionIDList[0], $changes1)) && p('0:field,old,new;1:field,old,new') && e('name,变更前名称,变更后名称;code,变更前编号,变更后编号');
 r($actionTest->logHistoryTest($actionIDList[1], $changes2)) && p('0:field,old,new') && e('assignedTo,admin,test1');

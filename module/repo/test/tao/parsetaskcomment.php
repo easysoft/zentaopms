@@ -23,11 +23,11 @@ cid=18121
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoTaoTest();
 
 // 测试数据：不同类型的任务注释
 $finishTaskComment   = 'Finish Task #8 Cost:2h';                      // 完成单个任务

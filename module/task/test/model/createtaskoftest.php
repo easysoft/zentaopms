@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(0);
@@ -66,7 +66,7 @@ $testTasks[3]->left     = 0;
 $testTasks[3]->story    = 1;
 $testTasks[3]->mailto   = '';
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->createTaskOfTestObject())                                             && p('name:0')              && e('『任务名称』不能为空。'); // 测试空数据
 r($taskTester->createTaskOfTestObject($sprintTask))                                  && p('execution,name')      && e('3,迭代下的任务');         // 测试创建迭代下的测试任务
 r($taskTester->createTaskOfTestObject($stageTask))                                   && p('execution,name')      && e('4,阶段下的任务');         // 测试创建阶段下的测试任务

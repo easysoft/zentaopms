@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug')->gen('100');
 zenData('user')->gen(1);
@@ -23,7 +23,7 @@ cid=18159
 - 测试 bug按照 类型 分组 的百分比 @automation:0.11;codeerror:0.12;config:0.11;designdefect:0.11;install:0.11;others:0.11;performance:0.11;security:0.11;standard:0.11;
 
 */
-$report = new reportTest();
+$report = new reportModelTest();
 
 global $tester;
 $bug = $tester->loadModel('bug');

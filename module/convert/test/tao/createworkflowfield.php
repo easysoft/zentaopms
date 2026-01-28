@@ -16,7 +16,7 @@ cid=15851
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 定义常量
 if(!defined('JIRA_TMPRELATION')) define('JIRA_TMPRELATION', 'jiratmprelation');
@@ -50,7 +50,7 @@ if(!isset($config->workflowfield->numberTypes)) $config->workflowfield->numberTy
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 测试步骤1: 开源版直接返回relations
 $originalEdition = $config->edition;

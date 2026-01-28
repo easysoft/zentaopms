@@ -16,7 +16,7 @@ cid=18012
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -49,7 +49,7 @@ foreach($bugs as $bug) {
     $tester->dao->insert(TABLE_BUG)->data($bug)->exec();
 }
 
-$releaseTest = new releaseTest();
+$releaseTest = new releaseModelTest();
 
 // 创建不同场景的release对象测试sendMail2Feedback方法
 // 1. 没有需求和Bug的发布

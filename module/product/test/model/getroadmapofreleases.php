@@ -17,7 +17,7 @@ cid=17511
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('productplan')->loadYaml('productplan')->gen(30);
@@ -28,7 +28,7 @@ $productIdList = array(1, 6);
 $branchList    = array('all', '0', '1');
 $countList     = array(0, 1);
 
-$productTester = new productTest();
+$productTester = new productModelTest();
 r(count($productTester->getRoadmapOfReleasesTest($productIdList[0], $branchList[0], $countList[0]))) && p() && e('3'); // 获取产品ID为1的产品发布数据
 r(count($productTester->getRoadmapOfReleasesTest($productIdList[0], $branchList[1], $countList[0]))) && p() && e('3'); // 获取产品ID为1下主干的产品发布数据
 r(count($productTester->getRoadmapOfReleasesTest($productIdList[0], $branchList[2], $countList[0]))) && p() && e('3'); // 获取产品ID为1下分支1的产品发布数据

@@ -15,7 +15,7 @@ cid=17893
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('project')->gen(1);
 zenData('doc')->gen(0);

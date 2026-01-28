@@ -13,7 +13,7 @@ cid=18161
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen('100');
 zenData('burn')->loadYaml('burn')->gen('100');
@@ -21,7 +21,7 @@ zenData('task')->loadYaml('task')->gen('100');
 zenData('user')->gen(1);
 su('admin');
 
-$report      = new reportTest();
+$report      = new reportModelTest();
 $executionID = array(101, 102, 103, 104, 105);
 
 r($report->createSingleJSONTest($executionID[0])) && p() && e('1'); // 测试获取执行 101 的json数据

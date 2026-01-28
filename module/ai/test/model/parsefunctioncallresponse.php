@@ -17,17 +17,17 @@ cid=15059
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 4. 设置模型配置
-$aiTest->objectModel->modelConfig = new stdClass();
-$aiTest->objectModel->modelConfig->type = 'openai-gpt35';
+$aiTest->instance->modelConfig = new stdClass();
+$aiTest->instance->modelConfig->type = 'openai-gpt35';
 
 // 5. 构造测试数据
 $openaiResponseData = json_encode((object)array(
@@ -79,7 +79,7 @@ $failedResponse = (object)array('result' => 'fail', 'message' => 'API request fa
 r($aiTest->parseFunctionCallResponseTest($openaiResponse)) && p('0') && e('{"key": "value"}');
 
 // 步骤2：测试Ernie模型正常function call响应解析
-$aiTest->objectModel->modelConfig->type = 'baidu-ernie';
+$aiTest->instance->modelConfig->type = 'baidu-ernie';
 r($aiTest->parseFunctionCallResponseTest($ernieResponse)) && p('0') && e('{"ernie_key": "ernie_value"}');
 
 // 步骤3：测试空content响应处理
@@ -89,5 +89,5 @@ r($aiTest->parseFunctionCallResponseTest($emptyResponse)) && p() && e('0');
 r($aiTest->parseFunctionCallResponseTest($failedResponse)) && p() && e('0');
 
 // 步骤5：测试无function_call的响应处理
-$aiTest->objectModel->modelConfig->type = 'openai-gpt35';
+$aiTest->instance->modelConfig->type = 'openai-gpt35';
 r(count($aiTest->parseFunctionCallResponseTest($noFunctionCallResponse))) && p() && e(0);

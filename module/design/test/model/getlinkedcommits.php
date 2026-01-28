@@ -16,7 +16,7 @@ cid=15991
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repohistory')->gen(0);
 zenData('relation')->gen(0);
@@ -59,7 +59,7 @@ $table->gen(5);
 
 su('admin');
 
-$designTest = new designTest();
+$designTest = new designModelTest();
 
 r($designTest->getLinkedCommitsTest(1, array('abc123', 'def456'))) && p() && e('2'); // 步骤1：正常情况查询设计提交关联数据
 r($designTest->getLinkedCommitsTest(999, array('abc123', 'def456'))) && p() && e('0'); // 步骤2：查询不存在的仓库ID

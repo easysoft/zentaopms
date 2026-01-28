@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 function initData()
@@ -55,7 +55,7 @@ $productIDList = array(1, 2);
 $branch        = 0;
 $moduleIDList  = array(array(1), array(2));
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->getModuleProjectCasesTest($productIDList[0]))                            && p('1:title;3:title;5:title;7:title;9:title')  && e('这个是测试用例1;这个是测试用例3;这个是测试用例5;这个是测试用例7;这个是测试用例9');  // 测试获取产品1的case
 r($testcase->getModuleProjectCasesTest($productIDList[0], $branch, $moduleIDList[0])) && p('1:title;3:title;5:title')                  && e('这个是测试用例1;这个是测试用例3;这个是测试用例5');                                  // 测试获取产品1，模块1的case

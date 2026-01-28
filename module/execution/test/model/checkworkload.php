@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -39,7 +39,7 @@ $executionIDList = array(3, 6);
 $typeList        = array('create', 'update');
 $percentList     = array(-1, 10, 200);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[0])) && p('percent', ';') && e('"工作量占比"必须为数字');                                     // 检查创建执行时，填写空工作量判断
 r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[1])) && p()               && e('1');                                                          // 检查创建执行时，填写正确的工作量判断
 r($executionTester->checkWorkloadTest($executionIDList[0], $typeList[0], $percentList[2])) && p('percent', ';') && e('工作量占比累计不应当超过100%, 当前产品下的工作量之和为0%');   // 检查创建执行时，填写错误的工作量判断

@@ -32,7 +32,7 @@ cid=16043
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(20);
 zenData('user')->gen(5);
@@ -41,7 +41,7 @@ su('admin');
 $docData   = array('lib' => 100, 'module' => 99);
 $docIdList = array(array(), array(1, 2), array(3, 4), array(5, 6), array(7, 8));
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->batchMoveDocTest($docData, $docIdList[0])) && p('') && e('0');                                      // 测试ID为空时
 r($docTester->batchMoveDocTest($docData, $docIdList[1])) && p('1:lib,module;2:lib,module') && e('100,99;100,99'); // 测试文档1文档2的字段
 r($docTester->batchMoveDocTest($docData, $docIdList[2])) && p('3:lib,module;4:lib,module') && e('100,99;100,99'); // 测试文档3文档4的字段

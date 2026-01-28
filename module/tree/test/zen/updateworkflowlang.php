@@ -20,10 +20,17 @@ include dirname(__FILE__, 2) . '/lib/treezen.unittest.class.php';
 
 su('admin');
 
+$data = zenData('workflowdatasource');
+$data->id->range('1-5');
+$data->name->prefix('数据源')->range('1-5');
+$data->createdDate->range("20260109 130000")->type('timestamp')->format('YYYY-MM-DD');
+$data->editedDate->range("20260109 130000")->type('timestamp')->format('YYYY-MM-DD');
+$data->gen(5);
+
 $treeTest = new treeTest();
 
-r($treeTest->updateWorkflowLangTest('datasource_1')) && p('manageDatasource_1Child') && e('模块维护');
-r($treeTest->updateWorkflowLangTest('workflow_1')) && p('manageWorkflow_1Child') && e('模块维护');
 r($treeTest->updateWorkflowLangTest('single')) && p('manage') && e('维护模块');
 r($treeTest->updateWorkflowLangTest('')) && p('manage') && e('维护模块');
-r($treeTest->updateWorkflowLangTest('datasource_999')) && p('manageDatasource_999Child') && e('模块维护');
+r($treeTest->updateWorkflowLangTest('datasource_1')) && p('manageDatasource_1Child') && e('数据源1');
+r($treeTest->updateWorkflowLangTest('workflow_1')) && p('manageWorkflow_1Child') && e('维护分类');
+r($treeTest->updateWorkflowLangTest('datasource_999')) && p('manageDatasource_999Child') && e('维护分类');

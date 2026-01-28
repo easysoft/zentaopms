@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-6');
@@ -32,7 +32,7 @@ pid=1
 
 $executionIDList = array(2, 3, 4, 5);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->startTest($executionIDList[0]))                && p('status:old,new') && e('wait,doing'); // 敏捷执行开始
 r($execution->startTest($executionIDList[1]))                && p('status:old,new') && e('wait,doing'); // 瀑布阶段开始
 r($execution->startTest($executionIDList[2]))                && p('status:old,new') && e('wait,doing'); // 看板执行开始

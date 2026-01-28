@@ -19,14 +19,14 @@ cid=19541
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('deploystep')->loadYaml('deploystep')->gen(10);
 zenData('action')->loadYaml('action')->gen(20);
 zenData('user')->gen(5);
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->processDeployStepActionTest(1))  && p('objectID,objectType') && e('1,deploystep');  //测试存在的上线步骤ID1不能删除
 r($upgrade->processDeployStepActionTest(10)) && p('objectID,objectType') && e('10,deploystep'); //测试存在的上线步骤ID2不能删除
 r($upgrade->processDeployStepActionTest(0))  && p('')                    && e('0');             //测试不存在的上线步骤ID0是否被删除

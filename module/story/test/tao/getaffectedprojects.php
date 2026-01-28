@@ -18,7 +18,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $story = zenData('story');
 $story->product->range(1);
@@ -66,7 +66,7 @@ zenData('storystage')->gen(30);
 zenData('bug')->gen(1);
 zenData('productplan')->gen(1);
 
-$story = new storyTest();
+$story = new storyTaoTest();
 $affectedStory = $story->getAffectedProjectsTest(2);
 
 r(array_keys($affectedStory->teams)) && p('0,1,2') && e('22,30,37'); //获取需求2团队成员的数量

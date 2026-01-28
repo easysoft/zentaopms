@@ -16,11 +16,11 @@ cid=18357
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$settingTest = new settingTest();
+$settingTest = new settingModelTest();
 
 r(strlen($settingTest->computeSNTest())) && p() && e('32'); // 检查 sn 长度
 

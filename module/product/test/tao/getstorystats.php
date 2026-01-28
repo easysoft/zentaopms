@@ -35,7 +35,7 @@ cid=17558
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->gen(50);
 zenData('story')->gen(50);
@@ -46,7 +46,7 @@ $productIdList[] = array();
 $productIdList[] = range(1, 10);
 $productIdList[] = range(10, 20);
 
-$productTester = new productTest();
+$productTester = new productTaoTest();
 r($productTester->getStoryStatsTest($productIdList[0])[1])  && p('story:draft,active,changing,reviewing,finished,closed,total') && e('0,1,1,0,0,0,2'); // 测试系统中所有产品下的需求统计信息
 r($productTester->getStoryStatsTest($productIdList[1])[2])  && p('story:draft,active,changing,reviewing,finished,closed,total') && e('0,1,1,0,0,0,2'); // 测试产品id为1-10的产品下的需求统计信息
 r($productTester->getStoryStatsTest($productIdList[2])[11]) && p('story:draft,active,changing,reviewing,finished,closed,total') && e('0,1,1,0,0,0,2'); // 测试产品id为11-20的产品下的需求统计信息

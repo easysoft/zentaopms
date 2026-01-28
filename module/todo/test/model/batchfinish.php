@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -24,7 +24,7 @@ su('admin');
 
 zenData('todo')->gen(10);
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 r($todo->getByIdTest(1)) && p('status') && e('wait');   // 获取ID为1的待办状态
 r($todo->getByIdTest(2)) && p('status') && e('doing');  // 获取ID为2的待办状态

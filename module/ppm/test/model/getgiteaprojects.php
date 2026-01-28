@@ -16,11 +16,11 @@ cid=17246
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->getGiteaProjectsTester(1))   && p()  && e('array'); // 测试步骤1：有效的服务器ID获取项目列表
 r($mrTest->getGiteaProjectsTester(0))   && p()  && e('0');     // 测试步骤2：服务器ID为0的边界值测试

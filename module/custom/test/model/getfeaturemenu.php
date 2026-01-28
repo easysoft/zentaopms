@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->getFeatureMenu();
@@ -20,7 +21,7 @@ cid=15896
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->loadYaml('lang')->gen(10);
 zenData('user')->gen(5);
@@ -29,7 +30,7 @@ su('admin');
 $modules = array('my', 'product', 'project', 'execution');
 $methods = array('work', 'browse', 'browse', 'task');
 
-$customTester  = new customTest();
+$customTester  = new customModelTest();
 r($customTester->getFeatureMenuTest($modules[0], $methods[0])) && p('')            && e('0');             // 获取地盘-待处理-任务列表筛选标签
 r($customTester->getFeatureMenuTest($modules[1], $methods[1])) && p('0:name,text') && e('allstory,全部'); // 获取产品-需求列表筛选标签
 r($customTester->getFeatureMenuTest($modules[2], $methods[2])) && p('0:name,text') && e('all,全部');      // 获取项目-项目列表筛选标签

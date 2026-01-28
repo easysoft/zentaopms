@@ -29,14 +29,14 @@ cid=19361
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(30);
 
 $moduleID = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getAllChildIdTest($moduleID[0])) && p() && e(',1,6,26');  // 测试获取module 1 的全部子项
 r($tree->getAllChildIdTest($moduleID[1])) && p() && e(',2,7,27');  // 测试获取module 2 的全部子项

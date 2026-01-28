@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 zenData('case')->gen(10);
@@ -52,7 +52,7 @@ $case = clone $caseData;
 
 $forceNotReview = array(true, false);
 
-$caselib = new caselibTest();
+$caselib = new caselibTaoTest();
 r($caselib->updateImportedCaseTest(0, $case, $data, $forceNotReview[0])) && p('title;steps[0]:desc') && e('用例更新;步骤一更新'); // 更新用例库 0 用例标题 强制评审
 $case = clone $caseData;
 r($caselib->updateImportedCaseTest(0, $case, $data, $forceNotReview[1])) && p('title;steps[0]:desc') && e('用例更新;步骤一更新'); // 更新用例库 0 用例标题 非强制评审

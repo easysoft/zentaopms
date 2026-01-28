@@ -22,7 +22,7 @@ cid=18476
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(0);
@@ -33,7 +33,7 @@ $project = zenData('project');
 $project->type->range('sprint');
 $project->gen(20);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $tasks = $story->batchToTaskTest();
 
 r(count($tasks))       && p()                                      && e('2');                           //2个需求批量转任务，查看转化后的数量

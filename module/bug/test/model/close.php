@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug_close')->gen(55);
 zenData('user')->gen(1);
@@ -60,7 +60,7 @@ $output['fromLaneID'] = 3;
 $output['toLaneID']   = 3;
 $output['regionID']   = 1;
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->closeObject($bugIDList[0])) && p('title,status,assignedTo,confirmed') && e('第1个bug,closed,closed,1'); // 测试关闭状态为active的bug1
 r($bug->closeObject($bugIDList[1])) && p('title,status,assignedTo,confirmed') && e('第2个bug,closed,closed,1'); // 测试关闭状态为resolved的bug2
 r($bug->closeObject($bugIDList[2])) && p('title,status,assignedTo,confirmed') && e('第3个bug,closed,closed,1'); // 测试关闭状态为closed的bug3

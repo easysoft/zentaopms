@@ -15,7 +15,7 @@ cid=18578
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(1);
@@ -38,7 +38,7 @@ $storyReview->reviewer->range('admin');
 $storyReview->version->range('1');
 $storyReview->gen(20);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $story->objectModel->app->rawModule     = 'story';
 $story->objectModel->app->rawMethod     = 'review';
 $story->objectModel->app->user->account = 'admin';

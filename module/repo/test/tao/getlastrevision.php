@@ -16,14 +16,14 @@ cid=18117
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(4);
 zenData('repohistory')->loadYaml('repohistory')->gen(3);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoTaoTest();
 
 r($repoTest->getLastRevisionTest(1)) && p() && e('2023-12-13 19:00:25');
 r($repoTest->getLastRevisionTest(3)) && p() && e('2023-12-18 19:00:25');

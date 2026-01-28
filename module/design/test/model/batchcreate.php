@@ -31,7 +31,7 @@ cid=15983
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->gen(0);
 zenData('user')->gen(5);
@@ -44,7 +44,7 @@ $noTypeDesgins = array(array('type' => '',     'name' => '无类型设计1'), ar
 $allDesgins    = array(array('type' => 'HLDS', 'name' => '概要设计3'),   array('type' => 'DDS',  'name' => '详细设计3'), array('type' => 'DBDS', 'name' => '数据库设计3'), array('type' => 'ADS',  'name' => '接口设计3'));
 $storyDesgins  = array(array('type' => 'HLDS', 'name' => '概要设计4', 'story' => 1), array('type' => 'DDS',  'name' => '详细设计4', 'story' => 1), array('type' => 'DBDS', 'name' => '数据库设计4', 'story' => 1), array('type' => 'ADS',  'name' => '接口设计4', 'story' => 1));
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->batchCreateTest($hldsDesgins))   && p('0:name,type')       && e('概要设计1,HLDS');         // 批量创建概要设计
 r($designTester->batchCreateTest($ddsDesgins))    && p('0:name,type')       && e('详细设计1,DDS');          // 批量创建详细设计
 r($designTester->batchCreateTest($dbdsDesgins))   && p('0:name,type')       && e('数据库设计1,DBDS');       // 批量创建数据库设计

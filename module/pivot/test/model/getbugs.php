@@ -13,11 +13,11 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug')->gen(20);
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 $date1_start = date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01')));
 $date1_end   = date('Y-m-d', strtotime('now'));

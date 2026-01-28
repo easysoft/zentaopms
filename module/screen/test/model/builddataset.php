@@ -16,11 +16,11 @@ cid=18209
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->buildDatasetTest(20002, 'mysql', '')) && p('0:count') && e('0');
 r($screenTest->buildDatasetTest(20004, 'mysql', '')) && p('0:count') && e('0');

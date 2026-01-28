@@ -89,7 +89,7 @@ cid=18443
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(20);
 zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
@@ -99,7 +99,7 @@ $projectIds  = array(0, 11, 100);
 $browseTypes = array('all', 'inside', 'outside', 'key', 'test');
 $sorts       = array('id_desc', 'name_desc');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getStakeholdersTest($projectIds[0], $browseTypes[0], $sorts[0])) && p()                                       && e('0');                           // 获取项目ID=0时，按照id倒序排列的所有干系人
 r($stakeholderTester->getStakeholdersTest($projectIds[0], $browseTypes[0], $sorts[1])) && p()                                       && e('0');                           // 获取项目ID=0时，按照name倒序排列的所有干系人
 r($stakeholderTester->getStakeholdersTest($projectIds[0], $browseTypes[1], $sorts[0])) && p()                                       && e('0');                           // 获取项目ID=0时，按照id倒序排列的内部干系人

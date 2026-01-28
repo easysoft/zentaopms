@@ -26,45 +26,42 @@ $fields->field('module')
     ->items($createFields['module']['options'])
     ->value($createFields['module']['default']);
 
-if(isset($createFields['branch']) && $type == 'story')
-{
-    $fields->remove('module');
-    $fields->field('twinsStory')
-        ->width('full')
-        ->control(array
-        (
-            'type'          => 'twinsstory',
-            'productType'   => data('product.type'),
-            'branchItems'   => $createFields['branch']['options'],
-            'defaultBranch' => $createFields['branch']['default'],
-            'moduleItems'   => $createFields['module']['options'],
-            'defaultModule' => $createFields['module']['default'],
-            'planItems'     => $createFields['plan']['options'],
-            'defaultPlan'   => $createFields['plan']['default'],
-        ));
-}
+if(isset($createFields['branch']) && $type == 'story') $fields->remove('module');
+$fields->field('twinsStory')
+    ->width('full')
+    ->hidden(!isset($createFields['branch']) || $type != 'story')
+    ->control(array
+    (
+        'type'          => 'twinsstory',
+        'productType'   => data('product.type'),
+        'branchItems'   => $createFields['branch']['options'] ?? array(),
+        'defaultBranch' => $createFields['branch']['default'] ?? 0,
+        'moduleItems'   => $createFields['module']['options'],
+        'defaultModule' => $createFields['module']['default'],
+        'planItems'     => isset($createFields['plan']['options']) ? $createFields['plan']['options'] : array(),
+        'defaultPlan'   => isset($createFields['plan']['default']) ? $createFields['plan']['default'] : 0,
+    ));
 
 $fields->field('parent')
     ->id('parentBox')
-    ->hidden(data('hiddenParent'))
     ->items($createFields['parent']['options'])
     ->value($createFields['parent']['default']);
 
 $fields->field('grade')
-    ->hidden(data('hiddenGrade'))
     ->disabled($gradeRule == 'stepwise')
     ->required()
     ->items($createFields['grade']['options'])
     ->value($createFields['grade']['default']);
 
 $fields->field('reviewer')
+    ->hidden(!data('forceReview') && !empty(data('needNotReview')))
     ->width('full')
     ->required()
     ->control('inputGroup')
     ->id('reviewerBox')
     ->items(false)
     ->itemBegin('reviewer[]')->control('picker')->id('reviewer')->items($createFields['reviewer']['options'])->value($createFields['reviewer']['default'])->multiple()->itemEnd();
-$fields->field('needNotReview')->control('hidden')->value(0);
+$fields->field('needNotReview')->control('hidden')->value(data('forceReview') ? 0 : 1);
 
 $fields->field('assignedTo')
     ->required($createFields['assignedTo']['required'])
@@ -136,7 +133,7 @@ if(!(isset($createFields['branch']) && $type == 'story') && isset($createFields[
         ->items(false)
         ->itemBegin('plan')->control('picker')->id('planIdBox')->items($createFields['plan']['options'])->value($createFields['plan']['default'])->multiple($type != 'story')->itemEnd()
         ->item(empty($createFields['plan']['options']) && hasPriv('productplan', 'create') ? field()->control('btn')->icon('plus')->url(createLink('productplan', 'create', 'productID=' . data('productID') . '&branch=' . data('branch')))->set(array('data-toggle' => 'modal', 'data-size' => 'lg'))->set('title', $lang->productplan->create) : null)
-        ->item(empty($createFields['plan']['options']) ? field()->control('btn')->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
+        ->item(empty($createFields['plan']['options']) ? field()->control(array('control' => 'btn', 'data-on' => 'click', 'data-call' => 'loadProductPlans', 'data-params' => data('productID')))->icon('refresh')->id("loadProductPlans")->set('title', $lang->refresh) : null);
 }
 
 $fields->field('source')

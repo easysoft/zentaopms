@@ -23,7 +23,7 @@ cid=17051
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 先生成action表数据，确保有正确的id
 $action = zenData('action');
@@ -49,7 +49,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$message = new messageTest();
+$message = new messageModelTest();
 
 r($message->getMessagesTest('all', 'createdDate', 'count')) && p() && e('8');                    // 测试获取全部消息
 r($message->getMessagesTest('wait', 'createdDate', 'count')) && p() && e('4');                    // 测试获取wait状态消息

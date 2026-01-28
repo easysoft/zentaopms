@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('story_reviewing')->gen('10');
 zenData('storyreview')->loadYaml('storyreview')->gen('10');
@@ -35,7 +35,7 @@ cid=17299
 global $config;
 $config->edition = 'open';
 
-$my = new myTest();
+$my = new myModelTest();
 
 su('admin');
 $account = array('admin', 'user1', 'user2', 'user3', 'user4');

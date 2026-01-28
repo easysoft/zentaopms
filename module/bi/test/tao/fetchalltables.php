@@ -18,10 +18,10 @@ cid=15221
 try
 {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
     su('admin');
-    $biTest = new biTest();
+    $biTest = new biTaoTest();
 }
 catch(Exception $e)
 {
@@ -86,7 +86,7 @@ catch(Exception $e)
         }
     }
 
-    $biTest = new biTest();
+    $biTest = new biTaoTest();
 }
 
 r(is_array($biTest->fetchAllTablesTest())) && p() && e('1');

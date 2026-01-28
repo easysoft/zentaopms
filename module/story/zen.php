@@ -749,13 +749,10 @@ class storyZen extends story
         if($this->story->checkForceReview($storyType)) $fields['reviewer']['required'] = true;
         if(empty($branches)) unset($fields['branch']);
         if(!empty($this->view->hiddenPlan)) unset($fields['plan']);
+        if($this->config->edition != 'ipd' && $storyType == 'epic') $fields['parent']['hidden'] = true;
 
-        $hiddenGrade = empty($this->config->showStoryGrade);
-        if($hiddenGrade && $storyType == 'epic') $fields['parent']['hidden'] = true;
-
-        $this->view->branchID    = $branch;
-        $this->view->gradeRule   = $this->config->{$storyType}->gradeRule;
-        $this->view->hiddenGrade = $hiddenGrade;
+        $this->view->branchID  = $branch;
+        $this->view->gradeRule = $this->config->{$storyType}->gradeRule;
         return $fields;
     }
 
@@ -1066,7 +1063,7 @@ class storyZen extends story
         $objectID = $this->view->objectID;
 
         /* Hidden some fields of projects without products. */
-        $hiddenProduct = $hiddenParent = $hiddenPlan = false;
+        $hiddenProduct = $hiddenPlan = false;
         $teamUsers     = array();
 
         if($this->app->tab === 'project' || $this->app->tab === 'execution')
@@ -1091,11 +1088,6 @@ class storyZen extends story
             $fields['assignedTo']['options'] = $teamUsers;
         }
 
-        $hiddenGrade = empty($this->config->showStoryGrade);
-        if($hiddenGrade && $storyType == 'epic') $hiddenParent = true;
-
-        $this->view->hiddenParent = $hiddenParent;
-        $this->view->hiddenGrade  = $hiddenGrade;
         return $fields;
     }
 
@@ -1136,7 +1128,6 @@ class storyZen extends story
             $fields['reviewer']['options']   = $teamUsers;
             $fields['assignedTo']['options'] = $teamUsers;
         }
-        if(empty($this->config->showStoryGrade) && $storyType == 'epic') $fields['parent']['className'] = 'hidden';
 
         return $fields;
     }
@@ -1749,6 +1740,12 @@ class storyZen extends story
             $object = $this->loadModel('project')->fetchByID($objectID);
             if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
             return $this->session->storyList;
+        }
+
+        if($this->app->tab == 'product')
+        {
+            $storyProductID = $this->story->fetchByID($storyID)->product;
+            return $this->createLink('product', 'browse', "productID=$storyProductID&branch=$branch&browseType=unclosed&param=0&storyType=$storyType");
         }
 
         helper::setcookie('storyModule', '0', 0);

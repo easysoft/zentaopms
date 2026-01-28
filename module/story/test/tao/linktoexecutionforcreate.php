@@ -17,7 +17,7 @@ cid=18652
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->gen(5);
 $project = zenData('project');
@@ -27,7 +27,7 @@ $project->type->range('project,kanban,sprint,sprint');
 $project->multiple->range('1{3},0');
 $project->gen(4);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->linkToExecutionForCreateTest(0,  0)) && p() && e('0'); //不传入执行，也不传入需求。
 r($storyTest->linkToExecutionForCreateTest(11, 0)) && p() && e('0'); //传入执行，不传入需求。

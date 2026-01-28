@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -84,7 +84,7 @@ $changedeadline   = array('deadline' => $deadline);
 $closedReason     = array('closedReason' => '关闭原因');
 $changeParent     = array('parent' => 1);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->updateObject($taskIDList[0], $changename))       && p('1:field,old,new') && e('name,任务1,修改后的任务名称'); // 测试修改任务名称
 r($task->updateObject($taskIDList[0], $changename))       && p()                  && e('没有数据更新');                // 测试无修改
 r($task->updateObject($taskIDList[1], $changemodule))     && p('0:field,old,new') && e('module,24,25');                // 测试修改任务模块

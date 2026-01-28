@@ -17,7 +17,7 @@ cid=17274
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $action = zenData('action');
@@ -56,7 +56,7 @@ $bug->gen(5);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$myTest = new myTest();
+$myTest = new myModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r(count($myTest->buildReviewedListTest(array('story' => array(1 => (object)array('id' => 1, 'title' => '测试需求1', 'type' => 'story', 'status' => 'active', 'product' => 1)), 'testcase' => array(2 => (object)array('id' => 2, 'title' => '测试用例1', 'status' => 'normal', 'product' => 1))), array((object)array('objectType' => 'story', 'objectID' => 1, 'date' => '2024-01-01 10:00:00', 'extra' => 'pass'), (object)array('objectType' => 'testcase', 'objectID' => 2, 'date' => '2024-01-02 11:00:00', 'extra' => 'reject')), array()))) && p() && e('2'); // 步骤1：正常情况

@@ -19,7 +19,7 @@ cid=18052
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $repoTable = zenData('repo');
@@ -35,7 +35,7 @@ $repofilesTable->loadYaml('repofiles_getcommits', false, 2)->gen(100);
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 5. 执行测试步骤
 $result1 = $repoTest->getCommitsTest((object)array('id' => 1, 'SCM' => 'Git'), '');

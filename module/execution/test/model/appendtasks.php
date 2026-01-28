@@ -22,7 +22,7 @@ cid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -53,7 +53,7 @@ su('admin');
 global $app;
 $app->user->admin = true;
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 $executions      = $executionTester->appendTasksTest();
 
 r(count($executions))      && p()                     && e('4');            // 判断执行数量

@@ -16,11 +16,11 @@ cid=16021
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 r($devTest->trimSpaceTest('* test ')) && p() && e('test');
 r($devTest->trimSpaceTest(" \t\n\r * hello world \t\n\r ")) && p() && e('hello world');

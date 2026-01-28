@@ -26,7 +26,7 @@ cid=19668
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $table = zenData('task');
 $table->execution->range('1-5{10}');
@@ -37,7 +37,7 @@ $table->gen(50);
 
 global $config;
 
-$userTest = new userTest();
+$userTest = new userTaoTest();
 
 $executionIdList = array(1, 2, 3, 4, 5);
 

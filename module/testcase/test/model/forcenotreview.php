@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('10');
 
@@ -33,7 +33,7 @@ cid=18972
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 $needReviewList     = array(true, false);
 $forceReviewList    = array(false, 'user1,user2', '');

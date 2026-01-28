@@ -19,7 +19,7 @@ cid=17773
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $projectTable = zenData('project');
@@ -42,7 +42,7 @@ $productTable->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanTaoTest();
 
 // 5. 测试步骤（至少5个）
 r($programplanTest->getStageListTest(1, 1, 'all', 'id_asc')) && p('2:name') && e('阶段1-1'); // 步骤1：正常情况 - 获取指定执行下的阶段

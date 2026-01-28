@@ -16,7 +16,7 @@ cid=17787
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('project');
 zenData('product');
@@ -24,7 +24,7 @@ zenData('user');
 
 su('admin');
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanZenTest();
 
 r($programplanTest->buildCreateViewTest(1, 'normal')) && p('success') && e('1');
 r($programplanTest->buildCreateViewTest(2, 'ipd')) && p('success') && e('1');

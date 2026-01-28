@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(5);
 $program = zenData('project')->loadYaml('program');
@@ -29,7 +29,7 @@ cid=17715
 
 $objectIdList = array(1, 2, 3, 4, 5);
 
-$programTester = new programTest();
+$programTester = new programTaoTest();
 $programTester->program->app->user->admin = true;
 r($programTester->buildProgramActionsMapTest($objectIdList[0])) && p('0:name') && e('close'); // 测试生成项目集id为1的操作按钮数据。
 r($programTester->buildProgramActionsMapTest($objectIdList[1])) && p('0:name') && e('close'); // 测试生成项目集id为2的操作按钮数据。

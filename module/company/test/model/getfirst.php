@@ -15,7 +15,7 @@ cid=15732
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据，使用现有的company.yaml数据结构
 zendata('company')->loadYaml('company', false, 2)->gen(5);
@@ -24,7 +24,7 @@ zendata('company')->loadYaml('company', false, 2)->gen(5);
 su('admin');
 
 // 创建测试实例
-$companyTest = new companyTest();
+$companyTest = new companyModelTest();
 
 // 测试步骤1：正常情况下获取第一家公司
 r($companyTest->getFirstTest()) && p('id,name') && e('1,易软天创网络科技有限公司');

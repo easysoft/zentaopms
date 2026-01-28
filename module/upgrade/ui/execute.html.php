@@ -18,11 +18,13 @@ jsVar('upgradeVersions', array_keys($upgradeVersions));
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 {
-    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $lang->{$edition . 'Name'};
+    $editionName = $lang->{$edition . 'Name'} ?? $edition;
+    $editionNames[$edition] = $edition == 'open' ? $lang->pmsName : $editionName;
 }
 
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
 $toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
+$versionCount     = count($upgradeVersions);
 
 $buildVersions = function() use ($upgradeVersions, $editionNames)
 {
@@ -30,43 +32,40 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
     foreach($upgradeVersions as $version => $label)
     {
         $edition = is_numeric($version[0]) ? 'open' : substr($version, 0, 3);
-        $versions[] = div
+        $versions[] = row
         (
-            row
+            setClass('version-item items-center gap-2'),
+            setData(['version' => $version]),
+            icon
             (
-                setClass('version-item items-center gap-2'),
-                setData(['version' => $version]),
-                icon
-                (
-                    setClass('text-xl text-gray-400'),
-                    'clock'
-                ),
-                span
-                (
-                    $editionNames[$edition] . str_ireplace($edition, '', $label)
-                )
+                setClass('text-gray-400 w-4 h-4'),
+                'clock'
+            ),
+            span
+            (
+                $editionNames[$edition] . str_ireplace($edition, '', $label)
             )
         );
     }
     return $versions;
 };
 
-$buildChanges = function() use ($lang, $upgradeChanges)
+$buildChanges = function() use ($app, $lang, $upgradeChanges)
 {
-    $changes    = [];
-    $bgColors   = ['create' => 'success-pale', 'update' => 'primary-pale', 'delete' => 'danger-pale'];
-    $textColors = ['create' => 'text-success', 'update' => 'text-primary', 'delete' => 'text-danger'];
+    $changes = [];
+    $width   = $app->getClientLang() == 'en' ? 'w-14' : 'w-11';
     foreach($upgradeChanges as $key => $change)
     {
         $sql = json_encode($change['sql'] ?? []);
         $changes[] = row
         (
             setClass('change-item items-center gap-3'),
-            setData(['key' => $key, 'change' => $change]),
+            setData(['key' => $key]),
             span
             (
-                setClass("label {$bgColors[$change['mode']]} {$textColors[$change['mode']]} px-2.5 py-1"),
-                $lang->upgrade->changeModes[$change['mode']]
+                setClass("label gray-pale text-gray-400 px-2.5 py-1 {$width}"),
+                setData(['text' => $lang->upgrade->changeModes[$change['mode']]]),
+                icon('spinner-indicator')
             ),
             span
             (
@@ -77,7 +76,7 @@ $buildChanges = function() use ($lang, $upgradeChanges)
                 set::href("javascript:showSQL({$sql})"),
                 icon
                 (
-                    setClass('text-gray-400 text-lg'),
+                    setClass('text-lg text-gray-400'),
                     'fields'
                 ),
             ) : null
@@ -105,7 +104,7 @@ div
         row
         (
             setClass('bg-gray-100 gap-2 p-2'),
-            setStyle(['max-height' => 'calc(100% - 4rem)']),
+            setStyle(['max-height' => 'calc(100% - 6rem)']),
             col
             (
                 setID('versionsBlock'),
@@ -118,7 +117,7 @@ div
                 col
                 (
                     setID('versionsBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
                     $buildVersions
                 ),
                 col
@@ -130,23 +129,25 @@ div
                     ),
                     row
                     (
-                        setClass('items-center gap-2'),
+                        setClass('justify-between items-center gap-2'),
                         progressbar
                         (
                             setID('versionsProgressBar'),
                             setClass('rounded-full'),
-                            setStyle(['height' => '.75rem', 'width' => 'calc(100% - 3rem)']),
+                            setStyle(['height' => '.75rem', 'width' => '100%']),
                             set::color('rgba(var(--color-success-500-rgb), var(--tw-bg-opacity));'),
                             set::percent(0)
                         ),
                         span
                         (
+                            setClass('text-right'),
+                            setStyle(['min-width' => (strlen((string)$versionCount) + 1) . 'rem']),
                             span
                             (
                                 setID('versionsProgressText'),
-                                '0'
+                                0
                             ),
-                            ' / ' . count($upgradeVersions)
+                            ' / ' . $versionCount
                         )
                     )
                 )
@@ -171,9 +172,19 @@ div
                 col
                 (
                     setID('changesBox'),
-                    setClass('gap-4 overflow-x-hidden overflow-y-auto h-full'),
+                    setClass('gap-2 overflow-x-hidden overflow-y-auto h-full'),
                     $buildChanges
                 )
+            )
+        ),
+        div
+        (
+            setClass('center'),
+            a
+            (
+                setID('continueBtn'),
+                setClass('btn primary w-24 disabled'),
+                $lang->upgrade->continue
             )
         )
     )

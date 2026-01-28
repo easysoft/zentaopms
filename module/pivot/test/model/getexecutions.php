@@ -10,14 +10,14 @@ title=测试 pivotModel->getExecutions();
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('task')->gen(20);
 zenData('user')->gen(2);
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 $date1_start = date('Y-m-d', strtotime('-3 months'));
 $date1_end   = date('Y-m-d', strtotime('+1 years'));

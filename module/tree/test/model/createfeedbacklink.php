@@ -15,10 +15,10 @@ cid=19351
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->createFeedbackLinkTest(1)) && p('url') && e("feedback-browse-byModule-1.html"); // 测试创建module 1 的 caseliblink
 r($tree->createFeedbackLinkTest(2)) && p('url') && e("feedback-browse-byModule-2.html"); // 测试创建module 2 的 caseliblink

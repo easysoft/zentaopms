@@ -60,7 +60,7 @@ if(!$build->execution)
                 set::name('builds[]'),
                 set::items($builds),
                 set::value($build->builds),
-                set::disabled(!empty($testtaskID)),
+                set::readonly(!empty($testtaskID)),
                 set::placeholder($lang->build->placeholder->multipleSelect),
                 set::multiple(true)
             )

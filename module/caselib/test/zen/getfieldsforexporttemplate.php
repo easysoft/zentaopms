@@ -16,11 +16,11 @@ cid=15547
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 r($caselibTest->getFieldsForExportTemplateTest('count')) && p() && e('12'); // 步骤1：正常调用获取导出模板字段
 r($caselibTest->getFieldsForExportTemplateTest()) && p('module') && e('所属模块'); // 步骤2：验证返回的字段包含module字段

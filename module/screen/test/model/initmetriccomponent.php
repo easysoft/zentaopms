@@ -17,13 +17,13 @@ cid=18264
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试数据准备
 $metric1 = (object)array('id' => 1, 'name' => '测试指标1');

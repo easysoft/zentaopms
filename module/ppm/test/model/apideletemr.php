@@ -19,7 +19,7 @@ cid=17226
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $pipeline = zenData('pipeline');
 $pipeline->id->range('1-5');
@@ -51,7 +51,7 @@ $repo->loadYaml('repo')->gen(5);
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 r($mrTest->apiDeleteMRTest(1, 'project1', 100)) && p() && e('0');                   // 测试步骤1：正常删除GitLab类型的MR
 r($mrTest->apiDeleteMRTest(999, 'project1', 100)) && p() && e('0');                 // 测试步骤2：删除不存在host的MR

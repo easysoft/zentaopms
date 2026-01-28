@@ -16,13 +16,13 @@ cid=17108
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('metric')->gen(0);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->getMetricRecordTypeTest('', 'system')) && p() && e('0'); // 步骤1：空code返回false
 r($metricTest->getMetricRecordTypeTest('test_nodate_metric', 'system')) && p() && e('system'); // 步骤2：system范围无日期类型

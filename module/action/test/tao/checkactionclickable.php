@@ -18,13 +18,13 @@ cid=14939
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(10);
 
 su('user1');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $action = new stdclass();
 

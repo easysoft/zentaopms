@@ -37,9 +37,9 @@ cid=19594
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->computePasswordStrengthTest(''))             && p()  && e(0); // 密码为空，强度为弱。
 

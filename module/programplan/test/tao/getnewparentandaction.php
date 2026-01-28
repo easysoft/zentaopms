@@ -21,13 +21,13 @@ cid=17768
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('project')->gen(20);
 
 su('admin');
 
-$programplan = new programplanTest();
+$programplan = new programplanTaoTest();
 
 // 准备父阶段对象
 $waitParent = new stdclass();

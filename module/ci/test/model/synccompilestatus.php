@@ -16,7 +16,7 @@ cid=15593
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('job')->loadYaml('job')->gen(10);
@@ -24,7 +24,7 @@ zenData('compile')->loadYaml('compile')->gen(10);
 su('admin');
 
 libxml_use_internal_errors(true);
-$ci = new ciTest();
+$ci = new ciModelTest();
 
 r($ci->syncCompileStatusTest(1)) && p('status') && e('created');  // 同步jenkins构建结果
 r($ci->syncCompileStatusTest(2)) && p('status') && e('failed');  // 同步gitlab构建结果

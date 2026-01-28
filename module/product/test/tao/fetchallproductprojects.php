@@ -22,7 +22,7 @@ cid=17536
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->gen(50);
 zenData('project')->gen(50);

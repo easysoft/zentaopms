@@ -21,7 +21,7 @@ cid=14901
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 
@@ -44,7 +44,7 @@ $tester->dao->exec("INSERT INTO zt_history (id, action, field, old, new, diff) V
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->getHistoryTest(1)[1])   && p("0:field,old,new") && e('resolution,1,2');    // 测试步骤1：使用整数actionID查询存在的历史记录
 r($actionTest->getHistoryTest('2')[2]) && p("0:field,old,new") && e('resolvedBuild,2,3'); // 测试步骤2：使用字符串actionID查询存在的历史记录

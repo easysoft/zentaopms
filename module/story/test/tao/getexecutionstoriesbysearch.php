@@ -23,7 +23,7 @@ cid=18635
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->gen(10);
 
@@ -56,7 +56,7 @@ $userquery->sql->range('(1 = 1 AND `id` = 2)');
 $userquery->form->range('``');
 $userquery->gen(1);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 $executionID = array(0, 11);
 $queryID     = array(0, 1);

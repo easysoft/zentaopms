@@ -17,7 +17,7 @@ cid=15021
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('ai_model');
@@ -34,7 +34,7 @@ $table->gen(3);
 su('admin');
 
 // 4. 创建测试实例
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($aiTest->editTest(null, 'Hello world', 'Fix grammar mistakes')) && p() && e('0'); // 步骤1：模型ID为空时返回false

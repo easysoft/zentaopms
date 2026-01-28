@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -34,7 +34,7 @@ $table->cycle->range('0');
 $table->gen(5);
 
 global $tester;
-$todo = new todoTest();
+$todo = new todoTaoTest();
 
 r(is_array($todo->getListByTest('today', 'admin', 'all', '2025-08-24', '2025-08-24', 0, 'date_desc'))) && p() && e('1'); // 正常获取指定类型和用户的待办列表
 r(count($todo->getListByTest('assignedtoother', 'admin', 'all', '', '', 0, 'date_desc'))) && p() && e('0'); // 获取空结果的待办列表

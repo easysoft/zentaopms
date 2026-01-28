@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -75,7 +75,7 @@ $executionIDList = array(3, 4, 5);
 $burnByList      = array('left', 'estimate', 'storyPoint');
 $showDelay       = array(false, true);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r(current($execution->getBurnDataFlotTest($executionIDList[0], $burnByList[0], $showDelay[0])))                             && p('value') && e('95.30'); // 按剩余工时查看敏捷执行查询统计
 r(current($execution->getBurnDataFlotTest($executionIDList[1], $burnByList[0], $showDelay[0])))                             && p('value') && e('3.00');  // 按剩余工时查看瀑布执行查询统计
 r(current($execution->getBurnDataFlotTest($executionIDList[2], $burnByList[0], $showDelay[0])))                             && p('value') && e('36.00'); // 按剩余工时查看看板执行查询统计

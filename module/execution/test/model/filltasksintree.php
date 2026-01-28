@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -67,7 +67,7 @@ cid=16294
 
 $executionIDList = array('0', '3', '4', '5', '1');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('0');     // 敏捷执行查询
 r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('0');     // 瀑布执行查询
 r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('0');     // 看板执行查询

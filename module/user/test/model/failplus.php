@@ -16,7 +16,7 @@ cid=19601
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->account->range('testuser');
@@ -33,7 +33,7 @@ su('admin');
 global $config, $tester;
 $config->user->failTimes = 3;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 // 清理session状态
 unset($_SESSION['loginFails']);

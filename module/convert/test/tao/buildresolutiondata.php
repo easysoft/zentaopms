@@ -32,13 +32,13 @@ cid=15825
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
 r($convertTest->buildResolutionDataTest(array('id' => 1, 'sequence' => 1, 'name' => 'Fixed', 'description' => 'Issue was resolved'))) && p('id,sequence,pname,description') && e('1,1,Fixed,Issue was resolved'); // 步骤1：完整数据输入

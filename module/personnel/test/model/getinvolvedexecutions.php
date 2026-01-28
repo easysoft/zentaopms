@@ -19,7 +19,7 @@ cid=17329
 
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 数据准备 - 项目数据
 $projectTable = zenData('project');
@@ -39,7 +39,7 @@ $teamTable->gen(15);
 
 su('admin');
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 
 // 测试数据定义
 $validProjects = array(11, 12);

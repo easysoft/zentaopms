@@ -15,7 +15,7 @@ cid=19358
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
@@ -24,7 +24,7 @@ $moduleID    = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
 $productID   = array(1, 2);
 $executionID = array(101, 102);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->createTaskLinkTest(1))  && p('url') && e("execution-task-1-byModule-1.html");   // 测试获取module 1  的task链接
 r($tree->createTaskLinkTest(2))  && p('url') && e("execution-task-1-byModule-2.html");   // 测试获取module 2  的task链接

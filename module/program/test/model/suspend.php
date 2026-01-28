@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 // 直接插入测试数据，避免zendata问题
@@ -67,7 +67,7 @@ cid=17711
 
 */
 
-$programTest = new programTest();
+$programTest = new programModelTest();
 
 r($programTest->suspendTest(1, array('comment' => '测试挂起', 'uid' => ''))) && p() && e('1'); // 步骤1：正常挂起等待状态的项目集
 r($programTest->suspendTest(2, array('comment' => '挂起进行中项目集', 'uid' => ''))) && p() && e('1'); // 步骤2：正常挂起进行中状态的项目集

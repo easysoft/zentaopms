@@ -26,11 +26,11 @@ cid=16044
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 r($docTest->buildDocItemsTest(1, '根文档', array())) && p('value,text') && e('1,根文档');                    // 步骤1：无子文档的基本节点
 r($docTest->buildDocItemsTest(1, '根文档', array(1 => array((object)array('id' => 2, 'title' => '子文档1'))))) && p('value,text') && e('1,根文档');  // 步骤2：单层子文档

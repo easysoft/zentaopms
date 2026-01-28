@@ -315,10 +315,12 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
         if(!str_contains('|tested|verified|rejected|released|closed|', "|$key|")) continue;
         $stageItems[] = array('text' => $stageName,  'class' => 'batch-btn', 'data-formaction' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
     }
+
+    $pinyinItems = common::convert2Pinyin($users);
     foreach($users as $account => $realname)
     {
         if($account == 'closed') continue;
-        $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
+        $assignItems[] = array('text' => $realname, 'keys' => zget($pinyinItems, $realname, ''), 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyModule, 'batchAssignTo', "productID={$productID}"), 'data-account' => $account);
     }
 
     if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);

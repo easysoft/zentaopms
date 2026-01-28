@@ -16,7 +16,7 @@ cid=18636
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $table = zenData('story');
 $table->id->range('1-15');
@@ -30,7 +30,7 @@ $table->gen(15);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->getFinishClosedTotalTest('story')) && p() && e('10'); // 步骤1：获取story类型的已完成关闭需求数量(4+3+3=10)
 r($storyTest->getFinishClosedTotalTest('requirement')) && p() && e('2'); // 步骤2：获取requirement类型的已完成关闭需求数量(1+1=2)

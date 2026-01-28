@@ -35,7 +35,7 @@ cid=19616
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->id->range('1001-1005');
@@ -46,7 +46,7 @@ $user->type->range('inside{3},outside{2}');
 $user->deleted->range('0-1');
 $user->gen(5);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 $accounts = array('user1', 'user2', 'user3', 'user4', 'user5');
 
 $users = $userTest->getListByAccountsTest(array());

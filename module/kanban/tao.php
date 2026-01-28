@@ -482,8 +482,6 @@ class kanbanTao extends kanbanModel
         $item['pri']          = $card->pri;
         $item['color']        = $card->color;
         $item['assignedTo']   = $card->assignedTo;
-        $item['parent']       = !empty($card->originParent) ? $card->originParent : 0;
-        $item['parent']       = !empty($card->rawParent) ? $card->rawParent : 0;
         $item['isParent']     = !empty($card->isParent) ? $card->isParent: 0;
         $item['progress']     = !empty($card->progress) ? $card->progress : 0;
         $item['group']        = !empty($card->group) ? $card->group : '';
@@ -506,6 +504,10 @@ class kanbanTao extends kanbanModel
         $item['avatarList']   = array();
         $item['realnames']    = '';
         $item['order']        = $order;
+
+        $item['parent'] = 0;
+        if(!empty($card->originParent)) $item['parent'] = $card->originParent;
+        if(!empty($card->rawParent))    $item['parent'] = $card->rawParent;
 
         if($card->assignedTo)
         {
@@ -621,13 +623,14 @@ class kanbanTao extends kanbanModel
         $avatarPairs = $this->loadModel('user')->getAvatarPairs();
         $users       = $this->loadModel('user')->getPairs('noletter');
         $module      = $browseType == 'parentStory' ? 'story' : $browseType;
+        $regionID    = $this->session->execution ? $this->dao->select('id')->from(TABLE_KANBANREGION)->where('deleted')->eq('0')->andWhere('kanban')->eq($this->session->execution)->orderBy('id_asc')->limit(1)->fetch('id') : 0;
         foreach($lanes as $laneID => $lane)
         {
             $laneData = array();
             $laneData['id']     = $groupBy . $laneID;
             $laneData['type']   = $browseType;
             $laneData['name']   = $laneData['id'];
-            $laneData['region'] = $lane->execution;
+            $laneData['region'] = $regionID ? $regionID : $lane->execution;
             $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$module->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']  = $lane->color;
             $laneData['order']  = $lane->order;

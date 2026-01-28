@@ -815,10 +815,19 @@ class commonModel extends model
                         if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
                         /* Parse drop menu link. */
-                        $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                        if(!empty($dropMenuItem['links']))
+                        {
+                            $dropMenuLink = common::getHasPrivLink($dropMenuItem);
+                            if(empty($dropMenuLink)) continue;
 
-                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
-                        if(!common::hasPriv($subModule, $subMethod)) continue;
+                            list($subLabel, $subModule, $subMethod, $subParams) = $dropMenuLink;
+                        }
+                        else
+                        {
+                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
+                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            if(!common::hasPriv($subModule, $subMethod)) continue;
+                        }
 
                         $activeMainMenu = false;
                         if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
@@ -841,6 +850,37 @@ class commonModel extends model
         }
 
         return $activeMenu;
+    }
+
+    /**
+     * 获取有权限的链接。
+     * Get the authorized link.
+     *
+     * @param  array  $menu
+     * @access public
+     * @return array
+     */
+    public static function getHasPrivLink(array $menu): array
+    {
+        if(empty($menu['link'])) return array();
+
+        list($label, $module, $method, $params) = explode('|', $menu['link']);
+        if(common::hasPriv($module, $method)) return array($label, $module, $method, $params);
+
+        if(empty($menu['links'])) return array();
+
+        $link = array();
+        foreach($menu['links'] as $menuLink)
+        {
+            list($module, $method, $params) = explode('|', $menuLink);
+            if(common::hasPriv($module, $method))
+            {
+                $link = array($label, $module, $method, $params);
+                break;
+            }
+        }
+
+        return $link;
     }
 
     /**
@@ -1115,35 +1155,10 @@ class commonModel extends model
 
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
+        if($this->app->getModuleName() == 'upgrade' && $this->app->getMethodName() == 'safedelete') return false;
+
         $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
         return (!is_file($statusFile) or (time() - filemtime($statusFile)) > $this->config->safeFileTimeout) ? $statusFile : false;
-    }
-
-    /**
-     * 检查升级验证文件是否创建，给出升级的提示。
-     * Check upgrade's status file is ok or not.
-     *
-     * @access public
-     * @return bool
-     */
-    public function checkUpgradeStatus()
-    {
-        $statusFile = $this->checkSafeFile();
-        if($statusFile)
-        {
-            $this->app->loadLang('upgrade');
-            $cmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->upgrade->createFileWinCMD : $this->lang->upgrade->createFileLinuxCMD;
-            $cmd = sprintf($cmd, $statusFile);
-
-            echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
-            echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
-            printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            echo '</td></tr></table></body></html>';
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -2329,6 +2344,10 @@ eof;
 
             $link = sprintf($menu['link'], $objectID);
             $menu['link'] = vsprintf($link, $params);
+            if(!empty($menu['links']))
+            {
+                foreach($menu['links'] as $key => $link) $menu['links'][$key] = sprintf($link, $objectID);
+            }
         }
         else
         {

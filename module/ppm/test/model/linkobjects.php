@@ -20,7 +20,7 @@ cid=17257
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(5);
 zenData('task')->gen(5);
@@ -29,7 +29,7 @@ zenData('pipeline')->gen(5);
 zenData('relation')->gen(0);
 zenData('mr')->loadYaml('mr')->gen(5);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->linkObjectsTester(4)) && p() && e('0'); // 错误的合并请求
 

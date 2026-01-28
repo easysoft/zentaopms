@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancard')->gen(100);
@@ -24,7 +24,7 @@ cid=16906
 
 $kanbanIDList = array('1', '2', '3', '4', '5', '1000001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getCardGroupByKanbanTest($kanbanIDList[0])) && p() && e('1'); // 测试查询看板1的卡片数量
 r($kanban->getCardGroupByKanbanTest($kanbanIDList[1])) && p() && e('1'); // 测试查询看板2的卡片数量

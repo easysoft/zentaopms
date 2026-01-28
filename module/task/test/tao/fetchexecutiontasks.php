@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -154,7 +154,7 @@ $modules         = array(array(), array(2), array(8), array(2,8));
 $orderBy         = array('status_asc, id_desc', 'pri_desc');
 $count           = array(0, 1);
 
-$task = new taskTest();
+$task = new taskTaoTest();
 
 r($task->fetchExecutionTasksTest($executionIdList[0], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[0]))  && p()          && e('0');      // 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务
 r($task->fetchExecutionTasksTest($executionIdList[0], $productIdList[0], $type[0], $modules[0], $orderBy[0], $count[1]))  && p()          && e('0');      // 测试获取执行ID 0 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量

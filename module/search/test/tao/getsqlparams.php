@@ -17,12 +17,12 @@ cid=18328
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $keywords = array('test', '测试', '12345');
 
-$search = new searchTest();
+$search = new searchTaoTest();
 r($search->getSqlParamsTest($keywords[0])) && p('0') && e('test_');                     //测试获取搜索 test 关键词的 unicode
 r($search->getSqlParamsTest($keywords[0])) && p('1') && e('(+"test_")');                //测试获取搜索 test 关键词的查询语句的 against 条件
 r($search->getSqlParamsTest($keywords[1])) && p('0') && e('27979 35797');               //测试获取搜索 测试 关键词的 unicode

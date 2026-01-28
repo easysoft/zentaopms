@@ -19,13 +19,13 @@ cid=19619
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('projectadmin')->loadYaml('projectadmin_getmanagelistgroupbytype', false, 2)->gen(4);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->getManageListGroupByTypeTest('admin')) && p('programs:isAdmin') && e('1'); // 测试用户admin的programs权限为all，isAdmin为1
 r($userTest->getManageListGroupByTypeTest('admin')) && p('projects:isAdmin') && e('1'); // 测试用户admin的projects权限为all，isAdmin为1

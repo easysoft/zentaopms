@@ -81,7 +81,7 @@ cid=15988
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -96,7 +96,7 @@ $products = array(0, 1, 11);
 $queries  = array(0, 1, 2);
 $sorts    = array('id_desc', 'id_asc', 'name_asc', 'name_desc');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->getBySearchTest($projects[0], $products[0], $queries[0], $sorts[0])) && p() && e('0'); // 测试projectID=0, productID=0, queryID=0时，按照id倒序排列的设计列表数据
 r($designTester->getBySearchTest($projects[0], $products[0], $queries[0], $sorts[1])) && p() && e('0'); // 测试projectID=0, productID=0, queryID=0时，按照id正序排列的设计列表数据
 r($designTester->getBySearchTest($projects[0], $products[0], $queries[0], $sorts[2])) && p() && e('0'); // 测试projectID=0, productID=0, queryID=0时，按照标题正序排列的设计列表数据

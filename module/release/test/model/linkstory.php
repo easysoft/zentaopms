@@ -21,7 +21,7 @@ cid=18006
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $release = zenData('release')->loadYaml('release');
 $release->stories->range('1-5');
@@ -36,7 +36,7 @@ $releaseID  = array(0, 1, 6);
 $stories[0] = array(2, 3);
 $stories[1] = array();
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->linkStoryTest($releaseID[0], $stories[0])) && p()                   && e('0');            // 测试releaseID为0时，关联需求
 r($releaseTester->linkStoryTest($releaseID[1], $stories[0])) && p('0:old;0:new', ';') && e('1;1,2,3');      // 测试releaseID为1时，关联需求
 r($releaseTester->linkStoryTest($releaseID[2], $stories[0])) && p()                   && e('0');            // 测试releaseID不存在时，关联需求

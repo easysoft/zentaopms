@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 function initData()
@@ -44,7 +44,7 @@ $testcaseQueryConditionList = array('product = 1', 'select * from ' . TABLE_CASE
 $exportTypeList = array('all', 'selected');
 $taskIDList     = array('0', '1');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 r($testcase->getCasesToExportTest($testcaseOnlyConditionList[0], $testcaseQueryConditionList[0], $exportTypeList[0], $taskIDList[0])) && p('1:title;2:title;3:title;4:title') && e('这个是测试用例1;这个是测试用例2;这个是测试用例3;这个是测试用例4'); // 测试获取产品 1 的用例
 r($testcase->getCasesToExportTest($testcaseOnlyConditionList[0], $testcaseQueryConditionList[0], $exportTypeList[0], $taskIDList[1])) && p('1:title;2:title')                 && e('这个是测试用例1;这个是测试用例2');                                 // 测试获取产品 1 测试单为 1 的用例
 r($testcase->getCasesToExportTest($testcaseOnlyConditionList[1], $testcaseQueryConditionList[1], $exportTypeList[1], $taskIDList[0])) && p('1:title;2:title;3:title')         && e('这个是测试用例1;这个是测试用例2;这个是测试用例3');                 // 测试获取选中的用例

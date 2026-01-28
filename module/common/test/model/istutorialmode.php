@@ -16,11 +16,11 @@ cid=15684
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonModelTest();
 
 // 备份原始session状态
 $originalTutorialMode = isset($_SESSION['tutorialMode']) ? $_SESSION['tutorialMode'] : null;

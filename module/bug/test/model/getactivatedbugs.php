@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(30);
 $action = zenData('action')->loadYaml('action');
@@ -62,7 +62,7 @@ $beginList     = array('lastmonth', 'lastweek');
 $endList       = array('nextmonth', 'nextweek');
 $buildIdList   = array('1,0,trunk', '1,trunk', '0,trunk');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getActivatedBugsTest($productIdList[0], $beginList[0], $endList[0], $buildIdList[0])) && p() && e('1,2,5,6,9'); // 测试获取产品 1 2 3 类型 空 开始日期 上月 结束日期 下月 的bug
 r($bug->getActivatedBugsTest($productIdList[0], $beginList[1], $endList[1], $buildIdList[0])) && p() && e('0');         // 测试获取产品 1 2 3 类型 空 开始日期 上周 结束日期 下周 的bug

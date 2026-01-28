@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 zenData('task')->gen(0);
 su('admin');
@@ -44,7 +44,7 @@ $executionIDList = array(1,2,3,4,5);
 $readjustTask    = array('readjustTask' => '1');
 $readjustTime    = array();
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->activateTest($executionIDList[0]))                && p('0:field,old,new') && e('status,suspended,wait');  // 敏捷执行激活
 r($executionTester->activateTest($executionIDList[1]))                && p('0:field,old,new') && e('status,suspended,wait');  // 瀑布执行激活
 r($executionTester->activateTest($executionIDList[2]))                && p('0:field,old,new') && e('status,suspended,wait');  // 看板执行激活

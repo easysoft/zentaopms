@@ -16,11 +16,11 @@ cid=15591
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$ci = new ciTest();
+$ci = new ciModelTest();
 
 $validUrl   = 'https://jenkinsdev.qc.oop.cc/job/paramsJob/buildWithParameters/api/json';
 $invalidUrl = 'https://invalid.example.com/invalid/path';

@@ -17,7 +17,7 @@ cid=19052
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('scene');
@@ -40,7 +40,7 @@ $table->gen(3);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($testcaseTest->saveSceneTest(array('name' => '新场景', 'product' => '1', 'branch' => '0', 'module' => '1821', 'tmpPId' => ''), array())) && p('result') && e('success'); // 步骤1：新建场景正常情况

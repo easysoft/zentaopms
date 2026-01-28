@@ -118,7 +118,7 @@ class releaseModel extends model
         $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where("product")->in($productIdList)
+            ->where("t1.product")->in($productIdList)
             ->fetchAll('id');
         if(!empty($builds))
         {
@@ -199,7 +199,7 @@ class releaseModel extends model
         $builds = $this->dao->select("t1.id, t1.name, t1.branch, t1.project, t1.execution, IF(t2.name IS NOT NULL, t2.name, '') AS projectName")
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where("product")->eq($productID)
+            ->where("t1.product")->eq($productID)
             ->fetchAll('id');
         if(!empty($builds))
         {

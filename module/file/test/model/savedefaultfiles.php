@@ -35,7 +35,7 @@ cid=16528
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('file')->gen(5);
@@ -47,7 +47,7 @@ $objectType = array('story', 'task');
 $extra      = array('', 1);
 $fileIdList = array(array(1), array(1,2));
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[0], $extra[0])) && p() && e('6');                          // 测试保存默认文件 1 到 需求 1001 extra 空 中
 r($file->saveDefaultFilesTest($fileIdList[0], $objectType[0], $objectID[0], $extra[1])) && p() && e('7');                          // 测试保存默认文件 1 到 需求 1001 extra 1  中

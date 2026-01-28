@@ -7,9 +7,9 @@ title=- 步骤2：分支产品1行数据，检查分支选项值 @主干(#0) 分
 timeout=0
 cid=19095
 
-- 步骤1：普通产品2行数据，检查第一行的类型选项值 @单元测试 接口测试 功能测试 安装部署 配置相关 性能测试 安全相关 其他
+- 步骤1：普通产品2行数据，检查第一行的类型选项值 @接口测试 功能测试 安装部署 配置相关 性能测试 安全相关 其他
 - 步骤2：分支产品1行数据，检查分支选项值 @主干(#0) 分支1(#1) 分支3(#3)
-- 步骤3：生成1行数据，检查阶段选项值 @单元测试阶段 功能测试阶段 集成测试阶段 系统测试阶段 冒烟测试阶段 版本验证阶段
+- 步骤3：生成1行数据，检查环节选项值 @单元测试环节 功能测试环节 集成测试环节 系统测试环节 冒烟测试环节 版本验证环节
 - 步骤4：生成0行数据，期望计数为0 @0
 - 步骤5：生成5行，每个模块3个，共15行数据 @15
 
@@ -51,7 +51,7 @@ $product1->id = 1;
 $product1->type = 'normal';
 $rows = $testcaseTest->getRowsForExportTemplateTest($product1, 2);
 $typeValue = trim(str_replace("\n", ' ', $rows[0]->typeValue));
-r($typeValue) && p() && e('单元测试 接口测试 功能测试 安装部署 配置相关 性能测试 安全相关 其他'); // 步骤1：普通产品2行数据，检查第一行的类型选项值
+r($typeValue) && p() && e('接口测试 功能测试 安装部署 配置相关 性能测试 安全相关 其他'); // 步骤1：普通产品2行数据，检查第一行的类型选项值
 
 $product2 = new stdClass();
 $product2->id = 2;
@@ -62,7 +62,7 @@ r($branchValue) && p() && e('主干(#0) 分支1(#1) 分支3(#3)'); // 步骤2：
 
 $rows = $testcaseTest->getRowsForExportTemplateTest($product1, 1);
 $stageValue = trim(str_replace("\n", ' ', $rows[0]->stageValue));
-r($stageValue) && p() && e('单元测试阶段 功能测试阶段 集成测试阶段 系统测试阶段 冒烟测试阶段 版本验证阶段'); // 步骤3：生成1行数据，检查阶段选项值
+r($stageValue) && p() && e('单元测试环节 功能测试环节 集成测试环节 系统测试环节 冒烟测试环节 版本验证环节'); // 步骤3：生成1行数据，检查环节选项值
 
 r(count($testcaseTest->getRowsForExportTemplateTest($product1, 0))) && p() && e(0); // 步骤4：生成0行数据，期望计数为0
 

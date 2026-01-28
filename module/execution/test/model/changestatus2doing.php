@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -36,7 +36,7 @@ cid=16278
 
 */
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->changeStatus2DoingObject(2)) && p('') && e('1');  // 测试等待状态执行更改为进行中状态
 r($executionTest->changeStatus2DoingObject(4)) && p('') && e('1');  // 测试已关闭状态执行更改为进行中状态

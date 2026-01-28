@@ -15,7 +15,7 @@ cid=16053
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $timestamp = time();
 $docTable = zenData('doc')->loadYaml('doc');
@@ -25,7 +25,7 @@ zenData('user')->gen(5);
 
 $docIds = array(0, 1, 2, 3, 100);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->checkOtherEditingTest($docIds[0])) && p() && e('0'); // 测试空数据
 r($docTester->checkOtherEditingTest($docIds[1])) && p() && e('1'); // 测试文档1是否有在编辑的人
 r($docTester->checkOtherEditingTest($docIds[2])) && p() && e('0'); // 测试文档2是否有在编辑的人

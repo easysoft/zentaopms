@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -26,7 +26,7 @@ $release->gen(1);
 
 zenData('story')->gen(5);
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->setStoriesStageTest('wait', 1))      && p('stage') && e('released'); // 测试草稿需求
 r($releaseTester->setStoriesStageTest('planned', 2))   && p('stage') && e('released'); // 测试激活需求
 r($releaseTester->setStoriesStageTest('projected', 3)) && p('stage') && e('closed');   // 测试已关闭需求

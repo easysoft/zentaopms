@@ -18,7 +18,7 @@ cid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $storyTable = zenData('story');
 $storyTable->id->range('1-10');
@@ -31,7 +31,7 @@ $storyTable->gen(10);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>");
 r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求B</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求C</a>");

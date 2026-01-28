@@ -60,7 +60,7 @@ cid=19506
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
@@ -71,7 +71,7 @@ $product->gen(9);
 
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $productIdList = array(array(1, 2, 3), array(4, 5, 6), array(7, 8, 9), array(10, 11, 12));
 $programID     = array(0, 1, 2);

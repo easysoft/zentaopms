@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('story_reviewing')->gen('10');
 zenData('storyreview')->loadYaml('storyreview')->gen('10');
@@ -40,7 +40,7 @@ $tester->app->methodName = 'getReviewingList';
 $tester->app->loadClass('pager', true);
 $pager = pager::init('10', 2, 1);
 
-$my = new myTest();
+$my = new myModelTest();
 
 $account    = array('admin', 'user1');
 $browseType = array('all', 'createdbyme');

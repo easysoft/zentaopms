@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -33,7 +33,7 @@ $productID   = array(1, 6, 100);
 $moduleID    = array(0, 18, 19, 21);
 $executionID = array(0, 101, 231, 181);
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->showBranchTest($productID[0]))                                && p() && e('2'); // 测试验证产品 1 是否显示分支标签
 r($branch->showBranchTest($productID[0], $moduleID[1]))                  && p() && e('2'); // 测试验证产品 1 是否显示分支标签

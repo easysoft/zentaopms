@@ -16,7 +16,7 @@ cid=18242
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $chart = zenData('chart');
@@ -40,7 +40,7 @@ $metric->gen(5);
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试步骤1：测试Select组件直接返回
 $selectComponent = new stdClass();

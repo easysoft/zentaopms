@@ -26,7 +26,7 @@ cid=18529
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $storyEstimate = zenData('storyestimate');
 $storyEstimate->story->range('1{3},2{1},3{5}');
@@ -39,7 +39,7 @@ $storyEstimate->gen(9);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getEstimateRoundsTest(999)) && p() && e('0');
 r($storyTest->getEstimateRoundsTest(2)) && p('1') && e('第 1 轮估算');

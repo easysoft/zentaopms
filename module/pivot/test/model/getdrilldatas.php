@@ -17,7 +17,7 @@ cid=17379
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 数据准备（关闭BI数据库配置，避免数据库错误）
 zenData('story')->gen(10);

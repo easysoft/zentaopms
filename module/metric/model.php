@@ -79,8 +79,8 @@ class metricModel extends model
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
 
-            $row->calcType     = $record['calcType'];
-            $row->calculatedBy = $record['calculatedBy'];
+            $row->calcType     = zget($record, 'calcType', '');
+            $row->calculatedBy = zget($record, 'calculatedBy', '');
 
             $tableData[] = $row;
         }

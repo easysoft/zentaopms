@@ -8,7 +8,7 @@ pid=1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('entry')->gen(1);
 zenData('user')->gen(5);
@@ -25,7 +25,7 @@ $freePasswdTest = array('name' => 'freePasswdTest', 'code' => 'freePasswdTest', 
 
 $normalTest = array('name' => 'normalTest', 'code' => 'normalTest', 'account' => 'admin', 'ip' => '127.0.0.1', 'key' => '792b9b972157d2d8531b43e04c0af021', 'freePasswd' => 0, 'desc' => '这是描述');
 
-$entry = new entryTest();
+$entry = new entryModelTest();
 r($entry->createObject($emptyNameTest))    && p('name:0')    && e('『名称』不能为空。'); //测试name为空
 r($entry->createObject($emptyCodeTest))    && p('code:0')    && e('『代号』不能为空。'); //测试code为空
 r($entry->createObject($emptyAccountTest)) && p('account:0') && e('『账号』不能为空。'); //测试account为空

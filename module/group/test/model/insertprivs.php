@@ -16,7 +16,7 @@ cid=16718
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('group');
 $table->id->range('1-10');
@@ -32,7 +32,7 @@ $table->gen(4);
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 // 测试步骤1：已有权限的分组新增一个权限
 $insertPrivs = array((object)array('group' => 1, 'module' => 'project', 'method' => 'create'));

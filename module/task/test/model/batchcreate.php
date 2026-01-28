@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen('5');
@@ -53,7 +53,7 @@ $testTasks  = array(array('type' => 'test', 'name' => '测试任务1'), array('t
 $storyTasks = array(array('type' => 'story', 'story' => 1, 'name' => '需求任务1'), array('type' => 'story', 'story' => 1, 'name' => '需求任务2'));
 $childTasks = array(array('type' => 'devel', 'parent' => 1, 'name' => '任务1子任务1'), array('type' => 'devel', 'parent' => 1, 'name' => '任务2子任务1'));
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 $output[] = array('laneID' => 1, 'columnID' => 1);
 $output[] = array('laneID' => 2, 'columnID' => 7);

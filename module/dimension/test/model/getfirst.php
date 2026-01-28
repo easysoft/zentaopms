@@ -16,7 +16,7 @@ cid=16035
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dimension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('dimension');
 $table->id->range('1-5');
@@ -30,7 +30,7 @@ $table->gen(5);
 
 su('admin');
 
-$dimensionTest = new dimensionTest();
+$dimensionTest = new dimensionModelTest();
 
 r($dimensionTest->getFirstTest('1,2,3,4,5')) && p('name') && e('维度1');
 r($dimensionTest->getFirstTest('1,2,3,4,5')) && p('id') && e('1');

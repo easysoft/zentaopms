@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -32,7 +32,7 @@ cid=19253
 
 */
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 global $tester;
 $tester->app->loadClass('date', true);

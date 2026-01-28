@@ -20,7 +20,7 @@ cid=17793
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('project');
 zenData('product');
@@ -28,7 +28,7 @@ zenData('user');
 
 su('admin');
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanZenTest();
 
 // 准备测试数据 - ipd项目模型,stage执行类型,无planID
 $viewData1 = new stdclass();

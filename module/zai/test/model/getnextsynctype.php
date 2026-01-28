@@ -16,14 +16,14 @@ cid=19771
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('config')->gen(0);
 
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 $tester->config->edition = 'ipd';
 
 /* 测试无参数时获取第一个同步类型 */

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('type')->gen(12);
@@ -50,7 +50,7 @@ cid=15373
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerTypeTest()) && p('codeerror:name,value')    && e('代码错误,3'); //获取类型为codeerror的数据
 r($bug->getDataOfBugsPerTypeTest()) && p('config:name,value')       && e('配置相关,2'); //获取类型为config的数据
 r($bug->getDataOfBugsPerTypeTest()) && p('install:name,value')      && e('安装部署,1'); //获取类型为install的数据

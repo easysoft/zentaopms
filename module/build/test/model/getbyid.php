@@ -18,13 +18,13 @@ cid=15491
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build')->gen(20);
 zenData('product')->gen(10);
 su('admin');
 
-$buildTester = new buildTest();
+$buildTester = new buildModelTest();
 
 r($buildTester->getByIDTest(1, false))    && p('name')         && e('版本1');       // 测试步骤1：正常获取版本信息
 r($buildTester->getByIDTest(2, false))    && p('name')         && e('版本2');       // 测试步骤2：获取第二个版本信息

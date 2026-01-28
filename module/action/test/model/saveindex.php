@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->gen(5);
@@ -34,7 +34,7 @@ $objectIdList   = array(0, 1, 100000);
 $actionTypeList = array('', 'created', 'tested');
 $commentList    = array('评论1');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->saveIndexTest($objectTypeList[0], $objectIdList[0], $actionTypeList[0])) && p() && e('0');                    // 测试保存空数据
 r($action->saveIndexTest($objectTypeList[1], $objectIdList[0], $actionTypeList[0])) && p() && e('0');                    // 测试保存$objectId为0, action为空的数据

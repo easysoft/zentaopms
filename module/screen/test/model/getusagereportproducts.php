@@ -16,7 +16,7 @@ cid=18259
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('product');
 $table->id->range('1-10');
@@ -28,7 +28,7 @@ $table->gen(10);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getUsageReportProductsTest('2023', '01')) && p() && e('2');
 r($screenTest->getUsageReportProductsTest('2024', '12')) && p() && e('8');

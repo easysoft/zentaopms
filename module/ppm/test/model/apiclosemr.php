@@ -20,12 +20,12 @@ cid=17222
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 su('admin');
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->apiCloseMrTester(10, '3', 114)) && p() && e('0'); // 测试步骤1：不存在的主机ID
 r($mrModel->apiCloseMrTester(1, '3', 114)) && p('title,state') && e('test,closed'); // 测试步骤2：有效的Gitlab主机关闭MR

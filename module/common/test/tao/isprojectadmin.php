@@ -17,13 +17,13 @@ cid=15726
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录（使用管理员账户）
 su('admin');
 
 // 3. 创建测试实例（变量名与模块名一致）
-$commonTest = new commonTest();
+$commonTest = new commonTaoTest();
 
 // 4. 设置全局环境
 global $app, $lang;

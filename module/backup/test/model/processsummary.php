@@ -19,11 +19,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 $testDir     = sys_get_temp_dir() . '/backup_test_' . time() . '/';
 $backupFile  = $testDir . 'test.file';

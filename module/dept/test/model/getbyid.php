@@ -15,7 +15,7 @@ cid=15968
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('dept');
 $table->id->range('1-5');
@@ -29,7 +29,7 @@ $table->gen(5);
 
 su('admin');
 
-$deptTest = new deptTest();
+$deptTest = new deptModelTest();
 
 r($deptTest->getByIDTest(1)) && p('name,parent,grade') && e('产品部,0,1');
 r($deptTest->getByIDTest(999)) && p() && e('0');

@@ -20,7 +20,7 @@ cid=16909
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $cell = zenData('kanbancell');
 $cell->loadYaml('kanbancell_getcellbycard', false, 2);
@@ -28,7 +28,7 @@ $cell->gen(10);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 r($kanbanTest->getCellByCardTest(1, 1)) && p('lane,column') && e('1,1');
 r($kanbanTest->getCellByCardTest(3, 1)) && p('lane,column') && e('1,2');

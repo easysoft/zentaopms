@@ -16,7 +16,7 @@ cid=18717
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 $dao = $tester->dao;
@@ -47,7 +47,7 @@ for($i = 1; $i <= 10; $i++)
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 $result = $svnTest->getReposTest();
 r(count($result['repos'])) && p() && e('5');

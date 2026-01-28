@@ -18,7 +18,7 @@ cid=18547
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $story = zenData('story');
 $story->product->range('1{15},2{10},3{5}');
@@ -55,7 +55,7 @@ $config->epic->gradeRule = 'stepwise';
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r(count($storyTest->getParentStoryPairsTest(1, '', 'story', 0))) && p() && e('0'); // 步骤1：测试story类型父需求
 r(count($storyTest->getParentStoryPairsTest(1, '', 'requirement', 0))) && p() && e('0'); // 步骤2：测试requirement类型父需求

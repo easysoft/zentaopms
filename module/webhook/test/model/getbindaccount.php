@@ -17,7 +17,7 @@ cid=19690
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('oauth');
@@ -31,7 +31,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$webhookTest = new webhookTest();
+$webhookTest = new webhookModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($webhookTest->getBindAccountTest(1, 'webhook', 'openid1')) && p() && e('admin');    // 步骤1：正常查询存在的绑定账号

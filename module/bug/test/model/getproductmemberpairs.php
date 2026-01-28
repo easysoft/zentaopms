@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(100);
 zenData('product')->gen(10);
@@ -45,7 +45,7 @@ cid=15391
 
 $productIDList = array(1, 2, 3, 4, 5, 6, 1000001);
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->getProductMemberPairsTest($productIDList[0])) && p() && e('A:admin,U:用户12,U:用户22,U:用户32'); // 测试获取productID为1的bug的团队成员
 r($bug->getProductMemberPairsTest($productIDList[1])) && p() && e('U:用户3,U:用户13,U:用户23,U:用户33'); // 测试获取productID为2的bug的团队成员
 r($bug->getProductMemberPairsTest($productIDList[2])) && p() && e('U:用户4,U:用户14,U:用户24,U:用户34'); // 测试获取productID为3的bug的团队成员

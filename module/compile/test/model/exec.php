@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('compile')->gen(10);
 zenData('job')->loadYaml('job')->gen(1);
@@ -40,7 +40,7 @@ $compile3->name       = '这是一个compile数据';
 $compile3->updateDate = NULL;
 $compile3->job        = 1;
 
-$compile = new compileTest();
+$compile = new compileModelTest();
 
 r($compile->execTest($compile1)) && p() && e('0'); //检测job不存在时是否能执行编译
 r($compile->execTest($compile2)) && p() && e('1'); //检测job存在但是$compile->id不等于$compile->job是否能执行编译

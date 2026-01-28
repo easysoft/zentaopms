@@ -19,13 +19,13 @@ cid=15940
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
 su('admin');
 
-$datatableTest = new datatableTest();
+$datatableTest = new datatableModelTest();
 
 // 在开源版本中，appendWorkflowFields应该返回空数组，因为只有企业版才有工作流功能
 r($datatableTest->appendWorkflowFieldsTest('user', 'browse')) && p() && e('0');

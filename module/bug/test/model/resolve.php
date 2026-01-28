@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('product')->gen(10);
@@ -60,7 +60,7 @@ $emptyFixedBug     = array('resolution' => 'fixed');
 
 $output = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->resolveTest($bugIdList[0], $bydesignBug))  && p('resolution,assignedTo')               && e('bydesign,user99');    // 测试解决原因为设计如此的bug
 r($bug->resolveTest($bugIdList[1], $duplicateBug)) && p('resolution,assignedTo,duplicateBug')  && e('duplicate,user99,1'); // 测试解决原因为重复bug 有重复bugID的bug
 r($bug->resolveTest($bugIdList[2], $fixedBug))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug

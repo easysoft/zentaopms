@@ -17,7 +17,7 @@ cid=18197
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('task')->loadYaml('task')->gen(10);
@@ -25,7 +25,7 @@ zenData('task')->loadYaml('task')->gen(10);
 $taskIds = array(0, 1, 7, 11);
 $methods = array('finish', 'close');
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 r($scoreTester->computeTaskScoreTest($taskIds[0], $methods[0])) && p()          && e('0'); // 测试空数据
 r($scoreTester->computeTaskScoreTest($taskIds[1], $methods[0])) && p('1:score') && e('3'); // 计算完成普通任务的积分
 r($scoreTester->computeTaskScoreTest($taskIds[2], $methods[0])) && p('1:score') && e('1'); // 计算完成子任务的积分

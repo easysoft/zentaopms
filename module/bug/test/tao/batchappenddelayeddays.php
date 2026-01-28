@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -26,7 +26,7 @@ su('admin');
 
 $productIDList = array(1, 7, 18, 20, 28, 33);
 
-$bug = new bugTest();
+$bug = new bugTaoTest();
 
 r($bug->batchAppendDelayedDaysTest($productIDList[0])) && p('delay', '-') && e('7,1,9');    // 检查产品1  中的bug延期天数
 r($bug->batchAppendDelayedDaysTest($productIDList[1])) && p('delay', '-') && e('11,5,13');  // 检查产品7  中的bug延期天数

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(25);
@@ -59,7 +59,7 @@ cid=14934
 
 $actionIDList = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25);
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->undeleteTest($actionIDList[0])) && p('') && e('0');                                                                           // 测试还原action 0, objectType execution 的数据。
 r($action->undeleteTest($actionIDList[1])) && p('') && e('该数据在版本升级过程中未参与数据归并流程，不支持还原。');                      // 测试还原action 1, objectType execution 的数据。

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->loadYaml('task')->gen(12);
@@ -67,7 +67,7 @@ $storyIdList     = array(0, 1, 2, 3);
 $executionIdList = array(3, 4, 6);
 $projectIdList   = array(1, 2);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getListByStoryTest($storyIdList[0]))        && p('5:name') && e('开发任务15'); // 获取未关联需求的任务
 r($task->getListByStoryTest($storyIdList[1]))        && p('1:name') && e('开发任务11'); // 获取关联需求ID=1的任务
 r($task->getListByStoryTest($storyIdList[2]))        && p('3:name') && e('开发任务13'); // 获取关联需求ID=2的任务

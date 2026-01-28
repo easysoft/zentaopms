@@ -16,11 +16,11 @@ cid=18331
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$searchTest = new searchTest();
+$searchTest = new searchTaoTest();
 
 r($searchTest->markKeywordsDirectTest('This is a test content', 'test')) && p() && e("This is a <span class='text-danger'>test</span>  content ");
 r($searchTest->markKeywordsDirectTest('This contains key1 and key2 words', 'key1 key2')) && p() && e("This contains <span class='text-danger'>key1</span>  and <span class='text-danger'>key2</span>  words ");

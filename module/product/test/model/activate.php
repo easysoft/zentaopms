@@ -38,7 +38,7 @@ cid=17469
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 
@@ -46,7 +46,7 @@ $normalProductIdList = array(1, 2, 3, 4, 5);
 $closedProductIdList = array(6, 7, 8, 9, 10);
 $wrongProductIdList  = array(11, 0, -1);
 
-$productTester = new productTest();
+$productTester = new productModelTest();
 r($productTester->activateTest($normalProductIdList[0])) && p() && e('0'); // 测试未关闭产品1
 r($productTester->activateTest($normalProductIdList[1])) && p() && e('0'); // 测试未关闭产品2
 r($productTester->activateTest($normalProductIdList[2])) && p() && e('0'); // 测试未关闭产品3

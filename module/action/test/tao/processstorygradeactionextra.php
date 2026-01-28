@@ -16,7 +16,7 @@ cid=14967
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $storyTable = zenData('story');
 $storyTable->id->range('1-5');
@@ -33,7 +33,7 @@ $storyGradeTable->gen(4);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->processStoryGradeActionExtraTest(1)) && p('extra') && e('UR');
 r($actionTest->processStoryGradeActionExtraTest(2)) && p('extra') && e('SR'); 

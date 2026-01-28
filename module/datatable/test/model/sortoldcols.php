@@ -16,11 +16,11 @@ cid=15949
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$datatableTest = new datatableTest();
+$datatableTest = new datatableModelTest();
 
 $objA = new stdclass();
 $objB = new stdclass();

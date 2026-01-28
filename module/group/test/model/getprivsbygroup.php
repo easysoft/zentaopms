@@ -19,7 +19,7 @@ cid=16710
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('group');
@@ -37,7 +37,7 @@ $privTable->gen(6);
 su('admin');
 
 // 4. 创建测试实例
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 // 5. 执行至少7个测试步骤
 r(count($groupTest->getPrivsByGroupTest(1))) && p() && e('3');                        // 步骤1：正常分组权限查询（分组1有3个权限）

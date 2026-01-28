@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->gen(0);
 zenData('user')->gen(1);
@@ -73,7 +73,7 @@ $lang->SRCommon = '研发需求';
 $app::$loadedLangs = array();
 $app->loadLang('message');
 
-$message = new messageTest();
+$message = new messageModelTest();
 $objectActions = $message->getObjectActionsTest();
 
 r($objectActions) && p('product:opened')     && e('创建');       //查询objectType为product的action是opened的lab标签

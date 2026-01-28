@@ -18,11 +18,11 @@ cid=15081
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 测试步骤1：正常情况 - 所有必填字段都已填写
 $requiredFields1 = array('name' => '名称', 'email' => '邮箱');

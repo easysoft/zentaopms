@@ -17,13 +17,13 @@ cid=17973
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('branch')->loadYaml('branch', false, 2)->gen(5);
 
 su('admin');
 
-$projectreleaseTest = new projectreleaseTest();
+$projectreleaseTest = new projectreleaseTaoTest();
 
 $branchGroup = array(
     1 => array(

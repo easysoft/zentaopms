@@ -20,13 +20,13 @@ cid=16227
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->addLink4DirControlTest()) && p('hasNewPageLink') && e('1'); // 步骤1：测试control.php目录链接
 r($editor->addLink4DirModelTest()) && p('hasNewMethodLink') && e('1'); // 步骤2：测试model.php目录链接

@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -12,7 +12,7 @@ pid=1
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 
 $queryID   = array(0, 1);
 $actionURL = array('actionURL1', 'actionURL2');

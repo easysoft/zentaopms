@@ -16,12 +16,12 @@ cid=18718
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(1);
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 $svnTest->objectModel->setRepos();
 
 if(empty($svnTest->objectModel->repos))

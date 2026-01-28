@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('user')->gen(10);
@@ -29,7 +29,7 @@ cid=16326
 
 */
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->getLimitedExecutionTest()) && p() && e('1');
 

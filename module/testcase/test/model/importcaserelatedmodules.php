@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module_caselib')->gen('60');
 
@@ -29,7 +29,7 @@ $libIdList     = array(1, 2, 3);
 $oldModuleList = array(1, 2, 3, 6, 22, 23, 24, 26, 43, 44, 45, 46);
 $maxOrder      = '50';
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->importCaseRelatedModulesTest($libIdList[0], $oldModuleList[0]))  && p() && e('61'); // 测试将模块 1 导入用例库 1 中
 r($testcase->importCaseRelatedModulesTest($libIdList[0], $oldModuleList[1]))  && p() && e('12'); // 测试将模块 2 导入用例库 1 中

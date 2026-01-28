@@ -245,6 +245,8 @@ class caselibZen extends caselib
 
                 if(empty($rows))
                 {
+                    unset($this->lang->testcase->typeList['unit']);
+
                     $row->typeValue  = implode("\n", $this->lang->testcase->typeList);
                     $row->stageValue = implode("\n", $this->lang->testcase->stageList);
                 }

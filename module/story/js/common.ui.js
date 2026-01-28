@@ -68,7 +68,7 @@ window.loadProductPlans = function(productID, branch)
 
     let params     = config.currentMethod == 'create' ? 'unexpired,noclosed' : '';
     let planLink   = $.createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&params=' + params + '&skipParent=true');
-    let $planIdBox = $('#planIdBox');
+    let $planIdBox = $('div[data-name="plan"] #planIdBox');
 
     $.get(planLink, function(data)
     {

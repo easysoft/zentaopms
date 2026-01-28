@@ -16,11 +16,11 @@ cid=16236
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->getMethodCodeTest('todo', 'create')) && p() && e('1'); // 测试步骤1：获取todo控制器create方法代码
 r($editor->getMethodCodeTest('todo', 'create', 'Model')) && p() && e('1'); // 测试步骤2：获取todo模型create方法代码

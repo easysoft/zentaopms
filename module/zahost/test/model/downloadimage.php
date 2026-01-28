@@ -17,7 +17,7 @@ cid=19743
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $host = zenData('host');
@@ -45,7 +45,7 @@ $image->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$zahostTest = new zahostTest();
+$zahostTest = new zahostModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($zahostTest->downloadImageTest(1)) && p('0') && e('创建下载镜像任务失败'); // 步骤1：下载第1个镜像，返回错误信息

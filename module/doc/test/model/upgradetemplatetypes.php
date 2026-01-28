@@ -18,7 +18,7 @@ cid=16165
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->gen(0);
 zenData('doc')->loadYaml('template')->gen(20);
@@ -35,7 +35,7 @@ $scope->key->range('builtInScopeMaps');
 $scope->value->range('`{"product":1,"project":2,"execution":3,"personal":4}`,`{"market":5,"product":6,"personal":7}`,`{"project":8,"personal":9}`');
 $scope->gen(3);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->upgradeTemplateTypesTest(1, '计划'))  && p() && e('1'); // 内置计划
 r($docTester->upgradeTemplateTypesTest(2, '需求'))  && p() && e('1'); // 内置需求
 r($docTester->upgradeTemplateTypesTest(3, '设计'))  && p() && e('1'); // 内置设计

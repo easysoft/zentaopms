@@ -16,7 +16,7 @@ cid=16365
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备用户数据
 zenData('user')->gen(5);
@@ -35,7 +35,7 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 
 r($executionTester->setProjectSessionTest(3))  && p() && e('2');  // 步骤1：正常执行ID
 r($executionTester->setProjectSessionTest(99)) && p() && e('0');  // 步骤2：不存在的执行ID

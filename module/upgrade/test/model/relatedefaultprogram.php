@@ -12,13 +12,13 @@ cid=19548
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product_for_default_program')->gen(2);
 zenData('module')->loadYaml('module_for_default_program')->gen(2);
 zenData('project')->loadYaml('project_for_default_program')->gen(2);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $upgrade->relateDefaultProgram(1);
 

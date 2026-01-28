@@ -41,7 +41,7 @@ cid=16071
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('doc')->gen(5);
 zenData('doccontent')->loadYaml('doccontent')->gen(5);
@@ -51,7 +51,7 @@ su('admin');
 $docIds     = range(0, 5);
 $setImgSize = array(false, true);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getByIDTest($docIds[0], $setImgSize[0])) && p()             && e('0');              // 测试空数据
 r($docTester->getByIDTest($docIds[1], $setImgSize[0])) && p('type,title') && e('text,文档标题1'); // 测试docID=1的数据
 r($docTester->getByIDTest($docIds[2], $setImgSize[0])) && p('type,title') && e('text,文档标题2'); // 测试docID=2的数据

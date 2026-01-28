@@ -16,7 +16,7 @@ cid=15201
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $table = zenData('user');
@@ -27,15 +27,15 @@ $table->role->range('admin,dev{3},qa{3},pm{2},po{1}');
 $table->gen(10);
 
 su('admin');
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试用例1：简单SELECT语句
 $sql1 = "SELECT id, account FROM zt_user LIMIT 1";
-$statement1 = $biTest->objectModel->sql2Statement($sql1);
+$statement1 = $biTest->instance->sql2Statement($sql1);
 
 // 测试用例2：多字段SELECT语句
 $sql2 = "SELECT id, account, realname FROM zt_user LIMIT 1";
-$statement2 = $biTest->objectModel->sql2Statement($sql2);
+$statement2 = $biTest->instance->sql2Statement($sql2);
 
 r(count($biTest->prepareColumnsTest($sql1, $statement1, 'mysql'))) && p() && e('2');               // 测试简单SELECT语句,验证返回结果包含两个元素
 r($biTest->prepareColumnsTest($sql1, $statement1, 'mysql')[0]) && p('id:name') && e('id');        // 测试简单SELECT语句,验证第一个元素columns包含id字段

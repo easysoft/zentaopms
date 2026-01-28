@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen('45');
 zenData('branch')->gen('10');
@@ -33,7 +33,7 @@ pid=1
 $productID = array(0, 1);
 $branch    = array('all', 0);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->buildSearchConfigTest($productID[0], $branch[0])['module'])      && p()         && e('testcase');      // 获取全部产品配置的module
 r($testcase->buildSearchConfigTest($productID[0], $branch[0])['storyValues']) && p('10')     && e('10:软件需求10'); // 获取全部产品配置的storyValues

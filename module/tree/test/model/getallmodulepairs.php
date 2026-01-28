@@ -15,14 +15,14 @@ cid=19362
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
 
 $type = array('bug', 'case', 'task');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getAllModulePairsTest())        && p() && e('46'); // 测试获取默认类型task的模块数量
 r($tree->getAllModulePairsTest('bug'))   && p() && e('51'); // 测试获取Bug类型的模块数量

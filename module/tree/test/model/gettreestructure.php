@@ -21,13 +21,13 @@ cid=19387
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getTreeStructureTest(1, 'story')) && p() && e('2:1;12:0;');          // 测试获取root 1 story 的树结构
 r($tree->getTreeStructureTest(1, 'bug'))   && p() && e('2:1;12:0;4:1;14:0;'); // 测试获取root 1 bug   的树结构

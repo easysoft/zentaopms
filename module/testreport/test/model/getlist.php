@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testreport')->gen(30);
 zenData('user')->gen(1);
@@ -55,7 +55,7 @@ $objectType = array('product', 'project', 'execution');
 $extra      = array(0, 1, 11, 101);
 $orderBy    = array('id_desc', 'id_asc');
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 
 r($testreport->getListTest($objectID[0], $objectType[0], $extra[0], $orderBy[0])) && p() && e('21,11,1'); // 查询objectID 1 objectType product extra 0 orderBy id_desc
 r($testreport->getListTest($objectID[0], $objectType[1], $extra[0], $orderBy[0])) && p() && e('0');       // 查询objectID 1 objectType project extra 0 orderBy id_desc

@@ -16,7 +16,7 @@ cid=15751
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('compile');
 $table->id->range('1-10');
@@ -29,7 +29,7 @@ $table->gen(10);
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 r($compileTest->getSuccessJobsTest(array())) && p() && e('0');
 r($compileTest->getSuccessJobsTest(array(1, 2, 3))) && p('1,2,3') && e('1,2,3');

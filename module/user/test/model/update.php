@@ -102,7 +102,7 @@ cid=19658
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(3);
 $companyTable = zenData('company');
@@ -163,7 +163,7 @@ $template->verifyPassword   = $verify;
 $template->passwordLength   = 6;
 $template->passwordStrength = 0;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 /**
  * 检测系统预留用户名。

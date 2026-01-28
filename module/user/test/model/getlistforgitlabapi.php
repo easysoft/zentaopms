@@ -14,14 +14,14 @@ cid=19618
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->account->range('1-2')->prefix('user');
 $user->avatar->range('`avatar`,``');
 $user->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 $accounts = array('user1', 'user2');
 
 $users = $userTest->getListForGitLabAPITest(array());

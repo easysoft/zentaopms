@@ -18,7 +18,7 @@ cid=19621
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->id->range('1001-1006');
@@ -32,7 +32,7 @@ $user->gen(5);
 
 $usersToAppended = array('account5', 'account1');
 
-$user = new userTest();
+$user = new userModelTest();
 $outsideUsersWithClosed     = $user->getPairsTest('outside');
 $outsideUsersWithLetter     = $user->getPairsTest('outside|noclosed');
 $outsideUsersNoLetter       = $user->getPairsTest('outside|noclosed|noletter');

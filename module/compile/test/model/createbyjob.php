@@ -30,7 +30,7 @@ cid=15743
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $compile = zenData('compile');
 $compile->gen(0);
@@ -40,7 +40,7 @@ $job->loadYaml('job_createbyjob', false, 2)->gen(5);
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 r($compileTest->createByJobTest(1,   'v1.0.0', 'tag'))    && p('name,job,tag,createdBy') && e('这是一个Job1,1,v1.0.0,admin'); // 根据ID为1的job生成compile
 r($compileTest->createByJobTest(2,   'abc123', 'name'))   && p('name,job,createdBy')     && e('abc123,2,admin');              // 根据ID为2的job生成compile

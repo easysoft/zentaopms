@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(50);
 zenData('user')->gen(20);
@@ -45,7 +45,7 @@ cid=17328
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 $programID = array(1, 2);
 
 r($personnel->getInvestTest($programID[0])) && p('qa[admin]:role,createdBug')    && e('测试,3');  //项目集1下投入人员admin创建的bug数量

@@ -16,11 +16,11 @@ cid=17070
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 测试步骤1：正常输入，有相同dataset的计算器归类
 $calcList1 = array();

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(1);
@@ -104,7 +104,7 @@ $noexecution   = array('execution' => 0, 'name' => '特殊任务一', 'type' => 
 $noname        = array('execution' => 2, 'name' => '', 'type' => 'devel', 'estimate' => 1, 'version' => 1);
 $notype        = array('execution' => 2, 'name' => '特殊任务二', 'type' => '', 'estimate' => 1, 'version' => 1);
 
-$task = new taskTest();
+$task = new taskModelTest();
 
 r($task->createObject($devel))       && p('name,execution,type,estimate,version,estStarted,deadline') && e('开发任务一,2,devel,1.00,1,`^$`,`^$`');               // 测试正常的创建开发任务
 r($task->createObject($design))      && p('name,execution,type,estimate,version,estStarted,deadline') && e('设计任务一,2,design,1.00,1,2023-04-01,`^$`');        // 测试正常的创建设计任务

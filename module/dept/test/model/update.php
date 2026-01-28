@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->gen(30);
@@ -41,7 +41,7 @@ $noParent   = array('id' => 17, 'name' => '无父级部门', 'manager' => 'test1
 $noName     = array('id' => 19, 'parent' => '0', 'manager' => 'test2');
 $noManager  = array('id' => 20, 'parent' => '1', 'name' => '无负责人部门');
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->updateTest((object)$parentDept)) && p('16:name|parent|path|manager', '|')  && e('修改后部门|0|,16,|dev1');     //修改父级
 r($dept->updateTest((object)$childDept))  && p('18:name|parent|path|manager', '|')  && e('子级部门修改|1|,1,18,|dev2'); //修改子级
 r($dept->updateTest((object)$noParent))   && p('17:id,name')                        && e('17,无父级部门');              //不输入上级部门

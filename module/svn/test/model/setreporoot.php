@@ -16,7 +16,7 @@ cid=18724
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('repo');
@@ -37,7 +37,7 @@ $table->gen(5);
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 global $tester;
 $svn = $tester->loadModel('svn');

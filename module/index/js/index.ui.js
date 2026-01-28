@@ -845,6 +845,8 @@ function initAppsMenu(items)
     {
         try { selectVisionCallback(window.getVisions()); } catch (e) { console.error('[ZIN] onSelectVision callback error:', e); }
     }
+
+    refreshMenu();
 }
 
 /** Update apps menu. */
@@ -903,7 +905,6 @@ function updateUserToolbar()
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
-refreshMenu();
 setTimeout(refreshMenu, 500);
 
 /* Bind event for menut-toggle */
@@ -1342,7 +1343,7 @@ window.browserNotify = function()
                         placement: 'bottom-right',
                         time: 0,
                         icon: 'envelope-o',
-                        className: 'bg-secondary-50 text-secondary-600 messager-notice'
+                        className: 'bg-secondary-50 text-secondary-600 messager-notice w-96'
                     });
                 }
             }

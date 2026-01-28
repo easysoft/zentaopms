@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -55,7 +55,7 @@ $task5 = new stdclass();
 $task5->name      = '';
 $task5->execution = $executionID;
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->createTaskFromGitlabIssueTest($task1, $executionID)) && p('name')        && e('gitlab中新建的问题01');   // 测试正常的创建开发任务
 r($task->createTaskFromGitlabIssueTest($task2, $executionID)) && p('execution')   && e('2');                      // 测试正常的创建开发任务
 r($task->createTaskFromGitlabIssueTest($task3, $executionID)) && p('project')     && e('1');                      // 测试正常的创建开发任务

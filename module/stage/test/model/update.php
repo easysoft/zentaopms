@@ -23,7 +23,7 @@ cid=18424
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('stage')->loadYaml('stage')->gen(1);
 
@@ -32,7 +32,7 @@ $changeName    = array('name' => '修改后的需求');
 $changePercent = array('percent' => '15');
 $changeType    = array('type' => 'other');
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 r($stageTester->updateTest($stageIds[0], $changeName))    && p()                  && e('0');                       // 测试修改ID=0阶段的名称
 r($stageTester->updateTest($stageIds[1], $changeName))    && p('0:field,old,new') && e('name,需求1,修改后的需求'); // 测试修改名称
 r($stageTester->updateTest($stageIds[1], $changePercent)) && p('0:field,old,new') && e('percent,10,15');           // 测试修改工作量占比

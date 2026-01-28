@@ -15,12 +15,12 @@ cid=19714
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->gen(0);
 zenData('module')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
-$weeklyTester = new weeklyTest();
+$weeklyTester = new weeklyModelTest();
 r($weeklyTester->addBuiltinCategoryTest()) && p('id,root,name,grade,type') && e('1,1,项目,1,reportTemplate'); // 测试添加内置分类

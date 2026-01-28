@@ -17,7 +17,7 @@ cid=17209
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/misc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $userTable = zenData('user');
@@ -27,7 +27,7 @@ $userTable->loadYaml('user_checkoneclickpackage', false, 2)->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$miscTest = new miscTest();
+$miscTest = new miscModelTest();
 
 // 5. 备份原始配置
 global $app;

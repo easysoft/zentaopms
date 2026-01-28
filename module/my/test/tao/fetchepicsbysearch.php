@@ -16,7 +16,7 @@ cid=17307
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->gen(0);
 zenData('product')->gen(0);
@@ -24,7 +24,7 @@ zenData('storyreview')->gen(0);
 
 su('admin');
 
-$myTest = new myTest();
+$myTest = new myTaoTest();
 
 r($myTest->fetchEpicsBySearchTest('t1.deleted = 0', 'contribute', 'id_desc', null, array(1, 2, 3))) && p() && e('0');
 r($myTest->fetchEpicsBySearchTest('t1.deleted = 0', 'assigned', 'id_desc')) && p() && e('0');

@@ -16,13 +16,13 @@ cid=18060
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getGitlabGroupsTest(1))                  && p('0:text') && e('GitLab Instance');      // 步骤1：正常gitlabID查询群组
 r($repoTest->getGitlabGroupsTest(1))                  && p('0:value') && e('2');                     // 步骤2：验证群组数据结构

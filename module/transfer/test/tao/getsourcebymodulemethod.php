@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -30,7 +30,7 @@ cid=19335
 - 调用execution:getByIdList方法并将结果生成id=>name 形式的关联数组属性3 @迭代1
 
 */
-$transfer = new transferTest();
+$transfer = new transferTaoTest();
 $_SESSION['taskTransferParams']['executionID']  = 1;
 $_SESSION['taskTransferParams']['ignoreVision'] = false;
 

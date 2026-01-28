@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('scene')->gen('4')->fixPath();
@@ -53,7 +53,7 @@ cid=18999
 
 */
 
-$testcase    = new testcaseTest();
+$testcase    = new testcaseModelTest();
 $sceneIdList = array(array(1, 2), array(1, 2, 3, 4));
 
 r(count($testcase->getScenesByListTest(array())))         && p() && e('0'); // 测试获取编号为空数组的场景条数。

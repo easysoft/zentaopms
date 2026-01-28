@@ -18,7 +18,7 @@ cid=16717
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 数据准备
 $userTable = zenData('user');
@@ -42,7 +42,7 @@ $usergroupTable->gen(6);
 su('admin');
 
 // 创建测试实例
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getUserPairsTest(1)) && p('admin') && e('管理员');      // 步骤1：正常分组查询，验证admin用户
 r($group->getUserPairsTest(1)) && p('user1') && e('用户1');      // 步骤2：同分组查询，验证user1用户

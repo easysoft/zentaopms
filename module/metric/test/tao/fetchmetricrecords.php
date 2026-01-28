@@ -16,14 +16,14 @@ cid=17166
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('metric')->loadYaml('metric_fetchmetricrecords', false, 2)->gen(10);
 zenData('metriclib')->loadYaml('metriclib_fetchmetricrecords', false, 2)->gen(50);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricTaoTest();
 
 r($metricTest->fetchMetricRecordsTest('storyScale', array('project', 'product'), array())) && p() && e('0');
 r($metricTest->fetchMetricRecordsTest('taskProgress', array(), array())) && p() && e('0');

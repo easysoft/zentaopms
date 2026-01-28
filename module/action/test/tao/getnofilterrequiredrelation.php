@@ -28,12 +28,12 @@ cid=14950
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('projectproduct')->gen(10);
 zenData('project')->loadYaml('execution_for_relation')->gen(1);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $objectTypeList = array('product', 'project', 'execution', 'marketresearch');
 $objectIDList   = array(1, 11,);

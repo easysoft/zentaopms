@@ -24,7 +24,7 @@ cid=18755
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -57,7 +57,7 @@ $drag = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' =>
 
 $taskIDList = range(1, 9);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->activateTest($taskIDList[0], '', $emptyTeamData)) && p('status') && e('doing'); // wait状态任务激活
 r($task->activateTest($taskIDList[1], '', $emptyTeamData)) && p('status') && e('doing'); // doing状态任务激活
 r($task->activateTest($taskIDList[2], '', $emptyTeamData)) && p('status') && e('doing'); // done状态任务激活

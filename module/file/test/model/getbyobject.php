@@ -46,7 +46,7 @@ cid=16505
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $file = zenData('file');
@@ -56,7 +56,7 @@ $objectType = array('traincourse', 'traincontents', 'task', 'bug', 'story', 'tes
 $objectID   = array(5, 6, 7, 8, 9, 10);
 $extra      = 0;
 
-$file = new fileTest();
+$file = new fileModelTest();
 $file->objectModel->webPath = '/data/upload/1/';
 $file->objectModel->config->webRoot = '/';
 

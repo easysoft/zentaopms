@@ -75,7 +75,7 @@ cid=18419
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('stage')->gen(0);
@@ -140,7 +140,7 @@ $percentOver->name    = '一个名称';
 $percentOver->percent = 101;
 $percentOver->type    = 'other';
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 
 /* Normal condition. */
 r($stageTester->createTest($stage1)) && p('name,percent,type') && e('新建的需求,1,request');    // 测试新建瀑布项目一个需求阶段

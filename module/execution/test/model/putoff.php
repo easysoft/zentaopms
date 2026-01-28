@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-6');
@@ -42,7 +42,7 @@ cid=16359
 
 $executionIDList = array(6, 3, 4, 5);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->putoffTest($executionIDList[0])) && p('0:field,old,new') && e('days,0,5');          // wait执行延期
 r($execution->putoffTest($executionIDList[1])) && p('0:field,old,new') && e('status,doing,wait'); // 敏捷执行延期
 r($execution->putoffTest($executionIDList[2])) && p('0:field,old,new') && e('status,doing,wait'); // 瀑布阶段延期

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->gen(10);
@@ -30,7 +30,7 @@ cid=15369
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerPriTest()) && p('1:name,value') && e('优先级:1,3'); //获取优先级为1的数据
 r($bug->getDataOfBugsPerPriTest()) && p('2:name,value') && e('优先级:2,3'); //获取优先级为2的数据
 r($bug->getDataOfBugsPerPriTest()) && p('3:name,value') && e('优先级:3,2'); //获取优先级为3的数据

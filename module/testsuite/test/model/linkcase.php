@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('testsuite')->gen(2);
@@ -27,7 +27,7 @@ $suiteID  = array(1, 1000, 0);
 $cases    = array(array(), array(1), array(2, 3));
 $versions = array(1 => 1, 2 => 1, 3=> 1);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->linkCaseTest($suiteID[0], $cases[0], $versions)) && p() && e('0');                                        //测试存在的suiteID值为1,cases值为空
 r($testsuite->linkCaseTest($suiteID[0], $cases[1], $versions)) && p('0:suite,case') && e('1,1');                        //测试存在的suiteID值为1,cases值为一个

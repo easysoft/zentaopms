@@ -16,11 +16,11 @@ cid=15560
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 // 测试步骤1：空libraries数组情况
 r($caselibTest->saveLibStateTest(1, array())) && p() && e('0');

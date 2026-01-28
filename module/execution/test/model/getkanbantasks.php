@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -64,7 +64,7 @@ $executionIDList   = array(5, 7, 9);
 $count             = array('0', '1');
 $excludeTaskIdList = array(21, 25, 29);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getKanbanTasksTest($executionIDList[0], $count[0]))                     && p('25:name,execution') && e('任务25,5'); // 敏捷执行查询
 r($executionTester->getKanbanTasksTest($executionIDList[1], $count[0]))                     && p('29:name,execution') && e('任务29,7'); // 瀑布执行查询
 r($executionTester->getKanbanTasksTest($executionIDList[2], $count[0]))                     && p('21:name,execution') && e('任务21,9'); // 看板执行查询

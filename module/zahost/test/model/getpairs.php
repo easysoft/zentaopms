@@ -25,7 +25,7 @@ cid=19751
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $host = zenData('host');
@@ -38,7 +38,7 @@ $host->gen(10);
 
 su('admin');
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 
 r($zahost->getPairsTest()) && p('1,2,3,7,8') && e('宿主机A,宿主机B,宿主机C,宿主机D,宿主机E'); // 测试步骤1：查询正常的zahost类型宿主机键值对
 r($zahost->getPairsTest()) && p('4') && e('~~'); // 测试步骤2：验证已删除的宿主机被过滤

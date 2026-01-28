@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -22,7 +22,7 @@ cid=15170
 
 */
 
-$bi = new biTest();
+$bi = new biModelTest();
 r($bi->getExpressionTest(null, '*'))                    && p('') && e('*');                           // 测试 *
 r($bi->getExpressionTest(null, 'id'))                   && p('') && e('`id`');                        // 测试 id
 r($bi->getExpressionTest('t1', 'id'))                   && p('') && e('`t1`.`id`');                   // 测试 t1.id

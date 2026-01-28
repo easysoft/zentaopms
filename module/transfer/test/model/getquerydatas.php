@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('story')->gen(20);
 $task = zenData('task');
 $task->project->range('11');
@@ -26,7 +26,7 @@ cid=19317
 - 测试task导出选中记录的数量 @3
 
 */
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 
 /* 测试导出需求。*/
 r($transfer->getQueryDatasTest('story')) && p('14:title') && e("软件需求14"); // 测试导出需求

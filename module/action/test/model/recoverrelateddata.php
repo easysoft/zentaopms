@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->gen(10);
 zenData('product')->gen(5);
@@ -27,7 +27,7 @@ cid=14927
 
 */
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 global $tester;
 $actionModel = $tester->loadModel('action');

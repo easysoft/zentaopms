@@ -24,11 +24,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 r($dataviewTest->processMergeFieldsTest('user', 'account', 'account', array())) && p('0,1') && e('用户名,user');
 r($dataviewTest->processMergeFieldsTest('flow_project', 'name', 'name', array())) && p('0,1') && e('项目名称,project');

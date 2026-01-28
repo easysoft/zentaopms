@@ -354,13 +354,14 @@ class metric extends control
         $this->display();
     }
 
-    public function ajaxGetTableAndCharts($metricID, $scope = '', $dateLabel = '', $dateBegin = '', $dateEnd = '', $viewType = 'single', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function ajaxGetTableAndCharts($metricID, $scope = '', $calcDate = '', $dateBegin = '', $dateEnd = '', $viewType = 'single', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $usePager = empty($scope);
 
         $dateBegin = str_replace('_', '-', $dateBegin);
         $dateEnd   = str_replace('_', '-', $dateEnd);
-        $options = array_filter(array('scope' => $scope, 'calcDate' => $dateLabel, 'dateBegin' => $dateBegin, 'dateEnd' => $dateEnd));
+        $dateLabel = isset($_POST['dateLabel']) ? $_POST['dateLabel'] : '';
+        $options   = array_filter(array('scope' => $scope, 'calcDate' => $calcDate, 'dateLabel' => $dateLabel, 'dateBegin' => $dateBegin, 'dateEnd' => $dateEnd));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

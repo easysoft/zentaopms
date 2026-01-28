@@ -23,7 +23,7 @@ cid=16919
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('kanbangroup');
@@ -37,7 +37,7 @@ $table->gen(15);
 su('admin');
 
 // 创建测试实例
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 // 测试步骤1：正常获取区域1的分组列表（根据实际数据分布）
 r($kanban->getGroupListTest(1)) && p() && e(',1,2,3,1,2');

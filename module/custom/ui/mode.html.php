@@ -17,11 +17,11 @@ jsVar('hasProgram', !empty($programs));
 $featureItems = array();
 foreach($disabledFeatures as $feature)
 {
-    if(is_array($feature) and empty($disabledScrumFeatures)) continue;
+    if(is_array($feature) and empty($disabledProjectFeatures)) continue;
     $featureItems[] = h::tr
     (
         setClass('text-center'),
-        h::td(setClass('text-left'), (is_array($feature) && !empty($disabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $disabledScrumFeatures)) : $this->lang->custom->features[$feature]),
+        h::td(setClass('text-left'), (is_array($feature) && !empty($disabledProjectFeatures)) ? implode($lang->comma, $disabledProjectFeatures) : $this->lang->custom->features[$feature]),
         h::td(setClass('text-center'), icon(setClass('text-danger'), 'ban-circle')),
         h::td(setClass('text-center'), icon(setClass('text-success'), 'check'))
     );
@@ -29,12 +29,12 @@ foreach($disabledFeatures as $feature)
 foreach($config->custom->allFeatures as $feature)
 {
     if(in_array($feature, $disabledFeatures)) continue;
-    if($feature == 'scrumDetail' and empty($enabledScrumFeatures)) continue;
+    if($feature == 'projectDetail' and empty($enabledProjectFeatures)) continue;
 
     $featureItems[] = h::tr
     (
         setClass('text-center'),
-        h::td(setClass('text-left'), ($feature == 'scrumDetail' and !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature]),
+        h::td(setClass('text-left'), ($feature == 'projectDetail' and !empty($enabledProjectFeatures)) ? implode($lang->comma, $enabledProjectFeatures) : $this->lang->custom->features[$feature]),
         h::td(setClass('text-center'), icon(setClass('text-success'), 'check')),
         h::td(setClass('text-center'), icon(setClass('text-success'), 'check'))
     );

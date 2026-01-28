@@ -15,14 +15,14 @@ cid=19597
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('company')->gen(1);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $result = $userTest->createCompanyTest('');
 r($result) && p('result')            && e(0);                        // 公司名称为空，返回 0。

@@ -27,7 +27,7 @@ cid=19566
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(5);
 su('admin');
@@ -50,7 +50,7 @@ $docContent->title->range('文档模板1,文档模板2,文档模板3,文档模�
 $docContent->version->range('1');
 $docContent->gen(10);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->upgradeWikiTemplatesTest(1)) && p('version,type') && e('2,doc'); // 更新文档模板1
 r($upgrade->upgradeWikiTemplatesTest(2)) && p('version,type') && e('2,doc'); // 更新文档模板2
 r($upgrade->upgradeWikiTemplatesTest(3)) && p('version,type') && e('2,doc'); // 更新文档模板3

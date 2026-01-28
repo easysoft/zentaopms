@@ -19,13 +19,13 @@ cid=16509
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $fileNames      = array('1.xlsm', '2.jpg', '3.txt', '4.mp4::mp4', '5.zip::zip');
 $errorFileNames = array('1.php', '2.phtml', '3.jsp', '4.py', '5.abc');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->getExtensionTest($fileNames[0]))      && p() && e('xlsm'); // 获取 1.xlsm 的扩展名
 r($file->getExtensionTest($fileNames[1]))      && p() && e('jpg');  // 获取 2.jpg 的扩展名

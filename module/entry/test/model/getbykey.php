@@ -16,7 +16,7 @@ cid=16248
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('entry');
 $table->id->range('1-10');
@@ -29,7 +29,7 @@ $table->gen(10);
 
 su('admin');
 
-$entryTest = new entryTest();
+$entryTest = new entryModelTest();
 
 r($entryTest->getByKeyTest('792b9b972157d2d8531b43e04c0af021')) && p('name') && e('应用1');
 r($entryTest->getByKeyTest('')) && p() && e('0');

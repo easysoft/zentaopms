@@ -18,7 +18,7 @@ cid=19747
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $host = zenData('host');
 $host->id->range('1-3');
@@ -44,7 +44,7 @@ $image->gen(5);
 
 su('admin');
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 
 r($zahost->getImageListTest(1)) && p('Ubuntu 20.04:name') && e('Ubuntu 20.04');
 r($zahost->getImageListTest(999)) && p() && e('0');

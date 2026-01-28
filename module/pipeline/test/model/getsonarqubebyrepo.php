@@ -18,7 +18,7 @@ cid=16848
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $job = zenData('job');
@@ -32,7 +32,7 @@ $job->gen(10);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 r($jobTest->getSonarqubeByRepoTest(array(1))) && p('1:name') && e('SonarQube任务Repo1_3'); // 步骤1：查询单个版本库返回该repo的最新任务
 r($jobTest->getSonarqubeByRepoTest(array(2))) && p('2:name') && e('SonarQube任务Repo2_2'); // 步骤2：查询另一个版本库返回该repo的最新任务

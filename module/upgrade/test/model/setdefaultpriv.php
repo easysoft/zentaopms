@@ -27,7 +27,7 @@ cid=19552
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(5);
 zenData('group')->loadYaml('group')->gen(8);
@@ -35,7 +35,7 @@ zenData('grouppriv')->gen(0);
 
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 $groupPrivs = $upgrade->setDefaultPrivTest();
 
 global $tester;

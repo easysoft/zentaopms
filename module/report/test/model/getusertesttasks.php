@@ -16,7 +16,7 @@ cid=18171
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $testtaskTable = zenData('testtask');
 $testtaskTable->loadYaml('testtask_getusertesttasks', false, 2)->gen(20);
@@ -26,7 +26,7 @@ $userTable->loadYaml('user_getusertesttasks', false, 2)->gen(20);
 
 su('admin');
 
-$reportTest = new reportTest();
+$reportTest = new reportModelTest();
 
 r($reportTest->getUserTestTasksTest()) && p() && e('user3:2;user4:2;user7:2;user8:2;user11:1;user12:1;'); // 测试步骤1：正常情况下获取用户测试任务
 r($reportTest->getUserTestTasksTest('array')) && p('user3') && e('2'); // 测试步骤2：验证用户3的测试任务数量

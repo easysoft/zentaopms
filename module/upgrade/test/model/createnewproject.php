@@ -18,7 +18,7 @@ cid=19512
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -39,7 +39,7 @@ $data->end           = '';
 $projectIdList = array();
 $programID     = 1;
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 $data->projectName = '项目4';
 r($upgrade->createNewProjectTest($data, $programID, $projectIdList)) && p('end:0') && e('『结束日期』不能为空。'); // 测试结束日期不能为空
 

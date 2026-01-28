@@ -17,7 +17,7 @@ cid=18558
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $story = zenData('story');
@@ -36,7 +36,7 @@ $story->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 5. 执行5个测试步骤
 r($storyTest->getStoriesCountByProductIDTest(1, 'requirement')) && p('draft:count') && e('3'); // 步骤1：正常产品1需求draft状态统计

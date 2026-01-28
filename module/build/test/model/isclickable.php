@@ -16,13 +16,13 @@ cid=15501
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->gen(5);
 
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r($buildTest->isClickableTest('create', 'bug', false)) && p() && e('1');
 r($buildTest->isClickableTest('create', 'testtask', false)) && p() && e('1');

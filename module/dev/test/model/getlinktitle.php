@@ -24,11 +24,11 @@ cid=16004
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTest = new devTest();
+$devTest = new devModelTest();
 
 // 步骤1：测试数组格式菜单（包含link键）
 $arrayMenus = array(

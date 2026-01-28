@@ -27,7 +27,7 @@ cid=19589
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('product');
@@ -53,7 +53,7 @@ $companyTable->gen(1);
 su('admin');
 
 // 4. 创建测试实例
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 // 5. 执行测试（必须包含至少5个测试步骤）
 // 创建测试数据对象

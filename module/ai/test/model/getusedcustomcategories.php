@@ -16,7 +16,7 @@ cid=15052
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_miniprogram');
 $table->id->range('1-10');
@@ -38,7 +38,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->getUsedCustomCategoriesTest())) && p() && e('3'); // 步骤1：有数据情况，期望返回3个分类
 r($aiTest->getUsedCustomCategoriesTest()) && p('0') && e('work'); // 步骤2：验证第一个分类

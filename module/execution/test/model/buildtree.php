@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备基础测试数据
 zenData('user')->gen(5);
@@ -57,7 +57,7 @@ cid=16275
 
 */
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 步骤1：空树数组输入测试
 r($executionTest->buildTreeTestDirect(array())) && p() && e('0');

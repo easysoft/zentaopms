@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_annual')->gen(200);
 zenData('task')->gen(60);
@@ -41,7 +41,7 @@ cid=18183
 $accounts   = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
 $objectType = array('story', 'task', 'bug');
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getYearObjectStatTest($accounts[0], $objectType[0])) && p() && e('draft:3;');  // 测试获取 admin story
 r($report->getYearObjectStatTest($accounts[0], $objectType[1])) && p() && e('wait:3;');   // 测试获取 admin task

@@ -17,7 +17,7 @@ cid=14913
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('action')->loadYaml('action_gettrashobjecttypes', false, 2)->gen(30);
@@ -27,7 +27,7 @@ zenData('actionrecent')->gen(0);
 su('admin');
 
 // 4. 创建测试实例
-$action = new actionTest();
+$action = new actionModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($action->getTrashObjectTypesTest('all'))     && p() && e('0');        // 步骤1：正常查询可恢复删除类型(extra=1)

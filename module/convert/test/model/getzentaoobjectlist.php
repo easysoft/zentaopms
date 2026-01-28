@@ -16,11 +16,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$convert = new convertTest();
+$convert = new convertModelTest();
 
 // 步骤1:当enableER和URAndSR都启用时,检查epic存在
 global $config;

@@ -17,13 +17,13 @@ cid=17026
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 // 4. 测试步骤执行（每个r()...e()语句必须在同一行）
 r(count($mailTest->setTOTest(array(), array()))) && p() && e('0'); // 步骤1：空toList列表情况

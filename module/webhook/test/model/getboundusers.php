@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('oauth')->gen(10);
@@ -20,7 +20,7 @@ cid=19691
 
 */
 
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 $ID = array();
 $ID[0] = 1;

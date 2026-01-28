@@ -851,7 +851,7 @@ $lang->tutorial->waterfallProjectManage->design->step1->desc = '可以在这里�
 
 $lang->tutorial->waterfallProjectManage->design->step2 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step2->name = '点击创建设计';
-$lang->tutorial->waterfallProjectManage->design->step2->desc = '您可以在这里创建版本';
+$lang->tutorial->waterfallProjectManage->design->step2->desc = '您可以在这里创建设计';
 
 $lang->tutorial->waterfallProjectManage->design->step3 = new stdClass();
 $lang->tutorial->waterfallProjectManage->design->step3->name = '填写表单';

@@ -52,11 +52,11 @@ cid=18885
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$taskTest = new taskTest();
+$taskTest = new taskTaoTest();
 
 r($taskTest->getTeamInfoListTest(array('admin', 'user1', 'user2'), array('user', 'user', 'user'), array(8, 16, 4), array(2, 8, 0), array(6, 8, 4))) && p('0:account,estimate,consumed,left;1:account,estimate,consumed,left;2:account,estimate,consumed,left') && e('admin,8,2,6;user1,16,8,8;user2,4,0,4');
 r($taskTest->getTeamInfoListTest(array(), array(), array(), array(), array())) && p() && e('0');

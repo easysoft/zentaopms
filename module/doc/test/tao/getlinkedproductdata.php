@@ -16,7 +16,7 @@ cid=16172
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $storyTable = zenData('story');
 $storyTable->product->range('1-5');
@@ -40,7 +40,7 @@ su('admin');
 
 $products = array(0 ,1, 2);
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 r($docTester->getLinkedProductDataTest($products[0])) && p('0') && e("SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'");       // 测试空数据
 r($docTester->getLinkedProductDataTest($products[1])) && p('0') && e("SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'");       // 获取productID=1的需求查询SQL
 r($docTester->getLinkedProductDataTest($products[1])) && p('3') && e("SELECT id FROM `zt_productplan` WHERE `product`  = '1' AND  `deleted`  = '0'"); // 获取productID=1的需求查询SQL

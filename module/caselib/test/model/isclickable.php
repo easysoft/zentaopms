@@ -18,11 +18,11 @@ cid=15535
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibModelTest();
 
 // 测试步骤1：测试createcase操作且对象有lib无product时是否可点击
 $libObject = new stdclass();

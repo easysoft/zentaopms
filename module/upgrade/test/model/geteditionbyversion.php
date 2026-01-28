@@ -16,7 +16,7 @@ cid=19522
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(5);
 
@@ -24,7 +24,7 @@ su('admin');
 
 $versions = array('18_1', 'pro8_1', 'biz6_1', 'max4_3', 'ipd1_1');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getEditionByVersionTest($versions[0])) && p() && e('open'); // 测试获取版本 18_1 的产品版本类型
 r($upgrade->getEditionByVersionTest($versions[1])) && p() && e('pro');  // 测试获取版本 pro8_1 的产品版本类型
 r($upgrade->getEditionByVersionTest($versions[2])) && p() && e('biz');  // 测试获取版本 biz6_1 的产品版本类型

@@ -16,7 +16,7 @@ cid=17043
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mark.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $mark = zenData('mark');
 $mark->objectType->range('story');
@@ -30,7 +30,7 @@ $mark->gen(8);
 
 su('admin');
 
-$markTest = new markTest();
+$markTest = new markModelTest();
 
 // 准备测试对象数据
 $object1 = new stdclass();

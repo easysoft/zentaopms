@@ -20,7 +20,7 @@ cid=19848
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('host');
@@ -32,7 +32,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeTaoTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($zanodeTest->getHostsByIDListTest(array(1, 2, 3))) && p('count') && e('3'); // 步骤1：正常多个主机ID查询

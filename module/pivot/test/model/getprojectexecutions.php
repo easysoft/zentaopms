@@ -16,11 +16,11 @@ cid=17397
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 // 测试不同场景的getProjectExecutions方法
 r($pivot->getProjectExecutionsTest('normal_case')) && p() && e('array');      // 测试步骤1：正常情况下获取项目执行列表

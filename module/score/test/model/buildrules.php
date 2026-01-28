@@ -70,10 +70,10 @@ cid=18194
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 $ruleList    = $scoreTester->buildRulesTest();
 
 r(count($ruleList)) && p() && e('38'); // 获取积分规则列表数量

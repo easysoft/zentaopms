@@ -62,7 +62,7 @@ cid=19637
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 
@@ -72,7 +72,7 @@ $table->gen(10);
 
 su('admin'); // 当前用户切换为 admin。
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $templates = $userTest->getUserTemplatesTest('exporttask');
 r(count($templates)) && p()               && e(2);         // admin 用户可以查看导出任务的模板有 2 个。

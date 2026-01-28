@@ -14,9 +14,9 @@ cid=15361
 - 获取产品1,2 下的全部 bug 列表，查看数量是否正确 @10
 - 获取不存在的产品下的全部 bug 列表，查看数量是否正确 @0
 - 获取产品1 分支0 下的全部 bug 列表，查看数量是否正确 @5
-- 获取产品1 分支0 下的 bug 列表，查看数量是否正确 @5
-- 获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确 @5
-- 获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确 @5
+- 获取产品1 分支0 下的 bug 列表，查看数量是否正确 @0
+- 获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确 @0
+- 获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确 @0
 - 获取产品1 项目2 下的全部 bug 列表，查看数量是否正确 @5
 - 获取产品1 不存在项目下的全部 bug 列表，查看数量是否正确 @5
 - 获取产品1 下的不包含 bug1 的 bug 列表，查看数量是否正确 @4
@@ -65,9 +65,9 @@ r(count($bug->getBySearch('bug', $productIdList[1], $branch[0], $projectID[0], 0
 r(count($bug->getBySearch('bug', $productIdList[2], $branch[0], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('10'); //获取产品1,2 下的全部 bug 列表，查看数量是否正确
 r(count($bug->getBySearch('bug', $productIdList[3], $branch[0], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('0');  //获取不存在的产品下的全部 bug 列表，查看数量是否正确
 r(count($bug->getBySearch('bug', $productIdList[0], $branch[1], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 分支0 下的全部 bug 列表，查看数量是否正确
-r(count($bug->getBySearch('bug', $productIdList[0], $branch[2], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 分支0 下的 bug 列表，查看数量是否正确
-r(count($bug->getBySearch('bug', $productIdList[0], $branch[3], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确
-r(count($bug->getBySearch('bug', $productIdList[0], $branch[3], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确
+r(count($bug->getBySearch('bug', $productIdList[0], $branch[2], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('0');  //获取产品1 分支0 下的 bug 列表，查看数量是否正确
+r(count($bug->getBySearch('bug', $productIdList[0], $branch[3], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('0');  //获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确
+r(count($bug->getBySearch('bug', $productIdList[0], $branch[3], $projectID[0], 0, 0, $excludeBugs[0]))) && p('') && e('0');  //获取产品1 不存在的分支下的全部 bug 列表，查看数量是否正确
 r(count($bug->getBySearch('bug', $productIdList[0], $branch[0], $projectID[1], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 项目2 下的全部 bug 列表，查看数量是否正确
 r(count($bug->getBySearch('bug', $productIdList[0], $branch[0], $projectID[2], 0, 0, $excludeBugs[0]))) && p('') && e('5');  //获取产品1 不存在项目下的全部 bug 列表，查看数量是否正确
 r(count($bug->getBySearch('bug', $productIdList[0], $branch[0], $projectID[0], 0, 0, $excludeBugs[1]))) && p('') && e('4');  //获取产品1 下的不包含 bug1 的 bug 列表，查看数量是否正确

@@ -16,13 +16,13 @@ cid=15549
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('testcase')->gen(0);
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibZenTest();
 
 $testDataDir = dirname(__FILE__) . '/data/';
 if(!is_dir($testDataDir)) mkdir($testDataDir, 0755, true);

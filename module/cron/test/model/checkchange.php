@@ -17,7 +17,7 @@ cid=15878
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/cron.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 1. 数据准备
 $table = zenData('cron');
@@ -38,7 +38,7 @@ $table->gen(6);
 su('admin');
 
 // 3. 创建测试实例
-$cronTest = new cronTest();
+$cronTest = new cronModelTest();
 
 // 设置部分记录的lastTime为NULL且status不为stop
 $cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('normal')->where('id')->in('1,2,3')->exec();

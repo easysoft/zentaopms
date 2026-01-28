@@ -14,7 +14,7 @@ cid=17626
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $bug = zenData('bug');
 $bug->branch->range('0-5');

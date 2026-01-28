@@ -17,7 +17,7 @@ cid=17128
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 无需zendata数据准备，因为该方法不直接操作数据库
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($metricTest->getTimeOptionsTest(array(array('name' => 'value'), array('name' => 'date')), array((object)array('value' => 100, 'date' => '2023-01-01'), (object)array('value' => 200, 'date' => '2023-01-02')), 'line', 'line')) && p('xAxis:type') && e('category'); // 步骤1：正常情况

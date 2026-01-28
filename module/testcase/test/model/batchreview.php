@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(10);
@@ -14,7 +14,7 @@ cid=18964
 
 */
 
-$testcase   = new testcaseTest();
+$testcase   = new testcaseModelTest();
 $caseIDList = array(1, 2, 3, 4);
 
 r($testcase->batchReviewTest($caseIDList, 'clarify')) && p('1:status') && e('wait');        // 评审结果为 继续完善，状态是 wait        的用例评审后状态为 wait。

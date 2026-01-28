@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testsuite')->gen(405);
 zenData('user')->gen(1);
@@ -43,7 +43,7 @@ cid=15529
 $caselibIdList  = array(201, 402, 500);
 $setImgSizeList = array(false, true);
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 
 $data = $caselib->getByIdTest(201);
 

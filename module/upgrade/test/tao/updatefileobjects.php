@@ -54,7 +54,7 @@ cid=19575
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen(5);
 zenData('file')->loadYaml('file_updatefileobjectid')->gen(11);
@@ -71,7 +71,7 @@ zenData('task')->loadYaml('task_updatefileobjectid')->gen(5);
 zenData('build')->loadYaml('build_updatefileobjectid')->gen(5);
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 
 $type   = array('doc', 'project', 'bug', 'release', 'productplan', 'product', 'story', 'testtask', 'todo', 'task', 'build');
 $lastID = array(3, 0);

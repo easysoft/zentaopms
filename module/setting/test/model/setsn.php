@@ -18,11 +18,11 @@ cid=18369
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$settingTest = new settingTest();
+$settingTest = new settingModelTest();
 
 r($settingTest->setSNTestForInstalled()) && p('length') && e('32'); // 测试已安装系统且无cookie时的SN设置
 r($settingTest->setSNTestWithValidCookie()) && p('length') && e('32'); // 测试已安装系统且cookie存在有效SN时的处理

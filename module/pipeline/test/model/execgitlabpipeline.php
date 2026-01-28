@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -23,7 +23,7 @@ zenData('job')->loadYaml('job')->gen(5);
 zenData('repo')->gen(5);
 zenData('compile')->gen(0);
 
-$job = new jobTest();
+$job = new jobModelTest();
 global $app;
 $app->rawModule = 'job';
 $app->rawMethod = 'exec';

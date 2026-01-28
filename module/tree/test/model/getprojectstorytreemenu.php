@@ -16,7 +16,7 @@ cid=19377
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -36,7 +36,7 @@ $story = zenData('story');
 $story->module->range('2,7,12');
 $story->gen(100);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getProjectStoryTreeMenuTest(1))  && p() && e('7|2');    // 测试获取项目1的Story模块
 r($tree->getProjectStoryTreeMenuTest(2))  && p() && e('7|2|12'); // 测试获取项目2的Story模块

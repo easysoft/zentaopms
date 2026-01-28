@@ -45,6 +45,8 @@ class devModel extends model
      */
     public function getFields($table)
     {
+        if(empty($table)) return array();
+
         $module      = substr($table, strpos($table, '_') + 1);
         $aliasModule = $subLang = '';
         $this->app->loadLang($module);

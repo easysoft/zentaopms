@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getMembersByIdListTest();
@@ -54,7 +54,7 @@ $team->gen(10);
 $executionIDList = array(3, 4, 5);
 $count           = array('0','1', '2');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[0]]) && p('admin:root,account,realname') && e('3,admin,admin'); // 批量查询敏捷执行team
 r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[1]]) && p('user1:root,account,realname') && e('4,user1,用户1'); // 批量查询瀑布执行team
 r($executionTester->getMembersByIdListTest($executionIDList, $count[0])[$executionIDList[2]]) && p('admin:root,account,realname') && e('5,admin,admin'); // 批量查询看板执行team

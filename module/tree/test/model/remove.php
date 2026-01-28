@@ -15,12 +15,12 @@ cid=19390
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 ob_start();
 r($tree->removeTest(0)) && p('deleted') && e('0'); // 测试删除module 0

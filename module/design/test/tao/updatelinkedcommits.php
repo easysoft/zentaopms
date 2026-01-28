@@ -24,7 +24,7 @@ cid=15998
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('design')->loadYaml('design')->gen(1);
 zenData('relation')->gen(0);
@@ -34,7 +34,7 @@ $repos        = array(0, 1);
 $revisions[0] = array();
 $revisions[1] = array(1, 2, 3);
 
-$designTester = new designTest();
+$designTester = new designTaoTest();
 r($designTester->updateLinkedCommitsTest($designs[0], $repos[0], $revisions[0])) && p()                                                 && e('0');                                    // 测试空数据
 r($designTester->updateLinkedCommitsTest($designs[0], $repos[1], $revisions[1])) && p()                                                 && e('0');                                    // 测试designID为0的数据
 r($designTester->updateLinkedCommitsTest($designs[1], $repos[0], $revisions[1])) && p()                                                 && e('0');                                    // 测试repoID为0的数据

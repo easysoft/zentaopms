@@ -15,11 +15,11 @@ cid=16709
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getPrivsAfterVersionTest('')) && p('doc-sort') && e('doc-sort'); // 步骤1：空版本号获取所有权限
 r($group->getPrivsAfterVersionTest('18.0')) && p('doc-sort') && e('~~'); // 步骤2：版本号18.0获取权限

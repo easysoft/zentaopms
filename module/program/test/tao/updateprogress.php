@@ -15,13 +15,13 @@ cid=17722
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('program')->gen(20);
 zenData('user')->gen(5);
 su('admin');
 
-$programTester = new programTest();
+$programTester = new programTaoTest();
 $results = $programTester->updateProgressTest();
 r($results) && p('1:progress') && e('0.00'); // 获取系统中所有项目集的进度 1
 r($results) && p('2:progress') && e('0.00'); // 获取系统中所有项目集的进度 2

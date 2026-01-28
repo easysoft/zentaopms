@@ -16,7 +16,7 @@ cid=15331
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $branch = zenData('branch');
 $branch->id->range('1-10');
@@ -29,7 +29,7 @@ $branch->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$branchTest = new branchTest();
+$branchTest = new branchModelTest();
 
 r($branchTest->getStatusListTest(101)) && p('1') && e('active');
 r($branchTest->getStatusListTest(999)) && p() && e('0');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 function initData()
@@ -52,7 +52,7 @@ $caseIDList     = array('1');
 $objectTypeList = array('product', 'story');
 $objectIDList   = array('2');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->updateCase2ProjectTest($caseIDList[0], $objectTypeList[0], $objectIDList[0])) && p('0:project,product,case')                        && e('1,2,1');       // 测试修改用例 1 产品 1 => 2
 r($testcase->updateCase2ProjectTest($caseIDList[0], $objectTypeList[1], $objectIDList[0])) && p('0:project,product,case;1:project,product,case') && e('2,1,1;4,1,1'); // 测试修改用例 1 需求 1 => 2

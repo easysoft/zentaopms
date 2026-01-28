@@ -22,7 +22,7 @@ cid=16529
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('usertpl')->gen(0);
@@ -53,7 +53,7 @@ $file5->title   = '新建的公共bug模板';
 $file5->content = array('id', 'product', 'branch', 'module', 'project', 'execution', 'story', 'task', 'title', 'keywords', 'severity', 'pri', 'type', 'os', 'browser', 'steps', 'status', 'deadline', 'activatedCount', 'confirmed', 'mailto', 'openedBy', 'openedDate', 'openedBuild', 'assignedTo', 'assignedDate', 'resolvedBy', 'resolution', 'resolvedBuild', 'resolvedDate', 'closedBy', 'closedDate', 'duplicateBug', 'linkBug', 'case', 'lastEditedBy', 'lastEditedDate', 'files', 'identify');
 $file5->public  = 1;
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->saveExportTemplateTest($module[0], $file1)) && p('title,public') && e('新建的公共bug模板,1');  // 测试新建 公共 bug 模板
 r($file->saveExportTemplateTest($module[0], $file2)) && p('title,public') && e('新建的私有bug模板,0');  // 测试新建 私有 bug 模板

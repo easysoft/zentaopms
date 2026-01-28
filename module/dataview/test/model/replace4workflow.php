@@ -16,11 +16,11 @@ cid=15960
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataviewTest = new dataviewTest();
+$dataviewTest = new dataviewModelTest();
 
 r($dataviewTest->replace4WorkflowTest('产品名称')) && p() && e('产品名称');
 r($dataviewTest->replace4WorkflowTest('这个产品很好')) && p() && e('这个产品很好');

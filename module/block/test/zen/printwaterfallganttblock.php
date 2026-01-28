@@ -16,7 +16,7 @@ cid=15309
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zendata('product')->gen(5);
 zendata('project')->gen(10);
@@ -24,7 +24,7 @@ zendata('productplan')->gen(20);
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 $block1 = new stdclass();
 $block1->id = 1;

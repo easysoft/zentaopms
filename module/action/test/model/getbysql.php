@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->gen(50);
@@ -26,7 +26,7 @@ $sql3 = "objectID < 10";
 $sql4 = "action = 'opened'";
 $sql5 = "`read` = '0'";
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getBySQLTest($sql1)) && p() && e('11'); // 查询id like %1的动作个数
 r($action->getBySQLTest($sql2)) && p() && e('3');  // 查询objectType = product的动作个数

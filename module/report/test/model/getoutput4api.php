@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->loadYaml('action_annual')->gen(200);
 zenData('task')->gen(60);
@@ -29,7 +29,7 @@ cid=18164
 */
 $account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getOutput4APITest($account[0])) && p() && e('story:10;task:8;bug:3;case:5;');    // 测试获取 admin 的输出
 r($report->getOutput4APITest($account[1])) && p() && e('task:4;bug:3;case:3;');             // 测试获取 dev17 的输出

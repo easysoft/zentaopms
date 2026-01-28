@@ -15,14 +15,14 @@ cid=18432
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('expect')->loadYaml('expect')->gen(1);
 
 $idList = array(0, 1, 2);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getExpectByIDTest($idList[0])) && p()                                 && e('0');                 // 获取ID=0的期望信息
 r($stakeholderTester->getExpectByIDTest($idList[1])) && p('userID,expect,progress,project') && e('11,期望1,进度1,11'); // 获取ID=1的期望信息
 r($stakeholderTester->getExpectByIDTest($idList[2])) && p()                                 && e('0');                 // 获取ID不存在的期望信息

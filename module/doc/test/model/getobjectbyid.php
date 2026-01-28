@@ -26,7 +26,7 @@ cid=16114
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(10);
@@ -36,7 +36,7 @@ su('admin');
 $types = array('all', 'product', 'project', 'execution');
 $ids   = array(0, 1, 11, 101, 200);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getObjectByIDTest($types[0], $ids[0])) && p()          && e('0');            // 测试空数据
 r($docTester->getObjectByIDTest($types[1], $ids[0])) && p()          && e('0');            // 获取id=0的产品信息
 r($docTester->getObjectByIDTest($types[1], $ids[1])) && p('id,name') && e('1,产品1');      // 获取id=1的产品信息

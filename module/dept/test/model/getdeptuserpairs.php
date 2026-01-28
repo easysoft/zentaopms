@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->gen(30);
@@ -32,7 +32,7 @@ $type       = array('inside', 'outside', 'out');
 $count      = array('0', '1');
 $params     = 'all';
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->getDeptUserPairsTest($deptIDList[0], $count[0], $key[0], $type[0]))          && p('50')      && e('用户49'); //查询所有内部用户
 r($dept->getDeptUserPairsTest($deptIDList[0], $count[0], $key[0], $type[1]))          && p('101')     && e('测试1');  //查询所有外部用户
 r($dept->getDeptUserPairsTest($deptIDList[1], $count[0], $key[0], $type[0]))          && p('11')      && e('用户10'); //根据部门查询用户

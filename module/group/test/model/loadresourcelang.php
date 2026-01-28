@@ -16,11 +16,11 @@ cid=16720
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 $resource = $group->loadResourceLangTest();
 
 r($resource->project) && p('start') && e('启动项目'); // 测试步骤1：验证项目模块语言加载成功

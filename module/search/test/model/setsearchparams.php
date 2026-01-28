@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -24,7 +24,7 @@ cid=18312
 
 */
 
-$search = new searchTest();
+$search = new searchModelTest();
 
 $searchConfig = array();
 $searchConfig['module'] = 'bug';

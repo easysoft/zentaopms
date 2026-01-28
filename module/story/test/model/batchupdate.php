@@ -25,7 +25,7 @@ cid=18477
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -34,7 +34,7 @@ $story->gen(20);
 zenData('storyspec')->gen(20);
 zenData('product')->gen(20);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $stories = array();
 $stories[12]['title']        = '测试软件需求1';
 $stories[12]['color']        = '';

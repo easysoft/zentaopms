@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -17,7 +17,7 @@ cid=15181
 
 */
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r(is_array($biTest->getSqlByMonthTest()) && count($biTest->getSqlByMonthTest()) == 1) && p() && e('1'); // 步骤1：默认参数测试返回数组且长度为1
 r(is_array($biTest->getSqlByMonthTest('Y', 'm'))) && p() && e('1'); // 步骤2：返回数组类型验证

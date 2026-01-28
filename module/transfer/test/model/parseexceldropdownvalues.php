@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/transfer.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('product')->gen(10);
 $module = zenData('module');
 $module->root->range('1');
@@ -51,7 +51,7 @@ sed: can't read /home/z/repo/master/zentaopms/test/config/my.php: No such file o
 
 */
 
-$transfer = new transferTest();
+$transfer = new transferModelTest();
 $result   = $transfer->parseExcelDropdownValuesTest('story', $rows);
 
 r($result) && p('2:title')   && e('需求1');     // 测试正常条件下导入需求标题是否为需求1

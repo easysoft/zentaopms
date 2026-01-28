@@ -19,7 +19,7 @@ cid=15056
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（简化处理，不依赖数据库数据）
 
@@ -27,7 +27,7 @@ include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($aiTest->isExecutableTest((object)array('id' => 1, 'name' => 'prompt1', 'module' => 'story', 'source' => ',story.title,story.spec,', 'purpose' => 'test purpose1', 'targetForm' => 'story.create'))) && p() && e('1'); // 步骤1：完整有效的prompt对象

@@ -18,7 +18,7 @@ cid=16948
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('kanbancard');
 $table->id->range('1-100');
@@ -44,7 +44,7 @@ $cellTable->gen(5);
 
 su('admin');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 // 测试用例1：正常导入产品计划对象
 $productplans = array('72', '73', '74');

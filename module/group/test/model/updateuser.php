@@ -15,7 +15,7 @@ cid=16727
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -23,7 +23,7 @@ zenData('user')->gen(100);
 zenData('group')->gen(5);
 zenData('usergroup')->loadYaml('usergroup')->gen(10);
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 $_POST['members'] = array('user1' => 'user1', 'user10' => 'user10');
 

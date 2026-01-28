@@ -26,9 +26,9 @@ cid=15172
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 // 测试1: 正常字段解析
 r($biTest->getFieldsWithAliasTest('SELECT id, account, realname FROM zt_user')) && p('id,account,realname') && e('id,account,realname');

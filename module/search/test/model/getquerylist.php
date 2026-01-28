@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $query = zenData('userquery');
@@ -36,7 +36,7 @@ cid=18304
 
 */
 
-$search = new searchTest();
+$search = new searchModelTest();
 $module = 'task';
 
 r($search->getQueryListTest($module)) && p('0:title,account') && e('这是搜索条件名称6,test');  //查询 task 模块的搜索查询列表的第1条记录的名称和用户

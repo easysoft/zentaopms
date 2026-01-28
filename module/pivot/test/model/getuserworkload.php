@@ -21,9 +21,9 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 zenData('task')->loadYaml('task_workload')->gen(20);
 

@@ -16,10 +16,10 @@ cid=19544
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('module')->loadYaml('module')->gen(1);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $programIDList = array(0, 1);
 $projectIDList = array(0, 1);

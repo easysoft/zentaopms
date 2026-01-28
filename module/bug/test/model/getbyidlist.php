@@ -28,7 +28,7 @@ cid=15360
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 function initData()
@@ -50,7 +50,7 @@ $bugIDList   = array('1,2,3', '1,4', '2,7', '1000001');
 $fieldsList  = array('*', 'id,title,status,plan,module,story', 'id,title,status', 'id,title');
 $orderByList = array('id_desc', 'id_asc');
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 
 r($bug->getByIdListTest($bugIDList[0], $fieldsList[0])) && p('1:title')  && e('BUG1');     // 查询id为1的bug title
 r($bug->getByIdListTest($bugIDList[0], $fieldsList[1])) && p('2:status') && e('active');   // 查询id为2的bug status

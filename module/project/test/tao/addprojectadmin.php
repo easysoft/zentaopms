@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('projectadmin')->gen(0);
 zenData('user')->gen(5);
@@ -25,7 +25,7 @@ cid=17885
 
 */
 
-$projectClass = new projectTest();
+$projectClass = new projectTaoTest();
 
 su('admin');
 r($projectClass->addProjectAdminTest(1)) && p('projects', '|') && e('1');     // 测试将项目ID为1添加admin至分组

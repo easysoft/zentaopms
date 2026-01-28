@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $project = zenData('project');
@@ -52,7 +52,7 @@ cid=17800
 
 */
 
-$project = new projectTest();
+$project = new projectModelTest();
 $projectIdList = array(1, 2, 3);
 
 $data[1] = new stdClass();

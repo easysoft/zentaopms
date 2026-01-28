@@ -16,7 +16,7 @@ cid=16847
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $job = zenData('job');
@@ -30,20 +30,7 @@ $job->gen(10);
 // 用户登录
 su('admin');
 
-// 创建测试实例
-$jobTest = new jobTest();
-
-// 测试步骤1：正常情况下获取repo为1的jenkins作业键值对
-r($jobTest->getPairsTest(1, 'jenkins')) && p('1') && e('Jenkins任务1');
-
-// 测试步骤2：正常情况下获取repo为2的gitlab作业键值对
-r($jobTest->getPairsTest(2, 'gitlab')) && p('2') && e('GitLab流水线1');
-
-// 测试步骤3：边界值测试-查询不存在的repo ID的作业键值对
-r($jobTest->getPairsTest(999, 'jenkins')) && p() && e(0);
-
-// 测试步骤4：过滤测试-不指定engine参数获取所有作业
-r($jobTest->getPairsTest(1, '')) && p('1') && e('Jenkins任务1');
-
-// 测试步骤5：删除记录过滤测试-确保已删除记录不被返回（id=9的记录被删除）
-r($jobTest->getPairsTest(3, 'jenkins')) && p('5') && e('Jenkins任务3');
+$pipelineTester = new pipelineModelTest();
+r($pipelineTester->getPairsTest($types[0])) && p('1') && e('gitLab'); // 获取type为空的流水线信息
+r($pipelineTester->getPairsTest($types[1])) && p('1') && e('gitLab'); // 获取type为gitlab的流水线信息
+r($pipelineTester->getPairsTest($types[2])) && p(0)   && e('0');      // 获取type为test的流水线信息

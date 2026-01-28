@@ -18,7 +18,7 @@ cid=17687
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -44,7 +44,7 @@ $query->sql->range("`(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `statu
 $query->gen(1);
 
 global $tester;
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $sql1 = "(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'wait'  ))";
 $sql2 = "(( 1   AND `name`  LIKE '%项目集%' ) AND ( 1  AND `status` = 'doing'  ))";

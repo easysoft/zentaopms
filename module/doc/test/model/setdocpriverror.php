@@ -16,13 +16,13 @@ cid=16151
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(10);
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('user')->gen(5);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->setDocPrivErrorTest(1, 1,   'product')) && p('doc_1_nopriv') && e('您暂无 正常产品1 的访问权限，无法查看该文档，如需调整权限可联系相关人员处理。'); // 判断文档1是否有正常产品1的权限
 r($docTester->setDocPrivErrorTest(2, 11,  'project')) && p('doc_2_nopriv') && e('您暂无 敏捷项目1 的访问权限，无法查看该文档，如需调整权限可联系相关人员处理。'); // 判断文档2是否有敏捷项目1的权限
 r($docTester->setDocPrivErrorTest(3, 60,  'project')) && p('doc_3_nopriv') && e('您暂无 瀑布项目2 的访问权限，无法查看该文档，如需调整权限可联系相关人员处理。'); // 判断文档3是否有瀑布项目2的权限

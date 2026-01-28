@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('task')->gen(30);
 su('admin');
@@ -50,7 +50,7 @@ $conditionList[5] = array('priList' => $priList, 'assignedToList' => $assignedTo
 
 $orderByList = array('id_asc', 'deadline_desc');
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r(count($taskTester->getListByConditionTest($conditionList[0], $orderByList[0]))) && p() && e('19'); // 测试按照优先级查询任务的数量
 r(count($taskTester->getListByConditionTest($conditionList[1], $orderByList[0]))) && p() && e('3'); // 测试按照指派给查询任务的数量
 r(count($taskTester->getListByConditionTest($conditionList[2], $orderByList[0]))) && p() && e('17'); // 测试按照状态查询任务的数量

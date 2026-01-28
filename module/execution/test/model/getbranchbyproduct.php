@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=executionModel->getBranchByProduct();
@@ -37,7 +37,7 @@ $branch->gen(2);
 $productIDList = array(1, 2);
 $count         = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getBranchByProductTest($productIDList[0], $count[0])) && p()      && e('0');     // 正常产品分支统计
 r($executionTester->getBranchByProductTest($productIDList[0], $count[1])) && p()      && e('0');     // 正常产品分支统计
 r($executionTester->getBranchByProductTest($productIDList[1], $count[0])) && p('2:1') && e('分支1'); // 分支产品分支查看

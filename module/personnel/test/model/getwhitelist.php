@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('acl')->gen(50);
 zenData('user')->gen(50);
@@ -65,7 +65,7 @@ cid=17335
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 
 $objectIdList   = array(1, 2, 3, 4);
 $objectTypeList = array('program', 'project', 'product', 'sprint');

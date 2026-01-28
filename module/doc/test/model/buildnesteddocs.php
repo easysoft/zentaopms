@@ -16,14 +16,14 @@ cid=16047
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->buildNestedDocsTest()) && p('1:text')  && e('我的文档1');        // 测试获取我的文档1
 r($docTester->buildNestedDocsTest()) && p('6:text')  && e('我的草稿文档6');    // 测试获取我的草稿文档6
 r($docTester->buildNestedDocsTest()) && p('11:text') && e('自定义文档11');     // 测试获取自定义文档11

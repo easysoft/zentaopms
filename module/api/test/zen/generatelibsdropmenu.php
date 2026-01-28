@@ -16,7 +16,7 @@ cid=15124
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('doclib')->loadYaml('generatelibsdropmenu/doclib', false, 2)->gen(10);
 zenData('product')->loadYaml('generatelibsdropmenu/product', false, 2)->gen(5);
@@ -24,7 +24,7 @@ zenData('project')->loadYaml('generatelibsdropmenu/project', false, 2)->gen(5);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiZenTest();
 
 $lib1 = new stdClass();
 $lib1->id = 1;

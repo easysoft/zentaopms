@@ -56,6 +56,7 @@ formBatchPanel
     on::change('[data-name="estStarted"], [data-name="deadline"]', 'checkBatchEstStartedAndDeadline'),
     on::change('[data-name="module"]', 'setStories'),
     on::change('input[name^=story]', 'setStoryRelated'),
+    on::change('[data-name="estimate"],[data-name="consumed"]', 'computeForParent'),
     on::click('[data-name=story] [data-type=ditto]', 'setStoryRelated'),
     set::formID('taskBatchEditForm' . $executionID),
     formBatchItem

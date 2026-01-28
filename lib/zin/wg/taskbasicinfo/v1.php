@@ -20,23 +20,24 @@ class taskBasicInfo extends wg
 
     protected function getModuleItems(object $task, null|bool|object $product): array
     {
-        $isInModal        = isInModal();
-        $canBrowseProduct = !$isInModal && common::hasPriv('product', 'browse');
-        $canViewTasks     = !$isInModal && common::hasPriv('execution', 'task');
-        $modulePath       = $this->prop('modulePath', data('modulePath'));
-        $items            = array();
+        global $app;
+        $isInModal    = isInModal();
+        $canViewTasks = !$isInModal && common::hasPriv('execution', 'task');
+        $modulePath   = $this->prop('modulePath', data('modulePath'));
+        $items        = array();
+        $appendApp    = $app->tab == 'execution' ? '' : "#app={$app->tab}";
         if($modulePath)
         {
             if($product)
             {
                 $item = array('text' => $product->name);
-                if($canBrowseProduct) $item['url'] = createLink('product', 'browse', "productID=$product->id");
+                if($canViewTasks) $item['url'] = createLink('execution', 'task', "executionID=$task->execution&browseType=byProduct&param=$product->id") . $appendApp;
                 $items[] = $item;
             }
             foreach($modulePath as $key => $module)
             {
                 $item = array('text' => $module->name);
-                if($canBrowseProduct) $item['url'] = createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id");
+                if($canViewTasks) $item['url'] = createLink('execution', 'task', "executionID=$task->execution&browseType=byModule&param=$module->id") . $appendApp;
                 $items[] = $item;
             }
         }
@@ -46,7 +47,7 @@ class taskBasicInfo extends wg
 
     protected function getItems(): array
     {
-        global $lang, $config;
+        global $lang, $config, $app;
 
         $task = $this->prop('task', data('task'));
         if(!$task) return array();
@@ -76,7 +77,7 @@ class taskBasicInfo extends wg
 
         if($config->edition == 'max' && $execution->type == 'stage')
         {
-            $items[$lang->task->design] = array('control' => 'text', 'text' => $task->designName, 'title' => $task->designName, 'control' => 'link', 'url' => createLink('design', 'view', "designID=$task->design"));
+            $items[$lang->task->design] = array('control' => 'text', 'text' => $task->designName, 'title' => $task->designName, 'control' => 'link', 'url' => createLink('design', 'view', "designID=$task->design") . ($app->tab == 'execution' ? '' : "#app={$app->tab}"));
         }
 
         if($config->vision != 'lite')

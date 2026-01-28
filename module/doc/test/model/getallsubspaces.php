@@ -14,7 +14,7 @@ cid=16069
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $docLibData = zenData('doclib')->loadYaml('doclib');
 $docLibData->type->range('mine,custom,product,project,execution');
@@ -29,7 +29,7 @@ su('admin');
 $typeList    = array('all', 'mine', 'custom', 'product', 'project', 'execution');
 $spaceIdList = array(0, 1, 2, 3, 4, 101);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->objectModel->getAllSubSpaces()) && p('mine.1')     && e('我的空间/项目接口库1');   // 测试获取项目接口库1
 r($docTester->objectModel->getAllSubSpaces()) && p('mine.6')     && e('我的空间/自定义文档库6'); // 测试获取自定义文档库6
 r($docTester->objectModel->getAllSubSpaces()) && p('custom.2')   && e('团队空间/项目接口库2');   // 测试获取项目接口库2

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->loadYaml('task')->gen(100);
@@ -85,7 +85,7 @@ cid=18837
 
 */
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->processData4ReportTest(3, 'execution'))    && p('3:name,value')          && e('3,76');         // 计算executionID为3的执行下按迭代任务数统计的图表数据
 r($task->processData4ReportTest(3, 'module'))       && p('2:name,value')          && e('2,24');         // 计算executionID为3的执行下按模块统计的图表数据
 r($task->processData4ReportTest(3, 'assignedTo'))   && p('admin:name,value')      && e('admin,14');     // 计算executionID为3的执行下按指派给统计的图表数据

@@ -19,14 +19,14 @@ cid=17742
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(5);
 zenData('task')->loadYaml('task')->gen(8);
 zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 
 $selectCustom     = 'date,task';
 $selectNoneCustom = '';

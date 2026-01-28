@@ -19,11 +19,11 @@ cid=15194
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->parseTableListTest('SELECT * FROM zt_user')) && p('zt_user') && e('zt_user'); // 测试解析简单SELECT语句，包含单个表且无别名
 r($biTest->parseTableListTest('SELECT u.account FROM zt_user u')) && p('u') && e('zt_user'); // 测试解析带表别名的SELECT语句

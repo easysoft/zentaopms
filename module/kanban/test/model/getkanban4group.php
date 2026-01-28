@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 zenData('taskteam')->gen(10);
@@ -74,7 +74,7 @@ $executionIDList = array('1', '2', '3', '4', '5');
 $browseTypeList  = array('story', 'task', 'bug');
 $groupByList     = array('pri', 'category', 'module', 'source', 'assignedTo', 'story', 'severity');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getKanban4GroupTest($executionIDList[0], $browseTypeList[0], $groupByList[0])[0]['data']['lanes']) && p('0:id,title') && e('pri0,优先级: 无');         // 查看执行1按需求的优先级分组的泳道
 r($kanban->getKanban4GroupTest($executionIDList[0], $browseTypeList[0], $groupByList[1])[0]['data']['lanes']) && p('0:id,title') && e('categoryfeature,功能');    // 查看执行1按需求的分类分组的泳道

@@ -18,7 +18,7 @@ cid=16160
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $docData = zenData('doc')->loadYaml('doc');
 $docData->order->range('1-10');
@@ -28,7 +28,7 @@ su('admin');
 
 $sortedIdList = array(2, 5, 1, 10, 7, 9, 8, 3, 4, 6);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 $sortedDocList = $docTester->updateDocOrderTest($sortedIdList);
 r($sortedDocList[1])  && p() && e('3');  // 检查ID为1的文档顺序
 r($sortedDocList[2])  && p() && e('1');  // 检查ID为2的文档顺序

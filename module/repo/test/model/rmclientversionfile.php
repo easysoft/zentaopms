@@ -16,11 +16,11 @@ cid=18092
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->rmClientVersionFileTest('existing_file')) && p() && e('1'); //测试步骤1：有文件且文件存在
 r($repo->rmClientVersionFileTest('nonexistent_file')) && p() && e('1'); //测试步骤2：有文件路径但文件不存在

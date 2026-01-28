@@ -77,10 +77,11 @@ $footToolbar = array();
 if($canBatchAssignTo)
 {
     $assignedToItems = array();
-    foreach ($memberPairs as $key => $value)
+    $pinyinItems     = common::convert2Pinyin($memberPairs);
+    foreach($memberPairs as $key => $value)
     {
         $key = base64_encode((string)$key); // 编码用户名中的特殊字符
-        if(!empty($key)) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+        if(!empty($key)) $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
     }
 
     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top');

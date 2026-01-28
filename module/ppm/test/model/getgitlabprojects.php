@@ -17,7 +17,7 @@ cid=17247
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(3);
 zenData('mr')->loadYaml('mr')->gen(1);
@@ -25,7 +25,7 @@ zenData('pipeline')->gen(1);
 zenData('oauth')->loadYaml('oauth')->gen(1);
 su('admin');
 
-$mrTester = new mrTest();
+$mrTester = new mrModelTest();
 
 $hostID        = 1;
 $projectIdList = array();

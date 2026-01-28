@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -56,7 +56,7 @@ zenData('kanbancell')->loadYaml('kanbancell', true)->gen(18);
 
 $taskIDlist = array(1, 2, 3, 4, 5, 6);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->cancelTest($taskIDlist[0], array('status' => 'cancel', 'comment' => '取消备注1'))) && p('id,name,status') && e('1,任务1,cancel'); // wait状态任务取消
 r($task->cancelTest($taskIDlist[1], array('status' => 'cancel', 'comment' => '取消备注2'))) && p('id,name,status') && e('2,任务2,cancel'); // doing状态任务取消
 r($task->cancelTest($taskIDlist[2], array('status' => 'cancel', 'comment' => '取消备注3'))) && p('id,name,status') && e('3,任务3,cancel'); // done状态任务取消

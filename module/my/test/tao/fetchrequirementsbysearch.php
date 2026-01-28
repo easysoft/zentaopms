@@ -16,7 +16,7 @@ cid=17308
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->loadYaml('story_fetchrequirementsbysearch', false, 2)->gen(10);
 zenData('product')->loadYaml('product_fetchrequirementsbysearch', false, 2)->gen(3);
@@ -24,7 +24,7 @@ zenData('storyreview')->loadYaml('storyreview_fetchrequirementsbysearch', false,
 
 su('admin');
 
-$myTest = new myTest();
+$myTest = new myTaoTest();
 
 r($myTest->fetchRequirementsBySearchTest("t1.deleted = '0'", 'contribute', 'id_desc', null, array())) && p() && e(3);
 r($myTest->fetchRequirementsBySearchTest("t1.deleted = '0'", 'assigned', 'id_desc', null, array())) && p() && e(3);

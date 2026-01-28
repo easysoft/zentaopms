@@ -18,7 +18,7 @@ cid=16282
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -32,7 +32,7 @@ $parentIdList  = array(0, 106);
 $beginList     = array('2022-01-01', '2022-01-13');
 $endList       = array('2022-01-14', '2022-02-16');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[0], $endList[0], $parentIdList[0])) && p('begin') && e('迭代开始日期应大于等于项目的开始日期：2022-01-12。');    // 测试敏捷项目不正确的开始日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[1], $endList[0], $parentIdList[0])) && p()        && e('1');                                                     // 测试敏捷项目正确的开始跟结束日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[1], $endList[1], $parentIdList[0])) && p('end')   && e('迭代截止日期应小于等于项目的截止日期：2022-02-15。');    // 测试敏捷项目不正确的结束日期

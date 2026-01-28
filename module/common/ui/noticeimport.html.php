@@ -60,7 +60,12 @@ window.submitForm = function(type)
     const formUrl  = $("button[data-target='#importNoticeModal']").closest('form').attr('action');
     const formData = new FormData($("button[data-target='#importNoticeModal']").closest('form')[0]);
 
-    $.ajaxSubmit({url: formUrl, data: formData});
+    $.ajaxSubmit({url: formUrl, data: formData, onFail: function(error)
+    {
+        $('#importNoticeModal .modal-footer button').removeClass('disabled');
+        $('#importNoticeModal').zui('modal').hide();
+        if(error?.message) showValidateMessage(error.message);
+    }});
 }
 
 window.enableSubmitButton = function()

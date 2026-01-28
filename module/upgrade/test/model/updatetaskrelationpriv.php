@@ -16,7 +16,7 @@ cid=19559
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $grouppriv = zenData('grouppriv');
 $grouppriv->group->range('1');
@@ -24,7 +24,7 @@ $grouppriv->module->range('execution');
 $grouppriv->method->range('maintainrelation');
 $grouppriv->gen(1);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->updateTaskRelationPrivTest()) && p('createrelation')    && e('createrelation');    //测试添加任务关系权限
 r($upgrade->updateTaskRelationPrivTest()) && p('editrelation')      && e('editrelation');      //测试维护任务关系权限
 r($upgrade->updateTaskRelationPrivTest()) && p('batcheditrelation') && e('batcheditrelation'); //测试批量维护任务关系权限

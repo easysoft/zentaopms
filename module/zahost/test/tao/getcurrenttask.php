@@ -18,10 +18,10 @@ cid=19757
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
-$zahost = new zahostTest();
+$zahost = new zahostTaoTest();
 
 $statusGroupTasks = new stdclass();
 
@@ -37,7 +37,7 @@ $statusGroupTasks->inprogress = $inprogressTasks;
 
 $imageID = 1;
 
-$zahost = new zahostTest();
+$zahost = new zahostTaoTest();
 r($zahost->getCurrentTask($imageID, $statusGroupTasks)) && p('status,task') && e('inprogress,1'); //测试有下载中的任务，当前任务为下载中的任务
 
 $task1->task = 2;

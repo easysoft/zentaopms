@@ -18,11 +18,11 @@ cid=15125
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiZenTest();
 
 $zenFile = realpath(dirname(__FILE__, 3) . '/zen.php');
 $filePath1 = $zenFile . '/getMethod';

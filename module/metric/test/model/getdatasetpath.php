@@ -16,11 +16,11 @@ cid=17088
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r(substr($metricTest->getDatasetPathTest(), -11)) && p() && e('dataset.php'); // 步骤1：正常获取dataset路径
 r(substr($metricTest->getDatasetPathTest(), -4)) && p() && e('.php'); // 步骤2：验证文件扩展名

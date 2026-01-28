@@ -21,7 +21,7 @@ cid=19591
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('1-10');
@@ -58,7 +58,7 @@ global $tester;
 $tester->app->company = new stdClass();
 $tester->app->company->admins = ',admin,';
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->checkProjectPrivTest((object)array('id' => 1, 'acl' => 'private', 'PO' => '', 'PM' => '', 'QD' => '', 'RD' => '', 'type' => 'project', 'parent' => 0, 'path' => ',1,'), 'admin', array(), array(), array(), array())) && p() && e('1');
 r($userTest->checkProjectPrivTest((object)array('id' => 1, 'acl' => 'private', 'PO' => '', 'PM' => 'pm1', 'QD' => '', 'RD' => '', 'type' => 'project', 'parent' => 0, 'path' => ',1,'), 'pm1', array(), array(), array(), array())) && p() && e('1');

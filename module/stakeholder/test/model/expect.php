@@ -16,7 +16,7 @@ cid=18429
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('expect')->gen(0);
 zenData('user')->gen(5);
@@ -28,7 +28,7 @@ $emptyExpect   = array('expect' => $expect[0], 'progress' => $progress[1]);
 $emptyProgress = array('expect' => $expect[1], 'progress' => $progress[0]);
 $expectData    = array('expect' => $expect[1], 'progress' => $progress[1]);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->expectTest($emptyExpect))   && p('expect:0')                       && e('『expect』不能为空。');           // 测试不填写期望
 r($stakeholderTester->expectTest($emptyProgress)) && p('progress:0')                     && e('『progress』不能为空。');         // 测试不填写进展
 r($stakeholderTester->expectTest($expectData))    && p('userID,expect,progress,project') && e('1,创建一条期望,创建一条进展,11'); // 测试创建一条期望

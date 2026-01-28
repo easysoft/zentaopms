@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(5);
@@ -23,7 +23,7 @@ cid=16951
 
 $columnIDList = array('1', '2', '3', '4', '5');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->processCardsTest($columnIDList[0])) && p('', '|') && e('2:,3,4,803,3:,5,6,805,4:,7,8,807,');                                    // 处理列1的卡片
 r($kanban->processCardsTest($columnIDList[1])) && p('', '|') && e('1:,1,2,801,3,4,803,3:,5,6,805,4:,7,8,807,');                            // 处理列2的卡片

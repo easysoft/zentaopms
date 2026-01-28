@@ -23,7 +23,7 @@ cid=16355
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -62,7 +62,7 @@ $manageMembers[1] = array('role' => $roles[1], 'hours' => $hours[1], 'account' =
 $manageMembers[2] = array('role' => $roles[2], 'hours' => $hours[2], 'account' => $accounts[2], 'limited' => $limited[2], 'days' => $days[2], 'root' => $executionID, 'type' => 'execution');
 $count            = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->manageMembersTest($executionID, $count[0], $manageMembers)[0]) && p('root,type,account') && e('3,execution,user1'); // 获取团队成员user1
 r($execution->manageMembersTest($executionID, $count[0], $manageMembers)[1]) && p('root,type,account') && e('3,execution,user2'); // 获取团队成员user2
 r($execution->manageMembersTest($executionID, $count[0], $manageMembers)[2]) && p('root,type,account') && e('3,execution,admin'); // 获取团队成员admin

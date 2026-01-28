@@ -75,7 +75,7 @@ cid=16085
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('template')->gen(20);
 zenData('module')->loadYaml('templatemodule')->gen(20);
@@ -86,7 +86,7 @@ $libs    = array(1, 2, 3, 4);
 $types   = array('all', 'draft', 'released');
 $orderBy = array('id_desc', 'title_asc');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocTemplateListTest($libs[0], $types[0], $orderBy[0])) && p('0:lib,title,templateType') && e('1,产品模板5,custom1');  // 获取产品范围下的所有模板
 r($docTester->getDocTemplateListTest($libs[0], $types[1], $orderBy[0])) && p('1:lib,title,templateType') && e('1,产品模板4,custom1');  // 获取产品范围下的草稿模板
 r($docTester->getDocTemplateListTest($libs[0], $types[2], $orderBy[0])) && p('0:lib,title,templateType') && e('1,产品模板2,QAP');      // 获取产品范围下的已发布模板

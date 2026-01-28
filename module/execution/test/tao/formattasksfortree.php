@@ -16,7 +16,7 @@ cid=16387
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -43,7 +43,7 @@ $task1->estStarted = '';
 $task1->realStarted = '';
 $tasks[] = $task1;
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 r($executionTest->formatTasksForTreeTest(array())) && p() && e('0'); // 测试步骤1：空任务数组输入
 r($executionTest->formatTasksForTreeTest($tasks)) && p() && e('1'); // 测试步骤2：单个任务格式化

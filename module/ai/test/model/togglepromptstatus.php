@@ -17,10 +17,10 @@ cid=15071
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('状态切换测试1,状态切换测试2,状态切换测试3,状态切换测试4,状态切换测试5,状态切换测试6,状态切换测试7,状态切换测试8,状态切换测试9,状态切换测试10');
 $table->desc->range('测试状态切换功能的提示词描述{10}');
@@ -42,7 +42,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($aiTest->togglePromptStatusTest(1, '')) && p() && e('1'); // 步骤1：使用ID切换draft状态prompt为active

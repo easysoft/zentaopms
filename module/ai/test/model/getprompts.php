@@ -16,9 +16,9 @@ cid=15044
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('需求润色,一键拆用例,任务润色,需求转任务,Bug润色,文档润色,Bug转需求,拆分一个子计划,测试提示词1,测试提示词2');
 $table->desc->range('测试描述内容{10}');
@@ -38,7 +38,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->getPromptsTest())) && p() && e('10'); // 步骤1：获取所有提示词，应返回10条记录
 r(count($aiTest->getPromptsTest('story'))) && p() && e('3'); // 步骤2：按story模块过滤，应返回3条记录

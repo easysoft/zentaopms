@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -30,7 +30,7 @@ zenData('mr')->loadYaml('mr')->gen(1);
 zenData('relation')->gen(0);
 su('admin');
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 
 r($mrModel->linkTester(2, 'story'))   && p() && e('0'); // 错误的合并请求
 r($mrModel->linkTester(1, 'stories')) && p() && e('0'); // 错误的关联类型

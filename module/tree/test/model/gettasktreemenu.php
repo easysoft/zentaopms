@@ -16,7 +16,7 @@ cid=19384
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -28,7 +28,7 @@ $projectproduct->project->range('1-100');
 $projectproduct->product->range('1-100');
 $projectproduct->gen(100);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getTaskTreeMenuTest(1))   && p() && e('product-1|6|1|11'); // 测试获取项目1的task模块
 r($tree->getTaskTreeMenuTest(10))  && p() && e('product-10');       // 测试获取项目10的task模块

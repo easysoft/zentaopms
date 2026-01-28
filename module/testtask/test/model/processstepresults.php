@@ -17,7 +17,7 @@ cid=19217
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $casestepTable = zenData('casestep');
@@ -37,7 +37,7 @@ $caseTable->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$testtaskTest = new testtaskTest();
+$testtaskTest = new testtaskModelTest();
 
 // 5. 执行测试步骤
 r($testtaskTest->processStepResultsTest([1, 2], 1, 'pass', [], [])) && p('1:result') && e('pass'); // 步骤1：用例有步骤，结果为pass

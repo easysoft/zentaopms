@@ -14,7 +14,7 @@ cid=18698
  - 第plan条的className属性 @hidden
  - 第product条的className属性 @hidden
 - 测试步骤5第parent条的className属性 @~~
-- 测试步骤6第parent条的className属性 @hidden
+- 测试步骤6第parent条的className属性 @~~
 - 测试步骤7第product条的className属性 @~~
 
 */
@@ -129,7 +129,7 @@ $product6 = new stdClass();
 $product6->id = 1;
 $product6->shadow = 0;
 $tester->config->showStoryGrade = '';
-r($storyTest->hiddenFormFieldsForEditTest($fields6, 'epic', $product6)) && p('parent:className') && e('hidden'); // 测试步骤6
+r($storyTest->hiddenFormFieldsForEditTest($fields6, 'epic', $product6)) && p('parent:className') && e('~~'); // 测试步骤6
 
 // 测试场景7: 普通产品(非影子产品),story类型
 $fields7 = array(

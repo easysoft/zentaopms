@@ -16,7 +16,7 @@ cid=17712
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -29,7 +29,7 @@ $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD
 $program->status->range('wait');
 $program->gen(1);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $data = array(
     'uid'          => '1',

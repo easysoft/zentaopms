@@ -21,7 +21,7 @@ cid=18485
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -29,7 +29,7 @@ $story->parent->range('0,`-1`,2{3}');
 $story->estimate->range('[1-4]');
 $story->gen(5);
 
-$story = new storyTest();
+$story = new storyModelTest();
 
 r($story->computeEstimateTest(0))  && p()          && e('0');   //不传入需求。
 r($story->computeEstimateTest(1))  && p('old,new') && e('1,1'); //传入普通需求，检查计算前后预计工时变化。

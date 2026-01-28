@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -29,7 +29,7 @@ cid=18367
 
 */
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 $pathList     = array();
 $pathList[0]  = "";

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->loadYaml('task')->gen(9);
 zenData('taskteam')->loadYaml('taskteam')->gen(5);
@@ -27,7 +27,7 @@ cid=0
 */
 $taskIDList = array('1', '2', '3', '4', '5', '7', '10');
 
-$task = new taskTest();
+$task = new taskModelTest();
 $task1Result = $task->getToAndCcListTest($taskIDList[0], true);
 $task4Result = $task->getToAndCcListTest($taskIDList[3]);
 r(count((array) $task1Result))               && p()      && e('1');           //计算无assignedto 无mailto的发信列表

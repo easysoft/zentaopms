@@ -42,7 +42,7 @@ cid=19638
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('user');
 $table->account->range('1-12')->prefix('user');
@@ -59,7 +59,7 @@ global $app;
 unset($config->safe->weak); // 防止数据库中的配置影响测试结果。
 $app->loadConfig('admin');  // 加载系统内置的弱密码配置。
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 $users    = $userTest->getWeakUsersTest();
 
 r(count($users))    && p() && e(10); // 检测出 10 个弱密码用户。

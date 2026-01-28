@@ -18,7 +18,7 @@ cid=18486
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(20);
@@ -68,7 +68,7 @@ $data->mailto      = '';
 $data->parent      = 1;
 $data->reviewer[]  = 'admin';
 
-$story = new storyTest();
+$story = new storyModelTest();
 $test1 = $story->createTest($data);
 $test2 = $story->createTest($data, 11);
 $test3 = $story->createTest($data, 0, 1);

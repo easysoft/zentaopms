@@ -16,9 +16,9 @@ cid=15054
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->isAssocTest(array(0, 1, 2))) && p() && e('0');                            // 步骤1：索引数组
 r($aiTest->isAssocTest(array('name' => 'test', 'id' => 1))) && p() && e('1');        // 步骤2：关联数组

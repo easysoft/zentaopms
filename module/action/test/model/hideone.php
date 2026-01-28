@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(2);
@@ -27,7 +27,7 @@ $type                         = array('product', 'story');
 $deleteAction1SuccessActionID = 3;
 $deleteAction2SuccessActionID = 4;
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->hideOneTest($actionIDList[0]))              && p('extra')           && e('2'); //隐藏action1
 r($action->hideOneTest($actionIDList[1]))              && p('id,action,extra') && e('2,created,1'); //隐藏action2

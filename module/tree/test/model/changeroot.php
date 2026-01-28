@@ -22,7 +22,7 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
@@ -45,7 +45,7 @@ $case->product->range('1');
 $case->module->range('5,10,15');
 $case->gen(20);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->changeRootTest(12, 1, 2, 'story')) && p('id,root') && e('6');  // 测试修改module 12 的root从 1 修改为 2
 r($tree->changeRootTest(2,  1, 2, 'story')) && p('id,root') && e('20'); // 测试修改module 2 的root从 1 修改为 2，子模块module 7同时修改

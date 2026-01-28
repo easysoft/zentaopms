@@ -16,7 +16,7 @@ cid=15017
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_message');
 $table->id->range('1-20');
@@ -29,7 +29,7 @@ $table->gen(20);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->deleteHistoryMessagesByIDTest(1, 1, array(1, 2, 3))) && p() && e('0');
 r($aiTest->deleteHistoryMessagesByIDTest(2, 2, array())) && p() && e('0');

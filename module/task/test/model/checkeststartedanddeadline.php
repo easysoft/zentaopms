@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $execution = zenData('project');
@@ -44,7 +44,7 @@ $executionID = '4';
 $estStarted  = array('2000-01-02', '', '2023-01-15');
 $deadline    = array('2040-01-02', '', '2023-01-15');
 
-$task = new taskTest();
+$task = new taskModelTest();
 
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[0])) && p('estStarted') && e('任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 2040-01-02 是否可以保存
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[1])) && p('estStarted') && e('任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 空 是否可以保存

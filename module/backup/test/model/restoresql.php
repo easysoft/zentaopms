@@ -16,7 +16,7 @@ cid=15142
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -40,7 +40,7 @@ EOT;
 
 file_put_contents('/tmp/backup_测试-2024.sql', $sql);
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 r($backupTest->restoreSQLTest('/tmp/backup_测试-2024.sql')) && p('result') && e('1');
 r($backupTest->restoreSQLTest('/tmp/test_backup.sql')) && p('result') && e('~~');

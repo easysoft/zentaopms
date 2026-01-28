@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -44,7 +44,7 @@ cid=16927
 
 $laneIDList = array('1', '2', '3', '4', '5', '1000001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getLaneByIdTest($laneIDList[0])) && p('name,type,region,group') && e('默认泳道,common,1,1'); // 测试通过id1获取泳道信息
 r($kanban->getLaneByIdTest($laneIDList[1])) && p('name,type,region,group') && e('默认泳道,common,2,2'); // 测试通过id2获取泳道信息

@@ -27,7 +27,7 @@ cid=15493
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->loadYaml('build')->gen(20);
 zenData('project')->loadYaml('execution')->gen(30);
@@ -40,7 +40,7 @@ $executionIDList = array(0, 107, 507);
 $type            = array('all', 'product', 'bysearch', 'test');
 $parm            = array(7, "t1.name = '执行版本版本17'", "test");
 
-$build = new buildTest();
+$build = new buildModelTest();
 r($build->getExecutionBuildsTest($count[0], $executionIDList[0], $type[0]))           && p('17:execution,name') && e('125,版本17'); // 全部执行版本查询
 r($build->getExecutionBuildsTest($count[0], $executionIDList[1], $type[0]))           && p('15:execution,name') && e('107,版本15'); // 单独执行版本查询
 r($build->getExecutionBuildsTest($count[0], $executionIDList[2], $type[0]))           && p()                    && e('0');          // 不存在执行版本查询

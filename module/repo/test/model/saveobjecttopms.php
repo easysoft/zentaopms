@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -56,7 +56,7 @@ $action->date   = '2023-12-29 13:14:36';
 $action->extra  = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 $action->action = 'gitcommited';
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'task');
 r($result) && p('1:objectID,objectType') && e('1,task'); //开始任务
 r($result) && p('8:objectID,objectType') && e('8,task'); //完成任务

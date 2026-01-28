@@ -17,14 +17,14 @@ cid=16725
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('group')->loadYaml('group')->gen(5);
 zenData('grouppriv')->loadYaml('grouppriv')->gen(10);
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->updatePrivByModuleTest('my', array(1, 2), array('my-index', 'my-work'))[1]) && p('my') && e('index|work');
 r($group->updatePrivByModuleTest('task', array(3), array('task-create'))[3]) && p('task') && e('create');

@@ -33,13 +33,13 @@ cid=19654
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('usertpl');
 $table->type->range('story');
 $table->gen(1);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $template1 = (object)array('account' => 'admin', 'type' => 'story', 'title' => '',          'content' => '',          'public' => 0);
 $template2 = (object)array('account' => 'admin', 'type' => 'story', 'title' => '模板名称1', 'content' => '模板内容1', 'public' => 0);

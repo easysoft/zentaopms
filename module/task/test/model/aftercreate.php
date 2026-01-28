@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('projectstory')->gen(0); // Clear the table zt_projectstory to make sure the story is not projected.
@@ -74,7 +74,7 @@ $testTasks[3]->name   = '测试子任务2';
 $testTasks[3]->type   = 'test';
 $testTasks[3]->mailto = '';
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->afterCreateTest())                                         && p()                && e('0');         // 测试空数据
 r($taskTester->afterCreateTest(0, $taskIdList['test']))                   && p()                && e('0');         // 测试taskID为空的情况
 r($taskTester->afterCreateTest(5, $taskIdList['test']))                   && p()                && e('0');         // 测试taskID不存在的情况

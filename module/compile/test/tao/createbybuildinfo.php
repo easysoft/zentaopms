@@ -25,13 +25,13 @@ cid=15757
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('compile')->gen(0);
 zenData('user')->gen(10);
 su('admin');
 
-$compile = new compileTest();
+$compile = new compileTaoTest();
 
 $nameList = array('testName1', 'testName2', 'testName3');
 $objectIDList = array(1, 2, 3);

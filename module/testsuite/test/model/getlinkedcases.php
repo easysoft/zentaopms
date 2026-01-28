@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(2);
@@ -78,7 +78,7 @@ $suiteID = 1;
 $orderBy = array('id_desc', 'id_asc', 'title_desc,id_desc', 'title_asc,id_desc');
 $append  = array(true, false);
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->getLinkedCasesTest($suiteID, $orderBy[0], null, $append[0])) && p('2:id,title,results;1:id,title,results') && e('2,这个是测试用例2,1;1,这个是测试用例1,1');  //测试suiteID值正常存在,orderBy值为id_desc,append值为true
 r($testsuite->getLinkedCasesTest($suiteID, $orderBy[0], null, $append[1])) && p('2:id,title,results;1:id,title,results') && e('2,这个是测试用例2,a;1,这个是测试用例1,a');  //测试suiteID值正常存在,orderBy值为id_desc,append值为false

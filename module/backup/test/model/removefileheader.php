@@ -16,11 +16,11 @@ cid=15140
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 // 测试步骤1：正常移除PHP文件头
 $testFile1 = dirname(__FILE__) . DS . 'test_php_header.txt';

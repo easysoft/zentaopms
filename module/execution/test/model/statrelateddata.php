@@ -31,7 +31,7 @@ cid=16368
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
@@ -81,7 +81,7 @@ $bug->gen(6);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->statRelatedDataTest(3))   && p('storyCount,taskCount,bugCount') && e('3,3,4');
 r($executionTest->statRelatedDataTest(4))   && p('storyCount,taskCount,bugCount') && e('1,3,1');

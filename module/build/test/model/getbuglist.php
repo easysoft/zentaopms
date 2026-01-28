@@ -16,14 +16,14 @@ cid=15488
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('bug')->gen(15);
 
 zenData('user')->gen(5);
 su('admin');
 
-$buildTest = new buildTest();
+$buildTest = new buildModelTest();
 
 r($buildTest->getBugListTest('')) && p() && e('0');                                      // 测试步骤1：传入空字符串
 r($buildTest->getBugListTest('1,2,3,4,5')) && p('4:title') && e('Bug5');                // 测试步骤2：传入有效bugId列表

@@ -14,7 +14,7 @@ cid=18627
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->gen(5);
 $feedback = zenData('feedback')->gen(1);
@@ -23,7 +23,7 @@ $todo->type->range('custom,feedback');
 $todo->objectID->range('0,1');
 $todo->gen(2);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->finishTodoWhenToStoryTest(0, 0)) && p() && e('0');    //不传入待办，也不传入需求。
 r($storyTest->finishTodoWhenToStoryTest(1, 0)) && p() && e('0');    //传入待办，不传入需求。

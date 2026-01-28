@@ -16,7 +16,7 @@ cid=16728
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -30,7 +30,7 @@ $formData = array(
     'actionallchecker' => false,
 );
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->updateViewTest(1, $formData)) && p('views:program')   && e('program'); // 验证views
 r($group->updateViewTest(1, $formData)) && p('programs:0')      && e('1');       // 验证programs

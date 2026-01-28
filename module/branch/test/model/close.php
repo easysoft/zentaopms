@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -16,7 +16,7 @@ cid=15322
 */
 $branchID = array(1, 2, 3, 4, 5, 6);
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->closeTest($branchID[0])) && p('id,status') && e('1,closed'); // 测试关闭branchID 1
 r($branch->closeTest($branchID[1])) && p('id,status') && e('2,closed'); // 测试关闭branchID 2

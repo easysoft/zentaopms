@@ -19,7 +19,7 @@ cid=15746
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('compile');
 $table->id->range('1-5');
@@ -41,7 +41,7 @@ $table->gen(5);
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 r($compileTest->getByIDTest(1)) && p('id,name,status') && e('1,构建1,success');
 r($compileTest->getByIDTest(999)) && p() && e(false);

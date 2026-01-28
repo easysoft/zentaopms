@@ -15,7 +15,7 @@ cid=15994
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(5);
 
@@ -29,7 +29,7 @@ $design3 = new stdClass();
 
 $action = array('confirmStoryChange', 'edit');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->isClickableTest($design1, $action[0])) && p() && e('1'); // 确认needConfirm true 动作 confirmStoryChange 的设计是否可以操作
 r($designTester->isClickableTest($design2, $action[0])) && p() && e('0'); // 确认needConfirm false 动作 confirmStoryChange 的设计是否可以操作
 r($designTester->isClickableTest($design3, $action[0])) && p() && e('0'); // 确认needConfirm 不存在 动作 confirmStoryChange 的设计是否可以操作

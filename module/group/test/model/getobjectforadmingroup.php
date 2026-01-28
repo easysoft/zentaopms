@@ -20,7 +20,7 @@ cid=16706
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 测试数据准备：正常项目数据
 $projectTable = zenData('project');
@@ -43,7 +43,7 @@ $productTable->gen(3);
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getObjectForAdminGroupTest()) && p('programs') && e('项目集1|项目1');                   // 步骤1：验证项目集
 r($group->getObjectForAdminGroupTest()) && p('projects') && e('迭代1|阶段1|看板1');              // 步骤2：验证项目

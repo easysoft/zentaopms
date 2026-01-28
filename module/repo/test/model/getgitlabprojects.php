@@ -16,7 +16,7 @@ cid=18061
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(5);
 zenData('user')->gen(10);
@@ -24,7 +24,7 @@ zenData('repo')->loadYaml('repo')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
 
 su('admin');
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r(count($repoTest->getGitlabProjectsTest(1, ''))) && p() && e('14');
 r(count($repoTest->getGitlabProjectsTest(1, 'IS_DEVELOPER'))) && p() && e('14');

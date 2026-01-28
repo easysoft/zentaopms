@@ -16,11 +16,11 @@ cid=18030
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->buildURLTest('cat', 'test', '1', 'svn')) && p() && e('svn-cat--1.html?repoUrl=dGVzdA=='); // 测试步骤1：SVN系统cat方法构建URL
 r($repo->buildURLTest('diff', 'project/repo', '123', 'git')) && p() && e('git-diff--123.html?repoUrl=cHJvamVjdC9yZXBv'); // 测试步骤2：Git系统diff方法构建URL

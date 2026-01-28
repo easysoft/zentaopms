@@ -16,13 +16,13 @@ cid=19401
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('action')->gen(40);
 zenData('user')->gen(5);
 
 
-$tutorial = new tutorialTest();
+$tutorial = new tutorialModelTest();
 
 $modifyPassword = array(0, 1);
 

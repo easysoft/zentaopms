@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('case')->gen(30);
 zenData('user')->gen(1);
@@ -16,7 +16,7 @@ pid=1
 
 */
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->getReviewAmountTest()) && p() && e('8'); // 测试查询待评审的用例数量
 

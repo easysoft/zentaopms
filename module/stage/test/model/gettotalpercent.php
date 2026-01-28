@@ -17,9 +17,9 @@ cid=18422
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 
 // 步骤1：测试空数据库情况
 zenData('stage')->gen(0);

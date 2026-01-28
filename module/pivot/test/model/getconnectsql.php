@@ -21,11 +21,11 @@ cid=17377
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->getConnectSQLTest(array())) && p() && e('0');                                                                 // 步骤1：空数组输入测试
 r($pivotTest->getConnectSQLTest(array(0 => array('from' => 'query', 'field' => 'name')))) && p() && e('0');              // 步骤2：包含from键的过滤条件测试

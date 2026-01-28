@@ -16,11 +16,11 @@ cid=19710
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$webhookTest = new webhookTest();
+$webhookTest = new webhookTaoTest();
 
 // 创建完整的正常webhook对象
 $normalWebhook = new stdClass();

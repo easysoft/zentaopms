@@ -15,10 +15,10 @@ cid=0
 
 */
 
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 创建测试实例
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 // 创建测试数据对象
 $imageData1 = new stdClass();

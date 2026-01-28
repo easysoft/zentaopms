@@ -16,7 +16,7 @@ cid=15478
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 $table = zenData('product');
 $table->id->range('1-5');
@@ -28,7 +28,7 @@ $table->gen(5);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 r($bugTest->setCreateMenuTest(1, 'all', array())) && p() && e('1');
 r($bugTest->setCreateMenuTest(1, '', array())) && p() && e('1');

@@ -16,7 +16,7 @@ cid=18234
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user_getactiveusertable', false, 2)->gen(10);
 zenData('action')->loadYaml('action_getactiveusertable', false, 2)->gen(30);
@@ -24,7 +24,7 @@ zenData('team')->loadYaml('team_getactiveusertable', false, 2)->gen(15);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 $validProjectList = array(1 => '项目1', 2 => '项目2', 3 => '项目3');
 $emptyProjectList = array();

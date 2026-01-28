@@ -16,7 +16,7 @@ cid=18077
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('pipeline')->loadYaml('pipeline_getrepolistbyurl')->gen(3);
@@ -26,7 +26,7 @@ zenData('repo')->loadYaml('repo_getrepolistbyurl')->gen(8);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：空URL输入测试
 r($repoTest->getRepoListByUrlTest('')) && p('message') && e('Url is empty.');

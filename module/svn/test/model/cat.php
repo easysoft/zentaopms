@@ -16,7 +16,7 @@ cid=18712
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 开始输出缓冲来捕获ZenData输出
 ob_start();
@@ -38,7 +38,7 @@ ob_get_clean();
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 // 测试步骤1：使用有效URL和版本号获取文件内容
 $validUrl = 'https://svn.qc.oop.cc/svn/unittest/README';

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -56,8 +56,7 @@ $projectIDList = array(11, 60, 100);
 $count         = array(0, 1);
 $modeList      = array('', 'all', 'noclosed', 'stagefilter', 'withdelete', 'multiple', 'leaf', 'order_asc', 'noprefix', 'withobject', 'hideMultiple');
 
-$executionTester = new executionTest();
-$executionTester->executionModel->app->user->admin = true;
+$executionTester = new executionModelTest();
 r($executionTester->getPairsTest($projectIDList[0], $count[0], $modeList[0]))  && p('105') && e('敏捷项目1(不启用迭代的项目)'); // 敏捷项目执行查看
 r($executionTester->getPairsTest($projectIDList[1], $count[0], $modeList[0]))  && p('109') && e('/阶段13');                     // 瀑布项目执行查看
 r($executionTester->getPairsTest($projectIDList[2], $count[0], $modeList[0]))  && p('126') && e('/看板30');                     // 看板项目执行查看

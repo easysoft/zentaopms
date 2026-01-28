@@ -18,7 +18,7 @@ cid=18425
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin', false);
 
@@ -36,7 +36,7 @@ $accounts[0] = array();
 $accounts[1] = array('admin', 'user1');
 $accounts[2] = array('user10', 'user11');
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->batchCreateTest($projectID[0], $accounts[0])) && p()    && e('0');  // 测试项目ID为0、人员为空时，批量创建项目干系人
 r($stakeholderTester->batchCreateTest($projectID[0], $accounts[1])) && p('0') && e('1');  // 测试项目ID为0、人员为admin、user1时，批量创建项目干系人
 r($stakeholderTester->batchCreateTest($projectID[0], $accounts[2])) && p('0') && e('3');  // 测试项目ID为0、人员为user10、user11时，批量创建项目干系人

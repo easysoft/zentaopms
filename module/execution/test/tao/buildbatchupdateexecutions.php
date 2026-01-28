@@ -18,7 +18,7 @@ cid=16382
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 注释掉zenData调用，避免数据库连接问题
 // zenData('user')->gen(10);
@@ -29,7 +29,7 @@ su('admin');
 global $config;
 $config->execution->edit->requiredFields = 'name,code,begin,end';
 
-$executionTest = new executionTest();
+$executionTest = new executionTaoTest();
 
 // 构造基础的老执行数据
 $oldExecutions = array();

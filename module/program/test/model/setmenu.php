@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 // 直接插入测试数据，避免zendata问题
@@ -48,7 +48,7 @@ cid=17709
 
 */
 
-$programTest = new programTest();
+$programTest = new programModelTest();
 
 r($programTest->setMenuTest(1)) && p() && e(1);
 r($programTest->setMenuTest(0)) && p() && e(1);

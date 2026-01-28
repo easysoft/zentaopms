@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/setting.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $config = zenData('config');
@@ -27,7 +27,7 @@ $versionList = array('16.5', 'max3.0', 'max2.0', 'biz6.5', '0');
 global $config;
 $config->framework->extensionLevel = 1;
 
-$setting = new settingTest();
+$setting = new settingModelTest();
 
 r($setting->updateVersionTest($versionList[0])) && p('1:value') && e('16.5');   //测试version值为16.5，添加数据
 r($setting->updateVersionTest($versionList[1])) && p('1:value') && e('max3.0'); //测试version值为max3.0，更新数据

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('notify')->gen(3);
@@ -28,7 +28,7 @@ cid=19707
 */
 
 $idList = array(1, 2, 3);
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 $result = $webhook->setSentStatusTest($idList, 'done', '2023-01-01 00:00:00');
 

@@ -16,7 +16,7 @@ cid=17017
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 手动插入基础测试数据，避免zendata工具路径问题
 global $tester;
@@ -57,7 +57,7 @@ foreach($users as $userData)
 
 su('admin');
 
-$mail = new mailTest();
+$mail = new mailModelTest();
 
 r($mail->sendmailTest(0, 0)) && p('processed') && e('1'); // 测试步骤1：空参数输入情况
 r($mail->sendmailTest(0, 1)) && p('processed') && e('1'); // 测试步骤2：只传入actionID无objectID

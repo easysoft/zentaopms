@@ -18,7 +18,7 @@ cid=17700
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -47,7 +47,7 @@ $team->gen(5);
 
 zenData('user')->gen(5);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 $teams1 = $programTester->getTeamMemberPairsTest(1);
 $teams2 = $programTester->getTeamMemberPairsTest(2);
 

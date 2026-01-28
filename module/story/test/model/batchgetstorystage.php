@@ -16,7 +16,7 @@ cid=18474
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $storystage = zenData('storystage');
 $storystage->story->range('100-104');
@@ -27,7 +27,7 @@ $storystage->gen(5);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->batchGetStoryStageTest(array(100,101,102))) && p('100:0:stage') && e('wait');
 r($storyTest->batchGetStoryStageTest(array(101))) && p('101:0:stage') && e('planned');

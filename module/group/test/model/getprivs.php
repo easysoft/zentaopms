@@ -21,7 +21,7 @@ cid=16708
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -37,7 +37,7 @@ $privTable->module->range('module1,module6,module3,module4,module5,module7,modul
 $privTable->method->range('method1,method6,method3,method4,method5,method7,method8,method9,method10');
 $privTable->gen(10);
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 r($group->getPrivsTest(1)) && p('module1') && e('method1');         // 步骤1：测试正常分组ID获取存在的权限
 r($group->getPrivsTest(1)) && p('module6') && e('method6');         // 步骤2：测试正常分组ID获取另一个存在的权限

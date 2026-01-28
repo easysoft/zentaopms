@@ -14,13 +14,13 @@ cid=19609
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $userContactList = zenData('usercontact');
 $userContactList->gen(100);
 
-$user = new userTest();
+$user = new userModelTest();
 $user1ContactList = $user->getContactListsTest('user1', 'withempty|withnote');
 $dev2ContactList  = $user->getContactListsTest('dev2', 'withempty');
 $test3ContactList = $user->getContactListsTest('test3');

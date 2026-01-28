@@ -19,11 +19,11 @@ cid=19741
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$zahostTest = new zahostTest();
+$zahostTest = new zahostModelTest();
 
 r($zahostTest->checkAddressTest('www.baidu.com')) && p() && e('1');         // 步骤1：测试有效域名
 r($zahostTest->checkAddressTest('127.0.0.1')) && p() && e('1');             // 步骤2：测试有效IP地址

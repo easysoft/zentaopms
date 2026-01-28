@@ -16,7 +16,7 @@ cid=15835
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 global $tester;
 
@@ -61,7 +61,7 @@ $userTable->gen(5);
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createDefaultExecutionTest(1001, 1, array())) && p() && e('1'); // 步骤1:正常情况,无团队成员
 r($convertTest->createDefaultExecutionTest(1002, 2, array())) && p() && e('1'); // 步骤2:不同项目无团队成员

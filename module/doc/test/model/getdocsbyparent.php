@@ -17,7 +17,7 @@ cid=16082
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('doc');
@@ -30,7 +30,7 @@ $table->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 // 5. 测试步骤：必须包含至少5个测试步骤
 r(count($docTest->getDocsByParentTest(1))) && p() && e('3'); // 步骤1：查询父文档ID为1的子文档，返回3个

@@ -22,11 +22,11 @@ cid=14942
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('action')->gen(1);
 zenData('project')->gen(1);
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 r($actionTest->fetchObjectInfoByID(TABLE_ACTION,  1, 'id,objectType,objectID')) && p('id,objectType,product,objectID') && e('1,product,~~,1');   //测试获取历史例句表中的id为1的记录的objectType和objectID字段的值是否正确,未能获取product字段，所以product为空。
 r($actionTest->fetchObjectInfoByID(TABLE_PROJECT, 1, 'id,project,type')) && p('id,project,charter,type') && e('1,0,~~,program');                 //测试获取项目表中的id为1的记录的project和type字段的值是否正确，未能获取charter字段，所以charter为空。

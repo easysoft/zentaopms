@@ -17,7 +17,7 @@ cid=19368
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('module');
@@ -27,7 +27,7 @@ $table->loadYaml('module_getgrouppairs', false, 2)->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$treeTest = new treeTest();
+$treeTest = new treeModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($treeTest->getGroupPairsTest(1, 0, 2, 'chart')) && p() && e('0'); // 步骤1：正常查询chart类型的二级分组

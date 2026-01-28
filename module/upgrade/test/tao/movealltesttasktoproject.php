@@ -12,13 +12,13 @@ cid=19570
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('projectcase')->gen(0);
 zenData('testtask')->gen(3);
 zenData('testrun')->gen(10);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 
 $projectIDList = array(1, 2, 3);
 $sprintIDList  = array(array(101), array(102), array(103));

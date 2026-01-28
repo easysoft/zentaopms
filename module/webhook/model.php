@@ -193,6 +193,7 @@ class webhookModel extends model
             $webhook = $this->webhookTao->getFeishuSecret($webhook);
         }
 
+        if(!empty($webhook->url) && !preg_match('/^http(s)?:\/\//', $webhook->url)) dao::$errors['url'] = $this->lang->webhook->error->url;
         if(dao::isError()) return false;
 
         $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
@@ -232,6 +233,9 @@ class webhookModel extends model
         {
             $webhook = $this->webhookTao->getFeishuSecret($webhook);
         }
+
+        if(!empty($webhook->url) && !preg_match('/^http(s)?:\/\//', $webhook->url)) dao::$errors['url'] = $this->lang->webhook->error->url;
+        if(dao::isError()) return false;
 
         $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret,wechatCorpId,wechatCorpSecret,wechatAgentId,feishuAppId,feishuAppSecret')
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')

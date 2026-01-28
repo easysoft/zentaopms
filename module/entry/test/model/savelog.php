@@ -31,14 +31,14 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/entry.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('entry')->gen(10);
 
 su('admin');
 
-$entry = new entryTest();
+$entry = new entryModelTest();
 
 r($entry->saveLogTest(1, 'http://example.com/api/test')) && p('objectID,objectType,url') && e('1,entry,http://example.com/api/test');
 r($entry->saveLogTest(2, 'http://test.com/api?param=测试&type=中文')) && p('objectID,objectType,url') && e('2,entry,http://test.com/api?param=测试&type=中文');

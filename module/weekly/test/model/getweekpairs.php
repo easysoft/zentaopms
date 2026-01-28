@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -21,7 +21,7 @@ cid=19736
 - 执行weekly模块的getWeekPairsTest方法，参数是3, 3  @0
 
 */
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getWeekPairsTest(1, 1)) && p() && e('0');
 r($weekly->getWeekPairsTest(1, 2)) && p() && e('0');

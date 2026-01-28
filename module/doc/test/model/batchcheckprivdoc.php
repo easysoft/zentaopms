@@ -17,7 +17,7 @@ cid=16042
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $docTable = zenData('doc')->loadYaml('doc');
 $docTable->assetLibType->range('practice,component,[]{18}');
@@ -32,7 +32,7 @@ zenData('user')->gen(5);
 $users  = array('admin', 'user1');
 $docIds = array(1, 3, 6, 12, 14, 20);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 
 r(count($docTester->batchCheckPrivDocTest($users[0], array()))) && p() && e('0'); // 传入空数组
 

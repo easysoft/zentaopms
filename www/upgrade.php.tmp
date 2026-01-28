@@ -93,7 +93,7 @@ try
 {
     /* Run it. */
     $app->parseRequest();
-    if($common->checkUpgradeStatus()) $app->loadModule();
+    $app->loadModule();
 }
 catch (EndResponseException $endResponseException)
 {

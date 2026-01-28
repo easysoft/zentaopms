@@ -827,6 +827,8 @@ class upgradeTao extends upgradeModel
         $project->lastEditedDate = $now;
         $project->grade          = 2;
         $project->acl            = $sprint->acl == 'open' ? 'open' : 'private';
+        $project->storyType      = 'story';
+
         if($fromMode == 'classic')
         {
             $project->multiple   = '0';

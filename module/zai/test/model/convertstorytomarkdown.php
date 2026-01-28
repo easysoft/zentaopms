@@ -18,7 +18,7 @@ cid=19767
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(2);
 zenData('storyspec')->gen(1);
@@ -26,7 +26,7 @@ zenData('storyspec')->gen(1);
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 // 创建完整的需求对象
 $story1 = new stdClass();

@@ -18,7 +18,7 @@ cid=15487
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('build')->gen(0);
 zenData('branch')->gen(10);
@@ -34,7 +34,7 @@ $noName          = array('execution' => $executionIDList[0], 'product' => 1, 'na
 $noProduct       = array('execution' => $executionIDList[0], 'product' => 0, 'name' => '新增无产品版本一', 'builder' => 'admin');
 $noBuilder       = array('execution' => $executionIDList[0], 'product' => 1, 'name' => '新增无创建者版本一', 'builder' => '');
 
-$build = new buildTest();
+$build = new buildModelTest();
 
 r($build->createTest($normalExecution)) && p('name')      && e('新增版本一');            //敏捷执行新增版本
 r($build->createTest($waterallBuild))   && p('product')   && e('2');                     //瀑布执行新增版本
