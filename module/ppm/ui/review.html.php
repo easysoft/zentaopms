@@ -26,7 +26,7 @@ formPanel
     (
         set::label($lang->ppm->opinion),
         set::name('opinion'),
-        set::control(array('control' => 'editor', 'upload-url' => 'disabled')),
+        set::control(array('control' => 'editor', 'upload-url' => 'disabled', 'placeholder' => $lang->ppm->opinionPlaceholder)),
         set::value(zget($reviewer, 'opinion', ''))
     )
 );
