@@ -3,6 +3,6 @@
         "php-webdriver/webdriver": "1.12.1.0",
         "symfony/polyfill-mbstring": "v1.26.0",
         "symfony/polyfill-php80": "v1.26.0",
-        "symfony/process": "v5.4.46"
+        "symfony/process": "v5.4.51"
     }
 }
