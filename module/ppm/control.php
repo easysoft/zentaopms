@@ -884,6 +884,7 @@ class ppm extends control
 
         $this->view->flow         = $flow;
         $this->view->ppmID        = $ppmID;
+        $this->view->ppm          = $ppm;
         $this->view->reviewers    = $reviewers;
         $this->view->reviewResult = $reviewResult;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
