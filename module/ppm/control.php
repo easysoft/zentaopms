@@ -986,4 +986,36 @@ class ppm extends control
 
         return $this->sendSuccess(array('load' => true));
     }
+
+    /**
+     * 检查合并请求是否需要再次审批.
+     * Check if need review again.
+     *
+     * @param  int $ppmID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckReviewFlow(int $ppmID)
+    {
+        $ppm = $this->ppm->fetchByID($ppmID);
+        $flow = $this->loadModel('reporeviewflow')->getByID(zget($ppm, 'reviewFlowID', 0));
+        if(empty($flow)) return '';
+
+        $newCommits = $flow->definition->reviewFlow->newCommits->addressOption;
+        if($newCommits != 'requireReReview') return '';
+
+        $reviewers = $this->ppm->getReviewers($ppmID);
+        if(empty($reviewers)) return '';
+
+        $review = new stdClass();
+        $review->decision = 'pending';
+        $review->opinion  = '';
+        $review->sha      = $ppm->sourceSHA;
+        foreach($reviewers as $reviewer)
+        {
+            $this->ppm->review($ppmID, $review, $reviewer->account);
+        }
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return print $this->sendSuccess();
+    }
 }
