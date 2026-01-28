@@ -17,7 +17,7 @@ cid=16289
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 准备测试数据
 zenData('user')->gen(5);
@@ -45,7 +45,7 @@ zenData('story')->gen(0);
 su('admin');
 
 // 4. 创建测试实例
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 5. 执行测试步骤
 r($executionTest->createDefaultSprintTest(1)) && p() && e('6'); // 步骤1：正常敏捷项目创建默认迭代

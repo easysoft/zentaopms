@@ -18,13 +18,13 @@ cid=16953
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('kanbancell')->gen(50);
 
 su('admin');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->removeKanbanCellTest('common', 1, array('1' => '1'))) && p('', '|') && e('1:2,801,; 2:3,4,803,; 3:5,6,805,; 4:7,8,807,'); // 正常移除单个卡片
 r($kanban->removeKanbanCellTest('common', array(3, 4), array('3' => '1', '4' => '1'))) && p('', '|') && e('1:2,801,; 2:803,; 3:5,6,805,; 4:7,8,807,'); // 正常移除多个卡片

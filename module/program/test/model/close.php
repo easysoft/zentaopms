@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试 programModel::close();
@@ -36,7 +36,7 @@ $maxDate    = array('realEnd' => date('Y-m-d', strtotime('+1 day')));
 $minDate    = array('realEnd' => '2023-09-10');
 $normalDate = array('realEnd' => '2023-09-12');
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $maxDateResult = $programTester->closeTest($programID, $maxDate);
 $minDateResult = $programTester->closeTest($programID, $minDate);

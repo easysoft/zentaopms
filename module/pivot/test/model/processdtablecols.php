@@ -16,9 +16,9 @@ cid=17417
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 测试1：多列输入，验证返回数组不为空
 $result1 = $pivotTest->processDTableColsTest(array('id' => array('title' => 'ID'), 'name' => array('title' => '名称'), 'status' => array('title' => '状态')));

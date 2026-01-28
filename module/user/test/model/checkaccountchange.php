@@ -37,7 +37,7 @@ cid=19581
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 zenData('company')->gen(1);
@@ -57,7 +57,7 @@ global $app;
 
 $app->company->admins = ',admin,';
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->checkAccountChangeTest('admin', 'admin')) && p('result') && e(0); // 新用户忙和旧用户名相同，返回 false。
 

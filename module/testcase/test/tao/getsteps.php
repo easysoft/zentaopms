@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
@@ -28,7 +28,7 @@ cid=19046
 $caseIDList = array(1, 2, 3, 1001);
 $version    = array(1, 2);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->getStepsTest($caseIDList[0], $version[0])) && p() && e('1 1.1 1.1.1');                         // 测试获取case 1 version 1 的步骤
 r($testcase->getStepsTest($caseIDList[0], $version[1])) && p() && e('1 1.1 1.1.1 1.1.2 1.2 1.2.1 2 2.1 3'); // 测试获取case 1 version 2 的步骤

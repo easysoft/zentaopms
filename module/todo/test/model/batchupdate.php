@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 function initData()
 {
@@ -48,7 +48,7 @@ $changeStatus[3]         = new stdclass();
 $changeStatus[3]->status = 'doing';
 $changeStatus[3]->type   = 'custom';
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 r($todo->batchUpdateTest($changeType, 1))   && p('0:field,old,new')  && e('type,custom,bug');   // 批量修改todo类型
 r($todo->batchUpdateTest($changePri, 2))    && p('0:field,old,new')  && e('pri,3,1');           // 批量修改todo优先级
 r($todo->batchUpdateTest($changeStatus, 3)) && p('0:field,old,new')  && e('status,wait,doing'); // 批量修改todo状态

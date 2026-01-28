@@ -16,7 +16,7 @@ cid=19740
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备宿主机测试数据
 $host = zenData('host');
@@ -45,7 +45,7 @@ $image->gen(5);
 
 su('admin');
 
-$zahostTest = new zahostTest();
+$zahostTest = new zahostModelTest();
 
 r($zahostTest->cancelDownloadTest(1)) && p() && e('1');     // 状态为inprogress的镜像可以取消下载
 r($zahostTest->cancelDownloadTest(999)) && p() && e('0'); // 不存在的镜像ID

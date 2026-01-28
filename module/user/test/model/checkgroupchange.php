@@ -25,7 +25,7 @@ cid=19585
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 zenData('group')->gen(3);
@@ -37,7 +37,7 @@ $groupTable->gen(2);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $user = $userTest->getByIdTest('user1');
 $user->group = array(1, 2);

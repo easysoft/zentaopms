@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('todo')->loadYaml('batchcreate')->gen(5);
@@ -30,7 +30,7 @@ $ends        = array('0900', '0930', '1000','1030', '1100', '1130', '1200', '123
 $assignedTos = array('admin', 'productManager', 'projectManager', 'dev1', 'dev2', 'dev3', 'tester1', 'tester2',);
 $todos       = array('types' => $types, 'pris' => $pris, 'names' => $names, 'descs' => $descs, 'begins' => $begins, 'ends' => $ends, 'assignedTos' => $assignedTos, 'date' => $today, 'switchDate' => '');
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 $result = $todo->batchCreateTest($todos);
 r(count($result)) && p()    && e('8');  // 判断批量创建8条待办，返回创建成功的数量
 r($result)        && p('0') && e('6');  // 判断批量创建8条待办，返回创建成功的ID

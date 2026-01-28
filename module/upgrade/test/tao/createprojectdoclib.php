@@ -25,13 +25,13 @@ cid=19568
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->gen(30);
 zenData('user')->gen(5);
 su('admin');
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 r($upgrade->createProjectDocLibTest(11)) && p('name,type,main,acl') && e('项目主库,project,1,private'); //测试为私有控制权限项目创建项目主库
 r($upgrade->createProjectDocLibTest(12)) && p('name,type,main,acl') && e('项目主库,project,1,custom');  //测试为继承项目集权限项目创建项目主库
 r($upgrade->createProjectDocLibTest(13)) && p('name,type,main,acl') && e('项目主库,project,1,open');    //测试为公开访问权限项目创建项目主库

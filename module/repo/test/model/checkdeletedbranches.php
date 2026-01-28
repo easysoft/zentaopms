@@ -31,7 +31,7 @@ cid=18031
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据 - 使用简单的数据生成方式
 zenData('repo')->loadYaml('repo')->gen(5);
@@ -57,7 +57,7 @@ $repoFiles->gen(9);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->checkDeletedBranchesTest(1, array('main' => 'main'))) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4'); // 步骤1：正常删除已删除的分支数据
 r($repoTest->checkDeletedBranchesTest(1, array())) && p('repoHistoryCount,repoBranchCount,repoFilesCount') && e('4,4,4'); // 步骤2：测试空分支列表输入

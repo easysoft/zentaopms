@@ -31,7 +31,7 @@ cid=18095
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('task')->gen(10);
@@ -48,7 +48,7 @@ global $app;
 include($app->getModuleRoot() . '/repo/control.php');
 $app->control = new repo();
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 // 测试步骤1：基础工时记录(消耗1小时，剩余3小时)
 $log1 = new stdclass();

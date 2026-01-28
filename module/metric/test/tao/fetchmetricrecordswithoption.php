@@ -17,7 +17,7 @@ cid=17167
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 zenData('metric')->loadYaml('metric', false, 2)->gen(5);
@@ -27,7 +27,7 @@ zenData('metriclib')->loadYaml('metriclib', false, 2)->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$metricTest = new metricTest();
+$metricTest = new metricTaoTest();
 
 // 5. 执行测试步骤
 r($metricTest->fetchMetricRecordsWithOptionTest('storyScale', array('project', 'value'))) && p() && e('0'); // 步骤1：正常获取度量数据

@@ -4,7 +4,7 @@
 use function zin\wg;
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(20);
@@ -51,7 +51,7 @@ $queryIdList    = array('myQueryID', 1);
 $orderBy        = array('id_desc', 'id_asc');
 $pager          = null;
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->getTrashesBySearchTest($objectTypeList[0], $typeList[0], $queryIdList[0], $orderBy[0], $pager)) && p()                                                     && e('0');                              // 搜索objectType all,      type all,    queryID myQueryID, orderBy id_desc的回收站信息
 r($action->getTrashesBySearchTest($objectTypeList[1], $typeList[0], $queryIdList[0], $orderBy[0], $pager)) && p('1:id,objectID,objectName;9:id,objectID,objectName')  && e('1,1,用户需求1;9,9,用户需求9');    // 搜索objectType story,    type all,    queryID myQueryID, orderBy id_desc的回收站信息

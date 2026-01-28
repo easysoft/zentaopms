@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . "/test/lib/init.php";
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('project')->loadYaml('program')->gen(20);
@@ -15,7 +15,7 @@ cid=17892
 
 */
 
-$projectTester = new projectTest();
+$projectTester = new projectTaoTest();
 
 $programIdList = array(1, 2, 0);
 $projectIdList = array(11, 60, 61, 100);

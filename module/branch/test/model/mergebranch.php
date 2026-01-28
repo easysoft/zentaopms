@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -45,7 +45,7 @@ $mergeBranch3->createBranch       = 0;
 $mergeBranch3->mergedBranchIDList = array(4, 5);
 $mergeBranch3->targetBranch       = 0;
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 r($branch->mergeBranchTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p('0:product,name') && e('6,分支2'); // 测试合并分支 1 到 分支 2
 r($branch->mergeBranchTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p('0:product,name') && e('6,分支2'); // 测试合并分支 2 到 新建分支
 r($branch->mergeBranchTest($productID[1], $mergedBranches[2], $mergeBranch3)) && p('0:product,name') && e('7,分支5'); // 测试合并分支 3 4 到 主干

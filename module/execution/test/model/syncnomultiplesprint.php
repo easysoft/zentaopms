@@ -16,7 +16,7 @@ sed: can't read /repo/zentaopms/test/config/my.php: No such file or directory
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -51,6 +51,6 @@ su('admin');
 
 $projectIDList = array(2, 15);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->syncNoMultipleSprintTest($projectIDList[0])) && p('id,name,project,multiple') && e('5,项目2,2,0'); // 同步没有执行的项目
 r($execution->syncNoMultipleSprintTest($projectIDList[1])) && p()                           && e('0');           // 同步错误的项目

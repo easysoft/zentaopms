@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(6);
@@ -61,7 +61,7 @@ $childTask  = array('assignedTo' => 'admin', 'consumed' => 2, 'left' => 5);
 $linearTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
 $multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 r($taskTester->finishTest($taskIDList[0], $waitTask))   && p('0:field,old,new') && e('status,wait,done');   // 测试完成 任务状态为未开始的任务
 r($taskTester->finishTest($taskIDList[1], $doingTask))  && p('1:field,old,new') && e('status,doing,done');  // 测试完成 任务状态为进行中的任务

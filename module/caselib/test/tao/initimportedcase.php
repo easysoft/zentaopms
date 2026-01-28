@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
@@ -44,7 +44,7 @@ $data2->title = array('', '');
 $data3 = clone $data1;
 $data3->type = array('', '');
 
-$caselib = new caselibTest();
+$caselib = new caselibTaoTest();
 r($caselib->initImportedCaseTest($data1)) && p('0:title,pri;1:title,pri') && e('用例1,3,用例2,3');                                                         // 测试初始化一条导入的用例1
 r($caselib->initImportedCaseTest($data2)) && p('title:0,1')               && e('1行的“用例名称”是必填字段，不能为空,2行的“用例名称”是必填字段，不能为空'); // 测试title为空2
 r($caselib->initImportedCaseTest($data3)) && p('type:0,1')                && e('1行的“用例类型”是必填字段，不能为空,2行的“用例类型”是必填字段，不能为空'); // 测试type为空4

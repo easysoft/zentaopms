@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -113,7 +113,7 @@ where t1.deleted = '0' and t2.deleted = '0' and t3.deleted = '0'
 and t2.type in ('sprint', 'stage', 'kanban')
 EOT;
 
-$bi = new biTest();
+$bi = new biModelTest();
 r($bi->parseSqlTest($sqls[0])) && p('id,name,bugID,type,fixedBugs,caseTitle') && e('zt_product=>id,zt_product=>name,zt_bug=>id,zt_bug=>type,zt_product=>fixedBugs,zt_case=>title'); // 测试第1条sql
 r($bi->parseSqlTest($sqls[1])) && p('id,name,consumed')                       && e('zt_task=>id,zt_task=>name,zt_task=>consumed');                                                  // 测试第2条sql
 r($bi->parseSqlTest($sqls[2])) && p('id,estimate')                            && e('zt_story=>id,zt_story=>estimate');                                                              // 测试第3条sql

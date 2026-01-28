@@ -16,7 +16,7 @@ cid=18011
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(5);
 zenData('release')->loadYaml('release')->gen(5);
@@ -27,7 +27,7 @@ su('admin');
 
 $releaseIds = array(0, 1, 2, 3, 99);
 
-$releaseTest = new releaseTest();
+$releaseTest = new releaseModelTest();
 
 r($releaseTest->sendmailTest($releaseIds[0])) && p() && e('empty'); // 步骤1：空releaseID
 r($releaseTest->sendmailTest($releaseIds[1])) && p() && e('success'); // 步骤2：正常releaseID

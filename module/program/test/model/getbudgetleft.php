@@ -16,7 +16,7 @@ cid=17681
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -25,7 +25,7 @@ $program->type->range('program');
 $program->budget->range('1000,2000,3000,4000,5000');
 $program->gen(5);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 r($programTester->getBudgetLeftTest(1)) && p() && e('1000');  // 查看项目集1的所有父项目集的预算剩余
 r($programTester->getBudgetLeftTest(2)) && p() && e('2000');  // 查看项目集2的所有父项目集的预算剩余
 r($programTester->getBudgetLeftTest(3)) && p() && e('3000');  // 查看项目集3的所有父项目集的预算剩余

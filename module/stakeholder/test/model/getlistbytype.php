@@ -20,14 +20,14 @@ cid=18436
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('stakeholder')->loadYaml('stakeholder')->gen(20);
 zenData('user')->gen(20);
 
 $objectIds = array(0 , 11, 12);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getListByTypeTest($objectIds[0]))            && p()                           && e('0');                        // 获取项目ID=0按照类型分组的干系人列表
 r($stakeholderTester->getListByTypeTest($objectIds[1])['inside'])  && p('0:name,account,type,role') && e('用户10,user10,inside,qa');  // 获取项目ID=11按照类型分组的干系人列表
 r($stakeholderTester->getListByTypeTest($objectIds[1])['outside']) && p('0:name,account,type,role') && e('用户15,user15,outside,qa'); // 获取项目ID=11按照类型分组的干系人列表

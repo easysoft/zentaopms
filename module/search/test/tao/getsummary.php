@@ -17,7 +17,7 @@ cid=18329
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // getSummary方法主要测试内容处理逻辑，不依赖searchdict数据
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$searchTest = new searchTest();
+$searchTest = new searchTaoTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($searchTest->getSummaryTest('短内容测试', '测试')) && p() && e("短内容<span class='text-danger'>测试 </span>  "); // 步骤1：短内容有关键词

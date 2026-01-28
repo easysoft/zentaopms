@@ -16,13 +16,13 @@ cid=17065
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('metric')->loadYaml('metric_calculatemetricbycode', false, 2)->gen(10);
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->calculateMetricByCodeTest('user_count')) && p() && e('0');
 r($metricTest->calculateMetricByCodeTest('empty_test')) && p() && e('0');

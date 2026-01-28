@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectrelease.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('release')->gen(20);
 zenData('build')->gen(20);
@@ -27,7 +27,7 @@ cid=17974
 
 $releaseID = array(1, 3, 7, 8, 10);
 
-$projectrelease = new projectreleaseTest();
+$projectrelease = new projectreleaseTaoTest();
 
 r($projectrelease->processReleaseTest($releaseID[0])) && p() && e('project:131 branch:0 build:1 branchName: buildInfos:项目11版本1'); // 测试计算发布信息 1
 r($projectrelease->processReleaseTest($releaseID[1])) && p() && e('project:131 branch:0 build:3 branchName: buildInfos:项目13版本3'); // 测试计算发布信息 3

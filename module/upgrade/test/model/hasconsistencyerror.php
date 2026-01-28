@@ -14,7 +14,7 @@ cid=19533
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $app;
 $path     = $app->getTmpRoot() . 'log/';
@@ -28,7 +28,7 @@ function genFile(string $filename, array $contents)
 
 $filePath = sprintf($path . $filename, date('Ymd'));
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 if(file_exists($filePath)) unlink($filePath);
 r($upgrade->hasConsistencyError())  && p('') && e(0);   //当前日志文件不存在，返回false

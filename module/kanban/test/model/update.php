@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanban')->gen(5);
@@ -60,7 +60,7 @@ $kanban4->owner = 'po17';
 $kanban4->team  = 'user5';
 $kanban4->desc  = '测试编辑没有名字的看板的描述';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->updateTest(1, $kanban1)) && p('name|space|owner|whitelist', '|') && e('测试编辑看板1|1|po15|,user3,po15'); // 正常编辑看板，查看编辑后的数据
 r($kanban->updateTest(2, $kanban2)) && p('name|space|owner|whitelist', '|') && e('测试编辑看板2|2|po16|user4');       // 正常编辑看板，查看编辑后的数据

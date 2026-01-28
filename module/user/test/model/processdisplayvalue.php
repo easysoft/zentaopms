@@ -41,7 +41,7 @@ cid=19650
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $users = array
 (
@@ -50,7 +50,7 @@ $users = array
     'user3' => (object)array('id' => 3, 'account' => 'user3', 'realname' => '用户3', 'deleted' => '1')
 );
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->processDisplayValueTest($users, ''))                         && p('user1,user2,user3') && e('U:用户1,U:user2,U:user3'); // 参数为空，用户 1 显示首字母 + 姓名，用户 2 显示首字母 + 用户名，用户 3 显示首字母 + 用户名。
 r($userTest->processDisplayValueTest($users, 'showid'))                   && p('user1,user2,user3') && e('1,2,3');                   // 参数为 showid，用户 1 显示用户 ID，用户 2 显示用户 ID，用户 3 显示用户 ID。

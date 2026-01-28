@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $task = zenData('task');
@@ -50,7 +50,7 @@ cid=18879
 
 */
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->getLeftAfterDeleteWorkhourTest(1)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,1,1,1,1,1'); // 删除ID为1的工时
 r($task->getLeftAfterDeleteWorkhourTest(2)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,1,0'); // 删除ID为2的工时
 r($task->getLeftAfterDeleteWorkhourTest(3)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,0,1'); // 删除ID为3的工时

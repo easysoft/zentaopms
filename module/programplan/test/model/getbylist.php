@@ -16,7 +16,7 @@ cid=17740
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -62,7 +62,7 @@ try {
 }
 
 // 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 r($programplanTest->getByListTest(array(1, 2, 3))) && p() && e(3); // 步骤1：传入有效ID数组
 r($programplanTest->getByListTest(array())) && p() && e(0); // 步骤2：传入空数组

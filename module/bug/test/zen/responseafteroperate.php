@@ -28,11 +28,11 @@ cid=15474
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 3) . '/control.php';
 include dirname(__FILE__, 3) . '/zen.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugZenTest();
 
 r($bugTest->responseAfterOperateTest(1, array(), '操作成功', false)) && p('result,message') && e('success,操作成功');
 r($bugTest->responseAfterOperateTest(2, array(), '', false)) && p('result,message') && e('success,保存成功');

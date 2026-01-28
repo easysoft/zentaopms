@@ -16,7 +16,7 @@ cid=14887
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('action');
 $table->id->range('1-50');
@@ -37,7 +37,7 @@ $table->gen(50);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 r($actionTest->getAccountFirstActionTest('admin')) && p('actor') && e('admin');
 r($actionTest->getAccountFirstActionTest('user')) && p('actor') && e('user');

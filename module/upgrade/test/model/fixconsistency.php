@@ -13,9 +13,9 @@ cid=19517
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 $consistencyFile = $upgrade->getConsistencyLogFile();
 if(file_exists($consistencyFile)) unlink($consistencyFile);

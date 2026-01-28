@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo_getlistbycondition')->gen(5);
 
@@ -26,7 +26,7 @@ cid=18070
 
 */
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 $pager = new stdclass();
 $pager->recPerPage = 2;

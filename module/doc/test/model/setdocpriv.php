@@ -29,7 +29,7 @@ cid=16150
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -42,7 +42,7 @@ $doc->users      = 'admin';
 $doc->groups     = '';
 $doc->readGroups = '1,2';
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->setDocPrivTest($doc, 'team')) && p('readable,editable') && e('1,1');   // 超级管理员可以查看和编辑自己的文档
 
 $doc->acl        = 'open';

@@ -16,14 +16,14 @@ cid=16934
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('kanban')->gen(3);
 zenData('user')->gen(5);
 
 su('user1');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 // 创建测试用的看板对象
 $activeKanban = new stdclass();

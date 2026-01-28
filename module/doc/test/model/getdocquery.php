@@ -37,7 +37,7 @@ cid=16078
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -67,7 +67,7 @@ $queries[] = "{$allLib} AND {$allProduct} AND {$allExecution}";
 $queries[] = "{$allProject} AND {$allProduct} AND {$allExecution}";
 $queries[] = "{$allLib} AND {$allProject} AND {$allProduct} AND {$allExecution}";
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocQueryTest($queries[0]))  && p() && e("1 AND `lib` IN ('6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','25','26','27','28','29','30')");                                                                                                             // 测试只查询所有文档库
 r($docTester->getDocQueryTest($queries[1]))  && p() && e("1 AND `project` in (11,60,61,100)");                                                                                                                                                                                                           // 测试只查询所有项目
 r($docTester->getDocQueryTest($queries[2]))  && p() && e("1 AND `product` IN ('1','2','3','4','5')");                                                                                                                                                                                                    // 测试只查询所有产品

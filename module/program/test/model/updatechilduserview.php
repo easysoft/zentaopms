@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->gen(20);
@@ -22,7 +22,7 @@ cid=17713
 
 */
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 r($programTester->updateChildUserViewTest(0, array('test1', 'test2'))) && p('', '|') && e(',2'); // 更新项目集ID为0下的用户视图。
 r($programTester->updateChildUserViewTest(1, array('test1', 'test2'))) && p('', '|') && e(',2'); // 更新项目集ID为1下的用户视图。

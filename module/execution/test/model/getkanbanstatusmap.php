@@ -17,13 +17,13 @@ cid=16323
 
 // 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 用户登录
 su('admin');
 
 // 创建测试实例
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 测试步骤1：测试管理员用户的任务状态映射
 r($executionTest->getKanbanStatusMapTest('0')['task']['wait']['doing']) && p() && e('start');

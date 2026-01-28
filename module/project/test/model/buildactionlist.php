@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(7);
@@ -22,7 +22,7 @@ cid=17801
 
 $projectIdList = range(2, 7);
 
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 r($projectTester->buildActionListObjectTest($projectIdList[0])) && p() && e('start');  // 设置敏捷项目的操作按钮
 r($projectTester->buildActionListObjectTest($projectIdList[1])) && p() && e('close');  // 设置瀑布项目的操作按钮
 r($projectTester->buildActionListObjectTest($projectIdList[2])) && p() && e('start');  // 设置看板项目的操作按钮

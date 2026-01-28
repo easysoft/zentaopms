@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -43,7 +43,7 @@ $todos = $tester->loadModel('todo')->getList();
 
 r(count($todos)) && p() && e('0'); // 测试前，待办数据为0
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 $todo->createByCycleTest();
 $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('deleted')->eq('0')->fetchAll();
 r($todoList) && p('0:id,name,status') && e('1,周期待办：提前1天，间隔一天生成,doing');   // 周期性待办ID为1的待办属性

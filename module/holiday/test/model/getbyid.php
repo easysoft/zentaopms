@@ -22,7 +22,7 @@ cid=16740
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->gen(10);
 zenData('user')->gen(1);
@@ -31,7 +31,7 @@ su('admin');
 
 $holidayIDList = array(1, 5, 10, 1001);
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 r($holiday->getByIdTest($holidayIDList[0])) && p('name,type,desc') && e('这是一个节假日1,holiday,这个是节假日的描述1');   //查询id为1的holiday
 r($holiday->getByIdTest($holidayIDList[1])) && p('name,type,desc') && e('这是一个节假日5,holiday,这个是节假日的描述5');   //查询id为5的holiday

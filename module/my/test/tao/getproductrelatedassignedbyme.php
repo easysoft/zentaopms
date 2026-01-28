@@ -17,7 +17,7 @@ cid=17311
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 $productTable = zenData('product');
@@ -36,7 +36,7 @@ $bugTable->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$myTest = new myTest();
+$myTest = new myTaoTest();
 
 // 5. 测试步骤（强制要求：必须包含至少5个测试步骤）
 r($myTest->getProductRelatedAssignedByMeTest(array(1, 2, 3, 4, 5), 'story', 'story', 'id_desc')) && p() && e('2'); // 步骤1：测试story模块正常情况

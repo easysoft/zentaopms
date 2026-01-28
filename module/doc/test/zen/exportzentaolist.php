@@ -19,7 +19,7 @@ cid=16188
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 3) . '/control.php';
 include dirname(__FILE__, 3) . '/zen.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('user');
@@ -30,7 +30,7 @@ $table->gen(10);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 

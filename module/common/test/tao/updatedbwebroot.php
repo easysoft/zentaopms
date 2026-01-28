@@ -16,11 +16,11 @@ cid=15729
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonTaoTest();
 
 // 创建模拟数据库配置对象
 $mockDbConfig1 = new stdClass();

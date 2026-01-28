@@ -16,9 +16,9 @@ cid=15043
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('ai_prompt');
+$table = zenData('ai_agent');
 $table->id->range('1-10');
 $table->name->range('需求润色,任务润色,Bug润色,文档润色,一键拆用例,需求转任务,生成测试,代码审查,数据分析,流程优化');
 $table->desc->range('测试描述内容{10}');
@@ -38,7 +38,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->getPromptByIdTest(1)) && p('name') && e('需求润色'); // 步骤1：正常情况
 r($aiTest->getPromptByIdTest(999)) && p() && e('0'); // 步骤2：不存在的ID

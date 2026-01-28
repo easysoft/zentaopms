@@ -25,7 +25,7 @@ cid=18463
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(1);
@@ -33,7 +33,7 @@ $story = zenData('story');
 $story->product->range(1);
 $story->gen(100);
 
-$story = new storyTest();
+$story = new storyModelTest();
 
 r($story->assignTest(2, 'test2'))    && p('id,assignedTo') && e('2,test2');    //指派需求，查看返回的指派人信息
 r($story->assignTest(4, ''))         && p('id,assignedTo') && e('4,~~');       //指派需求，查看返回的指派人信息

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->gen(10);
 su('admin');
@@ -22,7 +22,7 @@ cid=19723
 
 $date = array('2022-05-07', '2022-05-08', '2022-04-29', '', '0000-00-00');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 r($weekly->getLastDayTest($date[0])) && p() && e('2022-05-06');  // 查询日期为星期六
 r($weekly->getLastDayTest($date[1])) && p() && e('2022-05-06');  // 查询日期为星期日
 r($weekly->getLastDayTest($date[2])) && p() && e('2022-04-29');  // 查询日期为其他

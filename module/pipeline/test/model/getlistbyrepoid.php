@@ -21,7 +21,7 @@ cid=16845
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $jobTable = zenData('job');
@@ -41,7 +41,7 @@ $jobTable->gen(10);
 su('admin');
 
 // 创建测试实例
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 // 测试步骤1：有效版本库ID查询 - 检查repo=1的作业数量（排除已删除）
 r(count($jobTest->getListByRepoIDTest(1))) && p() && e('3'); // 测试步骤1：repo=1有3个未删除作业

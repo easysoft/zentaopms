@@ -19,7 +19,7 @@ cid=18497
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -76,7 +76,7 @@ zenData('storystage')->gen(30);
 zenData('productplan')->gen(1);
 zenData('branch')->gen(5);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $affectedStory2  = $story->getAffectedScopeTest(2);
 $affectedStory28 = $story->getAffectedScopeTest(28);
 

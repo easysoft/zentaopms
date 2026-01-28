@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 
@@ -56,7 +56,7 @@ $object4->status = 'closed';
 
 $actionList = array('confirm', 'resolve', 'close', 'activate', 'tostory', 'test');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->isClickableTest($object1, $actionList[0])) && p() && e('1'); // 状态为active confirmed为0的bug能否执行confirm动作
 r($bug->isClickableTest($object1, $actionList[1])) && p() && e('1'); // 状态为active confirmed为0的bug能否执行resolve动作

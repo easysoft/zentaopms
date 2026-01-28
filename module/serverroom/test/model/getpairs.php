@@ -18,13 +18,13 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/serverroom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 测试步骤1：正常数据测试
 zenData('serverroom')->loadYaml('serverroom')->gen(10);
 su('admin');
 
-$serverroomTest = new serverroomTest();
+$serverroomTest = new serverroomModelTest();
 
 r(count($serverroomTest->getPairsTest())) && p() && e('9'); // 步骤1：正常情况，检查记录数
 

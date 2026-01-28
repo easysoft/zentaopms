@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('group')->gen(0);
@@ -83,7 +83,7 @@ $type          = array('all', 'sprint', 'stage', 'kanban');
 $limit         = array('0', '2', '10');
 $count         = array('0', '1');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getListTest($projectIDList[1], $type[0], $status[0], $limit[0], $productIDList[0], $count[0])) && p('5:project,name')      && e('2,迭代1');        // 敏捷项目执行列表查询
 r($executionTester->getListTest($projectIDList[2], $type[0], $status[0], $limit[0], $productIDList[0], $count[0])) && p('7:project,name,type') && e('3,阶段1,stage');  // 瀑布项目执行列表查询
 r($executionTester->getListTest($projectIDList[3], $type[0], $status[0], $limit[0], $productIDList[0], $count[0])) && p('9:project,name,type') && e('4,看板1,kanban'); // 看板项目执行列表查询

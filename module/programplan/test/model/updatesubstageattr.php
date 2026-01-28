@@ -17,13 +17,13 @@ cid=17759
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project_updatesubstageattr', false, 2)->gen(20);
 
 su('admin');
 
-$plan = new programplanTest();
+$plan = new programplanModelTest();
 r($plan->updateSubStageAttrTest(1, 'mix')) && p() && e('empty string'); // 测试attribute为mix的情况，应该直接返回true，不更新任何数据
 r($plan->updateSubStageAttrTest(5, 'design')) && p() && e('design');     // 测试无子阶段的情况，应该返回true，不执行更新操作
 r($plan->updateSubStageAttrTest(1, 'design')) && p() && e('design');     // 测试有子阶段的正常更新情况，应该成功更新所有子阶段的attribute

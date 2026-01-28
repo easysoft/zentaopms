@@ -16,7 +16,7 @@ cid=18598
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -24,7 +24,7 @@ $story->parent->range('0,1');
 $story->gen(2);
 zenData('storyspec')->gen(5);
 
-$story = new storyTest();
+$story = new storyModelTest();
 global $tester;
 
 $parent = $tester->loadModel('story')->getByID(1);

@@ -24,7 +24,7 @@ cid=18282
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $user = zenData('user');
@@ -48,7 +48,7 @@ $chart->sql = "SELECT id,name FROM zt_project WHERE type='program' AND parent=0 
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->setFilterSQLTest($chart, '', false)) && p('') && e("SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'");
 r($screenTest->setFilterSQLTest($chart, 'year', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 2023 = '2023'");

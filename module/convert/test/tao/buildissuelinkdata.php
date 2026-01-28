@@ -16,11 +16,11 @@ cid=15815
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->buildIssuelinkDataTest(array('id' => 1, 'linktype' => 'blocks', 'source' => 'ISSUE-001', 'destination' => 'ISSUE-002'))) && p('linktype') && e('blocks');
 r($convertTest->buildIssuelinkDataTest(array('id' => 2))) && p('linktype') && e('~~');

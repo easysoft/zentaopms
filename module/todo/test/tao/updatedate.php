@@ -16,13 +16,13 @@ cid=19282
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('todo')->loadYaml('updatedate')->gen(10);
 
 su('admin');
 
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 $validDate1    = '2024-01-15';
 $validDate2    = '2024-02-20';

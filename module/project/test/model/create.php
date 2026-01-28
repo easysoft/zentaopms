@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -27,7 +27,7 @@ cid=17810
 */
 
 global $tester;
-$projectClass = new projectTest();
+$projectClass = new projectModelTest();
 $_POST['uid'] = '0';
 
 $project = new stdclass();

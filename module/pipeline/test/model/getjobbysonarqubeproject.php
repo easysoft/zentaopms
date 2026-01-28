@@ -18,7 +18,7 @@ cid=16842
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('job');
@@ -27,7 +27,7 @@ $table->gen(10);
 
 su('admin');
 
-$job = new jobTest();
+$job = new jobModelTest();
 
 // 测试步骤1：正常查询指定sonarqube服务器和项目key
 r($job->getJobBySonarqubeProjectTest(2, array('zentaopms'))) && p('zentaopms') && e('10');

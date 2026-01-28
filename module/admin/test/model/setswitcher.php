@@ -16,11 +16,11 @@ cid=14984
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 r($adminTest->setSwitcherTest('system')) && p() && e('success'); // 步骤1：正常情况，system菜单
 r($adminTest->setSwitcherTest('company')) && p() && e('success'); // 步骤2：正常情况，company菜单

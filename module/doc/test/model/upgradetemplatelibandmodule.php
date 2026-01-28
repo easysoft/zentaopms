@@ -51,13 +51,13 @@ cid=16164
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('template')->gen(20);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->upgradeTemplateLibAndModuleTest(1))  && p('lib,module,templateType') && e('1,1,PP');      // 更新模板1的字段值
 r($docTester->upgradeTemplateLibAndModuleTest(2))  && p('lib,module,templateType') && e('1,2,QAP');     // 更新模板1的字段值
 r($docTester->upgradeTemplateLibAndModuleTest(3))  && p('lib,module,templateType') && e('1,3,CMP');     // 更新模板1的字段值

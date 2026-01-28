@@ -19,7 +19,7 @@ cid=19393
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
@@ -30,7 +30,7 @@ $orders3 = array('12' => 7, '2' => 6,  '32' => 5); // 2是branch0， 12 32是分
 $orders4 = array('11' => 7, '1' => 6,  '31' => 5); // 1是branch0， 11 31是分支1
 $orders5 = array('13' => 8, '14' => 9, '15' => 10);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->updateOrderTest($orders1)) && p() && e(',12,32,16'); // 测试更新story模块顺序
 r($tree->updateOrderTest($orders2)) && p() && e(',18,31,11'); // 测试更新task模块顺序

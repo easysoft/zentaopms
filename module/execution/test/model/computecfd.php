@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->computeCFD();
@@ -54,7 +54,7 @@ $CFD = zenData('cfd');
 $CFD->id->range('1');
 $CFD->gen(0);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 $allExecutionCFDList    = $executionTester->computeCFDTest();
 $singleExecutionCFDList = $executionTester->computeCFDTest(3);
 

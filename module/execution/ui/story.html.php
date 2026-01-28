@@ -453,13 +453,15 @@ if($canBatchAction && !$isFromDoc && !$isFromAI)
 
     if($canBatchAssignTo)
     {
+        $pinyinItems     = common::convert2Pinyin($users);
         $assignedToItems = array();
-        foreach ($users as $account => $name)
+        foreach($users as $account => $name)
         {
             if($account == 'closed' || !$name) continue;
 
             $assignedToItems[] = array(
                 'text'       => $name,
+                'keys'       => zget($pinyinItems, $name, ''),
                 'innerClass' => 'batch-btn ajax-btn',
                 'data-url'   => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
             );

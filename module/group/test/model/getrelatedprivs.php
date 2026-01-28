@@ -19,11 +19,11 @@ cid=16716
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 $allPrivs = array('my-index', 'my-calendar', 'my-todo', 'todo-view', 'todo-calendar');
 
 r($group->getRelatedPrivsTest($allPrivs, array('my-todo'), array())) && p('depend:my,todo')           && e('my,todo');  // 选中my-todo权限，会提示依赖my和todo模块

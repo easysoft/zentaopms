@@ -16,10 +16,10 @@ cid=15008
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 // 测试步骤1：空数据库情况
 global $tester;

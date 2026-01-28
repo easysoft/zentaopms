@@ -17,7 +17,7 @@ cid=17282
 
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('project')->gen('20');  // 生成20个项目数据
@@ -26,7 +26,7 @@ zenData('task')->gen('10');    // 生成任务数据用于工时计算
 
 su('admin');
 
-$my = new myTest();
+$my = new myModelTest();
 
 // 测试步骤1：验证返回对象结构
 $result = $my->getDoingProjectsTest();

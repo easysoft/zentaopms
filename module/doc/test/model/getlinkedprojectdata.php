@@ -19,7 +19,7 @@ cid=16108
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $projectstoryTable = zenData('projectstory');
 $projectstoryTable->project->range('11, 60, 61, 100');
@@ -56,7 +56,7 @@ su('admin');
 $projects = array(0, 11, 60);
 $editions = array('open', 'max', 'ipd');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLinkedProjectDataTest($projects[0], $editions[0])) && p('4') && e("SELECT id FROM `zt_design` WHERE `project`  = '0' AND  `deleted`  = '0'");   // 获取开源版系统中所有关联项目的数据
 r($docTester->getLinkedProjectDataTest($projects[0], $editions[1])) && p('1') && e("SELECT id FROM `zt_issue` WHERE `project`  = '0' AND  `deleted`  = '0'");    // 获取旗舰版系统中所有关联项目的数据
 r($docTester->getLinkedProjectDataTest($projects[0], $editions[2])) && p('2') && e("SELECT id FROM `zt_meeting` WHERE `project`  = '0' AND  `deleted`  = '0'");  // 获取ipd版系统中所有关联项目的数据

@@ -21,7 +21,7 @@ cid=18017
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('release')->loadYaml('release')->gen(6);
 zenData('user')->gen(5);
@@ -36,7 +36,7 @@ $waitRelease      = array('name' => '修改发布为wait',   'marker' => 0, 'bui
 $noReleaseID      = array('name' => '测试任务ID为空',   'marker' => 0, 'build' => '1',  'status' => 'normal',    'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
 $noName           = array('name' => '',                 'marker' => 0, 'build' => '1',  'status' => 'normal',    'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 r($releaseTester->updateTest($releases[0], $normalRelease))    && p('id,name,build')  && e('1,修改正常发布,1');           //修改正常发布
 r($releaseTester->updateTest($releases[1], $terminateRelease)) && p('id,name,build')  && e('6,修改停止维护发布,11');      //修改停止维护发布
 r($releaseTester->updateTest($releases[0], $waitRelease))      && p('releasedDate:0') && e('『实际发布日期』不能为空。'); //修改发布为wait

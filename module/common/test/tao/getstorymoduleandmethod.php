@@ -26,11 +26,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/common.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$commonTest = new commonTest();
+$commonTest = new commonTaoTest();
 
 r($commonTest->getStoryModuleAndMethodTest('story', 'create', array())) && p('0,1') && e('story,create');
 r($commonTest->getStoryModuleAndMethodTest('story', 'create', array('storyType' => 'requirement'))) && p('0,1') && e('requirement,create');

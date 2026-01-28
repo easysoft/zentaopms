@@ -20,11 +20,11 @@ cid=17015
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r($mailTest->mergeMailsTest(array())) && p() && e('0'); //测试步骤1：不传入任何数据
 r($mailTest->mergeMailsTest(array((object)array('id' => 1, 'subject' => '主题1', 'data' => '用户创建了任务1', 'toList' => 'admin', 'ccList' => '')))) && p('id,subject,data') && e('1,主题1,用户创建了任务1'); //测试步骤2：只传入1条数据

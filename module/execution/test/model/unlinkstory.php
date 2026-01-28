@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -79,7 +79,7 @@ $executionIDList = array(3, 4, 5);
 $stories         = array(4, 324, 364);
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->unlinkStoryTest($executionIDList[0], $stories[0], $stories, $count[0])) && p('0:project,product,story') && e('3,1,324'); // 敏捷执行解除关联需求，移除迭代3中的需求4
 r($execution->unlinkStoryTest($executionIDList[1], $stories[1], $stories, $count[0])) && p('0:project,product,story') && e('4,1,4');   // 瀑布执行解除关联需求，移除迭代4中的需求324
 r($execution->unlinkStoryTest($executionIDList[2], $stories[2], $stories, $count[0])) && p('0:project,product,story') && e('5,1,4');   // 看板执行解除关联需求，移除迭代5中的需求364

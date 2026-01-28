@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -60,7 +60,7 @@ $projectIDList = array(2, 3, 4);
 $status        = array('wait', 'doing', 'done', 'closed');
 $count         = array(0, 1);
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getOrderedExecutionsTest($projectIDList[0], $status[0], $count[0])) && p('5:project,status,type')  && e('2,wait,sprint');  // 敏捷项目wait状态执行查看
 r($executionTester->getOrderedExecutionsTest($projectIDList[0], $status[1], $count[0])) && p('6:project,status,type')  && e('2,doing,sprint'); // 敏捷项目doing状态执行查看
 r($executionTester->getOrderedExecutionsTest($projectIDList[1], $status[0], $count[0])) && p()                         && e('0');              // 瀑布项目wait状态执行查看

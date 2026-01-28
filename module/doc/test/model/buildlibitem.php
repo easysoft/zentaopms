@@ -58,7 +58,7 @@ cid=16046
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('product')->loadYaml('product')->gen(5);
@@ -75,7 +75,7 @@ $moduleID  = 1;
 $objectIds = array(0, 1, 11, 101);
 $showDoc   = array(0, 1);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->buildLibItemTest($libID, $libIds[0], $types[0], $moduleID, $objectIds[2], $showDoc[0])) && p('type,name,objectType') && e('apiLib,项目接口库1,api');          // 构造api文档库节点
 r($docTester->buildLibItemTest($libID, $libIds[0], $types[0], $moduleID, $objectIds[2], $showDoc[1])) && p('type,name,objectType') && e('apiLib,项目接口库1,api');          // 构造api文档库并且展示文档节点
 r($docTester->buildLibItemTest($libID, $libIds[1], $types[1], $moduleID, $objectIds[0], $showDoc[0])) && p('type,name,objectType') && e('docLib,自定义文档库6,custom');     // 构造自定义文档库节点

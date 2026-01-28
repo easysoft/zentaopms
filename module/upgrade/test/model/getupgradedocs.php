@@ -27,7 +27,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->loadYaml('user')->gen(5);
 su('admin');
@@ -54,7 +54,7 @@ $docLib->type->range('book');
 $docLib->name->range('book1,book2,book3,book4,book5');
 $docLib->gen(5);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getUpgradeDocsTest()['doc'])  && p('0,1') && e('4,5'); // 获取旧文档45
 r($upgrade->getUpgradeDocsTest()['html']) && p('0,1') && e('6,7'); // 获取旧文档67
 r($upgrade->getUpgradeDocsTest()['html']) && p('2,3') && e('8,9'); // 获取旧文档89

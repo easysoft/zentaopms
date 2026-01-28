@@ -17,7 +17,7 @@ cid=18241
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 // 由于数据复杂性，先不设置过多测试数据，主要测试方法逻辑
@@ -26,7 +26,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 $screenTest->objectModel->filter = new stdclass();
 $screenTest->objectModel->filter->year = '2024';
 $screenTest->objectModel->filter->month = '01';

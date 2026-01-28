@@ -23,13 +23,13 @@ cid=19364
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen(100);
 
 su('admin');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getByIDTest(0))  && p('root,name,short') && e('0,0,0');               // 测试获取不存在模块的信息
 r($tree->getByIDTest(1))  && p('root,name,short') && e('1,模块1,模块简称1');   // 测试获取模块1的信息

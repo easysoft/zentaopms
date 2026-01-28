@@ -16,14 +16,14 @@ cid=17302
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('task')->gen('10');
 zenData('user')->gen('1');
 
 su('admin');
 
-$myTest = new myTest();
+$myTest = new myModelTest();
 
 r($myTest->getTaskAssignedByMeTest(null, 'id_desc', array())) && p() && e('0'); // 步骤1：空ID列表
 r($myTest->getTaskAssignedByMeTest(null, 'id_desc', array(1,2,3))) && p() && e('0'); // 步骤2：有效ID列表

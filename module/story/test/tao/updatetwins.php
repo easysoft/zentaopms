@@ -16,11 +16,11 @@ cid=18664
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('story')->gen(5);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 r($storyTest->updateTwinsTest(array(), 1)) && p() && e('0'); //不传入需求，也不传入产品。
 r($storyTest->updateTwinsTest(array(1 => 1, 2 => 2, 3 => 3, 4 => 4), 1)) && p('1,2,3,4') && e(':2:3:4:,:1:3:4:,:1:2:4:,:1:2:3:'); //传入需求列表，检查twins字段。

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -27,7 +27,7 @@ $paths    = array('', 'public');
 $branches = array('master', 'branch1');
 $types    = array('trees', 'blobs');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->getTreeByGraphqlTest($repoIds[0], $paths[0], $branches[0], $types[0])) && p('0:name') && e('public'); // 获取gitlab类型版本库1的master分支文件夹列表
 r($repo->getTreeByGraphqlTest($repoIds[0], $paths[0], $branches[0], $types[1])) && p('2:name') && e('sonar-project.properties'); // 获取gitlab类型版本库1的master分支文件列表

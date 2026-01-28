@@ -15,12 +15,12 @@ cid=19359
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $extra = 1;
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->createTestTaskLinkTest(1, $extra)) && p('url') && e("testtask-cases-1-byModule-1.html"); // 测试创建module 1 的TestTasklink
 r($tree->createTestTaskLinkTest(2, $extra)) && p('url') && e("testtask-cases-1-byModule-2.html"); // 测试创建module 2 的TestTasklink

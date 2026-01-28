@@ -16,11 +16,11 @@ cid=15087
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/aiapp.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$aiappTest = new aiappTest();
+$aiappTest = new aiappModelTest();
 
 r($aiappTest->getUsedCategoryArrayTest()) && p() && e('Array');
 r($aiappTest->getUsedCategoryArrayTest()) && p() && e('(');

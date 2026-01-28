@@ -16,13 +16,13 @@ cid=15098
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('apistruct_spec')->loadYaml('apistruct_spec', false, 2)->gen(0);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r($apiTest->createDemoStructSpecTest('16.0', 'admin')) && p() && e('1');
 r($apiTest->createDemoStructSpecTest('16.0', 'user')) && p() && e('1');

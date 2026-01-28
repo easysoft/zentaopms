@@ -16,7 +16,7 @@ cid=17764
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 1. 准备测试数据
 zendata('object')->loadYaml('object_buildpointdataforgantt', false, 2)->gen(5);
@@ -33,7 +33,7 @@ $project->gen(3);
 su('admin');
 
 // 3. 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanTaoTest();
 
 // 4. 构建测试评审点对象
 $normalPoint = new stdclass();

@@ -49,31 +49,6 @@ $handler = static function ()
     /* Check the request is getconfig or not. */
     if(isset($_GET['mode']) and $_GET['mode'] == 'getconfig') die(helper::removeUTF8Bom($app->exportConfig()));
 
-    /* Remove install.php and upgrade.php. */
-    if(file_exists('install.php') or file_exists('upgrade.php'))
-    {
-        if(!empty($config->inContainer) && !isset($_SESSION['installing']))
-        {
-            if(file_exists('install.php')) unlink('install.php');
-            if(file_exists('upgrade.php')) unlink('upgrade.php');
-        }
-        else
-        {
-            $undeletedFiles = array();
-            if(file_exists('install.php')) $undeletedFiles[] = '<strong style="color:#ed980f">install.php</strong>';
-            if(file_exists('upgrade.php')) $undeletedFiles[] = '<strong style="color:#ed980f">upgrade.php</strong>';
-            $wwwDir = dirname(__FILE__);
-            if($undeletedFiles)
-            {
-                echo "<html><head><meta charset='utf-8'></head>
-                    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>";
-                echo "<div style='margin-bottom:8px;'>安全起见，请删除 <strong style='color:#ed980f'>{$wwwDir}</strong> 目录下的 " . join(' 和 ', $undeletedFiles) . " 文件。</div>";
-                echo "<div>Please remove " . join(' and ', $undeletedFiles) . " under <strong style='color:#ed980f'>$wwwDir</strong> dir for security reason.</div>";
-                die("</td></tr></table></body></html>");
-            }
-        }
-    }
-
     if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->view = 'xhtml';
 
     try
@@ -86,6 +61,25 @@ $handler = static function ()
 
         $isClient = strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'uni-app') !== false;
         if($app->getViewType() != 'json' && session_id() != $app->sessionID && !$isClient) helper::restartSession($app->sessionID);
+
+        /* Remove install.php and upgrade.php. */
+        $wwwDir = dirname(__FILE__);
+        if(file_exists("{$wwwDir}/install.php") || file_exists("{$wwwDir}/upgrade.php"))
+        {
+            if(!empty($config->inContainer) && !isset($_SESSION['installing']))
+            {
+                if(file_exists('install.php')) unlink('install.php');
+                if(file_exists('upgrade.php')) unlink('upgrade.php');
+            }
+            else
+            {
+                if($app->getModuleName() != 'upgrade' && $app->getMethodName() != 'safedelete')
+                {
+                    $url = helper::createLink('upgrade', 'safeDelete');
+                    die(header("location: $url"));
+                }
+            }
+        }
 
         $app->loadModule();
     }

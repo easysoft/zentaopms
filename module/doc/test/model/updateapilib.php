@@ -29,7 +29,7 @@ cid=16157
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(2);
 zenData('user')->gen(5);
@@ -45,7 +45,7 @@ $updateDesc  = array('type' => 'project', 'product' => 0, 'project' => 11, 'name
 $noName      = array('type' => 'project', 'product' => 0, 'project' => 11, 'name' => '');
 $repeatName  = array('type' => 'project', 'product' => 0, 'project' => 11, 'name' => '修改api文档库');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->updateApiLibTest($ids[0], $openApilib))  && p('0:field,old,new;1:field,old,new;2:field,old,new') && e('name,项目接口库1,修改api文档库;baseUrl,~~,www.zentaopms.com;acl,default,custom'); // 正常修改接口库
 r($docTester->updateApiLibTest($ids[0], $updateUsers)) && p('1:field,old,new')                                 && e('users,admin,test1');                                                              // 修改users
 r($docTester->updateApiLibTest($ids[0], $noName))      && p('name:0')                                          && e('『库名称』不能为空。');                                                           // 修改名字为空

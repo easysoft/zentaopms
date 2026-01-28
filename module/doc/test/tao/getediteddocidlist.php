@@ -19,13 +19,13 @@ cid=16170
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('action')->loadYaml('action')->gen(30);
 zenData('user')->gen(5);
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 $docIdList = $docTester->getEditedDocIdListTest();
 
 r($docIdList[1])  && p() && e('1');  // 获取编辑过的文档ID列表

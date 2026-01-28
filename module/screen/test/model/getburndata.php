@@ -16,7 +16,7 @@ cid=18237
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 清空数据表
 global $tester;
@@ -49,7 +49,7 @@ foreach($executions as $execution) {
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r(count($screenTest->getBurnDataTest())) && p() && e('4');                           // 测试有进行中执行数据时返回数量
 r($screenTest->getBurnDataTest()) && p('10:name') && e('项目1--迭代1');              // 测试执行名称拼接格式

@@ -16,11 +16,11 @@ cid=16511
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->getPathOfImportedFileTest()) && p() && e('tmp/import');                    // 步骤1：正常获取导入路径
 r($file->getPathOfImportedFileEndsWithImportTest()) && p() && e('1');              // 步骤2：验证路径以import结尾

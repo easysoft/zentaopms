@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/personnel.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('program')->gen(3);
 zenData('user')->loadYaml('user')->gen(3);
@@ -26,7 +26,7 @@ cid=17319
 
 */
 
-$personnel = new personnelTest();
+$personnel = new personnelModelTest();
 
 $programID = array(1, 2, 10000);
 $account   = array('admin', 'dev1', 'dev2');

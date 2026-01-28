@@ -16,11 +16,11 @@ cid=17177
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricTaoTest();
 
 // 测试步骤1：day类型日期过滤
 $stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');

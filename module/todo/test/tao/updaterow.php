@@ -19,7 +19,7 @@ cid=19283
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备
 zendata('todo')->loadYaml('todo_updaterow', false, 2)->gen(10);
@@ -28,7 +28,7 @@ zendata('todo')->loadYaml('todo_updaterow', false, 2)->gen(10);
 su('admin');
 
 // 4. 创建测试实例
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 5. 准备测试数据对象
 $validCustomTodo = new stdclass();

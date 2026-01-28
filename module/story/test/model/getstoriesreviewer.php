@@ -16,7 +16,7 @@ cid=18559
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('1-5');
@@ -37,7 +37,7 @@ $user->gen(10);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getStoriesReviewerTest(1)) && p() && e('A:管理员');
 r($storyTest->getStoriesReviewerTest(2)) && p() && e('U:用户1');

@@ -16,7 +16,7 @@ cid=18172
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('todo')->loadYaml('todo')->gen(50);
 zenData('bug')->loadYaml('bug')->gen(20);
@@ -27,7 +27,7 @@ su('admin');
 
 $userType = array('admin', 'dev', 'test', 'user', 'pm', 'po');
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getUserTodosTest($userType[0])) && p() && e('admin:3;');                 // 测试获取用户待办数
 r($report->getUserTodosTest($userType[1])) && p() && e('dev2:1;dev3:2;');           // 测试获取用户待办数

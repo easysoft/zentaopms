@@ -97,7 +97,7 @@ class fileSelector extends wg
             $this->setProp('name', $name . '[]');
         }
 
-        if($this->hasProp('defaultFiles') && $this->hasProp('extra'))
+        if($this->prop('defaultFiles') && $this->prop('extra'))
         {
             $defaultFiles = array();
             foreach($this->prop('defaultFiles') as $file)

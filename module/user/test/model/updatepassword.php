@@ -25,7 +25,7 @@ cid=19660
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
 
@@ -33,7 +33,7 @@ su('admin');
 
 global $app;
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 /* 安全配置相关功能在 checkPassword 单元测试用例中有详细测试，此处重置为默认值以减少对当前用例的影响。*/
 unset($config->safe->mode);

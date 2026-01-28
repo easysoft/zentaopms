@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试executionModel->getSwitcher();
@@ -32,7 +32,7 @@ $executionIdList = array(101, 106, 124);
 $moduleList      = array('execution', 'project');
 $methodList      = array('index', 'create', 'task', 'view');
 
-$executionTester = new executionTest();
+$executionTester = new executionModelTest();
 r($executionTester->getSwitcherTest($executionIdList[0], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置迭代仪表盘1.5级下拉
 r($executionTester->getSwitcherTest($executionIdList[1], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置阶段仪表盘1.5级下拉
 r($executionTester->getSwitcherTest($executionIdList[2], $moduleList[0], $methodList[0])) && p() && e('0'); // 测试设置看板仪表盘1.5级下拉

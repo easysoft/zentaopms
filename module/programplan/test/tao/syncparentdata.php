@@ -19,7 +19,7 @@ cid=17783
 
 */
 include dirname(__FILE__, 5). '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('project')->gen(8)->fixPath();
 zenData('task')->loadYaml('task')->gen(10);

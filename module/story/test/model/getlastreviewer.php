@@ -18,7 +18,7 @@ cid=18540
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $action = zenData('action');
@@ -40,7 +40,7 @@ $history->gen(12);
 su('admin');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：不存在的需求ID查询
 r($storyTest->getLastReviewerTest(0)) && p() && e('0');

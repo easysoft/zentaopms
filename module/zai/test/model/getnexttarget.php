@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(1);
 zenData('bug')->gen(1);
@@ -23,7 +23,7 @@ cid=19772
 */
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 测试不存在的同步类型 */
 r($zai->getNextTargetTest('invalidtype', 1)) && p() && e('0'); // 测试不存在的同步类型

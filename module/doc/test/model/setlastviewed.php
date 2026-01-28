@@ -16,11 +16,11 @@ cid=16152
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 r($docTest->setLastViewedTest(array('lastViewedSpace' => '1', 'lastViewedSpaceHome' => '2', 'lastViewedLib' => '3'))) && p() && e('1');
 r($docTest->setLastViewedTest(array('lastViewedSpace' => '4', 'otherKey' => 'ignore'))) && p() && e('1');

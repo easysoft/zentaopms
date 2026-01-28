@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('treescene')->gen('20');
 zenData('user')->gen('1');
@@ -71,7 +71,7 @@ $scenes = $tester->dao->update(TABLE_SCENE)->set("path= replace(`path`,',0,', ',
 $sceneList = array(array(1,2,3), array(9,10,14), array(15,16,17), array(18,19,20));
 $fullPath  = array(true, false);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getScenesNameTest($sceneList[0])) && p('1,2,3')    && e('/这个是测试场景1,/这个是测试场景1/这个是测试场景2,/这个是测试场景3');                                       // 获取场景 1 2 3 的名称
 r($testcase->getScenesNameTest($sceneList[1])) && p('9,10,14')  && e('/这个是测试场景9,/这个是测试场景10,/这个是测试场景11/这个是测试场景12/这个是测试场景13/这个是测试场景14');  // 获取场景 9 10 14 的名称

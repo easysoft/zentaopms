@@ -21,7 +21,7 @@ cid=15862
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 创建测试所需的临时表
 global $tester;
@@ -104,7 +104,7 @@ $app->session->set('jiraRelation', json_encode(array()));
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 步骤1：空数组输入边界值测试
 r($convertTest->importJiraProjectTest(array())) && p() && e('true');

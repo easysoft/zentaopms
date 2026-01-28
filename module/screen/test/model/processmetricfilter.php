@@ -16,11 +16,11 @@ cid=18278
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->processMetricFilterTest(array(array('field' => 'date', 'default' => array(1609459200000, 1640995200000))), 'day')) && p('dateBegin') && e('2021-01-01');
 r($screenTest->processMetricFilterTest(array(array('field' => 'product', 'default' => array(1))), 'day')) && p('scope') && e('1');

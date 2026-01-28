@@ -18,13 +18,13 @@ cid=19273
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('todo');
 
 su('admin');
 
-$todoTest = new todoTest();
+$todoTest = new todoTaoTest();
 
 // 测试步骤1：按天间隔且无lastCycle数据，今天与开始日期间隔等于配置天数
 $todo1 = new stdclass();

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
@@ -85,7 +85,7 @@ $actionList = array('confirmchange', 'confirmstorychange', 'createbug', 'review'
 $needReview  = array('needReview'  => 1);
 $forceReview = array('forceReview' => 1);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->isClickableTest($actionList[0])) && p()  && e('0'); // 测试用例1，是否可以进行 confirmchange 操作
 r($testcase->isClickableTest($actionList[1])) && p()  && e('0'); // 测试用例1，是否可以进行 confirmstorychange 操作

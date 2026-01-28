@@ -16,7 +16,7 @@ cid=16850
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('job');
 $table->id->range('1-10');
@@ -28,7 +28,7 @@ $table->gen(10);
 
 su('admin');
 
-$jobTest = new jobTest();
+$jobTest = new jobModelTest();
 
 r(count($jobTest->getTriggerGroupTest('tag', array(1, 2)))) && p() && e('2');
 r(count($jobTest->getTriggerGroupTest('commit', array(1, 2, 3)))) && p() && e('2');

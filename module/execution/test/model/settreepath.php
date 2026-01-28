@@ -26,7 +26,7 @@ cid=16366
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-10');
@@ -40,7 +40,7 @@ $execution->gen(10);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r($executionTest->setTreePathTest(2)) && p('2:path,grade') && e(',1,2,,1');                    // 步骤1：父项目为project类型的stage设置TreePath
 r($executionTest->setTreePathTest(3)) && p('3:path,grade') && e(',1,2,3,,2');                  // 步骤2：父项目为stage类型的stage设置TreePath

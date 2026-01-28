@@ -13,11 +13,11 @@ cid=19525
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->program->range('0,1');
 $product->gen(10);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 r($upgrade->getNoMergedProductCountTest()) && p() && e('5');  //获取没有项目集的产品数量

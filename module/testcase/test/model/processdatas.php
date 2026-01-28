@@ -18,11 +18,11 @@ cid=19015
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 // 测试用例1: 单级步骤编号
 $data1 = array(

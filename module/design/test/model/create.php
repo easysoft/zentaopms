@@ -37,7 +37,7 @@ cid=15985
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('project')->gen(1);
 zenData('designspec')->gen(0);
@@ -61,7 +61,7 @@ $storyDesign  = array('product' => $products[1], 'story' => $stories[1], 'type' 
 $noTypeDesign = array('product' => $products[0], 'story' => $stories[0], 'type' => $types[4], 'name' => '没有类型设计');
 $noNameDesign = array('product' => $products[1], 'story' => $stories[0], 'type' => $types[1], 'name' => '');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->createTest($hldsDesign))   && p('name,project,product,type') && e('概要设计,11,1,HLDS');     // 创建概要设计
 r($designTester->createTest($ddsDesign))    && p('name,project,product,type') && e('详细设计,11,1,DDS');      // 创建详细设计
 r($designTester->createTest($dbdsDesign))   && p('name,project,product,type') && e('数据库设计,11,1,DBDS');   // 创建数据库设计

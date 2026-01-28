@@ -889,12 +889,29 @@ class storyModel extends model
 
         if($story->product != $oldStory->product || $story->branch != $oldStory->branch)
         {
+            $this->loadModel('productplan');
+            $oldPlans = explode(',', $oldStory->plan);
+            foreach($oldPlans as $oldPlanID)
+            {
+                if(!$oldPlanID) continue;
+                $this->productplan->unlinkStory($storyID, (int)$oldPlanID);
+            }
+
             $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();
-            $childStories = $this->getAllChildId($storyID, false);
-            $story->id    = $storyID;
-            foreach($childStories as $childStoryID)
+            $childStories      = $this->getAllChildId($storyID, false);
+            $childStoryAndPlan = $this->dao->select('id,plan')->from(TABLE_STORY)->where('id')->in($childStories)->fetchPairs();
+            $story->id         = $storyID;
+            foreach($childStoryAndPlan as $childStoryID => $planIDList)
             {
                 $this->updateStoryProduct($childStoryID, $story, $story->product);
+
+                /* 切换产品后，移除子需求与原产品下计划的关联。*/
+                $plans = explode(',', $planIDList);
+                foreach($plans as $planID)
+                {
+                    if(!$planID) continue;
+                    $this->productplan->unlinkStory($childStoryID, (int)$planID);
+                }
             }
         }
         if($story->grade != $oldStory->grade) $this->syncGrade($oldStory, $story);
@@ -1002,6 +1019,7 @@ class storyModel extends model
                  ->set('product')->eq($parent->product)
                  ->set('branch')->eq($parent->branch)
                  ->set('module')->eq(0)
+                 ->set('plan')->eq('')
                  ->set('root')->eq($parent->id)
                  ->set('path')->eq($childPath)
                  ->where('id')->eq($storyID)
@@ -1587,7 +1605,7 @@ class storyModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldStory, $story);
-        if($changes)
+        if($changes && empty($postData->retractedReason))
         {
             $preStatus = $oldStory->status;
             $isChanged = !empty($oldStory->changedBy) ? true : false;
@@ -2452,7 +2470,9 @@ class storyModel extends model
     public function closeAllChildren(int $storyID, string $closedReason)
     {
         $now         = helper::now();
-        $childIdList = $this->getAllChildId($storyID, false);
+        $childIdList = $this->getAllChildId($storyID, false, false, 'closed');
+        if(empty($childIdList)) return;
+
         $childList   = $this->getByList($childIdList);
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
@@ -2484,10 +2504,11 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  bool   $includeSelf
      * @param  bool   $sameType true|false
+     * @param  string $excludeStatus
      * @access public
      * @return array
      */
-    public function getAllChildId(int $storyID, bool $includeSelf = true, bool $sameType = false): array
+    public function getAllChildId(int $storyID, bool $includeSelf = true, bool $sameType = false, string $excludeStatus = ''): array
     {
         if($storyID == 0) return array();
 
@@ -2499,6 +2520,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($storyID)->fi()
             ->beginIF($sameType)->andWhere('type')->eq($story->type)->fi()
+            ->beginIF(!empty($excludeStatus))->andWhere('status')->ne($excludeStatus)->fi()
             ->fetchPairs();
 
         return array_keys($children);
@@ -2886,7 +2908,7 @@ class storyModel extends model
             ->fetchPairs();
 
         $review = $this->storyTao->getRevertStoryIdList((int)$productID);
-        $sql = str_replace(array('`product`', '`version`', '`branch`'), array('t1.`product`', 't1.`version`', 't1.`branch`'), $sql);
+        $sql    = str_replace(array('`product`', '`version`', '`branch`', '`id`'), array('t1.`product`', 't1.`version`', 't1.`branch`', 't1.`id`'), $sql);
         if(strpos($sql, 'result') !== false)
         {
             if(strpos($sql, 'revert') !== false)

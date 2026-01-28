@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanlane')->gen(200);
@@ -41,7 +41,7 @@ cid=16930
 $regionsList = array(array(1,2,3), array(4,5,6), array(7,8,9), array(10,11,12), array(13,14,15), array(1000001));
 $type        = array('bug', 'task', 'story');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getLaneGroupByRegionsTest($regionsList[0]))           && p() && e('6'); // 测试获取区域101,102,103的泳道
 r($kanban->getLaneGroupByRegionsTest($regionsList[0], $type[0])) && p() && e('0'); // 测试获取区域101,102,103的bug泳道

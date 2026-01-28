@@ -18,7 +18,7 @@ cid=18552
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $storyTable = zenData('story');
@@ -34,7 +34,7 @@ $storyTable->gen(20);
 su('admin');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getRequirementsTest(1)) && p('1,2,3') && e('需求1,需求2,需求3'); // 步骤1：获取产品1的活跃需求列表
 r($storyTest->getRequirementsTest(100)) && p() && e('0'); // 步骤2：获取不存在产品的需求列表返回空

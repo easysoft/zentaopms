@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanban')->gen(10);
@@ -49,7 +49,7 @@ $kanban3 = $tester->kanban->getById(8);
 $kanban4 = $tester->kanban->getById(9);
 $kanban5 = $tester->kanban->getById(10);
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->copyRegionsTest($kanban1, 1,  'kanban')) && p('6')  && e('默认区域'); // 复制默认区域1，查看相关字段
 r($kanban->copyRegionsTest($kanban2, 2,  'kanban')) && p('7')  && e('默认区域'); // 复制默认区域2，查看相关字段

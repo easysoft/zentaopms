@@ -21,7 +21,7 @@ cid=15857
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 创建测试所需的数据库表
 global $tester;
@@ -62,7 +62,7 @@ if(!defined('TABLE_ACTION')) define('TABLE_ACTION', '`zt_action`');
 su('admin');
 
 // 6. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 7. 执行测试步骤 - 每个测试用例必须包含至少5个测试步骤
 r($convertTest->importJiraChangeItemTest(array())) && p() && e('true'); // 步骤1：导入空数组数据

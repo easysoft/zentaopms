@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanregion')->gen(0);
@@ -42,7 +42,7 @@ cid=16889
 
 */
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 $regionIDList = array('1', '2', '3', '4', '5');
 $groupIDList  = array('1', '2', '3', '4', '5');

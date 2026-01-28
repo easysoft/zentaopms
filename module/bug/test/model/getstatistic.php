@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -26,7 +26,7 @@ zenData('bug')->loadYaml('bug_product')->gen(100);
 
 $productIDList = array('1', '11', '31', '61', '91', '10001');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 
 r($bug->getStatisticTest())                  && p('openedDate:num')   && e('0'); // 查询product id为0创建日期在今天的统计信息
 r($bug->getStatisticTest($productIDList[0])) && p('openedDate:num')   && e('1'); // 查询product id为1创建日期在今天的统计信息

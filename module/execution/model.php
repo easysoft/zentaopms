@@ -1162,8 +1162,11 @@ class executionModel extends model
         $projectModel = '';
         if($projectID)
         {
-            $projectModel = $this->dao->select('model')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('model');
+            $projectInfo  = $this->dao->select('model,isTpl')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
+            $projectModel = isset($projectInfo->model) ? $projectInfo->model : '';
             $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
+
+            if(!empty($projectInfo->isTpl)) $this->dao->filterTpl('never');
 
             /* Waterfall execution, when all phases are closed, in reverse order of date. */
             if(in_array($projectModel, array('waterfall', 'waterfallplus')))
@@ -1511,6 +1514,7 @@ class executionModel extends model
      */
     public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', ?object $pager = null): array
     {
+        if(strpos($orderBy, 'nameCol') !== false) $orderBy = str_replace('nameCol', 'name', $orderBy);
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
@@ -4709,7 +4713,7 @@ class executionModel extends model
                     $normalPlans[$plan->id] = $plan;
                 }
             }
-            $plans = array_merge($normalPlans, $pendPlans);
+            $plans = arrayUnion($normalPlans, $pendPlans);
         }
 
         $plans        = $this->loadModel('productplan')->reorder4Children($plans);
@@ -5462,26 +5466,19 @@ class executionModel extends model
     {
         $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
         $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
-        $deliverables = $this->dao->select('t1.template,t1.name,t2.required,t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+        $deliverables = $this->dao->select('t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
             ->andWhere('t1.status')->eq('enabled')
+            ->andWhere('t2.required')->eq('1')
             ->andWhere('t2.stage')->eq($stageType)
-            ->fetchAll('id');
+            ->fetchPairs();
 
         if(empty($deliverables)) return true;
 
-        $executionDeliverables = $execution->deliverable ? json_decode($execution->deliverable, true) : array();
+        $countExecutionDeliverables = $this->dao->select('count(*) as count')->from(TABLE_PROJECTDELIVERABLE)->where('project')->eq($execution->project)->andWhere('deliverable')->in($deliverables)->fetch('count');
 
-        foreach($deliverables as $id => $deliverable)
-        {
-            if(empty($deliverable->required)) continue;
-
-            if(!isset($executionDeliverables[$id])) return false;
-            if(empty($executionDeliverables[$id]['fileID']) && empty($executionDeliverables[$id]['doc'])) return false;
-        }
-
-        return true;
+        return $countExecutionDeliverables >= count($deliverables);
     }
 }

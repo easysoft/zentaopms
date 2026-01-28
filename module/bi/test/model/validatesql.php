@@ -16,10 +16,10 @@ cid=15219
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 创建测试实例
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->validateSqlTest('SELECT id, account FROM zt_user LIMIT 1')) && p() && e('1'); // 正常简单SELECT语句
 r($biTest->validateSqlTest('')) && p() && e('请输入一条正确的SQL语句'); // 空SQL语句

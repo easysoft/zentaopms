@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -18,7 +18,7 @@ cid=18042
 
 */
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 $paths = array('extention', '5', 'module/repo/js', 'abc.php');
 

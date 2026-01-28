@@ -22,14 +22,14 @@ cid=19352
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('module')->loadYaml('module_createmanagelink', false, 2)->gen(10);
 zendata('user')->loadYaml('user_createmanagelink', false, 2)->gen(10);
 
 su('admin');
 
-$treeTest = new treeTest();
+$treeTest = new treeModelTest();
 
 // 测试步骤1：创建story类型的管理链接
 $module1 = new stdclass();

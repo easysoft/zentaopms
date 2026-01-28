@@ -16,11 +16,11 @@ cid=16537
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 // 准备测试文件路径
 $testDir = dirname(__FILE__) . '/temp/';

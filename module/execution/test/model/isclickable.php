@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -49,7 +49,7 @@ $closedExecution->status    = 'closed';
 
 $actionList = array('start', 'close', 'suspend', 'putoff', 'activate', 'delete');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->isClickableTest($waitExecution,      $actionList[0])) && p() && e('检查通过');   // wait状态执行start按钮检查
 r($execution->isClickableTest($waitExecution,      $actionList[1])) && p() && e('检查通过');   // wait状态执行close按钮检查
 r($execution->isClickableTest($waitExecution,      $actionList[2])) && p() && e('检查通过');   // wait状态执行suspend按钮检查

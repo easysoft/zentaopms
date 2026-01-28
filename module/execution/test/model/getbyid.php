@@ -28,7 +28,7 @@ cid=16303
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备execution测试数据
 $execution = zenData('project');
@@ -68,7 +68,7 @@ $user->gen(10);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 // 测试步骤1：正常获取存在的执行信息
 r($executionTest->getByIDTest(3)) && p('name,type,status') && e('迭代1,sprint,doing');

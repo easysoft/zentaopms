@@ -16,7 +16,7 @@ cid=14920
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('company')->gen(1);
@@ -24,7 +24,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$actionTest = new actionTest();
+$actionTest = new actionModelTest();
 
 // 步骤1：空历史记录测试
 r($actionTest->printChangesTest('task', 1, array())) && p() && e('0');

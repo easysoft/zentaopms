@@ -16,7 +16,7 @@ cid=15001
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_miniprogram');
 $table->id->range('1-6');
@@ -37,7 +37,7 @@ $table->gen(6);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->checkDuplicatedAppNameTest('测试应用1', 5)) && p() && e('1');
 r($aiTest->checkDuplicatedAppNameTest('不存在的应用', 10)) && p() && e('0');

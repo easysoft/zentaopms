@@ -17,9 +17,9 @@ cid=17032
 
 try {
     include dirname(__FILE__, 5) . '/test/lib/init.php';
-    include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/tao.class.php';
     su('admin');
-    $mailTest = new mailTest();
+    $mailTest = new mailTaoTest();
 } catch(Exception $e) {
     // 如果初始化失败，使用简化的测试类
     class mailTest
@@ -39,7 +39,7 @@ try {
             return $images;
         }
     }
-    $mailTest = new mailTest();
+    $mailTest = new mailTaoTest();
 }
 
 // 测试步骤1：正常路径数组输入

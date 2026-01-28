@@ -28,7 +28,7 @@ cid=16495
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $pngFile = new stdclass();
@@ -66,7 +66,7 @@ $pptFile->title     = '这是一个文件名称8.ppt';
 $pptFile->size      = '37248';
 $pptFile->tmpname   = '/tmp/php7bhfki';
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->compressImageTest((array)$pngFile)) && p('extension,title,size') && e('png,file.png,2038');               // 测试上传 png 文件
 r($file->compressImageTest((array)$jpgFile)) && p('extension,title,size') && e('jpg,file.jpg,1888573');            // 测试上传 jpg 文件

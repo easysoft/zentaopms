@@ -16,11 +16,11 @@ cid=17087
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 r($metricTest->getDatasetTest()) && p('className') && e('dataset');
 r($metricTest->getDatasetTest()) && p('dao') && e('object');

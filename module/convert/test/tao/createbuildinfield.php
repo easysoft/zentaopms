@@ -16,7 +16,7 @@ cid=15833
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('workflowfield')->gen(0);
 zenData('workflow')->gen(0);
@@ -27,7 +27,7 @@ if(!isset($config->workflowfield->numberTypes)) $config->workflowfield->numberTy
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->createBuildinFieldTest('testmodule', array(), array(), false)) && p() && e('1');
 r($convertTest->createBuildinFieldTest('testmodule', array(), array(), true)) && p() && e('1');

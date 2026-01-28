@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('moduletreescene')->gen('20');
 zenData('branch')->gen('10');
@@ -61,7 +61,7 @@ $branchIdList  = array('all', '0', 1);
 $currentScene  = array(0, 6, 16);
 $emptyMenu     = array(false, true);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getSceneMenuTest($productIdList[0], $moduleIdList[0], $sceneIdList[0], $branchIdList[0], $currentScene[0], $emptyMenu[0])) && p() && e('/,/场景1,/场景1/场景2,/场景3,/场景4,/场景5,/场景6,/场景6/场景7,/场景6/场景7/场景8,/场景9,/场景10');    // 测试获取产品 1 模块 0 起始场景 0 分支 all 当前场景 0 无空值 的场景数组
 r($testcase->getSceneMenuTest($productIdList[0], $moduleIdList[1], $sceneIdList[0], $branchIdList[0], $currentScene[0], $emptyMenu[0])) && p() && e('/,/场景6,/场景6/场景7,/场景6/场景7/场景8,/场景9,/场景10');                                             // 测试获取产品 1 模块 1 起始场景 0 分支 all 当前场景 0 无空值 的场景数组

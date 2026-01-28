@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 // 准备测试数据
@@ -67,7 +67,7 @@ cid=15393
 
 */
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r($bugTest->getRelatedObjectsTest('product', 'id,name')) && p('count,hasEmpty,hasZero') && e('4,1,1'); // 测试product对象返回关联对象列表
 r($bugTest->getRelatedObjectsTest('story', 'id,title')) && p('count,hasEmpty,hasZero') && e('4,1,1'); // 测试story对象返回关联对象列表

@@ -24,11 +24,11 @@ cid=15167
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->getDuckdbBinConfigTest()) && p('file,path') && e('duckdb,/opt/zbox/bin/'); // 测试正常情况下返回完整配置数组
 r($biTest->getDuckdbBinConfigTest()) && p('extension') && e('mysql_scanner.duckdb_extension'); // 测试返回配置包含扩展字段

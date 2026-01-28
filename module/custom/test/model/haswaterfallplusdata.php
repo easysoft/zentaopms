@@ -16,9 +16,9 @@ cid=15917
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$customTest = new customTest();
+$customTest = new customModelTest();
 
 // 步骤1：测试系统中无任何项目数据的情况
 zenData('project')->gen(0);

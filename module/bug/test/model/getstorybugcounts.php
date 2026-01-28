@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(400);
 
@@ -24,7 +24,7 @@ pid=1
 $storyIDList = array('2', '6', '10', '14', '18', '22', '1000001');
 $executionID = '101';
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 $noExecution  = $bug->getStoryBugCountsTest($storyIDList);
 $hasExecution = $bug->getStoryBugCountsTest($storyIDList, $executionID);
 

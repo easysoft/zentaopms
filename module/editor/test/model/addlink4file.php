@@ -44,11 +44,11 @@ cid=16228
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$editor = new editorTest();
+$editor = new editorModelTest();
 
 r($editor->addLink4FileViewTest()) && p('hasOverrideLink,hasNewHookLink,textMatch,idLength') && e('1,1,1,32'); // 测试view目录下文件的链接生成
 r($editor->addLink4FileControlTest()) && p('hasExtendControlLink,hasApiLink,actionsCount') && e('1,1,2'); // 测试control.php下方法的链接生成

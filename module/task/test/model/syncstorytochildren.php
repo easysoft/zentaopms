@@ -15,7 +15,7 @@ cid=18845
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -43,7 +43,7 @@ $task5 = new stdclass();
 $task5->id    = 11;
 $task5->story = 25;
 
-$task = new taskTest();
+$task = new taskModelTest();
 
 r($task->syncStoryToChildrenTest($task1)) && p() && e('6:1;7:0'); // 同步任务 id 1 的需求 2 到其未关联需求的子任务
 r($task->syncStoryToChildrenTest($task2)) && p() && e('8:2;9:2'); // 同步任务 id 2 的需求 3 到其未关联需求的子任务

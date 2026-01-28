@@ -18,7 +18,7 @@ cid=18618
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('storyspec')->gen(0);
@@ -33,7 +33,7 @@ $data->verify  = 'test verify';
 $data->version = 1;
 r($storyModel->doCreateSpec(0, $data)) && p() && e('0'); // 不传入任何数据。
 
-$story     = new storyTest();
+$story     = new storyTaoTest();
 $storySpec = $story->doCreateSpecTest(10, $data, array(1 => '1.png', 2 => '2.png'));
 $storySpec = array_shift($storySpec);
 $storySpec->files = str_replace(',', ':', $storySpec->files);

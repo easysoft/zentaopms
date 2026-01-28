@@ -23,10 +23,10 @@ cid=16726
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$group = new groupTest();
+$group = new groupModelTest();
 
 $programs1   = array('program' => array(2), 'project' => array(),  'product' => array(),  'execution' => array(),  'accounts' => array('user1'));
 $products1   = array('program' => array(),  'project' => array(),  'product' => array(2), 'execution' => array(),  'accounts' => array('user1'));

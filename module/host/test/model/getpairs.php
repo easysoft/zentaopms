@@ -16,7 +16,7 @@ cid=16757
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/host.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('host');
 $table->id->range('1-10');
@@ -36,7 +36,7 @@ $moduleTable->gen(5);
 
 su('admin');
 
-$hostTest = new hostTest();
+$hostTest = new hostModelTest();
 
 r(count($hostTest->getPairsTest())) && p() && e('10'); // 步骤1：不带参数获取所有主机
 r(count($hostTest->getPairsTest('1'))) && p() && e('3'); // 步骤2：根据模块ID为1获取主机

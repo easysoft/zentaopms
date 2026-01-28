@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -77,7 +77,7 @@ global $app;
 include($app->getModuleRoot() . '/repo/control.php');
 $app->control = new repo();
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(1);
 r($result) && p('status,consumed,left') && e('doing,4,3'); //开始任务

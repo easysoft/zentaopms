@@ -28,7 +28,7 @@ cid=18472
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('productplan')->gen(0);
@@ -41,7 +41,7 @@ zenData('projectstory')->gen(0);
 zenData('planstory')->gen(0);
 
 $now   = helper::now();
-$story = new storyTest();
+$story = new storyModelTest();
 $stories = array();
 $stories['title']      = array(1 => '测试需求1', 2 => '测试需求2', 3 => '测试需求3');
 $stories['pri']        = array(1 => 1, 2 => 2, 3 => 3);

@@ -28,7 +28,7 @@ cid=19753
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zahost.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $action = array('delete', 'browseImage', 'cancelDownload', 'downloadImage');
@@ -37,7 +37,7 @@ $object = new stdclass();
 $object->canDelete = true;
 $object->from      = '';
 
-$zahost = new zahostTest();
+$zahost = new zahostModelTest();
 r($zahost->isClickable($object, $action[0])) && p() && e('1');  //测试是否可以删除
 
 $object->status = 'wait';

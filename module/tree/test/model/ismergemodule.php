@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $product = zenData('product');
@@ -30,7 +30,7 @@ cid=19388
 $root = array(1, 2, 3, 4);
 $type = array('bug', 'case', 'task');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->isMergeModuleTest($root[0], $type[0])) && p() && e('2'); // 测试检查root 1 type bug 合并模块版本
 r($tree->isMergeModuleTest($root[1], $type[0])) && p() && e('1'); // 测试检查root 2 type bug 合并模块版本

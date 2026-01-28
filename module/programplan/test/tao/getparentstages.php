@@ -18,7 +18,7 @@ cid=17769
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据
 zenData('project')->loadYaml('project')->gen(10);
@@ -28,7 +28,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
 su('admin');
 
 // 创建测试实例
-$programplanTest = new programplanTest();
+$programplanTest = new programplanTaoTest();
 
 r($programplanTest->getParentStagesTest(1, 10, 2)) && p('2') && e('执行1-1');             // 测试步骤1：正常情况查询
 r($programplanTest->getParentStagesTest(999, 10, 2)) && p() && e('0');                    // 测试步骤2：不存在的项目ID

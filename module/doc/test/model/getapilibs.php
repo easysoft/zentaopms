@@ -38,7 +38,7 @@ cid=16070
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(10);
 zenData('user')->gen(5);
@@ -48,7 +48,7 @@ $appendLibs  = array(0, 6);
 $objectTypes = array('', 'nolink', 'product', 'project');
 $objectIds   = array(0, 1, 11);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getApiLibsTest($appendLibs[0], $objectTypes[0], $objectIds[0])) && p('1:type,name') && e('api,项目接口库1');      // 获取全部的接口库
 r($docTester->getApiLibsTest($appendLibs[1], $objectTypes[0], $objectIds[0])) && p('6:type,name') && e('custom,自定义文档库6'); // 获取包括id=6的全部的接口库
 r($docTester->getApiLibsTest($appendLibs[0], $objectTypes[1], $objectIds[0])) && p()              && e('0');                    // 获取未关联产品、项目的接口库

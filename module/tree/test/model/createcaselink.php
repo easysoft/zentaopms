@@ -15,13 +15,13 @@ cid=19349
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
 
 global $app;
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 $extra = array('projectID' => '1');
 

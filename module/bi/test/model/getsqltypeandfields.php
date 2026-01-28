@@ -16,7 +16,7 @@ cid=15182
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $table = zenData('user');
@@ -27,7 +27,7 @@ $table->role->range('admin,dev{3},qa{3},pm{2},po{1}');
 $table->gen(10);
 
 su('admin');
-$biTest = new biTest();
+$biTest = new biModelTest();
 
 r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:id') && e('number');    // 步骤1：正常SQL语句解析，测试第一个元素id字段类型
 r($biTest->getSqlTypeAndFieldsTest('SELECT id, account FROM zt_user LIMIT 1', 'mysql')) && p('0:account') && e('string'); // 步骤2：正常SQL语句解析，测试第一个元素account字段类型

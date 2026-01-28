@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $task = zenData('task');
 $task->id->range('1-9');
@@ -34,7 +34,7 @@ cid=18864
 
 */
 
-$taskTester = new taskTest();
+$taskTester = new taskTaoTest();
 $allTaskIdList       = range(1, 9);
 $notParentTaskIdList = range(4, 9);
 $hasParentTaskIdList = array(1, 3, 4);

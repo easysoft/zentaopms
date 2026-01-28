@@ -28,7 +28,7 @@ cid=17285
 
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备 - 创建完整的测试数据环境
 zenData('project')->loadYaml('program')->gen(20);
@@ -63,7 +63,7 @@ $userGroupRelation->gen(10);
 // 测试准备
 global $tester;
 $tester->loadModel('program')->refreshStats(true);
-$my = new myTest();
+$my = new myModelTest();
 
 // 步骤1-4：管理员用户测试
 su('admin');

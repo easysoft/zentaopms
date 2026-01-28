@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(100);
@@ -32,7 +32,7 @@ $parentIDList = array('457', '468', '471', '100001');
 $regionIDList = array('1', '2', '3', '100001');
 $groupIDList  = array('1', '2', '3', '100001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getColumnsByFieldTest($fieldList[0], $parentIDList[0])) && p() && e('0'); // 测试获取parent 457的看板列数量
 r($kanban->getColumnsByFieldTest($fieldList[0], $parentIDList[1])) && p() && e('0'); // 测试获取parent 468的看板列数量

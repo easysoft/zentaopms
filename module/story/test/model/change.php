@@ -17,14 +17,14 @@ cid=18479
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->gen(30);
 zenData('storyspec')->gen(90);
 zenData('doc')->gen(30);
 
-$story  = new storyTest();
+$story  = new storyModelTest();
 
 $story->objectModel->config->requirement = $story->objectModel->config->story;
 

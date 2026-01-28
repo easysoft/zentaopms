@@ -158,7 +158,7 @@ if($isFromDoc || $isFromAI)
 }
 
 $linkParams = $rawMethod == 'groupcase' ? "productID=$productID&branch=$branch&groupBy=$groupBy&objectID=0&caseType=$caseType&browseType={key}" : "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
-if($app->tab == 'project' && $from != 'doc' && $from != 'ai') $linkParams = "projectID={$projectID}&$linkParams";
+if($app->tab == 'project' && $from != 'doc' && $from != 'ai' && $rawMethod != 'groupcase') $linkParams = "projectID={$projectID}&$linkParams";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
@@ -427,7 +427,7 @@ toolbar
 if($showSidebar)
 {
     $settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
-    $closeLink   = $isOnlyScene ? createLink('testcase', 'browseScene', "productID=$productID&branch=$branch&moduleID=0&orderBy=$orderBy") : createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+    $closeLink   = $isOnlyScene ? createLink('testcase', 'browseScene', "productID=$productID&branch=$branch&moduleID=0&orderBy=$orderBy") : createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=byModule&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
     sidebar
     (
         moduleMenu(set(array

@@ -12,9 +12,9 @@ cid=19518
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 zenData('project')->loadYaml('project_for_fix_path')->gen(5);
 

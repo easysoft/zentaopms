@@ -16,11 +16,11 @@ cid=16712
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 r($groupTest->getPrivsByParentsTest('my', '')) && p('my-index') && e('地盘仪表盘'); // 步骤1：获取 my 子集的权限
 r($groupTest->getPrivsByParentsTest('todo', '')) && p('todo-create') && e('添加待办'); // 步骤2：获取 todo 子集的权限

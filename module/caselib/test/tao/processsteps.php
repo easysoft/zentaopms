@@ -22,11 +22,11 @@ cid=15540
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$caselibTest = new caselibTest();
+$caselibTest = new caselibTaoTest();
 
 r($caselibTest->processStepsTest(array('登录系统', '创建项目', '验证结果'), array('step', 'step', 'step'), array('成功登录', '项目创建成功', '验证通过'))) && p('0:desc;1:desc;2:desc') && e('登录系统;创建项目;验证结果');
 r(count($caselibTest->processStepsTest(array('', '有效步骤', ''), array('step', 'step', 'step'), array('', '期望结果', '')))) && p() && e('1');

@@ -16,7 +16,7 @@ cid=15752
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $compile = zenData('compile');
 $compile->id->range('1-10');
@@ -30,7 +30,7 @@ $compile->gen(10);
 
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 r(count($compileTest->getUnexecutedListTest())) && p() && e('3'); // 步骤1：检查返回结果中未执行构建记录的数量
 r($compileTest->getUnexecutedListTest()) && p('0:name') && e('构建1'); // 步骤2：验证第一条未执行记录的name属性

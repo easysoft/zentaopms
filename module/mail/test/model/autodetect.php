@@ -20,11 +20,11 @@ cid=17003
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 r($mailTest->autoDetectTest('test@qq.com')) && p('host') && e('smtp.qq.com');        // 步骤1：正常QQ邮箱配置检测
 r($mailTest->autoDetectTest('test@163.com')) && p('host') && e('smtp.163.com');       // 步骤2：正常163邮箱配置检测

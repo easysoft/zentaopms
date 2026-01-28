@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(300);
 
@@ -34,7 +34,7 @@ cid=15397
 
 $storyIDList = array('2', '6', '10', '14', '18', '22', '1000001');
 
-$bug=new bugTest();
+$bug=new bugModelTest();
 r($bug->getStoryBugsTest($storyIDList[0])) && p() && e('BUG1,BUG101,BUG201'); // 测试获取关联需求ID为2的bug
 r($bug->getStoryBugsTest($storyIDList[1])) && p() && e('BUG2,BUG102,BUG202'); // 测试获取关联需求ID为6的bug
 r($bug->getStoryBugsTest($storyIDList[2])) && p() && e('BUG3,缺陷!()(){}|+=%^&*$#测试bug名称到底可以有多长！#￥%&*":.<>。?/（）;103,BUG203'); // 测试获取关联需求ID为10的bug

@@ -16,7 +16,7 @@ cid=18253
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('project')->loadYaml('project_getprojectstorytable', false, 2)->gen(10);
 zendata('projectstory')->loadYaml('projectstory_getprojectstorytable', false, 2)->gen(20);
@@ -25,7 +25,7 @@ zendata('action')->loadYaml('action_getprojectstorytable', false, 2)->gen(30);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 测试步骤1：正常年月和项目列表参数，返回数组长度
 $projectList = array(1 => 'Project 1', 2 => 'Project 2', 3 => 'Project 3');

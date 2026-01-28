@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->gen(50);
@@ -45,7 +45,7 @@ $objectID   = array('1', '26', '44', '4', '5');
 
 $actionList = array('sortlane', 'deletelane', 'splitcolumn', 'restorecolumn', 'archivecolumn', 'deletecolumn', 'sortColumn');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->isClickableTest($objectType[0], $objectID[0], $actionList[0])) && p() && e('2'); // 测试lane1 是否可以排序
 r($kanban->isClickableTest($objectType[0], $objectID[0], $actionList[1])) && p() && e('2'); // 测试lane1 是否可以删除

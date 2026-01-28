@@ -28,14 +28,14 @@ cid=19593
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->fails->range('5');
 $user->locked->range('`2023-01-10 14:34:12`');
 $user->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $_SESSION['loginFails']        = 5;
 $_SESSION['admin.loginLocked'] = '2023-01-10 14:34:12';

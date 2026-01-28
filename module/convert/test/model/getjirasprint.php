@@ -17,7 +17,7 @@ cid=15780
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录（选择合适角色）
 su('admin');
@@ -27,7 +27,7 @@ global $app;
 $app->session->set('jiraMethod', 'file'); // 使用file方法避免数据库连接问题
 
 // 4. 创建测试实例（变量名与模块名一致）
-$convertTest = new convertTest();
+$convertTest = new convertModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($convertTest->getJiraSprintTest(array('10001', '10002'))) && p() && e('0'); // 步骤1：正常项目列表，无API配置返回空数组显示为0

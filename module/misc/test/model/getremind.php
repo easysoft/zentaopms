@@ -17,13 +17,13 @@ cid=17213
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/misc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$miscTest = new miscTest();
+$miscTest = new miscModelTest();
 
 // 4. 测试步骤1：默认配置状态下的返回值
 r($miscTest->getRemindTest()) && p() && e('0'); // 步骤1：默认配置返回0

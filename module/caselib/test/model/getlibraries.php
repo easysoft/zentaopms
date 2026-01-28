@@ -26,7 +26,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/caselib.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $testsuite = zenData('testsuite');
 $testsuite->id->range('1-10');
@@ -41,7 +41,7 @@ zenData('user')->gen(1);
 
 su('admin');
 
-$caselib = new caselibTest();
+$caselib = new caselibModelTest();
 
 r($caselib->getLibrariesTest()) && p('1,2,3,4,5') && e('用例库1,用例库2,用例库3,用例库4,用例库5');  // 测试步骤1：有效用例库数据查询
 r(count($caselib->getLibrariesTest())) && p() && e('5');                                             // 测试步骤2：验证查询结果的数量
@@ -59,5 +59,5 @@ $emptyTestsuite->type->range('suite{3}');
 $emptyTestsuite->deleted->range('0{3}');
 $emptyTestsuite->gen(3);
 
-$emptyCaselib = new caselibTest();
+$emptyCaselib = new caselibModelTest();
 r($emptyCaselib->getLibrariesTest()) && p() && e('0');                                               // 测试步骤5：验证空结果处理

@@ -16,7 +16,7 @@ cid=19623
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(4);
 zenData('product')->gen(3);
@@ -39,7 +39,7 @@ $stakeholder->objectType->range('project');
 $stakeholder->user->range('user2,user4');
 $stakeholder->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 $emptyProducts = $userTest->getProductMembersTest(array());
 r(count($emptyProducts[0])) && p() && e(0); // 产品列表为空，返回空数组。

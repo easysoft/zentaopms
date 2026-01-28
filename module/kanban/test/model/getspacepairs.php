@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanspace')->gen(100);
@@ -33,7 +33,7 @@ cid=16946
 $userList   = array('admin', 'po16', 'test37', 'user25');
 $browseType = array('private', 'cooperation', 'public', 'involved');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getSpacePairsTest($userList[0], $browseType[0])) && p() && e('0');  // 查询用户可以看到的admin private的空间数量
 r($kanban->getSpacePairsTest($userList[0], $browseType[1])) && p() && e('34'); // 查询用户可以看到的admin cooperation的空间数量

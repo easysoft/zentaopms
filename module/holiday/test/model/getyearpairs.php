@@ -15,7 +15,7 @@ cid=16746
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 
@@ -24,7 +24,7 @@ zenData('user')->gen(1);
 
 su('admin');
 
-$holidayTest = new holidayTest();
+$holidayTest = new holidayModelTest();
 
 r($holidayTest->getYearPairsTest()) && p() && e('1');
 r($holidayTest->getYearPairsTestWithSpecificYear('2025')) && p() && e('2025');

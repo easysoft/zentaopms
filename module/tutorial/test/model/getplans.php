@@ -16,11 +16,11 @@ cid=19448
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r(count($tutorialTest->getPlansTest())) && p() && e(1); // 步骤1：正常调用返回数组长度为1
 r(array_keys($tutorialTest->getPlansTest())) && p('0') && e('1'); // 步骤2：验证数组键名为1

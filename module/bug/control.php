@@ -831,6 +831,7 @@ class bug extends control
             {
                 if(!empty($bug->assignedTo)) $bug->assignedDate = helper::now();
                 $bug->id = $this->bug->create($bug);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                 /* 批量创建后的一些其他操作。*/
                 /* Processing other operations after batch creation. */

@@ -15,14 +15,14 @@ cid=19622
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(10);
 su('admin');
 
 $userView = zenData('userview');
 $userView->gen(400);
 
-$user = new userTest();
+$user = new userModelTest();
 
 r($user->getParentStageAuthedUsersTest(0))   && p()         && e('0');      //传入阶段ID为0获取有权限的用户
 r($user->getParentStageAuthedUsersTest(1))   && p()         && e('0');      //传入一个阶段ID为1获取有权限的用户

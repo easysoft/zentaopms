@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(10);
@@ -39,7 +39,7 @@ $branch        = 0;
 $typeList      = array('all', 'needConfirm');
 $statusList    = array('wait', 'normal', 'blocked', 'investigate');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 $app->user->view->products = '1,2,3,4,5,6,7,8,9,10';
 

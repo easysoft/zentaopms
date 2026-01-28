@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/company.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('company')->gen(5);
@@ -20,7 +20,7 @@ cid=15731
 
 */
 
-$companyTest = new companyTest();
+$companyTest = new companyModelTest();
 
 r($companyTest->getByIDTest(1)) && p('name') && e('易软天创网络科技有限公司');
 r($companyTest->getByIDTest(0)) && p() && e('0');

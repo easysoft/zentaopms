@@ -441,7 +441,7 @@ class taskZen extends task
         }
 
         /* 获取模块和需求下拉数据。 Get module and story dropdown data. */
-        $showAllModule = !empty($this->config->execution->task->allModule) ? 'allModule' : '';
+        $showAllModule = !empty($this->config->execution->task->allModule) || $execution->type == 'kanban' ? 'allModule' : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($execution->id, 0, $showAllModule);
         $story         = $this->story->getByID($storyID);
         $stories       = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', $story ? $story->module : 0, 'short', 'active', 'story', false);

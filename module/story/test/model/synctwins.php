@@ -17,7 +17,7 @@ cid=18591
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->gen(20);
@@ -43,7 +43,7 @@ $changes = array();
 $changes[] = array('field' => 'pri', 'old' => '3', 'new' => '5', 'diff' => '');
 $changes[] = array('field' => 'estimate', 'old' => '10', 'new' => '100', 'diff' => '');
 
-$story = new storyTest();
+$story = new storyModelTest();
 $twins = $story->syncTwinsTest(5, '6,7', $changes);
 
 r($twins[0]) && p('id,pri,estimate') && e('6,5,100');

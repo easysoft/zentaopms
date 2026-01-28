@@ -20,14 +20,14 @@ cid=18487
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('story')->gen(0);
 zenData('storyspec')->gen(0);
 zenData('projectstory')->gen(0);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $story1               = new stdclass();
 $story1->title        = '测试需求1';
 $story1->pri          = '3';

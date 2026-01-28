@@ -14,7 +14,7 @@ cid=16539
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $testcase = zenData('case');
@@ -24,7 +24,7 @@ $testcase->fromCaseID->range('4,3,2,1');
 $testcase->fromCaseVersion->range('4,3,2,1');
 $testcase->gen(4);
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->updateTestcaseVersionTest(0)) && p() && e('0'); //检查用例ID = 0 用例 fromCaseVersion 字段是否改动
 r($file->updateTestcaseVersionTest(1)) && p() && e('1'); //检查用例ID = 1 用例 fromCaseVersion 字段是否改动

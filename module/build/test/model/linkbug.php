@@ -19,7 +19,7 @@ cid=15503
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $build = zenData('build')->loadYaml('build');
 $build->bugs->range('1-5');
@@ -32,7 +32,7 @@ $builds  = array(1, 2, 10);
 $bugs[0] = array(2, 3);
 $bugs[1] = array(5, 6);
 
-$buildTester = new buildTest();
+$buildTester = new buildModelTest();
 
 r($buildTester->linkBugTest($builds[0], $bugs[0])) && p('0:field;0:old;0:new', ';') && e('bugs;1;1,2,3'); // 测试版本1关联Bug2,3
 r($buildTester->linkBugTest($builds[1], $bugs[1])) && p('0:field;0:old;0:new', ';') && e('bugs;2;2,5,6'); // 测试版本2关联Bug5,6

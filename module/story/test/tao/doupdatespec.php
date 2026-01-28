@@ -37,7 +37,7 @@ cid=18623
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -57,7 +57,7 @@ $storySpec->files->range('``,1-10');
 $storySpec->version->range('1');
 $storySpec->gen(5);
 
-$storyTest = new storyTest();
+$storyTest = new storyTaoTest();
 
 $addedFiles[8] = 'aaa.png';
 $addedFiles[9] = 'bbb.png';

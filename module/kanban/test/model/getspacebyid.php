@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanspace')->gen(5);
@@ -42,7 +42,7 @@ cid=16944
 */
 $spaceIDList    = array('1', '2', '3', '4', '5', '10001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getSpaceByIdTest($spaceIDList[0])) && p('name,type,owner,status') && e('协作空间1,cooperation,po15,active'); // 测试查询空间1信息
 r($kanban->getSpaceByIdTest($spaceIDList[1])) && p('name,type,owner,status') && e('私有空间2,private,po16,active');     // 测试查询空间2信息

@@ -16,7 +16,7 @@ cid=15051
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
 $dao = $tester->dao;
@@ -82,7 +82,7 @@ $dao->insert(TABLE_AI_MINIPROGRAM)
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r($aiTest->getUniqueAppNameTest('独特应用名称')) && p() && e('独特应用名称');
 r($aiTest->getUniqueAppNameTest('重复名称')) && p() && e('重复名称_1_1');

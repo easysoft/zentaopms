@@ -16,13 +16,13 @@ cid=16460
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/extension.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 global $tester;
 $tester->loadModel('extension');
-$extensionTest = new extensionTest();
+$extensionTest = new extensionModelTest();
 
 r(count($extensionTest->getFilesFromPackageTest('testpkg1')))     && p() && e('0'); // 测试获取存在插件包testpkg1的文件列表
 r(count($extensionTest->getFilesFromPackageTest('nonexistent')))  && p() && e('0'); // 测试获取不存在插件包的文件列表

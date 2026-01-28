@@ -16,7 +16,7 @@ cid=17807
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据：手动插入项目数据避免zendata依赖问题
 global $tester;

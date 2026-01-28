@@ -16,11 +16,11 @@ cid=18722
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 // 步骤1：测试HTTPS协议且无用户名密码的情况（SVN客户端不存在时返回false）
 $repo = new stdclass();

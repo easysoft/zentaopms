@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $task = zenData('task');
 $task->id->range('1-5');
@@ -132,7 +132,7 @@ cid=18777
 
 */
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->computeMultipleHoursTest($oldTasks[0]))                                && p('id,assignedTo,status,estimate,left') && e('1,admin,doing,5.00,4.00');  // taskID 1 只有老task计算多人工时
 r($task->computeMultipleHoursTest($oldTasks[1]))                                && p('id,assignedTo,status,estimate,left') && e('2,user1,done,13.00,0.00');  // taskID 2 只有老task计算多人工时
 r($task->computeMultipleHoursTest($oldTasks[2]))                                && p('id,assignedTo,status,estimate,left') && e('3,admin,done,15.00,4.00');  // taskID 4 只有老task计算多人工时

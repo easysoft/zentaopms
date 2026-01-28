@@ -18,7 +18,7 @@ cid=15376
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 1. 准备测试数据
 zenData('bug')->loadYaml('getdataofopenedbugsperday/openeddate')->gen(10);
@@ -27,7 +27,7 @@ zenData('bug')->loadYaml('getdataofopenedbugsperday/openeddate')->gen(10);
 su('admin');
 
 // 3. 创建测试实例
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 // 4. 执行测试步骤（强制要求：至少5个测试步骤）
 r($bugTest->getDataOfOpenedBugsPerDayTest()) && p('0:name') && e('2023-01-01'); // 步骤1：验证第一天的日期格式

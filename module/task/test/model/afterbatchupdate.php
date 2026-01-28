@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('user')->gen(5);
@@ -52,7 +52,7 @@ $changeClosedBy      = array('id' => 13, 'status' => 'closed', 'closedBy' => 'ad
 $changeChildStatus   = array('id' => 14, 'status' => 'doing');
 $changeChildConsumed = array('id' => 15, 'status' => 'doing', 'consumed' => 1);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->afterBatchUpdateObject($taskIdList, $changeName))          && p() && e('1'); // 检查修改任务名称后的数据处理
 r($taskTester->afterBatchUpdateObject($taskIdList, $changeModule))        && p() && e('1'); // 检查修改任务模块后的数据处理
 r($taskTester->afterBatchUpdateObject($taskIdList, $changeType))          && p() && e('1'); // 检查修改任务类型后的数据处理

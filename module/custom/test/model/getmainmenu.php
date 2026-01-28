@@ -16,12 +16,12 @@ cid=15899
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 
 // 步骤1：测试默认参数情况
 $result1 = $customTester->getMainMenuTest();

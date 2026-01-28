@@ -17,10 +17,10 @@ cid=17006
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$mail = new mailTest();
+$mail = new mailModelTest();
 
 r($mail->getConfigByDetectingSMTPTest('qq.com',     'testuser', 465)) && p('host')     && e('smtp.qq.com'); // 测试步骤1：465端口SSL配置检测
 r($mail->getConfigByDetectingSMTPTest('qq.com',     'testuser', 25))  && p('secure')   && e('0');           // 测试步骤2：25端口普通配置检测

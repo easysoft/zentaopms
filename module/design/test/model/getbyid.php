@@ -24,7 +24,7 @@ cid=15987
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(3);
 zenData('file')->gen(0);
@@ -34,7 +34,7 @@ zenData('relation')->loadYaml('relation')->gen(5);
 
 $idList = array(0, 3, 4);
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->getByIDTest($idList[0])) && p()                                 && e('0');             // 获取ID=0的设计信息
 r($designTester->getByIDTest($idList[1])) && p('project,product,name,desc')      && e('60,1,设计3,~~'); // 获取ID=3的设计信息
 r($designTester->getByIDTest($idList[2])) && p()                                 && e('0');             // 获取ID不存在的设计信息

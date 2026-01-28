@@ -21,7 +21,7 @@ cid=18513
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据：创建不同版本的需求
 $story = zenData('story');
@@ -33,7 +33,7 @@ $story->gen(25);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 设置会话条件
 $_SESSION['storyOnlyCondition']  = true;

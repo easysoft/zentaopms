@@ -23,11 +23,11 @@ cid=16020
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 
 // 步骤1：测试空数组输入
 r($devTester->sortMenusTest(array())) && p() && e('0');

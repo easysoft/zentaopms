@@ -16,7 +16,7 @@ cid=18461
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // zendata数据准备
 $story = zenData('story');
@@ -29,7 +29,7 @@ zenData('product')->gen(1);
 su('admin');
 
 // 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：输入单个需求 - 验证基本功能
 $singleStory = array(1 => '单个需求测试');

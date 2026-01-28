@@ -16,7 +16,7 @@ cid=16168
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // zendata数据准备（即使不需要，也保持一致性）
 $table = zenData('doc');
@@ -30,7 +30,7 @@ $table->gen(10);
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docTaoTest();
 
 // 测试步骤1：正常文档过滤
 $normalDocs = array(

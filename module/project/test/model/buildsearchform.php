@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $project = zenData('project');
 $project->id->range('1-5');
@@ -43,7 +43,7 @@ cid=17803
 
 $queryIDList = array('0', '1', '2', '3', '4');
 
-$project = new projectTest();
+$project = new projectModelTest();
 r($project->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($project->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
 r($project->buildSearchFormTest($queryIDList[2])) && p() && e('2'); // 错误的queryID

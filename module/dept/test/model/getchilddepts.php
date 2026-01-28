@@ -16,13 +16,13 @@ cid=15969
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('dept')->loadYaml('dept')->gen(50)->fixPath();
 
 su('admin');
 
-$deptTest = new deptTest();
+$deptTest = new deptModelTest();
 
 r($deptTest->getChildDeptsTest(0, 'count')) && p() && e('50');            // 测试步骤1：获取所有部门，验证总数量
 r($deptTest->getChildDeptsTest(1)) && p('1:name') && e('产品部1');        // 测试步骤2：获取ID为1的部门，验证部门名称

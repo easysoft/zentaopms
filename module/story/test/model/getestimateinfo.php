@@ -19,13 +19,13 @@ cid=18528
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('storyestimate')->gen(10);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getEstimateInfoTest(1, 1)) && p() && e('0');
 r($storyTest->getEstimateInfoTest(2, 0)) && p('story,round,average') && e('2,1,1.5');

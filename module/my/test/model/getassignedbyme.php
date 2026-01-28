@@ -19,7 +19,7 @@ cid=17280
 
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $actions = zenData('action');
@@ -41,7 +41,7 @@ zenData('issue')->gen(5);
 
 su('admin');
 
-$myTest = new myTest();
+$myTest = new myModelTest();
 
 r($myTest->getAssignedByMeTest('admin', null, 'id_desc', 'task')) && p() && e('0'); // 步骤1：正常获取admin用户指派的task
 r($myTest->getAssignedByMeTest('admin', null, 'id_desc', 'bug')) && p() && e('4'); // 步骤2：正常获取admin用户指派的bug

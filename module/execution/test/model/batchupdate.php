@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -53,7 +53,7 @@ $days        = array($executionID => '5');
 $normal  = array('name' => $name, 'status'=> $statuses, 'code' => $code, 'PM' => $pms, 'lifetime' => $lifetimes, 'days' => $days);
 $noName  = array('status'=> $statuses, 'code' => $code, 'PM' => $pms, 'lifetime' => $lifetimes, 'days' => $days);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 $result = $execution->batchUpdateObject($normal, $executionID);
 r($result)                                               && p('0:field,old,new') && e('name,迭代1,批量修改执行一');         // 测试批量修改任务
 r($result)                                               && p('1:field,old,new') && e('PM,~~,outside100');                  // 测试批量修改任务

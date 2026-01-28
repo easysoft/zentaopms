@@ -87,4 +87,36 @@ class taskZenTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test processExportGroup method.
+     *
+     * @param  int    $executionID
+     * @param  array  $tasks
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function processExportGroupTest(int $executionID, array $tasks, string $orderBy): array
+    {
+        try {
+            // 使用 initReference 来获取 zen 类反射
+            $taskZenRef = initReference('task');
+            $method = $taskZenRef->getMethod('processExportGroup');
+            $method->setAccessible(true);
+
+            // 创建 zen 实例
+            $taskZenInstance = $taskZenRef->newInstance();
+
+            $result = $method->invokeArgs($taskZenInstance, [$executionID, $tasks, $orderBy]);
+
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        } catch (Exception $e) {
+            return array('error' => $e->getMessage());
+        } catch (Throwable $e) {
+            return array('error' => $e->getMessage());
+        }
+    }
 }

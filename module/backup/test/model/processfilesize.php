@@ -18,11 +18,11 @@ cid=15139
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 r($backupTest->processFileSizeTest(0)) && p() && e('0KB');
 r($backupTest->processFileSizeTest(512)) && p() && e('0.5KB');

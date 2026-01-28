@@ -16,7 +16,7 @@ cid=18245
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('metric');
 $table->id->range('1-5');
@@ -27,7 +27,7 @@ $table->gen(5);
 
 su('admin');
 
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 r($screenTest->getMetricCardOptionTest(1, array(), null)) && p('displayType') && e('normal');
 r($screenTest->getMetricCardOptionTest(1, array(), null)) && p('cardType') && e('A');

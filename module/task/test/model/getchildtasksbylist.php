@@ -15,7 +15,7 @@ cid=18792
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -24,7 +24,7 @@ zenData('task')->loadYaml('task')->gen(10);
 
 $taskIdList = array(array(1), array(2), array(1, 2), array(3), array(11));
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getChildTasksByListTest($taskIdList[0])) && p('1', '|') && e('childTasks: 6,7; nonStoryChildTasks: 7;'); // 查询任务 1 的子任务和未关联需求的子任务
 r($task->getChildTasksByListTest($taskIdList[1])) && p('2', '|') && e('childTasks: 8,9;');                        // 查询任务 2 的子任务和未关联需求的子任务
 r($task->getChildTasksByListTest($taskIdList[2])) && p('1', '|') && e('childTasks: 6,7; nonStoryChildTasks: 7;'); // 查询任务 1 和 2 的子任务和未关联需求的子任务 1

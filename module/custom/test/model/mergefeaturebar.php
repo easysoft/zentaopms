@@ -16,7 +16,7 @@ cid=15918
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('lang')->loadYaml('lang')->gen(10);
 zenData('userquery')->gen(0);
@@ -26,7 +26,7 @@ su('admin');
 $modules = array('my', 'product', 'project', 'execution');
 $methods = array('work', 'browse', 'browse', 'task');
 
-$customTester  = new customTest();
+$customTester  = new customModelTest();
 r($customTester->mergeFeatureBarTest($modules[0], $methods[0])) && p()               && e('0');        // 获取地盘-待处理-任务列表筛选标签
 r($customTester->mergeFeatureBarTest($modules[1], $methods[1])) && p('unclosed')     && e('未关闭');   // 获取未关闭标签
 r($customTester->mergeFeatureBarTest($modules[2], $methods[2])) && p('all')          && e('全部');     // 获取全部标签

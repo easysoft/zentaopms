@@ -40,7 +40,7 @@ cid=19392
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(20);
@@ -53,7 +53,7 @@ $changeName   = array('name' => '修改后的模块名');
 $changeShort  = array('short' => '修改后的简称');
 $changeBranch = array('branch' => 1);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->updateTest($moduleID[0], $changeRoot))   && p('root,branch,parent,name,short') && e('2,0,0,模块1,模块简称1');            // 测试更新module 1821 的 root
 r($tree->updateTest($moduleID[0], $changeParent)) && p('root,branch,parent,name,short') && e('2,0,1822,模块1,模块简称1');         // 测试更新module 1821 的 root

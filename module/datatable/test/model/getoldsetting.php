@@ -25,13 +25,13 @@ cid=15944
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$datatableTest = new datatableTest();
+$datatableTest = new datatableModelTest();
 
 // 4. 模拟创建一个完整的模块配置用于测试getOldSetting
 global $tester, $lang;

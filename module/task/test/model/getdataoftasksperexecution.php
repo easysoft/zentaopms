@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -48,7 +48,7 @@ $task->gen(4);
 
 $tester->session->set('taskOnlyCondition', true);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->getDataOfTasksPerExecutionTest(2)) && p('2:name,value') && e('迭代2,1'); // 统计executionID为2的执行的任务数量
 r($task->getDataOfTasksPerExecutionTest(3)) && p('3:name,value') && e('迭代3,2'); // 统计executionID为3的执行的任务数量
 r($task->getDataOfTasksPerExecutionTest(5)) && p('5:name,value') && e('0,0');     // 统计executionID为5的执行的任务数量

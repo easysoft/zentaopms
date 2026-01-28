@@ -18,11 +18,11 @@ cid=15137
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 $result1 = $backupTest->getDiskSpaceTest('/tmp');
 $result2 = $backupTest->getDiskSpaceTest('.');

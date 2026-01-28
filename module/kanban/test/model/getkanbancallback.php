@@ -16,14 +16,14 @@ cid=16922
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('kanban')->loadYaml('kanban_getkanbancallback', false, 2)->gen(10);
 zendata('kanbanregion')->loadYaml('kanbanregion_getkanbancallback', false, 2)->gen(10);
 
 su('admin');
 
-$kanbanTest = new kanbanTest();
+$kanbanTest = new kanbanModelTest();
 
 r($kanbanTest->getKanbanCallbackTest(1, 1)) && p('name') && e('updateKanbanRegion');
 r($kanbanTest->getKanbanCallbackTest(1, 1)) && p('params:0') && e('region1');

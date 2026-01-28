@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('execution')->gen(6);
@@ -38,7 +38,7 @@ cid=18760
 */
 
 $taskIDList = range(1, 6);
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 r($taskTester->afterChangeStatusTest($taskIDList[0], 'done')) && p('0:field,old,new') && e('status,wait,done');    // 测试任务状态为未开始的任务
 r($taskTester->afterChangeStatusTest($taskIDList[1], 'done')) && p('0:field,old,new') && e('status,changed,done'); // 测试任务状态为进行中的任务

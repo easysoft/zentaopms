@@ -16,7 +16,7 @@ cid=17881
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -24,7 +24,7 @@ global $config;
 if(!isset($config->execution)) $config->execution = new stdclass();
 $config->execution->defaultWorkhours = 8.0;
 
-$projectTest = new projectTest();
+$projectTest = new projectModelTest();
 
 // 测试用例1: 正常添加成员到scrum项目
 $newProject1 = new stdclass();

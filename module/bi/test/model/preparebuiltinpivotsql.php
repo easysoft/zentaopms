@@ -16,9 +16,9 @@ cid=15199
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$bi = new biTest();
+$bi = new biModelTest();
 
 r(count($bi->prepareBuiltinPivotSQLTest('insert'))) && p('') && e('140'); //测试透视表插入数量
 

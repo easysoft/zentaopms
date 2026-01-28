@@ -16,11 +16,11 @@ cid=19492
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tutorial.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$tutorialTest = new tutorialTest();
+$tutorialTest = new tutorialModelTest();
 
 r(count($tutorialTest->getTesttasksTest())) && p() && e(1); // 步骤1：获取测试单列表数量验证
 r(array_keys($tutorialTest->getTesttasksTest())) && p('0') && e(1); // 步骤2：验证返回数组的键值

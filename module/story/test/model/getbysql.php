@@ -18,7 +18,7 @@ cid=18510
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('product')->gen(5);
@@ -35,7 +35,7 @@ $story->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：正常查询指定产品的活跃需求
 r($storyTest->getBySQLTest(1, "1 = 1 AND `status` = 'active'", 'id_desc')) && p() && e('2');

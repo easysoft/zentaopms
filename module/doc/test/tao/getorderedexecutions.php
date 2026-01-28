@@ -15,7 +15,7 @@ cid=16175
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('execution')->gen(20);
 zenData('user')->gen(5);
@@ -23,7 +23,7 @@ su('admin');
 
 $appends = array(0, 101);
 
-$docTester = new docTest();
+$docTester = new docTaoTest();
 $orderedExecutions       = $docTester->getOrderedExecutionsTest($appends[0]);
 $appendOrderedExecutions = $docTester->getOrderedExecutionsTest($appends[1]);
 r($orderedExecutions)       && p('0:102') && e('敏捷项目1 / 迭代6'); // 获取系统中已排序的执行

@@ -16,7 +16,7 @@ cid=18080
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $task = zenData('task');
 $task->id->range('1-10');

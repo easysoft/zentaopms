@@ -15,10 +15,10 @@ cid=16507
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 // 测试数据1：多文件上传
 $fileNames1   = array('file1.jpg', 'file2.txt');

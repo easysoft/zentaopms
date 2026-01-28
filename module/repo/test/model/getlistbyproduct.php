@@ -21,7 +21,7 @@ cid=18071
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('repo');
 $table->id->range('1-5');
@@ -33,7 +33,7 @@ $table->gen(5);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getListByProductTest(1)) && p('1:name;2:name;4:name') && e('repo1;repo2;repo4');
 r($repoTest->getListByProductTest(2, 'Git')) && p('3:name') && e('repo3');

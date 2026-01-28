@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('notify')->gen(50);
@@ -22,7 +22,7 @@ cid=19695
 
 */
 
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 r($webhook->getDataListTest())        && p('40:id,objectType,objectID,action,status') && e('40,webhook,0,0,wait'); // 不需传任何参数,取出其中一个ID=40的日志内容，这里时间上取当前时间三小时以前的
 r(count($webhook->getDataListTest())) && p()                                          && e('8');                   // 统计数量

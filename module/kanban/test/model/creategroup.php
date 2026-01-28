@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbangroup')->gen(5);
@@ -39,7 +39,7 @@ cid=16893
 $kanbanIDList = array('1', '2', '3', '4', '5');
 $regionIDList = array('1', '2', '3', '4', '5');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createGroupTest($kanbanIDList[0], $regionIDList[0])) && p('kanban,region,order') && e('1,1,6');  // 测试创建看板1 区域1的看板组
 r($kanban->createGroupTest($kanbanIDList[1], $regionIDList[1])) && p('kanban,region,order') && e('2,2,11'); // 测试创建看板2 区域2的看板组

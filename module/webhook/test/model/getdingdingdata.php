@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -19,7 +19,7 @@ cid=19696
 
 */
 
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 $title = array();
 $title[0] = 'ceshi';

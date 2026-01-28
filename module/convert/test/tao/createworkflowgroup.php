@@ -17,7 +17,7 @@ cid=15852
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. zendata数据准备 - 简化的数据准备，避免复杂数据库操作
 
@@ -25,7 +25,7 @@ include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
 su('admin');
 
 // 4. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 5. 测试步骤
 r($convertTest->createWorkflowGroupTest(array('test' => 'data'), array(), array(), 'open')) && p() && e('a:1:{s:4:"test";s:4:"data";}'); // 步骤1：开源版本直接返回原始relations

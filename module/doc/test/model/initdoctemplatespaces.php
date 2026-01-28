@@ -17,7 +17,7 @@ cid=16139
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
 $table = zenData('doclib');
@@ -35,7 +35,7 @@ $table->gen(0); // 清空表，从空表开始测试
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($docTest->initDocTemplateSpacesTest()) && p() && e('true'); // 步骤1：检查方法调用是否成功完成

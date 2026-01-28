@@ -40,7 +40,7 @@ cid=17744
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $task = zenData('task');
@@ -61,7 +61,7 @@ $planIdList = array(array(101), array(102));
 $browseType = array('', 'bysearch');
 $queryID    = array(0, 1);
 
-$programplan = new programplanTest();
+$programplan = new programplanModelTest();
 r($programplan->getGanttTasksTest($projectID[0], $planIdList[0], $browseType[0], $queryID[0])) && p() && e('1'); // 测试查询项目 11 执行 101 browseType 空 queryID 0 的甘特图任务
 r($programplan->getGanttTasksTest($projectID[0], $planIdList[0], $browseType[0], $queryID[1])) && p() && e('1'); // 测试查询项目 11 执行 101 browseType 空 queryID 1 的甘特图任务
 r($programplan->getGanttTasksTest($projectID[0], $planIdList[0], $browseType[1], $queryID[0])) && p() && e('1'); // 测试查询项目 11 执行 101 browseType bysearch queryID 0 的甘特图任务

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -80,7 +80,7 @@ $executionIDList = array(3, 4, 5);
 $stories         = array(4, 324, 364);
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->linkStoryTest($executionIDList[0], $count[0], $stories)) && p('0:project,product,story') && e('3,1,364'); // 敏捷执行关联需求
 r($execution->linkStoryTest($executionIDList[1], $count[0], $stories)) && p('0:project,product,story') && e('4,1,364'); // 瀑布执行关联需求
 r($execution->linkStoryTest($executionIDList[2], $count[0], $stories)) && p('0:project,product,story') && e('5,1,364'); // 看板执行关联需求

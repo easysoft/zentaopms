@@ -15,12 +15,12 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 直接字段返回原值 */
 $target1 = new stdClass();

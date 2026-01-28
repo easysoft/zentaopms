@@ -81,7 +81,7 @@ cid=19648
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(2);
 zenData('company')->gen(1);
@@ -100,7 +100,7 @@ $groupPrivTable->gen(9);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 /* session 中记录登录失败次数和用户锁定时间以供检测清除用户锁定状态功能使用。*/
 $tester->session->set('loginFails', 5);

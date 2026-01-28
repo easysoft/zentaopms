@@ -16,12 +16,12 @@ cid=17982
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/release.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 以管理员身份登录
 su('admin');
 
-$releaseTester = new releaseTest();
+$releaseTester = new releaseModelTest();
 
 r($releaseTester->buildOperateViewMenuTest(1)) && p('0:text') && e('停止维护');  // 测试正常状态发布的操作菜单
 r($releaseTester->buildOperateViewMenuTest(2)) && p('0:text') && e('激活');     // 测试停止维护状态发布的操作菜单

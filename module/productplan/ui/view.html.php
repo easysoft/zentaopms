@@ -100,10 +100,12 @@ foreach($branchTagOption as $branchID => $branchName)      $branchItems[]       
 foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeModule', "moduleID=$moduleID"));
 foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangePlan', "planID=$planID&oldPlanID={$plan->id}"));
 foreach($lang->story->stageList as $key => $stageName)     $stageItems[]            = array('text' => $stageName,  'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchChangeStage', "stage=$key"));
+
+$pinyinItems = common::convert2Pinyin($users);
 foreach($users as $account => $realname)
 {
     if($account == 'closed') continue;
-    $assignItems[] = array('text' => $realname, 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
+    $assignItems[] = array('text' => $realname, 'keys' => zget($pinyinItems, $realname, ''), 'class' => 'batch-btn', 'data-type' => 'story', 'data-url' => $this->createLink('story', 'batchAssignTo', "productID=$plan->product"), 'data-account' => $account);
 }
 
 if(isset($reviewResultItems['reject'])) $reviewResultItems['reject'] = array('class' => 'not-hide-menu', 'text' => $lang->story->reviewResultList['reject'], 'items' => $reviewRejectItems);
@@ -154,7 +156,7 @@ if($canBatchActionBug)
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
+foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;

@@ -16,7 +16,7 @@ cid=19699
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/webhook.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(10);
 
@@ -38,7 +38,7 @@ zenData('task')->gen(50);
 
 su('admin');
 
-$webhook = new webhookTest();
+$webhook = new webhookModelTest();
 
 r(count($webhook->getLogListTest(1))) && p() && e('9');
 r(count($webhook->getLogListTest(999))) && p() && e('1');

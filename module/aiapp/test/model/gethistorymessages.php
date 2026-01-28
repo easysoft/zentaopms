@@ -16,13 +16,13 @@ cid=15084
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/aiapp.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('ai_message')->gen(0);
 
 su('admin');
 
-$aiappTest = new aiappTest();
+$aiappTest = new aiappModelTest();
 
 r(count($aiappTest->getHistoryMessagesTest(1, 20))) && p() && e('0'); // 步骤1：查询不存在消息的应用ID
 r($aiappTest->saveMiniProgramMessageTest('1', 'req', 'test message 1')) && p() && e('1'); // 先插入测试数据

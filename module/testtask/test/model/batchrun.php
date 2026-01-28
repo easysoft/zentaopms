@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->loadYaml('case')->gen(10);
@@ -236,7 +236,7 @@ cid=19156
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->batchRunTest(array()))   && p() && e(0); // 测试用例参数为空数组返回 false。
 r($testtask->batchRunTest(array(''))) && p() && e(0); // 测试用例参数内元素为空字符串返回 false。

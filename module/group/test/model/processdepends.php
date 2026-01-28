@@ -16,11 +16,11 @@ cid=16721
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 r($groupTest->processDependsTest(array(), array('user-view' => 'user-view'), array())) && p('user-view') && e('user-view');
 r($groupTest->processDependsTest(array('user-edit' => array('user-view')), array('user-edit' => 'user-edit'), array())) && p('user-view') && e('user-view');

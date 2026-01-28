@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -22,7 +22,7 @@ cid=16398
 
 */
 
-$executionTester = new executionTest();
+$executionTester = new executionTaoTest();
 
 // 测试步骤1：验证看板菜单的link属性
 $menu = $executionTester->setKanbanMenuTest();

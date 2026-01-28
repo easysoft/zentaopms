@@ -26,11 +26,11 @@ cid=18120
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoTaoTest();
 
 // 测试数据准备
 $normalSingleComment    = 'Fix bug#3';

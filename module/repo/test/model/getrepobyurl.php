@@ -16,7 +16,7 @@ cid=18075
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备最小化测试数据
 $pipeline = zenData('pipeline');
@@ -41,7 +41,7 @@ $repo->gen(1);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 测试步骤1：使用空URL
 r($repoTest->getRepoByUrlTest('')) && p('message') && e('Url is empty.');

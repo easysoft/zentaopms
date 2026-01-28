@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 zenData('casestep')->gen(10);
@@ -47,7 +47,7 @@ $case2->steps    = array('1' => 'step1Updated', '2' => 'step2Updated', '3' => 's
 $case2->expects  = array('1' => 'expect1Updated', '2' => 'expect2Updated', '3' => 'expect3Updated');
 $case2->stepType = array('1' => 'step', '2' => 'step', '3' => 'step');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseTaoTest();
 
 r($testcase->updateStepTest($caseIdList[0], $case1)) && p('0:version;0:desc;0:type') && e('2;~~;step'); // 测试更新步骤的版本号
 r($testcase->updateStepTest($caseIdList[0], $case2)) && p('0:version;0:desc;0:type') && e('3;~~;step'); // 测试更新新的步骤

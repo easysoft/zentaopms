@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('case')->gen(2);
@@ -185,7 +185,7 @@ cid=19161
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 $stepResults1 = array(1 => (object)array('result' => 'pass', 'real' => ''), 2 => (object)array('result' => 'n/a',     'real' => '')); // 测试用例 1 有测试步骤，测试结果为忽略。
 $stepResults2 = array(1 => (object)array('result' => 'pass', 'real' => ''), 2 => (object)array('result' => 'pass',    'real' => '')); // 测试用例 1 有测试步骤，测试结果为通过。

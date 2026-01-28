@@ -15,11 +15,11 @@ cid=18199
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/score.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $actionList = array('created', 'opened', 'closed', 'finished', 'bugconfirmed', 'resolved', 'fixed');
 
-$scoreTester = new scoreTest();
+$scoreTester = new scoreModelTest();
 r($scoreTester->fixKeyTest($actionList[0])) && p() && e('create');  // 将created改为create
 r($scoreTester->fixKeyTest($actionList[1])) && p() && e('create');  // 将opened改为create
 r($scoreTester->fixKeyTest($actionList[2])) && p() && e('close');   // 将closed改为close

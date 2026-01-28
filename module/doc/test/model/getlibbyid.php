@@ -17,7 +17,7 @@ cid=16097
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(5);
 zenData('user')->gen(5);
@@ -25,7 +25,7 @@ su('admin');
 
 $idList = array(0, 1, 4);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getLibByIdTest($idList[0])) && p()            && e('0');               // 测试空数据
 r($docTester->getLibByIdTest($idList[1])) && p('type,name') && e('api,项目接口库1'); // 获取ID=1的文档库信息
 r($docTester->getLibByIdTest($idList[2])) && p('type,name') && e('api,产品接口库4'); // 获取ID=4的文档库信息

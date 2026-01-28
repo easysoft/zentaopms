@@ -29,7 +29,7 @@ cid=19821
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据 - 直接使用简化的host表结构
 zenData('host')->gen(0);
@@ -37,7 +37,7 @@ zenData('action')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 // 测试步骤1：正常创建执行节点
 $normalData = new stdclass();

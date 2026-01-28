@@ -486,7 +486,7 @@ cid=16080
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -511,7 +511,7 @@ $queries     = array(0, 1, 2);
 $modules     = array(0, 1, 100);
 $sorts       = array('id_desc', 'id_asc', 'title_asc', 'title_desc');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getDocsByBrowseTypeTest($browseTypes[0], $queries[0], $modules[0], $sorts[0])) && p()                      && e('0');                    // 测试空数据
 r($docTester->getDocsByBrowseTypeTest($browseTypes[1], $queries[0], $modules[0], $sorts[0])) && p('1:title,lib,module')  && e('我的文档1,11,0');       // 获取类型为所有时，按照id倒序排列的文档
 r($docTester->getDocsByBrowseTypeTest($browseTypes[1], $queries[0], $modules[0], $sorts[1])) && p('1:title,lib,module')  && e('我的文档1,11,0');       // 获取类型为所有时，按照id正序排列的文档

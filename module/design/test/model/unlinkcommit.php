@@ -24,7 +24,7 @@ cid=15996
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('relation')->loadYaml('relation')->gen(3);
 zenData('design')->loadYaml('design')->gen(3);
@@ -33,7 +33,7 @@ zenData('user')->gen(5);
 $designs = array(0, 2, 3, 4);
 $commits = array(0, 1, 4);
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->unlinkCommitTest($designs[0], $commits[0])) && p()                                 && e('0');                             // 测试空数据
 r($designTester->unlinkCommitTest($designs[1], $commits[1])) && p()                                 && e('0');                             // 测试没有关联提交的设计解除关联
 r($designTester->unlinkCommitTest($designs[2], $commits[1])) && p('0:AID,AType,BID,BType,relation') && e('3,design,2,commit,completedin'); // 测试有关联提交的设计解除关联

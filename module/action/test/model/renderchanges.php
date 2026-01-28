@@ -16,7 +16,7 @@ cid=14929
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 zenData('action')->gen(10);
@@ -28,7 +28,7 @@ $history->new->range('newValue');
 $history->newValue->range('newValue');
 $history->gen(10);
 
-$action = new actionTest();
+$action = new actionModelTest();
 r($action->renderChangesTest(''))           && p('') && e('0'); // 测试type为空
 r($action->renderChangesTest('bug',     1)) && p('') && e('修改了 <strong><i>解决方案</i></strong>，旧值为 "oldValue"，新值为 "newValue"。<br />'); // 测试bug解决方案历史记录
 r($action->renderChangesTest('bug',     2)) && p('') && e('修改了 <strong><i>解决版本</i></strong>，旧值为 "oldValue"，新值为 "newValue"。<br />'); // 测试bug解决版本历史记录

@@ -143,7 +143,7 @@ cid=16112
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userqueryTable = zenData('userquery');
 $userqueryTable->id->range('1');
@@ -168,7 +168,7 @@ $allLibIDList[1] = range(1, 20);
 $allLibIDList[2] = range(21, 40);
 $allLibIDList[3] = range(31, 40);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getMyDocListBySearchTest($queries[0], $hasPrivDocIdList[0], $allLibIDList[0], $sorts[0])) && p()               && e('0');             // 搜索queryID=0、没有可查看的任何文档/文档库时，按照id降序排列的文档信息
 r($docTester->getMyDocListBySearchTest($queries[0], $hasPrivDocIdList[0], $allLibIDList[0], $sorts[1])) && p()               && e('0');             // 搜索queryID=0、没有可查看的任何文档/文档库时，按照id升序排列的文档信息
 r($docTester->getMyDocListBySearchTest($queries[0], $hasPrivDocIdList[0], $allLibIDList[0], $sorts[2])) && p()               && e('0');             // 搜索queryID=0、没有可查看的任何文档/文档库时，按照title升序排列的文档信息

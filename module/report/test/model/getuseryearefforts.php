@@ -2,7 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/report.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('effort')->loadYaml('effort')->gen(50);
 zenData('user')->gen(1);
@@ -18,7 +18,7 @@ pid=1
 */
 $account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'), array());
 
-$report = new reportTest();
+$report = new reportModelTest();
 
 r($report->getUserYearEffortsTest($account[0])) && p('count,consumed') && e('1,1');     // 获取本年度 admin 任务数
 r($report->getUserYearEffortsTest($account[1])) && p('count,consumed') && e('3,78');    // 获取本年度 po82 任务数

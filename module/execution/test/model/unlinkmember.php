@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -49,7 +49,7 @@ $accountList     = array('user1', 'user2', 'user3');
 $executionIDList = array('3', '4', '5');
 $count           = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->unlinkMemberTest($executionIDList[0], $accountList[0], $count[0])) && p('0:account,role') && e('user4,测试');  // 敏捷执行解除团队成员
 r($execution->unlinkMemberTest($executionIDList[0], $accountList[0], $count[1])) && p()                 && e('1');           // 敏捷执行解除团队成员后统计
 r($execution->unlinkMemberTest($executionIDList[1], $accountList[1], $count[0])) && p('0:account,role') && e('user2,研发');  // 瀑布执行解除团队成员

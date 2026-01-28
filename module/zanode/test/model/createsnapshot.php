@@ -16,7 +16,7 @@ cid=19823
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $hostTable = zenData('host');
 $hostTable->id->range('10-14');
@@ -35,7 +35,7 @@ zenData('user')->gen(5);
 
 su('admin');
 
-$zanode = new zanodeTest();
+$zanode = new zanodeModelTest();
 
 $validSnapshot = array('name' => 'test-snapshot', 'desc' => '正常快照描述');
 $invalidSnapshot = array('name' => '', 'desc' => '无效名称快照');

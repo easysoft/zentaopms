@@ -48,7 +48,6 @@ class entry extends control
             $this->user->cleanLocked($user->account);
 
             $user->lastTime       = $user->last;
-            $user->last           = date(DT_DATETIME1, $user->last);
             $user->admin          = strpos($this->app->company->admins, ",{$user->account},") !== false;
             $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
             if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
@@ -62,8 +61,8 @@ class entry extends control
             $user->groups   = $this->user->getGroups($user->account);
             $user->view     = $this->user->grantUserView($user->account, $user->rights['acls']);
 
-            $last = time();
-            $user->last     = date(DT_DATETIME1, $last);
+            $last = helper::now();
+            $user->last     = $last;
             $user->lastTime = $last;
             $user->ip       = helper::getRemoteIp();
 

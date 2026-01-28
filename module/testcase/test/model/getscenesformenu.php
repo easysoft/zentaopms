@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->loadYaml('modulescene')->gen('20');
 zenData('user')->gen('1');
@@ -73,7 +73,7 @@ $sceneIdList   = array(0, 1, 6);
 $branchIdList  = array('all', '', '0');
 $currentScene  = 1;
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getScenesForMenuTest($productIdList[0], $moduleIdList[0], $sceneIdList[0]))                   && p() && e('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20'); // 测试获取产品 0 模块 0 起始场景 0 的场景
 r($testcase->getScenesForMenuTest($productIdList[0], $moduleIdList[0], $sceneIdList[0], $branchIdList[0])) && p() && e('1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20'); // 测试获取产品 0 模块 0 起始场景 0 分支 all 的场景

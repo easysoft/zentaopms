@@ -18,12 +18,12 @@ cid=18354
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/serverroom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('serverroom')->gen(0);
 su('admin');
 
-$serverroomTest = new serverroomTest();
+$serverroomTest = new serverroomModelTest();
 
 // 准备测试数据
 $validRoom = new stdclass();

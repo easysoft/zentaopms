@@ -2,7 +2,7 @@
 <?php
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->gen(5);
@@ -30,7 +30,7 @@ cid=14937
 $attributeList = array(0, 1, 'attribute');
 $executionID   = array(array(1), array(2), array(3, 4));
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->updateStageAttributeTest($attributeList[0], $executionID[0])) && p('0:id,attribute') && e('1,0');                                    //测试attributeList为0,executionID为0
 r($action->updateStageAttributeTest($attributeList[1], $executionID[1])) && p('0:id,attribute') && e('2,1');                                    //测试attributeList为1,executionID为1

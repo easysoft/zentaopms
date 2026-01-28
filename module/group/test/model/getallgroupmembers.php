@@ -16,7 +16,7 @@ cid=16701
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $userTable = zenData('user');
@@ -44,7 +44,7 @@ $projectAdminTable->gen(3);
 
 su('admin');
 
-$groupTest = new groupTest();
+$groupTest = new groupModelTest();
 
 r($groupTest->getAllGroupMembersTest()) && p('1') && e('user1|user2|user7|user8'); // 步骤1：验证group1的正常成员
 r($groupTest->getAllGroupMembersTest()) && p('2') && e('user3|user4'); // 步骤2：验证group2的成员分布

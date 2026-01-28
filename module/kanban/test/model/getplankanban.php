@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(50);
@@ -35,7 +35,7 @@ cid=16936
 $productIDList = array('1', '2', '3');
 $branchIDList  = array('0', '1', '3');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getPlanKanbanTest($productIDList[0])[0]['items'][0]['data']['lanes'])   && p('0:name,title') && e('laneall,所有');                   // 测试获取产品1的计划看板
 r($kanban->getPlanKanbanTest($productIDList[1])[0]['items'][0]['data']['items']['laneall']['wait']) && p('1:name,title') && e('5,1.1');     // 测试获取产品2的计划看板

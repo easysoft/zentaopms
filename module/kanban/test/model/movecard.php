@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancell')->gen(10);
@@ -26,7 +26,7 @@ $columnIDList = array('1', '2', '3');
 $laneID   = 1;
 $kanbanID = 1;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->moveCardTest($cardIDList[0], $columnIDList[0], $columnIDList[1], $laneID, $laneID, $kanbanID)) && p('cards', '|') && e(',3,4,803,1,');    // 将卡片1从泳道1 列1转移到泳道1 列2
 r($kanban->moveCardTest($cardIDList[1], $columnIDList[0], $columnIDList[1], $laneID, $laneID, $kanbanID)) && p('cards', '|') && e(',3,4,803,1,2, '); // 将卡片2从泳道1 列1转移到泳道1 列2

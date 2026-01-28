@@ -19,11 +19,11 @@ cid=19608
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('usercontact')->gen(2);
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->getContactListByIDTest(0)) && p() && e(0); //获取 id 为 0 的联系人列表，返回空。
 r($userTest->getContactListByIDTest(3)) && p() && e(0); //获取 id 为 4 的联系人列表，返回空。

@@ -17,7 +17,7 @@ cid=15383
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备仓库历史记录数据
 $repohistory = zendata('repohistory');
@@ -69,7 +69,7 @@ $bug->gen(10);
 
 su('admin');
 
-$bugTest = new bugTest();
+$bugTest = new bugModelTest();
 
 r(count($bugTest->getLinkedCommitsTest(1, array('rev001', 'rev002', 'rev003')))) && p() && e('3'); // 测试步骤1:正常情况,仓库1的3个有效版本号
 r(count($bugTest->getLinkedCommitsTest(2, array('rev006', 'rev007')))) && p() && e('2'); // 测试步骤2:正常情况,仓库2的2个版本号

@@ -23,7 +23,7 @@ cid=16124
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->loadYaml('template')->gen(20);
 zenData('user')->gen(5);
@@ -39,7 +39,7 @@ $scope->gen(10);
 
 $scopeList = array(array(1 => '产品'), array(2 => '项目'), array(3 => '执行'), array(4 => '个人'));
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getScopeItemsTest($scopeList[0])) && p('0:value,text') && e('1,产品'); // 获取产品范围
 r($docTester->getScopeItemsTest($scopeList[1])) && p('0:value,text') && e('2,项目'); // 获取项目范围
 r($docTester->getScopeItemsTest($scopeList[2])) && p('0:value,text') && e('3,执行'); // 获取执行范围

@@ -31,11 +31,14 @@ class backupZenTest extends baseTest
      */
     public function backupCodeTestWithNofile()
     {
-        global $config;
-        $oldSetting = $config->backup->setting;
-        $config->backup->setting = 'nofile';
+        $oldSetting = $this->instance->config->backup->setting;
+
+        $this->instance->config->backup->setting = 'nofile';
+
         $result = $this->invokeArgs('backupCode', ['test_nofile']);
-        $config->backup->setting = $oldSetting;
+
+        $this->instance->config->backup->setting = $oldSetting;
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -63,11 +66,14 @@ class backupZenTest extends baseTest
      */
     public function backupFileTestWithNofile()
     {
-        global $config;
-        $oldSetting = $config->backup->setting;
-        $config->backup->setting = 'nofile';
+        $oldSetting = $this->instance->config->backup->setting;
+
+        $this->instance->config->backup->setting = 'nofile';
+
         $result = $this->invokeArgs('backupFile', ['test_nofile']);
-        $config->backup->setting = $oldSetting;
+
+        $this->instance->config->backup->setting = $oldSetting;
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -95,11 +101,14 @@ class backupZenTest extends baseTest
      */
     public function backupSQLTestWithNosafe()
     {
-        global $config;
-        $oldSetting = $config->backup->setting;
-        $config->backup->setting = 'nosafe';
+        $oldSetting = $this->instance->config->backup->setting;
+
+        $this->instance->config->backup->setting = 'nosafe';
+
         $result = $this->invokeArgs('backupSQL', ['test_nosafe_' . time()]);
-        $config->backup->setting = $oldSetting;
+
+        $this->instance->config->backup->setting = $oldSetting;
+
         if(dao::isError()) return dao::getError();
         return $result;
     }

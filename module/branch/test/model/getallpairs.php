@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(10);
@@ -30,7 +30,7 @@ cid=0
 */
 
 $params = array('noempty', 'noproductname', 'noempty,noproductname');
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r(count($branch->getAllPairsTest()))           && p()      && e('11');             // 测试获取全部分支名个数
 r(count($branch->getAllPairsTest($params[0]))) && p()      && e('10');             // 测试获取没有主干的分支名个数

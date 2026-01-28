@@ -16,7 +16,7 @@ cid=19346
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(100);
@@ -41,7 +41,7 @@ $branches1 = array('1', '2');
 $branches2 = array('0', '0');
 $branches3 = array('1', '2');
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->checkUniqueTest($module1))                       && p() && e('0');       // 测试module1是否与已存在的模块重名
 r($tree->checkUniqueTest($module2))                       && p() && e('模块2');   // 测试module2是否与已存在的模块重名

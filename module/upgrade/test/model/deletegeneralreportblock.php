@@ -16,9 +16,9 @@ cid=19514
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeModelTest();
 
 zenData('config')->loadYaml('block_config')->gen(1);
 zenData('block')->loadYaml('waterfall_block')->gen(1);

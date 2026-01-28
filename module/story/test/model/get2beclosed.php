@@ -21,14 +21,14 @@ cid=18495
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据：使用简化的数据配置
 zenData('story')->gen(50);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 测试步骤1：正常获取产品下需要关闭的需求数量
 r(count($storyTest->get2BeClosedTest(3, 0, '', 'story', 'id_desc'))) && p() && e('1'); // 正常情况测试

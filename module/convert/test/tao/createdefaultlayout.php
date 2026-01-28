@@ -18,7 +18,7 @@ cid=15836
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 global $tester;
 
@@ -27,7 +27,7 @@ $tester->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('1=1')->exec();
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 步骤1: 正常字段和普通模块
 $field1 = new stdClass();

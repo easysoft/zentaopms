@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->processProjectAcl();
@@ -30,7 +31,7 @@ cid=15922
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $projectTable = zenData('project')->loadYaml('project');
 $projectTable->acl->range('open{10},program{4}');
@@ -48,7 +49,7 @@ su('admin');
 
 $projects = array(11, 60, 61, 100, 1);
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->processProjectAclTest($projects[0])) && p('id;acl;whitelist', ';') && e('11;private;admin,user4'); // 处理项目权限为继承项目集的项目权限
 r($customTester->processProjectAclTest($projects[1])) && p('id;acl;whitelist', ';') && e('60;private;user1,user3'); // 处理项目权限为继承项目集的项目权限
 r($customTester->processProjectAclTest($projects[2])) && p('id;acl;whitelist', ';') && e('61;program;,,');          // 处理项目权限为继承项目集的项目权限

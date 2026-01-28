@@ -718,7 +718,7 @@ class bugModel extends model
         $staticData = array();
         foreach($dateFields as $field)
         {
-            $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
+            $bugCount = $this->dao->select("COUNT(id) AS num, DATE_FORMAT($field, '%m/%d') AS date")->from(TABLE_BUG)
                 ->where('product')->eq($productID)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')
@@ -2147,7 +2147,7 @@ class bugModel extends model
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder, INSTR('active,resolved,closed,', status) as statusOrder")->from(TABLE_BUG)
             ->where($bugQuery)
             ->andWhere('deleted')->eq('0')
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()

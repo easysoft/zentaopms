@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $task = zenData('task');
 $task->id->range('1-4');
@@ -30,7 +30,7 @@ cid=18789
 
 */
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 
 $taskIdList = range(1, 4);
 r($taskTester->getAssignedTo4MultiTest($taskIdList[0]))         && p() && e('admin'); // 测试获取并行任务的指派人

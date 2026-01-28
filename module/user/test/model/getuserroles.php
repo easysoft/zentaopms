@@ -39,7 +39,7 @@ cid=19636
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $user = zenData('user');
 $user->role->range('dev,qa,pm,po,td,pd,qd,top,others,role');
@@ -47,7 +47,7 @@ $user->gen(10);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r(count($userTest->getUserRolesTest('')))              && p() && e(0); // 参数为空字符串返回空数组。
 r(count($userTest->getUserRolesTest(array())))         && p() && e(0); // 参数为空数组返回空数组。

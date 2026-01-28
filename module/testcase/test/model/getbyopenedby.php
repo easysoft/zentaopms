@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $caseData = zenData('case');
@@ -31,7 +31,7 @@ cid=18978
 */
 $accountList = array('test1', 'test2', 'test3', 'test4');
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getByOpenedByTest($accountList[0])) && p('1:title;5:title;9:title')  && e('这个是测试用例1;这个是测试用例5;这个是测试用例9');  // 测试查询由 test1 创建的case信息
 r($testcase->getByOpenedByTest($accountList[1])) && p('2:title;6:title;10:title') && e('这个是测试用例2;这个是测试用例6;这个是测试用例10'); // 测试查询由 test2 创建的case信息

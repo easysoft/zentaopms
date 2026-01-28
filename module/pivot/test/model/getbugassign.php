@@ -12,7 +12,7 @@ pid=1
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('bug_getbugassign')->gen(10);
@@ -23,7 +23,7 @@ zenData('projectproduct')->gen(5);
 zenData('user')->gen(2);
 
 
-$pivot = new pivotTest();
+$pivot = new pivotModelTest();
 
 $result = $pivot->getBugAssign();
 r($result) && p('0:product,assignedTo,total;9:product,assignedTo,total') && e('1,admin,10;10,admin,10');    //判断已分配的bug数据获取是否正确。

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('20');
 zenData('user')->gen('1');
@@ -18,7 +18,7 @@ pid=1
 
 $stories = array(array('1' => 1, '2' => 2 ), array('3' => 3, '4' => 4 ), array('5' => 5, '6' => 6 ), array('7' => 7, '8' => 8 ), array('9' => 9, '10' => 10 ));
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getStoryCaseCountsTest($stories[0])) && p('1;2')  && e('0;4'); // 测试获取需求 1 2 的测试用例个数
 r($testcase->getStoryCaseCountsTest($stories[1])) && p('3;4')  && e('0;0'); // 测试获取需求 3 4 的测试用例个数

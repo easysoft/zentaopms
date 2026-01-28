@@ -19,13 +19,13 @@ cid=17750
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/programplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('getstageattribute/project')->gen(10);
 
 su('admin');
 
-$programplanTest = new programplanTest();
+$programplanTest = new programplanModelTest();
 
 r($programplanTest->getStageAttributeTest(1))   && p() && e('0');    // 测试步骤1：获取id为1的阶段属性（空属性）
 r($programplanTest->getStageAttributeTest(2))   && p() && e('0');    // 测试步骤2：获取id为2的阶段属性（项目集）

@@ -24,7 +24,7 @@ cid=19114
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testreport.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->loadYaml('getbugs4test_bug')->gen(40);
 zenData('testtask')->gen(0);
@@ -39,7 +39,7 @@ $product     = array(1, 0);
 $taskID      = 1;
 $type        = array('build', 'project', 'execution', '');
 
-$testreport = new testreportTest();
+$testreport = new testreportModelTest();
 r($testreport->getBugs4TestTest($buildIdList[0], $product[0], $taskID, $type[0])) && p() && e('1,2');   // 正常查询
 r($testreport->getBugs4TestTest($buildIdList[1], $product[0], $taskID, $type[0])) && p() && e('0');     // buildIdList 为空查询
 r($testreport->getBugs4TestTest($buildIdList[0], $product[1], $taskID, $type[0])) && p() && e('0');     // product为空查询

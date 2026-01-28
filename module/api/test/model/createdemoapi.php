@@ -16,7 +16,7 @@ cid=15091
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib_createdemoapi', false, 2)->gen(5);
 $moduleTable = zenData('module');
@@ -32,7 +32,7 @@ $moduleTable->gen(16);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r(is_array($apiTest->createDemoApiTest(1, '16.0', array(2949 => 2949, 2950 => 2950, 2951 => 2951, 2952 => 2952, 2953 => 2953, 2954 => 2954, 2955 => 2955, 2956 => 2956, 2957 => 2957, 2958 => 2958, 2959 => 2959, 2960 => 2960, 2961 => 2961, 2962 => 2962, 2963 => 2963, 2964 => 2964), 'admin'))) && p() && e(1);
 r(is_array($apiTest->createDemoApiTest(2, '16.0', array(2949 => 2949, 2950 => 2950, 2951 => 2951, 2952 => 2952, 2953 => 2953, 2954 => 2954, 2955 => 2955, 2956 => 2956, 2957 => 2957, 2958 => 2958, 2959 => 2959, 2960 => 2960, 2961 => 2961, 2962 => 2962, 2963 => 2963, 2964 => 2964), 'user1'))) && p() && e(1);

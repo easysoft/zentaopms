@@ -19,7 +19,7 @@ cid=18518
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData("user")->gen(5);
@@ -34,7 +34,7 @@ $story->gen(20);
 su('admin');
 
 // 4. 创建测试实例
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 // 5. 设置查询条件
 $_SESSION['storyOnlyCondition']  = true;

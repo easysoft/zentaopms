@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('module')->loadYaml('module')->gen('4');
 zenData('scene')->loadYaml('modulebranchscene')->gen('8');
@@ -36,7 +36,7 @@ global $app;
 $app->rawModule = 'testcase';
 $app->rawMethod = 'getSceneGroups';
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 r($testcase->getSceneGroupsTest(0, '',    0, 'id_asc'))  && p() && e(0);             // 产品 0、分支空、模块 0、正序，场景分组为空。
 r($testcase->getSceneGroupsTest(3, '',    0, 'id_asc'))  && p() && e(0);             // 产品 3、分支空、模块 0、正序，场景分组为空。
 r($testcase->getSceneGroupsTest(1, '',    0, 'id_asc'))  && p() && e(0);             // 产品 1、分支空、模块 0、正序，场景分组为空。

@@ -17,7 +17,7 @@ cid=17137
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/metric.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 手动插入测试数据
 global $tester;
@@ -96,7 +96,7 @@ $tester->dao->insert(TABLE_METRICLIB)->data($record3)->exec();
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$metricTest = new metricTest();
+$metricTest = new metricModelTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
 r($metricTest->isCalcByCronTest('test_metric_year', '2024', 'year')) && p() && e('0'); // 步骤1：查询年度度量项（无匹配）

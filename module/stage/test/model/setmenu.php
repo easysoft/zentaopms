@@ -14,14 +14,14 @@ cid=18423
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stage.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 
 $types  = array('scrum', 'waterfall', 'waterfallplus');
 $method = array('browse', 'browseplus');
 
-$stageTester = new stageTest();
+$stageTester = new stageModelTest();
 r($stageTester->setMenuType($types[0], $method[0])) && p()        && e('0');                                                        // 测试传入错误类型
 r($stageTester->setMenuType($types[1], $method[0])) && p('', ';') && e('baseline-templatetype,stage-settype,stage-plusbrowse');                           // 设置瀑布模型导航
 r($stageTester->setMenuType($types[1], $method[1])) && p('', ';') && e('baseline-templatetype,stage-settype,stage-plusbrowse');                           // 设置瀑布模型导航

@@ -30,7 +30,7 @@ cid=19842
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zanode.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 zenData('host')->loadYaml('host')->gen(12);
@@ -38,7 +38,7 @@ zenData('image')->gen(5);
 
 su('admin');
 
-$zanodeTest = new zanodeTest();
+$zanodeTest = new zanodeModelTest();
 
 r($zanodeTest->processNodeStatusTest(1)) && p('id,status') && e('1,offline');    // 测试正常运行状态的节点，心跳超时
 r($zanodeTest->processNodeStatusTest(2)) && p('id,status') && e('2,offline');    // 测试运行状态的节点，心跳超时

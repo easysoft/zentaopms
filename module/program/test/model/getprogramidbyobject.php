@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -32,7 +32,7 @@ su('admin');
 $objectIdList = array(1, 11, 60, 100, 101, 112, 124);
 $exist        = array(0, 1);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 r($programTester->getProgramIDByObjectTest($objectIdList[0], $exist[1])) && p() && e('1'); // 获取项目集的id
 r($programTester->getProgramIDByObjectTest($objectIdList[1], $exist[1])) && p() && e('1'); // 获取敏捷项目的项目集id
 r($programTester->getProgramIDByObjectTest($objectIdList[2], $exist[1])) && p() && e('2'); // 获取瀑布项目的项目集id

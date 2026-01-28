@@ -9,13 +9,13 @@ cid=15929
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('lang')->loadYaml('lang')->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$customTester = new customTest();
+$customTester = new customTaoTest();
 $allCustomLang = $customTester->getCustomLangTest();
 
 r($allCustomLang[6])  && p('key,value') && e('executionCommon,执行'); // 获取自定义迭代概念

@@ -129,11 +129,12 @@ window.redirectParentWindow = function(link, from, spaceID, libID, moduleID)
     {
         const aiResult = JSON.parse(localStorage.getItem('aiResult'));
         zui.DocApp.storeNextCreatingDoc({
-            content: aiResult.content || '',
+            title      : aiResult.title || '',
+            content    : aiResult.content || '',
             contentType: 'markdown',
-            space: Number(spaceID),
-            lib: Number(libID),
-            module: Number(moduleID),
+            space      : +spaceID,
+            lib        : +libID,
+            module     : +moduleID,
         });
         localStorage.removeItem('aiResult');
     }

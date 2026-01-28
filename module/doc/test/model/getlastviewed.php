@@ -16,11 +16,11 @@ cid=16096
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 r($docTest->getLastViewedTest('lastViewedSpace')) && p() && e('0');
 r($docTest->getLastViewedTest('lastViewedSpaceHome')) && p() && e('0');

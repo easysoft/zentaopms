@@ -939,7 +939,7 @@ class docModel extends model
         {
             if(!isset($modules[$doc->lib])) $modules[$doc->lib] = $this->tree->getOptionMenu((int)$doc->lib, 'doc', 0, 'all', 'nodeleted', 'all', ' > ');
             $doc->moduleName = zget($modules[$doc->lib], $doc->module);
-            $doc->moduleName = ltrim($doc->moduleName, '/');
+            $doc->moduleName = ltrim((string)$doc->moduleName, '/');
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
@@ -1796,7 +1796,9 @@ class docModel extends model
         {
             $this->dao->update(TABLE_PROJECTDELIVERABLE)
                  ->set('name')->eq($doc->title)
+                 ->set('docVersion')->eq($doc->version)
                  ->where('doc')->eq($docID)
+                 ->andWhere('status')->eq('draft')
                  ->exec();
         }
 

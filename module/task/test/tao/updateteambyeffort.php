@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('user1');
 
 /**
@@ -73,7 +73,7 @@ $normalTaskEffort->date     = "2022-01-01";
 
 $lastDate = '2022-01-01';
 
-$task = new taskTest();
+$task = new taskTaoTest();
 r($task->updateTeamByEffortTest(1, $finishTaskEffort, 1, null, $lastDate)) && p('0:estimate') && e('5.00');   // 通过ID为1的日志更新任务团队工时
 r($task->updateTeamByEffortTest(2, $finishTaskEffort, 1, null, $lastDate)) && p('0:consumed') && e('10.00');  // 通过ID为2的日志更新任务团队工时
 r($task->updateTeamByEffortTest(3, $startTaskEffort,  3, null, $lastDate)) && p('0:consumed') && e('0.00');   // 通过ID为3的日志更新任务团队工时

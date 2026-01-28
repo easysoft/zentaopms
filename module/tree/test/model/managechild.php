@@ -22,7 +22,7 @@ cid=19389
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('module')->loadYaml('module')->gen(30);
@@ -45,7 +45,7 @@ $short3   = array('id9' => '模块简称81', 'id29' => '修改简称的模块简
 $order3   = array('id9' => 10, 'id29' => 20);
 $tree3    = array('maxOrder' => 20, 'parentModuleID' => $parentModuleID[2], 'modules' => $modules3, 'shorts' => $short3, 'order' => $order3);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 $result1 = $tree->manageChildTest($root[0], 'story', $tree1);
 $result2 = $tree->manageChildTest($root[0], 'story', $tree2);

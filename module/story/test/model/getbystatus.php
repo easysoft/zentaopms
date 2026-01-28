@@ -18,7 +18,7 @@ cid=18511
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('story');
 $table->id->range('1-20');
@@ -35,7 +35,7 @@ $table->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 r($storyTest->getByStatusTest(1, 'all', '', 'active')) && p() && e('5');
 r($storyTest->getByStatusTest(1, 'all', '', 'draft')) && p() && e('2');

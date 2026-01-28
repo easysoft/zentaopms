@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 function initData()
@@ -47,7 +47,7 @@ $todo5->assignedTo     = 'admin';
 $todo5->future         = 'on';
 $todo5->lblDisableDate = 'on';
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 r($todo->assignToTest($todoIDList[0], $todo1)) && p('assignedTo,date,begin,end') && e('test1,20300101,1000,1400'); // 指派todo 1给test1 选择待定
 r($todo->assignToTest($todoIDList[1], $todo2)) && p('assignedTo,begin,end')      && e('test1,2400,2400');          // 指派todo 2给test1 暂时不设定时间

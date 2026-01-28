@@ -27,7 +27,7 @@ cid=17301
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->loadYaml('story')->gen('20');
 zenData('product')->gen('10');
@@ -38,7 +38,7 @@ zenData('user')->gen('1');
 
 su('admin');
 
-$my       = new myTest();
+$my       = new myModelTest();
 $queryID  = array(0, 2);
 $typeList = array('contribute', 'other');
 $orderBy  = array('id_desc', 'id_asc');

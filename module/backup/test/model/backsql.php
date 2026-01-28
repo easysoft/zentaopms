@@ -16,11 +16,11 @@ cid=15131
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/backup.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$backupTest = new backupTest();
+$backupTest = new backupModelTest();
 
 r($backupTest->backSQLTest('/tmp/test_backup')) && p('result') && e('1');
 r($backupTest->backSQLTest('backup/test.sql')) && p('result') && e('~~');

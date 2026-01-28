@@ -7,33 +7,17 @@ class editStageTester extends tester
      * 编辑一个阶段。
      *
      * @param  array  $stage
-     * @param  string $type  waterfall|waterfallplus
      * @access public
      * @return object
      */
-    public function editStage(array $stage, string $type = '')
+    public function editStage(array $stage)
     {
-        if($type == 'waterfall')
-        {
-            $form = $this->initForm('stage', 'browse', array(), 'appIframe-admin');
-            $form->dom->editBtn->click();
-        }
-        if($type == 'waterfallplus')
-        {
-            $form = $this->initForm('stage', 'plusbrowse', array(), 'appIframe-admin');
-            $form->dom->plusEditBtn->click();
-        }
+        $form = $this->initForm('stage', 'browse', array(), 'appIframe-admin');
+        $form->dom->editBtn->click();
         $editForm = $this->loadPage('stage', 'edit');
         if(isset($stage['name'])) $editForm->dom->name->setValue($stage['name']);
         if(isset($stage['type'])) $editForm->dom->type->picker($stage['type']);
-        if($type == 'waterfall')
-        {
-            $editForm->dom->submitBtn->click();
-        }
-        else
-        {
-            $editForm->dom->plusSubmitBtn->click();
-        }
+        $editForm->dom->submitBtn->click();
         $editForm->wait(1);
 
         /* 检查阶段名称不能为空。 */
@@ -44,18 +28,10 @@ class editStageTester extends tester
             return ($nameTipText == $nameTip) ? $this->success('编辑阶段表单页提示信息正确') : $this->failed('编辑阶段表单页提示信息不正确');
         }
         /* 跳转到阶段列表，检查阶段信息。 */
-        if($type == 'waterfall')
-        {
-            $browsePage = $this->loadPage('stage', 'browse');
-            if($browsePage->dom->stageNameA->getText() != $stage['name']) return $this->failed('阶段名称错误');
-            if($browsePage->dom->stageTypeA->getText() != $stage['type']) return $this->failed('阶段类型错误');
-        }
-        if($type == 'waterfallplus')
-        {
-            $plusbrowsePage = $this->loadPage('stage', 'plusbrowse');
-            if($plusbrowsePage->dom->stageNameB->getText() != $stage['name']) return $this->failed('阶段名称错误');
-            if($plusbrowsePage->dom->stageTypeB->getText() != $stage['type']) return $this->failed('阶段类型错误');
-        }
+        $browsePage = $this->loadPage('stage', 'browse');
+        if($browsePage->dom->stageNameA->getText() != $stage['name']) return $this->failed('阶段名称错误');
+        if($browsePage->dom->stageTypeA->getText() != $stage['type']) return $this->failed('阶段类型错误');
+
         return $this->success('编辑阶段成功');
     }
 }

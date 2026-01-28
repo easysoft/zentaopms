@@ -24,7 +24,7 @@ cid=18536
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zendata('storygrade')->loadYaml('storygrade_getgradeoptions', false, 2)->gen(9);
 
@@ -43,7 +43,7 @@ $storyTable->gen(3);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 $story1 = new stdClass();
 $story1->type = 'story';

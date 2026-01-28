@@ -19,7 +19,7 @@ cid=16292
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-10');
@@ -39,7 +39,7 @@ $execution->gen(10);
 
 su('admin');
 
-$executionTest = new executionTest();
+$executionTest = new executionModelTest();
 
 r(count($executionTest->fetchExecutionsByProjectIdListTest(array()))) && p() && e('0');                         // 测试步骤1：传入空数组参数
 r(count($executionTest->fetchExecutionsByProjectIdListTest(array(999)))) && p() && e('0');                       // 测试步骤2：传入不存在的项目ID

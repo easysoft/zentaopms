@@ -137,10 +137,13 @@ foreach($cases as $case)
     if(!empty($case->needconfirm)) $case->status = 'changed';
     if(isset($case->script)) unset($case->script);
 
-    $stages = array();
+    $stages         = array();
+    $reviewedByList = array();
     foreach(explode(',', $case->stage) as $stage) $stages[] = zget($lang->testcase->stageList, $stage, '');
+    foreach(explode(',', $case->reviewedBy) as $reviewedBy) $reviewedByList[] = zget($users, $reviewedBy, '');
 
     $case->stage      = implode(',', array_filter($stages));
+    $case->reviewedBy = implode(',', array_filter($reviewedByList));
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
     if(!$canModify) unset($case->actions);

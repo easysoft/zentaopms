@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
@@ -53,7 +53,7 @@ $laneIdList      = array(1, 2, 3);
 $colIdList       = array(1, 2, 3);
 $cardIdList      = array(1, 2, 3, 4, 5);
 
-$kanbanTester = new kanbanTest();
+$kanbanTester = new kanbanModelTest();
 r($kanbanTester->buildExecutionCardsTest($executionIdList[0], $laneIdList[0], $colIdList[0], $cardIdList)[1][1][0]) && p('id,title') && e('1,任务1'); // 构造迭代的任务卡片
 r($kanbanTester->buildExecutionCardsTest($executionIdList[1], $laneIdList[1], $colIdList[0], $cardIdList)[2][1][0]) && p('id,title') && e('2,任务2'); // 构造阶段的任务卡片
 r($kanbanTester->buildExecutionCardsTest($executionIdList[2], $laneIdList[2], $colIdList[0], $cardIdList)[3][1][0]) && p('id,title') && e('3,任务3'); // 构造看板的任务卡片

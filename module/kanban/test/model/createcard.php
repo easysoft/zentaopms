@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -77,7 +77,7 @@ $card5->end        = '2022-03-29';
 $card5->assignedTo = 'po15';
 $card5->desc       = '测试不填写名称的卡片的卡片描述';
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createCardTest(0, $card1)) && p('name,pri,estimate,desc') && e('测试创建卡片1,1,1.00,测试创建卡片1的卡片描述'); // 测试创建卡片1
 r($kanban->createCardTest(1, $card2)) && p('name,pri,estimate,desc') && e('测试创建卡片2,2,2.00,测试创建卡片2的卡片描述'); // 测试创建卡片2

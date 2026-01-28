@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(15);
 zenData('user')->gen(1);
@@ -23,7 +23,7 @@ cid=16333
 
 $executionIdList = array('1,2,3', '4,5,6', '7,8,9', '10,11,12', '13,14,15');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 
 r($execution->getPairsByListTest($executionIdList[0])) && p() && e('项目集1,项目集2,项目集3'); // 测试查找执行 ID 1 2 3 的名称
 r($execution->getPairsByListTest($executionIdList[1])) && p() && e('项目集4,项目集5,项目集6'); // 测试查找执行 ID 4 5 6 的名称

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->gen(11);
@@ -20,7 +20,7 @@ cid=15965
 
 */
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->deleteTest('11')) && p() && e('10'); //删除后统计数量
 r($dept->deleteTest('10')) && p() && e('9');  //删除后统计数量
 r($dept->deleteTest('9'))  && p() && e('8');  //删除后统计数量

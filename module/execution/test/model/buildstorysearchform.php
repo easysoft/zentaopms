@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -94,7 +94,7 @@ $lang->URCommon = '用户需求';
 $executionIdList = array(3, 0, 1);
 $queryIdList     = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[1])) && p() && e('1'); // 正确的执行，正确的queryID
 r($execution->buildStorySearchFormTest($executionIdList[1], $queryIdList[1])) && p() && e('0'); // 错误的执行，正确的queryID
 r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[0])) && p() && e('0'); // 正确的执行，错误的queryID

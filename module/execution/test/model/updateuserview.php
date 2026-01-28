@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -40,7 +40,7 @@ cid=16379
 
 */
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->updateUserViewTest(5)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
 r($execution->updateUserViewTest(4)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
 r($execution->updateUserViewTest(3)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限

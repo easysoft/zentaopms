@@ -16,7 +16,7 @@ cid=16110
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $moduleTable = zenData('module');
 $moduleTable->id->range('1-20');
@@ -37,7 +37,7 @@ $moduleTable->gen(20);
 
 su('admin');
 
-$docTest = new docTest();
+$docTest = new docModelTest();
 
 r(count($docTest->getModulesOfLibsTest(array(1, 2), 'doc,api'))) && p() && e('10');
 r($docTest->getModulesOfLibsTest(array(1), 'doc')) && p('1:type') && e('doc');

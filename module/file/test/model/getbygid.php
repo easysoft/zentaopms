@@ -22,7 +22,7 @@ cid=16502
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 直接插入测试数据
 global $tester;
@@ -97,7 +97,7 @@ foreach($files as $file) {
 
 su('admin');
 
-$fileTest = new fileTest();
+$fileTest = new fileModelTest();
 
 r($fileTest->getByGidTest('test_gid_001')) && p('gid,title') && e('test_gid_001,file1');
 r($fileTest->getByGidTest('gid_test_1')) && p('title') && e('gid_test_1');

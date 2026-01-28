@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 /**
 
@@ -87,7 +87,7 @@ $noConsumedEffort->consumed = 0;
 $noConsumedEffort->left     = 3;
 $noConsumedEffort->work     = '无剩时间余变更工作内容测试';
 
-$task = new taskTest();
+$task = new taskModelTest();
 r($task->updateEffortTest(1, $normalEffort)) && p('0:field,old,new') && e('consumed,3.00,4.1'); // 正常编辑日志，查看返回的信息
 r($task->updateEffortTest(2, $normalEffort)) && p('0:field,old,new') && e('consumed,4.00,9.1'); // 正常编辑日志，查看返回的信息
 r($task->updateEffortTest(3, $normalEffort)) && p('0:field,old,new') && e('consumed,5.00,4.1'); // 正常编辑日志，查看返回的信息

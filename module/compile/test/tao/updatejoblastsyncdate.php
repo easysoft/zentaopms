@@ -17,14 +17,14 @@ cid=15759
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 准备测试数据：从YAML文件加载job表配置并生成测试数据
 zendata('job')->loadYaml('job_updatejoblastsyncdate', false, 2)->gen(3);
 
 su('admin');
 
-$compile = new compileTest();
+$compile = new compileTaoTest();
 
 // 测试步骤1：更新存在的job的lastSyncDate为当前时间
 $now = '2025-01-15 10:30:00';

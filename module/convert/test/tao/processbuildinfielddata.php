@@ -23,13 +23,13 @@ cid=15866
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 准备测试数据
 // 测试数据1：正常的JIRA数据，包含基本字段

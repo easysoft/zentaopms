@@ -16,7 +16,7 @@ cid=19656
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $userTable = zenData('user');
 $userTable->id->range('1-5');
@@ -34,7 +34,7 @@ $companyTable->gen(1);
 
 su('user1');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->suTest()) && p('result') && e('1');
 

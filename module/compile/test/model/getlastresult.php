@@ -16,7 +16,7 @@ cid=15747
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/compile.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $compile = zenData('compile');
 $compile->id->range('1-10');
@@ -32,7 +32,7 @@ $compile->gen(10);
 zenData('job')->gen(5);
 su('admin');
 
-$compileTest = new compileTest();
+$compileTest = new compileModelTest();
 
 r($compileTest->getLastResultTest(1))   && p('job') && e('1'); // 测试步骤1：正常jobID查询最新编译结果
 r($compileTest->getLastResultTest(2))   && p('job') && e('2'); // 测试步骤2：查询有多条记录的jobID

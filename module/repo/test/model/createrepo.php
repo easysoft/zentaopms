@@ -16,7 +16,7 @@ cid=18039
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('pipeline');
@@ -26,7 +26,7 @@ $table->gen(5);
 su('admin');
 
 // 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 设置通用测试数据
 $baseRepo = new stdclass();

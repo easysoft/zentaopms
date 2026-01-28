@@ -71,14 +71,14 @@ cid=17484
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/product.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(0);
 zenData('task')->gen(0);
 zenData('bug')->gen(0);
 zenData('product')->gen(10);
 
-$product = new productTest();
+$product = new productModelTest();
 
 r($product->formatDataForListTest(1))  && p('id,name,code,type,status,PO,QD,RD,order,storyCompleteRate,bugFixedRate') && e('1,正常产品1,code1,product,normal,po1,test1,dev1,5,50,33.3');  // id1的产品信息
 r($product->formatDataForListTest(2))  && p('id,name,code,type,status,PO,QD,RD,order,storyCompleteRate,bugFixedRate') && e('2,正常产品2,code2,product,normal,po2,test2,dev2,10,50,33.3'); // id2的产品信息

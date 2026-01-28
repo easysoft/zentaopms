@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->loadYaml('branch')->gen(20);
@@ -43,7 +43,7 @@ $executionID = array(101, 102, 103, 0);
 $browseType  = array('all', 'closed', 'active');
 $mainBranch  = false;
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->getListTest($productID[0]))                                               && p('', '|') && e(',0,1,2');
 r($branch->getListTest($productID[0], $executionID[0]))                              && p('', '|') && e('0');

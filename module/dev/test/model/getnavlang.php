@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -29,7 +29,7 @@ $moduleList   = array('', 'my', 'scrum', 'waterfall', 'qa');
 $methodList   = array('', 'work', 'settings', 'qa', 'bug');
 $languageList = array('', 'zh-cn', 'en');
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 r($devTester->getNavLangTest($typeList[0], $moduleList[0], $methodList[0], $languageList[0])) && p('my')              && e("<i class='icon icon-menu-my'></i> 地盘|my|index|");         // 检查传入空值时的情况
 r($devTester->getNavLangTest($typeList[1], $moduleList[0], $methodList[0], $languageList[1])) && p('program')         && e("<i class='icon icon-program'></i> 项目集|program|browse|"); // 检查获取一级导航
 r($devTester->getNavLangTest($typeList[2], $moduleList[1], $methodList[0], $languageList[1])) && p('menu_index:link') && e("仪表盘|my|index");                                          // 检查获取地盘二级导航

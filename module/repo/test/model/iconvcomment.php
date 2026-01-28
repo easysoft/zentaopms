@@ -16,11 +16,11 @@ cid=18084
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->iconvCommentTest('test comment', '')) && p() && e('test comment'); // 测试步骤1：空编码参数情况
 r($repo->iconvCommentTest('utf-8 test', 'utf-8')) && p() && e('utf-8 test'); // 测试步骤2：UTF-8编码转换情况

@@ -17,7 +17,7 @@ cid=17645
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('branch')->loadYaml('relationbranch_branch')->gen(20);
 zenData('productplan')->loadYaml('relationbranch_productplan')->gen(50);

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('status')->gen(10);
@@ -26,7 +26,7 @@ cid=15372
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerStatusTest()) && p('active:name,value')   && e('激活,2');   //获取状态为激活的数据
 r($bug->getDataOfBugsPerStatusTest()) && p('resolved:name,value') && e('已解决,2'); //获取状态为已解决的数据
 r($bug->getDataOfBugsPerStatusTest()) && p('closed:name,value')   && e('已关闭,6'); //取状态为关闭的数据

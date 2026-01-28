@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testsuite.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('testsuite')->gen(1);
@@ -30,7 +30,7 @@ $type      = array('private', 'public', '');
 $uid       = array('', uniqid());
 $desc      = '<img src="/index.php?m=file&amp;f=read&amp;t=jpeg&amp;fileID=24">';
 
-$testsuite = new testsuiteTest();
+$testsuite = new testsuiteModelTest();
 
 r($testsuite->updateTest($productID[0], $name[0], $type[0], '',    $uid[0])) && p('2:field,old,new') && e('type,public,private');     //测试productID为1,name正常存在,type为private
 r($testsuite->updateTest($productID[0], $name[1], $type[0], '',    $uid[0])) && p('name:0')          && e('『套件名称』不能为空。');  //测试productID为1,name为空,type为private

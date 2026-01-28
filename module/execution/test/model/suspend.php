@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-7');
@@ -48,7 +48,7 @@ pid=1
 
 $executionIDList = array('2', '3', '4', '5', '6', '7');
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->suspendTest($executionIDList[0])) && p('0:field,old,new') && e('status,wait,suspended');  // wait敏捷执行挂起
 r($execution->suspendTest($executionIDList[1])) && p('0:field,old,new') && e('status,doing,suspended'); // doing敏捷执行挂起
 r($execution->suspendTest($executionIDList[2])) && p('0:field,old,new') && e('status,wait,suspended');  // wait瀑布执行挂起

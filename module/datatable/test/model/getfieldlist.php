@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(1);
 zenData('lang')->gen(0);
@@ -45,7 +45,7 @@ global $lang;
 $lang->SRCommon = '研发需求';
 $lang->URCommon = '用户需求';
 
-$datatable = new datatableTest();
+$datatable = new datatableModelTest();
 r($datatable->getFieldListTest('product', 'browse'))  && p('id:title;id:width;title:title;title:width')    && e('ID,80,研发需求名称,0.44');  //获取产品模块browse方法自定义列
 r($datatable->getFieldListTest('project', 'browse'))  && p('id:title;id:width;name:title;name:width')      && e('ID,80,项目名称,0.44');      //获取项目模块browse方法自定义列
 r($datatable->getFieldListTest('execution', 'task'))  && p('id:title;id:width;name:title;name:width')      && e('ID,80,任务名称,0.5');       //获取执行模块task方法自定义列

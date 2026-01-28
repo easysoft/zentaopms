@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -58,7 +58,7 @@ $key         = 'key=1';
 $vision      = 'vision=rnd';
 $paramString = array('', $lang, $lang.'&'.$module, $lang.'&'.$key.'&'.$section, $lang.'&'.$key.'&'.$section.'&'.$module, $lang.'&'.$key.'&'.$section.'&'.$module.'&'.$vision);
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->parseItemParamTest($paramString[5])) && p('lang,module,section,key,vision') && e('zh-cn,custom,URSRList,1,rnd'); // 测试参数为lang,key,section,module,vision
 r($customTester->parseItemParamTest($paramString[4])) && p('lang,module,section,key,vision') && e('zh-cn,custom,URSRList,1,~~');  // 测试参数为lang,key,section,module
 r($customTester->parseItemParamTest($paramString[3])) && p('lang,module,section,key,vision') && e('zh-cn,~~,URSRList,1,~~');      // 测试参数为lang,key,section

@@ -20,9 +20,9 @@ cid=17416
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 // 计算期望的日期值
 $monday = date('Y-m-d', time() - (date('N') - 1) * 24 * 3600);

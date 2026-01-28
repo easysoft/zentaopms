@@ -16,7 +16,7 @@ cid=15011
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $aiTable = zenData('ai_model');
 $aiTable->id->range('1-5');
@@ -33,7 +33,7 @@ $aiTable->gen(5);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 $validOpenAIModel = new stdclass();
 $validOpenAIModel->name = 'Test OpenAI Model';

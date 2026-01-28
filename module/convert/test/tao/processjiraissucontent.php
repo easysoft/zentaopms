@@ -18,7 +18,7 @@ cid=15870
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 // 创建自定义工作流测试表
 $dbh = $tester->dbh;
@@ -132,7 +132,7 @@ $actionTable->gen(10);
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 // 测试步骤1：正常处理多种类型的Jira问题内容转换（story、bug、task、ticket、feedback）
 r($convertTest->processJiraIssueContentTest(array(

@@ -17,7 +17,7 @@ cid=15100
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 $table = zenData('api_lib_release');
@@ -33,7 +33,7 @@ $table->gen(5);
 su('admin');
 
 // 4. 创建测试实例
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 // 5. 测试步骤（至少5个）
 r($apiTest->deleteReleaseTest(1, 1)) && p() && e('0'); // 步骤1：删除存在的发布记录ID=1，验证删除成功

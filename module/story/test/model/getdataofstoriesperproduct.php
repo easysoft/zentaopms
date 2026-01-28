@@ -20,7 +20,7 @@ cid=18521
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $product = zenData('product');
 $product->id->range('1-10');
@@ -38,7 +38,7 @@ $story->gen(20);
 
 su('admin');
 
-$storyTest = new storyTest();
+$storyTest = new storyModelTest();
 
 $_SESSION['storyOnlyCondition']  = true;
 $_SESSION['storyQueryCondition'] = "`id` < 20";

@@ -69,7 +69,7 @@ cid=16510
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('file')->gen(30);
@@ -77,7 +77,7 @@ zenData('file')->gen(30);
 $fileIDs = array('1,2,3,4,5', '6,7,8,9,10', '11,12,13,14,15', '16,17,18,19,20', '21,22,23,24,25');
 $titles  = array('title', 'extension');
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->getPairsTest($fileIDs[0], $titles[0])) && p('1,2,3,4,5')      && e('文件标题1,文件标题2,文件标题3,文件标题4,文件标题5');      // 测试获取文件 1 2 3 4 5 的 标题
 r($file->getPairsTest($fileIDs[1], $titles[0])) && p('6,7,8,9,10')     && e('文件标题6,文件标题7,文件标题8,文件标题9,文件标题10');     // 测试获取文件 6 7 8 9 10 的 标题

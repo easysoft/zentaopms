@@ -44,10 +44,10 @@ cid=14944
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('action')->loadYaml('action')->gen(18);
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $objectTypeList = array('project', 'testtask', 'buld', 'story', 'requirement', 'case', 'testcase', 'module', 'bug', 'testsuite');
 $objectIDList   = array(array(1, 2, 3), array(4, 5), array(6, 7), array(8), array(13, 14));

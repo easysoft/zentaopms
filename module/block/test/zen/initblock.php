@@ -16,11 +16,11 @@ cid=15244
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/block.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
-$blockTest = new blockTest();
+$blockTest = new blockZenTest();
 
 r($blockTest->zenInitBlockTest('my')) && p() && e(1);
 r($blockTest->zenInitBlockTest('qa')) && p() && e(1);

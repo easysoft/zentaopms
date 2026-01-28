@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -25,11 +25,11 @@ $SRName = array(
     '3' => array('SRName' => array('测试需求', '用户需求', '业务需求'), 'URName' => array('用户需求'), 'ERName' => array('业务需求')),
 );
 
-$custom = new customTest();
+$custom = new customModelTest();
 $custom->objectModel->lang->URName = '用户需求';
 $custom->objectModel->lang->SRName = '软件需求';
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->setURAndSRTest($SRName[0])) && p() && e('1');  //测试SRName值为空
 r($customTester->setURAndSRTest($SRName[1])) && p() && e('1');  //测试SRName值有一个
 r($customTester->setURAndSRTest($SRName[2])) && p() && e('1');  //测试SRName值有多个

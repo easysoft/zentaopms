@@ -19,7 +19,7 @@ cid=16059
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->gen(0);
 zenData('user')->gen(5);
@@ -35,7 +35,7 @@ $customApilib  = array('name' => '新建自定义api文档库', 'acl' => $acl[1]
 $noName        = array('name' => '',                    'acl' => $acl[0], 'baseUrl' => 'www.zentaopms.com');
 $noBaseUrl     = array('name' => 'noBaseUrl',           'acl' => $acl[0], 'baseUrl' => '');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->createApiLibTest($openApilib))    && p('type;name')   && e('api;新建api文档库');                                                                                                       // 新建公有接口库
 r($docTester->createApiLibTest($privateApilib)) && p('acl;baseUrl') && e('private;www.zentaopms.com');                                                                                               // 新建私有接口库
 r($docTester->createApiLibTest($customApilib))  && p('acl')         && e('custom');                                                                                                                  // 新建自定义接口库

@@ -16,7 +16,7 @@ cid=18437
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/stakeholder.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $projectTable = zenData('project')->loadYaml('project');
 $projectTable->acl->range('private');
@@ -30,7 +30,7 @@ $objectIds[1] = range(1, 10);
 $objectIds[2] = array(11);
 $objectIds[3] = array(200, 201, 202);
 
-$stakeholderTester = new stakeholderTest();
+$stakeholderTester = new stakeholderModelTest();
 r($stakeholderTester->getParentStakeholderGroupTest($objectIds[0])) && p('2:user1')  && e('user1'); // 获取对象ID为0的父对象干系人分组信息
 r($stakeholderTester->getParentStakeholderGroupTest($objectIds[1])) && p('2:admin')  && e('admin'); // 获取项目集ID为1-10的父项目集干系人分组信息
 r($stakeholderTester->getParentStakeholderGroupTest($objectIds[2])) && p('11:admin') && e('admin'); // 获取项目ID为11的所属项目集干系人分组信息

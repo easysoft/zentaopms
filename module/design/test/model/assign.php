@@ -19,7 +19,7 @@ cid=15982
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(1);
 zenData('user')->gen(5);
@@ -27,7 +27,7 @@ zenData('user')->gen(5);
 $designs   = array(0, 1, 2);
 $assignTos = array('admin', '');
 
-$designTester = new designTest();
+$designTester = new designModelTest();
 r($designTester->assignTest($designs[0], $assignTos[0])) && p()                  && e('0');                   // 测试设计ID为0，分配给admin
 r($designTester->assignTest($designs[1], $assignTos[0])) && p('0:field,old,new') && e('assignedTo,~~,admin'); // 测试设计ID为1，分配给admin
 r($designTester->assignTest($designs[1], $assignTos[1])) && p('0:field,old,new') && e('assignedTo,admin,~~'); // 测试设计ID为1，分配给空

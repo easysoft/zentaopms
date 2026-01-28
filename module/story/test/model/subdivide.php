@@ -17,7 +17,7 @@ cid=18587
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->gen(2);
@@ -34,7 +34,7 @@ $storySpec = zenData('storyspec');
 $storySpec->story->range('1-6');
 $storySpec->gen(6);
 
-$story = new storyTest();
+$story = new storyModelTest();
 $requirementResult = $story->subdivideTest(1, array(2, 3), 'requirement');
 $childrenResult    = $story->subdivideTest(4, array(5, 6), 'story');
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('bug')->loadYaml('execution')->gen(100);
@@ -33,7 +33,7 @@ cid=15367
 
 */
 
-$bug = new bugTest();
+$bug = new bugModelTest();
 r($bug->getDataOfBugsPerExecutionTest()) && p('11:name,value,title') && e('/PROJECT21,10,/PROJECT21');                                                         // 获取迭代11数据
 r($bug->getDataOfBugsPerExecutionTest()) && p('12:name,value,title') && e('/PROJECT22,9,/PROJECT22');                                                          // 获取迭代12数据
 r($bug->getDataOfBugsPerExecutionTest()) && p('13:name,value,title') && e('/PROJECT23,8,/PROJECT23');                                                          // 获取迭代13数据

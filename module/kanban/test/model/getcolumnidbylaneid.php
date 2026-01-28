@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbancolumn')->loadYaml('rdkanbancolumn')->gen(10);
@@ -36,7 +36,7 @@ cid=16913
 $laneIDList     = array('1', '2', '107', '108', '109', '10001');
 $columnTypeList = array('column1', 'column2', 'wait', 'test', 'backlog');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getColumnIDByLaneIDTest($laneIDList[0], $columnTypeList[0])) && p() && e('1'); // 测试获取泳道1 column1的看板列
 r($kanban->getColumnIDByLaneIDTest($laneIDList[0], $columnTypeList[1])) && p() && e('0'); // 测试获取泳道1 column2的看板列

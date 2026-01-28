@@ -17,11 +17,11 @@ cid=16126
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getSpacesTest('all', 0)) && p('0') && e('0');          // 测试获取all类型的空间返回空间数组长度
 r($docTester->getSpacesTest('mine', 1)) && p('0') && e('0');         // 测试获取mine类型的空间返回空间数组长度
 r($docTester->getSpacesTest('custom', 2)) && p('0') && e('0');       // 测试获取custom类型的空间返回空间数组长度

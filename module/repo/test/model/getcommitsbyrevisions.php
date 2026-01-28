@@ -16,7 +16,7 @@ cid=18054
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('repohistory');
 $table->id->range('1-10');
@@ -29,7 +29,7 @@ $table->gen(10);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 $singleRevision = array('commit001');
 $multipleRevisions = array('commit002', 'commit003', 'commit005');

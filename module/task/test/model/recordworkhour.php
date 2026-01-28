@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -121,7 +121,7 @@ $noconsumedTaskEffort[1]->left     = 2;
 $noconsumedTaskEffort[1]->work     = "无消耗的日志";
 $noconsumedTaskEffort[1]->date     = "2022-01-01";
 
-$task = new taskTest();
+$task = new taskModelTest();
 $startTaskResult = $task->recordWorkhourTest(1, $startTaskEffort);
 r($startTaskResult[0]) && p('field,old,new') && e('consumed,3,8');           // 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
 r($startTaskResult[1]) && p('field,old,new') && e('status,wait,doing');      // 任务未开始时记录工时，查看状态是否变化，应该从未开始变为开始

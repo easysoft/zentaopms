@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanbanlane')->gen(10);
@@ -23,7 +23,7 @@ cid=16931
 
 $groupIDList = array('1', '2', '3', '4', '5', '1000001');
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->getLanePairsByGroupTest($groupIDList[0])) && p() && e('默认泳道'); // 获取泳道组1的泳道
 r($kanban->getLanePairsByGroupTest($groupIDList[1])) && p() && e('默认泳道'); // 获取泳道组2的泳道

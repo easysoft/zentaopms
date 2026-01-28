@@ -16,14 +16,14 @@ cid=15095
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/api.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib', false, 2)->gen(10);
 zenData('module')->gen(0);
 
 su('admin');
 
-$apiTest = new apiTest();
+$apiTest = new apiModelTest();
 
 r($apiTest->createDemoModuleTest(1, '16.0')) && p('2964') && e('1');
 r($apiTest->createDemoModuleTest(2, '16.0')) && p('2963') && e('18');

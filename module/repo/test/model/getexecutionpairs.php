@@ -16,7 +16,7 @@ cid=18055
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-6');
@@ -54,7 +54,7 @@ $projectProduct->gen(5);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->getExecutionPairsTest(1)) && p() && e('0');
 r($repoTest->getExecutionPairsTest(999)) && p() && e('0');

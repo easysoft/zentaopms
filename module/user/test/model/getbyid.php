@@ -21,7 +21,7 @@ cid=19604
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('user');
 $table->last->prefix('2025-01-01 10:00:00');
@@ -29,7 +29,7 @@ $table->gen(1);
 
 su('admin');
 
-$userTest = new userTest();
+$userTest = new userModelTest();
 
 r($userTest->getByIDTest(0))                  && p('account') && e(0);       // $userID 参数为 0 ，通过默认字段获取，用户不存在。
 r($userTest->getByIDTest(1))                  && p('account') && e(0);       // $userID 参数为 1 ，通过默认字段获取，用户不存在。

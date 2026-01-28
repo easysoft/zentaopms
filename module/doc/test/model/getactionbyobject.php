@@ -20,7 +20,7 @@ cid=16068
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('docaction')->loadYaml('docaction')->gen(20);
 zenData('user')->gen(5);
@@ -30,7 +30,7 @@ $docs     = array(0, 1);
 $actions  = array('', 'collect', 'view');
 $accounts = array('', 'user1');
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->getActionByObjectTest($docs[0], $actions[0], $accounts[0])) && p()             && e('0');         // 测试空数据
 r($docTester->getActionByObjectTest($docs[1], $actions[0], $accounts[0])) && p()             && e('0');         // 测试查询docID=1的数据
 r($docTester->getActionByObjectTest($docs[1], $actions[1], $accounts[0])) && p('doc,action') && e('1,collect'); // 测试查询docID=1, action=collect的数据

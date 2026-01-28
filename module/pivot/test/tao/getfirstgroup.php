@@ -18,13 +18,13 @@ cid=17442
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('module')->loadYaml('module_pivot')->gen(9);
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotTaoTest();
 
 r($pivotTest->getFirstGroupTest(1)) && p('') && e('1');
 r($pivotTest->getFirstGroupTest(2)) && p('') && e('4');

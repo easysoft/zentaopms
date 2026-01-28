@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/branch.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->loadYaml('product')->gen(10);
 zenData('branch')->gen(5);
@@ -20,7 +20,7 @@ $changeDesc   = array('desc' => '修改后的分支1描述');
 $emptyName    = array('name' => '');
 $repeatName   = array('name' => '分支2');
 
-$branch = new branchTest();
+$branch = new branchModelTest();
 
 r($branch->updateTest($changeName))   && p('0:field,old,new') && e('name,分支1,修改后的分支1'); // 测试修改分支名称
 r($branch->updateTest($changeStatus)) && p('0:field,old,new') && e('status,active,closed');     // 测试修改分支状态

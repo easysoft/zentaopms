@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dept.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('dept')->gen(30);
@@ -29,7 +29,7 @@ cid=15975
 $deptIDList = array('2', '5', '50');
 $count      = array('0', '1');
 
-$dept = new deptTest();
+$dept = new deptModelTest();
 r($dept->getParentsTest($deptIDList[0], $count[0])) && p('0:id,name,parent') && e('2,开发部2,0');   //父级部门查询父级
 r($dept->getParentsTest($deptIDList[1], $count[0])) && p('0:id,name,parent') && e('5,开发部15,0');  //子级部门查询父级
 r($dept->getParentsTest($deptIDList[0], $count[1])) && p()                   && e('1');             //父级部门查询父级统计

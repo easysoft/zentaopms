@@ -15,7 +15,7 @@ cid=17261
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(1);
 zenData('repo')->loadYaml('repo')->gen(1);
@@ -23,7 +23,7 @@ zenData('mr')->loadYaml('mr')->gen(1);
 
 su('admin');
 
-$mrTest = new mrTest();
+$mrTest = new mrModelTest();
 
 $validMR = new stdclass();
 $validMR->title              = 'Updated test merge request';

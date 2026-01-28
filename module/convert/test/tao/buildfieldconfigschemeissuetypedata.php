@@ -17,11 +17,11 @@ cid=15810
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/convert.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
-$convertTest = new convertTest();
+$convertTest = new convertTaoTest();
 
 r($convertTest->buildFieldConfigSchemeIssueTypeDataTest(array('id' => '1', 'issuetype' => 'bug', 'fieldconfigscheme' => 'scheme1', 'fieldconfiguration' => 'config1'))) && p('id') && e('1');
 r($convertTest->buildFieldConfigSchemeIssueTypeDataTest(array('id' => '2', 'fieldconfigscheme' => 'scheme2', 'fieldconfiguration' => 'config2'))) && p('issuetype') && e('~~');

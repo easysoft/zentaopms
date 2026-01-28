@@ -41,14 +41,14 @@ div
         div
         (
             setID('command'),
-            setClass('pre rounded-md bg-gray-100 px-8 py-6'),
+            setClass('pre-wrap break-all break-words rounded-md bg-gray-100 px-8 py-6'),
             setStyle('height', 'calc(100% - 8rem)'),
             $command
         ),
         div
         (
             setClass('text-warning'),
-            $lang->upgrade->execCommand
+            $tips
         ),
         row
         (

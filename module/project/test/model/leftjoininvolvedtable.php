@@ -16,13 +16,13 @@ cid=17862
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(3);
 
 su('admin');
 
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 global $tester;
 
 $stmt1 = $tester->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1');

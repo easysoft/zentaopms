@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -85,7 +85,7 @@ $effort->gen(1);
 $user = zenData('user');
 $user->gen(20);
 
-$task = new taskTest();
+$task = new taskModelTest();
 r(count($task->processTasksTest(1))) && p() && e('6'); //查看处理后的执行1下的任务数量
 r($task->processTasksTest(1)) && p('1:productType,progress') && e('normal,75');   //根据executionID计算其下任务的进度及相关信息
 r($task->processTasksTest(2)) && p('2:productType,progress') && e('branch,80');   //根据executionID计算其下任务的进度及相关信息

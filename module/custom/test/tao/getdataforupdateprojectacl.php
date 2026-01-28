@@ -24,7 +24,7 @@ cid=15930
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $projectTable = zenData('project')->loadYaml('project');
 $projectTable->acl->range('open{10},program{4}');
@@ -40,7 +40,7 @@ $stakeholderTable->gen(10);
 zenData('user')->gen(5);
 su('admin');
 
-$customTester = new customTest();
+$customTester = new customTaoTest();
 $projectGroup = $customTester->getDataForUpdateProjectAclTest('projectGroup');
 $programPM    = $customTester->getDataForUpdateProjectAclTest('programPM');
 $stakeholders = $customTester->getDataForUpdateProjectAclTest('stakeholders');

@@ -17,7 +17,7 @@ cid=16539
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/file.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('file')->gen(20);
@@ -31,7 +31,7 @@ $albums2 = array('used' => array($uid2 => array('3' => '3', '4' => '4')));
 $albums3 = array('used' => array($uid3 => array('101' => '101', '102' => '102')));         // 不存在的文件ID
 $albums5 = array('used' => array($uid1 => array('5' => '5'), $uid2 => array('6' => '6'))); // 多个uid
 
-$file = new fileTest();
+$file = new fileModelTest();
 
 r($file->getUploadByUIDTest($uid1, $albums1)) && p('1') && e('文件标题1');               // 测试单个uid，有文件的情况
 r($file->getUploadByUIDTest($uid2, $albums2)) && p('3') && e('文件标题3');               // 测试多个uid的情况

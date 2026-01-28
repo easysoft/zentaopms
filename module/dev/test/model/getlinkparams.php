@@ -29,11 +29,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dev = new devTest();
+$dev = new devModelTest();
 
 r($dev->getLinkParamsTest('')) && p() && e('0');                                                         // 步骤1：空字符串输入
 r($dev->getLinkParamsTest('仪表盘|index|')) && p('0,1') && e('仪表盘,index');                             // 步骤2：标准字符串链接

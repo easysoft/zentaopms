@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testtask')->gen(10);
 zenData('testrun')->loadYaml('testrun')->gen(4);
@@ -68,7 +68,7 @@ cid=19155
 
 */
 
-$testtask = new testtaskTest();
+$testtask = new testtaskModelTest();
 
 r($testtask->batchAssignTest(0, 'a', array(1))) && p() && e(0); // 测试单参数为 0 返回 false。
 r($testtask->batchAssignTest(1, '',  array(1))) && p() && e(0); // 指派给参数为空返回 false。

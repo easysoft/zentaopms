@@ -13,12 +13,12 @@ cid=19574
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('project')->loadYaml('execution')->gen(10);
 zenData('project')->loadYaml('project')->gen(5, false, false);
 
-$upgrade = new upgradeTest();
+$upgrade = new upgradeTaoTest();
 
 $programID = 1;
 $projectID = array(2, 3, 4, 5);

@@ -30,7 +30,7 @@ cid=16841
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
 $table = zenData('job');
@@ -46,13 +46,7 @@ $table->gen(7);
 // 用户登录
 su('admin');
 
-// 创建测试实例
-$job = new jobTest();
-
-r($job->getByIdTest(1)) && p('id,engine,name,pipeline') && e('1,jenkins,Jenkins Job,test-pipeline'); // 测试步骤1：查询有效jenkins类型job的基本信息
-r($job->getByIdTest(2)) && p('id,engine,name') && e('2,gitlab,Gitlab Job');                    // 测试步骤2：查询有效gitlab类型job基本信息
-r($job->getByIdTest(999)) && p('id') && e('~~');                                               // 测试步骤3：查询不存在的job ID返回空对象
-r($job->getByIdTest(0)) && p('id') && e('~~');                                                 // 测试步骤4：测试边界值：ID为0的情况
-r($job->getByIdTest(6)) && p('id,engine,pipeline') && e('6,jenkins,simple');              // 测试步骤5：验证jenkins引擎正常pipeline
-r($job->getByIdTest(-1)) && p('id') && e('~~');                                                // 测试步骤6：测试负数ID的边界情况
-r($job->getByIdTest(5)) && p('id,engine') && e('5,jenkins');                                   // 测试步骤7：验证jenkins引擎基本信息
+$pipelineTester = new pipelineModelTest();
+r($pipelineTester->getByIDTest($idList[0])) && p()                                && e('0');                                                                                // 获取id为0的流水线信息
+r($pipelineTester->getByIDTest($idList[1])) && p('type,name,url,account,private') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root,08bcc98f75d7d40053dc80722bdc117b'); // 获取id为1流水线信息
+r($pipelineTester->getByIDTest($idList[2])) && p()                                && e('0');                                                                                // 获取id不存在的流水线信息

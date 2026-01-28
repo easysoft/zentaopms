@@ -815,7 +815,7 @@ class myModel extends model
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
         $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('story', 'enable');
-        unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch']);
+        unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch'], $this->config->product->search['fields']['roadmap']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -887,6 +887,7 @@ class myModel extends model
         $this->config->product->search['params']['product']['values'] = $products;
         $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('epic', 'enable');
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
+        if(isset($this->config->product->search['fields']['roadmap'])) $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs();
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->title);
         $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->create);
@@ -927,6 +928,7 @@ class myModel extends model
         $this->config->product->search['params']['product']['values'] = $products;
         $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('requirement', 'enable');
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
+        if(isset($this->config->product->search['fields']['roadmap'])) $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs();
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);

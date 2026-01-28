@@ -16,7 +16,7 @@ cid=19363
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -33,7 +33,7 @@ $bug->project->range('1');
 $bug->module->range('4');
 $bug->gen(10);
 
-$tree = new treeTest();
+$tree = new treeModelTest();
 
 r($tree->getBugTreeMenuTest(1))  && p() && e('正常产品1|模块4'); // 测试获取产品1的Bug模块
 r($tree->getBugTreeMenuTest(2))  && p() && e('正常产品2'); // 测试获取产品2的Bug模块

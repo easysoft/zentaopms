@@ -16,11 +16,11 @@ cid=18751
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/system.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$systemTest = new systemTest();
+$systemTest = new systemModelTest();
 
 r($systemTest->updateMinioDomainTest()) && p() && e('0');
 r($systemTest->updateMinioDomainTest()) && p() && e('0');

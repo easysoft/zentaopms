@@ -24,11 +24,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 r($adminTest->getHasPrivLinkTest(array('link' => 'System|company|index|'))) && p('0,1') && e('company,index');                     // 测试步骤1：正常菜单有权限链接
 r($adminTest->getHasPrivLinkTest(array())) && p() && e('0');                                                                    // 测试步骤2：没有链接字段的菜单

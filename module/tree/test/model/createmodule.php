@@ -23,7 +23,7 @@ cid=19353
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -47,7 +47,7 @@ $repeatNameData  = array('name' => $nameList[1], 'createType' => $createTypeList
 $childModuleData = array('name' => $nameList[2], 'createType' => $createTypeList[2], 'moduleType' => $moduleTypeList[1], 'parentID' => 1);
 $apiModuleData   = array('name' => $nameList[3], 'createType' => $createTypeList[1], 'moduleType' => $moduleTypeList[2], 'parentID' => 0);
 
-$treeTester = new treeTest();
+$treeTester = new treeModelTest();
 
 r($treeTester->createModuleTest($emptyData))       && p()             && e('『目录名称』不能为空。');    // 测试空数据创建模块
 r($treeTester->createModuleTest($nameEmptyData))   && p()             && e('『目录名称』不能为空。');    // 测试模块名称为空

@@ -21,7 +21,7 @@ cid=18725
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/svn.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -103,7 +103,7 @@ $dao->insert(TABLE_REPO)->data(array(
     'deleted' => '0'
 ))->exec();
 
-$svnTest = new svnTest();
+$svnTest = new svnModelTest();
 
 r($svnTest->setReposTest('count')) && p() && e('4');
 r($svnTest->setReposTest('first')) && p('name,SCM') && e('svn-repo-1,Subversion');

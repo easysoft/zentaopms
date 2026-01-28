@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -29,7 +29,7 @@ $typeList      = array('all', 'today', 'yesterday', 'twodaysago', 'latest3days',
 $dateList      = array('', '2025-04-23');
 $directionList = array('', 'pre', 'next');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->computeBeginAndEndTest($typeList[0], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算all的日期
 r($action->computeBeginAndEndTest($typeList[1], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算today的日期

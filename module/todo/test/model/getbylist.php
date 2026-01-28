@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -24,7 +24,7 @@ $todoIDList3 = array('5', '6', '7', '8');
 $todoIDList4 = array('9', '10', '11', '12'); /* Test not existed items. */
 $todoIDList5 = array(); /* Test empty todoIDList. */
 
-$todo = new todoTest();
+$todo = new todoModelTest();
 
 r($todo->getByListTest($todoIDList1)) && p() && e('1');
 r($todo->getByListTest($todoIDList2)) && p() && e('1234');

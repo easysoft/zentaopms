@@ -22,13 +22,13 @@ cid=14936
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->gen(10);
 
 su('admin');
 
-$action = new actionTest();
+$action = new actionModelTest();
 
 r($action->updateObjectByIDTest(TABLE_PROJECT, 1, array('name' => '更新后的项目名称'))) && p('name') && e('更新后的项目名称');
 r($action->updateObjectByIDTest(TABLE_PROJECT, 2, array('name' => '多字段更新项目', 'status' => 'doing'))) && p('name,status') && e('多字段更新项目,doing');

@@ -20,7 +20,7 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备文件测试数据
 $fileTable = zenData('file');
@@ -41,7 +41,7 @@ zenData('user')->gen(1);
 su('admin');
 
 global $tester, $app;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 测试1：文件不存在的情况 */
 $result1 = $zai->extractFileContentTest(999);

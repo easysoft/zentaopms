@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
@@ -31,7 +31,7 @@ $task->gen(50);
 $projectIDList = array(0, 11, 41);
 $dateList      = array('2022-05-01', '');
 
-$weekly = new weeklyTest();
+$weekly = new weeklyModelTest();
 
 r($weekly->getPVEVTest($projectIDList[0], $dateList[0]))               && p()  && e('20.00,60.68'); //测试projectID值为0，date值为2022-05-01
 r(explode(',', $weekly->getPVEVTest($projectIDList[0], $dateList[1]))) && p(1) && e('60.68');       //测试projectID值为0，date值为空

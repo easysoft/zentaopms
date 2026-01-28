@@ -42,7 +42,7 @@ cid=16060
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('project')->loadYaml('execution')->gen(100);
 zenData('user')->gen(5);
@@ -69,7 +69,7 @@ $noProduct       = array('type' => $type[0], 'product' => $product[0], 'name' =>
 $noProject       = array('type' => $type[1], 'project' => $project[0], 'name' => $name[1], 'acl' => $acl[1]);
 $noExecution     = array('type' => $type[2], 'execution' => $execution[0], 'name' => $name[1], 'acl' => $acl[1]);
 
-$docTester = new docTest();
+$docTester = new docModelTest();
 r($docTester->createLibTest($createProduct, $type[0], $libType[0])) && p('type;name')              && e('product;新建文档库');            // 新建公有产品文档库
 r($docTester->createLibTest($createProject, $type[1], $libType[0])) && p('type;acl')               && e('project;default');               // 新建公有项目文档库
 r($docTester->createLibTest($createProduct, $type[0], $libType[1])) && p('type;name')              && e('product;新建文档库');            // 新建公有产品api库

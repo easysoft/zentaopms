@@ -18,11 +18,11 @@ cid=15948
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/datatable.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$datatableTest = new datatableTest();
+$datatableTest = new datatableModelTest();
 
 r($datatableTest->sortColsTest(array('order' => 1), array('order' => 2))) && p() && e('-1');
 r($datatableTest->sortColsTest(array('order' => 2), array('order' => 1))) && p() && e('1');

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('product')->loadYaml('product')->gen(5);
@@ -30,7 +30,7 @@ cid=17880
 */
 
 $projectIdList = array(11, 60, 61, 100);
-$projectTester = new projectTest();
+$projectTester = new projectModelTest();
 
 r($projectTester->updateShadowProductTest($projectIdList[0])) && p('0:id,name') && e('1,更新敏捷项目11'); // 测试更新项目型敏捷项目的产品信息
 r($projectTester->updateShadowProductTest($projectIdList[1])) && p('0:id,name') && e('2,产品2');         // 测试更新产品型瀑布项目的产品信息

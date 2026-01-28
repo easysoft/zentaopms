@@ -15,7 +15,7 @@ cid=17685
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(5);
 su('admin');
 
@@ -30,7 +30,7 @@ zenData('team')->gen(0);
 global $app;
 $app->rawModule = 'program';
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 $statistic     = $programTester->getKanbanStatisticDataTest();
 
 r(count($statistic[0])) && p() && e('9');  // 获取项目集的产品数量

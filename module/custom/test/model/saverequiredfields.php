@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/custom.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 su('admin');
@@ -104,7 +104,7 @@ $requiredFields = array(
     'testcaseFields6'  => array('requiredFields' => array('create'   => array('stage', 'story'), 'edit' => array('stage', 'story'))),
 );
 
-$customTester = new customTest();
+$customTester = new customModelTest();
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields1'], $fieldsType[0]))   && p('value', ';') && e('name');                                             // 测试moduleName为product，requiredFields为空
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields2'], $fieldsType[0]))   && p('value', ';') && e('name,PO');                                          // 测试moduleName为product，requiredFields中的create存在一个值
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields3'], $fieldsType[0]))   && p('value', ';') && e('name,PO,RD');                                       // 测试moduleName为product，requiredFields中的create存在多个值

@@ -14,14 +14,14 @@ cid=0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/zai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(3);
 
 su('admin');
 
 global $tester;
-$zai = new zaiTest();
+$zai = new zaiModelTest();
 
 /* 获取测试用户信息 */
 $userModel = $tester->loadModel('user');

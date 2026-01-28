@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试 executionModel->getTaskGroupByExecution();
@@ -70,7 +70,7 @@ su('admin');
 
 $executionIdList = array(0, 3, 4, 5);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getTaskGroupByExecutionTest())                 && p() && e('0');  // 测试空数据
 r($execution->getTaskGroupByExecutionTest($executionIdList)) && p() && e('3');  // 测试获取执行的任务
 

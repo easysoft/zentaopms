@@ -18,13 +18,13 @@ cid=18266
 
 // 1. 导入依赖（路径固定，不可修改）
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 4. 准备测试数据
 // 构造标准过滤器对象

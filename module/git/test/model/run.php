@@ -16,11 +16,11 @@ cid=16551
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/git.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$git = new gitTest();
+$git = new gitModelTest();
 
 // 测试步骤1：无仓库情况下执行任务
 zenData('repo')->gen(0);

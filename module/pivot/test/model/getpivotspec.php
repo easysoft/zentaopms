@@ -18,7 +18,7 @@ cid=17394
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 初始化pivot测试数据
 global $tester, $app;
@@ -28,7 +28,7 @@ $tester->dbh->exec(file_get_contents($sqlFile));
 
 su('admin');
 
-$pivotTest = new pivotTest();
+$pivotTest = new pivotModelTest();
 
 r($pivotTest->getPivotSpecTest(1000, '1')) && p('id') && e('1000');
 r($pivotTest->getPivotSpecTest(999999, '1')) && p() && e('0');

@@ -20,11 +20,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/admin.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$adminTest = new adminTest();
+$adminTest = new adminModelTest();
 
 // 测试步骤1：测试正常的二级菜单配置
 $normalMenu = array(

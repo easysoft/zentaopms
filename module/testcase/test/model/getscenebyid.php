@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('scene')->gen('5');
 zenData('user')->gen('1');
@@ -18,7 +18,7 @@ pid=1
 
 $sceneIdList = array(1, 2, 3, 4, 5, 1001);
 
-$testcase = new testcaseTest();
+$testcase = new testcaseModelTest();
 
 r($testcase->getSceneByIDTest($sceneIdList[0])) && p('title,parent,grade') && e('这个是测试场景1,0,0'); // 测试获取scene 1 的信息
 r($testcase->getSceneByIDTest($sceneIdList[1])) && p('title,parent,grade') && e('这个是测试场景2,0,0'); // 测试获取scene 2 的信息

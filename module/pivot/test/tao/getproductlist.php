@@ -28,7 +28,7 @@ cid=17446
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('product')->loadYaml('product_closed')->gen(10);
 zenData('project')->gen(10);

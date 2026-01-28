@@ -19,7 +19,7 @@ cid=18053
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备
 zenData('task')->gen(10);
@@ -33,7 +33,7 @@ zenData('repohistory')->loadYaml('repohistory')->gen(1);
 su('admin');
 
 // 4. 创建测试实例
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 // 5. 执行测试步骤（至少5个）
 r($repoTest->getCommitsByObjectTest(8, 'task'))    && p('0:id')       && e('1');                  // 步骤1：获取任务关联提交信息

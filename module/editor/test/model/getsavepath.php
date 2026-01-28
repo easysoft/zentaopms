@@ -20,13 +20,13 @@ cid=16239
 
 // 1. 导入依赖
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/editor.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. 用户登录
 su('admin');
 
 // 3. 创建测试实例
-$editorTest = new editorTest();
+$editorTest = new editorModelTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
 r($editorTest->getSavePathTest()) && p('pathMatch') && e('1');                                      // 步骤1：测试extendModel操作生成正确路径

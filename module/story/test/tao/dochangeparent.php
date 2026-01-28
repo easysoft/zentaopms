@@ -22,7 +22,7 @@ cid=18616
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/story.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
 $story = zenData('story');
@@ -62,7 +62,7 @@ $oldStory9->type   = 'epic';
 $newStory9 = new stdClass();
 $newStory9->parent = 8;
 
-$story = new storyTest();
+$story = new storyTaoTest();
 r($story->doChangeParentTest(1, $noParent, $noParent))   && p('2:root;3:root')              && e('1;1'); //测试父需求不变的情况
 r($story->doChangeParentTest(3, $newStory3, $oldStory3)) && p('2:isParent;3:parentVersion') && e('1;2'); //测试将需求3的父需求修改为需求2
 r($story->doChangeParentTest(6, $newStory6, $oldStory6)) && p('5:isParent;6:parentVersion') && e('1;1'); //测试将用户需求6的父需求修改为用户需求5

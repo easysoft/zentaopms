@@ -19,11 +19,11 @@ cid=0
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mailTest = new mailTest();
+$mailTest = new mailModelTest();
 
 // 测试步骤1：获取单个错误信息
 $mailTest->objectModel->errors = array('用户邮箱不存在。');

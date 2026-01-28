@@ -1,5 +1,0 @@
-<select name='productID' id='productID' tabindex=2 onchange="switchProduct($('#productID').val(), 'bug', 'browse', '');">
-<optgroup label='&nbsp;'>
-<option value='1' selected='selected'>test</option>
-</optgroup>
-</select>

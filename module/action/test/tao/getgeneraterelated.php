@@ -32,14 +32,14 @@ cid=14948
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 zenData('bug')->gen(1);
 zenData('story')->gen(1);
 zenData('task')->gen(1);
 zenData('testreport')->gen(1);
 
-$actionTest = new actionTest();
+$actionTest = new actionTaoTest();
 
 $objectTypeList = array('bug', 'story', 'task', 'testreport', 'unknown');
 

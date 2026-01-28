@@ -77,10 +77,11 @@ if($canBatchReview)
 $assignedToItems = array();
 if($canBatchAssignTo)
 {
+    $pinyinItems = common::convert2Pinyin($users);
     foreach($users as $key => $value)
     {
         if(empty($key) || $key == 'closed') continue;
-        $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('epic', 'batchAssignTo', "storyType=epic&assignedTo={$key}"));
+        $assignedToItems[] = array('text' => $value, 'keys' => zget($pinyinItems, $value, ''), 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('epic', 'batchAssignTo', "storyType=epic&assignedTo={$key}"));
     }
 }
 

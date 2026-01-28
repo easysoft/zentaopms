@@ -24,13 +24,13 @@ cid=18111
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('repo')->loadYaml('repo')->gen(5);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->updateCommitCountTest(1, 100)) && p('id,commits') && e('1,100');    // 测试步骤1：正常更新版本库提交计数
 r($repoTest->updateCommitCountTest(2, 0)) && p('id,commits') && e('2,0');        // 测试步骤2：更新提交计数为0

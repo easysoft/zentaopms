@@ -16,12 +16,12 @@ cid=18239
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
 // 创建测试实例
-$screenTest = new screenTest();
+$screenTest = new screenModelTest();
 
 // 创建模拟图表对象
 $chart = new stdclass();

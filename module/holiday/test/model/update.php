@@ -16,7 +16,7 @@ cid=16749
 */
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/holiday.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('holiday')->gen(10);
 zenData('task')->gen(0);
@@ -26,7 +26,7 @@ su('admin');
 
 $holidayIDList = array(1, 2);
 
-$holiday = new holidayTest();
+$holiday = new holidayModelTest();
 
 $updateType      = array('type'  => 'working');
 $updateName      = array('name'  => '修改holiday的名字');

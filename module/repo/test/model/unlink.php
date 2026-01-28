@@ -16,7 +16,7 @@ cid=18107
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $repoTable = zenData('repo');
 $repoTable->id->range('1-3');
@@ -45,7 +45,7 @@ $relationTable->gen(6);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoModelTest();
 
 r($repoTest->unlinkTest(1, 'rev001', 'story', 1)) && p('') && e('success');
 r($repoTest->unlinkTest(1, 'rev002', 'bug', 2)) && p('') && e('success');

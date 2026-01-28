@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dev.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -19,7 +19,7 @@ pid=1
 
 */
 
-$devTester = new devTest();
+$devTester = new devModelTest();
 r($devTester->parseCommonLangTest(''))                     && p()  && e("null");     // 解析空字符串
 r($devTester->parseCommonLangTest('产品列表'))             && p()  && e("产品列表"); // 解析产品列表字符串
 r($devTester->parseCommonLangTest('$PRODUCTCOMMON列表'))   && p(1) && e('列表');     // 解析$PRODUCTCOMMON列表字符串

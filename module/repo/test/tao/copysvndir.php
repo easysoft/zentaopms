@@ -16,7 +16,7 @@ cid=18115
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 $repoTable = zenData('repo');
 $repoTable->id->range('1-5');
@@ -41,7 +41,7 @@ $filesTable->gen(15);
 
 su('admin');
 
-$repoTest = new repoTest();
+$repoTest = new repoTaoTest();
 
 r($repoTest->copySvnDirTest(1, '/trunk/src', '5', '/branches/dev/src')) && p() && e('1'); // 测试正常SVN目录复制
 r($repoTest->copySvnDirTest(1, '/nonexist', '5', '/branches/test')) && p() && e('0'); // 测试源路径不存在时的复制

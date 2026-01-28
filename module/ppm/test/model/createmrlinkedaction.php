@@ -17,7 +17,7 @@ cid=17242
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
@@ -25,7 +25,7 @@ zenData('action')->gen(0);
 zenData('mr')->gen(1);
 zenData('relation')->loadYaml('relation')->gen(10);
 
-$mrModel = new mrTest();
+$mrModel = new mrModelTest();
 r($mrModel->createMRLinkedActionTester(2)) && p() && e('0'); // 不存在的合并请求
 
 $result = $mrModel->createMRLinkedActionTester(1);

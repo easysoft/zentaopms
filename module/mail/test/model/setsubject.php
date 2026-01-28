@@ -18,11 +18,11 @@ cid=17025
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/mail.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$mail = new mailTest();
+$mail = new mailModelTest();
 
 r($mail->setSubjectTest('Normal subject text')) && p('Subject') && e('Normal subject text');
 r($mail->setSubjectTest('Test with \\slash')) && p('Subject') && e('Test with slash');

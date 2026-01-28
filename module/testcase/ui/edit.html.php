@@ -236,7 +236,8 @@ detailBody
                         set::name('type'),
                         set::items($lang->testcase->typeList),
                         set::value($case->type),
-                        set::required(true)
+                        set::required(true),
+                        $case->type == 'unit' ? set::disabled(true) : null,
                     ),
                     span
                     (

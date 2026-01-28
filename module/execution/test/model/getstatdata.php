@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -94,7 +94,7 @@ $branchID       = 0;
 $withTasksList  = array(false, true);
 $param          = 'skipParent';
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 
 r($execution->getStatDataTest())                                                                                        && p() && e('3'); // 测试默认值
 r($execution->getStatDataTest($projectIdList[0]))                                                                       && p() && e('3'); // 测试传入空值

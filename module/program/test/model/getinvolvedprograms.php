@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 /**
 
 title=测试 programModel::getInvolvedPrograms();
@@ -35,7 +35,7 @@ zenData('stakeholder')->gen(0);
 zenData('team')->gen(0);
 zenData('product')->gen(0);
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 $adminPrograms = $programTester->getInvolvedProgramsTest('admin');
 $test1Programs = $programTester->getInvolvedProgramsTest('test1');
 $user1Programs = $programTester->getInvolvedProgramsTest('user1');

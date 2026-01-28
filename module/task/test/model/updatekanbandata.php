@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('project')->loadYaml('project')->gen(5);
@@ -23,7 +23,7 @@ $taskIdList      = array(0, 1, 7);
 $laneIdList      = array(0, 1, 4);
 $oldColumnIdList = array(0, 1, 4);
 
-$taskTester = new taskTest();
+$taskTester = new taskModelTest();
 r($taskTester->updateKanbanDataTest($executionIdList[0], $taskIdList[0], $laneIdList[0], $oldColumnIdList[0])) && p()                 && e('0');         // 空数据的情况
 r($taskTester->updateKanbanDataTest($executionIdList[1], $taskIdList[0], $laneIdList[0], $oldColumnIdList[0])) && p()                 && e('0');         // 测试迭代下更新看板数据时，任务为空的情况
 r($taskTester->updateKanbanDataTest($executionIdList[0], $taskIdList[1], $laneIdList[0], $oldColumnIdList[0])) && p()                 && e('0');         // 测试迭代下更新看板数据时，执行为空的情况

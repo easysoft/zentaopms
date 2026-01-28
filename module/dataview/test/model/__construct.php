@@ -16,11 +16,11 @@ cid=15950
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/dataview.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$dataview = new dataviewTest();
+$dataview = new dataviewModelTest();
 
 r($dataview->__constructTest('normal')) && p('result') && e('normal'); // 步骤1：验证构造函数正常执行
 r($dataview->__constructTest('parentConstructor')) && p('result') && e('1'); // 步骤2：验证父类model正确初始化

@@ -16,7 +16,7 @@ cid=19023
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('product')->gen(5);
 zenData('user')->gen(1);
@@ -24,7 +24,7 @@ zenData('usergroup')->gen(5);
 
 su('admin');
 
-$testcaseTest = new testcaseTest();
+$testcaseTest = new testcaseModelTest();
 
 r($testcaseTest->setMenuTest(1)) && p() && e('1');
 r($testcaseTest->setMenuTest(0)) && p() && e('1');

@@ -15,7 +15,7 @@ cid=0
 $useTestFramework = false;
 try {
     // 仅包含测试类，避免框架初始化
-    include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
+    include dirname(__FILE__, 2) . '/lib/tao.class.php';
 } catch (Exception $e) {
     echo "Error: Unable to load test class: " . $e->getMessage() . PHP_EOL;
     exit(1);
@@ -125,7 +125,7 @@ $fieldParams['steps']      = $steps;
 $fieldParams['assignedTo'] = $assignedTo;
 $fieldParams['status']     = $status;
 
-$search = new searchTest();
+$search = new searchTaoTest();
 
 r($search->initSessionTest($module, $fields, $fieldParams)) && p('0:field') && e('title');
 r($search->initSessionTest($module, $fields, $fieldParams)) && p('0:operator') && e('include');

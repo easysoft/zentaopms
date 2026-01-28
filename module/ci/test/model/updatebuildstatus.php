@@ -16,7 +16,7 @@ cid=15596
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ci.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('pipeline')->gen(3);
 zenData('mr')->loadYaml('mr')->gen(10);
@@ -24,7 +24,7 @@ zenData('job')->loadYaml('job')->gen(10);
 zenData('compile')->loadYaml('compile')->gen(10);
 su('admin');
 
-$ci = new ciTest();
+$ci = new ciModelTest();
 
 r($ci->updateBuildStatusTest(1, 'building')) && p('status') && e('building'); // 更新构建任务状态为构建中
 r($ci->updateBuildStatusTest(1, 'success'))  && p('status') && e('success');  // 更新构建任务状态为成功

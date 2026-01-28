@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $program = zenData('project');
@@ -31,7 +31,7 @@ cid=17688
 
 */
 
-$programTester = new programTest();
+$programTester = new programModelTest();
 
 $programs1 = $programTester->getPairsTest();
 $programs2 = $programTester->getPairsTest('true');

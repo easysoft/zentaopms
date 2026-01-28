@@ -24,7 +24,7 @@ cid=16894
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 zenData('kanban')->gen(1);
@@ -57,7 +57,7 @@ $lane4->id = 1;
 $lane5 = new stdclass();
 $lane5->id = 2;
 
-$kanban = new kanbanTest();
+$kanban = new kanbanModelTest();
 
 r($kanban->createLaneTest(1, 1, $sameAsOtherLane))                && p('name,region,group') && e('测试创建与其他泳道使用相同看板列的泳道,1,1'); //测试创建与其他泳道使用相同看板列的泳道
 r($kanban->createLaneTest(1, 1, $independentLane))                && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,2');           //测试创建使用独立看板列的泳道

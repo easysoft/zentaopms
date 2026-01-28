@@ -19,11 +19,11 @@ cid=18038
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repo.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$repo = new repoTest();
+$repo = new repoModelTest();
 
 r($repo->createLinkTest('showSyncCommit', 'repoID=1')) && p() && e('repo-showSyncCommit-1.html'); // 测试PATH_INFO请求类型无路径参数
 r($repo->createLinkTest('showSyncCommit', 'repoID=1&entry=ZXh0ZW50aW9u')) && p() && e('repo-showSyncCommit-1-.html?repoPath=ZXh0ZW50aW9u'); // 测试entry参数转换

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $execution = zenData('project');
 $execution->id->range('1-7');
@@ -27,7 +27,7 @@ $kanbanExecutions = array(6, 7);
 $type             = array('sprint', 'stage', 'kanban');
 $count            = array(0, 1);
 
-$execution = new executionTest();
+$execution = new executionModelTest();
 r($execution->getToImportTest($sprintExecutions, $type[0], $count[0])) && p('2') && e('迭代1'); // 敏捷执行查询
 r($execution->getToImportTest($stageExecutions,  $type[1], $count[0])) && p('4') && e('阶段3'); // 瀑布执行查询
 r($execution->getToImportTest($kanbanExecutions, $type[2], $count[0])) && p('6') && e('看板5'); // 看板执行查询

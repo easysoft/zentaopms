@@ -16,7 +16,7 @@ cid=15220
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/bi.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 global $tester;
 $dao = $tester->dao;
@@ -65,7 +65,7 @@ $dao->insert(TABLE_ACTION)->data(array(
 
 su('admin');
 
-$biTest = new biTest();
+$biTest = new biTaoTest();
 
 r($biTest->fetchActionDateTest()) && p('minDate,maxDate') && e('2009-01-01 00:00:00,2024-12-31 18:00:00');
 r(is_object($biTest->fetchActionDateTest()) && isset($biTest->fetchActionDateTest()->minDate)) && p() && e('1');
