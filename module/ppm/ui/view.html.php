@@ -151,7 +151,7 @@ div
                 div
                 (
                     setClass('py-1 title-header text-clip'),
-                    span(setClass('text-lg text-clip text-ellipsis max-w-min font-bold entity-title-text'), set::title($ppm->title), "#{$ppm->id} {$ppm->title}"),
+                    span(setClass('text-lg text-clip font-bold entity-title-text'), set::title($ppm->title), "#{$ppm->id} {$ppm->title}"),
                     label(setClass('primary ml-4'), zget($lang->ppm->statusList, $ppm->status))
                 ),
                 div
