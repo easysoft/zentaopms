@@ -23,9 +23,15 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object
     {
-        $pipeline = $this->fetchByID($id);
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
+            ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
+            ->where('t1.id')->eq($id)
+            ->fetch();
+        $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
+
         return $pipeline;
     }
 
@@ -694,5 +700,21 @@ class pipelineModel extends model
         if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
 
         return true;
+    }
+
+    /**
+     * 获取步骤组.
+     * Get step groups.
+     *
+     * @access public
+     * @return void
+     */
+    public function getStepGroups(): object|bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipeline/steps/grouped");
+
+        $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        return $this->gitfox->getResponse($response);
     }
 }
