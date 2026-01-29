@@ -532,4 +532,23 @@ class pipeline extends control
 
         $this->sendSuccess(array('load' => true));
     }
+
+    /**
+     * 获取步骤组。
+     * Get step groups.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStepGroups()
+    {
+        $stepGroups = $this->pipeline->getStepGroups();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $this->sendError(zget($error, 'apiMessage', 'api error'));
+        }
+
+        $this->send(array('result' => 'success', 'data' => $stepGroups));
+    }
 }
