@@ -514,4 +514,22 @@ class pipeline extends control
         }
         echo json_encode($pipeline);
     }
+
+    /**
+     * 修改流水线信息。
+     * Edit pipeline info.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function ajaxPostFlowInfo(int $pipelineID)
+    {
+        $formData = form::data($this->config->pipeline->form->edit)->get();
+        $this->pipeline->update($pipelineID, $formData);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        $this->sendSuccess(array('load' => true));
+    }
 }
