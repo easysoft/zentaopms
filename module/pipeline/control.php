@@ -493,4 +493,25 @@ class pipeline extends control
 
         $this->display();
     }
+
+    /**
+     * 获取流水线信息。
+     * Get pipeline info.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFlowInfo(int $pipelineID)
+    {
+        $pipeline = $this->pipeline->getById($pipelineID);
+        if(!empty($pipeline) && !empty($pipeline->repoID) && $pipeline->type == 'repo')
+        {
+            $repo = $this->loadModel('repo')->fetchByID($pipeline->repoID);
+
+            $pipeline->repo     = $repo;
+            $pipeline->repoName = $repo->name;
+        }
+        echo json_encode($pipeline);
+    }
 }
