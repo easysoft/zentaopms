@@ -1034,15 +1034,15 @@ class ppmModel extends model
         $checkResult = array();
         $checkResult[$sourceBranch]['result'] = $checkSourceBranch;
         $checkResult[$targetBranch]['result'] = $checkTargetBranch;
-        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : zget($branchTypeRules[$sourceBranchType], 'targetBranch', array());
-        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : zget($branchTypeRules[$targetBranchType], 'sourceBranch', array());
+        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : explode(',', zget($branchTypeRules[$sourceBranchType], 'targetBranch', array()));
+        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : explode(',', zget($branchTypeRules[$targetBranchType], 'sourceBranch', array()));
 
-        if(empty($canMergeTargetBranchType)  && !empty($sourceTypeTargetRule) && !in_array($targetBranch, $sourceTypeTargetRule))
+        if(empty($canMergeTargetBranchType)  && !empty($sourceTypeTargetRule) && !in_array($targetBranchType, $sourceTypeTargetRule))
         {
             $checkResult[$sourceBranch]['result'] = false;
             $checkResult[$sourceBranch]['rule']   = $sourceTypeTargetRule;
         }
-        if(empty($canMergeSourceBranchType)  && !empty($targetTypeSourceRule) && !in_array($sourceBranch, $targetTypeSourceRule))
+        if(empty($canMergeSourceBranchType)  && !empty($targetTypeSourceRule) && !in_array($sourceBranchType, $targetTypeSourceRule))
         {
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $targetTypeSourceRule;
