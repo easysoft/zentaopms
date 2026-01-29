@@ -35,10 +35,10 @@ else
 /* zin: Define the toolbar on main menu. */
 $canCreate  = hasPriv('pipeline', 'create');
 $createItem = array('text' => $lang->pipeline->create, 'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$config->pipeline->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}&spaceID={$spaceID}&repoID={$repoID}");
 
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);
-
 toolbar($canCreate ? item(set($createItem)) : null);
 
 jsVar('confirmDelete', $lang->pipeline->confirmDelete);

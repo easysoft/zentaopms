@@ -268,38 +268,20 @@ class pipelineModel extends model
      */
     public function update(int $id, object $pipeline): bool
     {
-        $repo = $this->loadModel('repo')->getByID($pipeline->repo);
-        if($this->app->rawMethod != 'trigger')
-        {
-            $pipeline  = $this->pipelineTao->getServerAndPipeline($pipeline, $repo);
-            if(dao::isError()) return false;
+        $updatePipeline = $this->fetchByID($id);
+        if(empty($updatePipeline)) return false;
 
-            $result = $this->pipelineTao->checkIframe($pipeline, $id);
-            if(!$result) return false;
-        }
-        else
-        {
-            $this->pipelineTao->getSvnDir($pipeline, $repo);
-            $result = $this->pipelineTao->getCustomParam($pipeline);
-            if(!$result) return false;
-        }
+        $check = empty($updatePipeline->repoID) ? "spaceID = {$updatePipeline->spaceID}" : "repoID = {$updatePipeline->repoID}";
+        $check .= " AND id != $id";
 
-        $skipFields = 'triggerType,svnDir,comment,atDay,atTime,paramName,paramValue,autoRun';
-        if($this->app->rawMethod == 'trigger') $skipFields = 'name,engine,repo,reference,frame,product,sonarqubeServer,projectKey,jkServer,jkTask,gitfoxpipeline';
-        $this->dao->update(TABLE_PIPELINE)->data($pipeline, $skipFields)
-            ->batchCheckIF($this->app->rawMethod != 'trigger', $this->config->pipeline->edit->requiredFields, 'notempty')
-            ->batchCheckIF(strpos($pipeline->triggerType, 'schedule') !== false && $pipeline->atDay !== '0', "atDay", 'notempty')
-            ->batchCheckIF(strpos($pipeline->triggerType, 'schedule') !== false, "atTime", 'notempty')
-            ->batchCheckIF(strpos($pipeline->triggerType, 'commit') !== false, "comment", 'notempty')
-            ->batchCheckIF(strpos($pipeline->triggerType, 'action') !== false, "triggerActions", 'notempty')
-            ->batchCheckIF(($repo->SCM == 'Subversion' && strpos($pipeline->triggerType, 'tag') !== false), "svnDir", 'notempty')
-            ->batchCheckIF($pipeline->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
+        $this->dao->update(TABLE_PIPELINE)->data($pipeline)
+            ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
+            ->check('name', 'unique', $check)
             ->where('id')->eq($id)
+            ->autoCheck()
             ->exec();
-        if(dao::isError()) return false;
 
-        $this->initJob($id, $pipeline);
-        return true;
+        return !dao::isError();
     }
 
     /**
