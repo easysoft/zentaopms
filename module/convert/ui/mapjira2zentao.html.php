@@ -188,6 +188,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
             $buildHeader(sprintf($jiraRelation['zentaoObject'][$step] == 'bug' ? $lang->convert->jira->zentaoResolution : $lang->convert->jira->zentaoReason, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
         );
 
+        $app->loadLang($module);
         foreach($resolutionList as $id => $resolution)
         {
             $value  = $resolution->pname;
