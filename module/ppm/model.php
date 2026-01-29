@@ -1034,25 +1034,25 @@ class ppmModel extends model
         $checkResult = array();
         $checkResult[$sourceBranch]['result'] = $checkSourceBranch;
         $checkResult[$targetBranch]['result'] = $checkTargetBranch;
-        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) ? array() : explode(',', zget($branchTypeRules[$sourceBranchType], 'targetBranch', array()));
-        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) ? array() : explode(',', zget($branchTypeRules[$targetBranchType], 'sourceBranch', array()));
+        $sourceTypeTargetRule = empty($branchTypeRules[$sourceBranchType]) || empty($branchTypeRules[$sourceBranchType]->targetBranch) ? array() : explode(',', $branchTypeRules[$sourceBranchType]->targetBranch);
+        $targetTypeSourceRule = empty($branchTypeRules[$targetBranchType]) || empty($branchTypeRules[$targetBranchType]->sourceBranch) ? array() : explode(',', $branchTypeRules[$targetBranchType]->sourceBranch);
 
-        if(empty($canMergeTargetBranchType)  && !empty($sourceTypeTargetRule) && !in_array($targetBranchType, $sourceTypeTargetRule))
+        if(empty($canMergeTargetBranchType) && !empty($sourceTypeTargetRule) && !in_array($targetBranchType, $sourceTypeTargetRule))
         {
             $checkResult[$sourceBranch]['result'] = false;
             $checkResult[$sourceBranch]['rule']   = $sourceTypeTargetRule;
         }
-        if(empty($canMergeSourceBranchType)  && !empty($targetTypeSourceRule) && !in_array($sourceBranchType, $targetTypeSourceRule))
+        if(empty($canMergeSourceBranchType) && !empty($targetTypeSourceRule) && !in_array($sourceBranchType, $targetTypeSourceRule))
         {
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $targetTypeSourceRule;
         }
-        if(!empty($canMergeTargetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType))
+        if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType))
         {
             $checkResult[$sourceBranch]['result'] = false;
             $checkResult[$sourceBranch]['rule']   = $canMergeTargetBranchType;
         }
-        if(!empty($canMergeSourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType))
+        if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType))
         {
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $canMergeSourceBranchType;
