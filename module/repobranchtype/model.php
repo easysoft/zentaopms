@@ -313,7 +313,7 @@ class repobranchtypeModel extends model
         $branchTypes = $this->getBranchTypeByRepoID($repoID);
         if(empty($branchTypes)) return array();
 
-        $branchRuleList = array();
+        $branchTypeList = array();
         foreach($branchTypes as $branchType)
         {
             $prefixes = $branchType->prefixes;
@@ -323,13 +323,13 @@ class repobranchtypeModel extends model
                 {
                     if(strpos($branch, $prefix) === 0)
                     {
-                        $branchRuleList[$branch] = $branchType;
+                        $branchTypeList[$branch] = $branchType;
                         break;
                     }
                 }
             }
         }
 
-        return $branchRuleList;
+        return $branchTypeList;
     }
 }

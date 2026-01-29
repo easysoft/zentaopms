@@ -169,9 +169,10 @@ class reporeviewflowModel extends model
         $flows = $this->getList($repoID);
         if(empty($flows)) return array();
 
-        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repoID);
+        $branchTypes = $this->loadModel('repobranchtype')->getByBranches($repoID, array($branchName));
         if(empty($branchTypes)) return array();
 
+        $branchType = zget($branchTypes, $branchName, 0);
         foreach($flows as $flow)
         {
             if($flow->status == 'disable') continue;
@@ -184,13 +185,7 @@ class reporeviewflowModel extends model
             $flowBranchTypes = explode(',', $flow->branchType);
             foreach($flowBranchTypes as $flowBranchType)
             {
-                if(!isset($branchTypes[$flowBranchType])) continue;
-                $branchType = $branchTypes[$flowBranchType];
-                $prefixes   = $branchType->prefixes;
-                foreach($prefixes as $prefix)
-                {
-                    if(strpos($branchName, $prefix) === 0) return $flow;
-                }
+                if($flowBranchType == $branchType) return $flow;
             }
         }
 
