@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->ppm->review),
+    set::labelWidth(common::checkNotCN() ? '150px' : '100px'),
     formGroup
     (
         set::label($lang->ppm->decision),
