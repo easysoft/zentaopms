@@ -481,8 +481,6 @@ define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
-define('TABLE_PIPELINE',      '`ops_pipeline`');
-define('TABLE_PIPELINEEXEC',  '`ops_pipeline_execution`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_PPM',           '`ops_ppm`');
 define('TABLE_PPMREVIEWERS',  '`ops_request_reviewers`');
@@ -660,6 +658,11 @@ define('TABLE_DEVOPSREPOUSER', '`' . $config->db->prefix . 'ops_repouser`');
 define('TABLE_BRANCHTYPE', '`' . $config->db->prefix . 'ops_branch_type`');
 define('TABLE_BRANCHRULESET', '`' . $config->db->prefix . 'ops_branch_ruleset`');
 define('TABLE_REVIEWFLOW', '`' . $config->db->prefix . 'ops_review_flow`');
+
+define('TABLE_PIPELINE',        '`ops_pipeline`');
+define('TABLE_PIPELINECONTENT', '`ops_pipeline_content`');
+define('TABLE_PIPELINEEXEC',    '`ops_pipeline_executions`');
+define('TABLE_PIPELINETRIGGER', '`ops_triggers`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
