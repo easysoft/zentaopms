@@ -150,71 +150,28 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function edit(int $pipelineID)
+    public function edit(int $id, int $space = 0, int $repoID = 0)
     {
-        $pipeline = $this->pipeline->getByID($pipelineID);
-        if($_POST)
+        $this->commonAction($space);
+        if($repoID)
         {
-            $newJob = form::data($this->config->pipeline->form->edit)
-                ->setIF(!$this->post->repo, 'repo', $pipeline->repo)
-                ->setIF($this->post->triggerType && !in_array('commit',   $this->post->triggerType), 'comment', '')
-                ->setIF($this->post->triggerType && !in_array('schedule', $this->post->triggerType), 'atDay', '')
-                ->setIF($this->post->triggerType && !in_array('schedule', $this->post->triggerType), 'atTime', '')
-                ->setIF($this->post->triggerType && !in_array('tag',      $this->post->triggerType), 'lastTag', '')
-                ->setIF($this->post->frame != 'sonarqube', 'sonarqubeServer', 0)
-                ->setIF($this->post->frame != 'sonarqube', 'projectKey', '')
-                ->add('editedBy', $this->app->user->account)
-                ->get();
+            $this->pipelineZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
 
-            $this->pipeline->update($pipelineID, $newJob);
-            if(!dao::isError()) $this->loadModel('action')->create('pipeline', $pipelineID, 'edited');
-
-            return $this->send($this->pipelineZen->reponseAfterCreateEdit($pipeline->repo));
+            /* Set session. */
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
         }
 
-        $repo = $this->loadModel('repo')->getByID($pipeline->repo);
-
-        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, (int)$repo->serviceProject);
-        if($repo->SCM != 'Gitlab') $this->view->refList = $this->repo->getBranches($repo, true);
-        $this->pipelineZen->getSubversionDir($repo);
-
-        $products = $this->repo->getProductsByRepo($pipeline->repo);
-        if(!isset($products[$pipeline->product]))
-        {
-            $pipelineProduct = $this->loadModel('product')->getByID($pipeline->product);
-            if($pipelineProduct and $pipelineProduct->deleted == 0) $products += array($pipeline->product => $pipelineProduct->name);
-        }
-
-        if($pipeline->frame == 'sonarqube' && $pipeline->sonarqubeServer && $pipeline->projectKey)
-        {
-            $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($pipeline->sonarqubeServer, $pipeline->projectKey);
-        }
-
-        $this->view->title               = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->edit;
-        $this->view->repoList            = $this->loadModel('repo')->getList($this->projectID);
-        $this->view->pipeline                 = $pipeline;
-        $this->view->repo                = $repo;
-        $this->view->products            = $products;
-        $this->view->jenkinsServerList   = $this->loadModel('pipeline')->getPairs('jenkins');
-        $this->view->sonarqubeServerList = array('' => '') + $this->pipeline->getPairs('sonarqube');
+        $this->view->title    = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->edit;
+        $this->view->pipeline = $this->pipeline->getByID($id);
+        $this->view->repoID   = $repoID;
+        $this->view->repo     = $this->loadModel('repo')->getByID($repoID);;
 
         $this->display();
-    }
-
-    /**
-     * Delete a pipeline.
-     *
-     * @param  int    $pipelineID
-     * @access public
-     * @return void
-     */
-    public function delete(int $pipelineID)
-    {
-        $this->pipeline->delete(TABLE_JOB, $pipelineID);
-
-        $response['load']   = true;
-        $response['result'] = 'success';
-        return $this->send($response);
     }
 
     /**
