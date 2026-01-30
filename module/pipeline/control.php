@@ -548,8 +548,27 @@ class pipeline extends control
             $error = dao::getError();
             return $this->sendError(zget($error, 'apiMessage', 'api error'));
         }
+        $groups = array();
+        foreach($stepGroups as $group)
+        {
+            $object = new stdClass();
+            $object->name  = $group->groupName;
+            $object->alias = $group->desc;
 
-        $this->send(array('result' => 'success', 'data' => $stepGroups));
+            $tasks = array();
+            foreach($group->plugins as $plugin)
+            {
+                $task = new stdClass();
+                $task->name  = $plugin->name;
+                $task->alias = $plugin->alias;
+                $task->icon  = 'code';
+                $tasks[] = $task;
+            }
+            $object->tasks = $tasks;
+            $groups[] = $object;
+        }
+
+        $this->send(array('result' => 'success', 'data' => $groups));
     }
 
     /**
