@@ -551,4 +551,32 @@ class pipeline extends control
 
         $this->send(array('result' => 'success', 'data' => $stepGroups));
     }
+
+    /**
+     * 获取步骤定义。
+     * Get step schema.
+     *
+     * @param  string $stepName
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStepSchema(string $stepName)
+    {
+        $stepSchema = $this->pipeline->getStepSchema($stepName);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $this->sendError(zget($error, 'apiMessage', 'api error'));
+        }
+        $this->send(array('result' => 'success', 'data' => $stepSchema));
+    }
+
+    public function ajaxPostVars(int $pipelineID)
+    {
+        $this->send(array('result' => 'success', 'data' => $this->config->pipeline->vars));
+    }
+
+    public function ajaxEditPipeline(int $pipeline, string $type = 'draft')
+    {
+    }
 }
