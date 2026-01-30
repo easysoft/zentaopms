@@ -48,8 +48,9 @@ foreach($reviewers as $reviewer)
         ),
         div
         (
-            setClass('mt-2 pl-6'),
-            span("{$lang->ppm->approvalResult}: ", empty($reviewer->opinion) ? $lang->noData : strip_tags($reviewer->opinion))
+            setClass('mt-2 pl-6 h-auto break-all'),
+            set::title(empty($reviewer->opinion) ? $lang->noData : strip_tags($reviewer->opinion)),
+            span("{$lang->ppm->approvalResult}: ", empty($reviewer->opinion) ? $lang->noData : html($reviewer->opinion))
         )
     );
 }
