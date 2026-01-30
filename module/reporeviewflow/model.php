@@ -172,7 +172,8 @@ class reporeviewflowModel extends model
         $branchTypes = $this->loadModel('repobranchtype')->getByBranches($repoID, array($branchName));
         if(empty($branchTypes)) return array();
 
-        $branchType = zget($branchTypes, $branchName, 0);
+        $branchType = $branchTypes[$branchName];
+        $branchType = empty($branchType->id) ? '0' : $branchType->id;
         foreach($flows as $flow)
         {
             if($flow->status == 'disable') continue;

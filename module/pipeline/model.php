@@ -261,6 +261,18 @@ class pipelineModel extends model
         if(dao::isError()) return false;
 
         $pipelineID = $this->dao->lastInsertId();
+
+        if($pipelineID)
+        {
+            $content = new stdclass();
+            $content->pipelineID  = $pipelineID;
+            $content->createdBy   = $this->app->user->account;
+            $content->createdDate = helper::now();
+
+            $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)->exec();
+            if(dao::isError()) return false;
+        }
+
         $this->file->updateObjectID($this->post->uid, $pipelineID, 'pipeline');
         return $pipelineID;
     }
@@ -707,14 +719,46 @@ class pipelineModel extends model
      * Get step groups.
      *
      * @access public
-     * @return void
+     * @return object|bool|array
      */
-    public function getStepGroups(): object|bool
+    public function getStepGroups(): object|bool|array
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/pipeline/steps/grouped");
 
         $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
         return $this->gitfox->getResponse($response);
+    }
+
+    /**
+     * 获取步骤详情.
+     * Get step details.
+     *
+     * @param  string $stepName
+     * @access public
+     * @return string
+     */
+    public function getStepSchema(string $stepName): string
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipeline/steps/{$stepName}/schema");
+
+        $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return '';
+        }
+        return empty($response->data) ? '' : $response->data;
+    }
+
+    public function updateContent(int $pipelineID, object $content): bool
+    {
+        $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)
+            ->where('pipelineID')
+            ->eq($pipelineID)
+            ->exec();
+
+        return !dao::isError();
     }
 }
