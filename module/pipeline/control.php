@@ -592,10 +592,42 @@ class pipeline extends control
 
     public function ajaxPostVars(int $pipelineID)
     {
+        if($_POST)
+        {
+        }
         $this->send(array('result' => 'success', 'data' => $this->config->pipeline->vars));
     }
 
-    public function ajaxEditPipeline(int $pipeline, string $type = 'draft')
+    /**
+     * 修改流水线信息。
+     * Edit pipeline content.
+     *
+     * @param  int $pipelineID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxEditPipeline(int $pipelineID, string $type = 'draft')
     {
+        if($_POST)
+        {
+            $object = new stdClass();
+            $object->data       = $this->post->data;
+            $object->editedBy   = $this->app->user->account;
+            $object->editedDate = helper::now();
+            $this->pipeline->updateContent($pipelineID, $object);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $pipeline = $this->pipeline->fetchById($pipelineID);
+            $pipeline->type       = $type;
+            $pipeline->editedBy   = $this->app->user->account;
+            $pipeline->editedDate = helper::now();
+            $this->pipeline->update($pipelineID, $pipeline);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        return $this->sendError($this->lang->pipeline->notice->saveFailed);
     }
 }
