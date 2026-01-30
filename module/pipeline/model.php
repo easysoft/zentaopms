@@ -752,11 +752,19 @@ class pipelineModel extends model
         return empty($response->data) ? '' : $response->data;
     }
 
+    /**
+     * 修改流水线内容。
+     * Update pipeline content.
+     *
+     * @param  int $pipelineID
+     * @param  object $content
+     * @access public
+     * @return bool
+     */
     public function updateContent(int $pipelineID, object $content): bool
     {
-        $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)
-            ->where('pipelineID')
-            ->eq($pipelineID)
+        $this->dao->update(TABLE_PIPELINECONTENT)->data($content)
+            ->where('pipelineID')->eq($pipelineID)
             ->exec();
 
         return !dao::isError();
