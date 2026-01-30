@@ -296,7 +296,7 @@ div
                                         div
                                         (
                                             setClass('flex items-center py-1' . ($minReviewers == 0 ? ' hidden' : '')),
-                                            count($reviewers) >= $minReviewers ? icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check') : icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check'),
+                                            count($reviewers) >= $minReviewers ? icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewerCountIcon'), 'close'),
                                             span("{$lang->ppm->approvalReviewer}: ", count($reviewers)),
                                             div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≥{$minReviewers})"))
                                         )
