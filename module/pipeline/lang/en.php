@@ -152,3 +152,6 @@ $lang->pipeline->triggerTypeList['manual']       = 'Manual';
 $lang->pipeline->triggerTypeList['cron']         = 'Cron';
 $lang->pipeline->triggerTypeList['pull_request'] = 'Pull Request';
 $lang->pipeline->triggerTypeList['tag']          = 'Tag';
+
+$lang->pipeline->notice = new stdclass();
+$lang->pipeline->notice->saveFailed = "Save Failed, Please Retry.";

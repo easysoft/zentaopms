@@ -152,3 +152,6 @@ $lang->pipeline->triggerTypeList['manual']       = '手动触发';
 $lang->pipeline->triggerTypeList['cron']         = '定时触发';
 $lang->pipeline->triggerTypeList['pull_request'] = '拉取请求';
 $lang->pipeline->triggerTypeList['tag']          = '打标签';
+
+$lang->pipeline->notice = new stdclass();
+$lang->pipeline->notice->saveFailed = "保存失败,请重试。";
