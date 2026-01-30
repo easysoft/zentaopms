@@ -590,12 +590,29 @@ class pipeline extends control
         $this->send(array('result' => 'success', 'data' => $stepSchema));
     }
 
+    /**
+     * 更新流水线变量。
+     * Update pipeline variables.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
     public function ajaxPostVars(int $pipelineID)
     {
-        if($_POST)
+        $variables = file_get_contents('php://input');
+        if($variables)
         {
+            $object = new stdClass();
+            $object->variables  = $variables;
+            $object->editedBy   = $this->app->user->account;
+            $object->editedDate = helper::now();
+            $this->pipeline->updateContent($pipelineID, $object);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->sendSuccess(array('load' => true));
         }
-        $this->send(array('result' => 'success', 'data' => $this->config->pipeline->vars));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**
