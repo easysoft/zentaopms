@@ -358,60 +358,18 @@ class pipelineModel extends model
      * @access public
      * @return object|false
      */
-    public function exec(int $id, array $extraParam = array(), string $triggerType = ''): object|false
+    public function exec(int $id, object $variables): object|false
     {
-        $pipeline = $this->dao->select('t1.*,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
-            ->from(TABLE_JOB)->alias('t1')
-            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
-            ->where('t1.id')->eq($id)
-            ->fetch();
-        if(!$pipeline) return false;
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, '/pipeline/executions');
+        if(!empty($variables->gitRef)) $variables->gitRef = 'ref/heads/' . $variables->gitRef;
 
-        if(($this->app->rawModule != 'pipeline' || $this->app->rawMethod != 'exec') && !in_array($this->app->rawModule, array('mr', 'sonarqube')) && !empty($pipeline->autoRun)) return false;
+        $data = new stdClass();
+        $data->pipelineID = $id;
+        $data->params     = $variables;
 
-        $repo = $this->loadModel('repo')->getByID($pipeline->repo);
-        if(!$repo) return false;
-
-        $method = 'exec' . ucfirst($pipeline->engine) . 'Pipeline';
-        if(!method_exists($this, $method)) return false;
-
-        $compileID = 0;
-        if(in_array($triggerType, array('', 'schedule')) && strpos($pipeline->triggerType, 'schedule') !== false)
-        {
-            $compileID = $this->loadModel('compile')->createByJob($pipeline->id, $pipeline->atTime, 'atTime');
-        }
-
-        if(!$compileID && in_array($triggerType, array('', 'tag')) && strpos($pipeline->triggerType, 'tag') !== false)
-        {
-            $pipeline->lastTag = $this->getLastTagByRepo($repo, $pipeline);
-
-            $tag = '';
-            if($pipeline->lastTag)
-            {
-                $tag = $pipeline->lastTag;
-                $this->updateLastTag($pipeline->id, $pipeline->lastTag);
-            }
-
-            $compileID = $this->loadModel('compile')->createByJob($pipeline->id, $tag, 'tag');
-        }
-
-        if(!$compileID && in_array($triggerType, array('', 'commit')) && (!$pipeline->triggerType || strpos($pipeline->triggerType, 'commit') !== false))
-        {
-            $compileID = $this->loadModel('compile')->createByJob($pipeline->id);
-        }
-
-        $compile = $this->$method($pipeline, $repo, $compileID, $extraParam);
-        $compile->updateDate = helper::now();
-        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
-
-        $this->dao->update(TABLE_JOB)
-            ->set('lastExec')->eq(helper::now())
-            ->set('lastStatus')->eq($compile->status)
-            ->where('id')->eq($pipeline->id)
-            ->exec();
-
-        $compile->id = $compileID;
-        return $compile;
+        $response = json_decode(commonModel::http($url, $data, array(), $apiRoot->header, 'json'));
+        return $this->gitfox->getResponse($response);
     }
 
     /**
