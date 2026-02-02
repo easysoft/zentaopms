@@ -636,7 +636,7 @@ class pipeline extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $pipeline = $this->pipeline->fetchById($pipelineID);
-            $pipeline->type       = $type;
+            $pipeline->status     = $type;
             $pipeline->editedBy   = $this->app->user->account;
             $pipeline->editedDate = helper::now();
             $this->pipeline->update($pipelineID, $pipeline);
