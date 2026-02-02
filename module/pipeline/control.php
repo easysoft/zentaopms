@@ -679,7 +679,7 @@ class pipeline extends control
             $repo     = $this->loadModel('repo')->fetchByID($pipeline->repoID);
 
             $trigger = new stdClass();
-            $trigger->trigger    = zget($triggers, 'events', array());
+            $trigger->trigger    = explode(',', zget($triggers, 'events', array()));
             $trigger->id         = zget($pipeline, 'triggerID', 0);
             $trigger->pipelineID = $pipelineID;
             $trigger->cron       = $cron;
@@ -687,7 +687,7 @@ class pipeline extends control
             $trigger->editedBy   = $this->app->user->account;
             $trigger->editedDate = helper::now();
 
-            $this->pipeline->apiUpdateTrigger($pipelineID, zget($pipeline, 'triggerID', 0), $trigger);
+            $this->pipeline->apiUpdateTrigger($pipelineID, (int)zget($pipeline, 'triggerID', 0), $trigger);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true));
