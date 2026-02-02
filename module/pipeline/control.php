@@ -663,7 +663,6 @@ class pipeline extends control
         {
             $triggers = json_decode($triggers);
 
-            $events   = zget($triggers, 'events', array());
             $weekdays = zget($triggers, 'weekdays', '');
             $time     = zget($triggers, 'time', '');
 
@@ -680,7 +679,7 @@ class pipeline extends control
             $repo     = $this->loadModel('repo')->fetchByID($pipeline->repoID);
 
             $trigger = new stdClass();
-            $trigger->trigger    = explode(',', $events);
+            $trigger->trigger    = zget($triggers, 'events', array());
             $trigger->id         = zget($pipeline, 'triggerID', 0);
             $trigger->pipelineID = $pipelineID;
             $trigger->cron       = $cron;
