@@ -98,13 +98,11 @@ class repobranchrule extends control
                 $rule->createdDate = helper::now();
                 $result = $this->repobranchrule->createBranchRule($rule);
                 if(!$result) $this->sendError($this->lang->fail);
-                $this->loadModel('action')->create('branchRule', 0, 'create', $branchName);
             }
             else
             {
                 $result = $this->repobranchrule->updateBranchRule($originRule->id, $rule);
                 if(!$result) $this->sendError($this->lang->fail);
-                $this->loadModel('action')->create('branchRule', $originRule->id, 'edited');
             }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
