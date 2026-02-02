@@ -77,11 +77,11 @@ $config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&type={type}&pipelineID={id}");
 
-$config->pipeline->actionList['exec']['icon']      = 'play';
-$config->pipeline->actionList['exec']['text']      = $lang->pipeline->exec;
-$config->pipeline->actionList['exec']['hint']      = $lang->pipeline->exec;
-$config->pipeline->actionList['exec']['className'] = 'ajax-submit';
-$config->pipeline->actionList['exec']['url']       = helper::createLink('pipeline', 'exec',"id={id}");
+$config->pipeline->actionList['exec']['icon']        = 'play';
+$config->pipeline->actionList['exec']['text']        = $lang->pipeline->exec;
+$config->pipeline->actionList['exec']['hint']        = $lang->pipeline->exec;
+$config->pipeline->actionList['exec']['url']         = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}");
+$config->pipeline->actionList['exec']['data-toggle'] = 'modal';
 
 $config->pipeline->actionList['edit']['icon'] = 'edit';
 $config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
