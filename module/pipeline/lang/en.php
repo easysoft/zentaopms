@@ -147,11 +147,16 @@ $lang->pipeline->execStatusList['blocked']  = 'Blocked';
 $lang->pipeline->execStatusList['declined'] = 'Declined';
 
 $lang->pipeline->triggerTypeList = array();
-$lang->pipeline->triggerTypeList['push']         = 'Code Push';
-$lang->pipeline->triggerTypeList['manual']       = 'Manual';
-$lang->pipeline->triggerTypeList['cron']         = 'Cron';
-$lang->pipeline->triggerTypeList['pull_request'] = 'Pull Request';
-$lang->pipeline->triggerTypeList['tag']          = 'Tag';
+$lang->pipeline->triggerTypeList['branch_created']        = 'Create branch';
+$lang->pipeline->triggerTypeList['branch_updated']        = 'Branch update';
+$lang->pipeline->triggerTypeList['tag_created']           = 'Create tag';
+$lang->pipeline->triggerTypeList['tag_updated']           = 'Tag update';
+$lang->pipeline->triggerTypeList['pullreq_created']       = 'Create merge request';
+$lang->pipeline->triggerTypeList['pullreq_reopened']      = 'Reopen merge request';
+$lang->pipeline->triggerTypeList['pullreq_branch_update'] = 'Merge request branch update';
+$lang->pipeline->triggerTypeList['pullreq_closed']        = 'Merge request close';
+$lang->pipeline->triggerTypeList['pullreq_merged']        = 'Merge request merge';
+$lang->pipeline->triggerTypeList['cron']                  = 'Cron trigger';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "Save Failed, Please Retry.";

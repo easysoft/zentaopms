@@ -147,11 +147,16 @@ $lang->pipeline->execStatusList['blocked']  = '阻塞';
 $lang->pipeline->execStatusList['declined'] = '拒绝';
 
 $lang->pipeline->triggerTypeList = array();
-$lang->pipeline->triggerTypeList['push']         = '代码推送';
-$lang->pipeline->triggerTypeList['manual']       = '手动触发';
-$lang->pipeline->triggerTypeList['cron']         = '定时触发';
-$lang->pipeline->triggerTypeList['pull_request'] = '拉取请求';
-$lang->pipeline->triggerTypeList['tag']          = '打标签';
+$lang->pipeline->triggerTypeList['branch_created']        = '创建分支';
+$lang->pipeline->triggerTypeList['branch_updated']        = '分支更新';
+$lang->pipeline->triggerTypeList['tag_created']           = '创建标签';
+$lang->pipeline->triggerTypeList['tag_updated']           = '标签更新';
+$lang->pipeline->triggerTypeList['pullreq_created']       = '创建合并请求';
+$lang->pipeline->triggerTypeList['pullreq_reopened']      = '重新打开合并请求';
+$lang->pipeline->triggerTypeList['pullreq_branch_update'] = '合并请求的分支更新';
+$lang->pipeline->triggerTypeList['pullreq_closed']        = '合并请求关闭';
+$lang->pipeline->triggerTypeList['pullreq_merged']        = '合并请求合并';
+$lang->pipeline->triggerTypeList['cron']                  = '定时触发';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "保存失败,请重试。";
