@@ -62,8 +62,12 @@ $lang->pipeline->triggerPerson   = '触发人';
 $lang->pipeline->triggerDate     = '触发时间';
 $lang->pipeline->duration        = '执行时长';
 $lang->pipeline->pipelineName    = '流水线名称';
+$lang->pipeline->varName         = '变量名';
+$lang->pipeline->value           = '变量值';
 
-$lang->pipeline->lblBasic = '基本信息';
+$lang->pipeline->lblBasic  = '基本信息';
+$lang->pipeline->okBtn     = '确定';
+$lang->pipeline->execTitle = '指定运行参数';
 
 $lang->pipeline->auto           = '自动';
 $lang->pipeline->example        = '举例';

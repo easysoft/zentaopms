@@ -62,8 +62,12 @@ $lang->pipeline->triggerPerson   = 'Trigger Person';
 $lang->pipeline->triggerDate     = 'Trigger Date';
 $lang->pipeline->duration        = 'Duration';
 $lang->pipeline->pipelineName    = 'Pipeline Name';
+$lang->pipeline->varName         = 'Var Name';
+$lang->pipeline->varValue        = 'Var Value';
 
-$lang->pipeline->lblBasic = 'Basic Info';
+$lang->pipeline->lblBasic  = 'Basic Info';
+$lang->pipeline->okBtn     = 'Ok';
+$lang->pipeline->execTitle = 'Specify Execution Parameters';
 
 $lang->pipeline->auto           = 'Auto';
 $lang->pipeline->example        = 'e.g.';

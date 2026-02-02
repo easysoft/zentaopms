@@ -218,32 +218,33 @@ class pipeline extends control
      */
     public function exec(int $pipelineID)
     {
-        $compile = $this->pipeline->exec($pipelineID);
-        if(dao::isError())
+        $pipeline  = $this->pipeline->getByID($pipelineID);
+        $variables = $pipeline->variables;
+
+        if($_POST)
         {
-            $errors = array();
-            foreach(dao::getError() as $error)
+            $formData = fixer::input('post')->get();
+            if(isset($formData->gitRef) && !$formData->gitRef)
             {
-                if(is_array($error))
-                {
-                    foreach($error as $val)
-                    {
-                        $errors[] = $val;
-                    }
-                }
-                else
-                {
-                    $errors[] = $error;
-                }
+                return $this->sendError(array('gitRef' => sprintf($this->lang->error->notempty, $this->lang->pipeline->branch)));
             }
-            return $this->sendError(implode("\n", $errors));
+
+            $this->pipeline->exec($pipelineID, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->app->loadLang('compile');
-        $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
+        $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
 
-        $message = sprintf($this->lang->pipeline->sendExec, zget($this->lang->compile->statusList, $compile->status));
-        return $this->sendSuccess(array('message' => $message));
+        $this->view->title      = $this->lang->pipeline->exec;
+        $this->view->pipeline   = $pipeline;
+        $this->view->variables  = $variables;
+        $this->view->branchList = $scm->branch();
+        $this->display();
     }
 
     /**
