@@ -23,12 +23,20 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
             ->fetch();
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
+        $pipeline->triggerWeekdays = '';
+        $pipeline->triggerTime     = '';
+        if(!empty($pipeline->cron))
+        {
+            $cron = explode(' ', $pipeline->cron);
+            $pipeline->triggerWeekdays = zget($cron, count($cron) - 1, '');
+            $pipeline->triggerTime     = empty($cron[2]) || $cron[2] == '*' ? '' : $cron[2] . ':' . $cron[1];
+        }
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
 
@@ -270,6 +278,8 @@ class pipelineModel extends model
             $content->createdDate = helper::now();
 
             $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)->exec();
+            if(dao::isError()) return false;
+            $this->dao->insert(TABLE_PIPELINETRIGGER)->data($content)->exec();
             if(dao::isError()) return false;
         }
 
@@ -767,6 +777,30 @@ class pipelineModel extends model
             ->where('pipelineID')->eq($pipelineID)
             ->exec();
 
+        return !dao::isError();
+    }
+
+    /**
+     * 更新触发器.
+     * Update trigger.
+     *
+     * @param  int $pipelineID
+     * @param  int $triggerID
+     * @param  object $trigger
+     * @access public
+     * @return void
+     */
+    public function apiUpdateTrigger(int $pipelineID, int $triggerID, object $trigger)
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipelines/{$pipelineID}/triggers/{$triggerID}");
+
+        $response = json_decode(commonModel::http($url, $trigger, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $apiRoot->header, 'json', 'PUT'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
         return !dao::isError();
     }
 }

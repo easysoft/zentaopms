@@ -647,4 +647,52 @@ class pipeline extends control
 
         return $this->sendError($this->lang->pipeline->notice->saveFailed);
     }
+
+    /**
+     * 更新流水线触发器.
+     * Update pipeline triggers.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function ajaxPostTrigger(int $pipelineID)
+    {
+        $triggers = file_get_contents('php://input');
+        if($triggers)
+        {
+            $triggers = json_decode($triggers);
+
+            $events   = zget($triggers, 'events', array());
+            $weekdays = zget($triggers, 'weekdays', '');
+            $time     = zget($triggers, 'time', '');
+
+            $cron = '';
+            if($weekdays && $time)
+            {
+                list($hour, $minute) = explode(':', $time);
+                $cron = sprintf('0 %s %s * * %s', $minute, $hour, $weekdays);
+            }
+
+            if($weekdays && !$time) $cron = sprintf('0 * * * * %s', $weekdays);
+
+            $pipeline = $this->pipeline->getByID($pipelineID);
+            $repo     = $this->loadModel('repo')->fetchByID($pipeline->repoID);
+
+            $trigger = new stdClass();
+            $trigger->trigger    = explode(',', $events);
+            $trigger->id         = zget($pipeline, 'triggerID', 0);
+            $trigger->pipelineID = $pipelineID;
+            $trigger->cron       = $cron;
+            $trigger->repoID     = empty($repo) ? 0 : (int)$repo->gitfoxID;
+            $trigger->editedBy   = $this->app->user->account;
+            $trigger->editedDate = helper::now();
+
+            $this->pipeline->apiUpdateTrigger($pipelineID, zget($pipeline, 'triggerID', 0), $trigger);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true));
+        }
+        return $this->sendSuccess(array('load' => true));
+    }
 }
