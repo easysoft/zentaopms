@@ -54,7 +54,8 @@ if(!empty($variables))
 formPanel
 (
     set::title($lang->pipeline->execTitle),
-    set::actions(array('submit', 'cancel')),
+    on::click('.cancel', 'closeModal'),
+    set::actions(array('submit', array('type' => 'cancel', 'text' => $lang->cancel))),
     set::submitBtnText($lang->pipeline->okBtn),
     set::cancelBtnText($lang->cancel),
     formGroup
