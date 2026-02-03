@@ -216,7 +216,7 @@ class ppm extends control
         if(!empty($flow))
         {
             $flow->definition = json_decode($flow->definition);
-            $flow->reviewers  = arrayUnion($flow->definition->reviewFlow->approvals->defaultReviewers, $flow->definition->reviewFlow->approvals->specifiedReviewers);
+            $flow->reviewers  = arrayUnion(array_filter($flow->definition->reviewFlow->approvals->defaultReviewers), array_filter($flow->definition->reviewFlow->approvals->specifiedReviewers));
         }
         $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
 
