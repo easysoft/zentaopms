@@ -1047,12 +1047,12 @@ class ppmModel extends model
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $targetTypeSourceRule;
         }
-        if(!empty($canMergeTargetBranchType) && !empty($targetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType))
+        if(!empty($canMergeTargetBranchType) && !in_array($targetBranchType, $canMergeTargetBranchType))
         {
             $checkResult[$sourceBranch]['result'] = false;
             $checkResult[$sourceBranch]['rule']   = $canMergeTargetBranchType;
         }
-        if(!empty($canMergeSourceBranchType) && !empty($sourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType))
+        if(!empty($canMergeSourceBranchType) && !in_array($sourceBranchType, $canMergeSourceBranchType))
         {
             $checkResult[$targetBranch]['result'] = false;
             $checkResult[$targetBranch]['rule']   = $canMergeSourceBranchType;
