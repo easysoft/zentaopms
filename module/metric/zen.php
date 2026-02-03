@@ -146,6 +146,7 @@ class metricZen extends metric
 
         foreach(array_keys($this->lang->metric->objectList) as $object)
         {
+            if(!helper::hasFeature('program') && $object == 'program') continue;
             if(isset($groupModules[$object]) and !empty($groupModules[$object]))
             {
                 $sortedModules = array_merge($sortedModules, $groupModules[$object]);
