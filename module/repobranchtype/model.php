@@ -324,7 +324,6 @@ class repobranchtypeModel extends model
                     if(strpos($branch, $prefix) === 0)
                     {
                         $branchTypeList[$branch] = $branchType;
-                        break;
                     }
                 }
             }
