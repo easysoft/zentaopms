@@ -544,6 +544,7 @@ $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|brow
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
 $lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
+$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule');
 
@@ -565,6 +566,7 @@ $lang->devops->menuOrder[25]  = 'branch';
 $lang->devops->menuOrder[35]  = 'tag';
 $lang->devops->menuOrder[40]  = 'ppm';
 $lang->devops->menuOrder[45]  = 'pipeline';
+$lang->devops->menuOrder[46]  = 'artifact';
 $lang->devops->menuOrder[55]  = 'deploy';
 $lang->devops->menuOrder[70]  = 'settings';
 $lang->devops->menuOrder[75]  = 'apps';
@@ -761,6 +763,7 @@ $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
 $lang->navGroup->host             = 'devops';
+$lang->navGroup->artifact         = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';
