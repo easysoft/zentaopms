@@ -180,18 +180,25 @@ div
                                     $canMerge ? section
                                     (
                                         setClass('flex w-full checkMerge'),
-                                        div(setClass('py-6 border-l-4 border-r-4 border-success')),
+                                        $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? div(setClass('py-6 border-l-4 border-r-4 border-danger')) : div(setClass('py-6 border-l-4 border-r-4 border-success')),
                                         div
                                         (
+                                            $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center') :
                                             setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
                                             set::style(array('justify-content' => 'space-between')),
-                                            div(span(setClass('text-success font-bold'), $lang->ppm->checkSuccess)),
+                                            $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ?
+                                            div
+                                            (
+                                                setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
+                                                span(setClass('text-danger font-bold'), $lang->ppm->notice->fastNotice)
+                                            ) : div(span(setClass('text-success font-bold'), $lang->ppm->checkSuccess)),
                                             hasPriv('ppm', 'merge') && !empty($mergeBtnItems) && $ppm->status == 'opened' ? div(btnGroup
                                             (
                                                 setClass('merge-btn-group'),
                                                 btn
                                                 (
                                                     setClass('btn primary ajax-submit'),
+                                                    set::disabled($defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA),
                                                     set::url(createLink('ppm', 'merge', "ppmID={$ppm->id}&type={$defaultMergeType}")),
                                                     $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
                                                 ),
