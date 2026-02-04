@@ -663,6 +663,7 @@ define('TABLE_PIPELINE',        '`ops_pipeline`');
 define('TABLE_PIPELINECONTENT', '`ops_pipeline_content`');
 define('TABLE_PIPELINEEXEC',    '`ops_pipeline_executions`');
 define('TABLE_PIPELINETRIGGER', '`ops_triggers`');
+define('TABLE_ARTIFACT', '`ops_artifact`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
@@ -705,6 +706,7 @@ $config->objectTables['webhook']        = TABLE_WEBHOOK;
 $config->objectTables['stakeholder']    = TABLE_STAKEHOLDER;
 $config->objectTables['team']           = TABLE_TEAM;
 $config->objectTables['pipeline']       = TABLE_PIPELINE;
+$config->objectTables['artifact']       = TABLE_ARTIFACT;
 $config->objectTables['ppm']            = TABLE_PPM;
 $config->objectTables['kanban']         = TABLE_KANBAN;
 $config->objectTables['kanbanspace']    = TABLE_KANBANSPACE;
