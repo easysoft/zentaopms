@@ -12,6 +12,33 @@ declare(strict_types=1);
 class artifact extends control
 {
     /**
+     * 设置页面公共数据。
+     * Common actions.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function commonAction(int $spaceID = 0, int $repoID = 0)
+    {
+        $this->loadModel('space')->setMenu($spaceID);
+        if($repoID)
+        {
+            $repoID = $this->loadModel('repo')->saveState($repoID);
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+
+        $this->view->spaceID = $spaceID;
+        $this->view->repoID  = $repoID;
+        $this->view->inSpace = !empty($spaceID);
+    }
+
+    /**
      * 创建制品库。
      * create artifact repo.
      *
