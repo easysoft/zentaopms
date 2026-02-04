@@ -15,7 +15,7 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
 }
 
-$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$repoID}&type=all");
+$backUrl = createLink('pipeline', "browse", "space={$spaceID}&repoID={$repoID}&type={$type}");
 
 panel
 (

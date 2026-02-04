@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 
 namespace zin;
+global $app;
+$app->loadLang('runner');
 
 jsVar('repoID', $repoID);
 
@@ -33,13 +35,23 @@ else
 }
 
 /* zin: Define the toolbar on main menu. */
-$canCreate  = hasPriv('pipeline', 'create');
-$createItem = array('text' => $lang->pipeline->create, 'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
-$config->pipeline->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}&spaceID={$spaceID}&repoID={$repoID}");
+$canCreate     = hasPriv('pipeline', 'create');
+$runnerPriv    = hasPriv('runner', 'browse');
+$executionPriv = hasPriv('pipeline', 'execution');
+
+$createItem    = array('text' => $lang->pipeline->create,     'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$runnerItem    = array('text' => $lang->runner->manageRunner, 'url' => createLink('runner', 'browse'), 'class' => 'primary');
+$executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('execution', "spaceID={$spaceID}&repoID={$repoID}&type={$type}"), 'class' => 'primary');
+$config->pipeline->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
 
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);
-toolbar($canCreate ? item(set($createItem)) : null);
+toolbar
+(
+    $executionPriv ? item(set($executionItem)) : null,
+    $runnerPriv    ? item(set($runnerItem)) : null,
+    $canCreate     ? item(set($createItem)) : null
+);
 
 jsVar('confirmDelete', $lang->pipeline->confirmDelete);
 

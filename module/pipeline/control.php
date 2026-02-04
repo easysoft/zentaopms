@@ -150,7 +150,7 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function edit(int $id, int $space = 0, int $repoID = 0)
+    public function edit(int $id, int $space = 0, int $repoID = 0, $type = 'space')
     {
         $this->commonAction($space);
         if($repoID)
@@ -169,6 +169,7 @@ class pipeline extends control
         $this->view->title    = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->edit;
         $this->view->pipeline = $this->pipeline->getByID($id);
         $this->view->repoID   = $repoID;
+        $this->view->type     = $type;
         $this->view->repo     = $this->loadModel('repo')->getByID($repoID);;
 
         $this->display();

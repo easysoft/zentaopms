@@ -527,10 +527,6 @@ $lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|
 $lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
 $lang->devops->homeMenu->deploy   = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 
-$lang->devops->homeMenu->pipeline['subMenu'] = new stdclass();
-$lang->devops->homeMenu->pipeline['subMenu']->pipeline  = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'alias' => 'edit');
-$lang->devops->homeMenu->pipeline['subMenu']->execution = array('link' => "{$lang->devops->execution}|pipeline|execution|spaceID=%s&repoID=0&type=space");
-
 $configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
 $lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repo|setrules|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
@@ -548,9 +544,6 @@ $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|brow
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
 $lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
-$lang->devops->menu->pipeline['subMenu'] = new stdclass();
-$lang->devops->menu->pipeline['subMenu']->pipeline  = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'alias' => 'edit');
-$lang->devops->menu->pipeline['subMenu']->execution = array('link' => "{$lang->devops->execution}|pipeline|execution|spaceID=0&repoID=%s&type=repo");
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule');
 
