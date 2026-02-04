@@ -43,7 +43,6 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->pipeline->desc),
-        set::required(true),
         set::control('editor')
     )
 );
