@@ -238,13 +238,16 @@ class pipeline extends control
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
-        $scm  = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
+        if($repo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+        }
 
         $this->view->title      = $this->lang->pipeline->exec;
         $this->view->pipeline   = $pipeline;
         $this->view->variables  = $variables;
-        $this->view->branchList = $scm->branch();
+        $this->view->branchList = $repo ? $scm->branch() : array();
         $this->display();
     }
 
