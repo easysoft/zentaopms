@@ -632,7 +632,7 @@ class repoModel extends model
         $repo->serviceHost    = (int)$repo->serviceHost;
         $repo->gitService     = $repo->serviceHost;
         $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
-        $repo->members        = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->space, true);
+        $repo->members        = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->space);
 
         return $repo;
     }

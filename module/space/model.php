@@ -59,7 +59,7 @@ class spaceModel extends model
      */
     public function getMemberList(): array
     {
-        $managers   = $this->dao->select('*')->from(TABLE_DEVOPSSPACEUSER)->where('role')->eq('manager')->fetchAll();
+        $managers   = $this->dao->select('*')->from(TABLE_DEVOPSSPACEUSER)->fetchAll();
         $memberList = array();
         if(!empty($managers))
         {
@@ -222,7 +222,7 @@ class spaceModel extends model
         $createdDate = new DateTime($space->createdDate);
         $space->createdDate = $createdDate->format('Y-m-d H:i:s');
 
-        $space->members = $this->getSpaceMembers($spaceID, true);
+        $space->members = $this->getSpaceMembers($spaceID);
         return $space;
     }
 
@@ -511,12 +511,11 @@ class spaceModel extends model
      * Get all members by spaceID.
      *
      * @param  int  $spaceID
-     * @param  bool $showManager
      * @param  bool $allVision
      * @access public
      * @return array
      */
-    public function getSpaceMembers(int $spaceID, bool $showManager = false, bool $allVision = false): array
+    public function getSpaceMembers(int $spaceID, bool $allVision = false): array
     {
         $members     = array();
         $memberGroup = $this->getGroupMembersBySpace($spaceID, $allVision);
@@ -545,16 +544,13 @@ class spaceModel extends model
             }
         }
 
-        if($showManager)
+        $spaceUsers = $this->dao->select('*')->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($spaceID)->fetchAll();
+        if(!empty($spaceUsers))
         {
-            $spaceUsers = $this->getSpaceUsers($spaceID, 'manager');
-            if(!empty($spaceUsers))
+            foreach($spaceUsers as $spaceUser)
             {
-                foreach($spaceUsers as $spaceUser)
-                {
-                    if(empty($members[$spaceUser])) $members[$spaceUser] = array('spaceID' => $spaceID, 'account' => $spaceUser, 'role' => 'manager', 'group' => array(), 'repo' => array());
-                    $members[$spaceUser]['role'] = 'manager';
-                }
+                if(empty($members[$spaceUser->account])) $members[$spaceUser->account] = array('spaceID' => $spaceID, 'account' => $spaceUser->account, 'role' => $spaceUser->role, 'group' => array(), 'repo' => array());
+                $members[$spaceUser->account]['role'] = $spaceUser->role;
             }
         }
 
@@ -586,8 +582,8 @@ class spaceModel extends model
         $spaceGroups = $this->group->getList(0, $spaceID);
         $spaceGroups = !empty($spaceGroups) ? array_column($spaceGroups, 'id') : array();
 
-        $spaceRepos  = $this->getReposBySpace($spaceID);
-        $spaceRepos  = !empty($spaceRepos) ? array_column($spaceRepos, 'id') : array();
+        $spaceRepos = $this->getReposBySpace($spaceID);
+        $spaceRepos = !empty($spaceRepos) ? array_column($spaceRepos, 'id') : array();
 
         if(!empty($members['group']))
         {
@@ -609,14 +605,29 @@ class spaceModel extends model
             }
         }
 
+        if(!empty($members['space']))
+        {
+            foreach($members['space'] as $account)
+            {
+                $spaceMembers = new stdClass();
+                $spaceMembers->account = $account;
+                $spaceMembers->space   = $spaceID;
+                $spaceMembers->role    = 'member';
+
+                $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data($spaceMembers)->exec();
+            }
+        }
+
         if(!empty($members['delete']))
         {
             foreach($members['delete'] as $type => $deleteUsers)
             {
                 if($type == 'group')
                 {
+                    $group = $this->dao->select('id')->from(TABLE_GROUP)->where('devopsSpace')->eq($spaceID)->fetchPairs();
                     $this->dao->delete()->from(TABLE_USERGROUP)
                         ->where('`account`')->in($deleteUsers)
+                        ->andWhere('`group`')->in(array_keys($group))
                         ->beginIF(!empty($spaceGroups))->andWhere('`group`')->in($spaceGroups)->fi()
                         ->exec();
                 }

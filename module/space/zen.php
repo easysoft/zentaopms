@@ -86,10 +86,7 @@ class spaceZen extends space
                     $data['repo'][$delRepoID] = array();
                 }
             }
-            if(empty($data)) continue;
-
-            if(empty($group)) $data['delete']['group'][] = $account;
-            if(empty($repo))  $data['delete']['repo'][]  = $account;
+            if(empty($data) && !empty($account) && !in_array($account, $oldMembers)) $data['space'][] = $account;
         }
 
         $delUsers = array_diff($oldMembers, $newMembers);

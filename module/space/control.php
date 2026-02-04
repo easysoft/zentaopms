@@ -404,7 +404,7 @@ class space extends control
 
         $this->loadModel('user');
         $this->view->users   = $this->user->getPairs('noletter|nodeleted');
-        $this->view->members = $this->space->getSpaceMembers($spaceID, true);
+        $this->view->members = $this->space->getSpaceMembers($spaceID);
         $this->view->title   = $this->lang->space->members;
         $this->view->spaceID = $spaceID;
         $this->view->space   = $this->space->getByID($spaceID);
@@ -467,7 +467,7 @@ class space extends control
     public function manageMembers(int $spaceID)
     {
         $this->space->setMenu($spaceID);
-        $members = $this->space->getSpaceMembers($spaceID, true);
+        $members = $this->space->getSpaceMembers($spaceID);
         if($_POST)
         {
             $formData   = form::batchData($this->config->space->form->manageMembers)->get();
