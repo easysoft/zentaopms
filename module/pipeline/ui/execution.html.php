@@ -26,8 +26,14 @@ else
     /* zin: Define the set::module('pipeline') feature bar on main menu. */
     featureBar
     (
-        set::current($type),
-        set::link($this->createLink('pipeline', 'execution', "spaceID={$spaceID}&repoID={$repoID}&type={key}")),
+        backBtn
+        (
+            setClass('mr-2'),
+            set::icon('back'),
+            set::type('secondary'),
+            set::url($this->createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}")),
+            $lang->goback . $lang->pipeline->common
+        ),
         div(searchToggle(set::module('pipelineexec'), set::open($type == 'bySearch')))
     );
 }
