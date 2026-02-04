@@ -12,6 +12,26 @@ declare(strict_types=1);
 class artifactModel extends model
 {
     /**
+     * 获取流水线列表。
+     * Get pipeline list.
+     *
+     * @param  int $space
+     * @param  int $repoID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getList(int $space = 0, int $repoID = 0, string $type = 'space'): array
+    {
+        return $this->dao->select('*')->from(TABLE_ARTIFACT)
+            ->where('spaceID')->eq($space)
+            ->andWhere('repoID')->eq($repoID)
+            ->andWhere('type')->eq($type)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * 创建制品库。
      * create artifact repo.
      *
