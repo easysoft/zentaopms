@@ -23,14 +23,14 @@ class taskMiscInfo extends relatedList
         /* Linked MR. */
         if(helper::hasFeature('devops'))
         {
-            $canViewMR  = common::hasPriv('mr', 'view');
+            $canViewMR  = common::hasPriv('ppm', 'view');
             $linkMRList = $this->prop('linkMRTitles', data('linkMRTitles'));
             $linkedPRs  = $this->prop('linkedPRs', data('linkedPRs'));
             $data['mr'] = array
             (
                 'title'    => $lang->task->linkMR,
                 'items'    => $linkMRList,
-                'url'      => $canViewMR ? createLink('mr', 'view', 'MRID={id}') : false,
+                'url'      => $canViewMR ? createLink('ppm', 'view', 'MRID={id}') : false,
                 'props'    => array('data-app' => 'devops'),
                 'onRender' => function($item, $mr) use($lang)
                 {
@@ -38,7 +38,7 @@ class taskMiscInfo extends relatedList
                     $statusClass = $mr->status;
                     if($mr->status == 'opened') $statusClass = 'draft';
                     if($mr->status == 'merged') $statusClass = 'done';
-                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->ppm->statusList, $mr->status) . '</span>');
                     return $item;
                 }
             );
@@ -57,7 +57,7 @@ class taskMiscInfo extends relatedList
                         $statusClass = $mr->status;
                         if($mr->status == 'opened') $statusClass = 'draft';
                         if($mr->status == 'merged') $statusClass = 'done';
-                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->ppm->statusList, $mr->status) . '</span>');
                         return $item;
                     }
                 );
