@@ -39,6 +39,28 @@ class artifact extends control
     }
 
     /**
+     * 流水线列表。
+     * Browse pipeline.
+     *
+     * @param  int    $space
+     * @param  int    $repoID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function browse(int $space = 0, int $repoID = 0, string $type = 'space')
+    {
+        $this->commonAction($space, $repoID);
+
+        $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
+        $this->view->repo         = $this->loadModel('repo')->fetchByID($repoID);
+        $this->view->type         = $type;
+        $this->view->artifactList = $this->artifact->getList($space, $repoID, $type);
+
+        $this->display();
+    }
+
+    /**
      * 创建制品库。
      * create artifact repo.
      *
