@@ -318,6 +318,7 @@ $lang->ppm->mergeTypeInfoList['fast']   = 'All commits on this branch will be ad
 $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = 'Are you sure to close this merge request?';
 $lang->ppm->notice->confirmReopen = 'Are you sure to reopen this merge request?';
+$lang->ppm->notice->fastNotice    = 'The target branch already has new commits, cannot be merged quickly';
 
 $lang->ppm->featureBar['view']['all']   = 'All';
 $lang->ppm->featureBar['view']['story'] = 'Story';
