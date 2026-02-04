@@ -144,13 +144,13 @@ class pipeline extends control
     }
 
     /**
-     * Edit a pipeline.
+     * Arrange a pipeline.
      *
      * @param  int    $pipelineID
      * @access public
      * @return void
      */
-    public function edit(int $id, int $space = 0, int $repoID = 0, $type = 'space')
+    public function arrange(int $id, int $space = 0, int $repoID = 0, $type = 'space')
     {
         $this->commonAction($space);
         if($repoID)
@@ -222,7 +222,7 @@ class pipeline extends control
         $pipeline  = $this->pipeline->getByID($pipelineID);
         $variables = $pipeline->variables;
 
-        if($_POST)
+        if($_POST || isset($_SERVER['CONTENT_TYPE']))
         {
             $formData = fixer::input('post')->get();
             if(isset($formData->gitRef) && !$formData->gitRef)

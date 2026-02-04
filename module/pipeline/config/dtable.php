@@ -32,36 +32,13 @@ $config->pipeline->dtable->fieldList['status']['hint']     = true;
 $config->pipeline->dtable->fieldList['status']['map']      = $lang->pipeline->statusList;
 $config->pipeline->dtable->fieldList['status']['show']     = true;
 
-$config->pipeline->dtable->fieldList['lastExecStatus']['title']    = $lang->pipeline->lastStatus;
+$config->pipeline->dtable->fieldList['lastExecStatus']['title']    = $lang->pipeline->lastExecResult;
 $config->pipeline->dtable->fieldList['lastExecStatus']['name']     = 'lastExecStatus';
 $config->pipeline->dtable->fieldList['lastExecStatus']['sortType'] = false;
-$config->pipeline->dtable->fieldList['lastExecStatus']['width']    = '110';
+$config->pipeline->dtable->fieldList['lastExecStatus']['width']    = '100';
 $config->pipeline->dtable->fieldList['lastExecStatus']['hint']     = true;
 $config->pipeline->dtable->fieldList['lastExecStatus']['map']      = $lang->pipeline->execStatusList;
 $config->pipeline->dtable->fieldList['lastExecStatus']['show']     = true;
-
-$config->pipeline->dtable->fieldList['triggerPerson']['title']    = $lang->pipeline->triggerPerson;
-$config->pipeline->dtable->fieldList['triggerPerson']['name']     = 'triggerPerson';
-$config->pipeline->dtable->fieldList['triggerPerson']['type']     = 'user';
-$config->pipeline->dtable->fieldList['triggerPerson']['sortType'] = false;
-$config->pipeline->dtable->fieldList['triggerPerson']['minWidth'] = '120';
-$config->pipeline->dtable->fieldList['triggerPerson']['hint']     = true;
-$config->pipeline->dtable->fieldList['triggerPerson']['show']     = true;
-
-$config->pipeline->dtable->fieldList['triggerType']['title']    = $lang->pipeline->triggerType;
-$config->pipeline->dtable->fieldList['triggerType']['name']     = 'triggerType';
-$config->pipeline->dtable->fieldList['triggerType']['sortType'] = false;
-$config->pipeline->dtable->fieldList['triggerType']['width']    = '100';
-$config->pipeline->dtable->fieldList['triggerType']['hint']     = true;
-$config->pipeline->dtable->fieldList['triggerType']['show']     = true;
-$config->pipeline->dtable->fieldList['triggerType']['map']      = $lang->pipeline->triggerTypeList;
-
-$config->pipeline->dtable->fieldList['repo']['title']    = $lang->pipeline->repo;
-$config->pipeline->dtable->fieldList['repo']['name']     = 'repoName';
-$config->pipeline->dtable->fieldList['repo']['sortType'] = true;
-$config->pipeline->dtable->fieldList['repo']['width']    = '100';
-$config->pipeline->dtable->fieldList['repo']['hint']     = true;
-$config->pipeline->dtable->fieldList['repo']['show']     = true;
 
 $config->pipeline->dtable->fieldList['lastExecDate']['title']      = $lang->pipeline->lastExec;
 $config->pipeline->dtable->fieldList['lastExecDate']['name']       = 'lastExecDate';
@@ -70,6 +47,13 @@ $config->pipeline->dtable->fieldList['lastExecDate']['sortType']   = false;
 $config->pipeline->dtable->fieldList['lastExecDate']['hint']       = true;
 $config->pipeline->dtable->fieldList['lastExecDate']['show']       = true;
 $config->pipeline->dtable->fieldList['lastExecDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+
+$config->pipeline->dtable->fieldList['repo']['title']    = $lang->pipeline->repo;
+$config->pipeline->dtable->fieldList['repo']['name']     = 'repoName';
+$config->pipeline->dtable->fieldList['repo']['sortType'] = false;
+$config->pipeline->dtable->fieldList['repo']['width']    = '100';
+$config->pipeline->dtable->fieldList['repo']['hint']     = true;
+$config->pipeline->dtable->fieldList['repo']['show']     = true;
 
 $config->pipeline->actionList = array();
 $config->pipeline->actionList['execution']['icon'] = 'file-log';
@@ -83,10 +67,10 @@ $config->pipeline->actionList['exec']['hint']        = $lang->pipeline->exec;
 $config->pipeline->actionList['exec']['url']         = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}");
 $config->pipeline->actionList['exec']['data-toggle'] = 'modal';
 
-$config->pipeline->actionList['edit']['icon'] = 'edit';
-$config->pipeline->actionList['edit']['text'] = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['hint'] = $lang->pipeline->edit;
-$config->pipeline->actionList['edit']['url']  = helper::createLink('pipeline', 'edit',"id={id}");
+$config->pipeline->actionList['arrange']['icon'] = 'design';
+$config->pipeline->actionList['arrange']['text'] = $lang->pipeline->arrange;
+$config->pipeline->actionList['arrange']['hint'] = $lang->pipeline->arrange;
+$config->pipeline->actionList['arrange']['url']  = helper::createLink('pipeline', 'arrange',"id={id}");
 
 $config->pipeline->actionList['delete']['icon']       = 'trash';
 $config->pipeline->actionList['delete']['text']       = $lang->pipeline->delete;
@@ -98,7 +82,7 @@ $config->pipeline->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->dtable->fieldList['actions']['width'] = 150;
 $config->pipeline->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->dtable->fieldList['actions']['menu']  = array('execution', 'exec', 'edit', 'delete');
+$config->pipeline->dtable->fieldList['actions']['menu']  = array('exec', 'execution', 'arrange', 'delete');
 $config->pipeline->dtable->fieldList['actions']['list']  = $config->pipeline->actionList;
 
 $config->pipeline->execution->dtable = new stdclass();
