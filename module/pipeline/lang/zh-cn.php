@@ -17,13 +17,14 @@ $lang->pipeline->createType    = '创建方式';
 $lang->pipeline->existPipeline = '现有流水线';
 $lang->pipeline->execution     = '执行历史';
 $lang->pipeline->log           = '执行日志';
+$lang->pipeline->arrange       = '编排流水线';
 
 $lang->pipeline->browseAction = '流水线列表';
 
 $lang->pipeline->id              = 'ID';
 $lang->pipeline->name            = '名称';
 $lang->pipeline->desc            = '描述';
-$lang->pipeline->repo            = '关联代码库';
+$lang->pipeline->repo            = '所属代码库';
 $lang->pipeline->branch          = '分支';
 $lang->pipeline->product         = '关联' . $lang->productCommon;
 $lang->pipeline->svnDir          = 'SVN监控路径';
@@ -64,6 +65,7 @@ $lang->pipeline->duration        = '执行时长';
 $lang->pipeline->pipelineName    = '流水线名称';
 $lang->pipeline->varName         = '变量名';
 $lang->pipeline->value           = '变量值';
+$lang->pipeline->lastExecResult  = '最后执行结果';
 
 $lang->pipeline->lblBasic  = '基本信息';
 $lang->pipeline->okBtn     = '确定';
@@ -124,13 +126,8 @@ $lang->pipeline->pipelineVariablesValuePlaceHolder = "输入变量的值";
 $lang->pipeline->pipelineVariablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值。";
 $lang->pipeline->setReferenceTips                  = "在执行构建前，请先设置代码库的分支信息。";
 
-$lang->pipeline->featureBar['browse']['all']   = '全部';
-$lang->pipeline->featureBar['browse']['space'] = '空间下流水线';
-$lang->pipeline->featureBar['browse']['repo']  = '代码库下流水线';
-
-$lang->pipeline->featureBar['execution']['all']   = '全部';
-$lang->pipeline->featureBar['execution']['space'] = '空间下执行历史';
-$lang->pipeline->featureBar['execution']['repo']  = '代码库下执行历史';
+$lang->pipeline->featureBar['browse']['space'] = '空间流水线';
+$lang->pipeline->featureBar['browse']['repo']  = '代码库流水线';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = '创建空白流水线';

@@ -144,13 +144,13 @@ class pipeline extends control
     }
 
     /**
-     * Edit a pipeline.
+     * Arrange a pipeline.
      *
      * @param  int    $pipelineID
      * @access public
      * @return void
      */
-    public function edit(int $id, int $space = 0, int $repoID = 0)
+    public function arrange(int $id, int $space = 0, int $repoID = 0, $type = 'space')
     {
         $this->commonAction($space);
         if($repoID)
@@ -169,6 +169,7 @@ class pipeline extends control
         $this->view->title    = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->edit;
         $this->view->pipeline = $this->pipeline->getByID($id);
         $this->view->repoID   = $repoID;
+        $this->view->type     = $type;
         $this->view->repo     = $this->loadModel('repo')->getByID($repoID);;
 
         $this->display();
@@ -221,7 +222,7 @@ class pipeline extends control
         $pipeline  = $this->pipeline->getByID($pipelineID);
         $variables = $pipeline->variables;
 
-        if($_POST)
+        if($_POST || isset($_SERVER['CONTENT_TYPE']))
         {
             $formData = fixer::input('post')->get();
             if(isset($formData->gitRef) && !$formData->gitRef)
@@ -237,13 +238,16 @@ class pipeline extends control
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
-        $scm  = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
+        if($repo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+        }
 
         $this->view->title      = $this->lang->pipeline->exec;
         $this->view->pipeline   = $pipeline;
         $this->view->variables  = $variables;
-        $this->view->branchList = $scm->branch();
+        $this->view->branchList = $repo ? $scm->branch() : array();
         $this->display();
     }
 

@@ -17,6 +17,7 @@ $lang->pipeline->createType    = 'Create Type';
 $lang->pipeline->existPipeline = 'Existing Pipeline';
 $lang->pipeline->execution     = 'Execution History';
 $lang->pipeline->log           = 'Execution Log';
+$lang->pipeline->arrange       = 'Arrange Pipeline';
 
 $lang->pipeline->browseAction = 'Pipeline List';
 
@@ -64,6 +65,7 @@ $lang->pipeline->duration        = 'Duration';
 $lang->pipeline->pipelineName    = 'Pipeline Name';
 $lang->pipeline->varName         = 'Var Name';
 $lang->pipeline->varValue        = 'Var Value';
+$lang->pipeline->lastExecResult  = 'Last Exec Result';
 
 $lang->pipeline->lblBasic  = 'Infos de Base';
 $lang->pipeline->okBtn     = 'Ok';
@@ -124,13 +126,8 @@ $lang->pipeline->pipelineVariablesValuePlaceHolder = "Input variable value";
 $lang->pipeline->pipelineVariablesTips             = "Specify variable values to be used in this run. The values specified in CI/CD settings will be used by default.";
 $lang->pipeline->setReferenceTips                  = "Before performing a build, please set up the branch information of the code base.";
 
-$lang->pipeline->featureBar['browse']['all']   = 'All';
 $lang->pipeline->featureBar['browse']['space'] = 'Space Pipeline';
 $lang->pipeline->featureBar['browse']['repo']  = 'Repo Pipeline';
-
-$lang->pipeline->featureBar['execution']['all']   = 'All';
-$lang->pipeline->featureBar['execution']['space'] = 'Space Execution History';
-$lang->pipeline->featureBar['execution']['repo']  = 'Repo Execution History';
 
 $lang->pipeline->createTypeList = array();
 $lang->pipeline->createTypeList['new']  = 'Create Empty Pipeline';
