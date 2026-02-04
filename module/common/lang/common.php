@@ -166,6 +166,7 @@ $lang->projectstory   = new stdclass();
 
 $lang->repoSettings   = new stdclass();
 $lang->reporeviewflow = new stdclass();
+$lang->artifact       = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';
