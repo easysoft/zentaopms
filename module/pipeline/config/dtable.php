@@ -93,6 +93,13 @@ $config->pipeline->execution->dtable->fieldList['id']['fixed']    = 'left';
 $config->pipeline->execution->dtable->fieldList['id']['type']     = 'id';
 $config->pipeline->execution->dtable->fieldList['id']['sortType'] = 'text';
 
+$config->pipeline->execution->dtable->fieldList['type']['title']    = $lang->pipeline->level;
+$config->pipeline->execution->dtable->fieldList['type']['name']     = 'type';
+$config->pipeline->execution->dtable->fieldList['type']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['type']['width']    = '100';
+$config->pipeline->execution->dtable->fieldList['type']['hint']     = true;
+$config->pipeline->execution->dtable->fieldList['type']['map']      = $lang->pipeline->typeList;
+
 $config->pipeline->execution->dtable->fieldList['ref']['title']    = $lang->pipeline->branch;
 $config->pipeline->execution->dtable->fieldList['ref']['name']     = 'ref';
 $config->pipeline->execution->dtable->fieldList['ref']['sortType'] = false;
