@@ -365,7 +365,7 @@ $lang->repoSettings->common     = 'Settings';
 $lang->devops->branchType       = 'Branch Type';
 $lang->devops->reviewFlow       = 'Review Flow';
 $lang->devops->execution        = 'Execution';
-$lang->devops->artifact         = 'Artifact Repository';
+$lang->artifact->common         = 'Artifact Repository';
 
 $lang->dashboard       = 'Dashboard';
 $lang->contribute      = 'Contribute';
