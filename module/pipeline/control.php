@@ -116,7 +116,7 @@ class pipeline extends control
     {
         if($_POST)
         {
-            if($this->post->createType == 'copy' && empty($this->post->existPipeline))
+            if($this->post->createType == 'copy' && !$this->post->existPipeline)
             {
                 return $this->sendError(array('existPipeline' => sprintf($this->lang->error->notempty, $this->lang->pipeline->existPipeline)));
             }
