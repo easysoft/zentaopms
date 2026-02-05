@@ -29,14 +29,7 @@ class pipelineModel extends model
             ->where('t1.id')->eq($id)
             ->fetch();
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
-        $pipeline->triggerWeekdays = '';
-        $pipeline->triggerTime     = '';
-        if(!empty($pipeline->cron))
-        {
-            $cron = explode(' ', $pipeline->cron);
-            $pipeline->triggerWeekdays = zget($cron, count($cron) - 1, '');
-            $pipeline->triggerTime     = empty($cron[2]) || $cron[2] == '*' ? '' : $cron[2] . ':' . $cron[1];
-        }
+        $pipeline->triggers  = [];
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
 
