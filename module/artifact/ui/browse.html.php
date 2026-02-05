@@ -98,7 +98,7 @@ toolBar($canCreate ? item(set($createItem)) : null);
 
 panel
 (
-    div
+    empty($setItems) ? div(setClass('w-full h-36 text-center pt-10'), $lang->artifact->notice->noArtifact) : div
     (
         setClass('flex flex-wrap artifact-block'),
         $setItems
