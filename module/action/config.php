@@ -74,6 +74,7 @@ $config->action->objectNameFields['holiday']      = 'name';
 $config->action->objectNameFields['system']       = 'name';
 $config->action->objectNameFields['deliverable']  = 'name';
 $config->action->objectNameFields['space']        = 'name';
+$config->action->objectNameFields['artifact']     = 'name';
 
 $config->action->objectNameFields['ops_review_flow'] = 'name';
 
