@@ -91,4 +91,32 @@ class artifact extends control
         $this->view->title = $this->lang->artifact->create;
         $this->display();
     }
+
+    /**
+     * 编辑制品库。
+     * edit artifact repo.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        if($_POST)
+        {
+            $formData = form::data($this->config->artifact->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->get();
+
+            $this->artifact->update($id, $formData);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('artifact', (int)$id, 'edited');
+            $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title    = $this->lang->artifact->edit;
+        $this->view->artifact = $this->artifact->fetchByID($id);
+        $this->display();
+    }
 }
