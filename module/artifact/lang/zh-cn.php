@@ -15,3 +15,4 @@ $lang->artifact->placeholder->name = '请输入制品库名称';
 
 $lang->artifact->notice = new stdclass();
 $lang->artifact->notice->deleteConfirm = '您确定要删除该制品库吗？';
+$lang->artifact->notice->noArtifact    = '暂无制品库';
