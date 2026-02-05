@@ -57,4 +57,32 @@ class artifactModel extends model
         $id = $this->dao->lastInsertID();
         return $id;
     }
+
+    /**
+     * 更新制品库。
+     * update artifact repo.
+     *
+     * @param  int    $id
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function update(int $id, object $data): bool
+    {
+        $artifact = $this->fetchByID($id);
+        if(empty($artifact)) return false;
+
+        $check = 'id != ' . $id;
+        if($artifact->type == 'space')  $check .= " and spaceID = {$artifact->spaceID}";
+        if($artifact->type == 'repo')   $check .= " and repoID = {$artifact->repoID}";
+        if($artifact->type == 'system') $check .= " and spaceID = 0 and repoID = 0";
+
+        $this->dao->update(TABLE_ARTIFACT)->data($data)
+            ->check('name', 'unique', $check)
+            ->where('id')->eq($id)
+            ->autoCheck()
+            ->exec();
+
+        return !dao::isError();
+    }
 }
