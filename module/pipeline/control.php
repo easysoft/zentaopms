@@ -668,23 +668,32 @@ class pipeline extends control
         {
             $triggers = json_decode($triggers);
 
-            $weekdays = zget($triggers, 'weekdays', '');
-            $time     = zget($triggers, 'time', '');
-
-            $cron = '';
-            if($weekdays && $time)
+            $events = array();
+            $cron   = array();
+            foreach($triggers as $trigger)
             {
-                list($hour, $minute) = explode(':', $time);
-                $cron = sprintf('0 %s %s * * %s', $minute, $hour, $weekdays);
-            }
+                if(empty($trigger->value) || empty($trigger->type)) continue;
 
-            if($weekdays && !$time) $cron = sprintf('0 * * * * %s', $weekdays);
+                if($trigger->type == 'event')
+                {
+                    $events[] = $trigger->value;
+                }
+                elseif(!empty($trigger->time))
+                {
+                    list($hour, $minute) = explode(':', $trigger->time);
+                    $cron[] = $trigger->type == 'week' ? sprintf('0 %s %s * * %s', $minute, $hour, $trigger->value) : sprintf('0 %s %s * %s *', $minute, $hour, $trigger->value);
+                }
+                else
+                {
+                    $cron[] = $trigger->type == 'week' ? "* * * * * {$trigger->value}" : "* * * * {$trigger->value} *";
+                }
+            }
 
             $pipeline = $this->pipeline->getByID($pipelineID);
             $repo     = $this->loadModel('repo')->fetchByID($pipeline->repoID);
 
             $trigger = new stdClass();
-            $trigger->trigger    = explode(',', zget($triggers, 'events', array()));
+            $trigger->trigger    = $events;
             $trigger->id         = zget($pipeline, 'triggerID', 0);
             $trigger->pipelineID = $pipelineID;
             $trigger->cron       = $cron;
@@ -698,5 +707,20 @@ class pipeline extends control
             return $this->sendSuccess(array('load' => true));
         }
         return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 删除流水线。
+     * delete a pipeline.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function delete(int $pipelineID)
+    {
+        $this->pipeline->delete(TABLE_PIPELINE, $pipelineID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->sendSuccess(array('load' => true));
     }
 }
