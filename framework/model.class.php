@@ -108,7 +108,7 @@ class model extends baseModel
     {
         if(empty($id)) return false;
 
-        //$this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
+        $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
 
         $table = trim($table, '`');
         if(strpos($table, 'ops_') === 0)
