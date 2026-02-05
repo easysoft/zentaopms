@@ -119,4 +119,20 @@ class artifact extends control
         $this->view->artifact = $this->artifact->fetchByID($id);
         $this->display();
     }
+
+    /**
+     * 删除制品库。
+     * Delete artifact repo.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $this->artifact->delete(TABLE_ARTIFACT, $id, 'artifact');
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        $this->sendSuccess(array('load' => true));
+    }
 }
