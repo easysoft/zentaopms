@@ -66,6 +66,7 @@ $lang->pipeline->pipelineName    = 'Pipeline Name';
 $lang->pipeline->varName         = 'Var Name';
 $lang->pipeline->varValue        = 'Var Value';
 $lang->pipeline->lastExecResult  = 'Last Exec Result';
+$lang->pipeline->level           = 'Level';
 
 $lang->pipeline->lblBasic  = 'Basic Info';
 $lang->pipeline->okBtn     = 'Ok';
@@ -136,6 +137,10 @@ $lang->pipeline->createTypeList['copy'] = 'Copy From Existing Pipeline';
 $lang->pipeline->statusList = array();
 $lang->pipeline->statusList['draft']  = 'Draft';
 $lang->pipeline->statusList['active'] = 'Active';
+
+$lang->pipeline->typeList = array();
+$lang->pipeline->typeList['repo']  = 'Repository';
+$lang->pipeline->typeList['space'] = 'Space';
 
 $lang->pipeline->execStatusList = array();
 $lang->pipeline->execStatusList['success']  = 'Success';

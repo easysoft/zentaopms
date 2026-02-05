@@ -66,6 +66,7 @@ $lang->pipeline->pipelineName    = '流水线名称';
 $lang->pipeline->varName         = '变量名';
 $lang->pipeline->value           = '变量值';
 $lang->pipeline->lastExecResult  = '最后执行结果';
+$lang->pipeline->level           = '级别';
 
 $lang->pipeline->lblBasic  = '基本信息';
 $lang->pipeline->okBtn     = '确定';
@@ -136,6 +137,10 @@ $lang->pipeline->createTypeList['copy'] = '从现有流水线复制';
 $lang->pipeline->statusList = array();
 $lang->pipeline->statusList['draft']  = '草稿';
 $lang->pipeline->statusList['active'] = '激活';
+
+$lang->pipeline->typeList = array();
+$lang->pipeline->typeList['repo']  = '代码库';
+$lang->pipeline->typeList['space'] = '空间';
 
 $lang->pipeline->execStatusList = array();
 $lang->pipeline->execStatusList['success']  = '成功';

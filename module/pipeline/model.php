@@ -104,7 +104,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.spaceID AS space, t2.repoID AS repo, t2.name AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`type`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.repoID')->eq($repoID)->fi()
