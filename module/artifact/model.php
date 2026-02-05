@@ -27,6 +27,7 @@ class artifactModel extends model
             ->where('spaceID')->eq($space)
             ->andWhere('repoID')->eq($repoID)
             ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
