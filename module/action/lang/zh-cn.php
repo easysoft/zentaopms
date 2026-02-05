@@ -195,6 +195,7 @@ $lang->action->objectTypes['deliverable']      = '交付物类型';
 $lang->action->objectTypes['cm']               = '基线';
 $lang->action->objectTypes['baseline']         = '基线';
 $lang->action->objectTypes['projectchange']    = '项目变更';
+$lang->action->objectTypes['artifact']         = '制品库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
