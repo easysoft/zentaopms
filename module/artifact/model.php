@@ -21,13 +21,13 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $space = 0, int $repoID = 0, string $type = 'space'): array
+    public function getList(int $space = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc'): array
     {
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('spaceID')->eq($space)
             ->andWhere('repoID')->eq($repoID)
             ->andWhere('type')->eq($type)
-            ->orderBy('id_desc')
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 
