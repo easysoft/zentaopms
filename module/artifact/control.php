@@ -55,7 +55,7 @@ class artifact extends control
         $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
         $this->view->repo         = $this->loadModel('repo')->fetchByID($repoID);
         $this->view->type         = $type;
-        $this->view->artifactList = $this->artifact->getList($space, $repoID, $type);
+        $this->view->artifactList = $this->artifact->getList($space, $repoID, $type, 'createdDate_asc');
 
         $this->display();
     }
