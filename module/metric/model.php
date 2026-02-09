@@ -359,6 +359,7 @@ class metricModel extends model
         foreach($metrics as $metric)
         {
             if(!helper::hasFeature('program') && $metric->object == 'program') continue;
+            if(!helper::hasFeature('devops')  && $metric->object == 'host')    continue;
             $group = isset($groupMetrics[$metric->object]) ? $metric->object : 'other';
             $groupMetrics[$group][] = $metric;
         }
