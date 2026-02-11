@@ -24,6 +24,7 @@ panel
         set::height('calc(100vh - 96px)'),
         set::goBack(jsRaw("() => {goBack('pipeline-browse', '{$backUrl}')}")),
         set::id($pipeline->id),
-        set::name($pipeline->name)
+        set::name($pipeline->name),
+        set::published($pipeline->status == 'active')
     )
 );
