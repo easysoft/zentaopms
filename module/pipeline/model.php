@@ -29,7 +29,7 @@ class pipelineModel extends model
             ->where('t1.id')->eq($id)
             ->fetch();
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
-        $pipeline->triggers  = [];
+        $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->trigger);
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
 
@@ -753,5 +753,45 @@ class pipelineModel extends model
             return false;
         }
         return !dao::isError();
+    }
+
+    /**
+     * 解析触发规则。
+     * Parse triggers.
+     *
+     * @param  string $cron
+     * @param  string $events
+     * @access public
+     * @return array
+     */
+    public function parseTriggers(string $cron, string $events): array
+    {
+        $cron   = explode('|', $cron);
+
+        $triggers = array();
+        if(!empty($events))
+        {
+            $trigger = new stdclass;
+            $trigger->type  = 'event';
+            $trigger->value = $events;
+            $triggers[] = $trigger;
+        }
+
+        if(!empty($cron))
+        {
+            foreach($cron as $item)
+            {
+                $itemArr = explode(' ', $item);
+                if(count($itemArr) != 6) continue;
+
+                $trigger = new stdclass;
+                $trigger->type  = $itemArr[5] == '*' ? 'month' : 'week';
+                $trigger->value = $itemArr[5] == '*' ? $itemArr[4] : $itemArr[5];
+                $trigger->time  = $itemArr[2] == '*' ? '' : $itemArr[2] . ':' . $itemArr[1];
+                $triggers[] = $trigger;
+            }
+        }
+
+        return $triggers;
     }
 }
