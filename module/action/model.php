@@ -486,12 +486,7 @@ class actionModel extends model
             $table        = $this->config->objectTables[$objectType];
             $field        = $this->config->action->objectNameFields[$objectType];
             $objectIdList = array_unique($objectIdList);
-            if($objectType == 'pipeline')
-            {
-                $objectNames['jenkins'] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
-                $objectNames['gitlab']  = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
-            }
-            elseif($objectType == 'pivot')
+            if($objectType == 'pivot')
             {
                 $objectNames[$objectType] = $this->dao->select("t1.id, t2.{$field} AS name")->from($table)->alias('t1')
                     ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
@@ -521,9 +516,6 @@ class actionModel extends model
         /* Add name field to the trashes. */
         foreach($trashes as $key => $trash)
         {
-            if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
-            if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
-
             if($trash->objectType == 'auditplan')
             {
                 $realObjectID      = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectID   : 0;
@@ -577,7 +569,7 @@ class actionModel extends model
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
-        $queryFields = $objectType != 'pipeline' ? "t1.*, {$nameField} AS objectName" : 't1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType';
+        $queryFields = "t1.*, {$nameField} AS objectName";
 
         $trashes = $this->dao->select($queryFields)->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
@@ -586,14 +578,7 @@ class actionModel extends model
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
-            ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
-
-            ->beginIF($objectType == 'pipeline')
-            ->andWhere('(t2.type')->eq('gitlab')
-            ->orWhere('t2.type')->eq('jenkins')
-            ->markRight(1)
-            ->fi()
-
+            ->beginIF($objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('objectID');
