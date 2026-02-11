@@ -225,10 +225,18 @@ class pipeline extends control
         if($_POST || isset($_SERVER['CONTENT_TYPE']))
         {
             $formData = fixer::input('post')->get();
-            if(isset($formData->gitRef) && !$formData->gitRef)
+            $varPairs = array_column($variables, 'name', 'key');
+            foreach($formData as $varKey => $varValue)
             {
-                return $this->sendError(array('gitRef' => sprintf($this->lang->error->notempty, $this->lang->pipeline->branch)));
+                if($varKey == 'gitRef' && !$varValue)
+                {
+                    dao::$errors[$varKey] = sprintf($this->lang->error->notempty, $this->lang->pipeline->branch);
+                    continue;
+                }
+                if(empty($varPairs[$varKey])) continue;
+                if(!$varValue) dao::$errors[$varKey] = sprintf($this->lang->error->notempty, $varPairs[$varKey]);
             }
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->pipeline->exec($pipelineID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());

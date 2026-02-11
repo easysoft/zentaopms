@@ -36,9 +36,9 @@ if(!empty($variables))
 
         $varList[] = h::tr
         (
-            setClass('tr-row text-center'),
-            h::td(set::width(150), $variable->name),
-            h::td(set::width(150), $variable->key),
+            setClass('tr-row'),
+            h::td(set::width(150), setClass('text-center'), $variable->name),
+            h::td(set::width(150), setClass('text-center'), $variable->key),
             h::td
             (
                 input
