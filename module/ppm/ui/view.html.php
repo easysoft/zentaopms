@@ -51,63 +51,6 @@ $checkMessage  = empty($mergeCheckMessage) ? '' : zget($mergeCheckMessage, 'mess
 $conflictFiles = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
-$AICodeScore     = 3;     // AI评审代码分数
-$AISevereIssue   = 0;     // AI评审高危问题
-$AIOrdinaryIssue = 3;     // AI评审一般问题
-
-$approvalStatus   = 'approved'; // 审批流审批结果
-$approvalReviewer = 3;          // 审批人数
-$doneReviewer     = 3;          // 审批通过人数
-
-$scanSevereIssue   = 0;   // 代码扫描高危问题
-$scanOrdinaryIssue = 1;   // 代码扫描一般问题
-$scanPassRate      = 100; // 代码扫描安全门禁通过率
-
-$config->ppm->AICodeScore       = 6;   // 合格的AI评审代码分数
-$config->ppm->AISevereIssue     = 0;   // 合格的AI评审高危问题
-$config->ppm->AIOrdinaryIssue   = 5;   // 合格的AI评审一般问题
-$config->ppm->approvalReviewer  = 2;   // 合格的人工评审审批人数
-$config->ppm->doneReviewer      = 2;   // 合格的人工评审审批通过人数
-$config->ppm->scanSevereIssue   = 0;   // 合格的代码扫描高危问题
-$config->ppm->scanOrdinaryIssue = 3;   // 合格的代码扫描一般问题
-$config->ppm->scanPassRate      = 100; // 合格的代码扫描安全门禁通过率
-
-$pipelines = array();
-$pipeline1 = new stdclass();
-$pipeline1->title  = 'a0001';
-$pipeline1->status = 'success';
-$pipelines[] = $pipeline1;
-
-$checkPipeline = true;
-$pipelineBox   = array();
-foreach($pipelines as $pipeline)
-{
-    if($pipeline->status != 'success') $checkPipeline = false;
-    $pipelineBox[] = section
-    (
-        div
-        (
-            setClass('border px-4 h-12 flex items-center'),
-            span(setClass('font-bold'), "{$lang->ppm->pipeline}: {$pipeline->title}"),
-            $pipeline->status == 'success' ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail'])
-        ),
-        div
-        (
-            setClass('border px-4 py-4'),
-            setStyle(array('margin-top' => '-1px')),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $pipeline->status == 'success' ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                span("{$lang->ppm->runResult}: ", $lang->ppm->pipelineStatus[$pipeline->status]),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->pipelineStatus['success']})"))
-            )
-        )
-    );
-}
-
-$checkAI   = true;
-$checkScan = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
 
 $basicItems = array();
 $basicItems[] = item(set::name($lang->ppm->author),       zget($users, $ppm->createdBy));
@@ -137,6 +80,8 @@ if(!hasPriv('repo', 'diff')) unset($config->ppm->commitLogs->dtable->fieldList['
 if(!empty($reviewers)) $ppm->reviewers = implode(',', array_keys($reviewers));
 $actions = $this->loadModel('common')->buildOperateMenu($ppm);
 
+include "{$type}.html.php";
+
 div
 (
     setID('mr-view'),
@@ -165,319 +110,83 @@ div
                 ),
                 div
                 (
-                    tabs
+                    nav
                     (
-                        set::headerClass('border-b mr-menu'),
-                        tabPane
+                        li
                         (
-                            set::key('basic'),
-                            set::title($lang->ppm->mergeInfo),
-                            set::active($type == 'basic'),
-                            div
+                            setClass('nav-item'),
+                            a
                             (
-                                $ppm->status == 'opened' ? div
-                                (
-                                    $canMerge ? section
-                                    (
-                                        setClass('flex w-full checkMerge'),
-                                        $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? div(setClass('py-6 border-l-4 border-r-4 border-danger')) : div(setClass('py-6 border-l-4 border-r-4 border-success')),
-                                        div
-                                        (
-                                            $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ? setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center') :
-                                            setClass('flex flex-auto items-center pl-4 bg-success bg-opacity-5 items-center success-box'),
-                                            set::style(array('justify-content' => 'space-between')),
-                                            $defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA ?
-                                            div
-                                            (
-                                                setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                                                span(setClass('text-danger font-bold'), $lang->ppm->notice->fastNotice)
-                                            ) : div(span(setClass('text-success font-bold'), $lang->ppm->checkSuccess)),
-                                            hasPriv('ppm', 'merge') && !empty($mergeBtnItems) && $ppm->status == 'opened' ? div(btnGroup
-                                            (
-                                                setClass('merge-btn-group'),
-                                                btn
-                                                (
-                                                    setClass('btn primary ajax-submit'),
-                                                    set::disabled($defaultMergeType == 'fast' && $ppm->mergeBaseSHA != $ppm->mergeTargetSHA),
-                                                    set::url(createLink('ppm', 'merge', "ppmID={$ppm->id}&type={$defaultMergeType}")),
-                                                    $lang->reporeviewflow->mergeOptionList[$defaultMergeType]
-                                                ),
-
-                                                count($mergeBtnItems) > 1 ? dropDown
-                                                (
-                                                    btn(setClass('btn primary dropdown-toggle'),
-                                                    setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-                                                    set::placement('bottom-end'),
-                                                    set::items($mergeBtnItems)
-                                                ) : null
-                                            )) : null
-                                        )
-                                    ) : section
-                                    (
-                                        setClass('flex w-full mt-2 checkMerge'),
-                                        div(setClass('py-6 border-l-4 border-r-4 border-danger')),
-                                        div
-                                        (
-                                            setClass('flex flex-auto items-center pl-4 bg-danger bg-opacity-5 items-center'),
-                                            span(setClass('text-danger font-bold'), $lang->ppm->checkFailed . ($checkMessage ? "({$checkMessage})" : '')),
-                                        )
-                                    ),
-                                ) : null,
-                                section
-                                (
-                                    div
-                                    (
-                                        setClass('border px-4 h-12 flex items-center'),
-                                        span(setClass('font-bold'), $lang->ppm->codeConflict),
-                                        $hasConflict == 'yes' ? label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']),
-                                        div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
-                                    ),
-                                    div
-                                    (
-                                        setClass('border px-4 py-4'),
-                                        setStyle(array('margin-top' => '-1px')),
-                                        div
-                                        (
-                                            setClass('flex items-center'),
-                                            $hasConflict == 'yes' ? icon(setClass('text-danger font-bold mr-1'), 'close') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                            span("{$lang->ppm->hasConflict}: ", $lang->ppm->hasConflictList[$hasConflict]),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->hasConflictList['no']})"))
-                                        )
-                                    )
-                                ),
-                                section
-                                (
-                                    div
-                                    (
-                                        setClass('border px-4 h-12 flex items-center'),
-                                        span(setClass('font-bold'), $lang->ppm->AIReview),
-                                        $checkAI ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('warning ml-4'), $lang->ppm->checkStatusList['wait'])
-                                    ),
-                                    div
-                                    (
-                                        setClass('border px-4 py-4'),
-                                        setStyle(array('margin-top' => '-1px')),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $AICodeScore < $config->ppm->AICodeScore ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                            span("{$lang->ppm->AICodeScore}: ", $AICodeScore),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≥{$config->ppm->AICodeScore})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $AISevereIssue > $config->ppm->AISevereIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                            span("{$lang->ppm->AISevereIssue}: ", $AISevereIssue),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AISevereIssue})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $AIOrdinaryIssue > $config->ppm->AIOrdinaryIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                                            span("{$lang->ppm->AIOrdinaryIssue}: ", "$AIOrdinaryIssue"),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AIOrdinaryIssue})"))
-                                        )
-                                    )
-                                ),
-                                section
-                                (
-                                    setID('manualReview'),
-                                    div
-                                    (
-                                        setClass('border px-4 h-12 flex items-center'),
-                                        span(setClass('font-bold'), $lang->ppm->manualReview),
-                                        $reviewResult == 'approved' ? label(setClass('success ml-4'), $lang->ppm->approvalStatusList[$reviewResult]) : null,
-                                        $reviewResult == 'rejected' ? label(setClass('danger ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null,
-                                        $reviewResult == 'inProgress' ? label(setClass('secondary ml-4'),  $lang->ppm->approvalStatusList[$reviewResult]) : null
-                                    ),
-                                    div
-                                    (
-                                        setClass('border px-4 py-4'),
-                                        setStyle(array('margin-top' => '-1px')),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $reviewResult == 'approved' ? icon(setClass('text-success font-bold mr-1 reviewResultIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewResultIcon'), 'close'),
-                                            span("{$lang->ppm->reviewStatus}: ", $lang->ppm->approvalStatusList[$reviewResult]),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->approvalStatusList['approved']})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1' . ($minReviewers == 0 ? ' hidden' : '')),
-                                            count($reviewers) >= $minReviewers ? icon(setClass('text-success font-bold mr-1 reviewerCountIcon'), 'check') : icon(setClass('text-danger font-bold mr-1 reviewerCountIcon'), 'close'),
-                                            span("{$lang->ppm->approvalReviewer}: ", count($reviewers)),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≥{$minReviewers})"))
-                                        )
-                                    )
-                                ),
-                                section
-                                (
-                                    div
-                                    (
-                                        setClass('border px-4 h-12 flex items-center'),
-                                        span(setClass('font-bold'), $lang->ppm->codeScan),
-                                        $checkScan ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['fail'])
-                                    ),
-                                    div
-                                    (
-                                        setClass('border px-4 py-4'),
-                                        setStyle(array('margin-top' => '-1px')),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $scanSevereIssue <= $config->ppm->scanSevereIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                            span("{$lang->ppm->scanSevereIssue}: ", $scanSevereIssue),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->scanSevereIssue})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-warning font-bold mr-1'), 'about'),
-                                            span("{$lang->ppm->scanOrdinaryIssue}: ", $scanOrdinaryIssue),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->scanOrdinaryIssue})"))
-                                        ),
-                                        div
-                                        (
-                                            setClass('flex items-center py-1'),
-                                            $scanPassRate >= $config->ppm->scanPassRate ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                                            span("{$lang->ppm->scanPassRate}: ", "{$scanPassRate} %"),
-                                            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$config->ppm->scanPassRate}%)"))
-                                        )
-                                    )
-                                ),
-                                $pipelineBox
+                                $lang->ppm->mergeInfo,
+                                setClass('font-medium font-bold text-md'),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=basic")),
+                                set('data-app', $app->tab),
+                                $type == 'basic' ? setClass('active') : null
                             )
                         ),
-                        tabPane
+                        li
                         (
-                            set::key('bug'),
-                            set::title($lang->ppm->issueList . " ({$bugPager->recTotal})"),
-                            set::active($type == 'bug'),
-                            dtable
+                            setClass('nav-item'),
+                            a
                             (
-                                set::id('bugs'),
-                                set::cols($config->ppm->bug->dtable->fieldList),
-                                set::data(array_values($bugs)),
-                                set::loadPartial(true),
-                                set::footPager(usePager('bugPager', '', array('recPerPage' => $bugPager->recPerPage, 'recTotal' => $bugPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=bug&param=&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                                $lang->ppm->issueList . " ({$bugPager->recTotal})",
+                                setClass('font-medium font-bold text-md'),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=bug")),
+                                set('data-app', $app->tab),
+                                $type == 'bug' ? setClass('active') : null
                             )
                         ),
-                        tabPane
+                        li
                         (
-                            set::key('commit'),
-                            set::title($lang->ppm->commitLogs . " ({$commitPager->recTotal})"),
-                            set::active($type == 'commit'),
-                            dtable
+                            setClass('nav-item'),
+                            a
                             (
-                                set::id('commit'),
-                                set::userMap($users),
-                                set::cols($config->ppm->commitLogs->dtable->fieldList),
-                                set::data(array_values($commitLogs)),
-                                set::loadPartial(true),
-                                set::footPager(usePager('commitPager', '', array('recPerPage' => $commitPager->recPerPage, 'recTotal' => $commitPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=commit&param=&recTotal={$commitPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                                $lang->ppm->commitLogs . " ({$commitPager->recTotal})",
+                                setClass('font-medium font-bold text-md'),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=commit")),
+                                set('data-app', $app->tab),
+                                $type == 'commit' ? setClass('active') : null
                             )
                         ),
-                        tabPane
+                        li
                         (
-                            set::key('files'),
-                            set::title($lang->ppm->changeFiles . ' (' . count($diffs) . ')'),
-                            set::active($type == 'files'),
-                            empty($diffs) ? p(setClass('detail-content'), $lang->ppm->noChanges) : div(
-                                setID('diff-sidebar-left'),
-                                div
-                                (
-                                    set::id('fileTabs'),
-                                    tabs
-                                    (
-                                        set::id('monacoTabs'),
-                                        set::className('relative'),
-                                        div(setStyle(array('position' => 'absolute', 'width' => '100%', 'height' => '35px', 'background' => '#efefef', 'top' => '0px'))),
-                                        tabPane
-                                        (
-                                            set::title($fileInfo['basename']),
-                                            set::active(true),
-                                            set::key('tab-' . str_replace('=', '-', $currentEntry)),
-                                            to::suffix
-                                            (
-                                                icon
-                                                (
-                                                    'close',
-                                                    set::className('monaco-close')
-                                                )
-                                            ),
-                                            div(set::id('tab-' . $currentEntry))
-                                        ),
-                                        dropdown
-                                        (
-                                            set::arrow(false),
-                                            set::staticMenu(true),
-                                            btn
-                                            (
-                                                setClass('ghost text-black pull-right absolute top-0 right-0 z-10 monaco-dropmenu'),
-                                                set::icon('ellipsis-v rotate-90')
-                                            ),
-                                            set::items
-                                            (
-                                                $dropMenus
-                                            )
-                                        ),
-                                        div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-                                        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
-                                    )
-                                ),
-                                sidebar
-                                (
-                                    set::maxWidth(800),
-                                    treeEditor
-                                    (
-                                        set::id('monacoTree'),
-                                        set::items($tree),
-                                        set::canSplit(false),
-                                        set::collapsedIcon('folder'),
-                                        set::expandedIcon('folder-open'),
-                                        set::normalIcon('file-text-alt'),
-                                        set::selected($currentEntry),
-                                        set::onClickItem(jsRaw('window.treeClick'))
-                                    )
-                                ),
-                                on::click('.inline-appose')->call('inlineAppose'),
-                                on::click('#monacoTabs .monaco-close')->call('closeTab', jsRaw('this')),
-                                on::click('#monacoTabs .menu-item a')->call('changeDiffType', jsRaw('this')),
-                                a(set::className('iframe'), setData('size', '1200px'), setData('toggle', 'modal'), set::id('linkObject'))
+                            setClass('nav-item'),
+                            a
+                            (
+                                $lang->ppm->changeFiles . ' (' . count($diffs) . ')',
+                                setClass('font-medium font-bold text-md'),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=files")),
+                                set('data-app', $app->tab),
+                                $type == 'files' ? setClass('active') : null
                             )
                         ),
-                        tabPane
+                        li
                         (
-                            set::key('pipeline'),
-                            set::title($lang->pipeline->common),
-                            set::active($type == 'pipeline'),
-                            sectionList()
+                            setClass('nav-item'),
+                            a
+                            (
+                                $lang->pipeline->common,
+                                setClass('font-medium font-bold text-md'),
+                                set('data-app', $app->tab),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=pipeline")),
+                                $type == 'pipeline' ? setClass('active') : null
+                            )
                         ),
-                        tabPane
+                        li
                         (
-                            set::key('object'),
-                            set::title($lang->ppm->linkedObject . " ({$objectPager->recTotal})"),
-                            set::active($type == 'object'),
-                            featureBar
+                            setClass('nav-item'),
+                            a
                             (
-                                set::current($param),
-                                set::labelCount($objectPager->recTotal),
-                                set::link($this->createLink('ppm', 'view', "id={$ppm->id}&type=object&param={key}")),
-                            ),
-                            dtable
-                            (
-                                set::id('linkObjects'),
-                                set::cols($config->ppm->createCheck->linkObject->dtable->fieldList),
-                                set::userMap($users),
-                                set::data(array_values($linkObjects)),
-                                set::loadPartial(true),
-                                set::onRenderCell(jsRaw('window.renderObjectCell')),
-                                set::footPager(usePager('objectPager', '', array('recPerPage' => $objectPager->recPerPage, 'recTotal' => $objectPager->recTotal, 'linkCreator' => createLink('ppm', 'view', "id={$ppm->id}&type=object&param={$param}&recTotal={$objectPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                                $lang->ppm->linkedObject . " ({$objectPager->recTotal})",
+                                setClass('font-medium font-bold text-md'),
+                                set('data-app', $app->tab),
+                                set::href(createLink('ppm', 'view', "id={$ppm->id}&type=object")),
+                                $type == 'object' ? setClass('active') : null
                             )
                         )
                     )
-                )
+                ),
+                div(setClass('tab-content'), $domBox),
             )
         ),
         center

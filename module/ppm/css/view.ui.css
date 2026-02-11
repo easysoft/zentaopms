@@ -75,8 +75,6 @@ code {padding: 2px 4px; font-size: 90%; color: #37474f; background-color: #f3f5f
 #fileTabs {flex: 1 1 auto;}
 #diff-sidebar-left {width: 100%; align-items: stretch; display: flex; gap: 1rem; justify-content: space-between; flex-direction: row-reverse; margin-top: 10px; background: var(--zt-page-bg);}
 
-#mrMenu menu.nav {border-bottom: 1px solid #ddd}
-#mrMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
 .mr-actions {position: absolute; right: 1rem; top: 10px;}
 .panel-body .detail-content{margin-top: 10px;}
 #log .action-btn .caret {display: none;}
@@ -87,3 +85,5 @@ code {padding: 2px 4px; font-size: 90%; color: #37474f; background-color: #f3f5f
 .sidebar-left {z-index: 20;}
 
 .is-sidebar-resizing .repo-iframe {pointer-events: none;}
+#mr-view menu.nav {border-bottom: 1px solid #ddd}
+#mr-view .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
