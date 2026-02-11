@@ -25,6 +25,7 @@ panel
         set::goBack(jsRaw("() => {goBack('pipeline-browse', '{$backUrl}')}")),
         set::id($pipeline->id),
         set::name($pipeline->name),
-        set::published($pipeline->status == 'active')
+        set::published($pipeline->status == 'active'),
+        set::labels($lang->pipeline->flowApp->labels),
     )
 );
