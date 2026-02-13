@@ -581,14 +581,14 @@ class ppmModel extends model
      * Check same opened mr for source branch.
      *
      * @param  int    $repoID
-     * @param  string $sourceProject
+     * @param  int    $sourceRepoID
      * @param  string $sourceBranch
-     * @param  string $targetProject
+     * @param  int    $targetRepoID
      * @param  string $targetBranch
      * @access public
      * @return array
      */
-    public function checkSameOpened(int $repoID, string $sourceRepoID, string $sourceBranch, string $targetRepoID, string $targetBranch): array
+    public function checkSameOpened(int $repoID, int $sourceRepoID, string $sourceBranch, int $targetRepoID, string $targetBranch): array
     {
         if($sourceRepoID == $targetRepoID && $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->ppm->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_PPM)

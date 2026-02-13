@@ -223,8 +223,8 @@ class ppm extends control
             $ppm = form::data($this->config->ppm->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
-                ->add('sourceRepoID', zget($repo, 'gitfoxID', 0))
-                ->add('targetRepoID', zget($repo, 'gitfoxID', 0))
+                ->add('sourceRepoID', $repoID)
+                ->add('targetRepoID', $repoID)
                 ->add('status', 'opened')
                 ->add('reviewFlowID', !empty($flow->id) ? $flow->id : 0)
                 ->add('sourceSHA', zget($mergeCheckMessage, 'sourceSHA', ''))
@@ -382,7 +382,7 @@ class ppm extends control
         $this->view->encoding          = $encoding;
         $this->view->diffs             = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
         $this->view->users             = $this->loadModel('user')->getPairs('noletter');
-        $this->view->mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $ppm->sourceBranch, $ppm->targetBranch);
+        $this->view->mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage($ppm->repoID, $ppm->sourceBranch, $ppm->targetBranch);
         $this->view->oldRevision       = $ppm->targetBranch;
         $this->view->newRevision       = $ppm->sourceBranch;
         $this->view->defaultMergeType  = $this->cookie->mergeType;
@@ -484,7 +484,7 @@ class ppm extends control
         if(!in_array($ppm->targetBranch, $branches)) return $this->sendError($this->lang->ppm->sourceBranchNotExist);
         if(!in_array($ppm->sourceBranch, $branches)) return $this->sendError($this->lang->ppm->targetBranchNotExist);
 
-        $checkSameOpened = $this->ppm->checkSameOpened($ppm->repoID, (string)$ppm->sourceRepoID, $ppm->sourceBranch, (string)$ppm->targetRepoID, $ppm->targetBranch);
+        $checkSameOpened = $this->ppm->checkSameOpened($ppm->repoID, $ppm->sourceRepoID, $ppm->sourceBranch, $ppm->targetRepoID, $ppm->targetBranch);
         if($checkSameOpened['result'] == 'fail') return $this->sendError($checkSameOpened['message']);
 
         $this->ppm->reopen($id);
@@ -846,8 +846,7 @@ class ppm extends control
      */
     public function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
     {
-        $repo = $this->loadModel('repo')->fetchByID($repoID);
-        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage($repoID, $sourceBranch, $targetBranch);
         $conflictFiles     = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 
         $conflictFileList = array();
