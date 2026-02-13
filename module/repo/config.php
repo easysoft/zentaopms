@@ -64,7 +64,7 @@ $config->repo->createRepo = new stdclass();
 $config->repo->createRepo->requiredFields = 'space,product,name';
 
 $config->repo->edit = new stdclass();
-$config->repo->edit->requiredFields = 'space,product,SCM,name,encoding';
+$config->repo->edit->requiredFields = 'space,product,name';
 
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';
@@ -164,13 +164,11 @@ $config->repo->fileExt["xml"]              = array('.xml', '.dtd', '.ascx', '.cs
 $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
 
 $config->repo->search['module'] = 'repo';
-$config->repo->search['fields']['name']     = $lang->repo->name;
-$config->repo->search['fields']['product']  = $lang->repo->product;
-$config->repo->search['fields']['SCM']      = $lang->repo->SCM;
+$config->repo->search['fields']['name']    = $lang->repo->name;
+$config->repo->search['fields']['product'] = $lang->repo->product;
 
-$config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
-$config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
-$config->repo->search['params']['SCM']      = array('operator' => '=', 'control' => 'select', 'values' => $lang->repo->scmList);
+$config->repo->search['params']['name']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->search['params']['product'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
 
 $config->repo->searchCommits['module'] = 'repoCommits';
 $config->repo->searchCommits['fields']['commit']    = $lang->repo->revisionA;

@@ -18,8 +18,7 @@ $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink
 
 foreach($repoList as $repo)
 {
-    $repo->space  = $repo->space ? $repo->space : '';
-    $jobID        = 0;
+    $repo->spaceID  = $repo->spaceID ? $repo->spaceID : '';
 
     $productNames = array();
     $productList  = explode(',', str_replace(' ', '', $repo->product));
@@ -29,17 +28,6 @@ foreach($repoList as $repo)
         $productNames[] = zget($products, $productID, $productID);
     }
     $repo->productNames = implode('，', $productNames);
-
-    $projectNames = array();
-    $projectList  = explode(',', str_replace(' ', '', $repo->projects));
-    foreach($projectList as $projectID)
-    {
-        if(!isset($projects[$projectID])) continue;
-        $projectNames[] = zget($projects, $projectID, $projectID);
-    }
-    $repo->projectNames = implode('，', $projectNames);
-
-    if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
@@ -51,8 +39,6 @@ if(empty($config->repo->maintain->showRepoPath))
 {
     unset($config->repo->dtable->fieldList['path']);
     $config->repo->dtable->fieldList['product']['width']    = '0.2';
-    $config->repo->dtable->fieldList['scm']['width']        = '0.2';
-    $config->repo->dtable->fieldList['lastSubmit']['width'] = '0.2';
 }
 
 /* Set 'repo-visit' action as one open method, so any user can use it. */

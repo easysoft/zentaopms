@@ -49,7 +49,7 @@ if(!$inModal && common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array(
 if(!$inModal && common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$fromRevision"), 'class' => 'repoDropDownMenu');
 
 $tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
-$menuData = $repo->SCM == 'Subversion' ? array() : array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
+$menuData = array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
 
 div(
     set::id('fileTabs'),
@@ -100,7 +100,7 @@ $inModal ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),
-    $repo->SCM == 'Subversion' ? null : div
+    div
     (
         setClass('surface'),
         dropmenu

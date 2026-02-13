@@ -12,11 +12,11 @@ class scm
      */
     public function setEngine($repo)
     {
-        $scm = strtolower($repo->SCM);
+        $scm = empty($repo->SCM) ? 'gitfox' : strtolower($repo->SCM);
         $className = $scm . 'Repo';
         if($scm == 'git') $scm = 'gitrepo';
         if(!class_exists($className)) require($scm . '.class.php');
-        $this->engine = new $className($repo->client, in_array($scm, array('gitlab', 'gitfox')) ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
+        $this->engine = new $className($repo->client, $repo->apiPath, '', $repo->password, '', $repo);
     }
 
     /**

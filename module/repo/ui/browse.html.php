@@ -88,7 +88,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
             set::objectID($repo->id),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
-        ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
+        ($branches || $tags) ? dropmenu
         (
             setID('repoBranchDropMenu'),
             set::objectID($selected),
@@ -220,7 +220,6 @@ toolbar
         empty($lastRevision->link) ? null : set::href($lastRevision->link),
         $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
     ),
-    !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),
@@ -271,7 +270,7 @@ jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTota
 /* Disbale check all checkbox of table header */
 $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
-if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->commentDtable->fieldList['commit']);
+unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&source=browse");

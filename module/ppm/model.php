@@ -723,7 +723,7 @@ class ppmModel extends model
        $params['pageSize']     = is_null($pager) ? 20 : $pager->recPerPage;
        $params['includeStats'] = true;
 
-       $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->serviceProject, $params);
+       $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->id, $params);
        if(!empty($commits->data))
        {
            $pager->recTotal   = $commits->pager->total;
@@ -764,7 +764,7 @@ class ppmModel extends model
         for($i = 0; true; $i++)
         {
             $params['page'] = $i + 1;
-            $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->serviceProject, $params);
+            $commits = $this->loadModel('gitfox')->apiGetCommits((int)$repo->id, $params);
             if(empty($commits) || empty($commits->data) || empty($commits->data->commits)) break;
             $commitList = array_merge($commitList, $commits->data->commits);
             if(!empty($commits->pager) && $commits->pager->pageSize < 100) break;

@@ -124,7 +124,7 @@ class pipeline extends control
             $pipeline = form::data($this->config->pipeline->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
-                ->add('spaceID', ($repoID && !empty($repo)) ? $repo->space : $spaceID)
+                ->add('spaceID', ($repoID && !empty($repo)) ? $repo->spaceID : $spaceID)
                 ->add('type', $repoID ? 'repo' : 'space')
                 ->add('status', 'draft')
                 ->get();

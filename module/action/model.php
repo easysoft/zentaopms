@@ -2447,11 +2447,6 @@ class actionModel extends model
             $projectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
         }
-        elseif($action->objectType == 'repo' && in_array($object->SCM, array('Gitlab', 'Gitea', 'Gogs')))
-        {
-            $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($object->serviceHost)->andWhere('deleted')->eq('0')->fetch();
-            if(empty($server)) return $this->lang->action->repoNoServer;
-        }
         elseif($action->objectType == 'module')
         {
             $repeatName = $this->loadModel('tree')->checkUnique($object);

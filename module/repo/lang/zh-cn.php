@@ -98,6 +98,7 @@ $lang->repo->collapse = '点击折叠';
 $lang->repo->id                 = 'ID';
 $lang->repo->SCM                = '类型';
 $lang->repo->name               = '名称';
+$lang->repo->identifier         = '名称';
 $lang->repo->path               = '地址';
 $lang->repo->prefix             = '地址扩展';
 $lang->repo->config             = '配置目录';
@@ -204,6 +205,9 @@ if(!$config->inQuickon && !$config->inCompose)
 
 $lang->repo->aclList['open']    = '公开 (代码库所属空间内可访问)';
 $lang->repo->aclList['private'] = '私有 (仅代码库成员可访问)';
+
+$lang->repo->showAclList['open']    = '公开';
+$lang->repo->showAclList['private'] = '私有';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';

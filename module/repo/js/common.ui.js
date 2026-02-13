@@ -1,7 +1,6 @@
 $(function()
 {
     $('#log').on('click', '.btn-close', closeRelation);
-    window.onScmChange();
 
     setTimeout(function()
     {
@@ -268,75 +267,6 @@ window.onProjectChange = function()
     else
     {
         $('#name').val(serviceProject);
-    }
-}
-
-/**
- * Changed SCM.
- *
- * @param  string $scm
- * @access public
- * @return void
- */
-window.onScmChange = function()
-{
-    if(typeof scmList == 'undefined' || !scmList) return;
-
-    var scm = $('[name=SCM]').val();
-    if(!scm)
-    {
-        for(i in scmList)
-        {
-            scm = i;
-            break;
-        }
-    }
-
-    (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
-
-    if(scm != 'Subversion')
-    {
-        $('.account-fields').addClass('hidden');
-        $('#path').attr('placeholder', pathGitTip);
-        $('#client').attr('placeholder', clientGitTip);
-        if(!client) $('#client').val('/usr/bin/git');
-    }
-    else
-    {
-        $('.account-fields').removeClass('hidden');
-        $('#path').attr('placeholder', pathSvnTip);
-        $('#client').attr('placeholder', clientSvnTip);
-        if(!client) $('#client').val('/usr/bin/svn');
-    }
-
-    if(scm == 'Git' || scm == 'Subversion')
-    {
-        $('.service').toggle(false);
-        $('.hide-service').toggle(true);
-    }
-    else
-    {
-        $('.service').toggle(true);
-        if(scm == 'Gitea' || scm == 'Gogs')
-        {
-            $('.hide-service').each(function()
-            {
-                if(!$(this).hasClass('hide-git')) $(this).toggle(true);
-            });
-            $('.hide-git').toggle(false);
-        }
-        else
-        {
-            $('.hide-service').toggle(false);
-        }
-
-        var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
-        $.getJSON(url, function(data)
-        {
-            const $hostPicker = $('#serviceHost').zui('picker');
-            $hostPicker.render({items: data});
-            $hostPicker.$.clear();
-        });
     }
 }
 

@@ -21,8 +21,7 @@ class ppmZen extends ppm
      */
     protected function getAllProjects(object $repo): array
     {
-        $methodName = 'get' . ucfirst($repo->SCM) . 'Projects';
-        return $this->ppm->{$methodName}((int)$repo->serviceHost, array($repo->serviceProject => $repo->serviceProject));
+        return $this->ppm->getGitFoxProjects((int)$repo->serviceHost, array($repo->serviceProject => $repo->serviceProject));
     }
 
     /**
