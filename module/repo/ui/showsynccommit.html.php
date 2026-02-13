@@ -40,7 +40,6 @@ div
             (
                 h3($lang->repo->notice->syncing),
                 div(setClass('sync-line')),
-                !in_array($repo->SCM, $this->config->repo->notSyncSCM) ? p($lang->repo->notice->syncedCount, span($version, set::id('commits'))) : null
             )
         )
     )

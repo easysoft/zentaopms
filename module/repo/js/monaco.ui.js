@@ -41,10 +41,6 @@ $(function()
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
 
-        if(['Git', 'Gitlab', 'Gogs', 'Gitea'].indexOf(repo.SCM) == -1)
-        {
-            $('#sourceSwapper').hide();
-        }
         expandTree();
 
         $('.btn-left').on('click', function()  {arrowTabs('monacoTabs', 1);});

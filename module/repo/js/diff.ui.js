@@ -285,18 +285,8 @@ window.goDiff = function()
     var isBranchOrTag = $('#isBranchOrTag').val();
     if(!oldRevision || !newRevision)
     {
-        (repo.SCM != 'Subversion') ? zui.Modal.alert(repoLang.error.needTwoVersion) : zui.Modal.alert(repoLang.error.emptyVersion);
+        zui.Modal.alert(repoLang.error.needTwoVersion);
         return false;
-    }
-
-    if(repo.SCM == 'Subversion')
-    {
-        var intRe = /^\d+$/;
-        if((intRe.test(oldRevision) == false && oldRevision != '^') || (intRe.test(newRevision) == false && newRevision != '^'))
-        {
-            zui.Modal.alert(repoLang.error.versionError);
-            return false;
-        }
     }
 
     if(oldRevision == newRevision)
