@@ -22,7 +22,6 @@ formPanel
         set::width('1/2'),
         set::name("name"),
         set::label($lang->repo->name),
-        set::control('static'),
         set::value($repo->name)
     ),
     formGroup
