@@ -158,7 +158,6 @@ class ppm extends control
         $repoPairs = array();
         foreach($repoList as $repo)
         {
-            if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
             $repoPairs[$repo->id] = $repo->name;
         }
 
