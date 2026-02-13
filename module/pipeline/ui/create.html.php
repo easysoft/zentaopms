@@ -30,8 +30,7 @@ formPanel
         set::label($lang->pipeline->existPipeline),
         set::name('existPipeline'),
         set::required(true),
-        set::control(array('type' => 'picker', 'items' => $existPipelines)),
-        set::items(array())
+        set::control(array('type' => 'picker', 'items' => $existPipelines))
     ),
     formGroup
     (

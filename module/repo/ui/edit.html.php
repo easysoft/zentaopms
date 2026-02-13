@@ -10,107 +10,20 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('pathGitTip', $lang->repo->example->path->git);
-jsVar('pathSvnTip', $lang->repo->example->path->svn);
-jsVar('clientGitTip', $lang->repo->example->client->git);
-jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
-jsVar('repoSCM', $repo->SCM);
-jsVar('client', $repo->client);
 $members = $repo->acl == 'private' ? array_keys(zget($repo, 'members', array())) : array();
 
 formPanel
 (
     set::title($lang->repo->edit),
     set::back('repo-maintain'),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->product->typeAB),
-            set::control("static"),
-            set::value(zget($lang->repo->scmList, $repo->SCM, ''))
-        ),
-        formHidden('SCM', $repo->SCM),
-        $repo->SCM == 'Git' ? h::span
-        (
-            setClass('tips-git leading-8 ml-2'),
-            html($lang->repo->syncTips)
-        ) : null
-    ),
     formGroup
     (
         set::width('1/2'),
         set::name("name"),
-        set::label($lang->user->name),
-        set::required(true),
+        set::label($lang->repo->name),
+        set::control('static'),
         set::value($repo->name)
-    ),
-    formRow
-    (
-        setClass('hide-service hide-git'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("path"),
-            set::label($lang->repo->path),
-            set::required(true),
-            set::placeholder($lang->repo->example->path->git),
-            set::value($repo->path)
-        )
-    ),
-    formRow
-    (
-        ($config->inContainer || $config->inQuickon || $this->config->inCompose) ? setClass('hidden') : setClass('hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("client"),
-            set::label($lang->repo->client),
-            set::required(true),
-            set::value($repo->client)
-        )
-    ),
-    formRow
-    (
-        setClass('account-fields hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("account"),
-            set::label($lang->user->account),
-            set::required(true),
-            set::value($repo->account)
-        )
-    ),
-    formRow
-    (
-        setClass('account-fields hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->user->password),
-            set::required(true),
-            inputGroup
-            (
-                control(set(array
-                (
-                    'name' => "password",
-                    'id' => "password",
-                    'value' => $repo->password,
-                    'type' => "password"
-                ))),
-                control(set(array
-                (
-                    'name' => "encrypt",
-                    'id' => "encrypt",
-                    'value' => $repo->encrypt,
-                    'type' => "picker",
-                    'items' => $lang->repo->encryptList
-                )))
-            )
-        )
     ),
     formGroup
     (
@@ -119,7 +32,7 @@ formPanel
         set::label($lang->repo->space),
         set::required(true),
         set::items($spaces),
-        set::value($repo->space)
+        set::value($repo->spaceID)
     ),
     formGroup
     (
@@ -127,8 +40,8 @@ formPanel
         set::name("product[]"),
         set::label($lang->story->product),
         set::required(true),
-        set::control(array("control" => "picker","multiple" => true)),
         set::items($products),
+        set::multiple(true),
         set::value($repo->product)
     ),
     formGroup

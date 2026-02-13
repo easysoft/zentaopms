@@ -98,6 +98,7 @@ $lang->repo->collapse = 'Fold';
 $lang->repo->id                 = 'ID';
 $lang->repo->SCM                = 'Type';
 $lang->repo->name               = 'Name';
+$lang->repo->identifier         = 'Name';
 $lang->repo->path               = 'Path';
 $lang->repo->prefix             = 'Prefix';
 $lang->repo->config             = 'Config';
@@ -204,6 +205,9 @@ if(!$config->inQuickon && !$config->inCompose)
 
 $lang->repo->aclList['open']    = 'Open(Space members can access it)';
 $lang->repo->aclList['private'] = 'Private(Only repository members can access it)';
+
+$lang->repo->showAclList['open']    = 'Open';
+$lang->repo->showAclList['private'] = 'Private';
 
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';

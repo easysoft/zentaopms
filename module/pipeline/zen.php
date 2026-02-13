@@ -151,6 +151,7 @@ class pipelineZen extends pipeline
             foreach($pipelines as $pipeline)
             {
                 if(empty($pipeline->repoID)) continue;
+                if(empty($repoList[$pipeline->repoID])) continue;
                 if(!isset($pipelineItems[$pipeline->repoID]))
                 {
                     $pipelineItems[$pipeline->repoID]['items'] = array();

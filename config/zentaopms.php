@@ -482,17 +482,11 @@ define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
-define('TABLE_PPM',           '`ops_ppm`');
-define('TABLE_PPMREVIEWERS',  '`ops_request_reviewers`');
 define('TABLE_MARK',          '`' . $config->db->prefix . 'mark`');
 
 define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
 define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
-define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
-define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
-define('TABLE_REPOFILES',    '`' . $config->db->prefix . 'repofiles`');
-define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
 define('TABLE_KANBAN',       '`' . $config->db->prefix . 'kanban`');
 define('TABLE_KANBANSPACE',  '`' . $config->db->prefix . 'kanbanspace`');
 define('TABLE_KANBANREGION', '`' . $config->db->prefix . 'kanbanregion`');
@@ -622,7 +616,6 @@ define('TABLE_METRIC',        '`' . $config->db->prefix . 'metric`');
 define('TABLE_METRICLIB',     '`' . $config->db->prefix . 'metriclib`');
 define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
 
-define('TABLE_SPACE',        '`ops_space`');
 define('TABLE_INSTANCE',     '`' . $config->db->prefix . 'instance`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
@@ -653,17 +646,24 @@ define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
 if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
 
-define('TABLE_DEVOPSSPACEUSER', '`' . $config->db->prefix . 'ops_spaceuser`');
-define('TABLE_DEVOPSREPOUSER', '`' . $config->db->prefix . 'ops_repouser`');
 define('TABLE_BRANCHTYPE', '`' . $config->db->prefix . 'ops_branch_type`');
 define('TABLE_BRANCHRULESET', '`' . $config->db->prefix . 'ops_branch_ruleset`');
 define('TABLE_REVIEWFLOW', '`' . $config->db->prefix . 'ops_review_flow`');
 
+define('TABLE_SPACE',           '`ops_space`');
+define('TABLE_DEVOPSSPACEUSER', '`ops_spaceuser`');
+define('TABLE_PPM',             '`ops_ppm`');
+define('TABLE_PPMREVIEWERS',    '`ops_request_reviewers`');
+define('TABLE_REPO',            '`ops_repo`');
+define('TABLE_DEVOPSREPOUSER',  '`ops_repouser`');
+define('TABLE_REPOHISTORY',     '`ops_repohistory`');
+define('TABLE_REPOFILES',       '`ops_repofiles`');
+define('TABLE_REPOBRANCH',      '`ops_repobranch`');
 define('TABLE_PIPELINE',        '`ops_pipeline`');
 define('TABLE_PIPELINECONTENT', '`ops_pipeline_content`');
 define('TABLE_PIPELINEEXEC',    '`ops_pipeline_executions`');
 define('TABLE_PIPELINETRIGGER', '`ops_triggers`');
-define('TABLE_ARTIFACT', '`ops_artifact`');
+define('TABLE_ARTIFACT',        '`ops_artifact`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;

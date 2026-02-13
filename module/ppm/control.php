@@ -84,7 +84,7 @@ class ppm extends control
 
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('ppm', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
-        $repoList = $this->loadModel('repo')->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList));
+        $repoList = $this->loadModel('repo')->getListByPriv();
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
         if(!$repoID) $repoID = key($repoList);
@@ -104,7 +104,6 @@ class ppm extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $ppmList        = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager);
-        $projects       = $this->ppmZen->getAllProjects($repo);
         $canEdit        = common::hasPriv($this->app->rawModule, 'edit');
         $reviewResults  = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         foreach($ppmList as $ppm)
@@ -115,16 +114,15 @@ class ppm extends control
             if($ppm->status == 'merged' || $ppm->status == 'closed') $ppm->mergeStatus = $ppm->status;
         }
 
-        $this->view->title      = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
-        $this->view->ppmList    = $ppmList;
-        $this->view->projects   = $projects;
-        $this->view->pager      = $pager;
-        $this->view->mode       = $mode;
-        $this->view->param      = $param;
-        $this->view->objectID   = $objectID;
-        $this->view->repo       = $repo;
-        $this->view->orderBy    = $orderBy;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title    = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
+        $this->view->ppmList  = $ppmList;
+        $this->view->pager    = $pager;
+        $this->view->mode     = $mode;
+        $this->view->param    = $param;
+        $this->view->objectID = $objectID;
+        $this->view->repo     = $repo;
+        $this->view->orderBy  = $orderBy;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -218,7 +216,7 @@ class ppm extends control
             $flow->definition = json_decode($flow->definition);
             $flow->reviewers  = arrayUnion(array_filter($flow->definition->reviewFlow->approvals->defaultReviewers), array_filter($flow->definition->reviewFlow->approvals->specifiedReviewers));
         }
-        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage((int)$repo->gitfoxID, $sourceBranch, $targetBranch);
+        $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage($repoID, $sourceBranch, $targetBranch);
 
         if($_POST)
         {

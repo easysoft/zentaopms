@@ -28,10 +28,10 @@ class ciModel extends model
         if($this->session->repoID)
         {
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
-            if(!empty($repo) && !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->ppm);
-            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->tag);
-            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM)) unset($this->lang->devops->menu->branch);
+            if(!$repo) unset($this->lang->devops->menu->tag);
+            if(!$repo) unset($this->lang->devops->menu->branch);
         }
+        if($this->app->rawModule == 'pullreq') $this->lang->repo->menu->review['subMenu']->ppm['exclude'] = 'ppm-browse';
     }
 
     /**

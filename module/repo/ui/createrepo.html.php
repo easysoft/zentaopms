@@ -20,11 +20,6 @@ if($this->app->tab != 'devops')
     );
 }
 
-jsVar('pathGitTip', $lang->repo->example->path->git);
-jsVar('pathSvnTip', $lang->repo->example->path->svn);
-jsVar('clientGitTip', $lang->repo->example->client->git);
-jsVar('clientSvnTip', $lang->repo->example->client->svn);
-
 formPanel
 (
     on::change('#space')->call('loadMembers'),
@@ -33,7 +28,7 @@ formPanel
     (
         set::width('1/2'),
         set::name("name"),
-        set::label($lang->user->name),
+        set::label($lang->repo->name),
         set::required(true),
     ),
     formGroup

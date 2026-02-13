@@ -86,57 +86,6 @@ class repoZen extends repo
     }
 
     /**
-     * 准备编辑版本库的数据。
-     * Prepare edit repo data.
-     *
-     * @param  form      $formData
-     * @param  object    $oldRepo
-     * @param  bool      $isPipelineServer
-     * @access protected
-     * @return object|false
-     */
-    protected function prepareEdit(form $formData, object $oldRepo, bool $isPipelineServer): object|false
-    {
-        if($oldRepo->client != $this->post->client and !$this->checkClient()) return false;
-        if(!$this->checkConnection()) return false;
-
-        $repo = $formData
-            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setDefault('client', 'svn')
-            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
-            ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->serviceProject)
-            ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
-            ->setDefault('product', '')
-            ->skipSpecial('path,client,account,password,desc')
-            ->join('product', ',')
-            ->setDefault('projects', '')->join('projects', ',')
-            ->get();
-        if(strpos($repo->client, ' ')) $repo->client = "\"{$repo->client}\"";
-
-        if($repo->path != $oldRepo->path) $repo->synced = 0;
-
-        if($repo->SCM == 'Subversion')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $info     = $scm->info('');
-            $infoRoot = urldecode($info->root);
-
-            $path   = str_replace(array(':3690/',':80/'), '/', $repo->path);
-            $prefix = str_replace('\\', '/', $path);
-
-            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', $prefix), '/');
-            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
-        }
-        elseif($repo->SCM != $oldRepo->SCM and $repo->SCM == 'Git')
-        {
-            $repo->prefix = '';
-        }
-
-        return $repo;
-    }
-
-    /**
      * 检查权限数据。
      * Check acl.
      *
@@ -414,34 +363,8 @@ class repoZen extends repo
         $this->view->groups          = $this->loadModel('group')->getPairs();
         $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products        = $products;
-        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), explode(',', $repo->projects));
+        $this->view->relatedProjects = $this->repo->filterProject(explode(',', $repo->product), array());
         $this->view->spaces          = $this->loadModel('space')->getPairs($this->app->user->account);
-    }
-
-    /**
-     * 获取还没存在禅道的项目列表。
-     * Get not exist repos.
-     *
-     * @param  object    $gitlab
-     * @access protected
-     * @return array
-     */
-    protected function getNotExistRepos(object $server): array
-    {
-        $repoList = array();
-        if(!empty($server))
-        {
-            $repoList      = $this->getGitlabProjectsByApi($server);
-            $existRepoList = $this->dao->select('serviceProject,name')->from(TABLE_REPO)
-                ->where('SCM')->eq('Gitlab')
-                ->andWhere('serviceHost')->eq($server->id)
-                ->fetchPairs();
-            foreach($repoList as $key => $repo)
-            {
-                if(isset($existRepoList[$repo->id])) unset($repoList[$key]);
-            }
-        }
-        return $repoList;
     }
 
     /**
@@ -493,39 +416,13 @@ class repoZen extends repo
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        if($repo->SCM == 'Gitlab')
-        {
-            $_COOKIE['repoBranch'] = $branchID ? $branchID : $this->cookie->repoBranch;
-            $infos = $this->repo->getGitlabFilesByPath($repo, $path, $branchID);
-            foreach($infos as &$file)
-            {
-                $file->revision = '';
-                $file->comment  = '';
-                $file->account  = '';
-                $file->date     = '';
-            }
-        }
-        else
-        {
-            $infos = $this->repo->getFileCommits($repo, $branchID, $path);
-        }
-
-        $filePath = $path;
-        if($repo->SCM == 'Subversion')
-        {
-            $info = $scm->info('');
-            if(!empty($info->root))
-            {
-                $prefixPath = str_replace($info->root . '/', '', $repo->path);
-                $filePath   = trim(str_replace($prefixPath, '', $path), '/');
-            }
-        }
+        $infos = $scm->ls($path);
 
         foreach($infos as $info)
         {
             $info->originalComment = $info->comment;
             $info->comment         = $this->repo->replaceCommentLink($info->comment);
-            if($repo->SCM != 'Subversion') $info->revision = substr($info->revision, 0, 10);
+            $info->revision         = substr($info->revision, 0, 10);
 
             $infoPath = trim(urldecode($path) . '/' . $info->name, '/');
             if($info->kind == 'dir')
@@ -534,7 +431,6 @@ class repoZen extends repo
             }
             else
             {
-                if($repo->SCM == 'Subversion') $infoPath = $filePath . '/' . $info->name;
                 $info->link = $this->repo->createLink('view', "repoID={$repo->id}&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
             }
         }
@@ -555,7 +451,6 @@ class repoZen extends repo
     {
         /* Set branch or tag for git. */
         $branches = $tags = array();
-        if(!in_array($repo->SCM, $this->config->repo->gitTypeList)) return array();
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -611,110 +506,6 @@ class repoZen extends repo
     }
 
     /**
-     * 获取browse方法项目、分支、tags信息。
-     * Get project、branches、tags info for browse method.
-     *
-     * @param  object    $repo
-     * @access protected
-     * @return array
-     */
-    protected function getBrowseInfo(object $repo): array
-    {
-        if($repo->SCM == 'Gitlab')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $urls['project']['url']  = $scm->engine->getApiUrl("project");
-            $urls['branches']['url'] = $scm->engine->getApiUrl('branches');
-            $urls['tags']['url']     = $scm->engine->getApiUrl('tags');
-
-            $this->app->loadClass('requests', true);
-            $result = requests::request_multiple($urls);
-
-            if($result['project']->status_code == 200)
-            {
-                $project = json_decode($result['project']->body);
-                if(!is_object($project)) $project = new stdclass();
-
-                $this->loadModel('gitlab')->setProject((int)$repo->gitService, (int)$repo->serviceProject, $project);
-            }
-            if(!empty($result['branches']->headers) && !is_null($result['branches']->headers->offsetGet('x-total')))
-            {
-                $branchList = json_decode($result['branches']->body);
-                $totalPages = $result['branches']->headers->offsetGet('x-total-pages');
-                if($totalPages > 1)
-                {
-                    $requests = array();
-                    for($page = 2; $page <= $totalPages; $page++)
-                    {
-                        $requests[$page]['url'] = str_replace('page=1', "page={$page}", $urls['branches']['url']);
-                    }
-
-                    $reponses = requests::request_multiple($requests, array('timeout' => 10));
-                    foreach($reponses as $reponse)
-                    {
-                        $data = json_decode($reponse->body);
-                        if(!is_array($data)) continue;
-                        $branchList = array_merge($branchList, $data);
-                    }
-                }
-
-                $branches = array();
-                $default  = array();
-                if(!empty($branchList) && is_array($branchList))
-                {
-                    foreach($branchList as $branch)
-                    {
-                        if(!isset($branch->name)) continue;
-                        if($branch->default)
-                        {
-                            $default[$branch->name] = $branch->name;
-                        }
-                        else
-                        {
-                            $branches[$branch->name] = $branch->name;
-                        }
-                    }
-
-                    if(empty($branches) and empty($default)) $branches['master'] = 'master';
-                    asort($branches);
-                    $branches = $default + $branches;
-                }
-            }
-
-            if(!empty($result['tags']->headers) && !is_null($result['tags']->headers->offsetGet('x-total')))
-            {
-                $tagList    = json_decode($result['tags']->body);
-                $totalPages = $result['tags']->headers->offsetGet('x-total-pages');
-                if($totalPages > 1)
-                {
-                    $requests = array();
-                    for($page = 2; $page <= $totalPages; $page++)
-                    {
-                        $requests[$page]['url'] = str_replace('page=1', "page={$page}", $urls['tags']['url']);
-                    }
-
-                    $reponses = requests::request_multiple($requests, array('timeout' => 10));
-                    foreach($reponses as $reponse)
-                    {
-                        $data = json_decode($reponse->body);
-                        if(!is_array($data)) continue;
-                        $tagList = array_merge($tagList, $data);
-                    }
-                }
-
-                $tags = array();
-                if(!empty($tagList) && is_array($tagList))
-                {
-                    foreach($tagList as $tag) $tags[] = $tag->name;
-                }
-            }
-
-            return array(isset($branches) ? $branches : false, isset($tags) ? $tags : false);
-        }
-    }
-
-    /**
      * 为git类型版本库设置分支和tag。
      * Set branch or tag for git.
      *
@@ -725,28 +516,18 @@ class repoZen extends repo
      */
     protected function setBranchTag(object $repo, string $branchID): array
     {
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-        {
-            if($repo->SCM == 'Gitlab') list($branchInfo, $tagInfo) = $this->getBrowseInfo($repo);
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
+        $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
+        $tags     = array();
+        foreach($initTags as $tag) $tags[$tag] = $tag;
 
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
-            $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
-            $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
-            $tags     = array();
-            foreach($initTags as $tag) $tags[$tag] = $tag;
+        if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;
+        if(!isset($branches[$branchID]) && !isset($tags[$branchID])) $branchID = (string)key($branches);
+        if($branchID) $this->setRepoBranch($branchID);
 
-            if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;
-            if(!isset($branches[$branchID]) && !isset($tags[$branchID])) $branchID = (string)key($branches);
-            if($branchID) $this->setRepoBranch($branchID);
-
-            return array($branchID, $branches, $tags);
-        }
-        else
-        {
-            $this->setRepoBranch('');
-            return array($branchID, array(), array());
-        }
+        return array($branchID, $branches, $tags);
     }
 
     /**
@@ -769,7 +550,7 @@ class repoZen extends repo
         foreach($revisions as $item)
         {
             $item->link     = $this->repo->createLink('revision', "repoID={$repo->id}&objectID=$objectID&revision={$item->revision}" . $pathInfo);
-            $item->revision = ($repo->SCM != 'Subversion' && $item->revision) ? substr($item->revision, 0, 10) : $item->revision;
+            $item->revision = $item->revision ? substr($item->revision, 0, 10) : $item->revision;
         }
 
         return $revisions;
@@ -804,7 +585,6 @@ class repoZen extends repo
      * @param  int       $inSpace
      * @param  int       $space
      * @param  array     $products
-     * @param  array     $projects
      * @param  int       $objectID
      * @param  string    $orderBy
      * @param  int       $recPerPage
@@ -813,10 +593,9 @@ class repoZen extends repo
      * @access protected
      * @return void
      */
-    protected function buildRepoSearchForm(int $inSpace, int $space, array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
+    protected function buildRepoSearchForm(int $inSpace, int $space, array $products, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): void
     {
         $this->config->repo->search['params']['product']['values']  = $products;
-        $this->config->repo->search['params']['projects']['values'] = $projects;
         $this->config->repo->search['actionURL']   = $this->createLink('repo', 'maintain', "inSpace={$inSpace}&space={$space}&objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
         $this->config->repo->search['queryID']     = $param;
         $this->config->repo->search['onMenuBar']   = 'yes';
@@ -1198,17 +977,17 @@ class repoZen extends repo
             }
             $error .= sprintf($this->lang->repo->error->deleted, implode(', ', $tmpDesignLinks));
         }
-        $linkBranchs = $this->repo->getLinkedBranch(0, '', $repoID);
-        if(!empty($linkBranchs))
+        $linkBranches = $this->repo->getLinkedBranch(0, '', $repoID);
+        if(!empty($linkBranches))
         {
-            $tmpLinkBranchs = [];
-            foreach($linkBranchs as $value)
+            $tmpLinkBranches = [];
+            foreach($linkBranches as $value)
             {
-                if(!array_key_exists($value->AType, $tmpLinkBranchs)) $tmpLinkBranchs[$value->AType] = [];
+                if(!array_key_exists($value->AType, $tmpLinkBranches)) $tmpLinkBranches[$value->AType] = [];
 
-                if(!in_array($value->BType, $tmpLinkBranchs[$value->AType])) array_push($tmpLinkBranchs[$value->AType], $value->BType);
+                if(!in_array($value->BType, $tmpLinkBranches[$value->AType])) array_push($tmpLinkBranches[$value->AType], $value->BType);
             }
-            foreach($tmpLinkBranchs as $type=>$value)
+            foreach($tmpLinkBranches as $type => $value)
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
                     $this->createLink('repo', 'browse', 'repoID=' . $repoID),
@@ -1216,8 +995,8 @@ class repoZen extends repo
                 ));
             }
         }
-        $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('job', 'browse'), implode(', ', array_column($jobs, 'id')), '_blank', '', false));
+        $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('repoID')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
+        if($pipeline) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('pipeline', 'browse'), implode(', ', array_column($pipeline, 'id')), '_blank', '', false));
         return $error;
     }
 
@@ -1335,39 +1114,35 @@ class repoZen extends repo
      * 获取需要同步的分支。
      * Get sync branches.
      *
-     * @param  object    $repo
      * @param  string    $branchID
      * @access protected
      * @return array
      */
-    protected function getSyncBranches(object $repo, string &$branchID = ''): array
+    protected function getSyncBranches(string &$branchID = ''): array
     {
         $branches = array();
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        $branches = $this->scm->branch();
+        if(empty($branches)) return array();
+
+        $tags = $this->scm->tags('');
+        foreach($tags as $tag) $branches[$tag] = $tag;
+
+        if($branches)
         {
-            $branches = $this->scm->branch();
-            if(empty($branches)) return array();
+            /* Init branchID. */
+            if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
+            if(!isset($branches[$branchID])) $branchID = '';
+            if(empty($branchID)) $branchID = key($branches);
 
-            $tags = $this->scm->tags('');
-            foreach($tags as $tag) $branches[$tag] = $tag;
-
-            if($branches)
+            /* Get unsynced branches. */
+            foreach($branches as $branch)
             {
-                /* Init branchID. */
-                if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
-                if(!isset($branches[$branchID])) $branchID = '';
-                if(empty($branchID)) $branchID = key($branches);
-
-                /* Get unsynced branches. */
-                foreach($branches as $branch)
-                {
-                    unset($branches[$branch]);
-                    if($branch == $branchID) break;
-                }
-
-                $this->setRepoBranch($branchID);
-                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+                unset($branches[$branch]);
+                if($branch == $branchID) break;
             }
+
+            $this->setRepoBranch($branchID);
+            helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
 
         return $branches;
@@ -1389,32 +1164,25 @@ class repoZen extends repo
     {
         if(empty($commitCount) && !$repo->synced)
         {
-            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+            if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
+            if($branches)
             {
-                if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
-                if($branches)
-                {
-                    $branchID = array_shift($branches);
-                    helper::setcookie("syncBranch", $branchID);
-                }
-                else
-                {
-                    $branchID = '';
-                }
-
-                if($branchID) $this->repo->fixCommit($repo->id);
+                $branchID = array_shift($branches);
+                helper::setcookie("syncBranch", $branchID);
+            }
+            else
+            {
+                $branchID = '';
             }
 
-            if(empty($branchID) || in_array($repo->SCM, $this->config->repo->notSyncSCM))
-            {
-                helper::setcookie("syncBranch", '');
+            if($branchID) $this->repo->fixCommit($repo->id);
 
-                $this->repo->markSynced($repo->id);
-                return $this->config->repo->repoSyncLog->finish;
-            }
+            helper::setcookie("syncBranch", '');
+
+            $this->repo->markSynced($repo->id);
+            return $this->config->repo->repoSyncLog->finish;
         }
 
-        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
         return $type == 'batch' ? $commitCount : $this->config->repo->repoSyncLog->finish;
     }
 
@@ -1509,10 +1277,6 @@ class repoZen extends repo
      */
     protected function getViewTree(object $repo, string $entry, string $revision): array
     {
-        if($repo->SCM == 'Gitlab') return $this->repo->getGitlabFilesByPath($repo, '', (string)$this->cookie->repoBranch);
-
-        if($repo->SCM != 'Subversion') return $this->repo->getFileTree($repo);
-
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $tree = $scm->ls($entry, (string)$revision);
@@ -1700,8 +1464,6 @@ class repoZen extends repo
             $repoList = $this->repo->getList($objectID);
             foreach($repoList as $repo)
             {
-                if(!in_array($repo->SCM, $scmList)) continue;
-
                 $repoPairs[$repo->id] = $repo->name;
             }
             if(!isset($repoPairs[$repoID])) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
