@@ -334,17 +334,10 @@ class repoModel extends model
         if(empty($revisionInfo))
         {
             $repo = $this->getByID($repoID);
-            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
-            {
-                $scm = $this->app->loadClass('scm');
-                $scm->setEngine($repo);
-                $logs = $scm->getCommits($revision, 1);
-                $this->saveCommit($repoID, $logs, 0);
-            }
-            else
-            {
-                $this->updateCommit($repoID);
-            }
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $logs = $scm->getCommits($revision, 1);
+            $this->saveCommit($repoID, $logs, 0);
         }
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
