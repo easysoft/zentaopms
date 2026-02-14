@@ -270,7 +270,7 @@ class spaceModel extends model
     public function getReposBySpace(int $spaceID, $acl = ''): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
-            ->where('space')->eq($spaceID)
+            ->where('spaceID')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($acl)->andWhere('acl')->eq($acl)->fi()
             ->fetchAll('id');
@@ -304,7 +304,7 @@ class spaceModel extends model
     {
         return $this->dao->select('t1.*')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
-            ->where('t2.space')->eq($spaceID)
+            ->where('t2.spaceID')->eq($spaceID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -728,7 +728,7 @@ class spaceModel extends model
 
         $this->loadModel('repo');
 
-        $repos         = $this->dao->select('id,product,acl')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('space')->eq($spaceID)->fetchAll();
+        $repos         = $this->dao->select('id,product,acl')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('spaceID')->eq($spaceID)->fetchAll();
         $productIdList = array();
         foreach($repos as $key => $repo)
         {
