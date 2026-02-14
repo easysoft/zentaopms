@@ -578,20 +578,9 @@ class repoModel extends model
         $repo = $this->fetchByID($repoID);
         if(!$repo) return false;
 
-        $repo = $this->processGitService($repo);
         $repo->members = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->spaceID);
 
-        $repo->path = $this->parseRepoPath($repo->path);
-
-        $gitfoxRepo = $this->loadModel('gitfox')->apiGetSingleRepo($repoID, false);
-        if(!$gitfoxRepo || !empty($gitfoxRepo->importing)) return $repo;
-
-        $server = $this->gitfox->getServer();
-
-        $repo->apiPath  = sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id);
-        $repo->client   = $server->url;
-        $repo->password = $server->token;
-
+        $repo = $this->processGitService($repo);
         return $repo;
     }
 
@@ -1669,14 +1658,15 @@ class repoModel extends model
     {
 
         $server = $this->loadModel('gitfox')->getServer();
-        $singleRepo = $this->gitfox->apiGetSingleRepo((int)$repo->id);
-        $repo->path = $singleRepo->web_url;
 
-        $repo->path     = (!$repo->path && $server) ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id) : $repo->path;
-        $repo->apiPath  = $server ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id) : $repo->path;
-        $repo->client   = $server ? $server->url : '';
-        $repo->password = $server ? $server->token : '';
-        $repo->codePath = isset($singleRepo->web_url) ? $singleRepo->web_url : $repo->path;
+        $singleRepo = $this->gitfox->apiGetSingleRepo((int)$repo->id);
+        $repo->path = $singleRepo->gitURL;
+
+        $repo->apiPath   = $server ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id) : $repo->path;
+        $repo->client    = $server ? $server->url : '';
+        $repo->password  = $server ? $server->token : '';
+        $repo->codePath  = isset($singleRepo->gitURL) ? $singleRepo->gitURL : $repo->path;
+        $repo->importing = isset($singleRepo->importing) ? $singleRepo->importing : false;
         return $repo;
     }
 
