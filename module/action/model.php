@@ -691,12 +691,13 @@ class actionModel extends model
             {
                 $desc = $this->lang->{$objectType}->action->{$action->action};
             }
-            elseif(strpos('createppm,editppm,removeppm', $action->action) !== false && strpos($action->extra, '::') !== false)
+            elseif(strpos('createppm,editppm,removeppm,createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
             {
-                $ppmAction = str_replace('ppm', '', $action->action) . 'Action';
+                $ppmAction = str_replace(array('ppm', 'mr'), '', $action->action) . 'Action';
                 list($ppmDate, $ppmActor, $ppmLink) = explode('::', $action->extra);
                 if(!$ppmActor) $ppmActor = $action->actor;
                 if(is_numeric($ppmLink)) $ppmLink = helper::createLink('ppm', 'view', "id={$ppmLink}");
+                $ppmLink = str_replace('mr', 'ppm', $ppmLink);
 
                 if(isInModal()) $ppmLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
