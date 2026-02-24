@@ -505,6 +505,9 @@ $lang->action->label->startProgram            = '(The start of the project sets 
 $lang->action->label->createppm               = 'Linked';
 $lang->action->label->deleteppm               = 'Unlinked';
 $lang->action->label->mergedppm               = 'Merged';
+$lang->action->label->createmr                = 'Linked';
+$lang->action->label->deletemr                = 'Unlinked';
+$lang->action->label->mergedmr                = 'Merged';
 $lang->action->label->compilepass             = 'Compile Success';
 $lang->action->label->compilefail             = 'Compile Fail';
 $lang->action->label->reopen                  = 'Reopen';
@@ -1141,6 +1144,9 @@ $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocr
 $lang->action->desc->createppm                    = '$extra';
 $lang->action->desc->deleteppm                    = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
 $lang->action->desc->mergedppm                    = '$date, <strong>$actor</strong> merged code.';
+$lang->action->desc->createmr                     = '$extra';
+$lang->action->desc->deletemr                     = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
+$lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged code.';
 $lang->action->desc->compilefail                  = '$date, <strong>$actor</strong> compile fail.';
 $lang->action->desc->compilepass                  = '$date, <strong>$actor</strong> compile pass';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
