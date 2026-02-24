@@ -64,7 +64,7 @@ if(!$bug->deleted && $canModify)
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 
     $this->loadModel('repo');
-    $hasRepo = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
+    $hasRepo = $this->repo->getListByProduct($bug->product, 1);
     foreach($actions as $key => $action)
     {
         if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
