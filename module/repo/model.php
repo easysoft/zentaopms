@@ -2747,17 +2747,15 @@ class repoModel extends model
      * Get repo list by product id.
      *
      * @param  int    $productID
-     * @param  string $scm
      * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getListByProduct(int $productID, string $scm = '', int $limit = 0): array
+    public function getListByProduct(int $productID, int $limit = 0): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->andWhere("FIND_IN_SET({$productID}, `product`)")
-            ->beginIF($scm)->andWhere('SCM')->in($scm)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
