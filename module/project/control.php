@@ -23,7 +23,7 @@ class project extends control
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
-        $this->view->globalDisableProgram = $this->config->systemMode == 'light' || !helper::hasFeature('program');
+        $this->view->globalDisableProgram = $this->config->systemMode == 'light';
     }
 
     /**
