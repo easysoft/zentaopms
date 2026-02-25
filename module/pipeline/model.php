@@ -756,6 +756,29 @@ class pipelineModel extends model
     }
 
     /**
+     * 创建触发器.
+     * Create trigger.
+     *
+     * @param  int $pipelineID
+     * @param  object $trigger
+     * @access public
+     * @return void
+     */
+    public function apiCreateTrigger(int $pipelineID, object $trigger)
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipelines/{$pipelineID}/triggers");
+
+        $response = json_decode(commonModel::http($url, $trigger, array(), $apiRoot->header, 'json', 'POST'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
+        return !dao::isError();
+    }
+
+    /**
      * 解析触发规则。
      * Parse triggers.
      *
@@ -782,12 +805,12 @@ class pipelineModel extends model
             foreach($cron as $item)
             {
                 $itemArr = explode(' ', $item);
-                if(count($itemArr) != 6) continue;
+                if(count($itemArr) != 5) continue;
 
                 $trigger = new stdclass;
-                $trigger->type  = $itemArr[5] == '*' ? 'month' : 'week';
-                $trigger->value = $itemArr[5] == '*' ? $itemArr[4] : $itemArr[5];
-                $trigger->time  = $itemArr[2] == '*' ? '' : $itemArr[2] . ':' . $itemArr[1];
+                $trigger->type  = $itemArr[4] == '*' ? 'month' : 'week';
+                $trigger->value = $itemArr[4] == '*' ? $itemArr[3] : $itemArr[4];
+                $trigger->time  = $itemArr[1] == '*' ? '' : $itemArr[1] . ':' . $itemArr[0];
                 $triggers[] = $trigger;
             }
         }
