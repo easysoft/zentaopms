@@ -689,27 +689,38 @@ class pipeline extends control
                 elseif(!empty($trigger->time))
                 {
                     list($hour, $minute) = explode(':', $trigger->time);
-                    $cron[] = $trigger->type == 'week' ? sprintf('* %s %s * * %s', $minute, $hour, $trigger->value) : sprintf('* %s %s * %s *', $minute, $hour, $trigger->value);
+                    $cron[] = $trigger->type == 'week' ? sprintf('%s %s * * %s', $minute, $hour, $trigger->value) : sprintf('%s %s * %s *', $minute, $hour, $trigger->value);
                 }
                 else
                 {
-                    $cron[] = $trigger->type == 'week' ? "* * * * * {$trigger->value}" : "* * * * {$trigger->value} *";
+                    $cron[] = $trigger->type == 'week' ? "* * * * {$trigger->value}" : "* * * {$trigger->value} *";
                 }
             }
 
             $pipeline = $this->pipeline->getByID($pipelineID);
             $repo     = $this->loadModel('repo')->fetchByID($pipeline->repoID);
 
+            $triggerID = (int)zget($pipeline, 'triggerID', 0);
+
             $trigger = new stdClass();
             $trigger->trigger    = $events;
-            $trigger->id         = zget($pipeline, 'triggerID', 0);
+            $trigger->id         = $triggerID;
             $trigger->pipelineID = $pipelineID;
             $trigger->cron       = $cron;
-            $trigger->repoID     = empty($repo) ? 0 : (int)$repo->gitfoxID;
-            $trigger->editedBy   = $this->app->user->account;
-            $trigger->editedDate = helper::now();
+            $trigger->repoID     = empty($repo) ? 0 : (int)$repo->id;
 
-            $this->pipeline->apiUpdateTrigger($pipelineID, (int)zget($pipeline, 'triggerID', 0), $trigger);
+            if($triggerID)
+            {
+                $trigger->editedBy   = $this->app->user->account;
+                $trigger->editedDate = helper::now();
+                $this->pipeline->apiUpdateTrigger($pipelineID, $triggerID, $trigger);
+            }
+            else
+            {
+                $trigger->createdBy   = $this->app->user->account;
+                $trigger->createdDate = helper::now();
+                $this->pipeline->apiCreateTrigger($pipelineID, $trigger);
+            }
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('load' => true));

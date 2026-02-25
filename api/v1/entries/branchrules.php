@@ -29,8 +29,7 @@ class branchRulesEntry extends baseEntry
         }
 
         $branchName = $this->param('branchName');
-        $gitfoxID   = $this->param('id');
-        $repoID     = $this->loadModel('gitfox')->getIdByServiceProject((int)$gitfoxID);
+        $repoID     = $this->param('id');
 
         $this->loadModel('repobranchrule');
         $this->loadModel('repobranchtype');
