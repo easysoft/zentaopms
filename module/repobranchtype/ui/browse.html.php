@@ -56,6 +56,9 @@ toolbar
     set('data-app', $app->tab)) : null
 );
 
+// 非代码库下的分支类型不显示分支规则操作
+if(!$repo) $config->repobranchtype->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
+
 // 初始化表格数据
 $data = initTableData($branchTypeList, $config->repobranchtype->dtable->fieldList);
 
