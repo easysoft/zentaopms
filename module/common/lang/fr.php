@@ -364,6 +364,7 @@ $lang->deployment->common       = 'Host';
 $lang->repoSettings->common     = 'Settings';
 $lang->devops->branchType       = 'Branch Type';
 $lang->devops->reviewFlow       = 'Review Flow';
+$lang->devops->reporeviewflow   = 'Review Flow';
 $lang->devops->execution        = 'Execution';
 $lang->artifact->common         = 'Artifact Repository';
 

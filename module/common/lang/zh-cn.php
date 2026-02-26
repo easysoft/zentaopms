@@ -364,6 +364,7 @@ $lang->deployment->common       = '主机';
 $lang->repoSettings->common     = '设置';
 $lang->devops->branchType       = '分支类型';
 $lang->devops->reviewFlow       = '评审流程';
+$lang->devops->reporeviewflow   = '评审流程';
 $lang->devops->execution        = '执行历史';
 $lang->artifact->common         = '制品库';
 
