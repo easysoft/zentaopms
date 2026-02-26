@@ -1450,12 +1450,6 @@ $lang->resource->repo->createRepo      = 'createRepoAction';
 $lang->resource->repo->browseTag       = 'browseTag';
 $lang->resource->repo->browseBranch    = 'browseBranch';
 
-$lang->resource->repo->browseBranchType = 'browseBranchType';
-$lang->resource->repo->createBranchType = 'createBranchType';
-$lang->resource->repo->editBranchType   = 'editBranchType';
-$lang->resource->repo->deleteBranchType = 'deleteBranchType';
-$lang->resource->repo->importBranchType = 'importBranchType';
-
 $lang->resource->repobranchrule = new stdclass();
 $lang->resource->repobranchrule->setBranchRule = 'setBranchRule';
 
@@ -1481,11 +1475,6 @@ $lang->repo->methodOrder[100] = 'import';
 $lang->repo->methodOrder[105] = 'createRepo';
 $lang->repo->methodOrder[110] = 'browseTag';
 $lang->repo->methodOrder[115] = 'browseBranch';
-$lang->repo->methodOrder[120] = 'browseReviewFlow';
-$lang->repo->methodOrder[125] = 'createReviewFlow';
-$lang->repo->methodOrder[130] = 'editReviewFlow';
-$lang->repo->methodOrder[135] = 'changeReviewFlowStatus';
-$lang->repo->methodOrder[140] = 'deleteReviewFlow';
 
 $lang->resource->reporeviewflow = new stdclass();
 $lang->resource->reporeviewflow->browse       = 'browse';
@@ -1507,7 +1496,6 @@ $lang->resource->repobranchtype->edit   = 'edit';
 $lang->resource->repobranchtype->delete = 'delete';
 $lang->resource->repobranchtype->import = 'import';
 
-if(!isset($lang->repobranchtype)) $lang->repobranchtype = new stdclass();
 $lang->repobranchtype->methodOrder[5]  = 'browse';
 $lang->repobranchtype->methodOrder[10] = 'create';
 $lang->repobranchtype->methodOrder[15] = 'edit';

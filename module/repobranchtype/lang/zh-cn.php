@@ -1,6 +1,4 @@
 <?php
-$lang->repobranchtype = new stdclass();
-
 $lang->repobranchtype->common        = '分支类型';
 $lang->repobranchtype->browse        = '浏览分支类型';
 $lang->repobranchtype->create        = '创建分支类型';

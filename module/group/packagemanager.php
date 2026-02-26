@@ -4429,7 +4429,7 @@ $config->group->package->reviewFlow = new stdclass();
 $config->group->package->reviewFlow->order  = 2875;
 $config->group->package->reviewFlow->subset = 'repoSettings';
 $config->group->package->reviewFlow->privs = array();
-$config->group->package->reviewFlow->privs['reporeviewflow-browse']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
+$config->group->package->reviewFlow->privs['reporeviewflow-browse']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repobranchtype-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
 $config->group->package->reviewFlow->privs['reporeviewflow-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-edit', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
 $config->group->package->reviewFlow->privs['reporeviewflow-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-changeStatus', 'reporeviewflow-delete'));
 $config->group->package->reviewFlow->privs['reporeviewflow-changeStatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('reporeviewflow-browse'), 'recommend' => array('reporeviewflow-create', 'reporeviewflow-edit', 'reporeviewflow-delete'));
