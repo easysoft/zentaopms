@@ -1,6 +1,4 @@
 <?php
-$lang->repobranchtype = new stdclass();
-
 $lang->repobranchtype->common        = 'Branch Type';
 $lang->repobranchtype->browse        = 'Browse Branch Type';
 $lang->repobranchtype->create        = 'Create Branch Type';

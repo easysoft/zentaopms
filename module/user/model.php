@@ -1148,6 +1148,7 @@ class userModel extends model
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0)
+                ->andWhere('t1.devopsSpace')->eq(0)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->query();
         }

@@ -62,6 +62,8 @@ class repoModel extends model
 
         if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
         $this->session->set('repoID', $repoID);
+        $repo = $this->fetchByID($repoID);
+        $this->loadModel('common')->resetDevOpsPriv(empty($repo) ? 0 : $repo->spaceID);
     }
 
     /**
