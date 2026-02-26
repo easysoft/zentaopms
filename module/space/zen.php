@@ -57,8 +57,7 @@ class spaceZen extends space
             $account = $form->account;
             $repo    = $form->repo;
             $group   = $form->group;
-            $newMembers[] = $account;
-            if(empty($group) && empty($repo) && $form->role == 'manager') continue;
+            if($form->role == 'member') $newMembers[] = $account;
 
             $oldMember = zget($members, $account, array());
             $oldGroup  = array_keys(zget($oldMember, 'group', array()));
@@ -86,7 +85,7 @@ class spaceZen extends space
                     $data['repo'][$delRepoID] = array();
                 }
             }
-            if(empty($data) && !empty($account) && !in_array($account, $oldMembers)) $data['space'][] = $account;
+            if(!empty($account) && !in_array($account, $oldMembers)) $data['space'][] = $account;
         }
 
         $delUsers = array_diff($oldMembers, $newMembers);
@@ -94,6 +93,7 @@ class spaceZen extends space
         {
             foreach($delUsers as $delUser)
             {
+                if(!empty($members[$delUser]) && $members[$delUser]->role == 'manager') continue;
                 $data['delete']['group'][] = $delUser;
                 $data['delete']['repo'][]  = $delUser;
                 $data['delete']['space'][] = $delUser;
