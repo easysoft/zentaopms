@@ -1117,7 +1117,7 @@ class repo extends control
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         $lines    = '';
         if(strpos($entry, '#'))
