@@ -55,7 +55,7 @@ foreach($config->featureGroup as $group => $features)
             $items[] = checkbox
             (
                 setID("module{$code}"),
-                set::rootClass('w-40', !empty($config->hiddenFeature) && in_array($code, $config->hiddenFeature) ? 'hidden' : ''),
+                set::rootClass('w-40'),
                 set::name("module[{$code}]"),
                 set::value(1),
                 set::checked($value == 1),
