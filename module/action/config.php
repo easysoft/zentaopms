@@ -56,6 +56,7 @@ $config->action->objectNameFields['nexus']        = 'name';
 $config->action->objectNameFields['stage']        = 'name';
 $config->action->objectNameFields['apistruct']    = 'name';
 $config->action->objectNameFields['repo']         = 'name';
+$config->action->objectNameFields['repobranchtype']         = 'name';
 $config->action->objectNameFields['dataview']     = 'name';
 $config->action->objectNameFields['zahost']       = 'name';
 $config->action->objectNameFields['zanode']       = 'name';

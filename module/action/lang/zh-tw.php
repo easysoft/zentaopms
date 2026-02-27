@@ -144,6 +144,7 @@ $lang->action->objectTypes['pivot']            = '透视表';
 $lang->action->objectTypes['serverroom']       = '機房';
 $lang->action->objectTypes['account']          = '账号';
 $lang->action->objectTypes['host']             = '主機';
+$lang->action->objectTypes['repobranchtype']  = '分支类型';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -223,6 +224,7 @@ $lang->action->desc->unlinkrelatedcase   = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->online              = '$date, 由 <strong>$actor</strong> 上架。' . "\n";
 $lang->action->desc->offline             = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 $lang->action->desc->linkhost            = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
+$lang->action->desc->createbranchtype    = '$date, 由 <strong>$actor</strong> 創建了分支類型 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, 由 <strong>$actor</strong> 安装。' . "\n";
@@ -392,6 +394,7 @@ $lang->action->label->unlinkedrepo            = '取消了項目与代碼庫的�
 $lang->action->label->online                  = '上架了';
 $lang->action->label->offline                 = '下架了';
 $lang->action->label->linkhost                = '主机关联到';
+$lang->action->label->createbranchtype        = '創建了分支類型從';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();

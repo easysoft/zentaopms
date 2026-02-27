@@ -759,7 +759,7 @@ $config->objectTables['projectchange']  = TABLE_PROJECTCHANGE;
 $config->objectTables['reporeviewflow']  = TABLE_REVIEWFLOW;
 $config->objectTables['ops_review_flow'] = TABLE_REVIEWFLOW;
 
-$config->objectTables['ops_branch_type'] = TABLE_BRANCHTYPE;
+$config->objectTables['repobranchtype'] = TABLE_BRANCHTYPE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
