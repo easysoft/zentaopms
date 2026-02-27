@@ -1355,7 +1355,7 @@ class repo extends control
         if($module == 'repo' && $method == 'editreviewflow') $method = 'browsereviewflow';
         if($module == 'repo' && !in_array($method, array('review', 'diff', 'browsetag', 'browsebranch', 'log', 'browsereviewflow', 'createreviewflow'))) $method = 'browse';
         if($module == 'ppm' && $method != 'create')  $method = 'browse';
-        if($module == 'job') $method = 'browse';
+        if($module == 'pipeline') $method = 'browse';
         if($module == 'compile' and $method == 'logs') $method = 'browse';
         if($module == 'bug' and $method == 'view')
         {
@@ -1372,10 +1372,12 @@ class repo extends control
 
         /* Get repo group by type. */
         $repoGroup = $this->repo->getRepoGroup('project', $projectID);
+        $link      = $this->createLink($module, $method, "repoID=%s" . $params);
+        if($module == 'pipeline') $link = $this->createLink($module, $method, "space=0&repoID=%s&type=repo" . $params);
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
-        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params);
+        $this->view->link      = $link;
 
         $this->display();
     }
