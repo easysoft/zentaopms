@@ -30,6 +30,7 @@ class ciModel extends model
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
             if(!$repo) unset($this->lang->devops->menu->tag);
             if(!$repo) unset($this->lang->devops->menu->branch);
+            $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
             $this->loadModel('common')->resetDevOpsPriv(empty($repo) ? 0 : $repo->spaceID);
         }
         if($this->app->rawModule == 'pullreq') $this->lang->repo->menu->review['subMenu']->ppm['exclude'] = 'ppm-browse';
