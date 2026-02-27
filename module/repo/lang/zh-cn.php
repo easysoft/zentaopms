@@ -278,6 +278,7 @@ $lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。';
 $lang->repo->error->repoNameInvalid   = '名称必须以字母或 _ 开头，只包含字母数字，破折号，下划线和点。';
 $lang->repo->error->createdFail       = '创建失败';
+$lang->repo->error->branchNameTooLong = '分支名称不能超过30个字符';
 $lang->repo->error->noProduct         = '在开始导入代码库之前，请先关联产品。';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';

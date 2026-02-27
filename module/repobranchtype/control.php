@@ -84,9 +84,9 @@ class repobranchtype extends control
                 if(dao::isError()) return $this->sendError(dao::getError());
                 return $this->sendError($this->lang->fail);
             }
-
+            
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-            $this->loadModel('action')->create('repo', $repoID, 'createbranchtype');
+            $this->loadModel('action')->create('repobranchtype', $result->id, 'createbranchtype');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->createSuccess, 'load' => $link));
         }
 
@@ -138,7 +138,7 @@ class repobranchtype extends control
             }
 
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-            $this->loadModel('action')->create('ops_branch_type', $typeID, 'edited');
+            $this->loadModel('action')->create('repobranchtype', $typeID, 'edited');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->updateSuccess, 'load' => $link));
         }
 
@@ -186,7 +186,7 @@ class repobranchtype extends control
         if(!$result) return $this->sendError($this->lang->fail);
 
         $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
-        $this->loadModel('action')->create('ops_branch_type', $typeID, 'deleted');
+        $this->loadModel('action')->create('repobranchtype', $typeID, 'deleted');
         return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'load' => $link));
     }
 

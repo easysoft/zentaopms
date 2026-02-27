@@ -278,6 +278,7 @@ $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.'
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->repo->error->repoNameInvalid   = 'The name should contain only alphanumeric numbers, dashes, underscores, and dots.';
 $lang->repo->error->createdFail       = 'Create failed';
+$lang->repo->error->branchNameTooLong = 'Branch name cannot exceed 30 characters';
 $lang->repo->error->noProduct         = 'Please associate the product before starting to export the code repository.';
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';

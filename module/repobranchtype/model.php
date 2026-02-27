@@ -20,7 +20,7 @@ class repobranchtypeModel extends model
      * @access public
      * @return bool
      */
-    public function apiCreateBranchType(int $repoID, object $formData): bool
+    public function apiCreateBranchType(int $repoID, object $formData): object|false
     {
         /* 确保 prefixes 是数组。 */
         $prefixes = $formData->prefixes;
@@ -47,7 +47,7 @@ class repobranchtypeModel extends model
         /* 调用 GitFox API 创建分支类型。 */
         $result = $this->loadModel('gitfox')->apiCreateBranchType($repoID, $requestData);
 
-        return (bool)$result;
+        return $result;
     }
 
     /**

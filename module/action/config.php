@@ -77,6 +77,7 @@ $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['artifact']     = 'name';
 
 $config->action->objectNameFields['ops_review_flow'] = 'name';
+$config->action->objectNameFields['repobranchtype']  = 'name';
 
 $config->action->objectNameFields['cm']           = 'title';
 $config->action->objectNameFields['baseline']     = 'title';
