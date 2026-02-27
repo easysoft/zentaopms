@@ -456,14 +456,27 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(in_array("$module.$method", $this->config->logonMethods)) return true;
-
-            if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
             if($module == 'my'       and $method == 'guidechangetheme') return true;
             if($module == 'product'  and $method == 'showerrornone') return true;
             if($module == 'misc'     and in_array($method, array('downloadclient', 'changelog'))) return true;
             if($module == 'tutorial' and in_array($method, array('start', 'index', 'quit', 'wizard'))) return true;
+
+            if(stripos($method, 'ajax') !== false && !empty($this->config->ajaxDependencies["$module.$method"]))
+            {
+                $dependentMethods = $this->config->ajaxDependencies["$module.$method"];
+                if(is_string($dependentMethods)) $dependentMethods = [$dependentMethods];
+                if(is_array($dependentMethods))
+                {
+                    foreach($dependentMethods as $dependentMethod)
+                    {
+                        if(strpos($dependentMethod, '.') === false) continue;
+                        list($dependentModule, $dependentMethod) = explode('.', $dependentMethod);
+                        if($this->isOpenMethod($dependentModule, $dependentMethod) || self::hasPriv($dependentModule, $dependentMethod)) return true;
+                    }
+                }
+            }
         }
         return false;
     }
