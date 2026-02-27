@@ -56,8 +56,7 @@ $config->action->objectNameFields['nexus']        = 'name';
 $config->action->objectNameFields['stage']        = 'name';
 $config->action->objectNameFields['apistruct']    = 'name';
 $config->action->objectNameFields['repo']         = 'name';
-$config->action->objectNameFields['repobranchtype']         = 'name';
-$config->action->objectNameFields['dataview']     = 'name';
+$config->action->objectNameFields['dataview']       = 'name';
 $config->action->objectNameFields['zahost']       = 'name';
 $config->action->objectNameFields['zanode']       = 'name';
 $config->action->objectNameFields['privlang']     = 'name';
@@ -78,6 +77,7 @@ $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['artifact']     = 'name';
 
 $config->action->objectNameFields['ops_review_flow'] = 'name';
+$config->action->objectNameFields['repobranchtype']  = 'name';
 
 $config->action->objectNameFields['cm']           = 'title';
 $config->action->objectNameFields['baseline']     = 'title';

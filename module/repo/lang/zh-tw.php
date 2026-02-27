@@ -197,7 +197,6 @@ $lang->repo->error->linkedBranch  = "解除失敗，代碼庫與%s分支( %s )�
 $lang->repo->error->linkedJob     = "解除失敗，代碼庫與構建( %s )關聯。<br/>";
 $lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
 $lang->repo->error->noWritable    = '%s 不可寫！請檢查該目錄權限，否則無法下載。';
-$lang->repo->error->branchNameTooLong = '分支名稱不能超過30個字符';
 
 $lang->repo->syncTips          = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';
 $lang->repo->encodingsTips     = "提交日誌的編碼，可以用逗號連接起來的多個，比如utf-8。";
