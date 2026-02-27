@@ -144,7 +144,7 @@ $lang->action->objectTypes['pivot']            = '透视表';
 $lang->action->objectTypes['serverroom']       = '機房';
 $lang->action->objectTypes['account']          = '账号';
 $lang->action->objectTypes['host']             = '主機';
-$lang->action->objectTypes['repobranchtype']  = '分支类型';
+$lang->action->objectTypes['repobranchtype']  = '分支類型';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
