@@ -616,6 +616,14 @@ class pipeline extends control
         $variables = file_get_contents('php://input');
         if($variables)
         {
+            $varList = json_decode($variables);
+
+            $varCheckList = array();
+            foreach($varList as $var)
+            {
+                if(isset($varCheckList[$var->key])) return $this->sendError(sprintf($this->lang->error->repeat, $this->lang->pipeline->flowApp->labels['env-key'], $var->key));
+                $varCheckList[$var->key] = $var->name;
+            }
             $object = new stdClass();
             $object->variables  = $variables;
             $object->editedBy   = $this->app->user->account;
