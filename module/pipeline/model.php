@@ -21,13 +21,15 @@ class pipelineModel extends model
      * @access public
      * @return object
      */
-    public function getByID(int $id): object
+    public function getByID(int $id): object|false
     {
         $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
             ->fetch();
+        if(empty($pipeline)) return false;
+
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
         $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->trigger);
 
