@@ -111,7 +111,7 @@ function getIframeHeight()
     var tabsbar            = parseInt($('.nav-tabs').height());
     var mainMenuHeight     = parseInt($('#mainContent').css('padding-top')) + parseInt($('#mainContent').css('padding-bottom'));
     var detailHeaderHeight = parseInt($('.detail-header').height()) + parseInt($('.title-header').height());
-    var mrMenuHeight       = parseInt($('.mr-menu').height());
+    var mrMenuHeight       = parseInt($('#mrMenu').height());
     var appTabsHeight      = parseInt($('#appTabs').height());
     var appsBarHeight      = parseInt($('#appsBar').height());
 
@@ -142,7 +142,7 @@ function getSidebarHeight()
     var appTabsHeight      = parseInt($('#appTabs').height());
     var appsBarHeight      = parseInt($('#appsBar').height());
     var detailHeaderHeight = parseInt($('.detail-header').height()) + parseInt($('.title-header').height());
-    var mrMenuHeight       = parseInt($('.mr-menu').height());
+    var mrMenuHeight       = parseInt($('#mrMenu').height());
 
     appsBarHeight      = appsBarHeight ? appsBarHeight : 0;
     appTabsHeight      = appTabsHeight ? appTabsHeight : 0;
