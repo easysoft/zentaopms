@@ -344,6 +344,21 @@ class jira
                 $issue['links'] = $links;
             }
 
+            if(!empty($issue['subtasks']))
+            {
+                $links = !empty($issue['links']) ? $issue['links'] : array();
+                foreach($issue['subtasks'] as $index => $subtask)
+                {
+                    $link = array();
+                    $link['id']          = 'subtask' . $subtask['id'];
+                    $link['linktype']    = 'jiraSubTask';
+                    $link['source']      = $issue['id'];
+                    $link['destination'] = $subtask['id'];
+                    $links[$link['id']] = $link;
+                }
+                $issue['links'] = $links;
+            }
+
             $issue['created'] = date('Y-m-d H:i:s', strtotime($issue['created']));
             $issueList[$issue['id']] = $issue;
         }
