@@ -848,6 +848,7 @@ class repo extends control
      */
     public function setRules()
     {
+        $this->loadModel('space')->setMenu();
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));

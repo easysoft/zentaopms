@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use zin\set;
+
 /**
  * The control file of repobranchtype module of ZenTaoPMS.
  *
@@ -26,7 +29,14 @@ class repobranchtype extends control
     public function browse(int $repoID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 设置菜单。 */
-        if($repoID) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID)
+        {
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->loadModel('space')->setMenu();
+        }
 
         $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo === false) $repo = null;
@@ -84,7 +94,7 @@ class repobranchtype extends control
                 if(dao::isError()) return $this->sendError(dao::getError());
                 return $this->sendError($this->lang->fail);
             }
-            
+
             $link = $this->createLink('repobranchtype', 'browse', "repoID=$repoID");
             $this->loadModel('action')->create('repobranchtype', $result->id, 'createbranchtype');
             return $this->send(array('result' => 'success', 'message' => $this->lang->repobranchtype->tips->createSuccess, 'load' => $link));
