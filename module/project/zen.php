@@ -1388,10 +1388,7 @@ class projectZen extends project
         }
 
         /* 交付物提交进度。 */
-        if(in_array($this->config->edition, array('max', 'ipd')))
-        {
-            $project->deliverable = $this->project->countDeliverable($project);
-        }
+        if(in_array($this->config->edition, array('max', 'ipd'))) $projectList = $this->project->countDeliverable($projectList, 'project');
 
         return array_values($projectList);
     }
