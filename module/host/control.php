@@ -27,6 +27,7 @@ class host extends control
      */
     public function browse(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->loadModel('space')->setMenu();
         $this->app->session->set('hostList', $this->app->getURI(true));
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
