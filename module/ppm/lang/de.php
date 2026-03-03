@@ -88,6 +88,7 @@ $lang->ppm->jobID       = 'Pipeline job';
 $lang->ppm->commitLogs  = 'Commit Logs';
 $lang->ppm->execJob     = 'Execute';
 $lang->ppm->execJobTip  = 'Execute the pipeline job manually';
+$lang->ppm->repo        = 'Repo';
 
 $lang->ppm->canMerge  = "Can be merged";
 $lang->ppm->cantMerge = "Can not be merged";
