@@ -281,7 +281,7 @@ $lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->c
 $lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
 $lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
-$lang->scrum->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
+$lang->scrum->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create,edit');
 
 $lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
 $lang->scrum->menu->devops['menuOrder'][10] = 'commit';
