@@ -98,10 +98,11 @@ formPanel
     //    set::control(array('type' => 'number', 'min' => 0, 'max' => 100, 'placeholder' => $lang->reporeviewflow->aiScoreTips)),
     //    set::value(empty($definition->ai) || empty($definition->ai->approvals) ? 0 : $definition->ai->approvals->score)
     //),
-    formRowGroup(set::title($lang->reporeviewflow->manualReview)),
+    formRowGroup(setID('manualReviewTitle'), set::title($lang->reporeviewflow->manualReview)),
     formGroup
     (
         setID('defaultReviewers'),
+        setClass('normal-review'),
         set::width('2/3'),
         set::name('defaultReviewers'),
         set::label($lang->reporeviewflow->defaultReviewers),
@@ -113,6 +114,7 @@ formPanel
     formGroup
     (
         setID('specifiedReviewers'),
+        setClass('normal-review'),
         set::width('2/3'),
         set::name('specifiedReviewers'),
         set::label($lang->reporeviewflow->specifiedReviewers),
@@ -123,6 +125,7 @@ formPanel
     formGroup
     (
         setID('minReviewers'),
+        setClass('normal-review'),
         set::width('2/3'),
         set::label($lang->reporeviewflow->minReviewers),
         set::name('minReviewers'),

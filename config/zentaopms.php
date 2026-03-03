@@ -646,10 +646,6 @@ define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
 if(!defined('FIRST_RELEASE_DATE')) define('FIRST_RELEASE_DATE', '2010-05-03');
 
-define('TABLE_BRANCHTYPE', '`' . $config->db->prefix . 'ops_branch_type`');
-define('TABLE_BRANCHRULESET', '`' . $config->db->prefix . 'ops_branch_ruleset`');
-define('TABLE_REVIEWFLOW', '`' . $config->db->prefix . 'ops_review_flow`');
-
 define('TABLE_SPACE',           '`ops_space`');
 define('TABLE_DEVOPSSPACEUSER', '`ops_spaceuser`');
 define('TABLE_PPM',             '`ops_ppm`');
@@ -659,6 +655,9 @@ define('TABLE_DEVOPSREPOUSER',  '`ops_repouser`');
 define('TABLE_REPOHISTORY',     '`ops_repohistory`');
 define('TABLE_REPOFILES',       '`ops_repofiles`');
 define('TABLE_REPOBRANCH',      '`ops_repobranch`');
+define('TABLE_BRANCHTYPE',      '`ops_branch_type`');
+define('TABLE_BRANCHRULESET',   '`ops_branch_ruleset`');
+define('TABLE_REVIEWFLOW',      '`ops_review_flow`');
 define('TABLE_PIPELINE',        '`ops_pipeline`');
 define('TABLE_PIPELINECONTENT', '`ops_pipeline_content`');
 define('TABLE_PIPELINEEXEC',    '`ops_pipeline_executions`');
