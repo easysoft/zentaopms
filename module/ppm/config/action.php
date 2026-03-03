@@ -1,9 +1,10 @@
 <?php
 $config->ppm->actionList = array();
-$config->ppm->actionList['edit']['icon'] = 'edit';
-$config->ppm->actionList['edit']['text'] = $lang->ppm->edit;
-$config->ppm->actionList['edit']['hint'] = $lang->ppm->edit;
-$config->ppm->actionList['edit']['url']  = array('module' => 'ppm', 'method' => 'edit', 'params' => 'id={id}');
+$config->ppm->actionList['edit']['icon']     = 'edit';
+$config->ppm->actionList['edit']['text']     = $lang->ppm->edit;
+$config->ppm->actionList['edit']['hint']     = $lang->ppm->edit;
+$config->ppm->actionList['edit']['url']      = array('module' => 'ppm', 'method' => 'edit', 'params' => 'id={id}');
+$config->ppm->actionList['edit']['data-app'] = $app->tab;
 
 $config->ppm->actionList['review'] = array();
 $config->ppm->actionList['review']['icon']        = 'review';
