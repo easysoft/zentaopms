@@ -134,41 +134,41 @@ $domBox = div
             )
         )
     ),
-    section
-    (
-        div
-        (
-            setClass('border px-4 h-12 flex items-center'),
-            span(setClass('font-bold'), $lang->ppm->AIReview),
-            $checkAI ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('warning ml-4'), $lang->ppm->checkStatusList['wait'])
-        ),
-        div
-        (
-            setClass('border px-4 py-4'),
-            setStyle(array('margin-top' => '-1px')),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $AICodeScore < $config->ppm->AICodeScore ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                span("{$lang->ppm->AICodeScore}: ", $AICodeScore),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≥{$config->ppm->AICodeScore})"))
-            ),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $AISevereIssue > $config->ppm->AISevereIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                span("{$lang->ppm->AISevereIssue}: ", $AISevereIssue),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AISevereIssue})"))
-            ),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $AIOrdinaryIssue > $config->ppm->AIOrdinaryIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
-                span("{$lang->ppm->AIOrdinaryIssue}: ", "$AIOrdinaryIssue"),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AIOrdinaryIssue})"))
-            )
-        )
-    ),
+    //section
+    //(
+    //    div
+    //    (
+    //        setClass('border px-4 h-12 flex items-center'),
+    //        span(setClass('font-bold'), $lang->ppm->AIReview),
+    //        $checkAI ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('warning ml-4'), $lang->ppm->checkStatusList['wait'])
+    //    ),
+    //    div
+    //    (
+    //        setClass('border px-4 py-4'),
+    //        setStyle(array('margin-top' => '-1px')),
+    //        div
+    //        (
+    //            setClass('flex items-center py-1'),
+    //            $AICodeScore < $config->ppm->AICodeScore ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+    //            span("{$lang->ppm->AICodeScore}: ", $AICodeScore),
+    //            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≥{$config->ppm->AICodeScore})"))
+    //        ),
+    //        div
+    //        (
+    //            setClass('flex items-center py-1'),
+    //            $AISevereIssue > $config->ppm->AISevereIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+    //            span("{$lang->ppm->AISevereIssue}: ", $AISevereIssue),
+    //            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AISevereIssue})"))
+    //        ),
+    //        div
+    //        (
+    //            setClass('flex items-center py-1'),
+    //            $AIOrdinaryIssue > $config->ppm->AIOrdinaryIssue ? icon(setClass('text-warning font-bold mr-1'), 'about') : icon(setClass('text-success font-bold mr-1'), 'check'),
+    //            span("{$lang->ppm->AIOrdinaryIssue}: ", "$AIOrdinaryIssue"),
+    //            div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->AIOrdinaryIssue})"))
+    //        )
+    //    )
+    //),
     section
     (
         setID('manualReview'),
