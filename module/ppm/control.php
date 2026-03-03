@@ -39,7 +39,7 @@ class ppm extends control
 
             if($this->app->tab == 'project')
             {
-                $this->view->projectID   = $this->session->project;
+                $this->view->projectID = $this->session->project;
                 $this->loadModel('project')->setMenu((int)$this->session->project);
             }
 
@@ -103,9 +103,9 @@ class ppm extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $ppmList        = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager);
-        $canEdit        = common::hasPriv($this->app->rawModule, 'edit');
-        $reviewResults  = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
+        $ppmList       = $this->ppm->getList($mode, $param, $orderBy, array(), $repoID, 0, $pager);
+        $canEdit       = common::hasPriv($this->app->rawModule, 'edit');
+        $reviewResults = $this->ppm->getReviewResults(array_keys($ppmList), $repoID);
         foreach($ppmList as $ppm)
         {
             $ppm->canEdit        = $canEdit ? '' : 'disabled';
@@ -161,13 +161,6 @@ class ppm extends control
             $repoPairs[$repo->id] = $repo->name;
         }
 
-        $openIDList = array();
-        if(!$this->app->user->admin)
-        {
-            $this->loadModel('pipeline');
-            foreach(array('gitlab', 'gitea', 'gogs') as $service) $openIDList += $this->pipeline->getProviderPairsByAccount($service);
-        }
-
         $objectName = $this->app->tab == 'project' ? 'projectID' : 'executionID';
         $this->view->{$objectName} = $projectID;
 
@@ -181,7 +174,6 @@ class ppm extends control
         $this->view->repoList    = $repoList;
         $this->view->repoPairs   = $repoPairs;
         $this->view->orderBy     = $orderBy;
-        $this->view->openIDList  = $openIDList;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
@@ -230,13 +222,15 @@ class ppm extends control
                 ->add('sourceSHA', zget($mergeCheckMessage, 'sourceSHA', ''))
                 ->add('mergeTargetSHA', zget($mergeCheckMessage, 'targetSHA', ''))
                 ->add('approvalflow', $approvalflow)
+                ->add('executionID', $objectID)
                 ->skipSpecial('title,description')
                 ->get();
 
             $this->ppm->create($ppm);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $linkParams = $this->app->tab == 'execution' || $this->app->tab == 'project' ? "repoID=0&mode=status&param=opened&objectID={$objectID}" : "repoID={$repoID}";
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', "repoID={$repoID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink($this->moduleName, 'browse', $linkParams)));
         }
 
         $mergeRuleResult   = $this->ppm->checkMergeRule($repoID, $sourceBranch, $targetBranch);
@@ -249,10 +243,16 @@ class ppm extends control
             $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
         }
         $message = $this->ppmZen->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
+        if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
+        {
+            $repoList = $this->loadModel('repo')->getList($objectID);
+            foreach($repoList as $repoInfo) $repoPairs[$repoInfo->id] = $repoInfo->name;
+        }
 
         $this->view->title             = $this->lang->ppm->create;
         $this->view->users             = $this->repo->getRepoMembers($repo);
         $this->view->repo              = $repo;
+        $this->view->repoPairs         = empty($repoPairs) ? array() : $repoPairs;
         $this->view->repoID            = $repoID;
         $this->view->executionID       = $objectID;
         $this->view->objectID          = $objectID;
@@ -291,6 +291,8 @@ class ppm extends control
         }
 
         $ppm      = $this->ppm->fetchByID($id);
+        $repoID = $this->loadModel('repo')->saveState($ppm->repoID);
+        if($repoID) $this->ci->setMenu($repoID);
         $flow     = $this->loadModel('reporeviewflow')->getById($ppm->reviewFlowID);
         $reviewID = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
 

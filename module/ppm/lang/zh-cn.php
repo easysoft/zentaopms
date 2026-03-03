@@ -88,6 +88,7 @@ $lang->ppm->jobID       = '流水线任务';
 $lang->ppm->commitLogs  = '提交记录';
 $lang->ppm->execJob     = '执行';
 $lang->ppm->execJobTip  = '手动执行流水线任务';
+$lang->ppm->repo        = '代码库';
 
 $lang->ppm->canMerge  = "可合并";
 $lang->ppm->cantMerge = "不可合并";

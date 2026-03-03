@@ -2795,25 +2795,19 @@ class repoModel extends model
         $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
 
-        $showMR     = false;
         $showTag    = false;
         $showBranch = false;
         $showCommit = false;
-        $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
-        foreach($repoPairs as $repoID => $repoName)
+        foreach(array_keys($repoPairs) as $repoID)
         {
-            preg_match('/^\[(\w+)\]/', $repoName, $matches);
-
-            $result = isset($matches[1]) ? $matches[1] : '';
-            if($repoID == $this->session->repoID && in_array($result, $hasTagSCM))
+            if($repoID == $this->session->repoID)
             {
                 $showTag    = true;
                 $showBranch = true;
             }
-            if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
         }
 
-        $showMR     = $showMR     && common::hasPriv('ppm', 'browse');
+        $showMR     = common::hasPriv('ppm', 'browse');
         $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
         $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs  && common::hasPriv('repo', 'review');
