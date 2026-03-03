@@ -527,9 +527,7 @@ $lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|
 $lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
 $lang->devops->homeMenu->deploy   = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 
-$configureUrl = 'space|browse';
-if($config->inQuickon) $configureUrl = 'system|dashboard';
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repo|setrules|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repobranchtype|browse|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube,repobranchtype', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
 $lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
@@ -544,7 +542,7 @@ $lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|brow
 $lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
 $lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
-$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
+//$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule');
 
@@ -553,9 +551,11 @@ $lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->
 $lang->devops->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->devops->reviewFlow}|reporeviewflow|browse|repoID=%s", 'alias' => 'create,edit');
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
-$lang->devops->homeMenu->configure['subMenu']->rules = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
+//$lang->devops->homeMenu->configure['subMenu']->rules = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
+$lang->devops->homeMenu->configure['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|", 'alias' => 'create,edit,delete,import');
 
-$lang->devops->homeMenu->configure['menuOrder'][5] = 'rules';
+//$lang->devops->homeMenu->configure['menuOrder'][5] = 'rules';
+$lang->devops->homeMenu->configure['menuOrder'][10] = 'branchType';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[5]   = 'space';
