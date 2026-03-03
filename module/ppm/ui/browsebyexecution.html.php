@@ -14,40 +14,14 @@ jsVar('repoID', $repoID);
 
 dropmenu(set::url(createLink('execution', 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}")));
 
-foreach($ppmList as $index => $mr)
-{
-    if(!isset($repoList[$mr->repoID]))
-    {
-        unset($mrList[$index]);
-        continue;
-    }
-
-    $repo = $repoList[$mr->repoID];
-
-    /* The user whether has the permission of delete and edit does not require the judge of the permission from the project of the server. */
-    $mr->canDelete = hasPriv($app->rawModule, 'delete') ? '' : 'disabled'; /* The value can be '' or 'disabled', 'disabled' means that user can NOT do this. */
-    $mr->canEdit   = hasPriv($app->rawModule, 'edit')   ? '' : 'disabled';
-
-    if($mr->status == 'merged' || $mr->status == 'closed')
-    {
-        $mr->mergeStatus    = $mr->status;
-        $mr->approvalStatus = '-';
-    }
-    else
-    {
-        $mr->approvalStatus = empty($mr->approvalStatus) ? $lang->ppm->approvalStatusList['notReviewed'] : $lang->ppm->approvalStatusList[$mr->approvalStatus];
-    }
-
-    $mr->repoName = $repo->name;
-}
-
 /* Show source project column if the user browse the Merge Requests of all the repos. */
 if(empty($repoID))
 {
-    $sourceProject['repoName']['name']     = 'repoName';
-    $sourceProject['repoName']['title']    = $lang->repo->common;
-    $sourceProject['repoName']['type']     = 'text';
-    $sourceProject['repoName']['hint']     = '{sourceProject}';
+    $sourceProject['repoName']['name']  = 'repoID';
+    $sourceProject['repoName']['title'] = $lang->repo->common;
+    $sourceProject['repoName']['type']  = 'text';
+    $sourceProject['repoName']['hint']  = true;
+    $sourceProject['repoName']['map']   = $repoPairs;
 
     $offset = array_search('sourceBranch', array_keys($config->ppm->dtable->fieldList));
 

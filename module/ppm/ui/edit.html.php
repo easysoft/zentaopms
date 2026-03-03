@@ -9,8 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$notInDevOps = in_array($this->app->tab, array('execution', 'project'));
 
 $fields = defineFieldList('ppm');
+if($notInDevOps) $fields->field('repo')->label($lang->ppm->repo)->value(zget($repo, 'name', ''))->disabled(true)->width('1/2')->wrapAfter(true);
 $fields->field('sourceBranch')->required(true)->value($ppm->sourceBranch)->disabled(true)->width('1/2');
 $fields->field('targetBranch')->required(true)->value($ppm->targetBranch)->disabled(true)->width('1/2');
 $fields->field('title')->required(true)->value($ppm->title)->width('1/2');
