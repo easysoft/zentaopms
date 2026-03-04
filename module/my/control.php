@@ -1714,6 +1714,6 @@ class my extends control
     {
         $this->my->deleteSSH($sshID);
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => true));
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 }
