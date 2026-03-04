@@ -369,6 +369,10 @@ $config->logonMethods[] = 'screen.viewold';
 $config->logonMethods[] = 'system.backupview';
 $config->logonMethods[] = 'screen.staticdataold';
 $config->logonMethods[] = 'stage.updateorder';
+$config->logonMethods[] = 'my.ssh';
+$config->logonMethods[] = 'my.createssh';
+$config->logonMethods[] = 'my.editssh';
+$config->logonMethods[] = 'my.deletessh';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
