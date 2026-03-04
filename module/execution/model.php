@@ -4957,7 +4957,7 @@ class executionModel extends model
 
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
-                $hasConflict = $this->checkCircularDependencies($execution->id);
+                $hasConflict = $this->checkCircularDependencies($execution->projectID, $execution->rawID);
                 $execution->hasConflict = !empty($hasConflict) ? 1 : 0;
             }
 
