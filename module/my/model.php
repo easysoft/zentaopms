@@ -1691,4 +1691,27 @@ class myModel extends model
         $response = $this->gitfox->getResponse($result);
         return isset($response->data) ? $response->data : $response;
     }
+
+    /**
+     * 创建SSH密钥。
+     * Create SSH key.
+     *
+     * @param  object    $formData
+     * @access public
+     * @return bool|object
+     */
+    public function createSSH(object $formData): bool|object
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $data = new stdClass();
+        $data->identifier = $formData->name;
+        $data->content    = $formData->publicKey;
+
+        $url    = sprintf($apiRoot->url, '/user/keys');
+        $result = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json'));
+        return $this->gitfox->getResponse($result);
+    }
 }
