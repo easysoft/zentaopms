@@ -254,9 +254,12 @@ $lang->my->reviewResultList['pass'] = '通过';
 $lang->my->reviewResultList['fail'] = '不通过';
 
 $lang->my->ssh              = '浏览SSH密钥';
-$lang->my->createSSH        = '创建SSH密钥';
+$lang->my->createSSH        = '新增SSH密钥';
 $lang->my->editSSH          = '编辑SSH密钥';
 $lang->my->deleteSSH        = '删除SSH密钥';
+$lang->my->publicKey        = '公钥';
 $lang->my->createdDate      = '创建时间';
 $lang->my->lastUsed         = '最后使用';
 $lang->my->confirmDeleteSSH = '确定要删除该SSH密钥吗?';
+$lang->my->sshKeyTip        = "公钥必须以'ssh-rsa'、'ecdsa-sha2-nistp256'、'ecdsa-sha2-nistp384'、'ecdsa-sha2-nistp521'、'ssh-ed25519'、'sk-ecdsa-sha2-nistp256@openssh.com' 或 'sk-ssh-ed25519@openssh.com'开头。";
+$lang->my->nameFormat       = "请输入有效的名称，只能包含字母、数字、'-'、'_'、'.' 和 '$'。";

@@ -1632,4 +1632,29 @@ class my extends control
         $this->view->sshList = $sshList;
         $this->display();
     }
+
+    /**
+     * 创建ssh密钥.
+     * Create ssh.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSSH()
+    {
+        if($_POST)
+        {
+            $formData = form::data($this->config->my->form->createSSH)->get();
+            $this->myZen->checkSSH($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->my->createSSH($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title = $this->lang->my->createSSH;
+        $this->display();
+    }
 }
