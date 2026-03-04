@@ -1732,4 +1732,28 @@ class myModel extends model
         $result = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
         return $this->gitfox->getResponse($result);
     }
+
+    /**
+     * 根据ID修改SSH密钥。
+     * Edit SSH key.
+     *
+     * @param  int       $sshID
+     * @param  object    $formData
+     * @access public
+     * @return bool|object
+     */
+    public function editSSH(int $sshID, object $formData): bool|object
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $data = new stdClass();
+        $data->identifier = $formData->name;
+        $data->content    = $formData->publicKey;
+
+        $url      = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $response = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json', 'PUT'));
+        return $this->gitfox->getResponse($response);
+    }
 }
