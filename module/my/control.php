@@ -1647,12 +1647,58 @@ class my extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->my->createSSH($formData);
-            if(dao::isError()) return $this->sendError(dao::getError());
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                if(isset($error['key']))
+                {
+                    $error['publicKey'] = $error['key'];
+                    unset($error['key']);
+                }
+                return $this->sendError($error);
+            }
 
             return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->my->createSSH;
+        $this->display();
+    }
+
+    /**
+     * 编辑ssh密钥.
+     * Edit ssh.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return void
+     */
+    public function editSSH(int $sshID)
+    {
+        $ssh = $this->my->getSSHbyID($sshID);
+        if($_POST)
+        {
+            $formData = form::data($this->config->my->form->createSSH)->get();
+            $this->myZen->checkSSH($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->my->editSSH($sshID, $formData);
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                if(isset($error['key']))
+                {
+                    $error['publicKey'] = $error['key'];
+                    unset($error['key']);
+                }
+                return $this->sendError($error);
+            }
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title = $this->lang->my->editSSH;
+        $this->view->ssh   = $ssh ? $ssh : array();
         $this->display();
     }
 }
