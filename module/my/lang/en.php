@@ -252,3 +252,11 @@ $lang->my->featureBar['score']['all'] = 'My Score';
 
 $lang->my->reviewResultList['pass'] = 'Pass';
 $lang->my->reviewResultList['fail'] = 'Fail';
+
+$lang->my->ssh              = 'Browse SSH Keys';
+$lang->my->createSSH        = 'Create SSH Key';
+$lang->my->editSSH          = 'Edit SSH Key';
+$lang->my->deleteSSH        = 'Delete SSH Key';
+$lang->my->createdDate      = 'Created Date';
+$lang->my->lastUsed         = 'Last Used';
+$lang->my->confirmDeleteSSH = 'Are you sure to delete this SSH key?';

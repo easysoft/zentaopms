@@ -252,3 +252,11 @@ $lang->my->featureBar['score']['all'] = '我的积分';
 
 $lang->my->reviewResultList['pass'] = '通过';
 $lang->my->reviewResultList['fail'] = '不通过';
+
+$lang->my->ssh              = '浏览SSH密钥';
+$lang->my->createSSH        = '创建SSH密钥';
+$lang->my->editSSH          = '编辑SSH密钥';
+$lang->my->deleteSSH        = '删除SSH密钥';
+$lang->my->createdDate      = '创建时间';
+$lang->my->lastUsed         = '最后使用';
+$lang->my->confirmDeleteSSH = '确定要删除该SSH密钥吗?';

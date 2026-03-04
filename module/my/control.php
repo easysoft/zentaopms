@@ -1616,4 +1616,20 @@ class my extends control
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
+
+    /**
+     * 查看ssh密钥列表
+     * Get ssh list.
+     *
+     * @access public
+     * @return void
+     */
+    public function ssh()
+    {
+        $sshList = $this->my->getSSH();
+
+        $this->view->title   = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->ssh;
+        $this->view->sshList = $sshList;
+        $this->display();
+    }
 }

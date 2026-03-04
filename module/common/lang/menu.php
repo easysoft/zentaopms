@@ -97,6 +97,7 @@ $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|m
 $lang->my->menu->dynamic    = array('link' => "$lang->dynamic|my|dynamic|");
 $lang->my->menu->score      = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
 $lang->my->menu->contacts   = array('link' => "{$lang->contact->common}|my|managecontacts|");
+$lang->my->menu->ssh        = array('link' => "{$lang->ssh->common}|my|ssh|");
 
 /* My menu order. */
 $lang->my->menuOrder[5]  = 'index';
@@ -109,6 +110,7 @@ $lang->my->menuOrder[35] = 'contribute';
 $lang->my->menuOrder[40] = 'dynamic';
 $lang->my->menuOrder[45] = 'score';
 $lang->my->menuOrder[50] = 'contacts';
+$lang->my->menuOrder[55] = 'ssh';
 
 if(!$config->systemScore) unset($lang->my->menu->score, $lang->my->menuOrder[45]);
 
@@ -157,7 +159,7 @@ $lang->my->menu->contribute['menuOrder'][40] = 'doc';
 if(!$config->enableER) unset($lang->my->menu->contribute['subMenu']->epic, $lang->my->menu->contribute['menuOrder'][12]);
 if(!$config->URAndSR)  unset($lang->my->menu->contribute['subMenu']->requirement, $lang->my->menu->contribute['menuOrder'][15]);
 
-$lang->my->dividerMenu = ',work,dynamic,';
+$lang->my->dividerMenu = ',work,dynamic,ssh,';
 
 /* Program menu. */
 $lang->program->homeMenu = new stdclass();
