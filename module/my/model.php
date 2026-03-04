@@ -1714,4 +1714,22 @@ class myModel extends model
         $result = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json'));
         return $this->gitfox->getResponse($result);
     }
+
+    /**
+     * 根据ID获取SSH密钥。
+     * Get SSH key by ID.
+     *
+     * @param  int    $sshID
+     * @access public
+     * @return object|bool
+     */
+    public function getSSHbyID(int $sshID): object|bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url    = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $result = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
+        return $this->gitfox->getResponse($result);
+    }
 }
