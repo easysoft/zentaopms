@@ -299,7 +299,6 @@ $lang->ppm->featureBar['browse']['all']      = $lang->ppm->statusList['all'];
 $lang->ppm->featureBar['browse']['opened']   = $lang->ppm->statusList['opened'];
 $lang->ppm->featureBar['browse']['merged']   = $lang->ppm->statusList['merged'];
 $lang->ppm->featureBar['browse']['closed']   = $lang->ppm->statusList['closed'];
-$lang->ppm->featureBar['browse']['assignee'] = $lang->ppm->assignedToMe;
 $lang->ppm->featureBar['browse']['creator']  = $lang->ppm->createdByMe;
 
 $lang->ppm->bug = new stdclass();

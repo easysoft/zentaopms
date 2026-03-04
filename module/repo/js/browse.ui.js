@@ -109,6 +109,12 @@ window.downloadZip = function()
     $.ajaxSubmit({url: link});
 }
 
+window.loadSSHmanager = function()
+{
+    var link = $.createLink('my', 'ssh');
+    openUrl(link);
+}
+
 /* Refresh page when repo changed. */
 $('#repo-select').on('change', function()
 {
