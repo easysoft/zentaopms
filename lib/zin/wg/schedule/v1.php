@@ -43,5 +43,19 @@ class schedule extends wg
             });
 JS
 );
+
+        jsVar('type',     $type);
+        jsVar('callback', $callback ? $callback : '');
+        jsVar('longTime', $longTime);
+        return div
+        (
+            input(set::name('schedule'), setClass('hidden'), $value ? set::value($value) : null),
+            btn
+            (
+                setClass('btn-calendar', $disabled ? 'disabled' : ''),
+                setData(array('on' => 'click', 'call' => 'clickCalendar', 'params' => 'event', 'begin' => $begin, 'end' => $end, 'projectID' => $projectID, 'project' => $projectID)),
+                $lang->schedule
+            )
+        );
     }
 }
