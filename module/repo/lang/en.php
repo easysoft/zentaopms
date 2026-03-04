@@ -45,6 +45,7 @@ $lang->repo->visit           = 'Visit';
 $lang->repo->space           = 'Space';
 $lang->repo->allSpace        = 'All Spaces';
 $lang->repo->members         = 'Members';
+$lang->repo->sshManager      = 'SSH Key Manager';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->createTagAction    = 'Create Tag';

@@ -45,6 +45,7 @@ $lang->repo->visit           = '访问';
 $lang->repo->space           = '所属空间';
 $lang->repo->allSpace        = '全部空间';
 $lang->repo->members         = '成员';
+$lang->repo->sshManager      = 'SSH密钥管理';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->createTagAction    = '创建标签';
