@@ -200,17 +200,18 @@ $downloadWg = div
             )
         )
     ) : null,
-    common::hasPriv('repo', 'downloadCode') ? div
+    div
     (
         setStyle(array('margin-top' => '20px')),
-        btn
+        common::hasPriv('repo', 'downloadCode') ? btn
         (
             on::click()->call('downloadZip'),
             set::icon('down-circle'),
             set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip)
-        )
-    ) : null
+        ) : null,
+        btn(on::click()->call('loadSSHmanager'), setClass('ml-2'), set::icon('cog'), $lang->repo->sshManager)
+    )
 );
 
 toolbar
