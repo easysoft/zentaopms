@@ -1626,10 +1626,8 @@ class my extends control
      */
     public function ssh()
     {
-        $sshList = $this->my->getSSH();
-
         $this->view->title   = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->ssh;
-        $this->view->sshList = $sshList;
+        $this->view->sshList = $this->my->getSSH();
         $this->display();
     }
 
