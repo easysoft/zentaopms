@@ -122,7 +122,7 @@ $lang->programplan->emptyStageTip     = 'Please contact the administrator to set
 $lang->programplan->stageCustom['date'] = 'Show Date';
 $lang->programplan->stageCustom['task'] = 'Show Task';
 
-$lang->programplan->ganttCustom['PM']           = 'Manager';
+$lang->programplan->ganttCustom['owner_id']     = 'Manager';
 $lang->programplan->ganttCustom['deadline']     = 'Deadline';
 $lang->programplan->ganttCustom['status']       = 'Status';
 $lang->programplan->ganttCustom['realBegan']    = 'Actual Began';

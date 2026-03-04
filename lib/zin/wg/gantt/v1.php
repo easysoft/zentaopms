@@ -12,6 +12,8 @@ class gantt extends wg
         'ganttFields:array',
         'showChart?:bool',
         'zooming?:string',
+        'users?:array',
+        'showFields?:string',
         'options?:array'
     );
 
@@ -35,7 +37,7 @@ class gantt extends wg
 
     public function getUserList(): array
     {
-        $users = data('users');
+        $users = $this->prop('users');
         if(empty($users)) return array();
 
         $userList = array();
@@ -63,7 +65,7 @@ class gantt extends wg
         $fileName     = data('fileName');
         $ganttType    = data('ganttType');
         $project      = data('project');
-        $showFields   = data('showFields');
+        $showFields   = $this->prop('showFields');
         $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
         $ganttLang    = $this->prop('ganttLang');
         $ganttFields  = $this->prop('ganttFields');
