@@ -1256,10 +1256,11 @@ $config->my->project->dtable = $config->project->dtable;
 
 $config->my->ssh = new stdclass();
 $config->my->ssh->actionList = array();
-$config->my->ssh->actionList['edit']['icon'] = 'edit';
-$config->my->ssh->actionList['edit']['text'] = $lang->edit;
-$config->my->ssh->actionList['edit']['hint'] = $lang->edit;
-$config->my->ssh->actionList['edit']['url']  = array('module' => 'my', 'method' => 'editSSH', 'params' => "sshID={id}");
+$config->my->ssh->actionList['edit']['icon']        = 'edit';
+$config->my->ssh->actionList['edit']['text']        = $lang->edit;
+$config->my->ssh->actionList['edit']['hint']        = $lang->edit;
+$config->my->ssh->actionList['edit']['url']         = array('module' => 'my', 'method' => 'editSSH', 'params' => "sshID={id}");
+$config->my->ssh->actionList['edit']['data-toggle'] = 'modal';
 
 $config->my->ssh->actionList['delete']['icon']         = 'trash';
 $config->my->ssh->actionList['delete']['text']         = $lang->delete;
