@@ -1756,4 +1756,22 @@ class myModel extends model
         $response = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json', 'PUT'));
         return $this->gitfox->getResponse($response);
     }
+
+    /**
+     * 根据ID删除SSH密钥。
+     * Delete SSH key.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return bool|object
+     */
+    public function deleteSSH(int $sshID): bool|object
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url      = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $response = json_decode(common::http($url, array(),  array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header, 'json', 'DELETE'));
+        return $this->gitfox->getResponse($response);
+    }
 }
