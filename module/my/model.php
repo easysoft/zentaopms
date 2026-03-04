@@ -1673,4 +1673,22 @@ class myModel extends model
         $data->products      = array_values($products);
         return $data;
     }
+
+    /**
+     * 获取SSH密钥列表。
+     * Get SSH key list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSSH(): array
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return array();
+
+        $url      = sprintf($apiRoot->url, '/user/keys');
+        $result   = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
+        $response = $this->gitfox->getResponse($result);
+        return isset($response->data) ? $response->data : $response;
+    }
 }
