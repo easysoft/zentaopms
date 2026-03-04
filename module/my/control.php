@@ -1701,4 +1701,19 @@ class my extends control
         $this->view->ssh   = $ssh ? $ssh : array();
         $this->display();
     }
+
+    /**
+     * 删除ssh密钥.
+     * Delete ssh.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return void
+     */
+    public function deleteSSH(int $sshID)
+    {
+        $this->my->deleteSSH($sshID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
+    }
 }
