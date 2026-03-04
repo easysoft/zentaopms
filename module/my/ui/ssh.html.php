@@ -12,7 +12,7 @@ namespace zin;
 featureBar();
 
 $createLink = $this->createLink('my', 'createSSH');
-$createItem = array('text' => $lang->my->createSSH, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
+$createItem = array('text' => $lang->my->createSSH, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-size' => 'md', 'data-toggle' => 'modal');
 toolbar(item(set($createItem)));
 
 $tableData = initTableData($sshList, $config->my->ssh->dtable->fieldList, $this->my);
