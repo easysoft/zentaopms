@@ -170,7 +170,10 @@ class jira
         $linkTypes = json_decode($result, true);
         if(!$linkTypes) return array();
 
-        return $linkTypes['issueLinkTypes'];
+        $linkTypeList = array();
+        foreach($linkTypes['issueLinkTypes'] as $linkType) $linkTypeList[$linkType['id']] = $linkType;
+
+        return $linkTypeList;
     }
 
     /**
@@ -287,7 +290,7 @@ class jira
             if(!empty($issue['attachment']))
             {
                 $files = array();
-                foreach($issue['attachment'] as $index => $attachment)
+                foreach($issue['attachment'] as $attachment)
                 {
                     $file = array();
                     $file['issue']    = $issue['id'];
@@ -306,13 +309,15 @@ class jira
             if(!empty($issue['issuelinks']))
             {
                 $links = array();
-                foreach($issue['issuelinks'] as $index => $issueLink)
+                foreach($issue['issuelinks'] as $issueLink)
                 {
+                    if(empty($issueLink['outwardIssue']['id'])) continue;
+
                     $link = array();
                     $link['id']          = $issueLink['id'];
                     $link['linktype']    = $issueLink['type']['id'];
                     $link['source']      = $issue['id'];
-                    $link['destination'] = !empty($issueLink['inwardIssue']['id']) ? $issueLink['inwardIssue']['id'] : '';
+                    $link['destination'] = $issueLink['outwardIssue']['id'];
                     $links[$link['id']] = $link;
                 }
                 $issue['links'] = $links;
@@ -321,7 +326,7 @@ class jira
             if(!empty($issue['subtasks']))
             {
                 $links = !empty($issue['links']) ? $issue['links'] : array();
-                foreach($issue['subtasks'] as $index => $subtask)
+                foreach($issue['subtasks'] as $subtask)
                 {
                     $link = array();
                     $link['id']          = 'subtask' . $subtask['id'];
