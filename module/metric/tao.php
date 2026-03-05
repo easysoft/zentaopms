@@ -39,6 +39,8 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)->fi()
+            ->beginIF(!helper::hasFeature('program'))->andWhere('object')->notIN('program')->fi()
+            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host')->fi()
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
@@ -159,6 +161,8 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
+            ->beginIF(!helper::hasFeature('program'))->andWhere('object')->notIN('program')->fi()
+            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host')->fi()
             ->fetchAll();
 
         return $metrics;
@@ -182,6 +186,8 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
+            ->beginIF(!helper::hasFeature('program'))->andWhere('object')->notIN('program')->fi()
+            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host')->fi()
             ->fetchAll();
     }
 
@@ -200,6 +206,8 @@ class metricTao extends metricModel
             ->andWhere('scope')->eq($scope)
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
+            ->beginIF(!helper::hasFeature('program'))->andWhere('object')->notIN('program')->fi()
+            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host')->fi()
             ->groupBy('object, purpose')
             ->fetchAll();
     }

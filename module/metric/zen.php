@@ -143,6 +143,7 @@ class metricZen extends metric
         {
             $groupModules[$module->object][] = $module;
         }
+
         foreach(array_keys($this->lang->metric->objectList) as $object)
         {
             if(isset($groupModules[$object]) and !empty($groupModules[$object]))

@@ -64,6 +64,12 @@ $footToolbar = array('items' => array(
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $config->testsuite->testcase->dtable->fieldList['module']['map'] = $modules;
+$config->testsuite->testcase->dtable->fieldList['status']['statusMap']['changed'] = $lang->testcase->changed;
+
+foreach($cases as $case)
+{
+    if($case->version > $case->caseVersion) $case->status = 'changed';
+}
 
 $tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList);
 detailBody

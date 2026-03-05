@@ -93,6 +93,7 @@ $lang->testcase->sync             = 'Synchronize Case';
 $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From Case Library';
+$lang->testcase->fromTestsuite    = 'From Test Suite';
 $lang->testcase->fromCaseID       = 'From Case ID';
 $lang->testcase->fromCaseVersion  = 'From Case Version';
 $lang->testcase->mailto           = 'Mailto';

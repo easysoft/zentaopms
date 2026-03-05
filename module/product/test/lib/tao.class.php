@@ -956,7 +956,7 @@ class productTaoTest extends baseTest
      */
     public function createLineTest(int $programID, string $lineName): object|array
     {
-        $lineID = $this->objectModel->createLine($programID, $lineName);
+        $lineID = $this->invokeArgs('createLine', array($programID, $lineName));
 
         if(dao::isError())
         {
@@ -965,7 +965,7 @@ class productTaoTest extends baseTest
         else
         {
             if(!$lineID) return array();
-            $object = $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
+            $object = $this->instance->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($lineID)->fetch();
             return $object;
         }
     }

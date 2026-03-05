@@ -18,7 +18,7 @@ if($app->config->vision === 'rnd')
     $config->tutorial->guides[$testManage->name] = $testManage;
 
     /* Advance tutorial. */
-    if($config->systemMode != 'light') $config->tutorial->guides[$programManage->name] = $programManage;
+    if($config->systemMode != 'light' && helper::hasFeature('program')) $config->tutorial->guides[$programManage->name] = $programManage;
     $config->tutorial->guides[$productManage->advance->name] = $productManage->advance;
     $config->tutorial->guides[$scrumProjectManage->advance->name] = $scrumProjectManage->advance;
     if($config->systemMode != 'light') $config->tutorial->guides[$waterfallProjectManage->advance->name] = $waterfallProjectManage->advance;

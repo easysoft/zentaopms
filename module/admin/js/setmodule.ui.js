@@ -22,7 +22,7 @@ function checkModule(event)
 function checkGroup()
 {
     const checked = $(this).prop('checked');
-    $(this).closest('tr').find("input[type=checkbox][name^='module']").each(function()
+    $(this).closest('tr').find("div:not(.hidden) > input[type=checkbox][name^='module']").each(function()
     {
         const name = $(this).attr('name');
         $(this).prop('checked', checked);
@@ -34,7 +34,7 @@ function checkAll()
 {
     const checked = $(this).prop('checked');
     $('input[type=checkbox][name^=allChecker]').prop('checked', checked);
-    $(this).closest('table').find("input[type=checkbox][name^='module']").each(function()
+    $(this).closest('table').find("div:not(.hidden) > input[type=checkbox][name^='module']").each(function()
     {
         $(this).prop('checked', checked);
         changeModule($(this), 'all');

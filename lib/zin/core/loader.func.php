@@ -33,13 +33,12 @@ function getWgVer($name)
 {
     global $config;
 
-    return isset($config->zin->verMap[$name]) ? $config->zin->verMap[$name] : $config->zin->wgVer;
+    return isset($config->zin->wgVerMap[$name]) ? $config->zin->wgVerMap[$name] : $config->zin->wgVer;
 }
 
 function createWg($name, $args, ?string $fallbackWgName = null): node
 {
-    $name  = strtolower($name);
-    $wgVer = getWgVer($name);
+    $name   = strtolower($name);
     $wgName = "\\zin\\$name";
 
     if(!class_exists($wgName))
@@ -49,6 +48,7 @@ function createWg($name, $args, ?string $fallbackWgName = null): node
             return h::$name($args);
         }
 
+        $wgVer = getWgVer($name);
         include_once dirname(__DIR__) . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
     }
 

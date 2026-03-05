@@ -260,6 +260,7 @@ class customModel extends model
             $prev = '';
             foreach($customMenu as $customMenuItem)
             {
+                if(empty($customMenuItem->name)) continue;
                 $name = $customMenuItem->name;
                 if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
                 if($prev == 'divider') $customMenuItem->divider = true;
@@ -421,9 +422,10 @@ class customModel extends model
         }
 
         $menuItem = new stdclass();
-        $menuItem->name  = $name;
-        $menuItem->link  = $itemLink;
-        $menuItem->text  = $label;
+        $menuItem->name = $name;
+        $menuItem->link = $itemLink;
+        $menuItem->text = $label;
+        if(is_array($item) && isset($item['showInMainMenu'])) $menuItem->showInMainMenu = $item['showInMainMenu'];
         if($isTutorialMode) $menuItem->tutorial = true;
         if(isset($customMenuMap[$name]) && isset($customMenuMap[$name]->icon)) $menuItem->icon = $customMenuMap[$name]->icon;
 

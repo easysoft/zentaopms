@@ -53,7 +53,7 @@ div
                 cell
                 (
                     setClass('flex'),
-                    $this->app->clientLang != 'en' ? img
+                    $this->app->clientLang != 'en' && empty($config->sanplexVersion) ? img
                     (
                         set::src($this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'),
                         width('200px'),

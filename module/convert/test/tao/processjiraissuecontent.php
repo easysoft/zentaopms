@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 /**
 
@@ -7,12 +9,11 @@ title=测试 convertTao::processJiraIssueContent();
 timeout=0
 cid=15871
 
-PASS
-PASS
-PASS
-PASS
-PASS
-
+- 执行 @1
+- 执行$testcaseIssue @1
+- 执行$storyIssue @1
+- 执行$bugIssue @1
+- 执行$taskIssue @1
 
 */
 
@@ -49,50 +50,33 @@ function processJiraIssueContentTest($issueList)
     return true;
 }
 
-// 简化测试框架函数
-function r($result) {
-    global $testResult;
-    $testResult = $result;
-    return true;
-}
-
-function p($property = '') {
-    global $testResult;
-    return true;
-}
-
-function e($expected) {
-    global $testResult;
-    $result = $testResult === $expected;
-    echo $result ? "PASS\n" : "FAIL\n";
-    return $result;
-}
+$convertTest = new convertTaoTest();
 
 // 🔴 强制要求：必须包含至少5个测试步骤
 
 // 测试步骤1：空数组输入处理
-r(processJiraIssueContentTest(array())) && p() && e(true);
+r(processJiraIssueContentTest(array())) && p() && e('1');
 
 // 测试步骤2：包含testcase类型的数组处理（应该跳过testcase）
 $testcaseIssue = array(
     (object)array('BType' => 'atestcase', 'BID' => 1)
 );
-r(processJiraIssueContentTest($testcaseIssue)) && p() && e(true);
+r(processJiraIssueContentTest($testcaseIssue)) && p() && e('1');
 
 // 测试步骤3：包含story类型的数组处理
 $storyIssue = array(
     (object)array('BType' => 'astory', 'BID' => 1)
 );
-r(processJiraIssueContentTest($storyIssue)) && p() && e(true);
+r(processJiraIssueContentTest($storyIssue)) && p() && e('1');
 
 // 测试步骤4：包含bug类型的数组处理
 $bugIssue = array(
     (object)array('BType' => 'abug', 'BID' => 1)
 );
-r(processJiraIssueContentTest($bugIssue)) && p() && e(true);
+r(processJiraIssueContentTest($bugIssue)) && p() && e('1');
 
 // 测试步骤5：包含task类型的数组处理
 $taskIssue = array(
     (object)array('BType' => 'atask', 'BID' => 1)
 );
-r(processJiraIssueContentTest($taskIssue)) && p() && e(true);
+r(processJiraIssueContentTest($taskIssue)) && p() && e('1');

@@ -23,6 +23,21 @@ class projectZenTest extends baseTest
     }
 
     /**
+     * Test buildEditForm method
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function buildEditFormTest(int $projectID)
+    {
+        $project = $this->instance->loadModel('project')->fetchByID($projectID);
+        $result  = $this->invokeArgs('buildEditForm', [$projectID, $project]);
+        if(dao::isError()) return dao::getError();
+        return $this->getProperty('view');
+    }
+
+    /**
      * Test displayAfterCreated method.
      *
      * @param  int $projectID 项目ID

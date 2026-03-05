@@ -331,4 +331,17 @@ class commonModelTest extends baseTest
             }
         }
     }
+
+    /**
+     * Test getWorkspaceInfo method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getWorkspaceInfoTest()
+    {
+        $result = commonModel::getWorkspaceInfo();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

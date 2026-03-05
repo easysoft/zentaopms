@@ -640,6 +640,11 @@ class productZen extends product
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
+            if(!helper::hasFeature('program'))
+            {
+                 $lines[0][$id] = $name;
+                 continue;
+            }
 
             $programID = $data->programs[$id];
             if(!isset($lines[$programID])) $lines[$programID] = array();
@@ -1059,7 +1064,7 @@ class productZen extends product
         $kanbanList = array();
 
         list($productList, $planList, $projectList, $projectProduct, $latestExecutions, $releaseList) = $this->product->getStats4Kanban($browseType);
-        $programPairs = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
+        $programPairs = array(0 => helper::hasFeature('program') ? $this->lang->project->noProgram : '') + $this->loadModel('program')->getPairs(true, 'order_asc');
         $productList  = $this->getProductList4Kanban($productList, $planList, $projectList, $releaseList, $projectProduct);
 
         foreach($productList as $programID => $productList)
@@ -1398,6 +1403,7 @@ class productZen extends product
             $product->unexpiredPlan = zget($planList, $productID, array());
             $product->normalRelease = zget($releaseList, $productID, array());
             $product->doingProject  = $projects;
+            if(!helper::hasFeature('program')) $product->program = 0;
 
             $kanbanList[$product->program][$productID] = $product;
         }

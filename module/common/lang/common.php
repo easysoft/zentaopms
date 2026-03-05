@@ -263,3 +263,6 @@ if(!defined('FUTURE_TIME'))       define('FUTURE_TIME', '2030-01-01');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
 if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '100');
+
+if(!helper::hasFeature('program')) unset($lang->createIcons['program']);
+if(!helper::hasFeature('kanban'))  unset($lang->createIcons['kanban'], $lang->createIcons['kanbanspace']);

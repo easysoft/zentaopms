@@ -181,7 +181,7 @@ class chartModel extends model
         $chartGroups = array();
         foreach($groups as $group)
         {
-            $chartGroups[$group->id] = $this->dao->select('id, name')->from(TABLE_CHART)
+            $chartGroups[$group->id] = $this->dao->select('id, name, builtin')->from(TABLE_CHART)
                 ->where('deleted')->eq('0')
                 ->andWhere('builtin', true)->eq('0')
                 ->orWhere('id')->in($this->config->screen->builtinChart)
@@ -198,12 +198,18 @@ class chartModel extends model
         foreach($groups as $group)
         {
             if(empty($chartGroups[$group->id])) continue;
+            if(!helper::hasFeature('program') && strpos($group->name, $this->lang->program->common) !== false) continue;
+            if(!helper::hasFeature('devops')  && strpos($group->name, $this->lang->devops->common)  !== false) continue;
 
             /* 菜单树中只显示二级分组名称。*/
             /* Only the name of the second-level group is displayed in the menu tree. */
             if($group->grade == 2) $treeMenu[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
-            foreach($chartGroups[$group->id] as $chart) $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
+            foreach($chartGroups[$group->id] as $chart)
+            {
+                if(!$this->isClickable($chart, 'design') && !helper::hasFeature('program') && strpos($chart->name, $this->lang->program->common) !== false) continue;
+                $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
+            }
         }
 
         return $treeMenu;

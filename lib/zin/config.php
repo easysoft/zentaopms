@@ -24,4 +24,9 @@ function loadConfig()
     $config->zin->zuiPath  = isset($config->zuiPath) ? $config->zuiPath : ($app->getWebRoot() . 'js/zui3/');
 
     if(empty($config->zin->allowCommands)) $config->zin->allowCommands = array('zinDebug', 'hookCode');
+
+    if(empty($config->noWorkspace) && !isset($config->zin->wgVerMap['visionswitcher']))
+    {
+        $config->zin->wgVerMap['visionswitcher'] = '2';
+    }
 }

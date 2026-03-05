@@ -17,7 +17,8 @@ jsVar('hasProgram', !empty($programs));
 $featureItems = array();
 foreach($disabledFeatures as $feature)
 {
-    if(is_array($feature) and empty($disabledProjectFeatures)) continue;
+    if(is_array($feature) && empty($disabledProjectFeatures)) continue;
+    if(is_string($feature) && !in_array($feature, $config->custom->allFeatures)) continue;
     $featureItems[] = h::tr
     (
         setClass('text-center'),

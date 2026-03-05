@@ -18,6 +18,14 @@ class header extends wg
         'toolbar'         => array('map' => 'btn')
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        #heading {z-index: 5}
+        .in-workspace #heading {display: none;}
+        CSS;
+    }
+
     protected function buildHeading()
     {
         if($this->hasBlock('heading')) return $this->block('heading');
@@ -53,10 +61,21 @@ class header extends wg
             div
             (
                 setID('pageToolbar'),
-                setClass('btn-group mr-2'),
-                $pageToolbar ? html($pageToolbar) : null
+                setClass('toolbar mr-2'),
+                $pageToolbar ? html($pageToolbar) : null,
+                static::workspaceEntry()
             ),
             $toolbar
+        );
+    }
+
+    protected function buildWorkspaceHeader(string $workspace)
+    {
+        return h::header
+        (
+            setID('header'),
+            commonModel::isTutorialMode() ? setStyle('min-width', 'fit-content') : null,
+            $this->buildHeading(),
         );
     }
 
@@ -136,6 +155,9 @@ class header extends wg
                 );
             }
 
+            /* 禅道国际版增加站点管理。 */
+            if(!empty($config->sanplexVersion) && $app->user->admin) $items[] = array('text' => $lang->site, 'url' => createLink('admin', 'subscription'), 'icon' => 'sitemap');
+
             $items[] = array('type' => 'divider');
 
             if($app->config->vision === 'rnd' && !commonModel::isTutorialMode())
@@ -162,7 +184,9 @@ class header extends wg
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
         $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
-        $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
+
+        /* 禅道国际版隐藏帮助。 */
+        if(empty($config->sanplexVersion)) $items[] = array('text' => $lang->manual, 'icon' => 'help', 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
 
         $items[] = array('type' => 'divider');
 
@@ -193,12 +217,8 @@ class header extends wg
         );
 
         $langItems = array();
-        foreach($app->config->langs as $key => $value)
-        {
-            $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
-        }
+        foreach($app->config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectLang(\"$key\")", 'active' => $app->cookie->lang == $key);
         $items[] = array('text' => $lang->lang, 'icon' => 'lang', 'items' => $langItems);
-
         $items[] = array('type' => 'divider');
 
         /* Zentao desktop client menu. */
@@ -211,12 +231,15 @@ class header extends wg
         }
 
         $mobileSubMenu[] = array('content' => array('html' => "<img src='{$config->webRoot}static/images/app-qrcode.png' />", 'style' => 'width: 100px; heigth: 100px;'));
-        $items[]         = array('icon' => 'mobile', 'text' => $lang->downloadMobile, 'items' => $mobileSubMenu);
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
-        $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
-
-        $items[] = array('type' => 'divider');
+        /* 禅道国际版隐藏该内容。 */
+        if(empty($config->sanplexVersion))
+        {
+            $items[] = array('icon' => 'mobile', 'text' => $lang->downloadMobile, 'items' => $mobileSubMenu);
+            $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
+            $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
+            $items[] = array('type' => 'divider');
+        }
 
         if($isGuest)
         {
@@ -469,6 +492,27 @@ class header extends wg
             set::strategy('fixed'),
             set::arrow(true),
             set::items($items)
+        );
+    }
+
+    public static function workspaceEntry()
+    {
+        global $lang;
+
+        $workspace = commonModel::getWorkspaceInfo();
+        if(empty($workspace['type'])) return null;
+
+        $opened = $workspace['opened'];
+        return array(
+            btn
+            (
+                set::type('ghost'),
+                set::size('sm'),
+                set::icon($opened ? 'export rotate-90' : 'import rotate-270'),
+                set::hint($opened ? $lang->exitWorkspace : $lang->enterWorkspace),
+                on::click()->call($opened ? 'exitWorkspace' : 'enterWorkspace')
+            ),
+            html('<div class="divider" style="margin:0;height:8px;align-self:center;"></div>')
         );
     }
 }

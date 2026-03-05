@@ -69,7 +69,7 @@ toolbar
 
 /* zin: Define the sidebar in main content. */
 $settingLink = hasPriv('project', 'programTitle') ? createLink('project', 'programTitle') : '';
-empty($globalDisableProgram) && $config->vision != 'lite' ? sidebar
+empty($globalDisableProgram) && $config->vision != 'lite' && helper::hasFeature('program') ? sidebar
 (
     moduleMenu(set(array
     (

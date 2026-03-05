@@ -255,142 +255,147 @@ if($config->edition != 'ipd')
     }
 }
 
-div
-(
-    set::style(array('width' => '70%')),
-    $settingItems ? div
-    (
-        setID('settings'),
-        setClass('bg-white rounded-md mb-4'),
-        $buildHeader($lang->admin->setting),
-        div
-        (
-            setClass('flex flex-wrap pl-4'),
-            on::click('redirectSetting'),
-            $settingItems
-        )
-    ) : null,
-    $flowItems ? div
-    (
-        setID('flows'),
-        setClass('bg-white rounded-md mb-4'),
-        $buildHeader($lang->admin->setFlow),
-        div
-        (
-            setClass('flex flex-wrap pl-4'),
-            on::click('redirectSetting'),
-            $flowItems
-        )
-    ) : null,
-    $pluginItems ? div
-    (
-        setID('plugin'),
-        setClass('bg-white rounded-md mb-4'),
-        $buildHeader($lang->admin->pluginRecommendation, $config->admin->extensionURL),
-        div
-        (
-            setClass('flex flex-wrap pl-4'),
-            $pluginItems
-        )
-    ) : null,
-    div
-    (
-        setClass('flex'),
-        div
-        (
-            setClass('bg-white rounded-md mb-4 w-1/3'),
-            $buildHeader($lang->admin->officialAccount),
-            div
-            (
-                setClass('flex px-4'),
-                img
-                (
-                    setClass('w-1/3'),
-                    set::src('static/images/wechat.jpg')
-                ),
-                div
-                (
-                    setClass('pl-2 w-2/3'),
-                    $lang->admin->followUs,
-                    div
-                    (
-                        setClass('text-gray'),
-                        $lang->admin->followUsContent
-                    )
-                )
-            ),
-            !$bind && !$ignore && $hasInternet && common::hasPriv('admin', 'register') ? div
-            (
-                setClass('px-4 pb-4'),
-                substr($lang->admin->notice->register, 0, strpos($lang->admin->notice->register, '%s')),
-                a
-                (
-                    set::href(inlink('register')),
-                    $lang->admin->registerNotice->submitHere
-                ),
-                substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2)
-            ) : null
-        ),
-        div
-        (
-            setClass('bg-white rounded-md ml-4 mb-4 w-2/3'),
-            $buildHeader($lang->admin->publicClass, $config->admin->classURL),
-            div
-            (
-                setClass('flex pl-4'),
-                $classItems
-            )
-        )
-    )
-);
-
 $isZeroDay = empty($dateUsed->year) && empty($dateUsed->month) && empty($dateUsed->day);
 div
 (
-    setClass('bg-white rounded-md ml-4 px-4'),
-    set::style(array('width' => '30%')),
+    setClass('flex w-full'),
     div
     (
-        setClass('flex justify-between items-center h-14'),
-        div
+        setClass('flex-1'),
+        $settingItems ? div
         (
-            setClass('panel-title text-md py-2.5'),
-            $lang->admin->zentaoInfo
-        ),
-        div
-        (
-            setStyle(array('letter-spacing' => '1px')),
-            $lang->admin->zentaoUsed,
-            $buildUsed((int)$dateUsed->year, $lang->year),
-            $buildUsed((int)$dateUsed->month, $lang->admin->mon),
-            $buildUsed((int)$dateUsed->day, $lang->admin->day),
-            $isZeroDay ? span
+            setID('settings'),
+            setClass('bg-white rounded-md mb-4'),
+            $buildHeader($lang->admin->setting),
+            div
             (
-                setClass('bg-gray-100 rounded-md text-lg mx-1 px-1 py-0.5'),
-                0
-            ) : null,
-            $isZeroDay ? $lang->admin->day : null
-
+                setClass('flex flex-wrap pl-4'),
+                on::click('redirectSetting'),
+                $settingItems
+            )
+        ) : null,
+        $flowItems ? div
+        (
+            setID('flows'),
+            setClass('bg-white rounded-md mb-4'),
+            $buildHeader($lang->admin->setFlow),
+            div
+            (
+                setClass('flex flex-wrap pl-4'),
+                on::click('redirectSetting'),
+                $flowItems
+            )
+        ) : null,
+        $pluginItems ? div
+        (
+            setID('plugin'),
+            setClass('bg-white rounded-md mb-4'),
+            $buildHeader($lang->admin->pluginRecommendation, $config->admin->extensionURL),
+            div
+            (
+                setClass('flex flex-wrap pl-4'),
+                $pluginItems
+            )
+        ) : null,
+        div
+        (
+            setID('official'),
+            setClass('flex'),
+            div
+            (
+                setClass('bg-white rounded-md mb-4 w-1/3'),
+                $buildHeader($lang->admin->officialAccount),
+                div
+                (
+                    setClass('flex px-4'),
+                    img
+                    (
+                        setClass('w-1/3'),
+                        set::src('static/images/wechat.jpg')
+                    ),
+                    div
+                    (
+                        setClass('pl-2 w-2/3'),
+                        $lang->admin->followUs,
+                        div
+                        (
+                            setClass('text-gray'),
+                            $lang->admin->followUsContent
+                        )
+                    )
+                ),
+                !$bind && !$ignore && $hasInternet && common::hasPriv('admin', 'register') ? div
+                (
+                    setClass('px-4 pb-4'),
+                    substr($lang->admin->notice->register, 0, strpos($lang->admin->notice->register, '%s')),
+                    a
+                    (
+                        set::href(inlink('register')),
+                        $lang->admin->registerNotice->submitHere
+                    ),
+                    substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2)
+                ) : null
+            ),
+            div
+            (
+                setID('publicClass'),
+                setClass('bg-white rounded-md ml-4 mb-4 w-2/3'),
+                $buildHeader($lang->admin->publicClass, $config->admin->classURL),
+                div
+                (
+                    setClass('flex pl-4'),
+                    $classItems
+                )
+            )
         )
     ),
     div
     (
-        setClass('border rounded-md mb-4'),
-        $buildHeader($lang->admin->updateDynamics, $config->admin->dynamicURL),
-        $dynamicItems
-    ),
-    div
-    (
-        setClass('border rounded-md mb-4'),
-        $buildHeader($lang->admin->updatePatch, $config->admin->patchURL),
-        $patchItems
-    ),
-    $config->edition != 'ipd' ? div
-    (
-        setClass('border rounded-md mb-4'),
-        $buildHeader($lang->admin->upgradeRecommend),
-        $upgradeItems
-    ) : null
+        setID('zentaoinfo'),
+        setClass('bg-white rounded-md ml-4 px-4 w-1/3'),
+        div
+        (
+            setClass('flex justify-between items-center h-14'),
+            div
+            (
+                setClass('panel-title text-md py-2.5'),
+                $lang->admin->zentaoInfo
+            ),
+            div
+            (
+                setStyle(array('letter-spacing' => '1px')),
+                $lang->admin->zentaoUsed,
+                $buildUsed((int)$dateUsed->year, $lang->year),
+                $buildUsed((int)$dateUsed->month, $lang->admin->mon),
+                $buildUsed((int)$dateUsed->day, $lang->admin->day),
+                $isZeroDay ? span
+                (
+                    setClass('bg-gray-100 rounded-md text-lg mx-1 px-1 py-0.5'),
+                    0
+                ) : null,
+                $isZeroDay ? $lang->admin->day : null
+
+            )
+        ),
+        div
+        (
+            setClass('border rounded-md mb-4'),
+            $buildHeader($lang->admin->updateDynamics, $config->admin->dynamicURL),
+            $dynamicItems
+        ),
+        div
+        (
+            setClass('border rounded-md mb-4'),
+            $buildHeader($lang->admin->updatePatch, $config->admin->patchURL),
+            $patchItems
+        ),
+        $config->edition != 'ipd' ? div
+        (
+            setClass('border rounded-md mb-4'),
+            $buildHeader($lang->admin->upgradeRecommend),
+            $upgradeItems
+        ) : null
+    )
 );
 
 render();

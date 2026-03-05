@@ -1207,7 +1207,7 @@ class testcaseZen extends testcase
 
         $this->view->from       = $from;
         $this->view->taskID     = $taskID;
-        $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
+        $this->view->runID      = $from == 'testcase' || $from == 'testsuite' ? 0 : $run->id;
         $this->view->case       = $case;
         $this->view->caseFails  = $case->caseFails;
         $this->view->modulePath = $this->tree->getParents($case->module);

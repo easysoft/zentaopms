@@ -25,6 +25,8 @@ jsVar('openDependFeature', $lang->admin->notice->openDependFeature);
 jsVar('closeDependFeature', $lang->admin->notice->closeDependFeature);
 
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
+if($config->systemMode != 'ALM' && $config->systemMode != 'PLM') $disabledFeatures .= ',otherProgram';
+if(!empty($config->hiddenFeature)) $disabledFeatures .= ',' . implode(',', $config->hiddenFeature);
 
 $rows = array();
 foreach($config->featureGroup as $group => $features)
@@ -44,7 +46,7 @@ foreach($config->featureGroup as $group => $features)
         $items = array();
         foreach($features as $feature)
         {
-            $code = $group. ucfirst($feature);
+            $code = $group . ucfirst($feature);
             if(strpos(",$disabledFeatures,", ",$code,") !== false) continue;
 
             $value = strpos(",$closedFeatures,", ",$code,") === false ? '1' : '0';
@@ -71,7 +73,7 @@ foreach($config->featureGroup as $group => $features)
         }
         $rows[] = h::tr
         (
-            setClass('border-t'),
+            setClass('border-t', !empty($config->hiddenGroup) && in_array($group, $config->hiddenGroup) ? 'hidden' : ''),
             h::td
             (
                 setClass('p-2.5'),

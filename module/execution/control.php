@@ -2755,7 +2755,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $executionID, string $module, string $method, string $extra = '')
+    public function ajaxGetDropMenu(int $executionID, string $module = 'execution', string $method = 'task', string $extra = '')
     {
         $execution = $this->execution->fetchByID($executionID);
         if(!empty($execution->isTpl)) dao::$filterTpl = 'never';

@@ -167,7 +167,7 @@ window.onRenderCell = function(result, {row, col})
                     {
                         result.push({html: `[<i class='icon icon-share'></i> #${row.data.fromCaseID}]`}); // 添加来源用例
                     }
-                    else
+                    else if(canImportToLib)
                     {
                         let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
                         result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接

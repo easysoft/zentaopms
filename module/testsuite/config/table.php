@@ -95,16 +95,22 @@ $config->testsuite->testcase->actionList['runResult']['url']         = array('mo
 $config->testsuite->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testsuite->testcase->actionList['runResult']['data-size']   = 'lg';
 
+$config->testsuite->testcase->actionList['confirmCaseChange']['icon']  = 'search';
+$config->testsuite->testcase->actionList['confirmCaseChange']['text']  = $lang->testsuite->confirmCaseChange;
+$config->testsuite->testcase->actionList['confirmCaseChange']['hint']  = $lang->testsuite->confirmCaseChange;
+$config->testsuite->testcase->actionList['confirmCaseChange']['url']   = array('module' => 'testsuite', 'method' => 'confirmCaseChange', 'params' => 'caseID={id}&suiteID={suite}');
+$config->testsuite->testcase->actionList['confirmCaseChange']['class'] = 'ajax-submit';
+
 $config->testsuite->testcase->dtable = new stdclass();
 
 $config->testsuite->testcase->dtable->fieldList['id']['name']  = 'id';
 $config->testsuite->testcase->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->testsuite->testcase->dtable->fieldList['id']['type']  = 'checkID';
 
-$config->testsuite->testcase->dtable->fieldList['title']['name']  = 'title';
+$config->testsuite->testcase->dtable->fieldList['title']['name']  = 'caseTitle';
 $config->testsuite->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->testsuite->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->testsuite->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={caseVersion}');
+$config->testsuite->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={caseVersion}&from=testsuite&taskID=0&stepsType=&suiteID={suite}');
 
 $config->testsuite->testcase->dtable->fieldList['pri']['name']  = 'pri';
 $config->testsuite->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
@@ -118,12 +124,12 @@ $config->testsuite->testcase->dtable->fieldList['type']['map']      = $lang->tes
 $config->testsuite->testcase->dtable->fieldList['type']['sortType'] = true;
 $config->testsuite->testcase->dtable->fieldList['type']['group']    = '1';
 
-$config->testsuite->testcase->dtable->fieldList['status']['name']     = 'status';
-$config->testsuite->testcase->dtable->fieldList['status']['title']    = $lang->testcase->status;
-$config->testsuite->testcase->dtable->fieldList['status']['type']     = 'category';
-$config->testsuite->testcase->dtable->fieldList['status']['map']      = $lang->testcase->statusList;
-$config->testsuite->testcase->dtable->fieldList['status']['sortType'] = true;
-$config->testsuite->testcase->dtable->fieldList['status']['group']    = '1';
+$config->testsuite->testcase->dtable->fieldList['status']['name']      = 'status';
+$config->testsuite->testcase->dtable->fieldList['status']['title']     = $lang->testcase->status;
+$config->testsuite->testcase->dtable->fieldList['status']['type']      = 'status';
+$config->testsuite->testcase->dtable->fieldList['status']['statusMap'] = $lang->testcase->statusList;
+$config->testsuite->testcase->dtable->fieldList['status']['sortType']  = true;
+$config->testsuite->testcase->dtable->fieldList['status']['group']     = '1';
 
 $config->testsuite->testcase->dtable->fieldList['module']['name']  = 'module';
 $config->testsuite->testcase->dtable->fieldList['module']['title'] = $lang->testcase->module;
@@ -157,7 +163,7 @@ $config->testsuite->testcase->dtable->fieldList['actions']['type']     = 'action
 $config->testsuite->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testsuite->testcase->dtable->fieldList['actions']['sortType'] = false;
 $config->testsuite->testcase->dtable->fieldList['actions']['list']     = $config->testsuite->testcase->actionList;
-$config->testsuite->testcase->dtable->fieldList['actions']['menu']     = array_keys($config->testsuite->testcase->actionList);
+$config->testsuite->testcase->dtable->fieldList['actions']['menu']     = array(array('confirmCaseChange'), array('unlinkCase', 'runCase', 'runResult'));
 
 $config->testsuite->linkcase = new stdclass();
 $config->testsuite->linkcase->dtable = new stdclass();

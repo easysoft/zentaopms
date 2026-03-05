@@ -174,3 +174,5 @@ $config->story->actions = new stdclass();
 $config->story->actions->view = array();
 $config->story->actions->view['mainActions']   = array('change', 'submitReview', 'recall', 'review', 'subdivide', 'createBranch', 'assignTo', 'close', 'activate', 'importToLib', 'testcase', 'createTask');
 $config->story->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
+
+if(!helper::hasFeature('devops')) $config->story->actions->view['mainActions'] = array_diff($config->story->actions->view['mainActions'], array('createBranch'));

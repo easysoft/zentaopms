@@ -45,6 +45,7 @@
     const isTutorial  = top.config.currentModule === 'tutorial';
     let openedOldPage = false;
     let oldPageCofnig = null;
+    let workspaceType = '';
     const zinCallbacks = {
         onSelectLang: null,
         onSelectVision: null,
@@ -384,6 +385,7 @@
             $nav.find('.nav-item,.nav-divider').each(function()
             {
                 const $item = $(this);
+                if($item.hasClass('rsh-overflow-item')) return;
                 if($item.hasClass('nav-divider'))
                 {
                     layout.dividerCount++;
@@ -405,24 +407,11 @@
         itemPadding -= Math.min(7, fixSize);
         dividerMargin -= Math.min(7, fixSize);
         $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px', '--nav-offset-left': 0}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
-        const navLeft      = $nav[0].getBoundingClientRect().left;
-        const headingRight = $heading[0].getBoundingClientRect().right;
-        $nav.css('--nav-offset-left', Math.max(0, 20 + 2 * Math.ceil(headingRight - navLeft)) + 'px');
     }
 
     function updateNavbar(data)
     {
-        const $navbar = $('#navbar');
-
-        const $newNav = $(data);
-        if(
-            $newNav.find('.item').length !== $navbar.find('.item').length
-            || $newNav.find('.item[data-hidden]').length !== $navbar.find('.item[data-hidden]').length
-            || $newNav.text().trim() !== $navbar.text().trim()
-            || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')
-        ) return $navbar.empty().append($newNav);
-
-        activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
+        $('#navbar').morphInner(`<div>${data}</div>`);
         layoutNavbar();
     }
 
@@ -720,6 +709,16 @@
                 }
                 if(Array.isArray(data))
                 {
+                    if(workspaceType)
+                    {
+                        const navbarData = data.find(x => x.name === 'navbar');
+                        if(navbarData && !navbarData.data.includes(`__WORKSPACE_${workspaceType}__`))
+                        {
+                            window.open(response.url, '_blank');
+                            ajax.canceled = true;
+                            return;
+                        }
+                    }
 
                     if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? (response.url.split('?zin=')[0].split('&zin=')[0]) : url;
                     let newCacheData = (cacheKey && !hasFatal) ? rawData : null;
@@ -844,19 +843,19 @@
             },
             complete: () =>
             {
-                if(!options.partial) $('body').removeClass('loading-page');
-                if(ajax.canceled) return;
-                if(onFinish) onFinish();
-                $(document).data('zinCache', null);
-                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
-                callCallback('complete', []);
-                $(document).trigger('pageload.app');
                 const frameElement = window.frameElement;
                 if(frameElement)
                 {
                     frameElement.classList.remove('loading');
                     frameElement.classList.add('in');
                 }
+                if(!options.partial) $('body').removeClass('loading-page');
+                if(options.loadingTarget !== false) toggleLoading(options.loadingTarget || target, false, options.loadingClass);
+                if(ajax.canceled) return;
+                if(onFinish) onFinish();
+                $(document).data('zinCache', null);
+                callCallback('complete', []);
+                $(document).trigger('pageload.app');
             }
         });
         ajax.sendedAgain = true; // Disable the request again.
@@ -1968,7 +1967,37 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData, applyFormData: applyFormData, zinCallbacks: zinCallbacks, registerZinCallback: registerZinCallback, getVisions: getVisions});
+    function enterWorkspace(code, url)
+    {
+        workspaceType = code;
+        $.cookie.set('workspace', code || currentCode, {expires: config.cookieLife, path: config.webRoot});
+        if(url) openUrl(url);
+        else setTimeout(reloadPage, 500);
+    }
+
+    function exitWorkspace()
+    {
+        workspaceType = '';
+        $.cookie.remove('workspace', {path: config.webRoot});
+        setTimeout(reloadPage, 500);
+    }
+
+    function updateWorkspaceUI(info)
+    {
+        $('body').toggleClass('in-workspace', !!info);
+        if(info)
+        {
+            const $dropmenu = $('#dropmenu').first();
+            info.name      = $dropmenu.attr('data-text');
+            info.dropmenu  = $dropmenu.attr('zui-create-dropmenu');
+            info.icon      = $('#heading>.toolbar>.btn>.icon').attr('class').replace('icon icon-', '');
+            info.menuGroup = $('#navbar>.nav').attr('data-navbar-group');
+        }
+        workspaceType = info ? info.type : null;
+        $.apps.updateSpaceMenu && $.apps.updateSpaceMenu(info);
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData, applyFormData: applyFormData, zinCallbacks: zinCallbacks, registerZinCallback: registerZinCallback, getVisions: getVisions, enterWorkspace: enterWorkspace, exitWorkspace: exitWorkspace, updateWorkspaceUI: updateWorkspaceUI});
     $.extend($.apps, {openUrl: openUrl, getAppUrl: () => currentAppUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -2006,8 +2035,9 @@
                 if(data.locate) openUrl(data.locate);
             });
         }
-        if(data.load) return openUrl(data);
-        if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
+        if(data.modal) return loadModal(data.modal);
+        if(data.load)  return openUrl(data);
+        if(data.app)   return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data);
     });
 

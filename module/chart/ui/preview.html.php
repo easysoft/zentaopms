@@ -17,7 +17,11 @@ jsVar('maxPreviewCount', $config->chart->chartMaxChecked);
 jsVar('maxPreviewTips', sprintf($lang->chart->chartMaxChecked, $config->chart->chartMaxChecked));
 
 $lang->chart->featureBar['preview'] = array();
-foreach($groups as $id => $name) $lang->chart->featureBar['preview'][$id] = $name;
+foreach($groups as $id => $name)
+{
+    if(!helper::hasFeature('devops') && strpos($name, $lang->devops->common) !== false) continue;
+    $lang->chart->featureBar['preview'][$id] = $name;
+}
 
 featureBar
 (

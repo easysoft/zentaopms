@@ -28,7 +28,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('product')->gen(1);
 zenData('module')->gen(1);
 
-$product = new productTest('admin');
+$product = new productModelTest();
 
 $create       = array('name' => 'product1', 'code' => 'productcode1');
 $repeat       = array('name' => 'product1', 'code' => 'productcode1');

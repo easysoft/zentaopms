@@ -32,9 +32,11 @@ $canBatchConfirmStoryChange = $canModify && hasPriv('testcase', 'batchConfirmSto
 $canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBranch') && isset($product->type) && $product->type != 'normal';
 $canBatchChangeModule       = $canModify && hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
 $canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene');
-$canImportToLib             = $canModify && hasPriv('testcase', 'importToLib');
+$canImportToLib             = $canModify && hasPriv('testcase', 'importToLib') && helper::hasFeature('caselib');
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
+
+jsVar('canImportToLib', $canImportToLib);
 
 $productCount  = count(array_unique(array_map(function($case){return $case->product;}, $cases)));
 $caseProductID = $productCount > 1 ? 0 : $productID;

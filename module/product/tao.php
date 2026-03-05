@@ -337,7 +337,7 @@ class productTao extends productModel
         $line->parent = 0;
         $line->grade  = 1;
         $line->name   = htmlSpecialString($lineName);
-        $line->root   = in_array($this->config->systemMode, array('ALM', 'PLM')) ? $programID : 0;
+        $line->root   = in_array($this->config->systemMode, array('ALM', 'PLM')) && helper::hasFeature('program') ? $programID : 0;
 
         $existedLineID = (int)$this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch('id');
         if($existedLineID) return $existedLineID;

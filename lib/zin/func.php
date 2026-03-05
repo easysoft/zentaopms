@@ -252,6 +252,7 @@ function relatedObjectList(): relatedObjectList {return createWg('relatedObjectL
 function taskAssignedTo(): taskAssignedTo {return createWg('taskAssignedTo', func_get_args());}
 function docList(): docList {return createWg('docList', func_get_args());}
 function deliverable(): deliverable {return createWg('deliverable', func_get_args());}
+function menuViewSwitcher(): menuViewSwitcher {return createWg('menuViewSwitcher', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {

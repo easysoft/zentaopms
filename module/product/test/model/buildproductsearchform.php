@@ -31,10 +31,10 @@ $query->form->range('`a:44:{s:9:"fieldname";s:0:"";s:7:"fieldid";s:0:"";s:11:"fi
 $query->sql->range("`(( 1   AND `name`  LIKE '%产品%' ) AND ( 1  ))`");
 $query->gen(1);
 
-$queryIDList = array('0', '1');
+$queryIDList = array(0, 1);
 
 global $config;
-$product = new productTest('admin');
+$product = new productModelTest();
 r($product->buildProductSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($config->product->all->search) && p('module')                       && e('product');                    // 构建后的搜索数据
 r($config->product->all->search) && p('fields:name,reviewer,program') && e('产品名称,评审人,所属项目集'); // 构建后的搜索数据

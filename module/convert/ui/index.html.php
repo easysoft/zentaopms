@@ -16,10 +16,10 @@ panel
     set::title($lang->convert->jira->importJira),
     div
     (
-        setClass('flex justify-between panel-form text-center mx-auto size-sm p-8'),
+        setClass('flex justify-between panel-form text-center mx-auto size-sm p-8 gap-4'),
         div
         (
-            setClass('border border-hover rounded-md cursor-pointer open-url p-4 w-72 h-28'),
+            setClass('border border-hover rounded-md cursor-pointer open-url p-4 flex-1'),
             set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=db'))),
             div
             (
@@ -34,7 +34,7 @@ panel
         ),
         div
         (
-            setClass('border border-hover rounded-md cursor-pointer open-url p-4 w-72 h-28'),
+            setClass('border border-hover rounded-md cursor-pointer open-url p-4 flex-1'),
             set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=file'))),
             div
             (
@@ -45,6 +45,21 @@ panel
             (
                 setClass('text-gray mb-4'),
                 $lang->convert->jira->fileDesc
+            )
+        ),
+        div
+        (
+            setClass('border border-hover rounded-md cursor-pointer open-url p-4 flex-1'),
+            set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=api'))),
+            div
+            (
+                setClass('text-xl font-bold mb-4'),
+                $lang->convert->jira->importFromAPI
+            ),
+            div
+            (
+                setClass('text-gray mb-4'),
+                $lang->convert->jira->apiDesc
             )
         )
     )

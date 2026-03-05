@@ -140,6 +140,7 @@ $lang->homepage        = 'Accueil';
 $lang->noviceTutorial  = 'Tutoriel ZenTao';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manuel Utilisateur';
+$lang->site            = 'Site Manage';
 $lang->customMenu      = 'Personnalisation Menu';
 $lang->customField     = 'Personnalisation Champ';
 $lang->lineNumber      = 'Ligne No.';
@@ -537,6 +538,7 @@ $lang->themes['blue']       = 'Young Blue';
 $lang->themes['green']      = 'Green';
 $lang->themes['red']        = 'Red';
 $lang->themes['purple']     = 'Purple';
+$lang->themes['blackberry'] = 'Blackberry';
 
 /* Error info. */
 $lang->error = new stdclass();
@@ -629,8 +631,20 @@ $lang->noticePasteImg     = "Vous pouvez déposer des images dans l'éditeur.";
 $lang->pasteImgFail       = "Echec lors de la dépose des images. Essayez plus tard.";
 $lang->pasteImgUploading  = "Chargement...";
 
-$lang->visionTips = "You can switch vision here";
-$lang->IKnow      = "I know";
+/* Work visions. */
+$lang->visionTips      = "You can switch vision here";
+$lang->IKnow           = "I know";
+$lang->switchVision    = 'Switch to vision';
+$lang->workspaceAbbr   = 'Espace';
+$lang->switchWorkspace = 'Switch to workspace';
+$lang->enterWorkspace  = 'Enter space';
+$lang->exitWorkspace   = 'Exit space';
+
+/* Workspace list. */
+$lang->workspaceList = [];
+$lang->workspaceList['product']   = "{$lang->product->common} space";
+$lang->workspaceList['project']   = "{$lang->project->common} space";
+$lang->workspaceList['execution'] = "{$lang->execution->common} space";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');

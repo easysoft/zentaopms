@@ -27,6 +27,12 @@ zenData('story')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
+global $tester;
+$program  = $tester->loadModel('program');
+$list     = $program->getProjectStats(0, 'all', 0, 'id_asc');
+$firstId  = empty($list) ? 0 : key($list);
+if($firstId) $tester->dao->update(TABLE_PROJECT)->set('name')->eq('瀑布项目2')->set('budget')->eq(799900)->set('budgetUnit')->eq('USD')->where('id')->eq($firstId)->exec();
+
 $projectTester = new projectZenTest();
 $result = $projectTester->processProjectListDataTest();
-r($result) && p('1:name,budget,storyPoints,estimate,consume,left') && e('瀑布项目2,$ 79.99万,0 h,0,0,0'); // 获取处理后的项目数据
+r($result) && p('0:name,budget,storyPoints,estimate,consume,left') && e('瀑布项目2,$ 79.99万,0 h,0,0,0'); // 获取处理后的项目数据

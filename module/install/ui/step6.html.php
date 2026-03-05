@@ -51,7 +51,7 @@ div
                 ),
                 cell(
                     setClass('flex'),
-                    html(nl2br(sprintf($successLabel, $config->version)))
+                    html(setID('successLabel'), nl2br(sprintf($successLabel, $config->version)))
                 ),
             ),
             cell

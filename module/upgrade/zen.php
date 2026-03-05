@@ -147,11 +147,8 @@ class upgradeZen extends upgrade
             }
         }
 
-        if($currentEdition == 'ipd')
-        {
-            $currentVersion = str_replace('.', '_', $this->config->version);
-            $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
-        }
+        $currentVersion = str_replace('.', '_', $this->config->version);
+        if($currentEdition == 'ipd' && empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
 
         return $upgradeVersions;
     }

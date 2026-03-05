@@ -30,7 +30,7 @@ try {
 // 手动插入测试数据
 try {
     $tester->dbh->exec("DELETE FROM jiratmprelation WHERE AType='jcustomfield' AND BType='zworkflowfield'");
-    $tester->dbh->exec("INSERT INTO jiratmprelation (AType, AID, BType, BID, extra) VALUES 
+    $tester->dbh->exec("INSERT INTO jiratmprelation (AType, AID, BType, BID, extra) VALUES
         ('jcustomfield', '1', 'zworkflowfield', 'field1', 'story'),
         ('jcustomfield', '2', 'zworkflowfield', 'field2', 'task'),
         ('jcustomfield', '3', 'zworkflowfield', 'field3', 'bug'),

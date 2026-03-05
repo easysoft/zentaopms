@@ -521,10 +521,11 @@ class testcase extends control
      * @param  string $from
      * @param  int    $taskID
      * @param  string $stepsType
+     * @param  int    $suiteID
      * @access public
      * @return void
      */
-    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, string $stepsType = '')
+    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, string $stepsType = '', int $suiteID = 0)
     {
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
         $this->session->set('testtaskID', $taskID, $this->app->tab);
@@ -582,6 +583,7 @@ class testcase extends control
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
+        $this->view->suiteID   = $suiteID;
         $this->view->testcase  = $case;
         $this->view->stepsType = $stepsType;
         $this->view->version   = $version ? $version : $case->version;

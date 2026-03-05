@@ -14,6 +14,7 @@ namespace zin;
 require_once dirname(__DIR__) . DS . 'pagebase' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'featurebar' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'mainnavbar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'menuviewswitcher' . DS . 'v1.php';
 
 /**
  * 主要内容部件类。
@@ -57,10 +58,14 @@ class main extends wg
         if(!empty($toolbarList)) $toolbar = $toolbarList[0];
         if($toolbar instanceof node && !$toolbar->hasProp('id')) $toolbar->setProp('id', 'actionBar');
 
+        /* 来自二级或三级导航中的内容： */
+        $navbarMenu = new menuViewSwitcher();
+
         return div
         (
             set::id('mainMenu'),
             $featureBar,
+            $navbarMenu,
             $toolbar,
             $restList
         );
@@ -122,8 +127,11 @@ class main extends wg
      * @access protected
      * @return array
      */
-    protected function buildMainNavbar(): array|mainNavbar
+    protected function buildMainNavbar(): array|mainNavbar|null
     {
+        $workspace = commonModel::getWorkspaceInfo();
+        if($workspace['opened']) return null;
+
         $navbar = $this->block('navbar');
         if(!$navbar) return mainNavbar();
         return $navbar;

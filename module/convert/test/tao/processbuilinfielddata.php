@@ -7,25 +7,25 @@ title=测试 convertTao::processBuildinFieldData();
 timeout=0
 cid=15867
 
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations
  - 属性title @Test Story Title
  - 属性pri @2
  - 属性spec @Test story description
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 属性bugreporter @jira_user
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 属性bugreporter @jira_user_key
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations
  - 属性tasktimeoriginalestimate @2
  - 属性tasktimespent @1
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations
  - 属性title @Critical Bug
  - 属性severity @1
  - 属性assignedTo @developer
  - 属性existing_field @keep_this
 - 执行$result @1
 - 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 属性pre_existing @original_value
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是$module, $data, $object, $relations
  - 属性mapped_field_1 @custom_value_1
  - 属性mapped_field_2 @custom_value_2
- - 属性storyreporter @reporter_user
+ - 属性storyreporter @reporter_key
  - 属性storytimeoriginalestimate @4
  - 属性existing_data @preserve_this
 
@@ -67,7 +67,7 @@ $data->reporter = 'jira_user_key';
 $object = new stdclass();
 $relations = array();
 
-r($convertTest->processBuildinFieldDataTest($module, $data, $object, $relations)) && p('bugreporter') && e('jira_user');
+r($convertTest->processBuildinFieldDataTest($module, $data, $object, $relations)) && p('bugreporter') && e('jira_user_key');
 
 // 测试步骤3：测试buildinFields的时间字段转换
 $module = 'task';
@@ -153,4 +153,4 @@ $relations = array(
     )
 );
 
-r($convertTest->processBuildinFieldDataTest($module, $data, $object, $relations)) && p('mapped_field_1,mapped_field_2,storyreporter,storytimeoriginalestimate,existing_data') && e('custom_value_1,custom_value_2,reporter_user,4,preserve_this');
+r($convertTest->processBuildinFieldDataTest($module, $data, $object, $relations)) && p('mapped_field_1,mapped_field_2,storyreporter,storytimeoriginalestimate,existing_data') && e('custom_value_1,custom_value_2,reporter_key,4,preserve_this');

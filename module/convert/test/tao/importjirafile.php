@@ -7,11 +7,11 @@ title=测试 convertTao::importJiraFile();
 timeout=0
 cid=15858
 
-- 执行convertTest模块的importJiraFileTest方法，参数是array  @true
-- 执行convertTest模块的importJiraFileTest方法，参数是array  @true
-- 执行convertTest模块的importJiraFileTest方法，参数是array  @true
-- 执行convertTest模块的importJiraFileTest方法，参数是array  @true
-- 执行convertTest模块的importJiraFileTest方法，参数是array  @true
+- 执行convertTest模块的importJiraFileTest方法，参数是array  @1
+- 执行convertTest模块的importJiraFileTest方法，参数是array  @1
+- 执行convertTest模块的importJiraFileTest方法，参数是array  @1
+- 执行convertTest模块的importJiraFileTest方法，参数是array  @1
+- 执行convertTest模块的importJiraFileTest方法，参数是array  @1
 
 */
 
@@ -79,8 +79,8 @@ $fileData5->filesize = 8192;
 $fileData5->author = 'user1';
 $fileData5->created = '2023-09-11 14:00:00';
 
-r($convertTest->importJiraFileTest(array($fileData1, $fileData2))) && p() && e('true');
-r($convertTest->importJiraFileTest(array())) && p() && e('true');
-r($convertTest->importJiraFileTest(array($fileData3))) && p() && e('true');
-r($convertTest->importJiraFileTest(array($fileData4))) && p() && e('true');
-r($convertTest->importJiraFileTest(array($fileData1, $fileData2, $fileData5))) && p() && e('true');
+r($convertTest->importJiraFileTest(array($fileData1, $fileData2))) && p() && e('1');
+r($convertTest->importJiraFileTest(array())) && p() && e('1');
+r($convertTest->importJiraFileTest(array($fileData3))) && p() && e('1');
+r($convertTest->importJiraFileTest(array($fileData4))) && p() && e('1');
+r($convertTest->importJiraFileTest(array($fileData1, $fileData2, $fileData5))) && p() && e('1');

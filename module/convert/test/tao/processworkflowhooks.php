@@ -29,6 +29,10 @@ include dirname(__FILE__, 2) . '/lib/tao.class.php';
 
 su('admin');
 
+$workflow = zenData('workflow');
+$workflow->module->range('bug,task,story');
+$workflow->gen(3);
+
 $convertTest = new convertTaoTest();
 
 r($convertTest->processWorkflowHooksTest(array(), array(), 'bug')) && p() && e('0');

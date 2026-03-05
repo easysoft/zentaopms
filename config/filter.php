@@ -35,6 +35,7 @@ $filter->default->cookie['maxImport']   = 'reg::any';
 $filter->default->cookie['za']          = 'reg::any';
 $filter->default->cookie['zp']          = 'reg::any';
 $filter->default->cookie['vision']      = 'reg::word';
+$filter->default->cookie['workspace']   = 'reg::word';
 
 $filter->index        = new stdclass();
 $filter->my           = new stdclass();

@@ -36,20 +36,20 @@ if(!isset($suffixParam)) $suffixParam = '';
 if(!isset($from)) $from = '';
 
 $canSwitchCaseType   = $this->app->tab == 'qa';
-$canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
+$canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits' && helper::hasFeature('testsuite');
 $canManageModule     = $canModify && hasPriv('tree', 'browse') && !empty($productID) && (!isset($project) || $project->hasProduct);
 $canCreateSuite      = $canModify && hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
 $canBrowseScene      = hasPriv('testcase', 'browseScene') && in_array($rawMethod, array('browse', 'browsescene')) && !$isFromDoc && !$isFromAI;
-$canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
+$canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits' && helper::hasFeature('automated');
 $canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
 $canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');
 $canExportFreeMind   = !$isExecutionApp && hasPriv('testcase', 'exportFreeMind');
 $canExportXmind      = !$isExecutionApp && hasPriv('testcase', 'exportXmind');
 $canImport           = !$isExecutionApp && $canModify && hasPriv('testcase', 'import');
-$canImportFromLib    = !$isExecutionApp && $canModify && hasPriv('testcase', 'importFromLib');
+$canImportFromLib    = !$isExecutionApp && $canModify && hasPriv('testcase', 'importFromLib') && helper::hasFeature('caselib');
 $canImportXmind      = !$isExecutionApp && $canModify && hasPriv('testcase', 'importXmind');
 $canCreateCase       = $canModify && hasPriv('testcase', 'create');
 $canBatchCreateCase  = $canModify && $productID && hasPriv('testcase', 'batchCreate');
@@ -190,7 +190,7 @@ $zeroCaseTab = (function() use ($isFromDoc, $isFromAI, $canBrowseZeroCase, $rawM
     );
 })();
 
-$showAutoCaseCheckbox = !$isFromDoc && !$isFromAI && !in_array($rawMethod, array('browseunits', 'zerocase', 'groupcase'));
+$showAutoCaseCheckbox = !$isFromDoc && !$isFromAI && !in_array($rawMethod, array('browseunits', 'zerocase', 'groupcase')) && helper::hasFeature('automated');
 $isFromDocOrAI        = $from == 'doc' || $from == 'ai';
 $showProjectExecView  = ($isProjectApp || $isExecutionApp) && !$isFromDocOrAI;
 $showSidebar          = !in_array($rawMethod, array('zerocase', 'browseunits', 'groupcase')) && !$isFromDoc && !$isFromAI;

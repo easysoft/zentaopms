@@ -93,9 +93,16 @@ $lang->admin->setModule->closed         = 'Closed';
 $lang->admin->setModule->my             = 'My';
 $lang->admin->setModule->product        = $lang->productCommon;
 $lang->admin->setModule->project        = $lang->projectCommon;
+$lang->admin->setModule->qa             = 'QA';
 $lang->admin->setModule->assetlib       = 'Assetlib';
 $lang->admin->setModule->other          = 'Other';
 
+$lang->admin->setModule->program        = 'Program';
+$lang->admin->setModule->testsuite      = 'Testsuite';
+$lang->admin->setModule->automated      = 'Automated';
+$lang->admin->setModule->AI             = 'AI';
+$lang->admin->setModule->BI             = 'BI';
+$lang->admin->setModule->workestimation = 'Work Estimation';
 $lang->admin->setModule->score          = 'Score';
 $lang->admin->setModule->repo           = 'Repo';
 $lang->admin->setModule->issue          = 'Issue';

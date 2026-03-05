@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace zin;
 
 require_once dirname(__DIR__) . DS . 'nav' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'mainnavbar' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'menuviewswitcher' . DS . 'v1.php';
 
 class navbar extends wg
 {
@@ -13,9 +15,13 @@ class navbar extends wg
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
+        #navbar {position: relative;}
         #navbar .nav[z-use-sortable] > li:hover {cursor: grab !important;}
         #navbar .nav[z-use-sortable] > li > a:hover {cursor: grab !important;}
         #navbar .nav li.nav-divider.divider {border: none; width: 1px; background: currentColor; margin: 0; padding-left: var(--nav-divider-margin); padding-right: var(--nav-divider-margin); box-sizing: content-box; background-clip: content-box;}
+
+        #navbarHeading {position: absolute; top: 0; left: 1rem; bottom: 0; display: flex; align-items: center; justify-content: center;}
+        @media (min-width: 1400px) {#navbarHeading{left: 0}}
         CSS;
     }
 
@@ -27,7 +33,114 @@ class navbar extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    protected function getExecutionMoreItem($executionID)
+    protected function getOriginItems()
+    {
+        $items = $this->prop('items');
+        if($items !== null) return $items;
+
+        return static::getItems();
+    }
+
+    protected function buildWorkspaceNavbar(string $workspace)
+    {
+        global $app, $config;
+        $originItems      = $this->getOriginItems();
+        $isTaskViews      = $app->rawModule === 'execution' && data('activeMenu') === 'task';
+        $isTaskReport     = $app->tab === 'execution' && $app->rawModule === 'task' && $app->rawMethod === 'report';
+        $showViewSwitcher = ($isTaskViews || $isTaskReport) && !empty($config->sanplexVersion) && $config->vision === 'rnd';
+        $items            = static::getWorkspaceItems($showViewSwitcher);
+        $activeID         = data('activeMenu');
+        $activeItem       = array('data-id' => $activeID);
+
+        foreach($originItems as $item)
+        {
+            if(empty($item['data-id']) || $item['data-id'] != $activeID) continue;
+            $activeItem = $item;
+            break;
+        }
+
+        return h::nav
+        (
+            set::id('navbar'),
+            div
+            (
+                setID('navbarHeading'),
+                setClass('text-lg'),
+                isset($activeItem['text']) ? $activeItem['text'] : null
+            ),
+            new nav
+            (
+                setData('workspace', $workspace),
+                setData('navbarGroup', data('mainNavbarGroup')),
+                setData('mainNavbarGroup', $app->tab . '-' . $activeID),
+                on::init()->call('initPageNavbar', $originItems, $workspace, $activeID, "__WORKSPACE_{$workspace}__"),
+                set::items($items),
+                $this->children()
+            ),
+            $showViewSwitcher ? css('#actionBar>a[href^="' . str_replace('.html', '', createLink('task', 'report')) . '"]{display: none;}') : null,
+            commonModel::isTutorialMode() ? null : on::contextmenu('.nav-item:not(.nav-dropdown) > a, .nav-divider')->call('handleNavbarContextmenu', jsRaw('event'), jsRaw('this')),
+        );
+    }
+
+    /**
+     * Build.
+     *
+     * @access protected
+     */
+    protected function build()
+    {
+        $workspace = commonModel::getWorkspaceInfo();
+        if($workspace['opened']) return $this->buildWorkspaceNavbar($workspace['type']);
+
+        $items    = $this->getOriginItems();
+        $navItems = [];
+
+        foreach($items as $item)
+        {
+            if(!empty($item['hidden'])) continue;
+            $navItems[] = array_merge($item, ['icon' => null]);
+        }
+
+        global $lang;
+        $responsiveNavOptions = [];
+        $responsiveNavOptions['container']        = 'parent';
+        $responsiveNavOptions['more']             = ['text' => $lang->other, 'caret' => true];
+        $responsiveNavOptions['moreDropdown']     = ['trigger' => 'hover'];
+        $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => ($(container).width() - 40 - (2 * Math.max($("#heading").outerWidth() || 0, $("#toolbar").outerWidth() || 0)))');
+
+        return h::nav
+        (
+            set::id('navbar'),
+            commonModel::isTutorialMode() ? null : on::contextmenu('.nav-item:not(.nav-dropdown) > a, .nav-divider')->call('handleNavbarContextmenu', jsRaw('event'), jsRaw('this')),
+            new nav
+            (
+                setData('navbarGroup', data('mainNavbarGroup')),
+                on::init()->call('initPageNavbar', $items),
+                set::items($navItems),
+                zui::create('ResponsiveNavHelper', $responsiveNavOptions),
+                $this->children()
+            )
+        );
+    }
+
+
+    protected static function getWorkspaceItems(bool $showViewSwitcher = false)
+    {
+        if($showViewSwitcher)
+        {
+            list($items) = menuViewSwitcher::getItems();
+            foreach($items as $index => $item)
+            {
+                if(empty($item['selected'])) continue;
+                $items[$index]['active'] = true;
+            }
+            return $items;
+        }
+
+        return mainNavbar::getItems();
+    }
+
+    protected static function getExecutionMoreItem($executionID)
     {
         if(commonModel::isTutorialMode()) return;
 
@@ -99,7 +212,7 @@ class navbar extends wg
         );
     }
 
-    protected function getAppBtnItem()
+    protected static function getAppBtnItem()
     {
         if(commonModel::isTutorialMode()) return;
 
@@ -140,18 +253,24 @@ class navbar extends wg
         );
     }
 
-    protected function getItems()
+    /**
+     * Get the items for the navbar.
+     *
+     * @access public
+     * @return array
+     */
+    public static function getItems()
     {
-        $items = $this->prop('items');
-        if(!empty($items)) return $items;
+        $items = data('navbarOriginItems');
+        if($items !== null) return array_values($items);
 
         global $app, $lang, $config;
+        $adminMenuKey = '';
         if($app->tab == 'admin')
         {
             $groupID = data('groupID') ? data('groupID') : 0;
             $app->control->loadModel('admin')->setMenu($groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
-            jsVar('adminMenuKey', $adminMenuKey);
         }
 
         commonModel::replaceMenuLang();
@@ -167,25 +286,28 @@ class navbar extends wg
         if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
         if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
-        $tab          = $app->tab;
-        $menu         = \customModel::getMainMenu($isHomeMenu);
-        $activeMenu   = '';
-        $activeMenuID = data('activeMenuID');
-        $items        = array();
-        $flows        = $config->edition != 'open' ? $app->control->loadModel('my')->getFlowPairs() : array();
+        $tab              = $app->tab;
+        $menu             = \customModel::getMainMenu($isHomeMenu);
+        $activeMenu       = '';
+        $activeMenuID     = data('activeMenuID');
+        $items            = array();
+        $flows            = $config->edition != 'open' ? $app->control->loadModel('my')->getFlowPairs() : array();
+        $projectModel     = '';
+        $navbarInMainMenu = [];
+        $activeInMainMenu = '';
+        $getMenuIcon      = function($menuItem) use ($lang)
+        {
+            if(isset($menuItem->icon)) return $menuItem->icon;
+            if(!empty($lang->iconMap[$menuItem->name])) return 'icon-' . $lang->iconMap[$menuItem->name];
+            return '';
+        };
+
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))
             {
                 if($menuItem->divider) $items[] = array('type' => 'divider');
-                $items[] = array
-                (
-                    'class'   => $menuItem->class,
-                    'text'    => $menuItem->text,
-                    'type'    => 'text',
-                    'tagName' => 'span',
-                    'icon'    => isset($menuItem->icon) ? $menuItem->icon : '',
-                );
+                $items[] = array('class' => $menuItem->class, 'text' => $menuItem->text, 'type' => 'text', 'tagName' => 'span', 'icon' => $getMenuIcon($menuItem));
                 continue;
 
             }
@@ -211,31 +333,26 @@ class navbar extends wg
             if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'index')
             {
                 $projectID    = str_replace('project=', '', $menuItem->link['vars']);
-                $projectModel = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
-                if($projectModel) jsVar('projectModel', $projectModel->model);
+                $projectInfo  = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
+                if($projectInfo && isset($projectModel->model)) $projectModel = $projectModel->model;
             }
 
+            $newItem = null;
             if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
             {
                 $executionID = $menuItem->link['vars'];
-                $executionMoreItem = $this->getExecutionMoreItem($executionID);
-                if(!empty($executionMoreItem))
-                {
-                    $items[] = $executionMoreItem;
-                }
-                elseif(isset(end($items)['type']) && end($items)['type'] == 'divider')
-                {
-                    array_pop($items); // 最后一个是分割线，则删除
-                }
+                $executionMoreItem = static::getExecutionMoreItem($executionID);
+                if(!empty($executionMoreItem)) $newItem = $executionMoreItem;
+                elseif(isset(end($items)['type']) && end($items)['type'] == 'divider') array_pop($items); // 最后一个是分割线，则删除
             }
             elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
             {
-                $appBtnItem = $this->getAppBtnItem();
-                if(!empty($appBtnItem)) $items[] = $appBtnItem;
+                $appBtnItem = static::getAppBtnItem();
+                if(!empty($appBtnItem)) $newItem = $appBtnItem;
             }
             elseif($menuItem->link)
             {
-                $alias = isset($menuItem->alias) ? $menuItem->alias : '';
+                $alias  = isset($menuItem->alias) ? $menuItem->alias : '';
                 $target = '';
                 $module = '';
                 $method = '';
@@ -248,10 +365,7 @@ class navbar extends wg
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
 
-                if($module == $currentModule and ($method == $currentMethod or str_contains(",$alias,", ",$currentMethod,")) and !str_contains(",$exclude,", ",$currentMethod,"))
-                {
-                    $isActive = true;
-                }
+                if($module == $currentModule and ($method == $currentMethod or str_contains(",$alias,", ",$currentMethod,")) and !str_contains(",$exclude,", ",$currentMethod,")) $isActive = true;
 
                 $dataApp = (isset($lang->navGroup->$module) && $tab != $lang->navGroup->$module) || isset($flows[$module]) ? $tab : null;
                 if($isActive && $activeMenuID) $isActive = $menuItem->name == $activeMenuID;
@@ -265,7 +379,7 @@ class navbar extends wg
                     foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                     {
                         if(empty($dropMenuItem)) continue;
-                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
+                        if(isset($dropMenuItem['hidden']) and $dropMenuItem['hidden']) continue;
 
                         /* Parse drop menu link. */
                         if(!empty($dropMenuItem['links']))
@@ -306,77 +420,72 @@ class navbar extends wg
                             $label      = $subLabel;
                         }
 
+                        $dropItemIcon = isset($dropMenuItem->icon) ? $dropMenuItem->icon : '';
+                        if(empty($dropItemIcon)) $dropItemIcon = isset($lang->iconMap[$dropMenuName]) ? 'icon-' . $lang->iconMap[$dropMenuName] : '';
                         $dataApp = !empty($dropMenuItem['data-app']) ? $dropMenuItem['data-app'] : $dataApp;
-                        $dropItems[] = array(
-                            'active'   => $subActive,
-                            'data-id'  => $dropMenuName,
-                            'url'      => $subLink,
-                            'text'     => $subLabel,
-                            'data-app' => $dataApp
-                        );
+                        $dropItems[] = array('active' => $subActive, 'data-id' => $dropMenuName, 'url' => $subLink, 'text' => $subLabel, 'data-app' => $dataApp, 'zui-key' => $dropMenuName, 'icon' => $dropItemIcon);
                     }
 
                     if(empty($dropItems)) continue;
-                    $items[] = array
-                    (
-                        'type'     => 'dropdown',
-                        'items'    => $dropItems,
-                        'class'    => $class,
-                        'active'   => $isActive,
-                        'target'   => $target,
-                        'text'     => $label,
-                        'data-id'  => $menuItem->name,
-                        'data-app' => $dataApp,
-                        'trigger'  => 'hover'
-                    );
+
+                    if($menuItem->name === 'other')
+                    {
+                        foreach($dropItems as $dropItem)
+                        {
+                            $dropItem['outerClass'] = 'is-rsh-more';
+                            $items['other-' . $dropItem['data-id']] = $dropItem;
+                        }
+                        continue;
+                    }
+
+                    $newItem = array('type' => 'dropdown', 'items' => $dropItems, 'class' => $class, 'active' => $isActive, 'target' => $target, 'text' => $label, 'data-id' => $menuItem->name, 'data-app' => $dataApp, 'trigger' => 'hover', 'icon' => 'icon-more-circle');
                 }
                 else
                 {
-                    $items[] = array(
-                        'class'    => $class,
-                        'icon'     => isset($menuItem->icon) ? $menuItem->icon : '',
-                        'text'     => $label,
-                        'url'      => commonModel::createMenuLink($menuItem, $tab),
-                        'active'   => $isActive,
-                        'target'   => $target,
-                        'data-id'  => $menuItem->name,
-                        'data-app' => $dataApp,
-                        'hidden'   => (isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial))
-                    );
+                    $hidden  = (isset($menuItem->hidden) && $menuItem->hidden && (!isset($menuItem->tutorial) || !$menuItem->tutorial));
+                    $newItem = array('class' => $class, 'icon' => $getMenuIcon($menuItem), 'text' => $label, 'url' => commonModel::createMenuLink($menuItem, $tab), 'active' => $isActive, 'target' => $target, 'data-id' => $menuItem->name, 'data-app' => $dataApp, 'hidden' => $hidden);
                 }
             }
             else
             {
-                $items[] = array('class' => $class, 'icon' => isset($menuItem->icon) ? $menuItem->icon : '', 'text' => $menuItem->text, 'active' => $isActive);
+                $newItem = array('class' => $class, 'icon' => $getMenuIcon($menuItem), 'text' => $menuItem->text, 'active' => $isActive);
             }
+
+            if(!$newItem) continue;
+            if(isset($newItem['data-id'])) $newItem['zui-key'] = $newItem['data-id'];
+
+            $showInMainMenu = isset($menuItem->showInMainMenu) ? $menuItem->showInMainMenu : false;
+            if($showInMainMenu)
+            {
+                if($isActive) $activeInMainMenu = $showInMainMenu;
+                $navbarInMainMenu[] = $newItem;
+            }
+            if(!$showInMainMenu || $showInMainMenu === $menuItem->name) $items[$menuItem->name] = $newItem;
+        }
+
+        data('actualActiveMenu', $activeMenu);
+
+        $isExecutionView = ($activeMenu === 'view' || $activeMenu === 'task') && $currentModule === 'execution';
+        $isTaskReport    = $currentMethod === 'report' && $currentModule === 'task';
+        if(!$isExecutionView && !$isTaskReport) $navbarInMainMenu = null;
+
+        if(empty($items[$activeMenu]) && !empty($activeInMainMenu) && !empty($items[$activeInMainMenu]))
+        {
+            $items[$activeInMainMenu]['active'] = true;
+            $activeMenu = $activeInMainMenu;
         }
 
         /* Set active menu to global data, make it accessible to other widgets */
         data('activeMenu', $activeMenu);
-        jsVar('allNavbarItems', $items);
-        jsVar('isTutorialMode', commonModel::isTutorialMode());
+        data('navbarInMainMenu', $navbarInMainMenu);
 
-        $items = array_filter($items, function($item) { return empty($item['hidden']); });
+        $menuGroup = $tab;
+        if(!empty($projectModel)) $menuGroup = "project-$projectModel";
+        elseif($isHomeMenu)       $menuGroup = "{$tab}-home";
+        elseif($tab == 'admin')   $menuGroup = "admin-$adminMenuKey";
+        data('mainNavbarGroup', $menuGroup);
+        data('navbarOriginItems', $items);
 
-        return $items;
-    }
-
-    /**
-     * Build.
-     *
-     * @access protected
-     */
-    protected function build()
-    {
-        $items = $this->getItems();
-        return h::nav
-        (
-            set::id('navbar'),
-            new nav
-            (
-                set::items($items),
-                $this->children()
-            )
-        );
+        return array_values($items);
     }
 }

@@ -158,7 +158,7 @@ else
 
             if(empty($activeGroup) && $projectID == $project->id) $activeGroup = $group;
 
-            if($config->systemMode == 'light' || $config->vision == 'lite')
+            if($config->systemMode == 'light' || $config->vision == 'lite' || !helper::hasFeature('program'))
             {
                 $data[$group][] = $item;
             }

@@ -138,6 +138,13 @@ div
     setID('menu'),
     div
     (
+        setID('spaceHeading'),
+        icon('space'),
+        div(setClass('text')),
+        span(setClass('label size-xs ring-0 bg-gray bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
+    ),
+    div
+    (
         setID('menuNav'),
         ul(setClass('nav'), setID('menuMainNav')),
         ul
@@ -156,7 +163,7 @@ div
                     span(setClass('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(setClass('dropdown-menu nav'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu'), setID('menuMoreList'))
             )
         )
     ),
@@ -198,6 +205,7 @@ div
         chatBtn(),
         item
         (
+            setID('version'),
             setClass('ghost btn-zentao px-1'),
             set::icon('zentao text-2xl'),
             set::url($lang->website),
