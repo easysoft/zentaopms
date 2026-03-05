@@ -1336,6 +1336,22 @@ EOT;
      */
     public function getIssueTypeList(array $relations): array
     {
+        if($this->session->jiraMethod == 'api')
+        {
+            $schemeList   = $this->callJiraAPI('/rest/api/3/issuetypescheme?expand=projects,issuetypes&maxResults=1000');
+            $projectGroup = array();
+            foreach($schemeList as $scheme)
+            {
+                if(empty($scheme->issueTypes->values) || empty($scheme->projects->values)) continue;
+                foreach($scheme->issueTypes->values as $issueType)
+                {
+                    foreach($scheme->projects->values as $project) $projectGroup[$project->id][] = $relations['zentaoObject'][$issueType->id];
+                }
+            }
+
+            return $projectGroup;
+        }
+
         $schemeproject        = $this->getJiraData($this->session->jiraMethod, 'configurationcontext');
         $schemeissuetype      = $this->getJiraData($this->session->jiraMethod, 'optionconfiguration');
         $projectIssueTypeList = array();
