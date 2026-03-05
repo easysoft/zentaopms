@@ -184,6 +184,8 @@ else
     $config->search->searchObject = array('trash');
 }
 
+if(!helper::hasFeature('program')) unset($config->search->fields->program);
+
 $config->search->controlProps = array();
 $config->search->controlProps['executionCase']['lastRunResult'] = (object)array('emptyValue' => '');
 $config->search->controlProps['testtask']['lastRunResult']      = (object)array('emptyValue' => '');

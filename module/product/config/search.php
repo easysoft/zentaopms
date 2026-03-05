@@ -116,7 +116,7 @@ if(empty($config->setCode))
     unset($config->product->all->search['params']['code']);
 }
 
-if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')
+if(($config->systemMode != 'ALM' && $config->systemMode != 'PLM') || !helper::hasFeature('program'))
 {
     unset($config->product->all->search['fields']['program'], $config->product->all->search['fields']['line']);
     unset($config->product->all->search['params']['program'], $config->product->all->search['params']['line']);

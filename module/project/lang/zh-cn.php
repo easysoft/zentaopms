@@ -367,7 +367,7 @@ $lang->project->featureBar['bug']['all']        = '全部';
 $lang->project->featureBar['bug']['unresolved'] = '未解决';
 
 $app->loadLang('testcase');
-$lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
+if(!empty($lang->testcase->featureBar['browse'])) $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
 $lang->project->featureBar['build']['all'] = '全部构建';
 

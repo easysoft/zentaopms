@@ -253,7 +253,7 @@ $lang->metric->scopeList['program']   = "Program";
 
 global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['program']       = "Program Set";
+if(helper::hasFeature('program')) $lang->metric->objectList['program'] = "Program Set";
 $lang->metric->objectList['line']          = "Product Line";
 $lang->metric->objectList['product']       = "Product";
 $lang->metric->objectList['project']       = "Project";
@@ -292,7 +292,7 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "Issue";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['host']  = "Host";
+if(helper::hasFeature('devops')) $lang->metric->objectList['host'] = "Host";
 $lang->metric->objectList['other'] = "Other";
 
 $lang->metric->chartTypeList = array();

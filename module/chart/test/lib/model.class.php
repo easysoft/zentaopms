@@ -23,6 +23,20 @@ class chartModelTest extends baseTest
     }
 
     /**
+     * Test getTreeMenu method.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function getTreeMenuTest(int $groupID): array
+    {
+        $result = $this->instance->getTreeMenu($groupID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test switchFieldName method.
      *
      * @param  array  $fields

@@ -1129,6 +1129,7 @@ class task extends control
 
         $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->report->common;
         $this->view->executionID   = $executionID;
+        $this->view->execution     = $execution;
         $this->view->browseType    = $browseType;
         $this->view->chartType     = $chartType;
         $this->view->charts        = $chartList;

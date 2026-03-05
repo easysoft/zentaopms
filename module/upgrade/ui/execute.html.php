@@ -23,11 +23,12 @@ foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 }
 
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
-$toVersionName    = $editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion);
+$toVersionName    = !empty($config->sanplexVersion) ? $lang->upgrade->fromVersions[$toVersion] : ($editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion));
 $versionCount     = count($upgradeVersions);
 
 $buildVersions = function() use ($upgradeVersions, $editionNames)
 {
+    global $config;
     $versions = [];
     foreach($upgradeVersions as $version => $label)
     {
@@ -43,7 +44,7 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
             ),
             span
             (
-                $editionNames[$edition] . str_ireplace($edition, '', $label)
+                !empty($config->sanplexVersion) ? $label : ($editionNames[$edition] . str_ireplace($edition, '', $label))
             )
         );
     }

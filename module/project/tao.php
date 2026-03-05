@@ -712,6 +712,8 @@ class projectTao extends projectModel
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
 
+            if(!helper::hasFeature('program')) $topProgram = 0;
+
             if($project->PM == $this->app->user->account)
             {
                 if($project->status != 'closed')

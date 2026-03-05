@@ -13,7 +13,7 @@ $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'si
 
 $config->project->list = new stdclass();
 $config->project->list->exportFields = 'id,name,code,status,hasProduct,PM,storyPoints,storyCount,executionCount,budget,teamCount,invested,begin,end,realBegan,realEnd,estimate,consumed,progress';
-if($config->systemMode == 'ALM') $config->project->list->exportFields = substr_replace($config->project->list->exportFields, ',parent', 2, 0);
+if($config->systemMode == 'ALM' && helper::hasFeature('program')) $config->project->list->exportFields = substr_replace($config->project->list->exportFields, ',parent', 2, 0);
 $config->project->list->customCreateFields = 'budget,acl,auth';
 
 $config->project->create    = new stdclass();
@@ -387,3 +387,5 @@ $config->project->categoryStages['IPD']       = array('concept', 'plan', 'develo
 $config->project->categoryStages['TPD']       = array('concept', 'plan', 'develop', 'qualify');
 $config->project->categoryStages['CBB']       = array('concept', 'plan', 'develop', 'qualify');
 $config->project->categoryStages['CPD']       = array('plan', 'develop', 'qualify', 'launch');
+
+if(!helper::hasFeature('program')) unset($config->project->search['fields']['parent']);

@@ -6,15 +6,8 @@ $fields = defineFieldList('product');
 
 if($config->systemMode != 'light')
 {
-    $fields->field('program')
-        ->control('picker')
-        ->items(data('fields.program.options'))
-        ->value(data('fields.program.default'));
-
-    $fields->field('line')
-        ->control('picker')
-        ->items(data('fields.line.options'))
-        ->value(data('fields.line.default'));
+    if(helper::hasFeature('program')) $fields->field('program')->control('picker')->items(data('fields.program.options'))->value(data('fields.program.default'));
+    $fields->field('line')->control('picker')->items(data('fields.line.options'))->value(data('fields.line.default'));
 }
 
 $fields->field('name')->wrapBefore()->required()->control('input');

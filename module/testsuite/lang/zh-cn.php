@@ -9,18 +9,19 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->testsuite->create           = "建套件";
-$lang->testsuite->delete           = "删除套件";
-$lang->testsuite->view             = "概况";
-$lang->testsuite->edit             = "编辑套件";
-$lang->testsuite->browse           = "套件列表";
-$lang->testsuite->linkCase         = "关联用例";
-$lang->testsuite->linkVersion      = "版本";
-$lang->testsuite->unlinkCase       = "移除";
-$lang->testsuite->unlinkCaseAction = "移除用例";
-$lang->testsuite->batchUnlinkCases = "批量移除用例";
-$lang->testsuite->deleted          = '已删除';
-$lang->testsuite->successSaved     = '保存成功';
+$lang->testsuite->create            = "建套件";
+$lang->testsuite->delete            = "删除套件";
+$lang->testsuite->view              = "概况";
+$lang->testsuite->edit              = "编辑套件";
+$lang->testsuite->browse            = "套件列表";
+$lang->testsuite->linkCase          = "关联用例";
+$lang->testsuite->linkVersion       = "版本";
+$lang->testsuite->unlinkCase        = "移除";
+$lang->testsuite->unlinkCaseAction  = "移除用例";
+$lang->testsuite->batchUnlinkCases  = "批量移除用例";
+$lang->testsuite->deleted           = '已删除';
+$lang->testsuite->successSaved      = '保存成功';
+$lang->testsuite->confirmCaseChange = '确认用例变动';
 
 $lang->testsuite->id             = '编号';
 $lang->testsuite->pri            = '优先级';

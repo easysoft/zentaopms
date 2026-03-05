@@ -116,7 +116,7 @@ EOD;
 
 $lang->mail->forgetPassword = <<<EOT
 <p>Hello:</p>
-<p>You are applying to reset your ZenTao password. The link is valid for three minutes. If it expires, please apply again.</p>
+<p>You are applying to reset your ZenTao password. The link is valid for three minutes and can only be used once. If it expires, please apply again.</p>
 <p><a href="%s" target="_blank">Click here to jump</a></p>
 EOT;
 

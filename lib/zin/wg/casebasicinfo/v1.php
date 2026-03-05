@@ -126,8 +126,9 @@ class caseBasicInfo extends wg
     {
         global $app, $lang;
 
-        $from   = $this->prop('from', data('from'));
-        $taskID = $this->prop('taskID', data('taskID'));
+        $from    = $this->prop('from', data('from'));
+        $taskID  = $this->prop('taskID', data('taskID'));
+        $suiteID = $this->prop('suiteID', data('suiteID'));
 
         $status = array();
         $status[] = $app->control->processStatus('testcase', $case);
@@ -140,6 +141,18 @@ class caseBasicInfo extends wg
                 ' (',
                 $lang->testcase->changed,
                 hasPriv('testcase', 'confirmchange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID")), $lang->testcase->sync) : '',
+                ')'
+            );
+        }
+
+        if($from == 'testsuite' && $case->version > $case->currentVersion)
+        {
+            $status[] = span
+            (
+                set('title', $lang->testcase->fromTestsuite),
+                ' (',
+                $lang->testcase->changed,
+                hasPriv('testsuite', 'confirmCaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testsuite', 'confirmCaseChange', "caseID=$case->id&suiteID=$suiteID&from=view")), $lang->testcase->sync) : '',
                 ')'
             );
         }

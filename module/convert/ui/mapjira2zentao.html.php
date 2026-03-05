@@ -192,6 +192,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
         {
             $value  = $resolution->pname;
             $module = $jiraRelation['zentaoObject'][$step];
+            if($module) $app->loadLang($module);
             if($module == 'epic' || $module == 'story' || $module == 'requirement') $module = 'story';
             if($module == 'bug')
             {

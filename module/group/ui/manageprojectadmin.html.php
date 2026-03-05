@@ -22,8 +22,8 @@ sidebar
 );
 
 $tbody         = array();
-$hiddenProgram = in_array($config->systemMode, array('ALM', 'PLM')) ? '' : 'hidden';
-$rowspan       = in_array($config->systemMode, array('ALM', 'PLM')) ? 4 : 3;
+$hiddenProgram = in_array($config->systemMode, array('ALM', 'PLM')) && helper::hasFeature('program') ? '' : 'hidden';
+$rowspan       = in_array($config->systemMode, array('ALM', 'PLM')) && helper::hasFeature('program') ? 4 : 3;
 
 if($projectAdmins)
 {

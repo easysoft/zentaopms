@@ -59,7 +59,7 @@ $starter->tasks['createAccount']['steps'][] = array(
     'desc'   => $lang->tutorial->starter->createAccount->step6->desc
 );
 
-if($config->systemMode != 'light')
+if($config->systemMode != 'light' && helper::hasFeature('program'))
 {
     $starter->tasks['createProgram'] = array();
     $starter->tasks['createProgram']['name']     = 'createProgram';

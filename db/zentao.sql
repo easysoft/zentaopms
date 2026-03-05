@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
   `source` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+CREATE INDEX `idx_object`  ON `zt_acl` (`objectType`, `objectID`, `account`);
+CREATE INDEX `idx_account` ON `zt_acl` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
@@ -2478,7 +2480,8 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `ldap` varchar(30) NOT NULL DEFAULT '',
   `score` int unsigned NOT NULL DEFAULT 0,
   `scoreLevel` int unsigned NOT NULL DEFAULT 0,
-  `resetToken` varchar(50) NOT NULL DEFAULT '',
+  `resetToken` char(32) NOT NULL DEFAULT '' COMMENT '重置密码的令牌',
+  `resetExpired` int unsigned NOT NULL DEFAULT 0 COMMENT '重置密码令牌的过期时间戳',
   `clientStatus` varchar(10) NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
@@ -2489,6 +2492,7 @@ CREATE INDEX `dept` ON `zt_user` (`dept`);
 CREATE INDEX `email` ON `zt_user` (`email`);
 CREATE INDEX `commiter` ON `zt_user` (`commiter`);
 CREATE INDEX `deleted` ON `zt_user` (`deleted`);
+CREATE INDEX `idx_reset` ON `zt_user` (`resetToken`, `resetExpired`);
 
 -- DROP TABLE IF EXISTS `zt_usercontact`;
 CREATE TABLE IF NOT EXISTS `zt_usercontact` (

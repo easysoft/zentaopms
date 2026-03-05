@@ -1085,4 +1085,38 @@ class projectzenTest
 
         return 'success';
     }
+
+    /**
+     * Test processProjectListData method.
+     *
+     * @param  array $projectList
+     * @access public
+     * @return mixed
+     */
+    public function processProjectListDataTest($projectList = array())
+    {
+        try
+        {
+            $reflection = new ReflectionClass($this->objectZen);
+            $method = $reflection->getMethod('processProjectListData');
+            $method->setAccessible(true);
+
+            if(empty($projectList))
+            {
+                global $tester;
+                $program     = $tester->loadModel('program');
+                $projectList = $program->getProjectStats(0, 'all', 0, 'id_asc');
+            }
+            if(empty($projectList)) return array();
+
+            $result = $method->invoke($this->objectZen, $projectList);
+            if(dao::isError()) return dao::getError();
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return $e->getMessage();
+        }
+    }
 }

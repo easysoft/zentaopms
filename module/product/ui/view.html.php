@@ -179,7 +179,7 @@ div
                 div
                 (
                     setClass('flex mt-4'),
-                    in_array($this->config->systemMode, array('ALM', 'PLM')) && $product->program ? div
+                    in_array($this->config->systemMode, array('ALM', 'PLM')) && helper::hasFeature('program') && $product->program ? div
                     (
                         setClass('clip w-1/3'),
                         set::title($lang->product->program),

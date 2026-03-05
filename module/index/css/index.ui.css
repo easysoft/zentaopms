@@ -9,9 +9,10 @@
 [lang^='en'] {--zt-menu-width: 106px;}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 1120;}
+.has-space {--zt-menu-width: 160px!important;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
-#menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 6px 4px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none;}
+#menu .nav > .divider, #menuMoreList > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 6px 4px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none;}
 #menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
 #menu .nav > li > a.active,
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, rgba(var(--color-primary-400-rgb), .4)); color: var(--color-canvas);}
@@ -21,15 +22,34 @@
 @supports not (gap: 1px) {#menu .nav > li > a > .icon {margin-right: 4px;}}
 .show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
+#spaceHeading {display: none; height: 40px; align-items: center; flex-wrap: nowrap; gap: 4px; margin: 8px; background-color: rgba(var(--color-canvas-rgb), .1); border-radius: var(--radius-md); position: relative; padding: 0 8px;}
+.has-space #spaceHeading {display: flex;}
+#spaceHeading > .text {min-width: 0; overflow: hidden; white-space: nowrap; flex: auto}
+#spaceHeading > .icon, #spaceHeading > .label {flex: none}
+#spaceHeading.has-dropmenu > .icon, #spaceHeading > .label {display: none;}
+#spaceDropmenu {position: absolute; left: 0; top: 0; right: 0; bottom: 0;}
+#spaceDropmenu .dropmenu-btn {height: 40px; width: 100%;}
+#spaceDropmenu .dropmenu-btn > .text {min-width: 0; overflow: hidden; white-space: nowrap; flex: auto;}
+#spaceDropmenu .dropmenu-btn > .label {flex: none}
+.dropmenu.popup {background: var(--color-surface-light);}
+.hide-menu #spaceHeading > .text, .hide-menu #spaceHeading > .label {display: none;}
+.hide-menu #spaceHeading > .icon {display: flex;}
+.hide-menu #spaceHeading {justify-content: center;}
+.has-space #menuNav {top: 46px}
+
 #menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
 #menuMainNav a {cursor: pointer;}
 #menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
 .show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
 
+#menuMainNav .is-space,
+.has-space #menuMainNav .is-original {display: none;}
+.has-space #menuMainNav .is-space {display: block;}
+
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
 #menuMoreNav > li > a.with-popover-show {background-color: rgba(255,255,255,.1);}
-#menuMoreList {background: var(--zt-menu-bg); padding: 8px 0; min-width: 100px;}
+#menuMoreList {background: var(--zt-menu-bg); padding: 8px 0; min-width: 100px; list-style: none;}
 #menuMoreList > .menu-item {padding: 1px 12px!important; height: 32px!important;}
 #menuMoreList > .menu-item > a > .text {flex: auto;}
 
@@ -50,6 +70,8 @@ body.hide-menu {--zt-menu-width: var(--zt-menu-fold-width)!important;}
 #appTabs > li > a {border-radius: var(--radius-md); opacity: .6;}
 #appTabs > li + li::before {display: block; content: ' '; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--color-inverse); opacity: .12;}
 #appTabs > li > a.active {opacity: 1;}
+.has-space #appTabs > li {display: none;}
+.has-space #appTabs > li.active {display: flex;}
 #appsToolbar {width: 360px; display: flex; justify-content: flex-end;}
 #appsToolbar > .btn {color: inherit}
 #appsToolbar > .btn-zentao > .icon {color: var(--color-primary-400)}
@@ -58,6 +80,7 @@ body.hide-menu {--zt-menu-width: var(--zt-menu-fold-width)!important;}
 #visionSwitcher::before, #visionSwitcher::after {content: ''; display: block; position: absolute; right: -9px; top: -2px; width: 0; height: 0; border-style: solid; border-width: 18px 0 18px 8px; border-color: transparent transparent transparent var(--color-canvas);}
 #visionSwitcher::before {right: -10px; border-left-color: var(--color-fore); opacity: .1;}
 #versionSwitchBtn {padding: 0 6px;}
+.has-space #visionSwitcher {display: none;}
 
 .app-container {position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; transition-duration: .3s; background: var(--zt-page-bg);}
 .app-container.loading {background: var(--zt-page-bg) linear-gradient(180deg, var(--zt-header-bg) 0, var(--zt-header-bg) 48px, rgba(255,0,0,0) 48px) no-repeat;}

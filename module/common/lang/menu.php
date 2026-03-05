@@ -186,18 +186,18 @@ $lang->product->homeMenu->list   = array('link' => $lang->product->list . '|prod
 $lang->product->homeMenu->kanban = array('link' => "{$lang->product->kanban}|product|kanban|");
 
 $lang->product->menu              = new stdclass();
-$lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s");
-$lang->product->menu->epic        = array('link' => "{$lang->ERCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=epic", 'subModule' => 'story');
-$lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story');
-$lang->product->menu->story       = array('link' => "{$lang->SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story', 'exclude' => (isset($_GET['storyType']) ? ($_GET['storyType'] == 'requirement' ? 'browse,story-report,story-create,story-batchcreate' : '') : '') . ',batchtotask');
-$lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug');
-$lang->product->menu->project     = array('link' => "{$lang->projectCommon}|product|project|status=all&productID=%s");
-$lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release,system');
-$lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s");
-$lang->product->menu->track       = array('link' => "{$lang->track}|product|track|productID=%s");
-$lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|productSpace|objectID=%s", 'subModule' => 'doc,api');
-$lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s");
-$lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist');
+$lang->product->menu->dashboard   = array('link' => "{$lang->dashboard}|product|dashboard|productID=%s", 'icon' => 'icon-dashboard');
+$lang->product->menu->epic        = array('link' => "{$lang->ERCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=epic", 'subModule' => 'story', 'icon' => 'icon-epic');
+$lang->product->menu->requirement = array('link' => "{$lang->URCommon}|product|browse|productID=%s&branch=&browseType=unclosed&param=0&storyType=requirement", 'alias' => 'batchedit', 'subModule' => 'story', 'icon' => 'icon-requirement');
+$lang->product->menu->story       = array('link' => "{$lang->SRCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story', 'exclude' => (isset($_GET['storyType']) ? ($_GET['storyType'] == 'requirement' ? 'browse,story-report,story-create,story-batchcreate' : '') : '') . ',batchtotask', 'icon' => 'icon-story' );
+$lang->product->menu->plan        = array('link' => "{$lang->productplan->shortCommon}|productplan|browse|productID=%s", 'subModule' => 'productplan,bug', 'icon' => 'icon-productplan');
+$lang->product->menu->project     = array('link' => "{$lang->projectCommon}|product|project|status=all&productID=%s", 'icon' => 'icon-project');
+$lang->product->menu->release     = array('link' => "{$lang->release->common}|release|browse|productID=%s", 'subModule' => 'release,system', 'icon' => 'icon-tag');
+$lang->product->menu->roadmap     = array('link' => "{$lang->roadmap}|product|roadmap|productID=%s", 'icon' => 'icon-roadmap');
+$lang->product->menu->track       = array('link' => "{$lang->track}|product|track|productID=%s", 'icon' => 'icon-kanban-box');
+$lang->product->menu->doc         = array('link' => "{$lang->doc->common}|doc|productSpace|objectID=%s", 'subModule' => 'doc,api', 'icon' => 'icon-file-text');
+$lang->product->menu->dynamic     = array('link' => "{$lang->dynamic}|product|dynamic|productID=%s", 'icon' => 'icon-news');
+$lang->product->menu->settings    = array('link' => "{$lang->settings}|product|view|productID=%s", 'subModule' => 'tree,branch', 'alias' => 'edit,whitelist,addwhitelist', 'icon' => 'icon-cog-outline');
 
 /* Product menu order. */
 $lang->product->menuOrder[5]  = 'dashboard';
@@ -230,17 +230,17 @@ $lang->project->homeMenu->kanban = array('link' => "{$lang->project->kanban}|pro
 
 /* Scrum menu. */
 $lang->scrum->menu              = new stdclass();
-$lang->scrum->menu->index       = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->scrum->menu->execution   = array('link' => "$lang->executionCommon|project|execution|status=undone&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task');
-$lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,epic,requirement', 'alias' => 'story,track', 'exclude' => 'tree-browse');
+$lang->scrum->menu->index       = array('link' => "{$lang->dashboard}|project|index|project=%s", 'icon' => 'icon-dashboard');
+$lang->scrum->menu->execution   = array('link' => "$lang->executionCommon|project|execution|status=undone&projectID=%s", 'exclude' => 'execution-testreport', 'subModule' => 'task', 'icon' => 'icon-run');
+$lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,epic,requirement', 'alias' => 'story,track', 'exclude' => 'tree-browse', 'icon' => 'icon-story');
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
-$lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api');
-$lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit');
-if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
-$lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
-$lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
-$lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team,workflowgroup', 'exclude' => 'tree-browsetask');
+$lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api', 'icon' => 'icon-file-text');
+$lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit', 'icon' => 'icon-test');
+if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'icon' => 'icon-devops');
+$lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild', 'icon' => 'icon-wrench');
+$lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system', 'icon' => 'icon-tag');
+$lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s", 'icon' => 'icon-news');
+$lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team,workflowgroup', 'exclude' => 'tree-browsetask', 'icon' => 'icon-cog-outline');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
@@ -288,16 +288,16 @@ $lang->scrum->menu->devops['menuOrder'][25] = 'mr';
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
-$lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s");
-$lang->waterfall->menu->execution  = array('link' => "{$lang->stage->common}|project|execution|status=undone&projectID=%s", 'subModule' => 'programplan,task');
-$lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,epic,requirement', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse');
-$lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s");
-$lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport');
-$lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s");
-if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
-$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
-$lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
-$lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s");
+$lang->waterfall->menu->index      = array('link' => "$lang->dashboard|project|index|project=%s", 'icon' => 'icon-dashboard');
+$lang->waterfall->menu->execution  = array('link' => "{$lang->stage->common}|project|execution|status=undone&projectID=%s", 'subModule' => 'programplan,task', 'icon' => 'icon-waterfall');
+$lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,epic,requirement', 'alias' => 'story', 'exclude' => 'projectstory-track,tree-browse', 'icon' => 'icon-story');
+$lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s", 'icon' => 'icon-design');
+$lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'icon' => 'icon-test');
+$lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'icon' => 'icon-file-text');
+if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'icon' => 'icon-devops');
+$lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild', 'icon' => 'icon-wrench');
+$lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system', 'icon' => 'icon-tag');
+$lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s", 'icon' => 'icon-news');
 
 $lang->waterfall->menu->settings = $lang->scrum->menu->settings;
 $lang->waterfall->dividerMenu    = ',programplan,build,dynamic,';
@@ -348,9 +348,9 @@ $lang->waterfall->menu->devops['menuOrder'][25] = 'mr';
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();
 $lang->kanbanProject->menu = new stdclass();
-$lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s");
-$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
-$lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
+$lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s", 'icon' => 'icon-kanban');
+$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild', 'icon' => 'icon-wrench');
+$lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'icon' => 'icon-cog-outline');
 
 $lang->kanbanProject->dividerMenu = '';
 
@@ -372,21 +372,21 @@ $lang->execution->homeMenu->all             = array('link' => "{$lang->execution
 $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu = new stdclass();
-$lang->execution->menu->task   = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug', 'exclude' => 'tree-browse');
-$lang->execution->menu->kanban = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
-$lang->execution->menu->burn   = array('link' => "$lang->burn|execution|burn|executionID=%s");
-$lang->execution->menu->view   = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation,createrelation,batcheditrelation');
+$lang->execution->menu->task   = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug', 'exclude' => 'tree-browse', 'icon' => 'icon-task-list');
+$lang->execution->menu->kanban = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s", 'icon' => 'icon-kanban');
+$lang->execution->menu->burn   = array('link' => "$lang->burn|execution|burn|executionID=%s", 'icon' => 'icon-chart-line-down flip-x');
+$lang->execution->menu->view   = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation,createrelation,batcheditrelation', 'icon' => 'icon-group-view');
 
-if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation,createrelation,batcheditrelation');
+if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$lang->view|execution|gantt|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation,createrelation,batcheditrelation', 'icon' => 'icon-group-view');
 
-$lang->execution->menu->story      = array('link' => "{$lang->common->story}|execution|story|executionID=%s", 'subModule' => 'story,requirement,epic', 'alias' => 'storyview,storykanban,linkstory,batchtotask');
-$lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
-$lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
-$lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
-$lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
-$lang->execution->menu->settings   = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
-$lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s");
+$lang->execution->menu->story      = array('link' => "{$lang->common->story}|execution|story|executionID=%s", 'subModule' => 'story,requirement,epic', 'alias' => 'storyview,storykanban,linkstory,batchtotask', 'icon' => 'icon-story');
+$lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport', 'icon' => 'icon-test');
+if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create', 'icon' => 'icon-devops');
+$lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc', 'icon' => 'icon-file-text');
+$lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build', 'icon' => 'icon-wrench');
+$lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s", 'icon' => 'icon-volume-up', 'icon' => 'icon-news');
+$lang->execution->menu->settings   = array('link' => "$lang->settings|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover', 'icon' => 'icon-cog-outline');
+$lang->execution->menu->more       = array('link' => "$lang->more|execution|more|%s", 'icon' => 'icon-more-vertical');
 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
@@ -633,6 +633,23 @@ $lang->system->menuOrder[10] = 'calendar';
 $lang->system->menuOrder[15] = 'dynamic';
 $lang->system->menuOrder[20] = 'view';
 
+/* AI menu. */
+$lang->aiapp->menu = new stdclass();
+$lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
+$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize');
+$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory,miniprogramview,createMiniProgram,editminiprogram,configuredMiniProgram');
+$lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
+$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
+
+$lang->aiapp->dividerMenu = ',zentaoAgent,models,';
+
+/* AI menu order. */
+$lang->aiapp->menuOrder[5]  = 'conversation';
+$lang->aiapp->menuOrder[10] = 'zentaoAgent';
+$lang->aiapp->menuOrder[15] = 'generalAgent';
+$lang->aiapp->menuOrder[20] = 'models';
+$lang->aiapp->menuOrder[25] = 'config';
+
 /* Nav group.*/
 $lang->navGroup = new stdclass();
 $lang->navGroup->my               = 'my';
@@ -812,6 +829,13 @@ if(empty($_SESSION['tutorialMode']) && !helper::hasFeature('product_track'))
     $lang->product->dividerMenu = str_replace(',track,', ',doc,', $lang->product->dividerMenu);
 }
 
+if(!helper::hasFeature('program'))   unset($lang->mainNav->program,     $lang->mainNav->menuOrder[10]);
+if(!helper::hasFeature('caselib'))   unset($lang->qa->menu->caselib,    $lang->qa->menuOrder[40]);
+if(!helper::hasFeature('automated')) unset($lang->qa->menu->automation, $lang->qa->menuOrder[45]);
+if(!helper::hasFeature('testsuite')) unset($lang->qa->menu->testsuite,  $lang->qa->menuOrder[25]);
+if(!helper::hasFeature('AI'))        unset($lang->mainNav->aiapp,       $lang->mainNav->menuOrder[40], $lang->searchObjects['aiapp']);
+if(!helper::hasFeature('BI'))        unset($lang->mainNav->bi,          $lang->mainNav->menuOrder[45]);
+
 if(!helper::hasFeature('devops'))
 {
     unset($lang->mainNav->devops,         $lang->mainNav->menuOrder[35]);
@@ -826,6 +850,10 @@ if(!helper::hasFeature('kanban'))
     unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[50]);
     $lang->dividerMenu = str_replace(',kanban,' , ',doc,', $lang->dividerMenu);
 }
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 /* AI menu. */
 $lang->aiapp->menu = new stdclass();
@@ -843,3 +871,32 @@ $lang->aiapp->menuOrder[10] = 'zentaoAgent';
 $lang->aiapp->menuOrder[15] = 'generalAgent';
 $lang->aiapp->menuOrder[20] = 'models';
 $lang->aiapp->menuOrder[25] = 'config';
+
+/* Sanplex menu changes: */
+if(!empty($config->sanplexVersion) && $config->vision === 'rnd')
+{
+    $lang->execution->menu->task['showInMainMenu']   = 'task';
+    $lang->execution->menu->kanban['showInMainMenu'] = 'task';
+    $lang->execution->menu->burn['showInMainMenu']   = 'task';
+    $lang->execution->menu->view['showInMainMenu']   = 'task';
+}
+
+/* Zentao icons map: */
+$lang->iconMap = [];
+$lang->iconMap['report']        = 'ruler';
+$lang->iconMap['weekly']        = 'flag';
+$lang->iconMap['deliverable']   = 'package';
+$lang->iconMap['dynamic']       = 'news';
+$lang->iconMap['issue']         = 'issue';
+$lang->iconMap['risk']          = 'risk';
+$lang->iconMap['opportunity']   = 'opportunity';
+$lang->iconMap['pssp']          = 'task-list';
+$lang->iconMap['meeting']       = 'statistic';
+$lang->iconMap['track']         = 'chart-timeline';
+$lang->iconMap['cm']            = 'confirm';
+$lang->iconMap['projectchange'] = 'change';
+$lang->iconMap['estimation']    = 'hand-coins';
+$lang->iconMap['auditplan']     = 'shield-check';
+$lang->iconMap['train']         = 'book';
+$lang->iconMap['orroadmap']     = 'road-sign';
+$lang->iconMap['effort']        = 'time';

@@ -135,3 +135,11 @@ $config->testcase->zerocase->actionList['createcase']['hint']         = $lang->t
 $config->testcase->zerocase->actionList['createcase']['url']          = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch=0&module=0&from=0&param=0&storyID={id}');
 $config->testcase->zerocase->actionList['createcase']['data-app']     = 'qa';
 $config->testcase->zerocase->actionList['createcase']['notLoadModel'] = true;
+
+if(!helper::hasFeature('caselib'))
+{
+    unset($config->testcase->search['fields']['lib']);
+    $config->testcase->actions->view['mainActions'] = array_diff($config->testcase->actions->view['mainActions'], array('importToLib'));
+}
+
+if(!helper::hasFeature('automated')) unset($config->testcase->search['fields']['auto']);

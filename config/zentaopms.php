@@ -784,8 +784,9 @@ $config->featureGroup = new stdclass();
 $config->featureGroup->my       = array('score');
 $config->featureGroup->product  = array('roadmap', 'track', 'UR', 'ER');
 $config->featureGroup->project  = array();
+$config->featureGroup->qa       = array('testsuite', 'automated', 'caselib');
 $config->featureGroup->assetlib = array();
-$config->featureGroup->other    = array('devops', 'kanban', 'setCode');
+$config->featureGroup->other    = array('program', 'devops', 'kanban', 'setCode', 'AI', 'BI');
 
 $config->db->sqliteBlacklist    = array('sqlite_queue', 'cron');
 $config->hasDropmenuApps        = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi', 'feedback', 'demandpool');

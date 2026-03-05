@@ -13,14 +13,14 @@ $config->product->edit->requiredFields   = 'name';
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'line,PO,QD,RD,status,type,acl';
-if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->product->custom->batchEditFields .= ',program';
+if(($config->systemMode == 'ALM' || $config->systemMode == 'PLM') && helper::hasFeature('program')) $config->product->custom->batchEditFields .= ',program';
 
 /* Export fields of product list page. */
 $config->product->list = new stdclass();
 $config->product->list->exportFields          = 'id,program,line,name,manager,draftEpics,activeEpics,changedEpics,reviewingEpics,closedEpics,epicCompleteRate,draftRequirements,activeRequirements,changedRequirements,reviewingRequirements,closedRequirements,requirementCompleteRate,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
 $config->product->list->customCreateFields    = 'PO,RD,acl';
 $config->product->list->customBatchEditFields = 'PO,QD,RD,status,type,acl';
-if($config->systemMode == 'ALM' || $config->systemMode == 'PLM') $config->product->list->customBatchEditFields   .= ',program';
+if(($config->systemMode == 'ALM' || $config->systemMode == 'PLM') && helper::hasFeature('program')) $config->product->list->customBatchEditFields   .= ',program';
 
 $config->product->actionsMap['normal'] = array('edit');
 

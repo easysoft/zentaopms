@@ -23,6 +23,7 @@ $trs = array();
 foreach($disabledFeatures as $feature)
 {
     if(is_array($feature) && empty($disabledProjectFeatures)) continue;
+    if(is_string($feature) && !in_array($feature, $config->custom->allFeatures)) continue;
     $trs[] = h::tr
     (
         h::td

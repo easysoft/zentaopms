@@ -7,16 +7,16 @@ title=测试 convertTao::importJiraProject();
 timeout=0
 cid=15862
 
-- 执行convertTest模块的importJiraProjectTest方法，参数是array  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData2  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData3  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData4  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData5  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData6  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData7  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData8  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData9  @true
-- 执行convertTest模块的importJiraProjectTest方法，参数是$testData10  @true
+- 执行convertTest模块的importJiraProjectTest方法，参数是array  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData2  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData3  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData4  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData5  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData6  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData7  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData8  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData9  @1
+- 执行convertTest模块的importJiraProjectTest方法，参数是$testData10  @1
 
 */
 
@@ -107,7 +107,7 @@ su('admin');
 $convertTest = new convertTaoTest();
 
 // 步骤1：空数组输入边界值测试
-r($convertTest->importJiraProjectTest(array())) && p() && e('true');
+r($convertTest->importJiraProjectTest(array())) && p() && e('1');
 
 // 步骤2：已删除项目状态过滤测试
 $testData2 = array(
@@ -121,7 +121,7 @@ $testData2 = array(
         'pstatus' => 'deleted'
     )
 );
-r($convertTest->importJiraProjectTest($testData2)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData2)) && p() && e('1');
 
 // 步骤3：重复项目ID去重机制验证
 $testData3 = array(
@@ -135,7 +135,7 @@ $testData3 = array(
         'pstatus' => 'active'
     )
 );
-r($convertTest->importJiraProjectTest($testData3)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData3)) && p() && e('1');
 
 // 步骤4：正常项目完整导入流程测试
 $testData4 = array(
@@ -150,7 +150,7 @@ $testData4 = array(
         'lead' => 'admin'
     )
 );
-r($convertTest->importJiraProjectTest($testData4)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData4)) && p() && e('1');
 
 // 步骤5：项目状态映射转换验证
 $testData5 = array(
@@ -164,7 +164,7 @@ $testData5 = array(
         'pstatus' => 'archived'
     )
 );
-r($convertTest->importJiraProjectTest($testData5)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData5)) && p() && e('1');
 
 // 步骤6：批量项目导入并发处理测试
 $testData6 = array(
@@ -189,7 +189,7 @@ $testData6 = array(
         'lead' => 'user2'
     )
 );
-r($convertTest->importJiraProjectTest($testData6)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData6)) && p() && e('1');
 
 // 步骤7：必填字段数据完整性验证
 $testData7 = array(
@@ -205,7 +205,7 @@ $testData7 = array(
         'created' => '2023-01-01 10:00:00'
     )
 );
-r($convertTest->importJiraProjectTest($testData7)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData7)) && p() && e('1');
 
 // 步骤8：异常数据容错性处理测试
 $testData8 = array(
@@ -219,7 +219,7 @@ $testData8 = array(
         'pstatus' => 'unknown_status'
     )
 );
-r($convertTest->importJiraProjectTest($testData8)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData8)) && p() && e('1');
 
 // 步骤9：项目关联关系建立验证
 $testData9 = array(
@@ -234,7 +234,7 @@ $testData9 = array(
         'lead' => 'admin'
     )
 );
-r($convertTest->importJiraProjectTest($testData9)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData9)) && p() && e('1');
 
 // 步骤10：数据库事务一致性测试
 $testData10 = array(
@@ -249,4 +249,4 @@ $testData10 = array(
         'lead' => 'user1'
     )
 );
-r($convertTest->importJiraProjectTest($testData10)) && p() && e('true');
+r($convertTest->importJiraProjectTest($testData10)) && p() && e('1');

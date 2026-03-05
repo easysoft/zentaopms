@@ -401,4 +401,20 @@ class actionTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 测试操作是否可点击。
+     * Test check action clickable.
+     *
+     * @param  object $action
+     * @param  array  $deptUser
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return bool
+     */
+    public function checkActionClickableTest(object $action, array $deptUser, string $moduleName, string $methodName): bool
+    {
+        return $this->instance->checkActionClickable($action, $deptUser, $moduleName, $methodName);
+    }
 }

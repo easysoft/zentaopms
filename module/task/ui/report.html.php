@@ -22,7 +22,8 @@ detailHeader
             set::level(1),
             set::text($lang->task->report->common)
         )
-    )
+    ),
+    menuViewSwitcher()
 );
 
 $selectCharts = array();

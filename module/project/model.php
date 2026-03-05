@@ -1141,12 +1141,14 @@ class projectModel extends model
         /* Sort by project order in the program list. */
         $allProjects = array();
         foreach($programs as $programID => $program) $allProjects[$programID] = array();
+
+        $hasProgram = helper::hasFeature('program');
         foreach($projects as $project)
         {
             $programID = zget($project, 'program', '');
 
             $projectName = $project->name;
-            if($this->config->systemMode == 'ALM' && $programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+            if($this->config->systemMode == 'ALM' && $hasProgram && $programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
             $project->name = $projectName;
 
             $allProjects[$programID][] = $project;

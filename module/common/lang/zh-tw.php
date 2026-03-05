@@ -384,6 +384,7 @@ $lang->themes['blue']       = '青春藍';
 $lang->themes['green']      = '葉蘭綠';
 $lang->themes['red']        = '赤誠紅';
 $lang->themes['purple']     = '萱萱紫';
+$lang->themes['blackberry'] = '黑莓黑';
 
 /* 錯誤提示信息。*/
 $lang->error                  = new stdclass();

@@ -948,6 +948,7 @@ class actionTao extends actionModel
     {
         if(empty($moduleName) || empty($methodName)) return false;
         if(!common::hasPriv($moduleName, $methodName)) return false;
+        if(!helper::hasFeature($moduleName)) return false;
 
         if($action->objectType == 'user' && !isset($deptUsers[$action->objectID]) && !$this->app->user->admin) return false;
         if($action->objectType == 'user' && ($action->action == 'login' || $action->action == 'logout')) return false;
@@ -968,6 +969,7 @@ class actionTao extends actionModel
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
+        if($action->objectType == 'case' && $action->action == 'tolib') return helper::hasFeature('caselib');
 
         return true;
     }

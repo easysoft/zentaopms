@@ -59,7 +59,42 @@ class convertModelTest extends baseTest
      */
     public function checkImportJiraTest($step = '', $postData = array())
     {
-        $result = $this->invokeArgs('checkImportJira', [$step, $postData]);
+        $_POST = $postData;
+        $result = $this->invokeArgs('checkImportJira', [$step]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test quickImportJiraData method.
+     *
+     * @param  string $step
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function quickImportJiraDataTest()
+    {
+        $result = $this->invokeArgs('quickImportJiraData');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test batchImportJiraData method.
+     *
+     * @param  string $step
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function batchImportJiraDataTest()
+    {
+        $this->instance->session->set('jiraApi',    '');
+        $this->instance->session->set('jiraDB',     '');
+        $this->instance->session->set('jiraMethod', 'api');
+
+        $result = $this->invokeArgs('batchImportJiraData');
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -158,9 +193,9 @@ class convertModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function checkJiraApiTest($jiraApiData = array())
+    public function checkJiraApiTest()
     {
-        $result = $this->invokeArgs('checkJiraApi', [$jiraApiData]);
+        $result = $this->invokeArgs('checkJiraApi');
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -233,21 +268,12 @@ class convertModelTest extends baseTest
             $result = $this->instance->getIssueTypeList($relations);
             if(dao::isError()) {
                 $errors = dao::getError();
-                $this->restoreJiraMethodSession($originalJiraMethod);
                 return $errors;
             }
-
-            $this->restoreJiraMethodSession($originalJiraMethod);
             return $result;
         } catch (Exception $e) {
-            if(isset($originalJiraMethod)) {
-                $this->restoreJiraMethodSession($originalJiraMethod);
-            }
             return array();
         } catch (Error $e) {
-            if(isset($originalJiraMethod)) {
-                $this->restoreJiraMethodSession($originalJiraMethod);
-            }
             return array();
         }
     }
@@ -261,77 +287,9 @@ class convertModelTest extends baseTest
      */
     public function getJiraAccountTest($userKey = '')
     {
-        try {
-            // 备份原始session数据
-            global $app;
-            $originalJiraMethod = $this->instance->session->jiraMethod ?? null;
-            $originalJiraUser = $this->instance->session->jiraUser ?? null;
-
-            // 设置测试session数据
-            $this->instance->session->set('jiraMethod', 'test');
-            $this->instance->session->set('jiraUser', array('mode' => 'account'));
-
-            // 创建模拟的getJiraData方法
-            $originalGetJiraData = null;
-            if(method_exists($this->instance, 'getJiraData')) {
-                // 创建一个临时的mock方法
-                $mockUsers = array(
-                    3 => (object)array('account' => 'jirauser', 'email' => 'jira@test.com'),
-                    1 => (object)array('account' => 'admin', 'email' => 'admin@test.com'),
-                    2 => (object)array('account' => 'testuser', 'email' => 'test@test.com')
-                );
-
-                // 使用反射来模拟getJiraData方法的返回值
-                $mockModel = $this->createMockConvertModel();
-                $mockModel->mockUsers = $mockUsers;
-                $mockModel->session = $this->instance->session;
-
-                $result = $mockModel->getJiraAccount($userKey);
-            } else {
-                $result = 'method_not_found';
-            }
-
-            // 恢复原始session数据
-            if($originalJiraMethod !== null) {
-                $this->instance->session->set('jiraMethod', $originalJiraMethod);
-            } else {
-                $this->instance->session->destroy('jiraMethod');
-            }
-
-            if($originalJiraUser !== null) {
-                $this->instance->session->set('jiraUser', $originalJiraUser);
-            } else {
-                $this->instance->session->destroy('jiraUser');
-            }
-
-            return $result;
-        } catch (Exception $e) {
-            // 恢复原始session数据
-            if(isset($originalJiraMethod) && $originalJiraMethod !== null) {
-                $this->instance->session->set('jiraMethod', $originalJiraMethod);
-            } else {
-                $this->instance->session->destroy('jiraMethod');
-            }
-            if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                $this->instance->session->set('jiraUser', $originalJiraUser);
-            } else {
-                $this->instance->session->destroy('jiraUser');
-            }
-            return 'exception: ' . $e->getMessage();
-        } catch (Error $e) {
-            // 恢复原始session数据
-            if(isset($originalJiraMethod) && $originalJiraMethod !== null) {
-                $this->instance->session->set('jiraMethod', $originalJiraMethod);
-            } else {
-                $this->instance->session->destroy('jiraMethod');
-            }
-            if(isset($originalJiraUser) && $originalJiraUser !== null) {
-                $this->instance->session->set('jiraUser', $originalJiraUser);
-            } else {
-                $this->instance->session->destroy('jiraUser');
-            }
-            return 'error: ' . $e->getMessage();
-        }
+        $result = $this->invokeArgs('getJiraAccount', [$userKey]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -360,25 +318,13 @@ class convertModelTest extends baseTest
             $result = $this->instance->getJiraArchivedProject($dataList);
             if(dao::isError()) {
                 $errors = dao::getError();
-                // 恢复原始session数据
-                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
                 return $errors;
             }
 
-            // 恢复原始session数据
-            $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
             return $result;
         } catch (Exception $e) {
-            // 恢复原始session数据
-            if(isset($originalJiraMethod) && isset($originalJiraApi)) {
-                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
-            }
             return array();
         } catch (Error $e) {
-            // 恢复原始session数据
-            if(isset($originalJiraMethod) && isset($originalJiraApi)) {
-                $this->restoreSessionData($originalJiraMethod, $originalJiraApi);
-            }
             return array();
         }
     }
@@ -396,6 +342,36 @@ class convertModelTest extends baseTest
     public function getJiraDataTest($method = null, $module = null, $lastID = 0, $limit = 0)
     {
         $result = $this->instance->getJiraData($method, $module, $lastID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test tableExists method.
+     *
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function tableExistsTest(string $table = '')
+    {
+        $result = $this->instance->tableExists($table);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test tableExists method.
+     *
+     * @param  string $table
+     * @access public
+     * @return mixed
+     */
+    public function tableExistsOfJiraTest(string $dbName = '', string $table = '')
+    {
+        $result = $this->instance->tableExistsOfJira($dbName, $table);
         if(dao::isError()) return dao::getError();
 
         return $result;

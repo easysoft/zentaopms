@@ -192,8 +192,15 @@ function openApp(url, code, options)
         return zui.Modal.alert(appNotFound);
     }
 
-    /* Create iframe for app */
     let openedApp = apps.openedMap[code];
+    if($.apps.workspace && $.apps.workspace !== code)
+    {
+        url = url || (openedApp ? openedApp.currentUrl : app.url);
+        if(url) window.open(url, '_blank');
+        return;
+    }
+
+    /* Create iframe for app */
     if(!openedApp)
     {
         if(!url) url = app.url;
@@ -257,13 +264,16 @@ function openApp(url, code, options)
     $.cookie.set('tab', code, {expires: config.cookieLife, path: config.webRoot});
 
     /* Highlight on left menu */
-    const $menuNav  = $('#menuMainNav,#menuMoreNav');
-    const $lastItem = $menuNav.find('li>a.active');
-    if($lastItem.data('app') !== code)
+    if(!openedApp.workspace)
     {
-        $lastItem.removeClass('active');
-        $menuNav.find('li[data-app="' + code + '"]>a').addClass('active');
-        openedApp.$app.trigger('showapp', openedApp);
+        const $menuNav  = $('#menuMainNav,#menuMoreNav');
+        const $lastItem = $menuNav.find('li>a.active');
+        if($lastItem.data('app') !== code)
+        {
+            $lastItem.removeClass('active');
+            $menuNav.find('li[data-app="' + code + '"]>a').addClass('active');
+            openedApp.$app.trigger('showapp', openedApp);
+        }
     }
 
     /* Show and load app */
@@ -311,14 +321,17 @@ function openApp(url, code, options)
     const $lastTab = $tabs.find('li>a.active');
     if($lastTab.data('app') !== code)
     {
-        $lastTab.removeClass('active');
-        $tabs.find('li[data-app="' + code + '"]>a').addClass('active');
+        $lastTab.removeClass('active').parent().removeClass('active');
+        $tabs.find('li[data-app="' + code + '"]>a').addClass('active').parent().addClass('active');
     }
 
     if(DEBUG) showLog(code, 'Open', getUrlID(url), openedApp, {options, forceReload, needLoad});
     triggerAppEvent(code, 'openapp', [openedApp, {load: needLoad}]);
 
     changeApp();
+
+    const spaceType = openedApp.workspace ? openedApp.workspace.type : '';
+    if(spaceType !== $('#menu').attr('data-space')) updateSpaceMenu(openedApp.workspace);
 
     return openedApp;
 }
@@ -691,9 +704,13 @@ function refreshMenu()
     const $mainNav       = $('#menuMainNav');
     const $list          = $('#menuMoreList');
     const $menuNav       = $('#menuNav');
-    const $menuItems     = $mainNav.children('li');
-    const itemHeight     = $menuItems.first().outerHeight();
-    const maxHeight      = $menuNav.outerHeight() - 12;
+    const hasSpace       = $('body').hasClass('has-space');
+    const $menuItems     = $mainNav.children(hasSpace ? '.is-space' : '.is-original');
+    const itemHeight     = $menuItems.filter((_, ele) => {
+        const $ele = $(ele);
+        return $ele.css('display') !== 'none' && !$ele.hasClass('divider');
+    }).first().outerHeight();
+    const maxHeight      = $('#menu').outerHeight() - ($('#menuFooter').outerHeight() || 0) - ($('body').hasClass('has-space') ? (($('#spaceHeading').outerHeight() || 0) + 16) : 0) - 28;
     const dividerHeight  = 13;
     let showMoreMenu     = false;
     let currentHeight    = itemHeight;
@@ -778,7 +795,7 @@ function initAppsMenu(items)
     (items || appsItems).forEach(function(item)
     {
         const oldItem = apps.map[item.code];
-        if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
+        if(item === 'divider') return $menuMainNav.append('<li class="divider is-original"></li>');
         if(oldItem !== item && oldItem) item = $.extend({}, oldItem, item, {active: oldItem.active});
         item.external = item.external || item.url && item.url.includes('://');
 
@@ -795,7 +812,7 @@ function initAppsMenu(items)
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
-        $('<li class="hint-right"></li>')
+        $('<li class="hint-right is-original"></li>')
             .attr({'data-app': item.code, 'data-hint': item.text})
             .append($link)
             .appendTo($menuMainNav);
@@ -918,12 +935,16 @@ toggleMenu(!$('body').hasClass('hide-menu'));
  */
 function getMenuNavData()
 {
-    const data = [];
-    const $nav = $('#menuMainNav');
-    $nav.children().each(function(index, element) {
-        const $elm     = $(element);
+    const data      = [];
+    const $nav      = $('#menuMainNav');
+    const workspace = $.apps.workspace;
+    $nav.children($.apps.workspace ? '.is-space' : '.is-original').each(function(index, element)
+    {
+        const $elm = $(element);
+        if($elm.hasClass('rsh-more')) return;
+
         const menuItem = {};
-        menuItem.name  = $elm.is('.divider') ? 'divider' : $elm.data('app');
+        menuItem.name  = $elm.is('.divider') ? 'divider' : $elm.data(workspace ? 'name' : 'app');
         menuItem.order = index * 5;
         if(typeof $elm.data('hidden') != 'undefined') menuItem.hidden = true;
 
@@ -940,7 +961,15 @@ function saveMenuNavToServer()
 {
     const url = $.createLink('custom', 'ajaxSetMenu');
     const data = getMenuNavData();
-    $.ajaxSubmit({url, data: {menu: 'nav', items: JSON.stringify(data)}});
+    let   menu = 'nav';
+
+    if($.apps.workspace)
+    {
+        const currentApp = getLastApp();
+        if(currentApp.workspace.type === $.apps.workspace) menu = currentApp.workspace.menuGroup;
+    }
+
+    $.ajaxSubmit({url, data: {menu: menu, items: JSON.stringify(data)}});
 }
 
 /**
@@ -948,8 +977,15 @@ function saveMenuNavToServer()
  */
 function restoreMenuNavToServer()
 {
+    let menu = 'nav';
+    if($.apps.workspace)
+    {
+        const currentApp = getLastApp();
+        if(currentApp.workspace.type === $.apps.workspace) menu = currentApp.workspace.menuGroup;
+    }
+
     const url = $.createLink('custom', 'ajaxRestoreMenu');
-    $.ajaxSubmit({url, data: {menu: 'nav'}});
+    $.ajaxSubmit({url, data: {menu: menu}});
     top.location.reload();
 }
 
@@ -1001,87 +1037,129 @@ function generateAddMenuNavItems($item, onClick)
     return items;
 }
 
+function updateSpaceMenu(info)
+{
+    const spaceType    = info ? info.type : '';
+    const currentApp   = getLastApp();
+    const currentCode  = currentApp.code;
+    const hasSpaceNav  = spaceType === currentCode;
+    const $menuMainNav = $('#menuMainNav');
+
+    $.apps.workspace = spaceType;
+    currentApp.workspace = info;
+    $('#menu').attr('data-space', spaceType);
+    $('body').toggleClass('has-space', hasSpaceNav);
+
+    $menuMainNav.children('.is-space').remove();
+    if(!hasSpaceNav)
+    {
+        refreshMenu();
+        return;
+    }
+
+    const $spaceHeading = $('#spaceHeading').toggleClass('has-dropmenu', !!info.dropmenu);
+    if(info.dropmenu)
+    {
+        const $dropmenu = $('<div id="spaceDropmenu"></div>');
+        $spaceHeading.find('.text').empty().append($dropmenu);
+        const $label = $spaceHeading.find('.label');
+        const options = zui.evalValue(info.dropmenu, ['_element', $dropmenu[0]], ['_$dropmenu', $dropmenu]);
+        zui.create('dropmenu', $dropmenu[0], $.extend({icon: info.icon || spaceType, display: zui.jsx`<span class="text" title=${info.name}>${info.name}</span><span class=${$label.attr('class')}>${$label.text()}</span>`}, options, {leadingAngle: false}));
+    }
+    else
+    {
+        if(info.name) $spaceHeading.find('.text').text(info.name).attr('title', info.name);
+    }
+    $spaceHeading.find('.icon').attr('class', `icon icon-${info.icon || spaceType}`);
+
+    if(info.items[info.items.length -1]['data-id'] === 'more')
+    {
+        info.items.pop();
+        if(info.items[info.items.length -1]['type'] === 'divider') info.items.pop();
+    }
+
+    info.items.forEach(function(item)
+    {
+        item.code = item['data-id'];
+        if(item === 'divider' || item.type === 'divider') return $menuMainNav.append('<li class="divider is-space"></li>');
+
+        const $link= $('<a data-pos="menu"></a>')
+            .attr('data-app', currentCode)
+            .attr('href', item.url || '#')
+            .attr('target', item.notApp ? '_blank' : undefined)
+            .toggleClass('active', item.code === info.active)
+            .addClass('rounded' + (item.notApp ? '' : ' open-in-app'));
+
+        item.icon = item.icon || `icon-${item.code}`;
+        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
+        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+
+        $('<li class="hint-right is-space"></li>')
+            .attr({'data-app': currentCode, 'data-hint': item.text, 'data-name': item.code})
+            .attr('data-hidden', item.hidden ? 1 : null)
+            .css('display', item.hidden ? 'none' : 'block')
+            .append($link)
+            .appendTo($menuMainNav);
+    });
+    refreshMenu();
+}
+
 $(document).on('contextmenu', '#menuMainNav .divider', function(event)
 {
     const $divider = $(this);
     const $nav = $divider.closest('.nav');
     const isMoving = $nav.is('[z-use-sortable]');
-    const items = [];
+    let   items = [];
     if(isMoving)
     {
-        items.push(
-            {
-                text: langData.save,
-                onClick: () => {
-                    $divider.closest('.nav').zui().destroy();
-                    saveMenuNavToServer();
-                }
+        items.push({
+            text: langData.save,
+            onClick: () => {
+                $divider.closest('.nav').zui().destroy();
+                saveMenuNavToServer();
             }
-        );
+        });
     }
     else
     {
-        items.push(
-            {
-                text: langData.sort,
-                onClick: () => {
-                    const sortable = new zui.Sortable(
-                        '#menuMainNav',
-                        {
-                            animation: 150,
-                            ghostClass: 'bg-primary-pale',
-                            onSort: () => {
-                                saveMenuNavToServer();
-                            }
-                        }
-                    );
-                }
+        items.push({
+            text: langData.sort,
+            onClick: () => {
+                const sortable = new zui.Sortable('#menuMainNav', {
+                    animation: 150,
+                    ghostClass: 'bg-primary-pale',
+                    onSort: () => saveMenuNavToServer()
+                });
             }
-        );
+        });
     }
-    items.push(
-        {
-            text: langData.hide,
-            onClick: () => {
-                const $li = $divider.closest('li');
-                $li.remove();
-                refreshMenu();
-                saveMenuNavToServer();
-            }
+    items.push({
+        text: langData.hide,
+        onClick: () => {
+            const $li = $divider.closest('li');
+            $li.remove();
+            if(!$.apps.workspace) refreshMenu();
+            saveMenuNavToServer();
         }
-    );
-    const toAddedItems = generateAddMenuNavItems($divider, addMenuToMainNavCb($divider));
-    items.push(
-        toAddedItems.length === 0
-            ? {
-                text: langData.add,
-                disabled: true,
-            }
-            : {
-                text: langData.add,
-                items: toAddedItems,
-            }
-    );
-    items.push(
-        {
-            text: langData.restore,
-            onClick: () => {
-                restoreMenuNavToServer();
-            }
-        }
-    );
+    });
+    const toAddedItems = $.apps.workspace ? [] : generateAddMenuNavItems($divider, addMenuToMainNavCb($divider));
+    if(toAddedItems.length)
+    {
+        items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
+    }
+    items.push({text: langData.restore, onClick: () => restoreMenuNavToServer()});
 
+    items = items.filter(Boolean);
+    if(!items.length) return;
     if(apps.openedMenu) apps.openedMenu.hide();
-    apps.openedMenu = zui.ContextMenu.show(
-        {
-            element: $divider[0],
-            placement: 'right-start',
-            items: items,
-            event: event,
-            onClickItem: (info) => info.event.preventDefault(),
-            onHide: () => apps.openedMenu = null,
-        }
-    );
+    apps.openedMenu = zui.ContextMenu.show({
+        element: $divider[0],
+        placement: 'right-start',
+        items: items,
+        event: event,
+        onClickItem: (info) => info.event.preventDefault(),
+        onHide: () => apps.openedMenu = null,
+    });
     event.preventDefault();
 });
 
@@ -1104,10 +1182,12 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
     const code = $btn.data('app');
     if(!code) return;
 
-    const app   = apps.openedMap[code];
-    const items = [{text: langData.open, disabled: app && getLastAppCode() === code, onClick: () => showApp(code)}];
+    const app         = apps.openedMap[code];
+    const inTabs      = !!$btn.closest('#appTabs').length;
+    const inWorkspace = $.apps.workspace === code;
+    let   items       = [(inWorkspace && !inTabs) ? null : {text: langData.open, disabled: app && getLastAppCode() === code, onClick: () => showApp(code)}];
 
-    if(app) items.push({text: langData.reload, onClick: () => reloadApp(code)});
+    if(app && (!inWorkspace || inTabs || $btn.hasClass('active'))) items.push({text: langData.reload, onClick: () => reloadApp(code)});
 
     if($btn.closest('#menuMainNav').length !== 0)
     {
@@ -1115,84 +1195,63 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
         const isMoving = $nav.is('[z-use-sortable]');
         if(isMoving)
         {
-            items.push(
-                {
-                    text: langData.save,
-                    onClick: () => {
-                        $btn.closest('.nav').zui().destroy();
-                        saveMenuNavToServer();
-                    }
+            items.push({
+                text: langData.save,
+                onClick: () => {
+                    $btn.closest('.nav').zui().destroy();
+                    saveMenuNavToServer();
                 }
-            );
+            });
         }
         else
         {
-            items.push(
-                {
-                    text: langData.sort,
-                    onClick: () => {
-                        const sortable = new zui.Sortable(
-                            '#menuMainNav',
-                            {
-                                animation: 150,
-                                ghostClass: 'bg-primary-pale',
-                                onSort: () => {
-                                    saveMenuNavToServer();
-                                }
-                            }
-                        );
-                    }
+            items.push({
+                text: langData.sort,
+                onClick: () => {
+                    const sortable = new zui.Sortable('#menuMainNav', {
+                        animation: 150,
+                        ghostClass: 'bg-primary-pale',
+                        onSort: () => saveMenuNavToServer()
+                    });
                 }
-            );
+            });
         }
 
         const hideDisabled = code === 'my' || $btn.is('.active');
-        items.push(
-            {
-                text: langData.hide,
-                onClick: hideDisabled
-                    ? null
-                    : () => {
-                        closeApp(code);
-                        const $li = $btn.closest('li');
-                        $li.hide().attr('data-hidden', '1');
-                        refreshMenu();
-                        saveMenuNavToServer();
-                        changeApp();
-                    },
-                disabled: hideDisabled,
-            }
-        );
-        const toAddedItems = generateAddMenuNavItems($btn, addMenuToMainNavCb($btn.closest('li')));
-        items.push(
-            toAddedItems.length === 0
-                ? {
-                    text: langData.add,
-                    disabled: true,
+        items.push({
+            text: langData.hide,
+            onClick: hideDisabled ? null : () => {
+                const $li = $btn.closest('li');
+                $li.hide().attr('data-hidden', '1');
+                if(!$.apps.workspace)
+                {
+                    closeApp(code);
+                    refreshMenu();
+                    changeApp();
                 }
-                : {
-                    text: langData.add,
-                    items: toAddedItems,
-                }
-        );
+                saveMenuNavToServer();
+            },
+            disabled: hideDisabled,
+        });
+        const toAddedItems = inWorkspace ? [] : generateAddMenuNavItems($btn, addMenuToMainNavCb($btn));
+        if(toAddedItems.length)
+        {
+            items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
+        }
 
-        if(app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
+        if(!inWorkspace && app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
 
-        items.push(
-            {
-                text: langData.restore,
-                onClick: () => {
-                    restoreMenuNavToServer();
-                }
-            }
-        );
-    } else
+        items.push({text: langData.restore, onClick: () => restoreMenuNavToServer()});
+    }
+    else
     {
-        if(app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
+        if(!inWorkspace && app && code !== 'my') items.push({text: langData.close, onClick: () => closeApp(code)});
     }
 
+    items = items.filter(Boolean);
+    if(!items.length) return;
     if(apps.openedMenu) apps.openedMenu.hide();
-    apps.openedMenu = zui.ContextMenu.show({element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items, event: event, onClickItem: function(info){info.event.preventDefault();}, onHide: () => {apps.openedMenu = null}});
+    apps.openedMenu = zui.ContextMenu.show({element: $btn[0], placement: $btn.closest('#appTabs').length ? 'top-start' : 'right-start', items: items.filter(Boolean), event: event, onClickItem: function(info){info.event.preventDefault();}, onHide: () => {apps.openedMenu = null}});
     event.preventDefault();
 });
 
@@ -1263,6 +1322,7 @@ $.apps = $.extend(apps,
     getApps:           getApps,
     getVisibleApps:    getVisibleApps,
     getOpenedApps:     getOpenedApps,
+    updateSpaceMenu:   updateSpaceMenu,
 });
 
 window.notifyMessage = function(data)

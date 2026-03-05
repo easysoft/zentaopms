@@ -312,7 +312,7 @@ CSS;
     protected function buildMainSections()
     {
         global $app, $config;
-        $sections = $this->prop('sections');
+        $sections = $this->prop('sections', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list = array();
@@ -427,6 +427,7 @@ CSS;
     {
         global $config;
 
+        $mainSections = $this->buildMainSections();
         return div
         (
             setClass('detail-main flex-auto col gap-2 min-w-0'),
@@ -476,7 +477,7 @@ CSS;
     protected function buildTabsList()
     {
         global $app, $config;
-        $tabs = $this->prop('tabs');
+        $tabs = $this->prop('tabs', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 

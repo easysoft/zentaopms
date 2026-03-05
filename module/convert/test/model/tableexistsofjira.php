@@ -7,11 +7,11 @@ title=测试 convertModel::tableExistsOfJira();
 timeout=0
 cid=15798
 
-- 步骤1：正常情况验证方法存在 @1
-- 步骤2：验证方法可调用 @1
-- 步骤3：验证方法参数数量 @2
-- 步骤4：验证方法有返回类型 @1
-- 步骤5：业务规则验证类存在 @1
+- 步骤1：检查存在的系统表user @1
+- 步骤2：检查存在的表名bug @1
+- 步骤3：检查存在的表名task @1
+- 步骤4：检查不存在的表名 @0
+- 步骤5：检查空字符串表名 @1
 
 */
 
@@ -26,8 +26,8 @@ su('admin');
 $convertTest = new convertModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
-r(method_exists($convertTest->objectModel, 'tableExistsOfJira')) && p() && e('1'); // 步骤1：正常情况验证方法存在
-r(is_callable(array($convertTest->objectModel, 'tableExistsOfJira'))) && p() && e('1'); // 步骤2：验证方法可调用
-r((new ReflectionMethod('convertModel', 'tableExistsOfJira'))->getNumberOfParameters()) && p() && e('2'); // 步骤3：验证方法参数数量
-r((new ReflectionMethod('convertModel', 'tableExistsOfJira'))->hasReturnType()) && p() && e('1'); // 步骤4：验证方法有返回类型
-r(class_exists('convertModel')) && p() && e('1'); // 步骤5：业务规则验证类存在
+r(!!$convertTest->tableExistsOfJiraTest('zentaoipd', 'zt_user')) && p() && e('1'); // 步骤1：检查存在的系统表user
+r(!!$convertTest->tableExistsOfJiraTest('zentaoipd', 'zt_bug'))  && p() && e('1'); // 步骤2：检查存在的表名bug
+r(!!$convertTest->tableExistsOfJiraTest('zentaoipd', 'zt_task')) && p() && e('1'); // 步骤3：检查存在的表名task
+r(!!$convertTest->tableExistsOfJiraTest('zentaoipd', 'zt_nonexistent_table_12345')) && p() && e('0'); // 步骤4：检查不存在的表名
+r(!!$convertTest->tableExistsOfJiraTest('zentaoipd', '')) && p() && e('1'); // 步骤5：检查空字符串表名

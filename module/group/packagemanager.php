@@ -2017,11 +2017,12 @@ $config->group->package->manageTestsuite = new stdclass();
 $config->group->package->manageTestsuite->order  = 10;
 $config->group->package->manageTestsuite->subset = 'testsuite';
 $config->group->package->manageTestsuite->privs  = array();
-$config->group->package->manageTestsuite->privs['testsuite-create']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('testsuite-browse'), 'recommend' => array('testsuite-edit'));
-$config->group->package->manageTestsuite->privs['testsuite-edit']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testsuite-browse', 'testsuite-view'), 'recommend' => array('testsuite-create'));
-$config->group->package->manageTestsuite->privs['testsuite-linkCase']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-batchUnlinkCases', 'testsuite-unlinkCase'));
-$config->group->package->manageTestsuite->privs['testsuite-unlinkCase']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-linkCase'));
-$config->group->package->manageTestsuite->privs['testsuite-batchUnlinkCases'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-create']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('testsuite-browse'), 'recommend' => array('testsuite-edit'));
+$config->group->package->manageTestsuite->privs['testsuite-edit']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testsuite-browse', 'testsuite-view'), 'recommend' => array('testsuite-create'));
+$config->group->package->manageTestsuite->privs['testsuite-linkCase']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-batchUnlinkCases', 'testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-unlinkCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-linkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-batchUnlinkCases']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-confirmCaseChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('testsuite-view'));
 
 $config->group->package->deleteTestsuite = new stdclass();
 $config->group->package->deleteTestsuite->order  = 15;

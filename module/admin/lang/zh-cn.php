@@ -93,9 +93,16 @@ $lang->admin->setModule->closed         = '已关闭';
 $lang->admin->setModule->my             = '地盘';
 $lang->admin->setModule->product        = $lang->productCommon;
 $lang->admin->setModule->project        = $lang->projectCommon;
+$lang->admin->setModule->qa             = '测试';
 $lang->admin->setModule->assetlib       = '资产库';
 $lang->admin->setModule->other          = '其他功能';
 
+$lang->admin->setModule->program        = '项目集';
+$lang->admin->setModule->testsuite      = '套件';
+$lang->admin->setModule->automated      = '自动化';
+$lang->admin->setModule->AI             = 'AI';
+$lang->admin->setModule->BI             = 'BI';
+$lang->admin->setModule->workestimation = '估算';
 $lang->admin->setModule->score          = '积分';
 $lang->admin->setModule->repo           = '代码';
 $lang->admin->setModule->issue          = '问题';

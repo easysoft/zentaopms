@@ -15,10 +15,12 @@ cid=17928
  - 属性1 @/产品1
  - 属性2 @/产品2
  - 属性3 @/产品3
+- 测试获取编辑的表单数据 @0
+- 测试获取编辑的表单数据 @scrum
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 zenData('project')->loadYaml('execution')->gen(5);
 zenData('product')->loadYaml('product')->gen(5);
 zenData('projectproduct')->loadYaml('projectproduct')->gen(10);
@@ -32,3 +34,5 @@ $result = $projectTester->buildEditFormTest(11);
 r($result->title)       && p()                    && e('编辑项目');                // 测试获取编辑的表单数据
 r($result->users)       && p('admin,user1,user2') && e('A:admin,U:用户1,U:用户2'); // 测试获取编辑的表单数据
 r($result->allProducts) && p('1,2,3')             && e('/产品1,/产品2,/产品3');    // 测试获取编辑的表单数据
+r($result->from)        && p()                    && e('0');                       // 测试获取编辑的表单数据
+r($result->model)       && p()                    && e('scrum');                   // 测试获取编辑的表单数据

@@ -383,7 +383,11 @@ class custom extends control
             $this->custom->disableFeaturesByMode($mode);
 
             if($mode == 'light') $this->custom->processProjectAcl();
-            if($mode == 'ALM')   $this->loadModel('setting')->setItem('system.common.closedFeatures', 'otherOA');
+            if($mode == 'ALM')
+            {
+                $closedFeatures = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
+                $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures . ',otherOA');
+            }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->sendSuccess(array('callback' => '$.apps.updateAppsMenu(true);', 'load' => true, 'closeModel' => true));
