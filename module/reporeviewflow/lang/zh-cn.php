@@ -1,5 +1,5 @@
 <?php
-$lang->reporeviewflow->browse       = '浏览评审流程';
+$lang->reporeviewflow->browse       = '查看评审流程';
 $lang->reporeviewflow->create       = '创建评审流程';
 $lang->reporeviewflow->edit         = '编辑评审流程';
 $lang->reporeviewflow->changeStatus = '启用/停用评审流程';

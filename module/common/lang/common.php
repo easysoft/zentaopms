@@ -169,6 +169,7 @@ $lang->reporeviewflow = new stdclass();
 $lang->repobranchtype = new stdclass();
 $lang->artifact       = new stdclass();
 $lang->ssh            = new stdclass();
+$lang->codeReview     = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';

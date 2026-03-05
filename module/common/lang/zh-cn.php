@@ -368,6 +368,7 @@ $lang->devops->reporeviewflow   = '评审流程';
 $lang->devops->execution        = '执行历史';
 $lang->artifact->common         = '制品库';
 $lang->ssh->common              = 'SSH密钥';
+$lang->codeReview->common       = '代码评审';
 
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';

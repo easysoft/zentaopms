@@ -1,6 +1,6 @@
 <?php
 $lang->repobranchtype->common        = '分支类型';
-$lang->repobranchtype->browse        = '浏览分支类型';
+$lang->repobranchtype->browse        = '查看分支类型';
 $lang->repobranchtype->create        = '创建分支类型';
 $lang->repobranchtype->edit          = '编辑分支类型';
 $lang->repobranchtype->delete        = '删除分支类型';
