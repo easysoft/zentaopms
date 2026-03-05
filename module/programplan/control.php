@@ -115,6 +115,7 @@ class programplan extends control
                 if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
             }
 
+            $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $executionList = array();
@@ -132,7 +133,6 @@ class programplan extends control
                 }
             }
 
-            $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
         }
