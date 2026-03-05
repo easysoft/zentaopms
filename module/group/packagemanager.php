@@ -379,13 +379,9 @@ $config->group->subset->repocode = new stdclass();
 $config->group->subset->repocode->order = 2320;
 $config->group->subset->repocode->nav   = 'devops';
 
-$config->group->subset->pullreq = new stdclass();
-$config->group->subset->pullreq->order = 2330;
-$config->group->subset->pullreq->nav   = 'devops';
-
-$config->group->subset->ppm = new stdclass();
-$config->group->subset->ppm->order = 2340;
-$config->group->subset->ppm->nav   = 'devops';
+$config->group->subset->codeReview = new stdclass();
+$config->group->subset->codeReview->order = 2330;
+$config->group->subset->codeReview->nav   = 'devops';
 
 $config->group->subset->pipeline = new stdclass();
 $config->group->subset->pipeline->order = 2350;
@@ -2929,10 +2925,6 @@ $config->group->package->workflow->privs['workflow-setJS']             = array('
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
-$config->group->package->downloadCode = new stdclass();
-$config->group->package->downloadCode->order  = 10;
-$config->group->package->downloadCode->subset = 'repocode';
-
 $config->group->package->dev = new stdclass();
 $config->group->package->dev->order  = 5;
 $config->group->package->dev->subset = 'dev';
@@ -3086,34 +3078,6 @@ $config->group->package->managePipeline->privs['pipeline-create']  = array('edit
 $config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create'));
 $config->group->package->managePipeline->privs['pipeline-exec']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
 $config->group->package->managePipeline->privs['pipeline-delete']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
-
-$config->group->package->browseMR = new stdclass();
-$config->group->package->browseMR->order  = 5;
-$config->group->package->browseMR->subset = 'ppm';
-$config->group->package->browseMR->privs  = array();
-$config->group->package->browseMR->privs['ppm-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('ppm-addReview', 'ppm-approval', 'ppm-close', 'ppm-create', 'ppm-edit', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink', 'ppm-view'));
-$config->group->package->browseMR->privs['ppm-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('ppm-browse'), 'recommend' => array());
-
-$config->group->package->manageMR = new stdclass();
-$config->group->package->manageMR->order  = 10;
-$config->group->package->manageMR->subset = 'ppm';
-$config->group->package->manageMR->privs  = array();
-$config->group->package->manageMR->privs['ppm-create']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('ppm-browse'), 'recommend' => array('ppm-edit'));
-$config->group->package->manageMR->privs['ppm-edit']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-create', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-unlink'));
-$config->group->package->manageMR->privs['ppm-merge']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-browse', 'ppm-create', 'ppm-edit'));
-$config->group->package->manageMR->privs['ppm-linkStory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-review', 'ppm-close', 'ppm-linkBug', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink'));
-$config->group->package->manageMR->privs['ppm-linkBug']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-linkStory', 'ppm-linkTask', 'ppm-unlink'));
-$config->group->package->manageMR->privs['ppm-linkTask']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-linkBug', 'ppm-linkStory', 'ppm-unlink'));
-$config->group->package->manageMR->privs['ppm-unlink']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask'));
-$config->group->package->manageMR->privs['ppm-review']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-close', 'ppm-reopen'));
-$config->group->package->manageMR->privs['ppm-close']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-reopen'));
-$config->group->package->manageMR->privs['ppm-reopen']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-close'));
-
-$config->group->package->deleteMR = new stdclass();
-$config->group->package->deleteMR->order  = 2680;
-$config->group->package->deleteMR->subset = 'ppm';
-$config->group->package->deleteMR->privs  = array();
-$config->group->package->deleteMR->privs['ppm-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-create', 'ppm-edit'));
 
 $config->group->package->backup = new stdclass();
 $config->group->package->backup->order  = 5;
@@ -4259,25 +4223,82 @@ $config->group->package->browseCode = new stdclass();
 $config->group->package->browseCode->order  = 2540;
 $config->group->package->browseCode->subset = 'repocode';
 $config->group->package->browseCode->privs  = array();
-$config->group->package->browseCode->privs['repo-showSyncCommit'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-unlink', 'repo-view'));
-$config->group->package->browseCode->privs['repo-view']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink'));
-$config->group->package->browseCode->privs['repo-log']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->browseCode->privs['repo-revision']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->browseCode->privs['repo-browseTag']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
-$config->group->package->browseCode->privs['repo-browseBranch']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
+$config->group->package->browseCode->privs['repo-log']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->browseCode->privs['repo-revision']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->browseCode->privs['repo-diff']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array('repo-addBug', 'repo-editBug', 'repo-review'));
+$config->group->package->browseCode->privs['repo-view']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink'));
+$config->group->package->browseCode->privs['repo-blame']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-maintain'), 'recommend' => array('repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->browseCode->privs['repo-browseBranch'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
+$config->group->package->browseCode->privs['repo-browseTag']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('repo-browse'), 'recommend' => array('repo-log', 'repo-revision', 'repo-maintain'));
 
-$config->group->package->manageCode = new stdclass();
-$config->group->package->manageCode->order  = 2560;
-$config->group->package->manageCode->subset = 'repocode';
-$config->group->package->manageCode->privs  = array();
-$config->group->package->manageCode->privs['repo-diff']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-addBug', 'repo-editBug', 'repo-review'));
-$config->group->package->manageCode->privs['repo-blame']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array('repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->manageCode->privs['repo-download']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-downloadCode'));
-$config->group->package->manageCode->privs['repo-downloadCode'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('repo-download'));
-$config->group->package->manageCode->privs['repo-linkStory']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->manageCode->privs['repo-linkBug']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->manageCode->privs['repo-linkTask']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
-$config->group->package->manageCode->privs['repo-unlink']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-view'));
+$config->group->package->linkZentaoObject = new stdclass();
+$config->group->package->linkZentaoObject->order  = 2545;
+$config->group->package->linkZentaoObject->subset = 'repocode';
+$config->group->package->linkZentaoObject->privs  = array();
+$config->group->package->linkZentaoObject->privs['repo-linkStory']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->linkZentaoObject->privs['repo-linkBug']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->linkZentaoObject->privs['repo-linkTask']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-unlink', 'repo-view'));
+$config->group->package->linkZentaoObject->privs['repo-unlink']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('repo-maintain'), 'recommend' => array('repo-blame', 'repo-linkBug', 'repo-linkStory', 'repo-linkTask', 'repo-log', 'repo-revision', 'repo-showSyncCommit', 'repo-view'));
+
+$config->group->package->downloadCode = new stdclass();
+$config->group->package->downloadCode->order  = 2550;
+$config->group->package->downloadCode->subset = 'repocode';
+$config->group->package->downloadCode->privs  = array();
+$config->group->package->downloadCode->privs['repo-download']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-downloadCode'));
+$config->group->package->downloadCode->privs['repo-downloadCode'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('repo-download'));
+
+$config->group->package->createBranchAndTag = new stdclass();
+$config->group->package->createBranchAndTag->order  = 2555;
+$config->group->package->createBranchAndTag->subset = 'repocode';
+$config->group->package->createBranchAndTag->privs  = array();
+$config->group->package->createBranchAndTag->privs['repo-createBranch'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-browse', 'repo-browseBranch'), 'recommend' => array('repo-maintain'));
+$config->group->package->createBranchAndTag->privs['repo-createTag']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browse', 'repo-browseTag'), 'recommend' => array('repo-maintain'));
+
+$config->group->package->archiveBranch = new stdclass();
+$config->group->package->archiveBranch->order  = 2560;
+$config->group->package->archiveBranch->subset = 'repocode';
+$config->group->package->archiveBranch->privs  = array();
+$config->group->package->archiveBranch->privs['repo-archiveBranch'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('repo-browse', 'repo-browseBranch', 'repo-activeBranch'), 'recommend' => array('repo-maintain'));
+$config->group->package->archiveBranch->privs['repo-activeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('repo-browse', 'repo-browseBranch', 'repo-archiveBranch'), 'recommend' => array('repo-maintain'));
+
+$config->group->package->deleteBranchAndTag = new stdclass();
+$config->group->package->deleteBranchAndTag->order  = 2565;
+$config->group->package->deleteBranchAndTag->subset = 'repocode';
+$config->group->package->deleteBranchAndTag->privs  = array();
+$config->group->package->deleteBranchAndTag->privs['repo-deleteBranch'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('repo-browse', 'repo-browseBranch'), 'recommend' => array('repo-maintain'));
+$config->group->package->deleteBranchAndTag->privs['repo-deleteTag']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('repo-browse', 'repo-browseTag'), 'recommend' => array('repo-maintain'));
+
+$config->group->package->browseReviewRequest = new stdclass();
+$config->group->package->browseReviewRequest->order  = 2580;
+$config->group->package->browseReviewRequest->subset = 'codeReview';
+$config->group->package->browseReviewRequest->privs  = array();
+$config->group->package->browseReviewRequest->privs['pullreq-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('pullreq-addReview', 'pullreq-approval', 'pullreq-close', 'pullreq-edit', 'pullreq-linkBug', 'pullreq-linkStory', 'pullreq-linkTask', 'pullreq-reopen', 'pullreq-unlink', 'pullreq-view'));
+$config->group->package->browseReviewRequest->privs['pullreq-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pullreq-browse'), 'recommend' => array());
+$config->group->package->browseReviewRequest->privs['ppm-browse']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('ppm-addReview', 'ppm-approval', 'ppm-close', 'ppm-create', 'ppm-edit', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink', 'ppm-view'));
+$config->group->package->browseReviewRequest->privs['ppm-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array());
+
+$config->group->package->submitReviewRequest = new stdclass();
+$config->group->package->submitReviewRequest->order  = 2585;
+$config->group->package->submitReviewRequest->subset = 'codeReview';
+$config->group->package->submitReviewRequest->privs  = array();
+$config->group->package->submitReviewRequest->privs['pullreq-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('pullreq-browse'), 'recommend' => array('pullreq-linkBug', 'pullreq-linkStory', 'pullreq-linkTask', 'pullreq-unlink'));
+$config->group->package->submitReviewRequest->privs['pullreq-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pullreq-browse'), 'recommend' => array('pullreq-edit'));
+$config->group->package->submitReviewRequest->privs['pullreq-accept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('pullreq-browse', 'pullreq-edit'));
+$config->group->package->submitReviewRequest->privs['ppm-create']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-edit'));
+$config->group->package->submitReviewRequest->privs['ppm-edit']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-create', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-unlink'));
+$config->group->package->submitReviewRequest->privs['ppm-delete']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-create', 'ppm-edit'));
+$config->group->package->submitReviewRequest->privs['ppm-merge']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('ppm-browse', 'ppm-view'), 'recommend' => array('ppm-browse', 'ppm-create', 'ppm-edit'));
+
+$config->group->package->codeReview = new stdclass();
+$config->group->package->codeReview->order  = 2590;
+$config->group->package->codeReview->subset = 'codeReview';
+$config->group->package->codeReview->privs  = array();
+$config->group->package->codeReview->privs['pullreq-approval'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pullreq-browse'), 'recommend' => array('pullreq-close', 'pullreq-reopen'));
+$config->group->package->codeReview->privs['pullreq-close']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pullreq-browse'), 'recommend' => array('pullreq-approval', 'pullreq-reopen'));
+$config->group->package->codeReview->privs['pullreq-reopen']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('pullreq-browse'), 'recommend' => array('pullreq-approval', 'pullreq-close'));
+$config->group->package->codeReview->privs['ppm-review']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-close', 'ppm-reopen'));
+$config->group->package->codeReview->privs['ppm-close']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-reopen'));
+$config->group->package->codeReview->privs['ppm-reopen']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-close'));
 
 $config->group->package->manageCodeIssue = new stdclass();
 $config->group->package->manageCodeIssue->order  = 2620;

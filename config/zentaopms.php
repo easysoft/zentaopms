@@ -374,6 +374,7 @@ $config->logonMethods[] = 'my.createssh';
 $config->logonMethods[] = 'my.editssh';
 $config->logonMethods[] = 'my.deletessh';
 $config->logonMethods[] = 'repo-apigetrepobyurl';
+$config->logonMethods[] = 'repo-showSyncCommit';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

@@ -368,6 +368,7 @@ $lang->devops->reporeviewflow   = 'Review Flow';
 $lang->devops->execution        = 'Execution';
 $lang->artifact->common         = 'Artifact Repository';
 $lang->ssh->common              = 'SSH Key';
+$lang->codeReview->common       = 'Code Review';
 
 $lang->dashboard       = 'Dashboard';
 $lang->contribute      = 'Contribute';

@@ -123,6 +123,7 @@ $lang->repo->comment            = 'Comment';
 $lang->repo->view               = 'View File';
 $lang->repo->viewA              = 'View';
 $lang->repo->log                = 'Revision Log';
+$lang->repo->commitList         = 'View Commit List';
 $lang->repo->blame              = 'Blame';
 $lang->repo->date               = 'Date';
 $lang->repo->diff               = 'Diff';
