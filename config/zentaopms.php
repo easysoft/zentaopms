@@ -373,6 +373,7 @@ $config->logonMethods[] = 'my.ssh';
 $config->logonMethods[] = 'my.createssh';
 $config->logonMethods[] = 'my.editssh';
 $config->logonMethods[] = 'my.deletessh';
+$config->logonMethods[] = 'repo-apigetrepobyurl';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

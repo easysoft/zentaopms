@@ -1439,7 +1439,6 @@ $lang->resource->repo->diff            = 'diffAction';
 $lang->resource->repo->download        = 'downloadAction';
 $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
-$lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
 $lang->resource->repo->downloadCode    = 'downloadCode';
 $lang->resource->repo->linkStory       = 'linkStory';
 $lang->resource->repo->linkBug         = 'linkBug';
