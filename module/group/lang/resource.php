@@ -1509,8 +1509,8 @@ $lang->ci->methodOrder[10] = 'checkCompileStatus';
 
 $lang->resource->pipeline = new stdclass();
 $lang->resource->pipeline->browse    = 'browse';
-$lang->resource->pipeline->execution = 'execution';
-$lang->resource->pipeline->logs      = 'logs';
+$lang->resource->pipeline->execution = 'executionAction';
+$lang->resource->pipeline->logs      = 'logsAction';
 $lang->resource->pipeline->create    = 'create';
 $lang->resource->pipeline->arrange   = 'arrange';
 $lang->resource->pipeline->delete    = 'delete';

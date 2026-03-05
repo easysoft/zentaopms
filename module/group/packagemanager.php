@@ -3070,14 +3070,34 @@ $config->group->package->browsePipeline->privs['pipeline-view']      = array('ed
 $config->group->package->browsePipeline->privs['pipeline-execution'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('piopeline-logs', 'pipeline-exec', 'pipeline-view'));
 $config->group->package->browsePipeline->privs['pipeline-logs']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-execution', 'pipeline-exec', 'pipeline-view'));
 
+$config->group->package->execPipeline = new stdclass();
+$config->group->package->execPipeline->order  = 10;
+$config->group->package->execPipeline->subset = 'pipeline';
+$config->group->package->execPipeline->privs  = array();
+$config->group->package->execPipeline->privs['pipeline-exec'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
+
 $config->group->package->managePipeline = new stdclass();
-$config->group->package->managePipeline->order  = 10;
+$config->group->package->managePipeline->order  = 15;
 $config->group->package->managePipeline->subset = 'pipeline';
 $config->group->package->managePipeline->privs  = array();
 $config->group->package->managePipeline->privs['pipeline-create']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-arrange'));
 $config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create'));
-$config->group->package->managePipeline->privs['pipeline-exec']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-execution', 'pipeline-logs', 'pipeline-view'));
 $config->group->package->managePipeline->privs['pipeline-delete']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
+
+$config->group->package->browseRunner = new stdclass();
+$config->group->package->browseRunner->order  = 20;
+$config->group->package->browseRunner->subset = 'pipeline';
+$config->group->package->browseRunner->privs  = array();
+$config->group->package->browseRunner->privs['runner-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('pipeline-browse'), 'recommend' => array('runner-create', 'runner-changeState', 'runner-edit', 'runner-delete'));
+
+$config->group->package->manageRunner = new stdclass();
+$config->group->package->manageRunner->order  = 25;
+$config->group->package->manageRunner->subset = 'pipeline';
+$config->group->package->manageRunner->privs  = array();
+$config->group->package->manageRunner->privs['runner-create']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('runner-browse'), 'recommend' => array('runner-edit', 'runner-changeState', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-changeState'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-edit']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-changeState', 'runner-delete'));
+$config->group->package->manageRunner->privs['runner-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25,  'depend' => array('runner-browse'), 'recommend' => array('runner-create', 'runner-edit', 'runner-changeState'));
 
 $config->group->package->backup = new stdclass();
 $config->group->package->backup->order  = 5;

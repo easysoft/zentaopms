@@ -672,5 +672,8 @@ $lang->group->package->deleteBranchAndTag    = 'Delete Branch and Tag';
 $lang->group->package->browseReviewRequest   = 'Browse Review Request';
 $lang->group->package->submitReviewRequest   = 'Submit Review Request';
 $lang->group->package->codeReview            = 'Code Review';
+$lang->group->package->execPipeline          = 'Execution Pipeline';
+$lang->group->package->browseRunner          = 'Browse runners';
+$lang->group->package->manageRunner          = 'Manage runners';
 
 include (dirname(__FILE__) . '/resource.php');

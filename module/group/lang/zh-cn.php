@@ -477,7 +477,7 @@ $lang->group->package->gogs                  = 'Gogs';
 $lang->group->package->gitea                 = 'Gitea';
 $lang->group->package->sonarqube             = 'SonarQube';
 $lang->group->package->repoRules             = '指令';
-$lang->group->package->browsePipeline        = '浏览流水线';
+$lang->group->package->browsePipeline        = '查看流水线';
 $lang->group->package->managePipeline        = '创建维护流水线';
 $lang->group->package->backup                = '系统备份';
 $lang->group->package->trash                 = '回收站';
@@ -671,5 +671,8 @@ $lang->group->package->deleteBranchAndTag    = '删除分支标签';
 $lang->group->package->browseReviewRequest   = '浏览评审请求';
 $lang->group->package->submitReviewRequest   = '提交评审请求';
 $lang->group->package->codeReview            = '代码评审';
+$lang->group->package->execPipeline          = '执行流水线';
+$lang->group->package->browseRunner          = '浏览执行节点';
+$lang->group->package->manageRunner          = '管理执行节点';
 
 include (dirname(__FILE__) . '/resource.php');
