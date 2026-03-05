@@ -467,7 +467,9 @@ class navbar extends wg
 
         $isExecutionView = ($activeMenu === 'view' || $activeMenu === 'task') && $currentModule === 'execution';
         $isTaskReport    = $currentMethod === 'report' && $currentModule === 'task';
-        if(!$isExecutionView && !$isTaskReport) $navbarInMainMenu = null;
+        $isKanbanView    = $currentModule === 'execution' && $currentMethod === 'taskkanban';
+        $isBurnView      = $currentModule === 'execution' && $currentMethod === 'burn';
+        if(!$isExecutionView && !$isTaskReport && !$isKanbanView && !$isBurnView) $navbarInMainMenu = null;
 
         if(empty($items[$activeMenu]) && !empty($activeInMainMenu) && !empty($items[$activeInMainMenu]))
         {
