@@ -1,12 +1,14 @@
 <?php
-$lang->space->browse  = '空间列表';
-$lang->space->create  = '创建空间';
-$lang->space->edit    = '编辑空间';
-$lang->space->view    = '空间详情';
-$lang->space->delete  = '删除空间';
-$lang->space->members = '成员';
+$lang->space->browse     = '空间列表';
+$lang->space->create     = '创建空间';
+$lang->space->edit       = '编辑空间';
+$lang->space->view       = '空间详情';
+$lang->space->delete     = '删除空间';
+$lang->space->members    = '成员';
+$lang->space->memberList = '成员列表';
 
 $lang->space->group             = '权限';
+$lang->space->groupList         = '权限列表';
 $lang->space->createGroup       = '添加分组';
 $lang->space->importGroup       = '导入分组';
 $lang->space->managePriv        = '分配权限';

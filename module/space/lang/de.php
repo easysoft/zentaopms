@@ -1,12 +1,14 @@
 <?php
-$lang->space->browse  = 'Space List';
-$lang->space->create  = 'Create Space';
-$lang->space->edit    = 'Edit Space';
-$lang->space->view    = 'Space Detail';
-$lang->space->delete  = 'Delete Space';
-$lang->space->members = 'Members';
+$lang->space->browse     = 'Space List';
+$lang->space->create     = 'Create Space';
+$lang->space->edit       = 'Edit Space';
+$lang->space->view       = 'Space Detail';
+$lang->space->delete     = 'Delete Space';
+$lang->space->members    = 'Members';
+$lang->space->memberList = 'Member List';
 
 $lang->space->group             = 'Permission';
+$lang->space->groupList         = 'Permission List';
 $lang->space->createGroup       = 'Add Permission Group';
 $lang->space->managePriv        = 'Assign Permission';
 $lang->space->importGroup       = 'Import Permission Group';

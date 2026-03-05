@@ -1399,10 +1399,10 @@ $lang->resource->space->create = 'create';
 $lang->resource->space->edit   = 'edit';
 $lang->resource->space->delete = 'delete';
 
-$lang->resource->space->members           = 'members';
+$lang->resource->space->members           = 'memberList';
 $lang->resource->space->manageMembers     = 'manageMembers';
 $lang->resource->space->removeMember      = 'removeMember';
-$lang->resource->space->group             = 'group';
+$lang->resource->space->group             = 'groupList';
 $lang->resource->space->createGroup       = 'createGroup';
 $lang->resource->space->editGroup         = 'editGroup';
 $lang->resource->space->deleteGroup       = 'deleteGroup';
