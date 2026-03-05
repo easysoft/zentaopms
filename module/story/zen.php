@@ -2093,7 +2093,7 @@ class storyZen extends story
 
         $leftConditions  = array();
         $rightConditions = array();
-        $fieldNames      = json_decode($searchConfig['searchFields']);
+        $fieldNames      = $searchConfig['fields'];
         if(!$searchFields) return '';
 
         $this->app->loadLang('search');
