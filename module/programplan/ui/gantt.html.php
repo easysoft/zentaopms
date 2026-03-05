@@ -12,7 +12,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
 $showFields = str_replace('PM', 'owner_id', $showFields);
@@ -96,8 +95,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             btn(setClass('square switchBtn text-primary'), set::title($lang->programplan->gantt), icon('gantt-alt')),
             btn(setClass('square switchBtn'), set::title($lang->project->bylist), set::url($this->createLink('project', 'execution', "status=all&projectID=$projectID")), icon('list'))
         ),
-        btn(setClass('no-underline text-primary'), set::type('link'), setID('criticalPath'), $lang->execution->gantt->showCriticalPath, set::url('javascript:updateCriticalPath()')),
-        btn(setClass('no-underline'), set::type('link'), setID('fullScreenBtn'), set::icon('fullscreen'), $lang->programplan->full),
         dropdown
         (
             btn(set::type('link'), setClass('no-underline'), set::icon('export'), $lang->export),
@@ -107,7 +104,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 array('text' => $lang->execution->gantt->exportPDF, 'url' => 'javascript:exportGantt("pdf")')
             ))
         ),
-        btn(set::url($this->createLink('programplan', 'ajaxcustom')), set::icon('cog-outline'), $lang->settings, setClass('no-underline'), set::type('link'), set('data-toggle', 'modal'), set('data-size', 'sm')),
         common::hasPriv('programplan', 'relation') ? btn(set::url($this->createLink('programplan', 'relation', "projectID={$projectID}")), set::icon('list-alt'), $lang->programplan->setTaskRelation, setClass('no-underline'), set::type('link')) : null,
         (common::canModify('project', $project) && common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID")), set::icon('plus'), $lang->programplan->create, setClass('primary programplan-create-btn')) : null
     );
@@ -123,6 +119,9 @@ gantt
     set('showChart', !$dateDetails),
     set('users', $users),
     set('showFields', $showFields),
+    set::settingLink(createLink('programplan', 'ajaxcustom')),
+    set::toolbar(array('criticalPath', 'fullscreen', 'setting')),
+    set::exportFileName('gantt-export-' . $projectID),
     set('options', $plans)
 );
 
