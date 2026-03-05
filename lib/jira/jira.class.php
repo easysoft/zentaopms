@@ -57,7 +57,7 @@ class jira
     {
         if($startAt > 0) return array(); // 项目没有分页，第二次直接返回空数组
 
-        $url      = $this->jiraDomain . '/rest/api/3/project';
+        $url      = $this->jiraDomain . '/rest/api/3/project?expand=lead,description';
         $account  = $this->jiraAccount;
         $password = $this->jiraToken;
 
@@ -72,6 +72,7 @@ class jira
         foreach($result as $project)
         {
             $project['versions']      = $this->getBuilds($project['id']);
+            $project['lead']          = !empty($project['lead']['accountId']) ? $project['lead']['accountId'] : '';
             $projects[$project['id']] = $project;
         }
 
