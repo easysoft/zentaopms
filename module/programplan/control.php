@@ -116,6 +116,23 @@ class programplan extends control
             }
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $executionList = array();
+                foreach($_POST['id'] as $index => $planID)
+                {
+                    if(!$planID) continue;
+                    if(!isset($_POST['enable']) || (isset($_POST['enable'][$index]) && $_POST['enable'][$index] == 'on')) $executionList[] = $planID;
+                }
+
+                $conflictExecutions = $this->loadModel('execution')->checkDateConflict($executionList);
+                if(!empty($conflictExecutions))
+                {
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . current($conflictExecutions));
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){openPage('$locate'); openPage('$taskScheduleLink')} else {openPage('$locate')}});"));
+                }
+            }
+
             if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
         }
@@ -205,6 +222,16 @@ class programplan extends control
             }
 
             if($this->app->rawModule == 'marketresearch') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->marketstageList));
+
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $conflictExecutions = $this->loadModel('execution')->checkDateConflict(array($planID));
+                if(!empty($conflictExecutions))
+                {
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . $planID);
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){zui.Modal.hide(); loadCurrentPage(); openPage('$taskScheduleLink')} else {zui.Modal.hide(); loadCurrentPage();}});"));
+                }
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage', 'closeModal' => true));
         }
 

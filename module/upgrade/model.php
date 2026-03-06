@@ -13293,4 +13293,25 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 给项目和执行生成默认的日历数据。
+     * Compute default schedule.
+     *
+     * @access public
+     * @return bool
+     */
+    public function computeDefaultSchedule(): bool
+    {
+        $this->loadModel('project');
+
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('end')->ne(LONG_TIME)->fetchAll('id');
+        foreach($projects as $project)
+        {
+            $schedule = $this->project->computeSchedule($project->begin, $project->end, array());
+            $schedule = !empty($schedule) ? json_encode($schedule) : null;
+            $this->dao->update(TABLE_PROJECT)->set('schedule')->eq($schedule)->where('id')->eq($project->id)->exec();
+        }
+        return !dao::isError();
+    }
 }
