@@ -64,6 +64,8 @@ class gantt extends wg
         (
             set::type('ghost'),
             set::icon('guide'),
+            set::url('javascript:scrollToToday()'),
+            set::hint($ganttLang->scrollToToday)
         );
         if($toolbar === true || (is_array($toolbar) && in_array('criticalPath', $toolbar)))
         {
@@ -124,6 +126,7 @@ class gantt extends wg
         $ganttLang    = $this->prop('ganttLang');
         $ganttFields  = $this->prop('ganttFields');
         $toolbar      = $this->prop('toolbar');
+        $holidays     = $this->prop('holidays');
 
         return div
         (
@@ -144,6 +147,8 @@ class gantt extends wg
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('options',         $this->prop('options')),
             jsVar('exportFileName',  $this->prop('exportFileName')),
+            jsVar('weekend',         $this->prop('weekend')),
+            jsVar('holidays',        is_array($holidays) ? array_values($holidays) : array()),
             jsVar('colsWidth',       (float)$colsWidth),
             jsVar('height',          (float)$this->prop('height')),
             jsVar('canViewReview',   common::hasPriv('review', 'view')),

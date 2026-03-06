@@ -78,8 +78,11 @@ class programplan extends control
         $browseType = strtolower($browseType);
         $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
 
-        $this->view->from    = $from;
-        $this->view->blockID = $blockID;
+        $minBegin    = min(array_column($plans['data'], 'begin'));
+        $maxDeadline = max(array_column($plans['data'], 'deadline'));
+        $this->view->holidays = $this->loadModel('holiday')->getHolidays($minBegin, $maxDeadline);
+        $this->view->from     = $from;
+        $this->view->blockID  = $blockID;
 
         /* Build gantt browse view. */
         $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy, $baselineID, $browseType, $queryID);
