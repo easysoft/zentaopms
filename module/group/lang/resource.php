@@ -1500,13 +1500,6 @@ $lang->repobranchtype->methodOrder[15] = 'edit';
 $lang->repobranchtype->methodOrder[20] = 'delete';
 $lang->repobranchtype->methodOrder[25] = 'import';
 
-$lang->resource->ci = new stdclass();
-$lang->resource->ci->commitResult       = 'commitResult';
-$lang->resource->ci->checkCompileStatus = 'checkCompileStatus';
-
-$lang->ci->methodOrder[5]  = 'commitResult';
-$lang->ci->methodOrder[10] = 'checkCompileStatus';
-
 $lang->resource->pipeline = new stdclass();
 $lang->resource->pipeline->browse    = 'browse';
 $lang->resource->pipeline->execution = 'executionAction';
