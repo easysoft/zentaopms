@@ -79,3 +79,4 @@ $lang->aiapp->langData->promptTestDataIntro= 'Voici l\'exemple {type} de {name} 
 $lang->aiapp->langData->searchingKLibs     = 'Recherche de bases de connaissances...';
 $lang->aiapp->langData->recentChats        = 'Chats récents';
 $lang->aiapp->langData->aiTeammateTasks    = 'Tâches de l\'employé numérique';
+$lang->aiapp->langData->searchTasks        = 'Rechercher les tâches de l\'employé numérique';

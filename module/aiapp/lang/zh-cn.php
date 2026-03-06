@@ -79,3 +79,4 @@ $lang->aiapp->langData->promptTestDataIntro = '下面是要进行{name}的示例
 $lang->aiapp->langData->searchingKLibs      = '正在查找知识库...';
 $lang->aiapp->langData->recentChats         = '最近聊天';
 $lang->aiapp->langData->aiTeammateTasks     = '数字员工任务';
+$lang->aiapp->langData->searchTasks         = '搜索数字员工任务';

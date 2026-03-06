@@ -587,7 +587,7 @@ $(() =>
             },
             tabs: !window.enableAITeammate ? undefined : [
                 {key: 'RECENTS', title: zaiLang.recentChats, chatTypes: ['chat']},
-                {key: 'TASKS', title: zaiLang.aiTeammateTasks, chatsFetcher: (store) => store.getTasks(), onCreate: false},
+                {key: 'TASKS', title: zaiLang.aiTeammateTasks, chatsFetcher: (store) => store.getTasks(), onCreate: false, searchBox: {placeholder: zaiLang.searchTasks}},
             ]
         });
 
