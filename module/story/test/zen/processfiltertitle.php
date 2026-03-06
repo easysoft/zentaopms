@@ -33,8 +33,8 @@ global $lang, $config, $app;
 $lang->story->report = new stdclass();
 $lang->story->report->tpl = new stdclass();
 $lang->story->report->tpl->feature = '状态: %s';
-$lang->story->report->tpl->search = '%s %s %s';
-$lang->story->report->tpl->multi = '(%s) %s (%s)';
+$lang->story->report->tpl->search  = '%s %s %s';
+$lang->story->report->tpl->multi   = '(%s) %s (%s)';
 
 $lang->story->statusList['draft']    = '草稿';
 $lang->story->statusList['active']   = '激活';
@@ -46,7 +46,6 @@ $lang->projectstory->featureBar['story']['unclosed']  = '未关闭';
 $lang->projectstory->featureBar['story']['draft']     = '草稿';
 $lang->projectstory->featureBar['story']['reviewing'] = '评审中';
 $lang->projectstory->featureBar['story']['changing']  = '变更中';
-// $lang->projectstory->featureBar['story']['more']      = $lang->more;
 
 $lang->all = '全部';
 $lang->search->andor = new stdclass();
@@ -57,7 +56,7 @@ $lang->search->operators->equal   = '=';
 $lang->search->operators->include = '包含';
 $config->product->search['fields']['module'] = '模块';
 
-$app->tab == 'project';
+$app->tab = 'project';
 
 // 设置搜索配置以避免错误
 $_SESSION['storyForm'] = array();
