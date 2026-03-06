@@ -122,6 +122,8 @@ gantt
     set::settingLink(createLink('programplan', 'ajaxcustom')),
     set::toolbar(array('criticalPath', 'fullscreen', 'setting')),
     set::exportFileName('gantt-export-' . $projectID),
+    set::weekend($config->execution->weekend),
+    set::holidays($holidays),
     set('options', $plans)
 );
 

@@ -30,11 +30,13 @@ $ganttLang->errorPlanDrag       = $lang->programplan->error->planDrag;
 $ganttLang->edit                = $lang->programplan->edit;
 $ganttLang->submit              = $lang->programplan->submit;
 $ganttLang->today               = $lang->programplan->today;
+$ganttLang->scrollToToday       = $lang->execution->gantt->scrollToToday;
 $ganttLang->deleteRelation      = $lang->execution->gantt->confirmDelete;
 $ganttLang->wrongRelation       = $lang->execution->error->wrongGanttRelation;
 $ganttLang->wrongRelationSource = $lang->execution->error->wrongGanttRelationSource;
 $ganttLang->wrongRelationTarget = $lang->execution->error->wrongGanttRelationTarget;
 $ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
+$ganttLang->warningNoToday      = $lang->execution->gantt->warning->noTodayMarker;
 
 if($from == 'doc')
 {
