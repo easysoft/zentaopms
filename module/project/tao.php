@@ -643,6 +643,7 @@ class projectTao extends projectModel
             if(isset($project->parent)) $projects[$projectID]->parent = $project->parent;
             if(isset($project->code))   $projects[$projectID]->code   = $project->code;
             if($project->end == $this->lang->project->longTime) $projects[$projectID]->days = 0;
+            if(isset($projects[$projectID]->schedule)) $projects[$projectID]->schedule = $project->schedule;
 
             foreach($extendFields as $extendField)
             {
