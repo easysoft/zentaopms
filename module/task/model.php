@@ -3389,17 +3389,14 @@ class taskModel extends model
                 }
             }
 
-            $oldObject->estStarted = $postData->startDate;
-            $oldObject->deadline   = $postData->endDate;
-            unset($oldObject->openedDate);
-            unset($oldObject->assignedDate);
-            unset($oldObject->realStarted);
-            unset($oldObject->finishedDate);
-            unset($oldObject->canceledDate);
-            unset($oldObject->closedDate);
-            unset($oldObject->lastEditedDate);
-            unset($oldObject->activatedDate);
-            $this->loadModel('task')->update($oldObject);
+            $task = new stdclass();
+            $task->estStarted   = $postData->startDate;
+            $task->deadline     = $postData->endDate;
+            $task->execution    = $oldObject->execution;
+            $task->status       = $oldObject->status;
+            $task->id           = $oldObject->id;
+            $task->closedReason = $oldObject->closedReason;
+            $this->taskTao->doUpdate($task, $oldObject, 'estStarted,deadline');
         }
         elseif($postData->type == 'plan')
         {
