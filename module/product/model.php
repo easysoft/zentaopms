@@ -1901,8 +1901,8 @@ class productModel extends model
         /* Collect releases. */
         foreach($releases as $release)
         {
-            if($release->date > $today) continue;
-            $orderedReleases[$release->date][] = $release;
+            if(helper::isZeroDate($release->releasedDate) || $release->releasedDate > $today || $release->status != 'normal') continue;
+            $orderedReleases[$release->releasedDate][] = $release;
         }
 
         krsort($orderedReleases);
