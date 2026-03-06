@@ -3035,4 +3035,33 @@ class projectModel extends model
 
         return $scheduleData;
     }
+
+    /**
+     * 获取某个时间段内的工作日。
+     * Get working days.
+     *
+     * @param  string     $begin
+     * @param  string     $end
+     * @access public
+     * @return array|bool
+     */
+    public function getWorkingDays(string $begin, string $end): array|bool
+    {
+        if(helper::isZeroDate($begin) || helper::isZeroDate($end)) return array();
+
+        /* Get holidays, working days and weekend days .*/
+        $holidays    = $this->loadModel('holiday')->getHolidays($begin, $end);
+        $workingDays = $this->holiday->getWorkingDays($begin, $end);
+        $weekend     = zget($this->config->execution, 'weekend', '2');
+        $restDay     = zget($this->config->execution, 'restDay', '0');
+
+        $actualDays = array();
+        if($begin == $end)
+        {
+            if(in_array($begin, $workingDays)) return array($begin => $begin);
+            if(in_array($begin, $holidays))    return array();
+
+        }
+        return $actualDays;
+    }
 }
