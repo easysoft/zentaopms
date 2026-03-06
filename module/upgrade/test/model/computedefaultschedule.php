@@ -5,7 +5,14 @@ declare(strict_types=1);
 
 title=测试 upgradeModel->computeDefaultSchedule();
 timeout=0
-cid=19511
+cid=1
+
+- 给项目和执行生成默认的日历数据
+ - 第0条的project属性 @0
+ - 第0条的type属性 @project
+ - 第0条的name属性 @1
+ - 第0条的status属性 @wait
+ - 第0条的model属性 @scrum
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
