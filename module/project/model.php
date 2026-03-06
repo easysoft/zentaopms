@@ -2985,4 +2985,54 @@ class projectModel extends model
             ->fetch('1');
         return !empty($frozenObject);
     }
+
+    /**
+     * 生成新的排期日历。
+     * Compute schedule.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $schedule
+     * @param  object $project
+     * @access public
+     * @return object
+     */
+    public function computeSchedule(string $begin, string $end, array $schedule, object $project = null): object
+    {
+        $calendar        = array();
+        $weekends        = array(1, 2);
+        $begin           = date('Y-m-d', strtotime($begin));
+        $end             = date('Y-m-d', strtotime($end));
+        $workingDays     = $this->getWorkingDays($begin, $end);
+        $projectSchedule = $project ? json_decode($project->schedule, true) : array();
+        for($start = $begin; $start <= $end; $start = date('Y-m-d', strtotime('+1 day', strtotime($start))))
+        {
+            if(!empty($schedule['begin']) && !empty($schedule['end']) && $start >= $schedule['begin'] && $start <= $schedule['end'])
+            {
+                if(isset($schedule['calendar'][$start])) $calendar[$start] = $start;
+            }
+            else if(!empty($projectSchedule['begin']) && !empty($projectSchedule['end']) && $start >= $projectSchedule['begin'] && $start <= $projectSchedule['end'])
+            {
+                if(isset($projectSchedule['calendar'][$start])) $calendar[$start] = $start;
+            }
+            else if(isset($workingDays[$start]))
+            {
+                $calendar[$start] = $start;
+            }
+
+            $week = date('w', strtotime($start));
+            if(!isset($calendar[$start]) && $week == '6') unset($weekends[0]);
+            if(!isset($calendar[$start]) && $week == '0') unset($weekends[1]);
+        }
+
+        $scheduleData = new stdclass();
+        $scheduleData->begin        = $begin;
+        $scheduleData->end          = $end;
+        $scheduleData->minWorkHours = isset($schedule['minWorkHours']) ? $schedule['minWorkHours'] : sprintf('%.1f', $this->config->execution->defaultWorkhours);
+        $scheduleData->maxWorkHours = isset($schedule['maxWorkHours']) ? $schedule['maxWorkHours'] : sprintf('%.1f', $this->config->execution->defaultWorkhours + 1);
+        $scheduleData->workDays     = implode(',', $weekends);
+        $scheduleData->calendar     = $calendar;
+
+        return $scheduleData;
+    }
 }
