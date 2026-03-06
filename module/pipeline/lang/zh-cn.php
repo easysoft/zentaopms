@@ -1,5 +1,5 @@
 <?php
-$lang->pipeline->browse        = '浏览流水线';
+$lang->pipeline->browse        = '流水线列表';
 $lang->pipeline->create        = '创建流水线';
 $lang->pipeline->edit          = '编辑流水线';
 $lang->pipeline->exec          = '执行流水线';
@@ -19,7 +19,9 @@ $lang->pipeline->execution     = '执行历史';
 $lang->pipeline->log           = '执行日志';
 $lang->pipeline->arrange       = '编排流水线';
 
-$lang->pipeline->browseAction = '流水线列表';
+$lang->pipeline->browseAction    = '流水线列表';
+$lang->pipeline->executionAction = '流水线执行历史';
+$lang->pipeline->logsAction      = '流水线执行日志';
 
 $lang->pipeline->id              = 'ID';
 $lang->pipeline->name            = '名称';

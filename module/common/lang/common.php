@@ -170,6 +170,7 @@ $lang->repobranchtype = new stdclass();
 $lang->artifact       = new stdclass();
 $lang->ssh            = new stdclass();
 $lang->codeReview     = new stdclass();
+$lang->runner         = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';

@@ -369,6 +369,7 @@ $lang->devops->execution        = '执行历史';
 $lang->artifact->common         = '制品库';
 $lang->ssh->common              = 'SSH密钥';
 $lang->codeReview->common       = '代码评审';
+$lang->runner->common           = '执行节点';
 
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';
