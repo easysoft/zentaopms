@@ -176,58 +176,55 @@ window.callZentaoAgent = async function(agentID, objectID)
 /* 加载数字员工列表，并注册菜单 */
 function loadAndRegisterAiTeammates(lang, plugin)
 {
-    $.ajax({
-        url: $.createLink('ai', 'ajaxGetTeammates'),
-        dataType: 'json',
-        success: (res) => {
-            if(res && res.result === 'success' && res.data)
-            {
-                const teammates = res.data;
-                if(!teammates.length) return;
+    plugin.defineContextProvider({
+        code: 'ai-teammate',
+        title: lang.teammate,
+        icon: 'hand-right',
+        items: async function()
+        {
+            const res = await zui.fetchData($.createLink('ai', 'ajaxGetTeammates'));
+            if(!res || res.result !== 'success' || !res.data) return [];
 
-                const items = teammates.map((item) => {
-                    const collections = [];
-                    if(item.klibs && item.klibs.length)
-                    {
-                        item.klibs.forEach(klibID => collections.push(`zentao:${klibID}`));
-                    }
+            const teammates = res.data;
+            if(!teammates.length) return;
 
-                    const promptParts = [];
-                    if(item.roleName)
-                    {
-                        const prefix = lang.teammatePromptPrefix;
-                        promptParts.push(`${prefix}${item.roleName}`);
-                    }
-                    if(item.desc) promptParts.push(item.desc);
-                    if(item.klibNames && item.klibNames.length)
-                    {
-                        const klibNamesStr = item.klibNames.join(', ');
-                        const knowledgePrefix = lang.teammateKnowledgePrefix;
-                        const knowledgeSuffix = lang.teammateKnowledgeSuffix;
-                        promptParts.push(`${knowledgePrefix}${klibNamesStr}${knowledgeSuffix}`);
-                    }
+            const items = teammates.map((item) => {
+                const collections = [];
+                if(item.klibs && item.klibs.length)
+                {
+                    item.klibs.forEach(klibID => collections.push(`zentao:${klibID}`));
+                }
 
-                    const data = {
-                        prompt: promptParts.join(', '),
-                    };
-                    if(collections.length) data.memory = {collections};
+                const promptParts = [];
+                if(item.roleName)
+                {
+                    const prefix = lang.teammatePromptPrefix;
+                    promptParts.push(`${prefix}${item.roleName}`);
+                }
+                if(item.desc) promptParts.push(item.desc);
+                if(item.klibNames && item.klibNames.length)
+                {
+                    const klibNamesStr = item.klibNames.join(', ');
+                    const knowledgePrefix = lang.teammateKnowledgePrefix;
+                    const knowledgeSuffix = lang.teammateKnowledgeSuffix;
+                    promptParts.push(`${knowledgePrefix}${klibNamesStr}${knowledgeSuffix}`);
+                }
 
-                    return {
-                        code: `zentao-aiteammate-${item.id}`,
-                        title: item.name,
-                        hint: item.desc || item.name,
-                        data,
-                        llm: item.llm || undefined
-                    };
-                });
+                const data = {
+                    prompt: promptParts.join(', '),
+                };
+                if(collections.length) data.memory = {collections};
 
-                plugin.defineContextProvider({
-                    code: 'ai-teammate',
-                    title: lang.teammate,
-                    icon: 'hand-right',
-                    items,
-                });
-            }
+                return {
+                    code: `zentao-aiteammate-${item.id}`,
+                    title: item.name,
+                    hint: item.desc || item.name,
+                    data,
+                    llm: item.llm || undefined
+                };
+            });
+
+            return items;
         },
     });
 }
