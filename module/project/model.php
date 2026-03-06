@@ -3011,11 +3011,11 @@ class projectModel extends model
             {
                 if(isset($schedule['calendar'][$start])) $calendar[$start] = $start;
             }
-            else if(!empty($projectSchedule['begin']) && !empty($projectSchedule['end']) && $start >= $projectSchedule['begin'] && $start <= $projectSchedule['end'])
+            elseif(!empty($projectSchedule['begin']) && !empty($projectSchedule['end']) && $start >= $projectSchedule['begin'] && $start <= $projectSchedule['end'])
             {
                 if(isset($projectSchedule['calendar'][$start])) $calendar[$start] = $start;
             }
-            else if(isset($workingDays[$start]))
+            elseif(isset($workingDays[$start]))
             {
                 $calendar[$start] = $start;
             }
