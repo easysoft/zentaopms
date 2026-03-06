@@ -969,7 +969,11 @@ class actionTao extends actionModel
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
-        if($action->objectType == 'case' && $action->action == 'tolib') return helper::hasFeature('caselib');
+        if($action->objectType == 'case')
+        {
+            $case = $this->dao->select('lib')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
+            if($action->action == 'tolib' || !empty($case->lib)) return helper::hasFeature('caselib');
+        }
 
         return true;
     }
