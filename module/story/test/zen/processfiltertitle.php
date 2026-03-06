@@ -49,27 +49,7 @@ $lang->story->statusList['active']   = '激活';
 $lang->story->statusList['changing'] = '变更中';
 $lang->story->statusList['closed']   = '已关闭';
 
-$lang->projectstory->featureBar['story']['allstory']  = '全部';
-$lang->projectstory->featureBar['story']['unclosed']  = '未关闭';
-$lang->projectstory->featureBar['story']['draft']     = '草稿';
-$lang->projectstory->featureBar['story']['reviewing'] = '评审中';
-$lang->projectstory->featureBar['story']['changing']  = '变更中';
-
-$lang->all = '全部';
-$lang->search->andor = new stdclass();
-$lang->search->andor->and = ' 并且 ';
-$lang->search->andor->or  = ' 或者 ';
-$lang->search->operators  = new stdclass();
-$lang->search->operators->equal   = '=';
-$lang->search->operators->include = '包含';
-$config->product->search['fields']['module'] = '模块';
-
 $app->tab = 'project';
-
-// 设置搜索配置以避免错误
-$_SESSION['storyForm'] = array();
-$app->session = new stdclass();
-$app->session->storyForm = null;
 
 // 5. 创建测试实例
 $storyTest = new storyZenTest();
