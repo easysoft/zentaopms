@@ -89,7 +89,7 @@ class zai extends control
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST')
         {
-            return $this->send(array('result' => 'failed', 'message' => $this->lang->zai->onlyPostRequest));
+            return $this->send(array('result' => 'fail'iled', 'message' => $this->lang->zai->onlyPostRequest));
         }
 
         $force  = isset($_POST['force']) && $_POST['force'] === 'true';
@@ -112,7 +112,7 @@ class zai extends control
             return $this->send(array('result' => 'success', 'data' => $info));
         }
 
-        if(empty($info->key)) return $this->send(array('result' => 'failed', 'message' => $this->lang->zai->vectorizedUnavailableHint, 'data' => $info));
+        if(empty($info->key)) return $this->send(array('result' => 'fail'iled', 'message' => $this->lang->zai->vectorizedUnavailableHint, 'data' => $info));
 
         $force = isset($_POST['force']) && $_POST['force'] === 'true';
         if($info->status === 'synced' && $force)
@@ -158,7 +158,7 @@ class zai extends control
                 $info->syncFailedCount++;
                 $info->syncDetails->$syncingType->failed++;
                 $this->zai->setVectorizedInfo($info);
-                return $this->send(array('result' => 'failed', 'message' => $result['message'], 'data' => $info, 'request' => $this->app->config->debug > 5 ? $result : null));
+                return $this->send(array('result' => 'fail'iled', 'message' => $result['message'], 'data' => $info, 'request' => $this->app->config->debug > 5 ? $result : null));
             }
             if($result['result'] == 'success')
             {
@@ -208,13 +208,13 @@ class zai extends control
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST')
         {
-            return $this->send(array('result' => 'failed', 'message' => $this->lang->zai->onlyPostRequest));
+            return $this->send(array('result' => 'fail'iled', 'message' => $this->lang->zai->onlyPostRequest));
         }
 
         $userPrompt = zget($_POST, 'userPrompt', '');
         $filters    = json_decode(zget($_POST, 'filters', '{}'), true);
 
-        if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'failed', 'message' => $this->lang->fail));
+        if(empty($userPrompt) || empty($filters)) return $this->send(array('result' => 'fail'iled', 'message' => $this->lang->fail));
 
         $knowledges = $this->zai->searchKnowledgesInCollections($userPrompt, $filters, $type, $limit, 0.5);
         $results    = [];

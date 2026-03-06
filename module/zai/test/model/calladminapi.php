@@ -28,7 +28,7 @@ $zai = new zaiModelTest();
 
 /* 测试没有ZAI设置时调用管理员API */
 $result1 = $zai->callAdminAPITest('/admin/test');
-r($result1['result']) && p() && e('failed'); // 测试没有ZAI设置时调用管理员API
+r($result1['result']) && p() && e('fail'); // 测试没有ZAI设置时调用管理员API
 
 /* 设置不完整的ZAI配置（没有管理员Token） */
 $incompleteSettings = new stdClass();
