@@ -114,10 +114,10 @@ $lang->todo->statusList['closed'] = 'Geschlossen';
 //$lang->todo->statusList['cancel']   = 'Abgebrochen';
 //$lang->todo->statusList['postpone'] = 'Verzögert';
 
-$lang->todo->priList[1] = 'Höchste';
-$lang->todo->priList[2] = 'Hoch';
-$lang->todo->priList[3] = 'Normal';
-$lang->todo->priList[4] = 'Niedrig';
+$lang->todo->priList[1] = 1;
+$lang->todo->priList[2] = 2;
+$lang->todo->priList[3] = 3;
+$lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']      = 'Eigene';
 $lang->todo->typeList['cycle']       = 'Wiederkehrend';

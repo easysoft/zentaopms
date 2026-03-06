@@ -114,10 +114,10 @@ $lang->todo->statusList['closed'] = 'Closed';
 //$lang->todo->statusList['cancel']   = 'Cancelled';
 //$lang->todo->statusList['postpone'] = 'Delayed';
 
-$lang->todo->priList[1] = 'Critical';
-$lang->todo->priList[2] = 'Important';
-$lang->todo->priList[3] = 'Normal';
-$lang->todo->priList[4] = 'Low';
+$lang->todo->priList[1] = 1;
+$lang->todo->priList[2] = 2;
+$lang->todo->priList[3] = 3;
+$lang->todo->priList[4] = 4;
 
 $lang->todo->typeList['custom']      = 'Custom';
 $lang->todo->typeList['cycle']       = 'Recur';
