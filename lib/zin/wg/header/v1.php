@@ -206,14 +206,15 @@ class header extends wg
         $themeItems = array();
         foreach($app->lang->themes as $key => $value)
         {
-            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'active' => $app->cookie->theme == $key);
+            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'selected' => $app->cookie->theme == $key);
         }
         $items[] = array
         (
-            'text' => $lang->theme,
-            'icon' => 'theme',
-            'key'  => 'theme',
-            'items' => $themeItems
+            'text'      => $lang->theme,
+            'icon'      => 'theme',
+            'key'       => 'theme',
+            'items'     => $themeItems,
+            'listProps' => ['getItem' => jsRaw('(item) => {item.selected = item["data-value"] === $.cookie.get("theme"); return item;}')]
         );
 
         $langItems = array();
