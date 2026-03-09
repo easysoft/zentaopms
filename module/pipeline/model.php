@@ -819,4 +819,24 @@ class pipelineModel extends model
 
         return $triggers;
     }
+
+    /**
+     * 获取执行详情。
+     * Get execution info.
+     *
+     * @param  int $execID
+     * @access public
+     * @return object|false
+     */
+    public function apiGetExecInfo(int $execID): object|false
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipeline/executions/{$execID}");
+
+        $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        $response = $this->gitfox->getResponse($response);
+
+        if(dao::isError()) return false;
+        return $response;
+    }
 }

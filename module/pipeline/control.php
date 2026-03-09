@@ -750,4 +750,19 @@ class pipeline extends control
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->sendSuccess(array('load' => true));
     }
+
+    /**
+     * 获取执行信息。
+     * Get execution info.
+     *
+     * @param  int $execID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecInfo(int $execID)
+    {
+        $response = $this->pipeline->apiGetExecInfo($execID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->send(array('result' => 'success', 'data' => $response));
+    }
 }
