@@ -24,6 +24,7 @@ class kanbanTester extends tester
             if($this->checkFormTips('kanban')) return $this->success('看板名称必填提示信息正确');
             return $this->failed('看板名称必填提示信息不正确');
         }
+        $form = $this->initForm('kanban', 'space', ['browseType' => 'cooperation'], 'appIframe-kanban');
         return ($form->dom->kanbanName->getText() == $kanban->name)
             ? $this->success('创建看板成功')
             : $this->failed('创建看板失败');
