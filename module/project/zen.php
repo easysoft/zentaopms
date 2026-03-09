@@ -1820,7 +1820,7 @@ class projectZen extends project
             $groupData['data']['lanes'] = $lanes;
             $groupData['data']['cols']  = $columns;
             $groupData['data']['items'] = $items;
-            $kanbanList[] = array('items' => array($groupData), 'key' => $regionKey, 'heading' => array('title' => $this->lang->project->typeList[$regionKey]));
+            $kanbanList[] = array('items' => array($groupData), 'key' => $regionKey, 'heading' => array('title' => $this->lang->project->typeList[$regionKey]), 'kanbanProps' => array('laneNameWidth' => helper::hasFeature('program') ? null : '0'));
         }
 
         return $kanbanList;
