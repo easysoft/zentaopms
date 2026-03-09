@@ -118,7 +118,7 @@ formPanel
     ) : null,
     in_array($method, ['file', 'api']) ? formGroup
     (
-        set::label($lang->convert->jira->token),
+        set::label($method == 'api' ? $lang->convert->jira->apiToken : $lang->convert->jira->token),
         set::required($method == 'api'),
         set::labelWidth($labelWidth),
         input

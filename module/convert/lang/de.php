@@ -138,6 +138,7 @@ $lang->convert->jira->database         = 'Jira Database';
 $lang->convert->jira->domain           = 'Jira Domain';
 $lang->convert->jira->admin            = 'Jira Account';
 $lang->convert->jira->token            = 'Jira Passwork/Token';
+$lang->convert->jira->apiToken         = 'Jira Token';
 $lang->convert->jira->dbNameNotice     = "Please enter the Jira database name.";
 $lang->convert->jira->importNotice     = 'Notice: Importing data is risky! Make sure to complete the following steps in sequence before merging.';
 $lang->convert->jira->accountNotice    = 'Those who use email will use the string before @ as their username, and those exceeding 30 characters will be truncated.';

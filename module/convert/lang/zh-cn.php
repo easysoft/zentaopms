@@ -138,6 +138,7 @@ $lang->convert->jira->database         = 'Jira数据库';
 $lang->convert->jira->domain           = 'Jira域名';
 $lang->convert->jira->admin            = 'Jira管理员帐号';
 $lang->convert->jira->token            = 'Jira密码/Token';
+$lang->convert->jira->apiToken         = 'Jira Token';
 $lang->convert->jira->dbNameNotice     = '请输入Jira数据库名字';
 $lang->convert->jira->importNotice     = '注意：导入数据有风险！请务必确保如下操作步骤依次完成，再进行合并。';
 $lang->convert->jira->accountNotice    = '使用邮箱的会将@前面的字符串作为用户名，超过30位的会被截断处理。';
