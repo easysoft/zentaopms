@@ -43,6 +43,7 @@ $config->story->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->story->dtable->fieldList['pri']['fixed']    = 'left';
 $config->story->dtable->fieldList['pri']['sortType'] = true;
 $config->story->dtable->fieldList['pri']['type']     = 'pri';
+$config->story->dtable->fieldList['pri']['priList']  = $lang->story->priList;
 $config->story->dtable->fieldList['pri']['show']     = true;
 $config->story->dtable->fieldList['pri']['group']    = 2;
 
