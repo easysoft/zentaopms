@@ -116,6 +116,8 @@ formBatchPanel
     on::change('[data-name="branch"]', 'setModuleAndPlanByBranch'),
     on::change('[data-name="parent"]', 'setGrade'),
     on::change('[data-name="region"]', 'changeRegion'),
+    on::change('[data-name="source"]')->call('setSourceNote', jsRaw('event')),
+    set::onRenderCol(jsRaw('window.handleRenderFieldCol')),
     $stories ? set::data($stories) : null,
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     set::title($storyID ? $storyTitle . $lang->hyphen . $this->lang->story->subdivide : $this->lang->story->batchCreate),
