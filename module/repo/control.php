@@ -191,7 +191,10 @@ class repo extends control
         {
             /* Prepare data. */
             $formData = form::data($this->config->repo->form->createRepo)->get();
-            if($formData->acl == 'private') $this->config->repo->createRepo->requiredFields .= ',members';
+            if($formData->acl == 'private' && empty($formData->members))
+            {
+                $this->sendError(array('members' => sprintf($this->lang->error->notempty, $this->lang->repo->members)));
+            }
 
             /* Create a repo. */
             $repoID = $this->repo->createRepo($formData);
@@ -313,10 +316,18 @@ class repo extends control
                 ->skipSpecial('desc')
                 ->get();
 
-            if($formData->acl == 'private') $this->config->repo->edit->requiredFields .= ',members';
+            if($formData->acl == 'private' && empty($formData->members))
+            {
+                $this->sendError(array('members' => sprintf($this->lang->error->notempty, $this->lang->repo->members)));
+            }
 
             if($formData) $response = $this->loadModel('gitfox')->apiUpdateRepo($repoID, $formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $members = $formData->acl == 'private' ? explode(',', $formData->members) : array();
+            $this->repo->updateMembers($repoID, $members);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $noNeedSync = !empty($response) && !empty($response->id);
 
             $newRepo  = $this->repo->getByID($repoID);
