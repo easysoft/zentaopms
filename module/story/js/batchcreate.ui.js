@@ -90,8 +90,6 @@ window.setSourceNote = function(e)
 
 function renderSourceNote($sourceNote, source)
 {
-    console.log($sourceNote);
-    console.log(source);
     const $row       = $sourceNote.closest('tr');
     const index      = $row.attr('data-index');
     const sourceName = $sourceNote.find('input').attr('name');
