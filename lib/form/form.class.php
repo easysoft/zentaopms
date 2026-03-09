@@ -422,13 +422,10 @@ class form extends fixer
 
         if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
+        $emptyData = isset($data) && empty($data);
         if($config['type'] == 'int' || $config['type'] == 'float' || $config['type'] == 'string')
         {
             $emptyData = isset($this->rawdata->$field) && ($this->rawdata->$field === '' || $data === '');
-        }
-        else
-        {
-            $emptyData = isset($data) && empty($data);
         }
 
         if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && $emptyData)
