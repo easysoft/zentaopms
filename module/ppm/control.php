@@ -39,12 +39,9 @@ class ppm extends control
 
             if($this->app->tab == 'project')
             {
-                $this->view->projectID = $this->session->project;
                 $this->loadModel('project')->setMenu((int)$this->session->project);
+                $this->view->projectID = $this->session->project;
             }
-
-            /* Unlock session for wait to get data of repo. */
-            if(!in_array(strtolower($this->app->methodName), array('linkbug', 'linkstory', 'linktask'))) session_write_close();
         }
     }
 
@@ -75,11 +72,13 @@ class ppm extends control
             if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
             $this->loadModel('execution')->setMenu($objectID);
+            $this->view->executionID = $objectID;
         }
         elseif($this->app->tab == 'project')
         {
             $this->session->set('project', $objectID);
             $this->loadModel('project')->setMenu($objectID);
+            $this->view->projectID = $objectID;
         }
 
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('ppm', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));

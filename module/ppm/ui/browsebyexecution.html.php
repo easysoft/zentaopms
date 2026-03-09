@@ -12,8 +12,6 @@ namespace zin;
 
 jsVar('repoID', $repoID);
 
-dropmenu(set::url(createLink('execution', 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}")));
-
 /* Show source project column if the user browse the Merge Requests of all the repos. */
 if(empty($repoID))
 {
