@@ -53,6 +53,8 @@ class repo extends control
 
         if($tab == 'project')
         {
+            if(empty($this->repos)) return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
             $project = $this->loadModel('project')->getByID($objectID);
             if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
 
@@ -61,6 +63,8 @@ class repo extends control
         }
         elseif($tab == 'execution')
         {
+            if(empty($this->repos)) return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
@@ -80,8 +84,7 @@ class repo extends control
 
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'edit', 'setrules', 'createrepo', 'import', 'maintain')))
         {
-            $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
-            if($this->config->inCompose && $method == 'create') $method = 'createRepo';
+            $method = $this->app->tab == 'devops' ? 'maintain' : 'createRepo';
             return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
