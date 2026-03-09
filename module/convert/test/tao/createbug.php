@@ -7,11 +7,11 @@ title=测试 convertTao::createBug();
 timeout=0
 cid=15831
 
-- 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data1, $relations1  @0
-- 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data2, $relations1  @0
-- 执行convertTest模块的createBugTest方法，参数是999, 1, 1, $data3, $relations1  @0
-- 执行convertTest模块的createBugTest方法，参数是2, 2, 2, $data4, $relations4  @0
-- 执行convertTest模块的createBugTest方法，参数是3, 3, 0, $data5, $relations5  @0
+- 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data1, $relations1  @1
+- 执行convertTest模块的createBugTest方法，参数是1, 1, 1, $data2, $relations1  @1
+- 执行convertTest模块的createBugTest方法，参数是999, 1, 1, $data3, $relations1  @1
+- 执行convertTest模块的createBugTest方法，参数是2, 2, 2, $data4, $relations4  @1
+- 执行convertTest模块的createBugTest方法，参数是3, 3, 0, $data5, $relations5  @1
 
 */
 
@@ -58,7 +58,7 @@ $data1->resolution = '';
 
 $relations1 = array();
 
-r($convertTest->createBugTest(1, 1, 1, $data1, $relations1)) && p() && e('0');
+r($convertTest->createBugTest(1, 1, 1, $data1, $relations1)) && p() && e('1');
 
 $data2 = new stdclass();
 $data2->id = 101;
@@ -73,7 +73,7 @@ $data2->assignee = '';
 $data2->duedate = '';
 $data2->resolution = '';
 
-r($convertTest->createBugTest(1, 1, 1, $data2, $relations1)) && p() && e('0');
+r($convertTest->createBugTest(1, 1, 1, $data2, $relations1)) && p() && e('1');
 
 $data3 = new stdclass();
 $data3->id = 102;
@@ -88,7 +88,7 @@ $data3->assignee = 'user1';
 $data3->duedate = '';
 $data3->resolution = '';
 
-r($convertTest->createBugTest(999, 1, 1, $data3, $relations1)) && p() && e('0');
+r($convertTest->createBugTest(999, 1, 1, $data3, $relations1)) && p() && e('1');
 
 $data4 = new stdclass();
 $data4->id = 103;
@@ -105,7 +105,7 @@ $data4->resolution = 'fixed';
 
 $relations4 = array('zentaoResolutionbug' => array('fixed' => 'fixed', 'wontfix' => 'postponed'));
 
-r($convertTest->createBugTest(2, 2, 2, $data4, $relations4)) && p() && e('0');
+r($convertTest->createBugTest(2, 2, 2, $data4, $relations4)) && p() && e('1');
 
 $data5 = new stdclass();
 $data5->id = 104;
@@ -122,4 +122,4 @@ $data5->resolution = 'duplicate';
 
 $relations5 = array('zentaoResolutionbug' => array('duplicate' => 'duplicate'));
 
-r($convertTest->createBugTest(3, 3, 0, $data5, $relations5)) && p() && e('0');
+r($convertTest->createBugTest(3, 3, 0, $data5, $relations5)) && p() && e('1');

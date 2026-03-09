@@ -535,6 +535,23 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -809,6 +826,24 @@ class convertTaoTest extends baseTest
         if(!in_array($type, array('story', 'requirement', 'epic'))) return 0;
         if($productID <= 0 || $projectID <= 0 || $executionID <= 0) return 0;
 
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
         // 模拟创建需求的业务逻辑验证
         $story = new stdclass();
         $story->title = $data->summary;
@@ -818,22 +853,11 @@ class convertTaoTest extends baseTest
         $story->version = 1;
         $story->grade = 1;
 
-        // 模拟状态和阶段设置
-        $story->stage = $this->mockConvertStage($data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
-        $story->status = $this->mockConvertStatus($type, $data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
-
-        // 模拟用户账号转换
-        $story->openedBy = $this->mockGetJiraAccount($data->creator ?? '');
-        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
-        $story->assignedTo = $this->mockGetJiraAccount($data->assignee ?? '');
-
-        if($story->assignedTo) $story->assignedDate = date('Y-m-d H:i:s');
-
         // 模拟关闭原因设置
         if(isset($data->resolution) && $data->resolution)
         {
             $story->closedReason = isset($relations["zentaoReason{$data->issuetype}"][$data->resolution]) ?
-                                  $relations["zentaoReason{$data->issuetype}"][$data->resolution] : 'done';
+            $relations["zentaoReason{$data->issuetype}"][$data->resolution] : 'done';
         }
 
         // 验证必要字段都已设置
