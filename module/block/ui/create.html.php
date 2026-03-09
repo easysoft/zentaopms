@@ -26,12 +26,13 @@ $blockSize   = !empty($config->block->size[$module][$code]) ? $config->block->si
 $widthOptions = array();
 foreach(array_keys($blockSize) as $width) $widthOptions[$width] = zget($this->lang->block->widthOptions, $width);
 $defaultWidth = reset($widthOptions);
+$moduleWidth  = $app->getClientLang() == 'en' ? '160' : '128';
 row
 (
     setID('blockCreateForm'),
     $showModules ? cell
     (
-        set::width(128),
+        set::width($moduleWidth),
         setClass('flex-none bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
         buildBlockModuleNav()
     ) : null,
