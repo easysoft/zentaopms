@@ -1734,7 +1734,7 @@ class convertTao extends convertModel
                 foreach($data->fixVersions as $version)
                 {
                     $versionID = $version['id'];
-                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(TABLE_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                     if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('stories')->eq("CONCAT(stories,',',{$storyID})")->where('id')->eq($zentaoVersionID)->exec();
                 }
             }
@@ -1888,7 +1888,7 @@ class convertTao extends convertModel
             foreach($data->fixVersions as $version)
             {
                 $versionID = $version['id'];
-                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(TABLE_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                 if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('bugs')->eq("CONCAT(bugs,',',{$bugID})")->where('id')->eq($zentaoVersionID)->exec();
             }
         }
