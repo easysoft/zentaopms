@@ -761,6 +761,8 @@ class pipeline extends control
      */
     public function ajaxGetExecInfo(int $execID)
     {
-        return $this->pipeline->apiGetExecInfo($execID);
+        $response = $this->pipeline->apiGetExecInfo($execID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->send(array('result' => 'success', 'data' => $response));
     }
 }
