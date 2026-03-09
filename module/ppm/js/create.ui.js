@@ -4,6 +4,7 @@ window.loadReviewers = function()
     const sourceBranch  = $('[name="sourceBranch"]').val();
     const canMerge      = $('[data-name=message]').data('canMerge');
     const conflictFiles = $('[data-name=message]').data('conflictFiles');
+    var repo = $('[name="repoID"]').val() ? $('[name="repoID"]').val() : repoID;
 
     if(!canMerge)
     {
@@ -11,7 +12,7 @@ window.loadReviewers = function()
         $('button[type=submit]').attr('disabled', 'disabled');
         if(conflictFiles.length > 0)
         {
-            loadTarget($.createLink('ppm', 'ajaxGetConflictFiles', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
+            loadTarget($.createLink('ppm', 'ajaxGetConflictFiles', 'repoID=' + repo + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
             $('#createCheckList').removeClass('hidden');
         }
         else
@@ -24,7 +25,7 @@ window.loadReviewers = function()
         $('button[type=submit]').removeClass('disabled');
         $('button[type=submit]').removeAttr('disabled');
         $('#createCheckList').removeClass('hidden');
-        loadTarget($.createLink('ppm', 'ajaxGetCreateCheckList', 'repoID=' + repoID + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
+        loadTarget($.createLink('ppm', 'ajaxGetCreateCheckList', 'repoID=' + repo + '&sourceBranch=' + sourceBranch + '&targetBranch=' + targetBranch), 'createCheckList');
     }
 }
 

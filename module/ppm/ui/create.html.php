@@ -9,8 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$notInDevOps = in_array($this->app->tab, array('execution', 'project'));
 jsVar('repoID', $repoID);
-$notInDevOps = in_array($this->app->tab, array('execution', 'project')) && $objectID;
 
 $fields = defineFieldList('ppm');
 if($notInDevOps) $fields->field('repoID')->label($lang->ppm->repo)->required(true)->control('picker')->items($repoPairs)->value($repoID)->width('1/2')->wrapAfter(true);
