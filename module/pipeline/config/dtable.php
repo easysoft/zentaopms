@@ -59,7 +59,7 @@ $config->pipeline->actionList = array();
 $config->pipeline->actionList['execution']['icon'] = 'file-log';
 $config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
-$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&type={type}&pipelineID={id}");
+$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={type}&pipelineID={id}");
 
 $config->pipeline->actionList['exec']['icon']        = 'play';
 $config->pipeline->actionList['exec']['text']        = $lang->pipeline->exec;
@@ -154,7 +154,7 @@ $config->pipeline->execution->actionList = array();
 $config->pipeline->execution->actionList['log']['icon'] = 'file-log';
 $config->pipeline->execution->actionList['log']['text'] = $lang->pipeline->log;
 $config->pipeline->execution->actionList['log']['hint'] = $lang->pipeline->log;
-$config->pipeline->execution->actionList['log']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repo}&type={type}&pipelineID={id}");
+$config->pipeline->execution->actionList['log']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={type}&pipelineID={id}");
 
 $config->pipeline->execution->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->execution->dtable->fieldList['actions']['title'] = $lang->actions;
