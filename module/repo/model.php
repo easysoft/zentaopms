@@ -2794,6 +2794,10 @@ class repoModel extends model
     {
         $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
+        if(empty($repoPairs))
+        {
+            foreach($menuGroup as $module) unset($this->lang->{$module}->menu->devops);
+        }
 
         $showTag    = false;
         $showBranch = false;
