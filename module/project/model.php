@@ -3005,6 +3005,7 @@ class projectModel extends model
         $end             = date('Y-m-d', strtotime($end));
         $workingDays     = $this->getWorkingDays($begin, $end);
         $projectSchedule = $project ? json_decode($project->schedule, true) : array();
+        $hasSaturday     = $hasSunday = false;
         for($start = $begin; $start <= $end; $start = date('Y-m-d', strtotime('+1 day', strtotime($start))))
         {
             if(!empty($schedule['begin']) && !empty($schedule['end']) && $start >= $schedule['begin'] && $start <= $schedule['end'])
@@ -3021,8 +3022,10 @@ class projectModel extends model
             }
 
             $week = date('w', strtotime($start));
-            if(!isset($calendar[$start]) && $week == '6') unset($weekends[0]);
-            if(!isset($calendar[$start]) && $week == '0') unset($weekends[1]);
+            if($week == '6') $hasSaturday = true;
+            if($week == '0') $hasSunday = true;
+            if((!isset($calendar[$start]) && $week == '6') || !$hasSaturday) unset($weekends[0]);
+            if((!isset($calendar[$start]) && $week == '0') || !$hasSunday) unset($weekends[1]);
         }
 
         $scheduleData = new stdclass();
