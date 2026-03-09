@@ -467,8 +467,10 @@ class repoModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
 
+        $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
+            ->andWhere('spaceID')->in(array_keys($userSpaces))
             ->fetchAll('id', false);
 
         /* Get products. */

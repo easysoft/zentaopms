@@ -2371,6 +2371,12 @@ class projectModel extends model
 
         if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'ppm') $this->loadModel('repo')->setHideMenu($projectID);
 
+        $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $projectID);
+        if(empty($repoPairs))
+        {
+            foreach(array('project', 'waterfall') as $module) unset($this->lang->{$module}->menu->devops);
+        }
+
         if(!empty($project->isTpl)) dao::$filterTpl = 'never';
         return $projectID;
     }
