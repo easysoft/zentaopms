@@ -136,7 +136,7 @@ class gantt extends wg
             jsVar('method',          $app->rawMethod),
             jsVar('jsRoot',          $app->getWebRoot()),
             jsVar('ganttType',       $ganttType),
-            jsVar('showFields',      $showFields),
+            jsVar('showFields',      empty($showFields) ? array() : explode(',', $showFields)),
             jsVar('showChart',       $showChart),
             jsVar('colResize',       $colResize),
             jsVar('userList',        $this->getUserList()),
