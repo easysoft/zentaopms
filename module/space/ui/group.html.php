@@ -56,6 +56,7 @@ toolbar
     )) : null
 );
 
+if(!hasPriv('space', 'deleteGroup')) $config->spaceGroup->dtable->fieldList['actions']['menu'] = array('managePriv', 'manageGroupMember', 'editGroup');
 $groups = initTableData($groups, $config->spaceGroup->dtable->fieldList, $this->space);
 
 /* zin: Define the dtable in main content. */
