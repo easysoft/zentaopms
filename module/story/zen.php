@@ -1299,6 +1299,7 @@ class storyZen extends story
         $now       = helper::now();
         $fields    = $this->config->story->form->edit;
         $storyData = form::data($fields, $storyID)
+            ->add('id', $storyID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('demand', $oldStory->demand)
