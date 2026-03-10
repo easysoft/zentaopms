@@ -127,6 +127,8 @@ class gantt extends wg
         $ganttFields  = $this->prop('ganttFields');
         $toolbar      = $this->prop('toolbar');
         $holidays     = $this->prop('holidays');
+        $options      = $this->prop('options');
+        if(is_string($options) && $options == '[]') $options = array();
 
         return div
         (
@@ -145,7 +147,7 @@ class gantt extends wg
             jsVar('canEditDeadline', $this->prop('canEditDeadline')),
             jsVar('ganttFields',     $ganttFields),
             jsVar('zooming',         $this->prop('zooming')),
-            jsVar('options',         $this->prop('options')),
+            jsVar('options',         $options),
             jsVar('exportFileName',  $this->prop('exportFileName')),
             jsVar('weekend',         $this->prop('weekend')),
             jsVar('holidays',        is_array($holidays) ? array_values($holidays) : array()),
