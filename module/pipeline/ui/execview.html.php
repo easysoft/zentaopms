@@ -18,7 +18,7 @@ $backUrl = createLink('pipeline', "execution", "space={$spaceID}&repoID={$repoID
 
 panel
 (
-    zui::FlowApp
+    zui::FlowExecutionApp
     (
         set::height('calc(100vh - 96px)'),
         set::goBack(jsRaw("() => {goBack('pipeline-execution', '{$backUrl}')}")),
