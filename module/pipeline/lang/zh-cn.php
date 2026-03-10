@@ -18,10 +18,12 @@ $lang->pipeline->existPipeline = '现有流水线';
 $lang->pipeline->execution     = '执行历史';
 $lang->pipeline->log           = '执行日志';
 $lang->pipeline->arrange       = '编排流水线';
+$lang->pipeline->execView      = '执行详情';
 
 $lang->pipeline->browseAction    = '流水线列表';
 $lang->pipeline->executionAction = '流水线执行历史';
 $lang->pipeline->logsAction      = '流水线执行日志';
+$lang->pipeline->execViewAction  = '流水线执行详情';
 
 $lang->pipeline->id              = 'ID';
 $lang->pipeline->name            = '名称';

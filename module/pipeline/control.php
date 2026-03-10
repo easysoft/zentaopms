@@ -765,4 +765,37 @@ class pipeline extends control
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->send(array('result' => 'success', 'data' => $response));
     }
+
+    /**
+     * 查看执行详情。
+     * View execution detail.
+     *
+     * @param  int    $execID
+     * @access public
+     * @return void
+     */
+    public function execView(int $id, int $space = 0, int $repoID = 0, $type = 'space')
+    {
+        $this->commonAction($space);
+        if($repoID)
+        {
+            $this->pipelineZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
+
+            /* Set session. */
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+
+        $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
+        $this->view->execution = $this->pipeline->getExecByID($id);
+        $this->view->repoID    = $repoID;
+        $this->view->type      = $type;
+        $this->view->repo      = $this->loadModel('repo')->getByID($repoID);;
+
+        $this->display();
+    }
 }

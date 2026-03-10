@@ -18,10 +18,12 @@ $lang->pipeline->existPipeline = 'Existing Pipeline';
 $lang->pipeline->execution     = 'Execution History';
 $lang->pipeline->log           = 'Execution Log';
 $lang->pipeline->arrange       = 'Arrange Pipeline';
+$lang->pipeline->execView      = 'Execution View';
 
 $lang->pipeline->browseAction    = 'Pipeline List';
 $lang->pipeline->executionAction = 'Pipeline Execution History';
 $lang->pipeline->logsAction      = 'Execution Log';
+$lang->pipeline->execViewAction  = 'Pipeline Execution Details';
 
 $lang->pipeline->id              = 'ID';
 $lang->pipeline->name            = 'Nom';
