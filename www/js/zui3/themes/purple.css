@@ -1,3 +1,5 @@
+@import './common.css';
+
 :root
 {
   /* generate from https://uicolors.app/create */
@@ -46,4 +48,6 @@
   --color-secondary-800-rgb: 125, 42, 126;
   --color-secondary-900-rgb: 104, 39, 104;
   --color-secondary-950-rgb: 67, 15, 67;
+
+  --zt-menu-active-bg: var(--color-primary-400)!important;
 }
