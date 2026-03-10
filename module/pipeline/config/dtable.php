@@ -151,14 +151,14 @@ $config->pipeline->execution->dtable->fieldList['createdDate']['width']    = '11
 $config->pipeline->execution->dtable->fieldList['createdDate']['hint']     = true;
 
 $config->pipeline->execution->actionList = array();
-$config->pipeline->execution->actionList['log']['icon'] = 'file-log';
-$config->pipeline->execution->actionList['log']['text'] = $lang->pipeline->log;
-$config->pipeline->execution->actionList['log']['hint'] = $lang->pipeline->log;
-$config->pipeline->execution->actionList['log']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={type}&pipelineID={id}");
+$config->pipeline->execution->actionList['view']['icon'] = 'info';
+$config->pipeline->execution->actionList['view']['text'] = $lang->pipeline->log;
+$config->pipeline->execution->actionList['view']['hint'] = $lang->pipeline->log;
+$config->pipeline->execution->actionList['view']['url']  = array('module' => 'pipeline', 'method' => 'execView', 'params' => "execID={id}");
 
 $config->pipeline->execution->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->execution->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->execution->dtable->fieldList['actions']['width'] = 100;
 $config->pipeline->execution->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->execution->dtable->fieldList['actions']['menu']  = array('log');
+$config->pipeline->execution->dtable->fieldList['actions']['menu']  = array('view');
 $config->pipeline->execution->dtable->fieldList['actions']['list']  = $config->pipeline->execution->actionList;
