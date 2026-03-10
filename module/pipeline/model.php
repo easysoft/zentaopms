@@ -839,4 +839,19 @@ class pipelineModel extends model
         if(dao::isError()) return false;
         return $response;
     }
+
+    /**
+     * 通过执行ID获取执行详情。
+     * Get execution info by execID.
+     *
+     * @param  int $execID
+     * @access public
+     * @return object|false
+     */
+    public function getExecByID(int $execID): object|false
+    {
+        return $this->dao->select('*')->from(TABLE_PIPELINEEXEC)
+            ->where('id')->eq($execID)
+            ->fetch();
+    }
 }
