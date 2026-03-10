@@ -1502,8 +1502,10 @@ class productModel extends model
     {
         $product->type        = 'product';
         $product->productLine = $product->lineName;
-        $product->PO          = !empty($product->PO)  ? zget($users, $product->PO)  : '';
-        $product->PMT         = !empty($product->PMT) ? zget($users, $product->PMT) : '';
+        $product->PO          = !empty($product->PO)        ? zget($users, $product->PO)  : '';
+        $product->PMT         = !empty($product->PMT)       ? zget($users, $product->PMT) : '';
+        $product->createdBy   = !empty($product->createdBy) ? zget($users, $product->createdBy)  : '';
+        $product->createdDate = substr($product->createdDate, 0, 10);
 
         if($this->config->vision == 'or') return $product;
 
