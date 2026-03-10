@@ -1428,7 +1428,7 @@ class metricModel extends model
             ->andWhere('type')->eq('project')
             ->andWhere('model')->in(array('waterfall', 'waterfallplus'))
             ->andWhere("vision LIKE '%{$vision}%'", true)
-            ->orWhere("vision IS NULL")->markRight(1)
+            ->orWhere("vision")->isNull()->markRight(1)
             ->fetchPairs();
     }
 
@@ -1473,7 +1473,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'project':
@@ -1481,7 +1481,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'execution':
@@ -1489,7 +1489,7 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'repo':
@@ -1539,11 +1539,11 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('shadow')->eq(0)
                     ->andWhere('createdDate')->le($date)
-                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
                     ->orWhere('closedDate')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'project':
@@ -1551,11 +1551,11 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('project')
                     ->andWhere('openedDate')->le($date)
-                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
                     ->orWhere('closedDate')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'execution':
@@ -1563,11 +1563,11 @@ class metricModel extends model
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->in('sprint,stage,kanban')
                     ->andWhere('openedDate')->le($date)
-                    ->andWhere("closedDate IS NULL OR YEAR(closedDate)='0000'", true)
+                    ->andWhere("`closedDate` IS NULL OR YEAR(`closedDate`)='0000'", true)
                     ->orWhere('closedDate')->ge($date)
                     ->markRight(1)
                     ->andWhere("vision LIKE '%{$vision}%'", true)
-                    ->orWhere("vision IS NULL")->markRight(1)
+                    ->orWhere("vision")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
             case 'user':
@@ -1576,7 +1576,7 @@ class metricModel extends model
                     ->andWhere('join', true)->le(substr($date, 0, 10))
                     ->orWhere("`join` IS NULL")->markRight(1)
                     ->andWhere("visions LIKE '%{$vision}%'", true)
-                    ->orWhere("visions IS NULL")->markRight(1)
+                    ->orWhere("visions")->isNull()->markRight(1)
                     ->fetchPairs();
                 break;
         }
@@ -2420,7 +2420,7 @@ class metricModel extends model
      */
     public function updateMetricDate()
     {
-        $this->dao->update(TABLE_METRIC)->set('createdDate')->eq(helper::now())->where('createdDate is null')->exec();
+        $this->dao->update(TABLE_METRIC)->set('createdDate')->eq(helper::now())->where('createdDate')->isNull()->exec();
     }
 
     /**

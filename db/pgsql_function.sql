@@ -425,3 +425,73 @@ BEGIN
     RETURN TO_CHAR(date_val, pg_format);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION instr(
+    str TEXT,
+    substr TEXT
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF str IS NULL OR substr IS NULL OR substr = '' THEN
+        RETURN 0;
+    END IF;
+
+    RETURN strpos(LOWER(str), LOWER(substr));
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION left(
+    str TEXT,
+    length INT
+)
+RETURNS TEXT AS $$
+BEGIN
+    IF str IS NULL OR length IS NULL THEN
+        RETURN NULL;
+    END IF;
+    IF length <= 0 THEN
+        RETURN '';
+    END IF;
+    RETURN pg_catalog.left(str, length);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION left(
+    str DATE,
+    length INT
+)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN left(str::TEXT, length);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION left(
+    str NUMERIC,
+    length INT
+)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN left(str::TEXT, length);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION left(
+    str TIMESTAMP,
+    length INT
+)
+RETURNS TEXT AS $$
+BEGIN
+    RETURN left(str::TEXT, length);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
