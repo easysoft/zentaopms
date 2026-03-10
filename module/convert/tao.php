@@ -86,29 +86,30 @@ class convertTao extends convertModel
         foreach($data as $fieldKey => $fieldValue)
         {
             if(strpos($fieldKey, 'customfield_') === false) continue;
+            $customFieldKey = str_replace('customfield_', '', $fieldKey);
             if(is_array($fieldValue))
             {
                 if(!empty($fieldValue['content']) && !empty($fieldValue['renderedFields'][$fieldKey]))
                 {
-                    $issue->{$fieldKey} = $fieldValue['renderedFields'][$fieldKey];
+                    $issue->{$customFieldKey} = $fieldValue['renderedFields'][$fieldKey];
                 }
                 elseif(!empty($fieldValue['id']))
                 {
-                    $issue->{$fieldKey} = $fieldValue['id'];
+                    $issue->{$customFieldKey} = $fieldValue['id'];
                 }
                 else
                 {
-                    $issue->{$fieldKey} = '';
+                    $issue->{$customFieldKey} = '';
                     foreach($fieldValue as $field)
                     {
-                        if(!empty($field['id'])) $issue->{$fieldKey} .= $field['id'] . ',';
+                        if(!empty($field['id'])) $issue->{$customFieldKey} .= $field['id'] . ',';
                     }
-                    $issue->{$fieldKey} = rtrim($issue->{$fieldKey}, ',');
+                    $issue->{$customFieldKey} = rtrim($issue->{$customFieldKey}, ',');
                 }
             }
             else
             {
-                $issue->{$fieldKey} = $fieldValue;
+                $issue->{$customFieldKey} = $fieldValue;
             }
         }
 
