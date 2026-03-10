@@ -39,6 +39,7 @@ else
     );
 }
 $config->pipeline->execution->dtable->fieldList['repo']['map'] = $repos;
+$config->pipeline->execution->dtable->fieldList['actions']['list']['view']['url'] = array('module' => 'pipeline', 'method' => 'execview', 'params' => "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
 $tableData = initTableData($executionList, $config->pipeline->execution->dtable->fieldList, $this->pipeline);
 dtable
 (
