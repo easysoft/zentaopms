@@ -495,3 +495,37 @@ BEGIN
     RETURN left(str::TEXT, length);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION date_format(
+    input_date TIMESTAMP WITHOUT TIME ZONE,
+    format_str TEXT
+) RETURNS TEXT AS $$
+DECLARE
+    mapped_format TEXT := format_str;
+BEGIN
+    mapped_format := REPLACE(mapped_format, '%Y', 'YYYY');
+    mapped_format := REPLACE(mapped_format, '%y', 'YY');
+    mapped_format := REPLACE(mapped_format, '%m', 'MM');
+    mapped_format := REPLACE(mapped_format, '%c', 'FM MM');
+    mapped_format := REPLACE(mapped_format, '%d', 'DD');
+    mapped_format := REPLACE(mapped_format, '%e', 'FM DD');
+    mapped_format := REPLACE(mapped_format, '%H', 'HH24');
+    mapped_format := REPLACE(mapped_format, '%h', 'HH12');
+    mapped_format := REPLACE(mapped_format, '%i', 'MI');
+    mapped_format := REPLACE(mapped_format, '%s', 'SS');
+    mapped_format := REPLACE(mapped_format, '%W', 'Day');
+    mapped_format := REPLACE(mapped_format, '%w', 'D');
+    mapped_format := REPLACE(mapped_format, '%M', 'Month');
+    mapped_format := REPLACE(mapped_format, '%b', 'Mon');
+    mapped_format := REPLACE(mapped_format, '%p', 'AM');
+    mapped_format := REPLACE(mapped_format, '%T', 'HH24:MI:SS');
+    mapped_format := REPLACE(mapped_format, '%j', 'DDD');
+
+    mapped_format := REPLACE(mapped_format, 'FM MM', 'FMMM');
+    mapped_format := REPLACE(mapped_format, 'FM DD', 'FMDD');
+
+    RETURN TO_CHAR(input_date, mapped_format);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
