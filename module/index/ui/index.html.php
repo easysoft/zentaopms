@@ -141,7 +141,7 @@ div
         setID('spaceHeading'),
         icon('space'),
         div(setClass('text')),
-        span(setClass('label size-xs ring-0 bg-gray bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
+        span(setClass('label size-xs ring-0 bg-gray-500 bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
     ),
     div
     (
@@ -165,13 +165,10 @@ div
                 ),
                 ul(setClass('dropdown-menu menu'), setID('menuMoreList'))
             )
-        )
-    ),
-    div
-    (
-        setID('menuFooter'),
+        ),
         ul
         (
+            setID('menuToggleNav'),
             setClass('nav'),
             li
             (
@@ -181,7 +178,7 @@ div
                 a
                 (
                     setClass('menu-toggle justify-center cursor-pointer'),
-                    icon('menu-arrow-left icon-sm')
+                    icon('icon-menu-collapse icon-sm')
                 )
             )
         )

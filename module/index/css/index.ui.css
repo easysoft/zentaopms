@@ -2,25 +2,29 @@
 {
     --zt-apps-bar-height: 36px;
     --zt-apps-bar-bg: var(--color-canvas);
-    --zt-menu-width: 100px;
+    --zt-menu-width: 120px!important;
     --zt-menu-fold-width: 64px;
+    --zt-menu-space: 8px;
+    --zt-menu-active-bg: var(--color-primary-500);
+    --zt-menu-hover-bg: rgba(var(--color-primary-500-rgb), .4);
+    --zt-menu-text-color: rgba(var(--color-canvas-rgb), 1);
+    --zt-menu-text-active: var(--color-canvas);
     --zt-menu-bg: var(--color-primary-600);
 }
-[lang^='en'] {--zt-menu-width: 106px;}
-
-#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: rgba(var(--color-canvas-rgb), .8); transition: width .1s; user-select: none; z-index: 1120;}
+[lang^='en'] {--zt-menu-width: 132px;}
 .has-space {--zt-menu-width: 160px!important;}
+
+#menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: var(--zt-menu-text-color); transition: width .1s; user-select: none; z-index: 1120;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
-#menu .nav > .divider, #menuMoreList > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 6px 4px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none;}
+#menu .nav > .divider, #menuMoreList > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 6px 4px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none; margin: 0}
 #menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
 #menu .nav > li > a.active,
-#menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, rgba(var(--color-primary-400-rgb), .4)); color: var(--color-canvas);}
-#menu .nav > li > a.active {background: var(--zt-menu-active-bg, rgba(var(--color-primary-400-rgb), .7));}
+#menu .nav > li > a:hover {background: var(--zt-menu-hover-bg); color: var(--zt-menu-text-active)}
+#menu .nav > li > a.active {background: var(--zt-menu-active-bg); color: var(--zt-menu-text-active)}
 #menu .nav > li > a > .text {white-space: nowrap;}
 #menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
 @supports not (gap: 1px) {#menu .nav > li > a > .icon {margin-right: 4px;}}
-.show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #spaceHeading {display: none; height: 40px; align-items: center; flex-wrap: nowrap; gap: 4px; margin: 8px; background-color: rgba(var(--color-canvas-rgb), .1); border-radius: var(--radius-md); position: relative; padding: 0 8px;}
 .has-space #spaceHeading {display: flex;}
@@ -35,12 +39,12 @@
 .hide-menu #spaceHeading > .text, .hide-menu #spaceHeading > .label {display: none;}
 .hide-menu #spaceHeading > .icon {display: flex;}
 .hide-menu #spaceHeading {justify-content: center;}
-.has-space #menuNav {top: 46px}
 
-#menuNav {padding: 6px 0; position: absolute; left: 0; right: 0; top: 0; bottom: 46px;}
+#menuNav, #spaceHeading {margin: var(--zt-menu-space); background-color: rgba(var(--color-canvas-rgb), .07); border-radius: var(--radius-md);}
+#menuNav {padding: 4px 0;}
 #menuMainNav a {cursor: pointer;}
-#menuFooter {position: absolute; bottom: 0; left: 0; right: 0;}
 .show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
+.show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 
 #menuMainNav .is-space,
 .has-space #menuMainNav .is-original {display: none;}
