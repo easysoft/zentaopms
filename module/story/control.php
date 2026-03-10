@@ -123,7 +123,7 @@ class story extends control
         $this->view->fields      = $fields;
         $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
         $this->view->type        = $storyType;
-        $this->view->initStory   = $initStory;
+        $this->view->story       = $initStory;
         $this->view->forceReview = $this->story->checkForceReview($storyType);
 
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
