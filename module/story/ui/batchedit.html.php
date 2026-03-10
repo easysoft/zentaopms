@@ -71,6 +71,8 @@ foreach($stories as $storyID => $story)
 formBatchPanel
 (
     set::title($lang->story->batchEdit),
+    on::change('[data-name="source"]')->call('setSourceNote', jsRaw('event')),
+    set::onRenderCol(jsRaw('window.handleRenderFieldCol')),
     set::mode('edit'),
     set::items($items),
     set::data(array_values($data)),

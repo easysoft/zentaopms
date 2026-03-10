@@ -80,33 +80,3 @@ window.handleRenderFieldCol = function($col, col)
 {
     if(col.name === 'sourceNote') return renderSourceNote($col);
 };
-
-window.setSourceNote = function(e)
-{
-    const $row        = $(e.target).closest('tr');
-    const $sourceNote = $row.find('[data-name="sourceNote"]').closest('td');
-    renderSourceNote($sourceNote, e.target.value);
-}
-
-function renderSourceNote($sourceNote, source)
-{
-    const $row       = $sourceNote.closest('tr');
-    const index      = $row.attr('data-index');
-    const sourceName = $sourceNote.find('input').attr('name');
-
-    if(source === undefined) source = $row.find('[name^="source"]').val();
-    if(source == 'researchreport')
-    {
-        const sourceNoteID = `sourceNote_${index}`;
-        $sourceNote.html(`<div class='form-group-wrapper picker-box' id=${sourceNoteID}></div>`);
-        $.getJSON($.createLink('story', 'ajaxGetSourceNote'), function(sourceNoteItems)
-        {
-            new zui.Picker(`#${sourceNoteID}`, {items: sourceNoteItems, name: sourceName});
-        });
-
-    }
-    else
-    {
-        $sourceNote.html(`<input class="form-control form-batch-input" type="text" autocomplete="off" name=${sourceName} id="sourceNote" data-name="sourceNote">`);
-    }
-}
