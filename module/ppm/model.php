@@ -53,6 +53,7 @@ class ppmModel extends model
             $executionIdList = $this->loadModel('execution')->fetchExecutionList($objectID, 'all');
             if(!empty($executionIdList)) $objectID = array_merge(array_keys($executionIdList), array($objectID));
         }
+        $repoPairs = in_array($this->app->tab, array('project', 'execution')) ? $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID) : array();
 
         return $this->dao->select('*')->from(TABLE_PPM)
             ->where('1=1')
@@ -64,6 +65,7 @@ class ppmModel extends model
             ->beginIF($this->moduleName == 'ppm')->andWhere('flow')->eq('0')->fi()
             ->beginIF($this->moduleName == 'pullreq')->andWhere('flow')->eq('1')->fi()
             ->beginIF($objectID && $this->moduleName == 'ppm')->andWhere('executionID')->in($objectID)->fi()
+            ->beginIF(!empty($repoPairs))->andWhere('repoID')->in(array_keys($repoPairs))->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

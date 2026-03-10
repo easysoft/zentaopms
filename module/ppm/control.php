@@ -62,8 +62,12 @@ class ppm extends control
      */
     public function browse(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->loadModel('repo');
         if($this->app->tab == 'execution')
         {
+            $repos = $this->repo->getRepoPairs('execution', $objectID);
+            if(empty($repos)) return $this->locate($this->createLink('execution', 'task', "objectID={$objectID}"));
+
             $this->session->set('execution', $objectID);
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
@@ -76,6 +80,8 @@ class ppm extends control
         }
         elseif($this->app->tab == 'project')
         {
+            $repos = $this->repo->getRepoPairs('execution', $objectID);
+            if(empty($repos)) return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
             $this->session->set('project', $objectID);
             $this->loadModel('project')->setMenu($objectID);
             $this->view->projectID = $objectID;
@@ -83,7 +89,7 @@ class ppm extends control
 
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID) return print($this->fetch('ppm', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
-        $repoList = $this->loadModel('repo')->getListByPriv();
+        $repoList = $this->repo->getListByPriv();
         if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
         if(!$repoID) $repoID = key($repoList);
