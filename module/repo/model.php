@@ -2801,21 +2801,9 @@ class repoModel extends model
             foreach($menuGroup as $module) unset($this->lang->{$module}->menu->devops);
         }
 
-        $showTag    = false;
-        $showBranch = false;
-        $showCommit = false;
-        foreach(array_keys($repoPairs) as $repoID)
-        {
-            if($repoID == $this->session->repoID)
-            {
-                $showTag    = true;
-                $showBranch = true;
-            }
-        }
-
         $showMR     = common::hasPriv('ppm', 'browse');
-        $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
-        $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
+        $showTag    = common::hasPriv('repo', 'browsetag');
+        $showBranch = common::hasPriv('repo', 'browsebranch');
         $showReview = $repoPairs  && common::hasPriv('repo', 'review');
         $showCommit = $repoPairs  && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
