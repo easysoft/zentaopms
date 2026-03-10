@@ -48,12 +48,12 @@ class ppmModel extends model
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
+        $repoPairs = in_array($this->app->tab, array('project', 'execution')) ? $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID) : array();
         if($this->app->tab == 'project')
         {
             $executionIdList = $this->loadModel('execution')->fetchExecutionList($objectID, 'all');
             if(!empty($executionIdList)) $objectID = array_merge(array_keys($executionIdList), array($objectID));
         }
-        $repoPairs = in_array($this->app->tab, array('project', 'execution')) ? $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID) : array();
 
         return $this->dao->select('*')->from(TABLE_PPM)
             ->where('1=1')
