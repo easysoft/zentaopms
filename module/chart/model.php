@@ -192,6 +192,8 @@ class chartModel extends model
                 ->andWhere("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->eq('published')
                 ->andWhere('id')->in($viewableObjects)
+                ->beginIF(!helper::hasFeature('program'))->andWhere('code')->notLike("%program%")->fi()
+                ->beginIF(!helper::hasFeature('devops'))->andWhere('code')->notLike("%devops%")->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
@@ -208,7 +210,6 @@ class chartModel extends model
 
             foreach($chartGroups[$group->id] as $chart)
             {
-                if(!$this->isClickable($chart, 'design') && !helper::hasFeature('program') && strpos(strtolower($chart->code), 'program') !== false) continue;
                 $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
             }
         }
