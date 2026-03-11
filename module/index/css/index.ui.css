@@ -45,6 +45,7 @@
 #menuMainNav a {cursor: pointer;}
 .show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
 .show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
+.show-menu #menuToggleNav [data-hint]::before, .show-menu #menuToggleNav [data-hint]::after {display: block;}
 
 #menuMainNav .is-space,
 .has-space #menuMainNav .is-original {display: none;}
