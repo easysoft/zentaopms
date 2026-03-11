@@ -17,6 +17,7 @@ jsVar('rooms', $rooms);
 
 $config->host->featureBar['all']['active'] = true;
 $config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
+if(!hasPriv('host', 'treemap')) $config->host->featureBar = array($config->host->featureBar['all']);
 featureBar
 (
     set::items($config->host->featureBar),
