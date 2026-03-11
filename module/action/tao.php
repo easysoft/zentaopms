@@ -418,7 +418,7 @@ class actionTao extends actionModel
             $field  = $type == 'build' ? 'name, execution' : 'name';
             $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $field);
 
-            $buildTab = $type == 'build' && ($this->app->tab == 'product' || empty($action->execution)) ? 'project' : $this->app->tab;
+            $buildTab = $type == 'build' && (in_array($this->app->tab, array('product', 'qa')) || empty($action->execution)) ? 'project' : $this->app->tab;
             if($this->app->tab == 'system') $buildTab = 'project';
 
             if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name, '', $type == 'build' ? "data-app='{$buildTab}'" : '') : $object->name;
