@@ -205,6 +205,7 @@ class bug extends control
 
         if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
 
+        $builds = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'hasdeleted');
         if($bug->resolvedBuild && !isset($builds[$bug->resolvedBuild]))
         {
             $build = $this->build->fetchByID((int)$bug->resolvedBuild);
