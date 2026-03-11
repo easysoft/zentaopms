@@ -185,6 +185,15 @@ window.renderRowData = function($row, index, story)
         if(roadmapCondition || storyCondition) $roadmap.append("<input type='hidden' name='roadmap[" + story.id + "]' value='" + story.roadmap + "' />");
     }
 
+    if(story.type == 'requirement' && storyType != 'requirement')
+    {
+        $row.find('[data-name="source"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $sourcePicker = info[0];
+            $sourcePicker.render({items: URSourceItems});
+        });
+    }
+
     if(story.source == 'researchreport')
     {
         renderSourceNote($row.find('[data-name="sourceNote"]'), story.source, story.sourceNote);

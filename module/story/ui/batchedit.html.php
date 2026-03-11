@@ -20,6 +20,10 @@ jsVar('productStoryList', $productStoryList);
 jsVar('storyType', $storyType);
 jsVar('urStageOptions', $urStageOptions);
 
+$URSourceItems = array();
+foreach($lang->requirement->sourceList as $key => $name) $URSourceItems[] = array('value' => $key, 'text' => $name);
+jsVar('URSourceItems', $URSourceItems);
+
 if(!empty($twinsTip)) pageJS("zui.Modal.alert({message: '{$twinsTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 if(!empty($frozenTips)) pageJS("zui.Modal.alert({message: '{$frozenTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
