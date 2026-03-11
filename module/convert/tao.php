@@ -1340,7 +1340,7 @@ class convertTao extends convertModel
     {
         $member = new stdclass();
         $member->root    = $objectID;
-        $member->account = $createdBy;
+        $member->account = $this->getJiraAccount($createdBy);
         $member->role    = '';
         $member->join    = helper::now();
         $member->type    = $type;
