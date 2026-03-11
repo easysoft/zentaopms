@@ -114,7 +114,9 @@ window.getRelation = function(commit)
  */
 function openTab(titleObj)
 {
-    var tabTemplate = `<li class="nav-item"><a class="font-medium" href="{href}" data-toggle="tab"><span><i class="icon icon-{prefixIcon}"></i>{title}</span></a><a title="{unlinkTitle}" class="unlinks" data-link="{unlinkHref}"><i class="icon icon-unlink"></i></a></li>`;
+    var tabTemplate = `<li class="nav-item"><a class="font-medium" href="{href}" data-toggle="tab"><span><i class="icon icon-{prefixIcon}"></i>{title}</span></a>`
+    if(canUnlinkObject) tabTemplate = tabTemplate + `<a title="{unlinkTitle}" class="unlinks" data-link="{unlinkHref}"><i class="icon icon-unlink"></i></a>`
+    tabTemplate = tabTemplate + `</li>`;
 
     var eleId      = titleObj.type + '-' + titleObj.id;
     var prefixIcon = titleObj.type == 'story' ? 'lightbulb' : (titleObj.type == 'task' ? 'check-sign' : 'bug');

@@ -764,6 +764,11 @@ class pipeline extends control
     {
         $response = $this->pipeline->apiGetExecInfo($execID);
         if(dao::isError()) return $this->sendError(dao::getError());
+
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(empty($apiRoot)) return $this->send(array('result' => 'success', 'data' => $response));
+
+        $response->sseBaseURL = sprintf($apiRoot->url, '/pipelines/' . $response->pipelineID . '/executions/' . $response->id . '/stream');
         $this->send(array('result' => 'success', 'data' => $response));
     }
 

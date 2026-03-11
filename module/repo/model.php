@@ -463,7 +463,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getRepoPairs(string $type = '', int $projectID = 0, bool $showScm = true): array
+    public function getRepoPairs(string $type = '', int $projectID = 0, bool $showScm = false): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
 
@@ -480,7 +480,7 @@ class repoModel extends model
         foreach($repos as $repo)
         {
             $scm = '';
-            if($showScm) $scm = 'GitFox';
+            if($showScm) $scm = '[GitFox] ';
             if($this->checkPriv($repo))
             {
                 if(($type == 'project' or $type == 'execution') and $projectID)

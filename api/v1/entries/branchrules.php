@@ -21,7 +21,7 @@ class branchRulesEntry extends baseEntry
     {
         $header = getallheaders();
         $token  = isset($header['Authorization']) ? $header['Authorization'] : '';
-        $entry  = $this->loadModel('entry')->getByCode('devops');
+        $entry  = $this->loadModel('entry')->getByCode('gitfox');
 
         if(empty($token) || empty($entry->key) || $token != $entry->key)
         {
