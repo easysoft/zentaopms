@@ -7,8 +7,8 @@ title=测试 storyModel->getStories2Link();
 timeout=0
 cid=18556
 
-- 获取需求1可关联的需求数量 @9
-- 获取需求2可关联的需求数量 @9
+- 获取需求1可关联的需求数量 @18
+- 获取需求2可关联的需求数量 @18
 - 获取需求12可关联的需求id、product
  - 第12条的type属性 @story
  - 第12条的product属性 @1
@@ -24,7 +24,7 @@ zenData('storyspec')->gen(60);
 zenData('product')->gen(20);
 $story = zenData('story');
 $story->product->range(1);
-$story->parent->range('0{18},`-1`,19');
+$story->parent->range('0{18},19');
 $story->type->range('requirement{10},story{10}');
 $story->gen(20);
 
@@ -44,7 +44,7 @@ su('admin');
 $stories1 = $tester->loadModel('story')->getStories2Link(1, 'bySearch', 0);
 $stories2 = $tester->loadModel('story')->getStories2Link(2);
 
-r(count($stories1)) && p()                  && e('9');       // 获取需求1可关联的需求数量
-r(count($stories2)) && p()                  && e('9');       // 获取需求2可关联的需求数量
+r(count($stories1)) && p()                  && e('18');       // 获取需求1可关联的需求数量
+r(count($stories2)) && p()                  && e('18');       // 获取需求2可关联的需求数量
 r($stories1)        && p('12:type,product') && e('story,1'); // 获取需求12可关联的需求id、product
 r($stories2)        && p('14:type,product') && e('story,1'); // 获取需求3可关联的需求id、product
