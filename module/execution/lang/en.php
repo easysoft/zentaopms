@@ -222,7 +222,7 @@ $lang->execution->kanbanAclList['private'] = 'Private';
 
 $lang->execution->storyPoint = 'Story Point';
 
-$lang->execution->burnByList['left']       = 'View by remaining hours';
+$lang->execution->burnByList['left']       = 'View by left hours';
 $lang->execution->burnByList['estimate']   = "View by plan hours";
 $lang->execution->burnByList['storyPoint'] = 'View by story point';
 

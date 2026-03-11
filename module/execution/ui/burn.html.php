@@ -88,14 +88,14 @@ featureBar
     li
     (
         set::className('burnByBox'),
-        set::style(array('width' => $isEn ? '200px' : '150px')),
+        set::style(array('width' => $isEn ? '160px' : '150px')),
         picker
         (
             set::id('burnBy'),
             set::name('burnBy'),
             set::items($lang->execution->burnByList),
             set::value($burnBy),
-            $isEn ? set::style(array('width' => '200px')) : null,
+            $isEn ? set::style(array('width' => '160px')) : null,
             set::required(true)
         )
     ),
