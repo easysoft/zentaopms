@@ -184,7 +184,10 @@ else
     $config->search->searchObject = array('trash');
 }
 
-if(!helper::hasFeature('program')) unset($config->search->fields->program);
+if(!helper::hasFeature('program'))   unset($config->search->fields->program);
+if(!helper::hasFeature('AI'))        unset($config->search->fields->aiapp);
+if(!helper::hasFeature('testsuite')) unset($config->search->fields->testsuite);
+if(!helper::hasFeature('caselib'))   unset($config->search->fields->caselib);
 
 $config->search->controlProps = array();
 $config->search->controlProps['executionCase']['lastRunResult'] = (object)array('emptyValue' => '');
