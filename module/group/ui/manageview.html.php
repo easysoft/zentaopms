@@ -47,6 +47,7 @@ function getActionsBox($navGroup, $group, $module)
     {
         foreach($lang->action->dynamicAction->$module as $action => $actionTitle)
         {
+            if(!helper::hasFeature($module)) continue;
             $actionsBox[] = div
             (
                 set::className('action-item'),
@@ -69,6 +70,7 @@ function getActionsBox($navGroup, $group, $module)
             {
                 foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle)
                 {
+                    if(!helper::hasFeature($subModule)) continue;
                     $actionsBox[] = div
                     (
                         set::className('action-item'),
