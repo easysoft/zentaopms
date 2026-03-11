@@ -21,6 +21,7 @@ $config->space->actionList['group']['url']      = array('module' => 'space', 'me
 $config->space->actionList['edit']['icon']     = 'edit';
 $config->space->actionList['edit']['text']     = $lang->edit;
 $config->space->actionList['edit']['hint']     = $lang->edit;
+$config->space->actionList['edit']['showText'] = true;
 $config->space->actionList['edit']['url']      = array('module' => 'space', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->space->actionList['delete']['icon']         = 'trash';

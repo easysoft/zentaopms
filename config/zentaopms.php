@@ -350,7 +350,6 @@ $config->logonMethods[] = 'sonarqube.execjob';
 $config->logonMethods[] = 'sonarqube.reportview';
 $config->logonMethods[] = 'space.binduser';
 $config->logonMethods[] = 'space.createapplication';
-$config->logonMethods[] = 'space.edit';
 $config->logonMethods[] = 'space.getstoreappinfo';
 $config->logonMethods[] = 'story.storyview';
 $config->logonMethods[] = 'system.editdomain';

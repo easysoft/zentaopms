@@ -23,13 +23,13 @@ dropmenu
 featureBar();
 toolbar
 (
-    item(set(array
+    hasPriv('space', 'manageMembers') ? item(set(array
     (
         'icon'  => 'persons',
         'text'  => $lang->space->manageMembers,
         'class' => "primary create-project-btn",
         'url'   => $this->createLink('space', 'manageMembers', "spaceID={$spaceID}")
-    )))
+    ))) : null
 );
 
 if(!empty($space) && $space->auth == 'extend') unset($config->spaceMember->dtable->fieldList['group']);
