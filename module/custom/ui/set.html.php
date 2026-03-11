@@ -476,6 +476,7 @@ else
             $system   = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
             $keyLabel = $key === '' ? 'NULL' : $key;
             if($key === 0) $keyLabel = '0';
+            if($app->getClientLang() == 'en' && $key == 'requirement') $keyLabel = $lang->custom->feature;
 
             $formItems[] = formRow
             (
