@@ -117,7 +117,7 @@ class navbar extends wg
                 setData('navbarGroup', data('mainNavbarGroup')),
                 on::init()->call('initPageNavbar', $items),
                 set::items($navItems),
-                zui::create('ResponsiveNavHelper', $responsiveNavOptions),
+                empty($items) ? null : zui::create('ResponsiveNavHelper', $responsiveNavOptions),
                 $this->children()
             )
         );
