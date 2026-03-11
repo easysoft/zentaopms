@@ -18,12 +18,13 @@ jsVar('hasMyISAM', $lang->admin->engineSummary['hasMyISAM']);
 
 $MyISAMCount = 0;
 $engineList  = array();
+$isEn        = $app->getClientLang() == 'en';
 foreach($tableEngines as $tableName => $engine)
 {
     if($engine != 'InnoDB') $MyISAMCount++;
     $engineList[] = div
     (
-        setClass('flex items-center my-1 pl-5 h-5'),
+        setClass('flex items-center my-1 pl-5 h-5' . ($isEn ? ' gap-1' : '')),
         set(array('data-table' => $tableName)),
         div
         (
