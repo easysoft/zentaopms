@@ -37,8 +37,8 @@ class schedule extends wg
                 generateSchedule(objectType, parent.find('input[name^=schedule]'), `{$projectID}`, begin, end);
 
                 let disabled = true;
-                if(disabled && (!begin || !end  || end == `{$longTime}`)) disabled = false;
-                if(disabled && begin > end)                               disabled = false;
+                if(disabled && (!begin || !end  || end == `{$longTime}`) || typeof end == 'undefined') disabled = false;
+                if(disabled && begin > end) disabled = false;
                 parent.find('.btn-calendar').toggleClass('disabled', !disabled);
             });
 JS
