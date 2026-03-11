@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $this->app->loadLang('execution');
+$isEn = $app->getClientLang() == 'en';
 $teamOrders = array();
 foreach($task->team as $team) $teamOrders[$team->order] = $team->account;
 
@@ -156,12 +157,12 @@ div
                     h::th
                     (
                         width('60px'),
-                        $lang->task->consumedAB
+                        $lang->task->consumedAB . ($isEn ? $lang->task->labelSuffixHour : '')
                     ),
                     h::th
                     (
                         width('60px'),
-                        $lang->task->leftAB
+                        $lang->task->leftAB . ($isEn ? $lang->task->labelSuffixHour : '')
                     ),
                     h::th
                     (

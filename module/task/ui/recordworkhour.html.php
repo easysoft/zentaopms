@@ -15,6 +15,7 @@ jsVar('foldEffort', $lang->task->foldEffort);
 jsVar('unfoldEffort', $lang->task->unfoldEffort);
 
 if(isInModal()) set::id("modal-record-hours-task-{$task->id}");
+$isEn = $app->getClientLang() == 'en';
 
 modalHeader
 (
@@ -111,12 +112,12 @@ if($efforts)
                 h::th
                 (
                     width('60px'),
-                    $lang->task->consumedHours
+                    $lang->task->consumedHours . ($isEn ? $lang->task->labelSuffixHour : '')
                 ),
                 h::th
                 (
                     width('60px'),
-                    $lang->task->leftAB
+                    $lang->task->leftAB . ($isEn ? $lang->task->labelSuffixHour : '')
                 ),
                 h::th
                 (
@@ -205,7 +206,7 @@ else
         (
             set::required(true),
             set::name('consumed'),
-            set::label($lang->task->consumedHours),
+            set::label($lang->task->consumedHours . ($isEn ? $lang->task->labelSuffixHour : '')),
             set::width('80px'),
             set::control
             (
@@ -220,7 +221,7 @@ else
         (
             set::required(true),
             set::name('left'),
-            set::label($lang->task->leftAB),
+            set::label($lang->task->leftAB . ($isEn ? $lang->task->labelSuffixHour : '')),
             set::width('80px'),
             set::control
             (
