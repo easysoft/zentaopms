@@ -334,7 +334,7 @@ class navbar extends wg
             {
                 $projectID    = str_replace('project=', '', $menuItem->link['vars']);
                 $projectInfo  = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
-                if($projectInfo && isset($projectModel->model)) $projectModel = $projectModel->model;
+                if($projectInfo && isset($projectInfo->model)) $projectModel = $projectInfo->model;
             }
 
             $newItem = null;
