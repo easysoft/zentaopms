@@ -573,6 +573,7 @@ class pipeline extends control
             {
                 $task = new stdClass();
                 $task->name  = $plugin->name;
+                $task->type  = $plugin->kind;
                 $task->alias = $plugin->alias;
                 $task->icon  = 'code';
                 $tasks[] = $task;
