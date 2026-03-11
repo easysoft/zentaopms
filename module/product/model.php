@@ -1206,7 +1206,7 @@ class productModel extends model
     {
         return $this->dao->select('id,name')->from(TABLE_MODULE)
             ->where('type')->eq('line')
-            ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
+            ->beginIF(helper::hasFeature('program') && ($programIdList || $filterRoot))->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
