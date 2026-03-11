@@ -47,7 +47,7 @@ panel
                 $lang->convert->jira->fileDesc
             )
         ),
-        div
+        false ? div
         (
             setClass('border border-hover rounded-md cursor-pointer open-url p-4 flex-1'),
             set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=api'))),
@@ -61,7 +61,7 @@ panel
                 setClass('text-gray mb-4'),
                 $lang->convert->jira->apiDesc
             )
-        )
+        ) : null
     )
 );
 
