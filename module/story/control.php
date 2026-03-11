@@ -1465,10 +1465,11 @@ class story extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $orderBy = 'id_desc')
     {
         $this->commonAction($storyID);
         $story = $this->story->getById($storyID);
@@ -1499,7 +1500,7 @@ class story extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories to link. */
-        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
+        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager, $orderBy);
 
         /* Assign. */
         $this->view->title         = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
@@ -1508,6 +1509,11 @@ class story extends control
         $this->view->stories2Link  = $stories2Link;
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyID       = $storyID;
+        $this->view->linkedStoryID = $linkedStoryID;
+        $this->view->browseType    = $browseType;
+        $this->view->queryID       = $queryID;
+        $this->view->orderBy       = $orderBy;
 
         $this->display();
     }
