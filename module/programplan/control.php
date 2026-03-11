@@ -24,10 +24,10 @@ class programplan extends control
     {
         $this->loadModel('product');
         $this->loadModel('project');
-        $products  = $this->product->getProductPairsByProject($projectID);
+        $products = $this->product->getProductPairsByProject($projectID);
 
         $productID = $this->product->checkAccess($productID, $products);
-        $project = $this->project->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
         $this->project->setMenu($projectID);
@@ -78,9 +78,10 @@ class programplan extends control
         $browseType = strtolower($browseType);
         $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
 
+        $project     = $this->loadModel('project')->fetchByID($projectID);
         $minBegin    = min(array_column($plans['data'], 'begin'));
         $maxDeadline = max(array_column($plans['data'], 'deadline'));
-        $this->view->holidays = $this->loadModel('holiday')->getHolidays($minBegin, $maxDeadline);
+        $this->view->holidays = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->from     = $from;
         $this->view->blockID  = $blockID;
 
