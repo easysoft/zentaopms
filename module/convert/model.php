@@ -822,6 +822,34 @@ EOT;
     public function getJiraFieldGroupByProject($relations): array
     {
         $fieldList  = $this->dao->dbh($this->dbh)->select('AID, extra, BID AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
+        if($this->session->jiraMethod == 'api')
+        {
+            $projectList = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields&maxResults=1000');
+            $jiraFields  = array();
+            foreach($projectList as $project)
+            {
+                if(empty($project->issuetypes)) continue;
+                foreach($project->issuetypes as $issueType)
+                {
+                    if(empty($issueType->fields)) continue;
+
+                    $zentaoObject = $relations['zentaoObject'][$issueType->id];
+                    foreach($issueType->fields as $key => $field)
+                    {
+                        if(strpos($key, 'customfield_') === false) continue;
+
+                        $fieldKey = str_replace('customfield_', '', $key);
+                        if(empty($fieldList[$fieldKey])) continue;
+
+                        $zentaoField = $fieldList[$fieldKey][$zentaoObject];
+                        $jiraFields[$project->id][$zentaoObject][$zentaoField->field] = $zentaoField;
+                    }
+                }
+            }
+
+            return $jiraFields;
+        }
+
         $issues     = $this->getJiraData($this->session->jiraMethod, 'issue');
         $fieldValue = $this->getJiraData($this->session->jiraMethod, 'customfieldvalue');
         $jiraFields = array();
@@ -972,7 +1000,6 @@ EOT;
         $httpURL = $jiraApi['domain'] . $url . "&startAt=$start";
         $result  = json_decode(commonModel::http($httpURL, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
 
-        $dataList = array();
         if(!empty($result->values) || !empty($result->issues))
         {
             $dataList = !empty($result->values) ? $result->values : $result->issues;
@@ -987,9 +1014,13 @@ EOT;
                     $dataList = array_merge($dataList, $this->callJiraAPI($url, $start + $result->maxResults));
                 }
             }
+
+            return $dataList;
         }
 
-        return $dataList;
+        if(!empty($result->projects)) return $result->projects;
+
+        return array();
     }
 
     /**
@@ -1338,14 +1369,14 @@ EOT;
     {
         if($this->session->jiraMethod == 'api')
         {
-            $schemeList   = $this->callJiraAPI('/rest/api/3/issuetypescheme?expand=projects,issuetypes&maxResults=1000');
+            $projectList  = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes&maxResults=1000');
             $projectGroup = array();
-            foreach($schemeList as $scheme)
+            foreach($projectList as $project)
             {
-                if(empty($scheme->issueTypes->values) || empty($scheme->projects->values)) continue;
-                foreach($scheme->issueTypes->values as $issueType)
+                if(empty($project->issuetypes)) continue;
+                foreach($project->issuetypes as $issueType)
                 {
-                    foreach($scheme->projects->values as $project) $projectGroup[$project->id][] = $relations['zentaoObject'][$issueType->id];
+                    $projectGroup[$project->id][] = $relations['zentaoObject'][$issueType->id];
                 }
             }
 
