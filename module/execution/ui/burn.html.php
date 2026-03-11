@@ -24,6 +24,9 @@ $weekend      = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweeken
 $delay        = strpos($type, 'withdelay') !== false ? 'nodelay' : 'withdelay';
 $weekendParam = $delay == 'withdelay' ? "nodelay,{$weekend}" : "withdelay,{$weekend}";
 $delayParam   = $weekend == 'noweekend' ? "withweekend,{$delay}" : "noweekend,{$delay}";
+
+$isEn = $app->getClientLang() == 'en';
+
 featureBar
 (
     btn
@@ -85,24 +88,28 @@ featureBar
     li
     (
         set::className('burnByBox'),
+        set::style(array('width' => $isEn ? '200px' : '150px')),
         picker
         (
             set::id('burnBy'),
             set::name('burnBy'),
             set::items($lang->execution->burnByList),
             set::value($burnBy),
+            $isEn ? set::style(array('width' => '200px')) : null,
             set::required(true)
         )
     ),
     $interval ? li
     (
         set::className('intervalBox ml-4'),
+        set::style(array('width' =>  $isEn ? '150px' :'100px')),
         picker
         (
             set::id('interval'),
             set::name('interval'),
             set::items($dayList),
             set::value($interval),
+            $isEn ? set::style(array('width' => '150px')) : null,
             set::required(true)
         )
     ) : null
