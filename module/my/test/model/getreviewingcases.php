@@ -31,6 +31,9 @@ $account    = array('admin', 'user1');
 $orderBy    = array('id_desc', 'id_asc');
 $checkExist = array(false, true);
 
+global $config;
+$config->testcase->needReview = 1;
+
 $my = new myModelTest();
 r($my->getReviewingCasesTest($account[0], $orderBy[0], $checkExist[0])) && p() && e('17,13,9,5,1'); // 测试获取用户 admin 排序 id_desc 的需求id。
 r($my->getReviewingCasesTest($account[0], $orderBy[0], $checkExist[1])) && p() && e('exist');       // 测试获取用户 admin 排序 id_desc 的需求是否存在。
