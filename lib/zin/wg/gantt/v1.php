@@ -127,6 +127,7 @@ class gantt extends wg
         $ganttFields  = $this->prop('ganttFields');
         $toolbar      = $this->prop('toolbar');
         $holidays     = $this->prop('holidays');
+        $workingDays  = $this->prop('workingDays');
         $options      = $this->prop('options');
         if(is_string($options) && $options == '[]') $options = array();
 
@@ -150,6 +151,7 @@ class gantt extends wg
             jsVar('options',         $options),
             jsVar('exportFileName',  $this->prop('exportFileName')),
             jsVar('weekend',         $this->prop('weekend')),
+            jsVar('workingDays',     is_array($workingDays) ? array_values($workingDays) : array()),
             jsVar('holidays',        is_array($holidays) ? array_values($holidays) : array()),
             jsVar('colsWidth',       (float)$colsWidth),
             jsVar('height',          (float)$this->prop('height')),
@@ -161,7 +163,7 @@ class gantt extends wg
             div
             (
                 setClass('relative'),
-                empty($toolbar) ? null : setStyle(array('width' => 'calc(100% - 25px)')),
+                empty($toolbar) ? null : setStyle(array('width' => 'calc(100% - 50px)')),
                 div(setID($id), setClass('gantt is-collapsed')),
                 $this->getToolbar()
             ),
