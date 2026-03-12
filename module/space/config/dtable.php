@@ -83,7 +83,7 @@ $config->spaceGroup->dtable->fieldList['actions']['name']     = 'actions';
 $config->spaceGroup->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->spaceGroup->dtable->fieldList['actions']['type']     = 'actions';
 $config->spaceGroup->dtable->fieldList['actions']['width']    = '140';
-$config->spaceGroup->dtable->fieldList['actions']['menu']     = array('managePriv', 'manageGroupMember', 'editGroup', 'delete');
+$config->spaceGroup->dtable->fieldList['actions']['menu']     = array('managePriv', 'manageGroupMember', 'editGroup', 'deleteGroup');
 $config->spaceGroup->dtable->fieldList['actions']['sortType'] = false;
 $config->spaceGroup->dtable->fieldList['actions']['fixed']    = 'right';
 
@@ -106,10 +106,10 @@ $config->spaceGroup->dtable->fieldList['actions']['list']['editGroup']['url']   
 $config->spaceGroup->dtable->fieldList['actions']['list']['editGroup']['data-toggle'] = 'modal';
 $config->spaceGroup->dtable->fieldList['actions']['list']['editGroup']['data-size']   = 'sm';
 
-$config->spaceGroup->dtable->fieldList['actions']['list']['delete']['icon'] = 'trash';
-$config->spaceGroup->dtable->fieldList['actions']['list']['delete']['text'] = $lang->group->delete;
-$config->spaceGroup->dtable->fieldList['actions']['list']['delete']['hint'] = $lang->group->delete;
-$config->spaceGroup->dtable->fieldList['actions']['list']['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
+$config->spaceGroup->dtable->fieldList['actions']['list']['deleteGroup']['icon'] = 'trash';
+$config->spaceGroup->dtable->fieldList['actions']['list']['deleteGroup']['text'] = $lang->group->delete;
+$config->spaceGroup->dtable->fieldList['actions']['list']['deleteGroup']['hint'] = $lang->group->delete;
+$config->spaceGroup->dtable->fieldList['actions']['list']['deleteGroup']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
 
 $config->spaceMember = new stdclass();
 $config->spaceMember->dtable = new stdclass();
