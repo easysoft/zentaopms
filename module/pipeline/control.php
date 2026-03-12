@@ -804,4 +804,24 @@ class pipeline extends control
 
         $this->display();
     }
+
+    /**
+     * 获取执行日志。
+     * Get execution log.
+     *
+     * @param  int $pipelineID
+     * @param  int $executionID
+     * @param  int $stageID
+     * @param  int $stepID
+     * @access public
+     * @return void
+     */
+    public function getLog(int $pipelineID, int $executionID, int $stageID, int $stepID)
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url = sprintf($apiRoot->url, "/pipelines/{$pipelineID}/executions/{$executionID}/logs/{$stageID}/{$stepID}");
+
+        $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
+        $this->sendSuccess($response);
+    }
 }
