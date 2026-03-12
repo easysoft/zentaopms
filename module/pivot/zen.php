@@ -502,7 +502,7 @@ class pivotZen extends pivot
         $value  = zget($filter, 'default', '');
         $values = is_array($value) ? implode(',', $value) : $value;
 
-        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search}");
+        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search:base64}");
         $data = array();
         $data['values'] = $values;
         if($from == 'query')
