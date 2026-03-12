@@ -1182,7 +1182,7 @@ class myModel extends model
         foreach($demands as $id => $demand)
         {
             if(!$this->demand->isClickable($demand, 'review')) continue;
-            if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $demand)) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $demand)) continue;
 
             $data = new stdclass();
             $data->id      = $demand->id;
@@ -1239,7 +1239,7 @@ class myModel extends model
         foreach($stories as $storyID => $story)
         {
             if(!$this->story->isClickable($story, 'review')) continue;
-            if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $story)) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $story)) continue;
 
             $data = new stdclass();
             $data->id        = $story->id;
@@ -1290,7 +1290,7 @@ class myModel extends model
         foreach($cases as $case)
         {
             if(!$this->testcase->isClickable($case, 'review')) continue;
-            if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $case)) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $case)) continue;
 
             $data = new stdclass();
             $data->id      = $case->id;
@@ -1458,7 +1458,7 @@ class myModel extends model
         foreach($feedbacks as $feedback)
         {
             if(!$this->feedback->isClickable($feedback, 'review')) continue;
-            if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $feedback)) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $feedback)) continue;
 
             $data = new stdclass();
             $data->id      = $feedback->id;
