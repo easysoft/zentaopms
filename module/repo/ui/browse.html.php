@@ -15,6 +15,8 @@ namespace zin;
 jsVar('path', $path);
 jsVar('copied', $lang->repo->copied);
 jsVar('base64BranchID', $base64BranchID);
+jsVar('repoID', $repoID);
+jsVar('objectID', $objectID);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu

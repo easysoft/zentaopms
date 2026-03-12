@@ -1624,8 +1624,46 @@ class my extends control
      * @access public
      * @return void
      */
-    public function ssh()
+    public function ssh(int $repoID = 0, int $objectID = 0)
     {
+        $tab = $this->app->tab;
+        if($tab != 'my')
+        {
+            $this->loadModel('repo');
+            $this->repos = $this->repo->getRepoPairs($tab, $objectID);
+
+            if($tab == 'project')
+            {
+                if(empty($this->repos)) return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
+                $project = $this->loadModel('project')->getByID($objectID);
+                if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
+                $this->loadModel('project')->setMenu($objectID);
+                $this->view->projectID = $objectID;
+            }
+            elseif($tab == 'execution')
+            {
+                if(empty($this->repos)) return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
+                $execution = $this->loadModel('execution')->getByID($objectID);
+                if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
+                if($execution)
+                {
+                    $features = $this->execution->getExecutionFeatures($execution);
+                    if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+                }
+
+                $this->loadModel('execution')->setMenu($objectID);
+                $this->view->executionID = $objectID;
+            }
+            else
+            {
+                $this->repo->setMenu($this->repos, $repoID);
+            }
+        }
+
         $this->view->title   = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->ssh;
         $this->view->sshList = $this->my->getSSH();
         $this->display();
