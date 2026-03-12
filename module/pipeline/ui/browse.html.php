@@ -44,6 +44,7 @@ $createItem    = array('text' => $lang->pipeline->create,     'url' => inLink('c
 $runnerItem    = array('text' => $lang->runner->manageRunner, 'url' => createLink('runner', 'browse'), 'class' => 'primary');
 $executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('execution', "spaceID={$spaceID}&repoID={$repoID}&type={$type}"), 'class' => 'primary');
 $config->pipeline->dtable->fieldList['actions']['list']['arrange']['url'] = helper::createLink('pipeline', 'arrange',"id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
+$config->pipeline->dtable->fieldList['actions']['list']['exec']['url']    = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}&space={$spaceID}&repoID={$repoID}&type={$type}");
 
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);

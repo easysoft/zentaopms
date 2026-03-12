@@ -217,7 +217,7 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function exec(int $pipelineID)
+    public function exec(int $pipelineID, int $space = 0, int $repoID = 0, $type = 'space')
     {
         $pipeline  = $this->pipeline->getByID($pipelineID);
         $variables = $pipeline->variables;
@@ -238,11 +238,12 @@ class pipeline extends control
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->pipeline->exec($pipelineID, $formData);
+            $result = $this->pipeline->exec($pipelineID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
-            return $this->sendSuccess(array('load' => true));
+            $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
+            return $this->sendSuccess(array('locate' => $url));
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);

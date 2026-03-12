@@ -1730,7 +1730,7 @@ class myModel extends model
 
         $url    = sprintf($apiRoot->url, '/user/keys/' . $sshID);
         $result = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
-        return $this->gitfox->getResponse($result);
+        return $this->gitfox->getResponse($result, true);
     }
 
     /**
@@ -1754,7 +1754,7 @@ class myModel extends model
 
         $url      = sprintf($apiRoot->url, '/user/keys/' . $sshID);
         $response = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json', 'PUT'));
-        return $this->gitfox->getResponse($response);
+        return $this->gitfox->getResponse($response, true);
     }
 
     /**
