@@ -111,7 +111,7 @@ window.downloadZip = function()
 
 window.loadSSHmanager = function()
 {
-    var link = $.createLink('my', 'ssh');
+    var link = $.createLink('my', 'ssh', 'repoID=' + repoID + '&objectID=' + objectID) + '#app=' + appTab;
     openUrl(link);
 }
 

@@ -2796,16 +2796,12 @@ class repoModel extends model
     {
         $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
-        if(empty($repoPairs))
-        {
-            foreach($menuGroup as $module) unset($this->lang->{$module}->menu->devops);
-        }
 
-        $showMR     = common::hasPriv('ppm', 'browse');
-        $showTag    = common::hasPriv('repo', 'browsetag');
-        $showBranch = common::hasPriv('repo', 'browsebranch');
-        $showReview = $repoPairs  && common::hasPriv('repo', 'review');
-        $showCommit = $repoPairs  && common::hasPriv('repo', 'log');
+        $showMR     = $repoPairs && common::hasPriv('ppm', 'browse');
+        $showTag    = $repoPairs && common::hasPriv('repo', 'browsetag');
+        $showBranch = $repoPairs && common::hasPriv('repo', 'browsebranch');
+        $showReview = $repoPairs && common::hasPriv('repo', 'review');
+        $showCommit = $repoPairs && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
             if(!isset($this->lang->{$module}->menu->devops['subMenu'])) continue;

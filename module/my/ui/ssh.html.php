@@ -9,7 +9,15 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-featureBar();
+featureBar
+(
+    $this->app->tab != 'my' ? backBtn
+    (
+        set::icon('back'),
+        set::type('secondary'),
+        $lang->goback
+    ) : null
+);
 
 $createLink = $this->createLink('my', 'createSSH');
 $createItem = array('text' => $lang->my->createSSH, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus', 'data-size' => 'md', 'data-toggle' => 'modal');

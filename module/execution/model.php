@@ -232,12 +232,6 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
-        $repos = $this->loadModel('repo')->getRepoPairs('execution', $execution->id);
-        if(empty($repos))
-        {
-            unset($this->lang->execution->menu->devops);
-            unset($this->lang->project->noMultiple->scrum->menu->devops);
-        }
 
         return true;
     }

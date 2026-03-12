@@ -53,8 +53,6 @@ class repo extends control
 
         if($tab == 'project')
         {
-            if(empty($this->repos)) return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
-
             $project = $this->loadModel('project')->getByID($objectID);
             if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
 
@@ -63,8 +61,6 @@ class repo extends control
         }
         elseif($tab == 'execution')
         {
-            if(empty($this->repos)) return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
-
             $execution = $this->loadModel('execution')->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
