@@ -124,6 +124,7 @@ gantt
     set::exportFileName('gantt-export-' . $projectID),
     set::weekend(array('weekend' => zget($config->execution, 'weekend', 2), 'restDay' => zget($config->execution, 'restDay', 0))),
     set::holidays($holidays),
+    set::workingDays($workingDays),
     set('options', $plans)
 );
 
