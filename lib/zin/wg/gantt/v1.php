@@ -161,7 +161,7 @@ class gantt extends wg
             div
             (
                 setClass('relative'),
-                empty($toolbar) ? null : setStyle(array('width' => 'calc(100% - 25px)')),
+                empty($toolbar) ? null : setStyle(array('width' => 'calc(100% - 50px)')),
                 div(setID($id), setClass('gantt is-collapsed')),
                 $this->getToolbar()
             ),
