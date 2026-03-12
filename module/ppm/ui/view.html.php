@@ -35,7 +35,7 @@ jsVar('file', $currentEntry);
 jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID={$ppm->repoID}&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
-jsVar('sseURL', "http://localhost:{$config->devops->gitfoxPort}/api/v2/spaces/{$repo->spaceID}/events?App=zentao&Operator={$app->user->account}&Authorization={$gitfoxServer->token}");
+jsVar('sseURL', "{$config->devops->gitfoxURL}:{$config->devops->gitfoxPort}/api/v2/spaces/{$repo->spaceID}/events?App=zentao&Operator={$app->user->account}&Authorization={$gitfoxServer->token}");
 
 h:css("#monacoTree .text-clip {overflow: visible;}");
 

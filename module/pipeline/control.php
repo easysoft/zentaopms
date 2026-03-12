@@ -769,7 +769,6 @@ class pipeline extends control
         if(empty($apiRoot)) return $this->send(array('result' => 'success', 'data' => $response));
 
         $response->sseBaseURL = sprintf($apiRoot->url, '/pipelines/' . $response->pipelineID . '/executions/' . $response->id . '/stream');
-        $response->sseBaseURL = "http://localhost:3000/api/v2/pipelines/{$response->pipelineID}/executions/{$response->id}/stream";
         $this->send(array('result' => 'success', 'data' => $response));
     }
 
