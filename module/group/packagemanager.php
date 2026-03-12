@@ -2901,7 +2901,6 @@ $config->group->package->reviewCodeIssue->privs['repo-addBug']        = array('e
 $config->group->package->reviewCodeIssue->privs['repo-editBug']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editComment', 'repo-review'));
 $config->group->package->reviewCodeIssue->privs['repo-editComment']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-review'));
 $config->group->package->reviewCodeIssue->privs['repo-deleteComment'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-editComment', 'repo-review'));
-$config->group->package->reviewCodeIssue->privs['repo-deleteBug']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-diff'), 'recommend' => array('repo-addBug', 'repo-addComment', 'repo-editBug', 'repo-editComment', 'repo-review'));
 
 $config->group->package->editor = new stdclass();
 $config->group->package->editor->order  = 10;

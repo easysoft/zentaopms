@@ -1676,16 +1676,6 @@ $lang->custom->methodOrder[100] = 'hours';
 $lang->custom->methodOrder[105] = 'percent';
 $lang->custom->methodOrder[110] = 'limitTaskDate';
 
-/* Subversion. */
-$lang->resource->svn = new stdclass();
-$lang->resource->svn->diff    = 'diff';
-$lang->resource->svn->cat     = 'cat';
-$lang->resource->svn->apiSync = 'apiSync';
-
-$lang->svn->methodOrder[5]  = 'diff';
-$lang->svn->methodOrder[10] = 'cat';
-$lang->svn->methodOrder[15] = 'apiSync';
-
 /* merge request. */
 $lang->resource->ppm = new stdclass();
 $lang->resource->ppm->create     = 'create';
@@ -1694,10 +1684,6 @@ $lang->resource->ppm->edit       = 'edit';
 $lang->resource->ppm->delete     = 'delete';
 $lang->resource->ppm->view       = 'viewAction';
 $lang->resource->ppm->merge      = 'merge';
-$lang->resource->ppm->linkStory  = 'linkStory';
-$lang->resource->ppm->linkBug    = 'linkBug';
-$lang->resource->ppm->linkTask   = 'linkTask';
-$lang->resource->ppm->unlink     = 'unlink';
 $lang->resource->ppm->review     = 'review';
 $lang->resource->ppm->close      = 'close';
 $lang->resource->ppm->reopen     = 'reopen';
@@ -1708,10 +1694,6 @@ $lang->ppm->methodOrder[20]  = 'edit';
 $lang->ppm->methodOrder[25]  = 'delete';
 $lang->ppm->methodOrder[35]  = 'view';
 $lang->ppm->methodOrder[45]  = 'merge';
-$lang->ppm->methodOrder[60]  = 'linkStory';
-$lang->ppm->methodOrder[65]  = 'linkBug';
-$lang->ppm->methodOrder[70]  = 'linkTask';
-$lang->ppm->methodOrder[75]  = 'unlink';
 $lang->ppm->methodOrder[80]  = 'review';
 $lang->ppm->methodOrder[85]  = 'close';
 $lang->ppm->methodOrder[90]  = 'reopen';
@@ -1719,16 +1701,6 @@ $lang->ppm->methodOrder[95]  = 'addReview';
 
 /* App. */
 $lang->resource->app = new stdclass();
-
-/* Git. */
-$lang->resource->git = new stdclass();
-$lang->resource->git->diff    = 'diff';
-$lang->resource->git->cat     = 'cat';
-$lang->resource->git->apiSync = 'apiSync';
-
-$lang->git->methodOrder[5]  = 'diff';
-$lang->git->methodOrder[10] = 'cat';
-$lang->git->methodOrder[15] = 'apiSync';
 
 /* Company. */
 $lang->resource->company = new stdclass();

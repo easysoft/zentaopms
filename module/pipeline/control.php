@@ -768,7 +768,7 @@ class pipeline extends control
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         if(empty($apiRoot)) return $this->send(array('result' => 'success', 'data' => $response));
 
-        $response->sseBaseURL = sprintf($apiRoot->url, '/pipelines/' . $response->pipelineID . '/executions/' . $response->id . '/stream');
+        $response->sseBaseURL = sprintf($apiRoot->url, '/pipelines/' . $response->pipelineID . '/executions/' . $response->id . '/logstream');
         $this->send(array('result' => 'success', 'data' => $response));
     }
 
