@@ -4979,11 +4979,7 @@ class executionModel extends model
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
 
                         if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
-                        if($actionName == 'autoSchedule')
-                        {
-                            if(!commonModel::hasPriv('task', 'autoSchedule')) $action['disabled'] = true;
-                            if($hasConflict) $action['data-app'] = 'project';
-                        }
+                        if($actionName == 'autoSchedule' && !commonModel::hasPriv('task', 'autoSchedule')) $action['disabled'] = true;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                         if(!empty($execution->frozen) && in_array($actionName, array('edit', 'createChildStage', 'delete', 'putoff'))) $action['hint'] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->$actionName);
