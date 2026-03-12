@@ -43,7 +43,7 @@
 #menuNav, #spaceHeading {margin: var(--zt-menu-space); background-color: rgba(var(--color-canvas-rgb), .07); border-radius: var(--radius-md);}
 #menuNav {padding: 4px 0;}
 #menuMainNav a {cursor: pointer;}
-.show-menu #menuFooter [data-hint]::after {content: attr(data-collapse-text)}
+.show-menu #menuToggleNav [data-hint]::after {content: attr(data-collapse-text)}
 .show-menu #menuNav [data-hint]::before, .show-menu #menuNav [data-hint]::after {display: none;}
 .show-menu #menuToggleNav [data-hint]::before, .show-menu #menuToggleNav [data-hint]::after {display: block;}
 
