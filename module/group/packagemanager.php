@@ -4459,20 +4459,20 @@ $config->group->package->browseScanInfo->privs['codescan-ruleset']      = array(
 $config->group->package->browseScanInfo->privs['codescan-rulesetview']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array('codescan-ruleset'), 'recommend' => array());
 $config->group->package->browseScanInfo->privs['codescan-taskLog']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array('codescan-task'), 'recommend' => array());
 
+$config->group->package->execScan = new stdclass();
+$config->group->package->execScan->order  = 10;
+$config->group->package->execScan->subset = 'codeScan';
+$config->group->package->execScan->privs  = array();
+$config->group->package->execScan->privs['codescan-exec']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('codescan-plan'), 'recommend' => array('codescan-createPlan', 'codescan-editPlan', 'codescan-deletePlan', 'codescan-task', 'codescan-trigger'));
+$config->group->package->execScan->privs['codescan-resend'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('codescan-task'), 'recommend' => array());
+
 $config->group->package->processScanIssues = new stdclass();
-$config->group->package->processScanIssues->order  = 10;
+$config->group->package->processScanIssues->order  = 15;
 $config->group->package->processScanIssues->subset = 'codeScan';
 $config->group->package->processScanIssues->privs  = array();
 $config->group->package->processScanIssues->privs['codescan-ignoreIssue']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-confirmIssue', 'codescan-activeIssue'));
 $config->group->package->processScanIssues->privs['codescan-confirmIssue'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-activeIssue'));
 $config->group->package->processScanIssues->privs['codescan-activeIssue']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('codescan-issue'), 'recommend' => array('codescan-issueView', 'codescan-ignoreIssue', 'codescan-confirmIssue'));
-
-$config->group->package->execScan = new stdclass();
-$config->group->package->execScan->order  = 15;
-$config->group->package->execScan->subset = 'codeScan';
-$config->group->package->execScan->privs  = array();
-$config->group->package->execScan->privs['codescan-exec']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('codescan-plan'), 'recommend' => array('codescan-createPlan', 'codescan-editPlan', 'codescan-deletePlan', 'codescan-task', 'codescan-trigger'));
-$config->group->package->execScan->privs['codescan-resend'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10,  'depend' => array('codescan-task'), 'recommend' => array());
 
 $config->group->package->codeScanMaintain = new stdclass();
 $config->group->package->codeScanMaintain->order  = 20;
