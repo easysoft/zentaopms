@@ -4198,15 +4198,16 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
-     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $module
      * @param  bool   $cacheSearchFunc 是否缓存构造搜索参数的方法。默认缓存可以提高性能，构造搜索表单时再加载真实值。
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true, int $productID = 0)
     {
         $searchConfig = $this->config->execution->search;
         if($cacheSearchFunc)
@@ -4227,7 +4228,7 @@ class executionModel extends model
         }
         $execution = $this->getByID($executionID);
 
-        $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+        $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, $productID, 'all', '', 'full', 'unclosed', 'story', false);
 
         if($module == 'task')
         {
