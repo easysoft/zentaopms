@@ -1036,7 +1036,7 @@ EOT;
         if(empty($userKey)) return '';
 
         $users = $this->getJiraUser();
-        return zget($users, $userKey);
+        return zget($users, $userKey, '');
     }
 
     /**

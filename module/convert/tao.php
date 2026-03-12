@@ -1338,16 +1338,20 @@ class convertTao extends convertModel
      */
     protected function createTeamMember(int $objectID, string $createdBy, string $type): bool
     {
-        $member = new stdclass();
-        $member->root    = $objectID;
-        $member->account = $this->getJiraAccount($createdBy);
-        $member->role    = '';
-        $member->join    = helper::now();
-        $member->type    = $type;
-        $member->days    = 0;
-        $member->hours   = $this->config->execution->defaultWorkhours;
+        $account = $this->getJiraAccount($createdBy);
+        if($account)
+        {
+            $member = new stdclass();
+            $member->root    = $objectID;
+            $member->account = $account;
+            $member->role    = '';
+            $member->join    = helper::now();
+            $member->type    = $type;
+            $member->days    = 0;
+            $member->hours   = $this->config->execution->defaultWorkhours;
 
-        $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
+            $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
+        }
 
         return true;
     }
