@@ -844,8 +844,8 @@ class metricZen extends metric
         foreach($metrics as $metric)
         {
             $metric->canEdit        = $metric->stage == 'wait';
-            $metric->canImplement   = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin === '0');
-            $metric->canDelist      = $metric->stage == 'released' && $metric->builtin === '0';
+            $metric->canImplement   = ($metric->stage == 'wait' && !$this->metric->isOldMetric($metric) && $metric->builtin == '0');
+            $metric->canDelist      = $metric->stage == 'released' && $metric->builtin == '0';
             $metric->canRecalculate = $metric->stage == 'released' && !empty($metric->dateType) && $metric->dateType != 'nodate';
             $metric->isUsed         = $this->screen->checkIFChartInUse($metric->id, 'metric');
         }
