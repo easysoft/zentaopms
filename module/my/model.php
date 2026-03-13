@@ -1216,7 +1216,6 @@ class myModel extends model
     public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
         $this->loadModel($type);
-        $this->loadModel('flow');
 
         $stories = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
@@ -1231,15 +1230,25 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+        if($this->config->edition != 'open')
+        {
+            $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
+            if($reviewAction)
+            {
+                $this->loadModel('flow');
+                foreach($stories as $storyID => $story)
+                {
+                    if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $story)) unset($stories[$storyID]);
+                }
+            }
+        }
 
-        $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         $reviewList = array();
         foreach($stories as $storyID => $story)
         {
             if(!$this->story->isClickable($story, 'review')) continue;
-            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $story)) continue;
 
             $data = new stdclass();
             $data->id        = $story->id;
@@ -1282,15 +1291,26 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        $this->loadModel('testcase');
+        if($this->config->edition != 'open')
+        {
+            $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
 
-        $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
+            if($reviewAction)
+            {
+                $this->loadModel('flow');
+                foreach($cases as $caseID => $case)
+                {
+                    if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $case)) unset($cases[$caseID]);
+                }
+            }
+        }
+
+        $this->loadModel('testcase');
 
         $reviewList = array();
         foreach($cases as $case)
         {
             if(!$this->testcase->isClickable($case, 'review')) continue;
-            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $case)) continue;
 
             $data = new stdclass();
             $data->id      = $case->id;
