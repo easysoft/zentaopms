@@ -598,7 +598,7 @@ class upgradeZen extends upgrade
         $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
         /* 如果经典管理模式。*/
         /* If the system mode is classic. */
-        if($systemMode == 'classic')
+        if($systemMode == 'classic' && $this->config->edition != 'ipd')
         {
             $this->upgradeFromClassicMode();
             $selectMode = false;
