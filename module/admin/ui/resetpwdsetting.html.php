@@ -49,6 +49,9 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
     );
 }
 
+$isEn = $app->getClientLang() == 'en';
+$enSidebarWidth = $isEn ? set::minWidth('180') : null;
+
 div
 (
     setID('mainContent'),
@@ -56,6 +59,7 @@ div
     $menuItems ? sidebar
     (
         set::showToggle(false),
+        $enSidebarWidth,
         div
         (
             setClass('cell p-2.5 bg-white'),
