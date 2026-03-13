@@ -1712,7 +1712,7 @@ class myModel extends model
 
         $url    = sprintf($apiRoot->url, '/user/keys');
         $result = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json'));
-        return $this->gitfox->getResponse($result);
+        return $this->gitfox->getResponse($result, true);
     }
 
     /**
