@@ -43,9 +43,13 @@ class caseTimeInfo extends wg
 
     protected function build()
     {
+        global $app;
+
+        $isEn = $app->getClientLang() == 'en';
         return new datalist
         (
             set::className('case-time-info'),
+            $isEn ? set::labelWidth('86') : null,
             set::items($this->getItems())
         );
     }
