@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$isEn = $app->getClientLang() == 'en';
+
 formPanel
 (
     setID('percentForm'),
@@ -19,12 +22,13 @@ formPanel
         formGroup
         (
             set::label($lang->custom->setPercent),
+            $isEn ? null : set::labelWidth('128px'),
             radioList
             (
                 set::name('percent'),
                 set::items($lang->custom->conceptOptions->URAndSR),
                 set::value(isset($config->setPercent) ? $config->setPercent : 0),
-                set::inline(true)
+                set::inline(true),
             )
         )
     ),
@@ -34,6 +38,7 @@ formPanel
         formGroup
         (
             set::label(''),
+            $isEn ? null : set::labelWidth('128px'),
             span
             (
                 icon('info text-warning mr-2'),
