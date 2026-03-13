@@ -23,13 +23,17 @@ class tableData extends wg
 
     private function buildItemWithTr($item): node
     {
+        global $app;
+
         $required = $item->prop('required');
+        $isEn     = $app->getClientLang() == 'en';
         return h::tr
         (
             setClass($item->prop('trClass')),
             h::th
             (
                 setClass('py-1.5 pr-2 font-normal nowrap text-right' . ($required ? ' required' : ''), $item->prop('thClass')),
+                set::style(array('width' => $isEn ? '107px' : '65px')),
                 $item->prop('name'),
                 $item->block('suffixName')
             ),
