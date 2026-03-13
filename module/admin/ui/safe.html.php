@@ -51,6 +51,8 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
     );
 }
 
+$isEn = $app->getClientLang() == 'en';
+
 div
 (
     setID('mainContent'),
@@ -58,6 +60,7 @@ div
     $menuItems ? sidebar
     (
         set::showToggle(false),
+        $isEn ? set::minWidth('180') : null,
         div
         (
             setClass('cell p-2.5 bg-white'),
@@ -81,6 +84,7 @@ div
                     radioList
                     (
                         set::name('mode'),
+                        setClass('flex-nowrap'),
                         set::items($lang->admin->safe->modeList),
                         set::value(isset($config->safe->mode) ? $config->safe->mode : 0),
                         set::inline(true)
