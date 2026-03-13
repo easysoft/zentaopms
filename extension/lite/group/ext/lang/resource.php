@@ -1443,4 +1443,14 @@ if($config->edition != 'open')
     $lang->resource->workflowaction->setJS  = 'setJSAction';
     $lang->resource->workflowaction->setCSS = 'setCSSAction';
 }
+
+if(!helper::hasFeature('OA'))
+{
+    unset($lang->resource->attend);
+    unset($lang->resource->leave);
+    unset($lang->resource->makeup);
+    unset($lang->resource->overtime);
+    unset($lang->resource->lieu);
+}
+
 // include (dirname(__FILE__) . '/changelog.php');
