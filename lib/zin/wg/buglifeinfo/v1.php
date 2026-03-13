@@ -60,9 +60,13 @@ class bugLifeInfo extends wg
 
     protected function build()
     {
+        global $app;
+
+        $isEn = $app->getClientLang() == 'en';
         return new datalist
         (
             set::className('bug-life-info'),
+            $isEn ? set::labelWidth('100') : null,
             set::items($this->getItems())
         );
     }

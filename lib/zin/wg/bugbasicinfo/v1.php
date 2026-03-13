@@ -179,9 +179,13 @@ class bugBasicInfo extends wg
 
     protected function build()
     {
+        global $app;
+
+        $isEn = $app->getClientLang() == 'en';
         return new datalist
         (
             set::className('bug-basic-info break-all overflow-hidden text-clip'),
+            $isEn ? set::labelWidth('105') : null,
             set::items($this->getItems())
         );
     }
