@@ -3029,7 +3029,7 @@ $config->group->package->browsePipeline = new stdclass();
 $config->group->package->browsePipeline->order  = 5;
 $config->group->package->browsePipeline->subset = 'pipeline';
 $config->group->package->browsePipeline->privs  = array();
-$config->group->package->browsePipeline->privs['pipeline-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
+$config->group->package->browsePipeline->privs['pipeline-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain', 'repo-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
 $config->group->package->browsePipeline->privs['pipeline-execution'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-exec', 'pipeline-execView'));
 $config->group->package->browsePipeline->privs['pipeline-execView']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-execution', 'pipeline-exec'));
 
