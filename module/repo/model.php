@@ -64,7 +64,6 @@ class repoModel extends model
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
-        $this->loadModel('common')->resetDevOpsPriv(empty($repo) ? 0 : $repo->spaceID);
     }
 
     /**
