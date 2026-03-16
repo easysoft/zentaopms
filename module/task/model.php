@@ -3997,4 +3997,41 @@ class taskModel extends model
             $this->sendMailForRelationTask($task, $relationTasks, $action);
         }
     }
+
+    /**
+     * 发送邮件给依赖任务。
+     * Send mail for relation task.
+     *
+     * @param  object $task
+     * @param  array $relationTasks
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendMailForRelationTask(object $task, array $relationTasks, string $action): bool
+    {
+        $this->loadModel('mail');
+        $domain = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain = rtrim($domain, '/');
+        foreach($relationTasks as $relationTask)
+        {
+            $subjectVar  = $relationTask->action == 'begin' ? 'startSubjectText' : 'finishSubjectText';
+            $subjectText = sprintf($this->lang->task->$subjectVar, $relationTask->id, $relationTask->name);
+            if($action == 'started')
+            {
+                $mailContentVar = $relationTask->action == 'begin' ? 'SSMailContentText' : 'SFMailContentText';
+            }
+            else
+            {
+                $mailContentVar = $relationTask->action == 'begin' ? 'FSMailContentText' : 'FFMailContentText';
+            }
+
+            $currentLink  = $domain . helper::createLink('task', 'view', "id={$task->id}");
+            $relationLink = $domain . helper::createLink('task', 'view', "id={$relationTask->id}");
+            $mailContent  = sprintf($this->lang->task->$mailContentVar, $currentLink, $task->name, $relationLink, $relationTask->name);
+
+            $this->mail->send($relationTask->assignedTo, $subjectText, $mailContent);
+        }
+        return true;
+    }
 }
