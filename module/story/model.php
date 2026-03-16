@@ -2993,7 +2993,7 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
-                ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
+                ->beginIF($this->config->requirement->gradeRule == 'stepwise' && $this->config->vision == 'rnd')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
             $parents = array();
@@ -3063,7 +3063,7 @@ class storyModel extends model
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
             ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
-            ->beginIF($this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
+            ->beginIF($this->config->epic->gradeRule == 'stepwise' && $this->config->vision == 'rnd')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
             ->fetchAll('id');
 
         $parents = array();
