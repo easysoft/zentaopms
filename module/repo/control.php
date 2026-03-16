@@ -314,6 +314,8 @@ class repo extends control
             $formData = form::data($this->config->repo->form->edit)
                 ->skipSpecial('desc')
                 ->get();
+            $check = $this->repo->checkName($formData->name);
+            if(!$check) return $this->sendError(array('name' => $this->lang->repo->error->repoNameInvalid));
 
             if($formData->acl == 'private' && empty($formData->members))
             {
