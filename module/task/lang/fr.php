@@ -310,6 +310,20 @@ $lang->task->addChildTask              = 'Because the task has already consumed 
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 $lang->task->effortOperateTips         = 'Only the project manager, the executive supervisor, and the department head have the authority to %s logs belonging to others.';
 $lang->task->syncStoryToChildrenTip    = "Child tasks of %s do not have {$lang->SRCommon}, will {$lang->SRCommon} be synchronised with these child tasks?";
+$lang->task->startSubjectText          = '"TASK #%s %s" can start';
+$lang->task->finishSubjectText         = '"TASK #%s %s" can finish';
+$lang->task->SSMailContentText         = 'Pre-task "<a href=\'%s\'>%s</a>" has begun. The task you are responsible for "<a href=\'%s\'>%s</a>" can start.';
+$lang->task->SFMailContentText         = 'Pre-task "<a href=\'%s\'>%s</a>" has begun. The task you are responsible for "<a href=\'%s\'>%s</a>" can finish.';
+$lang->task->FSMailContentText         = 'Pre-task "<a href=\'%s\'>%s</a>" has finished. The task you are responsible for "<a href=\'%s\'>%s</a>" can start.';
+$lang->task->FFMailContentText         = 'Pre-task "<a href=\'%s\'>%s</a>" has finished. The task you are responsible for "<a href=\'%s\'>%s</a>" can finish.';
+$lang->task->SSWebhookText             = '%s has started the pre-task "[%s](%s)", and the task you are responsible for "[%s](%s)" can start.';
+$lang->task->SFWebhookText             = '%s has started the pre-task "[%s](%s)", and the task you are responsible for "[%s](%s)" can finish.';
+$lang->task->FSWebhookText             = '%s has finished the pre-task "[%s](%s)", and the task you are responsible for "[%s](%s)" can start.';
+$lang->task->FFWebhookText             = '%s has finished the pre-task "[%s](%s)", and the task you are responsible for "[%s](%s)" can finish.';
+$lang->task->SSMessageText             = "%s has started the pre-task \"<a href='%s'>%s</a>\", and the task you are responsible for \"<a href='%s'>%s</a>\" can start.";
+$lang->task->SFMessageText             = "%s has started the pre-task \"<a href='%s'>%s</a>\" and the task you are responsible for \"<a href='%s'>%s</a>\" can finish.";
+$lang->task->FSMessageText             = "%s has finished the pre-task \"<a href='%s'>%s</a>\" and the task you are responsible for \"<a href='%s'>%s</a>\" can start.";
+$lang->task->FFMessageText             = "%s has finished the pre-task \"<a href='%s'>%s</a>\" and the task you are responsible for \"<a href='%s'>%s</a>\" can finish.";
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Coût Total" doit être numérique.';
