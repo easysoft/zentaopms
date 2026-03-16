@@ -334,7 +334,7 @@ class file extends control
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
             if($file->objectType == 'charter')  $this->loadModel('charter')->updateFileByDelete($file);
 
-            if(!helper::isAjaxRequest()) return print(js::reload('parent'));
+            if(!helper::isAjaxRequest() && $this->viewType != 'json') return print(js::reload('parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
