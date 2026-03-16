@@ -4081,6 +4081,42 @@ class taskModel extends model
             $user         = zget($users, $relationTask->assignedTo);
             $mobile       = $user->mobile;
             $email        = $user->email;
+            foreach($webhooks as $id => $webhook)
+            {
+                if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
+                {
+                    $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
+                }
+                elseif($webhook->type == 'bearychat')
+                {
+                    $data = $this->webhook->getBearychatData($text, $mobile, $email, 'task', $task->id);
+                }
+                elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
+                {
+                    $data = $this->webhook->getWeixinData($text, $mobile);
+                }
+                elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
+                {
+                    $data = $this->webhook->getFeishuData($title, $text);
+                }
+                else
+                {
+                    $data = new stdclass();
+                    $data->text = $text;
+                }
+
+                $postData = json_encode($data);
+                if(!$postData) continue;
+
+                if($webhook->sendType == 'async')
+                {
+                    $this->webhook->saveData($id, '0', $postData);
+                    continue;
+                }
+
+                $result = $this->webhook->fetchHook($webhook, $postData, 0, $user->account);
+                if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $postData, $result);
+            }
         }
         return true;
     }
