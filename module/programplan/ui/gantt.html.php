@@ -119,6 +119,7 @@ gantt
     set('showChart', !$dateDetails),
     set('users', $users),
     set('showFields', $showFields),
+    set::root($projectID),
     set::settingLink(createLink('programplan', 'ajaxcustom')),
     set::toolbar(array('criticalPath', 'fullscreen', 'setting')),
     set::exportFileName('gantt-export-' . $projectID),

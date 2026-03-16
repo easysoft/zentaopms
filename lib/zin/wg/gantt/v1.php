@@ -16,6 +16,7 @@ class gantt extends wg
         'showFields?:string',
         'exportFileName?:string',
         'toolbar?:bool|array',
+        'root?:int',
         'options?:array'
     );
 
@@ -135,6 +136,7 @@ class gantt extends wg
         (
             jsVar('ganttID',         $id),
             jsVar('projectID',       $project ? $project->id : 0),
+            jsVar('root',            (int)$this->prop('root')),
             jsVar('module',          $app->rawModule),
             jsVar('method',          $app->rawMethod),
             jsVar('jsRoot',          $app->getWebRoot()),
