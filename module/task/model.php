@@ -250,6 +250,8 @@ class taskModel extends model
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->config->edition != 'open' && in_array(strtolower($action), array('started', 'finished'))) $this->sendMessageForRelation($task->id, strtolower($action), $actionID);
         }
         return !dao::isError();
     }
@@ -3963,5 +3965,36 @@ class taskModel extends model
         }
 
         return $task;
+    }
+
+    /**
+     * 发送消息给依赖任务。
+     * Send message for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @param  int    $actionID
+     * @access public
+     * @return bool
+     */
+    public function sendMessageForRelation(int $taskID, string $action, int $actionID): bool
+    {
+        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo')->from(TABLE_RELATIONOFTASKS)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t1.pretask')->eq($taskID)
+            ->beginIF($action == 'started')->andWhere('t1.condition')->eq('begin')->fi()
+            ->beginIF($action == 'finished')->andWhere('t1.condition')->eq('end')->fi()
+            ->fetchAll('id');
+        if(empty($relationTasks)) return true;
+
+        $this->loadModel('message');
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+
+        $task = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(isset($messageSetting['mail']['setting']['task']) && in_array($action, $messageSetting['mail']['setting']['task']))
+        {
+            $this->sendMailForRelationTask($task, $relationTasks, $action);
+        }
     }
 }
