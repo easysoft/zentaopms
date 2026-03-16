@@ -2899,4 +2899,21 @@ class taskModelTest extends baseTest
         if(!$result) return false;
         return true;
     }
+
+    /**
+     * 发送Webhook给依赖任务。
+     * Send webhook for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendWebhookForRelationTaskTest(int $taskID, string $action): bool
+    {
+        $task   = $this->instance->getByID($taskID);
+        $result = $this->instance->sendWebhookForRelationTask($task, array(), $action, 0);
+        if(!$result) return false;
+        return true;
+    }
 }
