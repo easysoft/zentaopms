@@ -4001,6 +4001,34 @@ class taskModel extends model
         {
             $this->sendWebhookForRelationTask($task, $relationTasks, $action, $actionID);
         }
+
+        if(isset($messageSetting['message']['setting']['task']) && in_array($action, $messageSetting['message']['setting']['task']))
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'message';
+            $notify->action      = $actionID;
+            $notify->status      = 'wait';
+            $notify->createdBy   = $this->app->user->account;
+            $notify->createdDate = helper::now();
+            foreach($relationTasks as $relationTask)
+            {
+                if($action == 'started')
+                {
+                    $messageTextVar = $relationTask->action == 'begin' ? 'SSMessageText' : 'SFMessageText';
+                }
+                else
+                {
+                    $messageTextVar = $relationTask->action == 'begin' ? 'FSMessageText' : 'FFMessageText';
+                }
+
+                $currentLink    = helper::createLink('task', 'view', "id={$task->id}");
+                $relationLink   = helper::createLink('task', 'view', "id={$relationTask->id}");
+                $notify->data   = sprintf($this->lang->task->$messageTextVar, $notify->createdBy, $currentLink, $task->name, $relationLink, $relationTask->name);
+                $notify->toList = ",{$relationTask->assignedTo},";
+
+                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
+        }
         return !dao::isError();
     }
 
