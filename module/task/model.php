@@ -251,7 +251,7 @@ class taskModel extends model
             $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            if($this->config->edition != 'open' && in_array(strtolower($action), array('started', 'finished'))) $this->sendMessageForRelation($task->id, strtolower($action), $actionID);
+            if($this->config->edition != 'open' && in_array(strtolower($action), array('started', 'finished'))) $this->sendMessageForRelationTask($task->id, strtolower($action), $actionID);
         }
         return !dao::isError();
     }
@@ -3977,7 +3977,7 @@ class taskModel extends model
      * @access public
      * @return bool
      */
-    public function sendMessageForRelation(int $taskID, string $action, int $actionID): bool
+    public function sendMessageForRelationTask(int $taskID, string $action, int $actionID): bool
     {
         $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo')->from(TABLE_RELATIONOFTASKS)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
@@ -3996,6 +3996,12 @@ class taskModel extends model
         {
             $this->sendMailForRelationTask($task, $relationTasks, $action);
         }
+
+        if(isset($messageSetting['webhook']['setting']['task']) && in_array($action, $messageSetting['webhook']['setting']['task']))
+        {
+            $this->sendWebhookForRelationTask($task, $relationTasks, $action, $actionID);
+        }
+        return !dao::isError();
     }
 
     /**
@@ -4031,6 +4037,50 @@ class taskModel extends model
             $mailContent  = sprintf($this->lang->task->$mailContentVar, $currentLink, $task->name, $relationLink, $relationTask->name);
 
             $this->mail->send($relationTask->assignedTo, $subjectText, $mailContent);
+        }
+        return true;
+    }
+
+    /**
+     * 发送Webhook给依赖任务。
+     * Send webhook for relation task.
+     *
+     * @param  object $task
+     * @param  array  $relationTasks
+     * @param  string $action
+     * @param  int    $actionID
+     * @access public
+     * @return bool
+     */
+    public function sendWebhookForRelationTask(object $task, array $relationTasks, string $action, int $actionID): bool
+    {
+        $this->loadModel('webhook');
+        static $webhooks = array();
+        if(!$webhooks) $webhooks = $this->webhook->getList();
+        if(!$webhooks) return true;
+
+        $users = $this->dao->select('`account`,mobile,email')->from(TABLE_USER)->where('`account`')->in(array_column($relationTasks, 'assignedTo'))->fetchAll('account');
+        foreach($relationTasks as $relationTask)
+        {
+            if(!isset($users[$relationTask->assignedTo])) continue;
+
+            if($action == 'started')
+            {
+                $webhookTextVar = $relationTask->action == 'begin' ? 'SSWebhookText' : 'SFWebhookText';
+            }
+            else
+            {
+                $webhookTextVar = $relationTask->action == 'begin' ? 'FSWebhookText' : 'FFWebhookText';
+            }
+
+            $host         = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+            $currentLink  = $host . helper::createLink('task', 'view', "id={$task->id}");
+            $relationLink = $host . helper::createLink('task', 'view', "id={$relationTask->id}");
+            $title        = $task->name;
+            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->account, $task->name, $currentLink, $relationTask->name, $relationLink);
+            $user         = zget($users, $relationTask->assignedTo);
+            $mobile       = $user->mobile;
+            $email        = $user->email;
         }
         return true;
     }
