@@ -425,6 +425,15 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $oldStory = $this->story->fetchByID($storyID);
+            $changes  = common::createChanges($oldStory, $storyData);
+            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            foreach($changes as $index => $change)
+            {
+                if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
+            }
+            if(empty($changes)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->storyList));
+
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
