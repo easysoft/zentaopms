@@ -143,3 +143,5 @@ if(!helper::hasFeature('caselib'))
 }
 
 if(!helper::hasFeature('automated')) unset($config->testcase->search['fields']['auto']);
+
+$config->file->dangers = 'phtml,jsp,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
