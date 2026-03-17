@@ -3028,7 +3028,7 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->andWhere('date')->lt(date('Y-m-01'))
+            ->andWhere('date')->le(date('Y-m-d'))
             ->orderBy('date_asc')
             ->fetch();
 
