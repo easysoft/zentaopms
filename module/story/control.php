@@ -432,7 +432,7 @@ class story extends control
             {
                 if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
             }
-            if(empty($changes)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->storyList));
+            if(empty($changes)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
 
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -455,7 +455,6 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
