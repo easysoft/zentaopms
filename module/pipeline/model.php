@@ -265,15 +265,34 @@ class pipelineModel extends model
 
         $pipelineID = $this->dao->lastInsertId();
 
+        $copyPipelineID = (int)$this->post->existPipeline;
+        $hasCopy        = $this->post->createType == 'copy' && !empty($copyPipelineID);
+
         if($pipelineID)
         {
             $content = new stdclass();
             $content->pipelineID  = $pipelineID;
             $content->createdBy   = $this->app->user->account;
             $content->createdDate = helper::now();
+            if($hasCopy)
+            {
+                $copyPipelineContent = $this->dao->select('*')->from(TABLE_PIPELINECONTENT)->where('pipelineID')->eq($copyPipelineID)->fetch();
+
+                $content->data      = $copyPipelineContent->data;
+                $content->variables = $copyPipelineContent->variables;
+            }
 
             $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)->exec();
             if(dao::isError()) return false;
+
+            if($hasCopy)
+            {
+                $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
+
+                unset($content->data, $content->variables);
+                $content->trigger = $copyTrigger->trigger;
+                $content->cron    = $copyTrigger->cron;
+            }
             $this->dao->insert(TABLE_PIPELINETRIGGER)->data($content)->exec();
             if(dao::isError()) return false;
         }
