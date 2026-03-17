@@ -2048,7 +2048,7 @@ class projectModel extends model
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
+            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
                 $this->loadModel('execution');
                 unset($postProductData->plans);
