@@ -963,14 +963,16 @@ class projectModel extends model
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
      * @param  int    $projectID
+     * @param  int    $hasProduct
      * @access public
      * @return object|false
      */
-    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0): object|false
+    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0, int $hasProduct = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+        if(!$hasProduct) $this->config->project->includedPriv = array_merge($this->config->project->includedPriv, $this->config->project->noProductPriv);
 
         $hasBaseline    = true;
         $hasAuditplan   = true;

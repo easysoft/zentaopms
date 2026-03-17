@@ -1142,7 +1142,7 @@ class project extends control
         $project = $this->project->getByID((int)$projectID);
         $this->projectZen->processGroupPrivs($project);
 
-        $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint', $projectID);
+        $this->lang->resource = $this->project->getPrivsByModel($project->multiple ? $project->model : 'noSprint', $projectID, $project->hasProduct);
 
         $getPrivs = $this->group->getPrivs($groupID);
         foreach($getPrivs as $moduleName => $actions)
