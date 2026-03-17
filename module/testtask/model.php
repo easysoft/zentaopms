@@ -1975,7 +1975,8 @@ class testtaskModel extends model
 
         $this->dao->replace(TABLE_TESTRUN)->data($testRun)->exec();
 
-        return $this->dao->lastInsertID();
+        $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->andWhere('lastRunDate')->eq($case->lastRunDate)->fetch();
+        return $testRunInfo ? $testRunInfo->id : 0;
     }
 
     /**
