@@ -248,6 +248,7 @@ class ppm extends control
             $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
         }
         $message = $this->ppmZen->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
+        if($sourceBranch == $targetBranch) $message = $this->lang->ppm->notice->sameBranch;
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
         {
             $repoList = $this->loadModel('repo')->getList($objectID);
