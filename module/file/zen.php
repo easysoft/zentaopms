@@ -128,12 +128,12 @@ class fileZen extends file
         $data = fixer::input('post')->get();
         if(validater::checkLength($data->fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
 
-        $fileName = $data->fileName;
-        if($data->extension) $fileName .= '.' . $data->extension;
+        $fileName  = $data->fileName;
+        $extension = isset($data->extension) ? $data->extension : '';
 
         $this->dao->update(TABLE_FILE)
             ->set('title')->eq($fileName)
-            ->beginIF($data->extension)->set('extension')->eq($data->extension)->fi()
+            ->beginIF($extension)->set('extension')->eq($extension)->fi()
             ->where('id')->eq($fileID)
             ->exec();
 

@@ -68,7 +68,7 @@ class file extends control
     {
         $file = $this->file->getUpload($field);
 
-        if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
+        if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
         $file = $file[0];
         if($file)
@@ -76,7 +76,7 @@ class file extends control
             if($file['size'] == 0)
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
-                return print(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
+                return $this->send(array('error' => 1, 'message' => $this->lang->file->errorFileUpload));
             }
 
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
@@ -94,6 +94,10 @@ class file extends control
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                 $fileID = $this->dao->lastInsertID();
+
+                /* Show story file from zt_storyspec, not zt_file. */
+                if($objectType == 'story') $this->file->updateStoryFiles($objectID);
+
                 $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
                 if($api || (defined('RUN_MODE') && RUN_MODE == 'api'))
@@ -333,6 +337,7 @@ class file extends control
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
             if($file->objectType == 'charter')  $this->loadModel('charter')->updateFileByDelete($file);
+            if($file->objectType == 'story')    $this->file->updateStoryFiles($file->objectID);
 
             if(!helper::isAjaxRequest() && $this->viewType != 'json') return print(js::reload('parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
