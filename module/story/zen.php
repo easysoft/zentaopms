@@ -1223,6 +1223,7 @@ class storyZen extends story
             $this->config->{$storyType}->create->requiredFields = str_replace(',module,', ',', ",{$this->config->{$storyType}->create->requiredFields},");
             foreach($_POST['modules'] as $key => $moduleID)
             {
+                if(!$key) continue;
                 if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
             }
         }
