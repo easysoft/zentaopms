@@ -320,12 +320,17 @@ class docTao extends docModel
         $deletedDocs = array();
         foreach($docs as $docID => $doc)
         {
+            if($doc->deleted == '0') continue;
             $doc->path = ',' . trim($doc->path, ',') . ',';
 
-            if($doc->deleted == '0') continue;
-
             unset($docs[$docID]);
-            $deletedDocs[$doc->id] = $doc->path;
+
+            $docPath = trim($doc->path, ',');
+            if(!empty($docPath))
+            {
+                $doc->path = ',' . $docPath . ',';
+                $deletedDocs[$doc->id] = $doc->path;
+            }
         }
 
         foreach($deletedDocs as $deletedPath)
