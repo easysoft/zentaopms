@@ -319,6 +319,7 @@ $lang->ppm->notice = new stdclass();
 $lang->ppm->notice->confirmClose  = '是否确认关闭该合并请求？';
 $lang->ppm->notice->confirmReopen = '是否开启该合并请求？';
 $lang->ppm->notice->fastNotice    = '目标分支已有新提交，无法进行快速合并';
+$lang->ppm->notice->sameBranch    = '源分支与目标分支不能相同。';
 
 $lang->ppm->featureBar['view']['all']   = '全部';
 $lang->ppm->featureBar['view']['story'] = '需求';
