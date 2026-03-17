@@ -1973,10 +1973,14 @@ class testtaskModel extends model
         $testRun->lastRunDate   = $case->lastRunDate;
         $testRun->lastRunResult = $case->lastRunResult;
 
-        $this->dao->replace(TABLE_TESTRUN)->data($testRun)->exec();
-
-        $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->andWhere('lastRunDate')->eq($case->lastRunDate)->fetch();
-        return $testRunInfo ? $testRunInfo->id : 0;
+        $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->fetch();
+        if(isset($testRunInfo->id))
+        {
+            $this->dao->update(TABLE_TESTRUN)->data($testRun)->where('id')->eq($testRunInfo->id);
+            return  $testRunInfo->id;
+        }
+        $this->dao->insert(TABLE_TESTRUN)->data($testRun)->exec();
+        return dao::isError() ? 0 : $this->dao->lastInsertID();
     }
 
     /**
