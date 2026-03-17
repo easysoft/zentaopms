@@ -32,7 +32,7 @@ $lang->dev->branch      = 'Branch';
 $lang->dev->apiBaseUrl  = 'Base URL';
 
 $lang->dev->fields = array();
-$lang->dev->fields['id']     = 'ID';
+$lang->dev->fields['id']     = 'No.';
 $lang->dev->fields['name']   = 'Feild';
 $lang->dev->fields['desc']   = 'Description';
 $lang->dev->fields['type']   = 'Type';
