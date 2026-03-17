@@ -275,6 +275,7 @@ $lang->group->package->importProjectStory    = 'Import Project ' . $lang->SRComm
 $lang->group->package->browseProject         = 'Browse Project';
 $lang->group->package->manageProject         = 'Manage Project';
 $lang->group->package->importProject         = 'Import Project';
+$lang->group->package->projectDoc            = 'Project Doc';
 $lang->group->package->projectTeam           = 'Project Team';
 $lang->group->package->deleteProject         = 'Delete Project';
 $lang->group->package->projectWhitelist      = 'Project Whitelist';

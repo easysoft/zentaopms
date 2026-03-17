@@ -146,6 +146,7 @@ $lang->executionburn      = new stdclass();
 $lang->executioncfd       = new stdclass();
 $lang->executionstory     = new stdclass();
 $lang->executionqa        = new stdclass();
+$lang->executionbuild     = new stdclass();
 $lang->executionsettings  = new stdclass();
 $lang->generalcomment     = new stdclass();
 $lang->generalping        = new stdclass();
