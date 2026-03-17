@@ -339,11 +339,7 @@ class api extends router
         /* File is special. */
         if($moduleName == 'file' && in_array($this->action, ['get', 'post']))
         {
-            if($this->action == 'get')
-            {
-                $methodName = 'download';
-            }
-            else
+            if($this->action != 'get')
             {
                 $methodName         = 'ajaxUpload';
                 $_GET['field']      = 'file';

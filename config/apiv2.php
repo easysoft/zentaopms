@@ -119,4 +119,5 @@ $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 
 $routes['/users']         = array('redirect' => '/companies/browse', 'response' => 'users,pager');
 $routes['/users/:userID'] = array('redirect' => '/users/:userID/profile', 'response' => 'user');
 
-$routes['/files/:fileID'] = array('method' => 'download', 'response' => 'file');
+$routes['/files/:fileID'] = array('redirect' => '/files/:fileID/ajaxQuery');
+$routes['/files/:fileID/download'] = array('method' => 'download');

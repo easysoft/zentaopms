@@ -123,13 +123,21 @@ class fileZen extends file
     protected function updateFileName(int $fileID): array
     {
         $file = $this->file->getByID($fileID);
+        if(!$file) return array('result' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound);
+
         $data = fixer::input('post')->get();
         if(validater::checkLength($data->fileName, 80, 1) == false) return array('result' => 'fail', 'message' => sprintf($this->lang->error->length[1], $this->lang->file->title, 80, 1));
 
-        $fileName = $data->fileName . '.' . $data->extension;
-        $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
+        $fileName = $data->fileName;
+        if($data->extension) $fileName .= '.' . $data->extension;
 
-        $actionID  = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
+        $this->dao->update(TABLE_FILE)
+            ->set('title')->eq($fileName)
+            ->beginIF($data->extension)->set('extension')->eq($data->extension)->fi()
+            ->where('id')->eq($fileID)
+            ->exec();
+
+        if($file->objectType) $actionID = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
         $changes[] = array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName, 'diff' => '');
         $this->action->logHistory($actionID, $changes);
 
