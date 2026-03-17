@@ -10,11 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$isEn = $app->getClientLang() == 'en';
+$isEn          = $app->getClientLang() == 'en';
+$enButtonClass = $isEn ? ' ml-2 size-md' : '';
 
 div
 (
     setClass('bg-white text-center p-10'),
     $lang->dev->noteEditor,
-    common::hasPriv('editor', 'turnon') ? btn(set::url($this->createLink('editor', 'turnon', 'status=1')), setClass('btn primary ajax-submit' . ($isEn ? ' ml-2 size-md' : '')), $lang->dev->switchList[1]) : null
+    common::hasPriv('editor', 'turnon') ? btn(set::url($this->createLink('editor', 'turnon', 'status=1')), setClass('btn primary ajax-submit' . $enButtonClass), $lang->dev->switchList[1]) : null
 );
