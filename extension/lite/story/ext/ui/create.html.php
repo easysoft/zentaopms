@@ -105,7 +105,7 @@ formPanel
     ),
     $type == 'story' && !$this->config->URAndSR ? formRow
     (
-        setClass($hiddenParent ? 'hidden' : ''),
+        setClass(!empty($hiddenParent) ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->story->parent),
