@@ -91,7 +91,7 @@ if($group->role == 'limited')
 else
 {
     $params = "projectID={$projectID}&groupID=$groupID&type=byPackage";
-    function getPrivsItemsHtml($privs, $moduleName, $packageID, $groupPrivs)
+    $getPrivsItemsHtml = function($privs, $moduleName, $packageID, $groupPrivs)
     {
         global $lang;
         $html = '';
@@ -133,7 +133,7 @@ else
             $html .= "<div class='privs hidden' data-module='$subsetName' data-package='$packageID' data-divid='{$subsetName}{$packageID}'>";
             $html .= '<div class="arrow"></div>';
             $html .= '<div class="popover-content">';
-            $html .= getPrivsItemsHtml($package->privs, $subsetName, $packageID, $groupPrivs);
+            $html .= $getPrivsItemsHtml($package->privs, $subsetName, $packageID, $groupPrivs);
             $html .= '</div>';
             $html .= '</div>';
         }
