@@ -7,7 +7,7 @@
 .container #mainContent {padding-top: 0;}
 
 /* Manage priv by package. */
-#managePrivFormContainer {gap: 16px; height: calc(100vh - 157px);}
+#managePrivFormContainer {gap: 16px; height: calc(100vh - 201px);}
 #managePrivFormContainer > .main {flex: 1 1 75%; overflow-y: auto; padding: 0px; border: 1px solid #FFF; box-sizing: content-box;}
 #managePrivFormContainer > .side {flex: 1 1 25%;}
 #managePrivFormContainer .table {table-layout: fixed;}
