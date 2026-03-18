@@ -51,13 +51,10 @@ class reporeviewflow extends control
     {
         $this->loadModel('ci')->setMenu($repoID);
         $repo        = $this->loadModel('repo')->getByID($repoID);
-        $branchTypes = $this->reporeviewflowZen->buildBranchTypes($repoID);
 
         if($_POST)
         {
             $formData = form::data($this->config->reporeviewflow->form->createReviewFlow)->get();
-            if($formData->isAllBranchTypes && !isset($branchTypes[0])) return $this->sendError(array('branchType' => $this->lang->reporeviewflow->allBranchTypesNotice));
-            if(!$formData->isAllBranchTypes && empty($formData->branchType)) return $this->sendError(array('branchType' => sprintf($this->lang->error->notempty, $this->lang->reporeviewflow->applicableBranchTypes)));
 
             $formData->definition = $this->reporeviewflowZen->buildDefinition($formData);
 
@@ -74,7 +71,6 @@ class reporeviewflow extends control
         $this->view->title       = $this->lang->reporeviewflow->create;
         $this->view->repoID      = $repoID;
         $this->view->repo        = $repo;
-        $this->view->branchTypes = $branchTypes;
         $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
     }
@@ -93,13 +89,10 @@ class reporeviewflow extends control
         $this->loadModel('ci')->setMenu($repoID);
         $repo        = $this->loadModel('repo')->getByID($repoID);
         $reviewFlow  = $this->reporeviewflow->getByID($flowID);
-        $branchTypes = $this->reporeviewflowZen->buildBranchTypes($repoID, $reviewFlow->branchType);
 
         if($_POST)
         {
             $formData = form::data($this->config->reporeviewflow->form->createReviewFlow)->get();
-            if($formData->isAllBranchTypes && !isset($branchTypes[0]) && !empty($reviewFlow->branchType)) return $this->sendError(array('branchType' => $this->lang->reporeviewflow->allBranchTypesNotice));
-            if(!$formData->isAllBranchTypes && empty($formData->branchType)) return $this->sendError(array('branchType' => sprintf($this->lang->error->notempty, $this->lang->reporeviewflow->applicableBranchTypes)));
 
             $formData->definition = $this->reporeviewflowZen->buildDefinition($formData);
 
@@ -118,7 +111,6 @@ class reporeviewflow extends control
         $this->view->flowID      = $flowID;
         $this->view->repo        = $repo;
         $this->view->reviewFlow  = $reviewFlow;
-        $this->view->branchTypes = $branchTypes;
         $this->view->repoMembers = !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
         $this->display();
     }

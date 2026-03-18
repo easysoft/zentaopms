@@ -12,39 +12,6 @@ declare(strict_types=1);
 class reporeviewflowZen extends reporeviewflow
 {
     /**
-     * 构建审批流程支持的分支类型。
-     * Build review flow branch types.
-     *
-     * @param  int $repoID
-     * @access protected
-     * @return array
-     */
-    protected function buildBranchTypes(int $repoID, string $appendIdList = ''): array
-    {
-        $branchTypes  = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
-        $reviewFlows  = $this->reporeviewflow->getList($repoID);
-        $appendIdList = explode(',', $appendIdList);
-
-        $reviewFlowBranchTypes = array();
-        foreach($reviewFlows as $flow)
-        {
-            $flowBranchTypes = explode(',', $flow->branchType);
-            if(empty($flowBranchTypes)) continue;
-            foreach($flowBranchTypes as $flowBranchType) $reviewFlowBranchTypes[$flowBranchType] = $flowBranchType;
-        }
-        $hasAllBranchTypes = empty($reviewFlowBranchTypes) || !isset($reviewFlowBranchTypes[0]);
-
-        $branchTypeList = $hasAllBranchTypes ? array(0 => $this->lang->all) : array();
-        foreach($branchTypes as $branchTypeID => $branchType)
-        {
-            if(isset($reviewFlowBranchTypes[$branchTypeID]) && !in_array($branchTypeID, $appendIdList)) continue;
-            $branchTypeList[$branchTypeID] = $branchType;
-        }
-
-        return $branchTypeList;
-    }
-
-    /**
      * 构建审批流程定义。
      * Build review flow definition.
      *

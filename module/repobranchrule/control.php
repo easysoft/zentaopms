@@ -47,8 +47,6 @@ class repobranchrule extends control
             $branchType->key = '';
         }
         $repo        = $this->loadModel('repo')->getByID($repoID);
-        $users       = $repo->acl == 'open' ? $this->loadModel('space')->getSpaceMembers($repo->spaceID, true) : $this->repo->getRepoUsers($repoID);
-        $members     = !empty($users) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
         $branchTypes = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
         $originRule  = $this->repobranchrule->getBranchRule($branchTypeID, $repoID, $branchName);
         if(!$originRule)
@@ -116,7 +114,7 @@ class repobranchrule extends control
         $this->view->branchTypeID = $branchTypeID;
         $this->view->ruleID       = $originRule->id;
         $this->view->originRule   = $originRule;
-        $this->view->users        = !empty($members) ? array_column($members, 'realname', 'account') : array();
+        $this->view->users        = $this->repo->getRepoMembers($repo);
         $this->view->branchTypes  = $branchTypes;
         $this->display();
     }
