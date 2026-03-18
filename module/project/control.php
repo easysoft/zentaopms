@@ -739,7 +739,6 @@ class project extends control
         $this->view->projectID  = $projectID;
         $this->view->programID  = $programID;
         $this->view->groupUsers = $groupUsers;
-
         $this->display();
     }
 
@@ -1118,10 +1117,11 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $groupID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function managePriv(int $projectID, int $groupID = 0)
+    public function managePriv(int $projectID, int $groupID = 0, string $type = 'byPackage')
     {
         $this->loadModel('group');
         foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
@@ -1160,12 +1160,77 @@ class project extends control
             }
         }
 
+        /* Subsets . */
+        $subsets = array();
+        foreach($this->config->group->subset as $subsetName => $subset)
+        {
+            $subset->code        = $subsetName;
+            $subset->allCount    = 0;
+            $subset->selectCount = 0;
+
+            $subsets[$subset->code] = $subset;
+        }
+
+        $selectPrivs = $this->group->getPrivsByGroup($groupID);
+        $allPrivList = $this->group->getPrivsByNav();
+
+        $selectedPrivList = array();
+        $packages         = array();
+        foreach($allPrivList as $privCode => $priv)
+        {
+            $subsetCode  = $priv->subset;
+            $packageCode = $priv->package;
+            if(!isset($packages[$subsetCode])) $packages[$subsetCode] = array();
+            if(!isset($subsets[$subsetCode]))
+            {
+                $subset = new stdclass();
+                $subset->code        = $subsetCode;
+                $subset->allCount    = 0;
+                $subset->selectCount = 0;
+
+                $subsets[$subsetCode] = $subset;
+            }
+
+            if(!isset($packages[$subsetCode][$packageCode]))
+            {
+                $package = new stdclass();
+                $package->allCount    = 0;
+                $package->selectCount = 0;
+                $package->subset      = $subsetCode;
+                $package->privs       = array();
+
+                $packages[$subsetCode][$packageCode] = $package;
+            }
+
+            $packages[$subsetCode][$packageCode]->privs[$privCode] = $priv;
+
+            $packages[$subsetCode][$packageCode]->allCount ++;
+            $subsets[$subsetCode]->allCount ++;
+
+            if(isset($selectPrivs[$privCode]))
+            {
+                $packages[$subsetCode][$packageCode]->selectCount ++;
+                $subsets[$subsetCode]->selectCount ++;
+                $selectedPrivList[] = $privCode;
+            }
+        }
+
+        $allPrivList     = array_keys($allPrivList);
+        $relatedPrivData = $this->group->getRelatedPrivs($allPrivList, $selectedPrivList);
+
+        $this->view->allPrivList      = $allPrivList;
+        $this->view->selectedPrivList = $selectedPrivList;
+        $this->view->relatedPrivData  = $relatedPrivData;
+
         $this->view->title      = $group->name . $this->lang->hyphen . $this->lang->group->managePriv;
+        $this->view->subsets    = $subsets;
+        $this->view->packages   = $packages;
         $this->view->group      = $group;
         $this->view->groupPrivs = $getPrivs;
         $this->view->groupID    = $groupID;
         $this->view->projectID  = $projectID;
         $this->view->project    = $project;
+        $this->view->type       = $type;
         $this->display();
     }
 
