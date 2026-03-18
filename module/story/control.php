@@ -430,9 +430,17 @@ class story extends control
             $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             foreach($changes as $index => $change)
             {
-                if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
+                if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
             }
-            if(empty($changes)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+
+            if(empty($changes) && empty($_FILES))
+            {
+                $reviewers = $this->story->getReviewerPairs($storyID, $oldStory->version);
+                $oldStory->reviewer = array_keys($reviewers);
+
+                $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
+                if(!$diff)return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+            }
 
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
