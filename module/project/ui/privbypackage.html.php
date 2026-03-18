@@ -110,7 +110,7 @@ else
         return $html;
     };
 
-    $getPackagesBoxHtml = function($subsetName, $packages, $groupPrivs) use $getPrivsItemsHtml
+    $getPackagesBoxHtml = function($subsetName, $packages, $groupPrivs) use ($getPrivsItemsHtml)
     {
         global $lang;
         $html = '';
