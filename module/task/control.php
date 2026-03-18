@@ -191,10 +191,11 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Execute hooks and synchronize the status of related objects. */
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
             if($task->status == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
 
-            $response = $this->taskZen->responseAfterEdit($taskID, $from, $changes);
+            $response = $this->taskZen->responseAfterEdit($taskID, $from, $changes, $message);
             return $this->send($response);
         }
 
@@ -279,9 +280,10 @@ class task extends control
             $this->task->assign($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
 
-            $response = $this->taskZen->responseAfterAssignTo($taskID, $from);
+            $response = $this->taskZen->responseAfterAssignTo($taskID, $from, $message);
             return $this->send($response);
         }
 
@@ -395,9 +397,6 @@ class task extends control
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
         $this->lang->task->statusList['changed'] = $this->lang->task->storyChange;
 
-        /* Execute workflow hooks if edition is not open. */
-        if($this->config->edition != 'open') $this->executeHooks($taskID);
-
         $this->view->title        = "TASK#$task->id $task->name / $execution->name";
         $this->view->execution    = $execution;
         $this->view->task         = $task;
@@ -424,9 +423,9 @@ class task extends control
     public function confirmStoryChange(int $taskID)
     {
         $this->task->confirmStoryChange($taskID);
-        $this->executeHooks($taskID);
+        $message = $this->executeHooks($taskID);
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+        return $this->send(array('result' => 'success', 'message' => $message ?: $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -467,13 +466,16 @@ class task extends control
             $changes = $this->task->start($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message = $this->executeHooks($task->id);
+            $message = $message ?: $this->lang->saveSuccess;
+
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $changes, (float)$this->post->left, $output);
+            $result = $this->task->afterStart($task, $changes, (float)$this->post->left, $output, $message);
             if(is_array($result)) $this->send($result);
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
 
@@ -713,11 +715,12 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
 
             /* Get response after the suspended task. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($oldTask, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($oldTask, $from, $message);
             return $this->send($response);
         }
 
@@ -764,8 +767,9 @@ class task extends control
             $result = $this->task->afterStart($task, $changes, (float)$this->post->left);
             if(is_array($result)) $this->send($result);
 
-            $this->executeHooks($taskID);
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $message  = $this->executeHooks($taskID);
+            $message  = $message ?: $this->lang->saveSuccess;
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
 
@@ -802,13 +806,14 @@ class task extends control
             $taskData = $this->taskZen->buildTaskForClose($task);
             $result   = $this->task->close($task, $taskData, $output);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->executeHooks($taskID);
             if(is_array($result)) return $this->send($result);
+
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
 
@@ -918,10 +923,10 @@ class task extends control
             $result  = $this->task->cancel($oldTask, $task, $output);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
 
             if(helper::isAjaxRequest('modal')) return $this->send($this->taskZen->responseModal($oldTask, $from));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
+            return $this->send(array('result' => 'success', 'message' => $message ?: $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
         $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->cancel;
@@ -958,11 +963,12 @@ class task extends control
             $this->task->activate($task, (string)$this->post->comment, $teamData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
 
             /* Get the information returned after a task is started. */
             $task     = $this->task->fetchByID($taskID);
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
 
@@ -1025,17 +1031,18 @@ class task extends control
         if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
-        $this->executeHooks($taskID);
+        $message = $this->executeHooks($taskID);
+        $message = $message ?: $this->lang->saveSuccess;
 
         /* 在看板中删除任务时的返回。*/
         /* Respond when delete in kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
-        if($from == 'view') return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+        if($from == 'view') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
 
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
         $link = isInModal() ? true : $link;
-        return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $link, 'closeModal' => true));
     }
 
     /**
@@ -1256,9 +1263,10 @@ class task extends control
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
 
-            $response = $this->taskZen->responseAfterAssignTo($taskID, $from);
+            $response = $this->taskZen->responseAfterAssignTo($taskID, $from, $message);
             return $this->send($response);
         }
 

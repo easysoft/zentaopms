@@ -359,10 +359,11 @@ class taskModel extends model
      * @param  array      $changes
      * @param  float      $left
      * @param  array      $output
+     * @param  string     $message
      * @access public
      * @return array|bool
      */
-    public function afterStart(object $oldTask, array $changes, float $left, array $output = array()): array|bool
+    public function afterStart(object $oldTask, array $changes, float $left, array $output = array(), string $message = ''): array|bool
     {
         /* Update the data of the parent task. */
         if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);
@@ -375,7 +376,6 @@ class taskModel extends model
 
         /* Send Webhook notifications and synchronize status to execution, project and program. */
         $oldExecution = $this->loadModel('execution')->fetchByID($oldTask->execution);
-        $this->executeHooks($oldTask->id);
         $this->loadModel('common')->syncPPEStatus($oldTask->id);
 
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
@@ -388,7 +388,7 @@ class taskModel extends model
         if($oldExecution->status == 'wait')
         {
             $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
-            if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
+            if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $message, 'load' => true);
         }
 
         return true;
