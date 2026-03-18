@@ -66,6 +66,15 @@ class branchRulesEntry extends baseEntry
             $defaultRule->forcePushUser = array();
             $defaultRule->sourceBranch  = array();
             $defaultRule->targetBranch  = array();
+            if(strpos($branchName, 'archived/') === 0)
+            {
+                $repo = $this->loadModel('repo')->fetchByID($repoID);
+                if($repo->branchArchivable)
+                {
+                    $defaultRule->updateUser = array('archiveManager');
+                    $defaultRule->deleteUser = array('archiveManager');
+                }
+            }
             return $this->send(200, $defaultRule);
         }
 
