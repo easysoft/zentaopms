@@ -469,6 +469,7 @@ class project extends control
         if($_POST)
         {
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
+            if(!empty($this->post->products) && $this->post->products[0] != '') $this->post->hasProduct = '1';
 
             $postData = form::data($this->config->project->form->create, 0, $workflowGroup);
             $project  = $this->projectZen->prepareCreateExtras($postData, $copyProjectID);
