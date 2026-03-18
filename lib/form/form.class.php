@@ -420,7 +420,7 @@ class form extends fixer
 
         if(isset($data)) $data = helper::convertType($data, $config['type']);
 
-        if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
+        if(isset($data) && isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
         $emptyData = empty($data);
         if($config['type'] == 'int' || $config['type'] == 'float' || $config['type'] == 'string')
