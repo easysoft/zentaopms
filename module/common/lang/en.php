@@ -370,6 +370,7 @@ $lang->artifact->common         = 'Artifact Repository';
 $lang->ssh->common              = 'SSH Key';
 $lang->codeReview->common       = 'Code Review';
 $lang->runner->common           = 'Runner';
+$lang->repobranchrule->common   = 'Branch Rule';
 
 $lang->dashboard       = 'Dashboard';
 $lang->contribute      = 'Contribute';

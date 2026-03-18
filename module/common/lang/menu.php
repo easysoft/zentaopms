@@ -546,7 +546,7 @@ $lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse
 $lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
 //$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
 
-$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'repo,reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,setarchive');
+$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,setarchive');
 
 $lang->devops->menu->settings['subMenu'] = new stdclass();
 $lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|repoID=%s", 'alias' => 'create,edit,delete,import');
