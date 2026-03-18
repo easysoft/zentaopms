@@ -22,7 +22,6 @@ formPanel
     setID('createReviewFlow'),
     set::title($title),
     set::labelWidth(common::checkNotCN() ? '280px' : '200px'),
-    on::change('[name=isAllBranchTypes]')->call('window.disableBranchType'),
     on::change('[name=aiReview]')->call('window.loadAiReviewScores'),
     on::change('[name=addressOption]')->call('window.loadIssueType'),
     formRowGroup(set::title($lang->reporeviewflow->basicInfo)),
@@ -32,36 +31,6 @@ formPanel
         set::label($lang->reporeviewflow->name),
         set::name('name'),
         set::required(true)
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::label($lang->reporeviewflow->applicableBranchTypes),
-        set::required(true),
-        inputGroup
-        (
-            div
-            (
-                setClass('w-full'),
-                setID('branchTypesBox'),
-                picker
-                (
-                    set::name('branchType'),
-                    set::items($branchTypes),
-                    set::multiple(true),
-                    set::required(true)
-                )
-            ),
-            div
-            (
-                setClass('input-group-addon flex'),
-                checkbox
-                (
-                    set::name('isAllBranchTypes'),
-                    set::text($lang->reporeviewflow->allBranchTypes)
-                )
-            )
-        )
     ),
     formGroup
     (

@@ -42,12 +42,9 @@ class reporeviewflowModel extends model
      */
     public function create(int $repoID, object $data): int|false
     {
-        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
-
         $reviewFlow = new stdClass();
         $reviewFlow->repo        = $repoID;
         $reviewFlow->name        = $data->name;
-        $reviewFlow->branchType  = $data->branchType;
         $reviewFlow->desc        = $data->desc;
         $reviewFlow->definition  = json_encode(zget($data, 'definition', array()));
         $reviewFlow->status      = 'enable';
@@ -77,11 +74,8 @@ class reporeviewflowModel extends model
      */
     public function update(object $flow, object $data): bool
     {
-        if($data->isAllBranchTypes && empty($data->branchType)) $data->branchType = '0';
-
         $reviewFlow = new stdClass();
         $reviewFlow->name       = $data->name;
-        $reviewFlow->branchType = $data->branchType;
         $reviewFlow->desc       = $data->desc;
         $reviewFlow->definition = json_encode(zget($data, 'definition', array()));
         $reviewFlow->status     = $flow->status;
