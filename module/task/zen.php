@@ -1416,14 +1416,18 @@ class taskZen extends task
      * @param  object    $task
      * @param  int       $executionID
      * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
+     * @param  array     $response
      * @access public
      * @return array
      */
-    public function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
+    public function generalCreateResponse(object $task, int $executionID, string $afterChoose, array $response = array()): array
     {
         /* Set the universal return value. */
-        $response['result']  = 'success';
-        $response['message'] = $this->lang->saveSuccess;
+        if(empty($response))
+        {
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+        }
 
         /* Set the response to continue adding task to story. */
         $executionID = $task->execution;
@@ -1739,7 +1743,7 @@ class taskZen extends task
             }
         }
 
-        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from, $message);
 
         $response['load'] = $this->createLink('task', 'view', "taskID=$taskID");
         return $response;
@@ -1794,7 +1798,7 @@ class taskZen extends task
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
-        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from, $message);
 
         $message = $message ?: $this->lang->saveSuccess;
         return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
@@ -1806,13 +1810,14 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  string    $from     ''|taskkanban
+     * @param  string    $message
      * @access protected
      * @return array
      */
-    protected function responseModal(object $task, string $from): array
+    protected function responseModal(object $task, string $from, string $message = ''): array
     {
         $response['result']     = 'success';
-        $response['message']    = $this->lang->saveSuccess;
+        $response['message']    = $message ?: $this->lang->saveSuccess;
         $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
         if($this->app->rawMethod == 'recordworkhour')
@@ -1884,7 +1889,7 @@ class taskZen extends task
         if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
 
         /* Process the return information for selecting a jump after creation. */
-        return $this->generalCreateResponse($task, $execution->id, $afterChoose);
+        return $this->generalCreateResponse($task, $execution->id, $afterChoose, $response);
     }
 
     /**
@@ -1938,7 +1943,7 @@ class taskZen extends task
     {
         $message = $message ?: $this->lang->saveSuccess;
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isInModal()) return $this->responseModal($task, $from);
+        if(isInModal()) return $this->responseModal($task, $from, $message);
         return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
     }
 

@@ -623,6 +623,8 @@ class taskModel extends model
             }
             $this->updateKanbanForBatchCreate($taskID, $executionID, $laneID, (int)$columnID);
 
+            $this->executeHooks($taskID);
+
             $taskIdList[$taskID] = $taskID;
         }
         return $taskIdList;
@@ -718,6 +720,8 @@ class taskModel extends model
                 foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$taskID}]"] = $error;
                 return false;
             }
+
+            $this->executeHooks($taskID);
 
             /* Create the task description of the current version in the database. */
             $oldTask = zget($oldTasks, $taskID);

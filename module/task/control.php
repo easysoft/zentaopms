@@ -652,8 +652,11 @@ class task extends control
             $changes = $this->task->finish($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $message = $this->executeHooks($taskID);
+            $message = $message ?: $this->lang->saveSuccess;
+
             /* Update other data related to the task after it is started. */
-            $result = $this->task->afterStart($task, $changes, 0, $output);
+            $result = $this->task->afterStart($task, $changes, 0, $output, $message);
             if(is_array($result)) return $this->send($result);
 
             if($taskData->status == 'done') $this->loadModel('score')->create('task', 'finish', $task->id);
@@ -661,7 +664,7 @@ class task extends control
 
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
-            $response = $this->taskZen->responseAfterChangeStatus($task, $from);
+            $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
 
@@ -764,11 +767,12 @@ class task extends control
             $changes = $this->task->start($task, $taskData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $result = $this->task->afterStart($task, $changes, (float)$this->post->left);
-            if(is_array($result)) $this->send($result);
-
             $message  = $this->executeHooks($taskID);
             $message  = $message ?: $this->lang->saveSuccess;
+
+            $result = $this->task->afterStart($task, $changes, (float)$this->post->left, array(), $message);
+            if(is_array($result)) $this->send($result);
+
             $response = $this->taskZen->responseAfterChangeStatus($task, $from, $message);
             return $this->send($response);
         }
@@ -925,7 +929,7 @@ class task extends control
 
             $message = $this->executeHooks($taskID);
 
-            if(helper::isAjaxRequest('modal')) return $this->send($this->taskZen->responseModal($oldTask, $from));
+            if(helper::isAjaxRequest('modal')) return $this->send($this->taskZen->responseModal($oldTask, $from, $message));
             return $this->send(array('result' => 'success', 'message' => $message ?: $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID")));
         }
 
