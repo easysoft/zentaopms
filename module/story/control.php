@@ -439,7 +439,7 @@ class story extends control
                 $oldStory->reviewer = array_keys($reviewers);
 
                 $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
-                if(!$diff && empty($_FILE)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+                if(!$diff && empty($_FILES)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
             }
 
             $changes = $this->story->change($storyID, $storyData);
