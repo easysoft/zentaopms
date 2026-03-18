@@ -1882,18 +1882,38 @@ class repo extends control
             $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
             $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
         }
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repo->id);
+        if(!empty($branchTypes))
+        {
+            $this->lang->repo->featureBar['browsebranch']['all'] = $this->lang->all;
+            if(count($branchTypes) > 8) $this->lang->moreSelects['browsebranch']['more'] = array();
+            $branchTypeCount = 0;
+            foreach($branchTypes as $branchType)
+            {
+                if($branchTypeCount < 8)
+                {
+                    $this->lang->repo->featureBar['browsebranch'][$branchType->id] = $branchType->name;
+                }
+                else
+                {
+                    if(!isset($this->lang->featureBar['browsebranch']['more'])) $this->lang->repo->featureBar['browsebranch']['more'] = $this->lang->more;
+                    $this->lang->repo->moreSelects['browsebranch']['more'][$branchType->id] = $branchType->name;
+                }
+                $branchTypeCount = $branchTypeCount + 1;
+            }
+        }
 
-        $this->view->title             = $this->lang->repo->browseBranch;
-        $this->view->repoID            = $repoID;
-        $this->view->objectID          = $objectID;
-        $this->view->repo              = $repo;
-        $this->view->pager             = $pager;
-        $this->view->orderBy           = $orderBy;
-        $this->view->branchList        = $branchList;
-        $this->view->keyword           = base64_encode($keyword);
-        $this->view->users             = $this->user->getPairs('noletter');
-        $this->view->label             = $label;
-        $this->view->showArchived      = $showArchived;
+        $this->view->title        = $this->lang->repo->browseBranch;
+        $this->view->repoID       = $repoID;
+        $this->view->objectID     = $objectID;
+        $this->view->repo         = $repo;
+        $this->view->pager        = $pager;
+        $this->view->orderBy      = $orderBy;
+        $this->view->branchList   = $branchList;
+        $this->view->keyword      = base64_encode($keyword);
+        $this->view->users        = $this->user->getPairs('noletter');
+        $this->view->label        = $label;
+        $this->view->showArchived = $showArchived;
         $this->display();
     }
 
