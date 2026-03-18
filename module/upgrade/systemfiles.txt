@@ -185,8 +185,6 @@
 ,admin/lang/zh-tw.php,
 ,admin/model.php,
 ,admin/view/bind.html.php,
-,admin/view/certifyztemail.html.php,
-,admin/view/certifyztmobile.html.php,
 ,admin/view/checkweak.html.php,
 ,admin/view/index.html,
 ,admin/view/index.html.php,
