@@ -21,13 +21,16 @@ dropmenu
 
 featureBar
 (
-    (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
+    (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? to::leading(dropmenu
     (
         set::id('repoDropmenu'),
         set::text($repo->name),
         set::objectID($repo->id),
         set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browsebranch&projectID={$objectID}"))
-    ) : null,
+    )) : null,
+    set::current($label),
+    set::labelCount(false),
+    set::linkParams("repoID={$repoID}&objectID={$objectID}&label={key}&keyword={$keyword}&showArchived={$showArchived}"),
     div
     (
         setClass('flex branch-search'),
