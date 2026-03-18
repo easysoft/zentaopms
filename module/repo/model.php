@@ -64,6 +64,7 @@ class repoModel extends model
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
+        if($this->app->methodName == 'setarchive') $this->lang->devops->menu->settings['subModule'] .= ',repo';
     }
 
     /**
