@@ -1,5 +1,5 @@
 <?php
-$lang->ppm->common            = "合并请求";
+$lang->ppm->common            = "评审请求";
 $lang->ppm->server            = "服务器";
 $lang->ppm->hostID            = "服务器";
 $lang->ppm->view              = "概况";
