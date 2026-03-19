@@ -1,5 +1,5 @@
 <?php
-$lang->ppm->common            = 'Merge Requests';
+$lang->ppm->common            = 'Review Requests';
 $lang->ppm->server            = "Server";
 $lang->ppm->hostID            = "Server";
 $lang->ppm->view              = "Survey";

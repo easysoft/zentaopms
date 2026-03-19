@@ -444,7 +444,7 @@ $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile      = '流水线';
-$lang->devops->ppm          = '合并请求';
+$lang->devops->ppm          = '代码评审';
 $lang->devops->repo         = '代码库';
 $lang->devops->rules        = '指令';
 $lang->devops->settings     = '合并请求设置';
