@@ -49,11 +49,6 @@ class repobranchrule extends control
         $repo        = $this->loadModel('repo')->getByID($repoID);
         $branchTypes = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
         $originRule  = $this->repobranchrule->getBranchRule($branchTypeID, $repoID, $branchName);
-        if(!$originRule)
-        {
-            $originRule = new stdClass();
-            $originRule->id = 0;
-        }
 
         if($_POST)
         {
@@ -61,61 +56,52 @@ class repobranchrule extends control
             $link = $branchTypeID ? $this->createLink('repobranchtype', 'browse', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
 
             /* 如果 $formData 里的字段全部为默认值，则返回保存成功，不保存数据。 */
-            $allDefault = true;
-            foreach($formData as $ruleDetail)
-            {
-                if(empty($ruleDetail)) continue;
-                $option = $ruleDetail['option'];
-                $value  = $ruleDetail['value'];
+            $formData = $this->checkRules($formData);
 
-                /* 当选择 specify 时，校验 value 不能为空。 */
-                if($option == 'specify')
-                {
-                    $value = array_filter($value);
-                    if(empty($value)) return $this->sendError($this->lang->repobranchrule->specifyValueEmptyError);
-
-                    $allDefault = false;
-                }
-            }
-            if($allDefault)
+            if(!$formData)
             {
-                if($originRule->id == 0) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+                if(!$originRule) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+
                 $result = $this->repobranchrule->deleteBranchRule($originRule->id);
-                if(!$result) $this->sendError($this->lang->repobranchrule->defaultValueRestoreError);
+                if(dao::isError()) return $this->sendError(dao::getError());
+
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
             }
 
-            $rule = $this->repobranchruleZen->buildBranchRuleData($branchTypeID, $repoID, $branchName, $formData);
-            if(dao::isError()) $this->sendError(dao::getError());
-            $rule->editedBy   = $this->app->user->account;
-            $rule->editedDate = helper::now();
+            $formData->repo       = $repoID;
+            $formData->branchType = $branchTypeID;
+            $formData->branchName = empty($branchTypeID) ? $branchName : '';
 
-            if($originRule->id == 0)
+            if($originRule)
             {
-                $rule->createdBy   = $this->app->user->account;
-                $rule->createdDate = helper::now();
-                $result = $this->repobranchrule->createBranchRule($rule);
-                if(!$result) $this->sendError($this->lang->fail);
+                $formData->editedBy   = $this->app->user->account;
+                $formData->editedDate = helper::now();
+                $result = $this->repobranchrule->updateBranchRule($originRule->id, $formData);
+                if(!$result) return $this->sendError($this->lang->fail);
             }
             else
             {
-                $result = $this->repobranchrule->updateBranchRule($originRule->id, $rule);
-                if(!$result) $this->sendError($this->lang->fail);
+                $formData->createdBy   = $this->app->user->account;
+                $formData->createdDate = helper::now();
+                $result = $this->repobranchrule->createBranchRule($formData);
+                if(!$result) return $this->sendError($this->lang->fail);
             }
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
         $this->view->title        = empty($branchTypeID) ? $branchName : $branchType->name;
+        $this->view->title        = $this->lang->repobranchrule->setBranchRule;
         $this->view->from         = $from;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
         $this->view->isDefault    = $isDefault;
         $this->view->branchTypeID = $branchTypeID;
-        $this->view->ruleID       = $originRule->id;
-        $this->view->originRule   = $originRule;
+        $this->view->ruleID       = zget($originRule, 'id', 0);
+        $this->view->originRule   = !$originRule ? array() : $originRule;
         $this->view->users        = $this->repo->getRepoMembers($repo);
         $this->view->branchTypes  = $branchTypes;
+        $this->view->reviewFlows  = $this->loadModel('reporeviewflow')->getPairs($repoID);
         $this->display();
     }
 
