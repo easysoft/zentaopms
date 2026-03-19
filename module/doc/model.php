@@ -783,7 +783,7 @@ class docModel extends model
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
             ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("(t2.deleted = '0' or t1.parent != '0')")
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
