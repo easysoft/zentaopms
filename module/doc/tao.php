@@ -325,7 +325,11 @@ class docTao extends docModel
             unset($docs[$docID]);
 
             $docPath = trim($doc->path, ',');
-            if(empty($docPath)) $docPath = $docID;
+            if(empty($docPath))
+            {
+                $docPath = $docID;
+                if(!empty($doc->parent)) $docPath = $doc->parent . ',' . $docPath;
+            }
             $doc->path = ',' . $docPath . ',';
             $deletedDocs[$doc->id] = $doc->path;
         }
