@@ -4,9 +4,10 @@ global $lang;
 $config->repobranchtype = new stdclass();
 $config->repobranchtype->actionList = array();
 
-$config->repobranchtype->actionList['rule']['icon'] = 'data-structure';
-$config->repobranchtype->actionList['rule']['hint'] = $lang->repobranchtype->setBranchRule;
-$config->repobranchtype->actionList['rule']['url']  = array('module' => 'repobranchrule', 'method' => 'setBranchRule', 'params' => 'branchTypeID={id}&repoID={repoID}&branchName=');
+$config->repobranchtype->actionList['rule']['icon']        = 'data-structure';
+$config->repobranchtype->actionList['rule']['hint']        = $lang->repobranchtype->setBranchRule;
+$config->repobranchtype->actionList['rule']['url']         = array('module' => 'repobranchrule', 'method' => 'setBranchRule', 'params' => 'branchTypeID={id}&repoID={repoID}&branchName=');
+$config->repobranchtype->actionList['rule']['data-toggle'] = 'modal';
 
 $config->repobranchtype->actionList['edit']['icon']        = 'edit';
 $config->repobranchtype->actionList['edit']['hint']        = $lang->repobranchtype->edit;

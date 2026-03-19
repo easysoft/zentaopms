@@ -186,4 +186,20 @@ class reporeviewflowModel extends model
 
         return isset($allBranchFlow) ? $allBranchFlow : array();
     }
+
+    /**
+     * 获取评审流程键值对。
+     * Get review flow pairs.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getPairs(int $repoID = 0): array
+    {
+        return $this->dao->select('id, name')->from(TABLE_REVIEWFLOW)
+            ->where('deleted')->eq(0)
+            ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->fetchPairs();
+    }
 }

@@ -12,36 +12,24 @@ declare(strict_types=1);
 class repobranchruleZen extends repobranchrule
 {
     /**
-     * 构建分支规则数据。
-     * Build branch rule data.
+     * 检查规则。
+     * Check rules.
      *
-     * @param  int    $typeID
-     * @param  int    $repoID
-     * @param  string $branchName
-     * @param  object $data
+     * @param  object $formData
      * @access public
      * @return object|bool
      */
-    public function buildBranchRuleData(int $typeID, int $repoID, string $branchName, object $data): object|bool
+    public function checkRules(object $formData): object|bool
     {
-        if(empty($data->allowCreate) || $data->allowCreate['option'] == 'hasPriv') $data->allowCreate['value']          = array();
-        if(empty($data->allowDelete) || $data->allowDelete['option'] == 'hasPriv') $data->allowDelete['value']          = array();
-        if(empty($data->allowUpdate) || $data->allowUpdate['option'] == 'hasPriv') $data->allowUpdate['value']          = array();
-        if(empty($data->allowForcePush) || $data->allowForcePush['option'] == 'hasPriv') $data->allowForcePush['value'] = array();
-        if(empty($data->allowMergeFrom) || $data->allowMergeFrom['option'] == 'all') $data->allowMergeFrom['value']     = array();
-        if(empty($data->allowMergeTo) || $data->allowMergeTo['option'] == 'all') $data->allowMergeTo['value']           = array();
+        $allDefault = true;
+        foreach($formData as $data)
+        {
+            if(empty($data)) continue;
+            $allDefault = false;
+        }
 
-        $rule                = new stdClass();
-        $rule->repo          = $repoID;
-        $rule->branchType    = $typeID;
-        $rule->branchName    = empty($typeID) ? $branchName : '';
-        $rule->createUser    = !empty($typeID) ? implode(',', $data->allowCreate['value']) : '';
-        $rule->deleteUser    = implode(',', $data->allowDelete['value']);
-        $rule->updateUser    = implode(',', $data->allowUpdate['value']);
-        $rule->forcePushUser = implode(',', $data->allowForcePush['value']);
-        $rule->sourceBranch  = implode(',', $data->allowMergeFrom['value']);
-        $rule->targetBranch  = implode(',', $data->allowMergeTo['value']);
+        if($allDefault) return false;
 
-        return $rule;
+        return $formData;
     }
 }
