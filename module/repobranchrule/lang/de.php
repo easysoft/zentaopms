@@ -1,5 +1,5 @@
 <?php
-$lang->repobranchrule->setBranchRule            = 'Set Branch Rule';
+$lang->repobranchrule->setBranchRule            = 'Set Review Flow';
 $lang->repobranchrule->specifyValueEmptyError   = 'Specify Value Not Allowed Empty';
 $lang->repobranchrule->defaultValueRestoreError = 'Default Value Restore Failed';
 
