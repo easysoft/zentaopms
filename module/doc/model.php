@@ -1650,6 +1650,7 @@ class docModel extends model
         {
             $parentDoc = $this->getByID($doc->parent);
             $path = ',' . trim($parentDoc->path, ',') . ',' . $path;
+            $doc->module = $parentDoc->module;
         }
 
         $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
@@ -1776,6 +1777,7 @@ class docModel extends model
             {
                 $parentDoc = $this->getByID($doc->parent);
                 $path = $parentDoc->path . $path;
+                $doc->module = $parentDoc->module;
             }
 
             $doc->path = $path;
@@ -1842,6 +1844,7 @@ class docModel extends model
         {
             $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
             if(strpos($parentDoc->path, ",$oldDoc->id,") !== false) return dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
+            $doc->module = $parentDoc->module;
         }
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($oldDoc->id)->andWhere('version')->eq($oldDoc->version)->fetch();
