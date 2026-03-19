@@ -1889,16 +1889,24 @@ class repo extends control
             $branchTypeCount = 0;
             foreach($branchTypes as $branchType)
             {
-                if($branchTypeCount < 8)
+                $branchTypeCount = $branchTypeCount + 1;
+                if($branchTypeCount < 5)
                 {
                     $this->lang->repo->featureBar['browsebranch'][$branchType->id] = $branchType->name;
                 }
                 else
                 {
-                    if(!isset($this->lang->featureBar['browsebranch']['more'])) $this->lang->repo->featureBar['browsebranch']['more'] = $this->lang->more;
-                    $this->lang->repo->moreSelects['browsebranch']['more'][$branchType->id] = $branchType->name;
+
+                    if($branchTypeCount == 5 && count($branchTypes) == 5)
+                    {
+                        $this->lang->repo->featureBar['browsebranch'][$branchType->id] = $branchType->name;
+                    }
+                    else
+                    {
+                        if(!isset($this->lang->featureBar['browsebranch']['more'])) $this->lang->repo->featureBar['browsebranch']['more'] = $this->lang->more;
+                        $this->lang->repo->moreSelects['browsebranch']['more'][$branchType->id] = $branchType->name;
+                    }
                 }
-                $branchTypeCount = $branchTypeCount + 1;
             }
         }
 
