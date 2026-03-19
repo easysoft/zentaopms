@@ -16,7 +16,6 @@ dropmenu
     set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-unset($branchTypes[0]);
 formPanel
 (
     setID('createReviewFlow'),
