@@ -1799,7 +1799,7 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $label
-     * @param  int    $showArchived
+     * @param  string $showArchived
      * @param  string $keyword
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -1808,7 +1808,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $label = 'all', int $showArchived = 0, string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $label = 'all', string $showArchived = 'active', string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1819,7 +1819,7 @@ class repo extends control
         $keyword = htmlspecialchars(base64_decode($keyword));
 
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID, $label, $showArchived);
+        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID, $label, $showArchived == 'archive' ? 1 : 0);
         if(count($branchList) == 0 && $pageID != 1) $this->locate(inLink('browseBranch', "repoID=$repoID&objectID=$objectID&label=$label&showArchived=$showArchived&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $this->app->loadClass('pager', true);
@@ -1886,7 +1886,6 @@ class repo extends control
         if(!empty($branchTypes))
         {
             $this->lang->repo->featureBar['browsebranch']['all'] = $this->lang->all;
-            if(count($branchTypes) > 8) $this->lang->moreSelects['browsebranch']['more'] = array();
             $branchTypeCount = 0;
             foreach($branchTypes as $branchType)
             {
