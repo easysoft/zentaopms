@@ -212,7 +212,6 @@
 #menu .nav > li > a.active > .icon {color: var(--color-canvas);}
 #menuToggleMenu .menu-toggle .icon-menu-arrow-left::before {content: "\e980"}
 
-#toolbar > .toolbar {gap: 8px!important}
 #toolbar > #pageToolbar + .toolbar > .btn {box-shadow: none!important; border-radius: var(--radius-xl)!important; min-width: 36px; background-color: var(--color-secondary-50); color: var(--color-secondary-500)}
 #pageToolbar > .btn {color: var(--color-secondary-500)}
 #quickAddMenu-toggle > .icon::before {content: "\e974"}
