@@ -39,24 +39,20 @@ class repobranchrule extends control
         }
         $this->loadModel('ci')->setMenu($repoID);
 
-        $branchName = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
-        $branchType = $this->loadModel('repobranchtype')->getBranchTypeByID($branchTypeID);
-        if(!$branchType)
-        {
-            $branchType = new stdClass();
-            $branchType->key = '';
-        }
+        $branchName  = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
+        $branchType  = $this->loadModel('repobranchtype')->getBranchTypeByID($branchTypeID);
         $repo        = $this->loadModel('repo')->getByID($repoID);
-        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypePairs($repoID);
+        $branchTypes = $this->repobranchtype->getBranchTypePairs($repoID);
         $originRule  = $this->repobranchrule->getBranchRule($branchTypeID, $repoID, $branchName);
 
         if($_POST)
         {
             $formData = form::data($this->config->repobranchrule->form->setBranchRule)->get();
-            $link = $branchTypeID ? $this->createLink('repobranchtype', 'browse', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
+            $link     = $branchTypeID ? $this->createLink('repobranchtype', 'browse', "repoID=$repoID") : $this->loadModel('repo')->createLink('browseBranch', "repoID=$repoID");
 
             /* 如果 $formData 里的字段全部为默认值，则返回保存成功，不保存数据。 */
             $formData = $this->checkRules($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             if(!$formData)
             {
