@@ -11,40 +11,10 @@ if(!isInModal())
         set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
     );
 }
-$basicSettings = array();
-//$basicRules    = empty($branchTypeID) ? $lang->repobranchrule->branchRule : $lang->repobranchrule->branchTypeRule;
-//foreach($basicRules as $ruleType => $label)
-//{
-//    $options = in_array($ruleType, array('sourceBranch', 'targetBranch')) ? $lang->repobranchrule->branchTypeOptionList : $lang->repobranchrule->userOptionList;
-//
-//    $basicSettings[] = formGroup
-//    (
-//        set::label($label),
-//        inputGroup
-//        (
-//            radioList
-//            (
-//                setClass('switch-rule mr-5'),
-//                set::value(0),
-//                set::name("{$ruleType}Option"),
-//                set::items($options),
-//                set::inline(true)
-//            ),
-//            picker
-//            (
-//                set::width('150px'),
-//                setClass('hidden'),
-//                set::name($ruleType),
-//                set::items($users),
-//                set::value(),
-//                set::multiple(true)
-//            )
-//        )
-//    );
-//}
 
 $backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repobranchtype', 'browse', "repoID=$repoID");
 $url     = createLink('repobranchrule', 'setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from");
+
 formPanel
 (
     setID('setBranchRuleForm'),
@@ -63,15 +33,11 @@ formPanel
             )
         )
     ),
-    on::change('.switch-rule')->call('setBranchRule', jsRaw('this')),
-    //formRowGroup(set::title($lang->repobranchrule->basicSetting)),
-    $basicSettings,
-    //formRowGroup(set::title($lang->repobranchrule->commitSetting)),
-    //formRowGroup(set::title($lang->repobranchrule->codeReviewFlow)),
     formGroup
     (
         setID('forceReview'),
         set::label($lang->repobranchrule->forceReview),
+        set::labelWidth('200px'),
         set::name('forceReview'),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->repobranchrule->enableStatusList),
@@ -81,6 +47,7 @@ formPanel
     (
         setID('reviewFlow'),
         set::label($lang->repobranchrule->reviewFlow),
+        set::labelWidth('200px'),
         inputGroup
         (
             picker
