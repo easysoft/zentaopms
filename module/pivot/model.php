@@ -2386,6 +2386,13 @@ class pivotModel extends model
     {
         foreach($filters as &$filter)
         {
+            $isSelect = isset($filter['type']) && $filter['type'] === 'select';
+
+            if($isSelect && isset($filter['default']) && $filter['default'] === '0')
+            {
+                $filter['default'] = '';
+            }
+
             if(!isset($filter['default']) || empty($filter['default'])) continue;
             if($processDateVar && is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
         }
