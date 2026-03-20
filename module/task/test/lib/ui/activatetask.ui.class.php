@@ -18,7 +18,6 @@ class activateTaskTester extends tester
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
 
         $form->dom->xpath['taskAssignedTo'] = "//*[@title='{$this->lang->task->assignedTo}']/../div[2]";
-        $form->dom->xpath['taskStatus']     = "//*[@title='{$this->lang->task->status}']/..//span";
         $form->dom->xpath['taskLeft']       = "//*[@title='{$this->lang->task->left}']/../div[2]";
         $form->dom->xpath['activateBtn']    = "//a[@title='{$this->lang->task->activate}']";
 
