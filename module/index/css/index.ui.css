@@ -11,8 +11,7 @@
     --zt-menu-text-active: var(--color-canvas);
     --zt-menu-bg: var(--color-primary-600);
 }
-[lang^='en'] {--zt-menu-width: 132px;}
-.has-space {--zt-menu-width: 160px!important;}
+[lang^='en'] {--zt-menu-width: 132px!important;}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: var(--zt-menu-text-color); transition: width .1s; user-select: none; z-index: 1120;}
 #menu .nav {flex-direction: column; align-items: stretch;}
