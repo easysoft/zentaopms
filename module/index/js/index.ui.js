@@ -1102,9 +1102,8 @@ function updateSpaceMenu(info)
     {
         const $dropmenu = $('<div id="spaceDropmenu"></div>');
         $spaceHeading.find('.text').empty().append($dropmenu);
-        const $label = $spaceHeading.find('.label');
         const options = zui.evalValue(info.dropmenu, ['_element', $dropmenu[0]], ['_$dropmenu', $dropmenu]);
-        zui.create('dropmenu', $dropmenu[0], $.extend({icon: info.icon || spaceType, display: zui.jsx`<span class="text" title=${info.name}>${info.name}</span><span class=${$label.attr('class')}>${$label.text()}</span>`}, options, {leadingAngle: false}));
+        zui.create('dropmenu', $dropmenu[0], $.extend({icon: info.icon || spaceType, display: zui.jsx`<span class="text" title=${info.name}>${info.name}</span>`}, options, {leadingAngle: false}));
     }
     else
     {
