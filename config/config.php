@@ -281,4 +281,4 @@ if($config->db->driver == 'mysql')
 }
 
 /* 配置禅道工作空间。Zentao workspace settings. */
-$config->noWorkspace = true;
+$config->noWorkspace = false;
