@@ -406,7 +406,6 @@ class storyZen extends story
         if(empty($bugID)) return $initStory;
 
         $bug = $this->loadModel('bug')->getByID($bugID);
-        $initStory->product  = $bug->product;
         $initStory->source   = 'bug';
         $initStory->title    = $bug->title;
         $initStory->keywords = $bug->keywords;
