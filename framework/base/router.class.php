@@ -1204,7 +1204,7 @@ class baseRouter
         if(defined('SESSION_STARTED')) return;
 
         /* API session use tmp/apisession directory. */
-        $apiMode = (defined('RUN_MODE') && RUN_MODE == 'api') && !isset($_GET[$this->config->sessionVar]);
+        $apiMode = $this->apiVersion && !isset($_GET[$this->config->sessionVar]);
 
         if(ini_get('session.save_handler') == 'files' || $apiMode)
         {

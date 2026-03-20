@@ -106,7 +106,7 @@ class navbar extends wg
         $responsiveNavOptions['container']        = 'parent';
         $responsiveNavOptions['more']             = ['text' => $lang->other, 'caret' => true];
         $responsiveNavOptions['moreDropdown']     = ['trigger' => 'hover'];
-        $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => ($(container).width() - 40 - (2 * Math.max($("#heading").outerWidth() || 0, $("#toolbar").outerWidth() || 0)))');
+        $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => ($(container).width() - 20 - (2 * Math.max(($("#heading").outerWidth() || 0), $("#toolbar").outerWidth() || 0)))');
 
         return h::nav
         (
@@ -117,7 +117,7 @@ class navbar extends wg
                 setData('navbarGroup', data('mainNavbarGroup')),
                 on::init()->call('initPageNavbar', $items),
                 set::items($navItems),
-                zui::create('ResponsiveNavHelper', $responsiveNavOptions),
+                empty($items) ? null : zui::create('ResponsiveNavHelper', $responsiveNavOptions),
                 $this->children()
             )
         );
@@ -334,7 +334,7 @@ class navbar extends wg
             {
                 $projectID    = str_replace('project=', '', $menuItem->link['vars']);
                 $projectInfo  = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
-                if($projectInfo && isset($projectModel->model)) $projectModel = $projectModel->model;
+                if($projectInfo && isset($projectInfo->model)) $projectModel = $projectInfo->model;
             }
 
             $newItem = null;
@@ -452,7 +452,11 @@ class navbar extends wg
             }
 
             if(!$newItem) continue;
-            if(isset($newItem['data-id'])) $newItem['zui-key'] = $newItem['data-id'];
+            if(isset($newItem['data-id']))
+            {
+                $newItem['zui-key'] = $newItem['data-id'];
+                if($newItem['data-id'] === 'settings' && strpos(',execution,project,product,', ",{$app->tab},") !== false) $newItem['outerClass'] = 'is-rsh-fixed';
+            }
 
             $showInMainMenu = isset($menuItem->showInMainMenu) ? $menuItem->showInMainMenu : false;
             if($showInMainMenu)
@@ -467,7 +471,9 @@ class navbar extends wg
 
         $isExecutionView = ($activeMenu === 'view' || $activeMenu === 'task') && $currentModule === 'execution';
         $isTaskReport    = $currentMethod === 'report' && $currentModule === 'task';
-        if(!$isExecutionView && !$isTaskReport) $navbarInMainMenu = null;
+        $isKanbanView    = $currentModule === 'execution' && $currentMethod === 'taskkanban';
+        $isBurnView      = $currentModule === 'execution' && $currentMethod === 'burn';
+        if(!$isExecutionView && !$isTaskReport && !$isKanbanView && !$isBurnView) $navbarInMainMenu = null;
 
         if(empty($items[$activeMenu]) && !empty($activeInMainMenu) && !empty($items[$activeInMainMenu]))
         {

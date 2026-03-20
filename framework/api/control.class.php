@@ -146,8 +146,6 @@ class control extends baseControl
      */
     public function render($moduleName = '', $methodName = '')
     {
-        if($this->viewType == 'html') return parent::render($moduleName, $methodName);
-
         if($this->app->apiVersion != 'v2')
         {
             $this->parseJSON($moduleName, $methodName);
@@ -164,6 +162,8 @@ class control extends baseControl
         }
         elseif(!$this->getFormData)
         {
+            if($this->viewType == 'html') return parent::render($moduleName, $methodName);
+
             $this->parseJSON($moduleName, $methodName);
 
             ob_start();

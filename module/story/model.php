@@ -2349,10 +2349,11 @@ class storyModel extends model
      * @param  string  $browseType bySearch
      * @param  int     $queryID
      * @param  object  $pager
+     * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null): array
+    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
     {
         $story    = $this->getById($storyID);
         $excludes = $this->storyTao->getRelation($storyID, $story->type);
@@ -2363,7 +2364,7 @@ class storyModel extends model
         $stories2Link = array();
         if($browseType == 'bySearch')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', 0, 'all', $excludes, '', $pager);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, $orderBy, 0, 'all', $excludes, '', $pager);
         }
 
         return $stories2Link;
@@ -2992,7 +2993,7 @@ class storyModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
                 ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
-                ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
+                ->beginIF($this->config->vision == 'rnd' && $this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
             $parents = array();
@@ -3062,7 +3063,7 @@ class storyModel extends model
             ->andWhere('product')->eq($productID)
             ->andWhere('type')->eq('epic')
             ->andWhere("CONCAT(',', vision, ',')")->like("%,{$this->config->vision},%")
-            ->beginIF($this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
+            ->beginIF($this->config->vision == 'rnd' && $this->config->epic->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['epic'])->fi()
             ->fetchAll('id');
 
         $parents = array();

@@ -26,7 +26,7 @@ $zai = new zaiModelTest();
 
 /* 测试在没有ZAI设置时启用向量化 */
 $result1 = $zai->enableVectorizationTest();
-r($result1['result']) && p() && e('failed'); // 测试在没有ZAI设置时启用向量化
+r($result1['result']) && p() && e('fail'); // 测试在没有ZAI设置时启用向量化
 
 /* 设置ZAI配置但API调用会失败 */
 $setting = new stdClass();
@@ -54,7 +54,7 @@ $zai->setVectorizedInfoTest($vectorInfo);
 
 /* 测试向量化已启用时再次启用 */
 $result2 = $zai->enableVectorizationTest();
-r($result2['result']) && p() && e('failed'); // 测试向量化已启用时再次启用
+r($result2['result']) && p() && e('fail'); // 测试向量化已启用时再次启用
 
 /* 测试强制启用已启用的向量化 */
 // 注意：由于没有真实的ZAI API服务器，这个测试会因为API调用失败

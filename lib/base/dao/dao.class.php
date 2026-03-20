@@ -630,7 +630,7 @@ class baseDAO
         $fromPOS    = strpos($sql, 'FROM');
         $fields     = substr($sql, $selectPOS, $fromPOS - $selectPOS);
         $countField = $distinctField ? 'distinct ' . $distinctField : '*';
-        $sql        = str_replace($fields, " COUNT($countField) AS recTotal ", substr($sql, 0, $fromPOS)) . substr($sql, $fromPOS);
+        $sql        = str_replace($fields, " COUNT($countField) AS `recTotal` ", substr($sql, 0, $fromPOS)) . substr($sql, $fromPOS);
 
         /*
          * 去掉SQL语句中order和limit之后的部分。

@@ -86,29 +86,30 @@ class convertTao extends convertModel
         foreach($data as $fieldKey => $fieldValue)
         {
             if(strpos($fieldKey, 'customfield_') === false) continue;
+            $customFieldKey = str_replace('customfield_', '', $fieldKey);
             if(is_array($fieldValue))
             {
                 if(!empty($fieldValue['content']) && !empty($fieldValue['renderedFields'][$fieldKey]))
                 {
-                    $issue->{$fieldKey} = $fieldValue['renderedFields'][$fieldKey];
+                    $issue->{$customFieldKey} = $fieldValue['renderedFields'][$fieldKey];
                 }
                 elseif(!empty($fieldValue['id']))
                 {
-                    $issue->{$fieldKey} = $fieldValue['id'];
+                    $issue->{$customFieldKey} = $fieldValue['id'];
                 }
                 else
                 {
-                    $issue->{$fieldKey} = '';
+                    $issue->{$customFieldKey} = '';
                     foreach($fieldValue as $field)
                     {
-                        if(!empty($field['id'])) $issue->{$fieldKey} .= $field['id'] . ',';
+                        if(!empty($field['id'])) $issue->{$customFieldKey} .= $field['id'] . ',';
                     }
-                    $issue->{$fieldKey} = rtrim($issue->{$fieldKey}, ',');
+                    $issue->{$customFieldKey} = rtrim($issue->{$customFieldKey}, ',');
                 }
             }
             else
             {
-                $issue->{$fieldKey} = $fieldValue;
+                $issue->{$customFieldKey} = $fieldValue;
             }
         }
 
@@ -1337,16 +1338,20 @@ class convertTao extends convertModel
      */
     protected function createTeamMember(int $objectID, string $createdBy, string $type): bool
     {
-        $member = new stdclass();
-        $member->root    = $objectID;
-        $member->account = $createdBy;
-        $member->role    = '';
-        $member->join    = helper::now();
-        $member->type    = $type;
-        $member->days    = 0;
-        $member->hours   = $this->config->execution->defaultWorkhours;
+        $account = $this->getJiraAccount($createdBy);
+        if($account)
+        {
+            $member = new stdclass();
+            $member->root    = $objectID;
+            $member->account = $account;
+            $member->role    = '';
+            $member->join    = helper::now();
+            $member->type    = $type;
+            $member->days    = 0;
+            $member->hours   = $this->config->execution->defaultWorkhours;
 
-        $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
+            $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
+        }
 
         return true;
     }
@@ -1734,7 +1739,7 @@ class convertTao extends convertModel
                 foreach($data->fixVersions as $version)
                 {
                     $versionID = $version['id'];
-                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(TABLE_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                    $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                     if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('stories')->eq("CONCAT(stories,',',{$storyID})")->where('id')->eq($zentaoVersionID)->exec();
                 }
             }
@@ -1888,7 +1893,7 @@ class convertTao extends convertModel
             foreach($data->fixVersions as $version)
             {
                 $versionID = $version['id'];
-                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(TABLE_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
+                $zentaoVersionID = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->andWhere('BType')->eq('zversion')->andWhere('AID')->eq($versionID)->fetch('BID');
                 if($zentaoVersionID) $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set('bugs')->eq("CONCAT(bugs,',',{$bugID})")->where('id')->eq($zentaoVersionID)->exec();
             }
         }

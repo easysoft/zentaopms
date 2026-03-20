@@ -123,7 +123,7 @@ class story extends control
         $this->view->fields      = $fields;
         $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
         $this->view->type        = $storyType;
-        $this->view->initStory   = $initStory;
+        $this->view->story       = $initStory;
         $this->view->forceReview = $this->story->checkForceReview($storyType);
 
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
@@ -425,6 +425,23 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $oldStory = $this->story->fetchByID($storyID);
+            $changes  = common::createChanges($oldStory, $storyData);
+            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            foreach($changes as $index => $change)
+            {
+                if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
+            }
+
+            if(empty($changes))
+            {
+                $reviewers = $this->story->getReviewerPairs($storyID, $oldStory->version);
+                $oldStory->reviewer = array_keys($reviewers);
+
+                $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
+                if(!$diff && empty($_FILES)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+            }
+
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -446,7 +463,6 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 
@@ -1465,10 +1481,11 @@ class story extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $orderBy = 'id_desc')
     {
         $this->commonAction($storyID);
         $story = $this->story->getById($storyID);
@@ -1499,7 +1516,7 @@ class story extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories to link. */
-        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager);
+        $stories2Link = $this->story->getStories2Link($storyID, $browseType, $queryID, $pager, $orderBy);
 
         /* Assign. */
         $this->view->title         = $this->lang->story->linkStory . "STORY" . $this->lang->hyphen .$this->lang->story->linkStory;
@@ -1508,6 +1525,11 @@ class story extends control
         $this->view->stories2Link  = $stories2Link;
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyID       = $storyID;
+        $this->view->linkedStoryID = $linkedStoryID;
+        $this->view->browseType    = $browseType;
+        $this->view->queryID       = $queryID;
+        $this->view->orderBy       = $orderBy;
 
         $this->display();
     }

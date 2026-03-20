@@ -141,7 +141,7 @@ $promptMenuInject = function() use ($generateAgents)
                 helper::createLink('ai', 'promptExecute', "promptId=$prompt->id&objectId=$currentObjectId&auto=0"),
                 $prompt->name . ($prompt->status != 'active' ? '<span class="label size-sm gray-500-pale ring-gray-500" style="margin-left: 4px; white-space: nowrap;">' . $this->lang->ai->prompts->statuses[$prompt->status] . '</span>' : ''),
                 '',
-                "class='prompt ajax-submit' style='width: 100%;'" . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " data-toggle='popover' data-container='body' data-trigger='hover' data-content='$prompt->desc' data-title='$prompt->name' data-placement='left'"),
+                "class='prompt ajax-submit' style='width: 100%;'" . (empty($prompt->unauthorized) ? '' : ' disabled') . (empty($prompt->desc) ? '' : " title='$prompt->desc'"),
                 'btn ghost size-sm font-medium text-left'
             );
             $html .= '</li>';

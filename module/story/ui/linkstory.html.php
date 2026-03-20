@@ -26,7 +26,6 @@ $cols['openedBy'] = $config->story->dtable->fieldList['openedBy'];
 $cols['estimate'] = $config->story->dtable->fieldList['estimate'];
 $cols['title']['nestedToggle'] = false;
 $cols['title']['flex']         = 1;
-$cols = array_map(function($col){unset($col['sortType']); return $col;}, $cols);
 
 $data = array();
 foreach($stories2Link as $linkStory) $data[] = $this->story->formatStoryForList($linkStory, array(), $linkStory->type, $maxGradeGroup);
@@ -48,6 +47,8 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::checkboxLabel($lang->selectAll),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('story', 'linkStory', "storyID={$storyID}&type={$type}&linkedStoryID={$linkedStoryID}&browseType={$browseType}&queryID={$queryID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&orderBy={name}_{sortType}"))
 );
 
 div

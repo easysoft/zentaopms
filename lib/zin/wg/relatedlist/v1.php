@@ -12,6 +12,7 @@ class relatedList extends wg
     (
         'data'         => '?array',     // 要显示的类型数据定义。
         'showCount'    => '?bool=true', // 是否显示数量。
+        'showIDLabel'  => '?bool=true', // 是否显示ID标签。
         'onRenderItem' => '?callback'   // 渲染需求对象的回调函数。
     );
 
@@ -20,11 +21,13 @@ class relatedList extends wg
         $title = '';
         if(isset($item->title)) $title = $item->title;
         if(isset($item->name))  $title = $item->name;
+
+        $showIDLabel = $this->prop('showIDLabel');
         $info = array
         (
             'title'   => $title,
             'hint'    => $title,
-            'leading' => array('html' => wg(idLabel::create($item->id))->render())
+            'leading' => $showIDLabel ? array('html' => wg(idLabel::create($item->id))->render()) : null
         );
 
         $urlTemplate = isset($group['url']) ? $group['url'] : null;

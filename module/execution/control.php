@@ -173,7 +173,7 @@ class execution extends control
         foreach($tasks as $task)
         {
             $task->name = htmlspecialchars_decode($task->name);
-            if($task->mode == 'multi' && strpos('done,closed', $task->status) === false)
+            if($task->mode == 'multi' && strpos('done,closed,cancel', $task->status) === false)
             {
                 $task->assignedTo = '';
 

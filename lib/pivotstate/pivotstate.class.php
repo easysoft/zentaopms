@@ -683,6 +683,7 @@ class pivotState
             switch($type)
             {
                 case 'select':
+                    if(is_string($default) && strpos($default, ',') !== false) $default = explode(',', $default);
                     if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
                     if(empty($default)) break;
                     $value = "('" . $default . "')";

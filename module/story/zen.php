@@ -1223,6 +1223,7 @@ class storyZen extends story
             $this->config->{$storyType}->create->requiredFields = str_replace(',module,', ',', ",{$this->config->{$storyType}->create->requiredFields},");
             foreach($_POST['modules'] as $key => $moduleID)
             {
+                if(!$key) continue;
                 if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
             }
         }
@@ -1299,6 +1300,7 @@ class storyZen extends story
         $now       = helper::now();
         $fields    = $this->config->story->form->edit;
         $storyData = form::data($fields, $storyID)
+            ->add('id', $storyID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('demand', $oldStory->demand)
@@ -2093,7 +2095,7 @@ class storyZen extends story
 
         $leftConditions  = array();
         $rightConditions = array();
-        $fieldNames      = json_decode($searchConfig['searchFields']);
+        $fieldNames      = $searchConfig['fields'];
         if(!$searchFields) return '';
 
         $this->app->loadLang('search');

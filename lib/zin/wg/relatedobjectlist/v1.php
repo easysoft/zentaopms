@@ -57,7 +57,7 @@ class relatedObjectList extends relatedList
         if($browseType == 'byRelation')
         {
             $relatedObjectTypeList = $config->custom->relateObjectList;
-            $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
+            if(helper::hasFeature('devops')) $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
             if(!isset($relatedObjectTypeList[$relatedObjectType])) $relatedObjectTypeList[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
             $itemType = $relatedObjectTypeList[$relatedObjectType];
         }
@@ -156,7 +156,7 @@ class relatedObjectList extends relatedList
                 }
 
                 $relatedObjectTypePairs = $config->custom->relateObjectList;
-                $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
+                if(helper::hasFeature('devops')) $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
                 if(!isset($relatedObjectTypePairs[$relatedObjectType])) $relatedObjectTypePairs[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
                 $data[$relatedObjectType] = array
                 (

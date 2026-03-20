@@ -11,18 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* Level 3 navigator. */
-$navLinkParams = array('project' => $projectID);
-
-$navItems = array();
-$navItems[] = array('text' => $lang->overview,            'url' => createLink('project', 'view',           $navLinkParams));
-$navItems[] = array('text' => $lang->productCommon,       'url' => createLink('project', 'manageProducts', $navLinkParams));
-$navItems[] = array('text' => $lang->team->common,        'url' => createLink('project', 'team',           $navLinkParams));
-$navItems[] = array('text' => $lang->stakeholder->common, 'url' => createLink('stakeholder', 'browse',     $navLinkParams));
-$navItems[] = array('text' => $lang->priv,                'url' => createLink('project', 'group',          $navLinkParams));
-
-mainNavbar(set::items($navItems));
-
 /* Feature bar. */
 featureBar
 (

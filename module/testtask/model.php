@@ -487,8 +487,9 @@ class testtaskModel extends model
     {
         if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
 
-        return $this->dao->select('t1.*, t2.version AS version')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.version AS version, COALESCE(t3.title, t1.title) AS title')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+            ->leftJoin(TABLE_CASESPEC)->alias('t3')->on('t1.id=t3.case AND t2.version=t3.version')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
             ->andWhere('t1.status')->ne('wait')
@@ -1972,9 +1973,14 @@ class testtaskModel extends model
         $testRun->lastRunDate   = $case->lastRunDate;
         $testRun->lastRunResult = $case->lastRunResult;
 
-        $this->dao->replace(TABLE_TESTRUN)->data($testRun)->exec();
-
-        return $this->dao->lastInsertID();
+        $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->fetch();
+        if(isset($testRunInfo->id))
+        {
+            $this->dao->update(TABLE_TESTRUN)->data($testRun)->where('id')->eq($testRunInfo->id);
+            return  $testRunInfo->id;
+        }
+        $this->dao->insert(TABLE_TESTRUN)->data($testRun)->exec();
+        return dao::isError() ? 0 : $this->dao->lastInsertID();
     }
 
     /**

@@ -205,6 +205,13 @@ class bug extends control
 
         if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
 
+        $builds = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'hasdeleted');
+        if($bug->resolvedBuild && !isset($builds[$bug->resolvedBuild]))
+        {
+            $build = $this->build->fetchByID((int)$bug->resolvedBuild);
+            $builds[$build->id] = $build->name;
+        }
+
         $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
@@ -221,7 +228,7 @@ class bug extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->branches    = $branches;
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
-        $this->view->builds      = $this->loadModel('build')->getBuildPairs(array($bug->product), 'all', 'hasdeleted');
+        $this->view->builds      = $builds;
         $this->view->linkCommits = $this->loadModel('repo')->getCommitsByObject($bug->id, 'bug');
         $this->view->actions     = $this->loadModel('action')->getList('bug', $bug->id);
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);

@@ -185,15 +185,18 @@ window.renderRowData = function($row, index, story)
         if(roadmapCondition || storyCondition) $roadmap.append("<input type='hidden' name='roadmap[" + story.id + "]' value='" + story.roadmap + "' />");
     }
 
-    if(story.source == 'meeting' || story.source == 'researchreport')
+    if(story.type == 'requirement' && storyType != 'requirement')
     {
-        objects = story.source == 'meeting' ? meetings : researchReports;
-        let $sourceNoteTd = $row.find('.form-batch-control[data-name="sourceNote"]');
-        $sourceNoteTd.html("<div class='form-control picker-box' data-name='source'></div>");
+        $row.find('[data-name="source"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $sourcePicker = info[0];
+            $sourcePicker.render({items: URSourceItems});
+        });
+    }
 
-        items = [];
-        for(let note in objects) items.push({text:objects[note], value:note});
-        $sourceNoteTd.find('.picker-box').render({items: items, name: 'sourceNote[' + story.id + ']', defaultValue: story.sourceNote});
+    if(story.source == 'researchreport')
+    {
+        renderSourceNote($row.find('[data-name="sourceNote"]'), story.source, story.sourceNote);
     }
 };
 
@@ -257,4 +260,9 @@ window.setDuplicateAndChild = function(resolution, storyID)
     {
         $('#duplicateStoryBox' + storyID).addClass('hidden');
     }
+};
+
+window.handleRenderFieldCol = function($col, col)
+{
+    if(col.name === 'sourceNote') return renderSourceNote($col);
 };

@@ -553,7 +553,6 @@ foreach($setting as $key => $col)
         $col['sortType'] = false;
         if(isset($col['link'])) unset($col['link']);
         if($key == 'assignedTo') $col['type'] = 'user';
-        if($key == 'pri') $col['priList'] = $lang->story->priList;
         if($key == 'title') $col['link']  = array('url' => createLink('{type}', 'view', "storyID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 
@@ -592,6 +591,7 @@ jsVar('cases', $storyCases);
 jsVar('summary', $summary);
 jsVar('checkedSummary', $lang->product->checkedAllSummary);
 jsVar('storyType', $storyType);
+
 dtable
 (
     setClass('shadow rounded'),

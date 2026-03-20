@@ -1161,8 +1161,9 @@ class myModel extends model
     {
         if($this->config->edition != 'ipd') return array();
 
-        $this->app->loadLang('demand');
-        $demands = $this->dao->select("t1.id, t1.title, 'demand' AS type, t1.createdDate AS time, t1.status, t1.product, 0 AS project")->from(TABLE_DEMAND)->alias('t1')
+        $this->loadModel('demand');
+
+        $demands = $this->dao->select('t1.*')->from(TABLE_DEMAND)->alias('t1')
             ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
@@ -1173,14 +1174,34 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($checkExists)
+        if(!empty($demands)) $demands = $this->demand->mergeReviewer($demands);
+
+        $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('demand', 'review');
+
+        $reviewList = array();
+        foreach($demands as $id => $demand)
         {
-            return !empty($demands);
+            if(!$this->demand->isClickable($demand, 'review')) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $demand)) continue;
+
+            $data = new stdclass();
+            $data->id      = $demand->id;
+            $data->title   = $demand->title;
+            $data->type    = 'demand';
+            $data->time    = $demand->createdDate;
+            $data->status  = $demand->status;
+            $data->product = $demand->product;
+            $data->project = 0;
+
+            $reviewList[$id] = $data;
         }
 
-         $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
-         foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
-         return array_values($demands);
+        if($checkExists) return !empty($reviewList);
+
+         $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+         foreach($actions as $demandID => $date) $reviewList[$demandID]->time = $date;
+
+         return array_values($reviewList);
     }
 
     /**
@@ -1194,8 +1215,9 @@ class myModel extends model
      */
     public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false, $type = 'story'): array|bool
     {
-        $this->app->loadLang($type);
-        $stories = $this->dao->select("t1.id, t1.title, 'story' AS type, t1.type AS storyType, t1.openedDate AS time, t1.status, t1.product, 0 AS project, t1.parent")->from(TABLE_STORY)->alias('t1')
+        $this->loadModel($type);
+
+        $stories = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
@@ -1208,14 +1230,46 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($checkExists)
+        if($this->config->edition != 'open')
         {
-            return !empty($stories);
+            $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction($type, 'review');
+            if($reviewAction)
+            {
+                $this->loadModel('flow');
+                foreach($stories as $storyID => $story)
+                {
+                    if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $story)) unset($stories[$storyID]);
+                }
+            }
         }
 
-        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
-        foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
-        return array_values($stories);
+        if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        $reviewList = array();
+        foreach($stories as $storyID => $story)
+        {
+            if(!$this->story->isClickable($story, 'review')) continue;
+
+            $data = new stdclass();
+            $data->id        = $story->id;
+            $data->title     = $story->title;
+            $data->type      = 'story';
+            $data->storyType = $story->type;
+            $data->time      = $story->openedDate;
+            $data->status    = $story->status;
+            $data->product   = $story->product;
+            $data->project   = 0;
+            $data->parent    = $story->parent;
+
+            $reviewList[$storyID] = $data;
+        }
+
+        if($checkExists) return !empty($reviewList);
+
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($reviewList))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
+        foreach($actions as $storyID => $date) $reviewList[$storyID]->time = $date;
+
+        return array_values($reviewList);
     }
 
     /**
@@ -1229,7 +1283,7 @@ class myModel extends model
      */
     public function getReviewingCases(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
-        $cases = $this->dao->select("t1.id, t1.title, 'testcase' AS type, t1.openedDate AS time, t1.status, t1.product, t1.project")->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('wait')
             ->beginIF(!$this->app->user->admin)->andWhere('(product')->in($this->app->user->view->products)->orWhere('lib')->gt(0)->markRight(1)->fi()
@@ -1237,8 +1291,41 @@ class myModel extends model
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll('id');
 
-        if($checkExists) return !empty($cases);
-        return array_values($cases);
+        if($this->config->edition != 'open')
+        {
+            $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('testcase', 'review');
+
+            if($reviewAction)
+            {
+                $this->loadModel('flow');
+                foreach($cases as $caseID => $case)
+                {
+                    if($reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $case)) unset($cases[$caseID]);
+                }
+            }
+        }
+
+        $this->loadModel('testcase');
+
+        $reviewList = array();
+        foreach($cases as $case)
+        {
+            if(!$this->testcase->isClickable($case, 'review')) continue;
+
+            $data = new stdclass();
+            $data->id      = $case->id;
+            $data->title   = $case->title;
+            $data->type    = 'testcase';
+            $data->time    = $case->openedDate;
+            $data->status  = $case->status;
+            $data->product = isset($case->product) ? $case->product : 0;
+            $data->project = isset($case->project) ? $case->project : 0;
+            $reviewList[] = $data;
+        }
+
+        if($checkExists) return !empty($reviewList);
+
+        return $reviewList;
     }
 
     /**
@@ -1290,6 +1377,7 @@ class myModel extends model
         foreach($projectReviews as $review)
         {
             if(!isset($pendingList[$review->id])) continue;
+            if(!$this->review->isClickable($review, 'review')) continue;
 
             $data = new stdclass();
             $data->id      = $review->id;
@@ -1328,6 +1416,7 @@ class myModel extends model
             ->beginIF(!helper::hasFeature('project_risk'))->andWhere('objectType')->ne('risk')->fi()
             ->beginIF(!helper::hasFeature('project_issue'))->andWhere('objectType')->ne('issue')->fi()
             ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
+            ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('objectType')->ne('charter')->fi()
             ->orderBy("t2.{$orderBy}")
             ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
@@ -1381,11 +1470,16 @@ class myModel extends model
 
         $this->session->set('feedbackProduct', 'all');
         $feedbacks = $this->loadModel('feedback')->getList('review', $orderBy);
-        if($checkExists) return !empty($feedbacks);
+
+        $this->loadModel('flow');
+        $reviewAction = $this->loadModel('workflowaction')->getByModuleAndAction('feedback', 'review');
 
         $reviewList = array();
         foreach($feedbacks as $feedback)
         {
+            if(!$this->feedback->isClickable($feedback, 'review')) continue;
+            if($reviewAction && $reviewAction->extensionType != 'none' && $reviewAction->status == 'enable' && !empty($reviewAction->conditions) && !$this->flow->checkConditions($reviewAction->conditions, $feedback)) continue;
+
             $data = new stdclass();
             $data->id      = $feedback->id;
             $data->title   = $feedback->title;
@@ -1396,6 +1490,9 @@ class myModel extends model
             $data->project = isset($feedback->project) ? $feedback->project : 0;
             $reviewList[] = $data;
         }
+
+        if($checkExists) return !empty($reviewList);
+
         return $reviewList;
     }
 

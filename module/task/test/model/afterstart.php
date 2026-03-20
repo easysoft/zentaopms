@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+zenData('company')->gen(1);
 zenData('bug')->gen(5);
 zenData('project')->loadYaml('project')->gen(6);
 zenData('task')->loadYaml('task')->gen(9);
@@ -44,10 +45,11 @@ $linearTask = array('assignedTo' => 'admin', 'consumed' => 0, 'left' => 5);
 $multiTask  = array('assignedTo' => 'admin', 'consumed' => 0);
 $output     = array('fromColID' => 1, 'toColID' => 2, 'fromLaneID' => 1, 'toLaneID' => 1);
 
-$taskTester = new taskModelTest();
-$taskTester->objectModel->app->moduleName = 'task';
-$taskTester->objectModel->app->rawMethod  = 'start';
+global $app;
+$app->moduleName = 'task';
+$app->rawMethod  = 'start';
 
+$taskTester = new taskModelTest();
 r($taskTester->afterStartTest($taskIDList[0], $waitTask))          && p()       && e('1'); // 测试开始任务状态为未开始的任务后的数据处理
 r($taskTester->afterStartTest($taskIDList[1], $doingTask))         && p('load') && e('1'); // 测试开始任务状态为进行中的任务后的数据处理
 r($taskTester->afterStartTest($taskIDList[2], $doneTask))          && p()       && e('1'); // 测试开始任务状态为已完成的任务后的数据处理

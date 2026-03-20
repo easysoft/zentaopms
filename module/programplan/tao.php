@@ -269,7 +269,7 @@ class programplanTao extends programplanModel
             }
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0);
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0, 'path' => $plan->path);
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }
@@ -331,12 +331,14 @@ class programplanTao extends programplanModel
                 $stageIndex[$index]['totalConsumed'] += $task->consumed;
                 $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
-                $parent = $stage['parent'];
-                if(!isset($stageIndex[$parent])) continue;
+                foreach(explode(',', $stage['path']) as $planID)
+                {
+                    if(!isset($stageIndex[$planID]) || $planID == $stage['planID']) continue;
 
-                $stageIndex[$parent]['totalEstimate'] += $task->estimate;
-                $stageIndex[$parent]['totalConsumed'] += $task->consumed;
-                $stageIndex[$parent]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                    $stageIndex[$planID]['totalEstimate'] += $task->estimate;
+                    $stageIndex[$planID]['totalConsumed'] += $task->consumed;
+                    $stageIndex[$planID]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
+                }
             }
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex);

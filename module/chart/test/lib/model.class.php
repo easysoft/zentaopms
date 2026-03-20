@@ -37,6 +37,20 @@ class chartModelTest extends baseTest
     }
 
     /**
+     * Test getDefaultCharts method.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function getDefaultChartsTest(int $groupID): array
+    {
+        $result = $this->instance->getDefaultCharts($groupID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test switchFieldName method.
      *
      * @param  array  $fields

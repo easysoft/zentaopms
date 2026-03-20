@@ -275,6 +275,7 @@ $lang->group->package->importProjectStory    = '导入导出项目' . $lang->SRC
 $lang->group->package->browseProject         = '浏览项目';
 $lang->group->package->manageProject         = '创建维护项目';
 $lang->group->package->importProject         = '导入导出项目';
+$lang->group->package->projectDoc            = '项目文档';
 $lang->group->package->projectTeam           = '团队权限';
 $lang->group->package->deleteProject         = '删除项目';
 $lang->group->package->projectWhitelist      = '项目白名单';

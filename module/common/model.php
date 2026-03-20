@@ -1229,7 +1229,7 @@ eof;
 
             if(isset($this->app->user))
             {
-                if($this->app->tab == 'project')
+                if($this->app->tab == 'project' || $this->app->tab == 'execution')
                 {
                     $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
                     if(commonModel::hasPriv($module, $method)) return true;

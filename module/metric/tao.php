@@ -40,7 +40,7 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)->fi()
             ->beginIF(!helper::hasFeature('program'))->andWhere('object')->notIN('program')->fi()
-            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host')->fi()
+            ->beginIF(!helper::hasFeature('devops'))->andWhere('object')->notIN('host,deployment,node,code,codebase,pipeline,artifact')->fi()
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();

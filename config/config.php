@@ -279,3 +279,6 @@ if($config->db->driver == 'mysql')
     if(!isset($config->db->collation))                              $config->db->collation = '';
     if(strpos($config->db->collation, $config->db->encoding) !== 0) $config->db->collation = '';
 }
+
+/* 配置禅道工作空间。Zentao workspace settings. */
+$config->noWorkspace = true;

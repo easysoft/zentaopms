@@ -31,11 +31,6 @@ class mainNavbar extends wg
         'onRenderItem' => '?callback',
     );
 
-    protected static array $defaultProps = array
-    (
-        'responsive' => true
-    );
-
     /**
      * Define the blocks.
      *
@@ -127,7 +122,12 @@ class mainNavbar extends wg
             (
                 setClass('container'),
                 empty($leftBlock) ? null : div(setClass('main-navbar-left'), $leftBlock),
-                nav(set::items($items), set($this->getRestProps())),
+                nav
+                (
+                    set::items($items),
+                    set::responsive(['more' => ['text' => $app->lang->other, 'caret' => true]]),
+                    set($this->getRestProps())
+                ),
                 $this->children(),
                 empty($rightBlock) ? null : div(setClass('main-navbar-right'), $rightBlock)
             ),

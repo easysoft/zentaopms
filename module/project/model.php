@@ -963,14 +963,16 @@ class projectModel extends model
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
      * @param  int    $projectID
+     * @param  int    $hasProduct
      * @access public
      * @return object|false
      */
-    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0): object|false
+    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0, int $hasProduct = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+        if(!$hasProduct) $this->config->project->includedPriv = array_merge($this->config->project->includedPriv, $this->config->project->noProductPriv);
 
         $hasBaseline    = true;
         $hasAuditplan   = true;
@@ -2048,7 +2050,7 @@ class projectModel extends model
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
+            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
                 $this->loadModel('execution');
                 unset($postProductData->plans);
@@ -2431,7 +2433,7 @@ class projectModel extends model
         $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* 无迭代项目不开启过程删除导航。 */
-        if($this->config->edition != 'open')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->loadModel('workflowgroup');
             if(!$this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process')) unset($lang->project->menu->other['dropMenu']->pssp);

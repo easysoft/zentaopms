@@ -162,6 +162,8 @@ class pivot extends control
      */
     public function ajaxGetSysOptions(string $search = '', int $limit = 100)
     {
+        /* Decode search from base64: */
+        $search = base64_decode($search);
         $type   = zget($_POST, 'type', '');
         $object = zget($_POST, 'object', '');
         $field  = zget($_POST, 'field', '');

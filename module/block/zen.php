@@ -1034,8 +1034,8 @@ class blockZen extends block
             ->andWhere('product')->in($productIdList)
             ->andWhere('begin')->ge(date('Y-m-d'))
             ->andWhere('status')->eq('wait')
-            ->orderBy('begin_desc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('begin_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
         /* Obtain the execution of the current in progress status closest to the actual start date based on the product list. */
@@ -1045,8 +1045,8 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->in($productIdList)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_asc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('realBegan_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
         /* Retrieve releases with the latest release date from the product list and a release date earlier than the current date. */
@@ -1054,20 +1054,20 @@ class blockZen extends block
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->andWhere('date')->le(date('Y-m-d'))
-            ->orderBy('date_asc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('date_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 将按照产品分组的统计数据放入产品列表中。 */
         /* Place statistical data grouped by product into the product list. */
         foreach($products as $productID => $product)
         {
             $product->storyDeliveryRate = isset($storyDeliveryRate[$productID]['value']) ? $storyDeliveryRate[$productID]['value'] * 100 : 0;
-            $product->totalStories      = isset($totalStories[$productID]['value']) ? $totalStories[$productID]['value'] : 0;
-            $product->closedStories     = isset($closedStories[$productID]['value']) ? $closedStories[$productID]['value'] : 0;
-            $product->unclosedStories   = isset($unclosedStories[$productID]['value']) ? $unclosedStories[$productID]['value'] : 0;
-            $product->newPlan           = isset($newPlan[$productID][$productID]) ? $newPlan[$productID][$productID] : '';
-            $product->newExecution      = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
-            $product->newRelease        = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
+            $product->totalStories      = isset($totalStories[$productID]['value'])      ? $totalStories[$productID]['value']            : 0;
+            $product->closedStories     = isset($closedStories[$productID]['value'])     ? $closedStories[$productID]['value']           : 0;
+            $product->unclosedStories   = isset($unclosedStories[$productID]['value'])   ? $unclosedStories[$productID]['value']         : 0;
+            $product->newPlan           = isset($newPlan[$productID])      ? current($newPlan[$productID])      : '';
+            $product->newExecution      = isset($newExecution[$productID]) ? current($newExecution[$productID]) : '';
+            $product->newRelease        = isset($newRelease[$productID])   ? current($newRelease[$productID])   : '';
 
             foreach($dates as $date)
             {
@@ -3007,9 +3007,9 @@ class blockZen extends block
         $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->andWhere('begin')->ge(date('Y-m-01'))
+            ->andWhere('begin')->ge(date('Y-m-d'))
             ->andWhere('status')->eq('wait')
-            ->orderBy('begin_desc')
+            ->orderBy('begin_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
@@ -3020,7 +3020,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->eq($productID)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_asc')
+            ->orderBy('realBegan_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -3028,8 +3028,8 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->andWhere('date')->lt(date('Y-m-01'))
-            ->orderBy('date_asc')
+            ->andWhere('date')->le(date('Y-m-d'))
+            ->orderBy('date_desc,id_desc')
             ->fetch();
 
         $product = $this->loadModel('product')->getByID($productID);

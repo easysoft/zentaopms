@@ -102,7 +102,8 @@ class backBtn extends btn
             'deliverable'    => 'deliverable-browse,project-deliverable,action-trash',
             'weekly'         => 'weekly-browse',
             'milestone'      => 'weekly-browse',
-            'nc'             => 'nc-browse'
+            'nc'             => 'nc-browse',
+            'budget'         => 'budget-browse,action-trash'
         );
 
         $props  = parent::getProps();

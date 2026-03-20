@@ -219,3 +219,6 @@ if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 
     $lang->confirmDelete = '您确定要执行删除操作吗？';
 }
+
+if(!helper::hasFeature('kanban'))  unset($lang->mainNav->kanban, $lang->mainNav->menuOrder[15]);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban']);

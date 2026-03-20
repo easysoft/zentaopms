@@ -48,7 +48,7 @@ class header extends wg
         {
             $toolbar = new toolbar
             (
-                setClass('gap-4'),
+                setClass('gap-2'),
                 static::quickAddMenu(),
                 static::messageBar(),
                 static::userBar()
@@ -206,14 +206,15 @@ class header extends wg
         $themeItems = array();
         foreach($app->lang->themes as $key => $value)
         {
-            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'active' => $app->cookie->theme == $key);
+            $themeItems[] = array('text' => $value, 'data-value' => $key, 'url' => "javascript:selectTheme(\"$key\")", 'selected' => $app->cookie->theme == $key);
         }
         $items[] = array
         (
-            'text' => $lang->theme,
-            'icon' => 'theme',
-            'key'  => 'theme',
-            'items' => $themeItems
+            'text'      => $lang->theme,
+            'icon'      => 'theme',
+            'key'       => 'theme',
+            'items'     => $themeItems,
+            'listProps' => ['getItem' => jsRaw('(item) => {item.selected = item["data-value"] === $.cookie.get("theme"); return item;}')]
         );
 
         $langItems = array();
@@ -296,7 +297,7 @@ class header extends wg
                 (
                     setID('messageBar'),
                     set(array('data-on' => 'click', 'data-call' => 'fetchMessage', 'data-fetcher' => createLink('message', 'ajaxGetDropMenu'))),
-                    setClass('text-primary bg-inherit ring-primary ring-opacity-40'),
+                    setClass('rounded-full bg-gray bg-opacity-10 text-primary-900 text-opacity-70 ring-0 w-9'),
                     set::square(true),
                     set::caret(false),
                     set::size('sm'),
@@ -479,8 +480,8 @@ class header extends wg
         (
             btn
             (
-                icon('plus', set::size('lg')),
-                setClass('text-primary ring-primary ring-opacity-30 bg-inherit'),
+                icon('plus-solid-circle', set::size('lg')),
+                setClass('rounded-full bg-gray bg-opacity-10 text-primary-900 text-opacity-70 ring-0 w-9'),
                 set::square(true),
                 set::size('sm'),
                 set::caret(false)

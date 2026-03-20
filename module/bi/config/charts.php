@@ -4525,7 +4525,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.estimate), 1) AS story
 FROM zt_product AS t1
-LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.closedReason = 'done'
+LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.`closedReason` = 'done'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
 GROUP BY `year`, t1.id, product
 ORDER BY `year`, story DESC LIMIT 999999

@@ -69,7 +69,8 @@ window.getFilterValues = function(where)
         }
         else if($filter.hasClass('filter-select') || $filter.hasClass('filter-multipleselect'))
         {
-            filterValues[index] = $filter.find('.pick-value').val();
+            $filterPicker = $filter.find('.picker').zui('picker');
+            filterValues[index] = $filterPicker.$.value;
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {

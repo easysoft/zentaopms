@@ -186,7 +186,7 @@ class VectorizedPanel extends zui.Component
             this.render();
             return;
         }
-        if(result.result === 'failed')
+        if(result.result !== 'success')
         {
             this.syncing = false;
             this.render(result.data);

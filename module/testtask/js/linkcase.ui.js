@@ -54,6 +54,7 @@ window.renderCell = function(result, info)
         let versions = [];
         for(i = 1; i <= info.row.data.version; i++) versions.push({'text': '#' + i, 'value': i});
         result[0].children.props.items = versions;
+        result[0].children.props.value = info.row.data.version;
     }
     if(info.col.name == 'lastRunDate' && result[0] && result[0].substring(0, 4) == '0000') result.shift();
     return result;

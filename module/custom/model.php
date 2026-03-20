@@ -1055,7 +1055,7 @@ class customModel extends model
                     $disabledFeatures .= "$feature,";
                 }
             }
-            $disabledFeatures .= 'projectMeasrecord,productTrack,productRoadmap';
+            $disabledFeatures .= 'productTrack,productRoadmap';
         }
 
         /* Save the features that are disable to the config. */

@@ -28,7 +28,7 @@ $zai = new zaiModelTest();
 
 /* 测试没有ZAI设置时调用API */
 $result1 = $zai->callAPITest('/test/path', 'GET');
-r($result1['result']) && p() && e('failed'); // 测试没有ZAI设置时调用API
+r($result1['result']) && p() && e('fail'); // 测试没有ZAI设置时调用API
 
 /* 设置ZAI配置 */
 $setting = new stdClass();

@@ -710,40 +710,80 @@ function refreshMenu()
         const $ele = $(ele);
         return $ele.css('display') !== 'none' && !$ele.hasClass('divider');
     }).first().outerHeight();
-    const maxHeight      = $('#menu').outerHeight() - ($('#menuFooter').outerHeight() || 0) - ($('body').hasClass('has-space') ? (($('#spaceHeading').outerHeight() || 0) + 16) : 0) - 28;
+    const maxHeight      = $('#menu').outerHeight() - ($('body').hasClass('has-space') ? (($('#spaceHeading').outerHeight() || 0) + 8) : 0) - 24 - $('#menuToggleNav').outerHeight();
     const dividerHeight  = 13;
     let showMoreMenu     = false;
-    let currentHeight    = itemHeight;
-    let moreMenuHeight   = 12;
+    let currentHeight    = 0;
+    let $firstHiddenItem = null;
+    const moreBtnHeight  = itemHeight + dividerHeight;
 
     $menuItems.each(function()
     {
-        var $item     = $(this);
-        var isDivider = $item.hasClass('divider');
-        var height    = isDivider ? dividerHeight : itemHeight;
-        currentHeight += height;
+        let $item     = $(this);
+        let isDivider = $item.hasClass('divider');
+        let height    = isDivider ? dividerHeight : itemHeight;
 
-        if(currentHeight > maxHeight)
+        if((currentHeight + height) > maxHeight)
         {
+            if(!$firstHiddenItem) $firstHiddenItem = $item;
             $item.addClass('hidden');
             if(!showMoreMenu)
             {
                 showMoreMenu = true;
                 $list.empty();
-
-                var $prevItem = $item.prev();
-                if($prevItem.hasClass('divider')) $prevItem.addClass('hidden');
-
-                if(isDivider) return;
             }
-            moreMenuHeight += isDivider ? dividerHeight : itemHeight;
             $list.append($item.clone().toggleClass('menu-item', !isDivider).removeClass('hidden'));
         }
         else
         {
+            currentHeight += height;
             $item.removeClass('hidden');
         }
     });
+
+    if(showMoreMenu && $firstHiddenItem && (currentHeight + moreBtnHeight) > maxHeight)
+    {
+        const $prevItem = $firstHiddenItem.prev();
+        if($prevItem.length)
+        {
+            $prevItem.addClass('hidden');
+            let isDivider = $prevItem.hasClass('divider');
+            $list.prepend($prevItem.clone().toggleClass('menu-item', !isDivider).removeClass('hidden'));
+        }
+    }
+
+    let moreMenuHeight = 16;
+    let nextNoDivider  = true;
+    $list.children().each(function()
+    {
+        const $item     = $(this);
+        const isDivider = $item.hasClass('divider');
+        if(isDivider && nextNoDivider)
+        {
+            $item.addClass('hidden');
+            return;
+        }
+        nextNoDivider = isDivider;
+        moreMenuHeight += isDivider ? dividerHeight : itemHeight;
+    });
+
+    nextNoDivider = true;
+    let $lastItem = null;
+    $menuItems.each(function()
+    {
+        const $item = $(this);
+        if($item.hasClass('hidden')) return;
+
+        const isDivider = $item.hasClass('divider');
+        if(isDivider && nextNoDivider)
+        {
+            $item.addClass('hidden');
+            return;
+        }
+        nextNoDivider = isDivider;
+        $lastItem = $item;
+    });
+    if($lastItem && $lastItem.hasClass('divider')) $lastItem.addClass('hidden');
 
     /* The magic number "111" is the space between dropdown trigger btn and the bottom of screen */
     let listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
@@ -1358,7 +1398,6 @@ window.notifyMessage = function(data)
 window.browserNotify = function()
 {
     let windowBlur = false;
-    let preCount   = 0;
     setInterval(function()
     {
         if(window.Notification && Notification.permission == 'default') Notification.requestPermission();

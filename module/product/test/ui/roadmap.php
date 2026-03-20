@@ -32,7 +32,7 @@ zendata('release')->loadYaml('release', false, 2)->gen(10);
 $tester = new roadmapTester();
 $tester->login();
 $productID['productID'] = 1;
-$num = 7;//迭代次数
+$num = 4;//迭代次数
 r($tester->checkIterationCount($productID, $num)) && p('message,status') && e('迭代次数正确,SUCCESS');//检查产品迭代次数
 
 $tester->closeBrowser();

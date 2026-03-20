@@ -198,6 +198,11 @@ class testsuiteModel extends model
             ->page($pager)
             ->fetchAll('id', false);
 
+        foreach($cases as $case)
+        {
+            if(empty($case->caseTitle)) $case->caseTitle = $case->title;
+        }
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         if(!$append) return $cases;

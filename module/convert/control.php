@@ -309,6 +309,9 @@ class convert extends control
             }
             elseif($method == 'api')
             {
+                $domain = $jiraApi['domain'];
+                if(!$domain) return $this->send(array('result' => 'fail', 'message' => array('dbName' => sprintf($this->lang->error->notempty, $this->lang->convert->jira->domain))));
+
                 $this->convert->checkJiraApi();
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
