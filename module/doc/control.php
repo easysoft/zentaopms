@@ -2316,10 +2316,11 @@ class doc extends control
         $order       = 0;
         foreach($docs as $doc)
         {
+            $order++;
             unset($doc->draft);
             $doc->originLIb   = $doc->lib;
             $doc->lib         = $menu['id'];
-            $doc->order       = $order++;
+            $doc->order       = $order;
             $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
         }
 
