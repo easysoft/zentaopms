@@ -1819,7 +1819,7 @@ class repo extends control
         $keyword = htmlspecialchars(base64_decode($keyword));
 
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID, $label, $showArchived == 'archive' ? 1 : 0);
+        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID, $label, $showArchived);
         if(count($branchList) == 0 && $pageID != 1) $this->locate(inLink('browseBranch', "repoID=$repoID&objectID=$objectID&label=$label&showArchived=$showArchived&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $this->app->loadClass('pager', true);

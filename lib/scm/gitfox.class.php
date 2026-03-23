@@ -166,13 +166,18 @@ class gitfoxRepo
      * @param  int    $limit
      * @param  int    $pageID
      * @param  string $label
-     * @param  bool   $showArchived
+     * @param  string $showArchived
      * @return array
      */
-    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', bool $showArchived = false)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', string $showArchived = 'active')
     {
         /* Max size of per_page in gitfox API is 100. */
-        $params = array("includeArchived" => $showArchived);
+        if(in_array($showArchived, array('active', 'all'))) $params['includeArchived'] = $showArchived == 'all';
+        if($showArchived == 'archive')
+        {
+            unset($params['includeArchived']);
+            $params['archivedOnly'] = true;
+        }
         if($showDetail) $params['includeCommit'] = true;
         $params['pageSize'] = $limit ? $limit : 100;
 
