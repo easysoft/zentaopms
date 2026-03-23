@@ -35,16 +35,6 @@ formPanel
     ),
     formGroup
     (
-        setID('forceReview'),
-        set::label($lang->repobranchrule->forceReview),
-        set::labelWidth('200px'),
-        set::name('forceReview'),
-        set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->repobranchrule->enableStatusList),
-        set::value(zget($originRule, 'forceReview', 0))
-    ),
-    formGroup
-    (
         setID('reviewFlow'),
         set::label($lang->repobranchrule->reviewFlow),
         set::labelWidth('200px'),
