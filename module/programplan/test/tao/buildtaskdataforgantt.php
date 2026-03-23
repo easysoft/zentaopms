@@ -55,23 +55,18 @@ $tester->loadModel('programplan');
 $tester->programplan->config->setPercent = false;
 
 $task = $tester->programplan->loadModel('task')->getById(1);
-$task->rawStatus = $task->status;
 $dateLimit = array('start' => '2023-09-28', 'end' => '2024-02-28', 'realBegan' => '2023-10-28', 'realEnd' => null);
 
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("1,task,<span class='pri-1 align-middle' title='1'>1</span> <span class='gantt_title'>开发任务11</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
 
 $task = $tester->programplan->loadModel('task')->getById(2);
-$task->rawStatus = $task->status;
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("2,task,<span class='pri-2 align-middle' title='2'>2</span> <span class='gantt_title'>开发任务12</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
 
 $task = $tester->programplan->loadModel('task')->getById(3);
-$task->rawStatus = $task->status;
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("3,task,<span class='pri-3 align-middle' title='3'>3</span> <span class='gantt_title'>开发任务13</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
 
 $task = $tester->programplan->loadModel('task')->getById(4);
-$task->rawStatus = $task->status;
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("4,task,<span class='pri-4 align-middle' title='4'>4</span> <span class='gantt_title'>开发任务14</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
 
 $task = $tester->programplan->loadModel('task')->getById(5);
-$task->rawStatus = $task->status;
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("5,task,<span class='pri-1 align-middle' title='1'>1</span> <span class='gantt_title'>开发任务15</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
