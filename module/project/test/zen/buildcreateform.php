@@ -34,6 +34,8 @@ $table->status->range('doing');
 $table->multiple->range('0,1');
 $table->gen(10);
 
+zenData('product')->gen(5);
+
 zenData('user')->gen(5);
 su('admin');
 
