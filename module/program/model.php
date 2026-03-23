@@ -784,10 +784,11 @@ class programModel extends model
      * @param  string $model
      * @param  string $mode
      * @param  bool   $isQueryAll
+     * @param  array  $appendPrograms
      * @access public
      * @return array
      */
-    public function getTopPairs(string $mode = '', bool $isQueryAll = false): array
+    public function getTopPairs(string $mode = '', bool $isQueryAll = false, array $appendPrograms = array()): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getProgramPairs();
 
@@ -797,6 +798,7 @@ class programModel extends model
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($mode, 'withDeleted') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF(!$isQueryAll && !$this->app->user->admin)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->beginIF(!empty($appendPrograms))->orWhere('id')->in($appendPrograms)->fi()
             ->orderBy('`order` asc')
             ->fetchPairs();
 
