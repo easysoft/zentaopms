@@ -92,10 +92,10 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         if($version->reviewType == 'baseline')    $item['text'] .= " [{$lang->project->baseline}]";
         if($version->reviewType == 'gantt')
         {
-            $item['actions']   = array();
+            $item['actions'] = array();
             if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'title' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
             if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'title' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
-        } 
+        }
 
         $versionItems[] = $item;
     }

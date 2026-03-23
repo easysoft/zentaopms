@@ -812,6 +812,7 @@ class programplanTao extends programplanModel
         $data->type         = 'task';
         $data->text         = $priIcon . "<span class='gantt_title'>{$task->name}</span>";
         $data->percent      = '';
+        $data->rawStatus    = $task->rawStatus;
         $data->status       = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
         $data->owner_id     = $task->assignedTo;
         $data->attribute    = '';

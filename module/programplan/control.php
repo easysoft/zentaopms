@@ -79,14 +79,15 @@ class programplan extends control
         $browseType = strtolower($browseType);
         if(is_numeric($versionID) && $versionID != 0)
         {
-
+            $plans = $this->programplan->getByGanttVersion($versionID);
         }
         else
         {
             $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
             if($versionID == 'nowait')
             {
-                $plans['data'] = array_values(array_filter($plans['data'], function($data) {
+                $plans['data'] = array_values(array_filter($plans['data'], function($data)
+                {
                     return !($data->type == 'task' && isset($data->rawStatus) && $data->rawStatus == 'wait');
                 }));
             }
@@ -464,7 +465,7 @@ class programplan extends control
     /**
      * 甘特图下创建版本。
      * Create a version of Gantt.
-     * 
+     *
      * @param  int    $projectID
      * @access public
      * @return void
