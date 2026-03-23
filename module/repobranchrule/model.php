@@ -197,4 +197,25 @@ class repobranchruleModel extends model
             ->beginIF(!empty($branchNames))->andWhere('branchName')->in($branchNames)->fi()
             ->fetchAll('id');
     }
+
+    /**
+     * 根据分支名称获取分支规则。
+     * Get branch rule by branch name.
+     *
+     * @param  int    $repoID
+     * @param  string $branchName
+     * @access public
+     * @return object|array
+     */
+    public function getRuleByBranchName(int $repoID, string $branchName): object|array
+    {
+        $branchRule = $this->getBranchRule(0, $repoID, $branchName);
+        if(!empty($branchRule)) return $branchRule;
+
+        $branchTypes = $this->loadModel('repobranchtype')->getByBranches($repoID, array($branchName));
+        if(empty($branchTypes)) return array();
+
+        $branchTypeID = isset($branchTypes[$branchName]) ? 0 : $branchTypes[$branchName]->id;
+        return $this->getBranchRule($branchTypeID, $repoID);
+    }
 }
