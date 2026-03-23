@@ -17,7 +17,6 @@ dropmenu
 );
 
 $definition = zget($reviewFlow, 'definition', array());
-jsVar('editBranchTypes', explode(',', $reviewFlow->branchType));
 formPanel
 (
     setID('editReviewFlow'),
@@ -136,6 +135,7 @@ formPanel
     formRowGroup(set::title($lang->reporeviewflow->mergeStrategy)),
     formGroup
     (
+        setID('mergeOptions'),
         set::width('2/3'),
         set::label($lang->reporeviewflow->mergeOptions),
         set::name('mergeOptions'),
@@ -143,16 +143,5 @@ formPanel
         set::multiple(true),
         set::required(true),
         set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->merge) ? 'merge,squash,rebase,fast' : $definition->reviewFlow->merge->options)
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::name('autoArchive'),
-        set::label($lang->reporeviewflow->autoArchive),
-        set::labelHintIcon('help'),
-        set::labelHint($lang->reporeviewflow->autoArchiveNotice),
-        set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->reporeviewflow->autoArchiveStatusList),
-        set::value(empty($definition->reviewFlow) || empty($definition->reviewFlow->merge) || empty($definition->reviewFlow->merge->autoArchive) ? 'disable' : 'enable')
     )
 );
