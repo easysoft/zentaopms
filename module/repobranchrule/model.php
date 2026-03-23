@@ -216,6 +216,9 @@ class repobranchruleModel extends model
         if(empty($branchTypes)) return array();
 
         $branchTypeID = isset($branchTypes[$branchName]) ? 0 : $branchTypes[$branchName]->id;
-        return $this->getBranchRule($branchTypeID, $repoID);
+        $branchRule   = $this->getBranchRule($branchTypeID, $repoID);
+        if(empty($branchRule)) return array();
+
+        return $branchRule;
     }
 }

@@ -33,31 +33,8 @@ class branchRulesEntry extends baseEntry
 
         $this->loadModel('repobranchrule');
         $this->loadModel('repobranchtype');
-        $rule = $this->repobranchrule->getBranchRule(0, $repoID, $branchName);
-        if(!$rule)
-        {
-            $branchTypes   = $this->repobranchtype->getBranchTypeList($repoID);
-            $branchTypeID  = 0;
-            if(!empty($branchTypes))
-            {
-                foreach($branchTypes as $branchType)
-                {
-                    if(empty($branchType->prefixes)) continue;
-
-                    foreach($branchType->prefixes as $prefix)
-                    {
-                        if(strpos($branchName, $prefix) === 0)
-                        {
-                            $branchTypeID = $branchType->id;
-                            break 2;
-                        }
-                    }
-                }
-            }
-            $rule = $this->repobranchrule->getBranchRule($branchTypeID, $repoID, '');
-        }
-
-        if(!$rule)
+        $rule = $this->repobranchrule->getRuleByBranchName(0, $branchName);
+        if(empty($rule))
         {
             $defaultRule = new stdClass();
             $defaultRule->createUser    = array();
@@ -66,6 +43,12 @@ class branchRulesEntry extends baseEntry
             $defaultRule->forcePushUser = array();
             $defaultRule->sourceBranch  = array();
             $defaultRule->targetBranch  = array();
+            $defaultRule->ppmCreateUser = array();
+            $defaultRule->ppmHandleUser = array();
+            $defaultRule->commitLine    = 0;
+            $defaultRule->pushLine      = 0;
+            $defaultRule->forceReview   = 0;
+            $defaultRule->reviewFlowID  = 0;
             if(strpos($branchName, 'archived/') === 0)
             {
                 $repo = $this->loadModel('repo')->fetchByID($repoID);
@@ -83,6 +66,8 @@ class branchRulesEntry extends baseEntry
         $rule->deleteUser    = !empty($rule->deleteUser) ? explode(',', $rule->deleteUser) : array();
         $rule->updateUser    = !empty($rule->updateUser) ? explode(',', $rule->updateUser) : array();
         $rule->forcePushUser = !empty($rule->forcePushUser) ? explode(',', $rule->forcePushUser) : array();
+        $rule->ppmCreateUser = !empty($rule->ppmCreateUser) ? explode(',', $rule->ppmCreateUser) : array();
+        $rule->ppmHandleUser = !empty($rule->ppmHandleUser) ? explode(',', $rule->ppmHandleUser) : array();
 
         /* 将 sourceBranch 和 targetBranch 字段的 '1,2' 解析为 ID 数组，再获取分支类型的 prefix 合并。 */
         $sourceBranchIDs = !empty($rule->sourceBranch) ? explode(',', $rule->sourceBranch) : array();
