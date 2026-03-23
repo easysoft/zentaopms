@@ -928,6 +928,7 @@ class programplanModel extends model
             /* Story changed or not. */
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
             $task->needConfirm  = false;
+            $task->rawStatus    = $task->status;
             if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('cancel', 'closed')) && $task->latestStoryVersion > $task->storyVersion)
             {
                 $task->needConfirm = true;
