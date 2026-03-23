@@ -79,7 +79,7 @@ class programplan extends control
         $browseType = strtolower($browseType);
         if(is_numeric($versionID) && $versionID != 0)
         {
-            $plans = $this->programplan->getByGanttVersion($versionID);
+            $plans = $this->programplan->getGanttDataByVersion($versionID);
         }
         else
         {
