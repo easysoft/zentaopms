@@ -204,6 +204,7 @@ $downloadWg = div
     ) : null,
     div
     (
+        setID('download-btn-group'),
         setStyle(array('margin-top' => '20px')),
         common::hasPriv('repo', 'downloadCode') ? btn
         (
