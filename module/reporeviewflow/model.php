@@ -160,14 +160,7 @@ class reporeviewflowModel extends model
      */
     public function getByBranchName(int $repoID, string $branchName): array|object
     {
-        $branchRule = $this->loadModel('repobranchrule')->getBranchRule(0, $repoID, $branchName);
-        if(!empty($branchRule) && !empty($branchRule->reviewFlowID)) return $this->fetchByID($branchRule->reviewFlowID);
-
-        $branchTypes = $this->loadModel('repobranchtype')->getByBranches($repoID, array($branchName));
-        if(empty($branchTypes)) return array();
-
-        $branchTypeID = isset($branchTypes[$branchName]) ? 0 : $branchTypes[$branchName]->id;
-        $branchRule   = $this->repobranchrule->getBranchRule($branchTypeID, $repoID);
+        $branchRule = $this->loadModel('repobranchrule')->getRuleByBranchName($repoID, $branchName);
         if(empty($branchRule) || empty($branchRule->reviewFlowID)) return array();
 
         return $this->fetchByID($branchRule->reviewFlowID);
