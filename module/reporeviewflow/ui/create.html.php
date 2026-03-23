@@ -130,6 +130,7 @@ formPanel
     formRowGroup(set::title($lang->reporeviewflow->mergeStrategy)),
     formGroup
     (
+        setID('mergeOptions'),
         set::width('2/3'),
         set::label($lang->reporeviewflow->mergeOptions),
         set::name('mergeOptions'),
@@ -137,16 +138,5 @@ formPanel
         set::multiple(true),
         set::required(true),
         set::value('merge,squash,rebase,fast')
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::name('autoArchive'),
-        set::label($lang->reporeviewflow->autoArchive),
-        set::labelHintIcon('help'),
-        set::labelHint($lang->reporeviewflow->autoArchiveNotice),
-        set::control(array('type' => 'radioList', 'inline' => true)),
-        set::items($lang->reporeviewflow->autoArchiveStatusList),
-        set::value('disable')
     )
 );
