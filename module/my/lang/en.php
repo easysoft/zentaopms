@@ -141,7 +141,6 @@ $lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed sp
 $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
 
-<<<<<<< HEAD
 $lang->my->devopsspaceLinkList = array();
 $lang->my->devopsspaceLinkList['repo-maintain'] = 'Code library list in space';
 $lang->my->devopsspaceLinkList['repo-browse']   = 'The most recently visited code library';
@@ -151,10 +150,7 @@ $lang->my->devopsLinkList['space-browse']  = 'Space list';
 $lang->my->devopsLinkList['repo-maintain'] = 'Code library list';
 $lang->my->devopsLinkList['repo-browse']   = 'The most recently visited code library';
 
-$lang->my->confirmReview['pass'] = 'Do you want to pass it?';
-=======
 $lang->my->confirmReview['pass'] = 'Are you sure you want to pass it?';
->>>>>>> release/22.1
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>Young Blue</span>theme is available now!</p>
 <div>
@@ -255,8 +251,7 @@ $lang->my->featureBar['contribute']['doc']['editedbyme'] = 'Edited by Me';
 $lang->my->featureBar['score']['all'] = 'My Points';
 
 $lang->my->reviewResultList['pass'] = 'Pass';
-<<<<<<< HEAD
-$lang->my->reviewResultList['fail'] = 'Fail';
+$lang->my->reviewResultList['fail'] = 'Reject';
 
 $lang->my->ssh              = 'Browse SSH Keys';
 $lang->my->createSSH        = 'Create SSH Key';
@@ -268,6 +263,3 @@ $lang->my->lastUsed         = 'Last Used';
 $lang->my->confirmDeleteSSH = 'Are you sure to delete this SSH key?';
 $lang->my->sshKeyTip        = 'The public key must start with "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", "ecdsa-sha2-nistp521", "ssh-ed25519", "sk-ecdsa-sha2-nistp256@openssh.com" or "sk-ssh-ed25519@openssh.com"';
 $lang->my->nameFormat       = 'The name can only contain letters, numbers, dashes (-), underscores (_), dots (.), and dollar signs ($)';
-=======
-$lang->my->reviewResultList['fail'] = 'Reject';
->>>>>>> release/22.1
