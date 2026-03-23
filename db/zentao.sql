@@ -2485,6 +2485,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `resetExpired` int unsigned NOT NULL DEFAULT 0 COMMENT '重置密码令牌的过期时间戳',
   `clientStatus` varchar(10) NOT NULL DEFAULT 'offline',
   `clientLang` varchar(10) NOT NULL DEFAULT 'zh-cn',
+  `jira` tinyint unsigned NOT NULL DEFAULT 0,
   `deleted` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
