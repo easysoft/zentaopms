@@ -1259,7 +1259,6 @@ unset($config->my->team->dtable->fieldList['actions']);
 $config->my->project = new stdclass();
 $config->my->project->dtable = $config->project->dtable;
 
-<<<<<<< HEAD
 $config->my->ssh = new stdclass();
 $config->my->ssh->actionList = array();
 $config->my->ssh->actionList['edit']['icon']        = 'edit';
