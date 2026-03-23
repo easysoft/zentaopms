@@ -171,6 +171,7 @@ class gitfoxRepo
      */
     public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', string $showArchived = 'active')
     {
+        $params = array();
         /* Max size of per_page in gitfox API is 100. */
         if(in_array($showArchived, array('active', 'all'))) $params['includeArchived'] = $showArchived == 'all';
         if($showArchived == 'archive')
@@ -185,8 +186,8 @@ class gitfoxRepo
         $sort = explode('_', $orderBy);
         $params['sort']  = $sort[0] == 'commitDate' ? 'date' : $sort[0];
         $params['order'] = isset($sort[1]) ? $sort[1] : 'asc';
-        if($showDetail && $showDetail != 'all') $params['query']  = (string)$showDetail;
-        if($label && $label != 'all')           $params['prefix'] = (string)$label;
+        if($showDetail && $showDetail != 'all') $params['query']         = (string)$showDetail;
+        if($label && $label != 'all')           $params['branchTypeIDs'] = array((int)$label);
 
         $branches = array();
         $default  = array();
@@ -225,7 +226,7 @@ class gitfoxRepo
             if(empty($default))
             {
                 $project = $this->fetch();
-                $default = array($project->default_branch => $project->default_branch);
+                $default = array($project->data->defaultBranch => $project->data->defaultBranch);
             }
 
             $branches = $this->getBranchesCommitsDivergence($branches, key($default));
