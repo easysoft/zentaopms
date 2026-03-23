@@ -48,10 +48,11 @@ class programplan extends control
      * @param  int    $queryID
      * @param  string $from
      * @param  int    $blockID
+     * @param  string $versionID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '')
     {
         if($type == 'lists') return $this->locate($this->createLink('project', 'execution', "status=undone&projectID={$projectID}"));
         if($from == 'doc')
@@ -76,13 +77,27 @@ class programplan extends control
 
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
-        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+        if(is_numeric($versionID) && $versionID != 0)
+        {
+
+        }
+        else
+        {
+            $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+            if($versionID == 'nowait')
+            {
+                $plans['data'] = array_values(array_filter($plans['data'], function($data) {
+                    return !($data->type == 'task' && isset($data->rawStatus) && $data->rawStatus == 'wait');
+                }));
+            }
+        }
 
         $project     = $this->loadModel('project')->fetchByID($projectID);
         $minBegin    = empty($plans['data']) ? $project->begin : min(array_column($plans['data'], 'begin'));
         $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
         $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
+        $this->view->versions    = $this->project->getGanttVersions($projectID);
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;
 
@@ -444,5 +459,32 @@ class programplan extends control
         $this->loadModel('execution');
         foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation((int)$relationID);
         return $this->sendSuccess(array('load' => inlink('relation', "projectID=$projectID")));
+    }
+
+    /**
+     * 甘特图下创建版本。
+     * Create a version of Gantt.
+     * 
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function createGanttVersion(int $projectID = 0)
+    {
+        if($_POST)
+        {
+            $project = $this->loadModel('project')->fetchByID($projectID);
+            $version = form::data($this->config->programplan->form->createGanttVersion)->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $version->title = $version->version;
+            if($project->type == 'project') $version->project = $projectID;
+            if(in_array($project->type, array('stage', 'sprint', 'kanban'))) $version->execution = $projectID;
+            $this->dao->insert(TABLE_OBJECT)->data($version)->exec();
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionBox')"));
+        }
+
+        $this->display();
     }
 }
