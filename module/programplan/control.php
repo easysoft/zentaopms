@@ -77,20 +77,13 @@ class programplan extends control
 
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
-        if(is_numeric($versionID) && $versionID != 0)
+        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID, (int)$versionID);
+        if($versionID == 'nowait')
         {
-            $plans = $this->programplan->getGanttDataByVersion($versionID);
-        }
-        else
-        {
-            $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
-            if($versionID == 'nowait')
+            $plans['data'] = array_values(array_filter($plans['data'], function($data)
             {
-                $plans['data'] = array_values(array_filter($plans['data'], function($data)
-                {
-                    return !($data->type == 'task' && isset($data->rawStatus) && $data->rawStatus == 'wait');
-                }));
-            }
+                return !($data->type == 'task' && isset($data->rawStatus) && $data->rawStatus == 'wait');
+            }));
         }
 
         $project     = $this->loadModel('project')->fetchByID($projectID);
@@ -99,6 +92,7 @@ class programplan extends control
         $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
         $this->view->versions    = $this->project->getGanttVersions($projectID);
+        $this->view->versionID   = $versionID;
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;
 
@@ -479,11 +473,12 @@ class programplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $version->title = $version->version;
+            $version->data  = $this->post->data;
             if($project->type == 'project') $version->project = $projectID;
             if(in_array($project->type, array('stage', 'sprint', 'kanban'))) $version->execution = $projectID;
             $this->dao->insert(TABLE_OBJECT)->data($version)->exec();
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionBox')"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
         $this->display();
@@ -506,7 +501,7 @@ class programplan extends control
 
             $version->title = $version->version;
             $this->dao->update(TABLE_OBJECT)->data($version)->where('id')->eq($versionID)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionBox')"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
         $this->view->version = $this->programplan->fetchByID($versionID, 'baseline');
@@ -524,6 +519,6 @@ class programplan extends control
     public function deleteGanttVersion(int $versionID)
     {
         $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
-        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionBox')"));
+        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
     }
 }

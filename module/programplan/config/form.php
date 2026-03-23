@@ -59,7 +59,6 @@ $config->programplan->form->updateTaskOrderByGantt['tasks'] = array('required' =
 $config->programplan->form->createGanttVersion['version'] = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
 $config->programplan->form->createGanttVersion['type']    = array('required' => false, 'type' => 'string', 'default' => 'taged');
 $config->programplan->form->createGanttVersion['status']  = array('required' => false, 'type' => 'string', 'default' => 'gantt');
-$config->programplan->form->createGanttVersion['data']    = array('required' => false, 'type' => 'string', 'default' => '');
 $config->programplan->form->createGanttVersion['items']   = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
 
 $config->programplan->form->editGanttVersion['version'] = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
