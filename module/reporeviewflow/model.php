@@ -160,31 +160,17 @@ class reporeviewflowModel extends model
      */
     public function getByBranchName(int $repoID, string $branchName): array|object
     {
-        $flows = $this->getList($repoID);
-        if(empty($flows)) return array();
+        $branchRule = $this->loadModel('repobranchrule')->getBranchRule(0, $repoID, $branchName);
+        if(!empty($branchRule) && !empty($branchRule->reviewFlowID)) return $this->fetchByID($branchRule->reviewFlowID);
 
         $branchTypes = $this->loadModel('repobranchtype')->getByBranches($repoID, array($branchName));
         if(empty($branchTypes)) return array();
 
-        $branchType = $branchTypes[$branchName];
-        $branchType = empty($branchType->id) ? '0' : $branchType->id;
-        foreach($flows as $flow)
-        {
-            if($flow->status == 'disable') continue;
-            if($flow->branchType == '0')
-            {
-                $allBranchFlow = $flow;
-                continue;
-            }
+        $branchTypeID = isset($branchTypes[$branchName]) ? 0 : $branchTypes[$branchName]->id;
+        $branchRule   = $this->repobranchrule->getBranchRule($branchTypeID, $repoID);
+        if(empty($branchRule) || empty($branchRule->reviewFlowID)) return array();
 
-            $flowBranchTypes = explode(',', $flow->branchType);
-            foreach($flowBranchTypes as $flowBranchType)
-            {
-                if($flowBranchType == $branchType) return $flow;
-            }
-        }
-
-        return isset($allBranchFlow) ? $allBranchFlow : array();
+        return $this->fetchByID($branchRule->reviewFlowID);
     }
 
     /**
