@@ -1,5 +1,24 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=bugModel->getBugQuery();
+cid=15357
+pid=1
+
+- 查询 `product` = 'all' 的bugQuery @1 AND `product` IN ('1','2','3','4','5','6','7','8','9','10')
+
+- 查询 `project` = 'all' 的bugQuery @1 AND `project` in (11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40)
+
+- 查询 `resolvedDate` = '2022-01-01' 的bugQuery @ `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` > '2022-01-01'
+- 查询 `closedDate` = '2022-01-01' 的bugQuery @ `closedDate` != '0000-00-00 00:00:00' AND `closedDate` <= '2022-01-01'
+- 查询 `story` LIKE '%abc%' 的bugQuery @`story`  IN (2,12,20,21,22,23,24,25,26,27,28,29) AND `story` != 0
+
+- 查询 `story` NOT LIKE '%abc%' 的bugQuery @`story` NOT  IN (2,12,20,21,22,23,24,25,26,27,28,29) AND `story` != 0
+
+- 查询 `product` = '1' and `project` = '1' and `story` > 'abc' 的bugQuery @`product` = '1' and `project` = '1' and `story` > 'abc' AND `story` != 0
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
@@ -9,14 +28,6 @@ zenData('product')->gen(20, true, false);
 zenData('story')->gen(30);
 
 su('admin');
-
-/**
-
-title=bugModel->getBugQuery();
-cid=15357
-pid=1
-
-*/
 
 $bugQuery = array();
 $bugQuery[] = "`product` = 'all'";

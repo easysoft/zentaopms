@@ -23,6 +23,7 @@ jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, z
 jsVar('projectExecutionPairs', $projectExecutionPairs);
 jsVar('edition',               $config->edition);
 jsVar('isShadowProduct',       !empty($product->shadow));
+jsVar('duplicateBugID',        !empty($bug->duplicateBug) ? $bug->duplicateBug : 0);
 
 detailHeader
 (
@@ -140,6 +141,7 @@ detailBody
             item
             (
                 set::name($lang->bug->module),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',module,') !== false),
                 modulePicker
                 (
                     set::items($moduleOptionMenu),
@@ -281,6 +283,7 @@ detailBody
             item
             (
                 set::name($lang->bug->feedbackBy),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',feedbackBy,') !== false),
                 input
                 (
                     set::name('feedbackBy'),
@@ -372,6 +375,7 @@ detailBody
             (
                 set::trClass($execution && !$execution->multiple ? 'hidden' : ''),
                 set::name($lang->bug->execution),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',execution,') !== false),
                 formGroup
                 (
                     set('id', 'executionBox'),

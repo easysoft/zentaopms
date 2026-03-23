@@ -523,8 +523,6 @@ class searchModel extends model
             ->remove('onMenuBar')
             ->get();
         if($this->post->onMenuBar) $query->shortcut = '1';
-        if(in_array($query->module, array('epic', 'requirement'))) $query->module = 'story'; // 用需业需保存为story
-
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
         if(dao::isError()) return false;
@@ -648,6 +646,22 @@ class searchModel extends model
         {
             $table = "SELECT *, ts_rank(to_tsvector('pg_catalog.english', coalesce(title, '') || ' ' || coalesce(content, '')), to_tsquery('pg_catalog.english', '{$againstCond}'))  AS score FROM " . TABLE_SEARCHINDEX;
             $score = '0.02';
+        }
+        elseif($this->config->db->driver == 'dm')
+        {
+            $spliter = $this->app->loadClass('spliter');
+            $labels  = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+            $words   = str_replace($labels, ' ', $words);
+            $words   = explode(' ', trim($words));
+
+            $conditions = [];
+            foreach($words as $word)
+            {
+                $trimmedWord  = trim($word);
+                $conditions[] = "title LIKE '%" . $trimmedWord . "%' OR content LIKE '%" . $trimmedWord . "%'";
+            }
+            $table = "SELECT *, (CASE WHEN (" . implode(' OR ', $conditions) . ") THEN 1 ELSE 0 END) AS score FROM " . TABLE_SEARCHINDEX;
+            $score = '1';
         }
         else
         {

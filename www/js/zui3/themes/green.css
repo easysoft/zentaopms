@@ -1,3 +1,5 @@
+@import './common.css';
+
 :root
 {
   --color-primary-50: #F2FBF8;
@@ -46,4 +48,6 @@
   --color-secondary-800-rgb: 33, 128, 90;
   --color-secondary-900-rgb: 24, 94, 59;
   --color-secondary-950-rgb: 14, 52, 33;
+
+  --zt-menu-active-bg: var(--color-primary-400)!important;
 }

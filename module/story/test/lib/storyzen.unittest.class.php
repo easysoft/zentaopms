@@ -830,12 +830,37 @@ class storyZenTest
      */
     public function processFilterTitleTest(string $browseType, int $param): string
     {
-        $method = $this->storyZenTest->getMethod('processFilterTitle');
-        $method->setAccessible(true);
+        global $tester;
 
-        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$browseType, $param]);
-        if(dao::isError()) return dao::getError();
-        return $result;
+        try
+        {
+            $storyZenInstance = $this->storyZenTest->newInstance();
+
+            $storyZenInstance->lang    = $tester->lang;
+            $storyZenInstance->config  = $tester->config;
+            $storyZenInstance->session = $tester->session;
+            $storyZenInstance->app     = $tester->app;
+
+            $storyZenInstance->loadModel = function($model) use ($tester) {
+                return $tester->loadModel($model);
+            };
+
+            $method = $this->storyZenTest->getMethod('processFilterTitle');
+            $method->setAccessible(true);
+
+            $result = $method->invokeArgs($storyZenInstance, [$browseType, $param]);
+
+            if(dao::isError()) return dao::getError();
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
     }
 
     /**

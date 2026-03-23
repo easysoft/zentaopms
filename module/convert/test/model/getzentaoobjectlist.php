@@ -35,7 +35,7 @@ r($convert->getZentaoObjectListTest()) && p('requirement') && e('用户需求');
 r($convert->getZentaoObjectListTestWithoutER()) && p('requirement') && e('用户需求'); // 步骤3:requirement仍存在
 
 // 步骤4:当URAndSR为false时,检查epic仍然存在
-r($convert->getZentaoObjectListTestWithoutUR()) && p('epic') && e('业务需求'); // 步骤4:epic仍存在
+r($convert->getZentaoObjectListTestWithoutER()) && p('epic') && e('业务需求'); // 步骤4:epic仍存在
 
 // 步骤5:当启用所有功能时,检查story对象存在
 r($convert->getZentaoObjectListTest()) && p('story') && e('软件需求'); // 步骤5:story存在

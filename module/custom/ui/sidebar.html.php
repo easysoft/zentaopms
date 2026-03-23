@@ -70,9 +70,13 @@ if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
     }
 }
 
+$isEn           = $app->getClientLang() == 'en';
+$EnSidebarWidth = $isEn ? set::width('210') : null;
+
 $sidebarMenu = $menuItems ? sidebar
 (
     set::showToggle(false),
+    $EnSidebarWidth,
     div
     (
         setClass('cell p-2.5 bg-white'),

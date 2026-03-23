@@ -12,10 +12,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
-$isFromDoc = $from === 'doc';
+$showFields = str_replace('PM', 'owner_id', $showFields);
+$isFromDoc  = $from === 'doc';
 if($isFromDoc)
 {
     jsVar('ganttOptions', $plans);
@@ -120,6 +120,10 @@ gantt
     set('canEditDeadline', $isFromDoc ? false : hasPriv('review', 'edit')),
     set('zooming', isset($zooming) ? $zooming : 'day'),
     set('showChart', !$dateDetails),
+    set('users', $users),
+    set('showFields', $showFields),
+    set::exportFileName('gantt-export-' . $projectID),
+    set::weekend(array('weekend' => zget($config->execution, 'weekend', 2), 'restDay' => zget($config->execution, 'restDay', 0))),
     set('options', $plans)
 );
 

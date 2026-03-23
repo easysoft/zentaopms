@@ -203,9 +203,9 @@ $config->group->subset->executionqa = new stdclass();
 $config->group->subset->executionqa->order = 610;
 $config->group->subset->executionqa->nav   = 'execution';
 
-$config->group->subset->build = new stdclass();
-$config->group->subset->build->order = 620;
-$config->group->subset->build->nav   = 'execution';
+$config->group->subset->executionbuild = new stdclass();
+$config->group->subset->executionbuild->order = 620;
+$config->group->subset->executionbuild->nav   = 'execution';
 
 $config->group->subset->executionsettings = new stdclass();
 $config->group->subset->executionsettings->order = 630;
@@ -823,29 +823,33 @@ $config->group->package->manageRequirement = new stdclass();
 $config->group->package->manageRequirement->order  = 10;
 $config->group->package->manageRequirement->subset = 'requirement';
 $config->group->package->manageRequirement->privs  = array();
-$config->group->package->manageRequirement->privs['requirement-create']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchCreate', 'requirement-change', 'requirement-close', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-create']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchCreate', 'requirement-change', 'requirement-close', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchCreate']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('product-requirement'), 'recommend' => array('requirement-create'));
-$config->group->package->manageRequirement->privs['requirement-edit']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchEdit', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
-$config->group->package->manageRequirement->privs['requirement-delete']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 25, 'depend' => array('requirement-view'), 'recommend' => array('requirement-create', 'requirement-edit'));
-$config->group->package->manageRequirement->privs['requirement-change']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
-$config->group->package->manageRequirement->privs['requirement-submitReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall'));
-$config->group->package->manageRequirement->privs['requirement-recall']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-submitReview'));
-$config->group->package->manageRequirement->privs['requirement-close']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 60, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchClose', 'requirement-change', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-edit']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchEdit', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-change']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-submitReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall'));
+$config->group->package->manageRequirement->privs['requirement-recall']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-close']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 60, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchClose', 'requirement-change', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchClose']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 65, 'depend' => array('product-requirement'), 'recommend' => array('requirement-close'));
-$config->group->package->manageRequirement->privs['requirement-assignTo']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-batchAssignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-assignTo']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-batchAssignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchAssignTo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 75, 'depend' => array('product-requirement'), 'recommend' => array('requirement-assignTo'));
-$config->group->package->manageRequirement->privs['requirement-activate']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('requirement-view'), 'recommend' => array('requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
-$config->group->package->manageRequirement->privs['requirement-linkStory']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-batchChangeModule', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-activate']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('requirement-view'), 'recommend' => array('requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkRequirements', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 95, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeModule']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 100, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeParent']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 101, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeGrade']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 102, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangePlan']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 103, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
-$config->group->package->manageRequirement->privs['requirement-linkRequirements']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 105, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-linkStory', 'requirement-recall', 'requirement-submitReview'));
+$config->group->package->manageRequirement->privs['requirement-linkRequirements']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 105, 'depend' => array('requirement-view'), 'recommend' => array('requirement-activate', 'requirement-assignTo', 'requirement-change', 'requirement-close', 'requirement-create', 'requirement-edit', 'requirement-recall', 'requirement-submitReview'));
 $config->group->package->manageRequirement->privs['requirement-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-requirement'), 'recommend' => array('requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-requirement'), 'recommend' => array('requirement-batchCreate', 'requirement-create', 'requirement-edit'));
 $config->group->package->manageRequirement->privs['requirement-relation']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 130, 'depend' => array(), 'recommend' => array());
 $config->group->package->manageRequirement->privs['requirement-processStoryChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array('product-requirement'), 'recommend' => array());
+
+$config->group->package->deleteRequirement = new stdclass();
+$config->group->package->deleteRequirement->order  = 15;
+$config->group->package->deleteRequirement->subset = 'requirement';
+$config->group->package->deleteRequirement->privs  = array();
+$config->group->package->deleteRequirement->privs['requirement-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array('requirement-view'), 'recommend' => array('requirement-create', 'requirement-edit'));
 
 $config->group->package->importRequirement = new stdclass();
 $config->group->package->importRequirement->order  = 20;
@@ -874,19 +878,17 @@ $config->group->package->manageEpic = new stdclass();
 $config->group->package->manageEpic->order  = 10;
 $config->group->package->manageEpic->subset = 'epic';
 $config->group->package->manageEpic->privs  = array();
-$config->group->package->manageEpic->privs['epic-create']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchCreate', 'epic-change', 'epic-close', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-create']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 5, 'depend' => array(), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchCreate', 'epic-change', 'epic-close', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
 $config->group->package->manageEpic->privs['epic-batchCreate']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('product-epic'), 'recommend' => array('epic-create'));
-$config->group->package->manageEpic->privs['epic-edit']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchEdit', 'epic-change', 'epic-close', 'epic-create', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
-$config->group->package->manageEpic->privs['epic-delete']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 25, 'depend' => array('epic-view'), 'recommend' => array('epic-create', 'epic-edit'));
-$config->group->package->manageEpic->privs['epic-change']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
-$config->group->package->manageEpic->privs['epic-submitReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall'));
-$config->group->package->manageEpic->privs['epic-recall']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-submitReview'));
-$config->group->package->manageEpic->privs['epic-close']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 60, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchClose', 'epic-change', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-edit']               = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 15, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchEdit', 'epic-change', 'epic-close', 'epic-create', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-change']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-submitReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 45, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall'));
+$config->group->package->manageEpic->privs['epic-recall']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-close']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 60, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchClose', 'epic-change', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
 $config->group->package->manageEpic->privs['epic-batchClose']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 65, 'depend' => array('product-epic'), 'recommend' => array('epic-close'));
-$config->group->package->manageEpic->privs['epic-assignTo']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-batchAssignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-assignTo']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-batchAssignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
 $config->group->package->manageEpic->privs['epic-batchAssignTo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 75, 'depend' => array('product-epic'), 'recommend' => array('epic-assignTo'));
-$config->group->package->manageEpic->privs['epic-activate']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('epic-view'), 'recommend' => array('epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-linkStory', 'epic-recall', 'epic-submitReview'));
-$config->group->package->manageEpic->privs['epic-linkStory']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('epic-view'), 'recommend' => array('epic-activate', 'epic-assignTo', 'epic-batchChangeModule', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
+$config->group->package->manageEpic->privs['epic-activate']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('epic-view'), 'recommend' => array('epic-assignTo', 'epic-change', 'epic-close', 'epic-create', 'epic-edit', 'epic-linkepics', 'epic-recall', 'epic-submitReview'));
 $config->group->package->manageEpic->privs['epic-batchChangeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 95, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
 $config->group->package->manageEpic->privs['epic-batchChangeModule']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 100, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
 $config->group->package->manageEpic->privs['epic-batchChangeParent']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 101, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
@@ -895,6 +897,12 @@ $config->group->package->manageEpic->privs['epic-batchChangePlan']    = array('e
 $config->group->package->manageEpic->privs['epic-batchEdit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 110, 'depend' => array('product-epic'), 'recommend' => array('epic-edit'));
 $config->group->package->manageEpic->privs['epic-batchChangeRoadmap'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 125, 'depend' => array('product-epic'), 'recommend' => array('epic-batchCreate', 'epic-create', 'epic-edit'));
 $config->group->package->manageEpic->privs['epic-processStoryChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 19, 'depend' => array('product-epic'), 'recommend' => array());
+
+$config->group->package->deleteEpic = new stdclass();
+$config->group->package->deleteEpic->order  = 15;
+$config->group->package->deleteEpic->subset = 'epic';
+$config->group->package->deleteEpic->privs  = array();
+$config->group->package->deleteEpic->privs['epic-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 25, 'depend' => array('epic-view'), 'recommend' => array('epic-create', 'epic-edit'));
 
 $config->group->package->importEpic = new stdclass();
 $config->group->package->importEpic->order  = 20;
@@ -1058,9 +1066,14 @@ $config->group->package->importProject = new stdclass();
 $config->group->package->importProject->order  = 15;
 $config->group->package->importProject->subset = 'project';
 $config->group->package->importProject->privs  = array();
-$config->group->package->importProject->privs['project-export']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 165, 'depend' => array('project-browse'), 'recommend' => array());
-$config->group->package->importProject->privs['doc-importToPracticeLib']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 150, 'depend' => array(), 'recommend' => array());
-$config->group->package->importProject->privs['doc-importToComponentLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 155, 'depend' => array(), 'recommend' => array());
+$config->group->package->importProject->privs['project-export'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 165, 'depend' => array('project-browse'), 'recommend' => array());
+
+$config->group->package->projectDoc = new stdclass();
+$config->group->package->projectDoc->order  = 20;
+$config->group->package->projectDoc->subset = 'project';
+$config->group->package->projectDoc->privs  = array();
+$config->group->package->projectDoc->privs['doc-importToPracticeLib']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 150, 'depend' => array(), 'recommend' => array());
+$config->group->package->projectDoc->privs['doc-importToComponentLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 155, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->projectTeam = new stdclass();
 $config->group->package->projectTeam->order  = 15;
@@ -1292,7 +1305,7 @@ $config->group->package->manageExecutionEffort->privs['execution-effort'] = arra
 
 $config->group->package->manageBuild = new stdclass();
 $config->group->package->manageBuild->order  = 10;
-$config->group->package->manageBuild->subset = 'build';
+$config->group->package->manageBuild->subset = 'executionbuild';
 $config->group->package->manageBuild->privs  = array();
 $config->group->package->manageBuild->privs['build-create']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('execution-build'), 'recommend' => array('build-edit', 'build-linkBug', 'build-linkStory', 'build-unlinkBug', 'build-unlinkStory'));
 $config->group->package->manageBuild->privs['build-edit']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('execution-build'), 'recommend' => array('build-create', 'build-linkBug', 'build-linkStory', 'build-unlinkBug', 'build-unlinkStory'));
@@ -1305,7 +1318,7 @@ $config->group->package->manageBuild->privs['build-batchUnlinkBug']   = array('e
 
 $config->group->package->deleteBuild = new stdclass();
 $config->group->package->deleteBuild->order  = 15;
-$config->group->package->deleteBuild->subset = 'build';
+$config->group->package->deleteBuild->subset = 'executionbuild';
 $config->group->package->deleteBuild->privs  = array();
 $config->group->package->deleteBuild->privs['build-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('execution-build'), 'recommend' => array('build-create', 'build-edit'));
 
@@ -2049,11 +2062,12 @@ $config->group->package->manageTestsuite = new stdclass();
 $config->group->package->manageTestsuite->order  = 10;
 $config->group->package->manageTestsuite->subset = 'testsuite';
 $config->group->package->manageTestsuite->privs  = array();
-$config->group->package->manageTestsuite->privs['testsuite-create']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('testsuite-browse'), 'recommend' => array('testsuite-edit'));
-$config->group->package->manageTestsuite->privs['testsuite-edit']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testsuite-browse', 'testsuite-view'), 'recommend' => array('testsuite-create'));
-$config->group->package->manageTestsuite->privs['testsuite-linkCase']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-batchUnlinkCases', 'testsuite-unlinkCase'));
-$config->group->package->manageTestsuite->privs['testsuite-unlinkCase']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-linkCase'));
-$config->group->package->manageTestsuite->privs['testsuite-batchUnlinkCases'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-create']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('testsuite-browse'), 'recommend' => array('testsuite-edit'));
+$config->group->package->manageTestsuite->privs['testsuite-edit']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testsuite-browse', 'testsuite-view'), 'recommend' => array('testsuite-create'));
+$config->group->package->manageTestsuite->privs['testsuite-linkCase']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-batchUnlinkCases', 'testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-unlinkCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-linkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-batchUnlinkCases']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-unlinkCase'));
+$config->group->package->manageTestsuite->privs['testsuite-confirmCaseChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('testsuite-view'));
 
 $config->group->package->deleteTestsuite = new stdclass();
 $config->group->package->deleteTestsuite->order  = 15;
@@ -3541,7 +3555,7 @@ $config->group->package->executionRelation->privs['execution-batchdeleterelation
 
 $config->group->package->browseBuild = new stdclass();
 $config->group->package->browseBuild->order  = 5;
-$config->group->package->browseBuild->subset = 'build';
+$config->group->package->browseBuild->subset = 'executionbuild';
 $config->group->package->browseBuild->privs  = array();
 $config->group->package->browseBuild->privs['execution-build'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('build-create', 'build-edit', 'build-linkBug', 'build-linkStory', 'build-unlinkBug', 'build-unlinkStory', 'build-view'));
 $config->group->package->browseBuild->privs['build-view']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-build'), 'recommend' => array('build-create', 'build-edit', 'build-linkBug', 'build-linkStory', 'build-unlinkBug', 'build-unlinkStory'));

@@ -9,18 +9,19 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->testsuite->create           = "Create Suite";
-$lang->testsuite->delete           = "Delete Suite";
-$lang->testsuite->view             = "Suite Detail";
-$lang->testsuite->edit             = "Edit Suite";
-$lang->testsuite->browse           = "Suite List";
-$lang->testsuite->linkCase         = "Link Case";
-$lang->testsuite->linkVersion      = "Version";
-$lang->testsuite->unlinkCase       = "Unlink";
-$lang->testsuite->unlinkCaseAction = "Unlink Case";
-$lang->testsuite->batchUnlinkCases = "Batch Unlink Cases";
-$lang->testsuite->deleted          = 'Deleted';
-$lang->testsuite->successSaved     = 'Saved';
+$lang->testsuite->create            = "Create Suite";
+$lang->testsuite->delete            = "Delete Suite";
+$lang->testsuite->view              = "Suite Detail";
+$lang->testsuite->edit              = "Edit Suite";
+$lang->testsuite->browse            = "Suite List";
+$lang->testsuite->linkCase          = "Link Case";
+$lang->testsuite->linkVersion       = "Version";
+$lang->testsuite->unlinkCase        = "Unlink";
+$lang->testsuite->unlinkCaseAction  = "Unlink Case";
+$lang->testsuite->batchUnlinkCases  = "Batch Unlink Cases";
+$lang->testsuite->deleted           = 'Deleted';
+$lang->testsuite->successSaved      = 'Saved';
+$lang->testsuite->confirmCaseChange = 'Confirm Case Change';
 
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->pri            = 'Priority';

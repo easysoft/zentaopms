@@ -683,6 +683,7 @@ class pivotState
             switch($type)
             {
                 case 'select':
+                    if(is_string($default) && strpos($default, ',') !== false) $default = explode(',', $default);
                     if(is_array($default)) $default = implode("', '", array_filter($default, function($val){return trim($val) != '';}));
                     if(empty($default)) break;
                     $value = "('" . $default . "')";
@@ -741,7 +742,8 @@ class pivotState
                         case '$MONTHBEGIN': $default = date($format, time() - (date('j') - 1) * 24 * 3600); break;
                         case '$MONTHEND':   $default = date($format, time() + (date('t') - date('j')) * 24 * 3600); break;
                         default:
-                        break;
+                            if(is_numeric($default)) $default = date('Y-m-d H:i:s', $default / 1000);
+                            break;
                     }
                 }
                 else

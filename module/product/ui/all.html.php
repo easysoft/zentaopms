@@ -54,7 +54,7 @@ jsVar('langSummary', $lang->product->pageSummary);
 /* ====== Define the page structure with zin widgets ====== */
 featureBar
 (
-    ($config->systemMode != 'ALM' && $config->systemMode != 'PLM') ? null : to::leading($fnGenerateProgramMenu($programList)),
+    (($config->systemMode != 'ALM' && $config->systemMode != 'PLM') || !helper::hasFeature('program')) ? null : to::leading($fnGenerateProgramMenu($programList)),
     set::link(createLink
     (
         $this->app->rawModule,

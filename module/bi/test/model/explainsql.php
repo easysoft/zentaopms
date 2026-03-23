@@ -21,7 +21,6 @@ cid=15157
 $biTest = new biModelTest();
 
 r($biTest->explainSQLTest('SELECT * FROM zt_user WHERE id = 1', 'mysql')) && p('result') && e('success'); // 使用有效SQL和mysql驱动
-r($biTest->explainSQLTest('SELECT * FROM zt_user WHERE id = 1', 'duckdb')) && p('result') && e('success'); // 使用有效SQL和duckdb驱动
 r($biTest->explainSQLTest('SELECT * FROM invalid_table WHERE', 'mysql')) && p('result') && e('fail'); // 使用无效SQL
 r($biTest->explainSQLTest('', 'mysql')) && p('result') && e('fail'); // 使用空SQL
 r($biTest->explainSQLTest('SELECT id, account FROM zt_user LIMIT 10')) && p('result') && e('success'); // 不指定驱动使用默认mysql

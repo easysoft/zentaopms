@@ -15,7 +15,7 @@ cid=18904
  - 属性account @admin
 - 步骤2：团队任务有当前用户
  - 属性task @2
- - 属性consumed @10
+ - 属性consumed @25
  - 属性left @20
  - 属性work @团队任务开始
  - 属性account @admin
@@ -88,7 +88,7 @@ $task2->id = 2;
 $task2->consumed = 30;
 $task2->left = 20;
 $task2->work = '团队任务开始';
-r($taskTest->buildEffortForStartTest($oldTask2, $task2)) && p('task,consumed,left,work,account') && e('2,10,20,团队任务开始,admin'); // 步骤2：团队任务有当前用户
+r($taskTest->buildEffortForStartTest($oldTask2, $task2)) && p('task,consumed,left,work,account') && e('2,25,20,团队任务开始,admin'); // 步骤2：团队任务有当前用户
 
 // 步骤3：团队任务但当前用户不在团队中的effort构建
 $oldTask3 = new stdclass();

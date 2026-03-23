@@ -5,6 +5,7 @@ class wechatapi
     private $appKey;
     private $appSecret;
     private $token;
+    private $agentId;
     private $expires;
     private $errors = array();
 

@@ -22,8 +22,8 @@ $lang->execution->execId              = "{$lang->execution->common} ID";
 $lang->execution->execName            = "{$lang->execution->common} Name";
 $lang->execution->execCode            = "{$lang->execution->common} Code";
 $lang->execution->execType            = 'Execution Type';
-$lang->execution->lifetime            = $lang->projectCommon . ' Cycle';
-$lang->execution->attribute           = 'Stage Type';
+$lang->execution->lifetime            = $lang->projectCommon . ' Duration';
+$lang->execution->attribute           = 'Phase Type';
 $lang->execution->percent             = 'Workload %';
 $lang->execution->milestone           = 'Milestone';
 $lang->execution->parent              = $lang->projectCommon;
@@ -186,11 +186,11 @@ $lang->execution->endList[365] = '1 Year';
 
 $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
-$lang->execution->lifeTimeList['ops']   = "DevOps";
+$lang->execution->lifeTimeList['ops']   = "CI&CD";
 
 $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
-$lang->execution->cfdTypeList['bug']   = "View By bug";
+$lang->execution->cfdTypeList['bug']   = "View by bug";
 
 $lang->team->account    = 'User';
 $lang->team->realname   = 'Name';
@@ -222,7 +222,7 @@ $lang->execution->kanbanAclList['private'] = 'Private';
 
 $lang->execution->storyPoint = 'Story Point';
 
-$lang->execution->burnByList['left']       = 'View by remaining hours';
+$lang->execution->burnByList['left']       = 'View by left hours';
 $lang->execution->burnByList['estimate']   = "View by plan hours";
 $lang->execution->burnByList['storyPoint'] = 'View by story point';
 
@@ -247,7 +247,7 @@ $lang->execution->doc                       = 'Document';
 $lang->execution->doclib                    = 'Docoment Library';
 $lang->execution->manageProducts            = 'Linked ' . $lang->productCommon . 's';
 $lang->execution->linkStory                 = 'Link Stories';
-$lang->execution->linkStoryByPlan           = 'Link Stories By Plan';
+$lang->execution->linkStoryByPlan           = 'Link Stories by Plan';
 $lang->execution->linkPlan                  = 'Linked Plan';
 $lang->execution->unlinkStoryTasks          = 'Unlink';
 $lang->execution->linkedProducts            = "Linked {$lang->productCommon}s";
@@ -285,7 +285,7 @@ $lang->execution->unlinkStory               = 'Unlink Story';
 $lang->execution->unlinkStoryAB             = 'Unlink';
 $lang->execution->batchUnlinkStory          = 'Batch Unlink Stories';
 $lang->execution->importTask                = 'Transfer Task';
-$lang->execution->importPlanStories         = 'Link Stories By Plan';
+$lang->execution->importPlanStories         = 'Link Stories by Plan';
 $lang->execution->importBug                 = 'Import Bug';
 $lang->execution->tree                      = 'Tree';
 $lang->execution->treeTask                  = 'Show Task Only';

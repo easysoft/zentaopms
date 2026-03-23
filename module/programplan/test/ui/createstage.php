@@ -64,8 +64,8 @@ $waterfall = array(
     array('name_0' => '', 'begin_0' => date('Y-m-d'), 'end_0' => date('Y-m-d', strtotime('+30 days'))),
     array('begin_0' => '', 'end_0' => date('Y-m-d', strtotime('+30 days'))),
     array('begin_0' => date('Y-m-d'), 'end_0' => ''),
-    array('begin_0' => '2024-10-24', 'end_0' => '2024-10-23'),
-    array('name_0' => '需求阶段', 'begin_0' => '2024-10-24', 'end_0' => '2024-10-30'),
+    array('begin_0' => date('Y-m-d'), 'end_0' => date('Y-m-d', strtotime('-1 day'))),
+    array('name_0' => '需求阶段', 'begin_0' => date('Y-m-d'), 'end_0' => date('Y-m-d', strtotime('+5 days'))),
 );
 
 r($tester->createStage($waterfall['0'])) && p('message,status') && e('阶段名称不能为空提示信息正确,SUCCESS'); //校验阶段名称不能为空

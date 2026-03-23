@@ -1,0 +1,10 @@
+title: table zt_build
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: product
+    range: 1
+  - field: branch
+    range: "`1,2`,3,0"

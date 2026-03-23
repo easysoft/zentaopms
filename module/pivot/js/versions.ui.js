@@ -9,8 +9,9 @@ function previewVersion(e)
 function loadCustomPivot()
 {
     const filterValues = getFilterValues('versions');
-    const form = zui.createFormData({filterValues});
+    const form = zui.createFormData();
     form.append('preview', '1');
+    form.append('filterValues', filterValues);
 
     const link = $.createLink('pivot', 'versions', 'groupID=' + group + '&pivotID=' + pivot + '&version=' + version);
     loadTarget(link, '#pivotVersionPanel', {method: 'POST', data: form});

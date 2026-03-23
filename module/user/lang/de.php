@@ -145,7 +145,7 @@ $lang->user->dynamic   = 'Verlauf';
 $lang->user->openedBy    = 'Geöffnet';
 $lang->user->assignedTo  = 'Zugeordnet';
 $lang->user->finishedBy  = 'Abgeschlossen';
-$lang->user->involved    = 'Involved By %s';
+$lang->user->involved    = 'Involved by %s';
 $lang->user->resolvedBy  = 'Gelöst';
 $lang->user->closedBy    = 'Geschlossen';
 $lang->user->reviewedBy  = 'Überprüft';
@@ -338,13 +338,13 @@ $lang->user->jumping = "This page will redirect to the previous page in <span id
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = 'Logout';
 
-$lang->user->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->user->featureBar['todo']['all']             = 'Assigned to Yourself';
 $lang->user->featureBar['todo']['before']          = 'Unfinished';
 $lang->user->featureBar['todo']['future']          = 'TBD';
 $lang->user->featureBar['todo']['thisWeek']        = 'This Week';
 $lang->user->featureBar['todo']['thisMonth']       = 'This Month';
 $lang->user->featureBar['todo']['thisYear']        = 'This Year';
-$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned to Other';
 $lang->user->featureBar['todo']['cycle']           = 'Recurrence';
 
 $lang->user->featureBar['dynamic']['all']       = 'All';

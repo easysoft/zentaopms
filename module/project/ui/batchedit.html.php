@@ -52,6 +52,7 @@ $items[] = array
     'name'     => 'name',
     'required' => true,
     'label'    => $lang->project->name,
+    'width'   => '240px'
 );
 if($setCode)
 {

@@ -23,9 +23,8 @@ class clientZen extends client
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            $this->app->loadLang('extension');
             $statusFile = str_replace('\\', '/', $statusFile);
-            $error      = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+            $error      = sprintf($this->lang->noticeOkFile, $statusFile, $statusFile);
 
             if($_POST)
             {

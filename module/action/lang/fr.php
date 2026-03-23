@@ -458,6 +458,7 @@ $lang->action->label->editestimate            = 'a réestimé ';
 $lang->action->label->editeffort              = 'a réestimé ';
 $lang->action->label->canceled                = 'a annulé ';
 $lang->action->label->finished                = 'a fini ';
+$lang->action->label->failed                  = 'failed';
 $lang->action->label->paused                  = 'a stoppé ';
 $lang->action->label->verified                = 'a vérifié ';
 $lang->action->label->delayed                 = 'a ajourné ';

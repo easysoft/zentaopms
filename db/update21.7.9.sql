@@ -337,10 +337,6 @@ AND FIND_IN_SET(\'rnd\', t1.vision)' WHERE `id`=10116;
 DELETE FROM `zt_action` WHERE `objectType` = 'zoutput';
 DELETE FROM `zt_actionrecent` WHERE `objectType` = 'zoutput';
 
-RENAME TABLE `zt_ai_prompt` TO `zt_ai_agent`;
-RENAME TABLE `zt_ai_promptrole` TO `zt_ai_agentrole`;
-RENAME TABLE `zt_ai_promptfield` TO `zt_ai_agentfield`;
-
 ALTER TABLE `zt_ai_agent`
 ADD COLUMN `code` varchar(30) NOT NULL DEFAULT '' COMMENT '内部 code'
 AFTER `id`;
@@ -395,3 +391,5 @@ ALTER TABLE `zt_projectadmin` MODIFY COLUMN `programs` text DEFAULT NULL;
 ALTER TABLE `zt_projectadmin` MODIFY COLUMN `projects` text DEFAULT NULL;
 ALTER TABLE `zt_projectadmin` MODIFY COLUMN `executions` text DEFAULT NULL;
 ALTER TABLE `zt_projectadmin` MODIFY COLUMN `products` text DEFAULT NULL;
+
+DELETE FROM zt_workflowfield WHERE `module`='bug' AND `field`='linkBug';

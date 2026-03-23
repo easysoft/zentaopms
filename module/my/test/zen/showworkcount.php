@@ -31,6 +31,13 @@ zenData('project')->gen(5);
 
 su('admin');
 
+global $tester;
+$tester->app->rawModule  = 'my';
+$tester->app->rawMethod  = 'work';
+$tester->app->tab        = 'my';
+$tester->app->moduleName = 'my';
+$tester->app->methodName = 'work';
+
 $myTest = new myZenTest();
 
 r($myTest->showWorkCountTest(0, 20, 1)) && p('hasTodoCount') && e('1'); // 测试默认参数调用

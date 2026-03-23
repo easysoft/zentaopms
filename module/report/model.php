@@ -190,21 +190,22 @@ class reportModel extends model
      */
     public function getUserTodos(): array
     {
-        $stmt = $this->dao->select('*')->from(TABLE_TODO)
+        $users = $this->loadModel('user')->getPairs('nodeleted');
+        $rows  = $this->dao->select('*')->from(TABLE_TODO)
             ->where('cycle')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing')
-            ->query();
+            ->fetchAll();
 
         $todos = array();
-        $users = $this->loadModel('user')->getPairs('nodeleted');
-        while($todo = $stmt->fetch())
+        foreach($rows as $todo)
         {
             $user = !empty($todo->assignedTo) ? $todo->assignedTo : $todo->account;
             if(!isset($users[$user])) continue;
 
             if($todo->type == 'task') $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')  $todo->name = $this->dao->findById($todo->objectID)->from(TABLE_BUG)->fetch('title');
+
             $todos[$user][] = $todo;
         }
         return $todos;
@@ -536,17 +537,18 @@ class reportModel extends model
         $statusStat = array();
         while($action = $stmt->fetch())
         {
+            /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
+            $lowerAction = strtolower($action->action);
+            if(in_array($lowerAction, array('fromfeedback', 'fromticket'))) $lowerAction = 'opened';
+
             $objectID = $action->objectID;
-            if($action->deleted == '0' && $action->action == 'opened')
+            if($action->deleted == '0' && $lowerAction == 'opened')
             {
                 if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
                 if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
                 $statedObjectIDList[$objectID] = $objectID;
             }
 
-            /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
-            $lowerAction = strtolower($action->action);
-            if(in_array($lowerAction, array('fromfeedback', 'fromticket'))) $lowerAction = 'opened';
             if(!isset($actionStat[$lowerAction]))
             {
                 foreach($months as $month) $actionStat[$lowerAction][$month] = 0;

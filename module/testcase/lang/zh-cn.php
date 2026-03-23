@@ -93,6 +93,7 @@ $lang->testcase->sync             = '同步';
 $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '来自测试单用例';
 $lang->testcase->fromCaselib      = '来自用例库用例';
+$lang->testcase->fromTestsuite    = '来自套件';
 $lang->testcase->fromCaseID       = '用例来源ID';
 $lang->testcase->fromCaseVersion  = '用例来源版本';
 $lang->testcase->mailto           = '抄送给';

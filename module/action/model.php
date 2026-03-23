@@ -234,7 +234,7 @@ class actionModel extends model
             if($actionName == 'deletechildrendemand') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view');
             if($actionName == 'createchildrendemand') $this->actionTao->processLinkStoryAndBugActionExtra($action, 'demand', 'view');
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
-            if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
+            if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse', false, helper::hasFeature('caselib'));
             if($actionName == 'changedbycharter' && $action->objectType == 'story') $this->actionTao->processActionExtra(TABLE_CHARTER, $action, 'name', 'charter', 'view');
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
             if($actionName == 'distributed' && $objectType == 'story') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view', false, $this->config->vision != 'or' ? false : true);
@@ -1904,15 +1904,15 @@ class actionModel extends model
 
          /* 只保留允许的标签。 */
          /* Keep only allowed tags. */
-         $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
+         $newComment->comment = fixer::stripDataTags($newComment->lastComment);
 
          /* 处理评论内的图片。*/
          /* Handle images in comment. */
-         $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
+         $newComment = $this->loadModel('file')->processImgURL($newComment, 'comment', $newComment->uid);
 
          $this->dao->update(TABLE_ACTION)
              ->set('date')->eq(helper::now())
-             ->set('comment')->eq($newComment->lastComment)
+             ->set('comment')->eq($newComment->comment)
              ->where('id')->eq($actionID)
              ->exec();
 

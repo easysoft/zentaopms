@@ -712,6 +712,8 @@ class projectTao extends projectModel
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
 
+            if(!helper::hasFeature('program')) $topProgram = 0;
+
             if($project->PM == $this->app->user->account)
             {
                 if($project->status != 'closed')
@@ -925,7 +927,7 @@ class projectTao extends projectModel
      */
     protected function getTotalStoriesByProject(array $projectIdList): array
     {
-        return $this->dao->select("t1.project, count(t2.id) as allStories, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as leftStories, count(if(t2.status = 'closed' and t2.closedReason = 'done', 1, null)) as doneStories")->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select("t1.project, count(t2.id) as `allStories`, count(if(t2.status = 'active' or t2.status = 'changing', 1, null)) as `leftStories`, count(if(t2.status = 'closed' and t2.`closedReason` = 'done', 1, null)) as `doneStories`")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t1.project')->in($projectIdList)
             ->andWhere('deleted')->eq('0')

@@ -20,7 +20,7 @@ $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "e
 $execution->rawID = $execution->id;
 
 $programDom = null;
-if($config->systemMode == 'ALM' && isset($execution->projectInfo->grade) && $execution->projectInfo->grade > 1)
+if($config->systemMode == 'ALM' && isset($execution->projectInfo->grade) && $execution->projectInfo->grade > 1 && helper::hasFeature('program'))
 {
     foreach($programList as $programID => $name)
     {

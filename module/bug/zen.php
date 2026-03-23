@@ -966,7 +966,7 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
         }
         elseif($executionID)
         {
@@ -1165,7 +1165,12 @@ class bugZen extends bug
 
         $this->assignVarsForEdit($bug, $product);
 
-        $duplicateBugs = $this->bug->getProductBugPairs($bug->product, $bug->branch);
+        $duplicateBugs = $this->bug->getProductBugPairs(0, $bug->branch, '', 0, 'all');
+        if(!empty($bug->duplicateBug))
+        {
+            $duplicateBug = $this->bug->fetchByID($bug->duplicateBug);
+            $duplicateBugs[$bug->duplicateBug] = $this->lang->productCommon . '#' . $duplicateBug->product . '@'. $duplicateBug->id . ':' . $duplicateBug->title;
+        }
         unset($duplicateBugs[$bug->id]);
 
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
@@ -1658,7 +1663,6 @@ class bugZen extends bug
         $branchProduct   = false;
         $modules         = array();
         $branchTagOption = array();
-        $productBugList  = array();
         $productPlanList = array();
         foreach($products as $product)
         {
@@ -1675,13 +1679,11 @@ class bugZen extends bug
                 {
                     $branchTagOption[$product->id][$branchID] = "/{$product->name}/{$branchName}";
                     $productPlanList[$product->id][$branchID] = $this->loadModel('productplan')->getPairs($product->id, $branchID, '', true);
-                    $productBugList[$product->id][$branchID]  = $this->bug->getProductBugPairs($product->id, "0,{$branchID}");
                 }
             }
             else
             {
                 $productPlanList[$product->id][0] = $this->loadModel('productplan')->getPairs($product->id, 0, '', true);
-                $productBugList[$product->id][0]  = $this->bug->getProductBugPairs($product->id, "");
             }
 
             $modulePairs           = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
@@ -1734,24 +1736,9 @@ class bugZen extends bug
             }
         }
 
-        $productBugOptions = array();
-        foreach($productBugList as $productID => $productBugs)
-        {
-            $productBugOptions[$productID] = array();
-            foreach($productBugs as $branchID => $branchBugs)
-            {
-                $productBugOptions[$productID][$branchID] = array();
-                foreach($branchBugs as $bugID => $bugTitle)
-                {
-                    $productBugOptions[$productID][$branchID][] = array('text' => $bugTitle, 'value' => $bugID);
-                }
-            }
-        }
-
         $this->view->bugs              = $bugs;
         $this->view->branchProduct     = $branchProduct;
         $this->view->modules           = $bugModules;
-        $this->view->productBugOptions = $productBugOptions;
         $this->view->branchTagOption   = $branchOptions;
         $this->view->products          = $products;
 
@@ -1826,7 +1813,7 @@ class bugZen extends bug
             else
             {
                 if(isset($productOpenedBuilds[$bug->product])) continue;
-                $productOpenedBuildItems = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+                $productOpenedBuildItems = $this->build->getBuildPairs(array($bug->product), empty($bug->branch) ? 'all' : $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
                 foreach($productOpenedBuildItems as $buildID => $buildName) $productOpenedBuilds[$bug->product][] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
             }
         }

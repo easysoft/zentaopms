@@ -122,7 +122,7 @@ $lang->programplan->emptyStageTip     = '请联系管理员，在后台的“项
 $lang->programplan->stageCustom['date'] = '显示日期';
 $lang->programplan->stageCustom['task'] = '显示任务';
 
-$lang->programplan->ganttCustom['PM']           ='负责人';
+$lang->programplan->ganttCustom['owner_id']     ='负责人';
 $lang->programplan->ganttCustom['deadline']     ='计划完成';
 $lang->programplan->ganttCustom['status']       ='状态';
 $lang->programplan->ganttCustom['realBegan']    ='实际开始';

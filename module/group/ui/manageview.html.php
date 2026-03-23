@@ -41,15 +41,17 @@ $viewCheckList[] = checkbox
 
 function getActionsBox($navGroup, $group, $module)
 {
-    global $lang;
+    global $lang, $app;
     $actionsBox = null;
     if(isset($lang->action->dynamicAction->$module))
     {
         foreach($lang->action->dynamicAction->$module as $action => $actionTitle)
         {
+            if(!helper::hasFeature($module)) continue;
             $actionsBox[] = div
             (
                 set::className('action-item'),
+                set::style(array('flex' => $app->getClientLang() == 'en' ? '0 1 32%' : '0 1 18%')),
                 checkbox
                 (
                     set::id("{$module}-{$action}"),
@@ -69,9 +71,11 @@ function getActionsBox($navGroup, $group, $module)
             {
                 foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle)
                 {
+                    if(!helper::hasFeature($subModule)) continue;
                     $actionsBox[] = div
                     (
                         set::className('action-item'),
+                        set::style(array('flex' => $app->getClientLang() == 'en' ? '0 1 32%' : '0 1 18%')),
                         checkbox
                         (
                             set::id("$subModule-$action"),

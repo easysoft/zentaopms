@@ -1,0 +1,9 @@
+title: table zt_branch
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    prefix: '分支'
+    range: 1-100

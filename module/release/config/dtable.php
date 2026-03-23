@@ -3,6 +3,7 @@ global $lang, $app;
 $app->loadLang('story');
 $app->loadLang('bug');
 $app->loadLang('build');
+$isEn = $app->getClientLang() == 'en';
 
 $config->release->dtable = new stdclass();
 $config->release->dtable->story   = new stdclass();
@@ -62,13 +63,13 @@ $config->release->dtable->fieldList['status']['show']      = true;
 $config->release->dtable->fieldList['date']['title']    = $lang->release->date;
 $config->release->dtable->fieldList['date']['name']     = 'date';
 $config->release->dtable->fieldList['date']['type']     = 'date';
-$config->release->dtable->fieldList['date']['minWidth'] = '100';
+$config->release->dtable->fieldList['date']['minWidth'] = $isEn ? '150' : '100';
 $config->release->dtable->fieldList['date']['show']     = true;
 
 $config->release->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
 $config->release->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
 $config->release->dtable->fieldList['releasedDate']['type']     = 'date';
-$config->release->dtable->fieldList['releasedDate']['minWidth'] = '100';
+$config->release->dtable->fieldList['releasedDate']['minWidth'] = $isEn ? '150' : '100';
 $config->release->dtable->fieldList['releasedDate']['show']     = true;
 
 $config->release->dtable->fieldList['desc']['title']    = $lang->release->desc;

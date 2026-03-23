@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 jsVar('gradeGroup', $gradeGroup);
 
 $projectChangeLink = createLink('projectStory', 'story', "projectID={projectID}&productID=0&branch=&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
@@ -92,7 +94,6 @@ foreach($setting as $key => $col)
     if($key == 'assignedTo') $setting[$key]['type'] = 'user';
     $setting[$key]['sortType'] = false;
     if(isset($col['link'])) unset($setting[$key]['link']);
-    if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
     if($key == 'title') $setting[$key]['link']  = array('url' => helper::createLink('{type}', 'view', 'storyID={id}&version={version}&param=0&storyType={type}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 }
 

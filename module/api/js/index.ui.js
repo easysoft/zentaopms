@@ -246,6 +246,7 @@ function getSpaceMenuOptions(spaceType, spaceID)
     const lang = $('html').attr('lang');
 
     return {
+        caret       : true,
         popWidth    : ['zh-cn', 'zh-tw'].includes(lang) ? 350 : 400,
         onClickItem : handleClickSpaceMenu,
         defaultValue: spaceID === 'nolink' ? `lib.${libID}`: spaceID,

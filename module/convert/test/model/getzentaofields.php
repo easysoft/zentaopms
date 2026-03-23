@@ -7,14 +7,14 @@ title=测试 convertModel::getZentaoFields();
 timeout=0
 cid=0
 
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'epic'  @6
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'story'  @6
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'bug'  @13
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'task'  @5
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'testcase'  @9
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'requirement'  @6
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是'notexist'  @0
-- 执行convertTest模块的getZentaoFieldsTest方法，参数是''  @0
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'epic'  @7
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'story'  @7
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'bug'  @14
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'task'  @6
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'testcase'  @10
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'requirement'  @7
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是'notexist'  @1
+- 执行convertTest模块的getZentaoFieldsTest方法，参数是''
 
 */
 

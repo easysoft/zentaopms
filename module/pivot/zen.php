@@ -219,7 +219,8 @@ class pivotZen extends pivot
 
         if(isset($_POST['filterValues']) and $_POST['filterValues'])
         {
-            foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
+            $filterValuesData = is_string($this->post->filterValues) ? explode(',', $this->post->filterValues) : $this->post->filterValues;
+            foreach($filterValuesData as $key => $value) $pivot->filters[$key]['default'] = $value;
         }
         $showOrigin = false;
         if(isset($_POST['summary']) and $_POST['summary']) $showOrigin = $this->post->summary == 'notuse';
@@ -501,7 +502,7 @@ class pivotZen extends pivot
         $value  = zget($filter, 'default', '');
         $values = is_array($value) ? implode(',', $value) : $value;
 
-        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search}");
+        $url = helper::createLink('pivot', 'ajaxGetSysOptions', "search={search:base64}");
         $data = array();
         $data['values'] = $values;
         if($from == 'query')

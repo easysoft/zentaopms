@@ -13,15 +13,15 @@ $lang->requirement->common = $lang->URCommon;
 
 $lang->requirement->stageList = array();
 $lang->requirement->stageList[''] = '';
-$lang->requirement->stageList['wait'] = 'Wait';
+$lang->requirement->stageList['wait'] = 'Not Started';
 if($config->edition == 'ipd')
 {
     $lang->requirement->stageList['inroadmap'] = 'In Roadmap';
     $lang->requirement->stageList['incharter'] = 'In Charter';
 }
 $lang->requirement->stageList['planned']    = 'Planned';
-$lang->requirement->stageList['projected']  = 'Projected';
-$lang->requirement->stageList['developing'] = 'Developing';
-$lang->requirement->stageList['delivering'] = 'Delivering';
+$lang->requirement->stageList['projected']  = 'Initiated';
+$lang->requirement->stageList['developing'] = 'In Development';
+$lang->requirement->stageList['delivering'] = 'In Delivery';
 $lang->requirement->stageList['delivered']  = 'Delivered';
 $lang->requirement->stageList['closed']     = 'Closed';

@@ -75,7 +75,13 @@ if($config->edition != 'ipd')
 
 if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')
 {
-    unset($config->product->form->create['program'], $config->product->form->create['line']);
-    unset($config->product->form->edit['program'], $config->product->form->edit['line']);
+    unset($config->product->form->create['line']);
+    unset($config->product->form->edit['line']);
+}
+
+if(($config->systemMode != 'ALM' && $config->systemMode != 'PLM') || !helper::hasFeature('program'))
+{
+    unset($config->product->form->create['program']);
+    unset($config->product->form->edit['program']);
     unset($config->product->form->batchEdit['program']);
 }

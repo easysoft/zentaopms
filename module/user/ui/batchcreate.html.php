@@ -14,7 +14,8 @@ jsVar('roleGroup', $roleGroup);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
-$companies += array('ditto' => $lang->user->ditto);
+$companies     += array('ditto' => $lang->user->ditto);
+$requiredFields = explode(',', $config->user->create->requiredFields);
 
 formBatchPanel
 (
@@ -65,6 +66,7 @@ formBatchPanel
         set::items($depts),
         set::value($deptID ? $deptID : ''),
         set::ditto(true),
+        set::required(in_array('dept', $requiredFields)),
         set::hidden($type != 'inside')
     ),
     formBatchItem
@@ -133,6 +135,7 @@ formBatchPanel
         set::control('picker'),
         set::width('160px'),
         set::items($lang->user->roleList),
+        set::required(in_array('role', $requiredFields)),
         set::ditto(true)
     ),
     formBatchItem
@@ -143,6 +146,7 @@ formBatchPanel
         set::multiple(true),
         set::items($groupList),
         set::width('200px'),
+        set::required(in_array('group', $requiredFields)),
         set::ditto(true)
     ),
     formBatchItem
@@ -151,6 +155,7 @@ formBatchPanel
         set::label($lang->user->email),
         set::control('input'),
         set::width('160px'),
+        set::required(in_array('group', $requiredFields)),
         set::hidden(!in_array('email', $showFields))
     ),
     formBatchItem
@@ -189,6 +194,7 @@ formBatchPanel
         set::label($lang->user->commiter),
         set::control('input'),
         set::width('120px'),
+        set::required(in_array('commiter', $requiredFields)),
         set::hidden(!in_array('commiter', $showFields) || $type != 'inside')
     ),
     formBatchItem

@@ -63,8 +63,8 @@ class webhook extends control
     {
         if($_POST)
         {
-            $webhook = form::data($this->config->webhook->form->create)->get();
-            $this->webhook->create($webhook);
+            $webhook   = form::data($this->config->webhook->form->create)->get();
+            $webhookID = $this->webhook->create($webhook);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
@@ -221,11 +221,7 @@ class webhook extends control
     public function chooseDept(int $id)
     {
         $webhook = $this->webhook->getById($id);
-        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser')))
-        {
-            echo js::alert($this->lang->webhook->note->bind);
-            return print(js::locate($this->createLink('webhook', 'browse')));
-        }
+        if(!in_array($webhook->type, array('dinguser', 'wechatuser', 'feishuuser'))) return $this->send(array('result' => 'fail', 'message' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse')));
 
         $webhook->secret = json_decode($webhook->secret);
 
@@ -240,16 +236,22 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
-            echo js::error($response['message']);
-            return print(js::locate($this->createLink('webhook', 'browse')));
+            $message = $response['message'];
+            if(is_array($message) || is_object($message))
+            {
+                $message = array();
+                array_walk_recursive($response['message'], function($item, $key) use(&$message) {$message[] = "$key: $item";});
+                $message = implode(",", $message);
+            }
+            $response = array('result' => 'fail', 'message' => $message, 'load' => $this->createLink('webhook', 'browse'));
+            return $this->send($response);
         }
-
         if($response['result'] == 'selected')
         {
             $locateLink  = $this->createLink('webhook', 'bind', "id={$id}");
             $locateLink .= strpos($locateLink, '?') !== false ? '&' : '?';
             $locateLink .= 'selectedDepts=' . join(',', $response['data']);
-            return print(js::locate($locateLink));
+            return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
 
         $this->view->title       = $this->lang->webhook->chooseDept;
@@ -329,9 +331,12 @@ class webhook extends control
                     $diff = time() - $time;
                 }
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
+                $this->webhook->setSentStatus($data->id, 'sended', $now);
             }
-
-            $this->webhook->setSentStatus($data->id, 'sended', $now);
+            else
+            {
+                $this->webhook->setSentStatus($data->id, 'fail', $now);
+            }
         }
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('status')->eq('sended')->exec();

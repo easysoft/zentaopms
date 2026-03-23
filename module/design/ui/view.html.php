@@ -146,11 +146,11 @@ detailBody
                         set::name($lang->design->story),
                         $storyItem
                     ),
-                    item
+                    helper::hasFeature('devops') ? item
                     (
                         set::name($lang->design->submission),
                         html($design->commit)
-                    ),
+                    ) : null,
                     item
                     (
                         set::name($lang->design->assignedTo),

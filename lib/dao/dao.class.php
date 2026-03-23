@@ -321,6 +321,7 @@ class dao extends baseDAO
                 {
                     if(empty($rule)) continue;
                     if($rule->type != 'system' || $rule->rule != 'notempty') continue;
+                    if(!isset($_FILES[$field->field])) continue;
 
                     $files = !empty($_FILES[$field->field]) ? $_FILES[$field->field] : '';
                     if(empty($files['size'][0])) dao::$errors[$field->field][] = sprintf($lang->error->notempty, $field->name);

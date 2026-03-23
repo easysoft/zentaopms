@@ -1,0 +1,17 @@
+title: zt_project
+desc: project data.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: project
+    range: 0{2},1{2},2
+  - field: type
+    range: project{2},sprint{3}
+  - field: estimate
+    range: 20.00,10.00,5.00,15.00,10.00
+  - field: left
+    range: 20.00,10.00,5.00,15.00,10.00
+  - field: consumed
+    range: 20.00,10.00,5.00,15.00,10.00

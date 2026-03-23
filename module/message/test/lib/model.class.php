@@ -147,8 +147,17 @@ class messageModelTest extends baseTest
         }
         $result = $this->instance->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
 
-        if(dao::isError()) return dao::getError();
+        $table  = $tester->config->objectTables[$objectType];
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        if(!$object) return array();
 
+        $result = $this->objectModel->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+
+        if(dao::isError())
+        {
+            $error = dao::getError(true);
+            return is_string($error) ? array('code' => 'fail', 'message' => $error) : array('code' => 'fail', 'message' => 'dao_error');
+        }
 
         if($result) $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->orderBy('id_desc')->fetch();
         return !empty($notify) ? $notify : array();
@@ -171,7 +180,11 @@ class messageModelTest extends baseTest
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $toList = $this->instance->getToList($object, $objectType, $actionID);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError())
+        {
+            $error = dao::getError(true);
+            return is_string($error) ? $error : 'dao_error';
+        }
 
         return trim($toList, ',');
     }

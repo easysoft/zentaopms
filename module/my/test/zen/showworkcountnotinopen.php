@@ -5,43 +5,52 @@
 
 title=测试 myZen::showWorkCountNotInOpen();
 timeout=0
-cid=17317
+cid=1
 
-- 测试开源版(open)下空count数组属性isBiz @0
-- 测试开源版(open)下空count数组的isMax属性isMax @0
-- 测试开源版(open)下空count数组的isIPD属性isIPD @0
-- 测试开源版(open)下feedback计数为0属性feedback @0
-- 测试非空count数组保留原有task计数属性task @5
-- 测试非空count数组保留原有story计数属性story @3
-- 测试非空count数组保留原有bug计数属性bug @2
+- 测试是否是ipd版本属性isIPD @1
+- 测试获取bug数量属性bug @0
+- 测试获取task数量属性task @0
+- 测试获取ticket数量属性ticket @0
+- 测试获取feedback数量属性feedback @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-zenData('feedback')->gen(0);
-zenData('ticket')->gen(0);
-zenData('issue')->gen(0);
-zenData('risk')->gen(0);
-zenData('nc')->gen(0);
-zenData('auditplan')->gen(0);
-zenData('meeting')->gen(0);
-zenData('demand')->gen(0);
-zenData('user')->gen(10);
-zenData('product')->gen(5);
+zenData('task')->gen(5);
+zenData('bug')->gen(5);
+zenData('user')->gen(2);
+zenData('feedback')->gen(10);
 
+$ticket = zenData('ticket');
+$ticket->assignedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->realStarted->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->startedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->openedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->activatedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->closedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->finishedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->resolvedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->editedDate->range('[2023-01-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->deadline->range('[2023-12-01 00:00:00, 2023-12-31 23:59:59]');
+$ticket->gen(2);
 su('admin');
 
+global $config, $tester;
+$config->edition = 'ipd';
+$config->vision  = 'rnd';
+$tester->app->rawModule  = 'my';
+$tester->app->rawMethod  = 'work';
+$tester->app->tab        = 'my';
+$tester->app->moduleName = 'my';
+$tester->app->methodName = 'work';
+
 $myTest = new myZenTest();
+$count  = array('task' => 0,  'bug' => 0, 'ticket' => 0, 'feedback' => 0);
 
-$emptyCount = array('task' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
-$nonEmptyCount = array('task' => 5, 'story' => 3, 'bug' => 2);
-
-r($myTest->showWorkCountNotInOpenTest($emptyCount)) && p('isBiz') && e('0'); // 测试开源版(open)下空count数组
-r($myTest->showWorkCountNotInOpenTest($emptyCount)) && p('isMax') && e('0'); // 测试开源版(open)下空count数组的isMax
-r($myTest->showWorkCountNotInOpenTest($emptyCount)) && p('isIPD') && e('0'); // 测试开源版(open)下空count数组的isIPD
-r($myTest->showWorkCountNotInOpenTest($emptyCount)) && p('feedback') && e('0'); // 测试开源版(open)下feedback计数为0
-r($myTest->showWorkCountNotInOpenTest($nonEmptyCount)) && p('task') && e('5'); // 测试非空count数组保留原有task计数
-r($myTest->showWorkCountNotInOpenTest($nonEmptyCount)) && p('story') && e('3'); // 测试非空count数组保留原有story计数
-r($myTest->showWorkCountNotInOpenTest($nonEmptyCount)) && p('bug') && e('2'); // 测试非空count数组保留原有bug计数
+r($myTest->showWorkCountNotInOpenTest($count)) && p('isIPD')    && e('1'); // 测试是否是ipd版本
+r($myTest->showWorkCountNotInOpenTest($count)) && p('bug')      && e('0'); // 测试获取bug数量
+r($myTest->showWorkCountNotInOpenTest($count)) && p('task')     && e('0'); // 测试获取task数量
+r($myTest->showWorkCountNotInOpenTest($count)) && p('ticket')   && e('0'); // 测试获取ticket数量
+r($myTest->showWorkCountNotInOpenTest($count)) && p('feedback') && e('0'); // 测试获取feedback数量

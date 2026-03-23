@@ -14,20 +14,22 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
+$taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
+
 /* ====== Preparing and processing page data ====== */
 jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);
 jsVar('oldConsumed', $task->consumed);
 jsVar('objectID', $execution->multiple ? $execution->id : $execution->project);
-jsVar('taskStatus', $task->status);
+jsVar('taskStatus', $taskStatus);
 jsVar('currentUser', $app->user->account);
 jsVar('team', array_values($task->members));
 jsVar('members', $members);
 jsVar('page', 'edit');
 jsVar('confirmChangeExecution', $lang->task->confirmChangeExecution);
 jsVar('teamMemberError', $lang->task->error->teamMember);
-jsVar('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));
+jsVar('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $taskStatus)));
 jsVar('confirmRecord', $lang->task->confirmRecord);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
@@ -53,7 +55,7 @@ $formTitle        = $task->name;
 $executionOptions = $executions;
 $moduleOptions    = $modules;
 $storyOptions     = $stories;
-if($task->status == 'wait' and $task->isParent == '0')
+if($taskStatus == 'wait' and $task->isParent == '0')
 {
     $modeOptions = $lang->task->editModeList;
 }
@@ -83,7 +85,7 @@ if($this->config->edition == 'ipd')
     $task->executionInfo          = $execution;
 }
 
-if($task->status == 'wait') unset($statusOptions['pause']);
+if($taskStatus == 'wait') unset($statusOptions['pause']);
 
 if(!empty($task->team))
 {
@@ -97,9 +99,9 @@ if(!empty($task->team))
         $member->memberDisabled = false;
         $member->memberStatus   = $member->status;
         if($member->memberStatus == 'done') $member->memberDisabled = true;
-        if(strpos('|closed|cancel|pause|', $task->status) !== false && $app->rawMethod != 'activate')
+        if(strpos('|closed|cancel|pause|', $taskStatus) !== false && $app->rawMethod != 'activate')
         {
-            $member->memberStatus   = $task->status;
+            $member->memberStatus   = $taskStatus;
             $member->memberDisabled = true;
         }
 
@@ -125,6 +127,34 @@ detailHeader
 );
 
 $recordWorkhourDisabled = !empty($task->children) ? 'disabled' : '';
+if(!empty($task->team))
+{
+    $assignedToComponent = picker
+    (
+        setID('assignedTo'),
+        setClass('w-full'),
+        set::name('assignedTo'),
+        set::value($task->assignedTo),
+        set::items($assignedToOptions),
+        set::required(true),
+        $task->mode == 'linear' && !in_array($taskStatus, array('done', 'closed')) ? set::disabled(true) : null,
+        $taskStatus == 'closed' ? set::disabled(true) : null,
+    );
+}
+else
+{
+    $assignedToComponent = taskAssignedTo
+    (
+        setID('assignedTo'),
+        setClass('w-full'),
+        set::name('assignedTo'),
+        set::value($task->assignedTo),
+        set::items($assignedToOptions),
+        $taskStatus == 'closed' ? set::disabled(true) : null,
+        $manageLink ? set::manageLink($manageLink) : null
+    );
+}
+
 detailBody
 (
     set::isForm(true),
@@ -292,26 +322,7 @@ detailBody
                     div
                     (
                         setClass('flex grow'),
-                        !empty($task->team) ? picker
-                        (
-                            setID('assignedTo'),
-                            setClass('w-full'),
-                            set::name('assignedTo'),
-                            set::value($task->assignedTo),
-                            set::items($assignedToOptions),
-                            set::required(true),
-                            $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
-                            $task->status == 'closed' ? set::disabled(true) : null,
-                        ) :  taskAssignedTo
-                        (
-                            setID('assignedTo'),
-                            setClass('w-full'),
-                            set::name('assignedTo'),
-                            set::value($task->assignedTo),
-                            set::items($assignedToOptions),
-                            $task->status == 'closed' ? set::disabled(true) : null,
-                            $manageLink ? set::manageLink($manageLink) : null
-                        )
+                        $assignedToComponent
                     ),
                     div
                     (
@@ -344,11 +355,11 @@ detailBody
                 (
                     on::change()->do('statusChange(target)'),
                     set::name('status'),
-                    set::value($task->status),
+                    set::value($taskStatus),
                     set::items($statusOptions),
                     set::required(true)
                 )
-            ) : formHidden('status', $task->status),
+            ) : formHidden('status', $taskStatus),
             item
             (
                 set::name($lang->task->pri),

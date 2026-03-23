@@ -928,8 +928,10 @@ $lang->ai->formSchema['story']['create']->properties->verify = new stdclass();
 $lang->ai->formSchema['story']['create']->properties->title->type         = 'string';
 $lang->ai->formSchema['story']['create']->properties->title->description  = '需求的标题';
 $lang->ai->formSchema['story']['create']->properties->spec->type          = 'string';
+$lang->ai->formSchema['story']['create']->properties->spec->format        = 'html';
 $lang->ai->formSchema['story']['create']->properties->spec->description   = '需求的描述';
 $lang->ai->formSchema['story']['create']->properties->verify->type        = 'string';
+$lang->ai->formSchema['story']['create']->properties->verify->format      = 'html';
 $lang->ai->formSchema['story']['create']->properties->verify->description = '需求的验收标准';
 $lang->ai->formSchema['story']['create']->required = array('title', 'spec', 'verify');
 $lang->ai->formSchema['story']['change'] = $lang->ai->formSchema['story']['create'];
@@ -1150,6 +1152,7 @@ $lang->ai->formSchema['empty']['empty']->properties->title = new stdclass();
 
 $lang->ai->promptMenu = new stdclass();
 $lang->ai->promptMenu->dropdownTitle = '%s智能助手';
+$lang->ai->promptMenu->assignedTo    = '委派%s';
 
 $lang->ai->dataInject = new stdclass();
 $lang->ai->dataInject->success = '已将禅道智能体执行结果填写到表单中';

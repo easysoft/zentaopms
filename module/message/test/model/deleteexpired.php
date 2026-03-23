@@ -18,14 +18,26 @@ cid=17049
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+// 使用字段范围设置，避免生成 SQL 文件
+// 需要确保有6条toList包含admin的message记录，删除2条后剩余4条
 $table = zenData('notify');
-$table->objectType->range('message{10},action{5},other{3}');
-$table->toList->range('`,admin,`,`,user1,`,`,user2,`');
-$table->status->range('wait{6},sended{6},read{6}');
-$table->action->range('0{9},1-10');
+$table->objectType->range('message{6}');
+$table->toList->range('`,admin,`');
+$table->status->range('wait{2},sended{2},read{2}');
+$table->action->range('0{3},1-3');
 $table->data->range('test message data');
-$table->createdBy->range('admin{6},user1{6},user2{6}');
-$table->gen(18);
+$table->createdBy->range('admin');
+$table->gen(6);
+
+// 添加其他用户的记录
+$table2 = zenData('notify');
+$table2->objectType->range('message{4},action{5},other{3}');
+$table2->toList->range('`,user1,`,`,user2,`');
+$table2->status->range('wait{2},sended{2}');
+$table2->action->range('0{2},1-2');
+$table2->data->range('test message data');
+$table2->createdBy->range('user1{2},user2{2}');
+$table2->gen(12);
 
 zenData('user')->gen(1);
 
@@ -34,6 +46,15 @@ su('admin');
 $messageTest = new messageModelTest();
 
 $messageTest->objectModel->app->user->account = 'admin';
+
+// 设置部分记录的 createdDate 为32天前，使其在 maxDays=30 时被删除
+$oldDate = date('Y-m-d H:i:s', strtotime('-32 days'));
+$messageTest->objectModel->dao->update(TABLE_NOTIFY)
+    ->set('createdDate')->eq($oldDate)
+    ->where('toList')->eq(',admin,')
+    ->andWhere('objectType')->eq('message')
+    ->limit(2)
+    ->exec();
 
 r($messageTest->deleteExpiredTest(30)) && p() && e('4');
 

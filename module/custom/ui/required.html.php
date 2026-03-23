@@ -28,7 +28,6 @@ foreach($requiredFields as $method => $requiredField)
             set::label($actionTitle . $lang->custom->page),
             set::labelProps(array('title' => $actionTitle . $lang->custom->page)),
             set::labelClass('font-bold'),
-            set::labelWidth('8rem'),
             picker
             (
                 set::name("requiredFields[{$method}][]"),
@@ -63,7 +62,6 @@ div
         setClass(isset($sidebarMenu) ? 'ml-0.5' : null),
         set::actionsClass('w-1/2'),
         set::actions($formActions),
-        $module == 'story' ? set::labelWidth('9em') : null,
         span
         (
             setClass('text-md font-bold'),

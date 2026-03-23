@@ -470,7 +470,7 @@ class bugModel extends model
         if(!empty($bug->duplicateBug))
         {
             $duplicateBug = $this->fetchByID($bug->duplicateBug);
-            if(!$duplicateBug || $duplicateBug->deleted == '1' || $duplicateBug->product != $oldBug->product)
+            if(!$duplicateBug || $duplicateBug->deleted == '1')
             {
                 dao::$errors['duplicateBug'][] = $this->lang->bug->error->duplicateBugNotExist;
                 return false;
@@ -1153,7 +1153,7 @@ class bugModel extends model
         $productID = (int)$productID;
         return $this->dao->select("id, CONCAT(IF(product = $productID, '', CONCAT('{$this->lang->product->common}#', product, '@')), id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->beginIF($range == 'single')->andWhere('product')->eq($productID)->fi()
+            ->beginIF($range == 'single' && $productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($range == 'all' && !$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in($branch)->fi()
@@ -1802,7 +1802,7 @@ class bugModel extends model
             {
                 foreach($out[2] as $searchValue)
                 {
-                    $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                    $story = $this->dao->select('t1.id')->from(TABLE_STORY)->alias('t1')
                         ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
                         ->where('t1.title')->like("%$searchValue%")
                         ->orWhere('t1.keywords')->like("%$searchValue%")

@@ -19,6 +19,8 @@ cid=15791
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('workflow')->gen(0);
+
 // 2. 用户登录（选择合适角色）
 su('admin');
 

@@ -30,7 +30,6 @@ $lang->custom->isRange              = 'Is Target Control';
 $lang->custom->concept              = "Concept";
 $lang->custom->URStory              = "User requirements";
 $lang->custom->SRStory              = "Software requirements";
-$lang->custom->epic                 = "Epic";
 $lang->custom->default              = "Default";
 $lang->custom->scrumStory           = "Story";
 $lang->custom->waterfallCommon      = "Waterfall";
@@ -122,7 +121,7 @@ $lang->custom->execution->fields['execution'] = 'Close Setting';
 
 $lang->custom->product = new stdClass();
 $lang->custom->product->fields['required']           = $lang->custom->required;
-$lang->custom->product->fields['browsestoryconcept'] = 'Story Concpet';
+$lang->custom->product->fields['browsestoryconcept'] = 'Story Concept';
 $lang->custom->product->fields['product']            = 'Close Setting';
 
 $lang->custom->story = new stdClass();
@@ -346,7 +345,7 @@ $lang->custom->conceptQuestions['storypoint'] = "Which of the following units is
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
-$lang->custom->conceptOptions->story['0'] = 'Requirement';
+$lang->custom->conceptOptions->story['0'] = 'Feature';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->URAndSR = array();

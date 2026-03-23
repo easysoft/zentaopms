@@ -14,7 +14,7 @@ fields:
   note: 产品ID
   range: 0
 - field: execution
-  note: 执行ID  
+  note: 执行ID
   range: 0
 - field: AType
   note: A类型

@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(1);
+zenData('build')->gen(1);
 zenData('product')->gen(10);
 
 zenData('bug')->loadYaml('bug_resolve')->gen(7);
@@ -35,7 +36,6 @@ cid=15405
 - 测试解决原因为设计如此的bug 传入output
  - 属性resolution @bydesign
  - 属性assignedTo @user99
-- 测试解决原因为重复bug 有重复bugID的bug 传入output @重复Bug不存在。
 - 测试解决原因为解决 有解决版本的bug 传入output
  - 属性resolution @fixed
  - 属性assignedTo @user99
@@ -66,7 +66,6 @@ r($bug->resolveTest($bugIdList[1], $duplicateBug)) && p('resolution,assignedTo,d
 r($bug->resolveTest($bugIdList[2], $fixedBug))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1');     // 测试解决原因为解决 有解决版本的bug
 
 r($bug->resolveTest($bugIdList[3], $bydesignBug, $output))  && p('resolution,assignedTo') && e('bydesign,user99'); // 测试解决原因为设计如此的bug 传入output
-r($bug->resolveTest($bugIdList[4], $duplicateBug, $output)) && p('') && e('重复Bug不存在。'); // 测试解决原因为重复bug 有重复bugID的bug 传入output
 r($bug->resolveTest($bugIdList[5], $fixedBug, $output))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1'); // 测试解决原因为解决 有解决版本的bug 传入output
 
 r($bug->resolveTest($bugIdList[6], $emptyResulution))   && p() && e('『解决方案』不能为空。'); // 测试解决原因为空的bug

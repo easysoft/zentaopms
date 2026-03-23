@@ -590,7 +590,6 @@ $lang->resource->requirement = new stdclass();
 $lang->resource->requirement->create             = 'create';
 $lang->resource->requirement->batchCreate        = 'batchCreate';
 $lang->resource->requirement->edit               = 'editAction';
-$lang->resource->requirement->linkStory          = 'linkStory';
 $lang->resource->requirement->batchEdit          = 'batchEdit';
 $lang->resource->requirement->export             = 'exportAction';
 $lang->resource->requirement->delete             = 'deleteAction';
@@ -644,7 +643,6 @@ $lang->resource->epic->create             = 'create';
 $lang->resource->epic->batchCreate        = 'batchCreate';
 $lang->resource->epic->edit               = 'editAction';
 $lang->resource->epic->batchEdit          = 'batchEdit';
-$lang->resource->epic->linkStory          = 'linkStory';
 $lang->resource->epic->export             = 'exportAction';
 $lang->resource->epic->delete             = 'deleteAction';
 $lang->resource->epic->view               = 'view';
@@ -1268,14 +1266,15 @@ $lang->testreport->methodOrder[15] = 'delete';
 $lang->testreport->methodOrder[20] = 'edit';
 
 $lang->resource->testsuite = new stdclass();
-$lang->resource->testsuite->browse           = 'browse';
-$lang->resource->testsuite->create           = 'create';
-$lang->resource->testsuite->view             = 'view';
-$lang->resource->testsuite->edit             = 'edit';
-$lang->resource->testsuite->delete           = 'delete';
-$lang->resource->testsuite->linkCase         = 'linkCase';
-$lang->resource->testsuite->unlinkCase       = 'unlinkCaseAction';
-$lang->resource->testsuite->batchUnlinkCases = 'batchUnlinkCases';
+$lang->resource->testsuite->browse            = 'browse';
+$lang->resource->testsuite->create            = 'create';
+$lang->resource->testsuite->view              = 'view';
+$lang->resource->testsuite->edit              = 'edit';
+$lang->resource->testsuite->delete            = 'delete';
+$lang->resource->testsuite->linkCase          = 'linkCase';
+$lang->resource->testsuite->unlinkCase        = 'unlinkCaseAction';
+$lang->resource->testsuite->batchUnlinkCases  = 'batchUnlinkCases';
+$lang->resource->testsuite->confirmCaseChange = 'confirmCaseChange';
 
 $lang->testsuite->methodOrder[5]  = 'browse';
 $lang->testsuite->methodOrder[10] = 'create';
@@ -1285,6 +1284,7 @@ $lang->testsuite->methodOrder[25] = 'delete';
 $lang->testsuite->methodOrder[30] = 'linkCase';
 $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
+$lang->testsuite->methodOrder[45] = 'confirmCaseChange';
 
 $lang->resource->caselib = new stdclass();
 $lang->resource->caselib->browse           = 'browseAction';
@@ -2243,9 +2243,21 @@ if(!$inUpgrade)
         unset($lang->resource->sonarqube);
         unset($lang->resource->ppm);
         unset($lang->resource->space);
+        unset($lang->resource->instance, $lang->resource->space, $lang->resource->store);
+        unset($lang->resource->zanode,   $lang->resource->ci, $lang->resource->zahost);
+        unset($lang->resource->testcase->showScript, $lang->resource->testcase->automation);
+        unset($lang->resource->design->linkCommit,   $lang->resource->design->viewCommit, $lang->resource->design->unlinkCommit, $lang->resource->design->revision);
+        unset($lang->resource->story->createBranch,  $lang->resource->story->unlinkBranch);
+        unset($lang->resource->bug->createBranch,    $lang->resource->bug->unlinkBranch);
+        unset($lang->resource->task->createBranch,   $lang->resource->task->unlinkBranch);
     }
-    if(!helper::hasFeature('kanban')) unset($lang->resource->kanban);
-
+    if(!helper::hasFeature('kanban'))    unset($lang->resource->kanban);
+    if(!helper::hasFeature('program'))   unset($lang->resource->program, $lang->resource->project->programTitle);
+    if(!helper::hasFeature('caselib'))   unset($lang->resource->caselib, $lang->resource->testcase->confirmLibcaseChange, $lang->resource->testcase->ignoreLibcaseChange, $lang->resource->testcase->importFromLib, $lang->resource->testcase->importToLib);
+    if(!helper::hasFeature('automated')) unset($lang->resource->zanode, $lang->resource->ci, $lang->resource->testcase->showScript, $lang->resource->testcase->automation);
+    if(!helper::hasFeature('testsuite')) unset($lang->resource->testsuite);
+    if(!helper::hasFeature('AI'))        unset($lang->resource->aiapp, $lang->resource->zai, $lang->resource->ai);
+    if(!helper::hasFeature('BI'))        unset($lang->resource->screen, $lang->resource->pivot, $lang->resource->chart, $lang->resource->metric, $lang->resource->dimension);
     if(!$config->systemScore) unset($lang->resource->my->score);
 }
 

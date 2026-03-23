@@ -26,7 +26,7 @@ for($i = $case->version; $i >= 1; $i--)
     $versionItem = setting()
         ->text("#{$i}")
         ->set('data-app', $app->tab)
-        ->url(createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
+        ->url(createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}"));
 
     if($isInModal)
     {
@@ -179,8 +179,8 @@ $stepsTable = !empty($case->steps) ? div
 
 $stepsActions = array();
 $stepsMisc    = isInModal() ? array('data-load' => 'modal', 'data-target' => '.modal-content') : array();
-$stepsActions['items'][] = $stepsMisc + array('icon' => 'table', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
-$stepsActions['items'][] = $stepsMisc + array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'table', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=table&suiteID={$suiteID}"));
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$version}&from={$from}&taskID={$taskID}&stepsType=mindmap&suiteID={$suiteID}"));
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();

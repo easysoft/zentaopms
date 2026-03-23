@@ -19,60 +19,66 @@ $lang->install->error  = 'Error ';
 
 $lang->install->officeDomain = 'https://www.zentao.pm';
 
-$lang->install->start            = 'Start';
-$lang->install->keepInstalling   = 'Continue installing this version';
-$lang->install->seeLatestRelease = 'View the latest version';
+$lang->install->start            = 'Install Now';
+$lang->install->keepInstalling   = 'Continue installing Current Version';
+$lang->install->seeLatestRelease = 'Check for Updates';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
-$lang->install->license          = 'License';
+$lang->install->license          = 'License Agreement';
 $lang->install->desc             = <<<EOT
-ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
+ZenTao Project Management Software (ZenTao PMS) is an open-source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> or <a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a> License. It is an all-in-one platform that integrates Product, Project, and Test Management, along with office automation and organizational management—making it the top choice for small and medium-sized enterprises.
 
-ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by ZenTao Software. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
+Built with PHP and MySQL on the proprietary ZenTao PHP framework, it offers high extensibility, allowing third-party developers and organizations to easily develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='https://zentao.pm' target='_blank' class='text-danger'>ZenTao Software</a></strong>.
-Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
-Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
+ZenTao PMS is developed by <strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>ZenTao Software (Qingdao) Co., Ltd. </a></strong>.
+Official Website: <a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
+Technical Support: <a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
+Follow us on LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>ZenTao Software</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
-
-You are installing <strong class='text-danger'>ZenTao %s</strong>.
+You are currently installing version: <strong class='text-danger'>%s</strong>.
 EOT;
 
 $lang->install->selectMode          = "Select mode";
-$lang->install->introduction        = "ZenTao 15.0+ Feature Introduction";
-$lang->install->howToUse            = "How do you like to use ZenTao?";
-$lang->install->guideVideo          = 'https://dl.zentao.net/vedio/zentaoconcepteng0716.mp4';
+$lang->install->introduction        = "15.0+ Feature Introduction of ZenTao ";
+$lang->install->howToUse            = "How do you plan to use the new version of ZenTao?";
+$lang->install->guideVideo          = 'https://dl.zentao.net/vedio/program0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
-  <h4>Dear users,</h4>
-  <p>Welcome to ZenTao project management system. ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
-  <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
-    <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i> <strong>Product</strong></p>
-      <p>Product is used to subdivide the company's strategy into requirements that can be developed, and the product manager can use it to make release plans.<p>
-    </div>
-    <div class='block-details'>
-      <p class='block-title'><i class='icon icon-project'></i> <strong>Project</strong></p>
-      <p>Project is used to organize the manpower for development, track and manage the project process, and complete the project in a faster, better, and less costly way.</p>
-    </div>
-    <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-run'></i> <strong>Execution</strong></p>
-      <p>Execution is used to decompose, assign, and track tasks to ensure that project goals can be implemented by manpower.<p>
-    </div>
-  </div>
-  <div class='text-center introduction-link'>
-    <a href='https://dl.zentao.net/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Introduction Document</a>
-    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Introduction Video</a>
-  </div>
+<h4>Dear users, welcome to ZenTao PMS.</h4>
+<p>ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
+<div class='block-content'>
+<div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>Program</strong></p>
+<p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
+<div class='block-details block-right'>
+<p class='block-title'><i class='icon icon-product'></i> <strong>Product</strong></p>
+<p>Products break down corporate strategy into actionable requirements, allowing Product Managers to create release plans.<p>
 </div>
-EOT;
+<div class='block-details'>
+<p class='block-title'><i class='icon icon-project'></i> <strong>Project</strong></p>
+<p>Projects organize resources for R&D and track the entire management process to ensure efficient, high-quality delivery.</p>
+</div>
+<div class='block-details block-right'>
+<p class='block-title'><i class='icon icon-run'></i> <strong>Execution</strong></p>
+<p>Execution is used to break down, assign, and track tasks, ensuring that project goals are implemented at the individual level.<p>
+</div>
+</div>
+<div class='text-center introduction-link'>
+<a href='https://dl.zentao.net/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Document Introduction</a>
+<a href='j a v a s c r i p t :showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video Introduction</a>
+</div>
+</div>
+EOT
 
-$lang->install->newReleased = "<strong class='text-danger'>Notice</strong>: Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
+
+
+
+
+;
+
+$lang->install->newReleased = "<strong class='text-danger'>Notice</strong>: The latest version <strong class='text-danger'>%s</strong> is available on the official website, released on %s.";
 $lang->install->or          = 'Or';
-$lang->install->checking    = 'System Checkup';
+$lang->install->checking    = 'System check';
 $lang->install->ok          = 'Passed(√)';
 $lang->install->fail        = 'Failed(×)';
 $lang->install->loaded      = 'Loaded';
@@ -81,43 +87,43 @@ $lang->install->exists      = 'Found ';
 $lang->install->notExists   = 'Not found ';
 $lang->install->writable    = 'Writable ';
 $lang->install->notWritable = 'Not writable ';
-$lang->install->phpINI      = 'PHP ini File';
+$lang->install->phpINI      = 'PHP Configuration File';
 $lang->install->checkItem   = 'Item';
-$lang->install->current     = 'Current Setting';
+$lang->install->current     = 'Current Configuration';
 $lang->install->result      = 'Result';
-$lang->install->action      = 'Action';
+$lang->install->action      = 'Suggestions';
 
 $lang->install->phpVersion = 'PHP Version';
 $lang->install->phpFail    = 'PHP Version should be 5.2.0+';
 
-$lang->install->pdo           = 'PDO';
-$lang->install->pdoFail       = 'Edit php.ini to load PDO extension.';
-$lang->install->pdoMySQL      = 'PDO_MySQL';
-$lang->install->pdoMySQLFail  = 'Edit php.ini to load PDO_MySQL extension.';
+$lang->install->pdo           = 'PDO Extension';
+$lang->install->pdoFail       = 'Modify the PHP configuration file to load the PDO extension.';
+$lang->install->pdoMySQL      = 'PDO_MySQL Extension';
+$lang->install->pdoMySQLFail  = 'Modify the PHP configuration file to load the pdo_mysql extension.';
 $lang->install->json          = 'JSON Extension';
-$lang->install->jsonFail      = 'Edit php.ini to load JSON extension.';
+$lang->install->jsonFail      = 'Modify the PHP configuration file to load the JSON extension.';
 $lang->install->openssl       = 'OpenSSL Extension';
-$lang->install->opensslFail   = 'Edit php.ini to load openssl extension.';
+$lang->install->opensslFail   = 'Modify the PHP configuration file to load the OPENSSL extension.';
 $lang->install->mbstring      = 'Mbstring Extension';
-$lang->install->mbstringFail  = 'Edit php.ini to load mbstring extension.';
+$lang->install->mbstringFail  = 'Modify the PHP configuration file to load the MBSTRING extension.';
 $lang->install->zlib          = 'Zlib Extension';
-$lang->install->zlibFail      = 'Edit php.ini to load zlib extension.';
+$lang->install->zlibFail      = 'Modify the PHP configuration file to load the ZLIB extension.';
 $lang->install->curl          = 'Curl Extension';
-$lang->install->curlFail      = 'Edit php.ini to load curl extension.';
+$lang->install->curlFail      = 'Modify the PHP configuration file to load the CURL extension.';
 $lang->install->filter        = 'Filter Extension';
-$lang->install->filterFail    = 'Edit the php.ini file to load filter extension.';
+$lang->install->filterFail    = 'Modify the PHP configuration file to load the FILTER extension.';
 $lang->install->gd            = 'GD Extension';
-$lang->install->gdFail        = 'Edit the php.ini file to load gd extension.';
+$lang->install->gdFail        = 'Modify the PHP configuration file to load the GD extension.';
 $lang->install->iconv         = 'Iconv Extension';
-$lang->install->iconvFail     = 'Edit the php.ini file to load iconv extension.';
-$lang->install->tmpRoot       = 'Temp Directory';
-$lang->install->dataRoot      = 'Uploaded File Directory';
-$lang->install->session       = 'Session Save Path';
-$lang->install->sessionFail   = 'Edit the php.ini file to set session.save_path.';
-$lang->install->mkdirWin      = '<p>%s directory has to be created.<br /> Run <code>mkdir %s</code> to create it.</p>';
-$lang->install->chmodWin      = ' "%s" privilege has to be changed.';
-$lang->install->mkdirLinux    = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
-$lang->install->chmodLinux    = ' "%s" permison has to be changed.<br /> Run <code>chmod 777 -R %s</code> to change it.';
+$lang->install->iconvFail     = 'Modify the PHP configuration file to load the ICONV extension.';
+$lang->install->tmpRoot       = 'Temporary File Directory';
+$lang->install->dataRoot      = 'Upload File Directory';
+$lang->install->session       = 'Session Storage Directory';
+$lang->install->sessionFail   = 'Modify the PHP configuration file to set session.save_path. <br />If using the BT Panel, go to "App Store" in the BT Web Panel, open PHP settings, go to the "Session Configuration" item, select files, and click Save. For older versions, the PHP configuration file needs to be modified manually.';
+$lang->install->mkdirWin      = '<p>Need to create directory %s. The command is:<br /> mkdir %s</p>';
+$lang->install->chmodWin      = 'Need to modify the permissions of directory "%s".';
+$lang->install->mkdirLinux    = '<p>Need to create directory %s.<br /> The command is:<br /> mkdir -p %s</p>';
+$lang->install->chmodLinux    = 'Need to modify the permissions of directory "%s".<br />The command is:<br />chmod 777 -R %s';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';
@@ -142,14 +148,14 @@ $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Application Lifecycle Management';
 
-$lang->install->errorConnectDB      = 'Connection to the database Failed. ';
-$lang->install->errorDBName         = 'Database name should exclude “.” ';
-$lang->install->errorCreateDB       = 'Failed to create the database.';
+$lang->install->errorConnectDB      = 'Database connection failed.';
+$lang->install->errorDBName         = ' “.” are not allowed in the database name';
+$lang->install->errorCreateDB       = 'Database creation failed.';
 $lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to the previous step and clear data, then continue the installation.';
-$lang->install->errorCreateTable    = 'Failed to create the table.';
+$lang->install->errorCreateTable    = 'Table creation failed.';
 $lang->install->errorEngineInnodb   = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
-$lang->install->errorImportDemoData = 'Failed to import the demo data.';
-$lang->install->errorDBUserPriv     = 'The current database user does not have sufficient permissions! Please switch to the root user or use the following SQL statement to grant the current user permissions:\n';
+$lang->install->errorImportDemoData = 'Importing demo data failed.';
+$lang->install->errorDBUserPriv     = 'The current database user does not have sufficient permissions! \nPlease switch to the root user or use the following SQL statement to grant the current user permissions：\n';
 
 $lang->install->setConfig          = 'Create config file';
 $lang->install->key                = 'Item';
@@ -158,7 +164,7 @@ $lang->install->saveConfig         = 'Save config file';
 $lang->install->save2File          = '<div class="text-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
 $lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
-$lang->install->errorNotInitConfig = 'The configuration has not been created.';
+$lang->install->errorNotInitConfig = 'The configuration file has not been created.';
 
 global $app;
 $lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->basePath}config/config.php file.";
@@ -176,8 +182,8 @@ $lang->install->errorEmpty['account']  = "{$lang->install->account} should not b
 $lang->install->errorEmpty['password'] = "{$lang->install->password} should not be blank.";
 
 $lang->install->langList['1'] = array('module' => 'process', 'key' => 'support', 'value' => 'Support Process');
-$lang->install->langList['2'] = array('module' => 'process', 'key' => 'engineering', 'value' => 'Project Management');
-$lang->install->langList['3'] = array('module' => 'process', 'key' => 'project', 'value' => 'Engineering Process');
+$lang->install->langList['2'] = array('module' => 'process', 'key' => 'engineering', 'value' =>  'Engineering Process');
+$lang->install->langList['3'] = array('module' => 'process', 'key' => 'project', 'value' => 'Project Management');
 
 $lang->install->processList['11'] = 'Project management';
 $lang->install->processList['12'] = 'Project planning';
@@ -185,7 +191,7 @@ $lang->install->processList['13'] = 'Project monitoring';
 $lang->install->processList['14'] = 'Risk management';
 $lang->install->processList['15'] = 'Closing management';
 $lang->install->processList['16'] = 'Quantitative Project management';
-$lang->install->processList['17'] = 'Requirements development';
+$lang->install->processList['17'] = 'Stories development';
 $lang->install->processList['18'] = 'Design and development';
 $lang->install->processList['19'] = 'Implementation and testing';
 $lang->install->processList['20'] = 'System test';
@@ -209,11 +215,11 @@ $lang->install->basicmeasList['12'] = array('name' => 'Actual days of project re
 $lang->install->basicmeasList['13'] = array('name' => 'Actual days of project design phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all design phases under the project');
 $lang->install->basicmeasList['14'] = array('name' => 'Actual number of days during the project development phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all r&d phases under the project');
 $lang->install->basicmeasList['15'] = array('name' => 'Actual number of days during the project test phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all test phases under the project');
-$lang->install->basicmeasList['26'] = array('name' => 'Plan days by product demand phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all requirements phases under the product');
+$lang->install->basicmeasList['26'] = array('name' => 'Plan days by product requirements phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all requirements phases under the product');
 $lang->install->basicmeasList['27'] = array('name' => 'Plan days by product design stage', 'unit' => 'Day', 'definition' => 'The sum of planned days for all design phases under the product');
 $lang->install->basicmeasList['28'] = array('name' => 'Planned days by product development phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all development phases under the product');
 $lang->install->basicmeasList['29'] = array('name' => 'Plan days by product test phase', 'unit' => 'Day', 'definition' => 'The sum of planned days for all test phases under the product');
-$lang->install->basicmeasList['30'] = array('name' => 'Actual days of product demand stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all requirement phases under the product');
+$lang->install->basicmeasList['30'] = array('name' => 'Actual days of product requirements stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all requirement phases under the product');
 $lang->install->basicmeasList['31'] = array('name' => 'Actual days of product design stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all design phases under the product');
 $lang->install->basicmeasList['32'] = array('name' => 'By actual days of product development stage', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all development phases under the product');
 $lang->install->basicmeasList['33'] = array('name' => 'By actual days of product test phase', 'unit' => 'Day', 'definition' => 'The sum of the actual days of all testing phases under the product');
@@ -222,11 +228,11 @@ $lang->install->basicmeasList['35'] = array('name' => 'Total estimated real-time
 $lang->install->basicmeasList['36'] = array('name' => 'Total estimated time of project design work in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all design-related tasks of the project');
 $lang->install->basicmeasList['37'] = array('name' => 'Total estimated time of project development in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all development related tasks of the project');
 $lang->install->basicmeasList['38'] = array('name' => 'Total estimated time of project test work in real time', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours for all test related tasks of the project');
-$lang->install->basicmeasList['39'] = array('name' => 'Actual man-hours consumed by project tasks', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed for all tasks under the project');
-$lang->install->basicmeasList['40'] = array('name' => 'The actual number of man-hours consumed by project demand work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all demand-related tasks of the project');
-$lang->install->basicmeasList['41'] = array('name' => 'The actual number of man-hours consumed by project design work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all design-related tasks of the project');
-$lang->install->basicmeasList['42'] = array('name' => 'The actual number of man-hours consumed by project development work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all development related tasks of the project');
-$lang->install->basicmeasList['43'] = array('name' => 'The actual number of man-hours consumed by the project testing work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours consumed by all test related tasks of the project');
+$lang->install->basicmeasList['39'] = array('name' => 'Actual man-hours cost by project tasks', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours cost for all tasks under the project');
+$lang->install->basicmeasList['40'] = array('name' => 'The actual number of man-hours cost by project requirements work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours cost by all demand-related tasks of the project');
+$lang->install->basicmeasList['41'] = array('name' => 'The actual number of man-hours cost by project design work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours cost by all design-related tasks of the project');
+$lang->install->basicmeasList['42'] = array('name' => 'The actual number of man-hours cost by project development work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours cost by all development related tasks of the project');
+$lang->install->basicmeasList['43'] = array('name' => 'The actual number of man-hours cost by the project testing work', 'unit' => 'Hour','definition' => 'The sum of the actual man-hours cost by all test related tasks of the project');
 $lang->install->basicmeasList['44'] = array('name' => 'Total estimated initial hours of project development work', 'unit' => 'Hour','definition' => 'The sum of the initial estimated work hours of all development related work in the first baseline release of the project plan');
 $lang->install->basicmeasList['45'] = array('name' => 'Total estimated initial hours of project design work', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all design-related work in the first baseline version of the project plan');
 $lang->install->basicmeasList['46'] = array('name' => 'Total estimated initial work hours for project testing', 'unit' => 'Hour','definition' => 'The sum of the initial estimated man-hours of all test-related work in the first baseline release of the project plan');
@@ -257,25 +263,25 @@ $lang->install->groupList['PD']['name']           = 'PD';
 $lang->install->groupList['PD']['desc']           = 'Product Director';
 $lang->install->groupList['QD']['name']           = 'QD';
 $lang->install->groupList['QD']['desc']           = 'Test Director';
-$lang->install->groupList['TOP']['name']          = 'Senior';
+$lang->install->groupList['TOP']['name']          = 'Senior Manager';
 $lang->install->groupList['TOP']['desc']          = 'Senior Manager';
 $lang->install->groupList['OTHERS']['name']       = 'Others';
 $lang->install->groupList['OTHERS']['desc']       = 'other users';
-$lang->install->groupList['LIMITED']['name']      = 'Limited User';
-$lang->install->groupList['LIMITED']['desc']      = 'Users can only edit contents related to themselves.';
+$lang->install->groupList['LIMITED']['name']      = 'Restricted User';
+$lang->install->groupList['LIMITED']['desc']      = 'Restricted User Group (Related Content Editing Only)';
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
-$lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
-$lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
-$lang->install->groupList['LITEADMIN']['desc']    = 'Operation Management Interface Admin';
-$lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
-$lang->install->groupList['LITEPROJECT']['desc']  = 'Operation Management Interface Project';
-$lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
-$lang->install->groupList['LITETEAM']['desc']     = 'Operation Management Interface Team';
+$lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins can manage project permissions.';
+$lang->install->groupList['LITEADMIN']['name']    = 'Admin';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Operations Management User Groups';
+$lang->install->groupList['LITEPROJECT']['name']  = 'Project Management';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Operations Management User Groups';
+$lang->install->groupList['LITETEAM']['name']     = 'Team Members';
+$lang->install->groupList['LITETEAM']['desc']     = 'Operations Management User Groups';
 
-$lang->install->groupList['IPDPRODUCTPLAN']['name'] = 'PRODUCT PLANING';
-$lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
-$lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
-$lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = 'Product Planner';
+$lang->install->groupList['IPDDEMAND']['name']      = 'Story Analyst';
+$lang->install->groupList['IPDPMT']['name']         = 'PMT Members';
+$lang->install->groupList['IPDADMIN']['name']       = 'Admins';
 
 $lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
 $lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
@@ -296,45 +302,45 @@ $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synch
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
 
 $lang->install->dbProgress = "Installing Database Table";
-$lang->install->dbFinish   = "Table install finished";
+$lang->install->dbFinish   = "Database tables installed successfully";
 $lang->install->success    = "Installed!";
 $lang->install->login      = 'ZenTao Login';
 $lang->install->register   = 'ZenTao Community Signup';
 
-$lang->install->successLabel       = "<p>You have installed ZenTao %s.</p>";
+$lang->install->successLabel       = "<p>You have installed ZenTao successfully %s.</p>";
 $lang->install->successNoticeLabel = "<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php</strong>.</p>";
-$lang->install->congratulations    = "Congratulations! ZenTao has been installed.";
+$lang->install->congratulations    = "Congratulations! ZenTao has been installed successfully.";
 $lang->install->joinZentao         = <<<EOT
-<p>Note: In order to get the latest news of ZenTao, please sign up on ZenTao Community(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>Note: To stay updated with the latest ZenTao news, please register on the ZenTao Community (<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>).</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
+$lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->promotion = "Products also from ZenTao Software:";
+$lang->install->promotion = "Recommended products from the ZenTao family:";
 
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
 $lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
-$lang->install->chanzhi->url  = 'https://www.zsite.net';
+$lang->install->chanzhi->url  = 'https://www.zsite.com';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
-  <li>Article, Blog, Manual, Member, Shop, Forum, Feedback</li>
-  <li>Customize page at will by Theme, Effect, Widget, CSS, JS and layout</li>
-  <li>Support both desktop and mobile in one system</li>
-  <li>Highly optimized for search engines</li>
+<li>Professional enterprise marketing portal system</li>
+<li>Feature-rich with an intuitive and user-friendly interface</li>
+<li>Highly optimized for SEO with attention to every detail</li>
+<li>Open source and free for unlimited commercial use!</li>
 </ul>
 EOD;
 
 $lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->name = 'ZDOO Collaboration';
 $lang->install->zdoo->logo = 'images/main/zdoo.ico';
-$lang->install->zdoo->url  = 'https://www.zdoo.co/';
+$lang->install->zdoo->url  = 'https://www.zdoo.com';
 $lang->install->zdoo->desc = <<<EOD
 <ul>
-  <li>CRM: Customer Management and Order Tracking</li>
-  <li>OA: Approve, Announce, Trip, Leave and more </li>
-  <li>Project, Task and Document management </li>
-  <li>Cash: Income, Expense, Transfer, Invest and Debt</li>
+<li>CRM & Order Tracking</li>
+<li>Project Tasks, Announcements & Docs</li>
+<li>Cash Management: Income & Expenses</li>
+<li>Forums, Blogs & Activity Feeds</li>
 </ul>
 EOD;
 
@@ -380,8 +386,8 @@ EOD;
 $lang->install->solution = new stdclass();
 $lang->install->solution->skip        = 'Skip';
 $lang->install->solution->skipInstall = 'Skip';
-$lang->install->solution->log         = 'Log';
-$lang->install->solution->title       = 'DevOps platform application settings';
-$lang->install->solution->progress    = 'Installing of DevOps platform';
-$lang->install->solution->desc        = 'Welcome to the DevOps platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
+$lang->install->solution->log         = 'Install Log';
+$lang->install->solution->title       = 'CI&CD platform application settings';
+$lang->install->solution->progress    = 'CI&CD platform Installation';
+$lang->install->solution->desc        = 'Welcome to the CI&CD platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
 $lang->install->solution->overMemory  = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';

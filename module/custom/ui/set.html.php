@@ -18,6 +18,7 @@ $formItems   = array();
 $formActions = array('submit');
 $headingTips = null;
 $actionWidth = 'w-1/2';
+$isEn        = $app->getClientLang() == 'en';
 if($module == 'project' && $field == 'unitList')
 {
     $checkedUnitList = array();
@@ -362,7 +363,7 @@ elseif($module == 'user' && $field == 'deleted')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        $isEn ? null : set::labelWidth('100px'),
         set::label($lang->custom->user->fields['deleted']),
         set::name('showDeleted'),
         set::value($showDeleted),
@@ -476,6 +477,7 @@ else
             $system   = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
             $keyLabel = $key === '' ? 'NULL' : $key;
             if($key === 0) $keyLabel = '0';
+            if($app->getClientLang() == 'en' && $key == 'requirement') $keyLabel = $lang->custom->feature;
 
             $formItems[] = formRow
             (

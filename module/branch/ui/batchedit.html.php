@@ -48,7 +48,7 @@ formBatchPanel
     (
         set::name("status"),
         set::label($lang->branch->status),
-        set::control('select'),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items($lang->branch->statusList)
     )
 );

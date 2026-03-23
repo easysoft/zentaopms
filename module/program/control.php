@@ -210,12 +210,20 @@ class program extends control
         $parentProgram = $program->parent ? $this->program->getByID($program->parent) : new stdclass();
         $parents       = $this->program->getParentPairs();
         $parents       = $this->programZen->removeSubjectToCurrent($parents, $programID);
+        $disableParent = false;
+
+        if(!isset($parents[$program->parent]))
+        {
+            $disableParent = true;
+            if(!empty($program->parent)) $parents = array($parentProgram->id => $parentProgram->name);
+        }
 
         $this->view->title = $this->lang->program->edit;
 
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->program        = $program;
         $this->view->parents        = $parents;
+        $this->view->disableParent  = $disableParent;
         $this->view->budgetUnitList = $this->loadModel('project')->getBudgetUnitList();
         $this->view->parentProgram  = $parentProgram;
         $this->view->loadUrl        = $this->createLink('program', 'edit', "programID=$programID&parentProgramID={parent}");

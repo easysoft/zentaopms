@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmFinish', $lang->task->confirmFinish);
+jsVar('confirmTeamFinish', $lang->task->confirmTeamFinish);
+jsVar('currentTeam', $currentTeam);
 
 /* zin: Set variables to define control for form. */
 $assignedToControl = '';
@@ -128,11 +130,7 @@ else
         formGroup
         (
             set::label($lang->comment),
-            editor
-            (
-                set::name('comment'),
-                set::rows('5')
-            )
+            editor(set::name('comment'), set::rows('5'))
         )
     );
     hr();

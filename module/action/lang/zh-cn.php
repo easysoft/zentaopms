@@ -458,6 +458,7 @@ $lang->action->label->editestimate            = '编辑了工时';
 $lang->action->label->editeffort              = '编辑了工时';
 $lang->action->label->canceled                = '取消了';
 $lang->action->label->finished                = '完成了';
+$lang->action->label->failed                  = '执行失败';
 $lang->action->label->paused                  = '暂停了';
 $lang->action->label->verified                = '验收了';
 $lang->action->label->delayed                 = '延期了';

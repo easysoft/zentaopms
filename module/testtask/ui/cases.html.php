@@ -14,8 +14,9 @@ $app->loadLang('zanode');
 
 jsVar('automation',     !empty($automation) ? $automation->id : 0);
 jsVar('runCaseConfirm', $lang->zanode->runCaseConfirm);
+jsVar('canImportToLib', helper::hasFeature('caselib'));
 
-$canCreateSuite = hasPriv('testsuite', 'create');
+$canCreateSuite = hasPriv('testsuite', 'create') && helper::hasFeature('testsuite');
 $canGroupCase   = hasPriv('testtask', 'groupcase');
 $canLinkCase    = hasPriv('testtask', 'linkCase');
 $canExport      = hasPriv('testcase', 'export');
@@ -59,7 +60,7 @@ else
 featureBar
 (
     set::linkParams("taskID={$task->id}&browseType={key}&param=0"),
-    dropdown
+    helper::hasFeature('testsuite') ? dropdown
     (
         btn
         (
@@ -67,7 +68,7 @@ featureBar
             $suiteName
         ),
         set::items($suiteItems)
-    ),
+    ) : null,
     li(searchToggle(set::open($browseType == 'bysearch')))
 );
 

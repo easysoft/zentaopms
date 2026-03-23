@@ -123,10 +123,10 @@ class upgradeModel extends model
         /* Means open source/pro upgrade to biz or max. */
         if($this->config->edition != 'open' && ($fromEdition == 'open' || $fromEdition == 'pro'))
         {
-            $methods['importBuildinModules']       = [];
-            $methods['importLiteModules']          = [];
-            $methods['addSubStatus']               = [];
-            $methods['processDataset']             = [];
+            $methods['importBuildinModules'] = [];
+            $methods['importLiteModules']    = [];
+            $methods['addSubStatus']         = [];
+            $methods['processDataset']       = [];
         }
 
         $methods['upgradeScreenAndMetricData'] = [];
@@ -8083,7 +8083,7 @@ class upgradeModel extends model
         if(strpos($this->fromVersion, 'max') !== false && version_compare($this->fromVersion, 'max4.2', '>=')) return true;
 
         $URSwitchStatus = $this->loadModel('setting')->getItem("owner=system&module=custom&key=URAndSR");
-        if(!$URSwitchStatus)
+        if(!$URSwitchStatus && $this->config->edition != 'ipd')
         {
             $closedFeatures = $this->setting->getItem('owner=system&module=common&key=closedFeatures');
             if(strpos($closedFeatures, 'productUR') === false) $closedFeatures .= ',productUR';
@@ -13007,7 +13007,6 @@ class upgradeModel extends model
      */
     public function upgradeClosedFeature()
     {
-
         $disabledFeatures = $this->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('closedFeatures')->andWhere('owner')->eq('system')->fetch('value');
         if(empty($disabledFeatures)) return true;
 

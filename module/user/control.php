@@ -899,10 +899,11 @@ class user extends control
             $this->loadModel('mail');
             if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
 
-            $code = uniqid();
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($user->account)->exec();
+            $token   = bin2hex(random_bytes(16));
+            $expired = strtotime("+{$this->config->user->resetPasswordTimeout} minutes");
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(md5($token))->set('resetExpired')->eq($expired)->where('account')->eq($user->account)->exec();
 
-            $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'token=' . $token)), '', true, array(), true);
             if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
@@ -916,41 +917,38 @@ class user extends control
      * 邮箱重置密码。
      * Reset password by email.
      *
-     * @param  string $code
+     * @param  string $token
      * @access public
      * @return void
      */
-    public function resetPassword(string $code)
+    public function resetPassword(string $token)
     {
-        $expired = true;
-        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"code":"' . $code . '"%')->fetch();
-        if($user)
+        $account = '';
+        if(preg_match("/^[a-z0-9]{32}$/i", $token))
         {
-            $resetToken = json_decode($user->resetToken);
-            if($resetToken->endTime >= time()) $expired = false;
+            $account = $this->dao->select('account')->from(TABLE_USER)->where('resetToken')->eq(md5($token))->andWhere('resetExpired')->gt(time())->fetch('account');
         }
 
         if(!empty($_POST))
         {
-            if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
+            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
 
             $user = form::data($this->config->user->form->resetPassword)
-                ->add('account', $user->account)
+                ->add('account', $account)
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
 
             $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($user->account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->set('resetExpired')->eq(0)->where('account')->eq($account)->exec();
 
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->saveSuccess, 'load' => inlink('login')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('login')));
         }
 
         $this->view->title   = $this->lang->user->resetPWD;
         $this->view->rand    = updateSessionRandom();
-        $this->view->expired = $expired;
-
+        $this->view->expired = empty($account);
         $this->display();
     }
 

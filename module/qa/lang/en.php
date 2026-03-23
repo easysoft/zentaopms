@@ -10,4 +10,4 @@
  * @link        https://www.zentao.net
  */
 $lang->qa->index       = 'QA Home';
-$lang->qa->indexAction = 'QA Index';
+$lang->qa->indexAction = 'Test Overview';

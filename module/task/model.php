@@ -186,7 +186,7 @@ class taskModel extends model
                 $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
             }
 
-            if(!empty($task->story) && !empty($task->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+            if(!empty($task->story) && !empty($oldTask->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
 
             if(!$syncStatus && $oldTask->status == 'wait' && $task->status == 'doing')
             {
@@ -194,6 +194,31 @@ class taskModel extends model
                 $this->loadModel('common')->syncPPEStatus($oldTask->id);
             }
 
+            if($this->config->edition != 'open' && $task->story != $oldTask->story)
+            {
+                if($oldTask->story > 0)
+                {
+                    $this->dao->delete()->from(TABLE_RELATION)
+                        ->where('relation')->eq('generated')
+                        ->andWhere('AID')->eq($oldTask->story)
+                        ->andWhere('AType')->eq('story')
+                        ->andWhere('BID')->eq($oldTask->id)
+                        ->andWhere('BType')->eq('task')
+                        ->exec();
+                }
+
+                if($task->story > 0)
+                {
+                    $relation = new stdClass();
+                    $relation->relation = 'generated';
+                    $relation->AID      = $task->story;
+                    $relation->AType    = 'story';
+                    $relation->BID      = $oldTask->id;
+                    $relation->BType    = 'task';
+                    $relation->product  = 0;
+                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                }
+            }
         }
 
         return !dao::isError();
@@ -332,10 +357,11 @@ class taskModel extends model
      * @param  array      $changes
      * @param  float      $left
      * @param  array      $output
+     * @param  string     $message
      * @access public
      * @return array|bool
      */
-    public function afterStart(object $oldTask, array $changes, float $left, array $output = array()): array|bool
+    public function afterStart(object $oldTask, array $changes, float $left, array $output = array(), string $message = ''): array|bool
     {
         /* Update the data of the parent task. */
         if($oldTask->parent > 0) $this->computeBeginAndEnd($oldTask->parent);
@@ -348,7 +374,6 @@ class taskModel extends model
 
         /* Send Webhook notifications and synchronize status to execution, project and program. */
         $oldExecution = $this->loadModel('execution')->fetchByID($oldTask->execution);
-        $this->executeHooks($oldTask->id);
         $this->loadModel('common')->syncPPEStatus($oldTask->id);
 
         /* Remind whether to update status of the bug, if task which from that bug has been finished. */
@@ -361,7 +386,7 @@ class taskModel extends model
         if($oldExecution->status == 'wait')
         {
             $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
-            if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
+            if(($this->app->tab == 'execution' || $inLiteKanban) && $oldExecution->type == 'kanban') return array('result' => 'success', 'message' => $message, 'load' => true);
         }
 
         return true;
@@ -596,6 +621,8 @@ class taskModel extends model
             }
             $this->updateKanbanForBatchCreate($taskID, $executionID, $laneID, (int)$columnID);
 
+            $this->executeHooks($taskID);
+
             $taskIdList[$taskID] = $taskID;
         }
         return $taskIdList;
@@ -691,6 +718,8 @@ class taskModel extends model
                 foreach(dao::getError() as $field => $error) dao::$errors["{$field}[{$taskID}]"] = $error;
                 return false;
             }
+
+            $this->executeHooks($taskID);
 
             /* Create the task description of the current version in the database. */
             $oldTask = zget($oldTasks, $taskID);
@@ -3144,7 +3173,8 @@ class taskModel extends model
     public function start(object $oldTask, object $task): false|array
     {
         /* Process data for multiple tasks. */
-        $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team) : array();
+        $account     = $this->app->user->account;
+        $currentTeam = !empty($oldTask->team) ? $this->getTeamByAccount($oldTask->team, $account, array()) : '';
         if($currentTeam)
         {
             /* Update task team. */
@@ -3172,7 +3202,7 @@ class taskModel extends model
             if(count($finishedUsers) == count($oldTask->team))
             {
                 $task->status       = 'done';
-                $task->finishedBy   = $this->app->user->account;
+                $task->finishedBy   = $account;
                 $task->finishedDate = $now;
             }
         }

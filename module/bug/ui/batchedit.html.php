@@ -14,7 +14,6 @@ jsVar('tab', $app->tab);
 jsVar('modules', $modules);
 jsVar('products', $products);
 jsVar('branchTagOption', $branchTagOption);
-jsVar('productBugOptions', $productBugOptions);
 jsVar('executionMembers', isset($executionMembers) ? $executionMembers : array());
 jsVar('projectMembers', isset($projectMembers) ? $projectMembers : array());
 jsVar('productMembers', isset($productMembers) ? $productMembers : array());

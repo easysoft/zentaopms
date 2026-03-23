@@ -20,7 +20,7 @@ jsVar('pageID', $pager->pageID);
 unset($programs[0]);
 featureBar
 (
-    to::before
+    helper::hasFeature('program') ? to::before
     (
         div
         (
@@ -34,7 +34,7 @@ featureBar
                 on::change('changeProgram')
             )
         )
-    ),
+    ) : null,
     set::current($browseType),
     set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox

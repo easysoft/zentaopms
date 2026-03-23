@@ -12,16 +12,13 @@ namespace zin;
 
 toolbar
 (
-    btngroup
+    hasPriv('user', 'create') ? btn
     (
-        btn
-        (
-            setClass('btn primary'),
-            set::icon('plus'),
-            set::url(helper::createLink('user', 'create', "deptID={$deptID}")),
-            $lang->user->create
-        )
-    )
+        setClass('btn primary'),
+        set::icon('plus'),
+        set::url(helper::createLink('user', 'create', "deptID={$deptID}")),
+        $lang->user->create
+    ) : null
 );
 
 dtable

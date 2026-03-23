@@ -3729,4 +3729,22 @@ class executionTaoTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * 更新项目的工时。
+     * Update project hours.
+     *
+     * @param  int $newProjectID
+     * @param  int $oldProjectID
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function updateProjectHoursTest(int $newProjectID, int $oldProjectID, int $executionID): bool
+    {
+        $result = $this->objectModel->updateProjectHours($newProjectID, $oldProjectID, $executionID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }

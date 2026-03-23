@@ -57,9 +57,7 @@ if(data('executionType') && data('executionType') == 'kanban')
         ->value(data('laneID'));
 }
 
-$fields->field('title')
-    ->className('full:w-full')
-    ->control('colorInput', array('colorValue' => data('bug.color')));
+$fields->field('title')->control('colorInput', array('colorValue' => data('bug.color')));
 
 $fields->field('type')
     ->width('1/6')

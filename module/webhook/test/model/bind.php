@@ -21,6 +21,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备测试数据
+zenData('lang')->loadYaml('lang')->gen(5);
+zenData('user')->gen(5);
 zenData('webhook')->gen(3);
 zenData('oauth')->gen(0);
 

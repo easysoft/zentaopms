@@ -11,6 +11,59 @@ title=测试 testtaskModel->getByBuild();
 timeout=0
 cid=19164
 
+- 获取 ID 为 0 的测试单，返回 false。 @0
+- 获取 ID 为 16 的测试单，返回 false。 @0
+- 获取 ID 为 1 的测试单的详细信息。
+ - 属性project @11
+ - 属性name @测试单1
+ - 属性product @1
+ - 属性execution @101
+ - 属性build @11
+ - 属性owner @user3
+ - 属性desc @这是测试单描述1
+ - 属性status @wait
+ - 属性auto @no
+- 获取 ID 为 2 的测试单的详细信息。
+ - 属性project @12
+ - 属性name @测试单2
+ - 属性product @2
+ - 属性execution @102
+ - 属性build @12
+ - 属性owner @user4
+ - 属性desc @这是测试单描述2
+ - 属性status @doing
+ - 属性auto @no
+- 获取 ID 为 3 的测试单的详细信息。
+ - 属性project @13
+ - 属性name @测试单3
+ - 属性product @3
+ - 属性execution @103
+ - 属性build @13
+ - 属性owner @user5
+ - 属性desc @这是测试单描述3
+ - 属性status @done
+ - 属性auto @no
+ - 获取 ID 为 4 的测试单的详细信息。
+ - 属性project @14
+ - 属性name @测试单4
+ - 属性product @4
+ - 属性execution @104
+ - 属性build @14
+ - 属性owner @user6
+ - 属性desc @这是测试单描述4
+ - 属性status @blocked
+ - 属性auto @no
+- 获取 ID 为 5 的测试单的详细信息。
+ - 属性project @15
+ - 属性name @测试单5
+ - 属性product @5
+ - 属性execution @105
+ - 属性build @15
+ - 属性owner @user7
+ - 属性desc @这是测试单描述5
+ - 属性status @wait
+ - 属性auto @no
+
 */
 
 global $tester;

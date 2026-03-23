@@ -81,10 +81,21 @@ class zui extends wg
 
     public static function create(string $name, ?array $options = null)
     {
+        $zinEvents = [];
+        $jsOptions = [];
+        if(is_array($options))
+        {
+            foreach($options as $key => $value)
+            {
+                if(str_starts_with($key, '@')) $zinEvents[$key] = $value;
+                else $jsOptions[$key] = $value;
+            }
+        }
         return array
         (
             set('zui-create', ''),
-            set("zui-create-$name", is_array($options) ? js::value(array_filter_null($options)) : '')
+            set("zui-create-$name", empty($jsOptions) ? '' : js::value($jsOptions)),
+            empty($zinEvents) ? null : set($zinEvents)
         );
     }
 

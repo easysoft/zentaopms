@@ -384,4 +384,21 @@ class testsuite extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
     }
+
+    /**
+     * 确认用例变更。
+     * Confirm testcase changed.
+     *
+     * @param  int    $caseID
+     * @param  int    $suiteID
+     * @param  string $from view|list
+     * @access public
+     * @return void
+     */
+    public function confirmCaseChange(int $caseID, int $suiteID = 0, string $from = 'list')
+    {
+        $case = $this->loadModel('testcase')->getById($caseID);
+        $this->dao->update(TABLE_SUITECASE)->set('version')->eq($case->version)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($caseID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $from == 'list' ? true : $this->createLink('testcase', 'view', "caseID={$caseID}&version={$case->version}&from=testsuite&taskID=0&stepsType=&suiteID={$suiteID}")));
+    }
 }

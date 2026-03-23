@@ -9,7 +9,12 @@ cid=15863
 
 - 步骤1：正常情况 @1
 - 步骤2：边界值 @1
+- 步骤3：异常输入 @1
+- 步骤4：权限验证 @1
 - 步骤5：业务规则 @1
+- 步骤6：数据完整性 @1
+- 步骤7：边界条件 @1
+- 步骤8：模式切换 @1
 
 */
 
@@ -62,6 +67,7 @@ try {
 } catch (Exception $e) {
     // 忽略更新错误
 }
+$_SESSION['jiraUser'] = array('password' => '123456', 'mode' => 'email');
 
 $usergroup = zenData('usergroup');
 $usergroup->account->range('admin,existing1,testuser');

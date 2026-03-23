@@ -10,11 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$labelWidth = $method == 'db' ? '80px' : '100px';
+$labelWidth = $method == 'db' ? '80px' : '120px';
+$isSetLabelWidth = $app->getClientLang() == 'en' ? null : set::labelWidth($labelWidth);
+
+$title = $lang->convert->jira->importFromDB;
+if($method == 'file')
+{
+    $title = $lang->convert->jira->importFromFile;
+}
+elseif($method == 'api')
+{
+    $title = $lang->convert->jira->importFromAPI;
+}
 
 formPanel
 (
-    set::title($method == 'db' ? $lang->convert->jira->importFromDB : $lang->convert->jira->importFromFile),
+    set::title($title),
     set::headingClass('justify-start'),
     set::bodyClass('px-0'),
     set::submitBtnText($lang->convert->jira->next),
@@ -30,50 +41,50 @@ formPanel
     ),
     formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('1.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         $lang->convert->jira->importSteps[$method][1]
     ),
     formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('2.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         $lang->convert->jira->importSteps[$method][2]
     ),
     formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('3.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         $method == 'db' ? $lang->convert->jira->importSteps[$method][3] : html(sprintf($lang->convert->jira->importSteps[$method][3], $app->getTmpRoot() . 'jirafile'))
     ),
     formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('4.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         html(sprintf($lang->convert->jira->importSteps[$method][4], $app->getTmpRoot()))
     ),
-    formGroup
+    $method != 'api' ? formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('5.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         $lang->convert->jira->importSteps[$method][5]
-    ),
+    ) : null,
     $method == 'file' ? formGroup
     (
-        setStyle(array('align-items' => 'center')),
+        setStyle(array('align-items' => 'center', 'white-space' => 'break-spaces')),
         set::label('6.'),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         $lang->convert->jira->importSteps[$method][6]
     ) : null,
     $method == 'db' ? formGroup
     (
         set::label($lang->convert->jira->database),
-        set::labelWidth($labelWidth),
+        $isSetLabelWidth,
         set::required(true),
         input
         (
@@ -82,10 +93,11 @@ formPanel
             set::placeholder($lang->convert->jira->dbNameNotice)
         )
     ) : null,
-    $method == 'file' ? formGroup
+    in_array($method, ['file', 'api']) ? formGroup
     (
         set::label($lang->convert->jira->domain),
-        set::labelWidth($labelWidth),
+        set::required($method == 'api'),
+        $isSetLabelWidth,
         input
         (
             setClass('w-72'),
@@ -93,10 +105,11 @@ formPanel
             set::value(zget($jiraApi, 'domain', ''))
         )
     ) : null,
-    $method == 'file' ? formGroup
+    in_array($method, ['file', 'api']) ? formGroup
     (
         set::label($lang->convert->jira->admin),
-        set::labelWidth($labelWidth),
+        set::required($method == 'api'),
+        $isSetLabelWidth,
         input
         (
             setClass('w-72'),
@@ -104,10 +117,11 @@ formPanel
             set::value(zget($jiraApi, 'admin', ''))
         )
     ) : null,
-    $method == 'file' ? formGroup
+    in_array($method, ['file', 'api']) ? formGroup
     (
-        set::label($lang->convert->jira->token),
-        set::labelWidth($labelWidth),
+        set::label($method == 'api' ? $lang->convert->jira->apiToken : $lang->convert->jira->token),
+        set::required($method == 'api'),
+        $isSetLabelWidth,
         input
         (
             setClass('w-72'),

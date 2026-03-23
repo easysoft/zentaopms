@@ -17,7 +17,9 @@ namespace zin;
  */
 function printFlowchart()
 {
-    global $lang;
+    global $lang, $app;
+
+    $isEn = $app->getClientLang() == 'en';
 
     $charts = array();
     foreach($lang->block->flowchart as $flowName => $flow)
@@ -29,9 +31,11 @@ function printFlowchart()
             $items[] = div
             (
                 set('class', "flow-item flow-item-$index " . ($index >= 1 ? 'flow-item-arrow' : '')),
+                $isEn ? set::style(array('flex' => '0 1 14%')) : null,
                 div
                 (
                     set('class', 'flow-item-display'),
+                    $isEn ? set::title($flowItem) : null,
                     $flowItem
                 )
             );

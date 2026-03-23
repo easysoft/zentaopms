@@ -94,10 +94,10 @@ $config->testtask->cases->actionList['runCase']['data-size']   = 'lg';
 $config->testtask->cases->actionList['runCase']['data-toggle'] = 'modal';
 $config->testtask->cases->actionList['runCase']['class']       = 'testtask-runCase-btn';
 
-$config->testtask->cases->actionList['results']['icon'] = 'list-alt';
-$config->testtask->cases->actionList['results']['text'] = $lang->testtask->results;
-$config->testtask->cases->actionList['results']['hint'] = $lang->testtask->results;
-$config->testtask->cases->actionList['results']['url']  = array('module' => 'testtask', 'method' => 'results', 'params' => 'id={id}');
+$config->testtask->cases->actionList['results']['icon']        = 'list-alt';
+$config->testtask->cases->actionList['results']['text']        = $lang->testtask->results;
+$config->testtask->cases->actionList['results']['hint']        = $lang->testtask->results;
+$config->testtask->cases->actionList['results']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'id={id}');
 $config->testtask->cases->actionList['results']['data-size']   = 'lg';
 $config->testtask->cases->actionList['results']['data-toggle'] = 'modal';
 $config->testtask->cases->actionList['results']['class']       = 'testtask-results-btn';

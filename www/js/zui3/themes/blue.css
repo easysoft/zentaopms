@@ -1,4 +1,6 @@
+@import './common.css';
+
 :root
 {
-  --zt-menu-bg: var(--color-primary-500);
+    --zt-menu-active-bg: var(--color-primary-400)!important;
 }

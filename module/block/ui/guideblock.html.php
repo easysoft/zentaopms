@@ -89,6 +89,7 @@ $config->projectLink   = $projectLink;
 $config->executionLink = $executionLink;
 
 $usedMode = zget($config->global, 'mode', 'light');
+$isEn     = $app->getClientLang() == 'en';
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
 blockPanel
 (
@@ -111,6 +112,7 @@ blockPanel
         (
             set('width', '18%'),
             set('class', 'border-r overflow-y-auto px-2 py-4'),
+            $isEn ? set::style(array('flex' => '0 0 18%')) : null,
             ul
             (
                 set('class', 'nav nav-stacked'),

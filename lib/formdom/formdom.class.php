@@ -364,11 +364,11 @@ class formdom
             if(preg_match($valuePattern, $pickerConfig, $valueMatches))
             {
                 /* 匹配优先级：数组 > 双引号字符串 > 单引号字符串 > 数字 > 布尔/null */
-                $defaultValue = !empty($valueMatches[5]) ? $valueMatches[5] // 优先级1：数组内容
-                    : (!empty($valueMatches[1]) ? $valueMatches[1]          // 优先级2：双引号字符串
-                    : (!empty($valueMatches[2]) ? $valueMatches[2]          // 优先级3：单引号字符串
-                    : (!empty($valueMatches[3]) ? $valueMatches[3]          // 优先级4：数字
-                    : $valueMatches[4] ?? null)));                           // 优先级5：布尔/null
+                $defaultValue = !empty($valueMatches[5]) ? $valueMatches[5]                    // 优先级1：数组内容
+                    : (!empty($valueMatches[1]) ? $valueMatches[1]                             // 优先级2：双引号字符串
+                    : (!empty($valueMatches[2]) ? $valueMatches[2]                             // 优先级3：单引号字符串
+                    : (!empty($valueMatches[3]) || $valueMatches[3] === '0' ? $valueMatches[3] // 优先级4：数字
+                    : $valueMatches[4] ?? null)));                                             // 优先级5：布尔/null
 
 
                 /* 转换类型（如"true"→true，"123"→123）*/

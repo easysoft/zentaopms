@@ -21,7 +21,7 @@ window.renderRowData = function($row, index, row)
         if(stageItems.length > 0)
         {
             options.items    = stageItems;
-            options.name     = 'attribute[' + row.id + ']';
+            options.name     = 'attribute';
             options.disabled = row.grade > 1 && parentType != 'mix';
             if(projectModel == 'ipd') options.disabled = true;
         }
@@ -32,6 +32,7 @@ window.renderRowData = function($row, index, row)
         {
             let $attribute = info[0];
             $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
+            $attribute.$.setValue(row.attribute);
             if(typeof row != 'undefined' && typeof row.hasDeliverable != 'undefined') $attribute.render({disabled: true});
             $(e.target).attr('data-parent', row.parent);
         });

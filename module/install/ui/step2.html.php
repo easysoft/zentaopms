@@ -36,7 +36,7 @@ div
                     h::tr
                     (
                         h::th(setClass('text-right w-1/5'), $lang->install->key),
-                        h::th($lang->install->value),
+                        h::th(setClass('w-1/3'), $lang->install->value),
                         h::th()
                     ),
                     h::tr

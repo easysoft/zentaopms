@@ -11,7 +11,7 @@ class viewPage extends page
             'modalText'        => "//*[@class='modal-body']",             //总计消耗和预计剩余都为空或0时弹窗提示
             'confirmBtn'       => "//*[@class='modal-footer']//button[1]",
             /* 基本信息 */
-            'taskStatus' => "//div[contains(@class, 'task-status')]//span",
+            'taskStatus' => "//div[contains(@class, 'task-status')]/div[2]/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

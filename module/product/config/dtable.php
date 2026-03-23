@@ -196,6 +196,8 @@ $config->product->all->dtable->fieldList['createdDate']['type']     = 'date';
 $config->product->all->dtable->fieldList['createdDate']['sortType'] = true;
 $config->product->all->dtable->fieldList['createdDate']['group']    = '1';
 
+$isEn = $app->getClientLang() == 'en';
+
 if($config->enableER)
 {
     $config->product->all->dtable->fieldList['draftEpics']['name']        = 'draftEpics';
@@ -251,6 +253,13 @@ if($config->enableER)
     $config->product->all->dtable->fieldList['epicCompleteRate']['sortType']    = false;
     $config->product->all->dtable->fieldList['epicCompleteRate']['group']       = 'epicCount';
     $config->product->all->dtable->fieldList['epicCompleteRate']['headerGroup'] = $lang->ERCommon;
+
+    if($isEn)
+    {
+        $config->product->all->dtable->fieldList['changingEpics']['width']    = 96;
+        $config->product->all->dtable->fieldList['reviewingEpics']['width']   = 96;
+        $config->product->all->dtable->fieldList['epicCompleteRate']['width'] = 112;
+    }
 }
 
 if($config->URAndSR)
@@ -308,6 +317,13 @@ if($config->URAndSR)
     $config->product->all->dtable->fieldList['requirementCompleteRate']['sortType']    = false;
     $config->product->all->dtable->fieldList['requirementCompleteRate']['group']       = 'requirementCount';
     $config->product->all->dtable->fieldList['requirementCompleteRate']['headerGroup'] = $lang->URCommon;
+
+    if($isEn)
+    {
+        $config->product->all->dtable->fieldList['changingRequirements']['width']    = 96;
+        $config->product->all->dtable->fieldList['reviewingRequirements']['width']   = 96;
+        $config->product->all->dtable->fieldList['requirementCompleteRate']['width'] = 112;
+    }
 }
 
 $config->product->all->dtable->fieldList['draftStories']['name']        = 'draftStories';
@@ -438,6 +454,17 @@ $config->product->all->dtable->fieldList['latestRelease']['minWidth']   = 80;
 $config->product->all->dtable->fieldList['latestRelease']['type']       = 'text';
 $config->product->all->dtable->fieldList['latestRelease']['filterType'] = true;
 $config->product->all->dtable->fieldList['latestRelease']['group']      = 'g9';
+
+if($isEn)
+{
+    $config->product->all->dtable->fieldList['changingStories']['width']   = 96;
+    $config->product->all->dtable->fieldList['reviewingStories']['width']  = 96;
+    $config->product->all->dtable->fieldList['storyCompleteRate']['width'] = 112;
+    $config->product->all->dtable->fieldList['executions']['width']        = 80;
+    $config->product->all->dtable->fieldList['testCaseCoverage']['width']  = 136;
+    $config->product->all->dtable->fieldList['unresolvedBugs']['width']    = 120;
+    $config->product->all->dtable->fieldList['releases']['width']          = 120;
+}
 
 if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')
 {

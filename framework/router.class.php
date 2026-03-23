@@ -299,6 +299,10 @@ class router extends baseRouter
 
         $config->disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
+        /* Sanplex hide features. */
+        $this->loadModuleConfig('common');
+        if(!empty($config->hiddenFeature)) $config->disabledFeatures .= ',' . implode(',', $config->hiddenFeature);
+
         /* Record system score.*/
         $config->systemScore = $score;
 

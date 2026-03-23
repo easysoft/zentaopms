@@ -1235,7 +1235,7 @@ class baseHelper
     {
         if(empty($data)) return $data;
         if(!is_object($data) && !is_array($data)) return $data;
-        if(!static::needDecodeHtmlSpecialChars()) return $data;
+        if(!self::needDecodeHtmlSpecialChars()) return $data;
 
         global $app, $config;
 
@@ -1244,18 +1244,18 @@ class baseHelper
 
         if(!isset($config->action->objectNameFields)) $app->loadConfig('action');
         $titleField = $config->action->objectNameFields[$objectType] ?? '';
-        if(!$titleField || $titleField == 'id') return $data;
+        if(!$titleField) return $data;
 
         if(is_object($data))
         {
-            if(isset($data->$titleField)) $data->$titleField = htmlspecialchars_decode($data->$titleField, ENT_QUOTES);
+            if(isset($data->$titleField)) $data->$titleField = htmlspecialchars_decode((string)$data->$titleField, ENT_QUOTES);
             return $data;
         }
 
         foreach($data as $key => $row)
         {
-            if(is_object($row) && isset($row->$titleField)) $row->$titleField = htmlspecialchars_decode($row->$titleField, ENT_QUOTES);
-            if(is_array($row)  && isset($row[$titleField])) $row[$titleField] = htmlspecialchars_decode($row[$titleField], ENT_QUOTES);
+            if(is_object($row) && isset($row->$titleField)) $row->$titleField = htmlspecialchars_decode((string)$row->$titleField, ENT_QUOTES);
+            if(is_array($row)  && isset($row[$titleField])) $row[$titleField] = htmlspecialchars_decode((string)$row[$titleField], ENT_QUOTES);
             $data[$key] = $row;
         }
         return $data;

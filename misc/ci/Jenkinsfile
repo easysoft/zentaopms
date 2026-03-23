@@ -229,7 +229,7 @@ pipeline {
                 script {
                   // 仅制作开源版时不上传收费版相关源码
                   if (params.publish_exts!="open") {
-                    buildPkg.uploadSource("php8.1", ["php0.0", "php8.1", "php7.0", "php7.1", "php7.2_7.4"])
+                    buildPkg.uploadSource("php8.1", ["php0.0", "php8.4", "php8.1", "php7.0", "php7.1", "php7.2_7.4"])
                   }
                 }
               }
@@ -274,7 +274,7 @@ pipeline {
               }
               axis {
                 name "PHPVERSION"
-                values "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
+                values "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1", "php8.4"
               }
             }
             excludes {

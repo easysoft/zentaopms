@@ -28,6 +28,7 @@ class fileEntry extends entry
 
         return $this->send(200, $data);
     }
+
     /**
      * PUT method.
      *

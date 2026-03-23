@@ -1,15 +1,11 @@
 var custom = false;
-$(function()
-{
-    loadResult();
-});
-
 $('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', function(e, info)
 {
     const $target = $(e.target);
     if($target.is('.modal') || (Array.isArray(info) && info[0] instanceof zui.Modal))
     {
-        if($(e.target).attr('id').indexOf('fileModal') == -1) loadCurrentPage();
+        const modalID = $target.attr('id');
+        if(modalID.indexOf('fileModal') == -1 && modalID.indexOf('stepResultFileModal') == -1) loadCurrentPage();
     }
 });
 
@@ -19,7 +15,7 @@ $('#runCaseModal').closest('.modal').off('hide.zui.modal').on('hide.zui.modal', 
  * @access public
  * @return void
  */
-function loadResult()
+window.loadResult = function()
 {
     loadCurrentPage({url: resultsLink, selector: '#casesResults', partial: true});
     window.waitDom('#casesResults .result-item', function(){ $('#casesResults .result-item').first().trigger('click');})

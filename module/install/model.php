@@ -214,6 +214,12 @@ class installModel extends model
             $dbFile = $dbPath . 'pgsql_function.sql';
             $tables = explode('--', file_get_contents($dbFile));
         }
+        elseif($this->config->db->driver == 'dm')
+        {
+            $dbFile = $dbPath . 'dm_function.sql';
+            $tables = explode('--', file_get_contents($dbFile));
+        }
+
 
         foreach($tables as $table)
         {
@@ -242,11 +248,8 @@ class installModel extends model
 
         if($this->config->db->driver == 'dm')
         {
-            $dbFile     = $dbPath . 'dm.sql';
-            $dbFuncFile = $dbPath . 'dm_function.sql';
-
-            $tables   = explode(';', file_get_contents($dbFile));
-            $tables[] = file_get_contents($dbFuncFile);
+            $dbFile = $dbPath . 'dm.sql';
+            $tables = explode(';', file_get_contents($dbFile));
         }
         elseif(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
         {

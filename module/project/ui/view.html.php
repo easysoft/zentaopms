@@ -14,18 +14,21 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
-$programDom     = array();
-$hasProgramPriv = common::hasPriv('program', 'product');
-foreach(toIntArray($project->path) as $programID)
+$programDom = array();
+if(helper::hasFeature('program'))
 {
-    if(!isset($programList[$programID])) continue;
+    $hasProgramPriv = common::hasPriv('program', 'product');
+    foreach(toIntArray($project->path) as $programID)
+    {
+        if(!isset($programList[$programID])) continue;
 
-    $name         = $programList[$programID];
-    $programLink  = $hasProgramPriv ? $this->createLink('program', 'product', "programID={$programID}") : '';
-    $programName  = $hasProgramPriv ? "<a href='{$programLink}' title='{$name}'>{$name}</a>" : "<span title='{$name}'>{$name}</span>";
-    $programDom[] = $programName;
+        $name         = $programList[$programID];
+        $programLink  = $hasProgramPriv ? $this->createLink('program', 'product', "programID={$programID}") : '';
+        $programName  = $hasProgramPriv ? "<a href='{$programLink}' title='{$name}'>{$name}</a>" : "<span title='{$name}'>{$name}</span>";
+        $programDom[] = $programName;
+    }
+    if($programDom) $programDom = div(icon('program mr-2 text-primary'), html(implode('/ ', $programDom)));
 }
-if($programDom) $programDom = div(icon('program mr-2 text-primary'), html(implode('/ ', $programDom)));
 
 $status = $this->processStatus('project', $project);
 

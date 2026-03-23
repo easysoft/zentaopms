@@ -54,7 +54,7 @@ class datalist extends wg
             (
                 setClass('datalist-item-label', $labelClass),
                 set::title($label),
-                $label
+                span(setClass('text'), $label)
             ),
             div
             (
@@ -87,11 +87,15 @@ class datalist extends wg
 
     protected function build()
     {
+        global $app;
+
+        $currentLang = $app->getClientLang();
         return div
         (
             setClass('datalist break-all overflow-hidden text-clip'),
             setStyle('--datalist-label-width', $this->prop('labelWidth') . 'px'),
             set($this->getRestProps()),
+            strpos($currentLang, 'zh-') !== false ? null : on::init()->call('$.autoLabelWidth', ['container' => jsRaw('$element'), 'item' => '.datalist-item', 'label' => '.datalist-item-label', 'text' => '.text', 'cssVar' => '--datalist-label-width']),
             $this->buildItems(),
             $this->children()
         );

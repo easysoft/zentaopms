@@ -30,7 +30,6 @@ $lang->custom->isRange              = '是否目标控制范围';
 $lang->custom->concept              = "{$lang->projectCommon}概念";
 $lang->custom->URStory              = "用户需求";
 $lang->custom->SRStory              = "软件需求";
-$lang->custom->epic                 = "史诗";
 $lang->custom->default              = "默认";
 $lang->custom->scrumStory           = "故事";
 $lang->custom->waterfallCommon      = "瀑布";

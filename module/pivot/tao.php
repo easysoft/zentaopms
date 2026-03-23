@@ -21,6 +21,7 @@ class pivotTao extends pivotModel
         $specData = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($id)->andWhere('version')->eq($version)->fetch();
         if(!$specData) return $pivot;
 
+        unset($specData->id);
         foreach($specData as $specKey => $specValue) $pivot->$specKey = $specValue;
         return $pivot;
     }

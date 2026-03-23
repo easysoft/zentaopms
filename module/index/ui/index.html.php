@@ -138,6 +138,13 @@ div
     setID('menu'),
     div
     (
+        setID('spaceHeading'),
+        icon('space'),
+        div(setClass('text')),
+        span(setClass('label size-xs ring-0 bg-gray-500 bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
+    ),
+    div
+    (
         setID('menuNav'),
         ul(setClass('nav'), setID('menuMainNav')),
         ul
@@ -156,15 +163,12 @@ div
                     span(setClass('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(setClass('dropdown-menu nav'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu'), setID('menuMoreList'))
             )
-        )
-    ),
-    div
-    (
-        setID('menuFooter'),
+        ),
         ul
         (
+            setID('menuToggleNav'),
             setClass('nav'),
             li
             (
@@ -174,7 +178,7 @@ div
                 a
                 (
                     setClass('menu-toggle justify-center cursor-pointer'),
-                    icon('menu-arrow-left icon-sm')
+                    icon('icon-menu-collapse icon-sm')
                 )
             )
         )
@@ -198,6 +202,7 @@ div
         chatBtn(),
         item
         (
+            setID('version'),
             setClass('ghost btn-zentao px-1'),
             set::icon('zentao text-2xl'),
             set::url($lang->website),
@@ -240,15 +245,29 @@ else
     $zaiLang->zaiConfigNotValid = $lang->aiapp->langData->zaiConfigNotValid;
 }
 
-if($config->edition != 'open')
-{
-    $this->app->loadLang('ai');
-    $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
-}
-
 $zaiConfigUrl = createLink('zai', 'setting');
 $zaiLang->zaiConfigNotValid = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->zaiConfigNotValid);
 if(isset($zaiLang->unauthorizedError)) $zaiLang->unauthorizedError = str_replace('{zaiConfigUrl}', $zaiConfigUrl, $lang->aiapp->langData->unauthorizedError);
+
+$enableAITeammate = !empty($config->enableAITeammate);
+h::jsVar('window.enableAITeammate', $enableAITeammate);
+if($config->edition != 'open' && $zaiConfig)
+{
+    $this->app->loadLang('ai');
+    $zaiLang->knowledgeLib = $lang->ai->knowledgeLib;
+
+    $zaiConfig->teammateMap = array();
+    if($enableAITeammate)
+    {
+        $zaiLang->teammate                = $lang->ai->teammate;
+        $zaiLang->teammatePromptPrefix    = $lang->ai->teammatePromptPrefix;
+        $zaiLang->teammateKnowledgePrefix = $lang->ai->teammateKnowledgePrefix;
+        $zaiLang->teammateKnowledgeSuffix = $lang->ai->teammateKnowledgeSuffix;
+
+        $zaiConfig->teammateMap = $this->loadModel('aiteammate')->getMap();
+    }
+}
+
 to::head
 (
     $zaiConfig ? h::js('window.zai=' . js::value($zaiConfig) . ';') : null,

@@ -87,9 +87,9 @@ $lang->search->modules['bug']         = 'Bug';
 $lang->search->modules['case']        = '用例';
 $lang->search->modules['doc']         = '文档';
 $lang->search->modules['todo']        = '待办';
-$lang->search->modules['build']       = '版本';
+$lang->search->modules['build']       = '构建';
 $lang->search->modules['effort']      = '日志';
-$lang->search->modules['caselib']     = '测试库';
+$lang->search->modules['caselib']     = '用例库';
 $lang->search->modules['product']     = $lang->productCommon;
 $lang->search->modules['release']     = '发布';
 $lang->search->modules['testtask']    = '测试单';
@@ -112,3 +112,5 @@ $lang->search->objectTypeList['sprint']           = $lang->execution->common;
 $lang->search->objectTypeList['kanban']           = '看板';
 $lang->search->objectTypeList['commonIssue']      = '问题';
 $lang->search->objectTypeList['stakeholderIssue'] = '干系人问题';
+
+if(!helper::hasFeature('testsuite') ) unset($lang->searchObjects['testsuite']);

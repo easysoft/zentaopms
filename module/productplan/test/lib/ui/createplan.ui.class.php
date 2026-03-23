@@ -57,9 +57,7 @@ class createPlanTester extends tester
             // 加载产品计划列表页面
             $browsePage = $this->initForm('productplan', 'browse', $planurl, 'appIframe-product');
             //计划创建成功后的检查
-            $browsePage->dom->search->click();
-            $browsePage->dom->value1->setValue($productplan->title);
-            $browsePage->dom->searchBtn->click();
+            $browsePage->dom->search(array(",=,{$productplan->title}"));
             $browsePage->wait(2);
             // 获取搜索结果的第一个计划ID
             $planParam = array();

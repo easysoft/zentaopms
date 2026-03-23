@@ -635,13 +635,13 @@ class control extends baseControl
                 if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
 
                 if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
-                if($object && empty($object->{$field->field})) $object->{$field->field} = $field->defaultValue;
+                if($object && empty($object->{$field->field}) && $field->defaultValue !== '') $object->{$field->field} = $field->defaultValue;
                 if(in_array($field->type, $this->config->workflowfield->numberTypes)) $field = $this->workflowfield->processNumberField($field);
 
                 $field->required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
                 $field->control  = $this->flow->buildFormControl($field);
                 $field->items    = $field->options ? array_filter($field->options) : null;
-                $field->value    = !empty($object->{$field->field}) ? zget($object, $field->field, '') : '';
+                $field->value    = isset($object->{$field->field}) ? zget($object, $field->field, '') : '';
                 $field->width    = $field->width != 'auto' ? $field->width : 'full';
 
                 if(!$field->value && $field->defaultValue) $field->value = $field->defaultValue;

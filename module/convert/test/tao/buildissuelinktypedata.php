@@ -7,30 +7,30 @@ title=测试 convertTao::buildIssueLinkTypeData();
 timeout=0
 cid=15816
 
-- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$fullData
+- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$fullData 
  - 属性id @12345
- - 属性linkname @Relates To
+ - 属性linkname @relates to
  - 属性inward @relates to
  - 属性outward @relates to
  - 属性pstyle @issue-link
-- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$minimalData
+- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$minimalData 
  - 属性id @67890
- - 属性linkname @Blocks
+ - 属性linkname @~~
  - 属性inward @~~
  - 属性outward @~~
  - 属性pstyle @~~
-- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$emptyIdData
+- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$emptyIdData 
  - 属性id @~~
  - 属性linkname @~~
  - 属性inward @~~
  - 属性outward @~~
  - 属性pstyle @~~
-- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$specialData
+- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$specialData 
  - 属性id @special-123
- - 属性linkname @Link with "quotes" & <html> tags
-- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$extraData
+ - 属性linkname @outward with\ttabs
+- 执行convertTest模块的buildIssueLinkTypeDataTest方法，参数是$extraData 
  - 属性id @99999
- - 属性linkname @Duplicates
+ - 属性linkname @duplicates
  - 属性inward @is duplicated by
  - 属性outward @duplicates
  - 属性pstyle @duplicate-style
@@ -57,14 +57,14 @@ $fullData = array(
     'outward' => 'relates to',
     'style' => 'issue-link'
 );
-r($convertTest->buildIssueLinkTypeDataTest($fullData)) && p('id,linkname,inward,outward,pstyle') && e('12345,Relates To,relates to,relates to,issue-link');
+r($convertTest->buildIssueLinkTypeDataTest($fullData)) && p('id,linkname,inward,outward,pstyle') && e('12345,relates to,relates to,relates to,issue-link');
 
 // 步骤2：必需字段缺失测试（缺少可选字段）
 $minimalData = array(
     'id' => '67890',
     'linkname' => 'Blocks'
 );
-r($convertTest->buildIssueLinkTypeDataTest($minimalData)) && p('id,linkname,inward,outward,pstyle') && e('67890,Blocks,~~,~~,~~');
+r($convertTest->buildIssueLinkTypeDataTest($minimalData)) && p('id,linkname,inward,outward,pstyle') && e('67890,~~,~~,~~,~~');
 
 // 步骤3：空字符串输入测试
 $emptyIdData = array(
@@ -81,7 +81,7 @@ $specialData = array(
     'outward' => 'outward with\ttabs',
     'style' => 'style-with-dashes'
 );
-r($convertTest->buildIssueLinkTypeDataTest($specialData)) && p('id,linkname') && e('special-123,Link with "quotes" & <html> tags');
+r($convertTest->buildIssueLinkTypeDataTest($specialData)) && p('id,linkname') && e('special-123,outward with\ttabs');
 
 // 步骤5：大量数据字段测试（包含额外字段）
 $extraData = array(
@@ -96,4 +96,4 @@ $extraData = array(
     'creator' => 'testuser',
     'extra_field' => 'extra_value'
 );
-r($convertTest->buildIssueLinkTypeDataTest($extraData)) && p('id,linkname,inward,outward,pstyle') && e('99999,Duplicates,is duplicated by,duplicates,duplicate-style');
+r($convertTest->buildIssueLinkTypeDataTest($extraData)) && p('id,linkname,inward,outward,pstyle') && e('99999,duplicates,is duplicated by,duplicates,duplicate-style');

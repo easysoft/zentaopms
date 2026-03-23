@@ -1046,10 +1046,10 @@ class baseControl
         helper::import($commonFieldFile);
         helper::import($methodFieldFile);
 
+        $this->setResponseHeader();
+
         ob_start();
         include $viewFile;
-
-        $this->setResponseHeader();
 
         if(!$context->rendered) \zin\renderPage();
         $content = ob_get_clean();

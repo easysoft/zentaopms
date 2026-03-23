@@ -783,7 +783,7 @@ class docModel extends model
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
             ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere("(t2.deleted = '0' or t1.parent != '0')")
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
@@ -1650,6 +1650,7 @@ class docModel extends model
         {
             $parentDoc = $this->getByID($doc->parent);
             $path = ',' . trim($parentDoc->path, ',') . ',' . $path;
+            $doc->module = $parentDoc->module;
         }
 
         $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
@@ -1776,6 +1777,7 @@ class docModel extends model
             {
                 $parentDoc = $this->getByID($doc->parent);
                 $path = $parentDoc->path . $path;
+                $doc->module = $parentDoc->module;
             }
 
             $doc->path = $path;
@@ -1842,6 +1844,7 @@ class docModel extends model
         {
             $parentDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$doc->parent)->fetch();
             if(strpos($parentDoc->path, ",$oldDoc->id,") !== false) return dao::$errors['parent'] = $this->lang->doc->errorParentChapter;
+            $doc->module = $parentDoc->module;
         }
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($oldDoc->id)->andWhere('version')->eq($oldDoc->version)->fetch();
@@ -2868,8 +2871,8 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
 
-        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
+        $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT `objectID`) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType`='doc'")
             ->where('t1.objectType')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
@@ -2879,8 +2882,8 @@ class docModel extends model
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
 
-        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.objectID) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.objectID=t2.id and t1.objectType='doc'")
+        $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.`objectID`) as count')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType`='doc'")
             ->where('t1.objectType')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
@@ -2890,7 +2893,7 @@ class docModel extends model
             ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
 
-        $myStatistic = $this->dao->select("COUNT(1) AS myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
+        $myStatistic = $this->dao->select("COUNT(1) AS `myDocs`, SUM(views) as `docViews`, SUM(collects) as `docCollects`")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('templateType')->eq('')

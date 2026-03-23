@@ -150,7 +150,7 @@ dtable
     set::cols($config->branch->dtable->fieldList),
     set::data($tableData),
     set::plugins(array('sortable')),
-    set::checkable(count($tableData) > 1 ? true : false),
+    set::checkable(true),
     set::onCheckChange(jsRaw('checkedChange')),
     set::sortable($canSort),
     set::onSortEnd($canSort ? jsRaw('window.onSortEnd') : null),

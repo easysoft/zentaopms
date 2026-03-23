@@ -34,7 +34,7 @@ class editor extends wg
         .editor {border: unset; border-radius: unset; color: var(--color-fore)}
         .editor.size-auto {min-height: 0;}
         zen-editor-menu-item {display: inline-flex; align-items: center;}
-        zen-editor-menu-item > .menu-item {color: #64758B!important; display: inline-flex; align-items: center;}
+        zen-editor-menu-item > .menu-item {color: #64758B!important; display: inline-flex; align-items: center; justify-content: center;}
         zen-editor-menu-item > .menu-item:hover {color: var(--color-primary-400)!important; background-color: var(--color-gray-100)!important;}
         zen-editor-menu-item > .menu-item.is-active {color: var(--color-primary-400)!important; background-color: transparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300);}
         zen-editor-menu-item > .menu-item.is-active:hover {background-color: var(--color-gray-200)!important;}

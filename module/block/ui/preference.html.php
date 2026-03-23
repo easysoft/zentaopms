@@ -17,7 +17,7 @@ namespace zin;
  */
 function printPreference(array $URSRList)
 {
-    global $lang, $config;
+    global $lang, $config, $app;
 
     $imageList = array();
     $imageList['program-browse']  = 'list';
@@ -61,13 +61,15 @@ function printPreference(array $URSRList)
         }
     }
 
+    $isEn = $app->getClientLang() == 'en';
+
     return div
     (
         set('class', 'preference-block pt-2 px-6'),
         form
         (
             set::url(helper::createLink('my', 'preference', "showTip=false")),
-            set::labelWidth('8rem'),
+            set::labelWidth($isEn ? '10rem' : '8rem'),
             set::actions(array('submit')),
             setStyle('gap', '0.8rem'),
             formGroup

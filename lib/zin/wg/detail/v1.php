@@ -108,6 +108,11 @@ class detail extends wg
         'toolbar'  => array('map' => 'btnGroup,toolbar')
     );
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     public static function getPageCSS(): ?string
     {
         return <<<'CSS'
@@ -129,6 +134,9 @@ class detail extends wg
         .detail-toggle {margin: 0!important;}
         .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
         .article > .files-list > li.file{white-space:normal;}
+        .ai-task-status .status-doing {color: #FAAE1A;}
+        .ai-task-status .status-done {color: #3883FA;}
+        .ai-task-status .status-cancel, .ai-task-status .status-closed {color: #9EA3B0;}
 CSS;
     }
 
@@ -304,7 +312,7 @@ CSS;
     protected function buildMainSections()
     {
         global $app, $config;
-        $sections = $this->prop('sections');
+        $sections = $this->prop('sections', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list = array();
@@ -378,8 +386,47 @@ CSS;
         );
     }
 
+    protected function buildAITasks()
+    {
+        list($objectID, $objectType) = $this->prop(array('objectID', 'objectType'));
+        if(!in_array($objectType, array('story', 'task', 'bug', 'testcase'))) return null;
+
+        global $lang, $app, $config;
+        if($config->edition == 'open') return null;
+
+        $app->control->loadModel('aitask');
+        jsVar('aiStatusList', $lang->aitask->statusList);
+
+        if($objectType == 'testcase') $objectType = 'case';
+        $users   = $app->control->loadModel('user')->getPairs('noletter');
+        $aiTasks = $app->control->aitask->getListByObject($objectType, $objectID);
+        if(empty($aiTasks)) return null;
+
+        $cols = $config->aitask->dtable->browse;
+        unset($cols['objectType']);
+        foreach($cols as $key => $col) $cols[$key]['sortType'] = false;
+
+        $aiTasks = initTableData($aiTasks, $cols, $app->control->aitask);
+        return panel
+        (
+            set::bodyClass('px-6 py-4'),
+            div(setClass('text-md font-bold mb-2'), $lang->aitask->common),
+            dtable
+            (
+                setID('aitasks'),
+                set::cols($cols),
+                set::data($aiTasks),
+                set::userMap($users),
+                set::onRenderCell(jsRaw('window.renderAITaskCell')),
+                set::emptyTip($lang->aitask->noTask),
+            )
+        );
+    }
+
     protected function buildMain()
     {
+        global $config;
+
         $mainSections = $this->buildMainSections();
         return div
         (
@@ -392,6 +439,7 @@ CSS;
                 $this->block('main')
             ) : null,
             $this->block('sections'),
+            !empty($config->enableAITeammate) && hasPriv('aitask', 'browse') ? $this->buildAITasks() : null,
             $this->children(),
             $this->buildHistory(),
             $this->buildActions()
@@ -429,7 +477,7 @@ CSS;
     protected function buildTabsList()
     {
         global $app, $config;
-        $tabs = $this->prop('tabs');
+        $tabs = $this->prop('tabs', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 

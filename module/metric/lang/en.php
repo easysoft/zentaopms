@@ -13,11 +13,11 @@ $lang->metric->code               = "Metric code";
 $lang->metric->desc               = "Metric desc";
 $lang->metric->formula            = "Formula";
 $lang->metric->when               = "Collection Method";
-$lang->metric->createdBy          = "Created By";
+$lang->metric->createdBy          = "Creator";
 $lang->metric->implement          = "Implement";
 $lang->metric->delist             = "delist";
-$lang->metric->implementedBy      = "Implemented By";
-$lang->metric->offlineBy          = "Offline By";
+$lang->metric->implementedBy      = "Implemented by";
+$lang->metric->offlineBy          = "Offline by";
 $lang->metric->lastEdited         = "Last Edited";
 $lang->metric->value              = "Value";
 $lang->metric->date               = "Date";
@@ -253,7 +253,7 @@ $lang->metric->scopeList['program']   = "Program";
 
 global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['program']       = "Program Set";
+if(helper::hasFeature('program')) $lang->metric->objectList['program'] = "Program Set";
 $lang->metric->objectList['line']          = "Product Line";
 $lang->metric->objectList['product']       = "Product";
 $lang->metric->objectList['project']       = "Project";
@@ -292,7 +292,7 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "Issue";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['host']  = "Host";
+if(helper::hasFeature('devops')) $lang->metric->objectList['host'] = "Host";
 $lang->metric->objectList['other'] = "Other";
 
 $lang->metric->chartTypeList = array();

@@ -147,11 +147,8 @@ class upgradeZen extends upgrade
             }
         }
 
-        if($currentEdition == 'ipd')
-        {
-            $currentVersion = str_replace('.', '_', $this->config->version);
-            $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
-        }
+        $currentVersion = str_replace('.', '_', $this->config->version);
+        if($currentEdition == 'ipd' && empty($upgradeVersions[$currentVersion])) $upgradeVersions[$currentVersion] = ucfirst($this->config->version);
 
         return $upgradeVersions;
     }
@@ -601,7 +598,7 @@ class upgradeZen extends upgrade
         $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
         /* 如果经典管理模式。*/
         /* If the system mode is classic. */
-        if($systemMode == 'classic')
+        if($systemMode == 'classic' && $this->config->edition != 'ipd')
         {
             $this->upgradeFromClassicMode();
             $selectMode = false;

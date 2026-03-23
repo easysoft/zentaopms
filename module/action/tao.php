@@ -418,7 +418,7 @@ class actionTao extends actionModel
             $field  = $type == 'build' ? 'name, execution' : 'name';
             $object = $this->fetchObjectInfoByID($table, (int)$action->extra, $field);
 
-            $buildTab = $type == 'build' && ($this->app->tab == 'product' || empty($action->execution)) ? 'project' : $this->app->tab;
+            $buildTab = $type == 'build' && (in_array($this->app->tab, array('product', 'qa')) || empty($action->execution)) ? 'project' : $this->app->tab;
             if($this->app->tab == 'system') $buildTab = 'project';
 
             if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name, '', $type == 'build' ? "data-app='{$buildTab}'" : '') : $object->name;
@@ -948,6 +948,7 @@ class actionTao extends actionModel
     {
         if(empty($moduleName) || empty($methodName)) return false;
         if(!common::hasPriv($moduleName, $methodName)) return false;
+        if(!helper::hasFeature($moduleName)) return false;
 
         if($action->objectType == 'user' && !isset($deptUsers[$action->objectID]) && !$this->app->user->admin) return false;
         if($action->objectType == 'user' && ($action->action == 'login' || $action->action == 'logout')) return false;
@@ -968,6 +969,11 @@ class actionTao extends actionModel
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;
+        if($action->objectType == 'case')
+        {
+            $case = $this->dao->select('lib')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch();
+            if($action->action == 'tolib' || !empty($case->lib)) return helper::hasFeature('caselib');
+        }
 
         return true;
     }

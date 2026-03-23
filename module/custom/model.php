@@ -260,6 +260,7 @@ class customModel extends model
             $prev = '';
             foreach($customMenu as $customMenuItem)
             {
+                if(empty($customMenuItem->name)) continue;
                 $name = $customMenuItem->name;
                 if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
                 if($prev == 'divider') $customMenuItem->divider = true;
@@ -421,9 +422,10 @@ class customModel extends model
         }
 
         $menuItem = new stdclass();
-        $menuItem->name  = $name;
-        $menuItem->link  = $itemLink;
-        $menuItem->text  = $label;
+        $menuItem->name = $name;
+        $menuItem->link = $itemLink;
+        $menuItem->text = $label;
+        if(is_array($item) && isset($item['showInMainMenu'])) $menuItem->showInMainMenu = $item['showInMainMenu'];
         if($isTutorialMode) $menuItem->tutorial = true;
         if(isset($customMenuMap[$name]) && isset($customMenuMap[$name]->icon)) $menuItem->icon = $customMenuMap[$name]->icon;
 
@@ -528,7 +530,8 @@ class customModel extends model
         global $lang, $app, $config;
         if(!isset($lang->$module->featureBar[$method])) return;
 
-        $queryModule = ($module == 'execution' && $method == 'task') ? 'task' : ($module == 'product' ? 'story' : $module);
+        $queryModule = $module == 'execution' && $method == 'task' ? 'task' : $module;
+        if($module == 'product') $queryModule = !empty($_SESSION['storyType']) ? $_SESSION['storyType'] : 'story';
         if(isset($config->$module->queryModule[$method])) $queryModule = $config->$module->queryModule[$method];
         if($module == 'execution' && $method == 'story')  $queryModule = 'executionStory';
 
@@ -1052,7 +1055,7 @@ class customModel extends model
                     $disabledFeatures .= "$feature,";
                 }
             }
-            $disabledFeatures .= 'projectMeasrecord,productTrack,productRoadmap';
+            $disabledFeatures .= 'productTrack,productRoadmap';
         }
 
         /* Save the features that are disable to the config. */

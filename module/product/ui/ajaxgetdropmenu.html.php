@@ -116,7 +116,7 @@ else
             $item['data-app'] = $app->tab;
             $item['isPO']     = $product->PO == $this->app->user->account;
 
-            if($config->systemMode == 'light' || $config->vision == 'or')
+            if($config->systemMode == 'light' || $config->vision == 'or' || !helper::hasFeature('program'))
             {
                 $data[$group][] = $item;
             }

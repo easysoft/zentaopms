@@ -247,4 +247,22 @@ class pivotZenTest extends baseTest
             'title'      => $this->instance->view->title ?? ''
         );
     }
+
+    /**
+     * Preview pivots of a group.
+     *
+     * @param  int         $groupID
+     * @param  int         $pivotID
+     * @param  string      $mark
+     * @param  string|null $version
+     * @access public
+     * @return void
+     */
+    public function showTest(int $groupID, int $pivotID, string $mark = '', ?string $version = null)
+    {
+        $this->invokeArgs('show', [$groupID, $pivotID, $mark, $version]);
+        if(dao::isError()) return dao::getError();
+
+        return $this->getProperty('view');
+    }
 }

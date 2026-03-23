@@ -57,7 +57,7 @@ class relatedObjectList extends relatedList
         if($browseType == 'byRelation')
         {
             $relatedObjectTypeList = $config->custom->relateObjectList;
-            $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
+            if(helper::hasFeature('devops')) $relatedObjectTypeList['commit'] = $config->custom->relateObjectList['repocommit'];
             if(!isset($relatedObjectTypeList[$relatedObjectType])) $relatedObjectTypeList[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
             $itemType = $relatedObjectTypeList[$relatedObjectType];
         }
@@ -94,6 +94,9 @@ class relatedObjectList extends relatedList
 
     protected function getCommonItem(string $type, array $group, object $item): array
     {
+        global $app;
+        $isEn = $app->getClientLang() == 'en';
+
         $title = '';
         if(isset($item->title)) $title = $item->title;
         if(isset($item->name))  $title = $item->name;
@@ -103,7 +106,7 @@ class relatedObjectList extends relatedList
             'title'      => $title,
             'hint'       => $title,
             'titleAttrs' => $item->titleAttrs,
-            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => array('max-width' => '45px'))))->render()),
+            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => $isEn ? '' : array('max-width' => '45px'))))->render()),
             'url'        => $item->url,
             'class'      => 'objectItem',
             'actions'    => isset($item->actions) ? $item->actions : array()
@@ -156,7 +159,7 @@ class relatedObjectList extends relatedList
                 }
 
                 $relatedObjectTypePairs = $config->custom->relateObjectList;
-                $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
+                if(helper::hasFeature('devops')) $relatedObjectTypePairs['commit'] = $config->custom->relateObjectList['repocommit'];
                 if(!isset($relatedObjectTypePairs[$relatedObjectType])) $relatedObjectTypePairs[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
                 $data[$relatedObjectType] = array
                 (

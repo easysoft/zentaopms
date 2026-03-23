@@ -34,7 +34,7 @@ class zdb
     /**
      * Get all tables.
      *
-     * @param  string $type  if type is 'base', just get base table.
+     * @param  string $type  base|view. if type is 'base', just get base table.
      * @access public
      * @return array
      */
@@ -52,6 +52,7 @@ class zdb
         {
             $tableType = strtolower($table['Table_type']);
             if($type == 'base' && $tableType != 'base table' && $tableType != 'table') continue;
+            if($type == 'view' && $tableType != 'view') continue;
 
             $tableName = $table["Tables_in_{$config->db->name}"];
             $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
@@ -282,6 +283,21 @@ class zdb
             }
             if($values) fwrite($fp, "INSERT INTO `$table`($fields) VALUES " . implode(",\n", $values) . ";\n");
         }
+
+        /* Get all views in database. */
+        $allViews = $this->getAllTables('view');
+        foreach($allViews as $table => $tableType)
+        {
+            $createView = $this->dbh->query("show create view `$table`")->fetch(PDO::FETCH_ASSOC);
+            if($createView && isset($createView['Create View']))
+            {
+                $backupSql  = "DROP VIEW IF EXISTS `$table`;\n";
+                $backupSql .= $createView['Create View'] . ";\n";
+            }
+
+            fwrite($fp, $backupSql);
+        }
+
         fclose($fp);
         return $return;
     }
@@ -308,7 +324,7 @@ class zdb
 
         $fp        = fopen($fileName, 'r');
         $sql       = '';
-        $startTags = '^DROP TABLE|^CREATE TABLE|^INSERT INTO|^SET';
+        $startTags = '^DROP TABLE|^CREATE TABLE|^INSERT INTO|^SET|^DROP VIEW|^CREATE .*VIEW';
         $isInsert  = false;
         while(!feof($fp))
         {

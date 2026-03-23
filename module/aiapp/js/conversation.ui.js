@@ -37,7 +37,7 @@ function injectEmbedStyle()
         '.ai-panel.is-embed {min-width: 1200px;  margin: calc(var(--zt-header-height) + 12px) auto 0; position: static; height: calc(100% - var(--zt-header-height) - 28px);}',
         '@media (min-width: 1400px) {.ai-panel.is-embed {padding: 0 2.5rem}}',
         '@media (min-width: 1720px) {.ai-panel.is-embed {max-width: 1720px;}}',
-        '.ai-panel.is-embed .ai-chats-panel {box-shadow: 0 0 0 1px rgba(var(--color-border-rgb), 1), var(--shadow); outline: none; width: 100%!important; backdrop-filter: none; height: calc(100% - 32px)!important; position: relative; transition: none; border-radius: var(--radius)}',
+        '.ai-panel.is-embed .ai-chats-panel {box-shadow: 0 0 0 1px rgba(var(--color-border-rgb), 1), var(--shadow); outline: none; width: 100%!important; backdrop-filter: none; height: calc(100% - 32px)!important; position: relative; transition: none; border-radius: var(--radius); bottom: auto!important}',
         '.ai-panel.is-embed .ai-panel-header {display: none}',
         '.ai-panel-root[z-last-mode="embed"].is-mode-changing .ai-panel {opacity: 0; transition: none}',
         '</style>'

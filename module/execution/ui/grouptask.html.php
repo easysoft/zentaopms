@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isEn = $app->getClientLang() == 'en';
+
 $items = array();
 if(isset($lang->execution->groupFilter[$groupBy]))
 {
@@ -141,7 +143,7 @@ foreach($lang->execution->groups as $key => $value)
     );
 }
 
-$thead = function() use($lang, $groupList, $groupBy, $allCount)
+$thead = function() use($lang, $groupList, $groupBy, $allCount, $isEn)
 {
     return h::tr
     (
@@ -162,66 +164,79 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
         h::th
         (
             setClass('c-id'),
+            set::style(array('width' => '60px')),
             $lang->task->id
         ),
         h::th
         (
             setClass('c-pri'),
+            set::style(array('width' => $isEn ? '40px' : '70px')),
             $lang->priAB
         ),
         h::th
         (
             setClass('c-name'),
+            set::style(array('max-width' => '120px')),
             $lang->task->name
         ),
         h::th
         (
             setClass('c-status'),
+            set::style(array('width' => '100px')),
             $lang->task->status
         ),
         h::th
         (
             setClass('c-user'),
+            set::style(array('width' => '100px')),
             $lang->task->assignedTo
         ),
         h::th
         (
             setClass('c-user'),
+            set::style(array('width' => $isEn ? '120px' : '100px')),
             $lang->task->finishedBy
         ),
         h::th
         (
             setClass('c-hours'),
+            set::style(array('width' => $isEn ? '50px' : '60px')),
             $lang->task->estimateAB
         ),
         h::th
         (
             setClass('c-hours'),
+            set::style(array('width' => $isEn ? '50px' : '60px')),
             $lang->task->consumedAB
         ),
         h::th
         (
             setClass('c-hours'),
+            set::style(array('width' => $isEn ? '50px' : '60px')),
             $lang->task->leftAB
         ),
         h::th
         (
             setClass('c-progress'),
+            set::style(array('width' => '60px')),
             $lang->task->progressAB
         ),
         h::th
         (
             setClass('c-type'),
+            set::style(array('width' => '60px')),
             $lang->typeAB
         ),
         h::th
         (
             setClass('c-date'),
+            set::style(array('width' => '100px')),
             $lang->task->deadline
         ),
         h::th
         (
             setClass('c-actions'),
+            set::style(array('width' => $isEn ? '105px' : '100px')),
             $lang->actions
         )
     );
@@ -319,7 +334,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                 ),
                 h::td
                 (
-                    setClass('c-name'),
+                    setClass('c-name text-clip'),
                     set('title', $task->name),
                     !empty($task->mode) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
                     (!$task->isParent && $task->parent > 0) ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,

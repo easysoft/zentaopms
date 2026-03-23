@@ -183,6 +183,11 @@ class fileSelector extends wg
      */
     protected function build()
     {
+        global $app, $lang;
+        $app->control->loadModel('file');
+        $savePath = $app->control->file->savePath;
+        if(!is_writable($savePath)) return div(setClass('file-selector-box p-4'), html(sprintf($lang->file->errorCanNotWrite, $savePath, dirname($savePath, 2))));
+
         return zui::fileSelector(inherit($this));
     }
 }

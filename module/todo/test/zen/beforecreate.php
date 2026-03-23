@@ -1,16 +1,22 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试 todoZen::beforeCreate();
+timeout=0
 cid=19291
 
-- 测试正常表单数据处理 >> 期望返回包含所有默认字段的对象
-- 测试具有模块类型对象的表单数据 >> 期望正确设置objectID
-- 测试空日期或切换日期的处理 >> 期望设置为FUTURE_TIME
-- 测试空时间或切换时间的处理 >> 期望设置为2400
-- 测试私有属性开关处理 >> 期望private字段设置为1
+- 执行todoTest模块的beforeCreateTest方法，参数是$normalData
+ - 属性account @admin
+ - 属性vision @rnd
+ - 属性assignedTo @admin
+ - 属性assignedBy @admin
+- 执行todoTest模块的beforeCreateTest方法，参数是$moduleData 属性objectID @5
+- 执行todoTest模块的beforeCreateTest方法，参数是$emptyDateData 属性date @2030-01-01
+- 执行todoTest模块的beforeCreateTest方法，参数是$emptyTimeData
+ - 属性begin @2400
+ - 属性end @2400
+- 执行todoTest模块的beforeCreateTest方法，参数是$privateData 属性private @1
 
 */
 

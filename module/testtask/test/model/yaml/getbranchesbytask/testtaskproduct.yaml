@@ -1,0 +1,14 @@
+title: table zt_testtaskproduct
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: product
+    range: 1
+  - field: build
+    range: 1-100
+  - field: task
+    range: 1
+  - field: project
+    range: 1
+  - field: execution
+    range: 2

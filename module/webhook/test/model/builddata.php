@@ -8,10 +8,10 @@ timeout=0
 cid=19686
 
 - 步骤1：正常参数测试 @1
-- 步骤2：空objectType参数 @1
-- 步骤3：不存在的actionType（有数据） @1
-- 步骤4：不存在的actionID @1
-- 步骤5：无匹配数据 @1
+- 步骤2：空objectType参数 @0
+- 步骤3：不存在的actionType（有数据） @0
+- 步骤4：不存在的actionID @0
+- 步骤5：无匹配数据 @0
 
 */
 
@@ -34,8 +34,17 @@ $tester->loadModel('action');
 $webhookTest = new webhookModelTest();
 
 // 5. 执行测试步骤（必须包含至少5个测试步骤）
-r(true) && p() && e('1'); // 步骤1：正常参数测试
-r(true) && p() && e('1'); // 步骤2：空objectType参数
-r(true) && p() && e('1'); // 步骤3：不存在的actionType（有数据）
-r(true) && p() && e('1'); // 步骤4：不存在的actionID
-r(true) && p() && e('1'); // 步骤5：无匹配数据
+$result1 = $webhookTest->buildDataTest('release', 1, 'opened', 1);
+r($result1 !== false ? '1' : '0') && p() && e('1'); // 步骤1：正常参数测试
+
+$result2 = $webhookTest->buildDataTest('', 1, 'opened', 1);
+r($result2 !== false ? '1' : '0') && p() && e('0'); // 步骤2：空objectType参数
+
+$result3 = $webhookTest->buildDataTest('release', 1, 'notexist', 1);
+r($result3 !== false ? '1' : '0') && p() && e('0'); // 步骤3：不存在的actionType（有数据）
+
+$result4 = $webhookTest->buildDataTest('release', 1, 'opened', 999);
+r($result4 !== false ? '1' : '0') && p() && e('0'); // 步骤4：不存在的actionID
+
+$result5 = $webhookTest->buildDataTest('story', 999, 'opened', 1);
+r($result5 !== false ? '1' : '0') && p() && e('0'); // 步骤5：无匹配数据

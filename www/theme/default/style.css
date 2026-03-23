@@ -52,6 +52,7 @@ a.showMoreImage:hover {opacity: 1;}
 
 #userNav .dropdown-menu>li>a>.icon-w {top: 2px;}
 #globalCreate .dropdown-menu {z-index: 2000;}
+#globalCreate .icon::before {content: "\e974";}
 .create-list {min-width: 120px !important;}
 .create-list>li>a {padding-left: 35px !important;}
 .create-list>li>a>.icon {left: 5px !important;}
@@ -85,7 +86,9 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 
 #navbar .nav>li>a {font-size: 14px; padding: 8px 12px 10px;}
 #navbar .nav>li>a:hover {background-color: rgba(0,0,0,.04);}
-#navbar .nav>li.active>a {background-color: rgba(0,0,0,.08);}
+#navbar .nav>li.active>a {background-color: rgba(0,0,0,.08); position: relative; background: transparent;}
+#navbar .nav>li.active>a::before {display: block; content: ' '; position: absolute; height: 2px; background: #fff; left: 12px; right: 12px; bottom: 0;}
+
 #mainHeader {height: 48px;}
 .header-btn {padding: 7px 0;}
 .header-btn > .btn {display: inline-flex; align-items: center; gap: 6px; padding: 0 6px!important; height: 32px;}
@@ -97,8 +100,7 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 #heading {left: 9px; top: 0.5px;}
 #toolbar {right: 9px;}
 @media (min-width: 1400px){#heading {left: 33px}#toolbar {right: 34px}}
-#userNav>li>a {padding-top: 9px;}
-
+#userNav > li > a {padding-top: 9px;}
 #userNav > li {height: 47px; display: flex; align-items: center; justify-content: center;}
 #userNav > li + li {margin-left: 8px;}
 #userNav .avatar {margin: 1.5px 1px 0.5px; width: 28px; height: 28px;}
@@ -116,6 +118,10 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 #userNav .create-list:hover:before {right: 21.5% !important;}
 #userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}
 #modules li>a, #modules ul>li>a {overflow: hidden; white-space: nowrap;}
+#userNav > li > .dropdown-toggle > .icon {filter: none; -webkit-filter: none; width: 36px; height: 24px; border-radius: 9999px; background: #4F91FB; color: #fff;}
+#userNav > li > .dropdown-toggle > .icon::after {display: none;}
+#userNav > li + li {margin-left: 6px;}
+#userDropDownMenu {margin-left: 12px !important;}
 
 .fixed-head-table{z-index:1000;}
 

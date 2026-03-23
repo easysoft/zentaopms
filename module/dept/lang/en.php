@@ -18,21 +18,21 @@ $lang->dept->delete       = "Delete Department";
 $lang->dept->parent       = "Parent Dept";
 $lang->dept->manager      = "Manager";
 $lang->dept->name         = "Department Name";
-$lang->dept->browse       = "Manage Department";
-$lang->dept->manage       = "Manage Department";
-$lang->dept->updateOrder  = "Department Ranking";
+$lang->dept->browse       = "Dept Settings";
+$lang->dept->manage       = "Dept Settings";
+$lang->dept->updateOrder  = "Sort Depts";
 $lang->dept->add          = "Add Department";
-$lang->dept->grade        = "Department Grade";
-$lang->dept->order        = "Department Order";
-$lang->dept->dragAndSort  = "Drag to order";
-$lang->dept->noDepartment = "No Department";
+$lang->dept->grade        = "Depts Level";
+$lang->dept->order        = "Sort";
+$lang->dept->dragAndSort  = "Drag to Reorder";
+$lang->dept->noDepartment = "No department.";
 
-$lang->dept->manageChildAction = "Manage Subordinate Department";
+$lang->dept->manageChildAction = "Manage Sub-departments";
 
-$lang->dept->confirmDelete = " Do you want to delete this department?";
-$lang->dept->successSave   = " Saved!";
-$lang->dept->repeatDepart  = " There is a duplicate department name, are you sure to add it?";
+$lang->dept->confirmDelete = "Are you sure you want to delete this department?";
+$lang->dept->successSave   = "Updated successfully.";
+$lang->dept->repeatDepart  = "A department with this name already exists. Are you sure you want to add it?";
 
 $lang->dept->error = new stdclass();
-$lang->dept->error->hasSons  = 'This Department has child departments. You cannot delete it!';
-$lang->dept->error->hasUsers = 'This Department has users. You cannot delete it!';
+$lang->dept->error->hasSons  = 'This department has sub-departments and cannot be deleted.';
+$lang->dept->error->hasUsers = 'This department has employees and cannot be deleted.';

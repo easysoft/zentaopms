@@ -420,9 +420,15 @@ class form extends fixer
 
         if(isset($data)) $data = helper::convertType($data, $config['type']);
 
-        if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
+        if(isset($data) && isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
-        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && (is_null($this->rawdata->$field) || $this->rawdata->$field === '' || is_array($this->rawdata->$field)) && empty($data))
+        $emptyData = empty($data);
+        if($config['type'] == 'int' || $config['type'] == 'float' || $config['type'] == 'string')
+        {
+            $emptyData = (isset($this->rawdata->$field) && $this->rawdata->$field === '') || (isset($data) && $data === '');
+        }
+
+        if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && $emptyData)
         {
             $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;

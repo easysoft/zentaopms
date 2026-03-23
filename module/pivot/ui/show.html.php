@@ -17,10 +17,9 @@ jsVar('drillModalTitle', $this->lang->pivot->stepDrill->drillView);
 $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
 {
     $hasFilter = !empty($pivot->filters);
-    if($showOrigin || !$hasFilter) return div(setID('conditions'), setClass('mb-4'));
+    if(!$hasFilter) return div(setID('conditions'), setClass('mb-4'));
 
     $filters = array();
-    $options = array();
     foreach($pivot->filters as $filter)
     {
         $type   = $filter['type'];
@@ -30,7 +29,11 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
         $from   = zget($filter, 'from');
 
         $items = $this->getFilterOptionUrl($filter, $pivot->sql, (array)$pivot->fieldSettings);
-        if($from == 'query')
+        if($showOrigin)
+        {
+            $filters[] = filter(set(array('title' => $name, 'type' => 'input', 'name' => $field, 'value' => $value)));
+        }
+        elseif($from == 'query')
         {
             $filters[]  = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => $items, 'multiple' => $type == 'multipleselect' ? true : false)));
         }
@@ -45,7 +48,7 @@ $fnGenerateFilters = function() use($pivot, $showOrigin, $lang)
     return div
     (
         setID('conditions'),
-        setClass('flex justify-start bg-canvas mt-4 mb-2 w-full', array('flex-wrap' => $isSingleFilter, 'items-center' => !$isSingleFilter)),
+        setClass('flex justify-start bg-canvas mt-4 mb-2 w-full', array('flex-wrap' => $isSingleFilter, 'items-center' => !$isSingleFilter), $showOrigin ? 'hidden' : null),
         $isSingleFilter ? $filters : div
         (
             setClass('flex flex-wrap w-full'),
@@ -212,7 +215,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                 setID('exportData'),
                 setClass('hidden'),
                 rawContent(),
-                $this->pivot->buildPivotTable($data, $configs),
+                html($this->pivot->buildPivotTable($data, $configs)),
             )
         )
     );

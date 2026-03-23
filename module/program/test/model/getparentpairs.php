@@ -37,7 +37,7 @@ $program->end->range('20220212 000000:0')->type('timestamp')->format('YYYY-MM-DD
 $program->deleted->range('0{15},1{5}');
 $program->gen(10);
 
-$programTester = new programModelTest();
+$programTester = new programTest();
 
 $program1 = $programTester->getParentPairsTest();
 $program2 = $programTester->getParentPairsTest('waterfall');

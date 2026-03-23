@@ -45,6 +45,7 @@ class detailHeader extends wg
                 $prefix,
                 $title
             ),
+            $this->children(),
             $suffix
         );
     }

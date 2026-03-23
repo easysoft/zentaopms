@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");

@@ -165,6 +165,7 @@ class product extends control
         $branch    = $branchID ? $branchID : $branch;
 
         /* ATTENTION: be careful to change the order of follow sentences. */
+        $this->session->set('storyType', $storyType, 'product');
         $this->productZen->setMenu4Browse($projectID, $productID, $branch, $storyType);
         $this->productZen->saveAndModifyCookie4Browse($productID, $branch, $param, $browseType, $orderBy);
         if($browseType == '')
@@ -241,7 +242,7 @@ class product extends control
             $productID = $this->product->create($productData, (string) $this->post->lineName);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $response = $this->productZen->responseAfterCreate($productID, $productData->program);
+            $response = $this->productZen->responseAfterCreate($productID, !empty($productData->program) ? $productData->program : 0);
             return $this->send($response);
         }
 
@@ -1216,7 +1217,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $productID, string $module, string $method, string $extra = '', string $from = '', int $useLink = 1)
+    public function ajaxGetDropMenu(int $productID, string $module = 'product', string $method = 'browse', string $extra = '', string $from = '', int $useLink = 1)
     {
         $shadow = '0';
         if($this->app->tab == 'qa' || $from == 'qa') $shadow = 'all';

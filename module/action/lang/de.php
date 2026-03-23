@@ -458,6 +458,7 @@ $lang->action->label->editestimate            = 'edited ';
 $lang->action->label->editeffort              = 'edited ';
 $lang->action->label->canceled                = 'cancelled ';
 $lang->action->label->finished                = 'finished ';
+$lang->action->label->failed                  = 'failed';
 $lang->action->label->paused                  = 'paused ';
 $lang->action->label->verified                = 'verified ';
 $lang->action->label->delayed                 = 'delayed ';

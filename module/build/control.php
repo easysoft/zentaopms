@@ -715,7 +715,7 @@ class build extends control
      */
     public function ajaxGetSystemBuilds(int $productID, int $systemID)
     {
-        $builds = $this->build->getBuildPairs(array($productID), 'all', 'noterminate, nodone, notrunk', 0, 'product', '', false, (int)$systemID);
+        $builds = $this->build->getBuildPairs(array($productID), 'all', 'noterminate, nodone, notrunk, withbranch', 0, 'product', '', false, (int)$systemID);
 
         $buildList = array();
         foreach($builds as $buildID => $buildName) $buildList[] = array('text' => $buildName, 'value' => $buildID);

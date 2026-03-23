@@ -2,7 +2,7 @@
 $lang->host->common       = 'Host';
 $lang->host->browse       = 'Host List';
 $lang->host->create       = 'Add Host';
-$lang->host->view         = 'Host View';
+$lang->host->view         = 'Host Details';
 $lang->host->edit         = 'Edit Host';
 $lang->host->editAction   = 'Edit Host';
 $lang->host->delete       = 'Delete';
@@ -19,36 +19,36 @@ $lang->host->hardwareType = 'Hardware Type';
 $lang->host->group        = 'Host Group';
 $lang->host->admin        = 'Admin';
 $lang->host->cabinet      = 'Cabinet';
-$lang->host->intranet     = 'Intranet IP';
-$lang->host->extranet     = 'Extranet IP';
+$lang->host->intranet     = 'Internal IP';
+$lang->host->extranet     = 'External IP';
 $lang->host->mac          = 'MAC';
 $lang->host->cpuBrand     = 'CPU Brand';
 $lang->host->cpuModel     = 'CPU Model';
-$lang->host->cpuNumber    = 'CPU Number';
-$lang->host->cpuCores     = 'CPU Cores';
-$lang->host->cpuRate      = 'CPU Rate';
+$lang->host->cpuNumber    = 'CPU Count';
+$lang->host->cpuCores     = 'Cores per CPU';
+$lang->host->cpuRate      = 'CPU Frequency';
 $lang->host->memory       = 'Memory Size';
 $lang->host->serverRoom   = 'IDC';
 $lang->host->desc         = 'Description';
 
-$lang->host->createdBy   = 'CreatedBy';
-$lang->host->createdDate = 'CreatedDate';
-$lang->host->editedBy    = 'EditedBy';
-$lang->host->editedDate  = 'EditedDate';
+$lang->host->createdBy   = 'Creator';
+$lang->host->createdDate = 'Created on';
+$lang->host->editedBy    = 'Edited by';
+$lang->host->editedDate  = 'Edited on';
 $lang->host->all         = 'All Hosts';
 
-$lang->host->empty = 'No Host';
+$lang->host->empty = 'No host available yet.';
 
-$lang->host->groupMaintenance = 'Manage Group';
+$lang->host->groupMaintenance = 'Manage Groups';
 
 $lang->host->status = 'Status';
 $lang->host->statusList['online']  = 'Online';
 $lang->host->statusList['busy']    = 'Overloaded';
 $lang->host->statusList['offline'] = 'Offline';
 
-$lang->host->online  = 'On';
+$lang->host->online  = 'Set Online';
 $lang->host->busy    = 'Overload';
-$lang->host->offline = 'Off';
+$lang->host->offline = 'Set Offline';
 
 $lang->host->onlineReason  = 'Online Reason';
 $lang->host->offlineReason = 'Offline Reason';
@@ -93,20 +93,20 @@ $lang->host->languageList['c#4']   = 'C# 4.0';
 
 $lang->host->featureBar['browse']['all']        = $lang->host->all;
 $lang->host->featureBar['browse']['serverroom'] = 'Physical Topology';
-$lang->host->featureBar['browse']['group']      = 'Logical Topology';
+$lang->host->featureBar['browse']['group']      = 'Group Topology';
 
 $lang->host->serverModel              = 'Server Model';
 $lang->host->hostType                 = 'Host Type';
-$lang->host->hostTypeList['physical'] = 'Physical';
-$lang->host->hostTypeList['virtual']  = 'Virtual';
+$lang->host->hostTypeList['physical'] = 'Physical Host';
+$lang->host->hostTypeList['virtual']  = 'Virtual Host';
 
 $lang->host->osVersion             = 'OS Version';
 $lang->host->osName                = 'OS Name';
 $lang->host->zap                   = 'Agent Port';
 $lang->host->instanceNum           = 'Max instances';
 $lang->host->pri                   = 'Priority';
-$lang->host->tags                  = 'Platform Label';
-$lang->host->provider              = 'Priority';
+$lang->host->tags                  = 'Platform Tag';
+$lang->host->provider              = 'Vendor';
 $lang->host->bridgeID              = 'Virtual Bridge';
 
 $lang->host->osNameList['linux']   = 'Linux';
@@ -158,23 +158,23 @@ $lang->host->otherList['']   = '';
 $lang->host->otherList['freebsd']   = 'FreeBSD';
 $lang->host->otherList['freebsdx64']   = 'FreeBSD X64';
 
-$lang->host->diskSize   = 'Disk Size';
+$lang->host->diskSize   = 'Disk Capacity';
 $lang->host->diskType   = 'Disk Type';
 $lang->host->diskTypeList['hdd'] = 'HDD';
 $lang->host->diskTypeList['ssd'] = 'SSD';
 
-$lang->host->confirmDelete  = 'Do you want to delete this host?';
+$lang->host->confirmDelete  = 'Are you sure you want to delete this host?';
 $lang->host->deletedSuccess = 'Deleted successfully!';
 
 $lang->host->notice = new stdclass();
-$lang->host->notice->memory     = 'Memory size should be numbers！';
-$lang->host->notice->diskSize   = 'Disk size should be numbers！';
-$lang->host->notice->cpuNumber  = 'CPU number should be numbers！';
-$lang->host->notice->cpuCores   = 'CPU cores should be numbers！';
-$lang->host->notice->int        = '『%s』should be a positive integer!';
-$lang->host->notice->ip         = '『%s』incorrect format!';
-$lang->host->notice->nameLength = 'Host name length should not exceed 100 characters!';
-$lang->host->notice->descLength = 'Host description length should not exceed 255 characters!';
+$lang->host->notice->memory     = 'Memory size must be a number.';
+$lang->host->notice->diskSize   = 'Disk capacity must be a number.';
+$lang->host->notice->cpuNumber  = 'CPU count must be a number.';
+$lang->host->notice->cpuCores   = 'CPU core count must be a number.';
+$lang->host->notice->int        = '『%s』must be a positive integer.';
+$lang->host->notice->ip         = '『%s』format is invalid.';
+$lang->host->notice->nameLength = 'Host name cannot exceed 100 characters.';
+$lang->host->notice->descLength = 'Host description cannot exceed 255 characters.';
 
 $lang->host->CDlist = array();
-$lang->host->CDlist['manual'] = 'Manual Deploy';
+$lang->host->CDlist['manual'] = 'Manually Deploy';

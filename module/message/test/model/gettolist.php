@@ -11,8 +11,21 @@ zenData('testtask')->gen(1);
 zenData('meeting')->loadYaml('meeting')->gen(1);
 zenData('mr')->gen(1);
 zenData('release')->gen(1);
-zenData('task')->loadYaml('task')->gen(9);
-zenData('taskteam')->loadYaml('taskteam')->gen(9);
+
+// 使用字段范围设置，避免生成 SQL 文件
+$task = zenData('task');
+$task->id->range('1-9');
+$task->project->range('1');
+$task->execution->range('3');
+$task->assignedTo->range('dev1{4},dev2{4},[]');
+$task->status->range('wait,doing,done,cancel,closed,wait{3},doing');
+$task->gen(9);
+
+$taskteam = zenData('taskteam');
+$taskteam->task->range('1-9');
+$taskteam->account->range('admin,user1,user2,user3');
+$taskteam->gen(9);
+
 zenData('story')->gen(1);
 zenData('action')->gen(2);
 zenData('product')->gen(10);

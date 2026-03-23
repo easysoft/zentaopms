@@ -60,19 +60,22 @@ class dropdown extends wg
             $items     = $this->prop('items', array());
             $menuProps = $this->prop('menu', array());
 
-            if(!empty($itemsList))
+            if(is_array($items))
             {
-                foreach($itemsList as $item)
+                if(!empty($itemsList))
                 {
-                    if(!($item instanceof item)) continue;
-                    $items[] = $item->props->toJSON();
+                    foreach($itemsList as $item)
+                    {
+                        if(!($item instanceof item)) continue;
+                        $items[] = $item->props->toJSON();
+                    }
                 }
-            }
-            foreach($items as $index => $item)
-            {
-                if(!($item instanceof setting)) continue;
-                $item = $item->toArray();
-                $items[$index] = $item;
+                foreach($items as $index => $item)
+                {
+                    if(!($item instanceof setting)) continue;
+                    $item = $item->toArray();
+                    $items[$index] = $item;
+                }
             }
 
             $menuProps = array_merge(array

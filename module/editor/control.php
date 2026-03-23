@@ -164,7 +164,9 @@ class editor extends control
      */
     public function delete(string $filePath = '')
     {
-        $filePath = helper::safe64Decode($filePath);
+        $filePath      = helper::safe64Decode($filePath);
+        $extensionPath = $this->app->getExtensionRoot() . 'custom' . DS;
+        if(strpos(strtolower($filePath), strtolower($extensionPath)) !== 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->notDelete));
 
         if(file_exists($filePath) and unlink($filePath)) return $this->send(array('load' => true));
         return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->notDelete));

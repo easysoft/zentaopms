@@ -17,6 +17,11 @@ featureBar
     li(searchToggle(set::open($type == 'bysearch'), set::module('user')))
 );
 
+$canCreate       = hasPriv('user', 'create');
+$canBatchCreate  = hasPriv('user', 'batchCreate');
+$createItem      = array('text' => $lang->user->create, 'url' => createLink('user', 'create', "deptID={$deptID}&type={$browseType}"));
+$batchCreateItem = array('text' => $lang->user->batchCreate, 'url' => createLink('user', 'batchCreate', "deptID={$deptID}&type={$browseType}"));
+
 toolbar
 (
     btn
@@ -27,7 +32,7 @@ toolbar
         setData('app', 'admin'),
         $lang->company->manageRole
     ),
-    btnGroup
+    $canCreate && $canBatchCreate ? btnGroup
     (
         btn
         (
@@ -49,7 +54,9 @@ toolbar
             ),
             set::placement('bottom-end')
         )
-    )
+    ) : null,
+    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    !$canCreate && $canBatchCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
 $settingLink = createLink('dept', 'browse');

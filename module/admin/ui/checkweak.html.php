@@ -51,6 +51,9 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
 
 $tableData = initTableData($weakUsers, $config->admin->checkWeak->dtable->fieldList, $this->admin);
 
+$isEn = $app->getClientLang() == 'en';
+$enSidebarWidth = $isEn ? set::minWidth('180') : null;
+
 div
 (
     setID('mainContent'),
@@ -58,6 +61,7 @@ div
     $menuItems ? sidebar
     (
         set::showToggle(false),
+        $enSidebarWidth,
         div
         (
             setClass('cell p-2.5 bg-white'),

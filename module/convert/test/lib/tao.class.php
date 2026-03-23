@@ -535,6 +535,23 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -809,6 +826,24 @@ class convertTaoTest extends baseTest
         if(!in_array($type, array('story', 'requirement', 'epic'))) return 0;
         if($productID <= 0 || $projectID <= 0 || $executionID <= 0) return 0;
 
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
         // 模拟创建需求的业务逻辑验证
         $story = new stdclass();
         $story->title = $data->summary;
@@ -818,22 +853,11 @@ class convertTaoTest extends baseTest
         $story->version = 1;
         $story->grade = 1;
 
-        // 模拟状态和阶段设置
-        $story->stage = $this->mockConvertStage($data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
-        $story->status = $this->mockConvertStatus($type, $data->issuestatus ?? 'Open', $data->issuetype ?? 'Story', $relations);
-
-        // 模拟用户账号转换
-        $story->openedBy = $this->mockGetJiraAccount($data->creator ?? '');
-        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
-        $story->assignedTo = $this->mockGetJiraAccount($data->assignee ?? '');
-
-        if($story->assignedTo) $story->assignedDate = date('Y-m-d H:i:s');
-
         // 模拟关闭原因设置
         if(isset($data->resolution) && $data->resolution)
         {
             $story->closedReason = isset($relations["zentaoReason{$data->issuetype}"][$data->resolution]) ?
-                                  $relations["zentaoReason{$data->issuetype}"][$data->resolution] : 'done';
+            $relations["zentaoReason{$data->issuetype}"][$data->resolution] : 'done';
         }
 
         // 验证必要字段都已设置
@@ -853,7 +877,24 @@ class convertTaoTest extends baseTest
      */
     public function createTeamMemberTest(int $objectID = 1, string $createdBy = 'admin', string $type = 'project'): bool
     {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
         try {
+
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+
             // Use reflection to access protected method
             $reflection = new ReflectionClass($this->instance);
             $method = $reflection->getMethod('createTeamMember');
@@ -993,11 +1034,6 @@ class convertTaoTest extends baseTest
     public function createWorkflowFieldTest($relations = array(), $fields = array(), $fieldOptions = array(), $jiraResolutions = array(), $jiraPriList = array())
     {
         global $tester;
-
-        if(!isset($this->instance->workflowfield))
-        {
-            $this->instance->workflowfield = $this->createMockWorkflowField();
-        }
 
         $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('createWorkflowField');
@@ -1197,7 +1233,25 @@ class convertTaoTest extends baseTest
      */
     public function importJiraIssueLinkTest($dataList = array())
     {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('importJiraIssueLink', [$dataList]);
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1240,6 +1294,23 @@ class convertTaoTest extends baseTest
      */
     public function importJiraWorkLogTest($dataList = array())
     {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('importJiraWorkLog', [$dataList]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1260,66 +1331,23 @@ class convertTaoTest extends baseTest
     {
         if($module === null || $data === null || $object === null) return false;
 
-        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
 
-    /**
-     * Test processBuildinFieldData method.
-     *
-     * @param  string $module
-     * @param  object $data
-     * @param  object $object
-     * @param  array  $relations
-     * @param  bool   $buildinFlow
-     * @access public
-     * @return mixed
-     */
-    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
-    {
-        if($module === null || $data === null || $object === null) return false;
-
-        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test processBuildinFieldData method.
-     *
-     * @param  string $module
-     * @param  object $data
-     * @param  object $object
-     * @param  array  $relations
-     * @param  bool   $buildinFlow
-     * @access public
-     * @return mixed
-     */
-    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
-    {
-        if($module === null || $data === null || $object === null) return false;
-
-        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test processBuildinFieldData method.
-     *
-     * @param  string $module
-     * @param  object $data
-     * @param  object $object
-     * @param  array  $relations
-     * @param  bool   $buildinFlow
-     * @access public
-     * @return mixed
-     */
-    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
-    {
-        if($module === null || $data === null || $object === null) return false;
-
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1328,12 +1356,12 @@ class convertTaoTest extends baseTest
     /**
      * Test processJiraIssueContent method.
      *
-     * @param  array $issueList
      * @access public
      * @return mixed
      */
-    public function processJiraIssueContentTest($issueList = array())
+    public function processJiraIssueContentTest()
     {
+        $issueList = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('BID')->ne('')->andWhere('extra')->eq('issue')->fetchAll('AID');
         $result = $this->invokeArgs('processJiraIssueContent', [$issueList]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1397,5 +1425,48 @@ class convertTaoTest extends baseTest
         $result = $this->invokeArgs('updateSubTask', [$taskLink, $issueList]);
         if(dao::isError()) return dao::getError();
         return $result;
+
+    }
+
+    /*
+     * Test getJiraUser method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraUserTest(): array
+    {
+        return $this->instance->getJiraUser();
+    }
+
+    /**
+     * Test createWorkflowAction method.
+     *
+     * @param  array   $relations
+     * @param  array   $actions
+     * @access public
+     * @return array
+     */
+    public function createWorkflowActionTest(array $relations, array $actions): array
+    {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
+        return $this->invokeArgs('createWorkflowAction', array($relations, $actions));
     }
 }

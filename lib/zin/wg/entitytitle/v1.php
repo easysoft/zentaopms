@@ -87,6 +87,7 @@ class entityTitle extends wg
                 a(
                     setClass('entity-title-link max-w-lg', $titleClass),
                     set::href($url),
+                    set::title($title),
                     set($titleProps),
                     set($this->prop('linkProps')),
                     $color ? setStyle('color', $color) : null,

@@ -253,7 +253,7 @@ $lang->metric->scopeList['program']   = "项目集";
 
 global $config;
 $lang->metric->objectList = array();
-$lang->metric->objectList['program']       = "项目集";
+if(helper::hasFeature('program')) $lang->metric->objectList['program'] = "项目集";
 $lang->metric->objectList['line']          = "产品线";
 $lang->metric->objectList['product']       = "产品";
 $lang->metric->objectList['project']       = "项目";
@@ -292,7 +292,7 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "问题";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['host']  = "主机";
+if(helper::hasFeature('devops')) $lang->metric->objectList['host'] = "主机";
 $lang->metric->objectList['other'] = "其他";
 
 $lang->metric->chartTypeList = array();

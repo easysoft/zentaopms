@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('type', $type);
+
 h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
 $items = array();
@@ -23,11 +25,16 @@ if($type == 'inside')
 {
     $items['company']['hidden'] = true;
 }
-else
+elseif($type == 'outside')
 {
     $items['dept']['hidden']     = true;
     $items['commiter']['hidden'] = true;
     $items['join']['hidden']     = true;
+}
+
+foreach(explode(',', $config->user->edit->requiredFields) as $requiredField)
+{
+    if(isset($items[$requiredField])) $items[$requiredField]['required'] = true;
 }
 
 formBatchPanel
@@ -37,6 +44,7 @@ formBatchPanel
     set::mode('edit'),
     set::items($items),
     set::data(array_values($users)),
+    set::onRenderRow(jsRaw('renderRowData')),
     on::click('button[type=submit]', 'encryptPassword'),
     div
     (

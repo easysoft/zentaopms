@@ -29,6 +29,8 @@ $project->id->range('1-10');
 $project->type->range('program');
 $project->gen(10);
 
+su('admin');
+
 global $tester;
 $product = $tester->loadModel('product');
 

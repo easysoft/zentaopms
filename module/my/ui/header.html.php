@@ -17,8 +17,13 @@ if($app->rawMethod == 'work')
 
     if($isOpenedURAndSR !== 0)                       $nameMap = array_merge($nameMap, array('requirement' => 'requirement'));
     if($config->enableER)                            $nameMap = array_merge($nameMap, array('epic' => 'epic'));
-    if($isBiz !== 0 || $isMax !== 0 || $isIPD !== 0) $nameMap = array_merge($nameMap, array('feedback' => 'feedback', 'ticket' => 'ticket'));
-    if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'nc' => 'qa', 'reviewissue' => 'reviewissue', 'myMeeting' => 'meeting'));
+    if($isBiz !== 0 || $isMax !== 0 || $isIPD !== 0)
+    {
+        $showMenu = array('feedback' => 'feedback', 'ticket' => 'ticket');
+        if(!empty($config->enableAITeammate)) $showMenu = array('aitask' => 'aitask') + $showMenu;
+        $nameMap = array_merge($nameMap, $showMenu);
+    }
+    if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'nc' => 'qa', 'myMeeting' => 'meeting'));
     if($isIPD !== 0)                                 $nameMap = array_merge($nameMap, array('demand' => 'demand'));
 
     foreach($nameMap as $name => $countKey)

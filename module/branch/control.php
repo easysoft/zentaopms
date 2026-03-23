@@ -133,10 +133,10 @@ class branch extends control
             return $this->sendSuccess(array('load' => $this->session->branchManage));
         }
 
-        $branchList   = array_values($this->branch->getList($productID, 0, 'all'));
         $branchIDList = $this->post->branchIDList;
-        if(empty($branchIDList)) return $this->sendError($this->lang->branch->noData, inLink('manage', "productID=$productID"));
+        if(empty($branchIDList)) return $this->send(array('load' => inLink('manage', "productID=$productID")));
 
+        $branchList = array_values($this->branch->getList($productID, 0, 'all'));
         foreach($branchList as $index => $branch)
         {
             if(!in_array($branch->id, $branchIDList))

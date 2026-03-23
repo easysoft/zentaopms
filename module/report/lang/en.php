@@ -96,7 +96,7 @@ $lang->report->mailTitle->testTask = " Request (%s),";
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
-$lang->report->annualData->exportByZentao   = "Export By ZenTao";
+$lang->report->annualData->exportByZentao   = "Export by ZenTao";
 $lang->report->annualData->scope            = "Scope";
 $lang->report->annualData->allUser          = "All Users";
 $lang->report->annualData->allDept          = "Whole Company";
@@ -220,7 +220,7 @@ $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 $lang->report->contributionCountObject = array();
 $lang->report->contributionCountObject['task']        = "Tasks: Create, Complete, Close, Cancel, Assign";
 $lang->report->contributionCountObject['story']       = "Stories: Create, Review, Close, Assign";
-$lang->report->contributionCountObject['requirement'] = "User Requirements: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['requirement'] = "Features: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['epic']        = "Epics: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['bug']         = "Bugs: Create, Solve, Close, Assign";
 $lang->report->contributionCountObject['testcase']    = "Testcases: Create";

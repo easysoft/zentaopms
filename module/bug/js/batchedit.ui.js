@@ -45,26 +45,17 @@ window.renderRowData = function($row, index, row)
     }
 
     /* Show the bugs of current bug's product. */
-    if(productBugOptions[row.product] != undefined && productBugOptions[row.product][row.branch] != undefined)
+    $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
     {
-        let duplicateBugs = JSON.parse(JSON.stringify(productBugOptions[row.product][row.branch]));
-        duplicateBugs.forEach((duplicateBug, index) =>
+        let $duplicateBug = info[0];
+        $.getJSON($.createLink('bug', 'ajaxGetDuplicateBugs', `bugID=${row.id}&duplicateBug=${row.duplicateBug}`), function(duplicateBugs)
         {
-            if(duplicateBug.value == row.id)
-            {
-                duplicateBugs.splice(index, 1);
-                return false;
-            }
-        })
-
-        $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
-        {
-            let $duplicateBug = info[0];
             $duplicateBug.render({items: duplicateBugs});
+            $duplicateBug.$.setValue(row.duplicateBug);
         });
+    });
 
-        $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').toggleClass('hidden', row.resolution != 'duplicate');
-    }
+    $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').toggleClass('hidden', row.resolution != 'duplicate');
 
     /* Change assigner. */
     let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]');

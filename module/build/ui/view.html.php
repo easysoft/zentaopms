@@ -353,10 +353,7 @@ detailBody
                         $build->files ? h::hr(set::className('mt-6')) : null,
                         section
                         (
-                            $build->files ? fileList
-                            (
-                                set::files($build->files)
-                            ) : null
+                            $build->files ? fileList(set::files($build->files), set::showEdit(true), set::showDelete(true)) : null
                         ),
                         h::hr(set::className('mt-6')),
                         history(set::objectID($build->id), set::objectType('build'))

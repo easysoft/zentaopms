@@ -516,7 +516,15 @@ class fileModel extends model
     {
         $companyID = isset($this->app->company->id) ? $this->app->company->id : 1;
         $savePath  = $this->app->getAppRoot() . "www/data/upload/{$companyID}/" . date('Ym/', $this->now);
-        if(!file_exists($savePath))
+
+        $parentDir = dirname($savePath);
+        while(!isset($parentCanWrite))
+        {
+            if(file_exists($parentDir)) $parentCanWrite = is_writable($parentDir);
+            $parentDir = dirname($parentDir);
+        }
+
+        if(!file_exists($savePath) && $parentCanWrite)
         {
             mkdir($savePath, 0777, true);
             touch($savePath . 'index.html');
@@ -788,7 +796,7 @@ class fileModel extends model
 
         $fh   = fopen($csvFile, "r");
         $data = array();
-        while(($row = fgetcsv($fh)) !== false) $data[] = $row;
+        while(($row = fgetcsv($fh, 0, ",", "\"", "\\")) !== false) $data[] = $row;
         fclose($fh);
 
         return $data;
@@ -1184,6 +1192,30 @@ class fileModel extends model
             $fromcaseVersion = $oldCase->fromCaseVersion + 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
         }
+    }
+
+    /**
+     * Update story files.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function updateStoryFiles(int $storyID): void
+    {
+        $storySpec = $this->dao->select('id')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->orderBy('id desc')->limit(1)->fetch();
+        if(empty($storySpec)) return;
+
+        $files = $this->dao->select('id')->from(TABLE_FILE)
+            ->where('objectType')->eq('story')
+            ->andWhere('objectID')->eq($storyID)
+            ->orderBy('id')
+            ->fetchAll();
+
+        $storyFiles = [];
+        foreach($files as $file) $storyFiles[] = $file->id;
+
+        $this->dao->update(TABLE_STORYSPEC)->set('files')->eq(implode(',', $storyFiles))->where('id')->eq($storySpec->id)->exec();
     }
 
     /**

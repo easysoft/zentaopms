@@ -211,8 +211,13 @@ class backup extends control
      */
     public function delete(string $fileName)
     {
-        foreach(glob($this->backupPath . "{$fileName}*") as $backupFile)
+        $version = str_replace('.', '_', $this->config->version);
+        if(preg_match("/^\d{15}" . preg_quote($version) . "$/", $fileName) == 0) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $fileName)));
+
+        $suffixes = ['.code', '.file', '.sql', '.sql.php'];
+        foreach($suffixes as $suffix)
         {
+            $backupFile = $this->backupPath . $fileName . $suffix;
             if(is_dir($backupFile))
             {
                 $zfile = $this->app->loadClass('zfile');

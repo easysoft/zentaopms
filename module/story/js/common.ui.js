@@ -140,3 +140,34 @@ window.setModuleAndPlanByBranch = function(e)
         if(!$rows.find('td[data-name="plan"][data-ditto="on"]').length) break;
     }
 }
+
+window.setSourceNote = function(e)
+{
+    const $row        = $(e.target).closest('tr');
+    const $sourceNote = $row.find('[data-name="sourceNote"]').closest('td');
+    renderSourceNote($sourceNote, e.target.value);
+}
+
+function renderSourceNote($sourceNote, source, sourceNote)
+{
+    const $row       = $sourceNote.closest('tr');
+    const index      = $row.attr('data-index');
+    const sourceName = $sourceNote.find('input').attr('name');
+
+    if(source === undefined) source = $row.find('[name^="source"]').val();
+    if(sourceNote === undefined) sourceNote = '';
+    if(source == 'researchreport')
+    {
+        const sourceNoteID = `sourceNote_${index}`;
+        $sourceNote.html(`<div class='form-group-wrapper picker-box' id=${sourceNoteID}></div>`);
+        $.getJSON($.createLink('story', 'ajaxGetSourceNote'), function(sourceNoteItems)
+        {
+            $sourceNotePicker = new zui.Picker(`#${sourceNoteID}`, {items: sourceNoteItems, name: sourceName, defaultValue: sourceNote});
+        });
+
+    }
+    else
+    {
+        $sourceNote.html(`<input class="form-control form-batch-input" type="text" autocomplete="off" name=${sourceName} id="sourceNote" data-name="sourceNote">`);
+    }
+}

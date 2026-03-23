@@ -1,0 +1,28 @@
+:root
+{
+    --zt-apps-bar-height: 36px;
+    --zt-apps-bar-bg: var(--color-canvas);
+    --zt-menu-width: 120px!important;
+    --zt-menu-fold-width: 64px;
+    --zt-menu-space: 8px;
+    --zt-menu-active-bg: var(--color-primary-500);
+    --zt-menu-hover-bg: rgba(var(--color-primary-500-rgb), .4);
+    --zt-menu-text-color: rgba(var(--color-canvas-rgb), .8);
+    --zt-menu-text-active: var(--color-canvas);
+    --zt-menu-bg: var(--color-primary-600);
+}
+
+#navbar  {--state-active-color: transparent!important}
+#navbar>.nav>.nav-item>a:before {box-shadow: none!important;}
+#navbar>.nav>.nav-item>a.active {color: inherit!important}
+#navbar>.nav>.nav-item>a>.text {display: flex; height: 100%; justify-content: center; align-items: center;}
+#navbar>.nav>.nav-item>a.active>.text {box-shadow: inset 0 -2px 0 var(--color-primary-500);}
+#navbar .nav li.nav-divider.divider {height: 8px; opacity: 1; background-color: var(--color-gray-400)!important;}
+
+.in-workspace #header {position: sticky; top: 0; z-index: 10; background-color: var(--zt-menu-bg); color: var(--color-canvas);}
+.in-workspace #header::before, .in-workspace #header::after {content: ' '; display: block; position: absolute; left: 0; bottom: -9px; width: 8px; height: 8px; background-color: var(--zt-menu-bg);
+}
+.in-workspace #header::after {z-index: 1; border-top-left-radius: 9999px; background-color: var(--zt-page-bg);}
+.in-workspace #toolbar > #pageToolbar + .toolbar > .btn {background-color: rgba(var(--color-primary-100-rgb), 0.2); color: var(--color-secondary-200)}
+.in-workspace #pageToolbar > .btn {color: var(--color-secondary-200)}
+.in-workspace #navbar>.nav>.nav-item>a.active>.text {box-shadow: inset 0 -3px 0 var(--color-primary-400);}

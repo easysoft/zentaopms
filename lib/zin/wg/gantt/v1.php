@@ -12,6 +12,10 @@ class gantt extends wg
         'ganttFields:array',
         'showChart?:bool',
         'zooming?:string',
+        'users?:array',
+        'showFields?:string',
+        'exportFileName?:string',
+        'toolbar?:bool|array',
         'options?:array'
     );
 
@@ -35,7 +39,7 @@ class gantt extends wg
 
     public function getUserList(): array
     {
-        $users = data('users');
+        $users = $this->prop('users');
         if(empty($users)) return array();
 
         $userList = array();
@@ -49,6 +53,61 @@ class gantt extends wg
         return $userList;
     }
 
+    protected function getToolbar()
+    {
+        $ganttLang = $this->prop('ganttLang');
+        $toolbar   = $this->prop('toolbar');
+        if(empty($toolbar)) return null;
+
+        $ganttToolbar = array();
+        $ganttToolbar[] = btn
+        (
+            set::type('ghost'),
+            set::icon('guide'),
+            set::url('javascript:scrollToToday()'),
+            set::hint($ganttLang->scrollToToday)
+        );
+        if($toolbar === true || (is_array($toolbar) && in_array('criticalPath', $toolbar)))
+        {
+            $ganttToolbar[] = btn
+            (
+                setID('criticalPath'),
+                set::type('ghost'),
+                set::icon('blame rotate-90'),
+                set::url('javascript:updateCriticalPath()'),
+                set::hint($ganttLang->showCriticalPath)
+            );
+        }
+        if($toolbar === true || (is_array($toolbar) && in_array('fullscreen', $toolbar)))
+        {
+            $ganttToolbar[] = btn
+            (
+                setID('fullScreenBtn'),
+                set::type('ghost'),
+                set::icon('fullscreen'),
+                set::hint($ganttLang->fullScreen)
+            );
+        }
+        if($toolbar === true || (is_array($toolbar) && in_array('setting', $toolbar)))
+        {
+            $ganttToolbar[] = btn
+            (
+                set::type('ghost'),
+                set::icon('cog-outline'),
+                set::url($this->prop('settingLink')),
+                setData(array('toggle' => 'modal', 'size' => '45%')),
+                set::hint($ganttLang->ganttSetting)
+            );
+        }
+
+        return div
+        (
+            setClass('absolute gantt-toolbar'),
+            set::style(array('width' => '40px', 'top' => '0', 'right' => '-50px')),
+            div(setClass('p-0.5 border border-gray-300'), $ganttToolbar)
+        );
+    }
+
     protected function build()
     {
         global $app;
@@ -60,13 +119,16 @@ class gantt extends wg
         if($showChart !== false) $showChart = true;
 
         $colResize    = $showChart;
-        $fileName     = data('fileName');
         $ganttType    = data('ganttType');
         $project      = data('project');
-        $showFields   = data('showFields');
+        $showFields   = $this->prop('showFields');
         $reviewPoints = ($project && $project->model == 'ipd') ? data('reviewPoints') : array();
         $ganttLang    = $this->prop('ganttLang');
         $ganttFields  = $this->prop('ganttFields');
+        $toolbar      = $this->prop('toolbar');
+        $holidays     = $this->prop('holidays');
+        $options      = $this->prop('options');
+        if(is_string($options) && $options == '[]') $options = array();
 
         return div
         (
@@ -75,9 +137,8 @@ class gantt extends wg
             jsVar('module',          $app->rawModule),
             jsVar('method',          $app->rawMethod),
             jsVar('jsRoot',          $app->getWebRoot()),
-            jsVar('fileName',        $fileName),
             jsVar('ganttType',       $ganttType),
-            jsVar('showFields',      $showFields),
+            jsVar('showFields',      empty($showFields) ? array() : explode(',', $showFields)),
             jsVar('showChart',       $showChart),
             jsVar('colResize',       $colResize),
             jsVar('userList',        $this->getUserList()),
@@ -86,7 +147,10 @@ class gantt extends wg
             jsVar('canEditDeadline', $this->prop('canEditDeadline')),
             jsVar('ganttFields',     $ganttFields),
             jsVar('zooming',         $this->prop('zooming')),
-            jsVar('options',         $this->prop('options')),
+            jsVar('options',         $options),
+            jsVar('exportFileName',  $this->prop('exportFileName')),
+            jsVar('weekend',         $this->prop('weekend')),
+            jsVar('holidays',        is_array($holidays) ? array_values($holidays) : array()),
             jsVar('colsWidth',       (float)$colsWidth),
             jsVar('height',          (float)$this->prop('height')),
             jsVar('canViewReview',   common::hasPriv('review', 'view')),
@@ -94,7 +158,13 @@ class gantt extends wg
             jsVar('canViewTask',     common::hasPriv('task', 'view')),
             setID('ganttContainer'),
             on::click('.toggle-all-icon')->call('toggleAllTasks'),
-            div(setID($id), setClass('gantt is-collapsed')),
+            div
+            (
+                setClass('relative'),
+                empty($toolbar) ? null : setStyle(array('width' => 'calc(100% - 50px)')),
+                div(setID($id), setClass('gantt is-collapsed')),
+                $this->getToolbar()
+            ),
             div(setID('myCover'), div(setID('gantt_here'), setData('reviewpoints', json_encode($reviewPoints)))),
             modal
             (

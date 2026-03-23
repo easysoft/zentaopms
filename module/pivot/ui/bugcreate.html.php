@@ -75,7 +75,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $bugs, $products, $
                 setID('exportData'),
                 setClass('hidden'),
                 rawContent(),
-                $this->pivot->buildPivotTable($data, array()),
+                html($this->pivot->buildPivotTable($data, array()))
             )
         )
     );

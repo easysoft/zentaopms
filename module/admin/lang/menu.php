@@ -76,7 +76,7 @@ $lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "{$l
 $lang->admin->menuList->feature['subMenu']['user']        = array('link' => "{$lang->user->common}|custom|required|module=user", 'links' => array('custom|set|module=user&field=roleList'), 'exclude' => 'set,required');
 
 $lang->admin->menuList->feature['tabMenu']['my']['todo']  = array('link' => "{$lang->todo->common}|custom|set|module=todo&field=priList", 'exclude' => 'custom-set');
-$lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
+$lang->admin->menuList->feature['tabMenu']['my']['block'] = array('link' => "{$lang->block->common}s|custom|set|module=block&field=closed", 'exclude' => 'custom-set');
 
 $lang->admin->menuList->feature['tabMenu']['product']['product'] = array('link' => "{$lang->productCommon}|custom|required|module=product", 'links' => array("custom|browsestoryconcept|", 'custom|product|'), 'alias' => 'browsestoryconcept,product', 'exclude' => 'custom-required');
 if($config->enableER) $lang->admin->menuList->feature['tabMenu']['product']['epic']        = array('link' => "{$lang->epic->common}|custom|required|module=epic", 'links' => array("custom|set|module=epic&field=categoryList"), 'exclude' => 'custom-required,custom-set');
@@ -194,4 +194,12 @@ if($config->vision == 'lite')
     $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15'] = 'story';
 
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
+}
+
+if(!helper::hasFeature('testsuite')) unset($lang->admin->menuList->feature['tabMenu']['qa']['testsuite'], $lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['15']);
+
+if(!helper::hasFeature('caselib'))
+{
+    unset($lang->admin->menuList->feature['tabMenu']['qa']['caselib']);
+    unset($lang->admin->menuList->feature['tabMenu']['menuOrder']['qa']['30']);
 }

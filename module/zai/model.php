@@ -192,7 +192,7 @@ class zaiModel extends model
     public function callAPI($path, $method = 'POST', $params = null, $postData = null, $admin = false)
     {
         $setting = $this->getSetting($admin);
-        if(empty($setting)) return array('result' => 'failed', 'message' => $this->lang->zai->configurationUnavailable);
+        if(empty($setting)) return array('result' => 'fail', 'message' => $this->lang->zai->configurationUnavailable);
 
         $tokenInfo = $this->getToken($setting, $admin);
         if($tokenInfo['result'] != 'success') return $tokenInfo;
@@ -231,7 +231,7 @@ class zaiModel extends model
         }
 
         $hasFile = false;
-        if($postData)
+        if($postData !== null) // Post data must set even if it is empty
         {
             foreach($postData as $value)
             {
@@ -266,12 +266,12 @@ class zaiModel extends model
 
         curl_close($curl);
 
-        if($code == 404) return array('result' => 'failed', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
-        if($code == 401) return array('result' => 'failed', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);
+        if($code == 404) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
+        if($code == 401) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);
 
         if($error || $code != 200)
         {
-            return array('result' => 'failed', 'data' => $data, 'code' => $code, 'postData' => $postData, 'message' => sprintf($this->lang->zai->callZaiAPIFailed, $url, ($this->app->config->debug ? $error : '') . "(code: $code, response: $response)"));
+            return array('result' => 'fail', 'data' => $data, 'code' => $code, 'postData' => $postData, 'message' => sprintf($this->lang->zai->callZaiAPIFailed, $url, ($this->app->config->debug ? $error : '') . "(code: $code, response: $response)"));
         }
 
         if(empty($data))     $data = $response;
@@ -305,7 +305,7 @@ class zaiModel extends model
     public function enableVectorization($force = false)
     {
         $info = $this->getVectorizedInfo();
-        if($info->status != 'disabled' && !$force) return array('result' => 'failed', 'message' => $this->lang->zai->vectorizedAlreadyEnabled, 'info' => $info);
+        if($info->status != 'disabled' && !$force) return array('result' => 'fail', 'message' => $this->lang->zai->vectorizedAlreadyEnabled, 'info' => $info);
 
         $suffix = '_' . time();
         $postData = array('name' => 'zentao' . $suffix, 'description' => $this->app->lang->zai->zentaoVectorization);
@@ -314,7 +314,7 @@ class zaiModel extends model
 
         if($result['result'] != 'success') return $result;
 
-        if(empty($result['data']['id'])) return array('result' => 'failed', 'message' => $this->lang->zai->vectorizedFailed);
+        if(empty($result['data']['id'])) return array('result' => 'fail', 'message' => $this->lang->zai->vectorizedFailed);
 
         $info->status          = 'wait';
         $info->key             = $result['data']['id'];

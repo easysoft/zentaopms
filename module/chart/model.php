@@ -93,9 +93,12 @@ class chartModel extends model
                 ->andWhere("FIND_IN_SET({$groupID}, `group`)")
                 ->andWhere('stage')->eq('published')
                 ->andWhere('id')->in($viewableObjects)
+                ->beginIF(!helper::hasFeature('program'))->andWhere('code')->notLike("%program%")->fi()
+                ->beginIF(!helper::hasFeature('devops'))->andWhere('code')->notLike("%devops%")->fi()
                 ->orderBy('id_desc')
                 ->limit(1)
                 ->fetch();
+
             if($chart)
             {
                 $chart = $this->processChart($chart);
@@ -181,7 +184,7 @@ class chartModel extends model
         $chartGroups = array();
         foreach($groups as $group)
         {
-            $chartGroups[$group->id] = $this->dao->select('id, name')->from(TABLE_CHART)
+            $chartGroups[$group->id] = $this->dao->select('id, name, builtin, code')->from(TABLE_CHART)
                 ->where('deleted')->eq('0')
                 ->andWhere('builtin', true)->eq('0')
                 ->orWhere('id')->in($this->config->screen->builtinChart)
@@ -189,6 +192,8 @@ class chartModel extends model
                 ->andWhere("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->eq('published')
                 ->andWhere('id')->in($viewableObjects)
+                ->beginIF(!helper::hasFeature('program'))->andWhere('code')->notLike("%program%")->fi()
+                ->beginIF(!helper::hasFeature('devops'))->andWhere('code')->notLike("%devops%")->fi()
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
@@ -198,12 +203,17 @@ class chartModel extends model
         foreach($groups as $group)
         {
             if(empty($chartGroups[$group->id])) continue;
+            if(!helper::hasFeature('program') && strpos($group->name, $this->lang->program->common) !== false) continue;
+            if(!helper::hasFeature('devops')  && strpos($group->name, $this->lang->devops->common)  !== false) continue;
 
             /* 菜单树中只显示二级分组名称。*/
             /* Only the name of the second-level group is displayed in the menu tree. */
             if($group->grade == 2) $treeMenu[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
-            foreach($chartGroups[$group->id] as $chart) $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
+            foreach($chartGroups[$group->id] as $chart)
+            {
+                $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
+            }
         }
 
         return $treeMenu;

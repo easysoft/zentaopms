@@ -344,11 +344,12 @@ class biModel extends model
     {
         $dbh = $this->app->loadDriver($driver);
 
+        $isDM = $this->config->db->driver == 'dm';
         $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
-        if($this->config->db->driver == 'dm') $sql = $dbh->formatSQL($sql);
+        if($isDM) $sql = $dbh->formatSQL($sql);
         try
         {
-            $dbh->query("$prefixSQL $sql")->fetchAll();
+            $isDM ? $dbh->exec("$prefixSQL $sql") : $dbh->query("$prefixSQL $sql")->fetchAll(); // [dmdb] EXPLAIN cannot fetch data.
         }
         catch(Exception $e)
         {

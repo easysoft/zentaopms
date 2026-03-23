@@ -173,6 +173,7 @@ class docApp extends wg
         jsVar('vision', $config->vision);
         jsVar('isInModal', isInModal());
         jsVar('userGroups', $app->user->groups);
+        jsVar('canViewAITask', !empty($config->enableAITeammate) && $config->edition != 'open' && hasPriv('aitask', 'browse'));
 
         /**
          * 定义文档应用接口链接。

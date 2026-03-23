@@ -120,7 +120,7 @@ $fields->field('verify')
     ->control(array('control' => 'editor', 'uid' => $uid))
     ->value($createFields['verify']['default']);
 
-$files = data('initStory.files') ? data('initStory.files') : array();
+$files = data('story.files') ? data('story.files') : array();
 $fields->field('files')->width('full')->control('fileSelector', array('defaultFiles' => array_values($files)));
 $fields->field('fileList')->control('hidden')->value($files);
 

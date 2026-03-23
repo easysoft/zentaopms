@@ -239,7 +239,7 @@ detailBody
                         set::required(true),
                         $case->type == 'unit' ? set::disabled(true) : null,
                     ),
-                    span
+                    helper::hasFeature('automated') ? span
                     (
                         setClass('input-group-addon'),
                         control
@@ -250,7 +250,7 @@ detailBody
                             set::text($lang->testcase->automated),
                             set::checked($case->auto == 'auto' ? true : false)
                         )
-                    )
+                    ) : null
                 )
             ),
             item

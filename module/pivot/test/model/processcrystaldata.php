@@ -84,7 +84,7 @@ r(count($pivotTest->processCrystalDataTest($complexGroups, $complexRecords, $nor
 // 步骤5：业务规则验证 - 包含slice切片数据
 $sliceSettings = array(
     'columns' => array(
-        array('field' => 'assignedTo', 'title' => 'Assigned To', 'slice' => 'status'),
+        array('field' => 'assignedTo', 'title' => 'Assigned to', 'slice' => 'status'),
         array('field' => 'estimate', 'title' => 'Estimate', 'stat' => 'sum')
     )
 );

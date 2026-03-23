@@ -347,6 +347,9 @@ class taskTao extends taskModel
         $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
         $copyTaskID = $this->dao->lastInsertID();
 
+        $copyTaskPath = $task->path . "{$copyTaskID},";
+        $this->dao->update(TABLE_TASK)->set('path')->eq($copyTaskPath)->where('id')->eq($copyTaskID)->exec();
+
         if(dao::isError()) return false;
 
         $path = $copyTask->path . "{$copyTaskID},";

@@ -36,7 +36,8 @@ $module->type->range("line");
 $module->parent->range('`0`');
 $module->gen(10);
 
-$product = new productTest('admin');
+$product = new productModelTest();
+
 r($product->getLinePairsTest(-1))       && p()      && e('0');                 // 测试获取程序集-1的信息
 r(count($product->getLinePairsTest(0))) && p()      && e('10');                // 获取所有未删除的产品线
 r($product->getLinePairsTest(1))        && p('1,6') && e('产品线1,产品线6');   // 测试获取程序集1的信息

@@ -13,7 +13,7 @@ $lang->epic->common = $lang->ERCommon;
 
 $lang->epic->stageList = array();
 $lang->epic->stageList[''] = '';
-$lang->epic->stageList['wait'] = 'Wait';
+$lang->epic->stageList['wait'] = 'Not started';
 if($config->edition == 'ipd')
 {
     $lang->epic->stageList['inroadmap'] = 'In Roadmap';
@@ -21,7 +21,7 @@ if($config->edition == 'ipd')
 }
 $lang->epic->stageList['planned']    = 'Planned';
 $lang->epic->stageList['projected']  = 'Projected';
-$lang->epic->stageList['developing'] = 'Developing';
+$lang->epic->stageList['developing'] = 'In development';
 $lang->epic->stageList['delivering'] = 'Delivering';
 $lang->epic->stageList['delivered']  = 'Delivered';
 $lang->epic->stageList['closed']     = 'Closed';

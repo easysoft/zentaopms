@@ -187,8 +187,9 @@ class testsuiteModel extends model
         $suite = $this->getById($suiteID);
         if(!$suite) return array();
 
-        $cases = $this->dao->select('t1.*, t2.version AS caseVersion, t2.suite')->from(TABLE_CASE)->alias('t1')
+        $cases = $this->dao->select('t1.*, t2.version AS caseVersion, t2.suite, t3.title AS caseTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+            ->leftJoin(TABLE_CASESPEC)->alias('t3')->on('t1.id=t3.case AND t2.version=t3.version')
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->andWhere('t1.product')->eq($suite->product)
@@ -196,6 +197,11 @@ class testsuiteModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+
+        foreach($cases as $case)
+        {
+            if(empty($case->caseTitle)) $case->caseTitle = $case->title;
+        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
@@ -279,6 +285,7 @@ class testsuiteModel extends model
      */
     public function isClickable(object $report, string $action): bool
     {
+        if($action == 'confirmCaseChange')  return isset($report->caseVersion) && $report->version > $report->caseVersion;
         return common::hasPriv('testsuite', $action);
     }
 

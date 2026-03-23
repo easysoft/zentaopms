@@ -55,10 +55,10 @@ $tester->login();
 $waterfallPlus = array(
     array('name' => '', 'longTime' => 'longTime', 'PM' => 'admin'),
     array('name' => '融合瀑布项目h01', 'end' => ''),
-    array('parent' => '项目集A', 'name' => '融合瀑布项目h01', 'type' => 1, 'end' => '2026-01-31', 'product' => '项目集A/产品1'),
+    array('parent' => '项目集A', 'name' => '融合瀑布项目h01', 'type' => 1, 'end' => date('Y-m-d', strtotime('+1 year')), 'product' => '项目集A/产品1'),
     array('name' => '融合瀑布项目1', 'type' => 1, 'longTime' => 'longTime'),
-    array('name' => '融合瀑布项目h02', 'type' => 1, 'end' => '2026-06-30', 'PM' => 'admin'),
-    array('name' => '项目型融合瀑布项目h01', 'type' => 0, 'end' => '2026-12-31', 'PM' => 'admin'),
+    array('name' => '融合瀑布项目h02', 'type' => 1, 'end' => date('Y-m-d', strtotime('+1 year')), 'PM' => 'admin'),
+    array('name' => '项目型融合瀑布项目h01', 'type' => 0, 'end' => date('Y-m-d', strtotime('+1 year')), 'PM' => 'admin'),
 );
 
 r($tester->checkInput($waterfallPlus['0'])) && p('message,status') && e('创建融合瀑布项目表单页提示信息正确, SUCCESS'); // 校验项目名称不能为空

@@ -54,6 +54,8 @@ if(common::hasPriv('release', 'create') && !common::isTutorialMode())
         ->itemEnd();
 }
 
+$fields->field('title')->className($isShadowProduct ? 'full:w-1/2' : 'full:w-full');
+
 $fields->field('steps')
     ->width('full')
     ->control(array('control' => 'editor', 'templateType' => 'bug'));

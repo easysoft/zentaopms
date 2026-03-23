@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 data('activeMenuID', $storyType);
 jsVar('orderBy', $orderBy);
 jsVar('storyPageID', $pager->pageID);
@@ -89,6 +91,7 @@ featureBar
     (
         picker
         (
+            set::boxClass('whitespace-nowrap'),
             set::tree(),
             set::name('showGrades'),
             set::items($gradeMenu),
@@ -98,6 +101,7 @@ featureBar
             setStyle('justify-content', 'center'),
             set::display($lang->story->viewAllGrades),
             set::menu(array('checkbox' => true, 'itemProps' => array('innerComponent' => 'a'))),
+            set::popMinWidth(150),
             set::value($showGrades),
             set::toolbar
             (
@@ -549,7 +553,6 @@ foreach($setting as $key => $col)
         $col['sortType'] = false;
         if(isset($col['link'])) unset($col['link']);
         if($key == 'assignedTo') $col['type'] = 'user';
-        if($key == 'pri') $col['priList'] = $lang->story->priList;
         if($key == 'title') $col['link']  = array('url' => createLink('{type}', 'view', "storyID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 
@@ -588,6 +591,7 @@ jsVar('cases', $storyCases);
 jsVar('summary', $summary);
 jsVar('checkedSummary', $lang->product->checkedAllSummary);
 jsVar('storyType', $storyType);
+
 dtable
 (
     setClass('shadow rounded'),

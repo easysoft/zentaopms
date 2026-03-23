@@ -7,12 +7,15 @@ class projectModel extends model
      * Get access control list by object type.
      *
      * @param  string $objectType
+     * @param  string $account
      * @access public
      * @return array
      */
-    public function getAclListByObjectType(string $objectType): array
+    public function getAclListByObjectType(string $objectType, string $account = ''): array
     {
-        return $this->dao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->in($objectType)->fetchAll('id');
+        return $this->dao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->in($objectType)
+            ->beginIF($account)->andWhere('account')->eq($account)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -56,12 +59,15 @@ class projectModel extends model
      * Get teams by type.
      *
      * @param  string $type
+     * @param  string $account
      * @access public
      * @return array
      */
-    public function getTeamListByType(string $type): array
+    public function getTeamListByType(string $type, string $account = ''): array
     {
-        return $this->dao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->in($type)->fetchAll('id');
+        return $this->dao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->in($type)
+            ->beginIF($account)->andWhere('account')->eq($account)->fi()
+            ->fetchAll('id');
     }
 
     /**
@@ -957,14 +963,16 @@ class projectModel extends model
      *
      * @param  string $model  scrum|waterfall|noSprint|agileplus|waterfallplus
      * @param  int    $projectID
+     * @param  int    $hasProduct
      * @access public
      * @return object|false
      */
-    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0): object|false
+    public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0, int $hasProduct = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
+        if(!$hasProduct) $this->config->project->includedPriv = array_merge($this->config->project->includedPriv, $this->config->project->noProductPriv);
 
         $hasBaseline    = true;
         $hasAuditplan   = true;
@@ -1135,12 +1143,14 @@ class projectModel extends model
         /* Sort by project order in the program list. */
         $allProjects = array();
         foreach($programs as $programID => $program) $allProjects[$programID] = array();
+
+        $hasProgram = helper::hasFeature('program');
         foreach($projects as $project)
         {
             $programID = zget($project, 'program', '');
 
             $projectName = $project->name;
-            if($this->config->systemMode == 'ALM' && $programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+            if($this->config->systemMode == 'ALM' && $hasProgram && $programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
             $project->name = $projectName;
 
             $allProjects[$programID][] = $project;
@@ -1216,7 +1226,7 @@ class projectModel extends model
      */
     protected function addTeamMembers(int $projectID, object $project, array $members): bool
     {
-        /* Set team of project. */
+        /* Manage Team of project. */
         array_push($members, $project->PM, $project->openedBy);
         $members     = array_unique($members);
         $roles       = $this->loadModel('user')->getUserRoles(array_values($members));
@@ -1536,6 +1546,7 @@ class projectModel extends model
         /* 如果没有传入项目管理方式，则用之前的管理方式。*/
         /* If no project management method is passed, the project management method is used. */
         if(empty($project->model)) $project->model = $oldProject->model;
+        if($project->model != $oldProject->model && !$this->checkCanChangeModel($projectID, $oldProject->model)) $project->model = $oldProject->model;
 
         /* 更新项目表。*/
         /* Update project table. */
@@ -2039,7 +2050,7 @@ class projectModel extends model
             }
 
             $project = $this->projectTao->fetchProjectInfo($projectID);
-            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus')))
+            if(!empty($project) && !empty($executions) && $project->stageBy == 'project' && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
                 $this->loadModel('execution');
                 unset($postProductData->plans);
@@ -2422,7 +2433,7 @@ class projectModel extends model
         $this->lang->switcherMenu   = $this->getSwitcher($projectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* 无迭代项目不开启过程删除导航。 */
-        if($this->config->edition != 'open')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->loadModel('workflowgroup');
             if(!$this->workflowgroup->hasFeature((int)$project->workflowGroup, 'process')) unset($lang->project->menu->other['dropMenu']->pssp);

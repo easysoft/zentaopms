@@ -107,7 +107,7 @@ class pivot extends control
         $this->view->builtin        = $pivot->builtin;
         $this->view->version        = $version;
         $this->view->groupID        = $groupID;
-        $this->view->pivotID        = $groupID;
+        $this->view->pivotID        = $pivotID;
         $this->display();
     }
 
@@ -162,6 +162,8 @@ class pivot extends control
      */
     public function ajaxGetSysOptions(string $search = '', int $limit = 100)
     {
+        /* Decode search from base64: */
+        $search = base64_decode($search);
         $type   = zget($_POST, 'type', '');
         $object = zget($_POST, 'object', '');
         $field  = zget($_POST, 'field', '');

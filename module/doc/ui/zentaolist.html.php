@@ -81,6 +81,22 @@ if(!$isTemplate && $type != 'gantt' && !$noSupport)
         );
 }
 
+$ganttView = null;
+if($type == 'gantt' && !empty($ganttData))
+{
+    if($showFields[0] == '"') $showFields = json_decode($showFields);
+    $ganttView = zui::gantt
+    (
+        set::onInit(jsRaw('window.onInitGantt')),
+        set::data($ganttData['data']),
+        set::links($ganttData['links']),
+        set::ganttFields($ganttFields),
+        set::showFields('text,begin,duration,' . $showFields),
+        set::userList($userList),
+        set::exts('zentao')
+    );
+}
+
 div
 (
     set('data-id', $blockID),
@@ -127,14 +143,5 @@ div
             div($noticeTip)
         )
     ) : null,
-    $type == 'gantt' && !empty($ganttData) ? zui::gantt
-    (
-        set::onInit(jsRaw('window.onInitGantt')),
-        set::data($ganttData['data']),
-        set::links($ganttData['links']),
-        set::ganttFields($ganttFields),
-        set::showFields(explode(',', $showFields)),
-        set::userList($userList),
-        set::exts('zentao')
-    ): null
+    $ganttView
 );

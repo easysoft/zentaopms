@@ -226,7 +226,7 @@ $lang->product->statusList['closed'] = 'Fermé';
 
 global $config;
 $lang->product->aclList['open'] = "Défaut (Les utilisateurs ayant des droits sur {$lang->productCommon} peuvent accéder à ce {$lang->productCommon}.)";
-if($config->systemMode == 'ALM')
+if($config->systemMode == 'ALM' && helper::hasFeature('program'))
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }

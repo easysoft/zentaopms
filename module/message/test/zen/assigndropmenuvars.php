@@ -24,51 +24,12 @@ su('admin');
 
 global $tester;
 
-// 创建message模型作为基类
-$message = $tester->loadModel('message');
-
-$messageZen = new class extends messageModel {
-    public function assignDropmenuVars(string $active = 'unread')
-    {
-        if(empty($active)) $active = 'unread';
-        
-        $messages = $this->getMessages('all', 'createdDate_desc');
-
-        $unreadCount    = 0;
-        $unreadMessages = $allMessages = array();
-        array_map(function($message) use (&$unreadCount, &$unreadMessages, &$allMessages)
-        {
-            $date = substr($message->createdDate, 0, 10);
-
-            $secondDiff = time() - strtotime($message->createdDate);
-            if($secondDiff < 60)    $time = sprintf($this->lang->message->timeLabel['minute'], 1);
-            if($secondDiff >= 60)   $time = sprintf($this->lang->message->timeLabel['minute'], ceil($secondDiff / 60));
-            if($secondDiff >= 3600) $time = $this->lang->message->timeLabel['hour'];
-            if($secondDiff >= 5400) $time = substr($message->createdDate, 11, 5);
-            if($secondDiff > 86400) $time = substr($message->createdDate, 5, 11);
-            $message->showTime = $time;
-
-            preg_match_all("/<a href='([^\']+)'/", $message->data, $out);
-            $link    = count($out[1]) ? $out[1][0] : '';
-            $content = str_replace("<a href='$link'", "<a data-url='{$link}' href='###' onclick='clickMessage(this)'", $message->data);
-            $content = preg_replace("/data-app='([^\']+)'/", '', $content);
-            $content = preg_replace("/(\?|\&)onlybody=yes/", '', $content);
-            $message->data = $content;
-
-            $allMessages[$date][] = $message;
-            if($message->status == 'read') return;
-
-            $unreadCount++;
-            $unreadMessages[$date][] = $message;
-        }, $messages);
-
-        $this->view->allMessages    = $allMessages;
-        $this->view->unreadCount    = $unreadCount;
-        $this->view->unreadMessages = $unreadMessages;
-        $this->view->active         = $active;
-    }
-};
-
+// 先加载 control 类，因为 messageZen 继承自 message (control)
+require_once $tester->app->getModulePath('', 'message') . 'control.php';
+$messageZen = $tester->app->loadTarget('message', '', 'zen');
+// 设置模块名并加载 message model，因为 messageZen 的方法中使用了 $this->message
+$messageZen->setModuleName('message');
+$messageZen->loadModel('message');
 $messageZen->view = new stdClass();
 
 // 测试步骤1：使用unread参数
@@ -87,6 +48,6 @@ r(isset($messageZen->view->unreadCount)) && p() && e('1');
 $messageZen->assignDropmenuVars('all');
 r(isset($messageZen->view->allMessages)) && p() && e('1');
 
-// 测试步骤5：测试空参数默认处理
-$messageZen->assignDropmenuVars('');
+// 测试步骤5：测试默认参数值
+$messageZen->assignDropmenuVars();
 r($messageZen->view->active) && p() && e('unread');

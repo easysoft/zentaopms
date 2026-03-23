@@ -334,12 +334,8 @@ div
 (
     setClass('main border-t'),
     set::id('resultsContainer'),
-    div
-    (
-        set::id('casesResults')
-    )
+    on::init()->do('loadResult()'),
+    div(set::id('casesResults'))
 );
 
 set::id('runCaseModal');
-
-render();

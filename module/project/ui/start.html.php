@@ -32,7 +32,7 @@ formPanel
     )
 );
 hr();
-history();
+history(set::objectID($project->id));
 
 /* ====== Render page ====== */
 render();

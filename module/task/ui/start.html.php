@@ -11,7 +11,9 @@ declare(strict_types=1);
 namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('confirmFinish', $lang->task->confirmFinish);
+jsVar('confirmTeamFinish', $lang->task->confirmTeamFinish);
 jsVar('noticeTaskStart', $lang->task->noticeTaskStart);
+jsVar('currentTeam', $currentTeam);
 
 /* zin: Set variables to define control for form. */
 $assignedToControl = '';

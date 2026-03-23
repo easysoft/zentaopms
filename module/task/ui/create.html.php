@@ -40,6 +40,8 @@ if(!empty($task->team))
     }
 }
 
+$isEn = $app->getClientLang() == 'en';
+
 $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
@@ -87,7 +89,7 @@ formGridPanel
         div
         (
             setClass('flex items-center w-96 mb-4'),
-            span(setClass('mr-4 w-16'), $lang->task->mode),
+            span(setClass('mr-4 ' . ($isEn ? 'w-20' : 'w-16')), $lang->task->mode),
             picker
             (
                 set::name("mode"),

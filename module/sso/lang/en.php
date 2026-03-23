@@ -10,38 +10,40 @@
  * @link        https://www.zentao.net
  */
 $lang->sso = new stdclass();
-$lang->sso->settings = 'Settings';
-$lang->sso->turnon   = 'Zdoo';
-$lang->sso->redirect = 'Auto Jump to Zdoo';
+$lang->sso->settings = 'Configuration';
+$lang->sso->turnon   = 'Access ZDOO';
+$lang->sso->redirect = 'Redirect to ZDOO';
 $lang->sso->code     = 'Code';
 $lang->sso->key      = 'Secret Key';
-$lang->sso->addr     = 'Address';
-$lang->sso->bind     = 'User Binding';
-$lang->sso->addrNotice = 'Example http://www.ranzhi.com/sys/sso-check.html';
+$lang->sso->addr     = 'Endpoint URL';
+$lang->sso->bind     = 'User Linking';
+$lang->sso->addrNotice = 'Example: http://www.ranzhi.com/sys/sso-check.html';
 
 $lang->sso->turnonList = array();
 $lang->sso->turnonList[1] = 'On';
 $lang->sso->turnonList[0] = 'Off';
 
-$lang->sso->bindType = 'Binding Type';
-$lang->sso->bindUser = 'User Binding';
+$lang->sso->bindType = 'Connection Methods';
+$lang->sso->bindUser = 'Connect User';
 
-$lang->sso->bindTypeList['bind'] = 'Bind to existing User';
+$lang->sso->bindTypeList['bind'] = 'Connect Existing User';
 $lang->sso->bindTypeList['add']  = 'Add User';
 
 $lang->sso->help = new stdclass();
-$lang->sso->help->addr = 'Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check';
-$lang->sso->help->code = 'Code must be the same as set in Zdoo';
-$lang->sso->help->key  = 'Secret Key must be the same as set in Zdoo';
+$lang->sso->help->addr = 'Endpoint URL format:
+For PATH_INFO: http://your zdoo url/sys/sso-check.html
+For GET: http://your zdoo url/sys/index.php?m=sso&f=check';
+$lang->sso->help->code = 'Ensure the code is identical to the one in ZDOO.';
+$lang->sso->help->key  = 'Ensure the Secret Key is identical to the one in ZDOO.';
 
-$lang->sso->deny           = 'Access Limited';
-$lang->sso->bindNotice     = 'User that is just added has no permissions. You have to ask ZenTao Admin to grant permissions to the User.';
-$lang->sso->bindNoPassword = 'Password should not be empty.';
-$lang->sso->bindNoUser     = 'Password is wrong/User cannot be found!';
-$lang->sso->bindHasAccount = 'This username already exists. Change your username or bind to it.';
+$lang->sso->deny           = 'Access Restricted';
+$lang->sso->bindNotice     = 'No permissions. Please ask ZenTao Admin for access.';
+$lang->sso->bindNoPassword = 'Password is required';
+$lang->sso->bindNoUser     = 'Invalid username or password';
+$lang->sso->bindHasAccount = 'Username already exists. Please choose another one or link to the existing account.';
 
-$lang->sso->homeURL             = 'Feishu Page Config URL：';
-$lang->sso->redirectURL         = 'Feishu Redirect URL：';
-$lang->sso->feishuConfigEmpty   = 'Go to [Admin]-[Notification]-[Webhook] to set ( Feishu Work Notification)';
-$lang->sso->feishuResponseEmpty = 'Request response is empty';
-$lang->sso->unbound             = 'Current Feishu user is not bound in ZenTao-Wwebhook.';
+$lang->sso->homeURL             = 'Feishu Homepage URL:';
+$lang->sso->redirectURL         = 'Feishu Redirect URL:';
+$lang->sso->feishuConfigEmpty   = 'Configure (Feishu Messenger Notifications) in [Admin]-[Notifications]-[Webhook].';
+$lang->sso->feishuResponseEmpty = 'Empty response received';
+$lang->sso->unbound             = 'User linking missing for Feishu in ZenTao Webhook settings.';

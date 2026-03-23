@@ -61,7 +61,7 @@ formPanel
             picker
             (
                 set::name('duplicateBug'),
-                set::items(createLink('bug', 'ajaxGetProductBugs', "projectID=$bug->product&bugID=$bug->id&search={search}")),
+                set::items(createLink('bug', 'ajaxGetProductBugs', "projectID=&bugID=$bug->id&search={search}")),
                 set::placeholder($lang->bug->placeholder->duplicate),
                 set::value(''),
                 set::popWidth('auto'),

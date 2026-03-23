@@ -190,7 +190,7 @@ $lang->execution->lifeTimeList['ops']   = "DevOps";
 
 $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
-$lang->execution->cfdTypeList['bug']   = "View By bug";
+$lang->execution->cfdTypeList['bug']   = "View by bug";
 
 $lang->team->account    = 'Utilisateur';
 $lang->team->realname   = 'Name';
@@ -247,7 +247,7 @@ $lang->execution->doc                       = 'Document';
 $lang->execution->doclib                    = 'Docoment Library';
 $lang->execution->manageProducts            = 'Linked ' . $lang->productCommon . 's';
 $lang->execution->linkStory                 = 'Link Stories';
-$lang->execution->linkStoryByPlan           = 'Link Stories By Plan';
+$lang->execution->linkStoryByPlan           = 'Link Stories by Plan';
 $lang->execution->linkPlan                  = 'Linked Plan';
 $lang->execution->unlinkStoryTasks          = 'Unlink';
 $lang->execution->linkedProducts            = "Linked {$lang->productCommon}s";
@@ -285,7 +285,7 @@ $lang->execution->unlinkStory               = 'Unlink Story';
 $lang->execution->unlinkStoryAB             = 'Unlink';
 $lang->execution->batchUnlinkStory          = 'Batch Unlink Stories';
 $lang->execution->importTask                = 'Transfer Task';
-$lang->execution->importPlanStories         = 'Link Stories By Plan';
+$lang->execution->importPlanStories         = 'Link Stories by Plan';
 $lang->execution->importBug                 = 'Import Bug';
 $lang->execution->tree                      = 'Tree';
 $lang->execution->treeTask                  = 'Show Task Only';

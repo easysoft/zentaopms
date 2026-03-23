@@ -30,7 +30,6 @@ $lang->custom->isRange              = 'Is Target Control';
 $lang->custom->concept              = "Concept";
 $lang->custom->URStory              = "User requirements";
 $lang->custom->SRStory              = "Software requirements";
-$lang->custom->epic                 = "Epic";
 $lang->custom->default              = "Default";
 $lang->custom->scrumStory           = "Story";
 $lang->custom->waterfallCommon      = "Waterfall";
@@ -122,7 +121,7 @@ $lang->custom->execution->fields['execution'] = 'Close Setting';
 
 $lang->custom->product = new stdClass();
 $lang->custom->product->fields['required']           = $lang->custom->required;
-$lang->custom->product->fields['browsestoryconcept'] = 'Story Concpet';
+$lang->custom->product->fields['browsestoryconcept'] = 'Story Concept';
 $lang->custom->product->fields['product']            = 'Close Setting';
 
 $lang->custom->story = new stdClass();

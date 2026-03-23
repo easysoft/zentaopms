@@ -14,6 +14,7 @@ namespace zin;
 $cells    = array();
 $hasRisk  = helper::hasFeature('risk');
 $hasIssue = helper::hasFeature('issue');
+$isEn     = $app->getClientLang() == 'en';
 foreach($config->block->projectstatistic->items as $module => $items)
 {
     $cellItems = array();
@@ -49,7 +50,7 @@ foreach($config->block->projectstatistic->items as $module => $items)
             ),
             span
             (
-                setClass('font-bold text-black mr-0.5'),
+                setClass('font-bold text-black mr-0.5' . ($isEn ? ' pl-1' : '')),
                 round(zget($project, $field, 0), 2)
             ),
             span
@@ -95,7 +96,7 @@ panel
                 array
                 (
                     'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
-                    'placement' => 'bottom',
+                    'placement' => $app->getClientLang() == 'en' ? 'bottom-end' : 'bottom',
                     'type'      => 'white',
                     'className' => 'text-dark border border-light leading-5'
                 )

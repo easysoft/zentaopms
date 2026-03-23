@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('URChanged', $this->lang->story->URChanged);
@@ -236,7 +238,6 @@ if($isFromDoc || $isFromAI)
         $setting[$key]['sortType'] = false;
         if(isset($col['link'])) unset($setting[$key]['link']);
         if($key == 'assignedTo') $setting[$key]['type'] = 'user';
-        if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
         if($key == 'title') $setting[$key]['link']  = array('url' => createLink('{type}', 'view', 'storyID={id}&version={version}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
@@ -462,6 +463,7 @@ featureBar
     (
         picker
         (
+            set::boxClass('whitespace-nowrap'),
             set::tree(true),
             set::name('showGrades'),
             set::items($gradeMenu),
@@ -472,6 +474,7 @@ featureBar
             set::display($lang->story->viewAllGrades),
             set::menu(array('checkbox' => true, 'itemProps' => array('innerComponent' => 'a'))),
             set::value($showGrades),
+            set::popMinWidth(150),
             set::toolbar
             (
                 array('text' => $lang->confirm, 'onClick' => jsRaw('(e,info) => {setShowGrades();info.relativeTarget.close();}')),

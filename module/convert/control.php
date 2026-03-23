@@ -307,6 +307,14 @@ class convert extends control
                 if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidDB)));
                 if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidTable)));
             }
+            elseif($method == 'api')
+            {
+                $domain = $jiraApi['domain'];
+                if(!$domain) return $this->send(array('result' => 'fail', 'message' => array('dbName' => sprintf($this->lang->error->notempty, $this->lang->convert->jira->domain))));
+
+                $this->convert->checkJiraApi();
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
             else
             {
                 if($domain)
@@ -409,12 +417,13 @@ class convert extends control
         $this->loadModel('task');
         $objectRelation = !empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRelation['zentaoObject']));
         $resolutionList = $objectRelation ? $this->convert->getJiraData($method, 'resolution')       : array();
-        $statusList     = $objectRelation ? $this->convert->getJiraStatusList($step, $jiraRelation)  : array();
-        $jiraFields     = $objectRelation ? $this->convert->getJiraCustomField($step, $jiraRelation) : array();
+        $statusList     = $objectRelation ? $this->convert->getJiraStatusList($step) : array();
+        $jiraFields     = $objectRelation ? zget($this->convert->getJiraCustomField(), $step, array()) : array();
         $issueTypeList  = $this->convert->getJiraTypeList();
         $linkTypeList   = $step == 'relation' ? $this->convert->getJiraData($method, 'issuelinktype') : array();
         $stepList       = $this->convert->getJiraStepList($jiraRelation, $issueTypeList);
         $backSteps      = $this->getBackKey($stepList, $step);
+        $jiraActions    = $this->convert->getJiraWorkflowActions();
 
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->method         = $method;
@@ -427,7 +436,7 @@ class convert extends control
         $this->view->zentaoObjects  = $this->convert->getZentaoObjectList();
         $this->view->fieldList      = $jiraFields;
         $this->view->statusList     = $statusList;
-        $this->view->jiraActions    = $this->convert->getJiraWorkflowActions();
+        $this->view->jiraActions    = $this->session->jiraMethod == 'api' ? zget($jiraActions, $step, array()) : $jiraActions;
         $this->view->resolutionList = $resolutionList;
         $this->view->defaultValue   = $this->convert->getObjectDefaultValue($step);
         $this->view->linkTypeList   = $linkTypeList;
@@ -548,5 +557,19 @@ class convert extends control
         $this->view->stepStatus = $stepStatus;
         $this->view->backUrl    = $backSteps ? inlink('initJiraUser', "method={$method}&dbName={$this->session->jiraDB}") : '';
         $this->display();
+    }
+
+    /**
+     * 接口调用快速导入jira数据。
+     * Ajax quick import jira data.
+     *
+     * @access public
+     * @return void
+     */
+    public function quickImportJiraData()
+    {
+        $this->convert->quickImportJiraData();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $this->send(array('result' => 'success'));
     }
 }

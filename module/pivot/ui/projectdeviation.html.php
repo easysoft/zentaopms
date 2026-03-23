@@ -105,7 +105,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $executions, $chart
                 setID('exportData'),
                 setClass('hidden'),
                 rawContent(),
-                $this->pivot->buildPivotTable($data, array()),
+                html($this->pivot->buildPivotTable($data, array()))
             )
         ),
         panel

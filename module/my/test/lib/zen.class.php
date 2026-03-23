@@ -126,10 +126,19 @@ class myZenTest extends baseTest
     public function showWorkCountNotInOpenTest($count = array())
     {
         /* Create a mock pager object. */
-        $pager = new stdClass();
-        $pager->recTotal = 0;
-        $pager->recPerPage = 20;
-        $pager->pageID = 1;
+        global $tester;
+        if(isset($tester) && isset($tester->app))
+        {
+            $tester->app->loadClass('pager', true);
+            $pager = new pager(0, 20, 1);
+        }
+        else
+        {
+            $pager = new stdClass();
+            $pager->recTotal = 0;
+            $pager->recPerPage = 20;
+            $pager->pageID = 1;
+        }
 
         $result = $this->invokeArgs('showWorkCountNotInOpen', [$count, $pager]);
         if(dao::isError()) return dao::getError();

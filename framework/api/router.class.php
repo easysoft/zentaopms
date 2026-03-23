@@ -336,6 +336,15 @@ class api extends router
         if(isset($pathItems[2])) $methodName = $pathItems[2];
         if(!$methodName) $methodName = $actionToMethod[$this->action];
 
+        /* File is special. */
+        if($moduleName == 'file' && $this->action == 'post')
+        {
+            $methodName         = 'ajaxUpload';
+            $_GET['field']      = 'file';
+            $_GET['objectType'] = zget($_POST, 'objectType', '');
+            $_GET['objectID']   = zget($_POST, 'objectID', '');
+        }
+
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();

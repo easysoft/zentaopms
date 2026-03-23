@@ -106,12 +106,14 @@ class cronModel extends model
      * 记录定时任务日志。
      * Log cron.
      *
-     * @param  string    $log
+     * @param  string $log
+     * @param  bool   $isDebugMode
      * @access public
      * @return void
      */
-    public function logCron(string $log)
+    public function logCron(string $log, bool $isDebugMode = false)
     {
+        if($isDebugMode && !$this->config->debug)  return false;
         if(!is_writable($this->app->getLogRoot())) return false;
 
         $runMode = PHP_SAPI == 'cli' ? '_cli' : '';

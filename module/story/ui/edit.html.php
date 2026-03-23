@@ -129,7 +129,7 @@ detailBody
             !$canEditContent ? set::hidden(true) : null,
             inputGroup
             (
-                picker
+                $story->status != 'reviewing' ? picker
                 (
                     setID('reviewer'),
                     set::name('reviewer[]'),
@@ -137,7 +137,7 @@ detailBody
                     set::value($fields['reviewer']['default']),
                     set::multiple(true),
                     on::change('changeReviewer')
-                ),
+                ) : null,
                 $forceReview ? null : span
                 (
                     setClass('input-group-addon'),

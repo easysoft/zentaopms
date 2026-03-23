@@ -24,3 +24,5 @@ $fields->field('acl')
 
 $fields->field('whitelist')
     ->hidden(data('program.acl') == 'open');
+
+$fields->field('parent')->disabled(data('disableParent'));

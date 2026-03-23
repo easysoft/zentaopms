@@ -32,8 +32,8 @@ su('admin');
 
 $storyTest = new storyModelTest();
 
-r($storyTest->getGradeMenuTest('story')) && p('0:text,value') && e('查看,story');
-r($storyTest->getGradeMenuTest('epic')) && p('0:text,value') && e('查看,epic');
-r($storyTest->getGradeMenuTest('requirement')) && p('0:text,value') && e('查看,requirement');
+r($storyTest->getGradeMenuTest('story')) && p('0:text,value') && e('查看研发需求,story');
+r($storyTest->getGradeMenuTest('epic')) && p('0:text,value') && e('查看业务需求,epic');
+r($storyTest->getGradeMenuTest('requirement')) && p('0:text,value') && e('查看用户需求,requirement');
 r(count($storyTest->getGradeMenuTest('all'))) && p() && e('3');
-r($storyTest->getGradeMenuTest('story', (object)array('storyType' => 'story'))) && p('0:text,value') && e('查看,story');
+r($storyTest->getGradeMenuTest('story', (object)array('storyType' => 'story'))) && p('0:text,value') && e('查看研发需求,story');

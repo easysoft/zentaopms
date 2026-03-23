@@ -1,62 +1,62 @@
 <?php
 $lang->entry->common  = 'Application';
-$lang->entry->list    = 'Applications';
+$lang->entry->list    = 'Application List';
 $lang->entry->api     = 'API';
 $lang->entry->webhook = 'Webhook';
-$lang->entry->log     = 'Log';
+$lang->entry->log     = 'Effort';
 $lang->entry->setting = 'Settings';
 
-$lang->entry->browse    = 'Browse';
+$lang->entry->browse    = 'View Application';
 $lang->entry->create    = 'Add Application';
-$lang->entry->edit      = 'Edit';
-$lang->entry->delete    = 'Delete';
-$lang->entry->createKey = 'Regenerate Secret Key';
+$lang->entry->edit      = 'Edit Application';
+$lang->entry->delete    = 'Delete Application';
+$lang->entry->createKey = 'Regenerate Key';
 
 $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
 $lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
-$lang->entry->freePasswd  = 'Password-Free Login';
+$lang->entry->freePasswd  = 'Passwordless Login';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Description';
-$lang->entry->createdBy   = 'CreatedBy';
-$lang->entry->createdDate = 'CreateDate';
-$lang->entry->editedby    = 'EditedBy';
-$lang->entry->editedDate  = 'EditedDate';
-$lang->entry->date        = 'Requesting Time';
-$lang->entry->url         = 'Requesting URL';
-$lang->entry->calledTime  = 'Called Time';
+$lang->entry->createdBy   = 'Creator';
+$lang->entry->createdDate = 'Created on';
+$lang->entry->editedby    = 'Last Edited by';
+$lang->entry->editedDate  = 'Edited on';
+$lang->entry->date        = 'Requested on';
+$lang->entry->url         = 'Request URL';
+$lang->entry->calledTime  = 'Call Time';
 $lang->entry->deleted     = 'Deleted';
 
-$lang->entry->confirmDelete = 'Do you want to delete this entry?';
+$lang->entry->confirmDelete = 'Are you sure you want to delete this application?';
 $lang->entry->help          = 'Help';
 $lang->entry->notify        = 'Notification';
 
-$lang->entry->helpLink   = 'https://www.zentao.pm/book/zentaomanual/scrum-tool-open-source-integrate-third-party-application-221.html';
+$lang->entry->helpLink   = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
 $lang->entry->notifyLink = 'https://www.zentao.net/book/zentaopmshelp/301.html';
 
-$lang->entry->summaryTip = 'There are %s applications on this page';
+$lang->entry->summaryTip = '%s applications on this page.';
 
 $lang->entry->note = new stdClass();
-$lang->entry->note->name    = 'Name';
-$lang->entry->note->code    = 'Code should be letters and numbers';
-$lang->entry->note->ip      = "Use comma to seperate IPs. IP segment is supported, e.g. 192.168.1.*";
-$lang->entry->note->allIP   = 'All IPs';
-$lang->entry->note->account = 'Application Account';
+$lang->entry->note->name    = 'Authorized App Name';
+$lang->entry->note->code    = 'Authorized App code must be alphanumeric.';
+$lang->entry->note->ip      = "Allowed IPs (Separate with commas. Wildcards like 192.168.1. are supported).";
+$lang->entry->note->allIP   = 'No Restrictions';
+$lang->entry->note->account = 'Authorized App Account';
 
-$lang->entry->freePasswdList[1] = 'On';
-$lang->entry->freePasswdList[0] = 'Off';
+$lang->entry->freePasswdList[1] = 'Enable';
+$lang->entry->freePasswdList[0] = 'Disable';
 
-$lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Parameter code is missing.';
-$lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Parameter token is missing.';
-$lang->entry->errmsg['SESSION_CODE_MISSING']  = 'Session code is missing.';
-$lang->entry->errmsg['EMPTY_KEY']             = 'Secret key is missing.';
+$lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Missing code parameter.';
+$lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Missing token parameter.';
+$lang->entry->errmsg['SESSION_CODE_MISSING']  = 'Missing session code.';
+$lang->entry->errmsg['EMPTY_KEY']             = 'App key not set.';
 $lang->entry->errmsg['INVALID_TOKEN']         = 'Invalid token.';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
-$lang->entry->errmsg['IP_DENIED']             = 'IP is denied.';
-$lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
-$lang->entry->errmsg['INVALID_ACCOUNT']       = 'Invalid account.';
-$lang->entry->errmsg['EMPTY_ENTRY']           = 'Application does not exist.';
-$lang->entry->errmsg['CALLED_TIME']           = 'Token has expired';
-$lang->entry->errmsg['ERROR_TIMESTAMP']       = 'Timestamp Error';
+$lang->entry->errmsg['IP_DENIED']             = 'Access denied for this IP.';
+$lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'No user linked.';
+$lang->entry->errmsg['INVALID_ACCOUNT']       = 'User does not exist.';
+$lang->entry->errmsg['EMPTY_ENTRY']           = 'App does not exist.';
+$lang->entry->errmsg['CALLED_TIME']           = 'Token has expired.';
+$lang->entry->errmsg['ERROR_TIMESTAMP']       = 'Invalid timestamp.';

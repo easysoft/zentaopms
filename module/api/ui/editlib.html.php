@@ -86,7 +86,7 @@ formPanel
                     inputGroup
                     (
                         $lang->doclib->user,
-                        mailto(set::items($users), set::value($lib->users))
+                        userPicker(set::items($users), set::value($lib->users))
                     )
                 )
             )

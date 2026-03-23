@@ -86,7 +86,7 @@ $lang->project->manage              = 'Manage';
 $lang->project->market              = 'Market';
 $lang->project->tips                = 'Note';
 $lang->project->afterInfo           = "{$lang->projectCommon} is created. Next you can";
-$lang->project->setTeam             = 'Set Team';
+$lang->project->setTeam             = 'Manage Team';
 $lang->project->linkStory           = 'Link Stories';
 $lang->project->createStory         = "Create {$lang->SRCommon}";
 $lang->project->createTask          = "Create Task";
@@ -98,7 +98,7 @@ $lang->project->backToExecutionList = 'Go Back to Project %s List';
 $lang->project->backToProjectList   = 'Go Back to Project List';
 $lang->project->deletedTip          = "Sorry, the {$lang->projectCommon} has been deleted";
 
-$lang->project->manDay          = 'Man Day';
+$lang->project->manDay          = 'Man-Days';
 $lang->project->day             = 'Day';
 $lang->project->newProduct      = 'New Product';
 $lang->project->associatePlan   = 'Associate Plan';

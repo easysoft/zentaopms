@@ -1408,11 +1408,13 @@ class storyTao extends storyModel
     public function computeStage(array $children): string
     {
         $allWait      = true;
+        $allClosed    = true;
         $hasInRoadmap = false;
         $hasInCharter = false;
         $allIpdStage  = true;
         foreach($children as $child)
         {
+            if($child->stage != 'closed') $allClosed = false;
             if($child->stage == 'closed' && $child->closedReason != 'done') continue;
             if($child->stage != 'wait')   $allWait   = false;
             if($child->stage == 'inroadmap') $hasInRoadmap = true;
@@ -1421,7 +1423,11 @@ class storyTao extends storyModel
         }
 
         $parentStage = '';
-        if($allWait)
+        if($allClosed)
+        {
+            $parentStage = 'closed';
+        }
+        elseif($allWait)
         {
             $parentStage = 'wait';
         }

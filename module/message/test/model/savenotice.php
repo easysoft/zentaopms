@@ -5,7 +5,16 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('story')->gen(2);
-zenData('task')->loadYaml('task')->gen(7);
+
+// 使用字段范围设置，避免生成 SQL 文件
+$task = zenData('task');
+$task->id->range('1-7');
+$task->project->range('1');
+$task->execution->range('3');
+$task->assignedTo->range('dev1{3},dev2{3},[]');
+$task->status->range('wait,doing,done,cancel,closed,wait,done');
+$task->gen(7);
+
 zenData('notify')->gen(0);
 zenData('action')->gen(20);
 zenData('user')->gen(2);

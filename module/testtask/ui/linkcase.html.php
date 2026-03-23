@@ -13,6 +13,8 @@ namespace zin;
 $items = array();
 foreach($lang->testtask->featureBar['linkcase'] as $key => $label)
 {
+    if($key == 'bysuite' && !helper::hasFeature('testsuite')) continue;
+
     $isActive = $key == $type;
     if($key == 'bysuite' || $key == 'bybuild')
     {

@@ -236,8 +236,13 @@ class executionTao extends executionModel
             foreach($extendFields as $extendField)
             {
                 $executions[$executionID]->{$extendField->field} = $postData->{$extendField->field}[$executionID];
-                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = implode(',', $executions[$executionID]->{$extendField->field});
+                if(in_array($extendField->type, array('date', 'datetime')) && empty($postData->{$extendField->field}[$executionID]))
+                {
+                    $executions[$executionID]->{$extendField->field} = null;
+                    continue;
+                }
 
+                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = implode(',', $executions[$executionID]->{$extendField->field});
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
 

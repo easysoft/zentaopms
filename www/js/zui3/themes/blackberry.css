@@ -1,47 +1,183 @@
-:root
-{
-  /* generate from https://uicolors.app/create */
-  --color-primary-50: #f2f6fc;
-  --color-primary-100: #e2ecf7;
-  --color-primary-200: #aac8e6;
-  --color-primary-300: #81acd9;
-  --color-primary-400: #6390ce;
-  --color-primary-500: #4f78c1;
-  --color-primary-600: #4565b0;
-  --color-primary-700: #3d5390;
-  --color-primary-800: #354873;
-  --color-primary-900: #26304b;
-  --color-primary-50-rgb: 242, 246, 252;
-  --color-primary-100-rgb: 226, 236, 247;
-  --color-primary-200-rgb: 170, 200, 230;
-  --color-primary-300-rgb: 129, 172, 217;
-  --color-primary-400-rgb: 99, 144, 206;
-  --color-primary-500-rgb: 79, 120, 193;
-  --color-primary-600-rgb: 69, 101, 176;
-  --color-primary-700-rgb: 61, 83, 144;
-  --color-primary-800-rgb: 53, 72, 115;
-  --color-primary-900-rgb: 38, 48, 75;
+:root {
 
-  --color-secondary-50: #f3f6fb;
-  --color-secondary-100: #e4ebf5;
-  --color-secondary-200: #adc6e3;
-  --color-secondary-300: #86a9d4;
-  --color-secondary-400: #698dc8;
-  --color-secondary-500: #5675ba;
-  --color-secondary-600: #4b64aa;
-  --color-secondary-700: #42538b;
-  --color-secondary-800: #344166;
-  --color-secondary-900: #262d45;
-  --color-secondary-50-rgb: 243, 246, 251;
-  --color-secondary-100-rgb: 228, 235, 245;
-  --color-secondary-200-rgb: 173, 198, 227;
-  --color-secondary-300-rgb: 134, 169, 212;
-  --color-secondary-400-rgb: 105, 141, 200;
-  --color-secondary-500-rgb: 86, 117, 186;
-  --color-secondary-600-rgb: 75, 100, 170;
-  --color-secondary-700-rgb: 66, 83, 139;
-  --color-secondary-800-rgb: 52, 65, 102;
-  --color-secondary-900-rgb: 38, 45, 69;
+  /* https://tints.catou.se/palette/v1:cHJpbWFyeXwxMDc4ZjN8NTAwfHB8MHwwfDB8MTAwfGF-c2Vjb25kYXJ5fDEyMWUzMXw5NTB8cHwwfDB8MHwxMDB8YX5kYW5nZXJ8RkY1RDVEfDUwMHxwfDB8MHwwfDEwMHxtfmltcG9ydGFudHxmZjk2NWR8NTAwfHB8MHwwfDB8MTAwfG1-c3VjY2Vzc3w0M2EwNDd8NTAwfHB8MHwwfDB8MTAwfG1-d2FybmluZ3xmZmM4MDB8NTAwfHB8MHwwfDB8MTAwfG1-c3BlY2lhbHw2RDE0RDJ8ODAwfHB8MHwwfDB8MTAwfGF-Z3JheXxmNGY2Zjl8NTB8cHwwfDB8MHwxMDB8YQ */
+  --color-primary-50: #ecf0ff;
+  --color-primary-100: #dae2ff;
+  --color-primary-200: #b6c8fe;
+  --color-primary-300: #8cacfe;
+  --color-primary-400: #5990fd;
+  --color-primary-500: #1078f3;
+  --color-primary-600: #0a5ec1;
+  --color-primary-700: #064794;
+  --color-primary-800: #03316a;
+  --color-primary-900: #011a3f;
+  --color-primary-950: #00102c;
+  --color-secondary-50: #edf1f9;
+  --color-secondary-100: #dfe5f5;
+  --color-secondary-200: #bacaeb;
+  --color-secondary-300: #99b1e1;
+  --color-secondary-400: #7599d8;
+  --color-secondary-500: #597fbc;
+  --color-secondary-600: #48699c;
+  --color-secondary-700: #38537d;
+  --color-secondary-800: #283c5c;
+  --color-secondary-900: #19283f;
+  --color-secondary-950: #121e31;
+  --color-danger-50: #fff0f0;
+  --color-danger-100: #ffe1e1;
+  --color-danger-200: #ffc7c7;
+  --color-danger-300: #ffa7a7;
+  --color-danger-400: #ff8484;
+  --color-danger-500: #ff5d5d;
+  --color-danger-600: #eb0000;
+  --color-danger-700: #b30000;
+  --color-danger-800: #7e0000;
+  --color-danger-900: #490000;
+  --color-danger-950: #310000;
+  --color-important-50: #fff4f1;
+  --color-important-100: #ffe9e3;
+  --color-important-200: #ffd7ca;
+  --color-important-300: #ffc1aa;
+  --color-important-400: #ffae8b;
+  --color-important-500: #ff965d;
+  --color-important-600: #da6d00;
+  --color-important-700: #a14f00;
+  --color-important-800: #6f3400;
+  --color-important-900: #3d1a00;
+  --color-important-950: #280f00;
+  --color-success-50: #dbfcdc;
+  --color-success-100: #affab1;
+  --color-success-200: #66ec6c;
+  --color-success-300: #5ad05f;
+  --color-success-400: #4eb853;
+  --color-success-500: #43a047;
+  --color-success-600: #337e37;
+  --color-success-700: #245e27;
+  --color-success-800: #174219;
+  --color-success-900: #0a250b;
+  --color-success-950: #051705;
+  --color-warning-50: #fff8ef;
+  --color-warning-100: #fff5e7;
+  --color-warning-200: #ffe8c3;
+  --color-warning-300: #ffdea3;
+  --color-warning-400: #ffd47b;
+  --color-warning-500: #ffc800;
+  --color-warning-600: #c99d00;
+  --color-warning-700: #947300;
+  --color-warning-800: #614b00;
+  --color-warning-900: #362800;
+  --color-warning-950: #201600;
+  --color-special-50: #f5f2ff;
+  --color-special-100: #ebe5fe;
+  --color-special-200: #d7cafd;
+  --color-special-300: #c5b0fc;
+  --color-special-400: #b191fb;
+  --color-special-500: #a174fa;
+  --color-special-600: #9254f9;
+  --color-special-700: #8428f7;
+  --color-special-800: #6d14d2;
+  --color-special-900: #3a0675;
+  --color-special-950: #25034e;
+  --color-gray-50: #f8f9fb;
+  --color-gray-100: #f4f6f9;
+  --color-gray-200: #cfd8e5;
+  --color-gray-300: #a8bad2;
+  --color-gray-400: #86a0bf;
+  --color-gray-500: #6e839d;
+  --color-gray-600: #56677c;
+  --color-gray-700: #3f4d5d;
+  --color-gray-800: #2c3642;
+  --color-gray-900: #181e26;
+  --color-gray-950: #0d1117;
+
+  --color-primary-50-rgb: 236, 240, 255;
+  --color-primary-100-rgb: 218, 226, 255;
+  --color-primary-200-rgb: 182, 200, 254;
+  --color-primary-300-rgb: 140, 172, 254;
+  --color-primary-400-rgb: 89, 144, 253;
+  --color-primary-500-rgb: 16, 120, 243;
+  --color-primary-600-rgb: 10, 94, 193;
+  --color-primary-700-rgb: 6, 71, 148;
+  --color-primary-800-rgb: 3, 49, 106;
+  --color-primary-900-rgb: 1, 26, 63;
+  --color-primary-950-rgb: 0, 16, 44;
+  --color-secondary-50-rgb: 237, 241, 249;
+  --color-secondary-100-rgb: 223, 229, 245;
+  --color-secondary-200-rgb: 186, 202, 235;
+  --color-secondary-300-rgb: 153, 177, 225;
+  --color-secondary-400-rgb: 117, 153, 216;
+  --color-secondary-500-rgb: 89, 127, 188;
+  --color-secondary-600-rgb: 72, 105, 156;
+  --color-secondary-700-rgb: 56, 83, 125;
+  --color-secondary-800-rgb: 40, 60, 92;
+  --color-secondary-900-rgb: 25, 40, 63;
+  --color-secondary-950-rgb: 18, 30, 49;
+  --color-danger-50-rgb: 255, 240, 240;
+  --color-danger-100-rgb: 255, 225, 225;
+  --color-danger-200-rgb: 255, 199, 199;
+  --color-danger-300-rgb: 255, 167, 167;
+  --color-danger-400-rgb: 255, 132, 132;
+  --color-danger-500-rgb: 255, 93, 93;
+  --color-danger-600-rgb: 235, 0, 0;
+  --color-danger-700-rgb: 179, 0, 0;
+  --color-danger-800-rgb: 126, 0, 0;
+  --color-danger-900-rgb: 73, 0, 0;
+  --color-danger-950-rgb: 49, 0, 0;
+  --color-important-50-rgb: 255, 244, 241;
+  --color-important-100-rgb: 255, 233, 227;
+  --color-important-200-rgb: 255, 215, 202;
+  --color-important-300-rgb: 255, 193, 170;
+  --color-important-400-rgb: 255, 174, 139;
+  --color-important-500-rgb: 255, 150, 93;
+  --color-important-600-rgb: 218, 109, 0;
+  --color-important-700-rgb: 161, 79, 0;
+  --color-important-800-rgb: 111, 52, 0;
+  --color-important-900-rgb: 61, 26, 0;
+  --color-important-950-rgb: 40, 15, 0;
+  --color-success-50-rgb: 219, 252, 220;
+  --color-success-100-rgb: 175, 250, 177;
+  --color-success-200-rgb: 102, 236, 108;
+  --color-success-300-rgb: 90, 208, 95;
+  --color-success-400-rgb: 78, 184, 83;
+  --color-success-500-rgb: 67, 160, 71;
+  --color-success-600-rgb: 51, 126, 55;
+  --color-success-700-rgb: 36, 94, 39;
+  --color-success-800-rgb: 23, 66, 25;
+  --color-success-900-rgb: 10, 37, 11;
+  --color-success-950-rgb: 5, 23, 5;
+  --color-warning-50-rgb: 255, 248, 239;
+  --color-warning-100-rgb: 255, 245, 231;
+  --color-warning-200-rgb: 255, 232, 195;
+  --color-warning-300-rgb: 255, 222, 163;
+  --color-warning-400-rgb: 255, 212, 123;
+  --color-warning-500-rgb: 255, 200, 0;
+  --color-warning-600-rgb: 201, 157, 0;
+  --color-warning-700-rgb: 148, 115, 0;
+  --color-warning-800-rgb: 97, 75, 0;
+  --color-warning-900-rgb: 54, 40, 0;
+  --color-warning-950-rgb: 32, 22, 0;
+  --color-special-50-rgb: 245, 242, 255;
+  --color-special-100-rgb: 235, 229, 254;
+  --color-special-200-rgb: 215, 202, 253;
+  --color-special-300-rgb: 197, 176, 252;
+  --color-special-400-rgb: 177, 145, 251;
+  --color-special-500-rgb: 161, 116, 250;
+  --color-special-600-rgb: 146, 84, 249;
+  --color-special-700-rgb: 132, 40, 247;
+  --color-special-800-rgb: 109, 20, 210;
+  --color-special-900-rgb: 58, 6, 117;
+  --color-special-950-rgb: 37, 3, 78;
+  --color-gray-50-rgb: 248, 249, 251;
+  --color-gray-100-rgb: 244, 246, 249;
+  --color-gray-200-rgb: 207, 216, 229;
+  --color-gray-300-rgb: 168, 186, 210;
+  --color-gray-400-rgb: 134, 160, 191;
+  --color-gray-500-rgb: 110, 131, 157;
+  --color-gray-600-rgb: 86, 103, 124;
+  --color-gray-700-rgb: 63, 77, 93;
+  --color-gray-800-rgb: 44, 54, 66;
+  --color-gray-900-rgb: 24, 30, 38;
+  --color-gray-950-rgb: 13, 17, 23;
 
   --color-link: var(--color-primary-700);
   --color-link-hover: var(--color-primary-600);
@@ -50,5 +186,64 @@
   --color-link-hover-rgb: var(--color-primary-600-rgb);
   --color-link-visited-rgb: var(--color-primary-800-rgb);
 
-  --zt-header-bg: var(--color-primary-800);
+  --color-fore: var(--color-secondary-950);
+  --color-fore-rgb: var(--color-secondary-950-rgb);
+
+  /* --zt-header-bg: var(--color-primary-800); */
+  --zt-menu-bg: var(--color-primary-950)!important;
+  --zt-menu-width: 132px!important;
+  --zt-page-bg: #f8f9fb!important;
+  --color-link: var(--color-primary-600)!important;
+  --color-link-hover: var(--color-primary-500)!important;
+
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
 }
+
+#menu #menuNav {background-color: var(--color-secondary-900); border-radius: 6px 6px 0 0; position: static; margin: 8px 8px 0;}
+#menuFooter {position: static!important; background-color: var(--color-secondary-900); margin: 0 8px 8px; border-radius: 0 0 6px 6px; border-top: 1px solid rgba(var(--color-canvas-rgb), .12)}
+#menu .nav > li > a.active {background-color: var(--color-primary-500)!important}
+#menu .nav > li > a > .icon {color: var(--color-gray-400); margin-right: 2px; transform: scale(90%);}
+#menu .nav > li > a.active > .icon {color: var(--color-canvas);}
+#menuToggleMenu .menu-toggle .icon-menu-arrow-left::before {content: "\e980"}
+
+#toolbar > .toolbar {gap: 8px!important}
+#toolbar > #pageToolbar + .toolbar > .btn {box-shadow: none!important; border-radius: var(--radius-xl)!important; min-width: 36px; background-color: var(--color-secondary-50); color: var(--color-secondary-500)}
+#pageToolbar > .btn {color: var(--color-secondary-500)}
+#quickAddMenu-toggle > .icon::before {content: "\e974"}
+
+#spaceHeading {background-color: var(--color-secondary-900)!important;}
+
+#heading #dropmenu .btn {height: 26px; background-color: var(--color-gray-100);}
+
+#navbar  {--state-active-color: transparent!important}
+#navbar>.nav>.nav-item>a:before {box-shadow: none!important;}
+#navbar>.nav>.nav-item>a.active {color: inherit!important}
+#navbar>.nav>.nav-item>a>.text {display: flex; height: 100%; justify-content: center; align-items: center;}
+#navbar>.nav>.nav-item>a.active>.text {box-shadow: inset 0 -2px 0 var(--color-primary-500);}
+#navbar .nav li.nav-divider.divider {height: 8px; opacity: 1; background-color: var(--color-gray-400)!important;}
+
+#versionSwitchBtn {color: var(--color-secondary-500)}
+
+.nav-feature {--nav-active-bg: var(--color-primary-500)!important; --nav-active-color: var(--color-canvas)!important;}
+#featureBar .search-form-toggle {--skin-color: transparent!important; --skin-bg: var(--color-secondary-50)!important;}
+#featureBar .search-form-toggle > .icon {color: var(--color-primary-500)}
+
+.search-box > .form-control {--form-control-border: transparent; background-color: var(--color-secondary-50)!important;}
+.search-box > .form-control:focus {background-color: var(--color-canvas)!important;}
+
+.dtable-check-info {color: var(--color-secondary-600)}
+.pager {color: var(--color-secondary-600)}
+
+.in-workspace #header {position: sticky; top: 0; z-index: 10; background-color: var(--zt-menu-bg); color: var(--color-canvas);}
+.in-workspace #header::before, .in-workspace #header::after {content: ' '; display: block; position: absolute; left: 0; bottom: -9px; width: 8px; height: 8px; background-color: var(--zt-menu-bg);
+}
+.in-workspace #header::after {z-index: 1; border-top-left-radius: 9999px; background-color: var(--zt-page-bg);}
+.in-workspace #toolbar > #pageToolbar + .toolbar > .btn {background-color: var(--color-secondary-800); color: var(--color-secondary-200)}
+.in-workspace #pageToolbar > .btn {color: var(--color-secondary-200)}
+.in-workspace #navbar>.nav>.nav-item>a.active>.text {box-shadow: inset 0 -3px 0 var(--color-primary-400);}

@@ -118,7 +118,7 @@ class todoZen extends todo
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
-            ->cleanInt('pri, begin, end')
+            ->cleanInt('pri')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date) || $this->post->switchDate, 'date', FUTURE_TIME)
             ->setIF(empty($rawData->begin) || $this->post->switchTime, 'begin', '2400')

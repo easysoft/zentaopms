@@ -421,11 +421,15 @@ class executionModel extends model
         }
 
         /* Redefines the language entries for the fields in the project table. */
+        $requiredFields = $this->config->execution->edit->requiredFields;
         foreach(explode(',', $this->config->execution->edit->requiredFields) as $field)
         {
+            if(empty($field)) continue;
             if(isset($this->lang->execution->$field)) $this->lang->project->$field = $this->lang->execution->$field;
             if($oldExecution->type == 'stage' and $field == 'name') $this->lang->project->name = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->project->name);
-            if($field == 'QD' && in_array($execution->attribute, array('request', 'design', 'review')) && empty($execution->QD)) $this->config->execution->edit->requiredFields = str_replace(',QD', '', $this->config->execution->edit->requiredFields);
+
+            /* 删除瀑布类型阶段无用必填项。 Delete useless required fields for waterfall stage. */
+            if((in_array($field, array('QD', 'RD')) && in_array($execution->attribute, array('request', 'design', 'review'))) || ($field == 'PO' && $execution->attribute == 'review')) $requiredFields = trim(str_replace(",{$field},", ',', ",{$requiredFields},"), ',');
         }
 
         /* Update data. */
@@ -433,7 +437,7 @@ class executionModel extends model
         $executionProject = isset($execution->project) ? $execution->project : $oldExecution->project;
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType, delta')
             ->autoCheck('begin,end')
-            ->batchCheck($this->config->execution->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
@@ -2769,6 +2773,9 @@ class executionModel extends model
         $this->dao->update(TABLE_TASK)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('project')->eq($newProjectID)->where('project')->eq($oldProjectID)->andWhere('execution')->eq($executionID)->exec();
+
+        /* Update the hours and efforts. */
+        $this->updateProjectHours($newProjectID, $oldProjectID, $executionID);
 
         /* Update the team members and whitelist of the project. */
         $addedAccounts = $this->updateProjectUsers($executionID, $newProjectID);
@@ -5475,5 +5482,50 @@ class executionModel extends model
         $countExecutionDeliverables = $this->dao->select('count(*) as count')->from(TABLE_PROJECTDELIVERABLE)->where('project')->eq($execution->project)->andWhere('deliverable')->in($deliverables)->fetch('count');
 
         return $countExecutionDeliverables >= count($deliverables);
+    }
+
+    /**
+     * 更新项目的工时。
+     * Update project hours.
+     *
+     * @param  int    $newProjectID
+     * @param  int    $oldProjectID
+     * @param  int    $executionID
+     * @access public
+     * @return bool
+     */
+    public function updateProjectHours(int $newProjectID, int $oldProjectID, int $executionID): bool
+    {
+        if(empty($newProjectID) || empty($oldProjectID) || empty($executionID)) return true;
+
+        $this->dao->update(TABLE_EFFORT)->set('project')->eq($newProjectID)->where('execution')->eq($executionID)->exec();
+
+        $executionHours  = $this->dao->select('estimate,`left`,consumed')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        $oldProjectHours = $this->dao->select('estimate,`left`,consumed')->from(TABLE_PROJECT)->where('id')->eq($oldProjectID)->fetch();
+        $newProjectHours = $this->dao->select('estimate,`left`,consumed')->from(TABLE_PROJECT)->where('id')->eq($newProjectID)->fetch();
+
+        if(!empty($executionHours->estimate))
+        {
+            $oldProjectHours->estimate -= $executionHours->estimate;
+            $newProjectHours->estimate += $executionHours->estimate;
+        }
+        if(!empty($executionHours->left))
+        {
+            $oldProjectHours->left -= $executionHours->left;
+            $newProjectHours->left += $executionHours->left;
+        }
+        if(!empty($executionHours->consumed))
+        {
+            $oldProjectHours->consumed -= $executionHours->consumed;
+            $newProjectHours->consumed += $executionHours->consumed;
+        }
+
+        $oldProjectHours->progress = ($oldProjectHours->consumed + $oldProjectHours->left) > 0 ? floor($oldProjectHours->consumed / ($oldProjectHours->consumed + $oldProjectHours->left) * 1000) / 1000 * 100 : 0;
+        $newProjectHours->progress = ($newProjectHours->consumed + $newProjectHours->left) > 0 ? floor($newProjectHours->consumed / ($newProjectHours->consumed + $newProjectHours->left) * 1000) / 1000 * 100 : 0;
+
+        $this->dao->update(TABLE_PROJECT)->data($oldProjectHours)->where('id')->eq($oldProjectID)->exec();
+        $this->dao->update(TABLE_PROJECT)->data($newProjectHours)->where('id')->eq($newProjectID)->exec();
+
+        return !dao::isError();
     }
 }

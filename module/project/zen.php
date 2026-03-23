@@ -283,7 +283,7 @@ class projectZen extends project
         if($this->view->globalDisableProgram) $programID = $this->config->global->defaultProgram;
         $programID     = (int)$programID;
         $topProgramID  = $this->program->getTopByID($programID);
-        $withProgram   = $this->config->systemMode == 'ALM';
+        $withProgram   = $this->config->systemMode == 'ALM' && helper::hasFeature('program');
         $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->program->getByID($programID);
 
@@ -361,7 +361,7 @@ class projectZen extends project
      */
     protected function buildEditForm(int $projectID, object $project, string $from = '', int $programID = 0): void
     {
-        $withProgram         = $this->config->systemMode == 'ALM';
+        $withProgram         = $this->config->systemMode == 'ALM' && helper::hasFeature('program');
         $allProducts         = $this->loadModel('program')->getProductPairs($project->parent, 'all', 'noclosed', '', 0, $withProgram);
         $branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $projectBranches     = $this->project->getBranchesByProject($projectID);
@@ -1767,7 +1767,7 @@ class projectZen extends project
     protected function getKanbanData()
     {
         list($kanbanGroup, $latestExecutions) = $this->project->getStats4Kanban();
-        $programPairs = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
+        $programPairs = array(0 => helper::hasFeature('program') ? $this->lang->project->noProgram : '') + $this->loadModel('program')->getPairs(true, 'order_asc');
 
         $kanbanList = array();
         foreach($kanbanGroup as $regionKey => $region)
@@ -1820,7 +1820,7 @@ class projectZen extends project
             $groupData['data']['lanes'] = $lanes;
             $groupData['data']['cols']  = $columns;
             $groupData['data']['items'] = $items;
-            $kanbanList[] = array('items' => array($groupData), 'key' => $regionKey, 'heading' => array('title' => $this->lang->project->typeList[$regionKey]));
+            $kanbanList[] = array('items' => array($groupData), 'key' => $regionKey, 'heading' => array('title' => $this->lang->project->typeList[$regionKey]), 'kanbanProps' => array('laneNameWidth' => helper::hasFeature('program') ? null : '0'));
         }
 
         return $kanbanList;
