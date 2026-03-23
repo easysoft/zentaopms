@@ -487,4 +487,42 @@ class programplan extends control
 
         $this->display();
     }
+
+    /**
+     * 甘特图下编辑版本。
+     * Edit a version of Gantt.
+     *
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function editGanttVersion(int $versionID)
+    {
+        if($_POST)
+        {
+            $version = form::data($this->config->programplan->form->editGanttVersion)->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $version->title = $version->version;
+            $this->dao->update(TABLE_OBJECT)->data($version)->where('id')->eq($versionID)->exec();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionBox')"));
+        }
+
+        $this->view->version = $this->programplan->fetchByID($versionID, 'baseline');
+        $this->display();
+    }
+
+    /**
+     * 甘特图下删除版本。
+     * Delete a version of Gantt.
+     *
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function deleteGanttVersion(int $versionID)
+    {
+        $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
+        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionBox')"));
+    }
 }
