@@ -1451,8 +1451,20 @@ eof;
      */
     public function resetProjectPriv(int $projectID = 0)
     {
+        if($this->app->tab == 'execution')
+        {
+            $executionID = $this->session->execution;
+            if(!empty($_GET['executionID'])) $executionID = $_GET['executionID'];
+            if(!empty($_GET['execution']))   $executionID = $_GET['execution'];
+            if(empty($executionID)) return;
+
+            $execution = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if(empty($execution)) return;
+            $projectID = $execution->project;
+        }
+
         /* Get user program priv. */
-        if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
+        if(empty($projectID) && $this->session->project) $projectID = $this->session->project;
         if(empty($projectID)) return;
 
         $program = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
