@@ -1,4 +1,4 @@
 window.setGanttData = function()
 {
-    $('[name=data]').val(JSON.stringify(window.ganttData));
+    $('[name=data]').val(window.jsonedGanttData);
 };

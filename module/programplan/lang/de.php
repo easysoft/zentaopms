@@ -58,6 +58,8 @@ $lang->programplan->duration         = 'Duration';
 $lang->programplan->estimate         = 'Man-hours';
 $lang->programplan->consumed         = 'Consumed';
 $lang->programplan->version          = 'Version';
+$lang->programplan->createVersion    = 'Create Version';
+$lang->programplan->editVersion      = 'Edit Version';
 $lang->programplan->full             = 'Full Screen';
 $lang->programplan->today            = 'Today';
 $lang->programplan->exporting        = 'Exporting';
@@ -82,6 +84,9 @@ $lang->programplan->editRelation        = 'Manage Task Relation';
 $lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';
 $lang->programplan->deleteRelation      = 'Delete Relation';
 $lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
+$lang->programplan->createGanttVersion  = 'Create Gantt Version';
+$lang->programplan->editGanttVersion    = 'Edit Gantt Version';
+$lang->programplan->deleteGanttVersion  = 'Delete Gantt Version';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
