@@ -119,6 +119,10 @@ $config->group->subset->projectbuild = new stdclass();
 $config->group->subset->projectbuild->order = 270;
 $config->group->subset->projectbuild->nav   = 'project';
 
+$config->group->subset->programplan = new stdclass();
+$config->group->subset->programplan->order = 275;
+$config->group->subset->programplan->nav   = 'project';
+
 $config->group->subset->projectrelease = new stdclass();
 $config->group->subset->projectrelease->order = 280;
 $config->group->subset->projectrelease->nav   = 'project';
