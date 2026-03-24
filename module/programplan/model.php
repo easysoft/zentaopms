@@ -387,6 +387,12 @@ class programplanModel extends model
         $prevLevel            = 0;
         foreach($plans as $plan)
         {
+            if(!empty($plan->schedule))
+            {
+                $schedule = json_decode($plan->schedule, true);
+                if(!empty($schedule['calendar'])) $plan->days = count($schedule['calendar']);
+            }
+
             $level    = isset($plan->level) ? $plan->level : 0;
             $syncData = isset($plan->syncData) ? $plan->syncData : null;
             unset($plan->level, $plan->syncData);
