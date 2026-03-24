@@ -161,6 +161,7 @@ if(!empty($build->builds))
 detailBody
 (
     set::hasExtraMain(false),
+    on::click('.batch-btn')->call('window.handleBatchBtnClick', jsRaw('target')),
     sectionList(
         tabs
         (
