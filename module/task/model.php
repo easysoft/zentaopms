@@ -4130,7 +4130,7 @@ class taskModel extends model
             $currentLink  = $host . helper::createLink('task', 'view', "id={$task->id}");
             $relationLink = $host . helper::createLink('task', 'view', "id={$relationTask->id}");
             $title        = $task->name;
-            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->account, $task->name, $currentLink, $relationTask->name, $relationLink);
+            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->realname, $task->name, $currentLink, $relationTask->name, $relationLink);
             foreach($relationTask->assignedTo as $taskAssignedTo)
             {
                 if(!isset($users[$taskAssignedTo])) continue;
