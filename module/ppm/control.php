@@ -206,6 +206,7 @@ class ppm extends control
         $defaultBranches = array_values(array_slice($branchNameList, 0, 2));
         $targetBranch    = $targetBranch ?: zget($defaultBranches, 0, '');
         $sourceBranch    = $sourceBranch ?: zget($defaultBranches, 1, '');
+        if($targetBranch && !$sourceBranch) $sourceBranch = $targetBranch;
         $flow            = $this->loadModel('reporeviewflow')->getByBranchName($repoID, $targetBranch);
         if(!empty($flow))
         {
