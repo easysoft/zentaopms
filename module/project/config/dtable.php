@@ -183,15 +183,15 @@ $config->project->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->project->execution->dtable->fieldList['rawID']['width']    = '80';
 $config->project->execution->dtable->fieldList['rawID']['show']     = true;
 
-$config->project->execution->dtable->fieldList['name']['title']        = $lang->nameAB;
-$config->project->execution->dtable->fieldList['name']['name']         = 'nameCol';
-$config->project->execution->dtable->fieldList['name']['fixed']        = 'left';
-$config->project->execution->dtable->fieldList['name']['flex']         = 1;
-$config->project->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
-$config->project->execution->dtable->fieldList['name']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
-$config->project->execution->dtable->fieldList['name']['nestedToggle'] = true;
-$config->project->execution->dtable->fieldList['name']['sortType']     = true;
-$config->project->execution->dtable->fieldList['name']['show']         = true;
+$config->project->execution->dtable->fieldList['nameCol']['title']        = $lang->nameAB;
+$config->project->execution->dtable->fieldList['nameCol']['name']         = 'nameCol';
+$config->project->execution->dtable->fieldList['nameCol']['fixed']        = 'left';
+$config->project->execution->dtable->fieldList['nameCol']['flex']         = 1;
+$config->project->execution->dtable->fieldList['nameCol']['type']         = 'nestedTitle';
+$config->project->execution->dtable->fieldList['nameCol']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
+$config->project->execution->dtable->fieldList['nameCol']['nestedToggle'] = true;
+$config->project->execution->dtable->fieldList['nameCol']['sortType']     = true;
+$config->project->execution->dtable->fieldList['nameCol']['show']         = true;
 
 $config->project->execution->dtable->fieldList['productName']['title']    = $lang->execution->product;
 $config->project->execution->dtable->fieldList['productName']['name']     = 'productName';
