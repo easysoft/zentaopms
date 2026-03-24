@@ -82,11 +82,62 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             set::items($items)
         );
     }
+
+    /* Build versions for dropdown. */
+    $versionItems = array();
+    foreach($versions as $version)
+    {
+        $item = array('text' => $version->version, 'value' => $version->id);
+        if($version->reviewType == 'deliverable') $item['text'] .= " [{$lang->project->deliverableAbbr}]";
+        if($version->reviewType == 'baseline')    $item['text'] .= " [{$lang->project->baseline}]";
+        if($version->reviewType == 'gantt')
+        {
+            $item['actions'] = array();
+            if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'title' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
+            if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'title' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
+        }
+
+        $versionItems[] = $item;
+    }
+
+    $item = array('text' => $lang->project->latestVersion, 'value' => 0);
+    if(hasPriv('programplan', 'createGanttVersion')) $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID=$projectID"), 'data-toggle' => 'modal'));
+    $versionItems[] = array('text' => $lang->project->realProgress, 'value' => 'nowait');
+    $versionItems[] = $item;
+
+    // 定义 JS 中用到的语言文本
+    $langData = [];
+    $langData['allVersions'] = $lang->project->allVersions;
+    $langData['compare']     = $lang->project->diffVersion;
+    $langData['confirm']     = $lang->confirm;
+    $langData['cancel']      = $lang->cancel;
+
     featureBar
     (
         btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
         $productDropdown,
-        $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null
+        $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
+        li
+        (
+            setID('versionList'),
+            setClass('ml-2'),
+            setStyle('order', '20000'),
+            dropdown
+            (
+                jsVar('versionLangData', $langData),
+                jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
+                btn(setID('versionBox'), setClass('ghost gray-300-outline rounded-full'), $lang->project->version),
+                set::menu([
+                   'checkOnClick' => '.has-checkbox .item',
+                   'items' => $versionItems,
+                   'width' => 200,
+                   'header' => jsRaw('setVersionDropdownHeader'),
+                   'footer' => jsRaw('setVersionDropdownFooter'),
+                   'getItem' => jsRaw('getVersionItem'),
+                   'onClickItem' => jsRaw('setClickVersionItem')
+                ]),
+            )
+        )
     );
     toolbar
     (
