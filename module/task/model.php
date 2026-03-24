@@ -3429,7 +3429,7 @@ class taskModel extends model
      */
     public function updateExecutionEsDateByGantt(object $postData): bool
     {
-        $stage = $this->dao->select('project,parent,frozen')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
+        $stage = $this->dao->select('project,parent,frozen,days,schedule')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
         if(!empty($stage->frozen))
         {
             $this->app->loadLang('execution');
@@ -3450,9 +3450,20 @@ class taskModel extends model
         if(helper::diffDate($end, $postData->endDate) < 0) dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
         if(dao::isError()) return false;
 
+        /* 拖动阶段时，需要更新自动排期以及可用工日数据。*/
+        $postData->schedule = $stage->schedule;
+        $postData->days     = $stage->days;
+        if(!empty($stage->schedule))
+        {
+            $schedule = $this->loadModel('project')->computeSchedule($postData->startDate, $postData->endDate, json_decode($stage->schedule, true));
+            if(!empty($schedule)) $postData->schedule = json_encode($schedule);
+            if(!empty($schedule->calendar)) $postData->days = count($schedule->calendar);
+        }
         $this->dao->update(TABLE_PROJECT)
             ->set('begin')->eq($postData->startDate)
             ->set('end')->eq($postData->endDate)
+            ->set('schedule')->eq($postData->schedule)
+            ->set('days')->eq($postData->days)
             ->set('lastEditedBy')->eq($this->app->user->account)
             ->where('id')->eq($postData->id)
             ->exec();
