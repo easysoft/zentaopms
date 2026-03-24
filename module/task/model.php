@@ -4042,7 +4042,7 @@ class taskModel extends model
 
                 $currentLink  = helper::createLink('task', 'view', "id={$task->id}");
                 $relationLink = helper::createLink('task', 'view', "id={$relationTask->id}");
-                $notify->data = sprintf($this->lang->task->$messageTextVar, $notify->createdBy, $currentLink, $task->name, $relationLink, $relationTask->name);
+                $notify->data = sprintf($this->lang->task->$messageTextVar, $this->app->user->realname, $currentLink, $task->name, $relationLink, $relationTask->name);
 
                 foreach($relationTask->assignedTo as $taskAssignedTo)
                 {
