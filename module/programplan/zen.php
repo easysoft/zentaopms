@@ -378,11 +378,14 @@ class programplanZen extends programplan
      * @param  int      $baselineID
      * @param  string   $type
      * @param  string   $orderBy
+     * @param  string   $browseType
+     * @param  int      $queryID
+     * @param  int      $versionID
      * j
      * @access protected
      * @return array
      */
-    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0, int $versionID = 0): array
     {
         /* Obtain user page configuration items. */
         $this->loadModel('setting');
@@ -399,11 +402,14 @@ class programplanZen extends programplan
         $this->view->selectCustom = $selectCustom;
 
         /* Get data for gantt. */
-        $stages = array();
-        if($type == 'gantt')      $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
-        if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
-
-        return $stages;
+        if($versionID != 0)
+        {
+            $stages = $this->loadModel('project')->getGanttDataByVersion((int)$versionID);
+            if($stages) return $stages;
+        }
+        if($type == 'gantt')      return $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
+        if($type == 'assignedTo') return $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
+        return array();
     }
 
     /**

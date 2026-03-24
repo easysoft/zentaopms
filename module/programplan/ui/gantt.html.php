@@ -84,28 +84,35 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     }
 
     /* Build versions for dropdown. */
-    $versionItems = array();
+    $versionItems   = array();
+    $currentVersion = $lang->project->version;
     foreach($versions as $version)
     {
-        $item = array('text' => $version->version, 'value' => $version->id);
-        if($version->reviewType == 'deliverable') $item['text'] .= " [{$lang->project->deliverableAbbr}]";
-        if($version->reviewType == 'baseline')    $item['text'] .= " [{$lang->project->baseline}]";
+        $item = array('title' => $version->version, 'value' => $version->id, 'hint' => $version->version);
+        if($version->reviewType == 'deliverable') $item['text'] = "[{$lang->project->deliverableAbbr}]";
+        if($version->reviewType == 'baseline')    $item['text'] = "[{$lang->project->baseline}]";
         if($version->reviewType == 'gantt')
         {
+            $item['hint']    = $version->items;
             $item['actions'] = array();
-            if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'title' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
-            if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'title' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
+            if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'hint' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
+            if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'hint' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
         }
 
+        if($version->id == $versionID)
+        {
+            $currentVersion = $version->version;
+            $item['class']  = 'selected';
+        }
         $versionItems[] = $item;
     }
 
-    $item = array('text' => $lang->project->latestVersion, 'value' => 0);
+    $item = array('title' => $lang->project->latestVersion, 'value' => 0);
     if(hasPriv('programplan', 'createGanttVersion')) $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID=$projectID"), 'data-toggle' => 'modal'));
-    $versionItems[] = array('text' => $lang->project->realProgress, 'value' => 'nowait');
+    $versionItems[] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
     $versionItems[] = $item;
+    if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
 
-    // 定义 JS 中用到的语言文本
     $langData = [];
     $langData['allVersions'] = $lang->project->allVersions;
     $langData['compare']     = $lang->project->diffVersion;
@@ -125,8 +132,20 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             dropdown
             (
                 jsVar('versionLangData', $langData),
+                jsVar('versionID', $versionID),
+                jsVar('currentVersion', $currentVersion),
                 jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
-                btn(setID('versionBox'), setClass('ghost gray-300-outline rounded-full'), $lang->project->version),
+                div
+                (
+                    btn(setID('versionBox'), setClass('ghost gray-300-outline rounded-full'), $currentVersion, span(setClass('caret'))),
+                    span
+                    (
+                        setID('compareBox'),
+                        setClass('hidden ml-2'),
+                        icon('exchange'),
+                        btn(setID('nextBox'), setClass('ghost gray-300-outline rounded-full ml-2'), span(setClass('caret')))
+                    )
+                ),
                 set::menu([
                    'checkOnClick' => '.has-checkbox .item',
                    'items' => $versionItems,
@@ -137,7 +156,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                    'onClickItem' => jsRaw('setClickVersionItem')
                 ]),
             )
-        )
+        ),
     );
     toolbar
     (

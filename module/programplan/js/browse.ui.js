@@ -23,6 +23,7 @@ window.insertToDoc = function(blockID, insertLink)
     });
 }
 
+let diffMode = false;
 window.setVersionDropdownHeader = function()
 {
     return {
@@ -33,8 +34,11 @@ window.setVersionDropdownHeader = function()
             titleClass: 'text-gray',
             actions: [
                 {icon: 'exchange', text: versionLangData.compare, className: this.state.showCheckbox ? 'invisible pointer-events-none' : 'text-primary', onClick: () => {
+                    diffMode = true
                     this.setState({showCheckbox: true});
                     $(this.base).find('li.menu-item .item-actions').addClass('hidden');
+                    $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#compareBox').html('<span class="caret"></span>').removeClass('hidden').removeAttr('data-value');
                 }},
             ],
         },
@@ -52,8 +56,11 @@ window.setVersionDropdownFooter = function()
             items: [
                 {text: versionLangData.confirm, size: 'sm', disabled: this.getChecks().length < 2, type: 'primary', onClick: () => console.log('点击了确认，已选中对比版本', this.getChecks())},
                 {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) => {
+                    diffMode = false;
                     this.setState({showCheckbox: false})
                     $(this.base).find('li.menu-item .item-actions').removeClass('hidden');
+                    $('#versionBox').html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
+                    $('#compareBox').html('<span class="caret"></span>').addClass('hidden').removeAttr('data-value');
                     e.stopPropagation();
                 }},
             ],
@@ -63,7 +70,7 @@ window.setVersionDropdownFooter = function()
 
 window.getVersionItem = function(item)
 {
-    if (!this.state.showCheckbox) return item;
+    if(!this.state.showCheckbox) return item;
 
     item = $.extend({checked: !!this.state.checked[item.key]}, item);
     if (!item.checked && item.disabled === undefined) item = $.extend({disabled: this.getChecks().length >= 2}, item);
@@ -72,8 +79,25 @@ window.getVersionItem = function(item)
 
 window.setClickVersionItem = function(info)
 {
-    if (this.state.showCheckbox)
+    if(this.state.showCheckbox)
     {
+        if(typeof $('#versionBox').attr('data-value') == 'undefined')
+        {
+            $('#versionBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+        }
+        else if($('#versionBox').attr('data-value') == info.item.value)
+        {
+            $('#versionBox').removeAttr('data-value').html('<span class="caret"></span>');
+        }
+        else if(typeof $('#nextBox').attr('data-value') == 'undefined')
+        {
+            $('#nextBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+        }
+        else if($('#nextBox').attr('data-value') == info.item.value)
+        {
+            $('#nextBox').removeAttr('data-value').html('<span class="caret"></span>');
+        }
+
         info.event.stopPropagation();
     }
     else

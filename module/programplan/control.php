@@ -469,14 +469,19 @@ class programplan extends control
         if($_POST)
         {
             $project = $this->loadModel('project')->fetchByID($projectID);
-            $version = form::data($this->config->programplan->form->createGanttVersion)->get();
+            $version = form::data($this->config->programplan->form->createGanttVersion)
+                ->add('title', $this->post->version)
+                ->add('data', $this->post->data)
+                ->setIF($project->type == 'project', 'project', $projectID)
+                ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
+                ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $version->title = $version->version;
-            $version->data  = $this->post->data;
-            if($project->type == 'project') $version->project = $projectID;
-            if(in_array($project->type, array('stage', 'sprint', 'kanban'))) $version->execution = $projectID;
-            $this->dao->insert(TABLE_OBJECT)->data($version)->exec();
+            if(!isset($this->lang->object)) $this->lang->object = new stdclass();
+            $this->lang->object->version = $this->lang->programplan->version;
+
+            $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique')->exec();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
@@ -496,11 +501,15 @@ class programplan extends control
     {
         if($_POST)
         {
-            $version = form::data($this->config->programplan->form->editGanttVersion)->get();
+            $version = form::data($this->config->programplan->form->editGanttVersion)->add('title', $this->post->version)->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $version->title = $version->version;
-            $this->dao->update(TABLE_OBJECT)->data($version)->where('id')->eq($versionID)->exec();
+            if(!isset($this->lang->object)) $this->lang->object = new stdclass();
+            $this->lang->object->version = $this->lang->programplan->version;
+
+            $this->dao->update(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' and id != {$versionID}")->where('id')->eq($versionID)->exec();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
