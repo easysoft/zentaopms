@@ -51,7 +51,6 @@ $checkMessage  = empty($mergeCheckMessage) ? '' : zget($mergeCheckMessage, 'mess
 $conflictFiles = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
-
 $basicItems = array();
 $basicItems[] = item(set::name($lang->ppm->author),       zget($users, $ppm->createdBy));
 $basicItems[] = item(set::name($lang->ppm->createdDate),  $ppm->createdDate);
@@ -59,7 +58,18 @@ $basicItems[] = item(set::name($lang->ppm->targetBranch), $ppm->targetBranch);
 $basicItems[] = item(set::name($lang->ppm->sourceBranch), $ppm->sourceBranch);
 $basicItems[] = item(set::name($lang->ppm->description),  !empty($ppm->desc) ? strip_tags($ppm->desc) : $lang->noData);
 
-$canMerge = $hasConflict == 'no' && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$checkMessage;
+$userCanMerge = empty($rule) || empty($rule->ppmHandleUser) || in_array($app->user->account, explode(',', $rule->ppmHandleUser));
+if(!$userCanMerge)
+{
+    $canMergeUsers = array();
+    foreach(explode(',', $rule->ppmHandleUser) as $user)
+    {
+        $canMergeUsers[] = zget($users, $user);
+    }
+    $canMergeUsers = sprintf($lang->ppm->notice->userNotAllowMerge, implode(',', $canMergeUsers));
+    $checkMessage  = $checkMessage ? $checkMessage . '; ' . $canMergeUsers : $canMergeUsers;
+}
+$canMerge = $hasConflict == 'no' && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$checkMessage && $userCanMerge;
 
 $mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
 $defaultMergeType = empty($defaultMergeType) ? 'rebase' : $defaultMergeType;
