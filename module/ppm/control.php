@@ -396,6 +396,7 @@ class ppm extends control
         $this->view->defaultMergeType  = $this->cookie->mergeType;
         $this->view->gitfoxServer      = $this->gitfox->getServer();
         $this->view->param             = $param;
+        $this->view->rule              = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
         $this->display();
     }
 
