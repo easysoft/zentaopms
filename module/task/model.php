@@ -3983,13 +3983,26 @@ class taskModel extends model
      */
     public function sendMessageForRelationTask(int $taskID, string $action, int $actionID): bool
     {
-        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo')->from(TABLE_RELATIONOFTASKS)->alias('t1')
+        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo,t2.mode')->from(TABLE_RELATIONOFTASKS)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.pretask')->eq($taskID)
             ->beginIF($action == 'started')->andWhere('t1.condition')->eq('begin')->fi()
             ->beginIF($action == 'finished')->andWhere('t1.condition')->eq('end')->fi()
             ->fetchAll('id');
         if(empty($relationTasks)) return true;
+
+        $taskTeam = $this->dao->select('task,`account`')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($relationTasks))->fetchGroup('task');
+        foreach($relationTasks as $relationTask)
+        {
+            if(!isset($taskTeam[$relationTask->id]) || $relationTask->mode != 'multi')
+            {
+                if($relationTask->assignedTo) $relationTask->assignedTo = array($relationTask->assignedTo => $relationTask->assignedTo);
+                continue;
+            }
+
+            $relationTask->assignedTo = array();
+            foreach($taskTeam[$relationTask->id] as $member) $relationTask->assignedTo[$member->account] = $member->account;
+        }
 
         $this->loadModel('message');
         $messageSetting = $this->config->message->setting;
@@ -4016,6 +4029,8 @@ class taskModel extends model
             $notify->createdDate = helper::now();
             foreach($relationTasks as $relationTask)
             {
+                if(empty($relationTask->assignedTo)) continue;
+
                 if($action == 'started')
                 {
                     $messageTextVar = $relationTask->action == 'begin' ? 'SSMessageText' : 'SFMessageText';
@@ -4025,12 +4040,15 @@ class taskModel extends model
                     $messageTextVar = $relationTask->action == 'begin' ? 'FSMessageText' : 'FFMessageText';
                 }
 
-                $currentLink    = helper::createLink('task', 'view', "id={$task->id}");
-                $relationLink   = helper::createLink('task', 'view', "id={$relationTask->id}");
-                $notify->data   = sprintf($this->lang->task->$messageTextVar, $notify->createdBy, $currentLink, $task->name, $relationLink, $relationTask->name);
-                $notify->toList = ",{$relationTask->assignedTo},";
+                $currentLink  = helper::createLink('task', 'view', "id={$task->id}");
+                $relationLink = helper::createLink('task', 'view', "id={$relationTask->id}");
+                $notify->data = sprintf($this->lang->task->$messageTextVar, $this->app->user->realname, $currentLink, $task->name, $relationLink, $relationTask->name);
 
-                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                foreach($relationTask->assignedTo as $taskAssignedTo)
+                {
+                    $notify->toList = ",{$taskAssignedTo},";
+                    $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                }
             }
         }
         return !dao::isError();
@@ -4053,6 +4071,8 @@ class taskModel extends model
         $domain = rtrim($domain, '/');
         foreach($relationTasks as $relationTask)
         {
+            if(empty($relationTask->assignedTo)) continue;
+
             $subjectVar  = $relationTask->action == 'begin' ? 'startSubjectText' : 'finishSubjectText';
             $subjectText = sprintf($this->lang->task->$subjectVar, $relationTask->id, $relationTask->name);
             if($action == 'started')
@@ -4068,7 +4088,8 @@ class taskModel extends model
             $relationLink = $domain . helper::createLink('task', 'view', "id={$relationTask->id}");
             $mailContent  = sprintf($this->lang->task->$mailContentVar, $currentLink, $task->name, $relationLink, $relationTask->name);
 
-            $this->mail->send($relationTask->assignedTo, $subjectText, $mailContent);
+            $toList = implode(',', $relationTask->assignedTo);
+            $this->mail->send(",{$toList},", $subjectText, $mailContent, '', true);
         }
         return true;
     }
@@ -4091,10 +4112,10 @@ class taskModel extends model
         if(!$webhooks) $webhooks = $this->webhook->getList();
         if(!$webhooks) return true;
 
-        $users = $this->dao->select('`account`,mobile,email')->from(TABLE_USER)->where('`account`')->in(array_column($relationTasks, 'assignedTo'))->fetchAll('account');
+        $users = $this->dao->select('`account`,mobile,email')->from(TABLE_USER)->fetchAll('account');
         foreach($relationTasks as $relationTask)
         {
-            if(!isset($users[$relationTask->assignedTo])) continue;
+            if(empty($relationTask->assignedTo)) continue;
 
             if($action == 'started')
             {
@@ -4109,45 +4130,50 @@ class taskModel extends model
             $currentLink  = $host . helper::createLink('task', 'view', "id={$task->id}");
             $relationLink = $host . helper::createLink('task', 'view', "id={$relationTask->id}");
             $title        = $task->name;
-            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->account, $task->name, $currentLink, $relationTask->name, $relationLink);
-            $user         = zget($users, $relationTask->assignedTo);
-            $mobile       = $user->mobile;
-            $email        = $user->email;
-            foreach($webhooks as $id => $webhook)
+            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->realname, $task->name, $currentLink, $relationTask->name, $relationLink);
+            foreach($relationTask->assignedTo as $taskAssignedTo)
             {
-                if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
-                {
-                    $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
-                }
-                elseif($webhook->type == 'bearychat')
-                {
-                    $data = $this->webhook->getBearychatData($text, $mobile, $email, 'task', $task->id);
-                }
-                elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
-                {
-                    $data = $this->webhook->getWeixinData($text, $mobile);
-                }
-                elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
-                {
-                    $data = $this->webhook->getFeishuData($title, $text);
-                }
-                else
-                {
-                    $data = new stdclass();
-                    $data->text = $text;
-                }
+                if(!isset($users[$taskAssignedTo])) continue;
 
-                $postData = json_encode($data);
-                if(!$postData) continue;
-
-                if($webhook->sendType == 'async')
+                $user   = zget($users, $taskAssignedTo);
+                $mobile = $user->mobile;
+                $email  = $user->email;
+                foreach($webhooks as $id => $webhook)
                 {
-                    $this->webhook->saveData($id, '0', $postData);
-                    continue;
-                }
+                    if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
+                    {
+                        $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
+                    }
+                    elseif($webhook->type == 'bearychat')
+                    {
+                        $data = $this->webhook->getBearychatData($text, $mobile, $email, 'task', $task->id);
+                    }
+                    elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
+                    {
+                        $data = $this->webhook->getWeixinData($text, $mobile);
+                    }
+                    elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
+                    {
+                        $data = $this->webhook->getFeishuData($title, $text);
+                    }
+                    else
+                    {
+                        $data = new stdclass();
+                        $data->text = $text;
+                    }
 
-                $result = $this->webhook->fetchHook($webhook, $postData, 0, $user->account);
-                if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $postData, $result);
+                    $postData = json_encode($data);
+                    if(!$postData) continue;
+
+                    if($webhook->sendType == 'async')
+                    {
+                        $this->webhook->saveData($id, '0', $postData);
+                        continue;
+                    }
+
+                    $result = $this->webhook->fetchHook($webhook, $postData, 0, $user->account);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $postData, $result);
+                }
             }
         }
         return true;
