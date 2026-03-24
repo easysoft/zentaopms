@@ -33,7 +33,7 @@ class branchRulesEntry extends baseEntry
 
         $this->loadModel('repobranchrule');
         $this->loadModel('repobranchtype');
-        $rule = $this->repobranchrule->getRuleByBranchName(0, $branchName);
+        $rule = $this->repobranchrule->getRuleByBranchName($repoID, $branchName);
         if(empty($rule))
         {
             $defaultRule = new stdClass();

@@ -371,6 +371,7 @@ class spaceModel extends model
             $this->session->set('devopsSpace', $spaceID);
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
+            unset($this->lang->devops->homeMenu->codescan);
             if(isset($this->lang->devops->homeMenu->spaceSetting))
             {
                 $this->lang->devops->homeMenu->spaceSetting = common::setMenuVarsEx($this->lang->devops->homeMenu->spaceSetting, $spaceID);
