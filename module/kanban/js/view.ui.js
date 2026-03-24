@@ -184,9 +184,35 @@ window.getItem = function(info)
     {
         renderGeneralItem(info);
     }
-    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+    if(info.item.color && info.item.color != '#fff') appendCardClass(info.item, 'color-' + info.item.color.replace('#', ''));
+    appendCardClass(info.item, getCardReminderClass(info.item));
 
     info.item.titleAttrs.class = 'card-title clip';
+}
+
+function appendCardClass(item, className)
+{
+    if(!className) return;
+    item.className = item.className ? `${item.className} ${className}` : className;
+}
+
+function getCardReminderClass(item)
+{
+    const deadline   = normalizeCardDeadline(item.deadline || item.end);
+    if(!deadline) return '';
+
+    if(deadline < today) return 'card-remind-overdue';
+
+    const diffDays = Math.floor((new Date(`${deadline}T00:00:00`) - new Date(`${today}T00:00:00`)) / 86400000);
+    if(expireDays > 0 && diffDays >= 0 && diffDays < expireDays) return 'card-remind-soon';
+
+    return '';
+}
+
+function normalizeCardDeadline(date)
+{
+    if(!date || date === '0000-00-00' || date < '1970-01-01') return '';
+    return date.slice(0, 10);
 }
 
 window.renderGeneralItem = function(info)

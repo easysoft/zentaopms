@@ -6,11 +6,15 @@
 .cardcolor {width: 36px; height: 14px; float: left; margin-right: 5px; margin-top: 2px; border-radius: 2px; border: 1px solid rgb(176, 176, 176) }
 .card-title {color: var(--color-black-rgb); }
 .card-icon {opacity: 1;}
+.card-remind-soon > .card {box-shadow: inset 0 0 0 2px #f59e0b;}
+.card-remind-overdue > .card {background-color: #fff1f1 !important;}
 .color-937c5a > .card { background-color: #937c5a !important; color: #fff !important}
 .color-ff9f46 > .card { background-color: #ff9f46 !important; color: #fff !important}
 .color-fc5959 > .card { background-color: #fc5959 !important; color: #fff !important}
 .color-937c5a > .card a, .color-ff9f46 > .card a, .color-fc5959 > .card a { color: inherit !important }
 .color-937c5a > .card span.label.gray-pale, .color-ff9f46 > .card span.label.gray-pale, .color-fc5959 > .card span.label.gray-pale { color: inherit !important }
+.card-remind-overdue.color-937c5a > .card, .card-remind-overdue.color-ff9f46 > .card, .card-remind-overdue.color-fc5959 > .card {color: rgba(var(--color-black-rgb), var(--tw-text-opacity)) !important;}
+.card-remind-overdue.color-937c5a > .card a, .card-remind-overdue.color-ff9f46 > .card a, .card-remind-overdue.color-fc5959 > .card a {color: inherit !important;}
 .progress {height: 0.5rem !important}
 .kanban-header-title .as-subtitle {font-weight: 700;}
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
