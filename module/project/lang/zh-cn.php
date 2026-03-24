@@ -97,6 +97,7 @@ $lang->project->backToKanban        = '返回看板';
 $lang->project->backToExecutionList = '返回项目%s列表';
 $lang->project->backToProjectList   = '返回项目列表';
 $lang->project->deletedTip          = "抱歉，您访问的{$lang->projectCommon}已被删除。";
+$lang->project->coverExecutionPriv  = "执行权限控制";
 
 $lang->project->manDay          = '人天';
 $lang->project->day             = '天';
@@ -522,6 +523,10 @@ $lang->project->executionList['waterfallplus'] = $lang->projectCommon . '阶段'
 $lang->project->featureBar['team']['all'] = '团队成员';
 
 $lang->project->featureBar['managemembers']['all'] = '团队管理';
+
+$lang->project->coverExecutionPrivList = array();
+$lang->project->coverExecutionPrivList[1] = '开启 (开启后，您可以在” 项目自定义权限“ 中对执行下功能（如任务、燃尽图、测试等）进行权限管控，此操作不可逆。)';
+$lang->project->coverExecutionPrivList[0] = '关闭';
 
 $lang->project->api = new stdclass();
 $lang->project->api->error = new stdclass();

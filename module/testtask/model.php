@@ -1879,8 +1879,9 @@ class testtaskModel extends model
                 if($suiteID) $this->linkImportedCaseToSuite($case, $caseID, $suiteCase);
 
                 $testresult = $results[$suiteIndex][$key];
-                $testresult->run  = $runID;
-                $testresult->case = $caseID;
+                $testresult->run     = $runID;
+                $testresult->case    = $caseID;
+                $testresult->version = isset($case->version) ? $case->version : 1;
                 $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
             }
         }
@@ -1976,7 +1977,7 @@ class testtaskModel extends model
         $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->fetch();
         if(isset($testRunInfo->id))
         {
-            $this->dao->update(TABLE_TESTRUN)->data($testRun)->where('id')->eq($testRunInfo->id);
+            $this->dao->update(TABLE_TESTRUN)->data($testRun)->where('id')->eq($testRunInfo->id)->exec();
             return  $testRunInfo->id;
         }
         $this->dao->insert(TABLE_TESTRUN)->data($testRun)->exec();

@@ -2830,7 +2830,7 @@ class testcaseZen extends testcase
 
         if(!isset($case->stepDesc))   $case->stepDesc  = '';
         if(!isset($case->stepExpect)) $case->stepExpect = '';
-        if(isset($case->id) && isset($relatedSteps[$case->id]))
+        if(!empty($case->id) && !empty($relatedSteps[$case->id]))
         {
             $preGrade      = 1;
             $parentSteps   = array();
@@ -2945,7 +2945,7 @@ class testcaseZen extends testcase
      */
     protected function processStepsAndExpectsForBatchEdit(array $cases): array
     {
-        $relatedSteps = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedSteps = $this->testcase->getRelatedSteps(array_column($cases, 'id'));
         foreach($cases as $case)
         {
             $this->processStepForExport($case, array(), $relatedSteps);

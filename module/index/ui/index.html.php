@@ -140,8 +140,7 @@ div
     (
         setID('spaceHeading'),
         icon('space'),
-        div(setClass('text')),
-        span(setClass('label size-xs ring-0 bg-gray-500 bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
+        div(setClass('text'))
     ),
     div
     (

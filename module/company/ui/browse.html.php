@@ -97,6 +97,7 @@ dtable
     set::userMap($userPairs),
     set::checkable(common::hasPriv('user', 'batchEdit')),
     set::fixedLeftWidth('0.2'),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );

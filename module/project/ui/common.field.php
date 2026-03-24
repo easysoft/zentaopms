@@ -147,6 +147,13 @@ $fields->field('auth')
     ->control('radioList')
     ->items($lang->project->authList);
 
+$fields->field('coverExecutionPriv')
+    ->width('full')
+    ->control('radioList')
+    ->items($lang->project->coverExecutionPrivList)
+    ->hidden(!empty(data('project.coverExecutionPriv')))
+    ->wrapBefore();
+
 $storyTypeList = array();
 foreach($lang->story->typeList as $key => $text)
 {

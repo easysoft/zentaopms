@@ -4949,16 +4949,17 @@ class executionModel extends model
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
 
-            $canModify = common::canModify('execution', $execution);
-            if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
+            if(isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
-                $isStage = in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd'));
+                $canModify = common::canModify('execution', $execution);
+                $isStage   = in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd'));
                 foreach($this->config->project->execution->dtable->actionsRule[$execution->projectModel] as $actionKey)
                 {
                     $action  = array();
                     $actions = explode('|', $actionKey);
                     foreach($actions as $actionName)
                     {
+                        if(!$canModify && !in_array($actionName, array('edit', 'delete', 'activate'))) continue;
                         if($actionName == 'createChildStage' && !$canCreateChildStage) continue;
                         if($actionName == 'createTask' && !$canCreateTask)  continue;
                         if($actionName == 'edit' && $isStage && !$canEditStage) continue;

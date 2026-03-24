@@ -97,6 +97,7 @@ $lang->project->backToKanban        = 'Return to Kanban';
 $lang->project->backToExecutionList = 'Return to Project %s List';
 $lang->project->backToProjectList   = 'Return to Project List';
 $lang->project->deletedTip          = "Sorry, the {$lang->projectCommon} you are trying to access has been deleted.";
+$lang->project->coverExecutionPriv  = "Execution Priv Control";
 
 $lang->project->manDay          = 'Man-Days';
 $lang->project->day             = 'Day';
@@ -522,6 +523,10 @@ $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Phase'
 $lang->project->featureBar['team']['all'] = 'Members';
 
 $lang->project->featureBar['managemembers']['all'] = 'Manage Team';
+
+$lang->project->coverExecutionPrivList = array();
+$lang->project->coverExecutionPrivList[1] = 'Open (After enabling, you can control permissions for executing functions (such as tasks, burn-down charts, tests, etc.) in the "Project Custom Permissions" section. This action is irreversible.)';
+$lang->project->coverExecutionPrivList[0] = 'Close';
 
 $lang->project->api = new stdclass();
 $lang->project->api->error = new stdclass();

@@ -11,8 +11,7 @@
     --zt-menu-text-active: var(--color-canvas);
     --zt-menu-bg: var(--color-primary-600);
 }
-[lang^='en'] {--zt-menu-width: 132px;}
-.has-space {--zt-menu-width: 160px!important;}
+[lang^='en'] {--zt-menu-width: 132px!important;}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: var(--zt-menu-text-color); transition: width .1s; user-select: none; z-index: 1120;}
 #menu .nav {flex-direction: column; align-items: stretch;}
@@ -34,7 +33,6 @@
 #spaceDropmenu {position: absolute; left: 0; top: 0; right: 0; bottom: 0;}
 #spaceDropmenu .dropmenu-btn {height: 40px; width: 100%;}
 #spaceDropmenu .dropmenu-btn > .text {min-width: 0; overflow: hidden; white-space: nowrap; flex: auto;}
-#spaceDropmenu .dropmenu-btn > .label {flex: none}
 .dropmenu.popup {background: var(--color-surface-light);}
 .hide-menu #spaceHeading > .text, .hide-menu #spaceHeading > .label {display: none;}
 .hide-menu #spaceHeading > .icon {display: flex;}

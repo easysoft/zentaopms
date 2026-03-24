@@ -287,14 +287,17 @@ class projectZen extends project
         $allProducts   = $this->program->getProductPairs($programID, 'all', 'noclosed', '', $shadow, $withProgram);
         $parentProgram = $this->program->getByID($programID);
 
+        $linkedProducts = $linkedBranches = array();
         if($copyProjectID)
         {
-            $linkedProducts = $this->product->getProducts($copyProjectID, 'all', '', true, array(), false);
-            $linkedBranches = $this->project->getBranchesByProject($copyProjectID);
+            if($copyProject->hasProduct)
+            {
+                $linkedProducts = $this->product->getProducts($copyProjectID, 'all', '', true, array(), false);
+                $linkedBranches = $this->project->getBranchesByProject($copyProjectID);
+            }
         }
         else
         {
-            $linkedProducts = $linkedBranches = array();
             if(!empty($output['productID']))
             {
                 $linkedProduct = $this->product->getByID((int)$output['productID']);

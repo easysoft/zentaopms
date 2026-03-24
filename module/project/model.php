@@ -970,9 +970,11 @@ class projectModel extends model
     public function getPrivsByModel(string $model = 'waterfall', int $projectID = 0, int $hasProduct = 0): object|false
     {
         if(!isset($this->config->programPriv->$model)) return false;
+        if($projectID) $project = $this->fetchByID($projectID);
 
         if($model == 'noSprint') $this->config->project->includedPriv = $this->config->project->noSprintPriv;
         if(!$hasProduct) $this->config->project->includedPriv = array_merge($this->config->project->includedPriv, $this->config->project->noProductPriv);
+        if(isset($project->coverExecutionPriv) && empty($project->coverExecutionPriv)) $this->config->project->includedPriv = $this->config->project->projectPriv;
 
         $hasBaseline    = true;
         $hasAuditplan   = true;
@@ -981,7 +983,6 @@ class projectModel extends model
         $hasChange      = true;
         if($this->config->edition != 'open' && $projectID)
         {
-            $project        = $this->fetchByID($projectID);
             $hasBaseline    = $this->loadModel('workflowgroup')->hasFeature((int)$project->workflowGroup, 'cm');
             $hasDeliverable = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'deliverable');
             $hasChange      = $this->workflowgroup->hasFeature((int)$project->workflowGroup, 'change');

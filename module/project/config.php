@@ -116,8 +116,8 @@ $config->project->noSprintPriv['nc']          = array('browse', 'create', 'edit'
 $config->project->noSprintPriv['productplan'] = array();
 
 $config->project->includedPriv = $config->project->noSprintPriv;
-unset($config->project->includedPriv['execution']);
 $config->project->includedPriv['project'][]   = 'execution';
+$config->project->includedPriv['execution']   = array('task', 'create', 'view', 'dynamic', 'updateOrder', 'all', 'doc', 'effortCalendar', 'create', 'edit', 'batchedit', 'batchchangestatus', 'start', 'activate', 'putoff', 'suspend', 'close', 'manageProducts', 'delete', 'export', 'whitelist', 'addWhitelist', 'unbindWhitelist', 'deliverable', 'gantt', 'ganttsetting', 'importtask', 'importplanstories', 'importBug', 'team', 'manageMembers', 'unlinkMember', 'taskKanban', 'printKanban', 'executionkanban', 'kanban', 'setKanban', 'grouptask', 'burn', 'computeBurn', 'fixFirst', 'linkStory', 'unlinkStory', 'batchUnlinkStory', 'storySort', 'storyEstimate', 'effort', 'testcase', 'bug', 'testtask', 'testreport', 'relation', 'createrelation', 'editrelation', 'batcheditrelation', 'deleterelation', 'batchdeleterelation', 'build', 'story', 'storyKanban', 'storyView', 'tree', 'treeTask', 'treeStory', 'taskEffort', 'computeTaskEffort', 'calendar');
 $config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib', 'tasks', 'bugs', 'cases', 'submitReview', 'batchChangeBranch', 'processStoryChange', 'relieved', 'createBranch', 'unlinkBranch');
 $config->project->includedPriv['requirement'] = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate', 'processStoryChange', 'submitReview', 'batchChangeBranch');
 $config->project->includedPriv['epic']        = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate', 'processStoryChange', 'submitReview', 'batchChangeBranch');
@@ -125,6 +125,23 @@ $config->project->includedPriv['repo']        = array('create', 'showSyncCommit'
 $config->project->includedPriv['mr']          = array('browse');
 $config->project->includedPriv['report']      = array('projectSummary');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect', 'userIssue');
+
+$config->project->projectPriv = $config->project->noSprintPriv;
+$config->project->projectPriv['project'][]   = 'execution';
+$config->project->projectPriv['task']        = array('create');
+$config->project->projectPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib');
+$config->project->projectPriv['requirement'] = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
+$config->project->projectPriv['epic']        = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'assignTo', 'activate');
+$config->project->projectPriv['bug']         = array('create', 'confirm', 'view', 'edit', 'assignTo', 'batchAssignTo', 'resolve', 'activate', 'close', 'export', 'confirmStoryChange', 'delete', 'linkBugs', 'import', 'showImport', 'exportTemplate', 'createBranch', 'unlinkBranch');
+$config->project->projectPriv['testcase']    = array('groupCase', 'create', 'batchCreate', 'createBug', 'view', 'edit', 'delete', 'export', 'confirmChange', 'confirmStoryChange', 'batchEdit', 'batchDelete', 'linkCases', 'bugs', 'review', 'batchReview', 'batchConfirmStoryChange', 'importFromLib', 'batchChangeType', 'exportTemplate', 'import', 'showImport', 'confirmLibcaseChange', 'ignoreLibcaseChange', 'submit', 'zeroCase', 'batchChangeScene', 'importToLib', 'importXmind', 'exportXmind', 'exportFreeMind');
+$config->project->projectPriv['testtask']    = array('create', 'cases', 'groupCase', 'edit', 'delete', 'batchAssign', 'linkcase', 'unlinkcase', 'runcase', 'results', 'batchUnlinkCases', 'report', 'batchRun', 'runDeployCase', 'deployCaseResults', 'view', 'start', 'activate', 'block', 'close', 'assignCase');
+$config->project->projectPriv['doc']         = array('createLib', 'editLib', 'deleteLib', 'create', 'edit', 'view', 'delete', 'deleteFile', 'collect', 'projectSpace', 'showFiles', 'addCatalog', 'editCatalog', 'deleteCatalog', 'displaySetting', 'diff', 'importToPracticeLib', 'importToComponentLib', 'moveLib', 'moveDoc', 'batchMoveDoc', 'sortDoclib', 'sortCatalog', 'sortDoc', 'addChapter', 'editChapter', 'sortChapter', 'deleteChapter', 'project2export', 'exportFiles');
+$config->project->projectPriv['repo']        = array('create', 'showSyncCommit', 'browse', 'browseBranch', 'browseTag', 'view', 'diff', 'log', 'revision', 'blame', 'download', 'apiGetRepoByUrl', 'review', 'addBug', 'deleteBug', 'addComment', 'editComment', 'deleteComment');
+$config->project->projectPriv['mr']          = array('browse');
+$config->project->projectPriv['execution']   = array('start', 'edit', 'close', 'delete');
+$config->project->projectPriv['report']      = array('projectSummary');
+if($config->edition != 'max') $config->project->projectPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect', 'userIssue');
+
 
 $config->project->noProductPriv['productplan'] = array('linkStory', 'unlinkStory', 'batchUnlinkStory', 'linkBug', 'unlinkBug', 'batchUnlinkBug', 'batchEdit', 'start', 'finish', 'close', 'activate', 'batchChangeStatus', 'delete');
 

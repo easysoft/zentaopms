@@ -2313,11 +2313,14 @@ class doc extends control
 
         $currentUser = $this->app->user->account;
         $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
+        $order       = 0;
         foreach($docs as $doc)
         {
+            $order++;
             unset($doc->draft);
             $doc->originLIb   = $doc->lib;
             $doc->lib         = $menu['id'];
+            $doc->order       = $order;
             $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
         }
 

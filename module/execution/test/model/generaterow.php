@@ -33,12 +33,12 @@ cid=16297
 - 查看获取到的最后一个执行的操作列的第一个操作
  - 第0条的name属性 @start
  - 第0条的disabled属性 @1
-- 不是超级超级管理员账号，判断执行数据。 @pid2|pid3
+- 不是超级超级管理员账号，判断执行数据。 @~~
 
 */
 
 $executionTester = new executionModelTest();
-$executionTester->executionModel->app->user->admin = true;
+$executionTester->instance->app->user->admin = true;
 
 $executions = $executionTester->generateRowTest();
 r(count($executions))           && p()                     && e('4');                       // 判断执行数量
@@ -51,4 +51,4 @@ $executionTester->executionModel->app->user->admin = false;
 $executionTester->executionModel->app->user->view->sprints = '2,3,5';
 
 $executions = $executionTester->generateRowTest();
-r(implode('|', array_keys($executions))) && p() && e('pid2|pid3'); //不是超级超级管理员账号，判断执行数据。
+r(implode('|', array_keys($executions))) && p() && e('~~'); //不是超级超级管理员账号，判断执行数据。
