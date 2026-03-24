@@ -247,7 +247,16 @@ class ppm extends control
             $canMerge      = !empty($mergeCheckMessage->mergeable) && $checkSourceBranch && $checkTargetBranch;
             $conflictFiles = zget($mergeCheckMessage, 'conflictFiles', array());
         }
-        $message = $this->ppmZen->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
+        $message    = $this->ppmZen->parseCreateCheckMsg($mergeCheckMessage, $mergeRuleResult, $sourceBranch, $targetBranch);
+        $branchRule = $this->loadModel('repobranchrule')->getRuleByBranchName($repoID, $targetBranch);
+        if(!empty($branchRule) && !empty($branchRule->ppmCreateUser) && !in_array($this->app->user->account, explode(',', $branchRule->ppmCreateUser)))
+        {
+            $ppmCreateUsers = explode(',', $branchRule->ppmCreateUser);
+            $ppmCreateUsers = $this->loadModel('user')->getListByAccounts($ppmCreateUsers);
+
+            $message  = sprintf($this->lang->ppm->notice->userNotAllowCreate, implode(',', array_column($ppmCreateUsers, 'realname')));
+            $canMerge = false;
+        }
         if($sourceBranch == $targetBranch) $message = $this->lang->ppm->notice->sameBranch;
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
         {

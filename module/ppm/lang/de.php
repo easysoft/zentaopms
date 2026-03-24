@@ -316,11 +316,12 @@ $lang->ppm->mergeTypeInfoList['rebase'] = 'All commits on this branch will be re
 $lang->ppm->mergeTypeInfoList['fast']   = 'All commits on this branch will be added directly to the base branch without generating merge commits, and rebasing may be required.';
 
 $lang->ppm->notice = new stdclass();
-$lang->ppm->notice->confirmClose      = 'Are you sure to close this merge request?';
-$lang->ppm->notice->confirmReopen     = 'Are you sure to reopen this merge request?';
-$lang->ppm->notice->fastNotice        = 'The target branch already has new commits, cannot be merged quickly';
-$lang->ppm->notice->sameBranch        = 'Source branch and target branch cannot be the same';
-$lang->ppm->notice->userNotAllowMerge = 'Only the following users are allowed to merge: %s';
+$lang->ppm->notice->confirmClose       = 'Are you sure to close this merge request?';
+$lang->ppm->notice->confirmReopen      = 'Are you sure to reopen this merge request?';
+$lang->ppm->notice->fastNotice         = 'The target branch already has new commits, cannot be merged quickly';
+$lang->ppm->notice->sameBranch         = 'Source branch and target branch cannot be the same';
+$lang->ppm->notice->userNotAllowMerge  = 'Only the following users are allowed to merge: %s';
+$lang->ppm->notice->userNotAllowCreate = 'Only the following users are allowed to create: %s';
 
 $lang->ppm->featureBar['view']['all']   = 'All';
 $lang->ppm->featureBar['view']['story'] = 'Story';
