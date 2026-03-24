@@ -4089,7 +4089,7 @@ class taskModel extends model
             $mailContent  = sprintf($this->lang->task->$mailContentVar, $currentLink, $task->name, $relationLink, $relationTask->name);
 
             $toList = implode(',', $relationTask->assignedTo);
-            $this->mail->send(",{$toList},", $subjectText, $mailContent);
+            $this->mail->send(",{$toList},", $subjectText, $mailContent, '', true);
         }
         return true;
     }
