@@ -266,15 +266,17 @@ $lang->pipeline->flowApp->labels['execution-status-skipped']  = 'Skipped';
 $lang->pipeline->flowApp->labels['execution-status-blocked']  = 'Blocked';
 $lang->pipeline->flowApp->labels['execution-status-declined'] = 'Declined';
 
-$lang->pipeline->flowApp->labels['event-branch-created']        = 'Create Branch';
-$lang->pipeline->flowApp->labels['event-branch-updated']        = 'Branch Update';
-$lang->pipeline->flowApp->labels['event-tag-created']           = 'Create Tag';
-$lang->pipeline->flowApp->labels['event-tag-updated']           = 'Tag Update';
-$lang->pipeline->flowApp->labels['event-pullreq-created']       = 'Create Merge Request';
-$lang->pipeline->flowApp->labels['event-pullreq-reopened']      = 'Reopen Merge Request';
-$lang->pipeline->flowApp->labels['event-pullreq-branch-update'] = 'Merge Request Branch Update';
-$lang->pipeline->flowApp->labels['event-pullreq-closed']        = 'Merge Request Close';
-$lang->pipeline->flowApp->labels['event-pullreq-merged']        = 'Merge Request Merge';
+$lang->pipeline->flowApp->labels['event-branch_created']        = 'Create Branch';
+$lang->pipeline->flowApp->labels['event-branch_updated']        = 'Branch Update';
+$lang->pipeline->flowApp->labels['event-tag_created']           = 'Create Tag';
+$lang->pipeline->flowApp->labels['event-tag_updated']           = 'Tag Update';
+$lang->pipeline->flowApp->labels['event-pullreq_created']       = 'Create Merge Request';
+$lang->pipeline->flowApp->labels['event-pullreq_reopened']      = 'Reopen Merge Request';
+$lang->pipeline->flowApp->labels['event-pullreq_branch_update'] = 'Merge Request Branch Update';
+$lang->pipeline->flowApp->labels['event-pullreq_closed']        = 'Merge Request Close';
+$lang->pipeline->flowApp->labels['event-pullreq_merged']        = 'Merge Request Merge';
+$lang->pipeline->flowApp->labels['event-manual']                = 'Manual';
+$lang->pipeline->flowApp->labels['event-cron']                  = 'Cron Trigger';
 
 $lang->pipeline->flowApp->labels['monday']    = 'Monday';
 $lang->pipeline->flowApp->labels['tuesday']   = 'Tuesday';
