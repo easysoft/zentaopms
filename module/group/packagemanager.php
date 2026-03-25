@@ -1881,7 +1881,7 @@ $config->group->package->browseBug->subset = 'bug';
 $config->group->package->browseBug->privs  = array();
 $config->group->package->browseBug->privs['bug-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('qa-index'), 'recommend' => array('bug-report', 'bug-view'));
 $config->group->package->browseBug->privs['bug-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseBug->privs['bug-report'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 85, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseBug->privs['bug-report'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 85, 'depend' => array('bug-browse'), 'recommend' => array());
 
 $config->group->package->manageBug = new stdclass();
 $config->group->package->manageBug->order  = 10;
