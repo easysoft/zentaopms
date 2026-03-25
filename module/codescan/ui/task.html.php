@@ -98,4 +98,4 @@ $isInPlanView ? panel
 
 $methodName = 'ajaxGetTaskLog';
 $logParams  = "repoID=%logID%&pipelineName=%pipelineName%&executionID=%executionID%";
-include  '../../ci/ext/ui/logs.html.php';
+include  'logs.html.php';

@@ -174,11 +174,6 @@ $config->codescan->plan->actionList['task']['hint']        = $lang->codescan->ta
 $config->codescan->plan->actionList['task']['url']         = array('module' => 'codescan', 'method' => 'planView', 'params' => 'planID={id}');
 $config->codescan->plan->actionList['task']['showText']    = true;
 
-$config->codescan->plan->actionList['trigger']['icon']     = 'trigger';
-$config->codescan->plan->actionList['trigger']['hint']     = $lang->codescan->trigger;
-$config->codescan->plan->actionList['trigger']['url']      = array('module' => 'codescan', 'method' => 'planView', 'params' => 'planID={id}');
-$config->codescan->plan->actionList['trigger']['showText'] = true;
-
 $config->codescan->plan->actionList['editPlan']['icon']     = 'edit';
 $config->codescan->plan->actionList['editPlan']['hint']     = $lang->codescan->edit;
 $config->codescan->plan->actionList['editPlan']['url']      = array('module' => 'codescan', 'method' => 'editPlan', 'params' => 'planID={id}&serviceRepoID={repo_id}&repoID={repo}');

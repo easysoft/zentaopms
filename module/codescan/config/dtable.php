@@ -283,16 +283,6 @@ $config->codescan->plan->dtable->fieldList['scanBranch']['show']     = true;
 $config->codescan->plan->dtable->fieldList['scanBranch']['sortType'] = false;
 $config->codescan->plan->dtable->fieldList['scanBranch']['order']    = 50;
 
-$config->codescan->plan->dtable->fieldList['triggerCount']['title']       = $lang->codescan->trigger;
-$config->codescan->plan->dtable->fieldList['triggerCount']['width']       = '60';
-$config->codescan->plan->dtable->fieldList['triggerCount']['show']        = true;
-$config->codescan->plan->dtable->fieldList['triggerCount']['required']    = false;
-$config->codescan->plan->dtable->fieldList['triggerCount']['sortType']    = false;
-$config->codescan->plan->dtable->fieldList['triggerCount']['link']        = array('module' => 'codescan', 'method' => 'planView', 'params' => 'planID={id}');
-$config->codescan->plan->dtable->fieldList['triggerCount']['data-toggle'] = 'modal';
-$config->codescan->plan->dtable->fieldList['triggerCount']['data-size']   = 'lg';
-$config->codescan->plan->dtable->fieldList['triggerCount']['order']       = 60;
-
 $config->codescan->plan->dtable->fieldList['scanType']['title']    = $lang->codescan->scope;
 $config->codescan->plan->dtable->fieldList['scanType']['hint']     = true;
 $config->codescan->plan->dtable->fieldList['scanType']['width']    = '100';
@@ -323,7 +313,7 @@ $config->codescan->plan->dtable->fieldList['actions']['name']  = 'actions';
 $config->codescan->plan->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->codescan->plan->dtable->fieldList['actions']['type']  = 'actions';
 $config->codescan->plan->dtable->fieldList['actions']['width'] = '100';
-$config->codescan->plan->dtable->fieldList['actions']['menu']  = array('exec', 'task', 'trigger', 'editPlan', 'deletePlan');
+$config->codescan->plan->dtable->fieldList['actions']['menu']  = array('exec', 'task', 'editPlan', 'deletePlan');
 $config->codescan->plan->dtable->fieldList['actions']['list']  = $config->codescan->plan->actionList;
 
 $config->codescan->trigger->dtable = new stdclass();

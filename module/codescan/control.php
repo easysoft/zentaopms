@@ -889,7 +889,7 @@ class codescan extends control
      * @access public
      * @return void
      */
-    public function planView(int $serviceRepoID, int $planID, int $repoID = 0, string $type = 'trigger', string $orderBy = 'createAt_desc', int $recPerPage = 20, int $pageID = 1)
+    public function planView(int $serviceRepoID, int $planID, int $repoID = 0, string $type = '', string $orderBy = 'createAt_desc', int $recPerPage = 20, int $pageID = 1)
     {
         $this->codescanZen->commonData('lang');
 
@@ -897,12 +897,7 @@ class codescan extends control
 
         $this->config->codescan->actionList = $this->config->codescan->plan->actionList;
 
-        if($type == 'trigger')
-        {
-            echo $this->fetch('codescan', 'trigger', "serviceRepoID={$serviceRepoID}&planID={$planID}&repoID={$repoID}&orderBy=id_desc&recPerPage={$recPerPage}&pageID={$pageID}");
-            return;
-        }
-        elseif($type == 'task')
+        if($type == 'task')
         {
             if(isset($this->lang->devops->homeMenu->codescan))
             {
@@ -944,179 +939,6 @@ class codescan extends control
             $this->view->actions       = $this->loadModel('action')->getList('codescanplan', $planID);
             $this->display();
         }
-    }
-
-    /**
-     * 触发器列表。
-     * Trigger list.
-     *
-     * @param  int    $planID
-     * @param  int    $repoID
-     * @param  string $orderBy
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function trigger(int $serviceRepoID, int $planID, int $repoID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
-    {
-        $this->config->codescan->actionList = $this->config->codescan->plan->actionList;
-        $plan = $this->codescan->getScanPlan($planID, $serviceRepoID);
-
-        $pager       = $this->codescanZen->setPager($recPerPage, $pageID);
-        $params      = $this->codescanZen->buildParams('all', '', 0, $orderBy, $pager->recPerPage, $pager->pageID);
-        $triggerList = $this->codescan->getScanPlanTriggers($planID, $serviceRepoID, $params);
-        $pager->recTotal = empty($triggerList->pager) ? 0 : zget($triggerList->pager, 'total', 0);
-
-        $solutionList = $this->codescanZen->getListByQuery('solution');
-        $triggerList  = zget($triggerList, 'data', array());
-        foreach($triggerList as &$trigger)
-        {
-            $trigger->latestScanTime   = empty($trigger->latest_task_created) ? '' : intval($trigger->latest_task_created / 1000);
-            $trigger->latestExecStatus = empty($trigger->latest_task_id) ? '' : zget($trigger, 'latest_task_status', '');
-            $trigger->result           = zget($trigger, 'latest_task_result', '');
-            $trigger->latestScan       = $this->codescan->getTriggerLatestScan($trigger);
-            $trigger->plan             = $planID;
-
-            if(!empty($trigger->solutions)) $trigger->solutionName = array_column($trigger->solutions, 'name');
-        }
-
-        $this->view->title         = $this->lang->codescan->trigger;
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
-        $this->view->triggers      = $triggerList;
-        $this->view->type          = 'trigger';
-        $this->view->serviceRepoID = $serviceRepoID;
-        $this->view->planID        = $planID;
-        $this->view->repoID        = $repoID;
-        $this->view->plan          = $plan;
-        $this->view->solutionList  = array_column($solutionList, 'name', 'id');
-        $this->display();
-    }
-
-    /**
-     * 添加触发器。
-     * Create trigger.
-     *
-     * @param  int    $planID
-     * @param  int    $serviceRepoID
-     * @access public
-     * @return void
-     */
-    public function createTrigger(int $planID, int $serviceRepoID)
-    {
-        if($_POST)
-        {
-            if($this->post->triggerType == 'action') $this->config->codescan->createtrigger->requiredFields = 'operation';
-            if($this->post->triggerType == 'cron')   $this->config->codescan->createtrigger->requiredFields = 'minute,hour,day,month,week,cron_branch';
-
-            $trigger = form::data($this->config->codescan->form->createTrigger)
-                ->add('plan', $planID)
-                ->removeIF($this->post->triggerType == 'action', 'minute,hour,day,month,week,cron_branch')
-                ->removeIF($this->post->triggerType == 'cron',   'operation,keywords')
-                ->get();
-
-            $this->codescanZen->validateTrigger($trigger);
-            if(dao::isError()) return $this->sendError(dao::getError());
-
-            $trigger->conditions = $this->codescanZen->processConditions($trigger);
-            if(dao::isError()) return $this->sendError(dao::getError());
-
-            $trigger->type = $trigger->triggerType;
-            if(!empty($trigger->operation)) $trigger->actions = array($trigger->operation);
-            $triggerID = $this->codescan->createTrigger($serviceRepoID, $planID, $trigger);
-            if(dao::isError()) return $this->codescanZen->responseError();
-
-            $this->loadModel('action')->create('codescantrigger', $triggerID, 'createtrigger', '', $trigger->name);
-            return $this->sendSuccess(array('locate' => $this->createLink('codescan', 'planview', "serviceRepoID=$serviceRepoID&planID=$planID&repoID=$serviceRepoID&type=trigger")));
-        }
-
-        $this->view->branches      = $this->codescanZen->processExecBranch($planID, $serviceRepoID);
-        $this->view->title         = $this->lang->codescan->createTrigger;
-        $this->view->planID        = $planID;
-        $this->view->serviceRepoID = $serviceRepoID;
-        $this->view->plan          = $this->codescan->getScanPlan($planID, $serviceRepoID);
-        $this->view->solutionList  = $this->codescanZen->getListByQuery('solution');
-        $this->display();
-    }
-
-    /**
-     * 编辑扫描计划。
-     * Edit trigger.
-     *
-     * @param  int    $triggerID
-     * @param  int    $planID
-     * @param  int    $serviceRepoID
-     * @access public
-     * @return void
-     */
-    public function editTrigger(int $triggerID, int $planID, int $serviceRepoID)
-    {
-        $trigger    = $this->codescan->getScanTrigger($serviceRepoID, $planID, $triggerID);
-        $conditions = $this->codescan->getTriggerConditions($serviceRepoID, $planID, $triggerID);
-        $conditions = zget($conditions, 'data', array());
-        if($_POST)
-        {
-            if($this->post->triggerType == 'action') $this->config->codescan->createtrigger->requiredFields = 'operation';
-            if($this->post->triggerType == 'cron')   $this->config->codescan->createtrigger->requiredFields = 'minute,hour,day,month,week,cron_branch';
-
-            $formData = form::data($this->config->codescan->form->editTrigger)
-                ->add('updated_by', $this->app->user->account)
-                ->add('plan', $planID)
-                ->setIF($this->post->triggerType == 'action', 'cron_branch', '')
-                ->setIF($this->post->triggerType == 'cron',   'keywords', '')
-                ->setIF($this->post->triggerType == 'cron',   'operation', '')
-                ->get();
-
-            $this->codescanZen->validateTrigger($formData);
-            if(dao::isError()) return $this->sendError(dao::getError());
-
-            $formData->conditions = $this->codescanZen->processConditions($formData);
-            if(dao::isError()) return $this->sendError(dao::getError());
-
-            if(!empty($conditions))
-            {
-                $this->codescan->deleteTriggerConditions((int)$serviceRepoID, $planID, $triggerID, array_column($conditions, 'id'));
-                if(dao::isError()) return $this->codescanZen->responseError();
-            }
-
-            $formData->type = $formData->triggerType;
-            if(!empty($formData->operation)) $formData->actions = array($formData->operation);
-            $this->codescan->editTrigger($serviceRepoID, $planID, $triggerID, $formData);
-            if(dao::isError()) return $this->codescanZen->responseError();
-
-            $this->loadModel('action')->create('codescantrigger', $triggerID, 'edittrigger', '', $formData->name);
-            return $this->sendSuccess(array('load' => true));
-        }
-
-        $this->view->branches      = $this->codescanZen->processExecBranch($planID, (int)$serviceRepoID);
-        $this->view->title         = $this->lang->codescan->editTrigger;
-        $this->view->planID        = $planID;
-        $this->view->serviceRepoID = $serviceRepoID;
-        $this->view->plan          = $this->codescan->getScanPlan($planID, $serviceRepoID);
-        $this->view->trigger       = $trigger;
-        $this->view->solutionList  = $this->codescanZen->getListByQuery('solution');
-        $this->view->conditions    = $conditions;
-        $this->display();
-    }
-
-    /**
-     * 删除触发器。
-     * Delete trigger.
-     *
-     * @param  int    $triggerID
-     * @access public
-     * @return void
-     */
-    public function deleteTrigger(int $triggerID, int $planID, int $serviceRepoID)
-    {
-        $trigger = $this->codescan->getScanTrigger($serviceRepoID, $planID, $triggerID);
-
-        $this->codescan->deleteTrigger($serviceRepoID, $planID, $triggerID);
-        if(dao::isError()) return $this->codescanZen->responseError();
-
-        $this->loadModel('action')->create('codescantrigger', $triggerID, 'deletetrigger', '', zget($trigger, 'name', ''));
-        $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 
     /**

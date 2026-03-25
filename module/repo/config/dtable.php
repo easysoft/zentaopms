@@ -42,7 +42,19 @@ $config->repo->dtable->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repo->dtable->fieldList['actions']['type']  = 'actions';
 $config->repo->dtable->fieldList['actions']['width'] = '132';
-$config->repo->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
+$config->repo->dtable->fieldList['actions']['menu']  = array('scanExec', 'scanIssue', 'edit', 'delete');
+
+$app->loadLang('codescan');
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['icon']        = 'start';
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['hint']        = $lang->codescan->exec;
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['url']         = array('module' => 'codescan', 'method' => 'exec', 'params' => 'planID=0&repoID={id}');
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['showText']    = true;
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['data-toggle'] = 'modal';
+
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['icon']        = 'bug';
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['hint']        = $lang->codescan->issue;
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['url']         = array('module' => 'codescan', 'method' => 'issue', 'params' => 'repoID={id}');
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['showText']    = true;
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
