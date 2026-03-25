@@ -15,6 +15,7 @@ namespace zin;
 include './ganttfields.html.php';
 
 $showFields = str_replace('PM', 'owner_id', $showFields);
+$isHistory  = is_numeric($versionID) && $versionID > 0;
 $isFromDoc  = $from === 'doc';
 if($isFromDoc)
 {
@@ -104,14 +105,15 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             $currentVersion = $version->version;
             $item['class']  = 'selected';
         }
-        $versionItems[] = $item;
+        $versionItems[$version->id] = $item;
     }
 
     $item = array('title' => $lang->project->latestVersion, 'value' => 0);
     if(hasPriv('programplan', 'createGanttVersion')) $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID=$projectID"), 'data-toggle' => 'modal'));
-    $versionItems[] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
-    $versionItems[] = $item;
+    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
+    $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
+    if($versionID == '0' && isset($ganttBaseline)) $currentVersion = $lang->project->latestVersion;
 
     $langData = [];
     $langData['allVersions'] = $lang->project->allVersions;
@@ -137,23 +139,46 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
                 div
                 (
-                    btn(setID('versionBox'), setClass('ghost gray-300-outline rounded-full'), $currentVersion, span(setClass('caret'))),
+                    btn
+                    (
+                        setID('versionBox'),
+                        setClass('ghost gray-300-outline rounded-full'),
+                        $currentVersion,
+                        isset($ganttBaseline) ? setData(array('value' => $versionID)) : null,
+                        span(setClass('caret'))
+                    ),
                     span
                     (
                         setID('compareBox'),
-                        setClass('hidden ml-2'),
-                        icon('exchange'),
-                        btn(setID('nextBox'), setClass('ghost gray-300-outline rounded-full ml-2'), span(setClass('caret')))
+                        setClass(isset($ganttBaseline) ? '' : 'hidden'),
+                        btn
+                        (
+                            setClass('ghost size-sm'),
+                            icon('exchange'),
+                            on::click()->call('exchangeVersion', jsRaw('event'))
+                        ),
+                        btn
+                        (
+                            setID('nextBox'),
+                            setClass('ghost gray-300-outline rounded-full'),
+                            isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : null,
+                            isset($ganttBaseline) ? setData(array('value' => $ganttBaseline)) : null,
+                            span(setClass('caret'))
+                        )
                     )
                 ),
                 set::menu([
                    'checkOnClick' => '.has-checkbox .item',
-                   'items' => $versionItems,
+                   'items' => array_values($versionItems),
                    'width' => 200,
                    'header' => jsRaw('setVersionDropdownHeader'),
                    'footer' => jsRaw('setVersionDropdownFooter'),
                    'getItem' => jsRaw('getVersionItem'),
                    'onClickItem' => jsRaw('setClickVersionItem')
+                ]),
+                set::triggerProps([
+                    'onShown' => isset($ganttBaseline) ? jsRaw('function(){this.menu.setState({showCheckbox: true});$(this.menu.base).find("li.menu-item .item-actions").addClass("hidden");}') : null,
+                    'onHide' => jsRaw('function(){return !this.menu.state.showCheckbox}')
                 ]),
             )
         ),
@@ -183,8 +208,8 @@ gantt
 (
     set('ganttLang', $ganttLang),
     set('ganttFields', $ganttFields),
-    set('canEdit', $isFromDoc ? false : hasPriv('programplan', 'ganttEdit')),
-    set('canEditDeadline', $isFromDoc ? false : hasPriv('review', 'edit')),
+    set('canEdit', $isFromDoc || $isHistory ? false : hasPriv('programplan', 'ganttEdit')),
+    set('canEditDeadline', $isFromDoc || $isHistory ? false : hasPriv('review', 'edit')),
     set('zooming', isset($zooming) ? $zooming : 'day'),
     set('showChart', !$dateDetails),
     set('users', $users),

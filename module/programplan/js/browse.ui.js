@@ -23,7 +23,6 @@ window.insertToDoc = function(blockID, insertLink)
     });
 }
 
-let diffMode = false;
 window.setVersionDropdownHeader = function()
 {
     return {
@@ -34,11 +33,11 @@ window.setVersionDropdownHeader = function()
             titleClass: 'text-gray',
             actions: [
                 {icon: 'exchange', text: versionLangData.compare, className: this.state.showCheckbox ? 'invisible pointer-events-none' : 'text-primary', onClick: () => {
-                    diffMode = true
                     this.setState({showCheckbox: true});
                     $(this.base).find('li.menu-item .item-actions').addClass('hidden');
                     $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value');
-                    $('#compareBox').html('<span class="caret"></span>').removeClass('hidden').removeAttr('data-value');
+                    $('#compareBox').removeClass('hidden');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
                 }},
             ],
         },
@@ -54,13 +53,20 @@ window.setVersionDropdownFooter = function()
             gap: 4,
             className: 'p-1 pt-0',
             items: [
-                {text: versionLangData.confirm, size: 'sm', disabled: this.getChecks().length < 2, type: 'primary', onClick: () => console.log('点击了确认，已选中对比版本', this.getChecks())},
-                {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) => {
-                    diffMode = false;
+                {text: versionLangData.confirm, size: 'sm', disabled: this.getChecks().length < 2, type: 'primary', onClick: () =>
+                {
+                    this.setState({showCheckbox: false})
+                    prevVersion = $('#versionBox').attr('data-value');
+                    nextVersion = $('#nextBox').attr('data-value');
+                    postAndLoadPage(browseTemplate.replace('%s', prevVersion), "baselineVersion=" + nextVersion);
+                }},
+                {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) =>
+                {
                     this.setState({showCheckbox: false})
                     $(this.base).find('li.menu-item .item-actions').removeClass('hidden');
                     $('#versionBox').html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
-                    $('#compareBox').html('<span class="caret"></span>').addClass('hidden').removeAttr('data-value');
+                    $('#compareBox').addClass('hidden');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
                     e.stopPropagation();
                 }},
             ],
@@ -72,7 +78,11 @@ window.getVersionItem = function(item)
 {
     if(!this.state.showCheckbox) return item;
 
+    if(!$('#versionBox').data('value') && !$('#nextBox').data('value')) this.state.checked = {};
+    if($('#versionBox').data('value')  && item.value == $('#versionBox').data('value')) this.state.checked[item.key] = true;
+    if($('#nextBox').data('value')     && item.value == $('#nextBox').data('value'))    this.state.checked[item.key] = true;
     item = $.extend({checked: !!this.state.checked[item.key]}, item);
+
     if (!item.checked && item.disabled === undefined) item = $.extend({disabled: this.getChecks().length >= 2}, item);
     return item;
 };
@@ -104,4 +114,16 @@ window.setClickVersionItem = function(info)
     {
         loadPage(browseTemplate.replace('%s', info.item.value));
     }
+};
+
+window.exchangeVersion = function(e)
+{
+    const $dropdown = $('#versionBox').zui('dropdown');
+    const $menu     = $dropdown.menu;
+    if($menu.state.showCheckbox) $menu.setState({showCheckbox: false})
+    if(!$dropdown.shown) e.stopPropagation();
+
+    const prevVersion = $('#versionBox').attr('data-value');
+    const nextVersion = $('#nextBox').attr('data-value');
+    postAndLoadPage(browseTemplate.replace('%s', nextVersion), "baselineVersion=" + prevVersion);
 };
