@@ -84,3 +84,5 @@
 #mainContent.loading .gantt_grid_head_cell .sort:before {display: none!important;}
 
 .gantt_task_cell.weekend, .gantt_scale_cell.weekend { background-color: #F2F2F2; }
+
+.baseline { position: absolute; border-radius: 2px; opacity: 0.6; margin-top: -7px; height: 12px; background: #ffd180; border: 1px solid rgb(255, 153, 0); }
