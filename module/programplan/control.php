@@ -86,6 +86,29 @@ class programplan extends control
             }));
         }
 
+        if(isset($_POST['baselineVersion']) && !empty($plans['data']))
+        {
+            $ganttBaseline = (int)$_POST['baselineVersion'];
+            if($ganttBaseline)
+            {
+                $baselinePlans = $this->project->getGanttDataByVersion($ganttBaseline);
+            }
+            else
+            {
+                $baselinePlans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $this->view->selectCustom, false, $browseType, $queryID);
+            }
+            $baselinePlans = empty($baselinePlans['data']) ? array() : array_column($baselinePlans['data'], null, 'id');
+            foreach($plans['data'] as $key => $plan)
+            {
+                if(!isset($baselinePlans[$plan->id])) continue;
+
+                $plans['data'][$key]->planned_start = $baselinePlans[$plan->id]->start_date;
+                $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->deadline) + 86400);
+            }
+
+            $this->view->ganttBaseline = $this->post->baselineVersion;
+        }
+
         $project     = $this->loadModel('project')->fetchByID($projectID);
         $minBegin    = empty($plans['data']) ? $project->begin : min(array_column($plans['data'], 'begin'));
         $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
