@@ -58,6 +58,36 @@ class reportZenTest extends baseTest
     }
 
     /**
+     * Test assignAnnualData method.
+     *
+     * @param  string     $year
+     * @param  string|int $dept
+     * @param  string     $account
+     * @param  array      $accounts
+     * @param  int        $userCount
+     * @access public
+     * @return array
+     */
+    public function assignAnnualDataTest(string $year, string|int $dept, string $account, array $accounts, int $userCount): array
+    {
+        $instance = $this->getInstance($this->moduleName, $this->className);
+
+        $this->invokeArgs('assignAnnualData', [$year, $dept, $account, $accounts, $userCount]);
+        if(dao::isError()) return dao::getError();
+
+        $data = $instance->view->data ?? array();
+
+        return array(
+            'users'         => isset($data['users']) ? (string)$data['users'] : '',
+            'logins'        => isset($data['logins']) ? (string)$data['logins'] : '',
+            'actions'       => isset($data['actions']) ? (string)$data['actions'] : '',
+            'todos'         => isset($data['todos']) ? "{$data['todos']->count},{$data['todos']->undone},{$data['todos']->done}" : '',
+            'consumed'      => isset($data['consumed']) ? (string)$data['consumed'] : '',
+            'hasStatusStat' => isset($data['statusStat']) ? 'yes' : 'no',
+        );
+    }
+
+    /**
      * Test getReminder method.
      *
      * @access public
