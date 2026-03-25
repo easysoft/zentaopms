@@ -831,7 +831,7 @@ class pipelineModel extends model
 
                 $trigger = new stdclass;
                 $trigger->type  = $itemArr[4] == '*' ? 'month' : 'week';
-                $trigger->value = $itemArr[4] == '*' ? $itemArr[3] : $itemArr[4];
+                $trigger->value = $itemArr[4] == '*' ? $itemArr[2] : $itemArr[4];
                 $trigger->time  = $itemArr[1] == '*' ? '' : $itemArr[1] . ':' . $itemArr[0];
                 $triggers[] = $trigger;
             }
