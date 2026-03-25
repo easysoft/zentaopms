@@ -699,11 +699,11 @@ class pipeline extends control
                 elseif(!empty($trigger->time))
                 {
                     list($hour, $minute) = explode(':', $trigger->time);
-                    $cron[] = $trigger->type == 'week' ? sprintf('%s %s * * %s', $minute, $hour, $trigger->value) : sprintf('%s %s * %s *', $minute, $hour, $trigger->value);
+                    $cron[] = $trigger->type == 'week' ? sprintf('%s %s * * %s', $minute, $hour, $trigger->value) : sprintf('%s %s %s * *', $minute, $hour, $trigger->value);
                 }
                 else
                 {
-                    $cron[] = $trigger->type == 'week' ? "* * * * {$trigger->value}" : "* * * {$trigger->value} *";
+                    $cron[] = $trigger->type == 'week' ? "* * * * {$trigger->value}" : "* * {$trigger->value} * *";
                 }
             }
 
