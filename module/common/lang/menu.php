@@ -900,3 +900,6 @@ $lang->iconMap['auditplan']     = 'shield-check';
 $lang->iconMap['train']         = 'book';
 $lang->iconMap['orroadmap']     = 'road-sign';
 $lang->iconMap['effort']        = 'time';
+$lang->iconMap['CFD']           = 'chart-area';
+$lang->iconMap['build']         = 'wrench';
+$lang->iconMap['settings']      = 'cog-outline';
