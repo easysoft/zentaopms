@@ -145,7 +145,7 @@ $lang->testcase->browse                  = "Case List";
 $lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "View By Group";
 $lang->testcase->groupView               = "Group View";
-$lang->testcase->zeroCase                = "Stories without cases";
+$lang->testcase->zeroCase                = "Stories without Cases";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->importCaseAction        = "Import Case";
@@ -282,7 +282,7 @@ $lang->testcase->action->linked2execution      = array('main' => '$date, linked 
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['wait']        = 'Waiting';
+$lang->testcase->featureBar['browse']['wait']        = 'Waiting Review';
 $lang->testcase->featureBar['browse'][]              = '-';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 

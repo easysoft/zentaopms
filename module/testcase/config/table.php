@@ -146,6 +146,7 @@ if($config->edition != 'open')
     $config->testcase->dtable->fieldList['relatedObject']['group']       = 5;
     $config->testcase->dtable->fieldList['relatedObject']['flex']        = false;
     $config->testcase->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($app->getClientLang() == 'en') $config->testcase->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
