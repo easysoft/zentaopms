@@ -104,6 +104,7 @@ $config->pipeline->execution->dtable->fieldList['ref']['title']    = $lang->pipe
 $config->pipeline->execution->dtable->fieldList['ref']['name']     = 'ref';
 $config->pipeline->execution->dtable->fieldList['ref']['sortType'] = false;
 $config->pipeline->execution->dtable->fieldList['ref']['hint']     = true;
+$config->pipeline->execution->dtable->fieldList['ref']['width']    = '150';
 
 $config->pipeline->execution->dtable->fieldList['name']['title']    = $lang->pipeline->pipelineName;
 $config->pipeline->execution->dtable->fieldList['name']['name']     = 'pipelineName';
