@@ -16,6 +16,7 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
+jsVar('userAccount', $this->app->user->account);
 jsVar('URChanged', $this->lang->story->URChanged);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('oldShowGrades', $showGrades);
@@ -24,7 +25,9 @@ jsVar('tab', $app->tab);
 jsVar('vision', $config->vision);
 jsVar('window.globalSearchType', $storyType);
 jsVar('storyViewPriv', hasPriv('story', 'view'));
+jsVar('storyAssignedToPriv', hasPriv('story', 'assignTo'));
 jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
+jsVar('requirementAssignedToPriv', hasPriv('requirement', 'assignTo'));
 jsVar('epicViewPriv', hasPriv('epic', 'view'));
 
 $viewType          = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';

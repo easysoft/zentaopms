@@ -130,11 +130,25 @@ window.renderCell = function(result, info)
     {
         result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
-    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
+    if(info.col.name == 'assignedTo')
     {
-        delete result[0]['props']['data-toggle'];
-        delete result[0]['props']['href'];
-        result[0]['props']['className'] += ' disabled';
+        if(info.row.data.status == 'closed' || !requirementAssignedToPriv)
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+            result[0]['props']['className'] += ' disabled';
+        }
+        else if(storyAssignedToPriv && requirementAssignedToPriv)
+        {
+            result[0]['props']['href'] = $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id);
+        }
+        else if(!storyAssignedToPriv && requirementAssignedToPriv)
+        {
+            let assignToClass = info.row.data.assignedTo == userAccount ? 'is-me' : '';
+            if(!info.row.data.assignedTo) assignToClass = 'is-unassigned';
+
+            result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+        }
     }
     if(info.col.name == 'childItem')
     {
