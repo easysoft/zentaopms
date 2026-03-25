@@ -66,7 +66,9 @@ class programplan extends control
         }
 
         $this->app->loadLang('stage');
-        $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
+        $uri = $this->app->getURI(true);
+        $this->session->set('projectPlanList', $uri, 'project');
+        $this->session->set('projectGanttLink', $uri, 'project');
         $this->commonAction($projectID, $productID);
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
