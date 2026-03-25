@@ -8,7 +8,7 @@ $lang->testreport->delete       = 'Delete Report';
 $lang->testreport->export       = 'Export';
 $lang->testreport->exportAction = 'Export Report';
 $lang->testreport->view         = 'Report Detail';
-$lang->testreport->recreate     = 'ReCreate';
+$lang->testreport->recreate     = 'Recreate';
 
 $lang->testreport->title       = 'Report Title';
 $lang->testreport->product     = $lang->productCommon;
@@ -17,7 +17,7 @@ $lang->testreport->storyTitle  = 'Story';
 $lang->testreport->project     = $lang->projectCommon;
 $lang->testreport->execution   = 'Execution';
 $lang->testreport->object      = "{$lang->projectCommon}/Execution";
-$lang->testreport->testtask    = 'Test Task';
+$lang->testreport->testtask    = 'Test Request';
 $lang->testreport->tasks       = $lang->testreport->testtask;
 $lang->testreport->startEnd    = 'Begin&End';
 $lang->testreport->owner       = 'Owner';
@@ -32,8 +32,8 @@ $lang->testreport->cases       = 'Case';
 $lang->testreport->bugInfo     = 'Bug Distribution';
 $lang->testreport->report      = 'Summary';
 $lang->testreport->legacyBugs  = 'Left Bugs';
-$lang->testreport->createdBy   = 'CreatedBy';
-$lang->testreport->createdDate = 'CreatedDate';
+$lang->testreport->createdBy   = 'Created by';
+$lang->testreport->createdDate = 'Created Date';
 $lang->testreport->objectID    = 'Object';
 $lang->testreport->objectType  = 'Object Type';
 $lang->testreport->profile     = 'Profile';
@@ -71,7 +71,7 @@ $lang->testreport->bugStageList['generated'] = 'Generated Bugs';
 $lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
 $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
-$lang->testreport->featureBar['browse']['all'] = 'all';
+$lang->testreport->featureBar['browse']['all'] = 'All';
 
 $lang->testreport->caseSummary     = 'Total <strong>%s</strong> cases. <strong>%s</strong> cases run. <strong>%s</strong> results generated. <strong>%s</strong> cases failed.';
 $lang->testreport->buildSummary    = 'Tested <strong>%s</strong> builds.';
