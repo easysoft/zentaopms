@@ -157,6 +157,7 @@ $lang->pipeline->execStatusList['blocked']  = '阻塞';
 $lang->pipeline->execStatusList['declined'] = '拒绝';
 
 $lang->pipeline->triggerTypeList = array();
+$lang->pipeline->triggerTypeList['manual']                = '人工触发';
 $lang->pipeline->triggerTypeList['branch_created']        = '创建分支';
 $lang->pipeline->triggerTypeList['branch_updated']        = '分支更新';
 $lang->pipeline->triggerTypeList['tag_created']           = '创建标签';
