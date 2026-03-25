@@ -392,7 +392,7 @@ class codescanZen extends codescan
      * @access protected
      * @return bool
      */
-    protected function validateTrigger(object &$trigger): bool
+    public function validateTrigger(object &$trigger): bool
     {
         if(empty($trigger->triggerType) || $trigger->triggerType == 'action') return true;
 
