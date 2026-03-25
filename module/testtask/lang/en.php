@@ -81,7 +81,7 @@ $lang->testtask->execTime          = 'Exec Time';
 $lang->testtask->pri               = 'Priority';
 $lang->testtask->name              = 'Request Name';
 $lang->testtask->unitName          = 'Name Of Unit Test';
-$lang->testtask->begin             = 'Begin';
+$lang->testtask->begin             = 'Start';
 $lang->testtask->end               = 'End';
 $lang->testtask->realBegan         = 'Actual Started Date';
 $lang->testtask->realFinishedDate  = 'Actual Finished Date';
@@ -117,10 +117,10 @@ $lang->testtask->skipChangedCases  = 'The testcases that are not to be confirmed
 $lang->testtask->summary           = '%s cases, %s failures, %s time.';
 $lang->testtask->stepSummary       = 'Total %s steps, %s passes, %s failures.';
 $lang->testtask->unitSummary       = 'Total %s unit test results.';
-$lang->testtask->pageSummary       = 'Total testtasks: <strong>%s</strong>.';
-$lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
-$lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
-$lang->testtask->checkedAllSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Testing: <strong>%testing%</strong>, Blocked: <strong>%blocked%</strong>.';
+$lang->testtask->pageSummary       = 'Total Test Requests: <strong>%s</strong>.';
+$lang->testtask->mySummary         = 'Total Test Requests: <strong>%s</strong>, Waiting: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
+$lang->testtask->allSummary        = 'Total Test Requests: <strong>%s</strong>, Waiting: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
+$lang->testtask->checkedAllSummary = 'Seleted: <strong>%total%</strong>, Waiting: <strong>%wait%</strong>, Testing: <strong>%testing%</strong>, Blocked: <strong>%blocked%</strong>.';
 $lang->testtask->emptyCases        = 'Cases %s have no steps, filter to show.';
 $lang->testtask->caseEmpty         = 'Selected cases have no steps or do not meet the execution conditions, and have been ignored.';
 
@@ -177,7 +177,7 @@ $lang->testtask->lblRunCase    = 'Run Case';
 $lang->testtask->lblResults    = 'Result';
 
 $lang->testtask->placeholder = new stdclass();
-$lang->testtask->placeholder->begin = 'Begin';
+$lang->testtask->placeholder->begin = 'Start';
 $lang->testtask->placeholder->end   = 'End';
 
 $lang->testtask->mail = new stdclass();
