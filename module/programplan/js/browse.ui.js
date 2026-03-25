@@ -80,9 +80,11 @@ window.getVersionItem = function(item)
 {
     if(!this.state.showCheckbox) return item;
 
-    if(!$('#versionBox').data('value') && !$('#nextBox').data('value')) this.state.checked = {};
-    if($('#versionBox').data('value')  && item.value == $('#versionBox').data('value')) this.state.checked[item.key] = true;
-    if($('#nextBox').data('value')     && item.value == $('#nextBox').data('value'))    this.state.checked[item.key] = true;
+    const hasPrevVersion = typeof $('#versionBox').data('value') != 'undefined';
+    const hasNextVersion = typeof $('#nextBox').data('value') != 'undefined';
+    if(!hasPrevVersion && !hasNextVersion) this.state.checked = {};
+    if(hasPrevVersion && item.value == $('#versionBox').data('value')) this.state.checked[item.key] = true;
+    if(hasNextVersion && item.value == $('#nextBox').data('value'))    this.state.checked[item.key] = true;
     item = $.extend({checked: !!this.state.checked[item.key]}, item);
 
     if (!item.checked && item.disabled === undefined) item = $.extend({disabled: this.getChecks().length >= 2}, item);
