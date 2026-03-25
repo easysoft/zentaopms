@@ -217,12 +217,12 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function exec(int $pipelineID, int $space = 0, int $repoID = 0, $type = 'space')
+    public function exec(int $pipelineID, int $space = 0, int $repoID = 0, $type = 'space', int $noVars = 0)
     {
         $pipeline  = $this->pipeline->getByID($pipelineID);
         $variables = $pipeline->variables;
 
-        if($_POST || isset($_SERVER['CONTENT_TYPE']))
+        if($_POST || $noVars)
         {
             $formData = fixer::input('post')->get();
             $varPairs = array_column($variables, 'name', 'key');
