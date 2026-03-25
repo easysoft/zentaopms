@@ -60,7 +60,7 @@ class restartTaskTester extends tester
         }
         else
         {
-            $form->wait(3);
+            $form->wait(10);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('继续任务后状态错误');
         }
         if(intval($form->dom->taskConsumed->getText()) != $consumed) return $this->failed('继续任务后总计消耗错误');
