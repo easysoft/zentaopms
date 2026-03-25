@@ -52,7 +52,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '')
+    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '')
     {
         if($type == 'lists') return $this->locate($this->createLink('project', 'execution', "status=undone&projectID={$projectID}"));
         if($from == 'doc')
@@ -70,6 +70,16 @@ class programplan extends control
         $this->session->set('projectPlanList', $uri, 'project');
         $this->session->set('projectGanttLink', $uri, 'project');
         $this->commonAction($projectID, $productID);
+
+        if(empty($type))
+        {
+            $cookieGanttType = $this->cookie->ganttType;
+            if(!empty($cookieGanttType)) $cookieGanttType = json_decode($cookieGanttType);
+            if(empty($cookieGanttType))  $cookieGanttType = array();
+
+            $type = zget(zget($cookieGanttType, $this->app->tab, array()), $projectID, 'gantt');
+        }
+        setcookie('ganttType', json_encode(array($this->app->tab => array($projectID => $type))), $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
 
