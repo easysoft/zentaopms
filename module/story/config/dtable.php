@@ -205,7 +205,7 @@ $config->story->dtable->fieldList['caseCount']['title']       = 'C';
 $config->story->dtable->fieldList['caseCount']['sortType']    = false;
 $config->story->dtable->fieldList['caseCount']['width']       = '30';
 $config->story->dtable->fieldList['caseCount']['type']        = 'text';
-$config->story->dtable->fieldList['caseCount']['link']        = array('module' => 'story', 'method' => 'cases', 'params' => 'storyID={id}');;
+$config->story->dtable->fieldList['caseCount']['link']        = array('module' => 'story', 'method' => 'cases', 'params' => 'storyID={id}');
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
