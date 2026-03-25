@@ -92,6 +92,7 @@ $lang->kanban->allUsers            = '加载所有用户';
 $lang->kanban->colWidth            = '列宽';
 $lang->kanban->minColWidth         = '最小列宽';
 $lang->kanban->maxColWidth         = '最大列宽';
+$lang->kanban->nearing             = '卡片临近截止提醒';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';

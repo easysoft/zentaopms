@@ -3660,6 +3660,41 @@ class kanbanModel extends model
     }
 
     /**
+     * 保存看板卡片到期提醒。
+     * Save kanban card due reminders.
+     *
+     * @param  array $cards
+     * @access public
+     * @return void
+     */
+    public function saveCardNotice(array $cards)
+    {
+        if(empty($cards)) $cards = $this->loadModel('report')->getUserKanbanCards();
+        if(empty($cards)) return;
+
+        foreach($cards as $user => $cardList)
+        {
+            foreach($cardList as $card)
+            {
+                $url  = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
+                $data = $this->lang->kanban->nearing . html::a($url, "#{$card->id} {$card->name}");
+
+                $notify = new stdclass();
+                $notify->objectType  = 'message';
+                $notify->action      = 0;
+                $notify->toList      = ",{$user},";
+                $notify->data        = $data;
+                $notify->status      = 'wait';
+                $notify->createdBy   = 'admin';
+                $notify->createdDate = helper::now();
+                $notify->sendTime    = null;
+
+                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
+        }
+    }
+
+    /**
      * 获取可转入的看板卡片。
      * Get cards to import.
      *
