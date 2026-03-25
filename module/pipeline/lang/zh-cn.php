@@ -266,15 +266,17 @@ $lang->pipeline->flowApp->labels['execution-status-skipped']  = '跳过';
 $lang->pipeline->flowApp->labels['execution-status-blocked']  = '阻塞';
 $lang->pipeline->flowApp->labels['execution-status-declined'] = '拒绝';
 
-$lang->pipeline->flowApp->labels['event-branch-created']        = '创建分支';
-$lang->pipeline->flowApp->labels['event-branch-updated']        = '分支更新';
-$lang->pipeline->flowApp->labels['event-tag-created']           = '创建标签';
-$lang->pipeline->flowApp->labels['event-tag-updated']           = '标签更新';
-$lang->pipeline->flowApp->labels['event-pullreq-created']       = '创建合并请求';
-$lang->pipeline->flowApp->labels['event-pullreq-reopened']      = '重新打开合并请求';
-$lang->pipeline->flowApp->labels['event-pullreq-branch-update'] = '合并请求的分支更新';
-$lang->pipeline->flowApp->labels['event-pullreq-closed']        = '合并请求关闭';
-$lang->pipeline->flowApp->labels['event-pullreq-merged']        = '合并请求合并';
+$lang->pipeline->flowApp->labels['event-branch_created']        = '创建分支';
+$lang->pipeline->flowApp->labels['event-branch_updated']        = '分支更新';
+$lang->pipeline->flowApp->labels['event-tag_created']           = '创建标签';
+$lang->pipeline->flowApp->labels['event-tag_updated']           = '标签更新';
+$lang->pipeline->flowApp->labels['event-pullreq_created']       = '创建合并请求';
+$lang->pipeline->flowApp->labels['event-pullreq_reopened']      = '重新打开合并请求';
+$lang->pipeline->flowApp->labels['event-pullreq_branch_update'] = '合并请求的分支更新';
+$lang->pipeline->flowApp->labels['event-pullreq_closed']        = '合并请求关闭';
+$lang->pipeline->flowApp->labels['event-pullreq_merged']        = '合并请求合并';
+$lang->pipeline->flowApp->labels['event-manual']                = '手动触发';
+$lang->pipeline->flowApp->labels['event-cron']                  = '定时触发';
 
 $lang->pipeline->flowApp->labels['monday']    = '周一';
 $lang->pipeline->flowApp->labels['tuesday']   = '周二';
