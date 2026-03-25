@@ -154,6 +154,33 @@ window.renderCell = function(result, info)
     {
         result[1]['attrs']['title'] = info.row.data?.childItemTitle;
     }
+    if(info.col.name == 'taskCount' && !info.row.data.taskCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'bugCount' && !info.row.data.bugCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'caseCount' && !info.row.data.caseCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
     return result;
 };
 
