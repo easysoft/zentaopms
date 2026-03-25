@@ -54,8 +54,9 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName')->from(TABLE_PIPELINE)->alias('t1')
+        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
+            ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.deleted')->eq('0')
             ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
