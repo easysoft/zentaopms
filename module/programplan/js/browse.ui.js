@@ -126,4 +126,4 @@ window.exchangeVersion = function(e)
     const prevVersion = $('#versionBox').attr('data-value');
     const nextVersion = $('#nextBox').attr('data-value');
     postAndLoadPage(browseTemplate.replace('%s', nextVersion), "baselineVersion=" + prevVersion);
-};  
+};
