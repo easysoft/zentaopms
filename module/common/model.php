@@ -1518,10 +1518,6 @@ eof;
             if(isset($projectRights['kanban']) and !isset($rights['project']['kanban'])) $rights['project']['kanban'] = 1;
             if(isset($projectRights['index'])  and !isset($rights['project']['index']))  $rights['project']['index']  = 1;
 
-            if(isset($projectPrivs->execution->linkStory))      $rights['execution']['linkstory']      = 1;
-            if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
-            if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
-
             $this->app->user->rights['rights'] = $rights;
         }
     }
