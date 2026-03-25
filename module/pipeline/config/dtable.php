@@ -91,7 +91,7 @@ $config->pipeline->execution->dtable->fieldList['id']['title']    = 'ID';
 $config->pipeline->execution->dtable->fieldList['id']['name']     = 'id';
 $config->pipeline->execution->dtable->fieldList['id']['fixed']    = 'left';
 $config->pipeline->execution->dtable->fieldList['id']['type']     = 'id';
-$config->pipeline->execution->dtable->fieldList['id']['sortType'] = 'text';
+$config->pipeline->execution->dtable->fieldList['id']['sortType'] = false;
 
 $config->pipeline->execution->dtable->fieldList['type']['title']    = $lang->pipeline->level;
 $config->pipeline->execution->dtable->fieldList['type']['name']     = 'type';
