@@ -42,6 +42,7 @@ $headers = nav
     setClass('flex-auto'),
     common::hasPriv('codescan', 'task') ? li
     (
+        setID('scanTask'),
         setClass('nav-item'),
         a
         (
@@ -52,17 +53,6 @@ $headers = nav
             $type == 'task' ? setClass('active') : null
         )
     ) : null,
-    li
-    (
-        setClass('nav-item link'),
-        a
-        (
-            icon('trigger', setClass('text-special')),
-            $lang->codescan->trigger,
-            set::href(inLink('planview', "serviceRepoID={$serviceRepoID}&planID={$planID}&repoID={$repoID}&type=trigger")),
-            $type == 'trigger' ? setClass('active') : null
-        )
-    ),
     li
     (
         setClass('nav-item'),
