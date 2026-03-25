@@ -799,6 +799,7 @@ class pipeline extends control
 
         $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
         $this->view->execution = $this->pipeline->getExecByID($id);
+        $this->view->pipeline  = $this->pipeline->getByID(empty($this->view->execution) ? 0 : $this->view->execution->pipelineID);
         $this->view->repoID    = $repoID;
         $this->view->type      = $type;
         $this->view->repo      = $this->loadModel('repo')->getByID($repoID);;

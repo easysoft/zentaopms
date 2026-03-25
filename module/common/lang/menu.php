@@ -525,11 +525,13 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->space    = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit', 'exclude' => 'space-view');
-$lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
-$lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline');
+$lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
+$lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline,runner');
+$lang->devops->homeMenu->codescan = array('link' => "{$lang->devops->codescan}|codescan|overview", 'subModule' => 'codescan');
+$lang->devops->homeMenu->system   = array('link' => "{$lang->devops->system}|repo|browsesystem", 'subModule' => 'system', 'exclude' => 'system-dashboard,system-dblist,system-domainview,system-ossview');
 $lang->devops->homeMenu->deploy   = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repobranchtype|browse|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,jenkins,sonarqube,repobranchtype', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repobranchtype|browse|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,gitfox,jenkins,sonarqube,repobranchtype', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit,repo-binduser');
 
 $lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
@@ -537,14 +539,38 @@ $lang->devops->homeMenu->spaceSetting['subMenu']->overview = array('link' => "{$
 $lang->devops->homeMenu->spaceSetting['subMenu']->member   = array('link' => "{$lang->devops->member}|space|members|spaceID=%s", 'alias' => 'managemembers');
 $lang->devops->homeMenu->spaceSetting['subMenu']->group    = array('link' => "{$lang->devops->group}|space|group|spaceID=%s", 'alias' => 'managepriv');
 
+$lang->devops->homeMenu->codescan['subMenu'] = new stdclass();
+$lang->devops->homeMenu->codescan['subMenu']->overview     = array('link' => "{$lang->devops->overview}|codescan|overview");
+$lang->devops->homeMenu->codescan['subMenu']->scanTask     = array('link' => "{$lang->devops->scanTask}|codescan|task", 'alias' => 'taskview,tasklog,issue', 'exclude' => 'codescan-plan,codescan-planview,codescan-overview');
+$lang->devops->homeMenu->codescan['subMenu']->scanPlan     = array('link' => "{$lang->devops->scanPlan}|codescan|plan", 'alias' => 'planview,trigger,createplan,editplan,tips');
+$lang->devops->homeMenu->codescan['subMenu']->scanSolution = array('link' => "{$lang->devops->scanSolution}|codescan|solution", 'alias' => 'solutionview');
+$lang->devops->homeMenu->codescan['subMenu']->ruleset      = array('link' => "{$lang->ruleset->common}|codescan|ruleset", 'alias' => 'rulesetview');
+$lang->devops->homeMenu->codescan['subMenu']->scanRule     = array('link' => "{$lang->devops->scanRule}|codescan|browse", 'alias' => 'view');
+
+$lang->devops->homeMenu->codescan['menuOrder'][5]  = 'overview';
+$lang->devops->homeMenu->codescan['menuOrder'][10] = 'scanTask';
+$lang->devops->homeMenu->codescan['menuOrder'][15] = 'scanPlan';
+$lang->devops->homeMenu->codescan['menuOrder'][20] = 'scanSolution';
+$lang->devops->homeMenu->codescan['menuOrder'][25] = 'ruleset';
+$lang->devops->homeMenu->codescan['menuOrder'][30] = 'scanRule';
+
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule');
-$lang->devops->menu->commit   = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
-$lang->devops->menu->branch   = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
-$lang->devops->menu->tag      = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
-$lang->devops->menu->ppm      = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
-$lang->devops->menu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
+$lang->devops->menu->code         = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule');
+$lang->devops->menu->commit       = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
+$lang->devops->menu->branch       = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
+$lang->devops->menu->tag          = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
+$lang->devops->menu->ppm          = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
+$lang->devops->menu->pipeline     = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
 //$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
+$lang->devops->menu->repoCodeScan = array('link' => "{$lang->devops->codescan}|codescan|overview|repoID=%s", 'alias' => 'planview,createplan,editplan', 'subModule' => 'codescan');
+$lang->devops->menu->repoCodeScan['subMenu'] = new stdclass();
+$lang->devops->menu->repoCodeScan['subMenu']->overview = array('link' => "{$lang->devops->overview}|codescan|overview|repoID=%s");
+$lang->devops->menu->repoCodeScan['subMenu']->scanTask = array('link' => "{$lang->devops->scanTask}|codescan|task|repoID=%s", 'alias' => 'taskview,tasklog,issue,issueview', 'exclude' => 'codescan-plan,codescan-planview');
+$lang->devops->menu->repoCodeScan['subMenu']->scanPlan = array('link' => "{$lang->devops->scanPlan}|codescan|plan|repoID=%s", 'alias' => 'planview,createplan,editplan,trigger,tips');
+
+$lang->devops->menu->review['subMenu'] = new stdclass();
+$lang->devops->menu->review['subMenu']->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
+$lang->devops->menu->review['subMenu']->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
 
 $lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,setarchive');
 
@@ -569,6 +595,9 @@ $lang->devops->menuOrder[35]  = 'tag';
 $lang->devops->menuOrder[40]  = 'ppm';
 $lang->devops->menuOrder[42]  = 'pipeline';
 $lang->devops->menuOrder[43]  = 'artifact';
+$lang->devops->menuOrder[47]  = 'repoCodeScan';
+$lang->devops->menuOrder[49]  = 'codescan';
+$lang->devops->menuOrder[53]  = 'system';
 $lang->devops->menuOrder[55]  = 'deploy';
 $lang->devops->menuOrder[70]  = 'settings';
 $lang->devops->menuOrder[75]  = 'apps';
@@ -841,6 +870,8 @@ $lang->navGroup->upgrade = 'upgrade';
 $lang->navGroup->reporeviewflow  = 'devops';
 $lang->navGroup->repobranchtype  = 'devops';
 $lang->navGroup->repobranchrule  = 'devops';
+$lang->navGroup->codescan        = 'devops';
+$lang->navGroup->gitfox          = 'devops';
 
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->enableER) unset($lang->product->menu->epic, $lang->product->menuOrder[10]);
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->URAndSR)  unset($lang->product->menu->requirement, $lang->product->menuOrder[15]);
