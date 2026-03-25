@@ -229,6 +229,29 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的卡片。
+     * Get user kanban cards.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUserKanbanCards(): array
+    {
+        $expireDays = isset($config->kanban->reminder->expireDays) ? $config->kanban->reminder->expireDays : 3;
+        return $this->dao->select('t1.id, t1.name, t2.account as user, t1.end as deadline, t1.kanban')
+            ->from(TABLE_KANBANCARD)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.assignedTo = t2.account')
+            ->where('t1.assignedTo')->ne('')
+            ->andWhere('t1.status')->eq('doing')
+            ->andWhere('t1.archived')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
+            ->fetchGroup('user');
+    }
+
+    /**
      * 获取用户今年的登录次数。
      * Get user login count in this year.
      *

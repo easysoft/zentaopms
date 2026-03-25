@@ -120,4 +120,32 @@
 </tr>
 <?php endif;?>
 
+<?php if(isset($mail->cards)):?>
+<tr>
+  <td style='padding: 10px; border: none;'>
+    <h5 style='margin: 8px 0; font-size: 14px;'><?php echo rtrim(sprintf($lang->report->mailTitle->card,  count($mail->cards)), ',') ?></h5>
+    <table cellpadding='0' cellspacing='0' style='width: 100%; border: 1px solid #e5e5e5; margin-bottom: 15px; border-collapse: collapse; font-size: 13px;'>
+    <tr>
+      <th style='width: 50px; border: 1px solid #e5e5e5; background-color: #f5f5f5; padding: 5px;'><?php echo $lang->report->idAB;?></th>
+      <th style='border: 1px solid #e5e5e5; background-color: #f5f5f5; padding: 5px;'><?php echo $lang->report->cardName;?></th>
+      <th style='width: 100px; border: 1px solid #e5e5e5; background-color: #f5f5f5; padding: 5px;'><?php echo $lang->report->deadline;?></th>
+    </tr>
+    <?php foreach($mail->cards as $card):?>
+    <tr>
+      <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php echo $card->id;?></td>
+      <td style='padding: 5px; border: 1px solid #e5e5e5;'>
+        <?php
+        $link = $this->createLink('kanban', 'view', "kanbanID=$card->kanban");
+        if($config->requestType == 'GET' and strpos($link, 'ztcli') !== false) $link = str_replace($this->server->php_self, $config->webRoot, $link);
+        echo html::a($url . $link, $card->name);
+        ?>
+      </td>
+      <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php echo $card->deadline;?></td>
+    </tr>
+    <?php endforeach;?>
+    </table>
+  </td>
+</tr>
+<?php endif;?>
+
 <?php include '../../common/view/mail.footer.html.php';?>

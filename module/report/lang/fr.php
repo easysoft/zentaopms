@@ -85,6 +85,7 @@ $lang->report->bugTitle     = 'Nom Bug';
 $lang->report->taskName     = 'Nom Tâche';
 $lang->report->todoName     = 'Nom Agenda';
 $lang->report->testTaskName = 'Nom Recette';
+$lang->report->cardName     = 'Nom Carte Kanban';
 $lang->report->deadline     = 'Date Butoir';
 
 $lang->report->mailTitle           = new stdclass();
@@ -93,6 +94,7 @@ $lang->report->mailTitle->bug      = " Bug (%s),";
 $lang->report->mailTitle->task     = " Tâches (%s),";
 $lang->report->mailTitle->todo     = " Agenda (%s),";
 $lang->report->mailTitle->testTask = " Recettes (%s),";
+$lang->report->mailTitle->card     = " Carte Kanban (%s),";
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
