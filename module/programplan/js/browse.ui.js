@@ -33,6 +33,7 @@ window.setVersionDropdownHeader = function()
             titleClass: 'text-gray',
             actions: [
                 {icon: 'exchange', text: versionLangData.compare, className: this.state.showCheckbox ? 'invisible pointer-events-none' : 'text-primary', onClick: () => {
+                    diffMode = true;
                     this.setState({showCheckbox: true});
                     $(this.base).find('li.menu-item .item-actions').addClass('hidden');
                     $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value');
@@ -62,6 +63,7 @@ window.setVersionDropdownFooter = function()
                 }},
                 {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) =>
                 {
+                    diffMode = false;
                     this.setState({showCheckbox: false})
                     $(this.base).find('li.menu-item .item-actions').removeClass('hidden');
                     $('#versionBox').html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
@@ -118,12 +120,21 @@ window.setClickVersionItem = function(info)
 
 window.exchangeVersion = function(e)
 {
+    const prevVersion = $('#versionBox').attr('data-value');
+    const nextVersion = $('#nextBox').attr('data-value');
+    if(!prevVersion || !nextVersion) return;
+
     const $dropdown = $('#versionBox').zui('dropdown');
     const $menu     = $dropdown.menu;
     if($menu.state.showCheckbox) $menu.setState({showCheckbox: false})
     if(!$dropdown.shown) e.stopPropagation();
 
-    const prevVersion = $('#versionBox').attr('data-value');
-    const nextVersion = $('#nextBox').attr('data-value');
     postAndLoadPage(browseTemplate.replace('%s', nextVersion), "baselineVersion=" + prevVersion);
+};
+
+window.showMenu = function()
+{
+    if(!diffMode) return;
+    this.menu.setState({showCheckbox: true});
+    $(this.menu.base).find("li.menu-item .item-actions").addClass("hidden");
 };

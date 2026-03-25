@@ -133,9 +133,12 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setStyle('order', '20000'),
             dropdown
             (
+                h::css('.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}'),
+                h::css('.menu-item .item-title {flex:none;}'),
                 jsVar('versionLangData', $langData),
                 jsVar('versionID', $versionID),
                 jsVar('currentVersion', $currentVersion),
+                jsVar('+diffMode', isset($ganttBaseline)),
                 jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
                 div
                 (
@@ -177,7 +180,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                    'onClickItem' => jsRaw('setClickVersionItem')
                 ]),
                 set::triggerProps([
-                    'onShown' => isset($ganttBaseline) ? jsRaw('function(){this.menu.setState({showCheckbox: true});$(this.menu.base).find("li.menu-item .item-actions").addClass("hidden");}') : null,
+                    'onShown' => jsRaw('showMenu'),
                     'onHide' => jsRaw('function(){return !this.menu.state.showCheckbox}')
                 ]),
             )

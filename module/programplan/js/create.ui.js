@@ -327,6 +327,8 @@ window.handleRenderRow = function($row, index, data)
             }
         });
     }
+
+    if(typeof data == "undefined" || !data.begin || !data.end || data.enabled == "off") $row.find(".btn-calendar").addClass("disabled");
 };
 
 window.onChangeExecutionType = function(event)
