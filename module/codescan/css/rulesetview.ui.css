@@ -1,0 +1,5 @@
+#rulesetMenu menu.nav {border-bottom: 1px solid #ddd}
+#rulesetMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
+
+#langTree #moduleMenu {box-shadow: none;}
+#langTree .listitem.selected .item-content {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity))}
