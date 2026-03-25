@@ -90,6 +90,21 @@ class pipeline extends control
         $pipelineQuery = $type == 'bySearch' ? $this->pipelineZen->getPipelineSearchQuery((int)$queryID) : '';
 
         $pipelineList = $this->pipeline->getList($space, $repoID, $type, $pipelineQuery, $orderBy, $pager);
+        foreach($pipelineList as $pipeline)
+        {
+            $vars     = json_decode($pipeline->variables);
+            $showVars = false;
+            if(empty($vars)) continue;
+            foreach($vars as $var)
+            {
+                if($var->runtime)
+                {
+                    $showVars = true;
+                    break;
+                }
+            }
+            $pipeline->showVars = $showVars;
+        }
 
         $this->view->title        = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->browse;
         $this->view->repoID       = $repoID;

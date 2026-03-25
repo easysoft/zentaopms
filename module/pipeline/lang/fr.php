@@ -157,6 +157,7 @@ $lang->pipeline->execStatusList['blocked']  = 'Blocked';
 $lang->pipeline->execStatusList['declined'] = 'Declined';
 
 $lang->pipeline->triggerTypeList = array();
+$lang->pipeline->triggerTypeList['manual']                = 'Manual trigger';
 $lang->pipeline->triggerTypeList['branch_created']        = 'Create branch';
 $lang->pipeline->triggerTypeList['branch_updated']        = 'Branch update';
 $lang->pipeline->triggerTypeList['tag_created']           = 'Create tag';
