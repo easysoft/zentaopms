@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 jsVar('spaceID', $spaceID);
 jsVar('spaceType', $type);
+$isEn = $app->getClientLang() == 'en';
 
 modalHeader(set::title($lang->kanban->create), set::titleClass('text-lg font-bold'));
 
@@ -21,6 +22,7 @@ formPanel
     on::change('[name=import]', 'toggleImportObjectBox'),
     on::click('#allUsers', 'loadAllUsers'),
     set::headingClass('headingActions'),
+    set::labelWidth($isEn ? '9rem' : '6.5rem'),
     to::headingActions
     (
         btn
