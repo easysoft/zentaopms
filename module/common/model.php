@@ -1462,6 +1462,11 @@ eof;
             if(empty($execution)) return;
             $projectID = $execution->project;
         }
+        else
+        {
+            if(empty($projectID) && !empty($_GET['projectID'])) $projectID = $_GET['projectID'];
+            if(empty($projectID) && !empty($_GET['project']))   $projectID = $_GET['project'];
+        }
 
         /* Get user program priv. */
         if(empty($projectID) && $this->session->project) $projectID = $this->session->project;
