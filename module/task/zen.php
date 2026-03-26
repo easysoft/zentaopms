@@ -719,6 +719,11 @@ class taskZen extends task
             if($this->post->selectTestStory == 'on') $formConfig['estStarted']['skipRequired'] = $formConfig['deadline']['skipRequired'] = $formConfig['estimate']['skipRequired'] = true;
         }
 
+        if($this->post->multiple && strpos($this->config->task->create->requiredFields, 'assignedTo') !== false)
+        {
+            $this->config->task->create->requiredFields = str_replace(',assignedTo', '', $this->config->task->create->requiredFields);
+        }
+
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
         if($execution && $this->task->isNoStoryExecution($execution)) unset($formConfig['story']);
 
