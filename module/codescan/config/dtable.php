@@ -577,9 +577,3 @@ $config->codescan->issue->dtable->fieldList['resolved']['type']     = 'datetime'
 $config->codescan->issue->dtable->fieldList['resolved']['show']     = false;
 $config->codescan->issue->dtable->fieldList['resolved']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['resolved']['required'] = false;
-
-$config->codescan->issue->dtable->fieldList['actions']['title']    = $lang->actions;
-$config->codescan->issue->dtable->fieldList['actions']['width']    = 100;
-$config->codescan->issue->dtable->fieldList['actions']['type']     = 'actions';
-$config->codescan->issue->dtable->fieldList['actions']['menu']     = array('confirmissue', 'bug', 'ignoreissue', 'activeissue');
-$config->codescan->issue->dtable->fieldList['actions']['list']     = $config->codescan->issue->actionList;
