@@ -36,9 +36,9 @@ window.setVersionDropdownHeader = function()
                     diffMode = true;
                     this.setState({showCheckbox: true});
                     $(this.base).find('li.menu-item .item-actions').addClass('hidden');
-                    $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                     $('#compareBox').removeClass('hidden');
-                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                 }},
             ],
         },
@@ -66,9 +66,9 @@ window.setVersionDropdownFooter = function()
                     diffMode = false;
                     this.setState({showCheckbox: false})
                     $(this.base).find('li.menu-item .item-actions').removeClass('hidden');
-                    $('#versionBox').html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
+                    $('#versionBox').attr('title', currentVersion).html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
                     $('#compareBox').addClass('hidden');
-                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                     e.stopPropagation();
                 }},
             ],
@@ -97,19 +97,19 @@ window.setClickVersionItem = function(info)
     {
         if(typeof $('#versionBox').attr('data-value') == 'undefined')
         {
-            $('#versionBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+            $('#versionBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
         else if($('#versionBox').attr('data-value') == info.item.value)
         {
-            $('#versionBox').removeAttr('data-value').html('<span class="caret"></span>');
+            $('#versionBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
         else if(typeof $('#nextBox').attr('data-value') == 'undefined')
         {
-            $('#nextBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+            $('#nextBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
         else if($('#nextBox').attr('data-value') == info.item.value)
         {
-            $('#nextBox').removeAttr('data-value').html('<span class="caret"></span>');
+            $('#nextBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
 
         info.event.stopPropagation();

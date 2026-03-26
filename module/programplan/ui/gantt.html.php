@@ -137,7 +137,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 (
                     '.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}',
                     '.menu-item .item-content {overflow:hidden; text-overflow:clip;}',
-                    '.menu-item .item-title {flex:none;}'
+                    '.menu-item .item-title {flex:none;}',
+                    '#versionBox .text, #nextBox .text{overflow:hidden}'
                 ),
                 jsVar('versionLangData', $langData),
                 jsVar('versionID', $versionID),
@@ -150,9 +151,11 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                     (
                         setID('versionBox'),
                         setClass('ghost gray-300-outline rounded-full'),
-                        $currentVersion,
-                        isset($ganttBaseline) ? setData(array('value' => $versionID)) : null,
-                        span(setClass('caret'))
+                        setStyle(array('max-width' => '150px')),
+                        set::text($currentVersion),
+                        set::hint($currentVersion),
+                        set::caret(),
+                        isset($ganttBaseline) ? setData(array('value' => $versionID)) : null
                     ),
                     span
                     (
@@ -160,17 +163,20 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                         setClass(isset($ganttBaseline) ? '' : 'hidden'),
                         btn
                         (
-                            setClass('ghost size-sm'),
-                            icon('exchange'),
+                            setClass('ghost'),
+                            set::size('sm'),
+                            set::icon('exchange'),
                             on::click()->call('exchangeVersion', jsRaw('event'))
                         ),
                         btn
                         (
                             setID('nextBox'),
                             setClass('ghost gray-300-outline rounded-full'),
-                            isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : null,
-                            isset($ganttBaseline) ? setData(array('value' => $ganttBaseline)) : null,
-                            span(setClass('caret'))
+                            setStyle(array('max-width' => '150px')),
+                            set::text(isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : ''),
+                            set::hint(isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : null),
+                            set::caret(),
+                            isset($ganttBaseline) ? setData(array('value' => $ganttBaseline)) : null
                         )
                     )
                 ),
