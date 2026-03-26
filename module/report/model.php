@@ -243,7 +243,7 @@ class reportModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')
             ->on('t1.assignedTo = t2.account')
             ->where('t1.assignedTo')->ne('')
-            ->andWhere('t1.status')->eq('doing')
+            ->andWhere('t1.progress')->lt(100)
             ->andWhere('t1.archived')->eq(0)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)

@@ -198,6 +198,7 @@ function appendCardClass(item, className)
 
 function getCardReminderClass(item)
 {
+    if(item.progress == 100) return '';
     const deadline   = normalizeCardDeadline(item.deadline || item.end);
     if(!deadline) return '';
 

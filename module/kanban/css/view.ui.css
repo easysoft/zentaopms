@@ -7,7 +7,7 @@
 .card-title {color: var(--color-black-rgb); }
 .card-icon {opacity: 1;}
 .card-remind-soon > .card {box-shadow: inset 0 0 0 2px #f59e0b;}
-.card-remind-overdue > .card {background-color: #fff1f1 !important;}
+.card-remind-overdue > .card {box-shadow: inset 0 0 0 2px #D75557;}
 .color-937c5a > .card { background-color: #937c5a !important; color: #fff !important}
 .color-ff9f46 > .card { background-color: #ff9f46 !important; color: #fff !important}
 .color-fc5959 > .card { background-color: #fc5959 !important; color: #fff !important}
