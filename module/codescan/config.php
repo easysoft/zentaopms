@@ -244,33 +244,6 @@ $config->codescan->task->search['params']['started']  = array('operator' => '>',
 $config->codescan->task->search['params']['finished'] = array('operator' => '<', 'control' => 'datetime', 'values' => '');
 
 $config->codescan->issue = new stdclass();
-$config->codescan->issue->actionList['bug']['icon']         = 'bug';
-$config->codescan->issue->actionList['bug']['hint']         = $lang->codescan->createBug;
-$config->codescan->issue->actionList['bug']['url']          = array('module' => 'bug', 'method' => 'create', 'params' => 'product={productID}&branch=0&extra=from=codescan,fromID={id},fromServerID={serverID},repoID={repoID}');
-$config->codescan->issue->actionList['bug']['showText']     = true;
-$config->codescan->issue->actionList['bug']['notLoadModel'] = true;
-$config->codescan->issue->actionList['bug']['data-toggle']  = 'modal';
-$config->codescan->issue->actionList['bug']['data-size']    = 'lg';
-
-$config->codescan->issue->actionList['ignoreissue']['icon']        = 'eye-off';
-$config->codescan->issue->actionList['ignoreissue']['hint']        = $lang->codescan->ignoreIssue;
-$config->codescan->issue->actionList['ignoreissue']['url']         = array('module' => 'codescan', 'method' => 'ignoreIssue', 'params' => 'issueID={id}');
-$config->codescan->issue->actionList['ignoreissue']['showText']    = true;
-$config->codescan->issue->actionList['ignoreissue']['data-toggle'] = 'modal';
-$config->codescan->issue->actionList['ignoreissue']['data-size']   = 'sm';
-
-$config->codescan->issue->actionList['confirmissue']['icon']      = 'ok';
-$config->codescan->issue->actionList['confirmissue']['hint']      = $lang->codescan->confirmIssue;
-$config->codescan->issue->actionList['confirmissue']['url']       = array('module' => 'codescan', 'method' => 'confirmIssue', 'params' => 'issueID={id}');
-$config->codescan->issue->actionList['confirmissue']['showText']  = true;
-$config->codescan->issue->actionList['confirmissue']['className'] = 'ajax-submit';
-
-$config->codescan->issue->actionList['activeissue']['icon']         = 'magic';
-$config->codescan->issue->actionList['activeissue']['hint']         = $lang->codescan->activeIssue;
-$config->codescan->issue->actionList['activeissue']['url']          = array('module' => 'codescan', 'method' => 'activeIssue', 'params' => 'issueID={id}');
-$config->codescan->issue->actionList['activeissue']['showText']     = true;
-$config->codescan->issue->actionList['activeissue']['className']    = 'ajax-submit';
-$config->codescan->issue->actionList['activeissue']['data-confirm'] = $lang->codescan->notice->confirmActivateIssue;
 
 $config->codescan->actions->issueview['mainActions']   = array('confirmissue', 'bug', 'ignoreissue', 'activeissue');
 $config->codescan->actions->issueview['suffixActions'] = array();
