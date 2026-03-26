@@ -49,10 +49,12 @@ $config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
 $config->repo->repoSyncLog->finishCompress = array('Compressing objects: 100%');
 
 $config->repo->editor = new stdclass();
-$config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleTools');
-$config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->create                   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->edit                     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->view                     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->diff                     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->ajaxgeteditorcontent     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->ajaxgetdiffeditorcontent = array('id' => 'commentText', 'tools' => 'simpleTools');
 
 $config->repo->switcherModuleList = array('repo', 'job', 'compile', 'ppm');
 $config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'log', 'revision', 'blame');

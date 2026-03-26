@@ -7,10 +7,12 @@ declare(strict_types=1);
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao<zhaoke@easycorp.ltd>
  * @package     repo
- * @link        https://www.zentao.net
+ * @link        http://www.zentao.net
  */
 
 namespace zin;
+
+include "header.review.html.php";
 
 $canLinkStory    = common::hasPriv('repo', 'linkStory');
 $canLinkBug      = common::hasPriv('repo', 'linkBug');
@@ -38,9 +40,8 @@ jsVar('sourceRevision', $oldRevision);
 jsVar('encodePath', $this->repo->encodePath($entry));
 if($showEditor) jsVar('codeContent', $content);
 jsVar('canAddBug', $canAddBug);
-//jsVar('canReview', !empty($canReview));
+jsVar('canReview', !empty($canReview));
 jsVar('createLang', $lang->repo->addIssue);
-if($showEditor) jsVar('codeContent', $content);
 
 $lang = 'php';
 foreach($this->config->repo->fileExt as $langName => $exts)
@@ -73,6 +74,7 @@ elseif($suffix == 'binary')
 else
 {
     $options = array(
+        'value'                => $content,
         'language'             => $lang,
         'readOnly'             => true,
         'autoIndent'           => true,
@@ -80,15 +82,26 @@ else
         'automaticLayout'      => true,
         'EditorMinimapOptions' => array('enabled' => false)
     );
-    if($type == 'diff') $options['EditorMinimapOptions'] = array('enabled' => false);
-    if($type != 'diff') $options['value'] = $content;
+    if($type == 'diff') $options = array(
+        'language'             => $lang,
+        'folding'              => true,
+        'showFoldingControls'  => 'never',
+        'readOnly'             => true,
+        'autoIndent'           => true,
+        'contextmenu'          => true,
+        'automaticLayout'      => true,
+        'renderSideBySide'     => false,
+        'EditorMinimapOptions' => array('enabled' => false)
+    );
     $wg = monaco
     (
         set::id('codeContainer'),
         set::options($options),
         set::action($type == 'diff' ? 'diff' : 'create'),
         $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null,
-        set::onMouseDown('window.onMouseDown')
+        set::onMouseDown('window.onMouseDown'),
+        set::onMouseMove('window.onMouseMove'),
+        set::selectedLines(empty($lines) ? '' : $lines)
     );
 }
 
@@ -104,14 +117,14 @@ $logWg = div
     div
     (
         set::className('action-btn pull-right'),
-        div(set::className('btn btn-close pull-right ghost text-black bg-gray-200 bg-opacity-50'), icon('close')),
+        div(set::className('btn btn-close pull-right ghost text-black bg-light bg-opacity-50'), icon('close')),
         !empty($dropMenus) ? dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
             btn
             (
-                setClass('ghost text-black bg-gray-200 bg-opacity-50'),
+                setClass('ghost text-black bg-light bg-opacity-50'),
                 set::icon('ellipsis-v rotate-90')
             ),
             set::items
@@ -121,7 +134,6 @@ $logWg = div
         ) : ''
     )
 );
-
 $relatedWg = div
 (
     set::id('related'),
@@ -133,7 +145,6 @@ $relatedWg = div
         tabs
         (
             set::id('relationTabs'),
-            setClass('mt-1 ml-2'),
             tabPane
             (
                 set::key('tab1'),
@@ -152,6 +163,13 @@ div
     $wg,
     $logWg,
     $relatedWg
+);
+
+div
+(
+    set::id('reviewBugContainer'),
+    setStyle('display', 'none'),
+    div($this->lang->repo->viewBugs)
 );
 
 set::zui(true);

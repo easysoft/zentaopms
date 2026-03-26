@@ -754,6 +754,7 @@ class repo extends control
      */
     public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $isBranchOrTag = 0)
     {
+        $this->repoZen->setBackSession('diff', true);
         $newRevision = strtr($newRevision, '*', '-');
         $oldRevision = strtr($oldRevision, '*', '-');
         $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
@@ -1120,6 +1121,7 @@ class repo extends control
      */
     public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '')
     {
+        $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
         $file      = $entry;
@@ -1160,6 +1162,7 @@ class repo extends control
         $this->view->suffix      = 'c';
         $this->view->blames      = array();
         $this->view->showEditor  = true;
+        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
         $this->display('repo', 'ajaxgeteditorcontent');
     }
 
@@ -1178,6 +1181,7 @@ class repo extends control
      */
     public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
     {
+        $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
         $file     = $entry;
@@ -1232,6 +1236,7 @@ class repo extends control
         $this->view->pathInfo    = $pathInfo;
         $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
+        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
         $this->display();
     }
 
@@ -1963,5 +1968,330 @@ class repo extends control
         foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
 
         return print(json_encode($userList));
+    }
+
+    /**
+     * addBug
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function addBug(int $repoID)
+    {
+        $this->loadModel('common')->checkPriv();
+
+        if(!empty($_POST))
+        {
+            global $config;
+            $file  = $this->post->file;
+            $v1    = $this->post->fromReversion;
+            $v2    = $this->post->revision;
+            $begin = $this->post->begin;
+            $end   = $this->post->end;
+            $v1    = strpos($v1, '^') !== false ? substr($v1, 0, -1) : $v1;
+            $v2    = strpos($v2, '^') !== false ? substr($v2, 0, -1) : $v2;
+            $bug   = form::data($config->repo->form->addBug)
+                ->setIF(!$this->post->entry, 'entry', $file)
+                ->add('openedBy', $this->app->user->account)
+                ->add('repo', $repoID)
+                ->add('lines', $begin . ',' . $end)
+                ->add('v1', $v1)
+                ->add('v2', $v2)
+                ->remove('begin,end,uid,fromReversion,revision,file')
+                ->get();
+            $bug = $this->loadModel('file')->processImgURL($bug, 'steps',(string)$this->post->uid);
+
+            $result = $this->repo->saveBug($repoID, $bug);
+            if($result['result'] === 'fail')
+            {
+                $result['message'] = $result['message'];
+                return $this->send($result);
+            }
+
+            $bugID      = $result['id'];
+            $repo       = $this->repo->getById($repoID);
+            $file       = $this->repo->decodePath($file);
+            $entry      = $repo->name . '/' . $file;
+            $location   = sprintf($this->lang->repo->reviewLocation, $entry, substr($v2, 0, 10), $begin, $end);
+            $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
+            if(empty($v1))
+            {
+                $revision = substr($v2, 0, 10);
+                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
+            }
+            else
+            {
+                $revision  = substr($v1, 0, 10);
+                $revision .= ' : ';
+                $revision .= substr($v2, 0, 10);
+                $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$changeFile}&oldRevision=$v1&newRevision=$v2&showBug=1", '', true) . "#L{$begin}";
+            }
+
+            /* search commit. */
+            $commitID = empty($v2) ? $v1 : $v2;
+            $this->app->loadClass('pager', true);
+            $pager = new pager(0, 1, 1);
+            $pager->recPerPage = 1;
+
+            $query = new stdclass();
+            $query->commit = $commitID;
+
+            $commits = $this->repo->getCommits($repo, '', '', 'dir', $pager, '', '', $query);
+            if(!empty($commits[0]))
+            {
+                $commit = $commits[0];
+                $historyLog = new stdclass();
+                if(!empty($commit->author->identity->name))
+                {
+                    $historyLog->committer = $commit->author->identity->name;
+                }else if(!empty($commit->committer_name))
+                {
+                    $historyLog->committer = $commit->committer_name;
+                }else
+                {
+                    $historyLog->committer = '';
+                }
+                /* Record code commit relationship. */
+                $historyLog->revision = $commit->revision;
+                $historyLog->comment  = $commit->message;
+                $historyLog->time     = date("Y-m-d H:i:s", strtotime($commit->time));
+                $this->repo->saveCommit($repo->id, array('commits' => [$historyLog]), 0);
+                $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)
+                    ->where('revision')->in($commit->revision)
+                    ->andWhere('repo')->eq($repoID)
+                    ->fetchPairs('id');
+                $this->loadModel('bug')->updateLinkedCommits((int)$bugID, $repoID, $revisions);
+            }
+            $actionID = $this->loadModel('action')->create('bug', $bugID, 'repoCreated', '', html::a($link, $location, '', "class='iframe'"));
+            $this->loadModel('mail')->sendmail($bugID, $actionID);
+
+            return $this->send($result);
+        }
+    }
+
+    /**
+     * 添加评论。
+     * Add comment.
+     *
+     * @access public
+     * @return void
+     */
+    public function addComment()
+    {
+        if(!empty($_POST))
+        {
+            $now  = helper::now();
+            $bug  = $this->loadModel('bug')->getByID($this->post->objectID);
+            $data = fixer::input('post')
+                ->add('objectType', 'bug')
+                ->add('product', ',' . $bug->product . ',')
+                ->add('project', $bug->project)
+                ->add('actor', $this->app->user->account)
+                ->add('action', 'commented')
+                ->add('date', $now)
+                ->remove('loadPage')
+                ->get();
+            if(empty($data->comment)) return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+
+            $this->dao->insert(TABLE_ACTION)->data($data)->exec();
+            return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+        }
+    }
+
+    /**
+     * Show review.
+     *
+     * @param  int    $repoID
+     * @param  string $bugList
+     * @param  int    $currentBug
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBugs($repoID, $bugList, $currentBug = 0)
+    {
+        $this->loadModel('bug');
+        $this->loadModel('file');
+        $bugIDList = explode(',', $bugList);
+        if(!$currentBug && $bugIDList) $currentBug = $bugIDList[count($bugIDList) - 1];
+
+        $modules  = $this->loadModel('tree')->getAllModulePairs('bug');
+        $bugs     = $this->repo->getBugsByRepo($repoID, 'all', 0, $bugIDList);
+        $comments = $this->repo->getComments($bugIDList);
+        $accounts = array();
+
+        foreach($bugs as $bug)
+        {
+            $bug->files      = array();
+            $bug->actions    = array();
+            $bug->toCases    = array();
+            $bug->moduleName = zget($modules, $bug->module, '');
+            $bug = $this->file->replaceImgURL($bug, 'steps');
+
+            $accounts[] = $bug->openedBy;
+        }
+
+        $this->view->repoID     = $repoID;
+        $this->view->bugs       = $bugs;
+        $this->view->bugIDList  = $bugIDList;
+        $this->view->comments   = $comments;
+        $this->view->currentBug = $currentBug;
+        $this->view->users      = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+        $this->view->commentUrl = $this->repo->createLink('addComment');
+        $this->display();
+    }
+
+    /**
+     * Ajax get committer.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  int    $revision
+     * @param  int    $line
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCommitter($repoID, $entry, $revision, $line)
+    {
+        if($this->get->repoPath) $entry = $this->get->repoPath;
+        $repo  = $this->repo->getRepoByID($repoID);
+        $entry = $this->repo->decodePath($entry);
+
+        $this->scm->setEngine($repo);
+        $blames   = $this->scm->blame($entry, $revision);
+        $committer = '';
+        while($line > 0)
+        {
+            if(isset($blames[$line]['committer']))
+            {
+                $committer = $blames[$line]['committer'];
+                break;
+            }
+            $line--;
+        }
+        die($committer);
+    }
+
+    /**
+     * Delete bug.
+     *
+     * @param  int    $bugID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteBug($bugID, $confirm = 'no')
+    {
+        if($confirm == 'yes')
+        {
+            $this->loadModel('bug')->delete(TABLE_BUG, $bugID);
+            echo 'deleted';
+        }
+        return false;
+    }
+
+    /**
+     * Delete comment.
+     *
+     * @param  int    $commentID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteComment($commentID, $confirm = 'no')
+    {
+        if($confirm == 'yes')
+        {
+            $result = $this->repo->deleteComment($commentID);
+            if($result) echo 'deleted';
+        }
+        return false;
+    }
+
+    /**
+     * 编辑评论。
+     * Edit comment.
+     *
+     * @param  int    $commentID
+     * @access public
+     * @return void
+     */
+    public function editComment($commentID)
+    {
+        if(!empty($_POST))
+        {
+            $comment = $this->loadModel('file')->pasteImage($this->post->commentText);
+            $this->repo->updateComment($commentID, $comment);
+            return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+        }
+    }
+
+    /**
+     * Show review.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function review($repoID, $browseType = '', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Save the original $repoID to this variable to check if $repoID is 0. */
+        $isAllRepo = !$repoID;
+
+        if($repoID == 0) $repoID = $this->repo->saveState($repoID);
+        $this->commonAction($repoID, (int)$objectID);
+
+        $firstOpen  = empty($browseType);
+        $browseType = strtolower($browseType ? $browseType : 'assigntome');
+        $this->app->loadLang('bug');
+        $this->repoZen->setBackSession('list', true);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $bugs = $this->repo->getBugsByRepo($objectID && $isAllRepo ? 0 : $repoID, $browseType, $objectID, array(), $orderBy, $pager);
+        if($firstOpen && empty($bugs)) return $this->locate(inLink('review', "repoID={$repoID}&browseType=all"));
+
+        $repo = $this->repo->getById($repoID);
+        $revisions = array();
+        foreach($bugs as $bug)
+        {
+            $revisions[] = $bug->v2;
+            if(!empty($bug->v1)) $revisions[] = $bug->v1;
+        }
+        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('revision', 'commit');
+
+        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
+
+        $repoList  = $this->loadModel('repo')->getList($objectID);
+        $repoPairs = array();
+        foreach($repoList as $repo)
+        {
+            $repoPairs[$repo->id] = $repo->name;
+        }
+
+        foreach($bugs as $bug) $bug->type = $bug->repoType ? $bug->repoType : $bug->type;
+
+        $this->view->allRepo    = $isAllRepo;
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->repos      = $this->repo->getList($objectID);
+        $this->view->repoGroup  = $this->repo->getRepoGroup($this->app->tab);
+        $this->view->orderBy    = $orderBy;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->bugs       = $bugs;
+        $this->view->pager      = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $this->lang->repo->review;
+        $this->view->browseType = $browseType;
+        $this->display();
     }
 }

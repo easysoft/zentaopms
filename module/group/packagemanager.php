@@ -4520,3 +4520,22 @@ $config->group->package->browseSystem->subset = 'systemManage';
 $config->group->package->browseSystem->privs  = array();
 $config->group->package->browseSystem->privs['repo-browseSystem'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('system-create', 'system-view'));
 $config->group->package->browseSystem->privs['system-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseSystem'), 'recommend' => array('system-create', 'system-edit', 'system-delete'));
+
+$config->group->package->browseArtifactrepo = new stdclass();
+$config->group->package->browseArtifactrepo->order  = 2780;
+$config->group->package->browseArtifactrepo->subset = 'artifactrepo';
+$config->group->package->browseArtifactrepo->privs  = array();
+$config->group->package->browseArtifactrepo->privs['artifactrepo-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+
+$config->group->package->manageArtifactrepo = new stdclass();
+$config->group->package->manageArtifactrepo->order  = 2800;
+$config->group->package->manageArtifactrepo->subset = 'artifactrepo';
+$config->group->package->manageArtifactrepo->privs  = array();
+$config->group->package->manageArtifactrepo->privs['artifactrepo-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageArtifactrepo->privs['artifactrepo-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array());
+
+$config->group->package->deleteArtifactrepo = new stdclass();
+$config->group->package->deleteArtifactrepo->order  = 2820;
+$config->group->package->deleteArtifactrepo->subset = 'artifactrepo';
+$config->group->package->deleteArtifactrepo->privs  = array();
+$config->group->package->deleteArtifactrepo->privs['artifactrepo-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
