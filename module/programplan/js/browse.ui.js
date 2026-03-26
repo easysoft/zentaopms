@@ -56,9 +56,11 @@ window.setVersionDropdownFooter = function()
             items: [
                 {text: versionLangData.confirm, size: 'sm', disabled: this.getChecks().length < 2, type: 'primary', onClick: () =>
                 {
-                    this.setState({showCheckbox: false})
                     prevVersion = $('#versionBox').attr('data-value');
                     nextVersion = $('#nextBox').attr('data-value');
+                    if(prevVersion == undefined || nextVersion == undefined) return;
+
+                    this.setState({showCheckbox: false})
                     postAndLoadPage(browseTemplate.replace('%s', prevVersion), "baselineVersion=" + nextVersion);
                 }},
                 {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) =>
@@ -126,7 +128,7 @@ window.exchangeVersion = function(e)
 {
     const prevVersion = $('#versionBox').attr('data-value');
     const nextVersion = $('#nextBox').attr('data-value');
-    if(!prevVersion || !nextVersion) return;
+    if(prevVersion == undefined || !nextVersion == undefined) return;
 
     const $dropdown = $('#versionBox').zui('dropdown');
     const $menu     = $dropdown.menu;
