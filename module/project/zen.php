@@ -1528,7 +1528,7 @@ class projectZen extends project
         if(!$project->hasProduct) unset($this->config->build->dtable->fieldList['product']);
         if(!$showBranch || !$project->hasProduct) unset($this->config->build->dtable->fieldList['branch']);
         if(!$project->multiple) unset($this->config->build->dtable->fieldList['execution']);
-        $this->config->build->dtable->fieldList['name']['link'] = helper::createLink('projectbuild', 'view', 'buildID={id}');
+        $this->config->build->dtable->fieldList['name']['link']       = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={id}');
         $this->config->build->dtable->fieldList['execution']['title'] = zget($this->lang->project->executionList, $project->model);
 
         return $builds;
