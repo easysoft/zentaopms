@@ -281,6 +281,8 @@ $lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. 
 $lang->repo->error->repoNameInvalid   = 'The name should contain only alphanumeric numbers, dashes, underscores, and dots.';
 $lang->repo->error->createdFail       = 'Create failed';
 $lang->repo->error->branchNameTooLong = 'Le nom de la branche ne peut pas dépasser 30 caractères';
+$lang->repo->error->emptyVersion      = 'Version cannot be empty';
+$lang->repo->error->versionError      = 'Wrong version format!';
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";
@@ -360,3 +362,30 @@ $lang->repo->branchRule->userOptionList['specify'] = 'Specified users only';
 $lang->repo->branchRule->branchTypeOptionList = array();
 $lang->repo->branchRule->branchTypeOptionList['all']     = 'All branches';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = 'Specified branch types';
+
+$lang->repo->select            = 'Please choose...';
+$lang->repo->searchPlaceholder = 'Filter by Git revision';
+$lang->repo->svnPlaceholder    = 'Please enter the version';
+$lang->repo->changeFile        = 'Change files';
+
+$lang->repo->commitInfo   = 'Code Modification Details';
+$lang->repo->linkedStory  = "Linked Stories";
+$lang->repo->linkedTask   = "Linked Tasks";
+$lang->repo->linkedBug    = "Linked Bugs";
+$lang->repo->commited     = "Commited";
+$lang->repo->commentary   = "Comment";
+$lang->repo->issueTitle   = "Issue Title";
+$lang->repo->issueDesc    = "Issue Detail";
+$lang->repo->dateTmpl     = "Proposed at %s";
+$lang->repo->commentNum   = " Comments";
+
+$lang->repo->fileTotal  = '%d files';
+$lang->repo->codeSurvey = 'Changed: <span class="add-cot">%d lines</span> of code added, <span class="delete-cot">%d lines</span> of code deleted';
+
+$lang->repo->featureBar['review']['all']          = 'All';
+$lang->repo->featureBar['review']['assigntome']   = 'AssignedToMe';
+$lang->repo->featureBar['review']['openedbyme']   = 'OpenedByMe';
+$lang->repo->featureBar['review']['resolvedbyme'] = 'ResolvedByMe';
+$lang->repo->featureBar['review']['assigntonull'] = 'Unassigned';
+$lang->repo->featureBar['review']['unresolved']   = 'Active';
+$lang->repo->featureBar['review']['unclosed']     = 'Unclosed';

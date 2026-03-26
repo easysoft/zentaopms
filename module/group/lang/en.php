@@ -685,5 +685,9 @@ $lang->group->package->codeScanDelete        = 'Code Scan Delete';
 $lang->group->package->reviewCodeIssue       = 'Review Code Issue';
 $lang->group->package->browseSystem          = 'Browse App';
 $lang->group->package->browseDeploy          = 'Browse Deploy ENV';
+$lang->group->package->artifactrepo          = 'Artifact Repo';
+$lang->group->package->browseArtifactrepo    = 'Artifact Repo List';
+$lang->group->package->manageArtifactrepo    = 'Manage Artifact Repo';
+$lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
 
 include (dirname(__FILE__) . '/resource.php');

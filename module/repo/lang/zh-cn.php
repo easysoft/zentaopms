@@ -24,10 +24,6 @@ $lang->repo->addComment      = '添加备注';
 $lang->repo->editComment     = '编辑备注';
 $lang->repo->deleteComment   = '删除备注';
 $lang->repo->encrypt         = '加密方式';
-$lang->repo->repo            = '代码库';
-$lang->repo->parent          = '父文件夹';
-$lang->repo->branch          = '分支';
-$lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取代码库';
 $lang->repo->blameTmpl       = '第 <strong>%line</strong> 行代码相关信息： %name 于 %time 提交 %version %comment';
@@ -282,6 +278,8 @@ $lang->repo->error->repoNameInvalid   = '名称必须以字母或 _ 开头，只
 $lang->repo->error->createdFail       = '创建失败';
 $lang->repo->error->branchNameTooLong = '分支名称不能超过30个字符';
 $lang->repo->error->noProduct         = '在开始导入代码库之前，请先关联产品。';
+$lang->repo->error->emptyVersion      = '版本不能为空';
+$lang->repo->error->versionError      = '版本格式错误！';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
@@ -361,3 +359,30 @@ $lang->repo->branchRule->userOptionList['specify'] = '仅指定人员';
 $lang->repo->branchRule->branchTypeOptionList = array();
 $lang->repo->branchRule->branchTypeOptionList['all']     = '全部分支';
 $lang->repo->branchRule->branchTypeOptionList['specify'] = '指定分支类型';
+
+$lang->repo->select            = '请选择...';
+$lang->repo->searchPlaceholder = '按Git版本筛选';
+$lang->repo->svnPlaceholder    = '请输入版本号';
+$lang->repo->changeFile        = '改动文件';
+
+$lang->repo->commitInfo   = '代码改动详情';
+$lang->repo->linkedStory  = "相关需求";
+$lang->repo->linkedTask   = "相关任务";
+$lang->repo->linkedBug    = "相关Bug";
+$lang->repo->commited     = "提交了";
+$lang->repo->commentary   = "评论";
+$lang->repo->issueTitle   = "问题标题";
+$lang->repo->issueDesc    = "详请";
+$lang->repo->dateTmpl     = "于 %s 提出";
+$lang->repo->commentNum   = " 条评论";
+
+$lang->repo->fileTotal  = '%d个文件';
+$lang->repo->codeSurvey = '发生改动：总共<span class="add-cot">添加%d行</span>代码，<span class="delete-cot">删除%d行</span>代码';
+
+$lang->repo->featureBar['review']['all']          = '全部';
+$lang->repo->featureBar['review']['assigntome']   = '指派给我';
+$lang->repo->featureBar['review']['openedbyme']   = '由我创建';
+$lang->repo->featureBar['review']['resolvedbyme'] = '由我解决';
+$lang->repo->featureBar['review']['assigntonull'] = '未指派';
+$lang->repo->featureBar['review']['unresolved']   = '未解决';
+$lang->repo->featureBar['review']['unclosed']     = '未关闭';

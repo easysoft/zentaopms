@@ -284,12 +284,14 @@ $lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->c
 $lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create,edit');
+$lang->scrum->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");
 
 $lang->scrum->menu->devops['menuOrder'][5]  = 'repo';
 $lang->scrum->menu->devops['menuOrder'][10] = 'commit';
 $lang->scrum->menu->devops['menuOrder'][15] = 'branch';
 $lang->scrum->menu->devops['menuOrder'][20] = 'tag';
 $lang->scrum->menu->devops['menuOrder'][25] = 'ppm';
+$lang->scrum->menu->devops['menuOrder'][60] = 'review';
 
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
@@ -343,12 +345,14 @@ $lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->rep
 $lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
+$lang->waterfall->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");
 
 $lang->waterfall->menu->devops['menuOrder'][5]  = 'repo';
 $lang->waterfall->menu->devops['menuOrder'][10] = 'commit';
 $lang->waterfall->menu->devops['menuOrder'][15] = 'branch';
 $lang->waterfall->menu->devops['menuOrder'][20] = 'tag';
 $lang->waterfall->menu->devops['menuOrder'][25] = 'ppm';
+$lang->waterfall->menu->devops['menuOrder'][60] = 'review';
 
 /* Kanban project menu. */
 $lang->kanbanProject = new stdclass();
@@ -435,12 +439,14 @@ $lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->rep
 $lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
+$lang->execution->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
 $lang->execution->menu->devops['menuOrder'][10] = 'commit';
 $lang->execution->menu->devops['menuOrder'][15] = 'branch';
 $lang->execution->menu->devops['menuOrder'][20] = 'tag';
 $lang->execution->menu->devops['menuOrder'][25] = 'ppm';
+$lang->execution->menu->devops['menuOrder'][60] = 'review';
 
 $lang->execution->menu->settings['subMenu'] = new stdclass();
 $lang->execution->menu->settings['subMenu']->view      = array('link' => "$lang->overview|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
@@ -568,6 +574,7 @@ $lang->devops->menu->repoCodeScan['subMenu']->overview = array('link' => "{$lang
 $lang->devops->menu->repoCodeScan['subMenu']->scanTask = array('link' => "{$lang->devops->scanTask}|codescan|task|repoID=%s", 'alias' => 'taskview,tasklog,issue,issueview', 'exclude' => 'codescan-plan,codescan-planview');
 $lang->devops->menu->repoCodeScan['subMenu']->scanPlan = array('link' => "{$lang->devops->scanPlan}|codescan|plan|repoID=%s", 'alias' => 'planview,createplan,editplan,trigger,tips');
 
+$lang->devops->menu->review = array('link' => '问题|repo|review|repoID=%s', 'subModule' => 'bug');
 $lang->devops->menu->review['subMenu'] = new stdclass();
 $lang->devops->menu->review['subMenu']->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
 $lang->devops->menu->review['subMenu']->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
@@ -599,6 +606,7 @@ $lang->devops->menuOrder[47]  = 'repoCodeScan';
 $lang->devops->menuOrder[49]  = 'codescan';
 $lang->devops->menuOrder[53]  = 'system';
 $lang->devops->menuOrder[55]  = 'deploy';
+$lang->devops->menuOrder[65]  = 'review';
 $lang->devops->menuOrder[70]  = 'settings';
 $lang->devops->menuOrder[75]  = 'apps';
 $lang->devops->menuOrder[80]  = 'configure';

@@ -9,6 +9,17 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+if($app->tab == 'devops')
+{
+    query('#heading')->append(
+        dropmenu
+        (
+            set::module('repo'),
+            set::tab('repo'),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "objectID=0&module=repo&method=review"))
+        )
+    );
+}
 
 use function zin\utils\flat;
 
