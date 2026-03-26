@@ -20,24 +20,19 @@ if($repoID)
     unset($lang->pipeline->featureBar['execution']);
     unset($config->pipeline->execution->dtable->fieldList['repo']);
     unset($config->pipeline->execution->dtable->fieldList['type']);
-    featureBar(div(searchToggle(set::module('pipelineexec'), set::open($type == 'bySearch'))));
 }
-else
-{
-    /* zin: Define the set::module('pipeline') feature bar on main menu. */
-    featureBar
+featureBar
+(
+    backBtn
     (
-        backBtn
-        (
-            setClass('mr-2'),
-            set::icon('back'),
-            set::type('secondary'),
-            set::url($this->createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}")),
-            $lang->goback . $lang->pipeline->common
-        ),
-        div(searchToggle(set::module('pipelineexec'), set::open($type == 'bySearch')))
-    );
-}
+        setClass('mr-2'),
+        set::icon('back'),
+        set::type('secondary'),
+        set::url($this->createLink('pipeline', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}")),
+        $lang->goback . $lang->pipeline->common
+    ),
+    div(searchToggle(set::module('pipelineexec'), set::open($type == 'bySearch')))
+);
 $config->pipeline->execution->dtable->fieldList['repo']['map'] = $repos;
 $config->pipeline->execution->dtable->fieldList['actions']['list']['view']['url'] = array('module' => 'pipeline', 'method' => 'execview', 'params' => "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
 $tableData = initTableData($executionList, $config->pipeline->execution->dtable->fieldList, $this->pipeline);
