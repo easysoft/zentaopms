@@ -1451,8 +1451,17 @@ eof;
      */
     public function resetProjectPriv(int $projectID = 0)
     {
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
         if($this->app->tab == 'execution')
         {
+            if($module == 'execution' && $method == 'all') return;
             $executionID = $this->session->execution;
             if(!empty($_GET['executionID'])) $executionID = $_GET['executionID'];
             if(!empty($_GET['execution']))   $executionID = $_GET['execution'];
@@ -1464,6 +1473,7 @@ eof;
         }
         else
         {
+            if(($module == 'project' && $method == 'browse') || ($module == 'project' && $method == 'template')) return;
             if(empty($projectID) && !empty($_GET['projectID'])) $projectID = $_GET['projectID'];
             if(empty($projectID) && !empty($_GET['project']))   $projectID = $_GET['project'];
         }
