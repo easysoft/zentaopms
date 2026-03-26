@@ -95,19 +95,21 @@ window.setClickVersionItem = function(info)
 {
     if(this.state.showCheckbox)
     {
-        if(typeof $('#versionBox').attr('data-value') == 'undefined')
+        const prevVersion = $('#versionBox').attr('data-value');
+        const nextVersion = $('#nextBox').attr('data-value');
+        if(prevVersion == undefined && (nextVersion == undefined || nextVersion != info.item.value))
         {
             $('#versionBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
-        else if($('#versionBox').attr('data-value') == info.item.value)
+        else if(prevVersion == info.item.value)
         {
             $('#versionBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
-        else if(typeof $('#nextBox').attr('data-value') == 'undefined')
+        else if(nextVersion == undefined && (prevVersion == undefined || prevVersion != info.item.value))
         {
             $('#nextBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
-        else if($('#nextBox').attr('data-value') == info.item.value)
+        else if(nextVersion == info.item.value)
         {
             $('#nextBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
