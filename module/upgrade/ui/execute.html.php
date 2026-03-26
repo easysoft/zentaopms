@@ -14,6 +14,7 @@ set::zui(true);
 
 jsVar('fromVersion', $fromVersion);
 jsVar('upgradeVersions', array_keys($upgradeVersions));
+$isEn = $app->getClientLang() == 'en';
 
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
@@ -184,7 +185,7 @@ div
             a
             (
                 setID('continueBtn'),
-                setClass('btn primary w-24 disabled'),
+                setClass('btn primary disabled ' . ($isEn ? 'w-28' : 'w-24')),
                 $lang->upgrade->continue
             )
         )
