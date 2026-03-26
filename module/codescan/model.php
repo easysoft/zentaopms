@@ -801,15 +801,11 @@ class codescanModel extends model
      */
     public function execScanTask(object $plan, string $branch): object|false
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/scan/tasks");
-
         $data = new stdclass();
-        $data->branch  = $branch;
-        $data->plan_id = $plan->id;
-
-        $result  = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json', 'POST'));
-        return $this->gitfox->getResponse($result);
+        $data->branch = $branch;
+        $data->planID = $plan->id;
+        $data->repoID = $plan->repoID;
+        return $this->loadModel('gitfox')->request('/scan/tasks', 'POST', $data);
     }
 
     /**

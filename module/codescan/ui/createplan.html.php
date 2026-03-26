@@ -79,7 +79,7 @@ formPanel
     (
         set::name('solutions'),
         set::width('2/3'),
-        set::label($lang->codescan->solutions),
+        set::label($lang->codescan->solutionIDs),
         set::required(true),
         set::items(array_column($solutionList, 'name', 'id')),
         set::control(array(

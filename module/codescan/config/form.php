@@ -53,7 +53,7 @@ $config->codescan->form->createTrigger['month']       = array('type' => 'string'
 $config->codescan->form->createTrigger['week']        = array('type' => 'string', 'required' => false, 'default' => '');
 $config->codescan->form->createTrigger['cronBranch']  = array('type' => 'string', 'required' => false, 'default' => '');
 $config->codescan->form->createTrigger['scanType']    = array('type' => 'string', 'required' => true);
-$config->codescan->form->createTrigger['solutions']   = array('type' => 'array',  'required' => true);
+$config->codescan->form->createTrigger['solutionIDs'] = array('type' => 'array',  'required' => true);
 $config->codescan->form->createTrigger['severity']    = array('type' => 'array',  'required' => false, 'default' => array());
 $config->codescan->form->createTrigger['type']        = array('type' => 'array',  'required' => false, 'default' => array());
 $config->codescan->form->createTrigger['metric']      = array('type' => 'array',  'required' => false, 'default' => array());

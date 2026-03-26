@@ -1138,7 +1138,7 @@ class codescan extends control
     public function exec(int $planID, int $repoID)
     {
         $repo = $this->loadModel('repo')->fetchByID($repoID);
-        $planList = $this->codescanZen->getListByQuery('plan', empty($repo) ? 0 : (int)$repo->serviceProject);
+        $planList = $this->codescanZen->getListByQuery('plan', $repoID);
 
         if($_POST)
         {
@@ -1154,7 +1154,7 @@ class codescan extends control
             $this->codescan->execScanTask($plan, $branch);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('codescanplan', $plan->id, 'exec', '', $plan->name . "|serviceRepoID={$repo->serviceProject}&planID={$planID}&repoID={$repoID}&type=view");
+            $this->loadModel('action')->create('codescanplan', $plan->id, 'exec', '', $plan->name . "|serviceRepoID={$repoID}&planID={$planID}&repoID={$repoID}&type=view");
             $this->sendSuccess(array('message' => $this->lang->codescan->notice->execSuccess, 'load' => true));
         }
 

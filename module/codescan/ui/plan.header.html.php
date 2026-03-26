@@ -10,7 +10,7 @@ foreach($actionList as $actionType => $typeActions)
     {
         $actionList[$actionType][$key]['className'] = isset($action['className']) ? $action['className'] . ' ghost' : 'ghost';
         $actionList[$actionType][$key]['iconClass'] = isset($action['iconClass']) ? $action['iconClass'] . ' text-primary' : 'text-primary';
-        $actionList[$actionType][$key]['url']       = str_replace(array('{id}', '{repo_id}', '{repo}'), array($planID, $serviceRepoID, $repoID), $action['url']);
+        $actionList[$actionType][$key]['url']       = str_replace(array('{id}', '{repo_id}', '{repo}'), array($planID, $serviceRepoID, $serviceRepoID), $action['url']);
     }
 }
 
