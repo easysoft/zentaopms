@@ -3968,7 +3968,7 @@ EOF;
 
         if(isset($app->workspaceInfo)) return $app->workspaceInfo;
 
-        if(!empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
+        if($config->vision != 'rnd' || !empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
         {
             $app->workspaceInfo = array('enabled' => false, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;
