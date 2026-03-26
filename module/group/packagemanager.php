@@ -2307,10 +2307,10 @@ $config->group->package->manageProjectchange = new stdclass();
 $config->group->package->manageProjectchange->order  = 10;
 $config->group->package->manageProjectchange->subset = 'projectchange';
 $config->group->package->manageProjectchange->privs  = array();
-$config->group->package->manageProjectchange->privs['projectchange-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-edit'));
-$config->group->package->manageProjectchange->privs['projectchange-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-create'));
-$config->group->package->manageProjectchange->privs['projectchange-submit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-recall'));
-$config->group->package->manageProjectchange->privs['projectchange-recall'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-submit'));
+$config->group->package->manageProjectchange->privs['projectchange-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-edit', 'projectchange-view'));
+$config->group->package->manageProjectchange->privs['projectchange-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-create', 'projectchange-view'));
+$config->group->package->manageProjectchange->privs['projectchange-submit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-recall', 'projectchange-view'));
+$config->group->package->manageProjectchange->privs['projectchange-recall'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('projectchange-browse'), 'recommend' => array('projectchange-submit', 'projectchange-view'));
 
 $config->group->package->deleteProjectchange = new stdclass();
 $config->group->package->deleteProjectchange->order  = 15;
