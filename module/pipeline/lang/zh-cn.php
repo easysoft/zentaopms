@@ -239,6 +239,7 @@ $lang->pipeline->flowApp->labels['save']                   = '保存';
 $lang->pipeline->flowApp->labels['publish']                = '发布';
 $lang->pipeline->flowApp->labels['confirm']                = '确定';
 $lang->pipeline->flowApp->labels['cancel']                 = '取消';
+$lang->pipeline->flowApp->labels['empty']                  = '暂无';
 $lang->pipeline->flowApp->labels['delete']                 = '删除';
 $lang->pipeline->flowApp->labels['edit']                   = '编辑';
 $lang->pipeline->flowApp->labels['add']                    = '添加';

@@ -239,6 +239,7 @@ $lang->pipeline->flowApp->labels['save']                   = 'Save';
 $lang->pipeline->flowApp->labels['publish']                = 'Publish';
 $lang->pipeline->flowApp->labels['confirm']                = 'Confirm';
 $lang->pipeline->flowApp->labels['cancel']                 = 'Cancel';
+$lang->pipeline->flowApp->labels['empty']                  = 'None';
 $lang->pipeline->flowApp->labels['delete']                 = 'Delete';
 $lang->pipeline->flowApp->labels['edit']                   = 'Edit';
 $lang->pipeline->flowApp->labels['add']                    = 'Add';
