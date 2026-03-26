@@ -1064,8 +1064,8 @@ $config->group->package->projectDoc = new stdclass();
 $config->group->package->projectDoc->order  = 20;
 $config->group->package->projectDoc->subset = 'project';
 $config->group->package->projectDoc->privs  = array();
-$config->group->package->projectDoc->privs['doc-importToPracticeLib']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 150, 'depend' => array(), 'recommend' => array());
-$config->group->package->projectDoc->privs['doc-importToComponentLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 155, 'depend' => array(), 'recommend' => array());
+$config->group->package->projectDoc->privs['doc-importToPracticeLib']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 150, 'depend' => array('doc-view'), 'recommend' => array());
+$config->group->package->projectDoc->privs['doc-importToComponentLib'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 155, 'depend' => array('doc-view'), 'recommend' => array());
 
 $config->group->package->projectTeam = new stdclass();
 $config->group->package->projectTeam->order  = 15;
