@@ -36,9 +36,9 @@ window.setVersionDropdownHeader = function()
                     diffMode = true;
                     this.setState({showCheckbox: true});
                     $(this.base).find('li.menu-item .item-actions').addClass('hidden');
-                    $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#versionBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                     $('#compareBox').removeClass('hidden');
-                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                 }},
             ],
         },
@@ -56,9 +56,11 @@ window.setVersionDropdownFooter = function()
             items: [
                 {text: versionLangData.confirm, size: 'sm', disabled: this.getChecks().length < 2, type: 'primary', onClick: () =>
                 {
-                    this.setState({showCheckbox: false})
                     prevVersion = $('#versionBox').attr('data-value');
                     nextVersion = $('#nextBox').attr('data-value');
+                    if(prevVersion == undefined || nextVersion == undefined) return;
+
+                    this.setState({showCheckbox: false})
                     postAndLoadPage(browseTemplate.replace('%s', prevVersion), "baselineVersion=" + nextVersion);
                 }},
                 {text: versionLangData.cancel, size: 'sm', className: 'not-hide-menu', type: 'default', onClick: (e) =>
@@ -66,9 +68,9 @@ window.setVersionDropdownFooter = function()
                     diffMode = false;
                     this.setState({showCheckbox: false})
                     $(this.base).find('li.menu-item .item-actions').removeClass('hidden');
-                    $('#versionBox').html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
+                    $('#versionBox').attr('title', currentVersion).html('<span class="text">' + currentVersion + '</span><span class="caret"></span>').removeAttr('data-value');
                     $('#compareBox').addClass('hidden');
-                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value');
+                    $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                     e.stopPropagation();
                 }},
             ],
@@ -95,21 +97,23 @@ window.setClickVersionItem = function(info)
 {
     if(this.state.showCheckbox)
     {
-        if(typeof $('#versionBox').attr('data-value') == 'undefined')
+        const prevVersion = $('#versionBox').attr('data-value');
+        const nextVersion = $('#nextBox').attr('data-value');
+        if(prevVersion == undefined && (nextVersion == undefined || nextVersion != info.item.value))
         {
-            $('#versionBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+            $('#versionBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
-        else if($('#versionBox').attr('data-value') == info.item.value)
+        else if(prevVersion == info.item.value)
         {
-            $('#versionBox').removeAttr('data-value').html('<span class="caret"></span>');
+            $('#versionBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
-        else if(typeof $('#nextBox').attr('data-value') == 'undefined')
+        else if(nextVersion == undefined && (prevVersion == undefined || prevVersion != info.item.value))
         {
-            $('#nextBox').attr('data-value', info.item.value).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
+            $('#nextBox').attr('data-value', info.item.value).attr('title', info.item.title).html('<span class="text">' + info.item.title + '</span><span class="caret"></span>');
         }
-        else if($('#nextBox').attr('data-value') == info.item.value)
+        else if(nextVersion == info.item.value)
         {
-            $('#nextBox').removeAttr('data-value').html('<span class="caret"></span>');
+            $('#nextBox').removeAttr('data-value').removeAttr('title').html('<span class="caret"></span>');
         }
 
         info.event.stopPropagation();
@@ -124,7 +128,7 @@ window.exchangeVersion = function(e)
 {
     const prevVersion = $('#versionBox').attr('data-value');
     const nextVersion = $('#nextBox').attr('data-value');
-    if(!prevVersion || !nextVersion) return;
+    if(prevVersion == undefined || !nextVersion == undefined) return;
 
     const $dropdown = $('#versionBox').zui('dropdown');
     const $menu     = $dropdown.menu;

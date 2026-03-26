@@ -892,6 +892,7 @@ class programplanModel extends model
             $projectTaskQuery = $this->session->projectTaskQuery;
             $projectTaskQuery .= " AND `project` = '$projectID'";
             $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
+            $projectTaskQuery .= " AND `status` != 'cancel' AND `closedReason` != 'cancel'";
 
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
@@ -905,6 +906,8 @@ class programplanModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
+                ->andWhere('t1.status')->ne('cancel')
+                ->andWhere('t1.closedReason')->ne('cancel')
                 ->orderBy('execution_asc, order_asc, id_asc')
                 ->fetchAll('id');
         }
