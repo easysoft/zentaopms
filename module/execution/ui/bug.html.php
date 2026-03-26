@@ -99,7 +99,7 @@ dtable
     set::checkable($canBatchAssignTo),
     set::orderBy($orderBy),
     set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footToolbar($footToolbar),
+    set::footToolbar(!empty($footToolbar) ? $footToolbar : null),
     set::customCols(true),
     set::footPager(
         usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
