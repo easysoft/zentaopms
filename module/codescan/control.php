@@ -1518,7 +1518,7 @@ class codescan extends control
 
         $task = $this->codescan->getScanTask($taskID);
         $task = $this->codescanZen->processTaskData($task, $repoList);
-        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repo_id}&taskID={$taskID}&repoID={$repoID}&type=view");
+        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repoID}&taskID={$taskID}&repoID={$task->repoID}&type=view");
         return $this->sendSuccess(array('load' => true, 'message' => $this->lang->codescan->notice->resendSuccess));
     }
 }
