@@ -21,6 +21,8 @@ class reportZen extends report
     protected function getReminder(): array
     {
         $this->app->loadConfig('message');
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
 
         /* Get reminder data. */
         $bugs = $tasks = $todos = $testTasks = $cards = array();
@@ -29,8 +31,8 @@ class reportZen extends report
         if($this->config->report->dailyreminder->todo)     $todos     = $this->report->getUserTodos();
         if($this->config->report->dailyreminder->testTask) $testTasks = $this->report->getUserTestTasks();
 
-        $cardMailSetting    = isset($this->config->message->setting['mail']['setting']['kanbancard']) ? $this->config->message->setting['mail']['setting']['kanbancard'] : array();
-        $cardMessageSetting = isset($this->config->message->setting['message']['setting']['kanbancard']) ? $this->config->message->setting['message']['setting']['kanbancard'] : array();
+        $cardMailSetting    = isset($messageSetting['mail']['setting']['kanbancard']) ? $messageSetting['mail']['setting']['kanbancard'] : array();
+        $cardMessageSetting = isset($messageSetting['message']['setting']['kanbancard']) ? $messageSetting['message']['setting']['kanbancard'] : array();
         if(in_array('nearing', $cardMailSetting))    $cards = $this->report->getUserKanbanCards();
         if(in_array('nearing', $cardMessageSetting)) $this->loadModel('kanban')->saveCardNotice($cards);
 
