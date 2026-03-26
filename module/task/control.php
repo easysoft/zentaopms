@@ -1334,7 +1334,7 @@ class task extends control
      */
     public function ajaxGetStories(int $executionID, int $moduleID, string $zeroTaskStory = 'false')
     {
-        $moduleType    = $this->task->fetchByID($moduleID, 'module')->type;
+        $moduleType    = $moduleID ? $this->task->fetchByID($moduleID, 'module')->type : '';
         $stories       = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', $moduleType == 'task' ? 0 : $moduleID, 'full', 'active', 'story', false);
         $taskCountList = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
 
