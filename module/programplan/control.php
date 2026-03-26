@@ -514,8 +514,10 @@ class programplan extends control
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
             $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
 
-            $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique')->exec();
+            $condition = $project->type == 'project' ? "project={$projectID}" : "execution={$projectID}";
+            $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND {$condition}")->exec();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
@@ -541,8 +543,11 @@ class programplan extends control
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
             $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
 
-            $this->dao->update(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' and id != {$versionID}")->where('id')->eq($versionID)->exec();
+            $oldVersion = $this->programplan->fetchByID($versionID, 'baseline');
+            $condition  = $oldVersion->project ? "project={$oldVersion->project}" : "execution={$oldVersion->execution}";
+            $this->dao->update(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND id != {$versionID} AND {$condition}")->where('id')->eq($versionID)->exec();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));

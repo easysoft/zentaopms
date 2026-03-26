@@ -133,8 +133,12 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setStyle('order', '20000'),
             dropdown
             (
-                h::css('.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}'),
-                h::css('.menu-item .item-title {flex:none;}'),
+                h::css
+                (
+                    '.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}',
+                    '.menu-item .item-content {overflow:hidden; text-overflow:clip;}',
+                    '.menu-item .item-title {flex:none;}'
+                ),
                 jsVar('versionLangData', $langData),
                 jsVar('versionID', $versionID),
                 jsVar('currentVersion', $currentVersion),
