@@ -113,6 +113,7 @@ $config->project->noSprintPriv['repo']        = array('create', 'showSyncCommit'
 $config->project->noSprintPriv['testreport']  = array('create', 'view', 'delete', 'edit', 'export');
 $config->project->noSprintPriv['auditplan']   = array('browse', 'create', 'edit', 'view', 'batchCreate', 'batchEdit', 'batchCheck', 'check', 'nc', 'result', 'assignTo', 'delete');
 $config->project->noSprintPriv['nc']          = array('browse', 'create', 'edit', 'view', 'close', 'assignTo', 'resolve', 'activate', 'export', 'delete');
+$config->project->noSprintPriv['review']      = array('browse', 'view', 'submitDeliverable', 'submitBaseline', 'submitIpd', 'submitProjectchange', 'create', 'submit', 'edit', 'recall', 'assess', 'report', 'exportReport');
 $config->project->noSprintPriv['productplan'] = array();
 $config->project->noSprintPriv['projectplan'] = array();
 
