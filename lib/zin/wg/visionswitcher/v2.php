@@ -16,7 +16,7 @@ class visionSwitcher extends wg
 
         #visionSwitchMenu {display: none; min-width: 240px; border-radius: var(--radius-md); --menu-bg: transparent}
         .vision-vision-menu-main {width: 240px}
-        #visionSwitchMenu.show {display: block;}
+        #visionSwitchMenu.show {display: flex; flex-direction: column;}
         #visionSwitchMenu .vision-icon {width: 20px; height: 20px; opacity: 1}
         #visionSwitchMenu .menu-heading {font-weight: normal}
         #visionSwitchMenu .vision-workspace-menu {width: 280px; display: flex; align-items: stretch;}
@@ -117,6 +117,7 @@ class visionSwitcher extends wg
             (
                 set::placement('top-start'),
                 set::target('#visionSwitchMenu'),
+                set::triggerProps(['maxHeight' => 400]),
                 btn
                 (
                     setClass('ghost'),
