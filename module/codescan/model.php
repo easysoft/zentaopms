@@ -698,9 +698,9 @@ class codescanModel extends model
      */
     public function getScanTasks(int $repoID, int $planID, array $params): array|object
     {
-        if($repoID) $params['repo_id'] = $repoID;
-        if($planID) $params['plan_id'] = $planID;
-        return $this->getListByAPI('/scan/tasks', $params);
+        $params['repoID'] = $repoID;
+        $params['planID'] = $planID;
+        return $this->loadModel('gitfox')->request('/scan/tasks/list', 'POST', $params);
     }
 
     /**
