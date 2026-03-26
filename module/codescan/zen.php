@@ -509,12 +509,12 @@ class codescanZen extends codescan
         $task->startTime   = empty($task->started) ? '' : date('Y-m-d H:i:s', intval($task->started / 1000));
         $task->endTime     = empty($task->finished) ? '' : date('Y-m-d H:i:s', intval($task->finished / 1000));
         $task->runTime     = empty($task->cost) ? '-' : $this->codescan->formatDuration($task->cost);
-        $task->triggerType = $task->trigger->trigger_type;
+        $task->triggerType = $task->trigger->triggerType;
         $task->triggerID   = zget($task->trigger, 'triggerID', 0);
         $task->branch      = str_replace('refs/heads/', '', zget($task, 'executionRef', ''));
-        $task->name        = zget($repoList, $task->repo_id) . sprintf($this->lang->codescan->scanNo, $task->repoNumber) . '(' . $task->branch . ')';
+        $task->name        = zget($repoList, $task->repoID) . sprintf($this->lang->codescan->scanNo, $task->repoNumber) . '(' . $task->branch . ')';
         $task->trigger     = zget($task->trigger, 'triggerName', '');
-        $task->repo        = $task->repo_id;
+        $task->repo        = $task->repoID;
 
         return $task;
     }

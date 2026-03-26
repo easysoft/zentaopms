@@ -19,7 +19,7 @@ $isInPlanView ? null : featureBar
 );
 $config->codescan->task->dtable->fieldList['repo']['map']    = $repoList;
 $config->codescan->task->dtable->fieldList['plan_id']['map'] = $planList;
-if($repoID) unset($config->codescan->task->dtable->fieldList['repo_id']);
+if($repoID) unset($config->codescan->task->dtable->fieldList['repoID']);
 if($isInPlanView)
 {
     unset($config->codescan->task->dtable->fieldList['actions']);
@@ -29,15 +29,15 @@ if(!hasPriv('codescan', 'issue')) unset($config->codescan->task->actionList['iss
 $cols = $this->loadModel('datatable')->getSetting('codescan', 'task');
 if(hasPriv('codescan', 'taskview'))
 {
-    $cols['name']['link']['params'] = "serviceRepoID={repo_id}&taskID={id}&repoID={$repoID}&type=view";
-    if(isset($cols['actions']['list']['issue'])) $cols['actions']['list']['issue']['url']['params'] = "serviceRepoID={repo_id}&taskID={id}&repoID={$repoID}&type=issue";
+    $cols['name']['link']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=view";
+    if(isset($cols['actions']['list']['issue'])) $cols['actions']['list']['issue']['url']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=issue";
 }
 if(hasPriv('codescan', 'planview'))
 {
-    if(isset($cols['plan_id']))$cols['plan_id']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repo_id}&planID={plan_id}&repoID={$repoID}&type=view");
+    if(isset($cols['plan_id']))$cols['plan_id']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repoID}&planID={plan_id}&repoID={$repoID}&type=view");
 }
 
-if(isset($cols['issueCount'])) $cols['issueCount']['link']['params'] = "repoID=$repoID&taskID={id}&serviceRepoID={repo_id}&type=all";
+if(isset($cols['issueCount'])) $cols['issueCount']['link']['params'] = "repoID=$repoID&taskID={id}&serviceRepoID={repoID}&type=all";
 $urlParams = array
 (
     'repoID'        => $repoID,
