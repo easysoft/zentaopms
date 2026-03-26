@@ -150,7 +150,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                     btn
                     (
                         setID('versionBox'),
-                        setClass('ghost gray-300-outline rounded-full'),
+                        setClass('ghost gray-300-outline rounded-full fixed-item'),
                         setStyle(array('max-width' => '150px')),
                         set::text($currentVersion),
                         set::hint($currentVersion),
