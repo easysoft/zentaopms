@@ -251,6 +251,12 @@ class pipeline extends control
                 if(empty($varPairs[$varKey])) continue;
                 if(!$varValue) dao::$errors[$varKey] = sprintf($this->lang->error->notempty, $varPairs[$varKey]);
             }
+            foreach($variables as $var)
+            {
+                $varKey = $var->key;
+                if(isset($formData->$varKey) || empty($var->value)) continue;
+                $formData->$varKey = $var->value;
+            }
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $result = $this->pipeline->exec($pipelineID, $formData);
@@ -507,7 +513,11 @@ class pipeline extends control
         $executionQuery = $type == 'bySearch' ? $this->pipelineZen->getPipelineSearchQuery((int)$queryID, 'pipelineexecQuery') : '';
 
         $executionList = $this->pipeline->getExecutionList($space, $repoID, $type, $pipelineID, $executionQuery, $orderBy, $pager);
-        foreach($executionList as $execution) $execution->repo = $execution->repo ? $execution->repo : '';
+        foreach($executionList as $execution)
+        {
+            $execution->repo     = $execution->repo ? $execution->repo : '';
+            $execution->duration = $this->pipeline->formatSeconds($execution->duration);
+        }
 
         $this->view->title         = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->execution;
         $this->view->repoID        = $repoID;

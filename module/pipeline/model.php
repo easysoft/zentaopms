@@ -874,4 +874,40 @@ class pipelineModel extends model
             ->where('id')->eq($execID)
             ->fetch();
     }
+
+    /**
+     * 秒数格式化方法
+     * Second format.
+     *
+     * @access public
+     * @param int $seconds 秒数（必须为非负整数）
+     * @return string 格式化后的时间字符串
+     */
+    function formatSeconds($seconds): string
+    {
+        // 确保入参是数字且非负
+        $seconds = max(0, (int)$seconds);
+
+        $hour   = 3600; // 1小时 = 3600秒
+        $minute = 60;   // 1分钟 = 60秒
+
+        // 小于1分钟
+        if($seconds < $minute) return "{$seconds}s";
+
+        // 小于1小时
+        if ($seconds < $hour)
+        {
+            $m = intval($seconds / $minute);
+            $s = $seconds % $minute;
+            return "{$m}m{$s}s";
+        }
+
+        // 大于等于1小时
+        $h      = intval($seconds / $hour);
+        $remain = $seconds % $hour;
+        $m      = intval($remain / $minute);
+        $s      = $remain % $minute;
+
+        return "{$h}h{$m}m{$s}s";
+    }
 }
