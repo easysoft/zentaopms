@@ -514,6 +514,7 @@ class programplan extends control
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
             $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
 
             $condition = $project->type == 'project' ? "project={$projectID}" : "execution={$projectID}";
             $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND {$condition}")->exec();
@@ -542,6 +543,7 @@ class programplan extends control
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
             $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
 
             $oldVersion = $this->programplan->fetchByID($versionID, 'baseline');
             $condition  = $oldVersion->project ? "project={$oldVersion->project}" : "execution={$oldVersion->execution}";
