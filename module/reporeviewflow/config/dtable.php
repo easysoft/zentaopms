@@ -20,11 +20,6 @@ $config->reporeviewflow->dtable->fieldList['status']['statusMap'] = $lang->repor
 $config->reporeviewflow->dtable->fieldList['status']['sortType']  = false;
 $config->reporeviewflow->dtable->fieldList['status']['group']     = 2;
 
-$config->reporeviewflow->dtable->fieldList['branchType']['title']    = $lang->reporeviewflow->applicableBranchTypes;
-$config->reporeviewflow->dtable->fieldList['branchType']['width']    = 500;
-$config->reporeviewflow->dtable->fieldList['branchType']['sortType'] = false;
-$config->reporeviewflow->dtable->fieldList['branchType']['group']    = 3;
-
 $config->reporeviewflow->dtable->fieldList['desc']['title']    = $lang->reporeviewflow->desc;
 $config->reporeviewflow->dtable->fieldList['desc']['type']     = 'desc';
 $config->reporeviewflow->dtable->fieldList['desc']['sortType'] = false;
