@@ -302,10 +302,9 @@ class spaceModel extends model
      */
     public function getPipelineBySpace(int $spaceID): array
     {
-        return $this->dao->select('t1.*')->from(TABLE_PIPELINE)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
-            ->where('t2.spaceID')->eq($spaceID)
-            ->andWhere('t1.deleted')->eq(0)
+        return $this->dao->select('*')->from(TABLE_PIPELINE)
+            ->where('spaceID')->eq($spaceID)
+            ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
     }
 

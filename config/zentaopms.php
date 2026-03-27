@@ -373,7 +373,7 @@ $config->logonMethods[] = 'my.createssh';
 $config->logonMethods[] = 'my.editssh';
 $config->logonMethods[] = 'my.deletessh';
 $config->logonMethods[] = 'repo.apigetrepobyurl';
-$config->logonMethods[] = 'repo.showSyncCommit';
+$config->logonMethods[] = 'repo.showsynccommit';
 $config->logonMethods[] = 'ppm.submit';
 $config->logonMethods[] = 'ppm.recall';
 
