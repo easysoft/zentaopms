@@ -430,15 +430,15 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION instr(
     str TEXT,
-    substr TEXT
+    sub_str TEXT
 )
 RETURNS INTEGER AS $$
 BEGIN
-    IF str IS NULL OR substr IS NULL OR substr = '' THEN
+    IF str IS NULL OR sub_str IS NULL OR sub_str = '' THEN
         RETURN 0;
     END IF;
 
-    RETURN strpos(LOWER(str), LOWER(substr));
+    RETURN strpos(LOWER(str), LOWER(sub_str));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
