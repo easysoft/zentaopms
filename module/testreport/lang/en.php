@@ -93,9 +93,9 @@ $lang->testreport->runDateTips     = "Some case execution records exceed the tim
 $lang->testreport->ignore          = "Ignore";
 
 $lang->testreport->bugSummary = <<<EOD
-Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs remained unresolved <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs reactivated <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->activatedBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs found from the running of cases<a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
-Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs-reported-from-cases rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
+Total <strong>%s</strong> Bugs reported <i class='icon icon-help text-light' data-placement='top' data-title="{$lang->testreport->foundBugTip}" data-type='black' data-toggle='tooltip'></i>，
+<strong>%s</strong> Bugs remained unresolved <i class='icon icon-help text-light' data-placement='top' data-title="{$lang->testreport->legacyBugTip}" data-type='black' data-toggle='tooltip'></i>.
+<strong>%s</strong> Bugs reactivated  <i class='icon icon-help text-light' data-placement='top' data-title="{$lang->testreport->activatedBugTip}" data-type='black' data-toggle='tooltip'></i>.
+<strong>%s</strong> Bugs found from the running of cases <i class='icon icon-help text-light' data-placement='top' data-title="{$lang->testreport->fromCaseBugTip}" data-type='black' data-toggle='tooltip'></i>.
+Bug Effective Rate: <strong>%s</strong>，Bugs reported from cases: <strong>%s</strong>.
 EOD;
