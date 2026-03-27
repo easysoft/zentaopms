@@ -75,8 +75,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     if($project->stageBy == 'product' && empty($project->isTpl))
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
-        $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0&type=gantt"), 'active' => $productID == 'all' || $productID == '0'));
-        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => ($productID == $key || ($key == 0 && $productID == 'all')));
+        $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0"), 'active' => $productID == 'all' || $productID == '0'));
+        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key"), 'active' => ($productID == $key || ($key == 0 && $productID == 'all')));
         $productDropdown = dropdown
         (
             btn(set::type('link'), setClass('no-underline'), $viewName),
@@ -109,7 +109,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     }
 
     $item = array('title' => $lang->project->latestVersion, 'value' => 0);
-    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID=$projectID"), 'data-toggle' => 'modal'));
+    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}"), 'data-toggle' => 'modal'));
     $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;

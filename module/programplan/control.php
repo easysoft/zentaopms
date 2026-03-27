@@ -52,7 +52,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '')
+    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '0')
     {
         if($type == 'lists') return $this->locate($this->createLink('project', 'execution', "status=undone&projectID={$projectID}"));
         if($from == 'doc')
@@ -126,7 +126,7 @@ class programplan extends control
         $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
         $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
-        $this->view->versions    = $this->project->getGanttVersions($projectID);
+        $this->view->versions    = $this->project->getGanttVersions($projectID, $productID);
         $this->view->versionID   = $versionID;
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;
@@ -499,7 +499,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function createGanttVersion(int $projectID = 0)
+    public function createGanttVersion(int $projectID = 0, int $productID = 0)
     {
         if($_POST)
         {
@@ -523,6 +523,7 @@ class programplan extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
+        $this->view->productID = $productID;
         $this->display();
     }
 
@@ -568,6 +569,6 @@ class programplan extends control
     public function deleteGanttVersion(int $versionID)
     {
         $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
-        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'callback' => "loadCurrentPage('#versionList')"));
     }
 }
