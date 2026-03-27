@@ -3672,12 +3672,14 @@ class kanbanModel extends model
         if(empty($cards)) $cards = $this->loadModel('report')->getUserKanbanCards();
         if(empty($cards)) return;
 
+        $today = helper::today();
         foreach($cards as $user => $cardList)
         {
             foreach($cardList as $card)
             {
-                $url  = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
-                $data = $this->lang->kanban->nearing . html::a($url, "#{$card->id} {$card->name}");
+                $url   = helper::createLink('kanban', 'view', "kanbanID={$card->kanban}") . "#app=kanban";
+                $data  = $today > $card->deadline ? $this->lang->kanban->due : $this->lang->kanban->nearing;
+                $data .= html::a($url, "#{$card->id} {$card->name}");
 
                 $notify = new stdclass();
                 $notify->objectType  = 'message';
