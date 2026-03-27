@@ -810,7 +810,7 @@ class programplanTao extends programplanModel
         $data = new stdclass();
         $data->id           = $task->id;
         $data->type         = 'task';
-        $data->text         = $priIcon . "<span class='gantt_title'>{$task->name}</span>";
+        $data->text         = $priIcon . "<span class='gantt_title'>#{$task->id} {$task->name}</span>";
         $data->percent      = '';
         $data->rawStatus    = zget($task, 'rawStatus', $task->status);
         $data->status       = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
