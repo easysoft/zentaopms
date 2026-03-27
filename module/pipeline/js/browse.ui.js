@@ -8,7 +8,7 @@ window.renderCell = function(result, {col, row})
         result[0] = {html:'<span class="' + className + '">' + result[0] + '</span>'};
     }
 
-    if(col.name === 'actions' && !row.data.showVars && !repoID)
+    if(col.name === 'actions' && !row.data.showVars && !row.data.repoID)
     {
         if(!result[0]) return result;
         const btnItems = result[0].props.items;
