@@ -26,10 +26,10 @@ cid=18193
 
 $cards = array(
     'admin' => array(
-        (object)array('id' => 1, 'name' => '卡片1', 'kanban' => 1)
+        (object)array('id' => 1, 'name' => '卡片1', 'kanban' => 1, 'deadline' => '2026-03-28')
     ),
     'user1' => array(
-        (object)array('id' => 2, 'name' => '卡片2', 'kanban' => 2)
+        (object)array('id' => 2, 'name' => '卡片2', 'kanban' => 2, 'deadline' => '2026-03-28')
     )
 );
 
