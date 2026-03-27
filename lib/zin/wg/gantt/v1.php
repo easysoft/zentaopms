@@ -153,6 +153,7 @@ class gantt extends wg
             jsVar('canEditDeadline', $this->prop('canEditDeadline')),
             jsVar('ganttFields',     $ganttFields),
             jsVar('zooming',         $this->prop('zooming')),
+            jsVar('appTab',          $app->tab),
             jsVar('options',         $options),
             jsVar('showBaselines',   $showBaselines),
             jsVar('exportFileName',  $this->prop('exportFileName')),
