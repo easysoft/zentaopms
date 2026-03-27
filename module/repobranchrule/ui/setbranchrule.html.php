@@ -40,6 +40,7 @@ formPanel
         set::labelWidth('200px'),
         inputGroup
         (
+            setID('reviewFlowBox'),
             picker
             (
                 set::name('reviewFlowID'),
@@ -49,7 +50,7 @@ formPanel
             ),
             div
             (
-                a(set::className('btn ml-1'), on::click()->do("loadCurrentPage({url: '{$url}', selector: '#reviewFlow', partial: true})"), set::href('#'), $lang->refresh)
+                a(set::className('btn ml-1'), on::click()->do("loadCurrentPage({url: '{$url}', selector: '#reviewFlowBox', partial: true})"), set::href('#'), $lang->refresh)
             ),
             hasPriv('reporeviewflow', 'create') ? div
             (
