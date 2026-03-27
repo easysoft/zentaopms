@@ -32,9 +32,9 @@ if(hasPriv('codescan', 'taskview'))
     $cols['name']['link']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=view";
     if(isset($cols['actions']['list']['issue'])) $cols['actions']['list']['issue']['url']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=issue";
 }
-if(hasPriv('codescan', 'planview'))
+if(hasPriv('codescan', 'planview') && isset($cols['plan_id']))
 {
-    if(isset($cols['plan_id']))$cols['plan_id']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repoID}&planID={plan_id}&repoID={$repoID}&type=view");
+    $cols['plan_id']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repoID}&planID={plan_id}&repoID={$repoID}&type=view");
 }
 
 if(isset($cols['issueCount'])) $cols['issueCount']['link']['params'] = "repoID=$repoID&taskID={id}&serviceRepoID={repoID}&type=all";
