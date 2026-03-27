@@ -146,7 +146,7 @@ class repobranchruleModel extends model
      */
     public function createBranchRule(object $rule): bool
     {
-        $this->dao->insert(TABLE_BRANCHRULESET)->data($rule)->exec();
+        $this->dao->insert(TABLE_BRANCHRULESET)->data($rule)->autoCheck()->exec();
         return !dao::isError();
     }
 
@@ -161,7 +161,7 @@ class repobranchruleModel extends model
      */
     public function updateBranchRule(int $id, object $rule): bool
     {
-        $this->dao->update(TABLE_BRANCHRULESET)->data($rule)->where('id')->eq($id)->exec();
+        $this->dao->update(TABLE_BRANCHRULESET)->data($rule)->where('id')->eq($id)->autoCheck()->exec();
         return !dao::isError();
     }
 
