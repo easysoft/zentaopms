@@ -506,10 +506,10 @@ class programplan extends control
             $project = $this->loadModel('project')->fetchByID($projectID);
             $version = form::data($this->config->programplan->form->createGanttVersion)
                 ->add('title', $this->post->version)
-                ->add('data', $this->post->data)
                 ->setIF($project->type == 'project', 'project', $projectID)
                 ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
                 ->get();
+            $version->data = $this->post->data;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();

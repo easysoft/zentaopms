@@ -109,7 +109,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     }
 
     $item = array('title' => $lang->project->latestVersion, 'value' => 0);
-    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}"), 'data-toggle' => 'modal'));
+    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}"), 'data-toggle' => 'modal'));
     $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
