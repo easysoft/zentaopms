@@ -488,19 +488,21 @@ $config->codescan->issue->dtable->fieldList['id']['type']  = 'checkID';
 
 $config->codescan->issue->dtable->fieldList['content']['title']    = $lang->codescan->title;
 $config->codescan->issue->dtable->fieldList['content']['type']     = 'shortTitle';
+$config->codescan->issue->dtable->fieldList['content']['name']     = 'message';
 $config->codescan->issue->dtable->fieldList['content']['show']     = true;
 $config->codescan->issue->dtable->fieldList['content']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['content']['required'] = true;
 $config->codescan->issue->dtable->fieldList['content']['checkbox'] = false;
 
-$config->codescan->issue->dtable->fieldList['repo_branch']['title']    = $lang->codescan->scanBranch;
-$config->codescan->issue->dtable->fieldList['repo_branch']['width']    = 150;
-$config->codescan->issue->dtable->fieldList['repo_branch']['show']     = true;
-$config->codescan->issue->dtable->fieldList['repo_branch']['sortType'] = false;
-$config->codescan->issue->dtable->fieldList['repo_branch']['required'] = false;
+$config->codescan->issue->dtable->fieldList['repoBranch']['title']    = $lang->codescan->scanBranch;
+$config->codescan->issue->dtable->fieldList['repoBranch']['width']    = 150;
+$config->codescan->issue->dtable->fieldList['repoBranch']['show']     = true;
+$config->codescan->issue->dtable->fieldList['repoBranch']['sortType'] = false;
+$config->codescan->issue->dtable->fieldList['repoBranch']['required'] = false;
 
 $config->codescan->issue->dtable->fieldList['file']['title']    = $lang->codescan->file;
 $config->codescan->issue->dtable->fieldList['file']['width']    = 250;
+$config->codescan->issue->dtable->fieldList['file']['name']     = 'path';
 $config->codescan->issue->dtable->fieldList['file']['show']     = true;
 $config->codescan->issue->dtable->fieldList['file']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['file']['required'] = false;
@@ -508,6 +510,7 @@ $config->codescan->issue->dtable->fieldList['file']['hint']     = true;
 
 $config->codescan->issue->dtable->fieldList['priority']['title']    = $lang->codescan->severity;
 $config->codescan->issue->dtable->fieldList['priority']['width']    = 100;
+$config->codescan->issue->dtable->fieldList['priority']['name']     = 'rulePriority';
 $config->codescan->issue->dtable->fieldList['priority']['show']     = true;
 $config->codescan->issue->dtable->fieldList['priority']['sortType'] = true;
 $config->codescan->issue->dtable->fieldList['priority']['required'] = false;
@@ -515,16 +518,17 @@ $config->codescan->issue->dtable->fieldList['priority']['map']      = $lang->cod
 
 $config->codescan->issue->dtable->fieldList['type']['title']    = $lang->codescan->type;
 $config->codescan->issue->dtable->fieldList['type']['width']    = 100;
+$config->codescan->issue->dtable->fieldList['type']['name']     = 'ruleType';
 $config->codescan->issue->dtable->fieldList['type']['show']     = true;
 $config->codescan->issue->dtable->fieldList['type']['required'] = false;
 $config->codescan->issue->dtable->fieldList['type']['sortType'] = true;
 $config->codescan->issue->dtable->fieldList['type']['map']      = $lang->codescan->typeList;
 
-$config->codescan->issue->dtable->fieldList['rule_plugin']['title']    = $lang->codescan->tool;
-$config->codescan->issue->dtable->fieldList['rule_plugin']['width']    = 100;
-$config->codescan->issue->dtable->fieldList['rule_plugin']['show']     = true;
-$config->codescan->issue->dtable->fieldList['rule_plugin']['sortType'] = false;
-$config->codescan->issue->dtable->fieldList['rule_plugin']['required'] = false;
+$config->codescan->issue->dtable->fieldList['rulePlugin']['title']    = $lang->codescan->tool;
+$config->codescan->issue->dtable->fieldList['rulePlugin']['width']    = 100;
+$config->codescan->issue->dtable->fieldList['rulePlugin']['show']     = true;
+$config->codescan->issue->dtable->fieldList['rulePlugin']['sortType'] = false;
+$config->codescan->issue->dtable->fieldList['rulePlugin']['required'] = false;
 
 $config->codescan->issue->dtable->fieldList['status']['title']     = $lang->codescan->status;
 $config->codescan->issue->dtable->fieldList['status']['type']      = 'status';
@@ -548,11 +552,11 @@ $config->codescan->issue->dtable->fieldList['createdAt']['show']     = true;
 $config->codescan->issue->dtable->fieldList['createdAt']['sortType'] = true;
 $config->codescan->issue->dtable->fieldList['createdAt']['required'] = false;
 
-$config->codescan->issue->dtable->fieldList['plan_name']['title']    = $lang->codescan->plan;
-$config->codescan->issue->dtable->fieldList['plan_name']['width']    = 150;
-$config->codescan->issue->dtable->fieldList['plan_name']['show']     = false;
-$config->codescan->issue->dtable->fieldList['plan_name']['sortType'] = false;
-$config->codescan->issue->dtable->fieldList['plan_name']['required'] = false;
+$config->codescan->issue->dtable->fieldList['planName']['title']    = $lang->codescan->plan;
+$config->codescan->issue->dtable->fieldList['planName']['width']    = 150;
+$config->codescan->issue->dtable->fieldList['planName']['show']     = false;
+$config->codescan->issue->dtable->fieldList['planName']['sortType'] = false;
+$config->codescan->issue->dtable->fieldList['planName']['required'] = false;
 
 $config->codescan->issue->dtable->fieldList['triggerName']['title']    = $lang->codescan->triggerName;
 $config->codescan->issue->dtable->fieldList['triggerName']['width']    = 150;
@@ -560,17 +564,17 @@ $config->codescan->issue->dtable->fieldList['triggerName']['show']     = false;
 $config->codescan->issue->dtable->fieldList['triggerName']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['triggerName']['required'] = false;
 
-$config->codescan->issue->dtable->fieldList['rule_id']['title']    = $lang->codescan->ruleID;
-$config->codescan->issue->dtable->fieldList['rule_id']['width']    = 150;
-$config->codescan->issue->dtable->fieldList['rule_id']['show']     = false;
-$config->codescan->issue->dtable->fieldList['rule_id']['sortType'] = false;
-$config->codescan->issue->dtable->fieldList['rule_id']['required'] = false;
+$config->codescan->issue->dtable->fieldList['ruleID']['title']    = $lang->codescan->ruleID;
+$config->codescan->issue->dtable->fieldList['ruleID']['width']    = 150;
+$config->codescan->issue->dtable->fieldList['ruleID']['show']     = false;
+$config->codescan->issue->dtable->fieldList['ruleID']['sortType'] = false;
+$config->codescan->issue->dtable->fieldList['ruleID']['required'] = false;
 
-$config->codescan->issue->dtable->fieldList['rule_name']['title']    = $lang->codescan->ruleName;
-$config->codescan->issue->dtable->fieldList['rule_name']['width']    = 150;
-$config->codescan->issue->dtable->fieldList['rule_name']['show']     = true;
-$config->codescan->issue->dtable->fieldList['rule_name']['sortType'] = false;
-$config->codescan->issue->dtable->fieldList['rule_name']['required'] = false;
+$config->codescan->issue->dtable->fieldList['ruleName']['title']    = $lang->codescan->ruleName;
+$config->codescan->issue->dtable->fieldList['ruleName']['width']    = 150;
+$config->codescan->issue->dtable->fieldList['ruleName']['show']     = true;
+$config->codescan->issue->dtable->fieldList['ruleName']['sortType'] = false;
+$config->codescan->issue->dtable->fieldList['ruleName']['required'] = false;
 
 $config->codescan->issue->dtable->fieldList['resolved']['title']    = $lang->bug->resolvedDate;
 $config->codescan->issue->dtable->fieldList['resolved']['type']     = 'datetime';

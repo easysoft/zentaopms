@@ -520,6 +520,20 @@ class codescanZen extends codescan
     }
 
     /**
+     * 处理问题数据。
+     * Process issue data.
+     *
+     * @param  object    $issue
+     * @access protected
+     * @return object
+     */
+    protected function processIssueData(object $issue): object
+    {
+        $issue->rulePlugin  = zget($issue->payload, 'tool', '');
+        return $issue;
+    }
+
+    /**
      * 处理执行分支数据。
      * Process execution branch data.
      *

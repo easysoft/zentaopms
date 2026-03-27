@@ -863,7 +863,8 @@ class codescanModel extends model
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
         $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues';
-        $result = $this->getListByAPI($api, $params);
+        $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
+
         if(empty($result) || empty($result->data)) return array();
 
         $bugList = $this->dao->select('issueKey,id')->from(TABLE_BUG)->where('issueKey')->in(array_column($result->data, 'id'))->fetchPairs();
@@ -874,6 +875,7 @@ class codescanModel extends model
             if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->trigger_type);
             if(!empty($issue->ignored) && $issue->ignored > 0 && $issue->ignored <= (time() * 1000)) $this->changeIssueState($issue->id, 'wait');
         }
+
         return $result;
     }
 
