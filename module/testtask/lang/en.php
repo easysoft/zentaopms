@@ -168,7 +168,7 @@ $lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Da
 $lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
 $lang->testtask->emptyUnitTip      = 'No unit test results.';
 
-$lang->testtask->assignedToMe  = 'AssignedToMe';
+$lang->testtask->assignedToMe  = 'Assigned to Me';
 $lang->testtask->allCases      = 'All Cases';
 
 $lang->testtask->lblCases      = 'Case';

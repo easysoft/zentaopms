@@ -180,7 +180,7 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe   = 'AssignedToMe';
+$lang->testcase->assignToMe   = 'Assigned to Me';
 $lang->testcase->openedByMe   = 'CreatedByMe';
 $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
