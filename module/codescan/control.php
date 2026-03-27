@@ -1272,7 +1272,7 @@ class codescan extends control
 
         $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);
         foreach($taskList as &$repoTask) $repoTask = $this->codescanZen->processTaskData($repoTask, $repoList);
-        foreach($issueList->data as &$issue) $issue = $this->codescanZen->processIssueData($issue);
+        if(isset($issueList->data) && is_array($issueList->data)) foreach($issueList->data as &$issue) $issue = $this->codescanZen->processIssueData($issue);
 
         $this->view->title         = $this->lang->codescan->issue;
         $this->view->type          = 'issue';

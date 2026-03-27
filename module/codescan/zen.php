@@ -529,7 +529,11 @@ class codescanZen extends codescan
      */
     protected function processIssueData(object $issue): object
     {
-        $issue->rulePlugin  = zget($issue->payload, 'tool', '');
+        $issue->content    = zget($issue, 'message', '');
+        $issue->file       = zget($issue, 'path', '');
+        $issue->priority   = zget($issue, 'rulePriority', '');
+        $issue->type       = zget($issue, 'ruleType', '');
+        $issue->rulePlugin = zget($issue->payload, 'tool', '');
         return $issue;
     }
 

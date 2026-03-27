@@ -488,7 +488,6 @@ $config->codescan->issue->dtable->fieldList['id']['type']  = 'checkID';
 
 $config->codescan->issue->dtable->fieldList['content']['title']    = $lang->codescan->title;
 $config->codescan->issue->dtable->fieldList['content']['type']     = 'shortTitle';
-$config->codescan->issue->dtable->fieldList['content']['name']     = 'message';
 $config->codescan->issue->dtable->fieldList['content']['show']     = true;
 $config->codescan->issue->dtable->fieldList['content']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['content']['required'] = true;
@@ -502,7 +501,6 @@ $config->codescan->issue->dtable->fieldList['repoBranch']['required'] = false;
 
 $config->codescan->issue->dtable->fieldList['file']['title']    = $lang->codescan->file;
 $config->codescan->issue->dtable->fieldList['file']['width']    = 250;
-$config->codescan->issue->dtable->fieldList['file']['name']     = 'path';
 $config->codescan->issue->dtable->fieldList['file']['show']     = true;
 $config->codescan->issue->dtable->fieldList['file']['sortType'] = false;
 $config->codescan->issue->dtable->fieldList['file']['required'] = false;
@@ -510,7 +508,6 @@ $config->codescan->issue->dtable->fieldList['file']['hint']     = true;
 
 $config->codescan->issue->dtable->fieldList['priority']['title']    = $lang->codescan->severity;
 $config->codescan->issue->dtable->fieldList['priority']['width']    = 100;
-$config->codescan->issue->dtable->fieldList['priority']['name']     = 'rulePriority';
 $config->codescan->issue->dtable->fieldList['priority']['show']     = true;
 $config->codescan->issue->dtable->fieldList['priority']['sortType'] = true;
 $config->codescan->issue->dtable->fieldList['priority']['required'] = false;
@@ -518,7 +515,6 @@ $config->codescan->issue->dtable->fieldList['priority']['map']      = $lang->cod
 
 $config->codescan->issue->dtable->fieldList['type']['title']    = $lang->codescan->type;
 $config->codescan->issue->dtable->fieldList['type']['width']    = 100;
-$config->codescan->issue->dtable->fieldList['type']['name']     = 'ruleType';
 $config->codescan->issue->dtable->fieldList['type']['show']     = true;
 $config->codescan->issue->dtable->fieldList['type']['required'] = false;
 $config->codescan->issue->dtable->fieldList['type']['sortType'] = true;

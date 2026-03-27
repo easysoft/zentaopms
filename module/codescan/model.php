@@ -1059,13 +1059,12 @@ class codescanModel extends model
      */
     public function getRepoMetrics(int $repoID, int $taskID = 0): object|array
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/scan/metrics");
+        $url = '/scan/metrics';
         if($repoID) $url .= "/repo/{$repoID}";
         if($taskID) $url .= "/task/{$taskID}";
         if(common::checkNotCN()) $url .= "?lang=en";
 
-        $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json'));
+        $result = $this->loadModel('gitfox')->request($url, 'GET', array());
         if(empty($result) || isset($result->message)) return array();
 
         return $result;
