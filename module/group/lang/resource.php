@@ -1317,23 +1317,6 @@ $lang->caselib->methodOrder[60] = 'exportTemplate';
 $lang->caselib->methodOrder[65] = 'import';
 $lang->caselib->methodOrder[70] = 'showImport';
 
-$lang->resource->host = new stdclass();
-$lang->resource->host->browse       = 'browse';
-$lang->resource->host->create       = 'create';
-$lang->resource->host->edit         = 'editAction';
-$lang->resource->host->delete       = 'deleteAction';
-$lang->resource->host->view         = 'view';
-$lang->resource->host->changeStatus = 'changeStatus';
-$lang->resource->host->treemap      = 'treemap';
-
-$lang->host->methodOrder[0]  = 'browse';
-$lang->host->methodOrder[5]  = 'create';
-$lang->host->methodOrder[10] = 'edit';
-$lang->host->methodOrder[15] = 'delete';
-$lang->host->methodOrder[20] = 'view';
-$lang->host->methodOrder[25] = 'changeStatus';
-$lang->host->methodOrder[30] = 'treemap';
-
 $lang->resource->zahost = new stdclass();
 $lang->resource->zahost->browse         = 'browse';
 $lang->resource->zahost->create         = 'create';
@@ -1529,19 +1512,6 @@ $lang->pipeline->methodOrder[25] = 'arrange';
 $lang->pipeline->methodOrder[30] = 'delete';
 $lang->pipeline->methodOrder[35] = 'exec';
 $lang->pipeline->methodOrder[40] = 'execView';
-
-$lang->resource->serverroom = new stdclass();
-$lang->resource->serverroom->browse = 'browse';
-$lang->resource->serverroom->create = 'create';
-$lang->resource->serverroom->edit   = 'editAction';
-$lang->resource->serverroom->delete = 'delete';
-$lang->resource->serverroom->view   = 'view';
-
-$lang->serverroom->methodOrder[0]  = 'browse';
-$lang->serverroom->methodOrder[5]  = 'create';
-$lang->serverroom->methodOrder[10] = 'edit';
-$lang->serverroom->methodOrder[15] = 'delete';
-$lang->serverroom->methodOrder[20] = 'view';
 
 $lang->resource->system = new stdclass();
 $lang->resource->system->dashboard    = 'dashboard';
