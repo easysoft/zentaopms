@@ -1024,13 +1024,10 @@ class codescanModel extends model
      */
     public function getIssueTreeList(int $repoID, int $taskID, string $type = 'file'): array
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/scan/issues/tree/{$type}");
-        $url    .= "?repo_id={$repoID}";
-        if($taskID) $url .= "&task_id={$taskID}";
-
-        $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json'));
-        return $this->gitfox->getResponse($result);
+        $url    = "/scan/issues/{$type}-tree";
+        $params = array('repoID' => $repoID, 'taskID' => $taskID);
+        $result = $this->loadModel('gitfox')->request($url, 'GET', $params);
+        return array($result);
     }
 
     /**
