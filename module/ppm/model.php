@@ -649,7 +649,7 @@ class ppmModel extends model
         if($action == 'review') return $ppm->status == 'opened' && strpos(",{$ppm->reviewers},", ",{$app->user->account},") !== false;
         if($action == 'submit') return $ppm->reviewStatus == 'pending' || $ppm->reviewStatus == 'rejected' || $ppm->reviewStatus == 'reverting';
         if($action == 'recall') return $ppm->reviewStatus == 'inProgress' && $app->control->loadModel('approval')->canCancel($ppm);
-        if($action == 'progress') return !empty($ppm->approvalflow);
+        if($action == 'progress') return !empty($ppm->approvalflow) && !empty($ppm->approval);
         return true;
     }
 

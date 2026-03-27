@@ -15,14 +15,17 @@ $config->ppm->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->ppm->dtable->fieldList['title']['link']     = helper::createLink($app->rawModule, 'view', "id={id}");
 $config->ppm->dtable->fieldList['title']['sortType'] = true;
 $config->ppm->dtable->fieldList['title']['width']    = 0.3;
+$config->ppm->dtable->fieldList['title']['order']    = 5;
 
 $config->ppm->dtable->fieldList['sourceBranch']['name']  = 'sourceBranch';
 $config->ppm->dtable->fieldList['sourceBranch']['title'] = $lang->ppm->sourceBranch;
 $config->ppm->dtable->fieldList['sourceBranch']['type']  = 'text';
+$config->ppm->dtable->fieldList['sourceBranch']['order'] = 10;
 
 $config->ppm->dtable->fieldList['targetBranch']['name']  = 'targetBranch';
 $config->ppm->dtable->fieldList['targetBranch']['title'] = $lang->ppm->targetBranch;
 $config->ppm->dtable->fieldList['targetBranch']['type']  = 'text';
+$config->ppm->dtable->fieldList['targetBranch']['order'] = 15;
 
 #$config->ppm->dtable->fieldList['mergeStatus']['name']      = 'mergeStatus';
 #$config->ppm->dtable->fieldList['mergeStatus']['title']     = $lang->ppm->mergeStatus;
@@ -36,6 +39,7 @@ $config->ppm->dtable->fieldList['status']['title']    = $lang->ppm->status;
 $config->ppm->dtable->fieldList['status']['type']     = 'type';
 $config->ppm->dtable->fieldList['status']['sortType'] = true;
 $config->ppm->dtable->fieldList['status']['map']      = $lang->ppm->statusList;
+$config->ppm->dtable->fieldList['status']['order']    = 25;
 
 #$config->ppm->dtable->fieldList['assignee']['name']     = 'assignee';
 #$config->ppm->dtable->fieldList['assignee']['title']    = $lang->ppm->reviewer;
@@ -46,11 +50,13 @@ $config->ppm->dtable->fieldList['createdBy']['name']     = 'createdBy';
 $config->ppm->dtable->fieldList['createdBy']['title']    = $lang->ppm->author;
 $config->ppm->dtable->fieldList['createdBy']['type']     = 'user';
 $config->ppm->dtable->fieldList['createdBy']['sortType'] = true;
+$config->ppm->dtable->fieldList['createdBy']['order']    = 30;
 
 $config->ppm->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->ppm->dtable->fieldList['createdDate']['title']    = $lang->ppm->createdDate;
 $config->ppm->dtable->fieldList['createdDate']['type']     = 'datetime';
 $config->ppm->dtable->fieldList['createdDate']['sortType'] = true;
+$config->ppm->dtable->fieldList['createdDate']['order']    = 35;
 
 $config->ppm->dtable->fieldList['actions']['name']  = 'actions';
 $config->ppm->dtable->fieldList['actions']['title'] = $lang->actions;
