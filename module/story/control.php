@@ -425,7 +425,7 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldStory = $this->story->fetchByID($storyID);
+            $oldStory = $this->story->getByID($storyID);
             $changes  = common::createChanges($oldStory, $storyData);
             $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             foreach($changes as $index => $change)
@@ -439,7 +439,7 @@ class story extends control
                 $oldStory->reviewer = array_keys($reviewers);
 
                 $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
-                if(!$diff && empty($_FILES)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+                if(!$diff && empty($_FILES['files']['name'][0])) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
             }
 
             $changes = $this->story->change($storyID, $storyData);
