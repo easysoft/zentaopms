@@ -855,7 +855,10 @@ class codescanModel extends model
      */
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
-        $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues';
+        if(isset($params['repoID'])) $params['repoID'] = (int)$params['repoID'];
+        if(isset($params['ruleID'])) $params['ruleID'] = (int)$params['ruleID'];
+
+        $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues/list';
         $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
 
         if(empty($result) || empty($result->data)) return array();
