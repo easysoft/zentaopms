@@ -21,7 +21,7 @@ panel
     zui::FlowExecutionApp
     (
         set::height('calc(100vh - 96px)'),
-        set::goBack(jsRaw("() => {goBack('pipeline-execution', '{$backUrl}')}")),
+        set::goBack(jsRaw("() => {goBack('pipeline', '{$backUrl}')}")),
         set::id($execution->id),
         set::name('#' . $execution->id . ' ' . $pipeline->name),
         set::labels($lang->pipeline->flowApp->labels)
