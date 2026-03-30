@@ -828,7 +828,7 @@ class codescanModel extends model
         $data = new stdclass();
         $data->status = $status;
         $data->ids    = $issueIdList;
-        $result = $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
+        $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
         if(dao::isError()) return false;
 
         $this->loadModel('action');
