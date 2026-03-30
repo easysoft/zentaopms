@@ -30,7 +30,7 @@ featureBar
     )) : null,
     set::current($label),
     set::labelCount(false),
-    set::linkParams("repoID={$repoID}&objectID={$objectID}&label={key}&showArchived=active&keyword={$keyword}"),
+    set::linkParams("repoID={$repoID}&objectID={$objectID}&label={key}&showArchived=active&keyword={$keyword}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     div
     (
         setClass('flex branch-search'),
