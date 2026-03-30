@@ -165,7 +165,7 @@ $config->codescan->plan = new stdclass();
 $config->codescan->plan->actionList = array();
 $config->codescan->plan->actionList['exec']['icon']         = 'start';
 $config->codescan->plan->actionList['exec']['hint']         = $lang->codescan->exec;
-$config->codescan->plan->actionList['exec']['url']          = array('module' => 'codescan', 'method' => 'exec', 'params' => 'planID={id}&repoID={repo}');
+$config->codescan->plan->actionList['exec']['url']          = array('module' => 'codescan', 'method' => 'exec', 'params' => 'planID={id}&repoID={repoID}');
 $config->codescan->plan->actionList['exec']['showText']     = true;
 $config->codescan->plan->actionList['exec']['data-toggle']  = 'modal';
 
@@ -176,12 +176,12 @@ $config->codescan->plan->actionList['task']['showText']    = true;
 
 $config->codescan->plan->actionList['editPlan']['icon']     = 'edit';
 $config->codescan->plan->actionList['editPlan']['hint']     = $lang->codescan->edit;
-$config->codescan->plan->actionList['editPlan']['url']      = array('module' => 'codescan', 'method' => 'editPlan', 'params' => 'planID={id}&serviceRepoID={repo_id}&repoID={repo}');
+$config->codescan->plan->actionList['editPlan']['url']      = array('module' => 'codescan', 'method' => 'editPlan', 'params' => 'planID={id}&serviceRepoID={repoID}&repoID={repoID}');
 $config->codescan->plan->actionList['editPlan']['showText'] = true;
 
 $config->codescan->plan->actionList['deletePlan']['icon']         = 'trash';
 $config->codescan->plan->actionList['deletePlan']['hint']         = $lang->codescan->delete;
-$config->codescan->plan->actionList['deletePlan']['url']          = array('module' => 'codescan', 'method' => 'deletePlan', 'params' => 'serviceRepoID={repo_id}&planID={id}&repoID={repo}');
+$config->codescan->plan->actionList['deletePlan']['url']          = array('module' => 'codescan', 'method' => 'deletePlan', 'params' => 'serviceRepoID={repoID}&planID={id}&repoID={repoID}');
 $config->codescan->plan->actionList['deletePlan']['data-confirm'] = array('message' => $lang->codescan->notice->deletePlan, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 $config->codescan->plan->actionList['deletePlan']['ajaxSubmit']   = true;
 $config->codescan->plan->actionList['deletePlan']['showText']     = true;

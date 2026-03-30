@@ -117,7 +117,7 @@ panel
                         item
                         (
                             set::name($lang->codescan->repo),
-                            zget($repoList, $task->repo_id)
+                            zget($repoList, $task->repoID)
                         ),
                         item
                         (

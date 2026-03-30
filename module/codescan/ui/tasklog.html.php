@@ -12,7 +12,7 @@ namespace zin;
 include 'task.header.html.php';
 
 $methodName = 'ajaxGetTaskLog';
-$logParams  = "repoID={$task->repo_id}&pipelineName=" . str_replace('-', '*', $task->pipeline_name) . "&executionID={$task->execution_number}";
+$logParams  = "repoID={$task->repoID}&pipelineName=" . str_replace('-', '*', $task->pipelineName) . "&executionID={$task->executionNumber}";
 $logID      = $taskID;
 include  '../../ci/ext/ui/logs.html.php';
 panel

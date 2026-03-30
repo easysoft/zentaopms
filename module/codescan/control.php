@@ -1272,6 +1272,7 @@ class codescan extends control
 
         $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);
         foreach($taskList as &$repoTask) $repoTask = $this->codescanZen->processTaskData($repoTask, $repoList);
+        if(isset($issueList->data) && is_array($issueList->data)) foreach($issueList->data as &$issue) $issue = $this->codescanZen->processIssueData($issue);
 
         $this->view->title         = $this->lang->codescan->issue;
         $this->view->type          = 'issue';
@@ -1323,7 +1324,7 @@ class codescan extends control
         $this->view->title         = $this->lang->codescan->issueView;
         $this->view->issueID       = $issueID;
         $this->view->issue         = $issue;
-        $this->view->rule          = empty($issue->rule_id) ? array() : $this->codescan->getScanRule($issue->rule_id);
+        $this->view->rule          = empty($issue->ruleID) ? array() : $this->codescan->getScanRule($issue->ruleID);
         $this->view->task          = empty($task) ? array() : $task;
         $this->view->repoID        = $repoID;
         $this->view->productID     = empty($repo) || empty($repo->product) ? 0 : explode(',', $repo->product)[0];
@@ -1518,7 +1519,7 @@ class codescan extends control
 
         $task = $this->codescan->getScanTask($taskID);
         $task = $this->codescanZen->processTaskData($task, $repoList);
-        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repo_id}&taskID={$taskID}&repoID={$repoID}&type=view");
+        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repoID}&taskID={$taskID}&repoID={$task->repoID}&type=view");
         return $this->sendSuccess(array('load' => true, 'message' => $this->lang->codescan->notice->resendSuccess));
     }
 }

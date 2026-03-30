@@ -147,10 +147,10 @@ class codescanZen extends codescan
             $param += $conditions;
         }
 
-        $param['sort']  = $sort;
-        $param['order'] = $order;
-        $param['page']  = $pageID;
-        $param['limit'] = $recPerPage;
+        $param['sort']     = $sort;
+        $param['order']    = $order;
+        $param['page']     = $pageID;
+        $param['pageSize'] = $recPerPage;
 
         $codeScanRuleForm = $this->session->$searchForm;
         if($type == 'bySearch' && !empty($codeScanRuleForm))
@@ -505,18 +505,36 @@ class codescanZen extends codescan
     protected function processTaskData(object $task, array $repoList): object
     {
         $task->result      = empty($task->result) ? '-' : $task->result;
-        $task->issueCount  = zget($task, 'issue_number');
+        $task->issueCount  = zget($task, 'issueNumber');
         $task->startTime   = empty($task->started) ? '' : date('Y-m-d H:i:s', intval($task->started / 1000));
         $task->endTime     = empty($task->finished) ? '' : date('Y-m-d H:i:s', intval($task->finished / 1000));
         $task->runTime     = empty($task->cost) ? '-' : $this->codescan->formatDuration($task->cost);
-        $task->triggerType = $task->trigger->trigger_type;
-        $task->triggerID   = zget($task->trigger, 'trigger_id', 0);
-        $task->branch      = str_replace('refs/heads/', '', zget($task, 'execution_ref', ''));
-        $task->name        = zget($repoList, $task->repo_id) . sprintf($this->lang->codescan->scanNo, $task->repo_number) . '(' . $task->branch . ')';
-        $task->trigger     = zget($task->trigger, 'trigger_name', '');
-        $task->repo        = $task->repo_id;
+        $task->triggerType = $task->trigger->triggerType;
+        $task->triggerID   = zget($task->trigger, 'triggerID', 0);
+        $task->branch      = str_replace('refs/heads/', '', zget($task, 'executionRef', ''));
+        $task->name        = zget($repoList, $task->repoID) . sprintf($this->lang->codescan->scanNo, $task->repoNumber) . '(' . $task->branch . ')';
+        $task->trigger     = zget($task->trigger, 'triggerName', '');
+        $task->repo        = $task->repoID;
 
         return $task;
+    }
+
+    /**
+     * 处理问题数据。
+     * Process issue data.
+     *
+     * @param  object    $issue
+     * @access protected
+     * @return object
+     */
+    protected function processIssueData(object $issue): object
+    {
+        $issue->content    = zget($issue, 'message', '');
+        $issue->file       = zget($issue, 'path', '');
+        $issue->priority   = zget($issue, 'rulePriority', '');
+        $issue->type       = zget($issue, 'ruleType', '');
+        $issue->rulePlugin = zget($issue->payload, 'tool', '');
+        return $issue;
     }
 
     /**

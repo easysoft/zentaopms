@@ -698,9 +698,9 @@ class codescanModel extends model
      */
     public function getScanTasks(int $repoID, int $planID, array $params): array|object
     {
-        if($repoID) $params['repo_id'] = $repoID;
-        if($planID) $params['plan_id'] = $planID;
-        return $this->getListByAPI('/scan/tasks', $params);
+        $params['repoID'] = $repoID;
+        $params['planID'] = $planID;
+        return $this->loadModel('gitfox')->request('/scan/tasks/list', 'POST', $params);
     }
 
     /**
@@ -863,7 +863,8 @@ class codescanModel extends model
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
         $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues';
-        $result = $this->getListByAPI($api, $params);
+        $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
+
         if(empty($result) || empty($result->data)) return array();
 
         $bugList = $this->dao->select('issueKey,id')->from(TABLE_BUG)->where('issueKey')->in(array_column($result->data, 'id'))->fetchPairs();
@@ -874,6 +875,7 @@ class codescanModel extends model
             if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->trigger_type);
             if(!empty($issue->ignored) && $issue->ignored > 0 && $issue->ignored <= (time() * 1000)) $this->changeIssueState($issue->id, 'wait');
         }
+
         return $result;
     }
 
@@ -1022,13 +1024,10 @@ class codescanModel extends model
      */
     public function getIssueTreeList(int $repoID, int $taskID, string $type = 'file'): array
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/scan/issues/tree/{$type}");
-        $url    .= "?repo_id={$repoID}";
-        if($taskID) $url .= "&task_id={$taskID}";
-
-        $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json'));
-        return $this->gitfox->getResponse($result);
+        $url    = "/scan/issues/{$type}-tree";
+        $params = array('repoID' => $repoID, 'taskID' => $taskID);
+        $result = $this->loadModel('gitfox')->request($url, 'GET', $params);
+        return array($result);
     }
 
     /**
@@ -1057,13 +1056,12 @@ class codescanModel extends model
      */
     public function getRepoMetrics(int $repoID, int $taskID = 0): object|array
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/scan/metrics");
+        $url = '/scan/metrics';
         if($repoID) $url .= "/repo/{$repoID}";
         if($taskID) $url .= "/task/{$taskID}";
         if(common::checkNotCN()) $url .= "?lang=en";
 
-        $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json'));
+        $result = $this->loadModel('gitfox')->request($url, 'GET', array());
         if(empty($result) || isset($result->message)) return array();
 
         return $result;

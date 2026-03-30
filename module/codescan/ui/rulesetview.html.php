@@ -56,7 +56,7 @@ if($type == 'rule')
         $item->url    = inLink('rulesetview', "setID={$setID}&type={$type}&language={$item->id}");
     }
 
-    if($ruleSet->is_custom && hasPriv('codescan', 'batchunlinkrule'))
+    if($ruleSet->isCustom && hasPriv('codescan', 'batchunlinkrule'))
     {
         $config->codescan->dtable->fieldList['id']['checkbox'] = true;
 
@@ -72,7 +72,7 @@ if($type == 'rule')
     $config->codescan->dtable->fieldList['actions']['menu']  = array('unlink');
     $config->codescan->dtable->fieldList['actions']['list']['unlink']['url'] = array('module' => 'codescan', 'method' => 'unlinkRule', 'params' => "setID={$setID}&ruleID={id}");
 
-    if(!$ruleSet->is_custom)
+    if(!$ruleSet->isCustom)
     {
         $config->codescan->dtable->fieldList['actions']['list']['unlink']['hint'] = sprintf($lang->codescan->notice->defaultRuleset, $lang->codescan->unlinkRule);
     }

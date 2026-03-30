@@ -98,7 +98,7 @@ div
                     (
                         setClass('secondary-pale mr-2'),
                         set::hint($lang->codescan->view),
-                        $canViewRule ? set::url(createLink('codescan', 'view', "ruleID={$issue->rule_id}")) : set::disabled(true),
+                        $canViewRule ? set::url(createLink('codescan', 'view', "ruleID={$issue->ruleID}")) : set::disabled(true),
                         $canViewRule ? setData('toggle', 'modal') : null,
                         $canViewRule ? setData('size', 'lg') : null,
                         $rule->lang . ':' . $rule->id
@@ -236,7 +236,7 @@ div
                     item
                     (
                         set::name($lang->codescan->plan),
-                        $task->plan_name
+                        $task->planName
                     ),
                     item
                     (

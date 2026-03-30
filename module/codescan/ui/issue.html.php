@@ -28,7 +28,7 @@ if(!$isInModal && empty($taskID))
 
 $queryMenuLink = createLink('codescan', 'issue', "repoID={$repoID}&taskID={$taskID}&serviceRepoID={$serviceRepoID}&type=bysearch&queryID={queryID}");
 $cols = $this->loadModel('datatable')->getSetting('codescan');
-if(isset($cols['rule_plugin'])) $cols['rule_plugin']['map'] = $pluginList;
+if(isset($cols['rulePlugin'])) $cols['rulePlugin']['map'] = $pluginList;
 if(isset($cols['actions']['list']['bug'])) $cols['actions']['list']['bug']['url']['params'] = "product={$productID}&branch=0&extra=from=codescan,fromID={id},fromServerID={$serverID},repoID={$realRepoID}";
 if(hasPriv('codescan', 'issueview')) $cols['content']['link'] = array('module' => 'codescan', 'method' => 'issueview', 'params' => "issueID={id}&repoID={$realRepoID}");
 if($isInModal)
