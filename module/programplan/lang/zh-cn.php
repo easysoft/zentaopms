@@ -87,6 +87,7 @@ $lang->programplan->batchDeleteRelation = '批量删除任务关系';
 $lang->programplan->createGanttVersion  = '创建甘特图版本';
 $lang->programplan->editGanttVersion    = '编辑甘特图版本';
 $lang->programplan->deleteGanttVersion  = '删除甘特图版本';
+$lang->programplan->diffGanttVersion    = '对比甘特图版本';
 
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";

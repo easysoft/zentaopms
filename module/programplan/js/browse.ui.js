@@ -31,7 +31,7 @@ window.setVersionDropdownHeader = function()
         props: {
             text: versionLangData.allVersions,
             titleClass: 'text-gray',
-            actions: [
+            actions: canDiffVersion ? [
                 {icon: 'exchange', text: versionLangData.compare, className: this.state.showCheckbox ? 'invisible pointer-events-none' : 'text-primary', onClick: () => {
                     diffMode = true;
                     this.setState({showCheckbox: true});
@@ -40,7 +40,7 @@ window.setVersionDropdownHeader = function()
                     $('#compareBox').removeClass('hidden');
                     $('#nextBox').html('<span class="caret"></span>').removeAttr('data-value').removeAttr('title');
                 }},
-            ],
+            ] : [],
         },
     };
 };
