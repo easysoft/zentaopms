@@ -264,13 +264,15 @@ class repobranchtypeModel extends model
      * Get branch types by repoID.
      *
      * @param  int $repoID
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getBranchTypeByRepoID(int $repoID): array
+    public function getBranchTypeByRepoID(int $repoID, string $orderBy = 'id_desc'): array
     {
         $branchTypes = $this->dao->select('*')->from(TABLE_BRANCHTYPE)
             ->where('repo')->eq($repoID)
+            ->orderBy($orderBy)
             ->fetchAll('id', false);
 
         if(!$branchTypes) return array();
