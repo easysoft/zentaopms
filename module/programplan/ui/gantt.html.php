@@ -108,9 +108,9 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         $versionItems[$version->id] = $item;
     }
 
-    $item = array('title' => $lang->project->latestVersion, 'value' => 0);
+    $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '');
     if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}"), 'data-toggle' => 'modal'));
-    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait');
+    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '');
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
     if($versionID == '0' && isset($ganttBaseline)) $currentVersion = $lang->project->latestVersion;
